@@ -26,13 +26,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    zipp
-  ];
+  propagatedBuildInputs =
+    [ tomli ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+      zipp
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -4,24 +4,20 @@
   fetchFromGitHub,
   cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rang";
-  version = "3.2";
-
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "agauniyal";
     repo = "rang";
-    tag = "v${version}";
-    hash = "sha256-NK7jB5ijcu9OObmfLgiWxlJi4cVAhr7p6m9HKf+5TnQ=";
+    rev = "cabe04d6d6b05356fa8f9741704924788f0dd762";
+    sha256 = "0v2pz0l2smagr3j4abjccshg4agaccfz79m5ayvrvqq5d4rlds0s";
   };
-
   nativeBuildInputs = [ cmake ];
-
-  meta = {
-    description = "Minimal, Header only Modern c++ library for terminal goodies";
+  meta = with lib; {
+    description = "A Minimal, Header only Modern c++ library for terminal goodies";
     homepage = "https://agauniyal.github.io/rang/";
-    license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.HaoZeke ];
+    license = licenses.unlicense;
+    maintainers = [ maintainers.HaoZeke ];
   };
 }

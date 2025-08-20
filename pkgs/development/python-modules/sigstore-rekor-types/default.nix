@@ -28,14 +28,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python models for Rekor's API types";
     homepage = "https://github.com/trailofbits/sigstore-rekor-types";
     changelog = "https://github.com/trailofbits/sigstore-rekor-types/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      fab
-      bot-wxt1221
-    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

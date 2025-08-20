@@ -20,19 +20,20 @@
 
 stdenv.mkDerivation rec {
   pname = "read-it-later";
-  version = "0.6.1";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "read-it-later";
-    tag = version;
-    hash = "sha256-ia65XGJonf/327o7L/862tOh04DOM2oXbKq86cCaVp4=";
+    rev = version;
+    hash = "sha256-A8u1fecJAsVlordgZmUJt/KZWxx6EWMhfdayKWHTTFY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-mn3Jl5XEHYbCCFjLd8TBqtZKEdevH95IWKdgHwAtXk0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-wK7cegcjiu8i1Grey6ELoqAn2BrvElDXlCwafTLuFv0=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +56,13 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
-    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.tag}";
-    license = lib.licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.rev}";
+    license = licenses.gpl3Plus;
     mainProgram = "read-it-later";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

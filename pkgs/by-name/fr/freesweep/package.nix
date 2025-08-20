@@ -3,49 +3,30 @@
   ncurses,
   lib,
   stdenv,
-  autoconf,
-  automake,
-  pkg-config,
+  updateAutotoolsGnuConfigScriptsHook,
   installShellFiles,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "freesweep";
-  version = "1.0.2-unstable-2024-04-19";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "rwestlund";
     repo = "freesweep";
-    rev = "68c0ee5b29d1087d216d95875a7036713cd25fc0";
-    hash = "sha256-ZnAH7mIuBMFLdrtJOY8PzNbxv+GDEFAgyEtWCpTH2Us=";
+    rev = "v${version}";
+    hash = "sha256-iuu81yHbNrjdPsimBrPK58PJ0d8i3ySM7rFUG/d8NJM";
   };
 
-  # These patches are sent upstream in github:rwestlund/freesweep#18
-  patches = [
-    # strncasecmp and friends are declared in strings.h and not string.h on
-    # systems with HAVE_STRINGS_H
-    ./0001-include-strings.h.patch
-    # Fixes a potential format string vulnerability and makes it compile with
-    # -Wformat-security
-    ./0002-fix-Wformat-security.patch
-    # autoconf believes systems that handle malloc(0) differently from glibc
-    # have a bad malloc implementation and will replace calls to malloc with
-    # rpl_malloc. freesweep does not define rpl_malloc so this macro prevents
-    # building for such systems, the easiest solution is to remove this macro
-    ./0003-remove-ac_func_malloc.patch
-  ];
-
   nativeBuildInputs = [
-    autoconf
-    automake
-    pkg-config
+    updateAutotoolsGnuConfigScriptsHook
     installShellFiles
   ];
   buildInputs = [ ncurses ];
 
-  enableParallelBuilding = true;
+  configureFlags = [ "--with-prefsdir=$out/share" ];
 
-  preConfigure = "./autogen.sh";
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -55,12 +36,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Console minesweeper-style game written in C for Unix-like systems";
     mainProgram = "freesweep";
     homepage = "https://github.com/rwestlund/freesweep";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ lzcunt ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

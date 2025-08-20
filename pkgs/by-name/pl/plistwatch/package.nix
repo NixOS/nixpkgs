@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "plistwatch";
-  version = "0-unstable-2023-06-22";
+  version = "unstable-2023-06-22";
 
   src = fetchFromGitHub {
     owner = "catilac";

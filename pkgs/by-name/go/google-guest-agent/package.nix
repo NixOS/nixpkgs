@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = "guest-agent";
+    repo = pname;
     tag = version;
     hash = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
   };
@@ -56,12 +56,12 @@ buildGoModule rec {
       --prefix PATH ":" "$binPath"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Guest Agent for Google Compute Engine";
     homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
     changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ abbradar ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

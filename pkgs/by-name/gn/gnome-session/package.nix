@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -34,7 +34,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "48.0";
+  version = "47.0.1";
 
   outputs = [
     "out"
@@ -43,11 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3ZCfvFsizb2y/E3xpH140bWUPMxeYeaiChhGJGNHxBc=";
+    hash = "sha256-Vq6caOSZlXk+sglrzcRTOxEWaeHlTItuCx2VL2peinA=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       bash = "${bash}/bin/bash";
@@ -135,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-session/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

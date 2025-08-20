@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "OpenIPMI";
-  version = "2.0.37";
+  version = "2.0.36";
 
   src = fetchurl {
     url = "mirror://sourceforge/openipmi/OpenIPMI-${version}.tar.gz";
-    sha256 = "sha256-xi049dp99Cmaw6ZSUI6VlTd1JEAYHjTHayrs69fzAbk=";
+    sha256 = "sha256-oEAxSPpfe+2TDJWKTRxVgEfic3Y6QIs6A2jtwTfMVdk=";
   };
 
   buildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
       lgpl2Only
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arezvov ];
-    teams = [ teams.c3d2 ];
+    maintainers = with maintainers; [ arezvov ] ++ teams.c3d2.members;
   };
 }

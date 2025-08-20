@@ -1,13 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  distutils,
-  graphviz,
-  numpy,
   pkgs,
-  python,
-  requests,
   setuptools,
+  distutils,
+  requests,
+  numpy,
+  graphviz,
+  python,
+  isPy3k,
+  isPy310,
 }:
 
 buildPythonPackage {
@@ -20,9 +22,9 @@ buildPythonPackage {
 
   dependencies = [
     distutils
-    graphviz
-    numpy
     requests
+    numpy
+    graphviz
   ];
 
   pythonRelaxDeps = [
@@ -31,6 +33,8 @@ buildPythonPackage {
   ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.mxnet ];
+
+  doCheck = !isPy3k;
 
   postPatch = ''
     # Required to support numpy >=1.24 where np.bool is removed in favor of just bool
@@ -47,5 +51,7 @@ buildPythonPackage {
     ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
   '';
 
-  meta = pkgs.mxnet.meta;
+  meta = pkgs.mxnet.meta // {
+    broken = (pkgs.mxnet.broken or false) || (isPy310 && pkgs.mxnet.cudaSupport);
+  };
 }

@@ -10,15 +10,15 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "efernau";
-    repo = "rot8";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-dHx3vFY0ztyTIlzUi22TYphPD5hvgfHrWaaeoGxnvW0=";
   };
 
-  cargoHash = "sha256-MZz8IZDux9VEDDLQjkT96smNsygY1vYG2QBw3Q09hqw=";
+  cargoHash = "sha256-KDg6Ggnm6Cl/1fXqNcc7/jRFJ6KTLVGveJ6Fs3NLlHE=";
 
   meta = with lib; {
-    description = "Screen rotation daemon for X11 and wlroots";
+    description = "screen rotation daemon for X11 and wlroots";
     homepage = "https://github.com/efernau/rot8";
     license = licenses.mit;
     maintainers = [ maintainers.smona ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "ANSI HTML Adapter";
     mainProgram = "aha";
     longDescription = ''
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/theZiz/aha";
     changelog = "https://github.com/theZiz/aha/blob/${version}/CHANGELOG";
-    license = with lib.licenses; [
+    license = with licenses; [
       lgpl2Plus
       mpl11
     ];
-    maintainers = with lib.maintainers; [ pSub ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.all;
   };
 }

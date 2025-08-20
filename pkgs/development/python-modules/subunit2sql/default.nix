@@ -56,7 +56,7 @@ buildPythonPackage rec {
     description = "Command to Read a subunit file or stream and put the data in a SQL DB";
     homepage = "https://opendev.org/opendev/subunit2sql";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
     # version 1.10.0 is incomptaible with oslo-db 14.0.0
     broken = true;
   };

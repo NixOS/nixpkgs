@@ -1,52 +1,28 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  cairo,
-  exo,
+  mkXfceDerivation,
   gtk3,
-  libexif,
-  libxfce4ui,
-  libxfce4util,
-  xfconf,
+  glib,
   gnome,
+  libexif,
   libheif,
   libjxl,
   librsvg,
+  libxfce4ui,
+  libxfce4util,
   webp-pixbuf-loader,
-  gitUpdater,
+  xfconf,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "apps";
   pname = "ristretto";
-  version = "0.13.4";
+  version = "0.13.3";
+  odd-unstable = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "apps";
-    repo = "ristretto";
-    tag = "ristretto-${finalAttrs.version}";
-    hash = "sha256-X0liZddeEOxlo0tyn3Irvo0+MTnMFuvKY2m4h+/EI2E=";
-  };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    glib # glib-compile-schemas
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
-  ];
+  sha256 = "sha256-cJMHRN4Wl6Fm0yoVqe0h30ZUlE1+Hw1uEDBHfHXBbC0=";
 
   buildInputs = [
-    cairo
-    exo
     glib
     gtk3
     libexif
@@ -70,14 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     }"
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "ristretto-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Fast and lightweight picture-viewer for the Xfce desktop environment";
-    homepage = "https://gitlab.xfce.org/apps/ristretto";
-    license = lib.licenses.gpl2Plus;
     mainProgram = "ristretto";
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "silx";
-  version = "2.2.2";
+  version = "2.1.2";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XZujZ7VxXMTLkBE4jz1xIA1763Z2yRCVL9E1CjQsVx8=";
+    hash = "sha256-Uep/BkH3ngGDbPMVptab64SKBbOGqa0qazUoT47idqU=";
   };
 
   build-system = with python3Packages; [

@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-gravity";
   version = "0-unstable-2024-12-29";
 
@@ -16,7 +16,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-upw0MjGccSI1B10wabKPMGrEo7ATfg4a7Hzaucbf99w=";
   };
 
-  cargoHash = "sha256-tkWY+dLFDnyir6d0supR3Z202p5i4UewY+J66mL1x/o=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "color-rs-0.8.0" = "sha256-/p4wYiLryY0+h0HBJUo4OV2jdZpcVn2kqv+8XewM4gM=";
+      "stardust-xr-0.45.0" = "sha256-1Bor53L+Fe18SU6MKwPLQXDGZq6E9++gtwDy4zkzZXw=";
+    };
+  };
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

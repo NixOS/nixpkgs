@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.9.1";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyproject_metadata";
     inherit version;
-    hash = "sha256-uLIlPdG3Bit4z5SaEV8Cun+kEUqr5j+hBSjp4alUqBY=";
+    hash = "sha256-N21aAHZKwpRApUV5+I5mt9nLfmKdNcNaHHJIv+vJtFU=";
   };
 
   build-system = [ flit-core ];

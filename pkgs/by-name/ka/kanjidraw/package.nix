@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   python3,
+  bash,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kanjidraw";
   version = "0.2.3";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "obfusk";
@@ -16,19 +16,15 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "03ag8vkbf85qww857ii8hcnn8bh5qa7rsmhka0v9vfxk272ifbyq";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [ tkinter ];
+  propagatedBuildInputs = with python3.pkgs; [ tkinter ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace-fail /bin/bash bash
+    substituteInPlace Makefile --replace /bin/bash ${bash}/bin/bash
   '';
 
   checkPhase = ''
     make test
   '';
-
-  pythonImportsCheck = [ "kanjidraw" ];
 
   meta = with lib; {
     description = "Handwritten kanji recognition";

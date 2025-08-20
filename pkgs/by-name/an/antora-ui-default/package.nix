@@ -40,11 +40,13 @@ stdenvNoCC.mkDerivation {
   # [3]: https://gitlab.com/trueNAHO/antora-ui-default/-/commit/11f563294248e9b64124b9289d639e349f2e9f5f
   src = fetchFromGitLab srcFetchFromGitLab;
 
+  phases = [ "installPhase" ];
+
   # Install '$src/ui-bundle.zip' to '$out/ui-bundle.zip' instead of '$out' to
   # prevent the ZIP from being misidentified as a binary [1].
   #
   # [1]: https://github.com/NixOS/nixpkgs/blob/8885a1e21ad43f8031c738a08029cd1d4dcbc2f7/pkgs/stdenv/generic/setup.sh#L792-L795
-  buildCommand = ''
+  installPhase = ''
     mkdir --parents "$out"
     cp "$src/ui-bundle.zip" "$out"
   '';

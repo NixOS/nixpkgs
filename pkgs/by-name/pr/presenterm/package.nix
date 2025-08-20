@@ -1,81 +1,55 @@
 {
   lib,
-  stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  makeBinaryWrapper,
-  lld,
+  rustPlatform,
   libsixel,
-  versionCheckHook,
+  stdenv,
   nix-update-script,
+  versionCheckHook,
 }:
-let
-  inherit (stdenv.hostPlatform) isDarwin isx86_64;
-in
-rustPlatform.buildRustPackage (finalAttrs: {
+
+rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.15.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tkIw7qo7lq3rSaBG0m6HzlXt8l3dQVFSBm8P3v7adVk=";
+    tag = "v${version}";
+    hash = "sha256-BFL0Y6v1v15WLSvA5i+l47bR9+1qDHPWSMMuEaLdhPY=";
   };
-
-  nativeBuildInputs =
-    lib.optionals isDarwin [
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals (isDarwin && isx86_64) [
-      lld
-    ];
 
   buildInputs = [
     libsixel
   ];
 
-  buildFeatures = [
-    "sixel"
-  ];
+  cargoHash = "sha256-IC72l1xbH/AdCHdcgY8ODv6+YZUmT5NYVisP9oIMpGA=";
 
-  cargoHash = "sha256-CLoN85A2fggTHs/AHmo43N+9Q4FGKwNmKObw+OMBFao=";
-
-  env = lib.optionalAttrs (isDarwin && isx86_64) {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
-
-  checkFeatures = [
-    "sixel"
-  ];
+  # Crashes at runtime on darwin with:
+  # Library not loaded: .../out/lib/libsixel.1.dylib
+  buildFeatures = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "sixel" ];
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
     "--skip=external_snippet"
   ];
 
-  # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionalString isDarwin ''
-    wrapProgram $out/bin/presenterm \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
-  '';
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
   passthru = {
     updateScript = nix-update-script { };
   };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   meta = {
     description = "Terminal based slideshow tool";
-    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${version}";
     homepage = "https://github.com/mfontanini/presenterm";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "presenterm";
   };
-})
+}

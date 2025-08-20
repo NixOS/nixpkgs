@@ -1,16 +1,14 @@
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  pytestCheckHook,
+  mock,
   zope-testing,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "zc-lockfile";
   version = "3.0.post1";
-  pyproject = true;
 
   src = fetchPypi {
     pname = "zc.lockfile";
@@ -18,24 +16,13 @@ buildPythonPackage rec {
     hash = "sha256-rbLubZ5qIzPJEXjcssm5aldEx47bdxLceEp9dWSOgew=";
   };
 
-  build-system = [ setuptools ];
+  buildInputs = [ mock ];
+  propagatedBuildInputs = [ zope-testing ];
 
-  pythonImportsCheck = [ "zc.lockfile" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    zope-testing
-  ];
-
-  enabledTestPaths = [ "src/zc/lockfile/tests.py" ];
-
-  pythonNamespaces = [ "zc" ];
-
-  meta = {
+  meta = with lib; {
     description = "Inter-process locks";
     homepage = "https://www.python.org/pypi/zc.lockfile";
-    changelog = "https://github.com/zopefoundation/zc.lockfile/blob/${version}/CHANGES.rst";
-    license = lib.licenses.zpl21;
+    license = licenses.zpl20;
     maintainers = [ ];
   };
 }

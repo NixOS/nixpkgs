@@ -2,8 +2,6 @@
   lib,
   asn1crypto,
   buildPythonPackage,
-  boto3,
-  botocore,
   certifi,
   cffi,
   charset-normalizer,
@@ -32,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.15.0";
+  version = "3.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +39,7 @@ buildPythonPackage rec {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-Dz5jxmbBfWThmd7H0MIO5+DfnjpDw9ADHg5Sc7P+DYs=";
+    hash = "sha256-6poMWKQB/NR40W39KDJwBgYGeAHsr4f1GJhPxYiTc1k=";
   };
 
   build-system = [
@@ -51,8 +49,6 @@ buildPythonPackage rec {
 
   dependencies = [
     asn1crypto
-    boto3
-    botocore
     certifi
     cffi
     charset-normalizer
@@ -68,10 +64,6 @@ buildPythonPackage rec {
     sortedcontainers
     tomlkit
     typing-extensions
-  ];
-
-  pythonRelaxDeps = [
-    "pyopenssl"
   ];
 
   optional-dependencies = {
@@ -104,17 +96,12 @@ buildPythonPackage rec {
     "test/unit/test_ocsp.py"
     "test/unit/test_retry_network.py"
     "test/unit/test_s3_util.py"
-    # AssertionError: /build/source/.wiremock/wiremock-standalone.jar does not exist
-    "test/unit/test_programmatic_access_token.py"
-    "test/unit/test_oauth_token.py"
   ];
 
   disabledTests = [
     # Tests connect to the internet
     "test_status_when_num_of_chunks_is_zero"
     "test_test_socket_get_cert"
-    # Missing .wiremock/wiremock-standalone.jar
-    "test_wiremock"
   ];
 
   pythonImportsCheck = [

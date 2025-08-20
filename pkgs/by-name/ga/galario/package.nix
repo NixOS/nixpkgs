@@ -32,12 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    fftw
-    fftwFloat
-  ]
-  ++ lib.optional enablePython pythonPackages.python
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs =
+    [
+      fftw
+      fftwFloat
+    ]
+    ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.numpy

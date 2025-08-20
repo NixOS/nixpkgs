@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "SVGCleaner";
   version = "unstable-2021-08-30";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
-    repo = "SVGCleaner";
+    repo = pname;
     rev = "575eac74400a5ac45c912b144f0c002aa4a0135f";
     sha256 = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
   };
 
-  cargoHash = "sha256-5HRhKW1VbecUdc+iad3hOKsR82JI2Pgtio3z/8pqZIg=";
+  cargoHash = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";
 
   meta = with lib; {
     description = "Clean and optimize SVG files from unnecessary data";

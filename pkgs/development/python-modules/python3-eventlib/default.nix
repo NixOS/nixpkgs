@@ -28,6 +28,8 @@ buildPythonPackage rec {
     greenlet
   ];
 
+  dontUseSetuptoolsCheck = true;
+
   pythonImportsCheck = [ "eventlib" ];
 
   meta = with lib; {

@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  darwin,
+  stdenv,
 }:
 buildGoModule rec {
   pname = "gptscript";
@@ -9,12 +11,14 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
-    repo = "gptscript";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-9wyDcvY5JCjtvx6XtvHwOsZLCiN1fRn0wBGaIaw2iRQ=";
   };
 
   vendorHash = "sha256-ajglXWGJhSJtcrbSBmxmriXFTT+Vb4xYq0Ec9SYRlQk=";
+
+  propagatedBuildInputs = with darwin; lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   ldflags = [
     "-s"
@@ -25,12 +29,12 @@ buildGoModule rec {
   # Requires network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/gptscript-ai/gptscript";
     changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v${version}";
     description = "Build AI assistants that interact with your systems";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ jamiemagee ];
     mainProgram = "gptscript";
   };
 }

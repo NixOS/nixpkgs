@@ -3,12 +3,16 @@
   autoreconfHook,
   fetchFromGitHub,
   fltk,
+  giflib,
+  libXcursor,
+  libXi,
+  libXinerama,
   libjpeg,
   libpng,
-  libwebp,
   libressl,
   mbedtls,
   openssl,
+  perl,
   pkg-config,
   stdenv,
   which,
@@ -27,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.2.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
+    hash = "sha256-bGIOYONMtIN4IhSobOeSLiRDR13mo4W/DBX4kQ2S+hg=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fltk
+    giflib
+    libXcursor
+    libXi
+    libXinerama
     libjpeg
     libpng
-    libwebp
+    perl
     ssl
-    fltk
   ];
 
   outputs = [
@@ -78,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

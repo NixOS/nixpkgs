@@ -2,7 +2,6 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   bash,
   lenovo-legion,
 }:
@@ -19,7 +18,7 @@ stdenv.mkDerivation {
     sed -i -e '/depmod/d' ./Makefile
   '';
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "SHELL=bash"
     "KERNELVERSION=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   rustPlatform,
+  darwin,
   testers,
   komac,
   dbus,
@@ -12,34 +13,42 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
-  bzip2,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "komac";
-  version = "2.12.1";
 
+let
+  version = "2.8.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-F6Vb6X1JbB7I1oOkrtLBVUdi2nqPIhiQIlqUEfPIgsc=";
+    tag = "v${version}";
+    hash = "sha256-yAf89GtKu500VPn+CKF6sGC+TPhJcGz2lR7C30/YBRI=";
   };
+in
+rustPlatform.buildRustPackage {
+  inherit version src;
 
-  cargoHash = "sha256-FMxt98wbes1PWqeOE95epK4uwOEgLU3zvCu1cyDPxGA=";
+  pname = "komac";
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    installShellFiles
-  ];
+  cargoHash = "sha256-wgOZoKsbYkbbCKS+2pfqgsHD5Azw72gPJXHhfw5mNqo=";
 
-  buildInputs = [
-    dbus
-    openssl
-    zstd
-    bzip2
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      installShellFiles
+    ];
+
+  buildInputs =
+    [
+      dbus
+      openssl
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -60,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
+      inherit version;
 
       package = komac;
       command = "komac --version";
@@ -72,11 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Community Manifest Creator for WinGet";
     homepage = "https://github.com/russellbanks/Komac";
-    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+      kachick
       HeitorAugustoLN
     ];
     mainProgram = "komac";
   };
-})
+}

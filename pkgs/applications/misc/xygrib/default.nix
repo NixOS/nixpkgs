@@ -13,7 +13,7 @@
   openjpeg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   version = "unstable-2022-05-16";
   pname = "xygrib";
 
@@ -37,10 +37,11 @@ stdenv.mkDerivation {
     openjpeg
     libpng
   ];
-  cmakeFlags = [
-    "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+  cmakeFlags =
+    [
+      "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then

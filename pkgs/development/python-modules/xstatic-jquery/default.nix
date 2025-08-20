@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "xstatic-jquery";
   version = "3.5.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-jQuery";

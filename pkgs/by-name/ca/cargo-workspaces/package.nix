@@ -6,34 +6,41 @@
   libssh2,
   openssl,
   zlib,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.4.0";
+  version = "0.3.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-kBjiRPEWHKhX6vTB48TjKYhlpaiieNzE1l0PjaLTL4k=";
+    hash = "sha256-JqLKFVM/EnVAPF7erINpHdaaDG+g2nbB0iE/hB1gml8=";
   };
 
-  cargoHash = "sha256-vHLc738wFunyUDu6/B5foTE2/wExd2Yxcl638iqOWdw=";
+  cargoHash = "sha256-wFf6M99IJAZ7YlPBKUZA2mgAS/LNB128GIjDHxr4pMo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libssh2
-    openssl
-    zlib
-  ];
+  buildInputs =
+    [
+      libssh2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     LIBSSH2_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for managing cargo workspaces and their crates, inspired by lerna";
     longDescription = ''
       A tool that optimizes the workflow around cargo workspaces with
@@ -42,8 +49,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
     changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       figsoda
       macalinao
       matthiasbeyer

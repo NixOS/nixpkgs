@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2025.1.86199";
+  version = "2024.3.55417";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
-    hash = "sha256-+sHxagy9+H6DEnpdtRTNMy6GLSSCopaeqlXWJodAim0=";
+    hash = "sha256-5ktWQZxrgoduQR9GOYnPK9kNGExpUDebKgBbhc+ImM8=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -43,8 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Issue tracking and project management tool for developers";
-    maintainers = [ lib.maintainers.leona ];
-    teams = [ lib.teams.serokell ];
+    maintainers = lib.teams.serokell.members ++ [ lib.maintainers.leona ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     # https://www.jetbrains.com/youtrack/buy/license.html
     license = lib.licenses.unfree;

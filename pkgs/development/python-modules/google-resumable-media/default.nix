@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  brotli,
   buildPythonPackage,
   fetchPypi,
   google-auth,
@@ -41,13 +40,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    brotli
     google-cloud-testutils
     mock
     pytest-asyncio
     pytestCheckHook
-  ]
-  ++ optional-dependencies.requests;
+  ] ++ optional-dependencies.requests;
 
   preCheck = ''
     # prevent shadowing imports

@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "martian-mono";
-  version = "1.1.0";
+  version = "1.0.0";
 
   src = fetchzip {
     url = "https://github.com/evilmartians/mono/releases/download/v${version}/martian-mono-${version}-otf.zip";
-    sha256 = "sha256-W6ewNtFDS1O1fwoAe27tIgNZn7AAKo965dWkZYzsg+o=";
+    sha256 = "sha256-hC08IHWqg+x3qoEf4EL98ZbGeqdwjnMpDovEiWrWPpI=";
     stripRoot = false;
   };
 
@@ -28,12 +28,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free and open-source monospaced font from Evil Martians";
     homepage = "https://github.com/evilmartians/mono";
     changelog = "https://github.com/evilmartians/mono/raw/v${version}/Changelog.md";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

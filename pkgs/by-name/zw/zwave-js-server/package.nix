@@ -1,22 +1,21 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nixosTests
 }:
 
 buildNpmPackage rec {
   pname = "zwave-js-server";
-  version = "3.2.1";
+  version = "1.40.2";
 
   src = fetchFromGitHub {
     owner = "zwave-js";
-    repo = "zwave-js-server";
+    repo = pname;
     rev = version;
-    hash = "sha256-oZA+tMYxiWc+PiPiqGEJpEa434CqNjPbutBWjXBgmhw=";
+    hash = "sha256-+S6sMJKmvi5P7eDEWtimArY1W/5IABl/cZkTqhDORgc=";
   };
 
-  npmDepsHash = "sha256-1JgfXF3kNuUj0jprKBsJSPeFH6ZpqpU4lceTQm5FBgg=";
+  npmDepsHash = "sha256-HfxYR62r0D0LTmj4Lb+dCvD4tdpE8b7nmk5wki7vEM8=";
 
   # For some reason the zwave-js dependency is in devDependencies
   npmFlags = [ "--include=dev" ];

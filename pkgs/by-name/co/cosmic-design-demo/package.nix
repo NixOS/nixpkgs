@@ -3,39 +3,47 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cmake,
   just,
-  libcosmicAppHook,
+  pkg-config,
   expat,
+  libxkbcommon,
   fontconfig,
   freetype,
+  wayland,
+  makeBinaryWrapper,
+  cosmic-icons,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-design-demo";
-  version = "0-unstable-2024-01-08";
+  version = "unstable-2024-01-08";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-design-demo";
+    repo = pname;
     rev = "d58cfad46f2982982494fce27fb00ad834dc8992";
     hash = "sha256-nWkiaegSjxgyGlpjXE9vzGjiDORaRCSoZJMDv0jtvaA=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-czfDtiSEmzmcLfpqv0/8sP8zDAEKh+pkQkGXdd5NskM=";
 
   nativeBuildInputs = [
+    cmake
     just
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
   ];
-
   buildInputs = [
+    libxkbcommon
     expat
     fontconfig
     freetype
+    wayland
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--unstable"
@@ -47,12 +55,18 @@ rustPlatform.buildRustPackage {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-design-demo"
   ];
 
-  meta = {
+  postInstall = ''
+    wrapProgram "$out/bin/cosmic-design-demo" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}" \
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-design-demo";
     description = "Design Demo for the COSMIC Desktop Environment";
-    license = lib.licenses.mpl20;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-design-demo";
   };
 }

@@ -5,9 +5,7 @@
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
-  setuptools-scm,
   fonttools,
-  orjson,
   typing-extensions,
   ufonormalizer,
   ufolib2,
@@ -16,24 +14,20 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.9.5";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
     rev = "v${version}";
-    hash = "sha256-nWySeGikbPhZmJ9yLpcFeTNxaG2EmMhTBtZvykrMsBo=";
+    hash = "sha256-padx8tq17IcO73mkSYzLCce1FCixnO0ljujKcjSDqKY=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     fonttools
-    orjson
     typing-extensions
     ufonormalizer
     ufolib2

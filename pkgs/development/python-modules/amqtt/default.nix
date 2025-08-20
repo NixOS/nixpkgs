@@ -17,7 +17,7 @@
   websockets,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "amqtt";
   version = "unstable-2022-05-29";
   format = "pyproject";
@@ -26,7 +26,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "Yakifo";
-    repo = "amqtt";
+    repo = pname;
     rev = "09ac98d39a711dcff0d8f22686916e1c2495144b";
     hash = "sha256-8T1XhBSOiArlUQbQ41LsUogDgOurLhf+M8mjIrrAC4s=";
   };
@@ -55,7 +55,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # stuck in epoll

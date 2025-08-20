@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -33,25 +33,23 @@ stdenv.mkDerivation rec {
     autoreconfHook
     file
     gettext
-    glib # for gdbus-codegen
     pkg-config
-  ]
-  ++ lib.optionals withGnome [
-    gtk4 # for gtk4-builder-tool
   ];
 
-  buildInputs = [
-    sstp
-    networkmanager
-    ppp
-  ]
-  ++ lib.optionals withGnome [
-    gtk3
-    gtk4
-    libsecret
-    libnma
-    libnma-gtk4
-  ];
+  buildInputs =
+    [
+      sstp
+      networkmanager
+      glib
+      ppp
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      gtk4
+      libsecret
+      libnma
+      libnma-gtk4
+    ];
 
   postPatch = ''
     sed -i 's#/sbin/pppd#${ppp}/bin/pppd#' src/nm-sstp-service.c
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
     "--enable-absolute-paths"
   ];
 
-  strictDeps = true;
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -77,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NetworkManager's sstp plugin";
-    inherit (networkmanager.meta) maintainers teams platforms;
+    inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;
   };
 }

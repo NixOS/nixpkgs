@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cloudposse";
-    repo = "github-commenter";
+    repo = pname;
     rev = version;
     hash = "sha256-x3/ae22ub9Us3mvSmvq9ohlkujvZCUfSrmZeQNvIWzE=";
   };

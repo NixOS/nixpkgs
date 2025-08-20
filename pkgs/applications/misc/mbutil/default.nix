@@ -23,7 +23,7 @@ buildPythonApplication rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "test/test.py" ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   meta = {
     description = "Importer and exporter for MBTiles";

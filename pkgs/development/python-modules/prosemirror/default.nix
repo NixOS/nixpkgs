@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "prosemirror";
-  version = "0.5.2";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cZwqoKQ+B7d07R20dXTiDsiBIYYTyaWa2SnGs8o8Hl8=";
+    hash = "sha256-COjCU//frJf2MNgaAz5aQizbjRsF3ypYFXS6aDjqrIU=";
   };
 
   build-system = [ setuptools-scm ];

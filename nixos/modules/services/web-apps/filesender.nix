@@ -158,8 +158,7 @@ in
         settings = {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
-        }
-        // cfg.poolSettings;
+        } // cfg.poolSettings;
       };
     };
 
@@ -228,7 +227,7 @@ in
         "multi-user.target"
         "phpfpm-filesender.service"
       ];
-      after = [ "postgresql.target" ];
+      after = [ "postgresql.service" ];
 
       restartIfChanged = true;
 

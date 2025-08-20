@@ -11,7 +11,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
   version = "1.1.1";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "obfusk";
@@ -25,11 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click
   ];
 
@@ -42,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail /bin/bash ${bash}/bin/bash
+      --replace /bin/bash ${bash}/bin/bash
   '';
 
   postBuild = ''

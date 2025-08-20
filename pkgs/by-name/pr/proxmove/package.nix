@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "proxmove";
   version = "1.2";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ossobv";
@@ -16,11 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-8xzsmQsogoMrdpf8+mVZRWPGQt9BO0dBT0aKt7ygUe4=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     proxmoxer
   ];
 

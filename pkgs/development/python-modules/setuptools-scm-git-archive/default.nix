@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "setuptools_scm_git_archive" ];
 

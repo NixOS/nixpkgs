@@ -2,20 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hypothesis,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.2.9";
-  pyproject = true;
+  version = "1.2.7";
+  format = "setuptools";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OqTbHV2duO4SmP6O9+tfaSD7fKOJ/PmzX5dUW9eoBBg=";
+    sha256 = "94aa84fa42393f773c8215fab679bd3b72bbdb9f7931643d3672184cde9981d9";
   };
 
-  build-system = [ poetry-core ];
+  propagatedBuildInputs = [ hypothesis ];
 
   # pypi doesn't distribute tests
   doCheck = false;
@@ -23,9 +25,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rubymarshal" ];
 
   meta = with lib; {
-    description = "Read and write Ruby-marshalled data";
     homepage = "https://github.com/d9pouces/RubyMarshal/";
+    description = "Read and write Ruby-marshalled data";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = [ maintainers.ryantm ];
   };
 }

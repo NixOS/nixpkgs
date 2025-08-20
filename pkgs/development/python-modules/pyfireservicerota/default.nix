@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchFromGitHub,
+  fetchPypi,
   pdm-backend,
   pytz,
   oauthlib,
@@ -12,21 +12,26 @@
 
 buildPythonPackage rec {
   pname = "pyfireservicerota";
-  version = "0.0.46";
+  version = "0.0.44";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchFromGitHub {
-    owner = "cyberjunky";
-    repo = "python-fireservicerota";
-    tag = version;
-    hash = "sha256-2pCv/9VwGUDS5wFdJCxOevl7vWg+iXInI/xY3jPp7BM=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-OknGX4xP+AHXRuhizbeTVAfiOX0uRGzAly7FJ1vopDI=";
   };
 
-  build-system = [ pdm-backend ];
+  postPatch = ''
+    # https://github.com/cyberjunky/python-fireservicerota/pull/1
+    substituteInPlace pyproject.toml \
+      --replace-fail '"aiohttp",' '"requests",' \
+      --replace-fail '"aiohttp_retry",' ""
+  '';
 
-  dependencies = [
+  nativeBuildInputs = [ pdm-backend ];
+
+  propagatedBuildInputs = [
     pytz
     oauthlib
     requests
@@ -39,7 +44,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyfireservicerota" ];
 
   meta = with lib; {
-    changelog = "https://github.com/cyberjunky/python-fireservicerota/releases/tag/${src.tag}";
     description = "Python 3 API wrapper for FireServiceRota/BrandweerRooster";
     homepage = "https://github.com/cyberjunky/python-fireservicerota";
     license = licenses.mit;

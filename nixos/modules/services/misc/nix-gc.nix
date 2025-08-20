@@ -19,9 +19,8 @@ in
       };
 
       dates = lib.mkOption {
-        type = with lib.types; either singleLineStr (listOf str);
-        apply = lib.toList;
-        default = [ "03:15" ];
+        type = lib.types.singleLineStr;
+        default = "03:15";
         example = "weekly";
         description = ''
           How often or when garbage collection is performed. For most desktop and server systems
@@ -87,9 +86,7 @@ in
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       serviceConfig.Type = "oneshot";
-      startAt = lib.optionals cfg.automatic cfg.dates;
-      # do not start and delay when switching
-      restartIfChanged = false;
+      startAt = lib.optional cfg.automatic cfg.dates;
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {

@@ -1,28 +1,27 @@
 {
-  lib,
   buildPythonPackage,
+  cmake,
   fetchFromGitHub,
+  gtest,
+  hydra-core,
+  lib,
   nlohmann_json,
   pybind11,
-  replaceVars,
-  gtest,
-  setuptools,
-  cmake,
-  sfml_2,
-  hydra-core,
   pyvirtualdisplay,
+  sfml,
+  substituteAll,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "nocturne";
-  version = "0-unstable-2024-06-19";
-  pyproject = true;
+  version = "unstable-2022-10-15";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = "nocturne";
-    rev = "6d1e0f329f7acbed01c934842b269333540af6d2";
-    hash = "sha256-Ufhvc+IZUrn8i6Fmu6o81LPjY1Jo0vzsso+eLbI1F2s=";
+    repo = pname;
+    rev = "ae0a4e361457caf6b7e397675cc86f46161405ed";
+    hash = "sha256-pFVbl4m7qX1mJgleNabRboS9klDDsbzUa4PYL5+Jupc=";
   };
 
   # Simulate the git submodules but with nixpkgs dependencies
@@ -33,22 +32,19 @@ buildPythonPackage {
   '';
 
   patches = [
-    (replaceVars ./dependencies.patch {
+    (substituteAll {
+      src = ./dependencies.patch;
       gtest_src = gtest.src;
     })
-  ];
-
-  build-system = [
-    setuptools
   ];
 
   nativeBuildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ sfml_2 ];
+  buildInputs = [ sfml ];
 
   # hydra-core and pyvirtualdisplay are not declared as dependences but they are requirements
-  dependencies = [
+  propagatedBuildInputs = [
     hydra-core
     pyvirtualdisplay
   ];
@@ -58,10 +54,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nocturne" ];
 
-  meta = {
+  meta = with lib; {
     description = "Data-driven, fast driving simulator for multi-agent coordination under partial observability";
     homepage = "https://github.com/facebookresearch/nocturne";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samuela ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ samuela ];
   };
 }

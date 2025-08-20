@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cutemaze";
-  version = "1.3.5";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "https://gottcode.org/cutemaze/cutemaze-${version}.tar.bz2";
-    hash = "sha256-a+QIOD0TB0AGnqIUgtkMBZuPUCQbXp4NtZ6b0vk/J0c=";
+    hash = "sha256-DKWg/wuWSsjs9dkJlanIxQhVWpebWRx5h6SRi5yFm84=";
   };
 
   nativeBuildInputs = [
@@ -25,13 +25,14 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

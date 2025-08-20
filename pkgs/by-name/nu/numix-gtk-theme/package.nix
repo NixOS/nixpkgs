@@ -10,7 +10,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "numix-gtk-theme";
   version = "unstable-2021-06-08";
 

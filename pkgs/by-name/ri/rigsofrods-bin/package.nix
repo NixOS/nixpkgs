@@ -14,7 +14,7 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rigsofrods-bin";
   version = "2022.12";
 

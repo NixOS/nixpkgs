@@ -1,35 +1,40 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  libcosmicAppHook,
   just,
-  nix-update-script,
-  nixosTests,
+  pkg-config,
+  rustPlatform,
+  libglvnd,
+  libxkbcommon,
+  wayland,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-panel";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-panel";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-QcrkfU6HNZ2tWfKsMdcv58HC/PE7b4T14AIep85TWOY=";
+    tag = "epoch-${version}";
+    hash = "sha256-nO7Y1SpwvfHhL0OSy7Ti+e8NPzfknW2SGs7IYoF1Jow=";
   };
 
-  cargoHash = "sha256-qufOJeWPRjj4GgWNJmQfYaGKeYOQbkTeFzrUSi9QNnQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EIp9s42deMaB7BDe7RAqj2+CnTXjHCtZjS5Iq8l46A4=";
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
+    pkg-config
+  ];
+  buildInputs = [
+    libglvnd
+    libxkbcommon
+    wayland
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -40,31 +45,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
   ];
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
+  # Force linking to libEGL, which is always dlopen()ed.
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+    map (a: "-C link-arg=${a}")
+      [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-Wl,--pop-state"
       ];
-    };
-  };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      qyliss
+      nyabinary
+    ];
+    platforms = platforms.linux;
   };
-})
+}

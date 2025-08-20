@@ -5,12 +5,12 @@
   fetchFromGitHub,
   fetchpatch,
   flex,
-  gitMinimal,
+  git,
   lib,
-  libpq,
   libtool,
   libunwind,
   pkg-config,
+  postgresql,
   ripgrep,
   stdenv,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lxBn/T01Tsa7tid3mRJUigUwv9d3BAPZhV9Mp1lywBU=";
     fetchSubmodules = true;
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     automake
     autoconf
-    gitMinimal
+    git
     libtool
     pkg-config
     ripgrep
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bison
     flex
-    libpq
+    postgresql
   ];
 
   enableParallelBuilding = true;

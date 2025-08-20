@@ -12,14 +12,20 @@
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "5.7.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo_serialization";
+    pname = "oslo.serialization";
     inherit version;
-    hash = "sha256-vcTT3Ze4BjmzUF5G2apDn8lQKIFBd/MLkXQ+gTZsO+c=";
+    hash = "sha256-TH1OEtqFPMTwS5EjBBE06Iboyf9Xq1fBli061Kh7f3w=";
   };
+
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
 
   build-system = [
     pbr
@@ -48,6 +54,6 @@ buildPythonPackage rec {
     description = "Oslo Serialization library";
     homepage = "https://github.com/openstack/oslo.serialization";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

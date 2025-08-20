@@ -1,11 +1,10 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "das";
   version = "1.0.3";
   pyproject = true;
@@ -18,16 +17,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
-    "dash"
     "defusedxml"
     "netaddr"
     "networkx"
-    "plotly"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python3.pkgs; [
     dash
     defusedxml
     dnspython
@@ -42,16 +39,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "das" ];
 
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
-
-  meta = {
+  meta = with lib; {
     description = "Divide full port scan results and use it for targeted Nmap runs";
     homepage = "https://github.com/snovvcrash/DivideAndScan";
     changelog = "https://github.com/snovvcrash/DivideAndScan/releases/tag/v${version}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "das";
   };
 }

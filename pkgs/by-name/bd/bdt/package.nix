@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "bdt";
   version = "0.18.0";
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
     hash = "sha256-gUKsJwbpMPSO+KPqyJRodrRLjUpTh/y6C2xhrgvJFKk=";
   };
 
-  cargoHash = "sha256-TikWh0U56x3HKca5Dj68Z59mOgedv+K5r+y7/CcpWa8=";
+  cargoHash = "sha256-4KrFhchoIB2N89m7HrL0xj2Z+u/6/6Onxa2wIAX18Io=";
 
   meta = with lib; {
-    description = "CLI tool to query parquet, json and avro files";
+    description = "boring data tool. A CLI tool to query parquet, json and avro files";
     homepage = "https://github.com/datafusion-contrib/bdt";
     license = licenses.asl20;
     mainProgram = "bdt";

@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tinyalsa";
   version = "unstable-2022-06-05";
 

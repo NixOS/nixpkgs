@@ -8,13 +8,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "flam3";
   version = "3.1.1+date=2018-04-12";
 
   src = fetchFromGitHub {
     owner = "scottdraves";
-    repo = "flam3";
+    repo = pname;
     rev = "7fb50c82e90e051f00efcc3123d0e06de26594b2";
     hash = "sha256-cKRfmTcyWY2LyxqojTzxD2wnxu5eh3emHi51bhS3gYg=";
   };

@@ -14,8 +14,6 @@
   bundlerEnv,
   libnotify,
   pandoc,
-  autoreconfHook,
-  bundlerUpdateScript,
 }:
 
 let
@@ -36,7 +34,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
     pkg-config
   ];
   buildInputs = [
@@ -51,21 +50,25 @@ stdenv.mkDerivation {
     libnotify
   ];
 
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
   configureFlags = [
     "--enable-gmodule"
     "--with-standard-modules=all"
   ];
 
-  passthru.updateScript = bundlerUpdateScript "mpdcron";
-
-  meta = {
+  meta = with lib; {
     description = "Cron like daemon for mpd";
     homepage = "http://alip.github.io/mpdcron/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       lovek323
       manveru
     ];
+    broken = stdenv.hostPlatform.isDarwin; # fails due to old nokogiri https://github.com/sparklemotion/nokogiri/discussions/3152#discussioncomment-8806607
   };
 }
+# TODO: autoreconfHook this

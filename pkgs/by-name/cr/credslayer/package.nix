@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     wireshark-cli
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests/tests.py"
   ];
 

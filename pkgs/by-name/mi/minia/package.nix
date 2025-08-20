@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GATB";
     repo = "minia";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "0bmfrywixaaql898l0ixsfkhxjf2hb08ssnqzlzacfizxdp46siq";
     fetchSubmodules = true;
   };

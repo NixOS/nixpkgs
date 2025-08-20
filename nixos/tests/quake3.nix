@@ -1,93 +1,102 @@
-{ lib, ... }:
-let
-  # Build Quake with coverage instrumentation.
-  overrides = pkgs: {
-    quake3game = pkgs.quake3game.override (args: {
-      stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
-    });
-  };
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
 
-  # Only allow the demo data to be used (only if it's unfreeRedistributable).
-  unfreePredicate =
-    pkg:
-    let
-      allowPackageNames = [
-        "quake3-demodata"
-        "quake3-pointrelease"
-      ];
-      allowLicenses = [ lib.licenses.unfreeRedistributable ];
-    in
-    lib.elem pkg.pname allowPackageNames && lib.elem (pkg.meta.license or null) allowLicenses;
+  let
 
-  client =
-    { pkgs, ... }:
-    {
-      imports = [ ./common/x11.nix ];
-      hardware.graphics.enable = true;
-      environment.systemPackages = [ pkgs.quake3demo ];
-      nixpkgs.config.packageOverrides = overrides;
-      nixpkgs.config.allowUnfreePredicate = unfreePredicate;
+    # Build Quake with coverage instrumentation.
+    overrides = pkgs: {
+      quake3game = pkgs.quake3game.override (args: {
+        stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
+      });
     };
-in
-{
-  name = "quake3";
-  meta.maintainers = with lib.maintainers; [ ];
 
-  node.pkgsReadOnly = false;
+    # Only allow the demo data to be used (only if it's unfreeRedistributable).
+    unfreePredicate =
+      pkg:
+      let
+        allowPackageNames = [
+          "quake3-demodata"
+          "quake3-pointrelease"
+        ];
+        allowLicenses = [ lib.licenses.unfreeRedistributable ];
+      in
+      lib.elem pkg.pname allowPackageNames && lib.elem (pkg.meta.license or null) allowLicenses;
 
-  # TODO: lcov doesn't work atm
-  #makeCoverageReport = true;
-
-  nodes = {
-    server =
+    client =
       { pkgs, ... }:
+
       {
-        systemd.services.quake3-server = {
-          wantedBy = [ "multi-user.target" ];
-          script =
-            "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 "
-            + "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";
-        };
+        imports = [ ./common/x11.nix ];
+        hardware.graphics.enable = true;
+        environment.systemPackages = [ pkgs.quake3demo ];
         nixpkgs.config.packageOverrides = overrides;
         nixpkgs.config.allowUnfreePredicate = unfreePredicate;
-        networking.firewall.allowedUDPPorts = [ 27960 ];
       };
 
-    client1 = client;
-    client2 = client;
-  };
+  in
 
-  testScript = ''
-    start_all()
+  rec {
+    name = "quake3";
+    meta = with lib.maintainers; {
+      maintainers = [ domenkozar ];
+    };
 
-    server.wait_for_unit("quake3-server")
-    client1.wait_for_x()
-    client2.wait_for_x()
+    # TODO: lcov doesn't work atm
+    #makeCoverageReport = true;
 
-    client1.execute("quake3 +set r_fullscreen 0 +set name Foo +connect server >&2 &", check_return = False)
-    client2.execute("quake3 +set r_fullscreen 0 +set name Bar +connect server >&2 &", check_return = False)
+    nodes = {
+      server =
+        { pkgs, ... }:
 
-    server.wait_until_succeeds("grep -q 'Foo.*entered the game' /tmp/log")
-    server.wait_until_succeeds("grep -q 'Bar.*entered the game' /tmp/log")
+        {
+          systemd.services.quake3-server = {
+            wantedBy = [ "multi-user.target" ];
+            script =
+              "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 "
+              + "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";
+          };
+          nixpkgs.config.packageOverrides = overrides;
+          nixpkgs.config.allowUnfreePredicate = unfreePredicate;
+          networking.firewall.allowedUDPPorts = [ 27960 ];
+        };
 
-    server.sleep(10)  # wait for a while to get a nice screenshot
+      client1 = client;
+      client2 = client;
+    };
 
-    client1.block()
+    testScript = ''
+      start_all()
 
-    server.sleep(20)
+      server.wait_for_unit("quake3-server")
+      client1.wait_for_x()
+      client2.wait_for_x()
 
-    client1.screenshot("screen1")
-    client2.screenshot("screen2")
+      client1.execute("quake3 +set r_fullscreen 0 +set name Foo +connect server >&2 &", check_return = False)
+      client2.execute("quake3 +set r_fullscreen 0 +set name Bar +connect server >&2 &", check_return = False)
 
-    client1.unblock()
+      server.wait_until_succeeds("grep -q 'Foo.*entered the game' /tmp/log")
+      server.wait_until_succeeds("grep -q 'Bar.*entered the game' /tmp/log")
 
-    server.sleep(10)
+      server.sleep(10)  # wait for a while to get a nice screenshot
 
-    client1.screenshot("screen3")
-    client2.screenshot("screen4")
+      client1.block()
 
-    client1.shutdown()
-    client2.shutdown()
-    server.stop_job("quake3-server")
-  '';
-}
+      server.sleep(20)
+
+      client1.screenshot("screen1")
+      client2.screenshot("screen2")
+
+      client1.unblock()
+
+      server.sleep(10)
+
+      client1.screenshot("screen3")
+      client2.screenshot("screen4")
+
+      client1.shutdown()
+      client2.shutdown()
+      server.stop_job("quake3-server")
+    '';
+
+  }
+)

@@ -11,7 +11,13 @@ in
 {
   options = {
     services.jenkins = {
-      enable = lib.mkEnableOption "Jenkins, a continuous integration server";
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to enable the jenkins continuous integration server.
+        '';
+      };
 
       user = lib.mkOption {
         default = "jenkins";
@@ -83,13 +89,11 @@ in
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
-      javaPackage = lib.mkPackageOption pkgs "jdk21" { };
-
       packages = lib.mkOption {
         default = [
           pkgs.stdenv
           pkgs.git
-          pkgs.jdk21
+          pkgs.jdk17
           config.programs.ssh.package
           pkgs.nix
         ];
@@ -167,8 +171,7 @@ in
       # server references the dejavu fonts
       systemPackages = [
         pkgs.dejavu_fonts
-      ]
-      ++ lib.optional cfg.withCLI cfg.package;
+      ] ++ lib.optional cfg.withCLI cfg.package;
 
       variables =
         { }
@@ -236,7 +239,7 @@ in
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${cfg.javaPackage}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk17}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \

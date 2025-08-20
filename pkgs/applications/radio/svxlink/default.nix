@@ -20,7 +20,6 @@
   tcl,
   doxygen,
   groff,
-  jsoncpp,
 }:
 
 let
@@ -40,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "svxlink";
-  version = "25.05.1";
+  version = "19.09.2";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
-    repo = "svxlink";
-    tag = version;
-    hash = "sha256-OyAR/6heGX6J53p6x+ZPXY6nzSv22umMTg0ISlWcjp8=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-riyFEuEmJ7+jYT3UoTTsMUwFdO3y5mjo4z0fcC3O8gY=";
   };
 
   cmakeFlags = [
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
     "../src"
   ];
-
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
@@ -79,24 +77,25 @@ stdenv.mkDerivation rec {
     rtl-sdr
     speex
     tcl
-    jsoncpp
   ];
 
   postInstall = ''
-    rm -rf $out/share/applications
-    ln -s ${desktopItem}/share/applications $out/share/applications
+    rm -f $out/share/applications/*
+    cp -v ${desktopItem}/share/applications/* $out/share/applications
+    mv $out/share/icons/link.xpm $out/share/icons/qtel.xpm
+
     wrapQtApp $out/bin/qtel
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Advanced repeater controller and EchoLink software";
     longDescription = ''
       Advanced repeater controller and EchoLink software for Linux including a
       GUI, Qtel - The Qt EchoLink client
     '';
     homepage = "http://www.svxlink.org/";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ zaninime ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ zaninime ];
+    platforms = platforms.linux;
   };
 }

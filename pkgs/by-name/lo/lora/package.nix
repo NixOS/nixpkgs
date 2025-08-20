@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "lora";
-  version = "3.006";
+  version = "v3.005";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nNl2IC/KqYO6uS6ah0qWgesqm2cG8cIix/MhxbkOeAM=";
+    rev = version;
+    hash = "sha256-EHa8DUPFRvdYBdCY41gfjKGtTHwGIXCwD9Qc+Npmt1s=";
   };
 
   dontConfigure = true;
@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
-    description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
+  meta = with lib; {
+    description = "Lora is a well-balanced contemporary serif with roots in calligraphy";
     homepage = "https://github.com/cyrealtype/lora";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ofalvai ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ofalvai ];
   };
-})
+}

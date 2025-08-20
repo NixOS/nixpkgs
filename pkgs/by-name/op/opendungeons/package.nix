@@ -1,22 +1,15 @@
 {
   lib,
   stdenv,
-  ogre_13,
-  cegui,
   fetchFromGitHub,
-
-  # nativeBuildInputs
   cmake,
   pkg-config,
-
-  # buildInputs
-  boost183,
-  ois,
+  ogre_13,
+  cegui,
+  boost,
+  sfml,
   openal,
-  sfml_2,
-
-  # passthru
-  unstableGitUpdater,
+  ois,
 }:
 
 let
@@ -31,13 +24,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "opendungeons";
-  version = "0-unstable-2024-07-27";
+  version = "unstable-2023-03-18";
 
   src = fetchFromGitHub {
     owner = "paroj";
     repo = "OpenDungeons";
-    rev = "2574db9fbe99aeb6a058b7a27bc191da37978c95";
-    hash = "sha256-EeyLwZmaVzzbxPA4PIooVbw12wYb131x+rnIB8n4fgg=";
+    rev = "974378d75591214dccbe0fb26e6ec8a40c2156e0";
+    hash = "sha256-vz9cT+rNcyKT3W9I9VRKcFol2SH1FhOhOALALjgKfIE=";
   };
 
   patches = [
@@ -58,27 +51,23 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost183
-    cegui'
     ogre'
-    ois
+    cegui'
+    boost
+    sfml
     openal
-    sfml_2
+    ois
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "OD_TREAT_WARNINGS_AS_ERRORS" false)
+    "-DOD_TREAT_WARNINGS_AS_ERRORS=FALSE"
   ];
 
-  passthru = {
-    updateScript = unstableGitUpdater { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
     mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       zlib
       mit
@@ -87,6 +76,6 @@ stdenv.mkDerivation {
       ofl
       cc-by-30
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -8,7 +8,7 @@
   python3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "clang-analyzer";
   inherit (llvmPackages.clang-unwrapped) src version;
 

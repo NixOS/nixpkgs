@@ -1,26 +1,27 @@
 {
   lib,
-  stdenv,
-
+  cmake,
+  dbus,
   fetchFromGitHub,
   fetchYarnDeps,
-
-  cargo,
-  cargo-tauri_1,
-  cmake,
-  jq,
-  moreutils,
-  nodejs-slim,
+  openssl,
   pkg-config,
-  rustc,
-  rustPlatform,
-  yarnConfigHook,
-
-  cyrus_sasl,
   freetype,
   libsoup_2_4,
-  openssl,
+  gtk3,
   webkitgtk_4_0,
+  perl,
+  cyrus_sasl,
+  stdenv,
+  yarnConfigHook,
+  nodejs-slim,
+  cargo-tauri_1,
+  cargo,
+  rustPlatform,
+  rustc,
+  jq,
+  moreutils,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "andrewinci";
-    repo = "insulator2";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
@@ -60,32 +61,35 @@ stdenv.mkDerivation rec {
   cargoRoot = "backend/";
   buildAndTestSubdir = cargoRoot;
 
-  strictDeps = true;
-
   dontUseCmakeConfigure = true;
 
+  preInstall = ''
+    mkdir -p "$out"
+  '';
+
   nativeBuildInputs = [
-    cargo
-    cargo-tauri_1.hook
     cmake
+    pkg-config
+    perl
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    cargo-tauri_1.hook
+    yarnConfigHook
+    nodejs-slim
+    cyrus_sasl
     jq
     moreutils # for sponge
-    nodejs-slim
-    pkg-config
-    rustc
-    rustPlatform.cargoSetupHook
-    yarnConfigHook
   ];
 
   buildInputs = [
-    cyrus_sasl
+    dbus
+    openssl.out
     freetype
     libsoup_2_4
-    openssl
+    gtk3
     webkitgtk_4_0
   ];
-
-  env.OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     description = "Client UI to inspect Kafka topics, consume, produce and much more";

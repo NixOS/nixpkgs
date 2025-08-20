@@ -2,37 +2,27 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   apeye-core,
   attrs,
-  click,
-  consolekit,
-  docutils,
   dom-toml,
   domdf-python-tools,
-  hatchling,
-  hatch-requirements-txt,
   natsort,
   packaging,
-  readme-renderer,
-  sdjson,
   shippinglabel,
   typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "pyproject-parser";
-  version = "0.13.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "pyproject_parser";
-    inherit version;
-    hash = "sha256-/x3bXUJsbYs4rXPNotXK8/VohSy04M+Gk0XInoyg+3Y=";
+    inherit pname version;
+    hash = "sha256-0ejtu6OlSA6w/z/+j2lDuikFGZh4r/HLBZhJAKZhggE=";
   };
 
-  build-system = [
-    hatchling
-    hatch-requirements-txt
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     apeye-core
@@ -44,20 +34,10 @@ buildPythonPackage rec {
     shippinglabel
     typing-extensions
   ];
-
-  optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
-    cli = [
-      click
-      consolekit
-      sdjson
-    ];
-    readme = [
-      docutils
-      readme-renderer
-    ]
-    ++ readme-renderer.optional-dependencies.md;
-  };
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
+  '';
 
   meta = {
     description = "Parser for ‘pyproject.toml’";

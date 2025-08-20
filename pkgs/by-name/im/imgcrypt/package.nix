@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "containerd";
-    repo = "imgcrypt";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-81jfoWHYYenGQFcQI9kk8uPnv6FcyOtcJjpo1ykdtOI=";
   };

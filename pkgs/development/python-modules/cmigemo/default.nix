@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test/" ];
+  pytestFlagsArray = [ "test/" ];
 
   pythonImportsCheck = [ "cmigemo" ];
 

@@ -12,7 +12,6 @@
   numpy,
   scipy,
   colorama,
-  packaging,
 
   # tests
   jupyter,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "3.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     tag = "v${version}";
-    hash = "sha256-dq5R0/gqjSzQPAmYvtByJ6gT8pOiXcezfYlKpFLnryk=";
+    hash = "sha256-vT8MlfAdzIKj6uyQedYngP6rCkIZwS8EdtKs4+8l9CA=";
   };
 
   build-system = [ poetry-core ];
@@ -41,7 +40,6 @@ buildPythonPackage rec {
     numpy
     scipy
     colorama
-    packaging
   ];
 
   nativeCheckInputs = [
@@ -59,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
-    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.juliendehos ];
   };

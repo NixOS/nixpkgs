@@ -5,7 +5,6 @@
   fixDarwinDylibNames,
   which,
   dieHook,
-  bmake,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableDarwinSandbox ? true,
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "2.0.2";
+  version = "1.3.2";
 
   outputs = [
     "out"
@@ -28,15 +27,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-cfzhuF4EnGmLJf5EGSIbWqJItY3npbRSALm+GarZ7SMU7Hr1xw0gtBFMpOdi5PBar4TgtvbnG4oRPh+COINGlA==";
+    hash = "sha512-IQmgPm2zE+B82Zdg+ldjtU/XI+qab9YRAzwzRMYv32KKjql0YLDEgc/m6DbgyCiNBkulD0dVExCtrTM+nBFHzw==";
   };
 
   nativeBuildInputs = [
     which
     dieHook
-    bmake # Uses FreeBSD's dialect
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
@@ -64,19 +61,20 @@ stdenv.mkDerivation rec {
     "bins" # prevents shared object from being built unnecessarily
   ];
 
-  installTargets = [
-    "install"
-  ]
-  ++ lib.optionals enableShared [
-    "install_shared"
-  ]
-  ++ lib.optionals enableStatic [
-    "install_static"
-  ];
+  installTargets =
+    [
+      "install"
+    ]
+    ++ lib.optionals enableShared [
+      "install_shared"
+    ]
+    ++ lib.optionals enableStatic [
+      "install_static"
+    ];
 
   postInstall =
     let
-      soVersion = "2";
+      soVersion = "1";
     in
 
     # Check that soVersion is up to date even if we are not on darwin

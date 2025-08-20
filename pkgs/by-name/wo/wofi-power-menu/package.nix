@@ -2,34 +2,30 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeBinaryWrapper,
+  makeWrapper,
   wofi,
   versionCheckHook,
   nix-update-script,
-  yq,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "wofi-power-menu";
-  version = "0.3.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "szaffarano";
     repo = "wofi-power-menu";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-3m4zTmjYn1WGdW5dY4tzYxOxdw0spwYxZFRhdBwWf2I=";
+    tag = "v${version}";
+    hash = "sha256-V1aN8jkWmZz+ynVzZlDE/WYSBnt8XpPEb6NImd6OA4g=";
   };
 
+  cargoHash = "sha256-KWpPyuI963v4D5uLUBNoLWU29lM1PD46uSR1LAUI+Es=";
+
   postPatch = ''
-    tomlq -ti '.package.version = "0.3.1"' Cargo.toml
+    sed -i 's/^version = .*/version = "${version}"/' Cargo.toml
   '';
 
-  cargoHash = "sha256-5txhSjCXlGqTmeG9EO1AUbt4syrTD62g4LtfO6nhAes=";
-
-  nativeBuildInputs = [
-    makeBinaryWrapper
-    yq # for `tomlq`
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/wofi-power-menu \
@@ -45,9 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Highly configurable power menu using the wofi launcher power-menu";
     homepage = "https://github.com/szaffarano/wofi-power-menu";
-    changelog = "https://github.com/szaffarano/wofi-power-menu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "wofi-power-menu";
   };
-})
+}

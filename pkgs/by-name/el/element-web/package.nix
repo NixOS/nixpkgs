@@ -9,7 +9,7 @@
 if (conf == { }) then
   element-web-unwrapped
 else
-  stdenv.mkDerivation {
+  stdenv.mkDerivation rec {
     pname = "${element-web-unwrapped.pname}-wrapped";
     inherit (element-web-unwrapped) version meta;
 

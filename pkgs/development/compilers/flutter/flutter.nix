@@ -3,11 +3,7 @@
   version,
   engineVersion,
   engineHashes ? { },
-  engineUrl ?
-    if lib.versionAtLeast version "3.29" then
-      "https://github.com/flutter/flutter.git@${engineVersion}"
-    else
-      "https://github.com/flutter/engine.git@${engineVersion}",
+  engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}",
   enginePatches ? [ ],
   engineRuntimeModes ? [
     "release"
@@ -26,7 +22,7 @@
   callPackage,
   makeWrapper,
   darwin,
-  gitMinimal,
+  git,
   which,
   jq,
   flutterTools ? null,
@@ -54,14 +50,10 @@ let
 
   flutterTools =
     args.flutterTools or (callPackage ./flutter-tools.nix {
-      inherit
-        dart
-        engineVersion
-        patches
-        pubspecLock
-        version
-        ;
+      inherit dart version;
       flutterSrc = src;
+      inherit patches;
+      inherit pubspecLock;
       systemPlatform = stdenv.hostPlatform.system;
     });
 
@@ -72,9 +64,8 @@ let
     nativeBuildInputs = [
       makeWrapper
       jq
-      gitMinimal
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+      git
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
 
     preConfigure = ''
@@ -111,6 +102,8 @@ let
       # Some of flutter_tools's dependencies contain static assets. The
       # application attempts to read its own package_config.json to find these
       # assets at runtime.
+      # TODO: Remove this once Flutter 3.24 is the lowest version in Nixpkgs.
+      # https://github.com/flutter/flutter/pull/150340 makes it redundant.
       mkdir -p packages/flutter_tools/.dart_tool
       ln -s '${flutterTools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 
@@ -158,8 +151,7 @@ let
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     installCheckPhase = ''
       runHook preInstallCheck
 
@@ -171,43 +163,44 @@ let
       runHook postInstallCheck
     '';
 
-    passthru = {
-      # TODO: rely on engine.version instead of engineVersion
-      inherit
-        dart
-        engineVersion
-        artifactHashes
-        channel
-        ;
-      tools = flutterTools;
-      # The derivation containing the original Flutter SDK files.
-      # When other derivations wrap this one, any unmodified files
-      # found here should be included as-is, for tooling compatibility.
-      sdk = unwrapped;
-    }
-    // lib.optionalAttrs (engine != null) {
-      inherit engine;
-    };
+    passthru =
+      {
+        # TODO: rely on engine.version instead of engineVersion
+        inherit
+          dart
+          engineVersion
+          artifactHashes
+          channel
+          ;
+        tools = flutterTools;
+        # The derivation containing the original Flutter SDK files.
+        # When other derivations wrap this one, any unmodified files
+        # found here should be included as-is, for tooling compatibility.
+        sdk = unwrapped;
+      }
+      // lib.optionalAttrs (engine != null) {
+        inherit engine;
+      };
 
-    meta = {
-      description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
+    meta = with lib; {
+      description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
       longDescription = ''
-        Flutter is Google's SDK for crafting beautiful,
-        fast user experiences for mobile, web, and desktop from a single codebase.
+        Flutter is Google’s UI toolkit for building beautiful,
+        natively compiled applications for mobile, web, and desktop from a single codebase.
       '';
       homepage = "https://flutter.dev";
-      license = lib.licenses.bsd3;
+      license = licenses.bsd3;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      mainProgram = "flutter";
-      maintainers = with lib.maintainers; [
-        ericdallo
-      ];
-      teams = [ lib.teams.flutter ];
+      maintainers =
+        teams.flutter.members
+        ++ (with maintainers; [
+          ericdallo
+        ]);
     };
   };
 in

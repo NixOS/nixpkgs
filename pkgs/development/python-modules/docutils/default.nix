@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromRepoOrCz,
   buildPythonPackage,
@@ -33,9 +34,13 @@ let
 
     nativeCheckInputs = [ pillow ];
 
-    checkPhase = ''
-      ${python.interpreter} test/alltests.py
-    '';
+    # Only Darwin needs LANG, but we could set it in general.
+    # It's done here conditionally to prevent mass-rebuilds.
+    checkPhase =
+      lib.optionalString stdenv.hostPlatform.isDarwin ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" ''
+      + ''
+        ${python.interpreter} test/alltests.py
+      '';
 
     # Create symlinks lacking a ".py" suffix, many programs depend on these names
     postFixup = ''

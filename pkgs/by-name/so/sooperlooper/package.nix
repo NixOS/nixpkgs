@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   which,
@@ -20,16 +21,24 @@
   fftw,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "sooperlooper";
-  version = "1.7.9";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bPu/VWTJLSIMoJSEQb+/nqtTpkPtCNVuXA17XsnFSP0=";
+    rev = "v${version}";
+    sha256 = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "10-build_with_wx_32.patch";
+      url = "https://sources.debian.org/data/main/s/sooperlooper/1.7.8~dfsg0-2/debian/patches/10-build_with_wx_32.patch";
+      sha256 = "sha256-NF/w+zgRBNkSTqUJhfH9kQogXSYEF70pCN+loR0hjpg=";
+    })
+  ];
 
   autoreconfPhase = ''
     patchShebangs ./autogen.sh
@@ -58,12 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
-  # see https://bugs.gentoo.org/925275
-  CPPFLAGS = "-fpermissive";
-
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.
@@ -73,9 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       and the engine can be run standalone on a computer without a monitor.
     '';
     homepage = "https://sonosaurus.com/sooperlooper/";
-    downloadPage = "https://github.com/essej/sooperlooper";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
   };
-})
+}

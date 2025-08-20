@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [
       qknight
+      domenkozar
     ];
     platforms = lib.platforms.all;
   };

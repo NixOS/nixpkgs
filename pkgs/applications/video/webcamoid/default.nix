@@ -1,14 +1,15 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   libxcb,
+  mkDerivation,
   cmake,
   qtbase,
   qtdeclarative,
-  wrapQtAppsHook,
-  qtsvg,
+  qtquickcontrols,
+  qtquickcontrols2,
   ffmpeg,
   gst_all_1,
   libpulseaudio,
@@ -16,23 +17,31 @@
   jack2,
   v4l-utils,
 }:
-
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "webcamoid";
-  version = "9.3.0";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
-    owner = "webcamoid";
+    sha256 = "sha256-E2hHFrksJtdDLWiX7wL1z9LBbBKT04a853V8u+WiwbA=";
+    rev = version;
     repo = "webcamoid";
-    tag = version;
-    hash = "sha256-KU5iJqCGbqTZebP5yWb5VcxRGcRjQYQHn+GP6W57D9I=";
+    owner = "webcamoid";
   };
+
+  patches = [
+    # Update mediawriterffmpeg.cpp for ffmpeg-7.0
+    (fetchpatch2 {
+      url = "https://github.com/webcamoid/webcamoid/commit/b4864f13ec8c2ec93ebb5c13d9293cf9c02c93fd.patch?full_index=1";
+      hash = "sha256-QasfVocxAzRMME03JFRfz7QQYXQGq4TSFiBsKL1g/wU=";
+    })
+  ];
 
   buildInputs = [
     libxcb
     qtbase
     qtdeclarative
-    qtsvg
+    qtquickcontrols
+    qtquickcontrols2
     ffmpeg
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -45,16 +54,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    wrapQtAppsHook
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Webcam Capture Software";
     longDescription = "Webcamoid is a full featured and multiplatform webcam suite.";
     homepage = "https://github.com/webcamoid/webcamoid/";
-    license = with lib.licenses; [ gpl3Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ robaca ];
+    license = [ licenses.gpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ robaca ];
     mainProgram = "webcamoid";
   };
 }

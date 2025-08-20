@@ -32,8 +32,6 @@ let
       pytestCheckHook
     ];
 
-    pytestFlags = [ "--benchmark-disable" ];
-
     # escape infinite recursion with twisted
     doCheck = false;
 

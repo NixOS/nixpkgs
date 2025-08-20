@@ -7,9 +7,9 @@
   libxml2,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "ua";
-  version = "0-unstable-2022-10-23";
+  version = "unstable-2022-10-23";
 
   src = fetchFromGitHub {
     owner = "sloonz";

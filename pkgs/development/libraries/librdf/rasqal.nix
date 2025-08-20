@@ -5,17 +5,17 @@
   librdf_raptor2,
   gmp,
   pkg-config,
+  pcre,
   libxml2,
   perl,
-  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "rasqal";
   version = "0.9.33";
 
   src = fetchurl {
-    url = "http://download.librdf.org/source/rasqal-${finalAttrs.version}.tar.gz";
+    url = "http://download.librdf.org/source/rasqal-${version}.tar.gz";
     sha256 = "0z6rrwn4jsagvarg8d5zf0j352kjgi33py39jqd29gbhcnncj939";
   };
 
@@ -23,27 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
+    pcre
     libxml2
   ];
 
   propagatedBuildInputs = [ librdf_raptor2 ];
-
-  confiugureFlags = [
-    # uses 'regex.h' as a fallback, which is preferrable
-    "--disable-pcre"
-  ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
 
   nativeCheckInputs = [ perl ];
   doCheck = false; # fails with "No testsuite plan file sparql-query-plan.ttl could be created in build/..."
   doInstallCheck = false; # fails with "rasqal-config does not support (--help|--version)"
-
-  passthru.tests = {
-    # rasqal-config --version just checks the pkg-config module.
-    # That check is broken, checking the pkg-config ourselves is a good replacement.
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-  };
 
   meta = {
     description = "Library that handles Resource Description Framework (RDF)";
@@ -54,6 +44,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.unix;
-    pkgConfigModules = [ "rasqal" ];
   };
-})
+}

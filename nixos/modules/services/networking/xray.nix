@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -40,18 +35,14 @@ with lib;
         type = types.nullOr (types.attrsOf types.unspecified);
         default = null;
         example = {
-          inbounds = [
-            {
-              port = 1080;
-              listen = "127.0.0.1";
-              protocol = "http";
-            }
-          ];
-          outbounds = [
-            {
-              protocol = "freedom";
-            }
-          ];
+          inbounds = [{
+            port = 1080;
+            listen = "127.0.0.1";
+            protocol = "http";
+          }];
+          outbounds = [{
+            protocol = "freedom";
+          }];
         };
         description = ''
           The configuration object.
@@ -65,44 +56,37 @@ with lib;
 
   };
 
-  config =
-    let
-      cfg = config.services.xray;
-      settingsFile =
-        if cfg.settingsFile != null then
-          cfg.settingsFile
-        else
-          pkgs.writeTextFile {
-            name = "xray.json";
-            text = builtins.toJSON cfg.settings;
-            checkPhase = ''
-              ${cfg.package}/bin/xray -test -config $out
-            '';
-          };
-
-    in
-    mkIf cfg.enable {
-      assertions = [
-        {
-          assertion = (cfg.settingsFile == null) != (cfg.settings == null);
-          message = "Either but not both `settingsFile` and `settings` should be specified for xray.";
-        }
-      ];
-
-      systemd.services.xray = {
-        description = "xray Daemon";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        script = ''
-          exec "${cfg.package}/bin/xray" -config "$CREDENTIALS_DIRECTORY/config.json"
+  config = let
+    cfg = config.services.xray;
+    settingsFile = if cfg.settingsFile != null
+      then cfg.settingsFile
+      else pkgs.writeTextFile {
+        name = "xray.json";
+        text = builtins.toJSON cfg.settings;
+        checkPhase = ''
+          ${cfg.package}/bin/xray -test -config $out
         '';
-        serviceConfig = {
-          DynamicUser = true;
-          LoadCredential = "config.json:${settingsFile}";
-          CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-          AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-          NoNewPrivileges = true;
-        };
+      };
+
+  in mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.settingsFile == null) != (cfg.settings == null);
+        message = "Either but not both `settingsFile` and `settings` should be specified for xray.";
+      }
+    ];
+
+    systemd.services.xray = {
+      description = "xray Daemon";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        NoNewPrivileges = true;
       };
     };
+  };
 }

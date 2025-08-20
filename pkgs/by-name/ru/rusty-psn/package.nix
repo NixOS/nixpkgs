@@ -13,64 +13,65 @@
   openssl,
   xorg,
   libGL,
-  libxkbcommon,
-  wayland,
   withGui ? false, # build GUI version
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.5.9";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
-    tag = "v${version}";
-    hash = "sha256-Al0cT4WaOX7gxOkD5ciRntbGLCCDFSjj83E4n8nXp6I=";
+    rev = "v${version}";
+    sha256 = "sha256-EGj9VVY+Zbmth7H1oTgq38KNLT/aWoTPn8k4sVkScgg=";
   };
 
-  cargoHash = "sha256-FaKUQk/Q2hE0lZ11QSKA2P2BLlBNih47zzuwpMsblhw=";
+  cargoPatches = [ ./fix-cargo-lock.patch ];
+
+  cargoHash = "sha256-8J92WtMmCTnghPqSmNYhG3IVdmpHsHEH7Fkod0UYKJU=";
 
   # Tests require network access
   doCheck = false;
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals withGui [
-    copyDesktopItems
-    cmake
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals withGui [
+      copyDesktopItems
+      cmake
+    ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals withGui [
-    fontconfig
-    glib
-    gtk3
-    freetype
-    openssl
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libxcb
-    libGL
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals withGui [
+      fontconfig
+      glib
+      gtk3
+      freetype
+      openssl
+      xorg.libxcb
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXrandr
+      xorg.libXi
+      xorg.libxcb
+      libGL
+    ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ (if withGui then "egui" else "cli") ];
 
-  postFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
-  ''
-  + lib.optionalString withGui ''
-    mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
-  '';
+  postFixup =
+    ''
+      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
+    ''
+    + lib.optionalString withGui ''
+      mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
+    '';
 
   desktopItem = lib.optionalString withGui (makeDesktopItem {
     name = "rusty-psn";
@@ -90,12 +91,12 @@ rustPlatform.buildRustPackage rec {
   });
   desktopItems = lib.optionals withGui [ desktopItem ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool to grab updates for PS3 games, directly from Sony's servers using their updates API";
     homepage = "https://github.com/RainbowCookie32/rusty-psn/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ AngryAnt ];
-    mainProgram = if withGui then "rusty-psn-gui" else "rusty-psn";
+    maintainers = with maintainers; [ AngryAnt ];
+    mainProgram = "rusty-psn";
   };
 }

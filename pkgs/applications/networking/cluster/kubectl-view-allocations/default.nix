@@ -3,31 +3,35 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  versionCheckHook,
+  Security ? null,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubectl-view-allocations";
-  version = "0.23.4";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "davidB";
-    repo = "kubectl-view-allocations";
-    tag = version;
-    hash = "sha256-xSjWUSHgx85K6RAl16S0QCNeveDte2SwHcxkS1EChZU=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-BM0TLzoXQg3m5fdQEnO/tErW8xmuljo74GprwEgJN8o=";
   };
 
-  cargoHash = "sha256-Dr8ORNje0icV13YdUSxYGPcok3RAXVNsCZKxnprJGSY=";
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  meta = {
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+
+  meta = with lib; {
     description = "kubectl plugin to list allocations (cpu, memory, gpu,... X utilization, requested, limit, allocatable,...)";
     homepage = "https://github.com/davidB/kubectl-view-allocations";
-    license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ mrene ];
-    platforms = lib.platforms.unix;
+    license = licenses.cc0;
+    maintainers = [ maintainers.mrene ];
+    platforms = platforms.unix;
   };
 }

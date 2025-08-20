@@ -21,21 +21,22 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "6.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Solanum";
-    tag = finalAttrs.version;
-    hash = "sha256-Wh9/88Vc4mtjL0U1Vrw+GEEBPjEv+5NrWd/Kw1glp+w=";
+    rev = version;
+    hash = "sha256-Xf/b/9o6zHF1hjHSyAXb90ySoBj+DMMe31e6RfF8C4Y=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-krjbeutochFk5md+THlYBW4iEwfFDbK89DYHZyd3IKo=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-POvKpwzi+bkEkfSDhi/vjs/ey+A2vNN5ta4Q7Ma/RBQ=";
   };
 
   postPatch = ''
@@ -70,13 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Solanum";
     description = "Pomodoro timer for the GNOME desktop";
-    maintainers = with lib.maintainers; [ linsui ];
-    teams = [ lib.teams.gnome-circle ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "solanum";
   };
-})
+}

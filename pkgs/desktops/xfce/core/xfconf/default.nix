@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   mkXfceDerivation,
   gobject-introspection,
@@ -7,10 +6,6 @@
   vala,
   libxfce4util,
   glib,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
 }:
 
 mkXfceDerivation {
@@ -21,11 +16,9 @@ mkXfceDerivation {
   sha256 = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
 
   nativeBuildInputs = [
-    perl
-  ]
-  ++ lib.optionals withIntrospection [
     gobject-introspection
-    vala # vala bindings require GObject introspection
+    perl
+    vala
   ];
 
   buildInputs = [ libxfce4util ];
@@ -35,6 +28,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Simple client-server configuration storage and query system for Xfce";
     mainProgram = "xfconf-query";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

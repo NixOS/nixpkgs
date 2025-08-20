@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoPatchelfHook,
-  boost186,
+  boost,
   cmake,
   copyDesktopItems,
   imagemagick,
@@ -15,7 +15,8 @@
   libtool,
   libusb1,
   makeDesktopItem,
-  qt5,
+  qtbase,
+  wrapQtAppsHook,
 
   withGui ? true,
   withNonFreePlugins ? false,
@@ -24,17 +25,13 @@
 let
   pname = "epsonscan2";
   description = "Epson Scan 2 scanner driver for many modern Epson scanners and multifunction printers";
-  # Epson updates projects without changing their version numbers.
-  # There can be multiple different packages identified by the same
-  #version, so we also tag them with the month and year shown in
-  # the Epson download page.
-  version = "6.7.70.0-01-2025";
+  version = "6.7.70.0";
 
   system = stdenv.hostPlatform.system;
 
   src = fetchzip {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/60/70/c7fc14e41ec84255008c6125b63bcac40f55e11c/epsonscan2-6.7.70.0-1.src.tar.gz";
-    hash = "sha256-WvNBy5hAxNJfwgjBR5VGaXuyTCK2YEiD3i7SMDl3U/U=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/14/37/7577ee65efdad48ee2d2f38d9eda75418e490552/epsonscan2-6.7.70.0-1.src.tar.gz";
+    hash = "sha256-y7XGxrOpVou/ZSfUffV3qv+SsFFpTiU7pWvtfsiLZWc=";
   };
   bundle =
     {
@@ -68,73 +65,77 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    rm CMakeCache.txt
+
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
-      --replace-fail '@KILLALL@' ${lib.getExe killall}
+      --replace-fail '@KILLALL@' ${killall}/bin/killall
 
     substituteInPlace src/Controller/Src/Filter/GetOrientation.cpp \
       --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals withGui [
-    imagemagick # to make icons
-    qt5.wrapQtAppsHook
-  ]
-  ++ lib.optionals withNonFreePlugins [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals withGui [
+      imagemagick # to make icons
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals withNonFreePlugins [
+      autoPatchelfHook
+    ];
 
-  buildInputs = [
-    boost186 # uses Boost.Optional but epsonscan2 is pre-C++11.
-    libjpeg
-    libpng
-    libtiff
-    libusb1
-  ]
-  ++ lib.optionals withGui [
-    copyDesktopItems
-    qt5.qtbase
-  ]
-  ++ lib.optionals withNonFreePlugins [
-    libtool.lib
-  ];
+  buildInputs =
+    [
+      boost
+      libjpeg
+      libpng
+      libtiff
+      libusb1
+    ]
+    ++ lib.optionals withGui [
+      copyDesktopItems
+      qtbase
+    ]
+    ++ lib.optionals withNonFreePlugins [
+      libtool.lib
+    ];
 
-  cmakeFlags = [
-    # The non-free (Debian) packages uses this directory structure so do the same when compiling
-    # from source so we can easily merge them.
-    "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
-  ]
-  ++ lib.optionals (!withGui) [
-    "-DNO_GUI=ON"
-  ];
+  cmakeFlags =
+    [
+      # The non-free (Debian) packages uses this directory structure so do the same when compiling
+      # from source so we can easily merge them.
+      "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
+    ]
+    ++ lib.optionals (!withGui) [
+      "-DNO_GUI=ON"
+    ];
 
-  doInstallCheck = true;
-
-  postInstall = ''
-    # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
-    # required libraries so create a symlink to where it expects them to be.
-    mkdir -p $out/lib/sane
-    for file in $out/lib/${system}-gnu/sane/*.so.*; do
-      ln -s $file $out/lib/sane/
-    done
-  ''
-  + lib.optionalString withGui ''
-    # The icon file extension is .ico but it's actually a png!
-    mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
-    magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
-    magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
-  ''
-  + lib.optionalString withNonFreePlugins ''
-    ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
-    tar Jxf data.tar.xz
-    cp -r usr/* $out
-  '';
+  postInstall =
+    ''
+      # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
+      # required libraries so create a symlink to where it expects them to be.
+      mkdir -p $out/lib/sane
+      for file in $out/lib/${system}-gnu/sane/*.so.*; do
+        ln -s $file $out/lib/sane/
+      done
+    ''
+    + lib.optionalString withGui ''
+      # The icon file extension is .ico but it's actually a png!
+      mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
+      magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
+      magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
+    ''
+    + lib.optionalString withNonFreePlugins ''
+      ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
+      tar Jxf data.tar.xz
+      cp -r usr/* $out
+    '';
 
   desktopItems = lib.optionals withGui [
     (makeDesktopItem {
-      name = "epsonscan2";
+      name = pname;
       exec = "epsonscan2";
       icon = "epsonscan2";
       desktopName = "Epson Scan 2";
@@ -151,27 +152,22 @@ stdenv.mkDerivation {
     inherit description;
     mainProgram = "epsonscan2";
     longDescription = ''
-      The Epson Scan 2 scanner driver, including optional non-free plugins such
-      as OCR and network scanning.
+      Epson Scan 2 scanner driver including optional non-free plugins such as OCR and network
+      scanning.
 
       To use the SANE backend:
-      ```nix
-      {
-        hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
-      }
-      ```
+      <literal>
+      hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
+      </literal>
 
-      Overrides can be used to customise this package. For example, to enable
-      non-free plugins and disable the Epson GUI:
-      ```nix
-      pkgs.epsonscan2.override {
-        withNonFreePlugins = true;
-        withGui = false;
-      }
-      ```
+      Overrides can be used to customise this package. For example, to enable non-free plugins and
+      disable the Epson GUI:
+      <literal>
+      pkgs.epsonscan2.override { withNonFreePlugins = true; withGui = false; }
+      </literal>
     '';
     homepage = "https://support.epson.net/linux/en/epsonscan2.php";
-    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
+    platforms = [ "x86_64-linux" ];
     sourceProvenance =
       with lib.sourceTypes;
       [ fromSource ] ++ lib.optionals withNonFreePlugins [ binaryNativeCode ];

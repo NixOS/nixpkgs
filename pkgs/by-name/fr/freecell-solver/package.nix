@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecell-solver";
-  version = "6.14.0";
+  version = "6.12.0";
 
   src = fetchurl {
     url = "https://fc-solve.shlomifish.org/downloads/fc-solve/freecell-solver-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HREl2FQivNUhEC18sefIS3aGP+RF3SGHn5d53Gss59w=";
+    hash = "sha256-oriegEzkuRjvdJAxZ2IQ8glf6jqMsSmAVgKEPHxIhKA=";
   };
 
   outputs = [
@@ -37,31 +37,32 @@ stdenv.mkDerivation (finalAttrs: {
     six
   ];
 
-  nativeBuildInputs = [
-    cmake
-    cmocka
-    gperf
-    ninja
-    perl
-    pkg-config
-    python3
-  ]
-  ++ (
-    with perl.pkgs;
-    TaskFreecellSolverTesting.buildInputs
-    ++ [
-      GamesSolitaireVerify
-      HTMLTemplate
-      Moo
-      PathTiny
-      StringShellQuote
-      TaskFreecellSolverTesting
-      TemplateToolkit
-      TextTemplate
+  nativeBuildInputs =
+    [
+      cmake
+      cmocka
+      gperf
+      ninja
+      perl
+      pkg-config
+      python3
     ]
-  )
-  ++ [ python3.pkgs.wrapPython ]
-  ++ finalAttrs.pythonPath;
+    ++ (
+      with perl.pkgs;
+      TaskFreecellSolverTesting.buildInputs
+      ++ [
+        GamesSolitaireVerify
+        HTMLTemplate
+        Moo
+        PathTiny
+        StringShellQuote
+        TaskFreecellSolverTesting
+        TemplateToolkit
+        TextTemplate
+      ]
+    )
+    ++ [ python3.pkgs.wrapPython ]
+    ++ finalAttrs.pythonPath;
 
   buildInputs = [
     gmp
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "fc-solve";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

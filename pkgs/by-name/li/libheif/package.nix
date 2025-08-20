@@ -1,43 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  dav1d,
-  rav1e,
-  libde265,
-  x265,
-  libpng,
-  libjpeg,
-  libaom,
-  gdk-pixbuf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, dav1d
+, rav1e
+, libde265
+, x265
+, libpng
+, libjpeg
+, libaom
+, gdk-pixbuf
 
-  # for passthru.tests
-  gimp,
-  imagemagick,
-  imlib2Full,
-  imv,
-  python3Packages,
-  vips,
+# for passthru.tests
+, gimp
+, imagemagick
+, imlib2Full
+, imv
+, python3Packages
+, vips
 }:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.19.8";
+  version = "1.18.2";
 
-  outputs = [
-    "bin"
-    "out"
-    "dev"
-    "man"
-  ];
+  outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    hash = "sha256-p+VkIJrX/aN2ohSiDmev+6fbS9Lc7Jh14YwW5vLIjJw=";
+    hash = "sha256-Z21E2b4E9jGtwR1RpFMAbGsWFw6jXn++WexlzdoyZzE=";
   };
 
   nativeBuildInputs = [
@@ -66,13 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit
-      gimp
-      imagemagick
-      imlib2Full
-      imv
-      vips
-      ;
+    inherit gimp imagemagick imlib2Full imv vips;
     inherit (python3Packages) pillow-heif;
   };
 
@@ -81,6 +69,6 @@ stdenv.mkDerivation rec {
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kuflierl ];
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

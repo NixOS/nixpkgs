@@ -32,7 +32,6 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.2.1";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytrainer";
@@ -41,13 +40,12 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     sqlalchemy
     python-dateutil
     matplotlib
     lxml
+    setuptools
     requests
     gdal
   ];
@@ -76,19 +74,20 @@ python.pkgs.buildPythonApplication rec {
     ])
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    perl
-    xvfb-run
-  ]
-  ++ (with python.pkgs; [
-    mysqlclient
-    psycopg2
-  ]);
+  nativeCheckInputs =
+    [
+      glibcLocales
+      perl
+      xvfb-run
+    ]
+    ++ (with python.pkgs; [
+      mysqlclient
+      psycopg2
+    ]);
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
-        --replace-fail 'sys.prefix' "\"$out\""
+        --replace 'sys.prefix' "\"$out\""
   '';
 
   checkPhase = ''

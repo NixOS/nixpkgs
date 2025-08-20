@@ -1,25 +1,22 @@
-{ lib, ... }:
-{
+import ./make-test-python.nix ({ lib, ... }: {
   name = "grub";
 
   meta = with lib.maintainers; {
     maintainers = [ rnhmjoj ];
   };
 
-  nodes.machine =
-    { ... }:
-    {
-      virtualisation.useBootLoader = true;
+  nodes.machine = { ... }: {
+    virtualisation.useBootLoader = true;
 
-      boot.loader.timeout = null;
-      boot.loader.grub = {
-        enable = true;
-        users.alice.password = "supersecret";
+    boot.loader.timeout = null;
+    boot.loader.grub = {
+      enable = true;
+      users.alice.password = "supersecret";
 
-        # OCR is not accurate enough
-        extraConfig = "serial; terminal_output serial";
-      };
+      # OCR is not accurate enough
+      extraConfig = "serial; terminal_output serial";
     };
+  };
 
   testScript = ''
     def grub_login_as(user, password):
@@ -60,4 +57,4 @@
     with subtest("Machine boots correctly"):
         machine.wait_for_unit("multi-user.target")
   '';
-}
+})

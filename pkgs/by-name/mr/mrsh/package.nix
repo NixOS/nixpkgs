@@ -8,7 +8,7 @@
   readline,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mrsh-unstable";
   version = "2021-01-10";
 

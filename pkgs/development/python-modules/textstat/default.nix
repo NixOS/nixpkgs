@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "textstat"
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "test.py"
   ];
 

@@ -15,16 +15,7 @@ let
   '';
 in
 writeScriptBin "send-message" ''
-  #!${
-    (python3.withPackages (
-      ps:
-      with ps;
-      [
-        slixmpp
-      ]
-      ++ slixmpp.optional-dependencies.xep-0363
-    )).interpreter
-  }
+  #!${(python3.withPackages (ps: [ ps.slixmpp ])).interpreter}
   import logging
   import sys
   import signal
@@ -98,7 +89,7 @@ writeScriptBin "send-message" ''
       # MUC
       ct.register_plugin('xep_0045')
       ct.connect(("${connectTo}", 5222))
-      ct.loop.run_until_complete(ct.disconnected)
+      ct.process(forever=False)
 
       if not ct.test_succeeded:
           sys.exit(1)

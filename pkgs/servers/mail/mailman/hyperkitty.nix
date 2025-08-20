@@ -1,9 +1,7 @@
-{
-  lib,
-  python3,
-  fetchurl,
-  nixosTests,
-  fetchpatch,
+{ lib
+, python3
+, fetchurl
+, nixosTests
 }:
 
 with python3.pkgs;
@@ -19,20 +17,6 @@ buildPythonPackage rec {
     url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
     hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
-
-  patches = [
-    # Fix test with mistune >= 3.1
-    (fetchpatch {
-      url = "https://gitlab.com/mailman/hyperkitty/-/commit/2d69f420c603356a639a6b6243e1059a0089b7eb.patch";
-      hash = "sha256-zo+dK8DFMkHlMrOVSUtelhAq+cxJE4gLG00LvuAlWKA=";
-    })
-    # Fix test with python 3.13
-    # https://gitlab.com/mailman/hyperkitty/-/merge_requests/657
-    (fetchpatch {
-      url = "https://gitlab.com/mailman/hyperkitty/-/commit/6c3d402dc0981e545081a3baf13db7e491356e75.patch";
-      hash = "sha256-ep9cFZe9/sIfIP80pLBOMYkJKWvNT7DRqg80DQSdRFw=";
-    })
-  ];
 
   build-system = [
     pdm-backend
@@ -66,8 +50,7 @@ buildPythonPackage rec {
     elasticsearch
     mock
     whoosh
-  ]
-  ++ beautifulsoup4.optional-dependencies.lxml;
+  ] ++ beautifulsoup4.optional-dependencies.lxml;
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

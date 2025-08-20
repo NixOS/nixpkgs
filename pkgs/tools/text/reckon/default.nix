@@ -5,8 +5,6 @@
   bundlerUpdateScript,
   makeWrapper,
   file,
-  testers,
-  reckon,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,13 +31,7 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = reckon;
-      version = "${version}";
-    };
-    updateScript = bundlerUpdateScript "reckon";
-  };
+  passthru.updateScript = bundlerUpdateScript "reckon";
 
   meta = with lib; {
     description = "Flexibly import bank account CSV files into Ledger for command line accounting";

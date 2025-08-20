@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  systemdMinimal,
+  systemd,
   pango,
   cairo,
   gdk-pixbuf,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
-  version = "1.10.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mako";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O93KOXonfkgIKtlIZP4YlsEgXBcupNifoC/cN+ZAYEM=";
+    hash = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
   };
 
   strictDeps = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
   buildInputs = [
-    systemdMinimal
+    systemd
     pango
     cairo
     gdk-pixbuf
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix PATH : "${
         lib.makeBinPath [
-          systemdMinimal # for busctl
+          systemd # for busctl
           jq
           bash
         ]

@@ -1,13 +1,8 @@
 {
   lib,
-  python312Packages,
+  python3Packages,
   fetchFromGitHub,
 }:
-
-let
-  # tensorflow-bin unsupported on Python 3.13
-  python3Packages = python312Packages;
-in
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-openwakeword";
@@ -21,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
   };
 
-  build-system = with python3Packages; [
+  nativeBuildInputs = with python3Packages; [
     setuptools
   ];
 
@@ -33,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     "tflite-runtime-nightly"
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     tensorflow-bin
     wyoming
   ];
@@ -42,12 +37,12 @@ python3Packages.buildPythonApplication rec {
     "wyoming_openwakeword"
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${version}/CHANGELOG.md";
     description = "Open source voice assistant toolkit for many human languages";
     homepage = "https://github.com/rhasspy/wyoming-openwakeword";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
     mainProgram = "wyoming-openwakeword";
   };
 }

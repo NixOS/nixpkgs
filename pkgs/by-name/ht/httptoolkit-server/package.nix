@@ -9,20 +9,19 @@
   pkg-config,
   openssl,
   libdatachannel,
-  plog,
 }:
 
 let
   nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.20.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iEAYZX7WNk6TvZ44GAOgTqXOcW5oFn4gX+kzixZZbWA=";
+    hash = "sha256-S4Io4X5Hlvm/5HoKIQ/OTor9jZvMz6me5RyfZ8FwOdM=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -30,7 +29,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-Uw7XbfwLMX+zbSrzFgvB8lw3hxUyw1eRKazCITrT/28=";
+    npmDepsHash = "sha256-GRN6ua3FY1AE61bB7PM2wgbKPZI/zJeXa5HOOh/2N2Y=";
 
     dontBuild = true;
 
@@ -42,20 +41,20 @@ let
 
   nodeDatachannel = buildNpmPackage' {
     pname = "node-datachannel";
-    version = "0.12.0";
+    version = "0.4.3";
 
     src = fetchFromGitHub {
       owner = "murat-dogan";
       repo = "node-datachannel";
       rev = "refs/tags/v${nodeDatachannel.version}";
-      hash = "sha256-xjYja+e2Z7X5cU4sEuSsJzG0gtmTPl3VrUf+ypd3zdw=";
+      hash = "sha256-BlfeocqSG+pqbK0onnCf0VKbQw8Qq4qMxhAcfGlFYR8=";
     };
 
     npmFlags = [ "--ignore-scripts" ];
 
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-Qhib9ZGulTXjoYcZIWunf3/BSd2SLXZuWEmMcstaphs=";
+    npmDepsHash = "sha256-pgcOOjiuWKlpD+WJyPj/c9ZhDjYuEnybpLS/BPmzeFM=";
 
     nativeBuildInputs = [
       cmake
@@ -65,7 +64,6 @@ let
     buildInputs = [
       openssl
       libdatachannel
-      plog
     ];
 
     dontUseCmakeConfigure = true;
@@ -75,12 +73,10 @@ let
 
     preBuild = ''
       # don't use static libs and don't use FetchContent
-      # don't try to link plog (it's headers-only)
       substituteInPlace CMakeLists.txt \
           --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
           --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
-          --replace-fail 'datachannel-static' 'datachannel' \
-          --replace-fail 'plog::plog' ""
+          --replace-fail 'datachannel-static' 'datachannel'
 
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
@@ -102,7 +98,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-gHXop4CTsQTSMrZ5mBHkMcmpOr2MIjVLrzjLLCfZ3As=";
+  npmDepsHash = "sha256-njSNdpo+CIfS9LTnshawJ7297tFc8ssjUqJcHk8kBZE=";
 
   npmFlags = [ "--ignore-scripts" ];
 

@@ -36,8 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-silent-rules"
-  ]
-  ++ (lib.optional enableSetPAG "--enable-setpag");
+  ] ++ (lib.optional enableSetPAG "--enable-setpag");
 
   preBuild = ''
     for f in k5start krenew; do

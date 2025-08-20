@@ -28,19 +28,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "11.3.2";
-  versiondate = "20250415";
+  version = "11.2.1";
+  versiondate = "20241105";
 
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-97L3BueekbZfFAdiLX1DHlVSzNyspu4exafpFVraMWE=";
+    hash = "sha256-w6FCAjF2ggFWH8eo7X8V6ZTbSptGkwRzoEMj9nGL5/M=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)

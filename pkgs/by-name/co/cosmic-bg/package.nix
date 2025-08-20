@@ -3,42 +3,42 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  cosmic-wallpapers,
-  libcosmicAppHook,
   just,
-  nasm,
-  nix-update-script,
-  nixosTests,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-bg";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-bg";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-KMP7TmamtbycF/nKctjYozMJwVr9zdp4A8AWriswo2g=";
+    repo = pname;
+    rev = "epoch-${version}";
+    hash = "sha256-bmcMZIURozlptsR4si62NTmexqaCX1Yj5bYj49GDehQ=";
   };
 
-  postPatch = ''
-    substituteInPlace config/src/lib.rs data/v1/all \
-      --replace-fail '/usr/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg' \
-      "${cosmic-wallpapers}/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg"
-  '';
-
+  useFetchCargoVendor = true;
   cargoHash = "sha256-GLXooTjcGq4MsBNnlpHBBUJGNs5UjKMQJGJuj9UO2wk=";
+
+  postPatch = ''
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
-    nasm
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -49,31 +49,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-bg"
   ];
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
-  };
+  postInstall = ''
+    wrapProgram $out/bin/cosmic-bg \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-bg";
     description = "Applies Background for the COSMIC Desktop Environment";
-    license = lib.licenses.mpl20;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-bg";
   };
-})
+}

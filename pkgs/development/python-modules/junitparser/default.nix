@@ -2,28 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  future,
   glibcLocales,
   lxml,
-  pytestCheckHook,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "junitparser";
-  version = "3.2.0";
+  version = "2.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "weiwei";
-    repo = "junitparser";
+    repo = pname;
     rev = version;
-    hash = "sha256-efP9t5eto6bcjk33wpJmunLlPH7wUwAa6/OjjYG/fgM=";
+    hash = "sha256-rhDP05GSWT4K6Z2ip8C9+e3WbvBJOwP0vctvANBs7cw=";
   };
 
+  propagatedBuildInputs = [ future ];
+
   nativeCheckInputs = [
-    pytestCheckHook
+    unittestCheckHook
     lxml
     glibcLocales
   ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Manipulates JUnit/xUnit Result XML files";

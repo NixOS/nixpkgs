@@ -1,5 +1,5 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 05cd96e..eb2000f 100644
+index 6eee6ef..263999f 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -1,12 +1,12 @@
@@ -7,7 +7,7 @@ index 05cd96e..eb2000f 100644
  build-backend = "hatchling.build"
  requires = [
 -  "hatch-vcs",
-   "hatchling>=1.26",
+   "hatchling",
  ]
  
  [project]
@@ -19,17 +19,18 @@ index 05cd96e..eb2000f 100644
 @@ -15,9 +15,6 @@ authors = [
      { name = "Holger Krekel", email = "holger.krekel@gmail.com" },
  ]
- requires-python = ">=3.8"
+ requires-python = ">=3.7"
 -dynamic = [
 -  "version",
 -]
  classifiers = [
      "Development Status :: 4 - Beta",
      "Intended Audience :: Developers",
-@@ -40,12 +37,6 @@ classifiers = [
+@@ -38,13 +35,6 @@ classifiers = [
+ [project.urls]
  Homepage = "https://github.com/pytest-dev/iniconfig"
  
- 
+-
 -[tool.hatch.version]
 -source = "vcs"
 -

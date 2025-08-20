@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gsound";
     description = "Small library for playing system sounds";
     mainProgram = "gsound-play";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

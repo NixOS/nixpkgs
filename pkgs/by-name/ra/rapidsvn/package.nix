@@ -8,9 +8,10 @@
   apr,
   aprutil,
   python3,
+  darwin,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rapidsvn";
   version = "unstable-2021-08-02";
 
@@ -30,13 +31,17 @@ stdenv.mkDerivation {
     autoreconfHook
   ];
 
-  buildInputs = [
-    wxGTK32
-    subversion
-    apr
-    aprutil
-    python3
-  ];
+  buildInputs =
+    [
+      wxGTK32
+      subversion
+      apr
+      aprutil
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   configureFlags = [
     "--with-svn-include=${subversion.dev}/include"

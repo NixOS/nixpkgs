@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "parameterized/test.py" ];
+  pytestFlagsArray = [ "parameterized/test.py" ];
 
   pythonImportsCheck = [ "parameterized" ];
 

@@ -7,7 +7,7 @@
   glibc,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   version = "2019-08-20";
   pname = "lepton-unstable";
 

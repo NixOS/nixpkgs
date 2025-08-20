@@ -37,7 +37,8 @@ The `package.nix` may look like this:
 # The return value must be a derivation
 stdenv.mkDerivation {
   # ...
-  buildInputs = lib.optional enableBar libbar;
+  buildInputs =
+    lib.optional enableBar libbar;
 }
 ```
 
@@ -69,7 +70,9 @@ and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-p
 
 ```nix
 {
-  libfoo = callPackage ../by-name/so/some-package/package.nix { libbar = libbar_2; };
+  libfoo = callPackage ../by-name/so/some-package/package.nix {
+    libbar = libbar_2;
+  };
 }
 ```
 
@@ -82,7 +85,7 @@ though it is expected to still take some time to get done.
 If you're interested in helping out with this effort,
 please see [this ticket](https://github.com/NixOS/nixpkgs-vet/issues/56).
 
-Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests-yourself),
+Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests),
 if package maintainers would like to use this feature, they are welcome to migrate their packages to `pkgs/by-name`.
 To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
 though this is not required and must not be expected.
@@ -96,16 +99,18 @@ Definitions like the following however, _can_ be transitioned:
 
 ```nix
 # all-packages.nix
-{
-  fooWithBaz = foo.override { bar = baz; };
-}
-```
-
-```nix
+fooWithBaz = foo.override {
+  bar = baz;
+};
 # turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
-{ foo, baz }:
+{
+  foo,
+  baz,
+}:
 
-foo.override { bar = baz; }
+foo.override {
+  bar = baz;
+}
 ```
 
 ## Limitations
@@ -134,6 +139,8 @@ You can locally emulate the CI check using
 ```
 $ ./ci/nixpkgs-vet.sh master
 ```
+
+See [here](../../.github/workflows/nixpkgs-vet.yml) for more info.
 
 ## Recommendation for new packages with multiple versions
 
@@ -177,7 +184,10 @@ because it establishes a clear connection between related attributes.
 This is not required, but the above solution also allows refactoring the definitions into a separate file:
 
 ```nix
-{ inherit (import ../tools/foo pkgs) foo_1 foo_2; }
+{
+  inherit (import ../tools/foo pkgs)
+    foo_1 foo_2;
+}
 ```
 
 ```nix
@@ -192,19 +202,19 @@ Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#
 if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
 
 ```nix
-{ inherit (callPackages ../tools/foo { }) foo_1 foo_2; }
+{
+  inherit (callPackages ../tools/foo { })
+    foo_1 foo_2;
+}
 ```
 
 ```nix
 # pkgs/tools/foo/default.nix
-{ stdenv }:
 {
-  foo_1 = stdenv.mkDerivation {
-    # ...
-  };
-  foo_2 = stdenv.mkDerivation {
-    # ...
-  };
+  stdenv
+}: {
+  foo_1 = stdenv.mkDerivation { /* ... */ };
+  foo_2 = stdenv.mkDerivation { /* ... */ };
 }
 ```
 

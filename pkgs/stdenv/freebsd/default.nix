@@ -62,9 +62,6 @@ let
         name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
-        # this script will prefer to link files instead of copying them.
-        # this prevents clang in particular, but possibly others, from calling readlink(argv[0])
-        # and obtaining dependencies, ld(1) in particular, from there instead of $PATH.
         args = [ ./linkBootstrap.sh ];
         PATH = "${bootstrapArchive}/bin";
         paths = attrs.paths;
@@ -77,7 +74,7 @@ let
     expand-response-params = "";
     bsdcp = linkBootstrap { paths = [ "bin/bsdcp" ]; };
     patchelf = linkBootstrap { paths = [ "bin/patchelf" ]; };
-    bashNonInteractive = linkBootstrap {
+    bash = linkBootstrap {
       paths = [
         "bin/bash"
         "bin/sh"
@@ -96,7 +93,6 @@ let
           "bin/clang"
           "bin/clang++"
           "bin/cpp"
-          "lib/clang"
         ];
         # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
         version = "18";
@@ -230,7 +226,6 @@ let
       ];
     };
     iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
-    libiconv = linkBootstrap { paths = [ "include/iconv.h" ]; };
     patch = linkBootstrap { paths = [ "bin/patch" ]; };
     gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
     gawk = linkBootstrap {
@@ -381,13 +376,13 @@ let
         gawk
         diffutils
         patch
-        bashNonInteractive
+        bash
         xz
         gzip
         bzip2
         bsdcp
       ];
-      shell = "${prevStage.bashNonInteractive}/bin/bash";
+      shell = "${prevStage.bash}/bin/bash";
       stdenvNoCC = import ../generic {
         inherit
           config
@@ -404,7 +399,6 @@ let
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib stdenvNoCC;
         inherit (prevStage) curl;
-        inherit (config) rewriteURL;
       };
       stdenv = import ../generic {
         inherit
@@ -448,7 +442,7 @@ let
             inherit (prevStage.freebsd) libc;
             inherit (prevStage) gnugrep coreutils expand-response-params;
             runtimeShell = shell;
-            bintools = (prevStage.llvmPackages or { }).bintools-unwrapped or prevStage.binutils-unwrapped;
+            bintools = prevStage.binutils-unwrapped;
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
@@ -459,9 +453,6 @@ let
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
           export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
           export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
-        ''
-        + lib.optionalString (prevStage.freebsd ? libiconvModules) ''
-          export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
         '';
       };
     in
@@ -480,13 +471,12 @@ in
         # we CAN'T import LLVM because the compiler built here is used to build the final compiler and the final compiler must not be built by the bootstrap compiler
         inherit (bootstrapTools)
           patchelf
-          bashNonInteractive
+          bash
           curl
           coreutils
           diffutils
           findutils
           iconv
-          libiconv
           patch
           gnutar
           gawk
@@ -502,7 +492,6 @@ in
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
-          inherit (config) rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?

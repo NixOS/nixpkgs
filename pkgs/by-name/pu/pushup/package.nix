@@ -1,10 +1,4 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  lib,
-  go,
-  makeWrapper,
-}:
+{ fetchFromGitHub, buildGoModule, lib, go, makeWrapper }:
 
 buildGoModule rec {
   pname = "pushup";
@@ -21,15 +15,14 @@ buildGoModule rec {
   subPackages = ".";
   # Pushup doesn't need CGO so disable it.
   env.CGO_ENABLED = 0;
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
   nativeBuildInputs = [ makeWrapper ];
   # The Go compiler is a runtime dependency of Pushup.
   allowGoReference = true;
   postInstall = ''
-    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : ${lib.makeBinPath [ go ]}
+    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : ${
+      lib.makeBinPath [ go ]
+    }
   '';
 
   meta = with lib; {

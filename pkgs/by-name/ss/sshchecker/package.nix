@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "lazytools";
-    repo = "sshchecker";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-QMc64ynPLHQGsmDOsoChgmqmpRDyMYmmSAPwAEFBK40=";
   };

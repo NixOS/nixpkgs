@@ -7,24 +7,24 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pykulersky";
-  version = "0.6.0";
-  pyproject = true;
+  version = "0.5.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = "pykulersky";
+    repo = pname;
     rev = version;
-    hash = "sha256-YHGEDAsbQN3sYu7mdVUbb3xX7FMnR0xAhXkvf7Ok7qs=";
+    hash = "sha256-coO+WBnv5HT14ym719qr3Plm1JuiaNdAvD1QVPj65oU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     bleak
     click
   ];

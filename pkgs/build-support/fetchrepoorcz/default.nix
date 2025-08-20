@@ -1,14 +1,10 @@
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchzip,
-}:
+{ fetchzip }:
 
 # gitweb example, snapshot support is optional in gitweb
 {
   repo,
   rev,
-  name ? repoRevToNameMaybe repo rev "repoorcz",
+  name ? "source",
   ... # For hash agility
 }@args:
 fetchzip (

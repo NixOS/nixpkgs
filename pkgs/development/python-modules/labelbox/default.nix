@@ -20,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  pythonOlder,
   requests,
   shapely,
   strenum,
@@ -28,45 +29,19 @@
   typing-extensions,
 }:
 
-let
-  version = "6.10.0";
+buildPythonPackage rec {
+  pname = "labelbox";
+  version = "5.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     tag = "v.${version}";
-    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
+    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
-
-  lbox-clients = buildPythonPackage {
-    inherit src version pyproject;
-
-    pname = "lbox-clients";
-
-    sourceRoot = "${src.name}/libs/lbox-clients";
-
-    build-system = [ hatchling ];
-
-    dependencies = [
-      google-api-core
-      requests
-    ];
-
-    nativeCheckInputs = [
-      pytestCheckHook
-      pytest-cov-stub
-    ];
-
-    doCheck = true;
-
-    __darwinAllowLocalNetworking = true;
-  };
-in
-buildPythonPackage rec {
-  inherit src version pyproject;
-
-  pname = "labelbox";
 
   sourceRoot = "${src.name}/libs/labelbox";
 
@@ -79,7 +54,6 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
-    lbox-clients
     pydantic
     python-dateutil
     requests
@@ -111,8 +85,7 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-  ]
-  ++ optional-dependencies.data;
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
@@ -122,17 +95,13 @@ buildPythonPackage rec {
     "tests/unit/test_label_data_type.py"
   ];
 
-  doCheck = true;
-
-  __darwinAllowLocalNetworking = true;
-
   pythonImportsCheck = [ "labelbox" ];
 
-  meta = {
+  meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rakesh4g ];
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rakesh4g ];
   };
 }

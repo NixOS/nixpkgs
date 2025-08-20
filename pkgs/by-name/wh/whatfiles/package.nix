@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Log what files are accessed by any Linux process";
     homepage = "https://github.com/spieglt/whatfiles";
     license = licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
     mainProgram = "whatfiles";
   };

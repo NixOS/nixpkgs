@@ -3,7 +3,6 @@
   stdenv,
   lib,
   runtimeShell,
-  meta,
 }:
 {
   name,
@@ -33,17 +32,18 @@
 }:
 
 let
-  sdkArgs = {
-    includeEmulator = true;
-    includeSystemImages = true;
-  }
-  // sdkExtraArgs
-  // {
-    cmdLineToolsVersion = "8.0";
-    platformVersions = [ platformVersion ];
-    systemImageTypes = [ systemImageType ];
-    abiVersions = [ abiVersion ];
-  };
+  sdkArgs =
+    {
+      includeEmulator = true;
+      includeSystemImages = true;
+    }
+    // sdkExtraArgs
+    // {
+      cmdLineToolsVersion = "8.0";
+      platformVersions = [ platformVersion ];
+      systemImageTypes = [ systemImageType ];
+      abiVersions = [ abiVersion ];
+    };
 
   sdk = (composeAndroidPackages sdkArgs).androidsdk;
 in
@@ -194,8 +194,4 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/run-test-emulator
   '';
-
-  meta = meta // {
-    mainProgram = "run-test-emulator";
-  };
 }

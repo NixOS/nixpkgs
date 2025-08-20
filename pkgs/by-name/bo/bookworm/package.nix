@@ -18,7 +18,7 @@
   pantheon,
   pkg-config,
   poppler,
-  poppler-utils,
+  poppler_utils,
   python3,
   sqlite,
   unar,
@@ -28,13 +28,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bookworm";
   version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "babluboy";
-    repo = "bookworm";
+    repo = pname;
     rev = "f3df858ce748a6bbc43f03a6e261ff76a6d7d303";
     hash = "sha256-mLyJfblF5WnWBV3rX1ZRupccou4t5mBpo3W7+ECNMVI=";
   };
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
         lib.makeBinPath [
           unzip
           unar
-          poppler-utils
+          poppler_utils
           html2text
           coreutils
           curl

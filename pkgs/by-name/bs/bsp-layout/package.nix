@@ -8,13 +8,13 @@
   bspwm,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bsp-layout";
   version = "unstable-2022-06-19";
 
   src = fetchFromGitHub {
     owner = "phenax";
-    repo = "bsp-layout";
+    repo = pname;
     rev = "9d60fc271454ea1bfca598575207a06d8d172d3e";
     sha256 = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
   };

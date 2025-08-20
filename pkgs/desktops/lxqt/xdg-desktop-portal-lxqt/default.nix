@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-lxqt";
-  version = "1.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-y3VqDuFagKcG8O5m5qjRGtlUZXfIXV0tclvZLChhWkg=";
+    hash = "sha256-uII6elLoREc/AO6NSe9QsT+jYARd2hgKSa84NCDza10=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ]
-  ++ extraQtStyles;
+  ] ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 

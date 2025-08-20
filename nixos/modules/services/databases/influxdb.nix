@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.influxdb;
 
@@ -60,32 +55,24 @@ let
       https-enabled = false;
     };
 
-    graphite = [
-      {
-        enabled = false;
-      }
-    ];
+    graphite = [{
+      enabled = false;
+    }];
 
-    udp = [
-      {
-        enabled = false;
-      }
-    ];
+    udp = [{
+      enabled = false;
+    }];
 
-    collectd = [
-      {
-        enabled = false;
-        typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
-        database = "collectd_db";
-        bind-address = ":25826";
-      }
-    ];
+    collectd = [{
+      enabled = false;
+      typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
+      database = "collectd_db";
+      bind-address = ":25826";
+    }];
 
-    opentsdb = [
-      {
-        enabled = false;
-      }
-    ];
+    opentsdb = [{
+      enabled = false;
+    }];
 
     continuous_queries = {
       enabled = true;
@@ -106,7 +93,11 @@ let
     };
   } cfg.extraConfig;
 
-  configFile = (pkgs.formats.toml { }).generate "config.toml" configOptions;
+  configFile = pkgs.runCommandLocal "config.toml" { } ''
+    ${pkgs.buildPackages.remarshal}/bin/remarshal -if json -of toml \
+      < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
+      > $out
+  '';
 in
 {
 
@@ -143,12 +134,13 @@ in
       };
 
       extraConfig = lib.mkOption {
-        default = { };
+        default = {};
         description = "Extra configuration options for influxdb";
         type = lib.types.attrs;
       };
     };
   };
+
 
   ###### implementation
 
@@ -171,9 +163,7 @@ in
       postStart =
         let
           scheme = if configOptions.http.https-enabled then "-k https" else "http";
-          bindAddr = (ba: if lib.hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}") (
-            toString configOptions.http.bind-address
-          );
+          bindAddr = (ba: if lib.hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}")(toString configOptions.http.bind-address);
         in
         lib.mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${scheme}://${bindAddr}/ping; do

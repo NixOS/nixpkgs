@@ -33,6 +33,6 @@ stdenvNoCC.mkDerivation rec {
       cc-by-sa-40
     ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

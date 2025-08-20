@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "iterative-telemtry";
-  version = "0.0.10";
+  version = "0.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "telemetry-python";
     tag = version;
-    hash = "sha256-+l9JH9MbN+Pai3MIcKZJObzoPGhQipfMd7T8v4SoSws=";
+    hash = "sha256-bcGniytjlN3JFPeMQYjyIP8Ruty9/dnzp9neclbdsfU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Common library to send usage telemetry";
     homepage = "https://github.com/iterative/iterative-telemetry";
-    changelog = "https://github.com/iterative/iterative-telemetry/releases/tag/${src.tag}";
+    changelog = "https://github.com/iterative/iterative-telemetry/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
   };

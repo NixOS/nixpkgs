@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   wrapGAppsHook3,
   pkg-config,
@@ -9,20 +9,17 @@
   gtk3,
   blas,
   lapack,
-  nix-update-script,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xnec2c";
   version = "4.4.16";
 
-  src = fetchFromGitHub {
-    owner = "KJ7LNW";
-    repo = "xnec2c";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-W8JwbCSXt5cjgncOzV1wltPnJxwWC6B29eaT8emIU9Y=";
+  src = fetchurl {
+    url = "https://www.xnec2c.org/releases/${pname}-v${version}.tar.gz";
+    hash = "sha256-XiZi8pfmfHjGpePkRy/pF1TA+5RdxX4AGuKzG5Wqrmk=";
   };
 
   nativeBuildInputs = [
@@ -37,17 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://www.xnec2c.org/";
     description = "Graphical antenna simulation";
     mainProgram = "xnec2c";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mvs ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ mvs ];
+    platforms = platforms.unix;
 
     # Darwin support likely to be fixed upstream in the next release
     broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}

@@ -9,7 +9,7 @@
   pyyaml,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "oyaml";
   version = "unstable-2021-12-03";
   format = "setuptools";

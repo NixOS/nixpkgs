@@ -12,12 +12,11 @@
   git,
   gnused,
   nix,
-  nixfmt,
   rebar3-nix,
 }:
 
 let
-  version = "3.25.1";
+  version = "3.24.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -30,7 +29,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "Wpg8MDVwum/cBpwbcY3Cjt2JkuQHEp7wxbZKgyP6crc=";
+      sha256 = "OhzgDipFhscHtRGlfc33ZewBgHgQLa9Zhjby/r1m49A=";
     };
 
     buildInputs = [ erlang ];
@@ -81,7 +80,7 @@ let
       '';
 
       platforms = lib.platforms.unix;
-      teams = [ lib.teams.beam ];
+      maintainers = lib.teams.beam.members;
       license = lib.licenses.asl20;
     };
 
@@ -95,7 +94,6 @@ let
           git
           gnused
           nix
-          nixfmt
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
@@ -107,7 +105,6 @@ let
         tmpdir=$(mktemp -d)
         cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
         (cd "$tmpdir" && rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
-        nixfmt "$nix_path/rebar-deps.nix"
       else
         echo "rebar3 is already up-to-date"
       fi

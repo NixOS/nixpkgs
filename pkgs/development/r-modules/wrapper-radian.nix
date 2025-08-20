@@ -14,12 +14,13 @@ runCommand (radian.name + "-wrapper")
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    buildInputs = [
-      R
-      radian
-    ]
-    ++ recommendedPackages
-    ++ packages;
+    buildInputs =
+      [
+        R
+        radian
+      ]
+      ++ recommendedPackages
+      ++ packages;
 
     nativeBuildInputs = [ makeWrapper ];
 

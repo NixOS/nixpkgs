@@ -16,14 +16,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jesopo";
-    repo = "ircstates";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Mq9aOj6PXzPjaz3ofoPcAbur59oUWffmEg8aHt0v+0Q=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "pendulum" ];
 
   dependencies = [
     irctokens

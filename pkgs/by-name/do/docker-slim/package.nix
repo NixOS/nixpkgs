@@ -44,12 +44,12 @@ buildGoModule rec {
     wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Minify and secure Docker containers";
     homepage = "https://slimtoolkit.org/";
     changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       Br1ght0ne
       mbrgm
     ];

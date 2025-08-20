@@ -1,49 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  cairo,
-  glib,
-  gtk3,
-  gtk-layer-shell,
-  libX11,
-  libXi,
-  libxfce4ui,
-  libxfce4util,
-  libxfce4windowing,
-  xfce4-panel,
-  gitUpdater,
+{ lib
+, mkXfceDerivation
+, cairo
+, glib
+, gtk3
+, gtk-layer-shell
+, libX11
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, libxfce4windowing
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "panel-plugins";
   pname = "xfce4-docklike-plugin";
-  version = "0.5.0";
-
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "panel-plugins";
-    repo = "xfce4-docklike-plugin";
-    tag = "xfce4-docklike-plugin-${finalAttrs.version}";
-    hash = "sha256-1R9qQKqn/CIV36GYmyg54t3xiY23qUs5EMLxvAIavK8=";
-  };
-
-  strictDeps = true;
-
-  depsBuildBuild = [
-    pkg-config
-  ];
-
-  nativeBuildInputs = [
-    gettext
-    glib # glib-compile-resources
-    meson
-    ninja
-    pkg-config
-  ];
+  version = "0.4.3";
+  sha256 = "sha256-cQ9B/sIzp1sq3GXPMtbb8xrfFhWiBS+FDe7/qlWVPdA=";
 
   buildInputs = [
     cairo
@@ -51,20 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libX11
-    libXi
     libxfce4ui
     libxfce4util
-    libxfce4windowing
     xfce4-panel
+    libxfce4windowing
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-docklike-plugin-"; };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-docklike-plugin/start";
     description = "Modern, minimalist taskbar for Xfce";
-    license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

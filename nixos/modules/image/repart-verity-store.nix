@@ -140,8 +140,8 @@ in
           pkgs.runCommand ukiFile
             {
               nativeBuildInputs = [
-                pkgs.buildPackages.jq
-                pkgs.buildPackages.systemdUkify
+                pkgs.jq
+                pkgs.systemdUkify
               ];
             }
             ''
@@ -177,9 +177,9 @@ in
               };
 
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
-                pkgs.buildPackages.systemdUkify
+                pkgs.systemdUkify
                 verityHashCheck
-                pkgs.buildPackages.jq
+                pkgs.jq
               ];
 
               preBuild = ''

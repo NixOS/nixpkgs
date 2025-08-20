@@ -1,21 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
   extractcode-7z,
   extractcode-libarchive,
+  fetchPypi,
   patch,
-  six,
-  typecode,
-
-  # tests
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  setuptools,
+  typecode,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +19,17 @@ buildPythonPackage rec {
   version = "31.0.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "aboutcode-org";
-    repo = "extractcode";
-    tag = "v${version}";
-    hash = "sha256-mPHGe/pMaOnIykDd4AjGcvh/T4UrbaGxrSVGhchqYFM=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
   postPatch = ''
     # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
     substituteInPlace setup.cfg \
-      --replace-fail ">=3.6.*" ">=3.6"
+      --replace ">=3.6.*" ">=3.6"
   '';
 
   dontConfigure = true;
@@ -41,16 +37,16 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    extractcode-7z
-    extractcode-libarchive
-    patch
-    six
     typecode
+    patch
+    extractcode-libarchive
+    extractcode-7z
+    six
   ];
 
   nativeCheckInputs = [
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
   ];
 
   disabledTestPaths = [
@@ -74,17 +70,15 @@ buildPythonPackage rec {
     "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
     # extractcode.libarchive2.ArchiveErrorRetryable: Damaged tar archive
     "test_extract_python_testtar_tar_archive_with_special_files"
-    # AssertionError: [<function extract at 0x7ffff493dd00>] == [] for archive/rar/basic.rar
-    "test_get_extractors_2"
   ];
 
   pythonImportsCheck = [ "extractcode" ];
 
-  meta = {
+  meta = with lib; {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/aboutcode-org/extractcode";
     changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ ];
     mainProgram = "extractcode";
   };

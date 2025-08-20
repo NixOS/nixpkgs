@@ -1,29 +1,26 @@
 {
   lib,
+  fetchurl,
   buildGoModule,
-  fetchFromGitea,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "harmonist";
-  version = "0.6.1";
+  version = "0.5.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "anaseto";
-    repo = "harmonist";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0YHbASLEcQJVYruFuWUYeb0yItmjnlJrZ4jY4h8WYgw=";
+  src = fetchurl {
+    url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-NkUrBvOOs6yctW4CVRpJNcdfdPvUJZp9HaWLS7eO4yE=";
   };
 
-  vendorHash = "sha256-pQgqITlUtKkTZTpumWUoYMIB+fKQIqbTIAeTy2UDvdY=";
+  vendorHash = "sha256-0DV32a2LYnfYzg/tqwear9uaaahNUIi0M8uWlXOQ5Ic=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Stealth coffee-break roguelike game";
     mainProgram = "harmonist";
     longDescription = ''
@@ -35,7 +32,7 @@ buildGoModule (finalAttrs: {
       adaptability for character progression.
     '';
     homepage = "https://harmonist.tuxfamily.org/";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     maintainers = [ ];
   };
-})
+}

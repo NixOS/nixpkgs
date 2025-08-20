@@ -10,8 +10,6 @@
 let
   inherit (lib)
     concatStringsSep
-    escapeShellArg
-    hasInfix
     mapAttrs
     mapAttrsToList
     mkOption
@@ -86,18 +84,10 @@ in
   };
 
   config = {
-    assertions = mapAttrsToList (name: _: {
-      assertion = !hasInfix "/" name;
-      message = ''
-        Specialisation names must not contain forward slashes.
-        Invalid specialisation name: ${name}
-      '';
-    }) config.specialisation;
-
     system.systemBuilderCommands = ''
       mkdir $out/specialisation
       ${concatStringsSep "\n" (
-        mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${escapeShellArg name}") children
+        mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children
       )}
     '';
   };

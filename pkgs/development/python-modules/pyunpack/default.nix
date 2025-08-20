@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cabextract
   ];
 
-  pytestFlags = [ "-x" ];
+  pytestFlagsArray = [ "-x" ];
 
   pythonImportsCheck = [ "pyunpack" ];
 

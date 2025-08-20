@@ -6,43 +6,38 @@
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "enturclient";
   version = "0.2.4";
-  pyproject = true;
-
   disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
-    repo = "enturclient";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     async-timeout
   ];
 
-  pythonRelaxDeps = [
-    "async_timeout"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
+  '';
+
+  # Project has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "enturclient" ];
-
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
-
-  unittestFlagsArray = [
-    "tests/dto/"
-  ];
 
   meta = with lib; {
     description = "Python library for interacting with the Entur.org API";

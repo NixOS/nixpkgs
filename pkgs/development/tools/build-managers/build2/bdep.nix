@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Build2 project dependency manager";
+    description = "build2 project dependency manager";
     mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
     longDescription = ''

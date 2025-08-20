@@ -1,11 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ninja,
-  quilt,
-}:
+{ lib, stdenv, fetchFromGitLab, cmake, ninja, quilt }:
 
 stdenv.mkDerivation {
   pname = "jxrlib";
@@ -19,16 +12,12 @@ stdenv.mkDerivation {
     hash = "sha256-BX4kLlFk8AfouKE9KDyG1EFFYLFB/HqYQRxFdjAe2J8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    quilt
-  ];
+  nativeBuildInputs = [ cmake ninja quilt ];
 
   strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
-    [ "-Wno-error=implicit-function-declaration" ]
+    [ "-Wno-error=implicit-function-declaration"]
     ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
   );
 

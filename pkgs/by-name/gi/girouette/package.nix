@@ -5,6 +5,8 @@
   pkg-config,
   dbus,
   openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,16 +20,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CROd44lCCXlWF8X/9HyjtTjSlCUFkyke+BjkD4uUqXo=";
   };
 
-  cargoHash = "sha256-1jRm8tKL6QTBaCjFgt+NKQjdGjJIURTb3rs1SrrKwr4=";
+  cargoHash = "sha256-AkagcIewHGPBYrITzI1YNPSJIN13bViDU6tbC+IeakY=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    dbus
-    openssl
-  ];
+  buildInputs =
+    [
+      dbus
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = with lib; {
     description = "Show the weather in the terminal, in style";

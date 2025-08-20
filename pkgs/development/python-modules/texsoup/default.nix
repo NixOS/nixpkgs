@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +22,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "TexSoup" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    substituteInPlace pytest.ini \
+      --replace "--cov=TexSoup" ""
+  '';
 
   meta = with lib; {
     description = "Fault-tolerant Python3 package for searching, navigating, and modifying LaTeX documents";

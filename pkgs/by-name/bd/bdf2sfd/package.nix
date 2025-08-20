@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bdf2sfd";
-  version = "1.1.9";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "fcambus";
-    repo = "bdf2sfd";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-L1fIPZdVP4px73VbnEA6sb28WrmsNUJ2tqLeGPpwDbA=";
+    sha256 = "sha256-+CPULpy3mqZv0QaXS4kKYWKjifibtcQt7unKGOUTSV0=";
   };
 
   nativeBuildInputs = [ cmake ];

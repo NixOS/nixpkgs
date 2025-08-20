@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "8.7.0";
+  version = "8.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-0TuBrSI7iQqhbFRx8qwwVs92xfEPgtb5KS8LQV84kAA=";
+    hash = "sha256-cVImVvCrrOHQcrnlSBpI8HwTjgDwecOMj4g4I/nCa9c=";
   };
 
   build-system = [
@@ -34,8 +34,7 @@ buildPythonPackage rec {
   dependencies = [
     toml
     zipp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;

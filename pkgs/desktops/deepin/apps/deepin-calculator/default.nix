@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  dtk6widget,
-  qt6integration,
-  qt6platform-plugins,
-  qt6Packages,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  libsForQt5,
   cmake,
   pkg-config,
   gtest,
@@ -13,33 +13,32 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-calculator";
-  version = "6.5.7";
+  version = "6.5.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-p3tEUIM7rxYUVLl7ZaEm20IZWRMNi12AIj9mQe6iB5I=";
+    hash = "sha256-yLLdQCnEfcKm0su9gIMRDwOxOjLRjrOqf7AkC7PvAwM=";
   };
 
   nativeBuildInputs = [
     cmake
-    qt6Packages.qttools
+    libsForQt5.qttools
     pkg-config
-    qt6Packages.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    dtk6widget
-    qt6integration
-    qt6platform-plugins
-    qt6Packages.qtbase
-    qt6Packages.qtsvg
+    dtkwidget
+    qt5integration
+    qt5platform-plugins
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     gtest
   ];
 
-  # qtsvg can't not be found with strictDeps
-  strictDeps = false;
+  strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
@@ -49,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-calculator";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 }

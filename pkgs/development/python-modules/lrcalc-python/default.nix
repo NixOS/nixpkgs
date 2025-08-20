@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Littlewood-Richardson Calculator bindings";
     homepage = "https://sites.math.rutgers.edu/~asbuch/lrcalc/";
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
     license = licenses.gpl3;
   };
 }

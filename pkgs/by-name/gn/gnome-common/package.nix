@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
   ]; # autogen.sh which is using gnome-common tends to require which
 
   meta = with lib; {
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

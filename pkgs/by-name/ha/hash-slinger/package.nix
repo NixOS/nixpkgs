@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hash-slinger";
-  version = "3.4";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "letoams";
-    repo = "hash-slinger";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-IN+jo2EuGx+3bnANKz+d/3opFBUCSmkBS/sCU3lT7Zs=";
+    sha256 = "sha256-c6IZHUFuhcccUWZYSOUGFbKpTtwMclIvEvDX8gE5d8o=";
   };
 
   pythonPath = with python3.pkgs; [
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     unbound
     libreswan
-  ]
-  ++ pythonPath;
+  ] ++ pythonPath;
 
   propagatedUserEnvPkgs = [
     unbound

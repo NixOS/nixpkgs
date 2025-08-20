@@ -9,29 +9,29 @@
 
   # dependencies
   albucore,
+  eval-type-backport,
   numpy,
   opencv-python,
   pydantic,
   pyyaml,
+  scikit-image,
   scipy,
 
   # optional dependencies
   huggingface-hub,
   pillow,
-  torch,
 
   # tests
   deepdiff,
   pytestCheckHook,
   pytest-mock,
-  scikit-image,
-  scikit-learn,
+  torch,
   torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "2.0.8";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     tag = version;
-    hash = "sha256-8vUipdkIelRtKwMw63oUBDN/GUI0gegMGQaqDyXAOTQ=";
+    hash = "sha256-8WEOI2J2H4PNhyb9LoIUMofGKx9AHPiPddkQCSdh8/A=";
   };
 
   patches = [
@@ -53,16 +53,17 @@ buildPythonPackage rec {
 
   dependencies = [
     albucore
+    eval-type-backport
     numpy
     opencv-python
     pydantic
     pyyaml
+    scikit-image
     scipy
   ];
 
   optional-dependencies = {
     hub = [ huggingface-hub ];
-    pytorch = [ torch ];
     text = [ pillow ];
   };
 
@@ -70,17 +71,14 @@ buildPythonPackage rec {
     deepdiff
     pytestCheckHook
     pytest-mock
-    scikit-image
-    scikit-learn
     torch
     torchvision
   ];
 
   disabledTests = [
     "test_pca_inverse_transform"
-    # these tests hang
-    "test_keypoint_remap_methods"
-    "test_multiprocessing_support"
+    # this test hangs up
+    "test_transforms"
   ];
 
   pythonImportsCheck = [ "albumentations" ];
@@ -88,7 +86,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast image augmentation library and easy to use wrapper around other libraries";
     homepage = "https://github.com/albumentations-team/albumentations";
-    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${src.tag}";
+    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

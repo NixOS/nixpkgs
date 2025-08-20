@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "peco";
-  version = "0.1.2";
+  version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xW65tEL86ecOfGIbnGiSnKtq7SmKQxW2eMTVrs/nxNc=";
+    hash = "sha256-p9Uxckc88HbUUtpg3fHGwYojU57mCuRzh3M1RAjKLX0=";
   };
 
   build-system = [ poetry-core ];

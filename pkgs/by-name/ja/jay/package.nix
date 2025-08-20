@@ -1,43 +1,40 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libGL,
-  libinput,
-  pkgconf,
-  xkeyboard_config,
-  libgbm,
-  pango,
-  udev,
-  shaderc,
-  libglvnd,
-  vulkan-loader,
-  autoPatchelfHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libGL
+, libinput
+, libxkbcommon
+, libgbm
+, pango
+, udev
+, shaderc
+, libglvnd
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jay";
-  version = "1.11.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
-    repo = "jay";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lVdNilNMeVN27VaDufWiNVme0apnX+w0x9JeHkDzFH4=";
+    sha256 = "sha256-VAg59hmI38hJzkh/Vtv6LjrqQFLaq7rIGtk9sfQe1TA=";
   };
 
-  cargoHash = "sha256-5j4ECjBCMSCmGfFUQ72nwER/vTvCiDl6f2CyNF3n1ek=";
+  cargoHash = "sha256-qYyuVNYhsHjR4uGdQq83Ih5TMBdlKmG0l4MxDa9wgD8=";
 
   SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pkgconf
   ];
 
   buildInputs = [
     libGL
-    xkeyboard_config
+    libxkbcommon
     libgbm
     pango
     udev
@@ -59,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "jay";
   };

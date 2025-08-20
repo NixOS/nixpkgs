@@ -6,6 +6,7 @@
   libGL,
   libheif,
   libjpeg,
+  darwin,
   pkg-config,
   stdenv,
   enableHEIFCodec ? true,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.5";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-PjgglP4mKW1eOJ7QgUmc4KNsp/d9ubJBWr4CLcQAyRA=";
+    hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
   };
 
   outputs = [
@@ -37,18 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-  ]
-  ++ lib.optionals enableHEIFCodec [
-    libheif
-  ]
-  ++ lib.optionals enableJPGCodec [
-    libjpeg
-  ]
-  ++ lib.optionals enableOpenGL [
-    libglut
-    libGL
-  ];
+  buildInputs =
+    [
+    ]
+    ++ lib.optionals enableHEIFCodec [
+      libheif
+    ]
+    ++ lib.optionals enableJPGCodec [
+      libjpeg
+    ]
+    ++ lib.optionals enableOpenGL [
+      libglut
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...

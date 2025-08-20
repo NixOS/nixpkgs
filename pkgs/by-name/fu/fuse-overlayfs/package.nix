@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.15";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "fuse-overlayfs";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-awVDq87lxMtpTADhy8k95N/4yuGH+2Fn94j3JZzkuUY=";
+    hash = "sha256-A70AxYPKph/5zRNFRDWrwl8Csc8Vf1gmOLJ39ixJgL0=";
   };
 
   nativeBuildInputs = [
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
     description = "FUSE implementation for overlayfs";
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma9e ];
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ ma9e ] ++ teams.podman.members;
     platforms = platforms.linux;
     inherit (src.meta) homepage;
     mainProgram = "fuse-overlayfs";

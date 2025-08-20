@@ -6,22 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghunt";
-  version = "2.3.3";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mxrch";
     repo = "ghunt";
-    # The newer releases aren't git-tagged to we just take the
-    # commit with the version bump
-    rev = "5782248bfd92a24875e112ed0a83e6986d4c70d0";
-    hash = "sha256-SQk/hy4r9LIffsu3kxLTv5LCcEvcZkP2jhmPA6Fzo8U=";
+    tag = "v${version}";
+    hash = "sha256-UeHVATTyAH3Xdm/NVSUhiicM+tZ4UnLeJsy1jSLK3v8=";
   };
 
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs =
@@ -31,7 +29,6 @@ python3.pkgs.buildPythonApplication rec {
       autoslot
       beautifulsoup4
       beautifultable
-      dnspython
       geopy
       httpx
       humanize
@@ -42,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
       protobuf
       python-dateutil
       rich
-      rich-argparse
+      trio
       packaging
     ]
     ++ httpx.optional-dependencies.http2;
@@ -54,12 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     "ghunt"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Offensive Google framework";
     mainProgram = "ghunt";
     homepage = "https://github.com/mxrch/ghunt";
     changelog = "https://github.com/mxrch/GHunt/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

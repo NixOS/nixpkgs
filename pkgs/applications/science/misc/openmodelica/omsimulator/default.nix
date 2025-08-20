@@ -9,7 +9,7 @@
   fetchpatch,
 }:
 
-mkOpenModelicaDerivation {
+mkOpenModelicaDerivation rec {
   pname = "omsimulator";
   omdir = "OMSimulator";
   omdeps = [ openmodelica.omcompiler ];

@@ -67,7 +67,7 @@ let
     systemd
   ];
 
-  version = "2025.7";
+  version = "2025.2";
 
   selectSystem =
     attrs:
@@ -79,8 +79,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-wKmwCLF+H/ByZFYGQMEJT6gmAt2Aa0vZalqaMptPjhU=";
-    aarch64-linux = "sha256-lsHpbxVxThxi+eKY+9c7VcXlDdxBTds6NQKrS0rxt34=";
+    x86_64-linux = "sha256-jOE6Nsna1R6kNp/wXaY60rNmgy4y2UViHiK+KphSNFo=";
+    aarch64-linux = "sha256-yemy1Eajq7uHfGGEf3bgnp2Uz+NcI0cSp65ZvKUQAEg=";
   };
 in
 
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;

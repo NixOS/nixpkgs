@@ -1,16 +1,5 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libtool,
-  cmake,
-  libxml2,
-  cppunit,
-  boost,
-  apr,
-  aprutil,
-  db,
-  expat,
+{ lib, stdenv, fetchurl, libtool, cmake, libxml2, cppunit, boost
+, apr, aprutil, db, expat
 }:
 
 stdenv.mkDerivation rec {
@@ -26,19 +15,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "\\\''${prefix}/" ""
   '';
 
-  buildInputs = [
-    libxml2
-    cppunit
-    boost
-    apr
-    aprutil
-    db
-    expat
-  ];
-  nativeBuildInputs = [
-    libtool
-    cmake
-  ];
+  buildInputs = [ libxml2 cppunit boost apr aprutil db expat ];
+  nativeBuildInputs = [ libtool cmake ];
 
   meta = {
     homepage = "https://logging.apache.org/log4cxx/index.html";

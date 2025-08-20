@@ -1,43 +1,42 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
+  qtbase,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "coreimage";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "coreimage";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-sgOxDKACb9D/TvjjHz09JwBpFoE8eXA4HixcbN+0FoE=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-SyGIeoYC4bTBWZ0adOfYJpWkW3/bvFNZg5zK2MN27kA=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Image viewer from the C Suite";
     mainProgram = "coreimage";
     homepage = "https://gitlab.com/cubocore/coreapps/coreimage";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

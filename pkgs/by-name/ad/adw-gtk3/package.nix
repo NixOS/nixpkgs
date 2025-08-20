@@ -5,37 +5,40 @@
   nix-update-script,
   meson,
   ninja,
-  dart-sass,
+  sassc,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adw-gtk3";
-  version = "6.2";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "adw-gtk3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
+    hash = "sha256-S/H6JGXwEgiqmcH1W+ZyHYOkk0gQtKG9Q3BiI2IjnEM=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    dart-sass
+    sassc
   ];
 
-  passthru.updateScript = nix-update-script { };
+  postPatch = ''
+    chmod +x gtk/src/adw-gtk3-dark/gtk-3.0/install-dark-theme.sh
+    patchShebangs gtk/src/adw-gtk3-dark/gtk-3.0/install-dark-theme.sh
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    description = "Unofficial GTK 3 port of libadwaita";
+    description = "Theme from libadwaita ported to GTK-3";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      ciferkey
-      Gliczy
-      normalcea
-    ];
+    maintainers = with lib.maintainers; [ ciferkey ];
   };
 })

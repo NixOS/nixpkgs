@@ -12,6 +12,7 @@
 
   # buildInputs
   libuuid,
+  xdg-utils,
 
   # passthru.tests
   nixosTests,
@@ -24,20 +25,24 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.4.1";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-00HiGju4pIswx8Z+M+ATdBSupiMS2xIm2ZnE52k/RwA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
   };
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-trc5DIWf68XRBSMjeG/ZchuwFA56wJnLbqm17gE+jYQ=";
+    hash = "sha256-mzmrbsUuIjUVuNEa33EgtOTl9r+0xYj2WkKqFjxX1oU=";
   };
 
+  postPatch = ''
+    substituteInPlace src/commands/CmdNews.cpp \
+      --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
+  '';
   # The CMakeLists files used by upstream issue a `cargo install` command to
   # install a rust tool (cxxbridge-cmd) that is supposed to be included in the Cargo.toml's and
   # `Cargo.lock` files of upstream. Setting CARGO_HOME like that helps `cargo
@@ -54,13 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     "bash_completion.test.py"
   ];
   # Contains Bash and Python scripts used while testing.
-  preConfigure = ''
-    patchShebangs test
-  ''
-  + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
-    substituteInPlace test/CMakeLists.txt \
-      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-  '';
+  preConfigure =
+    ''
+      patchShebangs test
+    ''
+    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+      substituteInPlace test/CMakeLists.txt \
+        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -113,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
-    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v${finalAttrs.src.rev}";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;

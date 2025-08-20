@@ -36,41 +36,40 @@ let
   */
   enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
 
-  defaultOptionals = [
-    protobuf
-  ]
-  ++ lib.optional snappySupport snappy.dev
-  ++ lib.optional zlibSupport zlib
-  ++ lib.optional zstdSupport zstd
-  ++ lib.optional log4cxxSupport log4cxx
-  ++ lib.optional asioSupport asio
-  ++ lib.optional (!asioSupport) boost;
+  defaultOptionals =
+    [ protobuf ]
+    ++ lib.optional snappySupport snappy.dev
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional zstdSupport zstd
+    ++ lib.optional log4cxxSupport log4cxx
+    ++ lib.optional asioSupport asio
+    ++ lib.optional (!asioSupport) boost;
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "libpulsar";
-  version = "3.7.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-3kUyimyv0Si3zUFaIsIVdulzH8l2fxe6BO9a5L6n8I8=";
+    rev = "v${version}";
+    hash = "sha256-hY6ivTKWgl/2KLeP6MMAdWcM/LJ5b7zoNVRlg6nx6Sc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ]
-  ++ defaultOptionals
-  ++ lib.optional gtestSupport gtest.dev;
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ defaultOptionals
+    ++ lib.optional gtestSupport gtest.dev;
 
   buildInputs = [
     jsoncpp
     openssl
     curl
-  ]
-  ++ defaultOptionals;
+  ] ++ defaultOptionals;
 
   cmakeFlags = [
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"
@@ -93,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-cpp/";
     description = "Apache Pulsar C++ library";
-    changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [

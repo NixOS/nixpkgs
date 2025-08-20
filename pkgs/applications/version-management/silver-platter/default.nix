@@ -30,9 +30,10 @@ buildPythonApplication rec {
     hash = "sha256-k+C4jrC4FO/yy9Eb6x4lv1zyyp/eGkpMcDqZ0KoxfBs=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-hZQfzaLvHSN/hGR5vn+/2TRH6GwDTTp+UcnePXY7JlM=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-+EUj6iBnHF4zlOAAfaHy5V/z6CCD/LFksBClE4FaHHc=";
   };
 
   propagatedBuildInputs = [
@@ -48,8 +49,7 @@ buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];

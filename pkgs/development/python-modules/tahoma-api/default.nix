@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "philklei";
-    repo = "tahoma-api";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-YwOKSBlN4lNyS+hfdbQDUq1gc14FBof463ofxtUVLC4=";
   };

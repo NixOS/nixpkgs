@@ -3,7 +3,7 @@
   fetchurl,
   buildPythonApplication,
   libjack2,
-  pyliblo3,
+  pyliblo,
   pyqt5,
   which,
   bash,
@@ -12,11 +12,11 @@
 
 buildPythonApplication rec {
   pname = "raysession";
-  version = "0.14.4";
+  version = "0.14.3";
 
   src = fetchurl {
     url = "https://github.com/Houston4444/RaySession/releases/download/v${version}/RaySession-${version}-source.tar.gz";
-    sha256 = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
+    sha256 = "sha256-3+g1zdjGkxNEpyuKuxzhr2p9gkEFjYAso4fPedbjmlY=";
   };
 
   postPatch = ''
@@ -24,7 +24,6 @@ buildPythonApplication rec {
     substituteInPlace Makefile --replace '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
     # Do not wrap an importable module with a shell script.
     chmod -x src/daemon/desktops_memory.py
-    chmod -x src/clients/jackpatch/main_loop.py
   '';
 
   format = "other";
@@ -39,8 +38,8 @@ buildPythonApplication rec {
     libjack2
     bash
   ];
-  dependencies = [
-    pyliblo3
+  propagatedBuildInputs = [
+    pyliblo
     pyqt5
   ];
 

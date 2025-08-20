@@ -2,38 +2,32 @@ let
   seed = "2151901553968352745";
   rcon-pass = "foobar";
   rcon-port = 43000;
-in
-{ lib, pkgs, ... }:
-{
+in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "minecraft-server";
-  meta.maintainers = with lib.maintainers; [ nequissimus ];
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
-  node.pkgsReadOnly = false;
+  nodes.server = { ... }: {
+    environment.systemPackages = [ pkgs.mcrcon ];
 
-  nodes.server =
-    { ... }:
-    {
-      environment.systemPackages = [ pkgs.mcrcon ];
+    nixpkgs.config.allowUnfree = true;
 
-      nixpkgs.config.allowUnfree = true;
-
-      services.minecraft-server = {
-        declarative = true;
-        enable = true;
-        eula = true;
-        serverProperties = {
-          enable-rcon = true;
-          level-seed = seed;
-          level-type = "flat";
-          generate-structures = false;
-          online-mode = false;
-          "rcon.password" = rcon-pass;
-          "rcon.port" = rcon-port;
-        };
+    services.minecraft-server = {
+      declarative = true;
+      enable = true;
+      eula = true;
+      serverProperties = {
+        enable-rcon = true;
+        level-seed = seed;
+        level-type = "flat";
+        generate-structures = false;
+        online-mode = false;
+        "rcon.password" = rcon-pass;
+        "rcon.port" = rcon-port;
       };
-
-      virtualisation.memorySize = 2047;
     };
+
+    virtualisation.memorySize = 2047;
+  };
 
   testScript = ''
     server.wait_for_unit("minecraft-server")
@@ -43,4 +37,4 @@ in
     )
     server.succeed("systemctl stop minecraft-server")
   '';
-}
+})

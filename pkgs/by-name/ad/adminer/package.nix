@@ -4,23 +4,21 @@
   fetchurl,
   php,
   nix-update-script,
-  unzip,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
+  version = "4.8.1";
   pname = "adminer";
-  version = "5.3.0";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
-    url = "https://github.com/vrana/adminer/releases/download/v${finalAttrs.version}/adminer-${finalAttrs.version}.zip";
-    hash = "sha256-7EnZ0frx8i6DXHO5E/65k+h+WuflTo8eBYNRVAmh7Kg=";
+    url = "https://github.com/vrana/adminer/releases/download/v${version}/adminer-${version}.tar.gz";
+    sha256 = "sha256-2rkNq79sc5RBFxWuiaSlpWr0rwrnEFlnW1WcoxjoP2M=";
   };
 
   nativeBuildInputs = [
     php
     php.packages.composer
-    unzip
   ];
 
   buildPhase = ''
@@ -35,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir $out
-    cp adminer-${finalAttrs.version}.php $out/adminer.php
+    cp adminer-${version}.php $out/adminer.php
 
     runHook postInstall
   '';
@@ -44,17 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Database management in a single PHP file";
     homepage = "https://www.adminer.org";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       jtojnar
       sstef
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
-})
+}

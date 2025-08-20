@@ -2,62 +2,57 @@
   lib,
   stdenv,
   fetchFromGitHub,
-
-  # build inputs
-  cacert,
   libuuid,
-
-  # build inputs (darwin)
+  cacert,
+  Foundation,
   readline,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "premake5";
   version = "5.0.0-beta4";
 
   src = fetchFromGitHub {
     owner = "premake";
     repo = "premake-core";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-sNLCyIHWDW/8jIrMFCZAqtWsh4SRugqtPR4HaoW/Vzk=";
   };
 
-  buildInputs = [
-    libuuid
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    readline
-  ];
+  buildInputs =
+    [ libuuid ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      readline
+    ];
 
   patches = [ ./no-curl-ca.patch ];
-  postPatch = ''
-    substituteInPlace contrib/curl/premake5.lua \
-      --replace-fail "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace premake5.lua \
-      --replace-fail '"-arch arm64"' '""' \
-      --replace-fail '"-arch x86_64"' '""'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isStatic ''
-    substituteInPlace \
-      binmodules/example/premake5.lua \
-      binmodules/luasocket/premake5.lua \
-      --replace-fail SharedLib StaticLib
-  '';
+  postPatch =
+    ''
+      substituteInPlace contrib/curl/premake5.lua \
+        --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace premake5.lua \
+        --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5 \
+        --replace-fail '"-arch arm64"' '""' \
+        --replace-fail '"-arch x86_64"' '""'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      substituteInPlace \
+        binmodules/example/premake5.lua \
+        binmodules/luasocket/premake5.lua \
+        --replace SharedLib StaticLib
+    '';
 
   buildPhase =
     if stdenv.hostPlatform.isDarwin then
-      # Error compiling the builtin zlib source, but it's not used currently
       ''
-        make PREMAKE_OPTS="--zlib-src=none" \
-             PLATFORM="Universal" \
-             -f Bootstrap.mak osx
+        make -f Bootstrap.mak osx
       ''
     else
       ''
-        make PLATFORM=${stdenv.hostPlatform.linuxArch} \
-          -f Bootstrap.mak linux
+        make -f Bootstrap.mak linux
       '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -78,12 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple build configuration and project generation tool using lua";
     mainProgram = "premake5";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.sarahec ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-})
+}

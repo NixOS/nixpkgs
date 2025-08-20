@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmcfp";
-  version = "1.4.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "mhekkel";
     repo = "libmcfp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qKmSkVuxY5kXQ1eSs/T500lFpCLzU3sXAoUmpXhTUp4=";
+    hash = "sha256-7Oy7qEXIAJ50NXL4+Mm67WrivpubDz7uLWZ3YVzTFxA=";
   };
 
   nativeBuildInputs = [

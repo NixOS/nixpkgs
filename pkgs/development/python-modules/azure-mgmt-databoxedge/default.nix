@@ -4,23 +4,22 @@
   azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isodate,
+  msrest,
   pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
-  version = "2.0.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "azure_mgmt_databoxedge";
-    inherit version;
-    hash = "sha256-8Y8GbQJ8maIkmY08R0CBJoIVmr44z1joewl3DKssrMA=";
+    inherit pname version;
+    extension = "zip";
+    hash = "sha256-BAkAYrwejwDC9FMVo7zrD7OzR57BR01xuINC4TSZsIc=";
   };
 
   build-system = [ setuptools ];
@@ -28,8 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     azure-common
     azure-mgmt-core
-    isodate
-    typing-extensions
+    msrest
   ];
 
   # no tests in pypi tarball

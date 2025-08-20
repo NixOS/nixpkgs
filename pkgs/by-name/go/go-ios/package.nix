@@ -1,23 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  libusb1,
-  iproute2,
-  net-tools,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, libusb1
 }:
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.182";
+  version = "1.0.168";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-GUCZiuW6IDVxVsFZN7QMRt5EFovxjUopC4jQD+/lZv8=";
+    sha256 = "sha256-BaJFFaNPPpPvDc8bMl89SfGYglvx9TwpoDQUEr0mqYM=";
   };
 
   proxyVendor = true;
@@ -26,14 +23,6 @@ buildGoModule rec {
   excludedPackages = [
     "restapi"
   ];
-
-  postPatch = ''
-    substituteInPlace ncm/linux_commands.go \
-      --replace-fail "ip " "${lib.getExe' iproute2 "ip"} "
-
-    substituteInPlace ios/tunnel/tunnel.go \
-      --replace-fail "ifconfig" "${lib.getExe' net-tools "ifconfig"}"
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -50,14 +39,13 @@ buildGoModule rec {
 
   # skips all the integration tests (requires iOS device) (`-tags=fast`)
   # as well as tests that requires networking
-  checkFlags =
-    let
-      skippedTests = [
-        "TestWorksWithoutProxy"
-        "TestUsesProxy"
-      ];
-    in
-    [ "-tags=fast" ] ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags = let
+    skippedTests = [
+      "TestWorksWithoutProxy"
+      "TestUsesProxy"
+    ];
+  in [ "-tags=fast" ]
+  ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script { };
 

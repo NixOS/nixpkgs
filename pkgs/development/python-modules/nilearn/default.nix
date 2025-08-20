@@ -1,78 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
   hatch-vcs,
-  hatchling,
-
-  # dependencies
-  joblib,
   lxml,
+  matplotlib,
   nibabel,
   numpy,
   pandas,
-  requests,
   scikit-learn,
   scipy,
-  packaging,
-
-  pytestCheckHook,
+  joblib,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.11.1";
+  version = "0.10.4";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "nilearn";
-    repo = "nilearn";
-    tag = version;
-    hash = "sha256-ZvodSRJkKwPwpYHOLmxAYIIv7f9AlrjmZS9KLPjz5rM=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-lFC9Vqd22ZezJPRd0Yv5bom9jYAWCXT8x1kzP7rqNcI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --template=maint_tools/templates/index.html" ""
-  '';
+  nativeBuildInputs = [ hatch-vcs ];
 
-  build-system = [
-    hatch-vcs
-    hatchling
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  disabledTests = [ "test_clean_confounds" ]; # https://github.com/nilearn/nilearn/issues/2608
+  # do subset of tests which don't fetch resources
+  pytestFlagsArray = [ "nilearn/connectome/tests" ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     joblib
     lxml
+    matplotlib
     nibabel
     numpy
     pandas
     requests
     scikit-learn
     scipy
-    packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # https://github.com/nilearn/nilearn/issues/2608
-    "test_clean_confounds"
-
-    # [XPASS(strict)] invalid checks should fail
-    "test_check_estimator_invalid_group_sparse_covariance"
-  ];
-
-  # do subset of tests which don't fetch resources
-  enabledTestPaths = [ "nilearn/connectome/tests" ];
-
-  meta = {
-    description = "Module for statistical learning on neuroimaging data";
+  meta = with lib; {
     homepage = "https://nilearn.github.io";
+    description = "Module for statistical learning on neuroimaging data";
     changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.bsd3;
   };
 }

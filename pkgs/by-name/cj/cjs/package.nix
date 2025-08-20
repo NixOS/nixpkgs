@@ -8,7 +8,7 @@
   glib,
   readline,
   libsysprof-capture,
-  spidermonkey_128,
+  spidermonkey_115,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "128.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-B9N/oNRvsnr3MLkpcH/aBST6xOJSFdvSUFuD6EldE38=";
+    hash = "sha256-2lkIWroOo3hxu9/L/Ty7CADzVrZ0ohyHVmm65NoNlD4=";
   };
 
   outputs = [
@@ -35,24 +35,25 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    which # for locale detection
-    libxml2 # for xml-stripblanks
-    dbus # for dbus-run-session
-    gobject-introspection
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      which # for locale detection
+      libxml2 # for xml-stripblanks
+      dbus # for dbus-run-session
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     cairo
     readline
     libsysprof-capture
-    spidermonkey_128
+    spidermonkey_115
   ];
 
   propagatedBuildInputs = [
@@ -83,6 +84,6 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

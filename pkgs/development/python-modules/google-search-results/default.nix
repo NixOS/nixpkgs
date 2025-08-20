@@ -1,37 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  pythonOlder,
   requests,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-search-results";
   version = "2.4.2";
-  pyproject = true;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "serpapi";
-    repo = "google-search-results-python";
-    tag = version;
-    hash = "sha256-2GRhBaRE0KHNFsdMrIC87dx6yMzql+QQFSSm2Gf7xHU=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit version;
+    pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
+    hash = "sha256-YDow7K4q+OYAsiY1dXpt8nXa1Lk0+XXmeHjM1kC3gkU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   # almost all tests require an API key or network access
   doCheck = false;
 
   pythonImportsCheck = [ "serpapi" ];
 
-  meta = {
+  meta = with lib; {
     description = "Scrape and search localized results from Google, Bing, Baidu, Yahoo, Yandex, Ebay, Homedepot, youtube at scale using SerpApi.com";
     homepage = "https://github.com/serpapi/google-search-results-python";
     changelog = "https://github.com/serpapi/google-search-results-python/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
   };
 }

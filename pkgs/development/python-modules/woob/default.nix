@@ -1,8 +1,9 @@
 {
   lib,
+  babel,
   buildPythonPackage,
   fetchFromGitLab,
-  babel,
+  fetchpatch,
   html2text,
   lxml,
   packaging,
@@ -19,33 +20,38 @@
   setuptools,
   testers,
   unidecode,
-  termcolor,
-  responses,
   woob,
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.7";
+  version = "3.6";
   pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "woob";
     repo = "woob";
-    tag = version;
-    hash = "sha256-EZHzw+/BIIvmDXG4fF367wsdUTVTHWYb0d0U56ZXwOs=";
+    rev = version;
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
-  build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "packaging"
-    "rich"
-    "requests"
+  patches = [
+    (fetchpatch {
+      name = "no-deprecated-pkg_resources.patch";
+      url = "https://gitlab.com/woob/woob/-/commit/3283c4c1a935cc71acea98b2d8c88bc4bf28f643.patch";
+      hash = "sha256-3bRuv93ivKRxbGr52coO023DlxHZWwUeInXTPqQAeL8=";
+    })
   ];
 
-  dependencies = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "packaging" ];
+
+  propagatedBuildInputs = [
     babel
     python-dateutil
     python-jose
@@ -59,13 +65,9 @@ buildPythonPackage rec {
     requests
     rich
     unidecode
-    termcolor
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    responses
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require networking
@@ -80,12 +82,12 @@ buildPythonPackage rec {
     version = "v${version}";
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
     mainProgram = "woob";
     homepage = "https://woob.tech";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ DamienCassou ];
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ DamienCassou ];
   };
 }

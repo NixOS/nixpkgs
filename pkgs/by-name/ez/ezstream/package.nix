@@ -2,56 +2,33 @@
   lib,
   stdenv,
   fetchurl,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
   libiconv,
   libshout,
-  libxml2,
   taglib,
-
-  # checkInputs
-  check,
+  libxml2,
+  pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ezstream";
-  version = "1.0.2";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/ezstream-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ed6Jf0ValbpYVGvc1AqV072mmGbsX3h5qDsCQSbFTCo=";
+    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/${pname}-${version}.tar.gz";
+    sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/playlist.c \
-      --replace-fail "#include <sys/stat.h>" $'#include <stddef.h>\n#include <sys/stat.h>'
-    substituteInPlace tests/Makefile.am \
-      --replace-fail "check_playlist " ""
-    substituteInPlace tests/check_mdata.c \
-      --replace-fail 'ck_assert_int_eq(mdata_run_program(md, SRCDIR "/test-meta03-huge.sh"), 0);' ""
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
-    check
     libiconv
     libshout
-    libxml2
-    check
     taglib
+    libxml2
   ];
-
-  checkInputs = [
-    check
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Command line source client for Icecast media streaming servers";
     longDescription = ''
       Ezstream is a command line source client for Icecast media
@@ -63,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       very little CPU resources.
     '';
     homepage = "https://icecast.org/ezstream/";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.barrucadu ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.barrucadu ];
+    platforms = platforms.all;
   };
-})
+}

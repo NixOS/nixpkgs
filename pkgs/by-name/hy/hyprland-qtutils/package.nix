@@ -1,26 +1,25 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   hyprutils,
-  hyprland-qt-support,
   pciutils,
   qt6,
 }:
 let
   inherit (lib.strings) makeBinPath;
 in
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.4";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2dModE32doiyQMmd6EDAQeZnz+5LOs6KXyE0qX76WIg=";
+    hash = "sha256-FxbuGQExtN37ToWYnGmO6weOYN6WPHN/RAqbr7gNPek=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprutils
-    hyprland-qt-support
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
@@ -45,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.hyprland ];
+    maintainers = [ lib.maintainers.fufexan ];
     platforms = lib.platforms.linux;
   };
 })

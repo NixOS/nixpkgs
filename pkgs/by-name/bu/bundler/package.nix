@@ -5,39 +5,43 @@
   writeScript,
   testers,
   bundler,
-  versionCheckHook,
-  nix-update-script,
 }:
 
 buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.6.9";
-  source.sha256 = "sha256-olZ1/70FWuEYZ2bMHhILTPYliOiKu1m5nFfiKxxVyes=";
+  version = "2.5.22";
+  source.sha256 = "sha256-dj8w1ZjuWHQu6ikoWHVDXqciIY1N8UneNbzjfALOlo4=";
   dontPatchShebangs = true;
 
   postFixup = ''
-    substituteInPlace $out/bin/bundle --replace-fail "activate_bin_path" "bin_path"
+    sed -i -e "s/activate_bin_path/bin_path/g" $out/bin/bundle
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgram = "${placeholder "out"}/bin/bundler";
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = writeScript "gem-update-script" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl common-updater-scripts jq
+
+      set -eu -o pipefail
+
+      latest_version=$(curl -s https://rubygems.org/api/v1/gems/${gemName}.json | jq --raw-output .version)
+      update-source-version ${gemName} "$latest_version"
+    '';
+    tests.version = testers.testVersion {
+      package = bundler;
+      command = "bundler -v";
+      version = version;
+    };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Manage your Ruby application's gem dependencies";
     homepage = "https://bundler.io";
     changelog = "https://github.com/rubygems/rubygems/blob/bundler-v${version}/bundler/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ anthonyroussel ];
     mainProgram = "bundler";
   };
 }

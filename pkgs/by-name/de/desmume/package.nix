@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       commercial nds rom titles which other DS Emulators aren't.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   icu,
   meson,
   ninja,
@@ -15,23 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libzim";
-  version = "9.3.0";
+  version = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
     tag = version;
-    hash = "sha256-DZiFeZ2ry3JpXDs3mvf0q7diwhkjQ2730KQkDQPbgcY=";
+    hash = "sha256-z22+cDlFQtLMLFh5+7Nt9LsGFyBPi3HeZhYb0LK86Oc=";
   };
-
-  patches = [
-    # Upstream patch for ICU76 compatibility.
-    # https://github.com/openzim/libzim/pull/936
-    (fetchpatch {
-      url = "https://github.com/openzim/libzim/commit/4a42b3c6971c9534b104f48f6d13db8630a97d2f.patch";
-      hash = "sha256-FjaGZ2bI1ROLg3rvWIGLbVoImGr51MbWjbBj+lGj1rs=";
-    })
-  ];
 
   nativeBuildInputs = [
     ninja
@@ -60,14 +50,11 @@ stdenv.mkDerivation rec {
     "-Dtest_data_dir=none"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
     changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      fab
-      greg
-    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://apps.gnome.org/DiskUtility/";
     description = "Udisks graphical front-end";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "gnome-disks";

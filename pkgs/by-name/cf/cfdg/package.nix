@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cfdg";
-  version = "3.4.2";
+  version = "3.4.1";
   src = fetchFromGitHub {
     owner = "MtnViewJohn";
     repo = "context-free";
     rev = "Version${version}";
-    sha256 = "sha256-PtkvhX5PIeN/5UDpAaVwBwfp8ykjsjfH+8iGdbNQOfI=";
+    sha256 = "sha256-f2VMb0TM50afKf/lGdZBP2z13UrCVgG4/IYi5gnD+ow=";
   };
 
   nativeBuildInputs = [

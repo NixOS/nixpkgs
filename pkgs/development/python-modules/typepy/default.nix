@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
   mbstrdecoder,
   python-dateutil,
   pytz,
@@ -14,21 +13,19 @@
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.4";
-  pyproject = true;
+  version = "1.3.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = "typepy";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
+    hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  dependencies = [ mbstrdecoder ];
+  propagatedBuildInputs = [ mbstrdecoder ];
 
   optional-dependencies = {
     datetime = [
@@ -41,16 +38,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "typepy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for variable type checker/validator/converter at a run time";
     homepage = "https://github.com/thombashi/typepy";
-    changelog = "https://github.com/thombashi/typepy/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    changelog = "https://github.com/thombashi/typepy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ genericnerdyusername ];
   };
 }

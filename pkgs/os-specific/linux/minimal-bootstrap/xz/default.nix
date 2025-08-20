@@ -49,7 +49,7 @@ bash.runCommand "${pname}-${version}"
         gpl2Plus
         lgpl21Plus
       ];
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = platforms.unix;
     };
   }

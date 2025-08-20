@@ -66,8 +66,6 @@ let
     werkzeug
     zipp
     zxcvbn
-    standard-imghdr
-
   ];
 
   all_patches = [
@@ -85,8 +83,7 @@ let
 
     nativeBuildInputs = [
       yarnConfigHook
-    ]
-    ++ pythonDeps;
+    ] ++ pythonDeps;
     patches = all_patches ++ [
       ./0002-Remove-cssrewrite-filter.patch
     ];

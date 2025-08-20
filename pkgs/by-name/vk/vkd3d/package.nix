@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkd3d";
-  version = "1.15";
+  version = "1.14";
 
   src = fetchFromGitLab {
     domain = "gitlab.winehq.org";
     owner = "wine";
     repo = "vkd3d";
     rev = "vkd3d-${finalAttrs.version}";
-    hash = "sha256-EzXsYi9wC+JdMYE77cIeO2lV+fY4ViQM3+KcAJFv9tU=";
+    hash = "sha256-puYsDKFNkml2JCEhwpx9rlMsFJuz0LGCNlnpyEv/W4g=";
   };
 
   outputs = [

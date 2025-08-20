@@ -19,7 +19,6 @@
   libpulseaudio,
   wrapGAppsHook3,
   mateUpdateScript,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -49,16 +47,13 @@ stdenv.mkDerivation rec {
     gtk3
     dconf
     mate-desktop
-  ]
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
-
-  doInstallCheck = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
@@ -72,6 +67,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mbstrdecoder,
   setuptools,
-  setuptools-scm,
   simplesqlite,
   sqliteschema,
   tabledata,
@@ -14,20 +13,17 @@
 
 buildPythonPackage rec {
   pname = "sqliteschema";
-  version = "2.0.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "sqliteschema";
-    tag = "v${version}";
-    hash = "sha256-ZGDzGfj78v8o0GvAHcP26JiJCOWPaIr2h1Lqzh5AuSg=";
+    rev = "v${version}";
+    hash = "sha256-IzHdYBnh6udVsanWTPSsX4p4PG934YCdzs9Ow/NW86E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     mbstrdecoder

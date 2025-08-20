@@ -5,22 +5,22 @@
   copyDesktopItems,
   python3,
   xdg-utils,
-  electron_36,
+  electron,
   makeDesktopItem,
 }:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.11.0";
+  version = "4.10.3";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     tag = "v${version}";
-    hash = "sha256-JHPvUEHBPsDqdesVifPFtg9mRwTUsln6JeXKXj/o8d8=";
+    hash = "sha256-ga94CBc87q1U06Bm6ju304CHrIlFRLcIwNJx3GB2S+w=";
   };
 
-  npmDepsHash = "sha256-5R3kcMZ9TsuZ89M6C3y/daEYDd/0ekRqf3uLBzSOOJA=";
+  npmDepsHash = "sha256-h14sYaUeXb57kjxSSiXyvDjaswWi1qPAU/x1xQz3BaY=";
 
   makeCacheWritable = true;
 
@@ -55,7 +55,7 @@ buildNpmPackage rec {
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron_36}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/
@@ -80,7 +80,7 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "Discord and SpaceBar electron-based client implemented without Discord API";
+    description = "A Discord and SpaceBar electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
@@ -88,7 +88,6 @@ buildNpmPackage rec {
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
       huantian
-      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };

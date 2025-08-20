@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
-    repo = "robotframework-requests";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-NRhf3delcqUw9vWRPL6pJzpcmRMDou2pHmUHMstF8hw=";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RequestsLibrary" ];
 
-  enabledTestPaths = [ "utests" ];
+  pytestFlagsArray = [ "utests" ];
 
   meta = with lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";

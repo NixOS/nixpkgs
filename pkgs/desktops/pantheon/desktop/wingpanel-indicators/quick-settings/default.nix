@@ -8,8 +8,6 @@
   ninja,
   pkg-config,
   vala,
-  wayland-scanner,
-  accountsservice,
   elementary-settings-daemon,
   granite,
   gtk3,
@@ -18,18 +16,19 @@
   libportal,
   packagekit,
   wayland,
+  wayland-scanner,
   wingpanel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wingpanel-quick-settings";
-  version = "1.2.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "quick-settings";
     rev = finalAttrs.version;
-    hash = "sha256-G8nwEbMMHVaT7czDG1E/AMsMdSYtmh0oiMruGr2tMdg=";
+    hash = "sha256-I5RCMd3lkWOkpoawCXYuGHDa49A+wVlIlM8U2hRfq/o=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    accountsservice
     elementary-settings-daemon # for prefers-color-scheme
     glib
     granite
@@ -64,6 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/elementary/quick-settings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.pantheon ];
+    maintainers = lib.teams.pantheon.members;
   };
 })

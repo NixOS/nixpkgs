@@ -11,11 +11,12 @@
   lxqt-build-tools,
   lxqt-menu-data,
   menu-cache,
+  pcre,
   pkg-config,
   qttools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.2.0",
+  version ? "2.1.0",
   qtx11extras ? null,
 }:
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     hash =
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
-        "2.2.0" = "sha256-xLXHwrcMJ8PObZ2qWVZTf9FREcjUi5qtcCJgNHj391Q=";
+        "2.1.0" = "sha256-yH3lyOpmDWjA3bV6msjw7fShs1HnAFOmkGer2Z9N/Tg=";
       }
       ."${version}";
   };
@@ -51,8 +52,8 @@ stdenv.mkDerivation rec {
     libxcb
     lxqt-menu-data
     menu-cache
-  ]
-  ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [ qtx11extras ]);
+    pcre
+  ] ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [ qtx11extras ]);
 
   passthru.updateScript = gitUpdater { };
 
@@ -61,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

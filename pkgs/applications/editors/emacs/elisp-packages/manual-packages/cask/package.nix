@@ -9,6 +9,7 @@
   f,
   fetchFromGitHub,
   git,
+  gitUpdater,
   melpaBuild,
   package-build,
   s,
@@ -45,6 +46,8 @@ melpaBuild (finalAttrs: {
     shut-up
   ];
 
+  strictDeps = true;
+
   # use melpaVersion so that it works for unstable releases too
   postPatch = ''
     lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion} \
@@ -56,6 +59,10 @@ melpaBuild (finalAttrs: {
     install -D -t $out/bin bin/cask
   '';
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     homepage = "https://github.com/cask/cask";
     description = "Project management for Emacs";
@@ -66,6 +73,6 @@ melpaBuild (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "cask";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 })

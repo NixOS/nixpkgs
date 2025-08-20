@@ -2,71 +2,50 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-
-  # tests
-  gitMinimal,
   ripgrep,
-  writableTmpDirAsHomeHook,
-
-  versionCheckHook,
-  nix-update-script,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "1.0.20";
+  version = "0.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-UbvWvPEd4SRVZpnANJD3V/oZAQrqOeEjWwr5TyOZjNI=";
+    hash = "sha256-tf3elcKXUwBqtSStDksOaSN3Q66d72urrG/Vab2M4f0=";
   };
 
   build-system = [ python3Packages.poetry-core ];
-
-  pythonRelaxDeps = [
-    "chromadb"
-    "psutil"
-    "setuptools"
-  ];
 
   dependencies = with python3Packages; [
     appdirs
     blessed
     chardet
-    chromadb
-    deepmerge
     flask
+    deepmerge
+    chromadb
     gitpython
-    halo
     jsonschema
-    nest-asyncio
-    ollama
-    psutil
     pygments
     requests
-    stop-words
+    nest-asyncio
     waitress
+    psutil
+    stop-words
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-      freezegun
-      pytest-asyncio
-      pytest-mock
-      pytest-snapshot
-    ]
-    ++ [
-      gitMinimal
-      ripgrep
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ];
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    freezegun
+    pytest-asyncio
+    pytest-mock
+    pytest-snapshot
+    gitMinimal
+    ripgrep
+  ];
 
   disabledTests = import ./failing_tests.nix;
 
@@ -76,24 +55,18 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     git init
   '';
-
-  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     wrapProgram $out/bin/seagoat-server \
       --prefix PATH : "${ripgrep}/bin"
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";

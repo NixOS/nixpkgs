@@ -3,10 +3,6 @@
   stdenv,
   fetchFromGitHub,
   znc,
-  cmake,
-  pkg-config,
-  python3,
-  which,
 }:
 
 let
@@ -15,86 +11,65 @@ let
       pname,
       src,
       module_name,
-      buildPhase ? ''
-        runHook preBuild
-
-        ${znc}/bin/znc-buildmod ${module_name}.cpp
-
-        runHook postBuild
-      '',
-      installPhase ? ''
-        runHook preInstall
-
-        install -D ${module_name}.so $out/lib/znc/${module_name}.so
-
-        runHook postInstall
-      '',
+      buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
+      installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so",
       ...
     }:
     stdenv.mkDerivation (
       a
       // {
-        inherit buildPhase installPhase;
-
-        nativeBuildInputs = [
-          python3
-          which
-          cmake
-          pkg-config
-        ];
-
-        dontUseCmakeConfigure = true;
+        inherit buildPhase;
+        inherit installPhase;
 
         buildInputs = znc.buildInputs;
-
-        passthru.module_name = module_name;
 
         meta = a.meta // {
           platforms = lib.platforms.unix;
         };
+        passthru.module_name = module_name;
       }
     );
 
 in
 {
 
-  backlog = zncDerivation {
+  backlog = zncDerivation rec {
     pname = "znc-backlog";
-    version = "0-unstable-2018-08-24";
+    version = "unstable-2017-06-13";
     module_name = "backlog";
 
     src = fetchFromGitHub {
       owner = "FruitieX";
       repo = "znc-backlog";
-      rev = "44314a6aca0409ae59b0d841807261be1159fff4";
-      hash = "sha256-yhoMuwXul6zq4VPGn810PlFwiCUIvvV6wkQupE3svOQ=";
+      rev = "42e8f439808882d2dae60f2a161eabead14e4b0d";
+      sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
     };
 
-    meta = {
+    meta = with lib; {
       description = "Request backlog for IRC channels";
       homepage = "https://github.com/fruitiex/znc-backlog/";
-      license = lib.licenses.asl20;
+      license = licenses.asl20;
       maintainers = [ ];
     };
   };
 
-  clientbuffer = zncDerivation {
+  clientbuffer = zncDerivation rec {
     pname = "znc-clientbuffer";
-    version = "0-unstable-2021-05-30";
+    version = "unstable-2021-05-30";
     module_name = "clientbuffer";
 
     src = fetchFromGitHub {
       owner = "CyberShadow";
       repo = "znc-clientbuffer";
       rev = "9a7465b413b53408f5d7af86e84b1d08efb6bec0";
-      hash = "sha256-pAj4Iot0RFuNJOLSZFaXoH5BPb4vf0H8KPfIoo0kbig=";
+      sha256 = "0a3f4j6s5j7p53y42zrgpqyl2zm0jxb69lp24j6mni3licigh254";
     };
 
-    meta = {
+    meta = with lib; {
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [
+      license = licenses.asl20;
+      maintainers = with maintainers; [
         hrdinka
         szlend
         cybershadow
@@ -102,29 +77,29 @@ in
     };
   };
 
-  clientaway = zncDerivation {
+  clientaway = zncDerivation rec {
     pname = "znc-clientaway";
-    version = "0-unstable-2017-04-28";
+    version = "unstable-2017-04-28";
     module_name = "clientaway";
 
     src = fetchFromGitHub {
-      owner = "kylef-archive";
+      owner = "kylef";
       repo = "znc-contrib";
       rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
-      hash = "sha256-KBd78ucRFbgV/jILS1OSsZqqKyjT4RmBfiBTKX8bbUY=";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = {
+    meta = with lib; {
       description = "ZNC clientaway module";
-      homepage = "https://github.com/kylef-archive/znc-contrib";
-      license = lib.licenses.gpl2;
+      homepage = "https://github.com/kylef/znc-contrib";
+      license = licenses.gpl2;
       maintainers = [ ];
     };
   };
 
-  fish = zncDerivation {
+  fish = zncDerivation rec {
     pname = "znc-fish";
-    version = "0-unstable-2017-06-26";
+    version = "unstable-2017-06-26";
     module_name = "fish";
 
     src = fetchFromGitHub {
@@ -132,32 +107,32 @@ in
       owner = "oilslump";
       repo = "znc-fish";
       rev = "7d91467dbb195f7b591567911210523c6087662e";
-      hash = "sha256-VW/je7vDc9arbrj848T0bbeqP9qx7Az5SMOVecLrxc8=";
+      sha256 = "1ky5xg17k5f393whrv5iv8zsmdvdyk2f7z5qdsmxcwy3pdxy6vsm";
     };
 
     meta = {
       description = "ZNC FiSH module";
-      homepage = "https://github.com/oilslump/znc-fish";
+      homepage = "https://github.com/dctrwatson/znc-fish";
       maintainers = [ lib.maintainers.offline ];
     };
   };
 
-  ignore = zncDerivation {
+  ignore = zncDerivation rec {
     pname = "znc-ignore";
-    version = "0-unstable-2017-04-28";
+    version = "unstable-2017-04-28";
     module_name = "ignore";
 
     src = fetchFromGitHub {
       owner = "kylef";
       repo = "znc-contrib";
       rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
-      hash = "sha256-KBd78ucRFbgV/jILS1OSsZqqKyjT4RmBfiBTKX8bbUY=";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = {
+    meta = with lib; {
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
-      license = lib.licenses.gpl2;
+      license = licenses.gpl2;
       maintainers = [ ];
     };
   };
@@ -170,48 +145,48 @@ in
     src = fetchFromGitHub {
       owner = "cocodelabs";
       repo = "znc-palaver";
-      tag = version;
+      rev = version;
       hash = "sha256-8W3uF1PrLQiEZm7JaFrpqmJLSFioa4F4qlM1J6Zua8U=";
     };
 
-    meta = {
+    meta = with lib; {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ szlend ];
+      license = licenses.mit;
+      maintainers = with maintainers; [ szlend ];
     };
   };
 
-  playback = zncDerivation {
+  playback = zncDerivation rec {
     pname = "znc-playback";
-    version = "0-unstable-2020-05-10";
+    version = "unstable-2015-08-04";
     module_name = "playback";
 
     src = fetchFromGitHub {
       owner = "jpnurmi";
       repo = "znc-playback";
-      rev = "8dd128bfe2b24b2cc6a9ea2e2d28bfaa28d2a833";
-      hash = "sha256-/hmwhrWDYGzjfmTeCB4mk+FABAJNZvREnuxzvzl6uo4=";
+      rev = "8691abf75becc1f3d7b5bb5ad68dad17cd21863b";
+      sha256 = "0mgfajljy035051b2sx70i8xrb51zw9q2z64kf85zw1lynihzyh4";
     };
 
-    meta = {
+    meta = with lib; {
       description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ hrdinka ];
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hrdinka ];
     };
   };
 
-  privmsg = zncDerivation {
+  privmsg = zncDerivation rec {
     pname = "znc-privmsg";
-    version = "0-unstable-2017-04-28";
+    version = "unstable-2015-02-22";
     module_name = "privmsg";
 
     src = fetchFromGitHub {
       owner = "kylef";
       repo = "znc-contrib";
-      rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
-      hash = "sha256-KBd78ucRFbgV/jILS1OSsZqqKyjT4RmBfiBTKX8bbUY=";
+      rev = "9f1f98db56cbbea96d83e6628f657e0d62cd9517";
+      sha256 = "0n82z87gdxxragcaixjc80z8bw4bmfwbk0jrf9zs8kk42phlkkc2";
     };
 
     meta = {
@@ -222,14 +197,14 @@ in
 
   push = zncDerivation rec {
     pname = "znc-push";
-    version = "1.1.0";
+    version = "unstable-2016-10-12";
     module_name = "push";
 
     src = fetchFromGitHub {
       owner = "jreese";
       repo = "znc-push";
-      tag = "v${version}";
-      hash = "sha256-OS2nIU/DlESpJT82cWhb75TizSO7LQr74CMz09ulKyQ=";
+      rev = "cf08b9e0f483f03c28d72dd78df932cbef141f10";
+      sha256 = "0xpwjw8csyrg736g1jc1n8d6804x6kbdkrvldzhk9ldj4iwqz7ay";
     };
 
     meta = {
@@ -242,4 +217,5 @@ in
       ];
     };
   };
+
 }

@@ -1,19 +1,23 @@
 {
   lib,
-  python3Packages,
+  python311Packages,
   fetchFromGitHub,
   bashate,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python311Packages;
+in
+pythonPackages.buildPythonApplication rec {
   pname = "kolla";
-  version = "19.4.0";
+  version = "18.1.0";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-yVNMCqg6eAUhLg3iAjDkYpMoIKc6OksDri9jNpyaS7c=";
+    hash = "sha256-jLD6ILihymQlWkkpGYC4OX8BKLpQurAK6Y5Xpju+QAI=";
     rev = version;
   };
 
@@ -22,22 +26,21 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "os.path.join(sys.prefix, 'share/kolla')," \
       "os.path.join(PROJECT_ROOT, '../../../share/kolla'),"
 
+    substituteInPlace test-requirements.txt \
+      --replace-fail "hacking>=3.0.1,<3.1.0" "hacking"
+
     sed -e 's/git_info = .*/git_info = "${version}"/' -i kolla/version.py
   '';
-
-  pythonRelaxDeps = [
-    "hacking"
-  ];
 
   # fake version to make pbr.packaging happy
   env.PBR_VERSION = version;
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     pbr
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     docker
     jinja2
     oslo-config
@@ -46,10 +49,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp kolla/template/repos.yaml $out/${python3Packages.python.sitePackages}/kolla/template/
+    cp kolla/template/repos.yaml $out/${pythonPackages.python.sitePackages}/kolla/template/
   '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pythonPackages; [
     testtools
     stestr
     oslotest
@@ -61,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "test_load_ok")
+    stestr run
     runHook postCheck
   '';
 
@@ -70,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "kolla-build";
     homepage = "https://opendev.org/openstack/kolla";
     license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members ++ [ maintainers.astro ];
   };
 }

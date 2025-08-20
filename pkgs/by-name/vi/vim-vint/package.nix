@@ -1,42 +1,38 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
-  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "Vimjas";
-    repo = "vint";
-    tag = "v${version}";
-    hash = "sha256-A0yXDkB/b9kEEXSoLeqVdmdm4p2PYL2QHqbF4FgAn30=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "15qdh8fby9xgfjxidcfv1xmrqqrxxapky7zmyn46qx1abhp9piax";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
+  disabled = !pythonAtLeast "3.5";
 
-  dependencies = with python3Packages; [
+  nativeCheckInputs = [
+    pytest
+    pytest-cov
+  ];
+  propagatedBuildInputs = [
     ansicolor
     chardet
     pyyaml
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
-
+  # Unpin test dependency versions. This is fixed in master but not yet released.
   preCheck = ''
-    substituteInPlace \
-      test/acceptance/test_cli.py \
-      test/acceptance/test_cli_vital.py \
-      --replace-fail \
-        "cmd = ['bin/vint'" \
-        "cmd = ['$out/bin/vint'"
+    sed -i 's/==.*//g' test-requirements.txt
+    sed -i 's/mock == 1.0.1/mock/g' setup.py
   '';
 
   meta = with lib; {

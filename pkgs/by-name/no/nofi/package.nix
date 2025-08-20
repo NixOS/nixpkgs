@@ -12,25 +12,25 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ellsclytn";
-    repo = "nofi";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-hQYIcyNCxb8qVpseNsmjyPxlwbMxDpXeZ+H1vpv62rQ=";
   };
 
-  cargoHash = "sha256-dWqMwS0TgspZqlpi8hhwtA7sbqGunw0FIqjJXOTiFKA=";
+  cargoHash = "sha256-0TYIycuy2LIhixVvH++U8CbmfQugc+0TF8DTiViWSbE=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
-  meta = {
+  meta = with lib; {
     description = "Interruption-free notification system for Linux";
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
     license = [
-      lib.licenses.asl20 # or
-      lib.licenses.mit
+      licenses.asl20 # or
+      licenses.mit
     ];
     mainProgram = "nofi";
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = [ maintainers.magnetophon ];
   };
 }

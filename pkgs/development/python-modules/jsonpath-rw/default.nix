@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "jsonpath-rw";
   version = "1.4.0";
-  format = "setuptools";
   disabled = isPyPy;
 
   src = fetchPypi {

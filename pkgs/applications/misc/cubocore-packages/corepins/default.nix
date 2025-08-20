@@ -1,43 +1,42 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
+  qtbase,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "corepins";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "corepins";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-noMdI2qk3cYc1FfRWd4rwpZBbeHiD557Z1T0ZxIhaTw=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-vA2Phs+sEs+Gd73xzj6vb91Krm8q3+koWDM7rCUayTQ=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Bookmarking app from the C Suite";
     mainProgram = "corepins";
     homepage = "https://gitlab.com/cubocore/coreapps/corepins";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

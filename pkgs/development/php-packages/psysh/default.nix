@@ -3,7 +3,6 @@
   fetchurl,
   lib,
   php,
-  versionCheckHook,
 }:
 
 let
@@ -27,6 +26,7 @@ php.buildComposerProject2 (finalAttrs: {
   inherit
     pname
     version
+    composerLock
     src
     ;
 
@@ -45,12 +45,8 @@ php.buildComposerProject2 (finalAttrs: {
       composer update --lock --no-install
     '';
 
-    vendorHash = "sha256-8l5bQ+VnLOtPUspMN1f+iXo7LldPTuYqyrAeW2aVoH8=";
+    vendorHash = "sha256-ODUfR7PsM1YKkEIl4KEAHcY2irqlqMGlpvmEYV1M2jk=";
   };
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
@@ -58,6 +54,6 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 })

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
   autoreconfHook,
   bash,
   buildPackages,
@@ -9,30 +10,27 @@
   python3,
   swig,
   pkgsCross,
-  libcap_ng,
 
   # Enabling python support while cross compiling would be possible, but the
   # configure script tries executing python to gather info instead of relying on
   # python3-config exclusively
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
-  nix-update-script,
-  testers,
-  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.0";
+  version = "4.0.2";
 
-  src = fetchFromGitHub {
-    owner = "linux-audit";
-    repo = "audit-userspace";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MWlHaGue7Ca8ks34KNg74n4Rfj8ivqAhLOJHeyE2Q04=";
+  src = fetchurl {
+    url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1dG11Q7kotDReHW8aua9an1bNNlVfqhHo5+uxTH6qgo=";
   };
 
   patches = [
-    # https://github.com/linux-audit/audit-userspace/pull/476
-    ./musl.patch
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/a89664b45c30a853a6f80b19730984bd78432142.patch";
+      hash = "sha256-HsaL9Bfo1MQ1JBKIS9ckNTapGk5eshjWWKh4M+e+Y9c=";
+    })
   ];
 
   postPatch = ''
@@ -40,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/include/linux/audit.h" \
                      "${linuxHeaders}/include/linux/audit.h"
   '';
-
-  # https://github.com/linux-audit/audit-userspace/issues/474
-  # building databuf_test fails otherwise, as that uses hidden symbols only available in the static builds
-  dontDisableStatic = true;
 
   outputs = [
     "bin"
@@ -59,17 +53,17 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ]
-  ++ lib.optionals enablePython [
-    python3
-    swig
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+    ]
+    ++ lib.optionals enablePython [
+      python3
+      swig
+    ];
 
   buildInputs = [
     bash
-    libcap_ng
   ];
 
   configureFlags = [
@@ -78,21 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-zos-remote"
     "--with-arm"
     "--with-aarch64"
-    # capability dropping, currently mostly for plugins as those get spawned as root
-    # see auditd-plugins(5)
-    "--with-libcap-ng=yes"
     (if enablePython then "--with-python" else "--without-python")
   ];
 
   enableParallelBuilding = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests = {
-      musl = pkgsCross.musl64.audit;
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      audit = nixosTests.audit;
-    };
+  passthru.tests = {
+    musl = pkgsCross.musl64.audit;
   };
 
   meta = {
@@ -100,11 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audit Library";
     changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ grimmauld ];
-    pkgConfigModules = [
-      "audit"
-      "auparse"
-    ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

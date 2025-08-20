@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
-    repo = "pyinstaller-versionfile";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-lz1GuiXU+r8sMld5SsG3qS+FOsWfbvkQmO2bxAR3XcY=";
   };

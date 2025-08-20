@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "orf";
-    repo = "xcat";
+    repo = pname;
     rev = "v${version}";
     sha256 = "01r5998gdvqjdrahpk0ci27lx9yghbddlanqcspr3qp5y5930i0s";
   };
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "xcat" ];
 
-  meta = {
+  meta = with lib; {
     description = "XPath injection tool";
     mainProgram = "xcat";
     longDescription = ''
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/orf/xcat";
     changelog = "https://github.com/orf/xcat/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

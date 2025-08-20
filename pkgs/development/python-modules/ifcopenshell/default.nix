@@ -183,8 +183,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  pytestFlags = [
-    "-pno:pytest-blender"
+  pytestFlagsArray = [
+    "-p no:pytest-blender"
   ];
 
   disabledTestPaths = [

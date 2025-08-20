@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "reap";
   version = "0.3-unreleased";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/leahneukirchen/reap";
-    description = "Run process until all its spawned processes are dead";
+    description = "run process until all its spawned processes are dead";
     mainProgram = "reap";
     license = with licenses; [ publicDomain ];
     platforms = platforms.linux;

@@ -13,29 +13,25 @@
   liblangtag,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libe-book";
   version = "0.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libebook/libe-book-${finalAttrs.version}/libe-book-${finalAttrs.version}.tar.xz";
+    url = "mirror://sourceforge/libebook/libe-book-${version}/libe-book-${version}.tar.xz";
     hash = "sha256-fo2P808ngxrKO8b5zFMsL5DSBXx3iWO4hP89HjTf4fk=";
   };
 
   # restore compatibility with icu68+
-  # https://sourceforge.net/p/libebook/code/ci/edc7a50a06f56992fe21a80afb4f20fbdc5654ed/
   postPatch = ''
-    substituteInPlace src/lib/EBOOKCharsetConverter.cpp --replace-fail \
+    substituteInPlace src/lib/EBOOKCharsetConverter.cpp --replace \
       "TRUE, TRUE, &status)" \
       "true, true, &status)"
   '';
-
-  nativeBuildInputs = [
-    pkg-config
-    gperf
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    gperf
     librevenge
     libxml2
     boost
@@ -45,14 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     liblangtag
   ];
 
-  strictDeps = true;
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  enableParallelBuilding = true;
-
-  meta = {
+  meta = with lib; {
     description = "Library for import of reflowable e-book formats";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
-})
+}

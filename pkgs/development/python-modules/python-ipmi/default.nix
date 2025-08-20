@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  future,
+  mock,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
@@ -10,6 +13,8 @@ buildPythonPackage rec {
   pname = "python-ipmi";
   version = "0.5.7";
   pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kontron";
@@ -23,9 +28,12 @@ buildPythonPackage rec {
       --replace-fail "version=version," "version='${version}',"
   '';
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
+    mock
     pytestCheckHook
   ];
 

@@ -6,15 +6,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "openfortivpn-webview-qt";
-  version = "1.2.3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "gm-vm";
     repo = "openfortivpn-webview";
     rev = "v${version}-electron";
-    hash = "sha256-jGDCFdqRfnYwUgVs3KO1pDr52JgkYVRHi2KvABaZFl4=";
+    hash = "sha256-BNotbb2pL7McBm0SQwcgEvjgS2GId4HVaxWUz/ODs6w=";
   };
-  sourceRoot = "${src.name}/openfortivpn-webview-qt";
+  sourceRoot = "source/openfortivpn-webview-qt";
 
   nativeBuildInputs = [
     qt6Packages.wrapQtAppsHook

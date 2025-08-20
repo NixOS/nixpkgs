@@ -22,27 +22,28 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.15.2";
+  version = "1.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HHI5G73v/M/jF+77pobLmjwHgAVHiIVBO5XDsmxXqKc=";
+    hash = "sha256-IDUDEXQVVh4gOqFFQXQGQ6YR9kFRfwIJ/K5j6foJ8aI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    mako
-    sqlalchemy
-    typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      mako
+      sqlalchemy
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+      importlib-metadata
+    ];
 
   pythonImportsCheck = [ "alembic" ];
 

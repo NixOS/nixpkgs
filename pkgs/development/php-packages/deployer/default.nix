@@ -1,21 +1,21 @@
 {
   lib,
-  php,
   fetchFromGitHub,
+  php,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "deployer";
-  version = "7.5.12";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "deployphp";
     repo = "deployer";
-    rev = "7b108897baa94b8ac438c821ec1fb815d95eba77";
-    hash = "sha256-wtkixHexsJNKsLnnlHssh0IzxwWYMPKDcaf/D0zUNKk=";
+    rev = "v${finalAttrs.version}^";
+    hash = "sha256-nSrW4o0Tb8H056AAjjMzbsAVvWY2z1pdWmPFZDpDr1k=";
   };
 
-  vendorHash = "sha256-0uBI30n31W0eDVA9/W366O0Qo2jWZBqEL+YbJx4J7P0=";
+  vendorHash = "sha256-APzJQTeSNbWvF/RtfNL7XuXIY0Xa0VNbJdSggFicpSQ=";
 
   meta = {
     changelog = "https://github.com/deployphp/deployer/releases/tag/v${finalAttrs.version}";
@@ -23,6 +23,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://deployer.org/";
     license = lib.licenses.mit;
     mainProgram = "dep";
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 })

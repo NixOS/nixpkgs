@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "64.0.0";
+  version = "60.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
     rev = "v${version}";
-    hash = "sha256-6UAZkVBxFJ1CWRn9enCLBBidIugAtxP7stbYlhh1ArA=";
+    hash = "sha256-C3wQdxPNBPQN6eUK6Vq0bA6Wpqb28e9BTBf7c/hTQxU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-XqOCHnvM64kZNifU5Wt/bFAvyRVy28ozWSwlvm/sMk8=";
   };
 
   build-system = [
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "glean-core/python/tests" ];
+  pytestFlagsArray = [ "glean-core/python/tests" ];
 
   disabledTests = [
     # RuntimeError: No ping received.

@@ -2,20 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nclib";
-  version = "1.0.7";
-  pyproject = true;
+  version = "1.0.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40Bdkhmd3LiZAR1v36puV9l4tgtDb6T8k9j02JTR4Jo=";
+    hash = "sha256-sKbISlL5hOBu1j6zWSib2HjJCvEoMrqdwzgG2keMqDE=";
   };
-
-  build-system = [ setuptools ];
 
   # Project has no tests
   doCheck = false;
@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module that provides netcat features";
-    homepage = "https://nclib.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
     mainProgram = "serve-stdio";
+    homepage = "https://nclib.readthedocs.io/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -5,7 +5,7 @@
   wirelesstools,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "mdk3-master";
   version = "6-unstable-2015-05-24";
 
@@ -18,9 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [ wirelesstools ];
 
-  # fix
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   installPhase = ''
     runHook preInstall
     make -C osdep install
@@ -29,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "MDK3 fork able to force reboot Access Points";
     homepage = "https://github.com/charlesxsh/mdk3-master";
-    changelog = "https://github.com/charlesxsh/mdk3-master/blob/${finalAttrs.src.rev}/CHANGELOG";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ pinpox ];
+    changelog = "https://github.com/charlesxsh/mdk3-master/blob/${src.rev}/CHANGELOG";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pinpox ];
     mainProgram = "mdk3";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
-})
+}

@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "notarin";
     repo = "hayabusa";
-    rev = "1d6b8cfd301d60ff9f6946970b51818c036083b0";
-    hash = "sha256-w9vXC7L7IP4QLPFS1IgPOKSm7fT7W0R+NsHTdAfIupg=";
+    rev = "306167c632173f6633e51c5610fe32af7718ec25";
+    hash = "sha256-e2zoVIhxcE9cUypi8Uzz3YZe2JvIaEVuWOGpqHVtxn8=";
   };
 
-  cargoHash = "sha256-F1dUv1SR6cf1o6a2JG2i2fCgjZpGsG20mskIrf3oiHY=";
+  cargoHash = "sha256-aoticMTrKZkRtjVXgdiBfyXJN3YcwBpM3yt07BBd3do=";
 
   enableParallelBuilding = true;
 
@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage {
   ];
 
   postPatch = ''
-    substituteInPlace distribution/hayabusa.service \
+    substituteInPlace src/daemon/hayabusa.service \
       --replace "/usr/local" "$out"
   '';
 
   postInstall = ''
-    install -Dm444 distribution/hayabusa.service -t $out/lib/systemd/system/
+    install -Dm444 src/daemon/hayabusa.service -t $out/lib/systemd/system/
   '';
 
   meta = {

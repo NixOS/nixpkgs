@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # only wheel on pypi
   src = fetchFromGitHub {
     owner = "cmacmackin";
-    repo = "markdown-include";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };

@@ -5,28 +5,25 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "ipgrep";
   version = "1.0.1";
-  format = "pyproject";
+  pname = "ipgrep";
+
+  disabled = python3Packages.isPy27;
 
   src = fetchFromGitHub {
     owner = "jedisct1";
-    repo = "ipgrep";
+    repo = pname;
     rev = version;
     hash = "sha256-NrhcUFQM+L66KaDRRpAoC+z5s54a+1fqEepTRXVZ5Qs=";
   };
 
   patchPhase = ''
-    mkdir -p ipgrep
+    mkdir -p ${pname}
     substituteInPlace setup.py \
-      --replace-fail "'scripts': []" "'scripts': { 'ipgrep.py' }"
+      --replace "'scripts': []" "'scripts': { '${pname}.py' }"
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pycares
     urllib3
     requests

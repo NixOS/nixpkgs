@@ -10,12 +10,10 @@ mkDerivation {
     "sys/modules/zfs/zfs_config.h"
   ];
 
-  # Without a prefix it will try to put object files in nonexistent directories
+  # Without a prefix it will try to put object files in nonexistant directories
   preBuild = ''
     export MAKEOBJDIRPREFIX=$TMP/obj
   '';
-
-  alwaysKeepStatic = true;
 
   meta = with lib; {
     platform = platforms.freebsd;

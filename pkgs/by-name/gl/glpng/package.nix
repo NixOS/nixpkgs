@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "glpng";
-  version = "1.47";
+  version = "1.46";
 
   src = fetchFromRepoOrCz {
     repo = "glpng";
     rev = "v${version}";
-    hash = "sha256-mwh0E8OZKBf6UcRScAeco8dfQ4LJ+7TG0IPuRi3Mzfc=";
+    hash = "sha256-C7EHaBN0PE/HJB6zcIaYU63+o7/MEz4WU1xr/kIOanM=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
     description = "PNG loader library for OpenGL";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

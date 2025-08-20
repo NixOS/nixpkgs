@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
-    pkgConfigModules = [ "blosc" ];
+    pkgConfigModules = [
+      "blosc"
+    ];
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Browse and find system icons";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.iconbrowser";
   };
 }

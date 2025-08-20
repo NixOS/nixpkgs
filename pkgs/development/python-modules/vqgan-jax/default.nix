@@ -8,7 +8,7 @@
   transformers,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "vqgan-jax";
   version = "unstable-2022-04-20";
 

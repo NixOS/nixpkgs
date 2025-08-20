@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbonsai";
-  version = "1.4.2";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "jallbrit";
-    repo = "cbonsai";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-TZb/5DBdWcl54GoZXxz2xYy9dXq5lmJQsOA3C26tjEU=";
+    hash = "sha256-XFK6DiIb8CzVubTnEMkqRW8xZkX/SWjUsrfS+I7LOs8=";
   };
 
   nativeBuildInputs = [

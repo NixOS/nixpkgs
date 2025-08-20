@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-filemanager-app";
-  version = "1.1.4";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-filemanager-app";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-2NDz9XcUMEYHOLaomTVImjuQHLzZ/pat/Fe9uWe29as=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XA1Gdb0Kpc3BEifmgHhQ38moKkCkYbhpr8wptnddZlk=";
   };
 
   postPatch = ''
@@ -81,12 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "File Manager application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
-    }/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-filemanager-app";
-    teams = [ lib.teams.lomiri ];
+    maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
   };
 })

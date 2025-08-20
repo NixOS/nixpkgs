@@ -1,4 +1,7 @@
 {
+  lib,
+  stdenv,
+  fetchurl,
   nim-unwrapped-1,
   nim,
 }:

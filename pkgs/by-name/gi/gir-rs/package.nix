@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.19.0";
+  version = "0.17.1";
 in
 rustPlatform.buildRustPackage {
   pname = "gir";
@@ -15,10 +15,15 @@ rustPlatform.buildRustPackage {
     owner = "gtk-rs";
     repo = "gir";
     rev = version;
-    sha256 = "sha256-GAAK4ej16e5/sjnPOVWs4ul1H9sqa+tDE8ky9tbB9No=";
+    sha256 = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
   };
 
-  cargoHash = "sha256-ObEXOaEdwJpaLJDkcSmAK86P7E6y0eUQQHFpX4hsuog=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustdoc-stripper-0.1.18" = "sha256-b+RRXJDGULEvkIZDBzU/ZchVF63pX0S9hBupeP12CkU=";
+    };
+  };
 
   postPatch = ''
     rm build.rs

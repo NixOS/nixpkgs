@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "filelock";
   version = "3.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

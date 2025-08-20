@@ -2,27 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+
+  cairo,
+  ffmpeg,
   texliveInfraOnly,
 
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # buildInputs
-  cairo,
-
-  # dependencies
-  av,
-  beautifulsoup4,
   click,
   cloup,
   decorator,
   isosurfaces,
+  jupyterlab,
   manimpango,
   mapbox-earcut,
   moderngl,
   moderngl-window,
   networkx,
+  notebook,
   numpy,
   pillow,
   pycairo,
@@ -37,17 +36,6 @@
   tqdm,
   typing-extensions,
   watchdog,
-
-  # optional-dependencies
-  jupyterlab,
-  notebook,
-
-  # tests
-  ffmpeg,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
 }:
 
 let
@@ -56,7 +44,7 @@ let
   #
   #   https://community.chocolatey.org/packages/manim-latex#files
   #
-  # which includes another custom distribution called tinytex, for which the
+  # which includes another cutom distribution called tinytex, for which the
   # package list can be found at
   #
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
@@ -183,41 +171,45 @@ let
       cbfonts-fd
     ]
   );
-  # https://github.com/ManimCommunity/manim/pull/4037
-  av_13_1 = av.overridePythonAttrs (rec {
-    version = "13.1.0";
-    src = fetchFromGitHub {
-      owner = "PyAV-Org";
-      repo = "PyAV";
-      tag = "v${version}";
-      hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-    };
-  });
 in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
-  version = "0.19.0";
+  version = "0.18.1";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
-    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+    hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
   };
 
   build-system = [
     poetry-core
-    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "cloup"
+    "isosurfaces"
+    "pillow"
+    "skia-pathops"
+    "watchdog"
   ];
 
   patches = [ ./pytest-report-header.patch ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
+
+    substituteInPlace manim/_config/default.cfg \
+      --replace "ffmpeg_executable = ffmpeg" "ffmpeg_executable = ${lib.getExe ffmpeg}"
+  '';
+
   buildInputs = [ cairo ];
 
   dependencies = [
-    av_13_1
-    beautifulsoup4
     click
     cloup
     decorator
@@ -265,19 +257,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ffmpeg
     manim-tinytex
-    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
-    versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];
 
-  meta = {
+  meta = with lib; {
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -285,10 +274,8 @@ buildPythonPackage rec {
       3Blue1Brown on YouTube. This is the community maintained version of
       manim.
     '';
-    mainProgram = "manim";
-    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
     homepage = "https://github.com/ManimCommunity/manim";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    license = licenses.mit;
+    maintainers = [ ];
   };
 }

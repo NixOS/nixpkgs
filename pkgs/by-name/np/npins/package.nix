@@ -1,8 +1,10 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
   makeWrapper,
+  stdenv,
+  darwin,
+  callPackage,
 
   # runtime dependencies
   nix, # for nix-prefetch-url
@@ -16,26 +18,22 @@ let
     nix-prefetch-git
     git
   ];
+  sources = (lib.importJSON ./sources.json).pins;
 in
 rustPlatform.buildRustPackage rec {
   pname = "npins";
-  version = "0.3.1";
+  version = src.version;
+  src = passthru.mkSource sources.npins;
 
-  src = fetchFromGitHub {
-    owner = "andir";
-    repo = "npins";
-    tag = version;
-    sha256 = "sha256-PPk9Ve1pM3X7NfGeGb8Jiq4YDEwAjErP4xzGwLaakTU=";
-  };
+  cargoHash = "sha256-YwMypBl+P1ygf4zUbkZlq4zPrOzf+lPOz2FLg2/xI3k=";
 
-  cargoHash = "sha256-YRW2TqbctuGC2M6euR4bb0m9a19m8WQVvWucRMpzkQE=";
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "clap"
-    "crossterm"
-    "env_logger"
-  ];
-
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
   nativeBuildInputs = [ makeWrapper ];
 
   # (Almost) all tests require internet
@@ -52,4 +50,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.eupl12;
     maintainers = with maintainers; [ piegames ];
   };
+
+  passthru.mkSource = callPackage ./source.nix { };
 }

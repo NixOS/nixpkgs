@@ -4,9 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   unstableGitUpdater,
-  libGL,
   libpng,
-  libX11,
   perl,
   SDL2,
   zlib,
@@ -58,15 +56,14 @@ gccStdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs = [
-    libpng
-    zlib
-  ]
-  ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
-    libGL
-    libX11
-    SDL2
-  ];
+  buildInputs =
+    [
+      libpng
+      zlib
+    ]
+    ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
+      SDL2
+    ];
 
   enableParallelBuilding = true;
 

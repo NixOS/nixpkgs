@@ -1,24 +1,20 @@
 {
   lib,
-  pythonPackages,
+  python3Packages,
   fetchPypi,
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
-  pname = "mopidy-mpd";
+python3Packages.buildPythonApplication rec {
+  pname = "Mopidy-MPD";
   version = "3.3.0";
-  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "Mopidy-MPD";
+    inherit pname version;
     hash = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
   };
 
-  build-system = [ pythonPackages.setuptools ];
-
-  dependencies = [ mopidy ];
+  propagatedBuildInputs = [ mopidy ];
 
   # no tests implemented
   doCheck = false;

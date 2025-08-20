@@ -7,8 +7,7 @@
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    setuptools
-    pytestCheckHook
+    pytest
     mock
     pexpect
     ;
@@ -17,7 +16,6 @@ in
 buildPythonApplication rec {
   pname = "lesspass-cli";
   version = "9.1.9";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = repo;
@@ -25,29 +23,25 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
-
   sourceRoot = "${src.name}/cli";
 
-  build-system = [
-    setuptools
-  ];
+  # some tests are designed to run against code in the source directory - adapt to run against
+  # *installed* code
+  postPatch = ''
+    for f in tests/test_functional.py tests/test_interaction.py ; do
+      substituteInPlace $f --replace "lesspass/core.py" "-m lesspass.core"
+    done
+  '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest
     mock
     pexpect
   ];
-
-  preCheck = ''
+  checkPhase = ''
     mv lesspass lesspass.hidden  # ensure we're testing against *installed* package
-
-    # some tests are designed to run against code in the source directory - adapt to run against
-    # *installed* code
-    substituteInPlace tests/test_functional.py tests/test_interaction.py \
-      --replace-fail "lesspass/core.py" "-m lesspass.core"
+    pytest tests
   '';
-
-  pythonImportsCheck = [ "lesspass" ];
 
   meta = with lib; {
     description = "Stateless password manager";

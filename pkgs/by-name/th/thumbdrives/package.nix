@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
-    repo = "thumbdrives";
+    repo = pname;
     rev = version;
     hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };

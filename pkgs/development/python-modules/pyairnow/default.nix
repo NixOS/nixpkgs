@@ -9,18 +9,21 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.3.1";
+  version = "1.2.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asymworks";
     repo = "pyairnow";
     tag = "v${version}";
-    hash = "sha256-BGTtDMq5SnYrk1qT6OkGa1tkxYH5umbMC5Udmffyf+g=";
+    hash = "sha256-KjOu9V92n2rq8iOkgutlK7EMRvirFAEK8oxseI+dr2s=";
   };
 
   build-system = [ poetry-core ];

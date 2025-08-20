@@ -7,7 +7,7 @@
   qtbase,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "obs-transition-table";
   version = "0.2.7-unstable-2024-11-27";
 

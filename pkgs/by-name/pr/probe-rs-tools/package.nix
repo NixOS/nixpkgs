@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  gitMinimal,
   pkg-config,
   libusb1,
   openssl,
@@ -10,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.29.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
-    tag = "v${version}";
-    hash = "sha256-/gP9abygktYSzg/054o1PEcQywiPFTtKNdUdI3hCYyc=";
+    rev = "v${version}";
+    hash = "sha256-skTM2+7ra8rfRmcxYgE0+mgzGPUYf5JNChC28XM0EMc=";
   };
 
-  cargoHash = "sha256-txHl0+HDCVdmbZppGsFqPjsEbPBCJVEB3XZWZJBBoOk=";
+  cargoHash = "sha256-O7F0mx/gfIQUlt+oDsT/DZrHPSQLpL/Aytae24ROUF0=";
 
   buildAndTestSubdir = pname;
 
@@ -27,6 +28,9 @@ rustPlatform.buildRustPackage rec {
     # required by libz-sys, no option for dynamic linking
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
+    # build.rs fails without git
+    # https://github.com/probe-rs/probe-rs/pull/2492
+    gitMinimal
     pkg-config
   ];
 
@@ -39,11 +43,6 @@ rustPlatform.buildRustPackage rec {
     # require a physical probe
     "--skip=cmd::dap_server::server::debugger::test::attach_request"
     "--skip=cmd::dap_server::server::debugger::test::attach_with_flashing"
-    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_after_and_not_including_the_ref_address"
-    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_before_and_not_including_the_ref_address_multiple_locations"
-    "--skip=cmd::dap_server::server::debugger::test::disassemble::instructions_including_the_ref_address_location_cloned_from_earlier_line"
-    "--skip=cmd::dap_server::server::debugger::test::disassemble::negative_byte_offset_of_exactly_one_instruction_aligned_"
-    "--skip=cmd::dap_server::server::debugger::test::disassemble::positive_byte_offset_that_lands_in_the_middle_of_an_instruction_unaligned_"
     "--skip=cmd::dap_server::server::debugger::test::launch_and_threads"
     "--skip=cmd::dap_server::server::debugger::test::launch_with_config_error"
     "--skip=cmd::dap_server::server::debugger::test::test_initalize_request"
@@ -61,15 +60,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=util::cargo::test::workspace_root"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       xgroleau
       newam
     ];

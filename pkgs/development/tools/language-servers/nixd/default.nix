@@ -8,7 +8,7 @@
   llvmPackages,
   meson,
   ninja,
-  nixVersions,
+  nix,
   nix-update-script,
   nixd,
   nixf,
@@ -20,15 +20,14 @@
 }:
 
 let
-  nix = nixVersions.nix_2_28;
   common = rec {
-    version = "2.6.4";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
-      tag = version;
-      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
+      rev = version;
+      hash = "sha256-5+ul4PxMgPkmGLB8CYpJcIcRDY/pJgByvjIHDA1Gs5A=";
     };
 
     nativeBuildInputs = [
@@ -107,6 +106,8 @@ in
         boost
       ];
 
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
         moduleNames = [ "nixt" ];
@@ -135,6 +136,8 @@ in
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

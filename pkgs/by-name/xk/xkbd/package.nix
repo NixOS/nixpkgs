@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mahatma-kaganovich/xkbd";
-    description = "On-screen soft keyboard for X11";
+    description = "onscreen soft keyboard for X11";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

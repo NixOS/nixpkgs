@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "forkstat";
-  version = "0.04.00";
+  version = "0.03.02";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = "forkstat";
+    repo = pname;
     rev = "V${version}";
-    hash = "sha256-HHyGjhu8yaBvDncloW8ST2L4iUU2ik2ydW1z9pFhfrw=";
+    hash = "sha256-lwJIs5knNzkwgIkSdMSVVtrzqnxGy6uOTKsBDkS3xy4=";
   };
 
   installFlags = [

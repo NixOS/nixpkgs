@@ -6,7 +6,7 @@
   gsettings-desktop-schemas,
   glib,
   gtk3,
-  libgda5,
+  libgda,
   libxml2,
   libxslt,
   makeWrapper,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libgda5
+    libgda
     libxml2
     libxslt
     glib

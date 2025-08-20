@@ -3,17 +3,16 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "metal-cli";
   version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "equinix";
-    repo = "metal-cli";
-    tag = "v${finalAttrs.version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-+hpsGFZHuVhh+fKVcap0vhoUmRs3xPgUwW8SD56m6uI=";
   };
 
@@ -22,7 +21,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/equinix/metal-cli/cmd.Version=${finalAttrs.version}"
+    "-X github.com/equinix/metal-cli/cmd.Version=${version}"
   ];
 
   nativeBuildInputs = [
@@ -39,20 +38,21 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/metal";
-  versionCheckProgramArg = "--version";
 
-  meta = {
+  installCheckPhase = ''
+    $out/bin/metal --version | grep ${version}
+  '';
+
+  meta = with lib; {
     description = "Official Equinix Metal CLI";
     homepage = "https://github.com/equinix/metal-cli/";
-    changelog = "https://github.com/equinix/metal-cli/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/equinix/metal-cli/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       Br1ght0ne
       nshalman
       teutat3s
     ];
     mainProgram = "metal";
   };
-})
+}

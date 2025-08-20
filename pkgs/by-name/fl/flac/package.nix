@@ -1,47 +1,38 @@
 {
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  graphviz,
   lib,
-  libogg,
-  nix-update-script,
-  buildPackages,
-  pkg-config,
   stdenv,
-  versionCheckHook,
-  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
+  fetchurl,
+  cmake,
+  pkg-config,
+  doxygen,
+  graphviz,
+  libogg,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+stdenv.mkDerivation rec {
   pname = "flac";
-  version = "1.5.0";
+  version = "1.4.3";
 
-  src = fetchFromGitHub {
-    owner = "xiph";
-    repo = "flac";
-    tag = finalAttrs.version;
-    hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
+  src = fetchurl {
+    url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
+    # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
+    hash = "sha256-bFjmnNIjSPRBuGEJK4JeWR0Lgi4QbebrDuTQXScgW3A=";
   };
-
-  hardeningDisable = [ "trivialautovarinit" ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     doxygen
     graphviz
-    pkg-config
-  ]
-  ++ lib.optional enableManpages buildPackages.pandoc;
+  ];
 
-  buildInputs = [ libogg ];
+  buildInputs = [
+    libogg
+  ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.hostPlatform.isStatic) [
-      "-DBUILD_SHARED_LIBS=ON"
-    ]
-    ++ lib.optionals (!enableManpages) [
-      "-DINSTALL_MANPAGES=OFF"
-    ];
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   CFLAGS = [
     "-O3"
@@ -49,37 +40,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   CXXFLAGS = [ "-O3" ];
 
-  patches = [ ./package.patch ];
-  doCheck = true;
+  # doCheck = true; # takes lots of time
 
   outputs = [
     "bin"
     "dev"
-    "doc"
     "out"
-  ]
-  ++ lib.optionals enableManpages [
     "man"
+    "doc"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://xiph.org/flac/";
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
-    changelog = "https://github.com/xiph/flac/releases/tag/${finalAttrs.version}";
+    changelog = "https://xiph.org/flac/changelog.html";
     mainProgram = "flac";
-    platforms = lib.platforms.all;
-    license = with lib.licenses; [
-      bsd3
-      fdl13Plus
-      gpl2Plus
-      lgpl21Plus
-    ];
-    maintainers = with lib.maintainers; [ ruuda ];
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ruuda ];
   };
-})
+}

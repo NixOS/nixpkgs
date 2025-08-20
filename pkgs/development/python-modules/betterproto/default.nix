@@ -12,7 +12,7 @@
   python,
   pydantic,
   pytest7CheckHook,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   pytest-mock,
   typing-extensions,
   tomlkit,
@@ -33,11 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry-core>=1.0.0,<2" "poetry-core"
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -55,12 +50,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
     pytest7CheckHook
     tomlkit
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "betterproto" ];
 
@@ -84,7 +78,7 @@ buildPythonPackage rec {
     "test_binary_compatibility"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
@@ -94,7 +88,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
     changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nikstur ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nikstur ];
   };
 }

@@ -68,7 +68,7 @@ buildPythonPackage rec {
     "test_tls_ext_noca"
   ];
 
-  __darwinAllowLocalNetworking = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Python modules for implementing LDAP clients";

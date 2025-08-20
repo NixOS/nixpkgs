@@ -16,7 +16,6 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
-      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -168,6 +167,7 @@ in
   util-linux = linux;
   util-linuxMinimal = linux;
   w3m = all;
+  webkitgtk_4_0 = linux;
   wget = all;
   which = all;
   wirelesstools = linux;
@@ -175,5 +175,5 @@ in
   xfsprogs = linux;
   xkeyboard_config = linux;
   zip = all;
-  tests-stdenv-gcc-stageCompare = linux;
+  tests-stdenv-gcc-stageCompare = all;
 }))

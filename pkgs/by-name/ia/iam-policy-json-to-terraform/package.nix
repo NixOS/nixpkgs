@@ -6,22 +6,22 @@
 
 buildGoModule rec {
   pname = "iam-policy-json-to-terraform";
-  version = "1.9.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "flosell";
-    repo = "iam-policy-json-to-terraform";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-xIhe+Mnvog+xRu1qMA7yxS1pCs91cr5EcaJroO+0zJ8=";
+    sha256 = "sha256-ovmWZpeHt1L8zNzG7+2BohteSjpYADMivi+AP0Vm8/E=";
   };
 
-  vendorHash = "sha256-6EtOMs+Vba39hOQ029dHpHCJ9ke35PZ/em9Xye3dmvg=";
+  vendorHash = "sha256-1WTc7peTJI3IvHJqznqRz29uQ2NG0CZpAAzlyYymZCQ=";
 
-  meta = {
+  meta = with lib; {
     description = "Small tool to convert an IAM Policy in JSON format into a Terraform aws_iam_policy_document";
     homepage = "https://github.com/flosell/iam-policy-json-to-terraform";
     changelog = "https://github.com/flosell/iam-policy-json-to-terraform/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ivankovnatsky ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.ivankovnatsky ];
   };
 }

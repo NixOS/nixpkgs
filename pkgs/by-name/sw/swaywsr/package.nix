@@ -6,18 +6,18 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "swaywsr";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pedroscaff";
-    repo = "swaywsr";
+    repo = pname;
     rev = "521fbf92738f44be438d3be6bdd665f02ac9d35c";
     hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };
 
-  cargoHash = "sha256-u+aMwj+IxFY+fSAECkKr8dSPVw2q+FXZpgwwexu7BFU=";
+  cargoHash = "sha256-zoV2vy41fVsX8BtddURqQymMX4Zpso+GOBBqoVr3tYo=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

@@ -14,13 +14,13 @@
 
 let
   pname = "iaito";
-  version = "6.0.0";
+  version = "5.9.6";
 
   main_src = fetchFromGitHub rec {
     owner = "radareorg";
     repo = pname;
-    tag = version;
-    hash = "sha256-bwGKHc2jlf1C/25CEoDUCLr6zOhAJES7+PvcGVyO8To=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rkL7qH1BLXw3eXdCoVuan2C6k05pE5LOIOTbIEtfUbE=";
     name = repo;
   };
 

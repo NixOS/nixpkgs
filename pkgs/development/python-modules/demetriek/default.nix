@@ -12,20 +12,22 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.3.0";
+  version = "1.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-6vzQaifvQ24LpSQFwPMvEvb1wuyv0iRpLCFHFO9V7sc=";
+    hash = "sha256-OTYQFw3Jy+sRGoPYVp5VKgCAzv9Gy2Fn2GjTGdsKjak=";
   };
 
   postPatch = ''
@@ -34,7 +36,11 @@ buildPythonPackage rec {
       --replace-fail "0.0.0" "${version}"
   '';
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "pydantic" ];
+
+  build-system = [
+    poetry-core
+  ];
 
   dependencies = [
     aiohttp
@@ -50,7 +56,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
   ];
 
   pythonImportsCheck = [ "demetriek" ];
@@ -60,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
-    changelog = "https://github.com/frenck/python-demetriek/releases/tag/${src.tag}";
+    changelog = "https://github.com/frenck/python-demetriek/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

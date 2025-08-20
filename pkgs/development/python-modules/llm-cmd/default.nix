@@ -10,7 +10,6 @@
   pygments,
   # tests
   pytestCheckHook,
-  llm-cmd,
 }:
 
 buildPythonPackage rec {
@@ -27,11 +26,13 @@ buildPythonPackage rec {
 
   # Only needed until https://github.com/simonw/llm-cmd/pull/18 is merged and released
   patches = [ ./fix-test.patch ];
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    # Follows the reasoning from https://github.com/NixOS/nixpkgs/pull/327800#discussion_r1681586659 about including llm in build-system
+    llm
+  ];
 
   dependencies = [
-    llm
     prompt-toolkit
     pygments
   ];
@@ -44,16 +45,11 @@ buildPythonPackage rec {
     "llm_cmd"
   ];
 
-  passthru.tests = llm.mkPluginTest llm-cmd;
-
   meta = {
     description = "Use LLM to generate and execute commands in your shell";
     homepage = "https://github.com/simonw/llm-cmd";
     changelog = "https://github.com/simonw/llm-cmd/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      erethon
-      philiptaron
-    ];
+    maintainers = with lib.maintainers; [ erethon ];
   };
 }

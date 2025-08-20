@@ -7,7 +7,6 @@
   pkg-config,
   audiofile,
   SDL2,
-  libGL,
   hexdump,
   sm64baserom,
   region ? "us",
@@ -19,13 +18,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "sm64ex";
-  version = "0-unstable-2024-12-17";
+  version = "0-unstable-2024-07-04";
 
   src = fetchFromGitHub {
     owner = "sm64pc";
     repo = "sm64ex";
-    rev = "d7ca2c04364a6dd0dac58b47151e04e26887e6f0";
-    hash = "sha256-n3ecY97UB/fdTZpy78CB4DxyHyjK+L6AAuNpvnmVoss=";
+    rev = "20bb444562aa1dba79cf6adcb5da632ba580eec3";
+    hash = "sha256-nw+F0upTetLqib5r5QxmcOauSJccpTydV3soXz9CHLQ=";
   };
 
   patches = lib.optionals _60fps [
@@ -45,17 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     audiofile
     SDL2
-    libGL
   ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "VERSION=${region}"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "OSX_BUILD=1"
-  ];
+  makeFlags =
+    [
+      "VERSION=${region}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "OSX_BUILD=1"
+    ];
 
   preBuild = ''
     patchShebangs extract_assets.py

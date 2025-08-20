@@ -32,8 +32,7 @@ in
         nftablesEnabled = config.networking.nftables.enable;
         iptablesServices = [
           "iptables.service"
-        ]
-        ++ optional config.networking.enableIPv6 "ip6tables.service";
+        ] ++ optional config.networking.enableIPv6 "ip6tables.service";
         tableServices = if nftablesEnabled then [ "nftables.service" ] else iptablesServices;
       in
       {
@@ -43,8 +42,7 @@ in
           After = [
             "network.target"
             "nss-lookup.target"
-          ]
-          ++ tableServices;
+          ] ++ tableServices;
           Wants = [ "network.target" ];
         };
 

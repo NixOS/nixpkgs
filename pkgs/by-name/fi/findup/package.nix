@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   testers,
-  zig,
+  zig_0_11,
 }:
+let
+  zig = zig_0_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "findup";
   version = "1.1.2";
@@ -21,8 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
-    # Doesn't support zig 0.12 or newer, last commit was 2 years ago.
-    broken = lib.versionAtLeast zig.version "0.12";
     homepage = "https://github.com/booniepepper/findup";
     description = "Search parent directories for sentinel files";
     license = lib.licenses.mit;

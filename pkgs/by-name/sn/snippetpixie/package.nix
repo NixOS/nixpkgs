@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bytepixie";
-    repo = "snippetpixie";
+    repo = pname;
     rev = version;
     sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";
   };
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.bytepixie.snippetpixie";
   };

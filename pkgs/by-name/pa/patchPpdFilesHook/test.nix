@@ -1,19 +1,21 @@
 {
-  replaceVars,
+  substituteAll,
   diffutils,
   stdenv,
   patchPpdFilesHook,
 }:
 
 let
-  input = replaceVars ./test.ppd {
+  input = substituteAll {
+    src = ./test.ppd;
     keep = "cmp";
     patch = "cmp";
     pathkeep = "/bin/cmp";
     pathpatch = "/bin/cmp";
   };
 
-  output = replaceVars ./test.ppd {
+  output = substituteAll {
+    src = ./test.ppd;
     keep = "cmp";
     patch = "${diffutils}/bin/cmp";
     pathkeep = "/bin/cmp";

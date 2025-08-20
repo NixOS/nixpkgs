@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Macro Expander Saving Our m2-PLANET";
     homepage = "https://github.com/oriansj/M2-Mesoplanet";
     license = licenses.gpl3Only;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Mesoplanet";
   };

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-docprovider";
-  version = "2.1.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";
     inherit version;
-    hash = "sha256-ivZhxlMAM0V3+i4mpltghvv2Z01ilt3rv6/XTUGMlNM=";
+    hash = "sha256-wt3I2agjKf/wqVJhzIJ7ZpNZh2r3+y8rr6jb34OasXI=";
   };
 
   postPatch = ''
@@ -33,12 +33,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration;
+  passthru.tests = jupyter-collaboration.tests;
 
   meta = {
     description = "JupyterLab/Jupyter Notebook 7+ extension integrating collaborative shared models";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-docprovider";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.jupyter ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

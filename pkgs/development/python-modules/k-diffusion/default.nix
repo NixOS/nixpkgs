@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Karras et al. (2022) diffusion models for PyTorch";
     homepage = "https://github.com/crowsonkb/k-diffusion";
     license = licenses.mit;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

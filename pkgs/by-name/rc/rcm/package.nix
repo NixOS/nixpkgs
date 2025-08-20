@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [
       malyn
+      AndersonTorres
     ];
     platforms = with platforms; unix;
   };

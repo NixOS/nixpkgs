@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     "test_auto_escaped_col_names"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line interface for SQLite";
     mainProgram = "litecli";
     longDescription = ''
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://litecli.com";
     changelog = "https://github.com/dbcli/litecli/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

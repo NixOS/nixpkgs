@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   fetchFromGitHub,
   autoreconfHook,
   gettext,
@@ -27,19 +27,13 @@
   python3,
   json-glib,
   libnotify ? null,
-  enableUI ? !libOnly,
-  withWayland ? !libOnly,
+  enableUI ? true,
+  withWayland ? true,
   libxkbcommon,
   wayland,
-  wayland-protocols,
-  wayland-scanner,
   buildPackages,
   runtimeShell,
   nixosTests,
-  versionCheckHook,
-  nix-update-script,
-  libX11,
-  libOnly ? false,
 }:
 
 let
@@ -65,27 +59,22 @@ let
       '';
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.32";
+  version = "1.5.31";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
-    tag = finalAttrs.version;
-    hash = "sha256-Rp2Aw2C2LXMBp8++pnZtPHiPoFDERpkDsKd0E//twuY=";
+    rev = version;
+    sha256 = "sha256-YMCtLIK/9iUdS37Oiow7WMhFFPKhomNXvzWbLzlUkdQ=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
-      # patch context
-      prefix = null;
-      datarootdir = null;
-      localedir = null;
-      # removed line only
-      PYTHON = null;
     })
     ./build-without-dbus-launch.patch
   ];
@@ -93,8 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals (!libOnly) [
     "installedTests"
   ];
 
@@ -122,28 +109,20 @@ stdenv.mkDerivation (finalAttrs: {
     "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
     "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
     "--disable-memconf"
-    "--disable-gtk2"
-    "--with-python=${python3BuildEnv.interpreter}"
-    (lib.enableFeature (!libOnly && dconf != null) "dconf")
-    (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
+    (lib.enableFeature (dconf != null) "dconf")
+    (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
-    (lib.enableFeature (!libOnly) "gtk3")
-    (lib.enableFeature (!libOnly) "gtk4")
-    (lib.enableFeature (!libOnly) "xim")
-    (lib.enableFeature (!libOnly) "appindicator")
-    (lib.enableFeature (!libOnly) "tests")
-    (lib.enableFeature (!libOnly) "install-tests")
-    (lib.enableFeature (!libOnly) "emoji-dict")
-    (lib.enableFeature (!libOnly) "unicode-dict")
-  ]
-  ++ lib.optionals (!libOnly) [
+    "--disable-gtk2"
+    "--enable-gtk4"
+    "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+    "--with-python=${python3BuildEnv.interpreter}"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 
-  makeFlags = lib.optionals (!libOnly) [
+  makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
@@ -159,62 +138,51 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3BuildEnv
-    dbus-launch
-    glib # required to satisfy AM_PATH_GLIB_2_0
     vala
-    gobject-introspection
-  ]
-  ++ lib.optionals (!libOnly) [
     wrapGAppsHook3
-  ]
-  ++ lib.optionals withWayland [
-    wayland-scanner
+    dbus-launch
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  buildInputs = [
-    dbus
-    systemd
-    dconf
-    python3.pkgs.pygobject3 # for pygobject overrides
-    isocodes
-    json-glib
-    libX11
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
-  ]
-  ++ lib.optionals (!libOnly) [
-    gtk3
-    gtk4
-    gdk-pixbuf
-    libdbusmenu-gtk3
-    libnotify
-  ]
-  ++ lib.optionals withWayland [
-    libxkbcommon
-    wayland
-    wayland-protocols
-  ];
+  buildInputs =
+    [
+      dbus
+      systemd
+      dconf
+      gdk-pixbuf
+      python3.pkgs.pygobject3 # for pygobject overrides
+      gtk3
+      gtk4
+      isocodes
+      json-glib
+      libnotify
+      libdbusmenu-gtk3
+      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+    ]
+    ++ lib.optionals withWayland [
+      libxkbcommon
+      wayland
+    ];
 
   enableParallelBuilding = true;
-  strictDeps = true;
 
   doCheck = false; # requires X11 daemon
-
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
-  versionCheckProgram = "${placeholder "out"}/bin/ibus";
+  installCheckPhase = ''
+    $out/bin/ibus version
+  '';
 
-  postInstall = lib.optionalString (!libOnly) ''
+  postInstall = ''
     # It has some hardcoded FHS paths and also we do not use it
     # since we set up the environment in NixOS tests anyway.
     moveToOutput "bin/ibus-desktop-testing-runner" "$installedTests"
   '';
 
-  postFixup = lib.optionalString (!libOnly) ''
+  postFixup = ''
     # set necessary environment also for tests
     for f in $installedTests/libexec/installed-tests/ibus/*; do
         wrapGApp $f
@@ -222,18 +190,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = lib.optionalAttrs (!libOnly) {
+    tests = {
       installed-tests = nixosTests.installed-tests.ibus;
     };
-    updateScript = nix-update-script { };
   };
 
-  meta = {
-    changelog = "https://github.com/ibus/ibus/releases/tag/${finalAttrs.src.tag}";
+  meta = with lib; {
     homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ttuegel ];
   };
-})
+}

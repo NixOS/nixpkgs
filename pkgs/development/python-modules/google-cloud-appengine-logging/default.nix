@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.6.2";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_appengine_logging";
     inherit version;
-    hash = "sha256-SJCShGTJjanuzHv04FQuuiVRUSwCZUYsEPOj0qZCS5A=";
+    hash = "sha256-OaLfaU2XmB7QDvXfVB98/MqSCpJJZwdVfysHu3up1no=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +33,7 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

@@ -7,7 +7,7 @@
   nix-update-script,
   makeWrapper,
   bash,
-  replaceVars,
+  substituteAll,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Use nix store's bash instead of sh. `@bash@/bin/sh` is used, since haredo expects a posix shell.
-    (replaceVars ./001-use-nix-store-sh.patch {
+    (substituteAll {
+      src = ./001-use-nix-store-sh.patch;
       inherit bash;
     })
   ];

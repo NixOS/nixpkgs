@@ -6,7 +6,7 @@
   pciutils,
   usbutils,
   iproute2,
-  net-tools,
+  nettools,
   fetchFromGitHub,
   makeWrapper,
 }:
@@ -86,7 +86,7 @@ perlPackages.buildPerlPackage rec {
             dmidecode
             pciutils
             usbutils
-            net-tools
+            nettools
             iproute2
           ]
         }
@@ -97,7 +97,7 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" ];
 
   meta = with lib; {
-    homepage = "https://www.fusioninventory.org";
+    homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = lib.licenses.gpl2Only;
     maintainers = [ maintainers.phile314 ];

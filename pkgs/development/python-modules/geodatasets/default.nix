@@ -38,9 +38,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTestMarks = [
+  pytestFlagsArray = [
     # disable tests which require network access
-    "request"
+    "-m 'not request'"
   ];
 
   pythonImportsCheck = [ "geodatasets" ];
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Spatial data examples";
     homepage = "https://geodatasets.readthedocs.io/";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members;
   };
 }

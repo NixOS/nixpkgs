@@ -10,21 +10,21 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "mothsart";
-    repo = "pouf";
+    repo = pname;
     rev = version;
     hash = "sha256-tW86b9a7u1jyfmHjwjs+5DaUujRZH+VhGQsj0CBj0yk=";
   };
 
-  cargoHash = "sha256-cgRf8zpl2hOhaGew4dwzuwdy0+7wSvMtYN3llVi3uYw=";
+  cargoHash = "sha256-rVJAaeg27SdM8cTx12rKLIGEYtXUhLHXUYpT78oVNlo=";
 
   postInstall = "make PREFIX=$out copy-data";
 
-  meta = {
+  meta = with lib; {
     description = "CLI program for produce fake datas";
     homepage = "https://github.com/mothsart/pouf";
     changelog = "https://github.com/mothsart/pouf/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ mothsart ];
-    license = with lib.licenses; [ mit ];
+    maintainers = with maintainers; [ mothsart ];
+    license = with licenses; [ mit ];
     mainProgram = "pouf";
   };
 }

@@ -13,13 +13,13 @@ buildOctavePackage rec {
     sha256 = "sha256-azRPhwMVvydCyojA/rXD2og1tPTL0vii15OveYQF+SA=";
   };
 
-  meta = {
-    homepage = "https://gnu-octave.github.io/packages/matgeom/";
-    license = with lib.licenses; [
+  meta = with lib; {
+    homepage = "https://octave.sourceforge.io/matgeom/index.html";
+    license = with licenses; [
       bsd2
       gpl3Plus
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Geometry toolbox for 2D/3D geometric computing";
   };
 }

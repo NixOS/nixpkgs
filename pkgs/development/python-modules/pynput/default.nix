@@ -13,6 +13,7 @@
   # dependencies
   xlib,
   evdev,
+  darwin,
   six,
 
   # tests
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.8.1";
+  version = "1.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
     tag = "v${version}";
-    hash = "sha256-rOkUyreS3JqEyubQUdNLJf5lDuFassDKrQrUXKrKlgI=";
+    hash = "sha256-6PwfFU1f/osEamSX9kxpOl2wDnrQk5qq1kHi2BgSHes=";
   };
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -46,13 +47,19 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs = [
-    six
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    evdev
-    xlib
-  ];
+  propagatedBuildInputs =
+    [ six ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      evdev
+      xlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Quartz
+      ]
+    );
 
   doCheck = false; # requires running X server
 

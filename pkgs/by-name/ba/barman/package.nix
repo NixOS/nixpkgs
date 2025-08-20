@@ -2,40 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
-  file,
   python3Packages,
-  rsync,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.14.1";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${version}";
-    hash = "sha256-Z3+PgUJcyG/M05hMmIhRr3HttzHUDx7BGIs44LA/qE4=";
+    hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
   };
 
-  patches = [
-    ./unwrap-subprocess.patch
-    # fix building with Python 3.13
-    (fetchpatch2 {
-      url = "https://github.com/EnterpriseDB/barman/commit/931f997f1d73bbe360abbca737bea9ae93172989.patch?full_index=1";
-      hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
-    })
-  ];
-
-  # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
-  postPatch = ''
-    substituteInPlace barman/encryption.py \
-      --replace-fail '"file"' '"${lib.getExe file}"'
-  '';
+  patches = [ ./unwrap-subprocess.patch ];
 
   build-system = with python3Packages; [
     distutils
@@ -57,41 +40,30 @@ python3Packages.buildPythonApplication rec {
     python-snappy
   ];
 
-  nativeCheckInputs = [
-    python3Packages.lz4
-    python3Packages.mock
-    python3Packages.pytestCheckHook
-    python3Packages.zstandard
-    rsync
+  nativeCheckInputs = with python3Packages; [
+    mock
+    pytestCheckHook
     versionCheckHook
   ];
 
-  disabledTests = [
-    # Assertion error
-    "test_help_output"
-    "test_exits_on_unsupported_target"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # FsOperationFailed
-    "test_get_file_mode"
-  ];
+  disabledTests =
+    [
+      # Assertion error
+      "test_help_output"
+      "test_exits_on_unsupported_target"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # FsOperationFailed
+      "test_get_file_mode"
+    ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^release/(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
-    changelog = "https://github.com/EnterpriseDB/barman/blob/${src.tag}/RELNOTES.md";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
     mainProgram = "barman";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ freezeboy ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ freezeboy ];
+    platforms = platforms.unix;
   };
 }

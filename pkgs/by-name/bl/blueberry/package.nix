@@ -13,20 +13,20 @@
   xapp,
 }:
 
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "blueberry";
   version = "1.4.8";
-  format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "blueberry";
+    repo = pname;
     rev = version;
     sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
+    python3Packages.wrapPython
     wrapGAppsHook3
   ];
 
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     bluez-tools
     gnome-bluetooth_1_0
     libnotify
+    python3Packages.python
     util-linux
     xapp
   ];
@@ -52,28 +53,28 @@ python3Packages.buildPythonApplication rec {
 
     # Fix paths
     substituteInPlace $out/bin/blueberry \
-      --replace-fail /usr/lib/blueberry $out/lib/blueberry
+      --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/bin/blueberry-tray \
-      --replace-fail /usr/lib/blueberry $out/lib/blueberry
+      --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/etc/xdg/autostart/blueberry-obex-agent.desktop \
-      --replace-fail /usr/lib/blueberry $out/lib/blueberry
+      --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/etc/xdg/autostart/blueberry-tray.desktop \
-      --replace-fail Exec=blueberry-tray Exec=$out/bin/blueberry-tray
+      --replace Exec=blueberry-tray Exec=$out/bin/blueberry-tray
     substituteInPlace $out/lib/blueberry/blueberry-obex-agent.py \
-      --replace-fail /usr/share $out/share
+      --replace /usr/share $out/share
     substituteInPlace $out/lib/blueberry/blueberry-tray.py \
-      --replace-fail /usr/share $out/share
+      --replace /usr/share $out/share
     substituteInPlace $out/lib/blueberry/blueberry.py \
-      --replace-fail '"bt-adapter"' '"${bluez-tools}/bin/bt-adapter"' \
-      --replace-fail /usr/bin/pavucontrol ${pavucontrol}/bin/pavucontrol \
-      --replace-fail /usr/lib/blueberry $out/lib/blueberry \
-      --replace-fail /usr/share $out/share
+      --replace '"bt-adapter"' '"${bluez-tools}/bin/bt-adapter"' \
+      --replace /usr/bin/pavucontrol ${pavucontrol}/bin/pavucontrol \
+      --replace /usr/lib/blueberry $out/lib/blueberry \
+      --replace /usr/share $out/share
     substituteInPlace $out/lib/blueberry/rfkillMagic.py \
-      --replace-fail /usr/bin/rfkill ${util-linux}/bin/rfkill \
-      --replace-fail /usr/sbin/rfkill ${util-linux}/bin/rfkill \
-      --replace-fail /usr/lib/blueberry $out/lib/blueberry
+      --replace /usr/bin/rfkill ${util-linux}/bin/rfkill \
+      --replace /usr/sbin/rfkill ${util-linux}/bin/rfkill \
+      --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/share/applications/blueberry.desktop \
-      --replace-fail Exec=blueberry Exec=$out/bin/blueberry
+      --replace Exec=blueberry Exec=$out/bin/blueberry
 
     glib-compile-schemas --strict $out/share/glib-2.0/schemas
 

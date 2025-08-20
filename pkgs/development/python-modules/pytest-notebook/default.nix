@@ -2,29 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   flit-core,
-
-  # dependencies
   attrs,
   jsonschema,
   nbclient,
   nbdime,
   nbformat,
-
-  # buildInputs
   pytest,
-
-  # tests
   black,
   coverage,
   ipykernel,
   pytest-cov-stub,
   pytest-regressions,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-LoK0wb7rAbVbgyURCbSfckWvJDef3tPY+7V4YU1IBRU=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     flit-core
   ];
 
@@ -48,7 +38,7 @@ buildPythonPackage rec {
     "nbclient"
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
     jsonschema
     nbclient
@@ -67,30 +57,26 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-regressions
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # AssertionError: FILES DIFFER:
-    "test_diff_to_string"
+  preCheck = ''
+    export HOME="$TEMP"
+  '';
 
-    # pytest_notebook.execution.CoverageError: An error occurred while executing coverage start-up
-    # TypeError: expected str, bytes or os.PathLike object, not NoneType
+  disabledTests = [
+    "test_diff_to_string"
     "test_execute_notebook_with_coverage"
     "test_regression_coverage"
-
-    # pytest_notebook.nb_regression.NBRegressionError
-    "test_regression_regex_replace_pass"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AssertionError: FILES DIFFER:
-    "test_documentation"
+    "test_collection"
+    "test_setup_with_skip_meta"
+    "test_run_fail"
+    "test_run_pass_with_meta"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${src.tag}/docs/source/changelog.md";
+    changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${src.rev}/docs/source/changelog.md";
     description = "Pytest plugin for regression testing and regenerating Jupyter Notebooks";
     homepage = "https://github.com/chrisjsewell/pytest-notebook";
     license = lib.licenses.bsd3;

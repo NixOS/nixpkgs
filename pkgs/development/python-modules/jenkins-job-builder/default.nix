@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
   version = "6.4.2";
-  format = "setuptools";
 
   build-system = [ setuptools ];
 

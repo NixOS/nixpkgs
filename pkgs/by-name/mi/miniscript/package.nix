@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "miniscript";
-  version = "0-unstable-2023-03-16";
+  version = "unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "sipa";
-    repo = "miniscript";
+    repo = pname;
     rev = "6806dfb15a1fafabf7dd28aae3c9d2bc49db01f1";
     sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };

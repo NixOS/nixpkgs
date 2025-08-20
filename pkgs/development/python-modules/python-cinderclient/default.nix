@@ -23,15 +23,14 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.7.0";
+  version = "9.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "python_cinderclient";
-    inherit version;
-    hash = "sha256-GMRQHlSWd5hNhbCxD9B0770mXjCt0qeW0oF2BVqNfc8=";
+    inherit pname version;
+    hash = "sha256-P+/eJoJS5S4w/idz9lgienjG3uN4/LEy0xyG5uybojg=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +75,6 @@ buildPythonPackage rec {
       cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_badrequest
       cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_overlimit
       cinderclient.tests.unit.test_shell.ShellTest.test_password_prompted
-      cinderclient.tests.unit.test_shell.TestLoadVersionedActions.test_load_versioned_actions_with_help
     ")
 
     runHook postCheck
@@ -89,6 +87,6 @@ buildPythonPackage rec {
     mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

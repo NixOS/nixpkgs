@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "junit-xml";
   version = "1.9";
   format = "setuptools";

@@ -7,33 +7,32 @@
 }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.17.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
-    rev = "mimir-${version}";
+    rev = "${pname}-${version}";
     owner = "grafana";
-    repo = "mimir";
-    hash = "sha256-auA063TveLtfLD7W1/RuN4COljiwKqz0K/l2vwtxPTQ=";
+    repo = pname;
+    hash = "sha256-mFCeetwMaqdxFt001QUEtoiPupRAtFBkTvIABszPQbc=";
   };
 
   vendorHash = null;
 
-  subPackages = [
-    "cmd/mimir"
-    "cmd/mimirtool"
-  ]
-  ++ (map (pathName: "tools/${pathName}") [
-    "compaction-planner"
-    "copyblocks"
-    "copyprefix"
-    "delete-objects"
-    "list-deduplicated-blocks"
-    "listblocks"
-    "mark-blocks"
-    "splitblocks"
-    "tenant-injector"
-    "undelete-blocks"
-  ]);
+  subPackages =
+    [
+      "cmd/mimir"
+      "cmd/mimirtool"
+    ]
+    ++ (map (pathName: "tools/${pathName}") [
+      "compaction-planner"
+      "copyblocks"
+      "copyprefix"
+      "delete-objects"
+      "list-deduplicated-blocks"
+      "listblocks"
+      "markblocks"
+      "undelete-blocks"
+    ]);
 
   passthru = {
     updateScript = nix-update-script {
@@ -52,6 +51,7 @@ buildGoModule rec {
       t = "github.com/grafana/mimir/pkg/util/version";
     in
     [
+      ''-extldflags "-static"''
       "-s"
       "-w"
       "-X ${t}.Version=${version}"

@@ -1,5 +1,4 @@
 {
-  lib,
   callPackage,
   cling,
   fetchurl,
@@ -42,7 +41,7 @@ let
 
     doInstallCheck = true;
     installCheckPhase = ''
-      runHook preInstallCheck
+      runHook preCheck
 
       # Smoke check: run a test notebook using Papermill by creating a simple kernelspec
       mkdir -p kernels/cpp17
@@ -61,17 +60,12 @@ let
         exit 1
       fi
 
-      runHook postInstallCheck
+      runHook postCheck
     '';
 
     passthru = (oldAttrs.passthru or { }) // {
       unwrapped = xeus-cling-unwrapped;
     };
-
-    meta.badPlatforms = [
-      # fatal error: 'stdlib.h' file not found
-      lib.systems.inspect.patterns.isDarwin
-    ];
   });
 
   mkKernelSpec = std: {

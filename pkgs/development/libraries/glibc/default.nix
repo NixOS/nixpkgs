@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   withLinuxHeaders ? true,
-  linuxHeaders ? null,
   profilingLibraries ? false,
   withGd ? false,
   enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false,
@@ -20,7 +19,7 @@ let
   ];
 in
 
-(callPackage ./common.nix { inherit stdenv linuxHeaders; } {
+(callPackage ./common.nix { inherit stdenv; } {
   inherit
     withLinuxHeaders
     withGd
@@ -65,7 +64,6 @@ in
       "fortify"
       "pie"
       "stackprotector"
-      "strictflexarrays3"
     ];
 
     env = (previousAttrs.env or { }) // {
@@ -121,10 +119,7 @@ in
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
             echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
-            # Don't install C.utf-8 into the archive, but into $out/lib/locale: on non-NixOS
-            # systems with an empty /usr/lib/locale/locale-archive, glibc would fall back to
-            # $libdir/locale/C.utf-8 instead of the locale archive of pkgs.glibc. See also #347965.
-            make -j''${NIX_BUILD_CORES:-1} localedata/install-locale-files
+            make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
           ''
         else
           lib.optionalString stdenv.buildPlatform.isLinux

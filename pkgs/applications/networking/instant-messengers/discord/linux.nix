@@ -54,6 +54,7 @@
   pipewire,
   python3,
   runCommand,
+  libunity,
   speechd-minimal,
   wayland,
   branch,
@@ -61,19 +62,9 @@
   openasar,
   withVencord ? false,
   vencord,
-  withMoonlight ? false,
-  moonlight,
   withTTS ? true,
-  enableAutoscroll ? false,
-  # Disabling this would normally break Discord.
-  # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
-  # for example if a settings.json is linked declaratively (e.g., with home-manager).
-  disableUpdates ? true,
-  commandLineArgs ? "",
 }:
-assert lib.assertMsg (
-  !(withMoonlight && withVencord)
-) "discord: Moonlight and Vencord can not be enabled at the same time";
+
 let
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -89,6 +80,7 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
+
 stdenv.mkDerivation rec {
   inherit
     pname
@@ -142,6 +134,7 @@ stdenv.mkDerivation rec {
       libnotify
       libX11
       libXcomposite
+      libunity
       libuuid
       libXcursor
       libXdamage
@@ -176,15 +169,10 @@ stdenv.mkDerivation rec {
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        ${lib.strings.optionalString withTTS ''
-          --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
-          --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
-        ''} \
-        ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
+        ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
-        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --run "${lib.getExe disableBreakingUpdates}"
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
@@ -207,12 +195,6 @@ stdenv.mkDerivation rec {
       mkdir $out/opt/${binaryName}/resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
-    ''
-    + lib.strings.optionalString withMoonlight ''
-      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
-      mkdir $out/opt/${binaryName}/resources/app
-      echo '{"name":"discord","main":"injector.js","private": true}' > $out/opt/${binaryName}/resources/app/package.json
-      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
     '';
 
   desktopItem = makeDesktopItem {
@@ -226,7 +208,6 @@ stdenv.mkDerivation rec {
       "InstantMessaging"
     ];
     mimeTypes = [ "x-scheme-handler/discord" ];
-    startupWMClass = "discord";
   };
 
   passthru = {

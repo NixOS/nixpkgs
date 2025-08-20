@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "LonePurpleWolf";
-    repo = "airtouch4pyapi";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-RiRwebumidn0nijL/e9J74ZYx0DASi1up5BTNxYoGEA=";
   };

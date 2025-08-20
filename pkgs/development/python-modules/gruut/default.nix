@@ -22,6 +22,7 @@
   rapidfuzz,
 
   # checks
+  glibcLocales,
   pytestCheckHook,
 }:
 
@@ -69,30 +70,30 @@ buildPythonPackage rec {
     num2words
     numpy
     python-crfsuite
-  ]
-  ++ optional-dependencies.en;
+  ] ++ optional-dependencies.en;
 
-  optional-dependencies = {
-    train = [
-      pydub
-      rapidfuzz
-    ];
-  }
-  // lib.genAttrs langPkgs (lang: [
-    (callPackage ./language-pack.nix {
-      inherit
-        lang
-        version
-        src
-        build-system
-        ;
-    })
-  ]);
+  optional-dependencies =
+    {
+      train = [
+        pydub
+        rapidfuzz
+      ];
+    }
+    // lib.genAttrs langPkgs (lang: [
+      (callPackage ./language-pack.nix {
+        inherit
+          lang
+          version
+          src
+          build-system
+          ;
+      })
+    ]);
 
   nativeCheckInputs = [
+    glibcLocales
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25
@@ -103,6 +104,10 @@ buildPythonPackage rec {
     "test_ar"
   ];
 
+  preCheck = ''
+    export LC_ALL=en_US.utf-8
+  '';
+
   pythonImportsCheck = [ "gruut" ];
 
   meta = with lib; {
@@ -110,6 +115,6 @@ buildPythonPackage rec {
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   gettext,
@@ -11,21 +11,28 @@
 
 stdenv.mkDerivation rec {
   pname = "nudoku";
-  version = "5.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jubalh";
-    repo = "nudoku";
+    repo = pname;
     rev = version;
-    hash = "sha256-aOtP23kNd15DdV6on7o80QnEf0CiUBubHfFE8M1mhg0=";
+    sha256 = "12v00z3p0ymi8f3w4b4bgl4c76irawn3kmd147r0ap6s9ssx2q6m";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/jubalh/nudoku/commit/c5fd9156d2d1f2c95a5d87b07adeaee90a7f911d.patch?full_index=1";
-      hash = "sha256-nvLKAUCDY3fQWjybVX8DaMBdk5CaegRRb/ENTI9kJ9k=";
+    # Pull upstream fix for ncurses-6.3
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/jubalh/nudoku/commit/93899a0fd72e04b9f257e5f54af53466106b5959.patch";
+      sha256 = "1h3za0dnx8fk3vshql5mhcici8aw8j0vr7ra81p3r1rii4c479lm";
     })
   ];
+
+  # Allow gettext 0.20
+  postPatch = ''
+    substituteInPlace configure.ac --replace 0.19 0.20
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -34,13 +41,14 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ ncurses ];
 
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
+
   meta = with lib; {
     description = "Ncurses based sudoku game";
     mainProgram = "nudoku";
-    homepage = "https://jubalh.github.io/nudoku";
-    license = licenses.gpl3Only;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    homepage = "http://jubalh.github.io/nudoku/";
+    license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ weathercold ];
+    maintainers = [ ];
   };
 }

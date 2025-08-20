@@ -1,13 +1,8 @@
 {
   haskell,
+  haskellPackages,
   lib,
   stdenv,
-  coreutils,
-  libsecret,
-  gnupg,
-  makeBinaryWrapper,
-  withLibsecret ? true, # default oama config uses libsecret
-  withGpg ? false,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
@@ -18,22 +13,9 @@ let
     maintainers = with lib.maintainers; [ aidalgol ];
 
     passthru.updateScript = ./update.sh;
-
-    buildDepends = [
-      makeBinaryWrapper
-    ];
-
-    postInstall = ''
-      wrapProgram $out/bin/oama \
-        --prefix PATH : ${
-          lib.makeBinPath (
-            [ coreutils ] ++ lib.optional withLibsecret libsecret ++ lib.optional withGpg gnupg
-          )
-        }
-    '';
   };
 
-  raw-pkg = haskell.packages.ghc912.callPackage ./generated-package.nix { };
+  raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
 in
 lib.pipe raw-pkg [
   (overrideCabal overrides)

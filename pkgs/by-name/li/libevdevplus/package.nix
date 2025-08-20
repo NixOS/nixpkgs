@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Easy-to-use event device library in C++";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ willibutz ];
     platforms = with platforms; linux;
   };
 }

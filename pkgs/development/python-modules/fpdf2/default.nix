@@ -10,7 +10,6 @@
   fonttools,
 
   pytestCheckHook,
-  pytest-cov-stub,
   qrcode,
   camelot,
   uharfbuzz,
@@ -29,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-NfHMmyFT+ZpqfRc41DetbFXs/twr12XagOkk3nGhrYk=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov=fpdf --cov-report=xml" ""
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -39,7 +43,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     qrcode
     camelot
     uharfbuzz

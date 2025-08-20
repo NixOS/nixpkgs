@@ -10,7 +10,6 @@
   rfc3986,
   uritemplate,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -38,21 +37,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     pytest-mock
   ];
 
-  disabledTests = [
-    # this test is flaky on darwin because it depends on the resolution of filesystem mtimes
-    # https://github.com/cldf/csvw/blob/45584ad63ff3002a9b3a8073607c1847c5cbac58/tests/test_db.py#L257
-    "test_write_file_exists"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/cldf/csvw/issues/58
-    "test_roundtrip_escapechar"
-    "test_escapequote_escapecharquotechar_final"
-    "test_doubleQuote"
-  ];
+  patchPhase = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov" ""
+  '';
+
+  disabledTests =
+    [
+      # this test is flaky on darwin because it depends on the resolution of filesystem mtimes
+      # https://github.com/cldf/csvw/blob/45584ad63ff3002a9b3a8073607c1847c5cbac58/tests/test_db.py#L257
+      "test_write_file_exists"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.10") [
+      # https://github.com/cldf/csvw/issues/58
+      "test_roundtrip_escapechar"
+      "test_escapequote_escapecharquotechar_final"
+      "test_doubleQuote"
+    ];
 
   pythonImportsCheck = [ "csvw" ];
 

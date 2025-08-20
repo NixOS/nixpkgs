@@ -1,20 +1,19 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "3.10.3";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
-    tag = "v${version}";
-    hash = "sha256-M5g3Rn9WuyudhWQfDooopjexEgGVB0rzfJsPg+dqwn4=";
+    rev = "v${version}";
+    hash = "sha256-MLwhqLPWdjg1ZUZP5Sig37RgZEeHlU+DyELpyMif6iY=";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://openrazer.github.io/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ evanjs ];
-    teams = [ lib.teams.lumiguide ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ evanjs ] ++ teams.lumiguide.members;
+    platforms = platforms.linux;
   };
 }

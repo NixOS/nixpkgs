@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "0.14.7";
+  version = "0.14.0";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     tag = "v${version}";
-    hash = "sha256-+YcVTn/jcEbaqTycMCYn6B0z2HsvgrCY1gHnkRajwSs=";
+    hash = "sha256-rTp+DkADqYkJg1zJog1yURE082V5kCqgid/oUd81SN8=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -28,7 +28,7 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-1MUmAWkeYUEL6WZGq1Jg5W2uKa2xj0oZbGlIbvZWT1E=";
+    npmDepsHash = "sha256-awfQR1wZBX3ggmD0uJE9Fur4voPydeygrviRijKnBTE=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -63,7 +63,8 @@ rustPlatform.buildRustPackage {
     cp -r ${web}/share/openobserve-ui web/dist
   '';
 
-  cargoHash = "sha256-vfc6B+Uc8RXQD8vGC1yV9w5YAefkYJMpCH2frqjrSWk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FWMUPghx9CxuzP7jFZYSIwZsylApWzQsfx8DuwS4GTo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -95,7 +96,6 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
-    "--skip=service::organization::tests::test_organization"
   ];
 
   passthru.updateScript = gitUpdater {

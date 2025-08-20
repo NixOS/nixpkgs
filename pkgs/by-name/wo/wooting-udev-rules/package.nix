@@ -1,21 +1,11 @@
-{
-  lib,
-  stdenv,
-  udevCheckHook,
-}:
+{ lib, stdenv }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wooting-udev-rules";
   version = "0-unstable-2024-11-20";
 
   # Source: https://help.wooting.io/article/147-configuring-device-access-for-wootility-under-linux-udev-rules
   src = [ ./wooting.rules ];
-
-  nativeBuildInputs = [
-    udevCheckHook
-  ];
-
-  doInstallCheck = true;
 
   dontUnpack = true;
 
@@ -29,6 +19,7 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = "unknown";
     maintainers = with maintainers; [
+      davidtwco
       returntoreality
     ];
   };

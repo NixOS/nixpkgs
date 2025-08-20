@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.25.5";
+  version = "1.25.4";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
-    repo = "jc";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-tv466jVjLtmn2U8t3sSyQLuzGcVf0RHtE+cFd8j8T5k=";
+    hash = "sha256-9006FoIGUpmb+tC2d6jLsYpKUPM5OEXxK1ztAREwZ1E=";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];
-    changelog = "https://github.com/kellyjonbrazil/jc/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
     mainProgram = "jc";
   };
 }

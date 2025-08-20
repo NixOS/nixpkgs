@@ -89,7 +89,6 @@ let
 
     propagatedBuildInputs = with python3Packages; [
       python-debian
-      chardet
       pygobject3
       setuptools
     ];
@@ -156,10 +155,12 @@ let
       changelog = "https://gitlab.com/ubports/development/core/click/-/blob/${version}/ChangeLog";
       license = lib.licenses.gpl3Only;
       mainProgram = "click";
-      maintainers = with lib.maintainers; [
-        ilyakooo0
-      ];
-      teams = [ lib.teams.lomiri ];
+      maintainers =
+        with lib.maintainers;
+        [
+          ilyakooo0
+        ]
+        ++ lib.teams.lomiri.members;
       platforms = lib.platforms.linux;
       pkgConfigModules = [
         "click-0.4"

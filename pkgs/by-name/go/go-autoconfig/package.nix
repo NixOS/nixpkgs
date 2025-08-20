@@ -4,13 +4,13 @@
   lib,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "go-autoconfig";
   version = "unstable-2022-08-03";
 
   src = fetchFromGitHub {
     owner = "L11R";
-    repo = "go-autoconfig";
+    repo = pname;
     rev = "b1b182202da82cc881dccd715564853395d4f76a";
     sha256 = "sha256-Rbg6Ghp5NdcLSLSIhwwFFMKmZPWsboDyHCG6ePqSSZA=";
   };

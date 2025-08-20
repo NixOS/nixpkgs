@@ -8,19 +8,25 @@
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.78.3";
+  version = "2.72.5";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     tag = "v${version}";
-    hash = "sha256-sV8cj+H9l/Rm/INRmfMvTMYehYVmQhZHH7KxWGcEMXs=";
+    hash = "sha256-owE3mWzVogESko4SeysobC3VmmH37ikk7llJv65ZTfU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-SriBFQXKLYPDTqDmC4cXfV1fjwvUCUuujq5hb4w5Fgg=";
+  vendorHash = "sha256-cxuNlIXD4LIBWxbTdC/ygiF/ti4eHYQBR6kZRhhgJtY=";
 
-  checkFlags = "-skip=^TestReleaseBundle";
+  postPatch = ''
+    # Patch out broken test cleanup.
+    substituteInPlace artifactory_test.go \
+      --replace-fail \
+      'deleteReceivedReleaseBundle(t, "cli-tests", "2")' \
+      '// deleteReceivedReleaseBundle(t, "cli-tests", "2")'
+  '';
 
   postInstall = ''
     # Name the output the same way as the original build script does
@@ -34,13 +40,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/jfrog/jfrog-cli";
     description = "Client for accessing to JFrog's Artifactory and Mission Control through their respective REST APIs";
     changelog = "https://github.com/jfrog/jfrog-cli/releases/tag/v${version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "jf";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       detegr
       aidalgol
     ];

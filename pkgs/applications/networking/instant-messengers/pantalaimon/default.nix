@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.10.6";
+  version = "0.10.5";
   pyproject = true;
 
   # pypi tarball miss tests
@@ -19,15 +19,16 @@ python3Packages.buildPythonApplication rec {
     owner = "matrix-org";
     repo = "pantalaimon";
     rev = version;
-    hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
+    hash = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
-  build-system = [
-    installShellFiles
-  ]
-  ++ (with python3Packages; [
-    setuptools
-  ]);
+  build-system =
+    [
+      installShellFiles
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   pythonRelaxDeps = [
     "matrix-nio"
@@ -37,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       aiohttp
+      appdirs
       attrs
       cachetools
       click
@@ -45,7 +47,6 @@ python3Packages.buildPythonApplication rec {
       logbook
       (matrix-nio.override { withOlm = true; })
       peewee
-      platformdirs
       prompt-toolkit
     ]
     ++ lib.optionals enableDbusUi optional-dependencies.ui;

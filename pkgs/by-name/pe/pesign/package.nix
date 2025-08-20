@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   nss,
   efivar,
@@ -12,25 +11,16 @@
   mandoc,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pesign";
   version = "116";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "pesign";
-    tag = finalAttrs.version;
+    rev = version;
     hash = "sha256-cuOSD/ZHkilgguDFJviIZCG8kceRWw2JgssQuWN02Do=";
   };
-
-  patches = [
-    # fix build with gcc14
-    # https://github.com/rhboot/pesign/pull/119
-    (fetchpatch2 {
-      url = "https://github.com/rhboot/pesign/commit/1f9e2fa0b4d872fdd01ca3ba81b04dfb1211a187.patch?full_index=1";
-      hash = "sha256-viVM4Z0jAEAWC3EdJVHcWe21aQskH5XE85lOd6Xd/qU=";
-    })
-  ];
 
   # nss-util is missing because it is already contained in nss
   # Red Hat seems to be shipping a separate nss-util:
@@ -59,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/run
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications";
     homepage = "https://github.com/rhboot/pesign";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ raitobezarius ];
     # efivar is currently Linux-only.
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
-})
+}

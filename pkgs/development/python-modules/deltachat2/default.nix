@@ -4,23 +4,24 @@
   buildPythonPackage,
   deltachat-rpc-server,
   setuptools-scm,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "deltachat2";
-  version = "0.7.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat2";
     tag = version;
-    hash = "sha256-n40LyF73FxXXIJnNwVG9B6ibUYaHbx6t9MRPdMjSInw=";
+    hash = "sha256-bp4bi+EeMaWP8zOaPp0eaPKn71F055QgMOOSDzIJUH4=";
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       deltachatrpcserver = lib.getExe deltachat-rpc-server;
     })
   ];

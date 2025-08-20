@@ -4,27 +4,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
-  version = "3.0.0";
-  pyproject = true;
+  version = "2.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = "pydroid-ipcam";
+    repo = pname;
     tag = version;
-    hash = "sha256-Z5dWgeXwIRd2iPT2GsWyypHVbaMZ5NUXEBxa8+AZdNk=";
+    hash = "sha256-toY3eVJdB5rbRuwkXMizpQUxUTo4Y1tWKFCZZuiYaGI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     yarl
   ];
@@ -37,8 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Android IP Webcam";
     homepage = "https://github.com/home-assistant-libs/pydroid-ipcam";
-    changelog = "https://github.com/home-assistant-libs/pydroid-ipcam/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

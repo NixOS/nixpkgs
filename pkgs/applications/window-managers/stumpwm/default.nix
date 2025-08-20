@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://stumpwm.github.io/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "stumpwm";
-    teams = [ lib.teams.lisp ];
+    maintainers = lib.teams.lisp.members;
     platforms = lib.platforms.unix;
   };
 })

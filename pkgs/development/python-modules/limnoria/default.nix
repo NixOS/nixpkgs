@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2025.5.3";
+  version = "2024.12.20";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EZ42Ufnw3sUM1fM3+hTreKr58QOgeRANilXP9uxU/Cs=";
+    hash = "sha256-e8YvB29tggssX8aMRSoLvprsSBWeKVKfhDrSZeA2rCQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,8 +37,7 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

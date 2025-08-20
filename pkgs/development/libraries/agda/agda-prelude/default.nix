@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-mkDerivation {
+mkDerivation rec {
   version = "unstable-2024-08-22";
   pname = "agda-prelude";
 

@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "openbsm";
-    repo = "openbsm";
-    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${version}");
+    owner = pname;
+    repo = pname;
+    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "${pname}-${version}");
     sha256 = "0b98359hd8mm585sh145ss828pg2y8vgz38lqrb7nypapiyqdnd1";
   };
 

@@ -30,17 +30,19 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.11.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "python_octaviaclient";
-    inherit version;
-    hash = "sha256-M+JRUMsTq46+UpqSKFzvtRXsaboUKTuqwWs29v09q04=";
+    inherit pname version;
+    hash = "sha256-cXReOIfgC5Fx5gT0vF/pV7QwEuC2YfnW4OE+m7nqr20=";
   };
 
-  # somehow python-neutronclient cannot be found despite it being supplied
-  pythonRemoveDeps = [ "python-neutronclient" ];
+  postPatch = ''
+    # somehow python-neutronclient cannot be found despite it being supplied
+    substituteInPlace requirements.txt \
+      --replace-fail "python-neutronclient>=6.7.0" ""
+  '';
 
   build-system = [
     setuptools
@@ -98,6 +100,6 @@ buildPythonPackage rec {
     description = "OpenStack Octavia Command-line Client";
     homepage = "https://github.com/openstack/python-octaviaclient";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

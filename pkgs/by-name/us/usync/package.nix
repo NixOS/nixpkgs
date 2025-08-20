@@ -7,7 +7,7 @@
   unison,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "usync";
   version = "0.0.3";
 

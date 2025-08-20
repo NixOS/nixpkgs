@@ -37,13 +37,13 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "IBM Plex Typeface";
     homepage = "https://www.ibm.com/plex/";
     changelog = "https://github.com/IBM/plex/raw/v${version}/CHANGELOG.md";
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       romildo
       ryanccn
     ];

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.8";
+  version = "0.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uGHN/l3FjzuK+sewppc9XXsstgjdD2JT0WuO6Or23xE=";
+    hash = "sha256-ZikvHVyUo8uYTzM22AZEYEKtsXNH0wifLTli3W5bpVo=";
   };
 
   nativeBuildInputs = [

@@ -39,7 +39,7 @@ buildPythonPackage rec {
       --replace "boto3~=1.9, >=1.9.56" "boto3"
   '';
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   pythonImportsCheck = [ "serverlessrepo" ];
 

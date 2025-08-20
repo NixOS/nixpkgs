@@ -4,8 +4,8 @@
   python,
   callPackage,
   fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
+  poetry-core,
+  poetry-dynamic-versioning,
   pytestCheckHook,
   configargparse,
   cryptography,
@@ -26,17 +26,20 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.33.1";
+  version = "2.31.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-cOYdf3F1OF1P4xFEG3isuiePIl1tHnjL7UVoFIpb40A=";
+    hash = "sha256-xDquVQjkWVER9h0a6DHWRZH6KtRf0jsThycSojDEdh4=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'script = "pre_build.py"' ""
+
     substituteInPlace locust/test/test_main.py \
       --replace-fail '"locust"' '"${placeholder "out"}/bin/locust"'
 
@@ -49,9 +52,14 @@ buildPythonPackage rec {
     src = "${src}/locust/webui";
   };
 
+  preBuild = ''
+    mkdir -p $out/${python.sitePackages}/${pname}
+    ln -sf ${webui} $out/${python.sitePackages}/${pname}/webui
+  '';
+
   build-system = [
-    hatchling
-    hatch-vcs
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
   pythonRelaxDeps = [
@@ -90,7 +98,7 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly load testing framework";
     homepage = "https://docs.locust.io/";
-    changelog = "https://github.com/locustio/locust/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/locustio/locust/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jokatzke ];
   };

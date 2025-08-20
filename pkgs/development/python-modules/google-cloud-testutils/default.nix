@@ -2,45 +2,41 @@
   lib,
   buildPythonPackage,
   click,
-  fetchFromGitHub,
+  fetchPypi,
   google-auth,
   packaging,
-  pytestCheckHook,
-  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "1.6.4";
-  pyproject = true;
+  version = "1.4.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "googleapis";
-    repo = "python-test-utils";
-    tag = "v${version}";
-    hash = "sha256-VTu/ElWZrSUrUBrfLPTBV4PMSQCRAyF9Ka7jKEqVzLk=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-1oocIuKssoUA1p2dxhqFy+nJjJtp4phwQnHN/L88C8s=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     click
     google-auth
     packaging
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # does not contain tests
+  doCheck = false;
 
   pythonImportsCheck = [ "test_utils" ];
 
-  meta = {
+  meta = with lib; {
     description = "System test utilities for google-cloud-python";
     mainProgram = "lower-bound-checker";
     homepage = "https://github.com/googleapis/python-test-utils";
-    changelog = "https://github.com/googleapis/python-test-utils/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sarahec ];
+    changelog = "https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

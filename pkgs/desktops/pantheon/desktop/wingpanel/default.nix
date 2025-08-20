@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  wayland-scanner,
-  wrapGAppsHook3,
-  pkg-config,
-  meson,
-  ninja,
-  vala,
-  gala,
-  gtk3,
-  libgee,
-  granite,
-  gettext,
-  mutter,
-  wayland,
-  json-glib,
-  elementary-gtk-theme,
-  elementary-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, wayland-scanner
+, wrapGAppsHook3
+, pkg-config
+, meson
+, ninja
+, vala
+, gala
+, gtk3
+, libgee
+, granite
+, gettext
+, mutter
+, wayland
+, json-glib
+, elementary-gtk-theme
+, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "8.0.3";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3UNtqfDqgclRE8Pe9N8rOt6i2FG6lKNfJAv5Q2OYXUU=";
+    sha256 = "sha256-c77ebUTs4D5M3//AfvtWI643n1a1sPb5Z70P+4tX3y8=";
   };
 
   patches = [
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.wingpanel";
   };
 }

@@ -7,36 +7,34 @@
   autoSignDarwinBinariesHook,
   cctools,
 }:
-# Like many google projects, shaderc doesn't gracefully support separately
-# compiled dependencies, so we can't easily use the versions of glslang and
-# spirv-tools used by vulkan-loader. Exact revisions are taken from
+# Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
+# the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
 
-# Future work: extract and fetch all revisions automatically based on a revision
-# of shaderc's known-good branch.
+# Future work: extract and fetch all revisions automatically based on a revision of shaderc's known-good branch.
 let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "15.3.0";
-    hash = "sha256-HwFP4KJuA+BMQVvBWV0BCRj9U5I3CLEU+5bBtde2f6w=";
+    rev = "6be56e45e574b375d759b89dad35f780bbd4792f";
+    hash = "sha256-tktdsj4sxwQHBavHzu1x8H28RrIqSQs/fp2TQcVCm2g=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "v2025.1";
-    hash = "sha256-2Wv0dxVQ8NvuDRTcsXkH1GKmuA6lsIuwTl0j6kbTefo=";
+    rev = "360d469b9eac54d6c6e20f609f9ec35e3a5380ad";
+    hash = "sha256-Bned5Pa6zCFByfNvqD0M5t3l4uAJYkDlpe6wu8e7a3U=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-1.4.309.0";
-    hash = "sha256-Q1i6i5XimULuGufP6mimwDW674anAETUiIEvDQwvg5Y=";
+    rev = "4183b260f4cccae52a89efdfcdd43c4897989f42";
+    hash = "sha256-RKjw3H1z02bl6730xsbo38yjMaOCsHZP9xJOQbmWpnw=";
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "shaderc";
-  version = "2025.2";
+  version = "2024.0";
 
   outputs = [
     "out"
@@ -49,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-u3gmH2lrkwBTZg9j4jInQceXK4MUWhKZPSPsN98mEkk=";
+    rev = "v${version}";
+    hash = "sha256-Cwp7WbaKWw/wL9m70wfYu47xoUGQW+QGeoYhbyyzstQ=";
   };
 
   postPatch = ''
@@ -60,14 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build utils/
   '';
 
-  nativeBuildInputs = [
-    cmake
-    python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -78,14 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix the paths in .pc, even though it's unclear if all these .pc are really useful.
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/*.pc \
-      --replace-fail '=''${prefix}//' '=/' \
-      --replace-fail "$dev/$dev/" "$dev/"
+      --replace '=''${prefix}//' '=/' \
+      --replace "$dev/$dev/" "$dev/"
   '';
 
-  meta = {
+  meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Collection of tools, libraries and tests for shader compilation";
-    inherit (finalAttrs.src.meta) homepage;
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
+    license = [ licenses.asl20 ];
   };
-})
+}

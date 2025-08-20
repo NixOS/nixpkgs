@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.services.metabase;
@@ -13,15 +8,12 @@ let
 
   dataDir = "/var/lib/metabase";
 
-in
-{
+in {
 
   options = {
 
     services.metabase = {
       enable = mkEnableOption "Metabase service";
-
-      package = lib.mkPackageOption pkgs "metabase" { };
 
       listen = {
         ip = mkOption {
@@ -92,8 +84,7 @@ in
         MB_DB_FILE = "${dataDir}/metabase.db";
         MB_JETTY_HOST = cfg.listen.ip;
         MB_JETTY_PORT = toString cfg.listen.port;
-      }
-      // optionalAttrs (cfg.ssl.enable) {
+      } // optionalAttrs (cfg.ssl.enable) {
         MB_JETTY_SSL = true;
         MB_JETTY_SSL_PORT = toString cfg.ssl.port;
         MB_JETTY_SSL_KEYSTORE = cfg.ssl.keystore;
@@ -101,7 +92,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = "${pkgs.metabase}/bin/metabase";
       };
     };
 

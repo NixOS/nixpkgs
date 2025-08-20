@@ -2,31 +2,29 @@
   lib,
   buildGoModule,
   fetchFromSourcehut,
+  fetchpatch,
   ncurses,
-  withNotmuch ? true,
   notmuch,
   scdoc,
   python3Packages,
   w3m,
   dante,
   gawk,
-  versionCheckHook,
-  nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "aerc";
-  version = "0.20.1";
+  version = "0.19.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
-    rev = finalAttrs.version;
-    hash = "sha256-IBTM3Ersm8yUCgiBLX8ozuvMEbfmY6eW5xvJD20UgRA=";
+    rev = version;
+    hash = "sha256-YlpR85jB6Il3UW4MTaf8pkilRVjkO0q/D/Yu+OiBX6Y=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-O1j0J6vCE6rap5/fOTxlUpXAG5mgZf8CfNOB4VOBxms=";
+  vendorHash = "sha256-WowRlAzyrfZi27JzskIDberiYt9PQkuS6H3hKqUP9qo=";
 
   nativeBuildInputs = [
     scdoc
@@ -35,11 +33,6 @@ buildGoModule (finalAttrs: {
 
   patches = [
     ./runtime-libexec.patch
-
-    # TODO remove these with the next release
-    # they resolve a path injection vulnerability when saving attachments (CVE-2025-49466)
-    ./basename-temp-file.patch
-    ./basename-temp-file-fixup.patch
   ];
 
   postPatch = ''
@@ -54,18 +47,20 @@ buildGoModule (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  pythonPath = [ python3Packages.vobject ];
+  pythonPath = [
+    python3Packages.vobject
+  ];
 
   buildInputs = [
     python3Packages.python
+    notmuch
     gawk
-  ]
-  ++ lib.optional withNotmuch notmuch;
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
+    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
 
     runHook postInstall
   '';
@@ -90,22 +85,12 @@ buildGoModule (finalAttrs: {
     patchShebangs $out/libexec/aerc/filters
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${finalAttrs.version}/item/CHANGELOG.md";
-    maintainers = with lib.maintainers; [
-      defelo
-      sikmir
-    ];
+    maintainers = [ ];
     mainProgram = "aerc";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
-})
+}

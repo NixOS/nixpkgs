@@ -7,57 +7,42 @@
   gobject-introspection,
   wrapGAppsHook3,
   adwaita-icon-theme,
-  writableTmpDirAsHomeHook,
-  xvfb-run,
 }:
 
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
-#  -  Included plugins dependencies: dot, ditaa, dia, any other?
+#  -  Included plugins depenencies: dot, ditaa, dia, any other?
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 
 python3Packages.buildPythonApplication rec {
   pname = "zim";
-  version = "0.76.3";
-  pyproject = true;
+  version = "0.75.2";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
-    hash = "sha256-St8J6z8HcTj+Vb8m8T5sTZk2Fv5CSnmdG6a+CYzk6wU=";
+    hash = "sha256-QIkNsFsWeNHEcXhGHHZyJDMMW2lNvdwMJLGxeCZaLdI=";
   };
-
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook3
-  ];
 
   buildInputs = [
     gtk3
     adwaita-icon-theme
   ];
-
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pyxdg
     pygobject3
   ];
-
-  # (test.py:800): GLib-GIO-ERROR **: 20:59:45.754:
-  # No GSettings schemas are installed on the system
-  doCheck = false;
-
-  nativeCheckInputs = [
-    xvfb-run
-    writableTmpDirAsHomeHook
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  dontWrapGApps = true;
 
-    xvfb-run ${python3Packages.python.interpreter} test.py
-
-    runHook postCheck
+  preFixup = ''
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share)
+    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postInstall = ''
@@ -69,26 +54,24 @@ python3Packages.buildPythonApplication rec {
         size=''${size%.svg}
         dimensions="''${size}x''${size}"
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp $img $out/share/icons/hicolor/$dimensions/apps/zim.png
+        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
       done
     )
   '';
 
-  dontWrapGApps = true;
+  # RuntimeError: could not create GtkClipboard object
+  doCheck = false;
 
-  preFixup = ''
-    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
-    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share)
-    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  checkPhase = ''
+    ${python3Packages.python.interpreter} test.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Desktop wiki";
     homepage = "https://zim-wiki.org/";
     changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ pSub ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pSub ];
     mainProgram = "zim";
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };

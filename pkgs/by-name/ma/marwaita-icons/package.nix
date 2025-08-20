@@ -30,10 +30,6 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontDropIconThemeCache = true;
-  dontWrapQtApps = true;
-
-  # FIXME: https://github.com/darkomarko42/Marwaita-Icons/issues/3
-  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall

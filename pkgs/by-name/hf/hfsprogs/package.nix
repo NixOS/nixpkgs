@@ -6,7 +6,7 @@
   libuuid,
   openssl,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "hfsprogs";
   version = "627.40.1-linux";
 

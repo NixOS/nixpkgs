@@ -4,7 +4,7 @@
   fetchpatch,
   ghostscript,
   imagemagick,
-  poppler-utils,
+  poppler_utils,
   python3,
   tesseract5,
 }:
@@ -12,11 +12,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
   version = "0.4.4";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "invoice-x";
-    repo = "invoice2data";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
   };
@@ -30,17 +30,16 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
+  nativeBuildInputs = with python3.pkgs; [
     setuptools-git
   ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     dateparser
     pdfminer-six
     pillow
     pyyaml
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
   makeWrapperArgs = [
@@ -51,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
       ghostscript
       imagemagick
       tesseract5
-      poppler-utils
+      poppler_utils
     ])
   ];
 

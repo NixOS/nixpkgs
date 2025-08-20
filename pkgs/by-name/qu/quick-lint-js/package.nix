@@ -43,7 +43,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "quick-lint-js";
   inherit version src;
 

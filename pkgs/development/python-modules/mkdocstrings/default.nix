@@ -12,19 +12,21 @@
   pymdown-extensions,
   pytestCheckHook,
   pythonOlder,
-  dirty-equals,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.30.0";
+  version = "0.27.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
-    hash = "sha256-tJErux/90zXaV0ViGJOQKMf1yYCxMhH1nMrQlXlHw/Y=";
+    hash = "sha256-L86aFq1S7Hfp+1MHwliCSz0mfgAFD/5AHbeqL1aZ5XM=";
   };
 
   postPatch = ''
@@ -34,28 +36,26 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies = [
-    jinja2
-    markdown
-    markupsafe
-    mkdocs
-    mkdocs-autorefs
-    pymdown-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      jinja2
+      markdown
+      markupsafe
+      mkdocs
+      mkdocs-autorefs
+      pymdown-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+      typing-extensions
+    ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    dirty-equals
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mkdocstrings" ];
 
   disabledTestPaths = [
     # Circular dependencies
-    "tests/test_api.py"
     "tests/test_extension.py"
   ];
 
@@ -64,14 +64,13 @@ buildPythonPackage rec {
     "test_disabling_plugin"
     # Circular dependency on mkdocstrings-python
     "test_extended_templates"
-    "test_nested_autodoc[ext_markdown0]"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
-    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
+    license = licenses.isc;
+    maintainers = with maintainers; [ fab ];
   };
 }

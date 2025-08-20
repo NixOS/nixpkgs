@@ -10,7 +10,6 @@
   pkg-config,
   stdenv,
   testers,
-  nixosTests,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -55,20 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    libinput
-    libxcb
-    libxkbcommon
-    pixman
-    wayland
-    wayland-protocols
-    wlroots
-  ]
-  ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
-    xwayland
-  ];
+  buildInputs =
+    [
+      libinput
+      libxcb
+      libxkbcommon
+      pixman
+      wayland
+      wayland-protocols
+      wlroots
+    ]
+    ++ lib.optionals enableXWayland [
+      libX11
+      xcbutilwm
+      xwayland
+    ];
 
   outputs = [
     "out"
@@ -85,16 +85,17 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString withCustomConfigH "cp ${configFile} config.h";
 
-  makeFlags = [
-    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-    "WAYLAND_SCANNER=wayland-scanner"
-    "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man"
-  ]
-  ++ lib.optionals enableXWayland [
-    ''XWAYLAND="-DXWAYLAND"''
-    ''XLIBS="xcb xcb-icccm"''
-  ];
+  makeFlags =
+    [
+      "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+      "WAYLAND_SCANNER=wayland-scanner"
+      "PREFIX=$(out)"
+      "MANDIR=$(man)/share/man"
+    ]
+    ++ lib.optionals enableXWayland [
+      ''XWAYLAND="-DXWAYLAND"''
+      ''XLIBS="xcb xcb-icccm"''
+    ];
 
   strictDeps = true;
 
@@ -102,13 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # `dwl -v` emits its version string to stderr and returns 1
-        command = "dwl -v 2>&1; return 0";
-      };
-      basic = nixosTests.dwl;
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # `dwl -v` emits its version string to stderr and returns 1
+      command = "dwl -v 2>&1; return 0";
     };
   };
 
@@ -127,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Tied to as few external dependencies as possible
     '';
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
     mainProgram = "dwl";
   };

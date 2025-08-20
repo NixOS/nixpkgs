@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
-    repo = "light-locker";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
@@ -87,8 +87,7 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ];
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

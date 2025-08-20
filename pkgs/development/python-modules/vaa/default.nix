@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = "vaa";
+    repo = pname;
     tag = "v.${version}";
     hash = "sha256-24GTTJSZ55ejyHoWP1/S3DLTKvOolAJr9UhWoOm84CU=";
   };

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-botan";
-  version = "1.2.1";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "botan";
     rev = "v${version}";
-    hash = "sha256-b5yOkjXKnJBQWSKCqiHJcznH1QOmTVgBbS5IwP3VTXA=";
+    hash = "sha256-5/vcm6vNucBhl1Aki+OFNjAU7Hvc7OLAAH4CYchlBIY=";
   };
 
   buildInputs = [

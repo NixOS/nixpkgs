@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "colemak-dh";
-  version = "0-unstable-2022-08-07";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner = "ColemakMods";

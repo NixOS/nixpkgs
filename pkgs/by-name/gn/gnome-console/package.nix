@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "48.0.1";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-AY6Qjk2uvPyxUNTxuyjZgnKqnRTWgV6vjaRfiJ2wXEk=";
+    hash = "sha256-0/YAtFtRcWaRrukocDMunJqMqJ1VNWXzEx2eKAdHJdA=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +63,7 @@ stdenv.mkDerivation rec {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/GNOME/console";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ zhaofengli ];
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ zhaofengli ]);
     platforms = platforms.unix;
     mainProgram = "kgx";
   };

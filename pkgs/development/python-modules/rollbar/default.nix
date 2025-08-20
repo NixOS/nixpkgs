@@ -4,7 +4,6 @@
   blinker,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   httpx,
   mock,
   pytestCheckHook,
@@ -16,19 +15,17 @@
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "1.3.0";
-  pyproject = true;
+  version = "1.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UZQC6sObzE+khIIYcva7GEl/t7bIEWcEeGfRdxTTs3k=";
+    hash = "sha256-Y0e35J8i8ClvwoemrqddZCz2RJTS7hJwQqelk8l9868=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     requests
     six
   ];

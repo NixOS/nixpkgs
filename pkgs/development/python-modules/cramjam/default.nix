@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
-
-  # tests
+  stdenv,
+  libiconv,
   hypothesis,
   numpy,
   pytest-xdist,
@@ -13,25 +13,29 @@
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.11.0.post1";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
-    repo = "cramjam";
+    repo = "pyrus-cramjam";
     tag = "v${version}";
-    hash = "sha256-iYx/cPQpZVVPAH+HTiYH/E9tmdnHvKf3Cel4yZpXSIA=";
+    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src version;
-    hash = "sha256-jLGCyrVHtauWhiDghtYgt5MhgOl8wNiM7TAQhrCk2xU=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-Bp7EtyuLdLUfU3yvouNVE42klfqYt9QOwt+iGe521yI=";
   };
+
+  buildAndTestSubdir = "cramjam-python";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [
     hypothesis
@@ -40,29 +44,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env = {
-    # Makes tests less flaky by relaxing performance constraints
-    # https://github.com/HypothesisWorks/hypothesis/issues/3713
-    CI = true;
-  };
-
-  disabledTests = [
-    # I (@GaetanLepage) cannot reproduce the failure, but it fails consistently on Ofborg with:
-    # SyntaxError: could not convert string to float: 'V' - Consider hexadecimal for huge integer literals to avoid decimal conversion limits.
-    "test_variants_decompress_into"
-  ];
+  pytestFlagsArray = [ "cramjam-python/tests" ];
 
   disabledTestPaths = [
-    "benchmarks/test_bench.py"
+    "cramjam-python/benchmarks/test_bench.py"
+    # test_variants.py appears to be flaky
+    #
+    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
+    "cramjam-python/tests/test_variants.py"
   ];
 
   pythonImportsCheck = [ "cramjam" ];
 
-  meta = {
+  meta = with lib; {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
-    changelog = "https://github.com/milesgranger/cramjam/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

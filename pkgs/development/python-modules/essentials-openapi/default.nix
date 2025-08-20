@@ -14,18 +14,17 @@
   pyyaml,
   rich,
   setuptools,
-  stdenv,
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
-  version = "1.2.1";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials-openapi";
     tag = "v${version}";
-    hash = "sha256-HckCdDQ7wNg+uHLwAaoBIxg2cfubkcFC1mhviOeFdDg=";
+    hash = "sha256-/NYv0NrE8+0kQg5G3Qf2DtesMHlmKQYczNT8pFlNFZE=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -60,17 +59,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openapidocs" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # These tests start a server using a hardcoded port, and since
-    # multiple Python versions are always built simultaneously, this
-    # failure is quite likely to occur.
-    "tests/test_cli.py"
-  ];
-
   meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
-    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/${src.tag}";
+    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aldoborrero

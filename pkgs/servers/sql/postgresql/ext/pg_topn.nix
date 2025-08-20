@@ -1,27 +1,28 @@
 {
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension rec {
+buildPostgresqlExtension rec {
   pname = "pg_topn";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "postgresql-topn";
-    tag = "v${version}";
-    hash = "sha256-lP6Iil/BUv4ga+co+oBpKv1FBqFuBGfNjueEolM6png=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lP6Iil/BUv4ga+co+oBpKv1FBqFuBGfNjueEolM6png=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
     homepage = "https://github.com/citusdata/postgresql-topn";
     changelog = "https://github.com/citusdata/postgresql-topn/raw/v${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
   };
 }

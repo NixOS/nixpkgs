@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "twilight-kde";
   version = "0-unstable-2023-03-09";
 

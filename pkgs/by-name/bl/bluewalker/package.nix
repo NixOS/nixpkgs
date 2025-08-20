@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitLab {
     owner = "jtaimisto";
-    repo = "bluewalker";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-wAzBlCczsLfHboGYIsyN7dGwz52CMw+L3XQ0njfLVR0=";
   };
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple command line Bluetooth LE scanner";
     homepage = "https://gitlab.com/jtaimisto/bluewalker";
     changelog = "https://gitlab.com/jtaimisto/bluewalker/-/tags/v${version}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ cimm ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ cimm ];
+    platforms = platforms.linux;
   };
 }

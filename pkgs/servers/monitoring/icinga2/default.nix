@@ -7,12 +7,11 @@
   flex,
   bison,
   systemd,
-  boost186,
-  libedit,
+  boost,
   openssl,
   patchelf,
   mariadb-connector-c,
-  libpq,
+  postgresql,
   zlib,
   tzdata,
   # Databases
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.15.0";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    hash = "sha256-IuK6kD2OBAm7bKtPcMnplwNSGyGUcX3UWiwm8Vry1is=";
+    hash = "sha256-QXe/+yQlyyOa78eEiudDni08SCUP3nhTYVpbmVUVKA8=";
   };
 
   patches = [
@@ -81,12 +80,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost186
-    libedit
+    boost
     openssl
     systemd
-  ]
-  ++ lib.optional withPostgresql libpq;
+  ] ++ lib.optional withPostgresql postgresql;
 
   nativeBuildInputs = [
     cmake
@@ -128,6 +125,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

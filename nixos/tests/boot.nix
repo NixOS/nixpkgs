@@ -23,40 +23,41 @@ let
     let
       qemu = qemu-common.qemuBinary pkgs.qemu_test;
 
-      flags = [
-        "-m"
-        (toString memory)
-        "-netdev"
-        ("user,id=net0" + (lib.optionalString (pxe != null) ",tftp=${pxe},bootfile=netboot.ipxe"))
-        "-device"
-        (
-          "virtio-net-pci,netdev=net0"
-          + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
-        )
-      ]
-      ++ lib.optionals (cdrom != null) [
-        "-cdrom"
-        cdrom
-      ]
-      ++ lib.optionals (usb != null) [
-        "-device"
-        "usb-ehci"
-        "-drive"
-        "id=usbdisk,file=${usb},if=none,readonly"
-        "-device"
-        "usb-storage,drive=usbdisk"
-      ]
-      ++ lib.optionals (pxe != null) [
-        "-boot"
-        "order=n"
-      ]
-      ++ lib.optionals uefi [
-        "-drive"
-        "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
-        "-drive"
-        "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
-      ]
-      ++ extraFlags;
+      flags =
+        [
+          "-m"
+          (toString memory)
+          "-netdev"
+          ("user,id=net0" + (lib.optionalString (pxe != null) ",tftp=${pxe},bootfile=netboot.ipxe"))
+          "-device"
+          (
+            "virtio-net-pci,netdev=net0"
+            + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
+          )
+        ]
+        ++ lib.optionals (cdrom != null) [
+          "-cdrom"
+          cdrom
+        ]
+        ++ lib.optionals (usb != null) [
+          "-device"
+          "usb-ehci"
+          "-drive"
+          "id=usbdisk,file=${usb},if=none,readonly"
+          "-device"
+          "usb-storage,drive=usbdisk"
+        ]
+        ++ lib.optionals (pxe != null) [
+          "-boot"
+          "order=n"
+        ]
+        ++ lib.optionals uefi [
+          "-drive"
+          "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
+          "-drive"
+          "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
+        ]
+        ++ extraFlags;
 
       flagsStr = lib.concatStringsSep " " flags;
     in
@@ -64,24 +65,20 @@ let
 
   iso =
     (import ../lib/eval-config.nix {
-      system = null;
+      inherit system;
       modules = [
         ../modules/installer/cd-dvd/installation-cd-minimal.nix
         ../modules/testing/test-instrumentation.nix
-        { nixpkgs.pkgs = pkgs; }
       ];
     }).config.system.build.isoImage;
 
   sd =
     (import ../lib/eval-config.nix {
-      system = null;
+      inherit system;
       modules = [
         ../modules/installer/sd-card/sd-image-x86_64.nix
         ../modules/testing/test-instrumentation.nix
-        {
-          sdImage.compressImage = false;
-          nixpkgs.pkgs = pkgs;
-        }
+        { sdImage.compressImage = false; }
       ];
     }).config.system.build.sdImage;
 
@@ -112,7 +109,7 @@ let
     let
       config =
         (import ../lib/eval-config.nix {
-          system = null;
+          inherit system;
           modules = [
             ../modules/installer/netboot/netboot.nix
             ../modules/testing/test-instrumentation.nix
@@ -121,8 +118,6 @@ let
                 "serial"
                 "live.nixos.passwordHash=$6$jnwR50SkbLYEq/Vp$wmggwioAkfmwuYqd5hIfatZWS/bO6hewzNIwIrWcgdh7k/fhUzZT29Vil3ioMo94sdji/nipbzwEpxecLZw0d0" # "password"
               ];
-
-              nixpkgs.pkgs = pkgs;
             }
             {
               key = "serial";

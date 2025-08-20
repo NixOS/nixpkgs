@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "upspin";
   version = "unstable-2023-02-05";
 

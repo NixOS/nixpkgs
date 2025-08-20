@@ -12,15 +12,15 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.11";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
-    repo = "telescope";
-    tag = finalAttrs.version;
-    hash = "sha256-GKeUXa4RKYkoywrCrpenfLt10Rdj9L0xYI3tf2hFAbk=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-MVZ/pvDAETacQiEMEXM0gYM20LXqNiHtMfFGqS1vipY=";
   };
 
   postPatch = ''
@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = {
-    description = "w3m-like browser for Gemini";
-    homepage = "https://telescope-browser.org/";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ heph2 ];
-    platforms = lib.platforms.unix;
+  meta = with lib; {
+    description = "Telescope is a w3m-like browser for Gemini";
+    homepage = "https://www.telescope-browser.org/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ heph2 ];
+    platforms = platforms.unix;
   };
-})
+}

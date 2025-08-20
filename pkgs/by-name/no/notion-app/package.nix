@@ -6,8 +6,8 @@
 }:
 let
   info =
-    (lib.importJSON ./info.json)."${stdenvNoCC.hostPlatform.parsed.cpu.name}-darwin"
-      or (throw "Unsupported CPU architecture: ${stdenvNoCC.hostPlatform.parsed.cpu.name}");
+    (builtins.fromJSON (builtins.readFile ./info.json))."${stdenvNoCC.targetPlatform.system}"
+      or (throw "notion-app: unsupported system ${stdenvNoCC.targetPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "notion-app";

@@ -29,9 +29,11 @@ Xcode.
 
 ```nix
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcodeenv.composeXcodeWrapper {
   version = "9.2";
@@ -61,9 +63,11 @@ executing the `xcodeenv.buildApp {}` function:
 
 ```nix
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcodeenv.buildApp {
   name = "MyApp";
@@ -155,9 +159,11 @@ instances:
 
 ```nix
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcode.simulateApp {
   name = "simulate";
@@ -187,9 +193,11 @@ app in the requested simulator instance:
 
 ```nix
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcode.simulateApp {
   name = "simulate";

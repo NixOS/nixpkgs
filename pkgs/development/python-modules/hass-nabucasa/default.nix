@@ -8,15 +8,12 @@
   ciso8601,
   cryptography,
   fetchFromGitHub,
-  freezegun,
   pycognito,
   pyjwt,
   pytest-aiohttp,
-  pytest-socket,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  sentence-stream,
   setuptools,
   snitun,
   syrupy,
@@ -26,24 +23,21 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.111.2";
+  version = "0.87.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-64DdjyzeeYI9u8hYP7CwZvLhCcCzztti2DshvtYcxNQ=";
+    hash = "sha256-V9iP/YRvxsdpYLqcRHSIULlOPQKq5fkouUXTNNeF0FY=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [ "acme" ];
 
-  pythonRelaxDeps = [
-    "acme"
-    "josepy"
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     acme
@@ -54,24 +48,16 @@ buildPythonPackage rec {
     cryptography
     pycognito
     pyjwt
-    sentence-stream
     snitun
     webrtc-models
   ];
 
   nativeCheckInputs = [
-    freezegun
     pytest-aiohttp
-    pytest-socket
     pytest-timeout
     pytestCheckHook
     syrupy
     xmltodict
-  ];
-
-  disabledTests = [
-    # mock time 10800s (3h) vs 43200s (12h)
-    "test_subscription_reconnection_handler_renews_and_starts"
   ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];
@@ -79,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

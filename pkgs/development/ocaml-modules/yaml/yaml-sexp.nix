@@ -6,7 +6,7 @@
   junit_alcotest,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "yaml-sexp";
 
   inherit (yaml) version src;

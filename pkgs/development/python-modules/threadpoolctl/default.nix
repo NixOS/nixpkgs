@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "3.6.0";
+  version = "3.5.0";
 
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "joblib";
-    repo = "threadpoolctl";
+    repo = pname;
     tag = version;
-    hash = "sha256-yICErKIHc9XKiWg9C9EH0il9zhbbkGntw6mlYDibr9g=";
+    hash = "sha256-XFgiCfcHwzjsjPDKask1X4JHTx1xeHfIFeSJWtbgJmU=";
   };
 
   nativeBuildInputs = [ flit-core ];

@@ -12,10 +12,10 @@ function genMainSrc() {
     local url="${BASE_URL}-${VERSION}-${1}-${2}.tar.gz"
     local sha256
     sha256=$(nix-prefetch-url "$url")
-    echo " {"
-    echo "      url = \"${url}\";"
-    echo "      sha256 = \"${sha256}\";"
-    echo "    };"
+    echo "      {"
+    echo "        url = \"${url}\";"
+    echo "        sha256 = \"${sha256}\";"
+    echo "      };"
 }
 
 {
@@ -27,19 +27,19 @@ function genMainSrc() {
   googleCloudSdkPkgs = {
 EOF
 
-    echo -n "    x86_64-linux ="
+    echo "    x86_64-linux ="
     genMainSrc "linux" "x86_64"
 
-    echo -n "    x86_64-darwin ="
+    echo "    x86_64-darwin ="
     genMainSrc "darwin" "x86_64"
 
-    echo -n "    aarch64-linux ="
+    echo "    aarch64-linux ="
     genMainSrc "linux" "arm"
 
-    echo -n "    aarch64-darwin ="
+    echo "    aarch64-darwin ="
     genMainSrc "darwin" "arm"
 
-    echo -n "    i686-linux ="
+    echo "    i686-linux ="
     genMainSrc "linux" "x86"
 
     echo "  };"

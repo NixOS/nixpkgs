@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "brimdata";
-    repo = "zed";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
   };
@@ -40,12 +40,12 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Novel data lake based on super-structured data";
     homepage = "https://zed.brimdata.io";
     changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       dit7ya
       knl
     ];

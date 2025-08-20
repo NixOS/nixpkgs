@@ -36,22 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
-  configureFlags = [
-    "--ioctl=termios"
-    "--libs=-lncurses"
-  ];
+  configureFlags = [ "--ioctl=termios" ];
 
   strictDeps = false;
 
   postPatch = ''
     substituteInPlace configure \
-      --replace-fail '-lcurses' '-lncurses' \
-      --replace-fail 'if [ -f /usr/include/sys/wait.h ]' 'if true'
-  '';
-
-  postConfigure = ''
-    echo >>config.h '#undef NEED_MEMMOVE'
-    echo >>config.h '#define NEED_IOCTL_H'
+      --replace-fail '-lcurses' '-lncurses'
   '';
 
   installPhase = ''
@@ -74,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://elvis.the-little-red-haired-girl.org/";
+    homepage = "http://elvis.the-little-red-haired-girl.org/";
     description = "Vi clone for Unix and other operating systems";
     license = lib.licenses.free;
     mainProgram = "elvis";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

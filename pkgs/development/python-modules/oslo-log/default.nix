@@ -8,7 +8,6 @@
   setuptools,
 
   # dependencies
-  debtcollector,
   oslo-config,
   oslo-context,
   oslo-serialization,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "7.2.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = version;
-    hash = "sha256-d5U3zvymIoGYfXfHFp7+gQuDOLHy/q4c+NOlUoCmikU=";
+    hash = "sha256-IEhIhGE95zZiWp602rFc+NLco/Oyx9XEL5e2RExNBMs=";
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are
@@ -42,15 +41,13 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    debtcollector
     oslo-config
     oslo-context
     oslo-serialization
     oslo-utils
     pbr
     python-dateutil
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet
@@ -61,9 +58,8 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
-    # Incompatible Exception Representation, displaying natively
-    "test_rate_limit"
-    "test_rate_limit_except_level"
+    # File which is used doesn't seem not to be present
+    "test_log_config_append_invalid"
   ];
 
   pythonImportsCheck = [ "oslo_log" ];
@@ -75,6 +71,6 @@ buildPythonPackage rec {
     mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.openstack ];
+    maintainers = lib.teams.openstack.members;
   };
 }

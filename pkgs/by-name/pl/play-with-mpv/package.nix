@@ -22,7 +22,7 @@ let
     doCheck = false;
   };
 in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "play-with-mpv";
   version = "unstable-2021-04-02";
   format = "setuptools";

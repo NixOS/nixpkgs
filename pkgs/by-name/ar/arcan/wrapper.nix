@@ -6,7 +6,7 @@
   name ? "arcan-wrapped",
 }:
 
-symlinkJoin {
+symlinkJoin rec {
   inherit name;
 
   paths = appls ++ [ arcan ];

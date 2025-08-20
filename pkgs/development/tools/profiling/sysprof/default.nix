@@ -3,7 +3,6 @@
   lib,
   desktop-file-utils,
   fetchurl,
-  elfutils,
   gettext,
   glib,
   gtk4,
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "48.0";
+  version = "47.2";
 
   outputs = [
     "out"
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gw8DgPLzBwi6h4KTIaBv7h2zbfqHeXu/B/CnrPRJjRg=";
+    hash = "sha256-5LXt6f2XjsPw1aDUTQQpptIBw2K/bLRScxkDGuRixU8=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    elfutils
     glib
     gtk4
     json-glib
@@ -87,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       be restarted.
     '';
     license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 })

@@ -45,13 +45,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-06-20";
+    version = "2024-04-20";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = "vimix-gtk-themes";
+      repo = pname;
       rev = version;
-      sha256 = "uRm6v+Zag4FO7nFVcHhZjVhOfdOeYBZYQym0IBR8+HU=";
+      sha256 = "RbAdoix+UWKiLB+04YiPa0UwzO1fFLy56IG1MipmE+E=";
     };
 
     nativeBuildInputs = [

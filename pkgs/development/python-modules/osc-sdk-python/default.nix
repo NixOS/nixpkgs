@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.35.0";
+  version = "0.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     tag = "v${version}";
-    hash = "sha256-/UYxleKMFN42EKxXuGSb1FtY8QoVkKCqzJUqocLjeFg=";
+    hash = "sha256-HOYIt4kLKAR8zYmIhjLQoibL3qp9uruFKgkgfnmZOfc=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # Only keep test not requiring access and secret keys
-  enabledTestPaths = [ "tests/test_net.py" ];
+  pytestFlagsArray = [ "tests/test_net.py" ];
 
   pythonImportsCheck = [ "osc_sdk_python" ];
 

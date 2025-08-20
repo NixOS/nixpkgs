@@ -3,9 +3,10 @@
   stdenv,
   autoreconfHook,
   bison,
+  coreutils,
   cyrus_sasl,
   db,
-  fetchurl,
+  fetchFromSavannah,
   flex,
   gdbm,
   liblockfile,
@@ -13,34 +14,28 @@
   openssl,
   readline,
   runtimeShell,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nmh";
-  version = "1.8";
-
-  src = fetchurl {
-    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Nmzgzj+URzAvVWcAkmnIuziC2AjzPu+shbo2fodchhU=";
+  version = "1.7.1";
+  src = fetchFromSavannah {
+    repo = "nmh";
+    rev = finalAttrs.version;
+    hash = "sha256-sBftXl4hWs4bKw5weHkif1KIJBpheU/RCePx0WXuv9o=";
   };
 
-  patches = [ ./reproducible-build-date.patch ];
-
-  postPatch =
-    # patch hardcoded shell
-    ''
-      substituteInPlace \
-        sbr/arglist.c \
-        uip/mhbuildsbr.c \
-        uip/whatnowsbr.c \
-        uip/slocal.c \
-        --replace-fail '"/bin/sh"' '"${runtimeShell}"'
-    ''
+  postPatch = ''
+    substituteInPlace config/config.c --replace /bin/cat ${coreutils}/bin/cat
+    substituteInPlace \
+      sbr/arglist.c \
+      uip/mhbuildsbr.c \
+      uip/whatnowsbr.c \
+      uip/slocal.c \
+      --replace '"/bin/sh"' '"${runtimeShell}"'
     # the "cleanup" pseudo-test makes diagnosing test failures a pain
-    + ''
-      ln -sf ${stdenv}/bin/true test/cleanup
-    '';
+    ln -s -f ${stdenv}/bin/true test/cleanup
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -58,21 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-stringop-truncation";
   doCheck = true;
   enableParallelBuilding = true;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/install-mh";
-  versionCheckProgramArg = "-version";
 
   meta = {
     description = "New MH Mail Handling System";
     homepage = "https://nmh.nongnu.org/";
-    downloadPage = "https://download.savannah.nongnu.org/releases/nmh/";
-    changelog = "https://savannah.nongnu.org/news/?group=nmh";
+    downloadPage = "http://download.savannah.nongnu.org/releases/nmh/";
+    changelog = "http://savannah.nongnu.org/news/?group=nmh";
     license = [ lib.licenses.bsd3 ];
     longDescription = ''
       This is the nmh mail user agent (reader/sender), a command-line based
@@ -92,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       claws-mail's mail folders.  Most other mail clients have migrated to
       maildir.
     '';
-    maintainers = with lib.maintainers; [ normalcea ];
   };
 
 })

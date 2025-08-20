@@ -5,9 +5,9 @@
   libX11,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xmcp";
-  version = "0-unstable-2020-10-10";
+  version = "unstable-2020-10-10";
 
   src = fetchFromGitHub {
     owner = "blblapco";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "Tiny color picker for X11";
     homepage = "https://github.com/blblapco/xmcp";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
     mainProgram = "xmcp";
   };

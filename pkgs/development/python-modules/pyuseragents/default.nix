@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
   pythonImportsCheck = [ "pyuseragents" ];
 
   meta = with lib; {

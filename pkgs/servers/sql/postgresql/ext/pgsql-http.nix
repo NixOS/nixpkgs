@@ -1,31 +1,31 @@
 {
-  curl,
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "pgsql-http";
-  version = "1.7.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "pramsey";
     repo = "pgsql-http";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tgmty8ZYpSEccwQouI/Ho2M495k6DizbMaaJ0+aW03Q=";
+    rev = "v${version}";
+    hash = "sha256-I9NDCXA6jColx/iFsvc3ujVbh3tjpqTgoW9VIzD2OTk=";
   };
 
   buildInputs = [ curl ];
-  nativeBuildInputs = [ curl ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP client for PostgreSQL, retrieve a web page from inside the database";
     homepage = "https://github.com/pramsey/pgsql-http";
-    changelog = "https://github.com/pramsey/pgsql-http/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/pramsey/pgsql-http/releases/tag/v${version}";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
-})
+}

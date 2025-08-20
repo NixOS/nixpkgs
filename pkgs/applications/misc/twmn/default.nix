@@ -3,20 +3,21 @@
   mkDerivation,
   fetchFromGitHub,
   qtbase,
+  qtx11extras,
   qmake,
   pkg-config,
   boost,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "twmn";
-  version = "2025_03_06";
+  version = "unstable-2018-10-01";
 
   src = fetchFromGitHub {
     owner = "sboli";
     repo = "twmn";
-    tag = version;
-    hash = "sha256-JQhONBcTJUzsKJY6YstC6HB4d/t8vf155/lN4UUv4l4=";
+    rev = "80f48834ef1a07087505b82358308ee2374b6dfb";
+    sha256 = "0mpjvp800x07lp9i3hfcc5f4bqj1fj4w3dyr0zwaxc6wqmm0fdqz";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,7 @@ mkDerivation rec {
   ];
   buildInputs = [
     qtbase
+    qtx11extras
     boost
   ];
 

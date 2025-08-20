@@ -93,8 +93,7 @@ buildPythonPackage rec {
     orjson
     pytestCheckHook
     python-decouple
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access

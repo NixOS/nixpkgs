@@ -4,38 +4,24 @@
   rustPlatform,
   protobuf,
   versionCheckHook,
-  cmake,
-  pkg-config,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "clash-rs";
-  version = "0.8.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HkIsflsLTQdvetgamLt6LbYxOpv1+FQ/e/PzJjKOfq4=";
+    tag = "v${version}";
+    hash = "sha256-PaXcMJuenUrcCBdU3CZEIk9U5tZxSAVVtm9ttAldVLM=";
   };
 
-  cargoHash = "sha256-Qh/YxNO/DtVBj6Eiloc3+Fs+dQqvAXSe+5lCer0F2zs=";
+  useFetchCargoVendor = true;
 
-  patches = [
-    ./unbounded-shifts.patch
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    rustPlatform.bindgenHook
-  ];
-
-  nativeInstallCheckInputs = [
-    protobuf
-    versionCheckHook
-  ];
+  cargoHash = "sha256-ynGp1MU0l48mD+gfsyOFNo4jJDiDWgoPLc02WblPjt4=";
 
   env = {
+    PROTOC = "${protobuf}/bin/protoc";
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
   };
@@ -56,12 +42,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
     mainProgram = "clash";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [ aucub ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}

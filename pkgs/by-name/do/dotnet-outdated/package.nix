@@ -1,8 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
 }:
 buildDotnetModule rec {
   pname = "dotnet-outdated";
@@ -10,7 +9,7 @@ buildDotnetModule rec {
 
   src = fetchFromGitHub {
     owner = "dotnet-outdated";
-    repo = "dotnet-outdated";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Ah5VOCIkSRkeDWk/KYHIc/OELo0T/HuJl0LEUiumlu0=";
   };
@@ -25,10 +24,7 @@ buildDotnetModule rec {
   executables = "dotnet-outdated";
 
   dotnetFlags = [ "-p:TargetFrameworks=net8.0" ];
-  dotnetInstallFlags = [
-    "--framework"
-    "net8.0"
-  ];
+  dotnetInstallFlags = [ "--framework" "net8.0" ];
 
   meta = with lib; {
     description = ".NET Core global tool to display and update outdated NuGet packages in a project";

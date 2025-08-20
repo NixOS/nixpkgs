@@ -4,13 +4,13 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libpq,
+  postgresql,
   libgcrypt,
   pam,
   libxcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pam_pgsql";
   version = "unstable-2020-05-05";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libgcrypt
     pam
-    libpq
+    postgresql
     libxcrypt
   ];
 

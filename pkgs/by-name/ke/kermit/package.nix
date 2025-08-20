@@ -39,8 +39,6 @@ stdenv.mkDerivation {
     make -f makefile install
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
-
   meta = with lib; {
     homepage = "https://www.kermitproject.org/ck90.html";
     description = "Portable Scriptable Network and Serial Communication Software";

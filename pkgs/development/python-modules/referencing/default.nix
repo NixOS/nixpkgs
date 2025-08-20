@@ -10,13 +10,12 @@
   pytestCheckHook,
   pythonOlder,
   rpds-py,
-  typing-extensions,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.36.2";
+    version = "0.35.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -26,7 +25,7 @@ let
       repo = "referencing";
       tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-VwViFiquacwJlELNDp01DRbtYQHOY4qXS2CjD7YmS6g=";
+      hash = "sha256-Ix0cpdOs7CtersdfW9daF/+BEJaV/na1WRTlYywUJV8=";
     };
 
     build-system = [
@@ -37,7 +36,6 @@ let
     dependencies = [
       attrs
       rpds-py
-      typing-extensions
     ];
 
     nativeCheckInputs = [
@@ -56,7 +54,7 @@ let
     meta = with lib; {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
-      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
+      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ fab ];
     };

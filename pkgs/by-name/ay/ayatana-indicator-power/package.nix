@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-power";
-  version = "24.5.2";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-power";
     tag = finalAttrs.version;
-    hash = "sha256-A9Kbs+qH01rkuLt8GINdPI2vCu0bCO+/g4kZhDj8GsY=";
+    hash = "sha256-M7BzyQRPKyXMEY0FTMBXsCemC3+w8upjTHApWkRf71I=";
   };
 
   postPatch = ''
@@ -51,19 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    libayatana-common
-    libnotify
-    librda
-    systemd
-  ]
-  ++ (with lomiri; [
-    cmake-extras
-    deviceinfo
-    lomiri-schemas
-    lomiri-sounds
-  ]);
+  buildInputs =
+    [
+      glib
+      libayatana-common
+      libnotify
+      librda
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      deviceinfo
+      lomiri-schemas
+      lomiri-sounds
+    ]);
 
   nativeCheckInputs = [
     dbus
@@ -93,10 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests = {
-      startup = nixosTests.ayatana-indicators;
-      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-power;
-    };
+    tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
 

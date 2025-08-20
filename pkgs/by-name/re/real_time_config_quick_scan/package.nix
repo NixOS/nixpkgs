@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "realTimeConfigQuickScan";
-  version = "0-unstable-2020-07-23";
+  version = "unstable-2020-07-23";
 
   src = fetchFromGitHub {
     owner = "raboof";
-    repo = "realTimeConfigQuickScan";
+    repo = pname;
     rev = "4697ba093d43d512b74a73b89531cb8c5adaa274";
     sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };

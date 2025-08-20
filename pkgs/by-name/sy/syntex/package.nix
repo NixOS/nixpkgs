@@ -4,7 +4,7 @@
   fetchFromGitHub,
   mono,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "syntex";
   version = "0.0pre20160915";
   src = fetchFromGitHub {

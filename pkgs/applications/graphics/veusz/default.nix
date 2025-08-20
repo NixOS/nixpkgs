@@ -2,29 +2,26 @@
   lib,
   python3Packages,
   fetchPypi,
-  qt6,
+  wrapQtAppsHook,
+  qtbase,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "veusz";
-  version = "4.1";
-  format = "setuptools";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s7TaDnt+nEIAmAqiZf9aYPFWVtSX22Ruz8eMpxMRr0U=";
+    sha256 = "whcaxF5LMEJNj8NSYeLpnb5uJboRl+vCQ1WxBrJjldE=";
   };
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     python3Packages.sip
     python3Packages.tomli
-    qt6.qmake
-    qt6.wrapQtAppsHook
   ];
 
-  dontUseQmakeConfigure = true;
-
-  buildInputs = [ qt6.qtbase ];
+  buildInputs = [ qtbase ];
 
   # veusz is a script and not an ELF-executable, so wrapQtAppsHook will not wrap
   # it automatically -> we have to do it explicitly
@@ -37,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   # really have a corresponding path, so patching the location of PyQt5 inplace
   postPatch = ''
     substituteInPlace pyqt_setuptools.py \
-      --replace-fail "get_path('platlib')" "'${python3Packages.pyqt5}/${python3Packages.python.sitePackages}'"
+      --replace "get_path('platlib')" "'${python3Packages.pyqt5}/${python3Packages.python.sitePackages}'"
     patchShebangs tests/runselftest.py
   '';
 
@@ -49,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     "--qt-libinfix="
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     numpy
-    pyqt6
+    pyqt5
     # optional requirements:
     dbus-python
     h5py
@@ -60,20 +57,16 @@ python3Packages.buildPythonApplication rec {
   ];
 
   installCheckPhase = ''
-    runHook preInstallCheck
-
     wrapQtApp "tests/runselftest.py"
     QT_QPA_PLATFORM=minimal tests/runselftest.py
-
-    runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Scientific plotting and graphing program with a GUI";
     mainProgram = "veusz";
     homepage = "https://veusz.github.io/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ laikq ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ laikq ];
   };
 }

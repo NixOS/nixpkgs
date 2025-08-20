@@ -7,7 +7,7 @@
   lwt,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "ctypes-foreign";
 
   inherit (ctypes) version src doCheck;

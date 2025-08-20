@@ -3,7 +3,7 @@
   fetchpatch,
   stdenv,
   lib,
-  replaceVars,
+  substituteAll,
   aspellWithDicts,
   at-spi2-core ? null,
   atspiSupport ? true,
@@ -15,6 +15,7 @@
   gtk3,
   hunspell,
   hunspellDicts,
+  hunspellWithDicts,
   intltool,
   isocodes,
   libappindicator-gtk3,
@@ -32,15 +33,17 @@
 
 let
 
-  customHunspell = hunspell.withDicts (di: [ di.en-us ]);
+  customHunspell = hunspellWithDicts [
+    hunspellDicts.en-us
+  ];
 
   majorVersion = "1.4";
 
 in
+
 python3.pkgs.buildPythonApplication rec {
   pname = "onboard";
   version = "${majorVersion}.1";
-  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
@@ -48,7 +51,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch { inherit mousetweaks; })
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit mousetweaks;
+    })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
 
@@ -67,8 +73,6 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/void-linux/void-packages/raw/9ef46bf26ac5acc1af5809f11c97b19c5e2233ed/srcpkgs/onboard/patches/fix-brokenformat.patch";
       hash = "sha256-r9mvJNWpPR1gsayuSSLpzIuafEKqtADYklre0Ju+KOM=";
     })
-
-    ./bool.patch
   ];
 
   nativeBuildInputs = [
@@ -94,8 +98,7 @@ python3.pkgs.buildPythonApplication rec {
     udev
     xorg.libXtst
     xorg.libxkbfile
-  ]
-  ++ lib.optional atspiSupport at-spi2-core;
+  ] ++ lib.optional atspiSupport at-spi2-core;
 
   pythonPath = with python3.pkgs; [
     dbus-python
@@ -106,7 +109,9 @@ python3.pkgs.buildPythonApplication rec {
     systemd
   ];
 
-  propagatedUserEnvPkgs = [ dconf ];
+  propagatedUserEnvPkgs = [
+    dconf
+  ];
 
   nativeCheckInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests

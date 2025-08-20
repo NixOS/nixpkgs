@@ -35,14 +35,6 @@ buildPythonPackage rec {
     hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
 
-  # https://beautiful-soup-4.readthedocs.io/en/latest/#method-names
-  postPatch = ''
-    sed 's/\<findAll\>/find_all/g' \
-      -i src/lexicon/_private/providers/*.py
-    sed 's/\<renderContents\>/encode_contents/g' \
-      -i src/lexicon/_private/providers/*.py
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -52,8 +44,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     tldextract
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     route53 = [ boto3 ];
@@ -75,10 +66,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-vcr
-  ]
-  ++ optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
-  enabledTestPaths = [ "tests/" ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTestPaths = [
     # Needs network access

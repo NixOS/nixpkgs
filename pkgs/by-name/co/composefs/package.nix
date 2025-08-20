@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.8";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nuQ3R/0eDS58HmN+0iXcYT5EtkY3J257EdtLir5vm4c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kbXmDdyRrtsERkUomjZUWP3QC2q27AWUTc/J2jCSXg4=";
   };
 
   strictDeps = true;
@@ -59,25 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     go-md2man
     pkg-config
   ];
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optional fuseSupport fuse3
-  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
-    libcap
-  ]);
+  buildInputs =
+    [ openssl ]
+    ++ lib.optional fuseSupport fuse3
+    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+      libcap
+    ]);
 
   doCheck = true;
-  nativeCheckInputs = [
-    python3
-    which
-  ]
-  ++ lib.optional enableValgrindCheck valgrind
-  ++ lib.optional fuseSupport fuse3
-  ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [
-    erofs-utils
-    fsverity-utils
-  ];
+  nativeCheckInputs =
+    [
+      python3
+      which
+    ]
+    ++ lib.optional enableValgrindCheck valgrind
+    ++ lib.optional fuseSupport fuse3
+    ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [
+      erofs-utils
+      fsverity-utils
+    ];
 
   mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
 

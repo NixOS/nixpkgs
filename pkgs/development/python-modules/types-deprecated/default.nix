@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-deprecated";
-  version = "1.2.15.20250304";
+  version = "1.2.15.20241117";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types_deprecated";
+    pname = "types-Deprecated";
     inherit version;
-    hash = "sha256-wykDBVMCneXMbLMPJpwR9OAOWYxCQSkBefY82n0z9xk=";
+    hash = "sha256-kkACyLf93sUbpJSXiKcCQRouNjbNmyozq9juEZcB134=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   # Modules has no tests
   doCheck = false;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Typing stubs for Deprecated";
     homepage = "https://pypi.org/project/types-Deprecated/";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

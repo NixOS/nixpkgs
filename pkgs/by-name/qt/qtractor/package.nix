@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtractor";
-  version = "1.5.7";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
-    hash = "sha256-dQcyba5QZRmi1GgFyTOmqzFiliBKyNu187xXM1+OnpI=";
+    hash = "sha256-Z32fOS8Um7x2iFy+2SlmsU8mrDLwboNSI4dm0RligBo=";
   };
 
   nativeBuildInputs = [

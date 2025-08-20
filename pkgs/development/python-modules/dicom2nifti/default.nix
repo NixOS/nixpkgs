@@ -2,22 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
+  pythonOlder,
+  pytestCheckHook,
   gdcm,
   nibabel,
   numpy,
   pydicom,
-  scipy,
-
-  # tests
-  pillow,
   pylibjpeg,
   pylibjpeg-libjpeg,
-  pytestCheckHook,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,22 +19,19 @@ buildPythonPackage rec {
   version = "2.5.1";
   pyproject = true;
 
+  disabled = pythonOlder "3.6";
+
   # no tests in PyPI dist
   src = fetchFromGitHub {
     owner = "icometrix";
-    repo = "dicom2nifti";
+    repo = pname;
     tag = version;
     hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_generic.py --replace-fail "from common" "from dicom2nifti.common"
-    substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
-  '';
-
   build-system = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     gdcm
     nibabel
     numpy
@@ -48,37 +39,24 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "dicom2nifti" ];
+  postPatch = ''
+    substituteInPlace tests/test_generic.py --replace-fail "from common" "from dicom2nifti.common"
+    substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
+  '';
 
   nativeCheckInputs = [
-    pillow
+    pytestCheckHook
     pylibjpeg
     pylibjpeg-libjpeg
-    pytestCheckHook
   ];
 
-  disabledTests = [
-    # OverflowError: Python integer -1024 out of bounds for uint16
-    "test_not_a_volume"
-    "test_resampling"
-    "test_validate_orthogonal_disabled"
+  pythonImportsCheck = [ "dicom2nifti" ];
 
-    # RuntimeError: Unable to decompress 'JPEG 2000 Image Compression (Lossless O...
-    "test_anatomical"
-    "test_compressed_j2k"
-    "test_main_function"
-    "test_rgb"
-
-    # Missing script 'dicom2nifti_scrip'
-    "test_gantry_option"
-    "test_gantry_resampling"
-  ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/icometrix/dicom2nifti";
     description = "Library for converting dicom files to nifti";
     mainProgram = "dicom2nifti";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

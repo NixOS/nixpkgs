@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Luculent font";
+    description = "luculent font";
     homepage = "http://www.eastfarthing.com/luculent/";
     license = licenses.ofl;
     maintainers = [ ];

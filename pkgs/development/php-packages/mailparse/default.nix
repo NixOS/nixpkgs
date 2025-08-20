@@ -7,8 +7,8 @@
 buildPecl {
   pname = "mailparse";
 
-  version = "3.1.8";
-  hash = "sha256-Wb6rTvhRdwxJW6egcmq0DgmBNUaaEdnI5mWwiclu/C8=";
+  version = "3.1.6";
+  hash = "sha256-pp8WBVg+q9tZws1MFzNLMmc5ih1H4f1+25LYvvne4Ag=";
 
   internalDeps = [ php.extensions.mbstring ];
   postConfigure = ''
@@ -19,6 +19,6 @@ buildPecl {
     description = "Mailparse is an extension for parsing and working with email messages";
     license = licenses.php301;
     homepage = "https://pecl.php.net/package/mailparse";
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 }

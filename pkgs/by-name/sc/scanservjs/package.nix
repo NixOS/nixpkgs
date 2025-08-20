@@ -3,14 +3,11 @@
   fetchFromGitHub,
   buildNpmPackage,
   fetchNpmDeps,
-  nodejs_20,
+  nodejs,
   replaceVars,
 }:
 
 let
-  # Build fails on node 22, presumably because of esm.
-  # https://github.com/NixOS/nixpkgs/issues/371649
-  nodejs = nodejs_20;
   version = "2.27.1";
   src = fetchFromGitHub {
     owner = "sbs20";

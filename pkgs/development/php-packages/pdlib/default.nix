@@ -26,6 +26,6 @@ buildPecl {
     description = "PHP extension for Dlib";
     license = with licenses; [ mit ];
     homepage = "https://github.com/goodspb/pdlib";
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 }

@@ -30,7 +30,7 @@ resholve.mkDerivation {
   src = fetchFromGitHub {
     owner = "sakai135";
     repo = "wsl-vpnkit";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-Igbr3L2W32s4uBepllSz07bkbI3qwAKMZkBrXLqGrGA=";
   };
 
@@ -75,12 +75,12 @@ resholve.mkDerivation {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Provides network connectivity to Windows Subsystem for Linux (WSL) when blocked by VPN";
     homepage = "https://github.com/sakai135/wsl-vpnkit";
     changelog = "https://github.com/sakai135/wsl-vpnkit/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ terlar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ terlar ];
     mainProgram = "wsl-vpnkit";
   };
 }

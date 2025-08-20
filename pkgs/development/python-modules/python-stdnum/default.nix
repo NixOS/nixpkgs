@@ -3,28 +3,31 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pytest-cov-stub,
+  pythonOlder,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "2.1";
+  version = "1.20";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
-    pname = "python_stdnum";
-    inherit version;
-    hash = "sha256-awFkWWnrPf1VBhoBFNWTdTzZ5lPOqQgxmLfuoSZEOXo=";
+    inherit pname version;
+    hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   optional-dependencies = {
     SOAP = [ zeep ];

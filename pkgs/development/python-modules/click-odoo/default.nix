@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   click,
-  fetchFromGitHub,
+  fetchPypi,
   lib,
   nix-update-script,
   setuptools-scm,
@@ -9,19 +9,17 @@
 
 buildPythonPackage rec {
   pname = "click-odoo";
-  version = "1.7.0";
+  version = "1.6.0";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "acsone";
-    repo = "click-odoo";
-    tag = version;
-    hash = "sha256-lNhhaUTFbvUTkMpTZZmTSVjhh/I43l9AeWvx8YzB8OA=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-zyfgsHzIoz4lnqANe63b2oqgD/oxBbTbJYEedfSHWQ8=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   passthru.updateScript = nix-update-script { };
 

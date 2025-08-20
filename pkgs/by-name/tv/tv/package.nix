@@ -10,19 +10,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "uzimaru0000";
-    repo = "tv";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-qODv45smZ6jHCJBaa6EEvFLG+7g+FWrRf6BiHRFLzqM=";
   };
 
-  cargoHash = "sha256-pg8u+1C68ilg0uhszQnsN1bRbniJd39yQHujerQx+mI=";
+  cargoHash = "sha256-nI4n4KMPLaIF978b5VvW3mb02vKW+r39nllrhukJilI=";
 
-  meta = {
+  meta = with lib; {
     description = "Format json into table view";
     mainProgram = "tv";
     homepage = "https://github.com/uzimaru0000/tv";
     changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

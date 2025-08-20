@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/hitori/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GTK application to generate and let you play games of Hitori";
     mainProgram = "hitori";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

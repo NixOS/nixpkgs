@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chmlib";
   version = "0.40a";
 
@@ -18,14 +18,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env = {
+  env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
-
-  configureFlags = [
-    "--enable-examples"
-    "--enable-devel"
-  ];
 
   meta = with lib; {
     homepage = "http://www.jedrea.com/chmlib";

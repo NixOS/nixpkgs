@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -17,7 +16,6 @@
   six,
   trimesh,
   pytestCheckHook,
-  mesa,
 }:
 
 buildPythonPackage rec {
@@ -79,15 +77,10 @@ buildPythonPackage rec {
 
   env.PYOPENGL_PLATFORM = "egl"; # enables headless rendering during check
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-    mesa.llvmpipeHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook) [
-    # requires opengl context
+  disabledTestPaths = [
+    # does not work inside sandbox, no GPU
     "tests/unit/test_offscreen.py"
   ];
 

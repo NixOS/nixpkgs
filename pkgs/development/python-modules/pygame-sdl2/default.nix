@@ -1,73 +1,68 @@
 {
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
   lib,
-  libjpeg,
-  libpng,
-  nix-update-script,
+  buildPythonPackage,
+  fetchurl,
+  isPy27,
+  renpy,
+  cython_0,
   SDL2,
   SDL2_image,
-  SDL2_mixer,
   SDL2_ttf,
+  SDL2_mixer,
+  libjpeg,
+  libpng,
   setuptools,
 }:
-
-buildPythonPackage rec {
+let
   pname = "pygame-sdl2";
-  version = "8.4.0.25071206";
+  version = "2.1.0";
+  renpy_version = renpy.base_version;
+in
+
+buildPythonPackage {
+  inherit pname version;
+  name = "${pname}-${version}-${renpy_version}";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "renpy";
-    repo = "pygame_sdl2";
-    tag = "renpy-${version}";
-    hash = "sha256-I4zk19aNfVZstkVDLkwI/TBXliGAqVmOjeQLbRFri8Y=";
+  src = fetchurl {
+    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}+renpy${renpy_version}.tar.gz";
+    hash = "sha256-bcTrdXWLTCnZQ/fP5crKIPoqJiyz+o6s0PzRChV7TQE=";
   };
 
-  build-system = [
-    cython
-    SDL2
+  # force rebuild of headers needed for install
+  prePatch = ''
+    rm -rf gen gen3
+  '';
+
+  # Remove build tag which produces invaild version
+  postPatch = ''
+    sed -i '2d' setup.cfg
+  '';
+
+  nativeBuildInputs = [
+    SDL2.dev
+    cython_0
     setuptools
   ];
 
-  dependencies = [
-    libjpeg
-    libpng
+  buildInputs = [
     SDL2
     SDL2_image
-    SDL2_mixer
     SDL2_ttf
+    SDL2_mixer
+    libjpeg
+    libpng
   ];
 
-  doCheck = true;
-
-  postUnpack = ''
-    substituteInPlace source/setup.py --replace-fail "2.1.0" "${version}"
-    substituteInPlace source/src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
-      builtins.replaceStrings [ "." ] [ ", " ] version
-    }"
-
-    headers=$(mktemp -d)
-    substituteInPlace source/setup.py --replace-fail \
-      "pathlib.Path(sysconfig.get_paths()['include']) / \"pygame_sdl2\"" \
-      "pathlib.Path(\"$headers\")"
-  '';
-
-  postInstall = ''
-    install -Dm644 $headers/* -t $out/include/pygame_sdl2
-  '';
-
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=renpy-(.*)" ]; };
+  doCheck = isPy27; # python3 tests are non-functional
 
   meta = {
-    description = "Reimplementation of the Pygame API using SDL2 and related libraries";
+    description = "Reimplementation of parts of pygame API using SDL2";
     homepage = "https://github.com/renpy/pygame_sdl2";
     license = with lib.licenses; [
       lgpl2
       zlib
     ];
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ raskin ];
   };
 }

@@ -5,34 +5,30 @@
   fetchFromGitHub,
   cmake,
   asciidoc,
-  pkg-config,
-  db,
-  curl,
   jemalloc,
-  boost186,
+  boost,
   fmt,
   fuse3,
   spdlog,
   yaml-cpp,
   isa-l,
   judy,
-  prometheus-cpp,
-  libz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.11.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZQ0+jiVpHZhAOdYneKkPi3M45LU9xj2FBbqo6VcD0JY=";
+    hash = "sha256-uPHgyCL4/HYjoIm1Ev5p7lXAf1KlpV/OAqLVhu5Ang4=";
   };
 
   patches = [
     ./sfstool.patch
+
   ];
 
   outputs = [
@@ -44,21 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     asciidoc
-    pkg-config
   ];
   buildInputs = [
-    db
-    curl
     fmt
     spdlog
     yaml-cpp
     fuse3
-    boost186
+    boost
     jemalloc
     isa-l
     judy
-    prometheus-cpp
-    libz
   ];
 
   cmakeFlags = [

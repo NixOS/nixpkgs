@@ -5,8 +5,10 @@
   pkg-config,
   openssl,
   sqlite,
+  stdenv,
+  darwin,
   mpv,
-  yt-dlp,
+  youtube-dl,
   makeBinaryWrapper,
 }:
 
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f/23PVk4bpUCvcQ25iNI/UVXqiPBzPKWq6OohVF41p8=";
   };
 
-  cargoHash = "sha256-I+ciLSMvV9EqlfA1+/IC1w7pWpj9HHF/DTfAbKw2CVM=";
+  cargoHash = "sha256-766Wev2/R/9LLlWWxOPl6y4CBRUU4hUrTDlVVuoJ8C8=";
 
   checkFlags = [
     "--skip=tests::display_config_path"
@@ -33,15 +35,20 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    mpv
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      mpv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/ytui_music \
-      --prefix PATH : ${lib.makeBinPath [ yt-dlp ]}
+      --prefix PATH : ${lib.makeBinPath [ youtube-dl ]}
   '';
 
   doInstallCheck = true;

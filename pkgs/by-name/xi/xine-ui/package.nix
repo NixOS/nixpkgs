@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Xlib-based frontend for Xine video player";
     license = lib.licenses.gpl2Plus;
     mainProgram = "xine";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

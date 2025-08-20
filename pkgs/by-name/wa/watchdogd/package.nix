@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) watchdogd; };
 
-  meta = {
+  meta = with lib; {
     description = "Advanced system & process supervisor for Linux";
     homepage = "https://troglobit.com/watchdogd.html";
     changelog = "https://github.com/troglobit/watchdogd/releases/tag/${version}";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ vifino ];
+    license = licenses.isc;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ vifino ];
   };
 }

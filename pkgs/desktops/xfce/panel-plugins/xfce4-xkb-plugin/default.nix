@@ -1,12 +1,6 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
+  mkXfceDerivation,
   gtk3,
   libnotify,
   librsvg,
@@ -17,35 +11,18 @@
   libxfce4util,
   xfce4-panel,
   xfconf,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "panel-plugins";
   pname = "xfce4-xkb-plugin";
-  version = "0.9.0";
-
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "panel-plugins";
-    repo = "xfce4-xkb-plugin";
-    tag = "xfce4-xkb-plugin-${finalAttrs.version}";
-    hash = "sha256-yLlUKp7X8bylJs7ioQJ36mfqFlsiZXOgFXa0ZP7AG1E=";
-  };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    gettext
-    meson
-    ninja
-    pkg-config
-  ];
+  version = "0.8.5";
+  sha256 = "sha256-oG3+OudjJIXfGII16bYaIGy4QMno00HX3kX+8H0VUcU=";
 
   buildInputs = [
     garcon
-    glib
     gtk3
-    libnotify
+    libnotify # optional notification support
     librsvg
     libxfce4ui
     libxfce4util
@@ -55,13 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     xfconf
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-xkb-plugin-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Allows you to setup and use multiple keyboard layouts";
-    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-xkb-plugin";
-    license = lib.licenses.gpl2Plus;
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

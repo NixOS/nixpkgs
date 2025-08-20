@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "cloudflare-utils";
-  version = "1.4.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
     rev = "v${version}";
-    hash = "sha256-/vausJEe5g6Txgq1z7oUUku0w6sd/mmYcZQ8D7dZ03E=";
+    hash = "sha256-Wa8YCwOY7kwKJmME5hWpEGrC8bxjgVnli1GUwKLyFJg=";
   };
 
-  vendorHash = "sha256-/kbXAljCe07dC/jL4RMeN8tKXhSPMxXY33CqBDySA8w=";
+  vendorHash = "sha256-hoU+GSJHBZtb29jJbeuaFQSn496b1xLzXJtBCbKEcYE=";
 
   meta = {
     description = "Helpful Cloudflare utility program";

@@ -1,28 +1,29 @@
 {
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "pg_uuidv7";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "fboulnois";
     repo = "pg_uuidv7";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-lG6dCnbLALnfQc4uclqXXXfYjK/WXLV0lo5I8l1E5p4=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tiny Postgres extension to create version 7 UUIDs";
     homepage = "https://github.com/fboulnois/pg_uuidv7";
     changelog = "https://github.com/fboulnois/pg_uuidv7/blob/main/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = with maintainers; [ gaelreyrol ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.mpl20;
-    broken = lib.versionOlder postgresql.version "13";
+    license = licenses.mpl20;
+    broken = versionOlder postgresql.version "13";
   };
-})
+}

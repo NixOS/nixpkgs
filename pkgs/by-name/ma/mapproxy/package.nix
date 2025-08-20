@@ -1,33 +1,28 @@
 {
   lib,
+  python3,
   fetchFromGitHub,
-
-  python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "mapproxy";
-  version = "5.0.0";
-  pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = version;
-    hash = "sha256-+L9ZTgWh4E5cUGeP0rTclDbnqIzc/DlHvIXR+kDcjm8=";
+    hash = "sha256-Dltr4JlgE1aJfSybTbAxlUyjqkfaobupNNSj90j9taE=";
   };
 
   prePatch = ''
-    substituteInPlace mapproxy/util/ext/serving.py --replace-warn "args = [sys.executable] + sys.argv" "args = sys.argv"
+    substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
-  build-system = with python3Packages; [ setuptools ];
-
-  pythonRemoveDeps = [ "future" ];
-
-  dependencies = with python3Packages; [
+  dependencies = [
     boto3 # needed for caches service
+    future
     jsonschema
     pillow
     pyyaml
@@ -35,21 +30,22 @@ python3Packages.buildPythonApplication rec {
     shapely
     gdal
     lxml
+    setuptools
     werkzeug
   ];
-
   # Tests are disabled:
   # 1) Dependency list is huge.
   #    https://github.com/mapproxy/mapproxy/blob/master/requirements-tests.txt
+  #
+  # 2) There are security issues with package Riak
+  #    https://github.com/NixOS/nixpkgs/issues/33876
+  #    https://github.com/NixOS/nixpkgs/pull/56480
   doCheck = false;
-
-  pythonImportsCheck = [ "mapproxy" ];
 
   meta = {
     description = "Open source proxy for geospatial data";
     homepage = "https://mapproxy.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rakesh4g ];
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
   };
 }

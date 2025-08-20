@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/arp242/uni";
     description = "Query the Unicode database from the commandline, with good support for emojis";
     changelog = "https://github.com/arp242/uni/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chvp ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ chvp ];
     mainProgram = "uni";
   };
 }

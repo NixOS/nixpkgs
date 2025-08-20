@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ec2stepshell";
-  version = "0-unstable-2023-04-07";
+  version = "unstable-2023-04-07";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -37,12 +37,12 @@ python3.pkgs.buildPythonApplication rec {
     "ec2stepshell"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "AWS post-exploitation tool";
     mainProgram = "ec2stepshell";
     homepage = "https://github.com/saw-your-packet/EC2StepShell";
     changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${version}/CHANGELOG.txt";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -3,13 +3,11 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  gettext,
   pkg-config,
   intltool,
   glib,
   gnome,
   gtk3,
-  gtk-doc,
   gnupg,
   gpgme,
   dbus-glib,
@@ -33,9 +31,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    dbus-glib # dbus-binding-tool
-    gtk3 # AM_GLIB_GNU_GETTEXT
-    gtk-doc
     intltool
     autoreconfHook
   ];
@@ -49,15 +44,7 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ dbus-glib ];
 
-  env.GNUPG = lib.getExe gnupg;
-  env.GPGME_CONFIG = lib.getExe' (lib.getDev gpgme) "gpgme-config";
-
   enableParallelBuilding = true;
-
-  preAutoreconf = ''
-    # error: possibly undefined macro: AM_NLS
-    cp ${gettext}/share/gettext/m4/nls.m4 m4
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -72,8 +59,5 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
-    # cannot open shared object file: No such file or directory
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

@@ -56,8 +56,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-      }
-      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+      } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
         DynamicUser = true;

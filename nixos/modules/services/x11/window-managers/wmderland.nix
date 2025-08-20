@@ -62,7 +62,6 @@ in
     environment.systemPackages = [
       pkgs.wmderland
       pkgs.wmderlandc
-    ]
-    ++ cfg.extraPackages;
+    ] ++ cfg.extraPackages;
   };
 }

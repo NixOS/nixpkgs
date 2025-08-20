@@ -7,10 +7,9 @@
 python3Packages.buildPythonApplication rec {
   pname = "mutmut";
   version = "3.2.0";
-  pyproject = true;
 
   src = fetchFromGitHub {
-    repo = "mutmut";
+    repo = pname;
     owner = "boxed";
     tag = version;
     hash = "sha256-+e2FmfpGtK401IW8LNqeHk0v8Hh5rF3LbZJkSOJ3yPY=";
@@ -24,9 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     click
     parso
     junit-xml
@@ -34,15 +31,13 @@ python3Packages.buildPythonApplication rec {
     textual
   ];
 
-  pythonImportsCheck = [ "mutmut" ];
-
-  meta = {
-    description = "Mutation testing system for Python, with a strong focus on ease of use";
+  meta = with lib; {
+    description = "mutation testing system for Python, with a strong focus on ease of use";
     mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       l0b0
       synthetica
     ];

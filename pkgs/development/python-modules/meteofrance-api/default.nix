@@ -8,27 +8,35 @@
   pytz,
   requests,
   requests-mock,
+  typing-extensions,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "meteofrance-api";
-  version = "1.4.0";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "meteofrance-api";
     tag = "v${version}";
-    hash = "sha256-5zqmzPbzC9IUZ+y1FRh+u1gds/ZdGeRm5/ajQf8UKTQ=";
+    hash = "sha256-uSrVK6LwCDyvsjzGl4xQd8585Hl6sp2Ua9ly0wqnC1Y=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  dependencies = [
+  pythonRelaxDeps = [ "urllib3" ];
+
+  propagatedBuildInputs = [
     pytz
     requests
+    typing-extensions
+    urllib3
   ];
 
   nativeCheckInputs = [
@@ -56,10 +64,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to access information from the Meteo-France API";
+    mainProgram = "meteofrance-api";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
     changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "meteofrance-api";
   };
 }

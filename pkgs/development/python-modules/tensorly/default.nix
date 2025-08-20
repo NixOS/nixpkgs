@@ -17,8 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "tensorly";
-    repo = "tensorly";
+    owner = pname;
+    repo = pname;
     tag = version;
     hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
   };
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "tensorly.contrib"
   ];
 
-  enabledTestPaths = [ "tensorly" ];
+  pytestFlagsArray = [ "tensorly" ];
 
   disabledTests = [
     # this can fail on hydra and other peoples machines, check with others before re-enabling

@@ -72,7 +72,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Object-oriented JSON Schema implementation for Python";
+    description = "An object-oriented JSON Schema implementation for Python";
     homepage = "https://github.com/marksparkza/jschon";
     changelog = "https://github.com/marksparkza/jschon/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

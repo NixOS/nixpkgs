@@ -1,32 +1,35 @@
 {
   lib,
-  versionCheckHook,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   zlib,
   geoip,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "mirrorbits";
-  version = "0.6.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "etix";
     repo = "mirrorbits";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-PqPE/PgIyQylbYoABC/saxLF83XjgRAS0QimragJ8P8=";
+    rev = "v${version}";
+    hash = "sha256-Ta3+Y3P74cvx09Z4rB5ObgBZtfF4grVgyeZ57yFPlGM=";
   };
 
-  postPatch = ''
-    rm -rf vendor
-  '';
+  vendorHash = null;
 
-  vendorHash = "sha256-cdD9RvOtgN/SHtgrtrucnUI+nnO/FabUyPRdvgoL44o=";
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/etix/mirrorbits/commit/955a8b2e1aacea1cae06396a64afbb531ceb36d4.patch";
+      hash = "sha256-KJgj3ynnjjiXG5qsUmzBiMjGEwfvM/9Ap+ZgUdhclik=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
     zlib
     geoip
@@ -37,15 +40,10 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/etix/mirrorbits/core.VERSION=${finalAttrs.version}"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
-
-  meta = {
-    description = "Geographical download redirector for distributing files efficiently across a set of mirrors";
+  meta = with lib; {
+    description = "geographical download redirector for distributing files efficiently across a set of mirrors";
     homepage = "https://github.com/etix/mirrorbits";
     longDescription = ''
       Mirrorbits is a geographical download redirector written in Go for
@@ -55,8 +53,8 @@ buildGoModule (finalAttrs: {
       the distribution of large-scale Open-Source projects with a lot
       of traffic.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fpletz ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fpletz ];
     mainProgram = "mirrorbits";
   };
-})
+}

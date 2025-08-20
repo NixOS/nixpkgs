@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tangram";
-  version = "3.3";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
-    tag = "v${version}";
-    hash = "sha256-OtQN8Iigu92iKa7CAaslIpbS0bqJ9Vus++inrgV/eeM=";
+    rev = "v${version}";
+    hash = "sha256-vN9zRc8Ac9SI0lIcuf01A2WLqLGtV3DUiNzCSmc2ri4=";
     fetchSubmodules = true;
   };
 
@@ -51,23 +51,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gjs
-    glib
-    glib-networking
-    gsettings-desktop-schemas
-    gtk4
-    libadwaita
-    webkitgtk_6_0
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      gdk-pixbuf
+      gjs
+      glib
+      glib-networking
+      gsettings-desktop-schemas
+      gtk4
+      libadwaita
+      webkitgtk_6_0
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+    ]);
 
   dontPatchShebangs = true;
 
@@ -93,10 +94,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      austinbutler
-      chuangzhu
-    ];
-    teams = [ lib.teams.gnome-circle ];
+    maintainers =
+      with maintainers;
+      [
+        austinbutler
+        chuangzhu
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

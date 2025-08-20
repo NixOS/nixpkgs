@@ -11,7 +11,6 @@
   peewee,
   pytest-django,
   pytestCheckHook,
-  pytest-cov-stub,
   six,
   sqlalchemy,
   webtest,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
     peewee
     pytest-django
     pytestCheckHook
-    pytest-cov-stub
     sqlalchemy
     webtest
   ];
@@ -57,7 +55,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "python_paths" "pythonpath"
+      --replace "python_paths" "pythonpath" \
+      --replace "--cov nplusone --cov-report term-missing" ""
   '';
 
   disabledTests = [

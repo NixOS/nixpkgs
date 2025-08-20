@@ -1,61 +1,46 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  stdenv,
-  apple-sdk,
-  versionCheckHook,
-  nix-update-script,
-  ...
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, otel-desktop-viewer
+, stdenv
+, apple-sdk_12
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "otel-desktop-viewer";
-  version = "0.2.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qvMpebhbg/OnheZIZBoiitGYUUMdTghSwEapblE0DkA=";
+    rev = "v${version}";
+    hash = "sha256-kMgcco4X7X9WoCCH8iZz5qGr/1dWPSeQOpruTSUnonI=";
   };
 
-  # NOTE: This project uses Go workspaces, but 'buildGoModule' does not support
-  # them at the time of writing; trying to build with 'env.GOWORK = "off"'
-  # fails with the following error message:
-  #
-  #     main module (github.com/CtrlSpice/otel-desktop-viewer) does not contain package github.com/CtrlSpice/otel-desktop-viewer/desktopexporter
-  #
-  # cf. https://github.com/NixOS/nixpkgs/issues/203039
-  proxyVendor = true;
-  vendorHash = "sha256-1TH9JQDnvhi+b3LDCAooMKgYhPudM7NCNCc+WXtcv/4=";
+  # https://github.com/CtrlSpice/otel-desktop-viewer/issues/139
+  patches = [ ./version-0.1.4.patch ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${finalAttrs.version}"
-  ];
+  subPackages = [ "..." ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk ];
+  vendorHash = "sha256-pH16DCYeW8mdnkkRi0zqioovZu9slVc3gAdhMYu2y98=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  ldflags = [ "-s" "-w" ];
 
-  passthru.updateScript = nix-update-script { };
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12;
 
-  meta = {
-    changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${finalAttrs.version}";
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = otel-desktop-viewer;
+    command = "otel-desktop-viewer --version";
+  };
+
+  meta = with lib; {
+    changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${version}";
     description = "Receive & visualize OpenTelemtry traces locally within one CLI tool";
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-      jkachmar
-      lf-
-    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ gaelreyrol ];
     mainProgram = "otel-desktop-viewer";
   };
-})
+}

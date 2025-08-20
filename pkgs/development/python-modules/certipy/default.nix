@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "certipy";
-  version = "0.2.2";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/vHz2IGe4pxMZ3GRccmIMCgj3+C2z7tH0knzdICboF4=";
+    hash = "sha256-DA6nslJItC+5MPMBc6eMAp5rpn4u+VmMpEcNiXXJy7Y=";
   };
 
   build-system = [ setuptools-scm ];

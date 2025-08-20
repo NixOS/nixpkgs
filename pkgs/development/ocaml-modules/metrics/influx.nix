@@ -6,7 +6,7 @@
   lwt,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "metrics-influx";
   inherit (metrics) version src;
 

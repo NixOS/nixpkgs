@@ -6,7 +6,7 @@
   scdoc,
   tzdata,
   mailcap,
-  replaceVars,
+  substituteAll,
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
@@ -23,7 +23,8 @@ assert
     inherit (lib) intersectLists platforms concatStringsSep;
     workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
   in
-  lib.assertMsg (enableCrossCompilation -> isLinux && is64bit) ''
+  (enableCrossCompilation -> !(isLinux && is64bit))
+  -> builtins.throw ''
     The cross-compilation toolchains may only be enabled on the following platforms:
     ${concatStringsSep "\n" workingPlatforms}
   '';
@@ -91,19 +92,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Replace FHS paths with nix store
-    (replaceVars ./001-tzdata.patch {
+    (substituteAll {
+      src = ./001-tzdata.patch;
       inherit tzdata;
     })
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
     # Hardcode harec and qbe.
-    (replaceVars ./003-hardcode-qbe-and-harec.patch {
+    (substituteAll {
+      src = ./003-hardcode-qbe-and-harec.patch;
       harec_bin = lib.getExe harec;
       qbe_bin = lib.getExe qbe;
     })
     # Use mailcap `/etc/mime.types` for Hare's mime module
-    (replaceVars ./004-use-mailcap-for-mimetypes.patch {
+    (substituteAll {
+      src = ./004-use-mailcap-for-mimetypes.patch;
       inherit mailcap;
     })
   ];
@@ -133,8 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ]
-  ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
+  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 

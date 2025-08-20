@@ -38,13 +38,14 @@ stdenv.mkDerivation rec {
     check
     pkg-config
   ];
-  buildInputs = [
-    file
-    protobufc
-  ]
-  ++ lib.optional withWolfSSL wolfssl
-  ++ lib.optional withGnuTLS gnutls
-  ++ lib.optional withJSON json_c;
+  buildInputs =
+    [
+      file
+      protobufc
+    ]
+    ++ lib.optional withWolfSSL wolfssl
+    ++ lib.optional withGnuTLS gnutls
+    ++ lib.optional withJSON json_c;
 
   configureFlags =
     [ ] ++ lib.optional withWolfSSL "--with-tls=wolfssl" ++ lib.optional withGnuTLS "--with-tls=gnutls";
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
-    license = licenses.eupl12;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ pradeepchhetri ];
     platforms = platforms.linux;
   };

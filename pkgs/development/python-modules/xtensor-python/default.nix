@@ -1,7 +1,7 @@
 {
   lib,
-  stdenv,
   toPythonModule,
+  stdenv,
   fetchFromGitHub,
   cmake,
   gtest,
@@ -13,23 +13,23 @@
 toPythonModule (
   stdenv.mkDerivation (finalAttrs: {
     pname = "xtensor-python";
-    version = "0.28.0";
+    version = "0.27.0";
 
     src = fetchFromGitHub {
       owner = "xtensor-stack";
       repo = "xtensor-python";
-      tag = finalAttrs.version;
-      hash = "sha256-xByqAYtSRKOnllMUFdRM25bXGft/43EEpEMIlcjdrgE=";
+      rev = finalAttrs.version;
+      hash = "sha256-Cy/aXuiriE/qxSd4Apipzak30DjgE7jX8ai1ThJ/VnE=";
     };
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ pybind11 ];
     nativeCheckInputs = [ gtest ];
-    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    doCheck = true;
     cmakeFlags = [
       # Always build the tests, even if not running them, because testing whether
       # they can be built is a test in itself.
-      (lib.cmakeBool "BUILD_TESTS" true)
+      "-DBUILD_TESTS=ON"
     ];
 
     propagatedBuildInputs = [
@@ -39,11 +39,11 @@ toPythonModule (
 
     checkTarget = "xtest";
 
-    meta = {
+    meta = with lib; {
       homepage = "https://github.com/xtensor-stack/xtensor-python";
       description = "Python bindings for the xtensor C++ multi-dimensional array library";
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ lsix ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ lsix ];
     };
   })
 )

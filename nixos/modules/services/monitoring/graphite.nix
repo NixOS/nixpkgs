@@ -34,8 +34,7 @@ let
     SEYREN_URL = cfg.seyren.seyrenUrl;
     MONGO_URL = cfg.seyren.mongoUrl;
     GRAPHITE_URL = cfg.seyren.graphiteUrl;
-  }
-  // cfg.seyren.extraConfig;
+  } // cfg.seyren.extraConfig;
 
   configDir = pkgs.buildEnv {
     name = "graphite-config";
@@ -293,7 +292,7 @@ in
           serviceConfig = {
             Slice = "system-graphite.slice";
             RuntimeDirectory = name;
-            ExecStart = "${lib.getExe' pkgs.python3Packages.twisted "twistd"} ${carbonOpts name}";
+            ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
             User = "graphite";
             Group = "graphite";
             PermissionsStartOnly = true;
@@ -320,7 +319,7 @@ in
           serviceConfig = {
             Slice = "system-graphite.slice";
             RuntimeDirectory = name;
-            ExecStart = "${lib.getExe' pkgs.python3Packages.twisted "twistd"} ${carbonOpts name}";
+            ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
             User = "graphite";
             Group = "graphite";
             PIDFile = "/run/${name}/${name}.pid";
@@ -341,7 +340,7 @@ in
           serviceConfig = {
             Slice = "system-graphite.slice";
             RuntimeDirectory = name;
-            ExecStart = "${lib.getExe' pkgs.python3Packages.twisted "twistd"} ${carbonOpts name}";
+            ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
             User = "graphite";
             Group = "graphite";
             PIDFile = "/run/${name}/${name}.pid";
@@ -385,7 +384,7 @@ in
         };
         serviceConfig = {
           ExecStart = ''
-            ${lib.getExe pkgs.python3Packages.waitress-django} \
+            ${pkgs.python3Packages.waitress-django}/bin/waitress-serve-django \
               --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
           '';
           User = "graphite";
@@ -398,7 +397,7 @@ in
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            ${lib.getExe' pkgs.python3Packages.django "django-admin"} migrate --noinput
+            ${pkgs.python3Packages.django}/bin/django-admin.py migrate --noinput
 
             chown -R graphite:graphite ${dataDir}
 
@@ -408,7 +407,7 @@ in
           # Only collect static files when graphite_web changes.
           if ! [ "${dataDir}/current_graphite_web" -ef "${pkgs.python3Packages.graphite-web}" ]; then
             mkdir -p ${staticDir}
-            ${lib.getExe' pkgs.python3Packages.django "django-admin"} collectstatic  --noinput --clear
+            ${pkgs.python3Packages.django}/bin/django-admin.py collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
             ln -sfT "${pkgs.python3Packages.graphite-web}" "${dataDir}/current_graphite_web"
           fi
@@ -428,7 +427,7 @@ in
         ];
         environment = seyrenConfig;
         serviceConfig = {
-          ExecStart = "${lib.getExe pkgs.seyren} -httpPort ${toString cfg.seyren.port}";
+          ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
           WorkingDirectory = dataDir;
           User = "graphite";
           Group = "graphite";

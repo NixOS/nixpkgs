@@ -9,33 +9,24 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   webargs,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "3.0.0b2";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "maximdanilchenko";
-    repo = "aiohttp-apispec";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-C+/M25oCLTNGGEUj2EyXn3UjcvPvDYFmmUW8IOoF1uU=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/conftest.py \
-      --replace-fail 'aiohttp_app(loop,' 'aiohttp_app(event_loop,' \
-      --replace-fail 'return loop.run_until_complete' 'return event_loop.run_until_complete'
-  '';
-
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     apispec
     jinja2

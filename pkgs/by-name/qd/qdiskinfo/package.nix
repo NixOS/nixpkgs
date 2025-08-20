@@ -8,7 +8,6 @@
   qt6,
   qdiskinfo,
   themeBundle ? null,
-  nix-update-script,
 }:
 
 let
@@ -36,13 +35,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdiskinfo";
-  version = "0.4";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
     tag = finalAttrs.version;
-    hash = "sha256-FufbF0oEqpYgXnfzUZJ3tTN2jJoIQX4UB3yURRV7y00=";
+    hash = "sha256-0zF3Nc5K8+K68HOSy30ieYvYP9/oSkTe0+cp0hVo9Gs=";
   };
 
   nativeBuildInputs = [
@@ -58,16 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "MinSizeRel";
 
-  cmakeFlags = [
-    "-DQT_VERSION_MAJOR=6"
-  ]
-  ++ lib.optionals isThemed [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
-  ++ (
-    if themeBundle'.rightCharacter then
-      [ "-DCHARACTER_IS_RIGHT=ON" ]
-    else
-      [ "-DCHARACTER_IS_RIGHT=OFF" ]
-  );
+  cmakeFlags =
+    [
+      "-DQT_VERSION_MAJOR=6"
+    ]
+    ++ lib.optionals isThemed [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
+    ++ (
+      if themeBundle'.rightCharacter then
+        [ "-DCHARACTER_IS_RIGHT=ON" ]
+      else
+        [ "-DCHARACTER_IS_RIGHT=OFF" ]
+    );
 
   postUnpack = ''
     cp -r $sourceRoot $TMPDIR/src
@@ -103,17 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
         themeName: themeBundle:
         (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
       );
-      updateScript = nix-update-script { };
     };
 
   meta = {
     description = "CrystalDiskInfo alternative for Linux";
     homepage = "https://github.com/edisionnano/QDiskInfo";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      roydubnium
-      ryand56
-    ];
+    maintainers = with lib.maintainers; [ roydubnium ];
     platforms = lib.platforms.linux;
     mainProgram = "QDiskInfo";
   };

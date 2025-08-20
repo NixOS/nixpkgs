@@ -6,6 +6,7 @@
   rustPlatform,
   installShellFiles,
   libiconv,
+  darwin,
   nix-update-script,
   pkg-config,
   openssl,
@@ -21,14 +22,14 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "9999years";
-    repo = "git-gr";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
+  cargoHash = "sha256-oukVU3YZMI2Z6HqIrEe2npmCj9PtwQUT6VOPkklM0Ig=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage {
     lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   postInstall = lib.optionalString canRunGitGr ''
@@ -53,12 +56,12 @@ rustPlatform.buildRustPackage {
       --zsh <(${gitGr} completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/9999years/git-gr";
     changelog = "https://github.com/9999years/git-gr/releases/tag/v${version}";
     description = "Gerrit CLI client";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers._9999years ];
+    license = [ licenses.mit ];
+    maintainers = [ maintainers._9999years ];
     mainProgram = "git-gr";
   };
 

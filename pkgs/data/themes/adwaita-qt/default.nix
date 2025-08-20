@@ -33,18 +33,19 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
-  ]
-  ++ lib.optionals (!useQt6) [
-    qt5.qtx11extras
-  ]
-  ++ lib.optionals useQt6 [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libxcb
+    ]
+    ++ lib.optionals (!useQt6) [
+      qt5.qtx11extras
+    ]
+    ++ lib.optionals useQt6 [
+      qtwayland
+    ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
   dontWrapQtApps = true;

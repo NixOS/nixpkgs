@@ -1,10 +1,5 @@
 # Bamf
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 {
   meta = with lib; {
     maintainers = with lib.maintainers; [ ];

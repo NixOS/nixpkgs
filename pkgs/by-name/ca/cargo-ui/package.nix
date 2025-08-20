@@ -10,6 +10,7 @@
   fontconfig,
   libGL,
   xorg,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,26 +22,30 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-M/ljgtTHMSc7rY/a8CpKGNuOSdVDwRt6+tzPPHdpKOw=";
   };
 
-  cargoHash = "sha256-odcyKOveYCWQ35uh//s19Jtq7OqiUnkeqbh90VWHp9A=";
+  cargoHash = "sha256-u3YqXQZCfveSBjxdWb+GC0IA9bpruAYQdxX1zanT3fw=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    expat
-    fontconfig
-    libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
-  ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      expat
+      fontconfig
+      libGL
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libxcb
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cargo-ui \
@@ -56,17 +61,17 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = {
+  meta = with lib; {
     description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       asl20
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       figsoda
       matthiasbeyer
     ];

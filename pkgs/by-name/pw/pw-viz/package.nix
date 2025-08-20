@@ -1,16 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  libxkbcommon,
-  pipewire,
-  wayland,
-  xorg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, expat
+, fontconfig
+, freetype
+, libGL
+, libxkbcommon
+, pipewire
+, wayland
+, xorg
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,12 +18,17 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ax9d";
-    repo = "pw-viz";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
-  cargoHash = "sha256-jsaWrdJRKfu75Gw8qGHxx0FHK7rOEK8IEDiQ6ktZsM0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "egui_nodes-0.1.4" = "sha256-Bb88T+erjgKD769eYOSiVEg9lFnB5pBEDLeWgCdyUus=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -45,13 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     patchelf $out/bin/pw-viz \
-      --add-rpath ${
-        lib.makeLibraryPath [
-          libGL
-          libxkbcommon
-          wayland
-        ]
-      }
+      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
   '';
 
   # enables pipewire API deprecated in 0.3.64

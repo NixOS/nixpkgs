@@ -23,17 +23,15 @@
   file,
   wrapGAppsHook3,
   xdg-utils,
-  libevdev,
-  pulseaudio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vice";
-  version = "3.9";
+  version = "3.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "sha256-QCArY0VeJrh+zGPrWlIyLG+j9XyrEqzwwifPn02uw3A=";
+    sha256 = "sha256-HX3E0PK7zCqHG7lU/0pd9jBI3qnBb18em8gmD6QaEAQ=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +58,6 @@ stdenv.mkDerivation rec {
     SDL_image
     xa
     xdg-utils
-    libevdev
-    pulseaudio
   ];
   dontDisableStatic = true;
   configureFlags = [

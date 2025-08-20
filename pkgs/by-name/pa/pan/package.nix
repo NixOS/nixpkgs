@@ -1,11 +1,12 @@
 {
+  spellChecking ? true,
   lib,
   stdenv,
   fetchFromGitLab,
-  cmake,
+  autoreconfHook,
   pkg-config,
   gtk3,
-  gspell,
+  gtkspell3,
   gmime3,
   gettext,
   intltool,
@@ -13,72 +14,73 @@
   libxml2,
   libnotify,
   gnutls,
-  wrapGAppsHook3,
+  makeWrapper,
   gnupg,
-  spellChecking ? true,
   gnomeSupport ? true,
   libsecret,
   gcr,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pan";
-  version = "0.163";
+  version = "0.158";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = "pan";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zClHwIvrWqAn8l1hpcy3FgScRmVUUk8UPQkT0KD59hM=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-gcs3TsUzZAW8PhNPMzyOfwu+2SNynjRgfxdGIfAHrpA=";
   };
 
   nativeBuildInputs = [
-    cmake
+    autoreconfHook
     pkg-config
     gettext
     intltool
     itstool
     libxml2
-    wrapGAppsHook3
+    makeWrapper
   ];
 
-  buildInputs = [
-    gtk3
-    gmime3
-    libnotify
-    gnutls
-  ]
-  ++ lib.optionals spellChecking [ gspell ]
-  ++ lib.optionals gnomeSupport [
-    libsecret
-    gcr
-  ];
+  buildInputs =
+    [
+      gtk3
+      gmime3
+      libnotify
+      gnutls
+    ]
+    ++ lib.optional spellChecking gtkspell3
+    ++ lib.optionals gnomeSupport [
+      libsecret
+      gcr
+    ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "WANT_GSPELL" spellChecking)
-    (lib.cmakeBool "WANT_GKR" gnomeSupport)
-    (lib.cmakeBool "ENABLE_MANUAL" true)
-    (lib.cmakeBool "WANT_GMIME_CRYPTO" true)
-    (lib.cmakeBool "WANT_WEBKIT" false) # We don't have webkitgtk_3_0
-    (lib.cmakeBool "WANT_NOTIFY" true)
-  ];
+  configureFlags =
+    [
+      "--with-dbus"
+      "--with-gtk3"
+      "--with-gnutls"
+      "--enable-libnotify"
+    ]
+    ++ lib.optional spellChecking "--with-gtkspell"
+    ++ lib.optional gnomeSupport "--enable-gkr";
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnupg ]})
+  postInstall = ''
+    wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "GTK-based Usenet newsreader good at both text and binaries";
     mainProgram = "pan";
-    homepage = "http://pan.rebelbase.com";
-    maintainers = with lib.maintainers; [
-      aleksana
-    ];
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [
+    homepage = "http://pan.rebelbase.com/";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
+    license = with licenses; [
       gpl2Only
       fdl11Only
     ];
   };
-})
+}

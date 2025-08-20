@@ -20,15 +20,13 @@ mkDerivation {
   };
 
   buildInputs = [
+    extra-cmake-modules
     qtbase
     boost
   ];
   propagatedBuildInputs = [ gpgme ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     license = [ licenses.lgpl2 ];

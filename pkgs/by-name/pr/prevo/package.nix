@@ -23,7 +23,7 @@ symlinkJoin rec {
   '';
 
   meta = {
-    description = "Offline version of the Esperanto dictionary Reta Vortaro";
+    description = "offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.

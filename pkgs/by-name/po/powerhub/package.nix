@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     cd tests/helpers
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Post exploitation tool based on a web application, focusing on bypassing endpoint protection and application whitelisting";
     homepage = "https://github.com/AdrianVollmer/PowerHub";
     changelog = "https://github.com/AdrianVollmer/PowerHub/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "powerhub";
   };
 }

@@ -1,36 +1,42 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.11.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-SPYLQ7o3sbrjy3MmBAB0YoVJI1rSmePbrZY0yb2SnFE=";
+    hash = "sha256-3KS/KN6/RO+PxoxbCVryymnTyWcmfXuCoc9E+asdU/E=";
   };
 
-  cargoHash = "sha256-i2nSwsQnwhiMhG8QJb0z0zPuNxTLwuO1dgJxI4e4FqY=";
+  cargoHash = "sha256-9MnYSmMhLn31aHwooo8W/1Rp7N5P6Tar7Ft2iXRVnh0=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   postInstall = ''
     installManPage tldr.1
     installShellCompletion completions/{tldr.bash,_tldr,tldr.fish}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Official tldr client written in Rust";
     homepage = "https://github.com/tldr-pages/tlrc";
     changelog = "https://github.com/tldr-pages/tlrc/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "tldr";
-    maintainers = with lib.maintainers; [ acuteenvy ];
+    maintainers = with maintainers; [ acuteenvy ];
   };
 }

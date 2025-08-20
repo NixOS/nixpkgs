@@ -1,67 +1,46 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
+  mkXfceDerivation,
+  gobject-introspection,
   glib,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gspell,
   gtk3,
   gtksourceview4,
+  gspell,
   libxfce4ui,
   xfconf,
   enablePolkit ? true,
   polkit,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "apps";
   pname = "mousepad";
-  version = "0.6.5";
+  version = "0.6.3";
+  odd-unstable = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "apps";
-    repo = "mousepad";
-    tag = "mousepad-${finalAttrs.version}";
-    hash = "sha256-5ywpQY4KUnjFCLSAXQo3huzZf94YHK9SLmkkNtfx4Ho=";
-  };
+  sha256 = "sha256-L1txMS86lOEE9tOPTIOr1Gh4lwH7krnAeq4f3yS5kN0=";
 
-  strictDeps = true;
+  nativeBuildInputs = [ gobject-introspection ];
 
-  nativeBuildInputs = [
-    glib # glib-compile-schemas
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      gtksourceview4
+      gspell
+      libxfce4ui # for shortcut plugin
+      xfconf # required by libxfce4kbd-private-3
+    ]
+    ++ lib.optionals enablePolkit [
+      polkit
+    ];
 
-  buildInputs = [
-    glib
-    gspell
-    gtk3
-    gtksourceview4
-    libxfce4ui # for shortcut plugin
-    xfconf # required by libxfce4kbd-private-3
-  ]
-  ++ lib.optionals enablePolkit [
-    polkit
-  ];
+  # Use the GSettings keyfile backend rather than DConf
+  configureFlags = [ "--enable-keyfile-settings" ];
 
-  # Use the GSettings keyfile backend rather than the default
-  mesonFlags = [ "-Dkeyfile-settings=true" ];
-
-  passthru.updateScript = gitUpdater { rev-prefix = "mousepad-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Simple text editor for Xfce";
-    homepage = "https://gitlab.xfce.org/apps/mousepad";
-    license = lib.licenses.gpl2Plus;
     mainProgram = "mousepad";
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

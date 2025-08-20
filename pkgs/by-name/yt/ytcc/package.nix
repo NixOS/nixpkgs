@@ -4,43 +4,38 @@
   fetchFromGitHub,
   gettext,
   installShellFiles,
-  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.7.2";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
-    tag = "v${version}";
-    hash = "sha256-PNSkIp6CJvgirO3k2lB0nOVEC1+znhn3/OyRIJ1EANI=";
+    rev = "v${version}";
+    hash = "sha256-pC2uoog+nev/Xa6UbXX4vX00VQQLHtZzbVkxrxO/Pg8=";
   };
 
-  build-system = with python3Packages; [ hatchling ];
+  nativeBuildInputs =
+    [
+      gettext
+      installShellFiles
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
-  nativeBuildInputs = [
-    gettext
-    installShellFiles
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     yt-dlp
     click
     wcwidth
-    defusedxml
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-    ]
-    ++ [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [
@@ -54,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     "test_import_duplicate"
     "test_update"
     "test_download"
-    "test_comma_list_error"
   ];
 
   postInstall = ''
@@ -69,7 +63,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";
     homepage = "https://github.com/woefe/ytcc";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "ytcc";
     maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

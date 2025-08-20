@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.4";
+  version = "1.7.3";
   pname = "libgeotiff";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "libgeotiff";
     rev = version;
-    hash = "sha256-oiuooLejCRI1DFTjhgYoePtKS+OAGnW6OBzgITcY500=";
+    hash = "sha256-FUvWZR5BrGEMnApxCBQBwmmi9NU7Tx6Ziq3mbIxjqfc=";
   };
 
   outputs = [
@@ -50,8 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OSGeo/libgeotiff";
     changelog = "https://github.com/OSGeo/libgeotiff/blob/${src.rev}/libgeotiff/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ marcweber ];
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
     platforms = with platforms; linux ++ darwin;
   };
 }

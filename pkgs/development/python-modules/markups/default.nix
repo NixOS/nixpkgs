@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   docutils,
-  fetchFromGitHub,
+  fetchPypi,
   importlib-metadata,
   markdown,
   pygments,
@@ -16,29 +16,27 @@
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.1.0";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "retext-project";
-    repo = "pymarkups";
-    tag = version;
-    hash = "sha256-7/pXCSbVhLeX7PhacMQYwYMT7Og/tZplPPCvWDxJFck=";
+  src = fetchPypi {
+    pname = "Markups";
+    inherit version;
+    hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     docutils
     markdown
     pygments
     python-markdown-math
     pyyaml
     textile
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

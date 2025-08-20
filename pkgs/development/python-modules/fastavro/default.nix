@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.11.1";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "fastavro";
-    repo = "fastavro";
+    owner = pname;
+    repo = pname;
     tag = version;
-    hash = "sha256-I8Te1Ae20UrE5qI2nwktU0Ubip7Jx4/NWteSKsSz7tg=";
+    hash = "sha256-/YZFrEs7abm+oPn9yyLMV1X/G5VZ/s+ThpvzoQtYQu0=";
   };
 
   preBuild = ''
@@ -56,8 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     zlib-ng
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.

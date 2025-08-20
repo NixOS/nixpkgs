@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "motionblindsble" ];
 
   disabledTests = [
-    # AssertionError
+    # AssertionEror
     "test_establish_connection"
   ];
 

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "kubecfg";
-  version = "0.36.0";
+  version = "0.35.2";
 
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
     rev = "v${version}";
-    hash = "sha256-27xek+rLJK7jbqi9QDuWdA9KrO5QXUPAj9IRXVxiS8Q=";
+    hash = "sha256-iCeeS6CVGEFrNqa0NvdV2AqViDQIfG02Hx8yOBO1Vsk=";
   };
 
   vendorHash = "sha256-nAjm4AotRYZGRv05A+dviNq6Moo53Zo/bOiQf972ZF8=";
@@ -32,13 +32,13 @@ buildGoModule rec {
       --zsh  <($out/bin/kubecfg completion --shell=zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for managing Kubernetes resources as code";
     mainProgram = "kubecfg";
     homepage = "https://github.com/kubecfg/kubecfg";
     changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       benley
       qjoly
     ];

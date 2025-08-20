@@ -2,34 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runCommand,
   buildNpmPackage,
   clang,
   go,
   libsForQt5,
-  qt6,
-  udevCheckHook,
 }:
 
-let
-  # Qt 6 doesn’t provide the rcc binary so we create an ad hoc package pulling
-  # it from Qt 5.
-  rcc = runCommand "rcc" { } ''
-    mkdir -p $out/bin
-    cp ${lib.getExe' libsForQt5.qt5.qtbase.dev "rcc"} $out/bin
-  '';
-in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.48.1";
+  version = "4.46.3";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-zpkjYnGsmPKjxUpp2H1qSzqthOO1mTmki3bPqo35sBo=";
+    hash = "sha256-2oGVQ022NGOHLo7TBdeXG3ng1nYW8fyLwSV0hJdAl9I=";
   };
+
+  patches = [
+    ./genassets.patch
+  ];
 
   postPatch = ''
     substituteInPlace frontends/qt/resources/linux/usr/share/applications/bitbox.desktop \
@@ -42,8 +35,8 @@ stdenv.mkDerivation rec {
     pname = "bitbox-web";
     inherit version;
     inherit src;
-    sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-9NS85U4L5sLX3n/uN4p4CB5vfpWMMcnf6wESlFdQPlI=";
+    sourceRoot = "source/frontends/web";
+    npmDepsHash = "sha256-w98wwKHiZtor5ivKd+sh5K8HnAepu6cw9RyVJ+eTq3k=";
     installPhase = "cp -r build $out";
   };
 
@@ -77,17 +70,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [ qt6.qtwebengine ];
+  buildInputs = [ libsForQt5.qtwebengine ];
 
   nativeBuildInputs = [
     clang
     go
-    qt6.wrapQtAppsHook
-    rcc
-    udevCheckHook
+    libsForQt5.wrapQtAppsHook
   ];
-
-  doInstallCheck = true;
 
   meta = {
     description = "Companion app for the BitBox02 hardware wallet";

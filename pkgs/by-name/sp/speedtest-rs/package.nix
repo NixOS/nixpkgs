@@ -5,6 +5,7 @@
   openssl,
   pkg-config,
   stdenv,
+  darwin,
   nix-update-script,
   testers,
   speedtest-rs,
@@ -21,11 +22,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1FAFYiWDD/KG/7/UTv/EW6Nj2GnU0GZFFq6ouMc0URA=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoHash = "sha256-T8OG6jmUILeRmvPLjGDFlJyBm87Xdgy4bw4n7V0BQMk=";
+  cargoHash = "sha256-0YPCBzidE1+LgIYk457eSoerLvQuuZs9cTd7uUt1Lr8=";
 
   # Fail for unclear reasons (only on darwin)
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

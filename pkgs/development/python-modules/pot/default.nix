@@ -11,7 +11,6 @@
   numpy,
   pymanopt,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   scikit-learn,
   scipy,
@@ -22,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.5";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     owner = "PythonOT";
     repo = "POT";
     tag = version;
-    hash = "sha256-sEK3uhZtjVJGEN1Gs8N0AMtiEOo9Kpn/zOSWUfGc/qE=";
+    hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
   };
 
   build-system = [
@@ -80,13 +79,11 @@ buildPythonPackage rec {
       );
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
 

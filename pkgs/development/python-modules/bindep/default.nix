@@ -3,29 +3,28 @@
   buildPythonPackage,
   distro,
   fetchPypi,
-  fixtures,
-  libredirect,
   packaging,
   parsley,
   pbr,
-  pytestCheckHook,
-  testtools,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bindep";
-  version = "2.13.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-33VkdT5YMDO7ETM4FQ13JUAUW00YmkgB7FaiW17eUFA=";
+    hash = "sha256-rLLyWbzh/RUIhzR5YJu95bmq5Qg3hHamjWtqGQAufi8=";
   };
 
   env.PBR_VERSION = version;
 
   build-system = [
+    distro
     pbr
+    setuptools
   ];
 
   dependencies = [
@@ -35,29 +34,16 @@ buildPythonPackage rec {
     distro
   ];
 
-  nativeCheckInputs = [
-    fixtures
-    libredirect.hook
-    pytestCheckHook
-    testtools
-  ];
-
-  preCheck = ''
-    echo "ID=nixos
-    " > os-release
-    export NIX_REDIRECTS=/etc/os-release=$(realpath os-release)
-    export PATH=$PATH:$out/bin
-  '';
-
-  pytestFlags = [ "-s" ];
+  # Checks moved to 'passthru.tests' to workaround infinite recursion
+  doCheck = false;
 
   pythonImportsCheck = [ "bindep" ];
 
   meta = with lib; {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
-    homepage = "https://opendev.org/opendev/bindep";
+    homepage = "https://docs.opendev.org/opendev/bindep/latest/";
     license = licenses.asl20;
     mainProgram = "bindep";
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

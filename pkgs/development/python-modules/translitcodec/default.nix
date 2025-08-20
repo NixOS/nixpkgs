@@ -19,7 +19,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "claudep";
-    repo = "translitcodec";
+    repo = pname;
     rev = "version-${version}";
     hash = "sha256-/EKquTchx9i3fZqJ6AMzHYP9yCORvwbuUQ95WJQOQbI=";
   };

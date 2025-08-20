@@ -4,38 +4,37 @@
   fetchPypi,
   setuptools,
   python,
-  cronsim,
-  python-dateutil,
+  croniter,
   tzlocal,
   pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "aiocron";
-  version = "2.1";
+  version = "1.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G7ZaNq7hN+iDNZJ4OVbgx9xHi8PpJz/ChB1dDGBF5NI=";
+    hash = "sha256-SFRlE/ry63kB5lpk66e2U8gBBu0A7ZyjQZw9ELZVWgE=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
-    cronsim
-    python-dateutil
+  propagatedBuildInputs = [
+    croniter
     tzlocal
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
-    pytest-xdist
     tzlocal
   ];
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--ignore/d" setup.cfg
+  '';
 
   postInstall = ''
     rm -rf $out/${python.sitePackages}/tests

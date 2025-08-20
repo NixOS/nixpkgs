@@ -4,10 +4,10 @@
   async,
   cstruct-async,
   core,
-  mirage-crypto-rng,
+  mirage-crypto-rng-async,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "tls-async";
 
   inherit (tls) src version;
@@ -20,7 +20,7 @@ buildDunePackage {
     async
     core
     cstruct-async
-    mirage-crypto-rng
+    mirage-crypto-rng-async
     tls
   ];
 

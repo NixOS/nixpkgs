@@ -50,6 +50,5 @@ stdenv.mkDerivation {
       tomberek
       costrouc
     ];
-    mainProgram = "minecraft-server";
   };
 }

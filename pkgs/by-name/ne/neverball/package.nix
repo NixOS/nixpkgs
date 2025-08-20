@@ -7,7 +7,6 @@
   libGL,
   libpng,
   libjpeg,
-  libX11,
   SDL2_ttf,
   libvorbis,
   gettext,
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     libjpeg
     SDL2_ttf
     libvorbis
-    libX11
     gettext
     physfs
   ];

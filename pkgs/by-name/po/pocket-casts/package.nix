@@ -10,22 +10,20 @@
 
 buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.10.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    hash = "sha256-Wg08X0GPdWDgVNK7na14hU+3WCeEBRviWyL7K3MOrfY=";
+    hash = "sha256-PwM9B2Qx4TxlcahQM/KEBTzWKc4cNrleDEYKg0m8bVE=";
   };
 
-  npmDepsHash = "sha256-64O3NTWxMN9fxYlBao5COeMFwDnKfbyKI5+/quRb8O0=";
+  npmDepsHash = "sha256-WPuXTcHCKrwepITGtZFCIwylVAdYlI3cNsuhqx1AEYI=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
-
-  makeCacheWritable = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -44,8 +42,8 @@ buildNpmPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 $out/lib/node_modules/pocket-casts/img/icon-x512.png $out/share/icons/hicolor/512x512/apps/pocket-casts.png
-    install -Dm444 $out/lib/node_modules/pocket-casts/img/icon-x360.png $out/share/icons/hicolor/360x360/apps/pocket-casts.png
+    install -Dm644 $out/lib/node_modules/pocket-casts/icon.png $out/share/pixmaps/pocket-casts.png
+    install -Dm644 $out/lib/node_modules/pocket-casts/icon-x360.png $out/share/pixmaps/pocket-casts-x360.png
 
     makeWrapper ${electron}/bin/electron $out/bin/pocket-casts \
       --add-flags $out/lib/node_modules/pocket-casts/main.js

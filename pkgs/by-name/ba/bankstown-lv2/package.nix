@@ -2,48 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "bankstown-lv2";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "bankstown";
-    rev = finalAttrs.version;
+    rev = version;
     hash = "sha256-IThXEY+mvT2MCw0PSWU/182xbUafd6dtm6hNjieLlKg=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "target/release" \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
+  cargoHash = "sha256-yRzM4tcYc6mweTpLnnlCeKgP00L2wRgHamtUzK9Kstc=";
+
+  installPhase = ''
+    export LIBDIR=$out/lib
+    mkdir -p $LIBDIR
+
+    make
+    make install
   '';
 
-  cargoHash = "sha256-eMN95QNnQtC7QDix9g3dwb9ZbtQuiVBj8+R+opFs0KI=";
-
-  dontCargoInstall = true;
-
-  installFlags = [
-    "DESTDIR=$(out)"
-    "LIBDIR=lib"
-  ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/chadmed/bankstown";
-    description = "Lightweight psychoacoustic bass enhancement plugin";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      normalcea
-      yuka
-    ];
-    platforms = lib.platforms.linux;
+    description = "Halfway-decent three-stage psychoacoustic bass approximation";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yuka ];
+    platforms = platforms.linux;
   };
-})
+}

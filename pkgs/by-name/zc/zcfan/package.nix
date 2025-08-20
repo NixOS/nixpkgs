@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/zcfan -h
+    $out/bin/${finalAttrs.pname} -h
 
     runHook postInstallCheck
   '';

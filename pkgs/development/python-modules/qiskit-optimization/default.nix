@@ -58,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "qiskit_optimization" ];
-  pytestFlags = [ "--durations=10" ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";

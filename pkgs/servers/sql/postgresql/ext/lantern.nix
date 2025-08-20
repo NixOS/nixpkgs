@@ -1,21 +1,22 @@
 {
+  lib,
+  stdenv,
   cmake,
   fetchFromGitHub,
-  lib,
   openssl,
   postgresql,
-  postgresqlBuildExtension,
   postgresqlTestExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "postgresql-lantern";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IsDD/um5pVvbzin8onf45DQVszl+Id/pJSQ2iijgHmg=";
     fetchSubmodules = true;
   };
@@ -50,16 +51,11 @@ postgresqlBuildExtension (finalAttrs: {
     '';
   };
 
-  meta = {
-    # PostgreSQL 18 support issue upstream: https://github.com/lanterndata/lantern/issues/375
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "0.5.0"
-    ) "Is postgresql18Packages.lantern still broken?" (lib.versionAtLeast postgresql.version "18");
+  meta = with lib; {
     description = "PostgreSQL vector database extension for building AI applications";
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license = licenses.agpl3Only;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

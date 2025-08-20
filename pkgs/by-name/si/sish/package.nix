@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sish";
-  version = "2.20.0";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = "sish";
     tag = "v${version}";
-    hash = "sha256-zw8zWvyApozHXROZV/o4hZ1EEl0u12snRxjhsqtSrI0=";
+    hash = "sha256-p/7NulUvDUnTCD1H1LRe6OHB7coloIwXiOnOvFbmLhM=";
   };
 
-  vendorHash = "sha256-FQzmFyunNllbn4Vaj+kzLamIXDGdWn90TA577EkgI6c=";
+  vendorHash = "sha256-AtGxRW2OtWBKxLHBqeL+D4PFLgT8APMwuK6NZCBTpao=";
 
   ldflags = [
     "-s"
@@ -33,12 +33,12 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
     changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "sish";
   };
 }

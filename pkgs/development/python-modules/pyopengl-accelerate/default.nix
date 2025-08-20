@@ -10,15 +10,21 @@
 
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
-  version = "3.1.9";
+  version = "3.1.7";
   format = "pyproject";
 
   src = fetchPypi {
-    pname = "pyopengl_accelerate";
+    pname = "PyOpenGL-accelerate";
     inherit version;
-    hash = "sha256-hZV8fHaXWBj/dZ7JJD+dxwke9vNz6jei61DDIP2ahvM=";
+    hash = "sha256-KxI2ISc6k59/0uwidUHjmfm11OgV1prgvbG2xwopNoA=";
   };
-  build-system = [
+
+  postPatch = ''
+    substituteInPlace src/numpy_formathandler.pyx \
+      --replace-fail 'Py_intptr_t' 'npy_intp'
+  '';
+
+  nativeBuildInputs = [
     cython
     numpy
     setuptools

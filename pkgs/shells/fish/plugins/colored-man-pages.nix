@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildFishPlugin {
+buildFishPlugin rec {
   pname = "colored-man-pages";
   version = "0-unstable-2022-04-30";
 

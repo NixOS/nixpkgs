@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "job-security";
   version = "0-unstable-2024-04-07";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-KPnLVKz10SuVcG0CCFWxWnjhf9gHHPCRZw6AW9/gAmk=";
   };
 
-  cargoHash = "sha256-g+n0C8tkEuixbRo48cMOYPXcYt+Ur1TP6fFTYlI4fVg=";
+  cargoHash = "sha256-YwlI+Z3Zry3i3amz3DufvKzSS1Hrp2kPG76aH5tMJ2g=";
 
   meta = {
     description = "Job control from anywhere";

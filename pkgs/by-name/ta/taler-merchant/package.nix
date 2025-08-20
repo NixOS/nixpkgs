@@ -11,21 +11,17 @@
   autoreconfHook,
   makeWrapper,
   jq,
-  libgcrypt,
-  texinfo,
-  curl,
-  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "1.0.1";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H/JqMGLP0u68g/bMqsollAk6sKL73TCZ9no49psYST0=";
+    hash = "sha256-ac7ajHBLW6BJrL0iaa+b7XNZHMEEmbAo17URIdPSXd8=";
   };
 
   postUnpack = ''
@@ -46,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
     makeWrapper
-    libgcrypt # AM_PATH_LIBGCRYPT
-    texinfo # makeinfo
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -56,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     # for ltdl.h
     libtool
   ];
-
-  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -70,10 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  configureFlags = [
-    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
-  ];
-
   # NOTE: The executables that need database access fail to detect the
   # postgresql library in `$out/lib/taler`, so we need to wrap them.
   postInstall = ''
@@ -83,14 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postFixup = ''
-    # - taler-merchant-dbinit expects `versioning.sql` under `share/taler/sql`
-    # - taler-merchant-httpd expects `share/taler/merchant/templates`
-    mkdir -p $out/share/taler/sql
-    ln -s $out/share/taler-merchant $out/share/taler/merchant
-    ln -s $out/share/taler-merchant/sql $out/share/taler/sql/merchant
-  '';
-
   enableParallelBuilding = true;
 
   doInstallCheck = true;
@@ -98,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ jq ];
 
   checkTarget = "check";
-
-  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Merchant component for the GNU Taler electronic payment system";
@@ -115,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

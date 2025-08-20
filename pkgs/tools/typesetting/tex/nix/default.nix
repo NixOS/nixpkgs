@@ -51,8 +51,7 @@ rec {
       buildInputs = [
         tex
         pkgs.perl
-      ]
-      ++ packages;
+      ] ++ packages;
     };
 
   # Returns the closure of the "dependencies" of a LaTeX source file.

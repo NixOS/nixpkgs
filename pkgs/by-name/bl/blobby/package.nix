@@ -15,7 +15,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "blobby-volley";
   version = "1.1.1";
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Volleyball game";
+    description = "Blobby volleyball game";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];

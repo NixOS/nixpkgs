@@ -8,24 +8,22 @@
   gdb,
   libpfm,
   makeWrapper,
-  nix-update-script,
   pkg-config,
   procps,
   python3,
   which,
   zlib,
-  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.9.0";
+  version = "5.8.0";
   pname = "rr";
 
   src = fetchFromGitHub {
-    owner = "rr-debugger";
+    owner = "mozilla";
     repo = "rr";
     rev = finalAttrs.version;
-    hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
+    hash = "sha256-FudAAkWIe6gv4NYFoe9E0hlgTM70lymBE5Fw/vbehps=";
   };
 
   postPatch = ''
@@ -64,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     procps
     python3
     zlib
-    zstd
   ];
 
   cmakeFlags = [
@@ -88,8 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH ":" "${lib.makeBinPath [ gdb ]}";
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://rr-project.org/";
     description = "Records nondeterministic executions and debugs them deterministically";
@@ -107,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pierron
       thoughtpolice
-      lf-
     ];
     platforms = [
       "aarch64-linux"

@@ -4,10 +4,11 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "cppclean";
   version = "0.13";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "myint";
@@ -19,10 +20,6 @@ python3Packages.buildPythonApplication rec {
   postUnpack = ''
     patchShebangs .
   '';
-
-  build-system = with python3Packages; [
-    setuptools
-  ];
 
   checkPhase = ''
     ./test.bash

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  udevCheckHook,
 }:
 
 ## Usage
@@ -10,36 +9,28 @@
 
 stdenv.mkDerivation rec {
   pname = "qmk-udev-rules";
-  version = "0.27.13";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "qmk";
     repo = "qmk_firmware";
-    tag = version;
-    hash = "sha256-Zs508OQ0RYCg0f9wqR+VXUmVvhP/jCA3piwRq2ZpR84=";
+    rev = version;
+    hash = "sha256-dFc6S9x7sBYZAQn0coZJpmGz66Fx0l4rrexjyB4k0zA=";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [
-    udevCheckHook
-  ];
-
-  doInstallCheck = true;
-
   installPhase = ''
     runHook preInstall
-
     install -D util/udev/50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
-
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/qmk/qmk_firmware";
     description = "Official QMK udev rules list";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ekleog ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ekleog ];
   };
 }

@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "basilk";
-  version = "0.2.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "gabalpha";
     repo = "basilk";
     tag = version;
-    hash = "sha256-ZicrgRghUvKp42H03IV1mUIV8FN5cfEx7ncqZMi9t9o=";
+    hash = "sha256-b77vVf+WbDNzKwGaMJvgMEMCC41h5TXmg45OM9g4v+4=";
   };
 
-  cargoHash = "sha256-e0zPA+DB1z2J0fIbIgHMSvrpyeglBssIx1Axp7TpQsw=";
+  cargoHash = "sha256-ZYyRUqWbwAoNaGuCXJvqWTgUm5jNpihqvPe5SsfjEq4=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {

@@ -9,16 +9,20 @@
   desktop-file-utils,
   libSM,
   imagemagick,
+  darwin,
   wrapGAppsHook3,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediainfo-gui";
-  version = "25.03";
+  version = "24.06";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${finalAttrs.version}/mediainfo_${finalAttrs.version}.tar.xz";
-    hash = "sha256-wpO7MPIx3FMQuYDv2E/n0za4MQto6DJlzxZtf3/Dhsk=";
+    hash = "sha256-MvSoKjHjhuF3/fbkwjcFPkdbUBCJJpqyxylFKgkxNSA=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     libSM
     imagemagick
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   sourceRoot = "MediaInfo/Project/GNU/GUI";
 

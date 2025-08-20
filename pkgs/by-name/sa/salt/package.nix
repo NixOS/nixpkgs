@@ -12,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3007.6";
+  version = "3007.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F2qLl8Q8UO2H3xInmz3SSLu2q0jNMrLekPRSNMfE0JQ=";
+    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
   };
 
   patches = [
@@ -47,7 +47,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3.pkgs;
     [
-      cryptography
       distro
       jinja2
       jmespath
@@ -72,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
   # as is it rather long.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://saltproject.io/";
     changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with lib.maintainers; [ Flakebi ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ Flakebi ];
+    license = licenses.asl20;
   };
 }

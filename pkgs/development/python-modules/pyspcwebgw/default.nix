@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mbrrg";
-    repo = "pyspcwebgw";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-gdIrbr25GXaX26B1f7u0NKbqqnAC2tmMFZspzW6I4HI=";
   };
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 

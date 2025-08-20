@@ -19,12 +19,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  version = "45.2";
   pname = "gpaste";
-  version = "45.3";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UU8pw7bqEwg2Vh7S6GTx8swI/2IhlwjQgkGNZCzoMwc=";
+    hash = "sha256-2WC0FGPQisY3YH4EgJcR/Re69fJznUD1KlCGljivyEE=";
   };
 
   patches = [
@@ -85,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gpaste-client";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 })

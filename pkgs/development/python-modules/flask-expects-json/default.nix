@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Fischerfredl";
-    repo = "flask-expects-json";
+    repo = pname;
     rev = version;
     hash = "sha256-CUxuwqjjAb9Fy6xWtX1WtSANYaYr5//vY8k89KghYoQ=";
   };
@@ -22,8 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     jsonschema
-  ]
-  ++ flask.optional-dependencies.async;
+  ] ++ flask.optional-dependencies.async;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

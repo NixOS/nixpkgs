@@ -20,11 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     sed -e 's@/usr/bin/@@' -i Makefile
-
-    runHook postConfigure
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

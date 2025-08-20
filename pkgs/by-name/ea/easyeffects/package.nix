@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   appstream-glib,
   calf,
   deepfilternet,
   desktop-file-utils,
-  fetchFromGitHub,
   fftw,
   fftwFloat,
   fmt_9,
@@ -45,16 +45,15 @@ let
   # Fix crashes with speexdsp effects
   speexdsp' = speexdsp.override { withFftw3 = false; };
 in
-
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.2.5";
+  version = "7.1.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-w3Mb13LOSF8vgcdJrqbesLqyyilI5AoA19jFquE5lEw=";
+    hash = "sha256-It+kldlhThWF9y/rTgKt9QlIouH1cQcCtSHQTsaGjfo=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +102,6 @@ stdenv.mkDerivation rec {
         mda_lv2 # loudness
         zam-plugins # maximizer
       ];
-
       ladspaPlugins = [
         deepfilternet # deep noise remover
         rubberband # pitch shifting
@@ -115,6 +113,11 @@ stdenv.mkDerivation rec {
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
     '';
+
+  patches = [
+    # Remove when lsp-plugins is >= 1.2.17. (https://github.com/wwmm/easyeffects/issues/3394)
+    ./0001-Revert-Merge-pull-request-3340-from-violetmage-viole.patch
+  ];
 
   separateDebugInfo = true;
 

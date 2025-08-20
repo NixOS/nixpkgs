@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "25.03";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "video-trimmer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-pJCXL0voOoc8KpYECYRWGefYMrsApNPST4wv8SQlH34=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-4B3NNGww+UjI/VbsKL62vWlKye7NYXYPzlJ4TfywJDw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-3ycc4jXneGsz9Jp9Arzf224JPAKM+PxUkitWcIXre8Y=";
+    hash = "sha256-vtV5TrF81TK4PUwzOF/CuDsKH1vTLO+4PFufyIOp2zk=";
   };
 
   nativeBuildInputs = [
@@ -77,11 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
-    changelog = "https://gitlab.gnome.org/YaLTeR/video-trimmer/-/releases/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [
-      doronbehar
-    ];
-    teams = [ lib.teams.gnome-circle ];
+    maintainers =
+      with lib.maintainers;
+      [
+        doronbehar
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "video-trimmer";

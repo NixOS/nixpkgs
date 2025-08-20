@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   coreutils,
   openssh,
   gnutar,
@@ -9,31 +9,29 @@
 
 stdenv.mkDerivation rec {
   pname = "rset";
-  version = "3.2";
+  version = "2.1";
 
-  src = fetchFromGitHub {
-    owner = "eradman";
-    repo = "rset";
-    tag = version;
-    hash = "sha256-b797R79aMopiPApTJ4Q3SP2MRjqCcNNO9BIxtuiNZks=";
+  src = fetchurl {
+    url = "https://scriptedconfiguration.org/code/${pname}-${version}.tar.gz";
+    sha256 = "0916f96afl8kcn2hpj4qhg92g2j93ycp2sb94nsz3q44sqc6ddhb";
   };
 
   patches = [ ./paths.patch ];
 
   postPatch = ''
     substituteInPlace rset.c \
-      --replace-fail @ssh@       ${openssh}/bin/ssh \
-      --replace-fail @miniquark@ $out/bin/miniquark \
-      --replace-fail @rinstall@  $out/bin/rinstall \
-      --replace-fail @rsub@      $out/bin/rsub
+      --replace @ssh@       ${openssh}/bin/ssh \
+      --replace @miniquark@ $out/bin/miniquark \
+      --replace @rinstall@  $out/bin/rinstall \
+      --replace @rsub@      $out/bin/rsub
 
     substituteInPlace execute.c \
-      --replace-fail @ssh@     ${openssh}/bin/ssh \
-      --replace-fail @ssh-add@ ${openssh}/bin/ssh-add \
-      --replace-fail @tar@     ${gnutar}/bin/tar
+      --replace @ssh@     ${openssh}/bin/ssh \
+      --replace @ssh-add@ ${openssh}/bin/ssh-add \
+      --replace @tar@     ${gnutar}/bin/tar
 
     substituteInPlace rutils.c \
-      --replace-fail @install@ ${coreutils}/bin/install
+      --replace @install@ ${coreutils}/bin/install
   '';
 
   # these are to be run on the remote host,
@@ -46,12 +44,17 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://scriptedconfiguration.org/";
     description = "Configure systems using any scripting language";
     changelog = "https://github.com/eradman/rset/raw/${version}/NEWS";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.unix;
+    license = licenses.isc;
+    platforms = platforms.unix;
     maintainers = [ ];
+    # 2023-08-19, fails to compile with glibc-2.38 because of strlcpy.
+    # At the time of writing, this was 4 minors behind already and
+    # the `paths.patch` didn't apply anymore, so this is now considered
+    # broken until somebody cares enough to fix and upgrade this.
+    broken = true;
   };
 }

@@ -7,19 +7,17 @@
   libusb1,
   pico-sdk,
   mbedtls_2,
-  versionCheckHook,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "picotool";
-  version = "2.1.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
-    repo = "picotool";
-    tag = finalAttrs.version;
-    hash = "sha256-WA17FXSUGylzUcbvzgAGCeds+XeuSvDlgFBJD10ERVY=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-z7EFk3qxg1PoKZQpUQqjhttZ2RkhhhiMdYc9TkXzkwk=";
   };
 
   postPatch = ''
@@ -44,23 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 ../udev/99-picotool.rules -t $out/etc/udev/rules.d
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = gitUpdater { };
-  };
-
-  meta = {
-    description = "Tool for interacting with RP2040/RP2350 device(s) in BOOTSEL mode, or with an RP2040/RP2350 binary";
+  meta = with lib; {
     homepage = "https://github.com/raspberrypi/picotool";
-    changelog = "https://github.com/raspberrypi/picotool/releases/tag/${finalAttrs.version}";
+    description = "Tool for interacting with RP2040/RP2350 device(s) in BOOTSEL mode, or with an RP2040/RP2350 binary";
     mainProgram = "picotool";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ muscaln ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ muscaln ];
+    platforms = platforms.unix;
   };
-})
+}

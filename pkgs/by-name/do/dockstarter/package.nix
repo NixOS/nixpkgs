@@ -9,13 +9,13 @@
   stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dockstarter";
   version = "unstable-2022-10-26";
 
   src = fetchFromGitHub {
     owner = "ghostwriters";
-    repo = "dockstarter";
+    repo = pname;
     rev = "a1b6b6e29aa135c2a61ea67ca05e9e034856ca08";
     hash = "sha256-G26DFme6YaizdE5oHBo/IqV+1quu07Bp+IykXtO/GgA=";
   };

@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = pname; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mobile broadband service provider database";
     homepage = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info";
     changelog = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/blob/${version}/NEWS?ref_type=tags";
-    license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    license = licenses.publicDomain;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

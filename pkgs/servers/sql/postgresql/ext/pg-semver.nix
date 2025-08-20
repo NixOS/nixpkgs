@@ -1,23 +1,25 @@
 {
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
   postgresqlTestExtension,
+  testers,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg-semver";
   version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pg-semver";
-    tag = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-9f+QuGupjTUK3cQk7DFDrL7MOIwDE9SAUyVZ9RfrdDM=";
   };
 
   passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
     extension = postgresqlTestExtension {
       inherit (finalAttrs) finalPackage;
       sql = "CREATE EXTENSION semver;";

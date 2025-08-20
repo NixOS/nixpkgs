@@ -3,21 +3,20 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pizauth";
-  version = "1.0.7";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${version}";
-    hash = "sha256-lvG50Ej0ius4gHEsyMKOXLD20700mc4iWJxHK5DvYJc=";
+    hash = "sha256-x3LdutVrQFrkXvbGPVzBV7Y8P9okKgv2rh2YdnDXvsc=";
   };
 
-  cargoHash = "sha256-WyQIk74AKfsv0noafCGMRS6o+Lq6CeP99AFSdYq+QHg=";
+  cargoHash = "sha256-moRr8usrFHE8YPQnsmeKoDZPAk94qRm9cHzHBLXtGFM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,8 +24,6 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd pizauth \
       --bash share/bash/completion.bash
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";

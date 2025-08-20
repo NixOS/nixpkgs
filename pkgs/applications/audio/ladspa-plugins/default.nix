@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     perlPackages.perl
     perlPackages.XMLParser
     pkg-config
-    perlPackages.perl
-    perlPackages.XMLParser
   ];
   buildInputs = [
     fftw

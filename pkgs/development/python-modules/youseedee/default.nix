@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  replaceVars,
+  substituteAll,
   setuptools,
   setuptools-scm,
   filelock,
@@ -23,7 +23,8 @@ buildPythonPackage rec {
   patches = [
     # Load data files from the unicode-character-database package instead of
     # downloading them from the internet. (nixpkgs-specific, not upstreamable)
-    (replaceVars ./0001-use-packaged-unicode-data.patch {
+    (substituteAll {
+      src = ./0001-use-packaged-unicode-data.patch;
       ucd_dir = "${unicode-character-database}/share/unicode";
     })
   ];

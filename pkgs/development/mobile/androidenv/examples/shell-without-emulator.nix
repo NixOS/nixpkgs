@@ -5,12 +5,12 @@
   # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*
     nixpkgsSource ? (builtins.fetchTarball {
-      name = "nixpkgs-20.09";
-      url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-      sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+    name = "nixpkgs-20.09";
+    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
+    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
     }),
     pkgs ? import nixpkgsSource {
-      config.allowUnfree = true;
+    config.allowUnfree = true;
     },
   */
 
@@ -18,32 +18,48 @@
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
   },
-
-  licenseAccepted ? pkgs.callPackage ../license.nix { },
+  config ? pkgs.config,
 }:
 
 # Copy this file to your Android project.
 let
+  # Declaration of versions for everything. This is useful since these
+  # versions may be used in multiple places in this Nix expression.
+  android = {
+    versions = {
+      cmdLineToolsVersion = "13.0";
+      platformTools = "35.0.2";
+      buildTools = "35.0.0";
+    };
+    platforms = [ "35" ];
+  };
+
   # If you copy this example out of nixpkgs, something like this will work:
   /*
     androidEnvNixpkgs = fetchTarball {
-      name = "androidenv";
-      url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
-      sha256 = "<fill me in with nix-prefetch-url --unpack>";
+    name = "androidenv";
+    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
+    sha256 = "<fill me in with nix-prefetch-url --unpack>";
     };
 
     androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-      inherit pkgs;
-      licenseAccepted = true;
+    inherit config pkgs;
+    licenseAccepted = true;
     };
   */
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit pkgs licenseAccepted;
+    inherit config pkgs;
+    # You probably need to uncomment below line to express consent.
+    # licenseAccepted = true;
   };
 
   sdkArgs = {
+    cmdLineToolsVersion = android.versions.cmdLineToolsVersion;
+    platformToolsVersion = android.versions.platformTools;
+    buildToolsVersions = [ android.versions.buildTools ];
+    platformVersions = android.platforms;
     includeNDK = false;
     includeSystemImages = false;
     includeEmulator = false;
@@ -68,15 +84,15 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
-  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
-pkgs.mkShell {
+pkgs.mkShell rec {
   name = "androidenv-example-without-emulator-demo";
   packages = [
     androidSdk
     platformTools
     jdk
+    pkgs.android-studio
   ];
 
   LANG = "C.UTF-8";
@@ -110,8 +126,8 @@ pkgs.mkShell {
           echo "installed_packages_section: ''${installed_packages_section}"
 
           packages=(
-            "build-tools" "cmdline-tools" \
-            "platform-tools" "platforms;android-${toString latestSdk}"
+            "build-tools;35.0.0" "cmdline-tools;13.0" \
+            "patcher;v4" "platform-tools" "platforms;android-35"
           )
 
           for package in "''${packages[@]}"; do

@@ -16,13 +16,12 @@
   curl,
   libcpr,
   rapidjson,
-  libX11,
-  libGL,
   writeShellScriptBin,
   makeDesktopItem,
   lib,
   copyDesktopItems,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "unnamed-sdvx-clone";
   version = "0.6.0";
@@ -55,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
-    libX11
-    libGL
   ];
 
   cmakeFlags = [
@@ -102,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Game based on K-Shoot MANIA and Sound Voltex";
+    description = "A game based on K-Shoot MANIA and Sound Voltex";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

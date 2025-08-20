@@ -1,5 +1,6 @@
 {
   asciidoctor,
+  darwin,
   fetchgit,
   git,
   installShellFiles,
@@ -12,20 +13,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-httpd";
-  version = "0.20.0";
+  version = "0.18.0";
   env.RADICLE_VERSION = version;
 
   # You must update the radicle-explorer source hash when changing this.
   src = fetchgit {
     url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
-    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
-    hash = "sha256-9rJH4ECqOJ9wnYxCbEFHXo3PlhbPdeOnF+Pf1MzX25c=";
+    rev = "refs/namespaces/z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5/refs/tags/v${version}";
+    hash = "sha256-VHfiL0BSJsYS8QgMf+LEa6HvYoc+dxawTcwB4d6sTg8=";
     sparseCheckout = [ "radicle-httpd" ];
   };
 
   sourceRoot = "${src.name}/radicle-httpd";
-
-  cargoHash = "sha256-1GWWtrSYzTXUAgjeWaxyOuDqTDuTMWleug8SmxTHXbI=";
+  cargoHash = "sha256-LmUZCu10RsuA8Lu3FjWcV8MzjX5FxBCV6+4zG0GEN2c=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   nativeCheckInputs = [ git ];
+  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 

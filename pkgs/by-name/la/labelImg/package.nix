@@ -8,19 +8,16 @@
 python3Packages.buildPythonApplication rec {
   pname = "labelImg";
   version = "1.8.6";
-  format = "pyproject";
-
   src = fetchFromGitHub {
-    owner = "HumanSignal";
+    owner = "tzutalin";
     repo = "labelImg";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-RJxCtiDOePajlrjy9cpKETSKsWlH/Dlu1iFMj2aO4XU=";
   };
-
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
+    pyqt5
     qt5.wrapQtAppsHook
   ];
-
   patches = [
     # fixes https://github.com/heartexlabs/labelImg/issues/838
     # can be removed after next upstream version bump
@@ -29,40 +26,26 @@ python3Packages.buildPythonApplication rec {
       hash = "sha256-BmbnJS95RBfoNQT0E6JDJ/IZfBa+tv1C69+RVOSFdRA=";
     })
   ];
-
-  build-system = with python3Packages; [
-    setuptools
-    pyqt5
-  ];
-
-  dependencies = with python3Packages; [
-    distutils
+  propagatedBuildInputs = with python3Packages; [
     pyqt5
     lxml
   ];
-
   preBuild = ''
     make qt5py3
   '';
-
   postInstall = ''
-    install -Dm644 libs/resources.py $out/${python3Packages.python.sitePackages}/libs
+    cp libs/resources.py $out/${python3Packages.python.sitePackages}/libs
   '';
-
   dontWrapQtApps = true;
-
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
-
-  pythonImportsCheck = [ "labelImg" ];
-
-  meta = {
+  meta = with lib; {
     description = "Graphical image annotation tool and label object bounding boxes in images";
     mainProgram = "labelImg";
-    homepage = "https://github.com/HumanSignal/labelImg";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.cmcdragonkai ];
+    homepage = "https://github.com/tzutalin/labelImg";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.cmcdragonkai ];
   };
 }

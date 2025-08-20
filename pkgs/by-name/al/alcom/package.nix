@@ -1,36 +1,42 @@
 {
   buildDotnetModule,
   cargo-about,
-  cargo-tauri,
+  cargo-tauri_1,
   dotnetCorePackages,
   fetchFromGitHub,
   fetchNpmDeps,
   glib-networking,
+  google-fonts,
   lib,
-  libsoup_3,
-  makeBinaryWrapper,
+  libsoup_2_4,
   nodejs,
   npmHooks,
   openssl,
   pkg-config,
   rustPlatform,
   stdenv,
-  wrapGAppsHook4,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
 }:
 let
   pname = "alcom";
-  version = "1.0.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    tag = "gui-v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-cOx7X3xfTBYpXhv1zIRStaIpyGWSp+d7qzdJLGzXtDY=";
+    hash = "sha256-jkhjJTb/U2dXj/vyaip+gWoqIOdfFKSExeDl0T11DE4=";
   };
 
   subdir = "vrc-get-gui";
+
+  google-fonts' = google-fonts.override {
+    fonts = [
+      "NotoSans"
+      "NotoSansJP"
+    ];
+  };
 
   dotnetSdk = dotnetCorePackages.sdk_8_0;
   dotnetRuntime = dotnetCorePackages.runtime_8_0;
@@ -51,51 +57,53 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  patches = [
-    ./disable-updater-artifacts.patch
-  ];
-
   nativeBuildInputs = [
     cargo-about
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     dotnetSdk
     nodejs
     npmHooks.npmConfigHook
-    wrapGAppsHook4
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    glib-networking
-    libsoup_3
-    makeBinaryWrapper
-    webkitgtk_4_1
-  ]
-  ++ dotnetSdk.packages
-  ++ dotnetBuild.nugetDeps;
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      glib-networking
+      libsoup_2_4
+      webkitgtk_4_0
+    ]
+    ++ dotnetSdk.packages
+    ++ dotnetBuild.nugetDeps;
 
-  cargoHash = "sha256-Ph6QZW21JYQJgrUecN+MklWuY51iKC2glPEdgxw+3r8=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
+    };
+  };
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/${subdir}";
-    hash = "sha256-lWQPBILZn8VGoILfEY2bMxGaBL2ALGbvcT5RqanTNyY=";
+    hash = "sha256-4zokKLhLgW2u1GxeTlIAAxJINSpxHRtY5HXmhi9nj6c=";
   };
   npmRoot = subdir;
+
+  patches = [
+    ./use-local-fonts.patch
+  ];
+
+  postPatch = ''
+    install -Dm644 "${google-fonts'}/share/fonts/truetype/NotoSans[wdth,wght].ttf" ${subdir}/app/fonts/noto-sans.ttf
+    install -Dm644 "${google-fonts'}/share/fonts/truetype/NotoSansJP[wght].ttf" ${subdir}/app/fonts/noto-sans-jp.ttf
+  '';
 
   preConfigure = ''
     dotnet restore "vrc-get-litedb/dotnet/vrc-get-litedb.csproj" \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/ALCOM \
-      --set APPIMAGE ALCOM
   '';
 
   passthru = {
@@ -107,7 +115,8 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/vrc-get/vrc-get";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    broken = stdenv.hostPlatform.isDarwin;
+    # aarch64-linux: Error failed to build app: Target aarch64-unknown-linux-gnu does not exist. Please run `rustup target list` to see the available targets.
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     mainProgram = "alcom";
   };
 }

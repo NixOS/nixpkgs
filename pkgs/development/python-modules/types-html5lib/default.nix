@@ -7,13 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-html5lib";
-  version = "1.1.11.20250708";
+  version = "1.1.11.20241018";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types_html5lib";
-    inherit version;
-    hash = "sha256-JDIXIP26xxzuUNWkvsm3RISVtyF5dM/+P88e3k7vev4=";
+    inherit pname version;
+    hash = "sha256-mAQlVf942eOlHHfJGLEEGsu362xAVAjYqeFQ/1vsyvo=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Typing stubs for html5lib";
     homepage = "https://pypi.org/project/types-html5lib/";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -5,7 +5,6 @@
   dns-client-lwt,
   dns-server,
   dns-certify,
-  dns-resolver,
   dnssec,
   bos,
   cmdliner,
@@ -14,7 +13,6 @@
   mirage-crypto,
   mirage-crypto-pk,
   mirage-crypto-rng,
-  mirage-mtime,
   ohex,
   ptime,
   mtime,
@@ -41,7 +39,6 @@ buildDunePackage {
     dns-client-lwt
     dns-server
     dns-certify
-    dns-resolver
     dnssec
     bos
     cmdliner
@@ -50,7 +47,6 @@ buildDunePackage {
     mirage-crypto
     mirage-crypto-pk
     mirage-crypto-rng
-    mirage-mtime
     ohex
     ptime
     mtime

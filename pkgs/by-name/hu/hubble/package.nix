@@ -1,60 +1,57 @@
 {
-  stdenv,
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "hubble";
-  version = "1.17.2";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "cilium";
-    repo = "hubble";
-    tag = "v${version}";
-    hash = "sha256-ZkowUftSEGo+UjYM+kk3tQJc8QJgoJATeIKPwu2ikQ4=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-evtXuVcaKKuAW+04S+IADKf+wJ1MrnGpHLNUbxWd9ZM=";
   };
-
-  nativeBuildInputs = [
-    installShellFiles
-  ];
 
   vendorHash = null;
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/cilium/cilium/hubble/pkg.GitBranch=none"
-    "-X=github.com/cilium/cilium/hubble/pkg.GitHash=none"
-    "-X=github.com/cilium/cilium/hubble/pkg.Version=${version}"
+    "-X github.com/cilium/hubble/pkg.GitBranch=none"
+    "-X github.com/cilium/hubble/pkg.GitHash=none"
+    "-X github.com/cilium/hubble/pkg.Version=${version}"
   ];
 
-  doCheck = true;
-
+  # Test fails at Test_getFlowsRequestWithInvalidRawFilters in github.com/cilium/hubble/cmd/observe
+  # https://github.com/NixOS/nixpkgs/issues/178976
+  # https://github.com/cilium/hubble/pull/656
+  # https://github.com/cilium/hubble/pull/655
+  doCheck = false;
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
+  installCheckPhase = ''
+    $out/bin/hubble version | grep ${version} > /dev/null
+  '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
     installShellCompletion --cmd hubble \
       --bash <($out/bin/hubble completion bash) \
       --fish <($out/bin/hubble completion fish) \
       --zsh <($out/bin/hubble completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
+    mainProgram = "hubble";
+    license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
-    changelog = "https://github.com/cilium/hubble/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       humancalico
       bryanasdev000
-      FKouhai
     ];
-    mainProgram = "hubble";
   };
 }

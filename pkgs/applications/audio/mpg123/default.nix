@@ -10,6 +10,8 @@
   withPulse ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
+  AudioUnit,
+  AudioToolbox,
   withJack ? stdenv.hostPlatform.isUnix,
   jack,
   withConplay ? !stdenv.hostPlatform.isWindows,
@@ -21,19 +23,18 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.33.0";
+  version = "1.32.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    hash = "sha256-IpDjrt5vTRY+GhdFIWWvM8qtS18JSPmUKc+i2Dhfqp0=";
+    hash = "sha256-h7LBf+DJedPvOO7O/2Nis1sorIWJ+/GFS1vnXJq2VXw=";
   };
 
   outputs = [
     "out"
     "dev"
     "man"
-  ]
-  ++ lib.optional withConplay "conplay";
+  ] ++ lib.optional withConplay "conplay";
 
   nativeBuildInputs = lib.optionals (!libOnly) (
     lib.optionals withConplay [ makeWrapper ] ++ lib.optionals (withPulse || withJack) [ pkg-config ]
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withAlsa [ alsa-lib ]
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [
+      AudioUnit
+      AudioToolbox
     ]
     ++ lib.optionals withJack [ jack ]
   );

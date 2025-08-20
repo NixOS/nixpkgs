@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   debtcollector,
-  fetchFromGitHub,
+  fetchFromGitea,
   jsonschema,
   keystoneauth1,
   openstackdocstheme,
@@ -22,16 +22,17 @@
 
 buildPythonPackage rec {
   pname = "python-designateclient";
-  version = "6.3.0";
+  version = "6.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "opendev.org";
     owner = "openstack";
     repo = "python-designateclient";
-    tag = version;
-    hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
+    rev = version;
+    hash = "sha256-MwcpRQXH8EjWv41iHxorbFL9EpYu8qOLkDeUx6inEAU=";
   };
 
   env.PBR_VERSION = version;
@@ -77,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/python-designateclient";
     description = "Client library for OpenStack Designate API";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.openstack ];
+    maintainers = lib.teams.openstack.members;
   };
 }

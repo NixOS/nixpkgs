@@ -38,8 +38,7 @@ let
 
   comps = [
     google-cloud-sdk
-  ]
-  ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
+  ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
 
   installCheck =
     let
@@ -75,8 +74,7 @@ symlinkJoin {
 
   paths = [
     google-cloud-sdk
-  ]
-  ++ comps;
+  ] ++ comps;
 
   postBuild = ''
     sed -i ';' $out/google-cloud-sdk/bin/.gcloud-wrapped

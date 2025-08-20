@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.21.0";
+  version = "2.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_datastore";
     inherit version;
-    hash = "sha256-7uRU3UpV9bMn+fNEko/xoJpvd8I9Xj2QitMaE8wvQHM=";
+    hash = "sha256-lmXQCXKdlVEynZR29NW9qcEdNGkkPqiiwNlJC2WqiZ8=";
   };
 
   build-system = [ setuptools ];
@@ -35,8 +35,7 @@ buildPythonPackage rec {
     google-cloud-core
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];

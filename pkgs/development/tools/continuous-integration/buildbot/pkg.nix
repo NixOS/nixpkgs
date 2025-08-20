@@ -6,7 +6,6 @@
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   pname = "buildbot_pkg";
   inherit (buildbot) src version;
 
@@ -27,7 +26,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    teams = [ teams.buildbot ];
+    maintainers = teams.buildbot.members;
     license = licenses.gpl2;
   };
 }

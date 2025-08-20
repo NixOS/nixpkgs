@@ -1,41 +1,33 @@
 {
   lib,
-  rust,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cmake,
   installShellFiles,
-  cargo-c,
   testers,
   yara-x,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "yara-x";
-  version = "0.15.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fbuh/SMfOygnuvG9zTZqem4oLaS+5uXScXPhU3aVDjM=";
+    tag = "v${version}";
+    hash = "sha256-gIYqWRJI/IZwEyc1Fke/CD8PPoSZvwtvOT0rnK+LFIo=";
   };
 
-  cargoHash = "sha256-+dPIujaxDJ7JrtNvX4VjGHFmgtCb1BJpFQL4c3E1/GY=";
+  cargoHash = "sha256-hlwHF6ESrRpXduXZmC/svldzYuoIwwOllf5pSbvEpCM=";
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
-    cargo-c
   ];
 
-  postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
-
-  postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
       --bash <($out/bin/yr completion bash) \
       --fish <($out/bin/yr completion fish) \
@@ -49,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tool to do pattern matching for malware research";
     homepage = "https://virustotal.github.io/yara-x/";
-    changelog = "https://github.com/VirusTotal/yara-x/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/VirusTotal/yara-x/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       fab
@@ -57,4 +49,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "yr";
   };
-})
+}

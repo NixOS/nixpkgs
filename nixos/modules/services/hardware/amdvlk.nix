@@ -40,9 +40,6 @@ in
     hardware.graphics = {
       enable = true;
       extraPackages = [ cfg.package ];
-    }
-    // lib.optionalAttrs cfg.support32Bit.enable {
-      enable32Bit = true;
       extraPackages32 = [ cfg.support32Bit.package ];
     };
 

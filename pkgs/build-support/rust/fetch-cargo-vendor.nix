@@ -53,16 +53,11 @@ let
     {
       name = "${name}-vendor-staging";
 
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-
       nativeBuildInputs = [
         fetchCargoVendorUtil
+        nix-prefetch-git
         cacert
-        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
-        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
-        (nix-prefetch-git.override { git-lfs = null; })
-      ]
-      ++ nativeBuildInputs;
+      ] ++ nativeBuildInputs;
 
       buildPhase = ''
         runHook preBuild
@@ -76,9 +71,6 @@ let
         runHook postBuild
       '';
 
-      strictDeps = true;
-
-      dontConfigure = true;
       dontInstall = true;
       dontFixup = true;
 

@@ -4,27 +4,30 @@
   async-lru,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
   oauthlib,
   pytestCheckHook,
-  requests-oauthlib,
+  pythonOlder,
   requests,
+  requests-oauthlib,
+  setuptools,
   vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.16.0";
+  version = "4.15.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tweepy";
     repo = "tweepy";
     tag = "v${version}";
-    hash = "sha256-9rJrZb9X3twVtfnQTFjWLH/TttfUNm4KA3/6AIHDKc0=";
+    hash = "sha256-vbiMwaJh4cN7OY7eYu2s8azs3A0KXvW/kRPVCx50ZVA=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     oauthlib
@@ -42,8 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     vcrpy
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "tweepy" ];
 

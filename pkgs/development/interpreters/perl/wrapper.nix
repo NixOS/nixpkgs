@@ -31,28 +31,29 @@ let
       ];
 
       # we create wrapper for the binaries in the different packages
-      postBuild = ''
-        if [ -L "$out/bin" ]; then
-            unlink "$out/bin"
-        fi
-        mkdir -p "$out/bin"
-
-        # take every binary from perl packages and put them into the env
-        for path in ${lib.concatStringsSep " " paths}; do
-          if [ -d "$path/bin" ]; then
-            cd "$path/bin"
-            for prg in *; do
-              if [ -f "$prg" ]; then
-                rm -f "$out/bin/$prg"
-                if [ -x "$prg" ]; then
-                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix PERL5LIB ':' "$out/${perl.libPrefix}"
-                fi
-              fi
-            done
+      postBuild =
+        ''
+          if [ -L "$out/bin" ]; then
+              unlink "$out/bin"
           fi
-        done
-      ''
-      + postBuild;
+          mkdir -p "$out/bin"
+
+          # take every binary from perl packages and put them into the env
+          for path in ${lib.concatStringsSep " " paths}; do
+            if [ -d "$path/bin" ]; then
+              cd "$path/bin"
+              for prg in *; do
+                if [ -f "$prg" ]; then
+                  rm -f "$out/bin/$prg"
+                  if [ -x "$prg" ]; then
+                    makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix PERL5LIB ':' "$out/${perl.libPrefix}"
+                  fi
+                fi
+              done
+            fi
+          done
+        ''
+        + postBuild;
 
       meta = perl.meta // {
         outputsToInstall = [ "out" ];

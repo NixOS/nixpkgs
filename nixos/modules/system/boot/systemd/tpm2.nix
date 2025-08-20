@@ -27,13 +27,13 @@
 
   options = {
     systemd.tpm2.enable = lib.mkEnableOption "systemd TPM2 support" // {
-      default = config.systemd.package.withTpm2Units;
-      defaultText = "systemd.package.withTpm2Units";
+      default = config.systemd.package.withTpm2Tss;
+      defaultText = "systemd.package.withTpm2Tss";
     };
 
     boot.initrd.systemd.tpm2.enable = lib.mkEnableOption "systemd initrd TPM2 support" // {
-      default = config.boot.initrd.systemd.package.withTpm2Units;
-      defaultText = "boot.initrd.systemd.package.withTpm2Units";
+      default = config.boot.initrd.systemd.package.withTpm2Tss;
+      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
     };
   };
 
@@ -64,12 +64,11 @@
           "systemd-tpm2-setup-early.service"
         ];
 
-        boot.initrd.availableKernelModules = [
-          "tpm-tis"
-        ]
-        ++ lib.optional (
-          !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)
-        ) "tpm-crb";
+        boot.initrd.availableKernelModules =
+          [ "tpm-tis" ]
+          ++ lib.optional (
+            !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)
+          ) "tpm-crb";
         boot.initrd.systemd.storePaths = [
           pkgs.tpm2-tss
           "${cfg.package}/lib/systemd/systemd-tpm2-setup"

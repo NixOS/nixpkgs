@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ashuffle";
-  version = "3.14.9";
+  version = "3.14.8";
 
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
-    tag = "v${version}";
-    hash = "sha256-HQ4+vyTvX0mhfuRclbiC+MvllV3300ztAwL0IxrUiC8=";
+    rev = "v${version}";
+    hash = "sha256-XnibLlwUspI2aveWfMg/TOe59vK6Z2WEnF7gafUmx6E=";
     fetchSubmodules = true;
   };
 

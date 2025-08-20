@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Finds geolocation on all image urls and directories";
     homepage = "https://github.com/aydinnyunus/exiflooter";
     changelog = "https://github.com/aydinnyunus/exifLooter/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ octodi ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ octodi ];
     mainProgram = "exiflooter";
   };
 }

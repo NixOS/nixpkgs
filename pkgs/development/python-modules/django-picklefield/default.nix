@@ -4,24 +4,22 @@
   fetchFromGitHub,
   django,
   python,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "3.3.0";
-  pyproject = true;
+  version = "3.2.0";
+  format = "setuptools";
 
+  # The PyPi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "gintas";
-    repo = "django-picklefield";
-    tag = "v${version}";
-    hash = "sha256-/H6spsf2fmJdg5RphD8a4YADggr+5d+twuLoFMfyEac=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-UMMbJoSHWcdumZOFPhKNUjThGzU/8nhP2J8YsDjgbHo=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ django ];
+  propagatedBuildInputs = [ django ];
 
   checkPhase = ''
     runHook preCheck
@@ -29,12 +27,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "picklefield" ];
-
   meta = with lib; {
     description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
-    changelog = "https://github.com/gintas/django-picklefield/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

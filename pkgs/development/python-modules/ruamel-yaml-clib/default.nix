@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchhg,
-  setuptools,
   cython,
 }:
 
 buildPythonPackage rec {
   pname = "ruamel-yaml-clib";
-  version = "0.2.12";
-  pyproject = true;
+  version = "0.2.7";
+  format = "setuptools";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml-clib/code";
     rev = version;
-    hash = "sha256-VKiNt2WJttVjMR0z4bvdSYKOZqycRONCSPQacAy5PYo=";
+    sha256 = "sha256-QNJyJWfCT8zEvrqI65zPlWIMSRZSoDwIAbFU48TfO4U=";
   };
-
-  build-system = [ setuptools ];
 
   # no tests
   doCheck = false;
@@ -26,6 +23,8 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "_ruamel_yaml" ];
   nativeBuildInputs = [ cython ];
 
+  # Fix incompatible function pointer conversion errors with clang 16.
+  patches = [ ./fix-incompatible-function-pointers.patch ];
   preBuild = "cython _ruamel_yaml.pyx -3 --module-name _ruamel_yaml -I.";
 
   meta = with lib; {

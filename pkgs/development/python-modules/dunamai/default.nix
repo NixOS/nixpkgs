@@ -1,47 +1,45 @@
 {
   lib,
+  poetry-core,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
+  pythonOlder,
+  importlib-metadata,
   packaging,
-
-  # tests
-  addBinToPathHook,
-  gitMinimal,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  git,
 }:
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.23.0";
+  version = "1.22.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "dunamai";
     tag = "v${version}";
-    hash = "sha256-JuW/VL8kfzz5mSXRHtrg/hHykgcewaQYfDuO2PALbWc=";
+    hash = "sha256-oOchPGBRHf3PT1Ynci56CF/eW4TkRVPV9inVNX2QQrk=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [ packaging ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
+  # needs to be able to run dunami from PATH
   preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
   '';
 
   nativeCheckInputs = [
-    addBinToPathHook
-    gitMinimal
+    git
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -51,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dunamai" ];
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic version generation";
     mainProgram = "dunamai";
     homepage = "https://github.com/mtkennerly/dunamai";
     changelog = "https://github.com/mtkennerly/dunamai/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jmgilman ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jmgilman ];
   };
 }

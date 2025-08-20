@@ -13,11 +13,7 @@ configuration format of `oh-my-zsh`.
 {
   programs.zsh.ohMyZsh = {
     enable = true;
-    plugins = [
-      "git"
-      "python"
-      "man"
-    ];
+    plugins = [ "git" "python" "man" ];
     theme = "agnoster";
   };
 }
@@ -38,7 +34,9 @@ scripts.
 
 The module can do this as well:
 ```nix
-{ programs.zsh.ohMyZsh.custom = "~/path/to/custom/scripts"; }
+{
+  programs.zsh.ohMyZsh.custom = "~/path/to/custom/scripts";
+}
 ```
 
 ## Custom environments {#module-programs-oh-my-zsh-environments}

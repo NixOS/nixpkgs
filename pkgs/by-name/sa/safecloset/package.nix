@@ -3,25 +3,30 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  darwin,
   xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "safecloset";
-  version = "1.4.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     rev = "v${version}";
-    hash = "sha256-1NvBNITb/KmUC2c+vchvyL9yZbK9xj5Es7AXYg0U9mE=";
+    hash = "sha256-buIceYP/dZMDw3tyrzj1bY6+sIIPaVJIVj1L//jZnws=";
   };
 
-  cargoHash = "sha256-VXxDD/2FFg3uQBdKdHsWOeLfOoCTYdaF+OZJVeQC6gE=";
+  cargoHash = "sha256-rxNp9dOvy/UTx6Q9pzZGccEKmIiWxzWVYyMxb+h5bqw=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libxcb
+    ];
 
   checkFlags = [
     # skip flaky test

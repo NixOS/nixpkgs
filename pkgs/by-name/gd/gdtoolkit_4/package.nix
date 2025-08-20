@@ -2,8 +2,6 @@
   lib,
   python3,
   fetchFromGitHub,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -12,12 +10,12 @@ let
     packageOverrides = self: super: {
       lark = super.lark.overridePythonAttrs (old: rec {
         # gdtoolkit needs exactly this lark version
-        version = "1.2.2";
+        version = "1.1.9";
         src = fetchFromGitHub {
           owner = "lark-parser";
           repo = "lark";
           rev = version;
-          hash = "sha256-Dc7wbMBY8CSeP4JE3hBk5m1lwzmCnNTkVoLdIukRw1Q=";
+          hash = "sha256-vDu+VPAXONY8J+A6oS7EiMeOMgzGms0nWpE+DKI1MVU=";
           fetchSubmodules = true;
         };
         patches = [ ];
@@ -27,14 +25,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.3.3";
-  format = "setuptools";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    tag = version;
-    hash = "sha256-GS1bCDOKtdJkzgP3+CSWEUeHQ9lUcAHDT09QmPOOeVc=";
+    rev = version;
+    hash = "sha256-XK6s/WnbTzjCAtV8dbRPLe5olpKUglPLQdttRRMvX70=";
   };
 
   disabled = python.pythonOlder "3.7";
@@ -48,16 +45,18 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs =
-    with python.pkgs;
-    [
-      pytestCheckHook
-      hypothesis
-    ]
-    ++ [
-      addBinToPathHook
-      writableTmpDirAsHomeHook
-    ];
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  preCheck = ''
+    # The tests want to run the installed executables
+    export PATH=$out/bin:$PATH
+
+    # gdtoolkit tries to write cache variables to $HOME/.cache
+    export HOME=$TMP
+  '';
 
   # The tests are not working on NixOS
   disabledTestPaths = [

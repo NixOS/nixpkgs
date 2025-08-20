@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    repo = "pytest-randomly";
+    repo = pname;
     owner = "pytest-dev";
     rev = version;
     hash = "sha256-bxbW22Nf/0hfJYSiz3xdrNCzrb7vZwuVvSIrWl0Bkv4=";
@@ -39,8 +39,9 @@ buildPythonPackage rec {
   ];
 
   # needs special invocation, copied from tox.ini
-  pytestFlags = [
-    "-pno:randomly"
+  pytestFlagsArray = [
+    "-p"
+    "no:randomly"
   ];
 
   pythonImportsCheck = [ "pytest_randomly" ];

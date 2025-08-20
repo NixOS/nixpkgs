@@ -1,13 +1,13 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ lib, ... }:
+{ ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
-  isoImage.edition = lib.mkDefault "gnome";
+  isoImage.edition = "gnome";
 
-  services.desktopManager.gnome = {
+  services.xserver.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
@@ -16,7 +16,7 @@
     enable = true;
   };
 
-  services.displayManager.gdm = {
+  services.xserver.displayManager.gdm = {
     enable = true;
     # autoSuspend makes the machine automatically suspend after inactivity.
     # It's possible someone could/try to ssh'd into the machine and obviously

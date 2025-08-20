@@ -1,50 +1,48 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  gperf,
-  zlib,
-}:
+{ lib, stdenv, fetchurl, zlib, gperf_3_0 }:
 
 stdenv.mkDerivation rec {
   pname = "libid3tag";
-  version = "0.16.3";
+  version = "0.15.1b";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "tenacityteam";
-    repo = "libid3tag";
-    rev = version;
-    hash = "sha256-6/49rk7pmIpJRj32WmxC171NtdIOaMNhX8RD7o6Jbzs=";
+  src = fetchurl {
+    url = "mirror://sourceforge/mad/libid3tag-${version}.tar.gz";
+    sha256 = "63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151";
   };
 
-  postPatch = ''
-    substituteInPlace packaging/id3tag.pc.in \
-      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"
-  '';
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false;
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    gperf
+  nativeBuildInputs = [ gperf_3_0 ];
+
+  buildInputs = [ zlib ];
+
+  patches = [
+    ./debian-patches.patch
+    ./CVE-2017-11550-and-CVE-2017-11551.patch
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  preConfigure = ''
+    configureFlagsArray+=(
+      --includedir=$dev/include
+    )
+  '';
 
-  meta = {
+  postInstall = ''
+    mkdir -p $dev/lib/pkgconfig
+    cp ${./id3tag.pc} $dev/lib/pkgconfig/id3tag.pc
+    substituteInPlace $dev/lib/pkgconfig/id3tag.pc \
+      --subst-var-by out $out \
+      --subst-var-by dev $dev \
+      --subst-var-by version "${version}"
+  '';
+
+  meta = with lib; {
     description = "ID3 tag manipulation library";
-    homepage = "https://codeberg.org/tenacityteam/libid3tag";
-    license = lib.licenses.gpl2Plus;
+    homepage = "https://mad.sourceforge.net/";
+    license = licenses.gpl2;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

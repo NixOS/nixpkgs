@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-lib2rPUTKudzbZQIGZxxxzvWNlbLkLdWtb9h7+C05QE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit pname version src;
-    hash = "sha256-59mxTtXQaGiHHbS4vOtwm5py/1BWwaSf+CBdKEtUpno=";
+    hash = "sha256-KrOvPeT8zhxSTNDRJPrAbUnSgnIQegRmNe5TEgGE8+s=";
   };
 
   nativeBuildInputs = [
@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
     mainProgram = "mousai";
     homepage = "https://github.com/SeaDve/Mousai";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
   };
 }

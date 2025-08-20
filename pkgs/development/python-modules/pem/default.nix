@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hynek";
-    repo = "pem";
+    repo = pname;
     tag = version;
     hash = "sha256-rVYlnvISGugh9qvf3mdrIyELmeOUU4g6291HeoMkoQc=";
   };
@@ -41,8 +41,7 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     twisted
-  ]
-  ++ twisted.optional-dependencies.tls;
+  ] ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "pem" ];
 

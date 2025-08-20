@@ -30,7 +30,7 @@ mkCoqDerivation {
   mlPlugin = true;
 
   meta = {
-    description = "Library for doing proofs by (enhanced) coinduction";
+    description = "A library for doing proofs by (enhanced) coinduction";
     license = lib.licenses.lgpl3Plus;
   };
 }

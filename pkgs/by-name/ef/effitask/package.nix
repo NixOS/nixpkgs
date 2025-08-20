@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sanpii";
-    repo = "effitask";
+    repo = pname;
     rev = version;
     sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
-  cargoHash = "sha256-j9WCzsh6aitmJeeyLDm0YrZHEAZlCNfGWANM/nmuncw=";
+  cargoHash = "sha256-ScqDNfWMFT8a1HOPjpw4J8EBrVSusIkOYReYeArZvZ8=";
 
   nativeBuildInputs = [ pkg-config ];
 

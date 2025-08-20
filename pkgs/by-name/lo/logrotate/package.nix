@@ -5,7 +5,7 @@
   gzip,
   popt,
   autoreconfHook,
-  aclSupport ? stdenv.hostPlatform.isLinux,
+  aclSupport ? stdenv.isLinux,
   acl,
   nixosTests,
 }:

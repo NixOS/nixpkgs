@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "httmock" ];
 

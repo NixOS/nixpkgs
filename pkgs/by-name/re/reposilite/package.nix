@@ -1,28 +1,18 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchurl,
-  jre_headless,
-  linkFarm,
   makeWrapper,
-  nixosTests,
-  plugins ? [ ],
+  jre_headless,
 }:
-let
-  pluginsDir = linkFarm "reposilite-plugins" (
-    builtins.map (p: {
-      name = (builtins.parseDrvName p.name).name + ".jar";
-      path = p.outPath or p;
-    }) plugins
-  );
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
-  version = "3.5.25";
+  version = "3.5.20";
 
   src = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${finalAttrs.version}/reposilite-${finalAttrs.version}-all.jar";
-    hash = "sha256-g1a+9TGRqRK4qcJW2ZACsiew5f27T4qkm/A+c7sVxHI=";
+    hash = "sha256-IdUHtulkSKvXatAs+BmzXgwv9oJz1XeRVtpEyIZ7BY4=";
   };
 
   dontUnpack = true;
@@ -35,27 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp $src $out/lib/reposilite
     makeWrapper ${jre_headless}/bin/java $out/bin/reposilite \
-      --add-flags "-Xmx40m -jar $out/lib/reposilite ${
-        lib.optionalString (plugins != [ ]) "--plugin-directory ${pluginsDir}"
-      }"
+      --add-flags "-Xmx40m -jar $out/lib/reposilite"
 
     runHook postInstall
   '';
-
-  passthru = {
-    tests = nixosTests.reposilite;
-    updateScript = ./update.sh;
-  };
 
   meta = {
     description = "Lightweight and easy-to-use repository management software dedicated for the Maven based artifacts in the JVM ecosystem";
     homepage = "https://github.com/dzikoysk/reposilite";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      jamalam
-      uku3lig
-    ];
+    maintainers = with lib.maintainers; [ jamalam ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "reposilite";
   };

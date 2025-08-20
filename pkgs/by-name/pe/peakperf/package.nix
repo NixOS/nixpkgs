@@ -9,6 +9,7 @@
   versionCheckHook,
   installShellFiles,
   unstableGitUpdater,
+  fetchpatch,
   autoAddDriverRunpath,
 }:
 
@@ -23,14 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CoGWj+zskcv8caFjhy55GKTKqFq2y1/nMjiVc6TzU1c=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-  ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      installShellFiles
+    ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
   buildInputs = lib.optionals enableCuda [
     cudaPackages.cuda_cudart

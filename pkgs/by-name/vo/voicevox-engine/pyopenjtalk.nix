@@ -4,13 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchzip,
-
   setuptools,
-  setuptools-scm,
-  cython,
+  cython_0,
   cmake,
   numpy,
   oldest-supported-numpy,
+  six,
   tqdm,
 }:
 
@@ -23,24 +22,32 @@ let
 in
 buildPythonPackage {
   pname = "pyopenjtalk";
-  version = "0-unstable-2025-04-23";
+  version = "0-unstable-2023-09-08";
   pyproject = true;
-
-  # needed because setuptools-scm doesn't like the 0-unstable format
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "pyopenjtalk";
-    rev = "74703b034dd90a1f199f49bb70bf3b66b1728a86";
-    hash = "sha256-UUUYoVEqENKux5N7ucbjcnrZ2+ewwxwP8S0WksaJEAQ=";
+    rev = "b35fc89fe42948a28e33aed886ea145a51113f88";
+    hash = "sha256-DbZkCMdirI6wSRUQSJrkojyjGmViqGeQPO0kSKiw2gE=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # this patch fixes the darwin build
+    # open_jtalk uses mecab, which uses the register keyword and std::binary_function, which are not allowed in c++17
+    # this patch removes them
+    ./mecab-remove-deprecated.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+        --replace-fail 'setuptools<v60.0' 'setuptools'
+  '';
+
   build-system = [
     setuptools
-    setuptools-scm
-    cython
+    cython_0
     cmake
     numpy
     oldest-supported-numpy
@@ -49,7 +56,9 @@ buildPythonPackage {
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    setuptools # imports pkg_resources at runtime
     numpy
+    six
     tqdm
   ];
 

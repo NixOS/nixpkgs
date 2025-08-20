@@ -1,56 +1,49 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cython,
-  setuptools,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.10";
-  pyproject = true;
+  version = "0.1.9";
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "sebastinas";
-    repo = "cwcwidth";
-    tag = "v${version}";
-    hash = "sha256-JrzItV+nCpQCz9MM1pcq5FtGZOsWNbgAra6i5WT4Mcg=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-8Z0RoBSNSoys0GTJbpO8qM40FaGGroIEA49F4Qjbdrg=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cython
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
-    # prevent import shadow
-    rm -rf cwcwidth
+    # Hack needed to make pytest + cython work
+    # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
+    export HOME=$(mktemp -d)
+    cp -r $TMP/$sourceRoot/tests $HOME
+    pushd $HOME
 
-    # locale settings used by upstream, has the effect of skipping otherwise-failing tests on darwin
+    # locale settings used by upstream, has the effect of skipping
+    # otherwise-failing tests on darwin
     export LC_ALL='C.UTF-8'
     export LANG='C.UTF-8'
   '';
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Despite setting the locales above, this test fails with:
-    # AssertionError: Tuples differ: (1, 1, 1, 1) != (1, 1, 1, 0)
-    "test_combining_spacing"
-  ];
+  postCheck = "popd";
 
   pythonImportsCheck = [ "cwcwidth" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for wc(s)width";
     homepage = "https://github.com/sebastinas/cwcwidth";
-    changelog = "https://github.com/sebastinas/cwcwidth/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/sebastinas/cwcwidth/blob/main/CHANGELOG.md";
+    license = licenses.mit;
     maintainers = [ ];
   };
 }

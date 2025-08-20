@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "fritzbox-exporter";
   version = "unstable-2021-04-13";
 

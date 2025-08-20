@@ -3,42 +3,36 @@
   stdenv,
   fetchurl,
   appimageTools,
-  undmg,
 }:
 let
   pname = "insomnia";
-  version = "11.0.1";
+  version = "10.2.0";
 
   src =
     fetchurl
       {
-        aarch64-darwin = {
-          url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
-        };
         x86_64-darwin = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
+          hash = "sha256-Yny5Rwt8XHTM77DH4AXmY8VtZ92F7jAdNW+polPePJk=";
         };
         x86_64-linux = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
-          hash = "sha256-X0UiD+IhyMTrUmsgocw0bpRZEk5YNEF3CMo3IkwKtvA=";
+          hash = "sha256-DmDYyYJq7B4Zs9SCwyxgY3F5v+MXAhCKeQB35b3E86w=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = {
+  meta = with lib; {
     homepage = "https://insomnia.rest";
-    description = "Open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC, with Cloud, Local and Git storage";
+    description = " The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage.";
     mainProgram = "insomnia";
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     platforms = [
-      "aarch64-darwin"
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       markus1189
       kashw2
       DataHearth
@@ -55,7 +49,23 @@ if stdenv.hostPlatform.isDarwin then
       ;
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    unpackCmd = ''
+      echo "Creating temp directory"
+      mnt=$(TMPDIR=/tmp mktemp -d -t nix-XXXXXXXXXX)
+      function finish {
+        echo "Ejecting temp directory"
+        /usr/bin/hdiutil detach $mnt -force
+        rm -rf $mnt
+      }
+      # Detach volume when receiving SIG "0"
+      trap finish EXIT
+      # Mount DMG file
+      echo "Mounting DMG file into \"$mnt\""
+      /usr/bin/hdiutil attach -nobrowse -mountpoint $mnt $curSrc
+      # Copy content to local dir for later use
+      echo 'Copying extracted content into "sourceRoot"'
+      cp -a $mnt/Insomnia.app $PWD/
+    '';
 
     installPhase = ''
       runHook preInstall

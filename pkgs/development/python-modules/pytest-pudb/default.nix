@@ -7,9 +7,9 @@
   pudb,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pytest-pudb";
-  version = "0.8.0";
+  version = "0.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {

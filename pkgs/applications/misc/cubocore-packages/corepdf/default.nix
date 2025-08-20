@@ -1,49 +1,46 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  kdePackages,
+  qtbase,
+  poppler,
+  qtwebengine,
   cmake,
   ninja,
-  pkg-config,
   libcprime,
   libcsys,
-  qdocumentview,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "corepdf";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "corepdf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fhEuMk15yCA6IUasD9rJPR8sB+h0tz8niOQtXFIe7Uc=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-t3r/bF/uKoprdDoRjrmYTND0Jws+jX6tAGnBeqofBF8=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkg-config
-    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kdePackages.qtbase
-    kdePackages.qtwebengine
-    kdePackages.poppler
-    qdocumentview
+    qtbase
+    poppler
+    qtwebengine
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "PDF viewer from the C Suite";
     mainProgram = "corepdf";
     homepage = "https://gitlab.com/cubocore/coreapps/corepdf";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

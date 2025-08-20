@@ -9,7 +9,7 @@
   curl,
   pcre2,
   libiconv,
-  php,
+  darwin,
 }:
 
 buildPecl rec {
@@ -24,27 +24,39 @@ buildPecl rec {
     hash = "sha256-Kx2HaWvRT+mFIs0LAAptx6nm9DQ83QEuyHNcEPEr7A4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-cwhE6M8r8QnrIiNgEekI25GcKTByySrZsigPd9/Fq7o=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "datadog-profiling-5.0.0" = "sha256-/Z1vGpAHpU5EO80NXnzyAHN4s3iyA1jOquBS8MH1nOo=";
+    };
   };
 
   env.NIX_CFLAGS_COMPILE = "-O2";
 
-  nativeBuildInputs = [
-    cargo
-    rustc
-    rustPlatform.bindgenHook
-    rustPlatform.cargoSetupHook
-  ];
+  nativeBuildInputs =
+    [
+      cargo
+      rustc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rustPlatform.bindgenHook
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.rustPlatform.bindgenHook
+      darwin.apple_sdk_11_0.rustPlatform.cargoSetupHook
+    ];
 
-  buildInputs = [
-    curl
-    pcre2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      curl
+      pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      libiconv
+    ];
 
   meta = {
     changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
@@ -54,7 +66,6 @@ buildPecl rec {
       asl20
       bsd3
     ];
-    teams = [ lib.teams.php ];
-    broken = lib.versionAtLeast php.version "8.4";
+    maintainers = lib.teams.php.members;
   };
 }

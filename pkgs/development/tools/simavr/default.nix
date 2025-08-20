@@ -11,6 +11,7 @@
   avrlibc,
   libGLU,
   libGL,
+  GLUT,
 }:
 
 let
@@ -45,14 +46,13 @@ stdenv.mkDerivation rec {
     which
     pkg-config
     avrgcc
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
   buildInputs = [
     libelf
     libglut
     libGLU
     libGL
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
 
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jh2";
-  version = "5.0.9";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,13 +21,14 @@ buildPythonPackage rec {
     owner = "jawah";
     repo = "h2";
     tag = "v${version}";
-    hash = "sha256-PA2hv+PIqcsvAIh8yIoQjol+Iaa3qsNRE8rBnR4UOzY=";
+    hash = "sha256-H1i2lolctispLtQc+uqeE+NUeKr/dtgDq1zdTJH5gyU=";
     fetchSubmodules = true;
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-CW95omstpWm76TTSKsb04iChU0EW1Vl+OA3QXxfZAX0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-E/Ah1sEqKrJd49ZvvbhqWtV1Abd0S1Ab/AF4tOn2RPY=";
   };
 
   build-system = [
@@ -49,9 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jawah/h2";
     changelog = "https://github.com/jawah/h2/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      fab
-      techknowlogick
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

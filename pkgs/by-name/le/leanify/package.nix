@@ -5,15 +5,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "leanify";
-  version = "unstable-2025-05-15";
+  version = "unstable-2023-12-17";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "42770e600b32962e7110c24b5fcaa8c7c2144b17";
-    hash = "sha256-njfMR2DSKeVh+ZUewall7837E9JY3nhrTxO4LOY1pEo=";
+    rev = "9daa4303cdc03f6b90b72c369e6377c6beb75c39";
+    hash = "sha256-fLazKCQnOT3bN3Kz25Q80RLk54EU5U6HCf6kPLcXn9c=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -29,9 +29,7 @@ stdenv.mkDerivation {
 
   checkPhase = ''
     runHook preCheck
-
     ./leanify /dev/null
-
     runHook postCheck
   '';
 

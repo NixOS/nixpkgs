@@ -4,13 +4,7 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  libXrandr,
-  libXcursor,
-  libXft,
-  libXt,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,34 +14,39 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
-    tag = "SPECTRWM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    rev = "SPECTRWM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-Dnn/iIrceiAVuMR8iMGcc7LqNhWC496eT5gNrYOInRU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libXrandr
-    libXcursor
-    libXft
-    libXt
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
-    libbsd
-  ];
+  buildInputs = (
+    with xorg;
+    [
+      libXrandr
+      libXcursor
+      libXft
+      libXt
+      xcbutil
+      xcbutilkeysyms
+      xcbutilwm
+    ]
+    ++ [ libbsd ]
+  );
 
-  sourceRoot = finalAttrs.src.name + (if stdenv.hostPlatform.isDarwin then "/osx" else "/linux");
+  prePatch =
+    let
+      subdir = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
+    in
+    "cd ${subdir}";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tiling window manager";
     homepage = "https://github.com/conformal/spectrwm";
-    maintainers = with lib.maintainers; [
-      rake5k
-    ];
-    license = lib.licenses.isc;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ rake5k ];
+    license = licenses.isc;
+    platforms = platforms.all;
 
     longDescription = ''
       spectrwm is a small dynamic tiling window manager for X11. It

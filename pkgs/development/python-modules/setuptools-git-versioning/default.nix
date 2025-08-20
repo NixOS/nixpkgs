@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "setuptools-git-versioning";
   version = "2.1.0";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dolfinus";
@@ -26,14 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-Slf6tq83LajdTnr98SuCiFIdm/6auzftnARLAOBgyng=";
   };
 
-  postPatch = ''
-    # Because the .git dir is missing, it falls back to using version 0.0.1
-    # Instead we use the version specified in the derivation
-    substituteInPlace setup.py --replace-fail \
-      'version=version_from_git(root=here, dev_template="{tag}.post{ccount}")' \
-      "version='${version}'"
-  '';
-
   build-system = [
     setuptools
   ];
@@ -41,8 +33,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "setuptools_git_versioning" ];
 
@@ -61,7 +52,8 @@ buildPythonPackage rec {
   '';
 
   # limit tests because the full suite takes several minutes to run
-  enabledTestMarks = [
+  pytestFlagsArray = [
+    "-m"
     "important"
   ];
 

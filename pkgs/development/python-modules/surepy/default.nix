@@ -20,26 +20,27 @@
 buildPythonPackage rec {
   pname = "surepy";
   version = "0.9.0";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";
-    repo = "surepy";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
   };
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "async-timeout"
-    "rich"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
+      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
+  '';
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiodns
     aiohttp
     async-timeout
@@ -60,10 +61,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";
-    homepage = "https://github.com/benleb/surepy";
-    changelog = "https://github.com/benleb/surepy/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
     mainProgram = "surepy";
+    homepage = "https://github.com/benleb/surepy";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

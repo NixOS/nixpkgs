@@ -4,8 +4,6 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchurl,
-  libGL,
-  libGLU,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -21,8 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [
-    libGL
-    libGLU
     SDL
     SDL_image
     SDL_mixer

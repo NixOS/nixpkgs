@@ -2,18 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "cliqr";
-  version = "0.1.29";
+  version = "0.1.25";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "cliqr";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fhNMiUaCTk4xYGJRMuZCHeYvzGeVwkS7E7LU1L+LuBg=";
+    tag = "v${version}";
+    hash = "sha256-iPNI92kCNFXRiV5NV7Yj0gznwNeFoW02yh6QLrkBYO0=";
   };
 
   vendorHash = null;
@@ -23,14 +22,12 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    changelog = "https://github.com/paepckehh/cliqr/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/paepckehh/cliqr/releases/tag/v${version}";
     homepage = "https://paepcke.de/cliqr";
     description = "Transfer, share data & secrets via console qr codes";
     license = lib.licenses.bsd3;
     mainProgram = "cliqr";
     maintainers = with lib.maintainers; [ paepcke ];
   };
-})
+}

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "5.0.0";
+  version = "4.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aBgMrRVAYr1bXZ/83UZPjeaTRBSyVGKugHsAuN+TRd4=";
+    hash = "sha256-7gahgqnISUZM6dX6kXU5qsyO3SpJJNG3qr7uyryuO8I=";
   };
 
   pythonImportsCheck = [ "uritools" ];

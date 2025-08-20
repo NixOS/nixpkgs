@@ -7,7 +7,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "konsave";
   version = "2.2.0";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
@@ -15,17 +14,15 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-tWarqT2jFgCuSsa2NwMHRaR3/wj0khiRHidvRNMwM8M=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = with python3Packages; [
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+  propagatedBuildInputs = with python3Packages; [
     pyyaml
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
-  pythonImportsCheck = [ "konsave" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Save Linux Customization";

@@ -24,7 +24,7 @@ buildGoModule rec {
     description = "Prometheus exporter for Nextcloud servers";
     homepage = "https://github.com/xperimental/nextcloud-exporter";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ willibutz ];
     mainProgram = "nextcloud-exporter";
   };
 }

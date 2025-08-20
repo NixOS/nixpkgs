@@ -1,8 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchPypi,
   pythonOlder,
   flit-core,
   async-timeout,
@@ -16,34 +15,33 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.9";
-  pyproject = true;
+  version = "0.8.0";
 
-  src = fetchFromGitLab {
-    owner = "takluyver";
-    repo = "jeepney";
-    tag = version;
-    hash = "sha256-d8w/4PtDviTYDHO4EwaVbxlYk7CXtlv7vuR+o4LhfRs=";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
+    async-timeout
     dbus
     pytest
     pytest-trio
     pytest-asyncio
     testpath
     trio
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- pytest ${lib.optionalString stdenv.hostPlatform.isDarwin "--ignore=jeepney/io/tests"}
+    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- pytest
 
     runHook postCheck
   '';
@@ -59,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${src.tag}/docs/release-notes.rst";
     homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = licenses.mit;

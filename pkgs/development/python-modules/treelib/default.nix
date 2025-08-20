@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "treelib";
-  version = "1.7.1";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "caesar0301";
     repo = "treelib";
-    tag = "v${version}";
-    hash = "sha256-+6Ur2hEhUxHccZLdWHCyCkdI6Zr/wGTBIIzzbpEEiSY=";
+    rev = "v${version}";
+    hash = "sha256-FIdJWpkOmUVZb+IkYocu1nn+oSPROrkcHeiw9wZupgM=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficient implementation of tree data structure in python 2/3";
     homepage = "https://github.com/caesar0301/treelib";
-    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
+    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbalatsko ];
   };

@@ -28,19 +28,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guacamole-server";
-  version = "1.6.0-unstable-2025-06-29";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
-    rev = "f3f5b9d76649ccc24f551cb166c81078f4b5e236";
-    hash = "sha256-OjTwAQzKUuXfwZXLsL9XjrJc/0be38CmAGG+CoCeNwk=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZrUaoWkZ3I/LxE7csDXXeUZ92jZDhkZ1c8EQU0gI1yY=";
   };
+
+  patches = [
+    # GUACAMOLE-1952: Add compatibility with FFMPEG 7.0
+    (fetchpatch2 {
+      url = "https://github.com/apache/guacamole-server/commit/cc8addf9beb90305037a32f9f861a893be4cae08.patch?full_index=1";
+      hash = "sha256-VCr2/8lQHKVdsdah9gvak4MjFHO+X4ixE5+zsvwIY1I=";
+    })
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
-    "-Wno-error=deprecated-declarations"
   ];
 
   strictDeps = true;

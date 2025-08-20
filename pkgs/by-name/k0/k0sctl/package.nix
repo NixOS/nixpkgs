@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.25.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = "k0sctl";
     tag = "v${version}";
-    hash = "sha256-mdmmvFCZMaTKMPjaVSgGvADcJ/MdDXyUBtvck638+Ss=";
+    hash = "sha256-hArlgDBfqsnla55cctIMQjzY6GJJNLaFXC9EVyzrNms=";
   };
 
-  vendorHash = "sha256-B1pmdv2dkP9Kin38Kc2DllP7BpHjesX8AAD4TgYYu/I=";
+  vendorHash = "sha256-fwE7eZrqWnlHO7vtBZOxqzCJvyguKX7Pt9KL0yjfCUA=";
 
   ldflags = [
     "-s"
@@ -44,13 +44,13 @@ buildGoModule rec {
     version = "version: (devel)\ncommit: v${version}\n";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
     changelog = "https://github.com/k0sproject/k0sctl/releases/tag/v${version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "k0sctl";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       nickcao
       qjoly
     ];

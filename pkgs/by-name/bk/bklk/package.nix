@@ -5,13 +5,13 @@
   ncurses,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bklk";
-  version = "0-unstable-2020-12-29";
+  version = "unstable-2020-12-29";
 
   src = fetchFromGitHub {
     owner = "Ruunyox";
-    repo = "bklk";
+    repo = pname;
     rev = "26f3420aa5726e152a745278ddb98dc99c0a935e";
     sha256 = "sha256-R3H6tv6fzQG41Y2rui0K8fdQ/+Ywnc5hqTPFjktrhF8=";
   };

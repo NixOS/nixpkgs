@@ -2,32 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nixosTests,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.14.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
-    repo = "routinator";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-itD9d+EqEdJ2bTJEpHxJCFFS8Mpc7AFQ1JgkNQxncV0=";
+    hash = "sha256-SUcAhXIPgYGFkUIgSrUJrxwWQvkkmWG/d12hv8+PQI0=";
   };
 
-  cargoHash = "sha256-58EnGouq8iKkgsvyHqARoQ0u4QXjw0m6pv4Am4J9wlU=";
+  cargoHash = "sha256-1JxAbQPCQqDVry3wGIdY4q18rzCXlJ7Dnc8LIvhkW1g=";
 
-  meta = {
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
+
+  meta = with lib; {
     description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ _0x4A6F ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
-  };
-
-  passthru.tests = {
-    basic-functioniality = nixosTests.routinator;
   };
 }

@@ -1,15 +1,23 @@
-{ pkgs, runTest, ... }:
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+
 let
   hosts = ''
     192.168.2.101 acme.test
   '';
 
 in
+
 builtins.listToAttrs (
   builtins.map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
-      value = runTest {
+      value = makeTest {
         name = "nginx-http3-${pkgs.lib.getName nginxPackage}";
         meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
@@ -90,7 +98,6 @@ builtins.listToAttrs (
 
           server.wait_for_unit("nginx")
           server.wait_for_open_port(443)
-          client.wait_for_unit("network-online.target")
 
           # Check http connections
           client.succeed("curl --verbose --http3-only https://acme.test | grep 'Hello World!'")

@@ -1,84 +1,72 @@
 {
   lib,
+  fetchPypi,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
   setuptools-scm,
-
-  # dependencies
-  cwcwidth,
   lxml,
-
-  # tests
-  aeidon,
-  charset-normalizer,
-  cheroot,
-  fluent-syntax,
-  gettext,
+  wcwidth,
+  pytestCheckHook,
   iniparse,
+  vobject,
   mistletoe,
   phply,
   pyparsing,
-  pytestCheckHook,
   ruamel-yaml,
+  cheroot,
+  fluent-syntax,
+  aeidon,
+  charset-normalizer,
   syrupy,
-  vobject,
+  gettext,
 }:
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.15.6";
+  version = "3.14.1";
 
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "translate";
-    repo = "translate";
-    tag = version;
-    hash = "sha256-G6DzpOkyD2FiskHwOhOsgRrZCXQJ9ITjp6PVZd3j9f4=";
-  };
-
   build-system = [ setuptools-scm ];
 
+  src = fetchPypi {
+    pname = "translate_toolkit";
+    inherit version;
+    hash = "sha256-IUjEN8Up1Or4nFo71WkDduq+6Xw8ObfUgkABp88zPoY=";
+  };
+
   dependencies = [
-    cwcwidth
     lxml
+    wcwidth
   ];
 
   nativeCheckInputs = [
-    aeidon
-    charset-normalizer
-    cheroot
-    fluent-syntax
-    gettext
+    pytestCheckHook
     iniparse
+    vobject
     mistletoe
     phply
     pyparsing
-    pytestCheckHook
     ruamel-yaml
+    cheroot
+    fluent-syntax
+    aeidon
+    charset-normalizer
     syrupy
-    vobject
+    gettext
   ];
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-
     # Requires network
     "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
 
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
+  meta = with lib; {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${src.tag}.html";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ erictapen ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ erictapen ];
   };
 }

@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.23.1";
+  version = "1.20.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -103,8 +103,8 @@ stdenv.mkDerivation {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "foot";
-    tag = version;
-    hash = "sha256-jPHr47ISAp9vzytCEiz/Jx5l8JTkYhtc02hEaiKKQOc=";
+    rev = version;
+    hash = "sha256-0tnB6fCZEUAlQ3iPxXXlJ5EXPMeWSNIHsIWV4d3cuKM=";
   };
 
   separateDebugInfo = true;
@@ -113,17 +113,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    wayland-scanner
-    meson
-    ninja
-    ncurses
-    scdoc
-    pkg-config
-  ]
-  ++ lib.optionals (compilerName == "clang") [
-    stdenv.cc.cc.libllvm.out
-  ];
+  nativeBuildInputs =
+    [
+      wayland-scanner
+      meson
+      ninja
+      ncurses
+      scdoc
+      pkg-config
+    ]
+    ++ lib.optionals (compilerName == "clang") [
+      stdenv.cc.cc.libllvm.out
+    ];
 
   buildInputs = [
     tllist
@@ -199,9 +200,6 @@ stdenv.mkDerivation {
     "themes"
   ];
 
-  passthru = { inherit stimulusGenerator; };
-  passthru.updateScript = ./update.sh;
-
   passthru.tests = {
     clang-default-compilation = foot.override {
       inherit (llvmPackages) stdenv;
@@ -219,16 +217,16 @@ stdenv.mkDerivation {
     });
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "Fast, lightweight and minimalistic Wayland terminal emulator";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      sternenseemann
-      abbe
+    license = licenses.mit;
+    maintainers = [
+      maintainers.sternenseemann
+      maintainers.abbe
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "foot";
   };
 }

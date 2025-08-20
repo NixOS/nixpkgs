@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-up";
-  version = "0.9.0";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "MousaZeidBaker";
-    repo = "poetry-plugin-up";
-    tag = "v${version}";
-    hash = "sha256-gVhx8Vhk+yT/QjcEme8w0F+6BBpnEZOqzCkUJgM9eck=";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PWHbMDGL9CGLRmvFWLOztUW0f/TJioPjQtAgpyCbAqw=";
   };
 
   build-system = [
@@ -37,11 +37,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Poetry plugin to simplify package updates";
     homepage = "https://github.com/MousaZeidBaker/poetry-plugin-up";
     changelog = "https://github.com/MousaZeidBaker/poetry-plugin-up/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.k900 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.k900 ];
+    # https://github.com/MousaZeidBaker/poetry-plugin-up/pull/70
+    broken = lib.versionAtLeast poetry.version "2";
   };
 }

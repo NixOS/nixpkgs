@@ -9,7 +9,7 @@
   xz,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   version = "111.15329";
 
   pname = "vboot_reference";

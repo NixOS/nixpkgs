@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   doxygen,
@@ -13,30 +12,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.33";
+  version = "6.0.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-ZnRhrlgrQ7Vusod2diFwVEVnNGHYNq5Ij12GbW6LXWc=";
+    hash = "sha256-Ybi68lTSUJpAipx92JF7wj6y+GTYDodJKRCVFhfnBvQ=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-    (fetchpatch {
-      name = "resolve-compilation-issues-on-Qt-6_9.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6gui/-/raw/ae64c77a73cdea069579ecf6833be63635237180/qt-6.9.patch";
-      hash = "sha256-45L3ZQ9Hv7tLdDjtazLhVl8XgKBtcHL3CT2nw6GkqgM=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace src/util/dsvgrenderer.cpp \
       --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
-    sed '1i#include <pwd.h>' \
-      -i 'src/kernel/dguiapplicationhelper.cpp'
   '';
 
   nativeBuildInputs = [
@@ -88,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6gui";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 })

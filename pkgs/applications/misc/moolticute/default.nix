@@ -37,8 +37,6 @@ mkDerivation rec {
     qtwebsockets
   ];
 
-  doInstallCheck = true;
-
   preConfigure = "mkdir -p build && cd build";
   qmakeFlags = [ "../Moolticute.pro" ];
 

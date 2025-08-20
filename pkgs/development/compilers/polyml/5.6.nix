@@ -14,15 +14,8 @@ stdenv.mkDerivation {
   pname = "polyml";
   inherit version;
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
-    AH_TEMPLATE([_Static_assert])
-    AC_DEFINE([_Static_assert], [static_assert])
-    "
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure.ac --replace-fail stdc++ c++
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace stdc++ c++
   '';
 
   patches = [
@@ -33,7 +26,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
 
   src = fetchurl {
     url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";

@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-spec";
-  version = "5.0.0";
+  version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pchomik";
     repo = "pytest-spec";
     tag = version;
-    hash = "sha256-EWhKqGOLBa+Eb4fJtkamP8it+hWeK3rGWKgY8mJI53U=";
+    hash = "sha256-SOu4ucRcLQSk1YOfNifFDezsB+ZeLXTwbJJ93/3EASk=";
   };
 
   build-system = [

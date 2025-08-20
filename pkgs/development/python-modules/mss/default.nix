@@ -4,7 +4,7 @@
   fetchPypi,
   pythonOlder,
   stdenv,
-  replaceVars,
+  substituteAll,
 
   # build-system
   hatchling,
@@ -23,18 +23,19 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "10.1.0";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
+    hash = "sha256-2QPg1RJivw+HgoQc8W6qbX4+HxLq41q0HC4xiDfGY38=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (replaceVars ./linux-paths.patch {
+    (substituteAll {
+      src = ./linux-paths.patch;
       x11 = "${xorg.libX11}/lib/libX11.so";
       xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
       xrandr = "${xorg.libXrandr}/lib/libXrandr.so";

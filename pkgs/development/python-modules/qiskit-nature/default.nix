@@ -48,8 +48,7 @@ buildPythonPackage rec {
     rustworkx
     scikit-learn
     scipy
-  ]
-  ++ lib.optional withPyscf pyscf;
+  ] ++ lib.optional withPyscf pyscf;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -60,7 +59,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlags = [ "--durations=10" ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   disabledTests = [
     "test_two_qubit_reduction" # failure cause unclear

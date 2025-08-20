@@ -10,7 +10,7 @@
   qtlocation,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "libosmscout";
   version = "2022.04.25";
 

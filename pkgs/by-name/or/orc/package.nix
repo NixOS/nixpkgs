@@ -5,7 +5,7 @@
   meson,
   ninja,
   file,
-  docbook-xsl-nons,
+  docbook_xsl,
   gtk-doc ? null,
   buildDevDoc ? gtk-doc != null,
 
@@ -14,22 +14,18 @@
   gst_all_1,
   qt6,
   vips,
+
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit (lib) optional optionals;
+in
+stdenv.mkDerivation rec {
   pname = "orc";
-  version = "0.4.41";
-
-  outputs = [
-    "out"
-    "dev"
-  ]
-  ++ lib.optional buildDevDoc "devdoc";
-  outputBin = "dev"; # compilation tools
+  version = "0.4.40";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yxv9T2VSic05vARkLVl76d5UJ2I/CGHB/BnAjZhGf6I=";
+    url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
+    hash = "sha256-P8K+5437fEH9lgUGH8aRONt98Afq4vZpofVui6zvdKs=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -37,19 +33,24 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
-  mesonFlags = [
-    (lib.mesonEnable "gtk_doc" buildDevDoc)
-  ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ optional buildDevDoc "devdoc";
+  outputBin = "dev"; # compilation tools
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ]
-  ++ lib.optionals buildDevDoc [
-    gtk-doc
-    file
-    docbook-xsl-nons
-  ];
+  mesonFlags = optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ];
+
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+    ]
+    ++ optionals buildDevDoc [
+      gtk-doc
+      file
+      docbook_xsl
+    ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
   doCheck =
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
-    changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
+    changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with licenses; [
@@ -79,4 +80,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = [ ];
   };
-})
+}

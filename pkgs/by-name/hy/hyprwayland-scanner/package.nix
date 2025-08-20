@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwayland-scanner";
-  version = "0.4.5";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwayland-scanner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FnhBENxihITZldThvbO7883PdXC/2dzW4eiNvtoV5Ao=";
+    hash = "sha256-fktzv4NaqKm94VAkAoVqO/nqQlw+X0/tJJNAeCSfzK4=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland version of wayland-scanner in and for C++";
     changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      johnrtitor
+    ];
     mainProgram = "hyprwayland-scanner";
     platforms = lib.platforms.linux;
   };

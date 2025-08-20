@@ -4,7 +4,7 @@
   fetchurl,
   readline,
   libmysqlclient,
-  libpq,
+  postgresql,
   sqlite,
 }:
 
@@ -27,17 +27,10 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
-  configureFlags = [
-    # detection fails when cross-compiling
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-    "ac_cv_func_strtod=yes"
-  ];
-
   buildInputs = [
     readline
     libmysqlclient
-    libpq
+    postgresql
     sqlite
   ];
 

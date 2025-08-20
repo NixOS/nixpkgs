@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
-    repo = "river-tag-overlay";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-hLyXdLi/ldvwPJ1oQQsH5wgflQJuXu6vhYw/qdKAV9E=";
   };

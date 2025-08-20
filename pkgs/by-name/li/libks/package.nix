@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "2.0.7";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "signalwire";
-    repo = "libks";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fiBemt71UJgN0RryGmGiK7sob1xbdmSOArEGt5Pg5YM=";
+    sha256 = "sha256-zKL+ukAdKiCC4wh55hnZpebFraIdKWDFsRfhVzhUNj0=";
   };
 
   patches = [
@@ -37,11 +37,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libuuid
-  ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
+  buildInputs =
+    [ openssl ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libuuid
+    ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
 
   passthru = {
     tests.freeswitch = freeswitch;

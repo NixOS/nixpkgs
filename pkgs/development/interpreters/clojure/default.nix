@@ -1,23 +1,13 @@
-{
-  lib,
-  stdenv,
-  bashNonInteractive,
-  fetchurl,
-  installShellFiles,
-  jdk,
-  rlwrap,
-  makeWrapper,
-  writeScript,
-}:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.1.1550";
+  version = "1.12.0.1488";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kGxiVnnHLnA1h1mIpGOSodg9Fu4d9ZmlYaL9M0JLDT8=";
+    hash = "sha256-vBm+ABC+8EIcJv077HvDvKCMGSgo1ZoVGEVCLcRCB0I=";
   };
 
   nativeBuildInputs = [
@@ -25,19 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    bashNonInteractive
-  ];
-
-  strictDeps = true;
-
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
-      binPath = lib.makeBinPath [
-        rlwrap
-        jdk
-      ];
+      binPath = lib.makeBinPath [ rlwrap jdk ];
     in
     ''
       runHook preInstall

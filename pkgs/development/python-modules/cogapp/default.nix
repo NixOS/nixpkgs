@@ -1,34 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "3.5.0";
+  version = "3.4.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "nedbat";
-    repo = "cog";
-    tag = "v${version}";
-    hash = "sha256-jmHAHBzUw8VLCudT8slisCJ7yOUTVrrLiUbEiiTcfew=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qAbV254xihotP86YgAgXkWjn2xPl5VsZt5dj+budKYI=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [ "cogapp" ];
+  # there are no tests
+  doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  meta = {
+  meta = with lib; {
     description = "Code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
-    changelog = "https://github.com/nedbat/cog/blob/v${version}/CHANGELOG.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

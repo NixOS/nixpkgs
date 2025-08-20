@@ -104,7 +104,7 @@ in
       {
         assertions = [
           {
-            assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
+            assertion = pkgs.stdenv.hostPlatform.isx86;
             message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
           }
         ];

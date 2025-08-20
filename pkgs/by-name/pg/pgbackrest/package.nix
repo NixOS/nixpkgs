@@ -1,32 +1,31 @@
 {
-  bzip2,
-  fetchFromGitHub,
   lib,
-  libbacktrace,
-  libpq,
-  libssh2,
-  libxml2,
-  libyaml,
-  lz4,
+  stdenv,
+  fetchFromGitHub,
   meson,
   ninja,
-  pkg-config,
   python3,
-  stdenv,
+  pkg-config,
+  libbacktrace,
+  bzip2,
+  lz4,
+  postgresql,
+  libxml2,
+  libyaml,
   zlib,
+  libssh2,
   zstd,
-  nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pgbackrest";
-  version = "2.55.1";
+  version = "2.54.1";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
-    tag = "release/${finalAttrs.version}";
-    hash = "sha256-A1dTywcCHBu7Ml0Q9k//VVPFN1C3kmmMkq4ok9T4g94=";
+    rev = "release/${version}";
+    sha256 = "sha256-kzFTWKzBQ0Jfew8oV+iaNAEx4lQncySyAI2VAgNu42s=";
   };
 
   strictDeps = true;
@@ -34,30 +33,28 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    pkg-config
     python3
+    pkg-config
   ];
 
   buildInputs = [
-    bzip2
     libbacktrace
-    libpq
-    libssh2
+    bzip2
+    lz4
+    postgresql
     libxml2
     libyaml
-    lz4
     zlib
+    libssh2
     zstd
   ];
 
-  passthru.tests = nixosTests.pgbackrest;
-
-  meta = {
+  meta = with lib; {
     description = "Reliable PostgreSQL backup & restore";
-    homepage = "https://pgbackrest.org";
-    changelog = "https://github.com/pgbackrest/pgbackrest/releases/tag/release%2F${finalAttrs.version}";
-    license = lib.licenses.mit;
+    homepage = "https://pgbackrest.org/";
+    changelog = "https://github.com/pgbackrest/pgbackrest/releases";
+    license = licenses.mit;
     mainProgram = "pgbackrest";
-    maintainers = with lib.maintainers; [ zaninime ];
+    maintainers = with maintainers; [ zaninime ];
   };
-})
+}

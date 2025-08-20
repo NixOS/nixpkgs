@@ -38,13 +38,13 @@ let
   ];
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "instead";
-  version = "3.5.2";
+  version = "3.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/instead/instead/${finalAttrs.version}/instead_${finalAttrs.version}.tar.gz";
-    hash = "sha256-d5BvzZCZ3P5CLptuCuJ4KxfEp4CDbtmIZDIbGDcyV3o=";
+    url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
+    sha256 = "u5j2kDKRvMQPsG8iA6uOBScuyE/e1BJIK2+qVL6jqQs=";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";
@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     unzip
   ];
-
   buildInputs = [
     SDL2
     SDL2_ttf
@@ -65,15 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace configure.sh \
-      --replace-fail "/tmp/sdl-test" $(mktemp)
+      --replace "/tmp/sdl-test" $(mktemp)
   '';
 
   configurePhase = ''
-    runHook preConfigure
-
     { echo 2; echo $out; } | ./configure.sh
-
-    runHook postConfigure
   '';
 
   inherit games;
@@ -88,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Simple text adventure interpreter for Unix and Windows";
     homepage = "https://instead.syscall.ru/";
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub ];
   };
-})
+}

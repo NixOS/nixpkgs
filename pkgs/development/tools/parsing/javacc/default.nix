@@ -60,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://javacc.github.io/javacc";
     license = licenses.bsd2;
     mainProgram = "javacc";
-    teams = [ teams.deshaw ];
+    maintainers = teams.deshaw.members;
   };
 })

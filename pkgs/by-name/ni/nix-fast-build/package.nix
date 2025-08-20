@@ -6,19 +6,18 @@
   nix-eval-jobs,
   nix-output-monitor,
   nix-update-script,
-  bashInteractive,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nix-fast-build";
-  version = "1.3.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-fast-build";
     rev = "refs/tags/${version}";
-    hash = "sha256-6X4BW+3C2nfkorMfe+tuoeYrdddxPtLqOJ1rZxuxPrc=";
+    hash = "sha256-HkaJeIFgxncLm8MC1BaWRTkge9b1/+mjPcbzXTRshoM=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -29,7 +28,6 @@ python3Packages.buildPythonApplication rec {
         [
           nix-eval-jobs
           nix-eval-jobs.nix
-          bashInteractive
         ]
         ++ lib.optional (lib.meta.availableOn stdenv.buildPlatform nix-output-monitor.compiler) nix-output-monitor
       )

@@ -17,7 +17,7 @@ let
     version = "74";
     src = fetchFromGitHub {
       owner = "tihmstar";
-      repo = "libgeneral";
+      repo = pname;
       rev = "refs/tags/${version}";
       hash = "sha256-6aowcIYssc1xqH6kTi/cpH2F7rgc8+lGC8HgZWYH2w0=";
       # Leave DotGit so that autoconfigure can read version from git tags
@@ -37,13 +37,13 @@ let
   };
 
 in
-clangStdenv.mkDerivation {
+clangStdenv.mkDerivation rec {
   pname = "usbmuxd2";
   version = "unstable-2023-12-12";
 
   src = fetchFromGitHub {
     owner = "tihmstar";
-    repo = "usbmuxd2";
+    repo = pname;
     rev = "2ce399ddbacb110bd5a83a6b8232d42c9a9b6e84";
     hash = "sha256-UVLLE73XuWTgGlpTMxUDykFmiBDqz6NCRO2rpRAYfow=";
     # Leave DotGit so that autoconfigure can read version from git tags
@@ -71,8 +71,6 @@ clangStdenv.mkDerivation {
     libimobiledevice
     libusb1
   ];
-
-  doInstallCheck = true;
 
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"

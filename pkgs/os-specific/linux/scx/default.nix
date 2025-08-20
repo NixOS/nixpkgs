@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "sched-ext";
       repo = "scx";
-      tag = "v${versionInfo.scx.version}";
+      rev = "refs/tags/v${versionInfo.scx.version}";
       inherit (versionInfo.scx) hash;
     };
 
@@ -21,11 +21,7 @@ let
       changelog = "https://github.com/sched-ext/scx/releases/tag/v${versionInfo.scx.version}";
       license = lib.licenses.gpl2Only;
       platforms = lib.platforms.linux;
-      badPlatforms = [ "aarch64-linux" ];
-      maintainers = with lib.maintainers; [
-        johnrtitor
-        Gliczy
-      ];
+      maintainers = with lib.maintainers; [ johnrtitor ];
     };
   };
 

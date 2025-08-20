@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pvanek/qlipper";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

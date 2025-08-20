@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mac-fdisk";
   version = "0.1.16";
 

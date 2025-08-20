@@ -7,57 +7,57 @@
   allegro,
   libsamplerate,
   libX11,
+  libXext,
+  SDL,
+  SDL_mixer,
   SDL2,
   SDL2_mixer,
   readline,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "1oom";
-  version = "1.11.7";
+  version = "1.11";
+
+  src = fetchFromGitHub {
+    owner = "1oom-fork";
+    repo = "1oom";
+    tag = "v${version}";
+    hash = "sha256-xEHFuCOyuWmee6kgOc0WUk1iWWFqfFb42F7shGZmutQ=";
+  };
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [
+    allegro
+    libsamplerate
+    libX11
+    libXext
+    SDL
+    SDL_mixer
+    SDL2
+    SDL2_mixer
+    readline
+  ];
 
   outputs = [
     "out"
     "doc"
   ];
 
-  src = fetchFromGitHub {
-    owner = "1oom-fork";
-    repo = "1oom";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-pOEs3HQSxER0wUhasxQUyrktka8cRZCtNER0F01BRvk=";
-  };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    SDL2
-  ];
-  buildInputs = [
-    allegro
-    libsamplerate
-    libX11
-    SDL2
-    SDL2_mixer
-    readline
-  ];
-
-  strictDeps = true;
-  enableParallelBuilding = true;
-
   postInstall = ''
-    install -d $doc/share/doc/1oom
-    install -t $doc/share/doc/1oom \
+    install -d $doc/share/doc/${pname}
+    install -t $doc/share/doc/${pname} \
       HACKING NEWS PHILOSOPHY README.md doc/*.txt
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "f"; };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/1oom-fork/1oom";
-    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${version}";
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ marcin-serwin ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
   };
-})
+}

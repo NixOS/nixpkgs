@@ -55,13 +55,12 @@ let
     {
       testName,
       buildIdrisArgs,
-      # function that takes result of `buildIdris` and transforms it (commonly
-      # by calling `.executable` or `.library {}` upon it):
-      transformBuildIdrisOutput,
+      makeExecutable,
       expectedTree,
     }:
     let
-      idrisPkg = transformBuildIdrisOutput (idris2Packages.buildIdris buildIdrisArgs);
+      final = pkg: if makeExecutable then pkg.executable else pkg.library { };
+      idrisPkg = final (idris2Packages.buildIdris buildIdrisArgs);
     in
     runCommand "${pname}-${testName}"
       {
@@ -141,7 +140,7 @@ in
         EOF
       '';
     };
-    transformBuildIdrisOutput = pkg: pkg.library { withSource = false; };
+    makeExecutable = false;
     expectedTree = ''
       `-- lib
           `-- idris2-0.7.0
@@ -152,82 +151,6 @@ in
                   `-- pkg.ipkg
 
       5 directories, 3 files'';
-  };
-
-  buildLibraryWithSource = testBuildIdris {
-    testName = "library-with-source-package";
-    buildIdrisArgs = {
-      ipkgName = "pkg";
-      idrisLibraries = [ idris2Packages.idris2Api ];
-      src = runCommand "library-package-src" { } ''
-        mkdir $out
-
-        cat > $out/Main.idr <<EOF
-        module Main
-
-        import Compiler.ANF -- from Idris2Api
-
-        hello : String
-        hello = "world"
-        EOF
-
-        cat > $out/pkg.ipkg <<EOF
-        package pkg
-        modules = Main
-        depends = idris2
-        EOF
-      '';
-    };
-    transformBuildIdrisOutput = pkg: pkg.library { withSource = true; };
-    expectedTree = ''
-      `-- lib
-          `-- idris2-0.7.0
-              `-- pkg-0
-                  |-- 2023090800
-                  |   |-- Main.ttc
-                  |   `-- Main.ttm
-                  |-- Main.idr
-                  `-- pkg.ipkg
-
-      5 directories, 4 files'';
-  };
-
-  buildLibraryWithSourceRetroactively = testBuildIdris {
-    testName = "library-with-source-retro-package";
-    buildIdrisArgs = {
-      ipkgName = "pkg";
-      idrisLibraries = [ idris2Packages.idris2Api ];
-      src = runCommand "library-package-src" { } ''
-        mkdir $out
-
-        cat > $out/Main.idr <<EOF
-        module Main
-
-        import Compiler.ANF -- from Idris2Api
-
-        hello : String
-        hello = "world"
-        EOF
-
-        cat > $out/pkg.ipkg <<EOF
-        package pkg
-        modules = Main
-        depends = idris2
-        EOF
-      '';
-    };
-    transformBuildIdrisOutput = pkg: pkg.library'.withSource;
-    expectedTree = ''
-      `-- lib
-          `-- idris2-0.7.0
-              `-- pkg-0
-                  |-- 2023090800
-                  |   |-- Main.ttc
-                  |   `-- Main.ttm
-                  |-- Main.idr
-                  `-- pkg.ipkg
-
-      5 directories, 4 files'';
   };
 
   buildExecutable = testBuildIdris {
@@ -253,7 +176,7 @@ in
         EOF
       '';
     };
-    transformBuildIdrisOutput = pkg: pkg.executable;
+    makeExecutable = true;
     expectedTree = ''
       `-- bin
           `-- mypkg

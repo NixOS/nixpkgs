@@ -6,7 +6,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "cursewords";
   version = "1.1";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "thisisparker";
@@ -15,17 +14,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Ssr15kSdWmyMFFG5uCregrpGQ3rI2cMXqY9+/a3gs84=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     python3Packages.setuptools
+    python3Packages.wheel
   ];
 
   doCheck = false; # no tests
 
-  pythonRelaxDeps = [
-    "blessed"
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     python3Packages.blessed
   ];
 

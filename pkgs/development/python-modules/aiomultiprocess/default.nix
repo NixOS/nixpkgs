@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "aiomultiprocess/tests/*.py" ];
+  pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
 
   disabledTests = [
     # tests are flaky and make the whole test suite time out

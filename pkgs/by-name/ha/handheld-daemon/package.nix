@@ -11,24 +11,18 @@
   efibootmgr,
   dbus,
   lsof,
-  btrfs-progs,
-  util-linux,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.18.5";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-T/0qKHF/BmVtVO19pd4/iqIZP1/G7iayDzHdhjRIA7U=";
+    hash = "sha256-y3CxdWqQEwdNYs4m1NEUeRjTvvhEpS5S739wyFlluWo=";
   };
-
-  # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
-  # NixOS doesn't support selinux so we can safely remove them
-  patches = [ ./0001-remove-selinux-fixes.patch ];
 
   # This package relies on several programs expected to be on the user's PATH.
   # We take a more reproducible approach by patching the absolute path to each of these required
@@ -47,16 +41,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace src/hhd/controller/physical/imu.py \
       --replace-fail '"modprobe' '"${lib.getExe' kmod "modprobe"}'
 
-    substituteInPlace src/hhd/plugins/power/power.py \
-      --replace-fail '"efibootmgr"' '"${lib.getExe' efibootmgr "id"}"' \
-      --replace-fail '"systemctl"' '"${lib.getExe' systemd "systemctl"}"' \
-      --replace-fail '"stat"' '"${lib.getExe' coreutils "stat"}"' \
-      --replace-fail '"swapon"' '"${lib.getExe' util-linux "swapon"}"' \
-      --replace-fail '"swapoff"' '"${lib.getExe' util-linux "swapoff"}"' \
-      --replace-fail '"fallocate"' '"${lib.getExe' util-linux "fallocate"}"' \
-      --replace-fail '"chmod"' '"${lib.getExe' coreutils "chmod"}"' \
-      --replace-fail '"mkswap"' '"${lib.getExe' util-linux "mkswap"}"' \
-      --replace-fail '"btrfs",' '"${lib.getExe' btrfs-progs "btrfs"}",'
+    substituteInPlace src/hhd/plugins/overlay/power.py \
+      --replace-fail '"efibootmgr"' '"${lib.getExe' efibootmgr "id"}"'
 
     substituteInPlace src/hhd/device/oxp/serial.py \
       --replace-fail "udevadm" "${lib.getExe' systemd "udevadm"}"
@@ -97,9 +83,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/hhd-dev/hhd/";
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
+    changelog = "https://github.com/hhd-dev/hhd/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+      appsforartists
       toast
     ];
     mainProgram = "hhd";

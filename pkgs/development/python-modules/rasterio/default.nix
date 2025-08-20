@@ -84,7 +84,7 @@ buildPythonPackage rec {
     rm -r rasterio # prevent importing local rasterio
   '';
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # flaky
@@ -93,12 +93,7 @@ buildPythonPackage rec {
     "test_issue1982"
     "test_opener_fsspec_http_fs"
     "test_fsspec_http_msk_sidecar"
-    # expect specific magic numbers that our version of GDAL does not produce
-    "test_warp"
-    "test_warpedvrt"
-    "test_rio_warp"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
 
@@ -114,6 +109,6 @@ buildPythonPackage rec {
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    maintainers = teams.geospatial.members;
   };
 }

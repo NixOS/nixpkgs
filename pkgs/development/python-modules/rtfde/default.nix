@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rtfde";
-  version = "0.1.2.1";
+  version = "0.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "seamustuohy";
     repo = "RTFDE";
     tag = version;
-    hash = "sha256-dtPWgtOYpGaNRmIE7WNGJd/GWB2hQXsFJDDSHIcIjY4=";
+    hash = "sha256-zmcf9wqlKz55dOIchUC9sgW0PcTCPc52IkbIonOFlmU=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/seamustuohy/RTFDE/releases/tag/${src.tag}";
+    changelog = "https://github.com/seamustuohy/RTFDE/releases/tag/${version}";
     description = "Library for extracting encapsulated HTML and plain text content from the RTF bodies";
     homepage = "https://github.com/seamustuohy/RTFDE";
     license = lib.licenses.lgpl3Only;

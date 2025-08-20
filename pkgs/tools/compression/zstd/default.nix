@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  bashNonInteractive,
+  bash,
   gnugrep,
   fixDarwinDylibNames,
   file,
@@ -28,31 +27,22 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.7";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
+    hash = "sha256-qcd92hQqVBjMT3hyntjcgk29o9wGQsg5Hg7HE5C0UNc=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = lib.optional stdenv.hostPlatform.isUnix bashNonInteractive;
+  buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
-
-    # Pull missing manpages update:
-    #   https://github.com/facebook/zstd/pull/4302
-    # TODO: remove with 1.5.8 release
-    (fetchpatch {
-      name = "man-fix.patch";
-      url = "https://github.com/facebook/zstd/commit/6af3842118ea5325480b403213b2a9fbed3d3d74.patch";
-      hash = "sha256-i+iv+owUXbKU3UtZBsjfj86kFB3TDlpcVDNsDX8dyZE=";
-    })
   ];
 
   postPatch = lib.optionalString (!static) ''
@@ -92,30 +82,32 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  preInstall = ''
-    mkdir -p $bin/bin
-    substituteInPlace ../programs/zstdgrep \
-      --replace ":-grep" ":-${gnugrep}/bin/grep" \
-      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
+  preInstall =
+    ''
+      mkdir -p $bin/bin
+      substituteInPlace ../programs/zstdgrep \
+        --replace ":-grep" ":-${gnugrep}/bin/grep" \
+        --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
-    substituteInPlace ../programs/zstdless \
-      --replace "zstdcat" "$bin/bin/zstdcat"
-  ''
-  + lib.optionalString buildContrib (
+      substituteInPlace ../programs/zstdless \
+        --replace "zstdcat" "$bin/bin/zstdcat"
     ''
-      cp contrib/pzstd/pzstd $bin/bin/pzstd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
-    ''
-  );
+    + lib.optionalString buildContrib (
+      ''
+        cp contrib/pzstd/pzstd $bin/bin/pzstd
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+      ''
+    );
 
-  outputs = [
-    "bin"
-    "dev"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isUnix "man"
-  ++ [ "out" ];
+  outputs =
+    [
+      "bin"
+      "dev"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ [ "out" ];
 
   passthru = {
     updateScript = nix-update-script { };

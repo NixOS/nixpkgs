@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to parse, deduplicate, and query multiple port scans";
     homepage = "https://github.com/leesoh/np";
     changelog = "https://github.com/leesoh/np/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "np";
   };
 }

@@ -62,12 +62,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   env.LC_ALL = "en_US.UTF8";
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
     # Flaky tests

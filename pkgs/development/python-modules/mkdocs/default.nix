@@ -42,18 +42,13 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "mkdocs";
-    repo = "mkdocs";
+    owner = pname;
+    repo = pname;
     tag = version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
-  build-system = [
-    hatchling
-    # babel, setuptools required as "build hooks"
-    babel
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -69,18 +64,16 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
-    i18n = [ babel ];
+    i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ]
-  ++ optional-dependencies.i18n;
+  ] ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"

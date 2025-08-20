@@ -11,23 +11,22 @@
   docbook_xsl,
   docbook_xml_dtd_412,
   glib,
-  gupnp_1_6,
+  gupnp,
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gupnp-igd";
-  version = "1.6.0";
+  version = "1.2.0";
 
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-igd/${lib.versions.majorMinor finalAttrs.version}/gupnp-igd-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QJmXgzmrIhJtSWjyozK20JT8RMeHl4YHgfH8LxF3G3Q=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
   depsBuildBuild = [
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     glib
-    gupnp_1_6
+    gupnp
   ];
 
   mesonFlags = [
@@ -57,19 +56,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Seems to get stuck sometimes.
   # https://github.com/NixOS/nixpkgs/issues/119288
-  # doCheck = true;
+  #doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gupnp-igd";
+      packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Library to handle UPnP IGD port mapping";
     homepage = "http://www.gupnp.org/";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
-})
+}

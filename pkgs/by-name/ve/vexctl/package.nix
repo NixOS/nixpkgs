@@ -3,18 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "vexctl";
-  version = "0.3.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "openvex";
-    repo = "vexctl";
-    tag = "v${version}";
-    hash = "sha256-rJK9OTaEF0PU12m7voMUHPHI2/Je7wh6w2Zr1Ug8+1w=";
+    owner = "chainguard-dev";
+    repo = "vex";
+    rev = "v${version}";
+    hash = "sha256-f5UVX6x4DwjlcgMAv0GuKBH9UUzFhQ8pW8l+9pc7RQ4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,8 +25,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  vendorHash = "sha256-YVMg9tjwJmrqxB2GmVuLkzsGXGlpp5gmZZTmv+PGWPc=";
+  vendorHash = "sha256-GZIssLLPg2dF7xsvsYn2MKYunMCpGbNA+6qCYBW++vk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,6 +42,10 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
+  postBuild = ''
+    mv $GOPATH/bin/vex{,ctl}
+  '';
+
   postInstall = ''
     installShellCompletion --cmd vexctl \
       --bash <($out/bin/vexctl completion bash) \
@@ -52,16 +54,18 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/vexctl --help
+    $out/bin/vexctl version 2>&1 | grep "v${version}"
+    runHook postInstallCheck
+  '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "version";
-
-  meta = {
-    homepage = "https://github.com/openvex/vexctl";
-    description = "Tool to create, transform and attest VEX metadata";
+  meta = with lib; {
+    homepage = "https://github.com/chainguard-dev/vex/";
+    description = "Tool to attest VEX impact statements";
     mainProgram = "vexctl";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jk ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jk ];
   };
 }

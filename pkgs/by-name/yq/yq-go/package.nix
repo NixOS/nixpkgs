@@ -1,55 +1,50 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   runCommand,
-  nix-update-script,
+  yq-go,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "yq-go";
-  version = "4.47.1";
+  version = "4.45.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-r9vHXDviQADv7yIwwzCHKjvHSNzZnJATwiWAaFW4vXs=";
+    rev = "v${version}";
+    hash = "sha256-AsTDbeRMb6QJE89Z0NGooyTY3xZpWFoWkT7dofsu0DI=";
   };
 
-  vendorHash = "sha256-mG9rKla2ZSEbOvSlV6jl7MBoo0dDI//CMcR2hLET4K4=";
+  vendorHash = "sha256-d4dwhZYzEuyh1zJQ2xU0WkygHjoVLoCBrDKuAHUzu1w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd yq \
       --bash <($out/bin/yq shell-completion bash) \
       --fish <($out/bin/yq shell-completion fish) \
       --zsh <($out/bin/yq shell-completion zsh)
   '';
 
-  passthru = {
-    tests = {
-      simple = runCommand "yq-go-test" { } ''
-        echo "test: 1" | ${finalAttrs.finalPackage}/bin/yq eval -j > $out
-        [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
-      '';
-    };
-    updateScript = nix-update-script { };
+  passthru.tests = {
+    simple = runCommand "${pname}-test" { } ''
+      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+    '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
-    changelog = "https://github.com/mikefarah/yq/raw/${finalAttrs.src.tag}/release_notes.txt";
+    changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
     mainProgram = "yq";
-    license = [ lib.licenses.mit ];
-    maintainers = with lib.maintainers; [
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [
       lewo
-      prince213
       SuperSandro2000
     ];
   };
-})
+}

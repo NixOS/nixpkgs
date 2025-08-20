@@ -4,24 +4,26 @@
   fetchFromGitHub,
   autoreconfHook,
   gmpxx,
-  flint3,
+  flint,
+  arb,
   nauty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "normaliz";
-  version = "3.10.5";
+  version = "3.10.4";
 
   src = fetchFromGitHub {
     owner = "normaliz";
     repo = "normaliz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ku5OTtRxrs9qaSE0mle17eJSE2yKZUUsflEZk4k91jM=";
+    hash = "sha256-qmbLgjAkLrW8rqFthK3H4n63zLVJ33Pe82V7yU1StOo=";
   };
 
   buildInputs = [
     gmpxx
-    flint3
+    flint
+    arb
     nauty
   ];
 

@@ -68,14 +68,14 @@ stdenvNoCC.mkDerivation rec {
     ];
   });
 
-  meta = {
+  meta = with lib; {
     description = "Android GPU Inspector";
     homepage = "https://gpuinspector.dev";
     changelog = "https://github.com/google/agi/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kashw2 ];
-    sourceProvenance = with lib.sourceTypes; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kashw2 ];
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];

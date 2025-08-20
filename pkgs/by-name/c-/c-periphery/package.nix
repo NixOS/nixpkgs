@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-periphery";
-  version = "2.4.3";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "vsergeev";
     repo = "c-periphery";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-azqGw7KW6/UrQ4eUPkeH8d6l6sSbotNMAAbn5pNMOB8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uUSXvMQcntUqD412UWkMif0wLxPhpPdnMb96Pqqh/B4=";
   };
 
   outputs = [
@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     description = "C library for peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) in Linux";
     homepage = "https://github.com/vsergeev/c-periphery";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
   };
 })

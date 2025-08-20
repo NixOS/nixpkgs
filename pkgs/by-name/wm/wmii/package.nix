@@ -16,7 +16,7 @@
   which,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wmii";
   version = "0-unstable-2023-09-30";
 

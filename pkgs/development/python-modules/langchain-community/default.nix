@@ -4,28 +4,27 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  poetry-core,
 
   # dependencies
   aiohttp,
   dataclasses-json,
-  httpx-sse,
-  langchain,
   langchain-core,
+  langchain,
   langsmith,
-  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
+  # optional-dependencies
+  typer,
+  numpy,
+
   # tests
-  blockbuster,
-  duckdb,
-  duckdb-engine,
   httpx,
-  langchain-tests,
+  langchain-standard-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -35,49 +34,36 @@
   responses,
   syrupy,
   toml,
-
-  # passthru
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.27";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain-community";
-    tag = "libs/community/v${version}";
-    hash = "sha256-rGU8AYe7993+zMAtHLkNiK+wA+UtZnGkUQsOPMtUQ8w=";
+    repo = "langchain";
+    tag = "langchain-core==${version}";
+    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ pdm-backend ];
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individual components.
-    "langchain"
-    "langchain-core"
     "numpy"
     "pydantic-settings"
     "tenacity"
   ];
 
-  pythonRemoveDeps = [
-    "bs4"
-  ];
-
   dependencies = [
     aiohttp
     dataclasses-json
-    httpx-sse
-    langchain
     langchain-core
+    langchain
     langsmith
-    numpy
     pydantic-settings
     pyyaml
     requests
@@ -85,14 +71,16 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  optional-dependencies = {
+    cli = [ typer ];
+    numpy = [ numpy ];
+  };
+
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
-    blockbuster
-    duckdb
-    duckdb-engine
     httpx
-    langchain-tests
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
@@ -104,37 +92,35 @@ buildPythonPackage rec {
     toml
   ];
 
-  enabledTestPaths = [
-    "tests/unit_tests"
-  ];
+  pytestFlagsArray = [ "tests/unit_tests" ];
+
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # requires bs4, aka BeautifulSoup
-    "test_importable_all"
-    # flaky
-    "test_llm_caching"
-    "test_llm_caching_async"
+    # Test require network access
+    "test_ovhcloud_embed_documents"
+    "test_yandex"
+    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
+    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
+    "test_table_info"
+    "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
   ];
-
-  disabledTestPaths = [
-    # depends on Pydantic v1 notations, will not load
-    "tests/unit_tests/document_loaders/test_gitbook.py"
-  ];
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "libs/community/v";
-  };
 
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
-    homepage = "https://github.com/langchain-ai/langchain-community";
-    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
+    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      natsukium
-      sarahec
-    ];
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

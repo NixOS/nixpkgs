@@ -1,6 +1,6 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
   cmake,
   wrapGAppsHook3,
@@ -24,7 +24,6 @@
   libtiff,
   libgeotiff,
   libjpeg,
-  qhull,
   # eccodes is broken on darwin
   enableGRIB ? stdenv.hostPlatform.isLinux,
   eccodes,
@@ -33,6 +32,7 @@
   # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
   # of hdf4
   enableLibtirpc ? stdenv.hostPlatform.isLinux,
+  libtirpc,
   python3,
   enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
@@ -60,6 +60,7 @@
   # and Darwin.
   enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   wxGTK32,
+  Cocoa,
   # X11: OFF by default for platform consistency. Use X where WX is not available
   enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
 }:
@@ -109,66 +110,60 @@ let
           ;
       };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnudatalanguage";
-  version = "1.1.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner = "gnudatalanguage";
+    owner = pname;
     repo = "gdl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fLsa/R8+7QZcxjqJLnHZivRF6dD4a6J6KuCqYvazaCU=";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "sha256-IrCLL8MQp0SkWj7sbfZlma5FrnMbgdl4E/1nPGy0Y60=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'FATAL_ERROR "The src' 'WARNING "The src' \
-      --replace-fail "find_package(Git REQUIRED)" "" \
-      --replace-fail "-D GIT_EXECUTABLE=''${GIT_EXECUTABLE}" ""
-    echo -e 'set(VERSION "${finalAttrs.version}")\n\nconfigure_file(''${SRC} ''${DST})' > CMakeModules/GenerateVersionHeader.cmake
-  '';
-
-  nativeBuildInputs = [ cmake ] ++ lib.optional enableWX wrapGAppsHook3;
-
-  buildInputs = [
-    qhull
-    readline
-    ncurses
-    zlib
-    gsl
-    openmp
-    graphicsmagick
-    fftw
-    fftwFloat
-    fftwLongDouble
-    proj
-    shapelib
-    expat
-    mpi
-    udunits
-    eigen
-    pslib
-    libpng
-    libtiff
-    libgeotiff
-    libjpeg
-    hdf4-custom
-    hdf5-custom
-    netcdf-custom
-    plplot-with-drivers
-  ]
-  ++ lib.optional enableXWin plplot-with-drivers.libX11
-  ++ lib.optional enableGRIB eccodes
-  ++ lib.optional enableGLPK glpk
-  ++ lib.optional enableWX wxGTK32
-  ++ lib.optional enableMPI mpi
-  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-  ++ lib.optional enableSzip szip;
+  buildInputs =
+    [
+      readline
+      ncurses
+      zlib
+      gsl
+      openmp
+      graphicsmagick
+      fftw
+      fftwFloat
+      fftwLongDouble
+      proj
+      shapelib
+      expat
+      mpi
+      udunits
+      eigen
+      pslib
+      libpng
+      libtiff
+      libgeotiff
+      libjpeg
+      hdf4-custom
+      hdf5-custom
+      netcdf-custom
+      plplot-with-drivers
+    ]
+    ++ lib.optional enableXWin plplot-with-drivers.libX11
+    ++ lib.optional enableGRIB eccodes
+    ++ lib.optional enableGLPK glpk
+    ++ lib.optional enableWX wxGTK32
+    ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
+    ++ lib.optional enableMPI mpi
+    ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
+    ++ lib.optional enableSzip szip;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))
   ];
+
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optional enableWX wrapGAppsHook3;
 
   cmakeFlags =
     lib.optional (!enableHDF4) "-DHDF=OFF"
@@ -204,8 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
         "test_call_external"
         "test_tic_toc"
         "test_timestamp"
-        "test_bugs_poly2d"
-        "test_formats"
       ]
     }'")
   '';
@@ -226,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free incremental compiler of IDL";
     longDescription = ''
       GDL (GNU Data Language) is a free/libre/open source incremental compiler
@@ -234,9 +227,9 @@ stdenv.mkDerivation (finalAttrs: {
       GDL is aimed as a drop-in replacement for IDL.
     '';
     homepage = "https://github.com/gnudatalanguage/gdl";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ShamrockLee ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ShamrockLee ];
+    platforms = platforms.all;
     mainProgram = "gdl";
   };
-})
+}

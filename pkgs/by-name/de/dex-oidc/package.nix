@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
   testers,
   dex-oidc,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "dex";
-  version = "2.42.0";
+  version = "2.41.1";
 
   src = fetchFromGitHub {
     owner = "dexidp";
-    repo = "dex";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FbjNOyECgf26+Z48YwF9uMN8C3zMRshD3VOjoRbA0ys=";
+    sha256 = "sha256-sYTAW1S2fAAIZSFfsgYQ46TlkZHXUtbylSImBQz68DE=";
   };
 
-  vendorHash = "sha256-D8UMrQcUntsXV1PFOk30NhmJ9f17M58D79VDdbybt7Q=";
+  vendorHash = "sha256-LPPYJRmei/K2zW7Mi6Y/AOvNoYQSIfXKF+qxjYTCDAc=";
 
   subPackages = [
     "cmd/dex"

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "retroarch-joypad-autoconfig";
-  version = "1.21.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-joypad-autoconfig";
     rev = "v${version}";
-    hash = "sha256-yLxJaHvscNHvuX1ak1bQ1yGMYv5yO4gTj53neT+JsRo=";
+    hash = "sha256-TdNyQOMLBgwpeYDE8qrRrIMUYcagiBJ02rSVU4Ycn1o=";
   };
 
   makeFlags = [
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Joypad autoconfig files";
     homepage = "https://www.libretro.com/";
     license = licenses.mit;
-    teams = [ teams.libretro ];
+    maintainers = with maintainers; teams.libretro.members ++ [ ];
     platforms = platforms.all;
   };
 }

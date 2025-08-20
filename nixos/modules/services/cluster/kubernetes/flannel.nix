@@ -41,7 +41,6 @@ in
           cniVersion = "0.3.1";
           delegate = {
             isDefaultGateway = true;
-            hairpinMode = true;
             bridge = "mynet";
           };
         }

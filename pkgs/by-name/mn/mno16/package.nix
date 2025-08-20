@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Minimalist monospaced font";
+    description = "minimalist monospaced font";
     homepage = "https://sev.dev/fonts/mno16";
     license = licenses.cc0;
   };

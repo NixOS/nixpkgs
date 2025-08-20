@@ -1,64 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   click,
-  langgraph,
-  langgraph-runtime-inmem,
-  langgraph-sdk,
-  python-dotenv,
-
-  # testing
+  fetchFromGitHub,
+  nix-update-script,
+  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  docker-compose,
-
-  # passthru
-  gitUpdater,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.3.6";
+  version = "0.1.52";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-tBMdFOHSRjw0PtE19XytLU4MmjR3NBLJxUqWoG4L2F8=";
+    hash = "sha256-zTBeDJB1Xu/rWsvEC/L4BRzxyh04lPYV7HQNHoJcskk=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    click
-    langgraph-sdk
-  ];
-
-  optional-dependencies = {
-    "inmem" = [
-      langgraph
-      langgraph-runtime-inmem
-      python-dotenv
-    ];
-  };
+  dependencies = [ click ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    docker-compose
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ];
 
-  enabledTestPaths = [ "tests/unit_tests" ];
+  pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langgraph_cli" ];
 
@@ -71,22 +48,18 @@ buildPythonPackage rec {
     "test_config_to_compose_end_to_end"
     "test_config_to_compose_simple_config"
     "test_config_to_compose_watch"
-
-    # Tests that require docker
-    "test_dockerfile_command_with_docker_compose"
-    "test_build_command_with_api_version_and_base_image"
-    "test_build_command_with_api_version"
-    "test_build_generate_proper_build_context"
-    "test_build_command_shows_wolfi_warning"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "cli==";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cli==(.*)"
+    ];
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
-    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
+    homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;

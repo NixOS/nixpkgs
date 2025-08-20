@@ -4,7 +4,7 @@
   fetchgit,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "golint";
   version = "unstable-2020-12-08";
 

@@ -44,7 +44,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specific library,
+  # * To skip file checking for a specific arch specfic library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
@@ -192,7 +192,12 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
+  # GHC has other native backends (like PowerPC), but here only the ones
+  # we ship bindists for matter.
+  useLLVM =
+    !(
+      stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+    );
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
@@ -201,22 +206,23 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
-  runtimeDeps = [
-    targetPackages.stdenv.cc
-    targetPackages.stdenv.cc.bintools
-    coreutils # for cat
-  ]
-  ++ lib.optionals useLLVM [
-    (lib.getBin llvmPackages.llvm)
-  ]
-  # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
-  ];
+  runtimeDeps =
+    [
+      targetPackages.stdenv.cc
+      targetPackages.stdenv.cc.bintools
+      coreutils # for cat
+    ]
+    ++ lib.optionals useLLVM [
+      (lib.getBin llvmPackages.llvm)
+    ]
+    # On darwin, we need unwrapped bintools as well (for otool)
+    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+      targetPackages.stdenv.cc.bintools.bintools
+    ];
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -296,17 +302,12 @@ stdenv.mkDerivation {
                     -i {} \;
     ''
     +
-      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString
-        (
-          lib.meta.availableOn stdenv.hostPlatform numactl
-          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
-        )
-        ''
-          find . -name package.conf.in \
-              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-        ''
+      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
+        find . -name package.conf.in \
+            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+      ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -330,30 +331,22 @@ stdenv.mkDerivation {
   # calls install-strip ...
   dontBuild = true;
 
-  # GHC tries to remove xattrs when installing to work around Gatekeeper
-  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
-  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
-  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
-  # modified (such as target of the symlink to `libiconv.dylib`).
-  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
-  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
-  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
-
   # Patch scripts to include runtime dependencies in $PATH.
-  postInstall = ''
-    for i in "$out/bin/"*; do
-      test ! -h "$i" || continue
-      isScript "$i" || continue
-      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
-    done
-  ''
-  + lib.optionalString stdenv.targetPlatform.isDarwin ''
-    # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
-    # detects `llvm-ar` even though the resulting archives are not supported by ld64.
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
-    # https://github.com/haskell/cabal/issues/8882
-    sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
-  '';
+  postInstall =
+    ''
+      for i in "$out/bin/"*; do
+        test ! -h "$i" || continue
+        isScript "$i" || continue
+        sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+      done
+    ''
+    + lib.optionalString stdenv.targetPlatform.isDarwin ''
+      # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
+      # detects `llvm-ar` even though the resulting archives are not supported by ld64.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+      # https://github.com/haskell/cabal/issues/8882
+      sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
+    '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
@@ -474,6 +467,6 @@ stdenv.mkDerivation {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    teams = [ lib.teams.haskell ];
+    maintainers = lib.teams.haskell.members;
   };
 }

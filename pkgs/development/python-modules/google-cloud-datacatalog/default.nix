@@ -1,32 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   google-api-core,
   grpc-google-iam-v1,
   libcst,
   mock,
-  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.27.1";
+  version = "3.24.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "googleapis";
-    repo = "google-cloud-python";
-    tag = "google-cloud-datacatalog-v${version}";
-    hash = "sha256-4Ifg9igzsVR8pWH/lcrGwCnByqYQjPKChNPJGmmQbKI=";
-  };
+  disabled = pythonOlder "3.7";
 
-  sourceRoot = "${src.name}/packages/google-cloud-datacatalog";
+  src = fetchPypi {
+    pname = "google_cloud_datacatalog";
+    inherit version;
+    hash = "sha256-JYcOb+suHqXNPGNoGhXm1GI33UWFM3lo766HXf9mek8=";
+  };
 
   build-system = [ setuptools ];
 
@@ -36,8 +35,7 @@ buildPythonPackage rec {
     libcst
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -47,18 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.datacatalog" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-datacatalog-v([0-9.]+)"
-    ];
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Google Cloud Data Catalog API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-datacatalog";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-datacatalog-v${version}/packages/google-cloud-datacatalog/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sarahec ];
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oapi-codegen";
-  version = "2.5.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "deepmap";
-    repo = "oapi-codegen";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-Z10rJMancQLefyW0wXWaODIKfSY+4b3T+TAro//xsAQ=";
+    hash = "sha256-21VhHSyfF+NHkXlr2svjwBNZmfS1O448POBP9XUQxak=";
   };
 
-  vendorHash = "sha256-obpY7ZATebI/7bkPMidC83xnN60P0lZsJhSuKr2A5T4=";
+  vendorHash = "sha256-bp5sFZNJFQonwfF1RjCnOMKZQkofHuqG0bXdG5Hf3jU=";
 
   # Tests use network
   doCheck = false;
@@ -24,12 +24,12 @@ buildGoModule rec {
 
   ldflags = [ "-X main.noVCSVersionOverride=${version}" ];
 
-  meta = {
+  meta = with lib; {
     description = "Go client and server OpenAPI 3 generator";
     homepage = "https://github.com/deepmap/oapi-codegen";
     changelog = "https://github.com/deepmap/oapi-codegen/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ j4m3s ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ j4m3s ];
     mainProgram = "oapi-codegen";
   };
 }

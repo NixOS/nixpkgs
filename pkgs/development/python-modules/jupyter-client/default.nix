@@ -31,8 +31,7 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "jupyter_client" ];
 
@@ -44,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter_client";
     changelog = "https://github.com/jupyter/jupyter_client/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.jupyter ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

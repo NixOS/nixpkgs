@@ -56,8 +56,7 @@ stdenv.mkDerivation {
   buildFlags = [
     "static"
     "CC=${stdenv.cc.targetPrefix}cc"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
 
   installPhase = ''
     mkdir -p $out/bin

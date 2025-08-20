@@ -6,7 +6,7 @@
   gnome-shell,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-tilingnome";
   version = "unstable-2019-09-19";
 

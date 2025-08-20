@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
       --replace Exec=zps Exec=$out/zps \
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small utility for listing and reaping zombie processes on GNU/Linux";
     homepage = "https://github.com/orhun/zps";
     changelog = "https://github.com/orhun/zps/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ figsoda ];
+    platforms = platforms.linux;
     mainProgram = "zps";
   };
 }

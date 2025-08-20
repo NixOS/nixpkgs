@@ -5,7 +5,7 @@
   nodejs,
 }:
 
-buildNpmPackage {
+buildNpmPackage rec {
   pname = "zotero-translation-server";
   version = "unstable-2023-07-13";
 

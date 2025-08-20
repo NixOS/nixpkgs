@@ -7,7 +7,7 @@
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org";
     license = licenses.mit;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = platforms.unix;
   };
 }

@@ -1,34 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  pytestCheckHook,
   pythonOlder,
+  fetchFromGitHub,
+  click,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.7";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  version = "0.5.6";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
-    repo = "click-option-group";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-MiTOAgIZZEvU6aLdUpQvLTd7dJpYXU1gJz+ea8C/95Y=";
+    hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
   };
 
-  build-system = [
-    hatchling
-    hatch-vcs
-  ];
-
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -43,7 +35,7 @@ buildPythonPackage rec {
       for example). Moreover, argparse stdlib package contains this
       functionality out of the box.
     '';
-    homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${src.tag}";
+    homepage = "https://github.com/click-contrib/click-option-group";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

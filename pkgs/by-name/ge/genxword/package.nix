@@ -12,11 +12,10 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "genxword";
   version = "2.1.0";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "riverrun";
-    repo = "genxword";
+    repo = pname;
     rev = "v${version}";
     sha256 = "17h8saja45bv612yk0pra9ncbp2mjnx5n10q25nqhl765ks4bmb5";
   };
@@ -32,11 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     gtksourceview3
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pycairo
     pygobject3
   ];

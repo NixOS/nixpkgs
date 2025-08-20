@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "28.0";
   src = fetchFromSourcehut {
     owner = "~hannes";
-    repo = "airwindows-lv2";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-1GWkdNCn98ttsF2rPLZE0+GJdatgkLewFQyx9Frr2sM=";
   };

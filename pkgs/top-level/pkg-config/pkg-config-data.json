@@ -395,7 +395,7 @@
     },
     "javascriptcoregtk-4.0": {
       "attrPath": [
-        "webkitgtk_4_0"
+        "webkitgtk"
       ]
     },
     "lapack": {
@@ -525,7 +525,7 @@
     },
     "libpq": {
       "attrPath": [
-        "libpq"
+        "postgresql"
       ]
     },
     "libpulse": {
@@ -726,6 +726,11 @@
         "openssl"
       ]
     },
+    "orte": {
+      "attrPath": [
+        "openmpi"
+      ]
+    },
     "panel": {
       "attrPath": [
         "ncurses"
@@ -832,12 +837,12 @@
     },
     "webkit2gtk-4.0": {
       "attrPath": [
-        "webkitgtk_4_0"
+        "webkitgtk"
       ]
     },
     "webkit2gtk-web-extension-4.0": {
       "attrPath": [
-        "webkitgtk_4_0"
+        "webkitgtk"
       ]
     },
     "x11": {

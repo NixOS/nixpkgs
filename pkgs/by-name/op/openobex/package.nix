@@ -6,7 +6,6 @@
   bluez,
   libusb-compat-0_1,
   cmake,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,14 +20,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    udevCheckHook
   ];
   buildInputs = [
     bluez
     libusb-compat-0_1
   ];
-
-  doInstallCheck = true;
 
   configureFlags = [ "--enable-apps" ];
 

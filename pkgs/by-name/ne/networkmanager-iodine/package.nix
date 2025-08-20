@@ -41,16 +41,17 @@ stdenv.mkDerivation {
     glib
   ];
 
-  buildInputs = [
-    iodine
-    networkmanager
-    glib
-  ]
-  ++ lib.optionals withGnome [
-    gtk3
-    libsecret
-    libnma
-  ];
+  buildInputs =
+    [
+      iodine
+      networkmanager
+      glib
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      libsecret
+      libnma
+    ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -72,7 +73,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "NetworkManager's iodine plugin";
-    inherit (networkmanager.meta) maintainers teams platforms;
+    inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;
   };
 }

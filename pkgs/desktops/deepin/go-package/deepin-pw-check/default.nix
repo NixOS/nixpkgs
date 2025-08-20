@@ -69,6 +69,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/deepin-pw-check";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

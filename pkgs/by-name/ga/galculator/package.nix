@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/galculator/galculator/commit/501a9e3feeb2e56889c0ff98ab6d0ab20348ccd6.patch";
       hash = "sha256-qVJHcfJTtl0hK8pzSp6MjhYAh1NbIIWr3rBDodIYBvk=";
     })
-    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = false;
 
   meta = {
-    homepage = "https://galculator.sourceforge.net/";
+    homepage = "http://galculator.sourceforge.net/";
     description = "GTK algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK-based calculator. Its main features include:
@@ -64,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "galculator";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (gtk3.meta) platforms;
   };
 })

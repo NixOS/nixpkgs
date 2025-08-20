@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  enabledTestPaths = [ "iso8601" ];
+  pytestFlagsArray = [ "iso8601" ];
 
   pythonImportsCheck = [ "iso8601" ];
 

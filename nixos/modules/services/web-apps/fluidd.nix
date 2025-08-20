@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.fluidd;
@@ -22,7 +17,8 @@ in
     };
 
     nginx = mkOption {
-      type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+      type = types.submodule
+        (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
       default = { };
       example = literalExpression ''
         {

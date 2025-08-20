@@ -4,23 +4,23 @@
   fetchFromGitHub,
   cmake,
   gcc,
-  libseccomp,
   rust-bindgen,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  version = "1.12.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${version}";
-    hash = "sha256-95SvakhepL4P+3SqbPkjAKaehBkDyn/psMfFASbv8Gg=";
+    hash = "sha256-kLQPAHbj8Q425Z5zdwofyHz+sd3bf7zGmcMjKn9yTKc=";
   };
 
-  cargoHash = "sha256-0ycF+uoz4ZK4xJJL+qOpxBn7yUW1k5RdnvEhOhawxcI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TnEPNTeeX1KP+9HLD/oGF0sZGcXDHpc1Q1wCWw3L6mU=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
   AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
@@ -35,22 +35,15 @@ rustPlatform.buildRustPackage rec {
       --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
   '';
 
-  buildInputs = [ libseccomp ];
-
   nativeBuildInputs = [
     cmake
     gcc
-    rust-bindgen # for aws-lc-sys@0.22.0
+    rust-bindgen  # for aws-lc-sys@0.22.0
     rustPlatform.bindgenHook
   ];
 
   cargoBuildFlags = [ "--workspace" ];
-  cargoTestFlags = [
-    "--package"
-    "firecracker"
-    "--package"
-    "jailer"
-  ];
+  cargoTestFlags = [ "--package" "firecracker" "--package" "jailer" ];
 
   checkFlags = [
     # basic tests to skip in sandbox
@@ -82,14 +75,14 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
     changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
     mainProgram = "firecracker";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       usertam
       thoughtpolice
       qjoly

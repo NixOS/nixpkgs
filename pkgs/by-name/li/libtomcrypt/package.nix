@@ -24,14 +24,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
+    libtool
     libtommath
   ];
 
   postPatch = ''
-    substituteInPlace makefile.shared \
-      --replace-fail "LIBTOOL:=glibtool" "LIBTOOL:=libtool" \
-      --replace-fail libtool "${lib.getExe libtool}"
+    substituteInPlace makefile.shared --replace "LIBTOOL:=glibtool" "LIBTOOL:=libtool"
   '';
 
   preBuild = ''
@@ -46,15 +45,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Fairly comprehensive, modular and portable cryptographic toolkit";
     homepage = "https://www.libtom.net/LibTomCrypt/";
     changelog = "https://github.com/libtom/libtomcrypt/raw/v${version}/changes";
-    license = with lib.licenses; [
+    license = with licenses; [
       publicDomain
       wtfpl
     ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

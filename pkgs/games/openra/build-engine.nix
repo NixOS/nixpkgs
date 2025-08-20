@@ -1,39 +1,24 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  SDL2,
-  freetype,
-  openal,
-  lua51Packages,
-  openRaUpdater,
+{ lib, buildDotnetModule, dotnetCorePackages
+, fetchFromGitHub
+, SDL2, freetype, openal, lua51Packages
 }:
 engine:
 
-let
+buildDotnetModule rec {
   pname = "openra-${engine.build}";
-  version = engine.version;
-  dotnet-sdk = engine.dotnet-sdk;
-in
-buildDotnetModule {
-  inherit pname version dotnet-sdk;
+  inherit (engine) version;
 
-  src = fetchFromGitHub {
+  src = if engine ? src then engine.src else fetchFromGitHub {
     owner = "OpenRA";
     repo = "OpenRA";
-    rev = if lib.hasAttr "rev" engine then engine.rev else "${engine.build}-${engine.version}";
-    inherit (engine) hash;
-  };
-
-  passthru = {
-    updateScript = {
-      command = openRaUpdater engine;
-      supportedFeatures = [ "commit" ];
-    };
+    rev = "${engine.build}-${engine.version}";
+    sha256 = engine.sha256;
   };
 
   nugetDeps = engine.deps;
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   useAppHost = false;
 
@@ -85,15 +70,15 @@ buildDotnetModule {
     # Create Nix wrappers to the application scripts which setup the needed environment
     for bin in $(find $out/.bin-unwrapped -type f); do
       makeWrapper "$bin" "$out/bin/$(basename "$bin")" \
-        --prefix "PATH" : "${lib.makeBinPath [ dotnet-sdk.runtime ]}"
+        --prefix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.build} version";
     homepage = "https://www.openra.net/";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.mdarocha ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ mdarocha ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "openra-ra";
   };

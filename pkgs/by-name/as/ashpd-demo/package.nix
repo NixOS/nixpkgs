@@ -17,25 +17,22 @@
   wayland,
   wrapGAppsHook4,
   desktop-file-utils,
-  gitUpdater,
-  common-updater-scripts,
-  _experimental-update-script-combinators,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
-  version = "0.5.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "ashpd";
     rev = "${finalAttrs.version}-demo";
-    hash = "sha256-0IGqA8PM6I2p4/MrptkdSWIZThMoeaMsdMc6tVTI2MU=";
+    hash = "sha256-fIyJEUcyTcjTbBycjuJb99wALQelMT7Zq6PHKcL2F80=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${finalAttrs.src}/ashpd-demo";
-    hash = "sha256-kUEzVBk8dKXCQdHFJJS633CBG1F57TIxJg1xApMwzbI=";
+    hash = "sha256-ldflCBErM9w3eO2DwWfYTrdO7lowZtqfj7Fft6Crl1w=";
   };
 
   nativeBuildInputs = [
@@ -65,37 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     cd ashpd-demo
   '';
-
-  passthru = {
-    updateScript =
-      let
-        updateSource = gitUpdater {
-          url = finalAttrs.src.gitRepoUrl;
-          rev-suffix = "-demo";
-        };
-
-        updateLockfile = {
-          command = [
-            "sh"
-            "-c"
-            ''
-              PATH=${
-                lib.makeBinPath [
-                  common-updater-scripts
-                ]
-              }
-              update-source-version ashpd-demo --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
-            ''
-          ];
-          # Experimental feature: do not copy!
-          supportedFeatures = [ "silent" ];
-        };
-      in
-      _experimental-update-script-combinators.sequence [
-        updateSource
-        updateLockfile
-      ];
-  };
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";

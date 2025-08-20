@@ -9,40 +9,37 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnum4";
-  version = "1.4.20";
+  version = "1.4.19";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/m4-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
+    url = "mirror://gnu/m4/m4-${version}.tar.bz2";
+    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
+  # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-devel/m4/m4-1.4.19-r1.ebuild
+  patches = lib.optional stdenv.hostPlatform.isLoongArch64 ./loong-fix-build.patch;
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
-  postPatch = ''
-    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLoongArch64 ''
-    touch ./aclocal.m4 ./lib/config.hin ./configure ./doc/stamp-vti || die
-    find . -name Makefile.in -exec touch {} + || die
-  '';
+  postPatch =
+    ''
+      substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLoongArch64 ''
+      touch ./aclocal.m4 ./lib/config.hin ./configure ./doc/stamp-vti || die
+      find . -name Makefile.in -exec touch {} + || die
+    '';
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
-  # Issue exists whenever NLS is disabled, and there's an upstream fix
-  # for GCC, but there's no good way to check whether NLS or GCC is in
-  # use.  (Checking stdenv.cc.isGNU causes infinite recursion.)
-  hardeningDisable = [ "format" ];
-
   doCheck = false;
 
   configureFlags = [
     "--with-syscmd-shell=${stdenv.shell}"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
+  ] ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
   meta = {
     description = "GNU M4, a macro processor";
@@ -69,4 +66,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
-})
+}

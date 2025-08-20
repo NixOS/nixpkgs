@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchfossil,
+  fetchFromGitHub,
   docutils,
   pkg-config,
   freetype,
@@ -11,12 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcm2ps";
-  version = "8.14.17";
+  version = "8.14.15";
 
-  src = fetchfossil {
-    url = "https://chiselapp.com/user/moinejf/repository/abcm2ps";
+  src = fetchFromGitHub {
+    owner = "leesavide";
+    repo = "abcm2ps";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YA36wfj7owKu/KyWgCj6U8EJEh831cFtQj4/JtH6kVg=";
+    hash = "sha256-0ZSMKARX16/33sIWR8LOVOFblI/Q+iZgnfVq/xqRMnI=";
   };
 
   configureFlags = [
@@ -40,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://moinejf.free.fr/";
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
     description = "Command line program which converts ABC to music sheet in PostScript or SVG format";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.dotlambda ];
     mainProgram = "abcm2ps";
   };
 })

@@ -91,4 +91,3 @@ Meson setup hook.
 
 - `prefixKey`
 - `enableParallelBuilding`
-- `enableParallelChecking`

@@ -15,7 +15,7 @@
   ninja,
   opencascade-occt_7_6,
   pkg-config,
-  podofo_0_10,
+  podofo,
   sqlite,
 }:
 let
@@ -24,13 +24,13 @@ in
 # This base is used in horizon-eda and python3Packages.horizon-eda
 rec {
   pname = "horizon-eda";
-  version = "2.7.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    hash = "sha256-Y2oopRycYSxtiKuQZSfTBVP7RmpZ0JA+QyZgnrpoAes=";
+    hash = "sha256-0ikCR10r/WPb+H+Ut2GO6y4A/9bctJLanL/RR4r9GWs=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +51,17 @@ rec {
     librsvg
     libuuid
     opencascade-occt
-    podofo_0_10
+    podofo
     sqlite
   ];
 
   env = {
-    CASROOT = opencascade-occt;
+    NIX_CFLAGS_COMPILE = toString [
+      "-fpermissive"
+    ];
   };
+
+  CASROOT = opencascade-occt;
 
   meta = {
     description = "Free EDA software to develop printed circuit boards";

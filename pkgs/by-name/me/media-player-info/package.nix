@@ -6,7 +6,6 @@
   pkg-config,
   python3,
   udev,
-  udevCheckHook,
   systemd,
 }:
 
@@ -30,10 +29,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     python3
-    udevCheckHook
   ];
-
-  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs ./tools

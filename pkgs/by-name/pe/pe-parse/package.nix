@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     $out/bin/dump-pe ../tests/assets/example.exe
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
     changelog = "https://github.com/trailofbits/pe-parse/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arturcygan ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ arturcygan ];
     mainProgram = "dump-pe";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

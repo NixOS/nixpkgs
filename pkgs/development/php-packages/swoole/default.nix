@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "6.0.2";
+  version = "6.0.0";
 in
 buildPecl {
   inherit version;
@@ -19,7 +19,7 @@ buildPecl {
     owner = "swoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-mCJj0vLpJinxK/EfPq+CeVWnoxouqClOKYbrgj7GNDc=";
+    hash = "sha256-h49TMwtEaaRfQO69Z9sAPsCqLYt/w/6Vx9ZVBajAU5U=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
@@ -32,6 +32,6 @@ buildPecl {
     description = "Coroutine-based concurrency library for PHP";
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 }

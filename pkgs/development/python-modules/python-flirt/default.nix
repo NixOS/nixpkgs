@@ -9,35 +9,36 @@
 
 buildPythonPackage rec {
   pname = "python-flirt";
-  version = "0.9.7";
-  pyproject = true;
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
     rev = "v${version}";
-    hash = "sha256-IgkfUkVsJyAsqH+L9GBdTQI1ure4k8mVLLWHj7AFDj8=";
+    hash = "sha256-J48tRgJw6JjUrcAQdRELFE50pyDptbmbgYbr+rAK/PA=";
   };
 
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+    cp ${./Cargo.lock} Cargo.lock
   '';
+
+  format = "pyproject";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ar-0.9.0" = "sha256-eyi1MlhJVvsiBOsetDHXFpdk+ABeZo/fVXNyvc5mw9s=";
-    };
-  };
-
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildAndTestSubdir = "pyflirt";
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "zydis-3.1.3" = "sha256-X+aURjNfXGXO4eh6RJ3bi8Eb2kvF09I34ZHffvYjt9I=";
+    };
+  };
 
   pythonImportsCheck = [ "flirt" ];
 

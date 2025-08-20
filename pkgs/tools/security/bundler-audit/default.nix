@@ -29,6 +29,7 @@ bundlerEnv rec {
     changelog = "https://github.com/rubysec/bundler-audit/blob/v${version}/ChangeLog.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
+      primeos
       nicknovitski
     ];
     platforms = platforms.unix;

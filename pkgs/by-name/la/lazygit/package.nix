@@ -1,20 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   lazygit,
   testers,
-  nix-update-script,
 }:
-buildGoModule rec {
+# Regression in go1.23 see https://github.com/jesseduffield/lazygit/issues/4002
+buildGo122Module rec {
   pname = "lazygit";
-  version = "0.54.2";
+  version = "0.45.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
-    repo = "lazygit";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-LfSTbnSyRT1vdrEOs9Ur+0cGAz/pUUEVm8HhfE9VaYo=";
+    hash = "sha256-B8z0NqCFdCAYVZnujfDJ9Y4qFXuhy5A/RG51Qb2J4ts=";
   };
 
   vendorHash = null;
@@ -25,16 +25,7 @@ buildGoModule rec {
     "-X main.buildSource=nix"
   ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = lazygit; };
-
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v([0-9.]+)$"
-      ];
-    };
-  };
+  passthru.tests.version = testers.testVersion { package = lazygit; };
 
   meta = {
     description = "Simple terminal UI for git commands";
@@ -45,6 +36,7 @@ buildGoModule rec {
       Br1ght0ne
       equirosa
       khaneliman
+      paveloom
       starsep
       sigmasquadron
     ];

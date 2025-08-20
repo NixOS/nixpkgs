@@ -2,9 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  capstone,
-  pytestCheckHook,
-  setuptools-scm,
   setuptools,
   unicorn,
 }:
@@ -35,18 +32,17 @@ buildPythonPackage rec {
       "macosx_11_0"
     ];
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    capstone
-    pytestCheckHook
-  ];
+  checkPhase = ''
+    runHook preCheck
 
-  # this test does not appear to be intended as a pytest-style test
-  disabledTests = [ "test_i386" ];
+    mv unicorn unicorn.hidden
+    patchShebangs sample_*.py shellcode.py
+    sh -e sample_all.sh
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "unicorn" ];
 

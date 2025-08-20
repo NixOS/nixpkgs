@@ -4,25 +4,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pytest-cov-stub,
   pytest-httpbin,
   pytest-mock,
   pytestCheckHook,
-  requests-mock,
+  pythonOlder,
   requests,
-  setuptools,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
-  version = "1.4.0";
-  pyproject = true;
+  version = "1.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
     tag = "v${version}";
-    hash = "sha256-fu3DGTsLrw+MHZCFF4WHMpyjqkexH/c8j9ko9ZAeAwU=";
+    hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
   };
 
   postPatch = ''
@@ -30,12 +31,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
     substituteInPlace setup.cfg \
-      --replace " --flake8" ""
+      --replace " --cov --cov-config .coveragerc --flake8" ""
   '';
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     beautifulsoup4
     lxml
     requests
@@ -44,7 +43,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytest-cov-stub
     pytest-httpbin
     pytest-mock
     pytestCheckHook
@@ -52,11 +50,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "mechanicalsoup" ];
-
-  disabledTests = [
-    # Missing module
-    "test_select_form_associated_elements"
-  ];
 
   meta = with lib; {
     description = "Python library for automating interaction with websites";

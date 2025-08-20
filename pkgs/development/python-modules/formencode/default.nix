@@ -13,14 +13,15 @@
 
 buildPythonPackage rec {
   pname = "formencode";
-  version = "2.1.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4X8WGZ0jLlT2eRIATzrTM827uBoaGhAjis8JurmfkZk=";
+    pname = "FormEncode";
+    inherit version;
+    hash = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
   };
 
   postPatch = ''

@@ -12,13 +12,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "catppuccin-sddm";
-  version = "1.1.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "sddm";
     rev = "v${version}";
-    hash = "sha256-mDOiIGcpIvl4d3Dtsb2AX/1OggFEJ+hAjCd2LH7lqv0=";
+    hash = "sha256-SdpkuonPLgCgajW99AzJaR8uvdCPi4MdIxS5eB+Q9WQ=";
   };
 
   dontWrapQtApps = true;

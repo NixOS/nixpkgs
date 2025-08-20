@@ -48,17 +48,18 @@ let
       docbook_xml_dtd_412
       gobject-introspection
     ];
-    buildInputs = [
-      glib
-      libxml2
-      gsasl
-      libidn
-      gss
-      libintl
-      libdaemon
-    ]
-    ++ lib.optional gtkWidgets gtk3
-    ++ lib.optional avahiSupport avahi;
+    buildInputs =
+      [
+        glib
+        libxml2
+        gsasl
+        libidn
+        gss
+        libintl
+        libdaemon
+      ]
+      ++ lib.optional gtkWidgets gtk3
+      ++ lib.optional avahiSupport avahi;
 
     propagatedBuildInputs = [ gnutls ];
 

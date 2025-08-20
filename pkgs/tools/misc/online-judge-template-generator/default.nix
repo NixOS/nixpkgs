@@ -18,7 +18,6 @@
 buildPythonApplication rec {
   pname = "online-judge-template-generator";
   version = "4.8.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";

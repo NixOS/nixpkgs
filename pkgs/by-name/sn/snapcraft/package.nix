@@ -1,20 +1,18 @@
 {
   fetchFromGitHub,
-  gitMinimal,
+  git,
   glibc,
   lib,
   makeWrapper,
   nix-update-script,
-  python312Packages,
+  python3Packages,
   squashfsTools,
-  cacert,
   stdenv,
-  writableTmpDirAsHomeHook,
 }:
 
-python312Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.10.2";
+  version = "8.5.1";
 
   pyproject = true;
 
@@ -22,20 +20,19 @@ python312Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-klG+cT2vXo9v9tIJhJNCeGTiuV5C+oed0Vi9310PnqQ=";
+    hash = "sha256-7kIVWbVj5qse3JIdlCvRtVUfSa/rSjn4e8HJdVY3sOA=";
   };
 
   patches = [
-    # We're using a later version of `craft-cli` than expected, which
-    # adds an extra deprecation warning to the CLI output, meaning that
-    # an expected error message looks slightly different. This patch corrects
-    # that by checking for the updated error message and can be dropped in a
-    # later release of snapcraft.
-    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
     ./lxd-socket-path.patch
+    # In certain places, Snapcraft expects an /etc/os-release file to determine
+    # host info which doesn't exist in our test environment. This is a
+    # relatively naive patch which helps the test suite pass - without it *many*
+    # of the tests fail. This patch will likely never be accepted upstream.
+    ./os-platform.patch
     # Snapcraft will try to inject itself as a snap *from the host system* into
     # the build system. This patch short-circuits that logic and ensures that
     # Snapcraft is installed on the build system from the snap store - because
@@ -50,7 +47,15 @@ python312Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace snapcraft/__init__.py --replace-fail "dev" "${version}"
+    substituteInPlace setup.py \
+      --replace-fail 'version=determine_version()' 'version="${version}"' \
+      --replace-fail 'gnupg' 'python-gnupg'
+
+    substituteInPlace requirements.txt \
+      --replace-fail 'gnupg==2.3.1' 'python-gnupg'
+
+    substituteInPlace snapcraft/__init__.py \
+      --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
 
     substituteInPlace snapcraft_legacy/__init__.py \
       --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
@@ -59,12 +64,13 @@ python312Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python312Packages; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -108,16 +114,12 @@ python312Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python312Packages; [ setuptools-scm ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
-    "click"
-    "craft-parts"
-    "cryptography"
     "docutils"
     "jsonschema"
     "pygit2"
-    "requests"
     "urllib3"
     "validators"
   ];
@@ -126,13 +128,8 @@ python312Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  preCheck = ''
-    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
-
   nativeCheckInputs =
-    with python312Packages;
+    with python3Packages;
     [
       pytest-check
       pytest-cov-stub
@@ -141,14 +138,18 @@ python312Packages.buildPythonApplication rec {
       pytestCheckHook
       responses
       setuptools
-      writableTmpDirAsHomeHook
     ]
     ++ [
-      gitMinimal
+      git
       squashfsTools
     ];
 
-  enabledTestPaths = [ "tests/unit" ];
+  preCheck = ''
+    mkdir -p check-phase
+    export HOME="$(pwd)/check-phase"
+  '';
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"
@@ -175,8 +176,7 @@ python312Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

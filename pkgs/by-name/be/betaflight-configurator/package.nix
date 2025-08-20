@@ -1,14 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeDesktopItem,
-  nwjs,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  gtk3,
-}:
+{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
@@ -34,15 +24,9 @@ stdenv.mkDerivation rec {
     find -name "lib*.so" -delete
   '';
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    unzip
-  ];
+  nativeBuildInputs = [ wrapGAppsHook3 unzip ];
 
-  buildInputs = [
-    gsettings-desktop-schemas
-    gtk3
-  ];
+  buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
     runHook preInstall
@@ -65,10 +49,10 @@ stdenv.mkDerivation rec {
       Various types of aircraft are supported by the tool and by Betaflight, e.g.
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
-    homepage = "https://github.com/betaflight/betaflight/wiki";
+    homepage    = "https://github.com/betaflight/betaflight/wiki";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3;
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.linux;
+    platforms   = platforms.linux;
   };
 }

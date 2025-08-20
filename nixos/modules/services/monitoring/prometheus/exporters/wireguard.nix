@@ -15,18 +15,16 @@ let
     mkEnableOption
     optionalString
     escapeShellArg
-    concatStringsSep
-    concatMapStringsSep
     ;
 in
 {
   port = 9586;
   imports = [
     (mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
-    {
+    ({
       options.warnings = options.warnings;
       options.assertions = options.assertions;
-    }
+    })
   ];
   extraOpts = {
     verbose = mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";
@@ -43,15 +41,6 @@ in
         as `networking.wireguard` uses
         {manpage}`wg(8)`
         to set the peers up.
-      '';
-    };
-
-    interfaces = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = ''
-        Specifies the interface(s) passed to the wg show <interface> dump parameter.
-        By default all interfaces are used.
       '';
     };
 
@@ -73,22 +62,6 @@ in
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };
-
-    latestHandshakeDelay = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Adds the `wireguard_latest_handshake_delay_seconds` metric that automatically calculates the seconds passed since the last handshake.
-      '';
-    };
-
-    prependSudo = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether or no to prepend sudo to wg commands.
-      '';
-    };
   };
   serviceOpts = {
     path = [ pkgs.wireguard-tools ];
@@ -103,11 +76,7 @@ in
           ${optionalString cfg.verbose "-v true"} \
           ${optionalString cfg.singleSubnetPerField "-s true"} \
           ${optionalString cfg.withRemoteIp "-r true"} \
-          ${optionalString cfg.latestHandshakeDelay "-d true"} \
-          ${optionalString cfg.prependSudo "-a true"} \
-          ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"} \
-          ${concatMapStringsSep " " (i: "-i ${i}") cfg.interfaces} \
-          ${concatStringsSep " " cfg.extraFlags}
+          ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"}
       '';
       RestrictAddressFamilies = [
         # Need AF_NETLINK to collect data

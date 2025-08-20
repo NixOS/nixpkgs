@@ -11,7 +11,7 @@
   inetutils,
   iperf,
   iproute2,
-  net-tools,
+  nettools,
   socat,
 }:
 
@@ -34,7 +34,7 @@ let
     socat
     # mn errors out without a telnet binary
     # pkgs.inetutils brings an undesired ifconfig into PATH see #43105
-    net-tools
+    nettools
     telnet
   ];
 

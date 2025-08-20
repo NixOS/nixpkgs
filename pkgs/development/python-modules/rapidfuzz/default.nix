@@ -2,12 +2,13 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   cython,
   ninja,
   scikit-build-core,
+  setuptools,
   numpy,
   hypothesis,
   pandas,
@@ -18,24 +19,22 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.13.0";
+  version = "3.11.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
+    hash = "sha256-wsY0JCY8unLIMs01SLgQMOu9RQ0qTdPAZ71e6TigTVQ=";
   };
 
-  patches = [
-    # https://github.com/rapidfuzz/RapidFuzz/pull/446
-    (fetchpatch {
-      name = "support-taskflow-3.10.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/bba3281cc61ecc4ab4affe5d2d50389a4f6d7556.patch";
-      hash = "sha256-kAS6xsPY7eUTfKO+EAOW8bktY4cApvLEpRMciJEsPgk=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
+  '';
 
   build-system = [
     cmake
@@ -51,11 +50,13 @@ buildPythonPackage rec {
     taskflow
   ];
 
-  env.RAPIDFUZZ_BUILD_EXTENSION = 1;
-
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
-  '';
+  preBuild =
+    ''
+      export RAPIDFUZZ_BUILD_EXTENSION=1
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
+    '';
 
   optional-dependencies = {
     all = [ numpy ];
@@ -83,11 +84,11 @@ buildPythonPackage rec {
     "rapidfuzz.utils"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.tag}/CHANGELOG.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

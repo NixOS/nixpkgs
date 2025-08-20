@@ -3,7 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript_headless,
+  ghostscript,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -18,9 +18,10 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   rich,
   reportlab,
-  replaceVars,
+  substituteAll,
   tesseract,
   unpaper,
   installShellFiles,
@@ -28,7 +29,10 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.10.4";
+  version = "16.7.0";
+
+  disabled = pythonOlder "3.10";
+
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,13 +45,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-uHC1mIrWlvpL6SOFZQHWFlha7qSM3jhz2C/CH2cn2K0=";
+    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
   };
 
   patches = [
     ./use-pillow-heif.patch
-    (replaceVars ./paths.patch {
-      gs = lib.getExe ghostscript_headless;
+    (substituteAll {
+      src = ./paths.patch;
+      gs = lib.getExe ghostscript;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;
@@ -83,13 +88,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ocrmypdf" ];
 
-  disabledTests = [
-    # Broken by Python 3.13.4 change
-    # https://github.com/python/cpython/commit/8e923f36596370aedfdfb12251447bface41317a
-    # https://github.com/ocrmypdf/OCRmyPDF/blob/9f6e5a48ada5df7006a8c68b84e2aeae61943d8b/src/ocrmypdf/_exec/ghostscript.py#L66
-    "TestDuplicateFilter"
-  ];
-
   postInstall = ''
     installShellCompletion --cmd ocrmypdf \
       --bash misc/completion/ocrmypdf.bash \
@@ -106,7 +104,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.md";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
     mainProgram = "ocrmypdf";
   };
 }

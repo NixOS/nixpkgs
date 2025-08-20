@@ -5,6 +5,7 @@
   libiconv,
   libpng,
   ncurses,
+  pcre,
   readline,
   zlib,
   writeScript,
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--without-pcre"
+    "--with-pcre=${pcre.dev}"
     "--with-png=${libpng.dev}"
     "--with-readline=${readline.dev}"
     "--with-z=${zlib.dev}"
@@ -43,10 +44,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
+    pcre
     readline
     zlib
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jedsoft.org/slang/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "slsh";
     platforms = platforms.unix;
   };

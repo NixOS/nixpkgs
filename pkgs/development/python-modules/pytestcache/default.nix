@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pytest-cache";
   version = "1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +28,6 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-cache/";
-    description = "Pytest plugin with mechanisms for caching across test runs";
+    description = "pytest plugin with mechanisms for caching across test runs";
   };
 }

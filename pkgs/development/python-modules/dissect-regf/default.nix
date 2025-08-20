@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-regf";
-  version = "3.13";
+  version = "3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.regf";
     tag = version;
-    hash = "sha256-O2BKOzv0nFQ8rCgTCgYowQTptR1asuJBroqTNeDIIak=";
+    hash = "sha256-PzGA5OZ74bS25lC77pi6tG1x7BZcr9GtKbyKf9i/MwM=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for Windows registry file format";
     homepage = "https://github.com/fox-it/dissect.regf";
-    changelog = "https://github.com/fox-it/dissect.regf/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.regf/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

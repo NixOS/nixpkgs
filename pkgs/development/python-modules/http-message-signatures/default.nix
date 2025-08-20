@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pyauth";
-    repo = "http-message-signatures";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Jsivw4lNA/2oqsOGGx8D4gUPftzuys877A9RXyapnSQ=";
   };
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  enabledTestPaths = [ "test/test.py" ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "http_message_signatures" ];
 

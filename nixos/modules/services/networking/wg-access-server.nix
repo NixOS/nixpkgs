@@ -43,7 +43,7 @@ in
           };
         };
       };
-      description = "See <https://www.freie-netze.org/wg-access-server/2-configuration/> for possible options";
+      description = "See https://www.freie-netze.org/wg-access-server/2-configuration/ for possible options";
     };
 
     secretsFile = mkOption {
@@ -127,8 +127,7 @@ in
         let
           capabilities = [
             "CAP_NET_ADMIN"
-          ]
-          ++ lib.optional cfg.settings.dns.enabled "CAP_NET_BIND_SERVICE";
+          ] ++ lib.optional cfg.settings.dns.enabled "CAP_NET_BIND_SERVICE";
         in
         {
           WorkingDirectory = "/var/lib/wg-access-server";

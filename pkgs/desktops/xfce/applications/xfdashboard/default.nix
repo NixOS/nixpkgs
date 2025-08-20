@@ -2,7 +2,6 @@
   lib,
   mkXfceDerivation,
   clutter,
-  gettext,
   libXcomposite,
   libXinerama,
   libXdamage,
@@ -20,16 +19,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfdashboard";
-  version = "1.0.0-unstable-2025-07-18";
-  # Fix build with gettext 0.25
-  rev = "93255940950ef5bc89cab729c8b977a706f98e0c";
+  version = "1.0.0";
   rev-prefix = "";
 
-  sha256 = "sha256-Qv0ASuJF0FzPoeLx2D6/kXkxnOJV7mdAFD6PCk+CMac=";
-
-  nativeBuildInputs = [
-    gettext
-  ];
+  sha256 = "sha256-iC41I0u9id9irUNyjuvRRzSldF3dzRYkaxb/fgptnq4=";
 
   buildInputs = [
     clutter
@@ -49,6 +42,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Gnome shell like dashboard";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

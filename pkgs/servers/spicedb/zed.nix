@@ -2,36 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "zed";
-  version = "0.30.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-ftSgp0zxUmSTJ7lFHxFdebKrCKbsRocDkfabVpyQ5Kg=";
+    hash = "sha256-gaTTHkJkKO3MY5tAVJNHEq6ZkcS1iSBSEh1eyPzsXQY=";
   };
 
-  vendorHash = "sha256-2AkknaufRhv79c9WQtcW5oSwMptkR+FB+1/OJazyGSM=";
+  vendorHash = "sha256-7UwpkmFwYT8XP00pTlOK25WDweaalQfA4zX7yvlFWow=";
 
-  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'" ];
-
-  preCheck = ''
-    export NO_COLOR=true
-  '';
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = ''
-    installShellCompletion --cmd zed \
-      --bash <($out/bin/zed completion bash) \
-      --fish <($out/bin/zed completion fish) \
-      --zsh <($out/bin/zed completion zsh)
-  '';
+  ldflags = [
+    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
+  ];
 
   meta = with lib; {
     description = "Command line for managing SpiceDB";
@@ -42,9 +30,6 @@ buildGoModule rec {
     '';
     homepage = "https://authzed.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      squat
-      thoughtpolice
-    ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

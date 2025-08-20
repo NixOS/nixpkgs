@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-pictureit";
   namespace = "visualization.pictureit";
-  version = "21.0.2";
+  version = "20.2.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-jFRv/fYR/98jcP9GCRVYu2EQIdWQItzYrEoXW/RF+bA=";
+    hash = "sha256-mQDPjpsxStU01H2XJKnX183KAHG+O1CH8JOmApMmwMc=";
   };
 
   extraBuildInputs = [
@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "PictureIt visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

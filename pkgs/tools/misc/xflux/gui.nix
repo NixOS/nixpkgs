@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonApplication,
-  python,
+  python3Packages,
   wrapGAppsHook3,
   xflux,
   gtk3,
@@ -18,7 +18,6 @@
 buildPythonApplication rec {
   pname = "xflux-gui";
   version = "1.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";
@@ -55,7 +54,7 @@ buildPythonApplication rec {
   postFixup = ''
     wrapGAppsHook
     wrapPythonPrograms
-    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
+    patchPythonScript $out/${python3Packages.python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

@@ -1,12 +1,4 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  gpsd,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "plasma5support";
-
-  extraNativeBuildInputs = [ pkg-config ];
-
-  extraBuildInputs = [ gpsd ];
 }

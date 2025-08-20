@@ -1,35 +1,35 @@
 {
   lib,
-  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
   versionCheckHook,
-  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "kryptor";
-  version = "4.1.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "samuel-lucas6";
     repo = "Kryptor";
     tag = "v${version}";
-    hash = "sha256-+pG3u4U3IZ6jw2p2f1jptX7C/qt0mPIcMG82XYtPzbs=";
+    hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  projectFile = "src/Kryptor/Kryptor.csproj";
+  projectFile = "src/Kryptor.sln";
   nugetDeps = ./deps.json;
 
   executables = [ "kryptor" ];
+
+  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -43,9 +43,5 @@ buildDotnetModule rec {
       gepbird
     ];
     platforms = lib.platforms.all;
-    # https://hydra.nixos.org/build/286325419
-    # a libsodium.dylib file should be kept as per https://github.com/samuel-lucas6/Kryptor/releases/tag/v4.1.1
-    # upstream issue: https://github.com/dotnet/sdk/issues/45903
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

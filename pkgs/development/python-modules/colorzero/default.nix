@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkginfo,
   pytestCheckHook,
-  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -14,19 +13,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "waveform80";
-    repo = "colorzero";
+    repo = pname;
     tag = "release-${version}";
     hash = "sha256-0NoQsy86OHQNLZsTEuF5s2MlRUoacF28jNeHgFKAH14=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov" ""
+  '';
 
   nativeBuildInputs = [ pkginfo ];
 
   pythonImportsCheck = [ "colorzero" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Yet another Python color library";

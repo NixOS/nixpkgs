@@ -15,7 +15,6 @@ let
 in
 melpaBuild {
   inherit pname version src;
-  melpaVersion = "1.4"; # upstream versions such as 1.04 are not supported
 
   outputs = [
     "out"

@@ -6,23 +6,23 @@
   gucci,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gucci";
-  version = "1.9.0";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-CL4Vn3DP40tBBejN28iQSIV+2GtHwl7IS8zVJ5wcqwY=";
+    tag = version;
+    sha256 = "sha256-bwPQQtaPHby96C5ZHZhBTok+m8GPPS40U1CUPVYqCa4=";
   };
 
-  vendorHash = "sha256-+0pq2lbwfvWdAiz7nONrmlRRxS886B+wieoMeuxLUtM=";
+  vendorHash = "sha256-/4OnbtxxhXQnmSV6UbjgzXdL7szhL9rKiG5BR8FsyqI=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=${finalAttrs.version}"
+    "-X main.AppVersion=${version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -38,11 +38,11 @@ buildGoModule (finalAttrs: {
     "-skip=^TestIntegration"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple CLI templating tool written in golang";
     mainProgram = "gucci";
     homepage = "https://github.com/noqcks/gucci";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ braydenjw ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ braydenjw ];
   };
-})
+}

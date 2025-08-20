@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bear";
-  version = "3.1.6";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "bear";
     rev = finalAttrs.version;
-    hash = "sha256-fWNMjqF5PCjGfFGReKIUiJ5lv8z6j7HeBn5hvbnV2V4=";
+    hash = "sha256-pwdjytP+kmTwozRl1Gd0jUqRs3wfvcYPqiQvVwa6s9c=";
   };
 
   strictDeps = true;

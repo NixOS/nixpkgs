@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libusbmuxd";
-  version = "2.1.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = "libusbmuxd";
+    repo = pname;
     rev = version;
-    hash = "sha256-o1EFY/cv+pQrGexvPOwMs5mz9KRcffnloXCQXMzbmDY=";
+    hash = "sha256-coQqNGPsqrOYbBjO0eQZQNK8ZTB+ZzfMWvQ6Z1by9PY=";
   };
 
   nativeBuildInputs = [

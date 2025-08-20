@@ -19,7 +19,6 @@
   dbus,
   python3,
   wrapGAppsHook3,
-  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +28,6 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals withDocs [
     "devdoc"
   ];
 
@@ -40,18 +37,14 @@ stdenv.mkDerivation rec {
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
-
   nativeBuildInputs = [
-    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [ lxml ])) # Tests
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
     autoreconfHook
     dbus
     docbook_xsl
     gnome-common
     gobject-introspection
-    gtk-doc # required for autoreconfHook, even when `withDocs = false`
+    gtk-doc
     pkg-config
     vala
     which
@@ -74,10 +67,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-headless-tests"
-  ]
-  ++ lib.optionals withDocs [
     "--enable-gtk-doc"
+    "--enable-headless-tests"
   ];
 
   # Fix paths
@@ -88,7 +79,6 @@ stdenv.mkDerivation rec {
 
   # TODO: Requires /etc/machine-id
   doCheck = false;
-  strictDeps = true;
 
   # Ignore deprecation errors
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
@@ -106,7 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

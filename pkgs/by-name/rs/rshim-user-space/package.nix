@@ -1,43 +1,35 @@
 {
+  stdenv,
+  lib,
+  fetchFromGitHub,
   autoconf,
   automake,
-  bashNonInteractive,
-  coreutils,
-  fetchFromGitHub,
-  fuse,
-  gawk,
-  gnugrep,
-  gnused,
-  lib,
-  libusb1,
   makeBinaryWrapper,
-  pciutils,
   pkg-config,
-  procps,
+  pciutils,
+  libusb1,
+  fuse,
+  busybox,
   pv,
-  stdenv,
-  which,
-  util-linux,
   withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.4.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = "rshim-user-space";
+    repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
+    hash = "sha256-moU6XxBVSAZiiR/usFfxse2CHk6+003Jb9t62szk1fk=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     pkg-config
-  ]
-  ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
+  ] ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
     pciutils
@@ -53,34 +45,27 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  installPhase = ''
-    mkdir -p "$out"/bin
-    cp -a src/rshim "$out"/bin/
-  ''
-  + lib.optionalString withBfbInstall ''
-    cp -a scripts/bfb-install "$out"/bin/
-  '';
+  installPhase =
+    ''
+      mkdir -p "$out"/bin
+      cp -a src/rshim "$out"/bin/
+    ''
+    + lib.optionalString withBfbInstall ''
+      cp -a scripts/bfb-install "$out"/bin/
+    '';
 
   postFixup = lib.optionalString withBfbInstall ''
     wrapProgram $out/bin/bfb-install \
       --set PATH ${
         lib.makeBinPath [
-          bashNonInteractive
-          coreutils
-          gawk
-          gnugrep
-          gnused
-          pciutils
-          procps
+          busybox
           pv
-          util-linux
-          which
         ]
       }
   '';
 
   meta = with lib; {
-    description = "User-space rshim driver for the BlueField SoC";
+    description = "user-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
       BlueField target from external host machine. The current version
@@ -91,8 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mellanox/rshim-user-space";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      thillux
-    ];
+    maintainers = with maintainers; [ nikstur ];
   };
 }

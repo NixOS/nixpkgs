@@ -1,70 +1,68 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  cmake,
-  libdaq,
-  libdnet,
-  flex,
-  hwloc,
+  pkg-config,
   luajit,
   openssl,
+  fetchurl,
   libpcap,
-  pcre2,
-  pkg-config,
+  pcre,
+  libdnet,
+  daq,
   zlib,
-  xz,
-  nix-update-script,
+  flex,
+  bison,
+  makeWrapper,
+  libtirpc,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
+  version = "2.9.20";
   pname = "snort";
-  version = "3.9.2.0";
 
-  src = fetchFromGitHub {
-    owner = "snort3";
-    repo = "snort3";
-    tag = finalAttrs.version;
-    hash = "sha256-LVAsCps5XLsj4acYWI42qdbvX6h9JTJJfM33FvVfWK0=";
+  src = fetchurl {
+    name = "${pname}-${version}.tar.gz";
+    url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
+    sha256 = "sha256-KUAOE/U7GDHguLEOwSJKHLqm3BUzpTIqIN2Au4S0mBw=";
   };
 
   nativeBuildInputs = [
-    libdaq
+    makeWrapper
     pkg-config
-    cmake
   ];
-
   buildInputs = [
-    libdaq
-    libpcap
-    stdenv.cc.cc # libstdc++
-    libdnet
-    flex
-    hwloc
     luajit
     openssl
     libpcap
-    pcre2
+    pcre
+    libdnet
+    daq
     zlib
-    xz
+    flex
+    bison
+    libtirpc
   ];
 
-  # Patch that is tracking upstream PR https://github.com/snort3/snort3/pull/399
-  patches = [ ./0001-cmake-fix-pkg-config-path-for-libdir.patch ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = nix-update-script { };
+  configureFlags = [
+    "--disable-static-daq"
+    "--enable-control-socket"
+    "--with-daq-includes=${daq}/includes"
+    "--with-daq-libraries=${daq}/lib"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq --dynamic-preprocessor-lib-dir $out/lib/snort_dynamicpreprocessor/ --dynamic-engine-lib-dir $out/lib/snort_dynamicengine"
+  '';
 
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
-    maintainers = with lib.maintainers; [
-      aycanirican
-      brianmcgillion
-    ];
-    changelog = "https://github.com/snort3/snort3/releases/tag/${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ aycanirican ];
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
   };
-})
+}

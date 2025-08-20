@@ -10,16 +10,15 @@
 let
   pname = "amphetype";
   version = "1.0.0";
-  description = "Advanced typing practice program";
+  description = "An advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
-  format = "pyproject";
   inherit pname version;
 
   src = fetchFromGitLab {
     owner = "franksh";
-    repo = "amphetype";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 
@@ -33,11 +32,7 @@ python3Packages.buildPythonApplication {
     qt5.qtwayland
   ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     editdistance
     pyqt5
     translitcodec
@@ -53,14 +48,14 @@ python3Packages.buildPythonApplication {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "amphetype";
+      name = pname;
       desktopName = "Amphetype";
       genericName = "Typing Practice";
       categories = [
         "Education"
         "Qt"
       ];
-      exec = "amphetype";
+      exec = pname;
       comment = description;
     })
   ];

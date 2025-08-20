@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Chc1+JUHXzuLl26NuBGVxSiXiaE4Ns1FXb0dBs6STVk=";
   };
 
-  cargoHash = "sha256-eVEfuX/dNFoNH9o18fIx51DP/MWrQMqInU4wtGCmUbQ=";
+  cargoHash = "sha256-uuQBTAyWczzc4Ez2Tq4Ps6NPonXqHrXAP2AZFzgsvo4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,16 +35,16 @@ rustPlatform.buildRustPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic output configuration tool that automatically detects and configures connected outputs based on a set of profiles";
     homepage = "https://gitlab.com/w0lff/shikane";
     changelog = "https://gitlab.com/w0lff/shikane/-/tags/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       michaelpachec0
       natsukium
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "shikane";
   };
 }

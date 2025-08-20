@@ -29,7 +29,7 @@ resholve.mkDerivation rec {
     domain = "gitlab.archlinux.org";
     owner = "archlinux";
     repo = "arch-install-scripts";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-XWcZZ+ET3J4dB6M9CdXESf0iQh+2vYxlxoJ6TZ3vFUk=";
   };
 

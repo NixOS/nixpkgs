@@ -13,16 +13,14 @@ let
       expected,
       src,
       patches ? [ ],
-      args,
+      schemaIdToVariableMapping,
     }:
 
     let
-      patch = makeHardcodeGsettingsPatch (
-        args
-        // {
-          inherit src patches;
-        }
-      );
+      patch = makeHardcodeGsettingsPatch ({
+        inherit src schemaIdToVariableMapping;
+        inherit patches;
+      });
     in
     runCommandLocal "makeHardcodeGsettingsPatch-tests-${name}"
 
@@ -56,12 +54,10 @@ in
   basic = mkTest {
     name = "basic";
     src = ./fixtures/example-project;
-    args = {
-      schemaIdToVariableMapping = {
-        "org.gnome.evolution-data-server.addressbook" = "EDS";
-        "org.gnome.evolution.calendar" = "EVO";
-        "org.gnome.seahorse.nautilus.window" = "SEANAUT";
-      };
+    schemaIdToVariableMapping = {
+      "org.gnome.evolution-data-server.addressbook" = "EDS";
+      "org.gnome.evolution.calendar" = "EVO";
+      "org.gnome.seahorse.nautilus.window" = "SEANAUT";
     };
     expected = ./fixtures/example-project-patched;
   };
@@ -73,26 +69,9 @@ in
       # Avoid using wrapper function, which the generator cannot handle.
       ./fixtures/example-project-wrapped-settings-constructor-resolve.patch
     ];
-    args = {
-      schemaIdToVariableMapping = {
-        "org.gnome.evolution-data-server.addressbook" = "EDS";
-      };
+    schemaIdToVariableMapping = {
+      "org.gnome.evolution-data-server.addressbook" = "EDS";
     };
     expected = ./fixtures/example-project-wrapped-settings-constructor-patched;
   };
-
-  existsFn = mkTest {
-    name = "exists-fn";
-    src = ./fixtures/example-project;
-    args = {
-      schemaIdToVariableMapping = {
-        "org.gnome.evolution-data-server.addressbook" = "EDS";
-        "org.gnome.evolution.calendar" = "EVO";
-        "org.gnome.seahorse.nautilus.window" = "SEANAUT";
-      };
-      schemaExistsFunction = "e_ews_common_utils_gsettings_schema_exists";
-    };
-    expected = ./fixtures/example-project-patched-with-exists-fn;
-  };
-
 }

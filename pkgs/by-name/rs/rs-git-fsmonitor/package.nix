@@ -8,28 +8,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rs-git-fsmonitor";
-  version = "0.2.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jgavris";
-    repo = "rs-git-fsmonitor";
-    tag = "v${version}";
-    hash = "sha256-+5nR+/09HmFk3mq2B8NTeBT50aBG85yXEdeO6BhStVw=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "021vdk5i7yyrnh4apn0gnsh6ycnx15wm3g2jrfsg7fycnq8167wc";
   };
 
-  cargoHash = "sha256-WkqJSbtaJxaagJMsdFiVozi1SkrfxXyM9bdZeimwJag=";
+  cargoHash = "sha256-Vi8PUy6Qgp03SghtCneDxwE8vbt7uGClfOCayDq0pUM=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postFixup = ''
-    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}"
+  fixupPhase = ''
+    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}" ;
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast git core.fsmonitor hook written in Rust";
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nilscc ];
+    license = licenses.mit;
+    maintainers = [ ];
     mainProgram = "rs-git-fsmonitor";
   };
 }

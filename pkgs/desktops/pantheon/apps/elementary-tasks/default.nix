@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Synced tasks and reminders on elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.tasks";
   };
 }

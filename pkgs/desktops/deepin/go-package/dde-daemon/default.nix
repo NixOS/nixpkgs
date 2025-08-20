@@ -31,7 +31,6 @@
   lshw,
   dmidecode,
   systemd,
-  udevCheckHook,
 }:
 
 buildGoModule rec {
@@ -94,7 +93,6 @@ buildGoModule rec {
     gettext
     python3
     wrapGAppsHook3
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -129,8 +127,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  doInstallCheck = true;
-
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : "${
@@ -160,6 +156,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/dde-daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

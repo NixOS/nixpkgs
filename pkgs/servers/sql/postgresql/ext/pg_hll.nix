@@ -1,30 +1,28 @@
 {
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "pg_hll";
   version = "2.18";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "postgresql-hll";
-    tag = "v${finalAttrs.version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
 
-  # https://github.com/citusdata/postgresql-hll/issues/166#issuecomment-3165489050
-  NIX_CFLAGS_COMPILE = "-Wno-error=missing-variable-declarations";
-
-  meta = {
+  meta = with lib; {
     description = "HyperLogLog for PostgreSQL";
     homepage = "https://github.com/citusdata/postgresql-hll";
-    changelog = "https://github.com/citusdata/postgresql-hll/blob/v${finalAttrs.version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    changelog = "https://github.com/citusdata/postgresql-hll/blob/v${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
-})
+}

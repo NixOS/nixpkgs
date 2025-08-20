@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  installPhase = ''
+    make install PREFIX="$out"
+  '';
 
   fixupPhase = ''
     wrapProgram "$out/bin/chibi-scheme" \
@@ -38,9 +38,6 @@ stdenv.mkDerivation rec {
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      applePrincess
-      DerGuteMoritz
-    ];
+    maintainers = [ lib.maintainers.DerGuteMoritz ];
   };
 }

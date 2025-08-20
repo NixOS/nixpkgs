@@ -4,7 +4,7 @@
   stdlib-shims,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "ocaml-protoc";
 
   inherit (pbrt) version src;

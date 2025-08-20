@@ -1,12 +1,14 @@
 {
-  runTestOn,
+  system ? builtins.currentSystem,
+  handleTestOn,
 }:
 let
   supportedSystems = [
     "x86_64-linux"
     "i686-linux"
   ];
+
 in
 {
-  standard = runTestOn supportedSystems ./standard.nix;
+  standard = handleTestOn supportedSystems ./standard.nix { inherit system; };
 }

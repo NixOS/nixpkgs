@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/marco";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

@@ -7,7 +7,6 @@
   pkg-config,
   freetype,
   zlib,
-  libGL,
   libX11,
   SDL2,
   SDL2_image,
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGL
     libX11
     freetype
     zlib

@@ -29,7 +29,6 @@
   pyphen,
   pyrss2gen,
   pytestCheckHook,
-  pytest-cov-stub,
   python-dateutil,
   pythonOlder,
   requests,
@@ -44,19 +43,25 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.3.3";
+  version = "8.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Y219b/wqsk9MJknoaV+LtWBOMJFT6ktgt4b6yuA6scc=";
+    pname = "Nikola";
+    inherit version;
+    hash = "sha256-IfJB2Rl3c1MyEiuyNpT3udfpM480VvFD8zosJFDHr7k=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov nikola --cov-report term-missing" ""
+  '';
 
-  dependencies = [
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     aiohttp
     babel
     blinker
@@ -95,13 +100,11 @@ buildPythonPackage rec {
     freezegun
     mock
     pytestCheckHook
-    pytest-cov-stub
   ];
 
   disabledTests = [
     # AssertionError
     "test_compiling_markdown"
-    "test_write_content_does_not_detroy_text"
     # Date formatting slightly differs from expectation
     "test_format_date_long"
     "test_format_date_timezone"
@@ -113,10 +116,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Static website and blog generator";
+    mainProgram = "nikola";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
-    mainProgram = "nikola";
   };
 }

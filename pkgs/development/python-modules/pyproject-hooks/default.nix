@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchPypi rec {
     pname = "pyproject_hooks";
     inherit version;
     hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    teams = [ teams.python ];
+    maintainers = teams.python.members;
   };
 }

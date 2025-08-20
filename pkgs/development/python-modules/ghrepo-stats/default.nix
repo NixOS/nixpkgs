@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
-    repo = "ghrepo-stats";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-zdBIX/uetkOAalg4uJPWXRL9WUgNN+hmqUwQDTdzrzA=";
   };

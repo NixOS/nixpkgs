@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-app-services";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfdump";
-  version = "1.7.6";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
     tag = "v${version}";
-    hash = "sha256-4iyoQAjOQW4KNJbRmdisdecuOz+DFvQGEKgq8cq7GDI=";
+    hash = "sha256-1S55WVVHczYBDGwTxGZr+ND+e4a892jkTINlvIR2xgI=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +50,15 @@ stdenv.mkDerivation rec {
     "--enable-nfpcapd"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools for working with netflow data";
     longDescription = ''
       nfdump is a set of tools for working with netflow data.
     '';
     homepage = "https://github.com/phaag/nfdump";
     changelog = "https://github.com/phaag/nfdump/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ takikawa ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ takikawa ];
+    platforms = platforms.unix;
   };
 }

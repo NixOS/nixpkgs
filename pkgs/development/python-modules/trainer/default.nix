@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
   hatchling,
 
   coqpit,
@@ -60,6 +62,6 @@ buildPythonPackage {
     homepage = "https://github.com/idiap/coqui-ai-Trainer";
     changelog = "https://github.com/idiap/coqui-ai-Trainer/releases/tag/v${version}";
     license = licenses.asl20;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

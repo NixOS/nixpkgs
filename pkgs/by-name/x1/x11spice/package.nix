@@ -10,7 +10,7 @@
   spice-protocol,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "x11spice";
   version = "2019-08-20";
 

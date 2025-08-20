@@ -34,11 +34,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Go-based tools for modifying UEFI firmware";
     homepage = "https://github.com/linuxboot/fiano";
     changelog = "https://github.com/linuxboot/fiano/blob/v${version}/RELEASES.md";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.jmbaur ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.jmbaur ];
   };
 }

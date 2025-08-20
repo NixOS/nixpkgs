@@ -12,7 +12,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python3,
+  python,
   openssl,
   jq,
   callPackage,
@@ -21,24 +21,7 @@
 }:
 
 let
-  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
-  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
-  pythonCustom = python3.override {
-    self = pythonCustom;
-    packageOverrides = _: super: {
-      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-        version = "24.2.1";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
-        };
-        # 36 failed tests
-        doCheck = false;
-      });
-    };
-  };
-
-  pythonEnv = pythonCustom.withPackages (
+  pythonEnv = python.withPackages (
     p:
     with p;
     [
@@ -47,7 +30,6 @@ let
       pyopenssl
       crcmod
       numpy
-      grpcio
     ]
     ++ lib.optional (with-gce) google-compute-engine
   );
@@ -68,7 +50,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl (sources stdenv.hostPlatform.system);
 
-  buildInputs = [ python3 ];
+  buildInputs = [ python ];
 
   nativeBuildInputs = [
     jq
@@ -81,6 +63,8 @@ stdenv.mkDerivation rec {
     ./gcloud-path.patch
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Revert patch including extended Python version constraint
+    ./gsutil-revert-version-constraint.patch
   ];
 
   installPhase = ''
@@ -103,7 +87,7 @@ stdenv.mkDerivation rec {
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
             --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
-            --prefix PYTHONPATH : "${pythonEnv}/${python3.sitePackages}" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin
@@ -183,7 +167,6 @@ stdenv.mkDerivation rec {
       pradyuman
       stephenmw
       zimbatm
-      ryan4yin
     ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";

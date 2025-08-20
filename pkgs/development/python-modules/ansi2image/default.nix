@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansi2image" ];
 
-  enabledTestPaths = [ "tests/tests.py" ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Module to convert ANSI text to an image";

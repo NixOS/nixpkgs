@@ -134,8 +134,7 @@ in
           };
           target = "/metadata.yaml";
         }
-      ]
-      ++ templates.files;
+      ] ++ templates.files;
     };
   };
 }

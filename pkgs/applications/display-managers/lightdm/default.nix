@@ -8,8 +8,8 @@
   plymouth,
   pam,
   pkg-config,
-  autoreconfHook,
-  gettext,
+  autoconf,
+  automake,
   libtool,
   libxcb,
   glib,
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
-    gettext
+    autoconf
+    automake
     yelp-tools
     yelp-xsl
     gobject-introspection
@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
     libxklavier
     pam
     polkit
-  ]
-  ++ lib.optional withQt5 qtbase;
+  ] ++ lib.optional withQt5 qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -89,9 +88,6 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
-
-    # glib gettext is deprecated and broken, so use regular gettext instead
-    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
@@ -103,8 +99,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-tests"
     "--disable-dmrc"
-  ]
-  ++ lib.optional withQt5 "--enable-liblightdm-qt5";
+  ] ++ lib.optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -133,6 +128,6 @@ stdenv.mkDerivation rec {
     description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 }

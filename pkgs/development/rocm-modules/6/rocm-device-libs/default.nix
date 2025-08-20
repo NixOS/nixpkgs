@@ -1,14 +1,11 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
   cmake,
-  ninja,
+  rocm-cmake,
   libxml2,
-  zlib,
-  zstd,
-  ncurses,
-  rocm-merged-llvm,
-  python3,
 }:
 
 let
@@ -20,43 +17,41 @@ let
     else
       throw "Unsupported ROCm LLVM platform";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
-  # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  version = "6.0.2";
 
-  postPatch = ''
-    cd amd/device-libs
-  '';
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "ROCm-Device-Libs";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-7XG7oSkJ3EPWTYGea0I50eB1/DPMD5agmjctxZYTbLQ=";
+  };
 
   patches = [ ./cmake.patch ];
 
   nativeBuildInputs = [
     cmake
-    ninja
-    python3
+    rocm-cmake
   ];
 
-  buildInputs = [
-    libxml2
-    zlib
-    zstd
-    ncurses
-    rocm-merged-llvm
-  ];
+  buildInputs = [ libxml2 ];
+  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}" ];
 
-  cmakeFlags = [
-    "-DCMAKE_RELEASE_TYPE=Release"
-    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-  ];
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/ROCm/ROCm-Device-Libs";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
-}
+})

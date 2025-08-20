@@ -5,7 +5,6 @@
   fetchFromGitHub,
   flit-core,
   typing-extensions,
-  azure-identity,
   azure-storage-blob,
   azure-storage-file-datalake,
   google-cloud-storage,
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.21.1";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,14 +31,8 @@ buildPythonPackage rec {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-Bhr92xMK/WV3u0SG8q9SvO0kGnwSVXHzq6lK/RD2ssk=";
+    hash = "sha256-VjoQc9nzwcMh9kiqWXsJNE5X7e7/sVGId5jgFTLZQy4=";
   };
-
-  postPatch = ''
-    # missing pytest-reportlog test dependency
-    substituteInPlace pyproject.toml \
-      --replace-fail "--report-log reportlog.jsonl" ""
-  '';
 
   build-system = [ flit-core ];
 
@@ -58,7 +51,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cloudpathlib" ];
 
   nativeCheckInputs = [
-    azure-identity
     psutil
     pydantic
     pytestCheckHook
@@ -68,8 +60,7 @@ buildPythonPackage rec {
     python-dotenv
     shortuuid
     tenacity
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   meta = with lib; {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";

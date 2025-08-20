@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
-    repo = "jaeles";
+    repo = pname;
     rev = "beta-v${version}";
     hash = "sha256-IGvIjO1nCilg2sPyScGTH5Zmv0rORlGwRv3NRxQk+aM=";
   };
@@ -20,12 +20,12 @@ buildGoModule rec {
   # Tests want to download signatures
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for automated Web application testing";
     mainProgram = "jaeles";
     homepage = "https://github.com/jaeles-project/jaeles";
     changelog = "https://github.com/jaeles-project/jaeles/releases/tag/beta-v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

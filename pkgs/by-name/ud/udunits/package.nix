@@ -10,7 +10,7 @@
   texinfo,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "udunits";
   version = "unstable-2021-03-17";
 

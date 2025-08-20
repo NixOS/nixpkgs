@@ -8,16 +8,16 @@
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
-  version = "1.8.6";
+  version = "1.8.4";
 
   src = fetchurl {
-    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
-    hash = "sha256-cSn+O3rVAPiLivhgXvB7lsh6deyYamlf/8CkCfRKfIY=";
+    url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
+    hash = "sha256-xqJYLG5PKowueihE+lx+s2Oq0lOLBS8gPHEGSd1CHMg=";
   };
 
   strictDeps = true;
 
-  # reconf needed to successfully cross-compile
+  # reconf needed to sucesfully cross-compile
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     description = "Multilingual text processing library (runtime)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astsmtl ];
   };
 }

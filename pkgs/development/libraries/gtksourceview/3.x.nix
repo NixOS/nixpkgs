@@ -95,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gtksourceview-3.0" ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 })

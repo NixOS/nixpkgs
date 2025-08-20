@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rss-bridge";
-  version = "2025-08-05";
+  version = "2025-01-02";
 
   src = fetchFromGitHub {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
     rev = version;
-    sha256 = "sha256-SH5iYsdvGD51j+2xqaG51VDtb35m1v9MR0+yLE1eyWo=";
+    sha256 = "sha256-6Ise+qptY2wLkNveT/mzL0nWrX6OhxAlOJkF2+BmSTE=";
   };
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit (nixosTests.rss-bridge) caddy nginx;
+      basic-functionality = nixosTests.rss-bridge;
     };
     updateScript = nix-update-script { };
   };

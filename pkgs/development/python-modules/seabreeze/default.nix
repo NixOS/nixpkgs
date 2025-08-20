@@ -9,13 +9,12 @@
   pkgconfig,
   setuptools,
   setuptools-scm,
-  udevCheckHook,
 
   # dependneices
   numpy,
   libusb-compat-0_1,
 
-  # optional-dependencies
+  # optional-dependenices
   pyusb,
 
   # tests
@@ -31,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.10.1";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     tag = "v${version}";
-    hash = "sha256-q4qBblebCb5z67KgWBIzsvCWNZf146I7LHPCyAabDUM=";
+    hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
     leaveDotGit = true;
   };
 
@@ -57,7 +56,6 @@ buildPythonPackage rec {
     pkgconfig
     setuptools
     setuptools-scm
-    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -79,8 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [ "TestHardware" ];
 

@@ -4,20 +4,20 @@
   fetchFromGitHub,
   setuptools,
   ply,
-  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
-  version = "1.3.3";
+  version = "1.3.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "calmjs";
     repo = "calmjs.parse";
-    tag = version;
-    hash = "sha256-aGGIwQBHToujc69zzIeEbvmYwLKA5X3bamVWBRmJtSE=";
+    rev = version;
+    hash = "sha256-+tel9AJFaKqsuSjqS1KPyRjO6iU7V90ECSEYLBdfqZU=";
   };
 
   postPatch = ''
@@ -32,9 +32,13 @@ buildPythonPackage rec {
     ply
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} -m unittest calmjs.parse.tests.make_suite
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "calmjs.parse"

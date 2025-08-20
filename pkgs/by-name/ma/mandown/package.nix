@@ -2,29 +2,27 @@
   lib,
   rustPlatform,
   fetchCrate,
-  nix-update-script,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+
+rustPlatform.buildRustPackage rec {
   pname = "mandown";
-  version = "1.1.0";
+  version = "0.1.5";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-a+1tm9YlBuroTtgCL0nTjASaPiJHif89pRH0CWw7RjM=";
+    inherit pname version;
+    hash = "sha256-TgOxRd8s2Vb4pNVPmFt2E5VnRHIEt6YlnTNyr91l6P8=";
   };
 
-  cargoHash = "sha256-ZyjoAvsqUyHgfEsG3+CvJatmBt0AJ2ga6HRJ8Y7her0=";
+  cargoHash = "sha256-eHKivxnbOk3K2JEVIVHhaEds6Gr2TcYUnFuallHRV/0=";
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Markdown to groff (man page) converter";
     homepage = "https://gitlab.com/kornelski/mandown";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ ];
     mainProgram = "mandown";
   };
-})
+}

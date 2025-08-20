@@ -25,32 +25,22 @@ let
 
   iniFormat = pkgs.formats.ini { };
 
-  # we need to build our own GI_TYPELIB_PATH and GST_PLUGIN_PATH because celery, paster and gmg need this information and it cannot easily be re-wrapped
-  gst =
+  # we need to build our own GI_TYPELIB_PATH because celery and paster need this information, too and cannot easily be re-wrapped
+  GI_TYPELIB_PATH =
     let
       needsGst =
         (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.audio")
         || (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.video");
     in
-    with pkgs.gst_all_1;
-    [
-      pkgs.glib
-      gst-plugins-base
-      gstreamer
-    ]
-    # audio and video share most dependencies, so we can just take audio
-    ++ lib.optionals needsGst cfg.package.optional-dependencies.audio;
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" gst;
-  GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst;
-
-  path =
-    lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.stl") [ pkgs.blender ]
-    ++ lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.pdf") (
-      with pkgs;
+    lib.makeSearchPathOutput "out" "lib/girepository-1.0" (
+      with pkgs.gst_all_1;
       [
-        poppler-utils
-        unoconv
+        pkgs.glib
+        gst-plugins-base
+        gstreamer
       ]
+      # audio and video share most dependencies, so we can just take audio
+      ++ lib.optionals needsGst cfg.package.optional-dependencies.audio
     );
 
   finalPackage = cfg.package.python.buildEnv.override {
@@ -199,7 +189,7 @@ in
         if [[ "$USER" != mediagoblin ]]; then
          sudo='exec /run/wrappers/bin/sudo -u mediagoblin'
         fi
-        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} GST_PLUGIN_PATH=${GST_PLUGIN_PATH} PATH=$PATH:${lib.makeBinPath path} ${lib.getExe' finalPackage "gmg"} $*"
+        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} ${lib.getExe' finalPackage "gmg"} $@"
       '')
     ];
 
@@ -230,8 +220,7 @@ in
             '';
             locations = {
               "/".proxyPass = "http://127.0.0.1:${toString cfg.paste.port}";
-              "/mgoblin_static/".alias =
-                "${finalPackage}/${finalPackage.python.sitePackages}/mediagoblin/static/";
+              "/mgoblin_static/".alias = "${finalPackage}/${finalPackage.python.sitePackages}/mediagoblin/static/";
               "/mgoblin_media/".alias = "/var/lib/mediagoblin/user_dev/media/public/";
               "/theme_static/".alias = "/var/lib/mediagoblin/user_dev/theme_static/";
               "/plugin_static/".alias = "/var/lib/mediagoblin/user_dev/plugin_static/";
@@ -258,7 +247,15 @@ in
       let
         serviceDefaults = {
           wantedBy = [ "multi-user.target" ];
-          inherit path;
+          path =
+            lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.stl") [ pkgs.blender ]
+            ++ lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.pdf") (
+              with pkgs;
+              [
+                poppler_utils
+                unoconv
+              ]
+            );
           serviceConfig = {
             AmbientCapabilities = "";
             CapabilityBoundingSet = [ "" ];
@@ -327,7 +324,6 @@ in
             Environment = [
               "CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery"
               "GI_TYPELIB_PATH=${GI_TYPELIB_PATH}"
-              "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
               "MEDIAGOBLIN_CONFIG=/var/lib/mediagoblin/mediagoblin.ini"
               "PASTE_CONFIG=${pasteConfig}"
             ];
@@ -339,11 +335,11 @@ in
         mediagoblin-paster = lib.recursiveUpdate serviceDefaults {
           after = [
             "mediagoblin-celeryd.service"
-            "postgresql.target"
+            "postgresql.service"
           ];
           requires = [
             "mediagoblin-celeryd.service"
-            "postgresql.target"
+            "postgresql.service"
           ];
           preStart = ''
             cp --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini
@@ -353,7 +349,6 @@ in
             Environment = [
               "CELERY_ALWAYS_EAGER=false"
               "GI_TYPELIB_PATH=${GI_TYPELIB_PATH}"
-              "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
             ];
             ExecStart = "${lib.getExe' finalPackage "paster"} serve /var/lib/mediagoblin/paste.ini";
           };

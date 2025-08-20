@@ -6,12 +6,11 @@
   expat,
   nifticlib,
   zlib,
-  ctestCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gifticlib";
-  version = "0-unstable-2020-07-07";
+  version = "unstable-2020-07-07";
 
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";
@@ -34,11 +33,11 @@ stdenv.mkDerivation {
 
   # without the test data, this is only a few basic tests
   doCheck = !stdenv.hostPlatform.isDarwin;
-  nativeCheckInputs = [ ctestCheckHook ];
-  checkFlags = [
-    "-LE"
-    "NEEDS_DATA"
-  ];
+  checkPhase = ''
+    runHook preCheck
+    ctest -LE 'NEEDS_DATA'
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://www.nitrc.org/projects/gifti";

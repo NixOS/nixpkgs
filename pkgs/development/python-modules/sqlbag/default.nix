@@ -17,14 +17,14 @@
   postgresql,
   postgresqlTestHook,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "sqlbag";
   version = "0.1.1617247075";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = "sqlbag";
+    repo = pname;
     # no tags on github, version patch number is unix time.
     rev = "eaaeec4158ffa139fba1ec30d7887f4d836f4120";
     hash = "sha256-lipgnkqrzjzqwbhtVcWDQypBNzq6Dct/qoM8y/FNiNs=";
@@ -58,11 +58,6 @@ buildPythonPackage {
   preCheck = ''
     export PGUSER="nixbld";
   '';
-
-  enabledTestPaths = [
-    "tests"
-  ];
-
   disabledTests = [
     # These all fail with "List argument must consist only of tuples or dictionaries":
     # Related issue: https://github.com/djrobstep/sqlbag/issues/14
@@ -75,9 +70,10 @@ buildPythonPackage {
     "test_transaction_separation"
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "-x"
     "-svv"
+    "tests"
   ];
 
   pythonImportsCheck = [ "sqlbag" ];
@@ -86,7 +82,7 @@ buildPythonPackage {
     description = "Handy python code for doing database things";
     homepage = "https://github.com/djrobstep/sqlbag";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ bpeetz ];
+    maintainers = with maintainers; [ soispha ];
     broken = true; # Fails to build against the current flask version
   };
 }

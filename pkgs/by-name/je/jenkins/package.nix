@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  jdk21,
+  openjdk,
   writeScript,
   nixosTests,
   jq,
@@ -16,13 +16,13 @@
   curl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.516.1";
+  version = "2.479.2";
 
   src = fetchurl {
-    url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-wwiifoH0zjqmeH6WyvdxU09/IG/vu4OWnXexX8fycAo=";
+    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
+    hash = "sha256-F3wsAz8NOuQUjmAdD9raYBEtg/JQUh86Cg/ZfLsTjb0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
-      && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
+    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${version}.jar \
+      && mv WEB-INF/lib/cli-${version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256")"
+      hash="$(nix hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
         update-source-version jenkins "$version" "$hash"
@@ -80,11 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [
+      coconnor
       earldouglas
       nequissimus
     ];
-    changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
+    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;
   };
-})
+}

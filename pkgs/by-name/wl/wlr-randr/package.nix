@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromSourcehut,
   meson,
   ninja,
   pkg-config,
@@ -11,14 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";
-  version = "0.5.0";
+  version = "0.4.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "emersion";
-    repo = "wlr-randr";
+  src = fetchFromSourcehut {
+    owner = "~emersion";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-lHOGpY0IVnR8QdSqJbtIA4FkhmQ/zDiFNqqXyj8iw/s=";
+    hash = "sha256-2kWTVAi4hq2d9jQ6yBLVzm3x7n/oSvBdZ45WyjhXhc4=";
   };
 
   strictDeps = true;
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Xrandr clone for wlroots compositors";
-    homepage = "https://gitlab.freedesktop.org/emersion/wlr-randr";
+    homepage = "https://git.sr.ht/~emersion/wlr-randr";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;

@@ -476,10 +476,4 @@ in
         map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances
       );
     };
-
-  meta.maintainers = with lib.maintainers; [
-    jk
-    dit7ya
-    nicomem
-  ];
 }

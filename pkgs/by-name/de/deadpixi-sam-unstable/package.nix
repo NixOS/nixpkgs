@@ -9,7 +9,7 @@
   libXft,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "deadpixi-sam-unstable";
   version = "2020-07-14";
 

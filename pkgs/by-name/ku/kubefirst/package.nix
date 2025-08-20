@@ -1,21 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "kubefirst";
-  version = "2.8.4";
+  version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "konstructio";
     repo = "kubefirst";
     tag = "v${version}";
-    hash = "sha256-5A5luRvUr5qBua6Jw5/SJqIHLZfEpkXFoqxTnpUjlas=";
+    hash = "sha256-nBYwvOgkkx3NXELK+h9SpapoMjAVauI9leCPhKNZfh0=";
   };
 
-  vendorHash = "sha256-1u34cuPUY/5fYd073UhRUu/5/1nhPadTI06+3o+uE7w=";
+  vendorHash = "sha256-DYEEkduud1sXVao7xbJoyvmMhfMJUPswIs3v20tncwo=";
 
   ldflags = [
     "-s"
@@ -25,12 +24,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Tool to create instant GitOps platforms that integrate some of the best tools in cloud native from scratch";
     mainProgram = "kubefirst";
     homepage = "https://github.com/konstructio/kubefirst/";
     changelog = "https://github.com/konstructio/kubefirst/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qjoly ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ qjoly ];
   };
 }

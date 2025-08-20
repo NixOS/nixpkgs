@@ -6,16 +6,16 @@
   python3,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "folder-color-switcher";
-  version = "1.6.8";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "folder-color-switcher";
+    repo = pname;
     # They don't really do tags, this is just a named commit.
-    rev = "d135f29d688d89a0e7b48acec9e08738c7976ee1";
-    hash = "sha256-3EFnQxTYcJLGjfAzZNS7pgVDUwuU3juOAwUyaKOHemI=";
+    rev = "5bd94d3ffdb9585c09832f0beabb14f0e67e8d58";
+    hash = "sha256-77+b7yVcTvBjtmXGOUIrh88IaxvCiBNM+hbZoN0+zoI=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ stdenvNoCC.mkDerivation {
     description = "Change folder colors for Nemo and Caja";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

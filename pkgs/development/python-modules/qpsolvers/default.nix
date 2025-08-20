@@ -13,31 +13,29 @@
   daqp,
   ecos,
   gurobipy,
-  jaxopt,
   osqp,
   quadprog,
   scs,
   highspy,
   piqp,
-  proxsuite,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.8.1";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     tag = "v${version}";
-    hash = "sha256-wiFDsTE+L0J+6GsDz27Xh20eXvtV6KDa2CLGQDYzIGM=";
+    hash = "sha256-/yIFLxy2gjEFg/J9A5pcbrVmq4A3Tz2efEAntH0Twk8=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
   pythonImportsCheck = [ "qpsolvers" ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     numpy
     scipy
   ];
@@ -50,11 +48,10 @@ buildPythonPackage rec {
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
     highs = [ highspy ];
-    jaxopt = [ jaxopt ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     piqp = [ piqp ];
-    proxqp = [ proxsuite ];
+    # proxqp = [ proxsuite ];
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
@@ -67,9 +64,7 @@ buildPythonPackage rec {
         ecos
         highs
         osqp
-        piqp
-        proxqp
-        # qpalm
+        piqp # proxqp qpalm
         quadprog
         scs
       ];
@@ -78,7 +73,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
   meta = with lib; {
-    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
     license = licenses.lgpl3Plus;

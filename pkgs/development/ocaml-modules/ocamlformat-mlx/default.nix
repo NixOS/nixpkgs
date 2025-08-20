@@ -1,11 +1,13 @@
 {
+  lib,
   buildDunePackage,
+  fetchFromGitHub,
   cmdliner,
   odoc,
   ocamlformat-mlx-lib,
   re,
 }:
-buildDunePackage {
+buildDunePackage rec {
   pname = "ocamlformat-mlx";
   minimalOcamlVersion = "4.08";
 

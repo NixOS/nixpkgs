@@ -3,15 +3,16 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenvNoCC.mkDerivation {
+
+stdenvNoCC.mkDerivation rec {
   pname = "bemoji";
-  version = "0.4.0-unstable-2024-04-28";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "marty-oehme";
     repo = "bemoji";
-    rev = "1b5e9c1284ede59d771bfd43780cc8f6f7446f38";
-    hash = "sha256-WD4oFq0NRZ0Dt/YamutM7iWz3fMRxCqwgRn/rcUsTIw=";
+    tag = "v${version}";
+    hash = "sha256-HXwho0vRI9ZrUuDMicMH4ZNExY+zJfbrne2LMQmmHww=";
   };
 
   strictDeps = true;
@@ -27,9 +28,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.mit;
     mainProgram = "bemoji";
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      laurent-f1z1
-      MrSom3body
-    ];
+    maintainers = with maintainers; [ laurent-f1z1 ];
   };
 }

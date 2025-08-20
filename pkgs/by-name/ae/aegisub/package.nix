@@ -60,29 +60,30 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    boost
-    expat
-    ffmpeg
-    ffms
-    fftw
-    fontconfig
-    freetype
-    fribidi
-    harfbuzz
-    icu
-    libGL
-    libass
-    libuchardet
-    wxGTK32
-    zlib
-  ]
-  ++ lib.optionals alsaSupport [ alsa-lib ]
-  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
-  ++ lib.optionals portaudioSupport [ portaudio ]
-  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-  ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
+  buildInputs =
+    [
+      boost
+      expat
+      ffmpeg
+      ffms
+      fftw
+      fontconfig
+      freetype
+      fribidi
+      harfbuzz
+      icu
+      libGL
+      libass
+      libuchardet
+      wxGTK32
+      zlib
+    ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
+    ++ lib.optionals portaudioSupport [ portaudio ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals spellcheckSupport [ hunspell ]
+    ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa" alsaSupport)
@@ -140,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       built-in real-time video preview.
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
-    # software - so the resulting program will be GPL
+    # softwares - so the resulting program will be GPL
     license = with lib.licenses; [
       bsd3
     ];

@@ -6,22 +6,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zenoh-plugin-mqtt";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-mqtt";
     tag = version;
-    hash = "sha256-ijoKL8TReNER3a9dwsPeh56l1Ze2rz6jN6L9rYQLYRU=";
+    hash = "sha256-boe4AI0U0JHNuChhHOlfCMlKJ0Zo5yUGG3xubR/Msrc=";
   };
 
-  cargoHash = "sha256-ZKpyVVzXC+c7JzktSOMubWl610ujoZ3Vgo4tC0/1JHk=";
+  cargoHash = "sha256-uB/geIBpNStXx82zL2sX6e6sLsoWRkbUsx14xLvDdsw=";
 
   # Some test time out
   doCheck = false;
 
   meta = {
-    description = "Zenoh plug-in that allows to integrate and/or route MQTT pub/sub with Eclipse Zenoh";
+    description = "A Zenoh plug-in that allows to integrate and/or route MQTT pub/sub with Eclipse Zenoh";
     homepage = "https://github.com/eclipse-zenoh/zenoh-plugin-mqtt";
     license = with lib.licenses; [
       epl20

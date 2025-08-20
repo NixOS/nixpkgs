@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signaturepdf";
-  version = "1.9.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "24eme";
     repo = "signaturepdf";
     rev = "v${version}";
-    hash = "sha256-DLPLloSt9yMEWFqmplQ8WictanlwRc4oQbTEQLUxR+E=";
+    hash = "sha256-Mo8r80XgrHdtr7k67MQpWBgTrsUpnyygufwmvUIe2n4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Web software for signing PDFs and also organize pages, edit metadata and compress pdf";
     mainProgram = "signaturepdf";
     homepage = "https://pdf.24eme.fr/";
     changelog = "https://github.com/24eme/signaturepdf/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ DamienCassou ];
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ DamienCassou ];
   };
 }

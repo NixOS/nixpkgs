@@ -8,7 +8,6 @@
   glibmm,
   gst_all_1,
   gnome,
-  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,10 +30,6 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
   ];
 
   nativeBuildInputs = [

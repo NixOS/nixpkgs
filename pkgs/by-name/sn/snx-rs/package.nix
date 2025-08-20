@@ -1,66 +1,51 @@
 {
   fetchFromGitHub,
-  glib,
-  gtk4,
-  kdePackages,
-  lib,
-  openssl,
-  pkg-config,
   rustPlatform,
-  wrapGAppsHook4,
-  graphene,
-  nix-update-script,
-  versionCheckHook,
+  lib,
+  pkg-config,
+  openssl,
+  glib,
+  atk,
+  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "snx-rs";
-  version = "4.5.0";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
-    tag = "v${version}";
-    hash = "sha256-24zklkFczsp7fhvka3T3Nz3bL61Owyrs8eHt7F9CQM8=";
+    rev = "v2.2.3";
+    hash = "sha256-tBl67uDeYVmVBwi8NQVclfFQ0Sj1dl+hR8Jct1iE2LI=";
   };
 
-  passthru.updateScript = nix-update-script { };
-
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook4
-  ];
-
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib
-    gtk4
-    kdePackages.kstatusnotifieritem
     openssl
-    graphene
+    glib
+    atk
+    gtk3
+    libsoup_3
+    webkitgtk_4_1
   ];
 
   checkFlags = [
     "--skip=platform::linux::net::tests::test_default_ip"
-    "--skip=platform::linux::tests::test_xfrm_check"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
-  cargoHash = "sha256-uDQzUl1q6mlDzs5D3b1/Q53Sz//BFeJZrE88HfMrXIk=";
-
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
-  versionCheckProgramArg = "--version";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "isakmp-0.1.0" = "sha256-6v5xhkt9iaQg3Eh8S1tXW55oLv4YFDYvY0cfsepMuIM=";
+    };
+  };
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [
-      shavyn
-    ];
-    mainProgram = "snx-rs";
+    maintainers = [ ];
   };
 }

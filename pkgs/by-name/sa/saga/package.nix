@@ -19,7 +19,8 @@
   opencv,
   vigra,
   pdal,
-  libpq,
+  postgresql,
+  darwin,
   unixODBC,
   poppler,
   hdf5,
@@ -33,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.9.1";
+  version = "9.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-InypyVCk08tsByKaIBRFWldwRz1AkNCgFD3DL4OG84w=";
+    hash = "sha256-ZPJ8OlVEqG/jmRaA7BJRsw3b1X/3tKtRcYTXqfGdJ0I=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -46,51 +47,54 @@ stdenv.mkDerivation rec {
     cmake
     wrapGAppsHook3
     pkg-config
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs = [
-    curl
-    libsForQt5.dxflib
-    fftw
-    libsvm
-    hdf5
-    gdal
-    wxGTK32
-    pdal
-    proj
-    libharu
-    opencv
-    vigra
-    libpq
-    libiodbc
-    xz
-    qhull
-    giflib
-  ]
-  # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
-  # for why the have additional buildInputs on darwin
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    unixODBC
-    poppler
-    netcdf
-    sqlite
-  ];
+  buildInputs =
+    [
+      curl
+      libsForQt5.dxflib
+      fftw
+      libsvm
+      hdf5
+      gdal
+      wxGTK32
+      pdal
+      proj
+      libharu
+      opencv
+      vigra
+      postgresql
+      libiodbc
+      xz
+      qhull
+      giflib
+    ]
+    # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
+    # for why the have additional buildInputs on darwin
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+      unixODBC
+      poppler
+      netcdf
+      sqlite
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      michelk
-      mpickering
-    ];
-    teams = [ lib.teams.geospatial ];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl2Plus;
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        michelk
+        mpickering
+      ];
+    platforms = with platforms; unix;
   };
 }

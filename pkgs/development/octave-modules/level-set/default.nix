@@ -45,11 +45,11 @@ buildOctavePackage rec {
     cd -
   '';
 
-  meta = {
+  meta = with lib; {
     name = "Level Set";
-    homepage = "https://gnu-octave.github.io/packages/level-set/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    homepage = "https://octave.sourceforge.io/level-set/index.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Routines for calculating the time-evolution of the level-set equation and extracting geometric information from the level-set function";
     # Got broke with octave 8.x update, and wasn't updated since 2019
     broken = true;

@@ -9,9 +9,9 @@
   gnunet,
   jansson,
   libmicrohttpd,
-  libpq,
   libsodium,
   libtool,
+  postgresql,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-sync";
-  version = "1.0.0";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.taler.net/sync.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-di+AgCCgOTvzR6Fberz1ISo6ZT+OsKikeNCU2HZHSz4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-v+BBn9GZ+4Zc8iUebGmLtxAQN+7+cTdG8jNOpi+jN2c=";
   };
 
   strictDeps = true;
@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     libgcrypt
     libmicrohttpd
-    libpq
     libsodium
     libtool
+    postgresql
     taler-exchange
     taler-merchant
   ];
@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/sync.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

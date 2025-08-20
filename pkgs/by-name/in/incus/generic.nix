@@ -2,7 +2,7 @@
   hash,
   lts ? false,
   patches ? [ ],
-  nixUpdateExtraArgs ? [ ],
+  updateScriptArgs ? "",
   vendorHash,
   version,
 }:
@@ -12,47 +12,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writeScript,
   acl,
-  buildPackages,
   cowsql,
-  incus-ui-canonical,
   libcap,
   lxc,
   pkg-config,
   sqlite,
   udev,
-  udevCheckHook,
   installShellFiles,
-  nix-update-script,
   nixosTests,
 }:
 
 let
   pname = "incus${lib.optionalString lts "-lts"}";
-  docsPython = buildPackages.python3.withPackages (
-    py: with py; [
-      furo
-      gitpython
-      linkify-it-py
-      canonical-sphinx-extensions
-      myst-parser
-      pyspelling
-      sphinx
-      sphinx-autobuild
-      sphinx-copybutton
-      sphinx-design
-      sphinx-notfound-page
-      sphinx-remove-toctrees
-      sphinx-reredirects
-      sphinx-tabs
-      sphinxcontrib-jquery
-      sphinxext-opengraph
-    ]
-  );
 in
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   inherit
+    patches
     pname
     vendorHash
     version
@@ -61,17 +39,14 @@ buildGoModule (finalAttrs: {
   outputs = [
     "out"
     "agent_loader"
-    "doc"
   ];
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    tag = "v${version}";
+    rev = "refs/tags/v${version}";
     inherit hash;
   };
-
-  patches = [ ./docs.patch ] ++ patches;
 
   excludedPackages = [
     # statically compile these
@@ -85,8 +60,6 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    docsPython
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -108,13 +81,6 @@ buildGoModule (finalAttrs: {
   CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   postBuild = ''
-    # build docs
-    mkdir -p .sphinx/deps
-    ln -s ${buildPackages.python3.pkgs.swagger-ui-bundle.src} .sphinx/deps/swagger-ui
-    substituteInPlace Makefile --replace-fail '. $(SPHINXENV) ; ' ""
-    make doc-incremental
-
-    # build some static executables
     make incus-agent incus-migrate
   '';
 
@@ -131,8 +97,6 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  doInstallCheck = true;
-
   postInstall = ''
     installShellCompletion --cmd incus \
       --bash <($out/bin/incus completion bash) \
@@ -146,29 +110,27 @@ buildGoModule (finalAttrs: {
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
     substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
-
-    mkdir $doc
-    cp -R doc/html $doc/
   '';
 
   passthru = {
     client = callPackage ./client.nix {
       inherit
         lts
+        meta
         patches
+        src
         vendorHash
         version
         ;
-      inherit (finalAttrs) meta src;
     };
 
     tests = if lts then nixosTests.incus-lts.all else nixosTests.incus.all;
 
-    ui = lib.warnOnInstantiate "`incus.ui` renamed to `incus-ui-canonical`" incus-ui-canonical;
+    ui = callPackage ./ui.nix { };
 
-    updateScript = nix-update-script {
-      extraArgs = nixUpdateExtraArgs;
-    };
+    updateScript = writeScript "ovs-update.py" ''
+      ${./update.py} ${updateScriptArgs}
+    '';
   };
 
   meta = {
@@ -176,8 +138,8 @@ buildGoModule (finalAttrs: {
     homepage = "https://linuxcontainers.org/incus";
     changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.lxc ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
     mainProgram = "incus";
   };
-})
+}

@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  runtimeShell,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, runtimeShell
+, installShellFiles
 
-  android-tools,
-  ffmpeg,
-  libusb1,
-  SDL2,
+, android-tools
+, ffmpeg
+, libusb1
+, SDL2
 }:
 
 let
-  version = "3.3.1";
+  version = "3.1";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-oPcLIKpJmPv2WMlBGM1sjatqu7Bkejvas0TXC8Hry7g=";
+    hash = "sha256-lY8JRKYvI7HzOhbp6xSETBoEuILKF1pzjBbSPLIrhsA=";
   };
 in
 stdenv.mkDerivation rec {
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-WotmLbktFLVpoRSmlxj7RLRYDhVQ7AWp4Awgry7kgIM=";
+    hash = "sha256-XxvlwF3vqtkew+P1yuIwBJxYetD+D+v8OKaETU3qVkk=";
   };
 
   #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
@@ -44,19 +43,9 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-    installShellFiles
-  ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [
-    ffmpeg
-    SDL2
-    libusb1
-  ];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
@@ -69,8 +58,7 @@ stdenv.mkDerivation rec {
 
     # runtime dep on `adb` to push the server
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/scrcpy-console.desktop \
       --replace "/bin/bash" "${runtimeShell}"
   '';
@@ -85,10 +73,7 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      deltaevo
-      ryand56
-    ];
+    maintainers = with lib.maintainers; [ deltaevo ryand56 ];
     mainProgram = "scrcpy";
   };
 }

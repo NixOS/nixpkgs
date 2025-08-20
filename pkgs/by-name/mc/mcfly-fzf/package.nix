@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace shell/mcfly-fzf.fish --replace '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
   '';
 
-  cargoHash = "sha256-xHYOhq/vDmjP7RfgRR15Isj7rg/nIV9tz9XznHBENig=";
+  cargoHash = "sha256-xMXM56ulfKAY2HwRTXTG9h3garxDeu+zthMKSve5seQ=";
 
   meta = with lib; {
     homepage = "https://github.com/bnprks/mcfly-fzf";

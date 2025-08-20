@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "2048-in-terminal";
-  version = "0-unstable-2022-06-13";
+  version = "unstable-2022-06-13";
 
   src = fetchFromGitHub {
     owner = "alewmoose";
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   '';
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Animated console version of the 2048 game";
     mainProgram = "2048-in-terminal";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "enumer";
-  version = "1.6.0";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "dmarkham";
     repo = "enumer";
     tag = "v${version}";
-    hash = "sha256-6K9xsJ9VmsfMDAUZZpQPtwZKzyITuRy2mmduwhya9EY=";
+    hash = "sha256-NYL36GBogFM48IgIWhFa1OLZNUeEi0ppS6KXybnPQks=";
   };
 
-  vendorHash = "sha256-w9T9PWMJjBJP2MmhGC7e78zbszgCwtVrfO5AQlu/ugQ=";
+  vendorHash = "sha256-CJCay24FlzDmLjfZ1VBxih0f+bgBNu+Xn57QgWT13TA=";
 
   meta = with lib; {
     description = "Go tool to auto generate methods for enums";

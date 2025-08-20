@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "picosvg";
-  version = "0.22.3";
+  version = "0.22.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = "picosvg";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-ocdHF0kYnfllpvul32itu1QtlDrqVeq5sT8Ecb5V1yk=";
+    hash = "sha256-jG1rfamegnX8GXDwqkGFBFzUeycRLDObJvGbxNk6OpM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

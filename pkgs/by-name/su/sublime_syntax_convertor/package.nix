@@ -1,15 +1,8 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-}:
-
-bundlerApp rec {
+{ lib, bundlerApp }:
+bundlerApp {
   pname = "sublime_syntax_convertor";
   gemdir = ./.;
   exes = [ "sublime_syntax_convertor" ];
-
-  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = {
     description = "Converts tmLanguage to sublime-syntax";

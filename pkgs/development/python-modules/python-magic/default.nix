@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  replaceVars,
+  substituteAll,
   file,
   pytestCheckHook,
 }:
@@ -22,7 +22,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./libmagic-path.patch {
+    (substituteAll {
+      src = ./libmagic-path.patch;
       libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     (fetchpatch {
@@ -42,10 +43,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8
-  '';
-
-  postCheck = ''
-    unset LC_ALL
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -1,26 +1,26 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  pkg-config,
-  openssl,
-  pandoc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, pkg-config
+, openssl
+, pandoc
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dogedns";
-  version = "0.2.9";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "Dj-Codeman";
     repo = "doge";
     rev = "v${version}";
-    hash = "sha256-SeC/GZ1AeEqRzxWc4oJ6JOvXfn3/LRcQz9uWXXqdTqU=";
+    hash = "sha256-3wOka+MKSy2x3100eF0d9A5Jc0qFSNCiLsisHO1Uldc=";
   };
 
-  cargoHash = "sha256-vLdfmaIOSxNqs1Hq6NJMA8HDZas4E9rc+VHnFSlX/wg=";
+  cargoHash = "sha256-hRtHjyOeIGx7ulXZiyY7EWXVQiF2vzFP1Gf+lTpe2GQ=";
 
   patches = [
     # remove date info to make the build reproducible
@@ -39,14 +39,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=options::test::two_classes"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    pandoc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  nativeBuildInputs = [ installShellFiles pandoc ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  postInstall = ''
+ postInstall = ''
     installShellCompletion completions/doge.{bash,fish,zsh}
     installManPage ./target/man/*.1
   '';

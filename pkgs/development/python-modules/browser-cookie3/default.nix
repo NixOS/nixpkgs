@@ -1,9 +1,8 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonPackage,
   pythonOlder,
-  setuptools,
   lz4,
   keyring,
   pbkdf2,
@@ -13,21 +12,17 @@
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.20.1";
-  pyproject = true;
+  version = "0.19.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "borisbabic";
-    repo = "browser_cookie3";
-    tag = version;
-    hash = "sha256-3EmFx+9LQFuS26mUPH/etc6hkUXqmNOOipbldhjorDE=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-MDGtFLlrR+8eTIVF8vRj4QrYRO+DTc0Ova42HjHGEZo=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     lz4
     keyring
     pbkdf2

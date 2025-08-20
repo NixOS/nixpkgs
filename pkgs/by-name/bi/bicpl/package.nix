@@ -7,14 +7,14 @@
   netpbm,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bicpl";
   version = "unstable-2024-05-14";
 
   # master is not actively maintained, using develop and develop-apple branches
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = "bicpl";
+    repo = pname;
     rev = "7e1e791483cf135fe29b8eecd7a360aa892823ae";
     hash = "sha256-SvbtPUfEYp3IGivG+5yFdJF904miyMk+s15zwW7e7b4=";
   };

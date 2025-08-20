@@ -28,7 +28,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "sca2d";
   version = "0.2.2";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "bath_open_instrumentation_group";
@@ -37,9 +37,7 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-p0Bv8jcnjcOLBAXN5A4GspSIEG4G4NPA4o0aEtwe/LU=";
   };
 
-  build-system = with python.pkgs; [ setuptools ];
-
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     lark010
     colorama
   ];

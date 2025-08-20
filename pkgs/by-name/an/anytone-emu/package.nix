@@ -6,7 +6,7 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "anytone-emu";
   version = "unstable-2023-06-15";
 

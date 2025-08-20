@@ -1,12 +1,12 @@
 # This module defines a NixOS installation CD that contains X11 and
 # Plasma 5.
 
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-calamares.nix ];
 
-  isoImage.edition = lib.mkDefault "plasma5";
+  isoImage.edition = "plasma5";
 
   services.xserver.desktopManager.plasma5 = {
     enable = true;
@@ -45,8 +45,8 @@
       ln -sfT ${pkgs.plasma5Packages.konsole}/share/applications/org.kde.konsole.desktop ${
         desktopDir + "org.kde.konsole.desktop"
       }
-      ln -sfT ${pkgs.calamares-nixos}/share/applications/calamares.desktop ${
-        desktopDir + "calamares.desktop"
+      ln -sfT ${pkgs.calamares-nixos}/share/applications/io.calamares.calamares.desktop ${
+        desktopDir + "io.calamares.calamares.desktop"
       }
     '';
 

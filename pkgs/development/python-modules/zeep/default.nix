@@ -11,7 +11,6 @@
   isodate,
   lxml,
   mock,
-  packaging,
   platformdirs,
   pretend,
   pytest-asyncio,
@@ -41,8 +40,6 @@ buildPythonPackage rec {
     hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
 
-  patches = [ ./httpx-compat.patch ];
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -50,7 +47,6 @@ buildPythonPackage rec {
     defusedxml
     isodate
     lxml
-    packaging
     platformdirs
     pytz
     requests
@@ -59,8 +55,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    async = [ httpx ];
-    xmlsec = [ xmlsec ];
+    async_require = [ httpx ];
+    xmlsec_require = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];
@@ -75,8 +71,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Failed: External connections not allowed during tests.

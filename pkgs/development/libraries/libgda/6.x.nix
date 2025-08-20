@@ -24,11 +24,11 @@
   mysqlSupport ? false,
   libmysqlclient ? null,
   postgresSupport ? false,
-  libpq ? null,
+  postgresql ? null,
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> libpq != null;
+assert postgresSupport -> postgresql != null;
 
 stdenv.mkDerivation rec {
   pname = "libgda";
@@ -73,20 +73,21 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    json-glib
-    isocodes
-    openssl
-    libgee
-    sqlite
-  ]
-  ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ]
-  ++ lib.optionals postgresSupport [
-    libpq
-  ];
+  buildInputs =
+    [
+      gtk3
+      json-glib
+      isocodes
+      openssl
+      libgee
+      sqlite
+    ]
+    ++ lib.optionals mysqlSupport [
+      libmysqlclient
+    ]
+    ++ lib.optionals postgresSupport [
+      postgresql
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
       # CLI tools
       gpl2Plus
     ];
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

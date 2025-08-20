@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.16";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "francma";
-    repo = "wob";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-Bn/WN9Ix4vm9FDFVKc/vRLP4WeVNaJFz1WBuS9tqJhY=";
+    sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
   };
 
   strictDeps = true;
@@ -41,12 +41,11 @@ stdenv.mkDerivation rec {
     inih
     wayland
     wayland-protocols
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Lightweight overlay bar for Wayland";
     longDescription = ''
@@ -54,9 +53,9 @@ stdenv.mkDerivation rec {
       inspired by xob.
     '';
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.isc;
+    maintainers = with maintainers; [ primeos ];
+    platforms = platforms.linux;
     mainProgram = "wob";
   };
 }

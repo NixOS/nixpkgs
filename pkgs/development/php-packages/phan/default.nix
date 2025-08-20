@@ -7,16 +7,16 @@
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject
   (finalAttrs: {
     pname = "phan";
-    version = "5.5.1";
+    version = "5.4.5";
 
     src = fetchFromGitHub {
       owner = "phan";
       repo = "phan";
       rev = finalAttrs.version;
-      hash = "sha256-G17ORkHmu6nkfJ8UrGzcaybPOKPrq1Q+LXVS56aVOZ8=";
+      hash = "sha256-CSV+kapCzGOCBaYnX0lJVlDdZGNBCKZ/nogOac1xj1A=";
     };
 
-    vendorHash = "sha256-Ake5/7IyoweC2ONDuWt9jJSbG0JbnU9lmCRu2p6uUQM=";
+    vendorHash = "sha256-qRcB0KmUJWRQaMlnK1JdUsZrikThD6nQnrqQZm9yROk=";
 
     meta = {
       description = "Static analyzer for PHP";
@@ -27,7 +27,6 @@
         and attempts to prove incorrectness rather than correctness.
       '';
       mainProgram = "phan";
-      maintainers = with lib.maintainers; [ apeschar ];
-      teams = [ lib.teams.php ];
+      maintainers = with lib.maintainers; [ apeschar ] ++ lib.teams.php.members;
     };
   })

@@ -9,7 +9,6 @@
 buildPythonApplication rec {
   pname = "nxdomain";
   version = "1.0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

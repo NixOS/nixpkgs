@@ -4,12 +4,13 @@
   buildPythonPackage,
   cargo,
   cmake,
+  darwin,
   fetchFromGitHub,
   pkg-config,
   pkgs, # zstd hidden by python3Packages.zstd
   pytestCheckHook,
   pytest-codspeed ? null, # Not in Nixpkgs
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   pytest-benchmark,
   rustc,
@@ -40,28 +41,23 @@
 }:
 
 let
-  version = "1.31.0";
+  version = "1.12.0";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "polars";
   inherit version;
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
-    tag = "py-${version}";
-    hash = "sha256-OZ7guV/uxa3jGesAh+ubrFjQSNVp5ImfXfPAQxagTj0=";
+    rev = "py-${version}";
+    hash = "sha256-q//vt8FvVKY9N/BOIoOwxaSB/F/tNX1Zl/9jd0AzSH4=";
   };
-
-  patches = [
-    ./avx512.patch
-  ];
 
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
   postPatch = ''
@@ -70,9 +66,12 @@ buildPythonPackage rec {
     done < <( find -iname '*.rs' -print0 )
   '';
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-yGTXUW6IVa+nRpmnkEl20/RJ/mxTSAaokETT8QLE+Ns=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "numpy-0.21.0" = "sha256-u0Z+6L8pXSPaA3cE1sUpY6sCoaU1clXUcj/avnNzmsw=";
+      "polars-parquet-format-2.10.0" = "sha256-iB3KZ72JSp7tJCLn9moukpDEGf9MUos04rIQ9rDGWfI=";
+    };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -89,10 +88,16 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [
-    polarsMemoryAllocator
-    (pkgs.__splicedPackages.zstd or pkgs.zstd)
-  ];
+  buildInputs =
+    [
+      polarsMemoryAllocator
+      (pkgs.__splicedPackages.zstd or pkgs.zstd)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -182,7 +187,7 @@ buildPythonPackage rec {
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "${src.name}/py-polars";
+    sourceRoot = "source/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
@@ -205,7 +210,6 @@ buildPythonPackage rec {
         ps.altair
         ps.boto3
         ps.deltalake
-        ps.fastexcel
         ps.flask
         ps.flask-cors
         ps.fsspec
@@ -214,7 +218,6 @@ buildPythonPackage rec {
         ps.jax
         ps.jaxlib
         (ps.kuzu or null)
-        ps.matplotlib
         ps.moto
         ps.nest-asyncio
         ps.numpy
@@ -222,7 +225,7 @@ buildPythonPackage rec {
         ps.pandas
         ps.pyarrow
         ps.pydantic
-        ps.pyiceberg
+        (ps.pyiceberg or null)
         ps.sqlalchemy
         ps.torch
         ps.xlsx2csv
@@ -234,15 +237,15 @@ buildPythonPackage rec {
     nativeCheckInputs = [
       pytestCheckHook
       pytest-codspeed
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       pytest-benchmark
     ];
 
-    pytestFlags = [
-      "--benchmark-disable"
-      "-nauto"
-      "--dist=loadgroup"
+    pytestFlagsArray = [
+      "-n auto"
+      "--dist loadgroup"
+      ''-m "slow or not slow"''
     ];
     disabledTests = [
       "test_read_kuzu_graph_database" # kuzu
@@ -261,25 +264,6 @@ buildPythonPackage rec {
 
       # Internet access:
       "test_read_web_file"
-      "test_run_python_snippets"
-
-      # AssertionError: Series are different (exact value mismatch)
-      "test_reproducible_hash_with_seeds"
-
-      # AssertionError: assert 'PARTITIONED FORCE SPILLED' in 'OOC sort forced\nOOC sort started\nRUN STREAMING PIPELINE\n[df -> sort -> ordered_sink]\nfinished sinking into OOC so... sort took: 365.662µs\nstarted sort source phase\nsort source phase took: 2.169915ms\nfull ooc sort took: 4.502947ms\n'
-      "test_streaming_sort"
-
-      # AssertionError assert sys.getrefcount(foos[0]) == base_count (3 == 2)
-      # tests/unit/dataframe/test_df.py::test_extension
-      "test_extension"
-
-      # Internet access (https://bucket.s3.amazonaws.com/)
-      "test_scan_credential_provider"
-      "test_scan_credential_provider_serialization"
-
-      # ModuleNotFoundError: ADBC 'adbc_driver_sqlite.dbapi' driver not detected.
-      "test_read_database"
-      "test_read_database_parameterised_uri"
 
       # Untriaged
       "test_pickle_lazyframe_nested_function_udf"
@@ -290,8 +274,8 @@ buildPythonPackage rec {
       "tests/benchmark"
       "tests/docs"
 
-      # Internet access
-      "tests/unit/io/cloud/test_credential_provider.py"
+      "tests/unit/io/test_iceberg.py" # Package pyiceberg
+      "tests/unit/io/test_spreadsheet.py" # Package fastexcel
 
       # Wrong altair version
       "tests/unit/operations/namespaces/test_plot.py"
@@ -310,7 +294,6 @@ buildPythonPackage rec {
   meta = {
     description = "Dataframes powered by a multithreaded, vectorized query engine, written in Rust";
     homepage = "https://github.com/pola-rs/polars";
-    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada

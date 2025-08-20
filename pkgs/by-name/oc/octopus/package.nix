@@ -31,13 +31,13 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "16.0";
+  version = "15.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    hash = "sha256-sByiRTgAntJtSeL4h+49Mi9Rcxw2wK/BvXvsePa77HE=";
+    hash = "sha256-vG1HUkuNUZkhBumoJJy3AyFU6cZOo1YGmaOYcU6bPOM=";
   };
 
   patches = [
@@ -68,8 +68,7 @@ stdenv.mkDerivation rec {
     spglib
     metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
-  ]
-  ++ lib.optional enableMpi scalapack;
+  ] ++ lib.optional enableMpi scalapack;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;

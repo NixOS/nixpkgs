@@ -10,10 +10,10 @@
 let
   # get rid of rec
   pname = "pyspread";
-  version = "2.4";
+  version = "2.3.1";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
+    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
   };
   inherit (libsForQt5)
     qtsvg
@@ -21,7 +21,6 @@ let
     ;
 in
 python3.pkgs.buildPythonApplication {
-  format = "setuptools";
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -84,6 +83,6 @@ python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

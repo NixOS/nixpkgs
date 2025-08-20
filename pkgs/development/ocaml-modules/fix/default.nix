@@ -6,14 +6,14 @@
 
 buildDunePackage rec {
   pname = "fix";
-  version = "20250428";
+  version = "20230505";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "fix";
     rev = version;
-    sha256 = "sha256-ZfIKx0BMhnmrqmfyqRi9ElZN1xdkupsDmfRg1GD3l/Q=";
+    sha256 = "sha256-Xuw4pEPqAbQjSHrpMCNE7Th0mpbNMSxdEdwvH4hu2SM=";
   };
 
   minimalOCamlVersion = "4.03";

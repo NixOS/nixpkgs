@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.3.5";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     tag = "v${version}";
-    hash = "sha256-UHjWO/uCfUF6xylfYLbwiMwpNwZvlNoVRzRhRFxfqck=";
+    hash = "sha256-ffE/PlLUH2qO4QJpSGHmEh7/ghputTCnTYplzP+Umw0=";
   };
 
-  vendorHash = "sha256-wl0BqZXd7NRNBY3SCLOwfwa3e91ar5JX6lxtkQChXHM=";
+  vendorHash = "sha256-YSE6WQkq47A+D9ff3UHbc0Kdik9b4KjRpwYWkXDD5zA=";
 
   buildInputs = [ libpcap ];
 
@@ -32,9 +32,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "-version";
+  versionCheckProgramArg = [ "-version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast SYN/CONNECT port scanner";
     longDescription = ''
       Naabu is a port scanning tool written in Go that allows you to enumerate
@@ -44,8 +44,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
     changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "naabu";
   };
 }

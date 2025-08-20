@@ -18,7 +18,6 @@
   glib,
   systemd,
   polkit,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -87,8 +85,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dlocalstatedir=/var"
   ];
-
-  doInstallCheck = true;
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";

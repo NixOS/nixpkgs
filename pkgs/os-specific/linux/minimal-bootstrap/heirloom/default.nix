@@ -27,7 +27,7 @@ let
 
     # "tcc -ar" doesn't support creating empty archives
     ./tcc-empty-ar.patch
-    # meslibc doesn't have separate libm
+    # meslibc doesn't have seperate libm
     ./dont-link-lm.patch
     # meslibc's vprintf doesn't support %ll
     ./vprintf.patch
@@ -108,7 +108,7 @@ bash.runCommand "${pname}-${version}"
         lpl-102
         info-zip
       ];
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = platforms.unix;
     };
   }

@@ -17,9 +17,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfdesktop";
-  version = "4.20.1";
+  version = "4.20.0";
 
-  sha256 = "sha256-QBzsHXEdTGj8PlgB+L/TJjxAVksKqf+9KrRN3YaBf44=";
+  sha256 = "sha256-80g3lk1TkQI0fbYf2nXs36TrPlaGTHgH6k/TGOzRd3w=";
 
   buildInputs = [
     exo
@@ -37,6 +37,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Xfce's desktop manager";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

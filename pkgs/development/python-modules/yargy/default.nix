@@ -19,11 +19,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pymorphy2 ];
   pythonImportsCheck = [ "yargy" ];
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   meta = with lib; {
     description = "Rule-based facts extraction for Russian language";
-    homepage = "https://github.com/natasha/yargy";
+    homepage = "https://github.com/natasha/yargu";
     license = licenses.mit;
     maintainers = with maintainers; [ npatsakula ];
   };

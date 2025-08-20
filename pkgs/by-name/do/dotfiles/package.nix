@@ -7,7 +7,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
   version = "0.6.5";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit version pname;
@@ -17,11 +16,8 @@ python3Packages.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [ click ];
-
   nativeCheckInputs = with python3Packages; [ pytest ];
+  propagatedBuildInputs = with python3Packages; [ click ];
 
   meta = with lib; {
     description = "Easily manage your dotfiles";

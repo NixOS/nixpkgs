@@ -13,23 +13,19 @@
   mpv,
   procps,
   scdoc,
-  stdenvNoCC,
+  stdenv,
   streamlink,
   vlc,
-  fzf,
-  withMpv ? true,
-  withVlc ? false,
-  withMplayer ? false,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wtwitch";
   version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "krathalan";
-    repo = "wtwitch";
-    tag = finalAttrs.version;
+    repo = pname;
+    rev = version;
     hash = "sha256-2YLBuxGwGkav3zB2qMqM6yRXf7ZLqgULoJV4s5p+hSw=";
   };
 
@@ -39,11 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   buildPhase = ''
-    runHook preBuild
-
     scdoc < src/wtwitch.1.scd > wtwitch.1
-
-    runHook postBuild
   '';
 
   nativeBuildInputs = [
@@ -53,8 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHook preInstall
-
     installManPage wtwitch.1
     installShellCompletion --cmd wtwitch \
       --bash src/wtwitch-completion.bash \
@@ -64,32 +54,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set-default LANG en_US.UTF-8 \
       --prefix PATH : ${
         lib.makeBinPath (
-          [
+          lib.optionals stdenv.hostPlatform.isLinux [ vlc ]
+          ++ [
             bash
             coreutils-prefixed
             curl
             gnused
             gnugrep
             jq
+            mplayer
+            mpv
             procps
             streamlink
-            fzf
           ]
-          ++ lib.optional withMpv mpv
-          ++ lib.optional withVlc vlc
-          ++ lib.optional withMplayer mplayer
         )
       }
-
-    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terminal user interface for Twitch";
     homepage = "https://github.com/krathalan/wtwitch";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.urandom ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ urandom ];
+    platforms = platforms.all;
     mainProgram = "wtwitch";
   };
-})
+}

@@ -3,22 +3,19 @@
   lib,
   fetchFromGitiles,
   libcap,
-  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "2025.07.02";
+  version = "2024.05.22";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/minijail";
     rev = "linux-v${version}";
-    sha256 = "sha256-GRnr2O6ZpWtRDGJ6Am0XPT426Xh7wxTJsoEqyTUECYY=";
+    sha256 = "sha256-1NNjNEC0pNb0WW0PG5smltT1/dGYNRfhNxJtW0hngI8=";
   };
 
   buildInputs = [ libcap ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   makeFlags = [
     "ECHO=echo"
@@ -43,8 +40,6 @@ stdenv.mkDerivation rec {
     cp -v *.pc $out/lib/pkgconfig
     cp -v libminijail.h scoped_minijail.h $out/include/chromeos
     cp -v minijail0 $out/bin
-
-    installManPage minijail0.1 minijail0.5
   '';
 
   enableParallelBuilding = true;

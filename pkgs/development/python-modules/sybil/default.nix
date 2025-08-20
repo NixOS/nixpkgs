@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "9.1.0";
+  version = "6.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simplistix";
-    repo = "sybil";
+    repo = pname;
     tag = version;
-    hash = "sha256-ov8b8NPBbiqB/pcKgdD2D+xNSxUM1uGK8EP+20K7eGQ=";
+    hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
   };
 
   build-system = [ setuptools ];

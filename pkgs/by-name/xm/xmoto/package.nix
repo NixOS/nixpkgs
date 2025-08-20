@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
-  version = "0.6.3";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "xmoto";
-    repo = "xmoto";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-DNljUd7FSH0fTgQx8LMqItZ54aLZtwMUPzqR8Z820SM=";
+    hash = "sha256-n58GB5HA50ybSq0ssvJMq+p3I3JThHUGLZ5sHy/245M=";
   };
 
   nativeBuildInputs = [

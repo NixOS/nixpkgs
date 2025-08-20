@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "xinntao";
-    repo = "Real-ESRGAN-ncnn-vulkan";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-F+NfkAbk8UtAKzsF42ppPF2UGjK/M6iFfBsRRBbCmcI=";
   };

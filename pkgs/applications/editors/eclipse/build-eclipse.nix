@@ -14,22 +14,22 @@
   libXtst,
   libsecret,
   gsettings-desktop-schemas,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   makeWrapper,
   perl,
   ...
 }:
 
 {
-  pname,
+  name,
   src ? builtins.getAttr stdenv.hostPlatform.system sources,
   sources ? null,
   description,
-  version,
+  productVersion,
 }:
 
 stdenv.mkDerivation rec {
-  inherit pname version src;
+  inherit name src;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
@@ -57,8 +57,7 @@ stdenv.mkDerivation rec {
     libXtst
     libsecret
     zlib
-  ]
-  ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
+  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
 
   buildCommand = ''
     # Unpack tarball.
@@ -94,12 +93,12 @@ stdenv.mkDerivation rec {
             libXtst
             libsecret
           ]
-          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
+          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
         )
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
@@ -111,8 +110,6 @@ stdenv.mkDerivation rec {
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
-  passthru.updateScript = ./update.sh;
-
   meta = {
     homepage = "https://www.eclipse.org/";
     inherit description;
@@ -121,7 +118,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ lib.maintainers.jerith666 ];
   };
 
 }

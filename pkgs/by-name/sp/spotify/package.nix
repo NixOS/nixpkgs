@@ -10,8 +10,6 @@ let
 
   pname = "spotify";
 
-  updateScript = ./update.sh;
-
   meta = with lib; {
     homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
@@ -27,6 +25,6 @@ let
 
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix (extraArgs // { inherit pname updateScript meta; })
+  callPackage ./darwin.nix (extraArgs // { inherit pname meta; })
 else
-  callPackage ./linux.nix (extraArgs // { inherit pname updateScript meta; })
+  callPackage ./linux.nix (extraArgs // { inherit pname meta; })

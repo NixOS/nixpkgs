@@ -23,21 +23,16 @@ let
     pname = "vikunja-frontend";
     inherit version src;
 
-    patches = [
-      ./nodejs-22.12-tailwindcss-update.patch
-    ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs)
         pname
         version
-        patches
         src
         sourceRoot
         ;
-      fetcherVersion = 1;
-      hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
+      hash = "sha256-D2dOyYsdsNV1ZSQdjpy6rfoix7yBACEHj/2XyHb7HWE=";
     };
 
     nativeBuildInputs = [

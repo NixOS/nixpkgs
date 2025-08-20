@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
-    repo = "pyshark";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-kzJDzUK6zknUyXPdKc4zMvWim4C5NQCSJSS45HI6hKM=";
   };
@@ -61,20 +61,21 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # flaky
-    # KeyError: 'Packet of index 0 does not exist in capture'
-    "test_getting_packet_summary"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # fails on darwin
-    # _pickle.PicklingError: logger cannot be pickled
-    "test_iterate_empty_psml_capture"
-  ];
+  disabledTests =
+    [
+      # flaky
+      # KeyError: 'Packet of index 0 does not exist in capture'
+      "test_getting_packet_summary"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fails on darwin
+      # _pickle.PicklingError: logger cannot be pickled
+      "test_iterate_empty_psml_capture"
+    ];
 
   pythonImportsCheck = [ "pyshark" ];
 
-  enabledTestPaths = [ "../tests/" ];
+  pytestFlagsArray = [ "../tests/" ];
 
   meta = with lib; {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";

@@ -6,6 +6,8 @@
   libXmu,
   libXi,
   libXext,
+  AGL,
+  OpenGL,
   testers,
   mesa,
 }:
@@ -19,12 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libXmu
-    libXi
-    libXext
-  ];
-  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      [ AGL ]
+    else
+      [
+        libXmu
+        libXi
+        libXext
+      ];
+  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   outputs = [
     "out"

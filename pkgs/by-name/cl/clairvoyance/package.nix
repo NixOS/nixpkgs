@@ -11,12 +11,10 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "nikitastupin";
-    repo = "clairvoyance";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-CVXa2HvX7M0cwqnTeZVETg07j324ATQuMNreEgAC2QA=";
   };
-
-  pythonRelaxDeps = [ "rich" ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -46,12 +44,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_probe_typename"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to obtain GraphQL API schemas";
     mainProgram = "clairvoyance";
     homepage = "https://github.com/nikitastupin/clairvoyance";
     changelog = "https://github.com/nikitastupin/clairvoyance/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

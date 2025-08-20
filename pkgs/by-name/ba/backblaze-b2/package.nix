@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "4.4.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     tag = "v${version}";
-    hash = "sha256-j+HlwFB9wTL5XNO/IBwBY+z3Qke/6LmLIFr9ZrMPZuA=";
+    hash = "sha256-a0XJq8M1yw4GmD5ndIAJtmHFKqS0rYdvYIxK7t7oyZw=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -44,15 +44,12 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [ "phx-class-registry" ];
-
   nativeCheckInputs = with python3Packages; [
     backoff
     more-itertools
     pexpect
     pytestCheckHook
     pytest-xdist
-    tenacity
   ];
 
   preCheck = ''
@@ -103,7 +100,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
-    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hrdinka ];
     mainProgram = "backblaze-b2";

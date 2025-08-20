@@ -13,22 +13,23 @@
   libstartup_notification,
   libxml2,
   pkg-config,
-  replaceVars,
+  substituteAll,
   wrapGAppsHook3,
   zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "metacity";
-  version = "3.56.0";
+  version = "3.54.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor version}/metacity-${version}.tar.xz";
-    hash = "sha256-dVSZcQSyb/DnmgKzeiuhib3058zVQibw+vSxpZAGyQE=";
+    hash = "sha256-WHifKLbzhSL9iMIkKRChB9ppNCF7LH3VKn1RLTlB1kM=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit zenity;
     })
   ];
@@ -64,12 +65,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Window manager used in Gnome Flashback";
     homepage = "https://gitlab.gnome.org/GNOME/metacity";
     changelog = "https://gitlab.gnome.org/GNOME/metacity/-/blob/${version}/NEWS?ref_type=tags";
-    license = lib.licenses.gpl2;
-    teams = [ lib.teams.gnome ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = teams.gnome.members;
+    platforms = platforms.linux;
   };
 }

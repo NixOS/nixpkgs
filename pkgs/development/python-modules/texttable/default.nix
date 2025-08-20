@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "texttable" ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   meta = with lib; {
     description = "Module to generate a formatted text table, using ASCII characters";

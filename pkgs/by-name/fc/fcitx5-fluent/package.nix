@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Fluent-design theme with blur effect and shadow";
+    description = "A fluent-design theme with blur effect and shadow";
     homepage = "https://github.com/Reverier-Xu/Fluent-fcitx5";
     license = licenses.mpl20;
     platforms = platforms.all;

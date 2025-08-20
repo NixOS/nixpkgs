@@ -19,7 +19,7 @@
   qtquickcontrols2,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "kalk";
 
   nativeBuildInputs = [

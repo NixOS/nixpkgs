@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.5.0";
+  version = "5.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
     tag = "v${version}";
-    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
+    hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
   };
 
   build-system = [ hatchling ];
@@ -44,8 +44,7 @@ buildPythonPackage rec {
     packaging
     pandas
     toolz
-  ]
-  ++ lib.optional (pythonOlder "3.14") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.14") typing-extensions;
 
   nativeCheckInputs = [
     ipython
@@ -61,11 +60,6 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
     "test_renderer_with_none_embed_options"
-    # Sometimes conflict due to parallelism
-    "test_dataframe_to_csv[polars]"
-    "test_dataframe_to_csv[pandas]"
-    # Network access
-    "test_theme_remote_lambda"
   ];
 
   disabledTestPaths = [

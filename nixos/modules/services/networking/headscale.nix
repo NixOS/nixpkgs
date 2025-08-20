@@ -164,7 +164,7 @@ in
                 '';
               };
 
-              auto_update_enabled = lib.mkOption {
+              auto_update_enable = lib.mkOption {
                 type = lib.types.bool;
                 default = true;
                 description = ''
@@ -228,7 +228,7 @@ in
                   default = true;
                   description = ''
                     Enable WAL mode for SQLite. This is recommended for production environments.
-                    <https://www.sqlite.org/wal.html>
+                    https://www.sqlite.org/wal.html
                   '';
                   example = true;
                 };
@@ -406,6 +406,14 @@ in
                 '';
                 example = [ "alice@example.com" ];
               };
+
+              strip_email_domain = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether the domain part of the email address should be removed when generating namespaces.
+                '';
+              };
             };
 
             tls_letsencrypt_hostname = lib.mkOption {
@@ -485,11 +493,7 @@ in
   imports = with lib; [
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "autoUpdate" ]
-      [ "services" "headscale" "settings" "derp" "auto_update_enabled" ]
-    )
-    (mkRenamedOptionModule
-      [ "services" "headscale" "derp" "auto_update_enable" ]
-      [ "services" "headscale" "settings" "derp" "auto_update_enabled" ]
+      [ "services" "headscale" "settings" "derp" "auto_update_enable" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "paths" ]
@@ -577,11 +581,6 @@ in
         "dns_config"
         "nameservers"
       ] "Use `dns.nameservers.global` instead.")
-      (assertRemovedOption [
-        "settings"
-        "oidc"
-        "strip_email_domain"
-      ] "The strip_email_domain option got removed upstream")
     ];
 
     services.headscale.settings = lib.mkMerge [
@@ -630,7 +629,6 @@ in
         in
         {
           Restart = "always";
-          RestartSec = "5s";
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;

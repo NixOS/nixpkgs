@@ -9,7 +9,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
   version = "2.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kliment";
@@ -19,13 +18,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "pyglet >= 1.1, < 2.0" "pyglet" \
+      --replace "cairosvg >= 1.0.9, < 2.6.0" "cairosvg"
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
   '';
-
-  pythonRelaxDeps = [
-    "pyglet"
-    "cairosvg"
-  ];
 
   nativeBuildInputs = [
     glib

@@ -12,7 +12,7 @@ import unittest
 import site
 
 
-ENV = "@environment@"
+ENV = "@env@"
 INTERPRETER = "@interpreter@"
 PYTHON_VERSION = "@pythonVersion@"
 

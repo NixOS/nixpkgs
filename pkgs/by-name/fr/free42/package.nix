@@ -1,33 +1,34 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromGitHub,
   alsa-lib,
   copyDesktopItems,
-  wrapGAppsHook3,
+  gtk3,
   makeDesktopItem,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.3.8";
+  version = "3.1.10";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromGitHub {
     owner = "thomasokken";
     repo = "free42";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-L6WZM5/+ujM6hv85ppt9YiqHLkd0vYFx3nFVcJwzEBM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-X1fNr+0xc15KmR+qbDOkQraYPUj50b1eWmSheIKl4e8=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-    wrapGAppsHook3
   ];
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [
+    alsa-lib
+    gtk3
+  ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile
@@ -43,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "free42bin";
       type = "Application";
       comment = "A software clone of HP-42S Calculator";
-      icon = "free42";
       categories = [
         "Utility"
         "Calculator"
@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "free42dec";
       type = "Application";
       comment = "A software clone of HP-42S Calculator";
-      icon = "free42";
       categories = [
         "Utility"
         "Calculator"
@@ -85,21 +84,21 @@ stdenv.mkDerivation (finalAttrs: {
                         $out/share/icons/hicolor/128x128/apps
 
     install -m755 gtk/free42dec gtk/free42bin $out/bin
+    install -m644 gtk/README $out/share/doc/free42/README-GTK
     install -m644 README $out/share/doc/free42/README
 
-    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps/free42.xpm
-    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps/free42.xpm
+    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps
+    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps
     install -m644 skins/* $out/share/free42/skins
 
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://thomasokken.com/free42/";
-    changelog = "https://thomasokken.com/free42/history.html";
+    homepage = "https://github.com/thomasokken/free42";
     description = "Software clone of HP-42S Calculator";
     license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;
   };

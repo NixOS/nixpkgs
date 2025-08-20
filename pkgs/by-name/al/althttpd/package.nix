@@ -5,7 +5,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "althttpd";
   version = "unstable-2023-08-12";
 

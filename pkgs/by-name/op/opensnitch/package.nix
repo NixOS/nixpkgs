@@ -13,12 +13,9 @@
   testers,
   opensnitch,
   nixosTests,
-  opensnitch-ui,
-  nix-update-script,
 }:
 let
   # Override protoc-gen-go-grpc to use the compatible version
-  # Should be droppable on opensnitch 1.7.0
   protoc-gen-go-grpc' = protoc-gen-go-grpc.overrideAttrs (oldAttrs: rec {
     version = "1.3.0";
 
@@ -32,20 +29,20 @@ let
     vendorHash = "sha256-y+/hjYUTFZuq55YAZ5M4T1cwIR+XFQBmWVE+Cg1Y7PI=";
   });
 in
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "opensnitch";
-  version = "1.7.2";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XAR7yZjAzbMxIVGSV82agpAGwlejkILGgDI6iRicZuQ=";
+    tag = "v${version}";
+    hash = "sha256-2BwFCRbVvs7pAM5SnhynWws2+QthB/F9V6DYPViDICU=";
   };
 
   postPatch = ''
     # Allow configuring Version at build time
-    substituteInPlace daemon/core/version.go --replace-fail "const " "var "
+    substituteInPlace daemon/core/version.go --replace "const " "var "
   '';
 
   modRoot = "daemon";
@@ -63,7 +60,7 @@ buildGoModule (finalAttrs: {
     protoc-gen-go-grpc'
   ];
 
-  vendorHash = "sha256-6/N/E+uk6RVmSLy6fSWjHj+J5mPFXtHZwWThhFJnfYY=";
+  vendorHash = "sha256-urRujxcp58ZuhUtTAqCK0etSZ16YYG/6JY/aOUodl9g=";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
@@ -74,18 +71,18 @@ buildGoModule (finalAttrs: {
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
     cp system-fw.json $out/etc/opensnitchd/
     substitute default-config.json $out/etc/opensnitchd/default-config.json \
-      --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
+      --replace "/var/log/opensnitchd.log" "/dev/stdout"
     # Do not mkdir rules path
     sed -i '8d' opensnitchd.service
     # Fixup hardcoded paths
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
-      --replace-fail "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
+      --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/evilsocket/opensnitch/daemon/core.Version=${finalAttrs.version}"
+    "-X github.com/evilsocket/opensnitch/daemon/core.Version=${version}"
   ];
 
   postInstall = ''
@@ -93,33 +90,20 @@ buildGoModule (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) opensnitch;
-      inherit opensnitch-ui;
-      version = testers.testVersion {
-        package = opensnitch;
-        command = "opensnitchd -version";
-      };
-    };
-
-    updater = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v([0-9.]+)$"
-      ];
+  passthru.tests = {
+    inherit (nixosTests) opensnitch;
+    version = testers.testVersion {
+      package = opensnitch;
+      command = "opensnitchd -version";
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Application firewall";
     mainProgram = "opensnitchd";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      onny
-      grimmauld
-    ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
   };
-})
+}

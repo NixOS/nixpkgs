@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "discordchatexporter-desktop";
-  version = "2.44.2";
+  version = "2.44";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    hash = "sha256-Dc6OSWUTFftP2tyRFoxHm+TsnSMDfx627DhmYnPie9w=";
+    hash = "sha256-eLwSodbEux8pYXNZZg8c2rCYowTEkvPzYbxANYe0O7w=";
   };
 
   env.XDG_CONFIG_HOME = "$HOME/.config";
@@ -35,12 +35,12 @@ buildDotnetModule rec {
     updateScript = ./updater.sh;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to export Discord chat logs to a file (GUI version)";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = with lib.maintainers; [ willow ];
+    maintainers = with maintainers; [ kekschen ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "discordchatexporter";
   };

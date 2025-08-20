@@ -8,13 +8,13 @@
   texinfo,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "guile-xcb";
   version = "unstable-2017-05-29";
 
   src = fetchFromGitHub {
     owner = "mwitmer";
-    repo = "guile-xcb";
+    repo = pname;
     rev = "db7d5a393cc37a56f66541b3f33938b40c6f35b3";
     hash = "sha256-zbIsEIPwNJ1YXMZTDw2DfzufC+IZWfcWgZHbuv7bhJs=";
   };

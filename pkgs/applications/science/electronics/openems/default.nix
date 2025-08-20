@@ -1,22 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  csxcad,
-  fparser,
-  tinyxml,
-  hdf5,
-  vtk,
-  boost,
-  zlib,
-  cmake,
-  octave,
-  mpi,
-  withQcsxcad ? true,
-  withMPI ? false,
-  withHyp2mat ? true,
-  qcsxcad,
-  hyp2mat,
+{ stdenv
+, lib
+, fetchFromGitHub
+, csxcad
+, fparser
+, tinyxml
+, hdf5
+, vtk
+, boost
+, zlib
+, cmake
+, octave
+, mpi
+, withQcsxcad ? true
+, withMPI ? false
+, withHyp2mat ? true
+, qcsxcad
+, hyp2mat
 }:
 
 stdenv.mkDerivation rec {
@@ -44,11 +43,10 @@ stdenv.mkDerivation rec {
     boost
     zlib
     csxcad
-    (octave.override { inherit hdf5; })
-  ]
-  ++ lib.optionals withQcsxcad [ qcsxcad ]
-  ++ lib.optionals withMPI [ mpi ]
-  ++ lib.optionals withHyp2mat [ hyp2mat ];
+    (octave.override { inherit hdf5; }) ]
+    ++ lib.optionals withQcsxcad [ qcsxcad ]
+    ++ lib.optionals withMPI [ mpi ]
+    ++ lib.optionals withHyp2mat [ hyp2mat ];
 
   postFixup = ''
     substituteInPlace $out/share/openEMS/matlab/setup.m \
@@ -62,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Source Electromagnetic Field Solver";
-    homepage = "https://wiki.openems.de/index.php/Main_Page.html";
+    homepage = "http://openems.de/index.php/Main_Page.html";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matthuszagh ];
     platforms = platforms.linux;

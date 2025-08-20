@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zebradil";
     repo = "xkb-switch-i3";
-    tag = version;
+    rev = version;
     hash = "sha256-5d1DdRtz0QCWISSsWQt9xgTOekYUCkhfMsjG+/kyQK4=";
     fetchSubmodules = true;
   };

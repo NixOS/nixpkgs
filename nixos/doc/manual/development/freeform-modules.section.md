@@ -23,8 +23,7 @@ type-checked and assign a default value. See
 for a more complete example.
 
 ```nix
-{ lib, config, ... }:
-{
+{ lib, config, ... }: {
 
   options.settings = lib.mkOption {
     type = lib.types.submodule {

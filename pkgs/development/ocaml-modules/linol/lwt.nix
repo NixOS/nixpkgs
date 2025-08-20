@@ -1,6 +1,7 @@
 {
   buildDunePackage,
   linol,
+  jsonrpc,
   lwt,
   yojson,
 }:
@@ -11,6 +12,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     linol
+    jsonrpc
     lwt
     yojson
   ];

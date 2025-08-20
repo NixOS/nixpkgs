@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -28,25 +27,31 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.31";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-yE6tY0hxslv0nZEX63miegQJHGKD/wp2W4aaj3y74i4=";
+    hash = "sha256-fmm5QrRpZIYmPO4GK/JrP7w0Utlw52pfh524pgESliM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning>=2.0,<3"' "" \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  pythonRelaxDeps = [
+    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
+    "gpiod"
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
     bellows
     click
     coloredlogs
@@ -54,9 +59,7 @@ buildPythonPackage rec {
     pyserial-asyncio-fast
     typing-extensions
     zigpy
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -68,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
   meta = with lib; {
-    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
+    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";

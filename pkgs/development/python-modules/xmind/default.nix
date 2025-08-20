@@ -14,12 +14,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zhuifengshen";
-    repo = "xmind";
+    repo = pname;
     rev = "v${version}";
     sha256 = "xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
   };
 
-  # Project thas no tests
+  # Projec thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "xmind" ];

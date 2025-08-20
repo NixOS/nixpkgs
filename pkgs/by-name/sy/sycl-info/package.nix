@@ -12,9 +12,9 @@
   doctest,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sycl-info";
-  version = "0-unstable-2019-11-19";
+  version = "unstable-2019-11-19";
 
   src = fetchFromGitHub {
     owner = "codeplaysoftware";
@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     mainProgram = "sycl-info";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ davidtwco ];
   };
 }

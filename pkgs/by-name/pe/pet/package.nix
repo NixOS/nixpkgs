@@ -1,10 +1,8 @@
 {
-  lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  writableTmpDirAsHomeHook,
+  lib,
 }:
 
 buildGoModule rec {
@@ -32,14 +30,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     installShellFiles
-    writableTmpDirAsHomeHook
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd pet \
-      --bash <($out/bin/pet completion bash) \
-      --fish <($out/bin/pet completion fish) \
-      --zsh $src/misc/completions/zsh/_pet
+      --zsh ./misc/completions/zsh/_pet
   '';
 
   meta = with lib; {

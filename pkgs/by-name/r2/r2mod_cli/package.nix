@@ -1,11 +1,9 @@
-{
-  fetchFromGitHub,
-  bashInteractive,
-  jq,
-  makeWrapper,
-  p7zip,
-  lib,
-  stdenv,
+{ fetchFromGitHub
+, bashInteractive
+, jq
+, makeWrapper
+, p7zip
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -23,18 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [
-    "DESTDIR="
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${
-      lib.makeBinPath [
-        jq
-        p7zip
-      ]
-    }";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
   '';
 
   meta = with lib; {

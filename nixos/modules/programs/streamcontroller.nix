@@ -10,14 +10,7 @@ in
 {
   options.programs.streamcontroller = {
     enable = lib.mkEnableOption "StreamController";
-    package = lib.mkOption {
-      default = pkgs.streamcontroller.override { isKde = config.services.desktopManager.plasma6.enable; };
-      defaultText = lib.literalExpression "pkgs.streamcontroller";
-      type = lib.types.package;
-      description = ''
-        The StreamController package to use
-      '';
-    };
+    package = lib.mkPackageOption pkgs "streamcontroller" { default = [ "streamcontroller" ]; };
   };
 
   config = lib.mkIf cfg.enable {

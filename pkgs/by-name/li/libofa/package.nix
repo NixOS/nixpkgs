@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchzip,
   expat,
   curl,
   fftw,
@@ -18,21 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 
-  debian_patches = fetchzip {
+  patches = fetchurl {
     url = "mirror://debian/pool/main/libo/libofa/libofa_${version}-${deb_patch}.debian.tar.gz";
-    hash = "sha256-tENhXSRcUP1PKm35IJyLUEEROze8UzxJzRx3VNAqo40=";
+    sha256 = "1rfkyz13cm8izm90c1xflp4rvsa24aqs6qpbbbqqcbmvzsj6j9yn";
   };
-
-  patches = [
-    "${debian_patches}/patches/01_gcc41.diff"
-    "${debian_patches}/patches/02_example-open.diff"
-    "${debian_patches}/patches/03_example-size_type.diff"
-    "${debian_patches}/patches/04_libofa.pc-deps.diff"
-    "${debian_patches}/patches/05_gcc43.diff"
-    "${debian_patches}/patches/06_gcc44.diff"
-    "${debian_patches}/patches/fix_ftbfs.diff"
-    "${debian_patches}/patches/fix-ftbfs-gcc4.7.diff"
-  ];
 
   outputs = [
     "out"

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1FOPe466GqQfiIpsQT9DJn+FupI2vy9b4+7p31ceY6M=";
   };
 
-  cargoHash = "sha256-SIPak7tl/fIH6WzvAl8bjhclZqQ6imC/zdxCnBnEsbk=";
+  cargoHash = "sha256-Up6wvkZJ4yLrXp/2sEAv5RqGbhLOQPNHO2vEy2Vhy+E=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     installManPage termimage.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Display images in your terminal";
     homepage = "https://github.com/nabijaczleweli/termimage";
     changelog = "https://github.com/nabijaczleweli/termimage/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "termimage";
   };
 }

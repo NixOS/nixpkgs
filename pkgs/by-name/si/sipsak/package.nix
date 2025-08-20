@@ -5,12 +5,11 @@
   autoreconfHook,
   c-ares,
   openssl ? null,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "sipsak";
-  version = "4.5.12.1";
+  version = "4.1.2.1";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
@@ -27,21 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sipwise";
     repo = "sipsak";
-    tag = "mr${finalAttrs.version}";
-    hash = "sha256-j4KF87krXvY2pcepEYRRxtadV8QxHRGICK6VrmXw5BQ=";
+    rev = "mr${version}";
+    hash = "sha256-y9P6t3xjazRNT6lDZAx+CttdyXruC6Q14b8XF9loeU4=";
   };
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/sipwise/sipsak";
     description = "SIP Swiss army knife";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sheenobu ];
-    platforms = with lib.platforms; unix;
+    maintainers = with maintainers; [ sheenobu ];
+    platforms = with platforms; unix;
     mainProgram = "sipsak";
   };
 
-})
+}

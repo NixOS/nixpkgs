@@ -15,7 +15,7 @@ in
   zlib,
   python3,
   lldb,
-  dotnetCorePackages,
+  dotnet-sdk_8,
   maven,
   openssl,
   expat,
@@ -37,15 +37,12 @@ in
   libX11,
 
   vmopts ? null,
-  forceWayland ? false,
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 
   package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
@@ -56,8 +53,7 @@ let
       + lib.optionalString meta.isOpenSource (
         if fromSource then " (built from source)" else " (patched binaries from jetbrains)"
       );
-    maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
-    teams = [ lib.teams.jetbrains ];
+    maintainers = lib.teams.jetbrains.members ++ map (x: lib.maintainers."${x}") meta.maintainers;
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
     sourceProvenance =
       if fromSource then
@@ -78,27 +74,15 @@ let
       extraWrapperArgs ? [ ],
       extraLdPath ? [ ],
       extraBuildInputs ? [ ],
-      extraTests ? { },
     }:
     mkJetBrainsProductCore {
       inherit
         pname
-        extraLdPath
         jdk
-        ;
-      extraBuildInputs =
-        extraBuildInputs
-        ++ [ stdenv.cc.cc ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          fontconfig
-          libGL
-          libX11
-        ];
-      extraWrapperArgs =
         extraWrapperArgs
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
-          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-        ];
+        extraLdPath
+        extraBuildInputs
+        ;
       src =
         if fromSource then
           communitySources."${pname}"
@@ -113,9 +97,6 @@ let
       inherit (ideInfo."${pname}") wmClass product;
       productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
       meta = mkMeta ideInfo."${pname}".meta fromSource;
-      passthru.tests = extraTests // {
-        plugins = callPackage ./plugins/tests.nix { ideName = pname; };
-      };
       libdbm =
         if ideInfo."${pname}".meta.isOpenSource then
           communitySources."${pname}".libdbm
@@ -167,18 +148,6 @@ let
       }
     );
 
-  patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ls -d \
-      $out/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/bin/*/linux/*/lib/python3.8/lib-dynload/* \
-      $out/*/plugins/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/plugins/*/bin/*/linux/*/lib/python3.8/lib-dynload/* |
-    xargs patchelf \
-      --replace-needed libssl.so.10 libssl.so \
-      --replace-needed libcrypto.so.10 libcrypto.so \
-      --replace-needed libcrypt.so.1 libcrypt.so \
-      ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
-  '';
 in
 rec {
   # Sorted alphabetically
@@ -186,6 +155,7 @@ rec {
   aqua = mkJetBrainsProduct {
     pname = "aqua";
     extraBuildInputs = [
+      stdenv.cc.cc
       lldb
     ];
   };
@@ -194,14 +164,16 @@ rec {
     (mkJetBrainsProduct {
       pname = "clion";
       extraBuildInputs =
-        lib.optionals stdenv.hostPlatform.isLinux [
+        lib.optionals (stdenv.hostPlatform.isLinux) [
+          fontconfig
           python3
+          stdenv.cc.cc
           openssl
           libxcrypt-legacy
           lttng-ust_2_12
           musl
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
           expat
           libxml2
           xz
@@ -210,21 +182,40 @@ rec {
       (attrs: {
         postInstall =
           (attrs.postInstall or "")
-          + lib.optionalString stdenv.hostPlatform.isLinux ''
-            for dir in $out/clion/plugins/clion-radler/DotFiles/linux-*; do
-              rm -rf $dir/dotnet
-              ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
-            done
+          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+            (
+              cd $out/clion
+
+              for dir in plugins/clion-radler/DotFiles/linux-*; do
+                rm -rf $dir/dotnet
+                ln -s ${dotnet-sdk_8.unwrapped}/share/dotnet $dir/dotnet
+              done
+            )
           '';
 
-        postFixup = ''
-          ${attrs.postFixup or ""}
-          ${patchSharedLibs}
-        '';
+        postFixup =
+          (attrs.postFixup or "")
+          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+            (
+              cd $out/clion
+
+              # I think the included gdb has a couple of patches, so we patch it instead of replacing
+              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+              xargs patchelf \
+                --replace-needed libssl.so.10 libssl.so \
+                --replace-needed libcrypto.so.10 libcrypto.so
+
+              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+              xargs patchelf \
+                --replace-needed libssl.so.10 libssl.so \
+                --replace-needed libcrypto.so.10 libcrypto.so
+            )
+          '';
       });
 
   datagrip = mkJetBrainsProduct {
     pname = "datagrip";
+    extraBuildInputs = [ stdenv.cc.cc ];
   };
 
   dataspell =
@@ -239,6 +230,7 @@ rec {
       extraBuildInputs = [
         libgcc
         libr
+        stdenv.cc.cc
       ];
     };
 
@@ -256,6 +248,7 @@ rec {
       ];
       extraBuildInputs = [
         libgcc
+        stdenv.cc.cc
       ];
     }).overrideAttrs
       (attrs: {
@@ -270,10 +263,12 @@ rec {
 
   idea-community-bin = buildIdea {
     pname = "idea-community";
+    extraBuildInputs = [ stdenv.cc.cc ];
   };
 
   idea-community-src = buildIdea {
     pname = "idea-community";
+    extraBuildInputs = [ stdenv.cc.cc ];
     fromSource = true;
   };
 
@@ -286,6 +281,7 @@ rec {
   idea-ultimate = buildIdea {
     pname = "idea-ultimate";
     extraBuildInputs = [
+      stdenv.cc.cc
       lldb
       musl
     ];
@@ -296,6 +292,7 @@ rec {
   phpstorm = mkJetBrainsProduct {
     pname = "phpstorm";
     extraBuildInputs = [
+      stdenv.cc.cc
       musl
     ];
   };
@@ -318,40 +315,53 @@ rec {
   rider =
     (mkJetBrainsProduct {
       pname = "rider";
-      extraBuildInputs = [
-        openssl
-        libxcrypt
-        lttng-ust_2_12
-        musl
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
-        expat
-        libxml2
-        xz
-      ];
+      extraBuildInputs =
+        [
+          fontconfig
+          stdenv.cc.cc
+          openssl
+          libxcrypt
+          lttng-ust_2_12
+          musl
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+          expat
+          libxml2
+          xz
+        ];
       extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
         # Avalonia dependencies needed for dotMemory
         libICE
         libSM
         libX11
+        libGL
       ];
     }).overrideAttrs
       (attrs: {
         postInstall =
           (attrs.postInstall or "")
-          + lib.optionalString stdenv.hostPlatform.isLinux ''
-            ${patchSharedLibs}
+          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+            (
+              cd $out/rider
 
-            for dir in $out/rider/lib/ReSharperHost/linux-*; do
-              rm -rf $dir/dotnet
-              ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
-            done
+              ls -d $PWD/plugins/cidr-debugger-plugin/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+              xargs patchelf \
+                --replace-needed libssl.so.10 libssl.so \
+                --replace-needed libcrypto.so.10 libcrypto.so \
+                --replace-needed libcrypt.so.1 libcrypt.so
+
+              for dir in lib/ReSharperHost/linux-*; do
+                rm -rf $dir/dotnet
+                ln -s ${dotnet-sdk_8.unwrapped}/share/dotnet $dir/dotnet
+              done
+            )
           '';
       });
 
   ruby-mine = mkJetBrainsProduct {
     pname = "ruby-mine";
     extraBuildInputs = [
+      stdenv.cc.cc
       musl
     ];
   };
@@ -360,27 +370,47 @@ rec {
     (mkJetBrainsProduct {
       pname = "rust-rover";
       extraBuildInputs =
-        lib.optionals stdenv.hostPlatform.isLinux [
+        lib.optionals (stdenv.hostPlatform.isLinux) [
           python3
           openssl
           libxcrypt-legacy
+          fontconfig
+          xorg.libX11
+          libGL
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
           expat
           libxml2
           xz
         ];
     }).overrideAttrs
       (attrs: {
-        postFixup = ''
-          ${attrs.postFixup or ""}
-          ${patchSharedLibs}
-        '';
+        postFixup =
+          (attrs.postFixup or "")
+          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+            (
+              cd $out/rust-rover
+
+              # Copied over from clion (gdb seems to have a couple of patches)
+              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+              xargs patchelf \
+                --replace-needed libssl.so.10 libssl.so \
+                --replace-needed libcrypto.so.10 libcrypto.so
+
+              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+              xargs patchelf \
+                --replace-needed libssl.so.10 libssl.so \
+                --replace-needed libcrypto.so.10 libcrypto.so
+
+              chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
+            )
+          '';
       });
 
   webstorm = mkJetBrainsProduct {
     pname = "webstorm";
     extraBuildInputs = [
+      stdenv.cc.cc
       musl
     ];
   };
@@ -388,10 +418,13 @@ rec {
   writerside = mkJetBrainsProduct {
     pname = "writerside";
     extraBuildInputs = [
+      stdenv.cc.cc
       musl
     ];
   };
 
-  plugins = callPackage ./plugins { };
+  plugins = callPackage ./plugins { } // {
+    __attrsFailEvaluation = true;
+  };
 
 }

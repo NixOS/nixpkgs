@@ -11,18 +11,17 @@
   swig,
   pkg-config,
   zlib,
-  openfst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfst";
-  version = "3.16.2";
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vp9rSQYNK991fCoEcW7tpVxCOemW2RFt0LujLGHFGVQ=";
+    hash = "sha256-2ST0s08Pcp+hTn7rUTgPE1QkH6PPWtiuFezXV3QW0kU=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     icu
     zlib
-    openfst
   ];
 
   configureFlags = [

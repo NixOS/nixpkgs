@@ -34,12 +34,12 @@ buildGoModule rec {
 
   doCheck = false; # require network
 
-  meta = {
+  meta = with lib; {
     description = "Fast and simple video download library and CLI tool written in Go";
     homepage = "https://github.com/iawia002/lux";
     changelog = "https://github.com/iawia002/lux/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ galaxy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ galaxy ];
     mainProgram = "lux";
   };
 }

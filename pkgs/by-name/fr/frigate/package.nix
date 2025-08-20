@@ -1,42 +1,43 @@
 {
   lib,
-  stdenv,
   callPackage,
   python312,
   fetchFromGitHub,
   fetchurl,
-  rocmPackages,
-  sqlite-vec,
   frigate,
   nixosTests,
 }:
 
 let
-  version = "0.15.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-YJFtMVCTtp8h9a9RmkcoZSQ+nIKb5o/4JVynVslkx78=";
+    hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python312;
+  python = python312.override {
+    self = python;
+    packageOverrides = self: super: {
+      paho-mqtt = super.paho-mqtt_2;
+    };
+  };
 
   # Tensorflow audio model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
   tflite_audio_model = fetchurl {
     url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
     hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
   };
 
   # Tensorflow Lite models
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L115-L117
+  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L96-L97
   tflite_cpu_model = fetchurl {
     url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
     hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
@@ -46,11 +47,9 @@ let
     hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
   };
 
-  # TODO: OpenVino model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
-  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
-  coco_91cl_bkgr = fetchurl {
+  # OpenVino models
+  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L101
+  openvino_model = fetchurl {
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
@@ -62,101 +61,84 @@ python.pkgs.buildPythonApplication rec {
 
   inherit src;
 
-  patches = [ ./constants.patch ];
-
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
 
-    substituteInPlace \
-      frigate/app.py \
-      frigate/test/test_{http,storage}.py \
-      frigate/test/http_api/base_http_test.py \
+    substituteInPlace frigate/app.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
     substituteInPlace frigate/const.py \
-      --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
       --replace-fail "/media/frigate" "/var/lib/frigate" \
       --replace-fail "/tmp/cache" "/var/cache/frigate" \
       --replace-fail "/config" "/var/lib/frigate" \
       --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
+    substituteInPlace frigate/comms/{config,detections,events}_updater.py frigate/comms/inter_process.py \
       --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
-
-    substituteInPlace frigate/db/sqlitevecq.py \
-      --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
-
-  ''
-  # clang-rocm, provided by `rocmPackages.clr`, only works on x86_64-linux specifically
-  + lib.optionalString (with stdenv.hostPlatform; isx86_64 && isLinux) ''
-    substituteInPlace frigate/detectors/plugins/rocm.py \
-      --replace-fail "/opt/rocm/bin/rocminfo" "rocminfo" \
-      --replace-fail "/opt/rocm/lib" "${rocmPackages.clr}/lib"
-
-  ''
-  + ''
-    # provide default paths for models and maps that are shipped with frigate
-    substituteInPlace frigate/config/config.py \
-      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+
+    substituteInPlace frigate/output/birdseye.py \
+      --replace-fail "/opt/frigate/" "${placeholder "out"}/${python.sitePackages}/"
+
+    # work around onvif-zeep idiosyncrasy
+    substituteInPlace frigate/ptz/onvif.py \
+      --replace-fail dist-packages site-packages
+
+    # provide default paths for models and maps that are shipped with frigate
+    substituteInPlace frigate/config.py \
+      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/events/audio.py \
       --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
       --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
 
-    # work around onvif-zeep idiosyncrasy
-    substituteInPlace frigate/ptz/onvif.py \
-      --replace-fail dist-packages site-packages
+    substituteInPlace frigate/test/test_config.py \
+      --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
+      --replace-fail "/config/model_cache" "/build/model_cache"
+
+    substituteInPlace frigate/api/preview.py \
+      --replace-fail "/media/frigate" "/var/lib/frigate"
   '';
 
   dontBuild = true;
 
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     # docker/main/requirements.txt
     scikit-build
     # docker/main/requirements-wheel.txt
-    aiohttp
     click
-    fastapi
-    google-generativeai
+    distutils
+    flask
+    flask-limiter
     imutils
     joserfc
     markupsafe
+    matplotlib
     norfair
     numpy
-    ollama
-    onnxruntime
     onvif-zeep
-    openai
     opencv4
     openvino
-    paho-mqtt
     pandas
-    pathvalidate
+    paho-mqtt
     peewee
     peewee-migrate
     psutil
     py3nvml
     pydantic
     pytz
-    py-vapid
-    pywebpush
+    pyyaml
     pyzmq
     requests
     ruamel-yaml
     scipy
     setproctitle
-    slowapi
-    starlette
-    starlette-context
     tensorflow-bin
-    transformers
     tzlocal
     unidecode
-    uvicorn
     ws4py
   ];
 
@@ -172,7 +154,7 @@ python.pkgs.buildPythonApplication rec {
     tar --extract --gzip --file ${tflite_audio_model}
     cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
 
-    cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
+    cp --no-preserve=mode ${openvino_model} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
 
     runHook postInstall
@@ -182,16 +164,6 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
-
-  preCheck = ''
-    # Unavailable in the build sandbox
-    substituteInPlace frigate/const.py \
-      --replace-fail "/var/lib/frigate" "$TMPDIR/" \
-      --replace-fail "/var/cache/frigate" "$TMPDIR"
-  '';
-
   disabledTests = [
     # Test needs network access
     "test_plus_labelmap"
@@ -200,14 +172,15 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath = (python.pkgs.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
+    pythonPath =
+      (python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };
   };
 
   meta = with lib; {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/v${version}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI

@@ -1,22 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-}:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "inferno";
-  version = "0.12.3";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
-    repo = "inferno";
-    tag = "v${version}";
-    hash = "sha256-D72rkTnUgLJRHFEDoUwQDLQJAPGyqmxhf6hmNJGUl+U=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-lnNS3+2VZ+DgbmaM8/9X79vhqoxw3G8M9macLILX//w=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Gc31yyspU7RYDQDpVvq+UhMnE7t4HQ65fSGu9eDN6C0=";
+  cargoHash = "sha256-L2Mq8y5v0n4OP8nZLeB0A8+UBr0snEDjTDZAGZQTxuo=";
 
   # skip flaky tests
   checkFlags = [
@@ -28,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=flamegraph_multiple_base_symbol"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Port of parts of the flamegraph toolkit to Rust";
     homepage = "https://github.com/jonhoo/inferno";
     changelog = "https://github.com/jonhoo/inferno/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.cddl;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.cddl;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

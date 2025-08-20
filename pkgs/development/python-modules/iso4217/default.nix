@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  enabledTestPaths = [ "iso4217/test.py" ];
+  pytestFlagsArray = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 

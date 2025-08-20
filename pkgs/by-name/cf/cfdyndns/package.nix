@@ -16,7 +16,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OV1YRcZDzYy1FP1Bqp9m+Jxgu6Vc0aWpbAffNcdIW/4=";
   };
 
-  cargoHash = "sha256-VA4oT8WeXdxjr/tKbrRuZPLpXmmXbeKC5d6laRHr+uo=";
+  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock.outputHashes."cloudflare-0.12.0" = "sha256-8/C5mHN7g/k3q9BzFC9TIKMlgmBsmvC4xWVEoz1Sz9c=";
+  cargoLock.outputHashes."public-ip-0.2.2" = "sha256-DDdh90EAo3Ppsym4AntczFuiAQo4/QQ9TEPJjMB1XzY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -28,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with maintainers; [
       colemickens
+      nrdxp
     ];
     platforms = with platforms; linux;
   };

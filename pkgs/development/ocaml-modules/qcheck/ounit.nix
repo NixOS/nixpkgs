@@ -1,7 +1,7 @@
 {
   buildDunePackage,
   qcheck-core,
-  ounit2,
+  ounit,
 }:
 
 buildDunePackage {
@@ -9,9 +9,11 @@ buildDunePackage {
 
   inherit (qcheck-core) version src patches;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     qcheck-core
-    ounit2
+    ounit
   ];
 
   meta = qcheck-core.meta // {

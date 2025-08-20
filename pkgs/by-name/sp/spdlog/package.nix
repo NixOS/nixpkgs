@@ -1,27 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fmt,
-  catch2_3,
-  staticBuild ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fmt
+, catch2_3
+, staticBuild ? stdenv.hostPlatform.isStatic
 
-  # passthru
-  bear,
-  tiledb,
-  nix-update-script,
+# tests
+, bear
+, tiledb
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.15.2";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
-    repo = "spdlog";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9RhB4GdFjZbCIfMOWWriLAUf9DE/i/+FTXczr0pD0Vg=";
+    repo  = "spdlog";
+    rev   = "v${version}";
+    hash  = "sha256-HCpnN28qWreg0NvL6Q9pfSSxOTHgV6glHt6P0FbH/Cw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,19 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [
-    (lib.cmakeBool "SPDLOG_BUILD_SHARED" (!staticBuild))
-    (lib.cmakeBool "SPDLOG_BUILD_STATIC" staticBuild)
-    (lib.cmakeBool "SPDLOG_BUILD_EXAMPLE" false)
-    (lib.cmakeBool "SPDLOG_BUILD_BENCH" false)
-    (lib.cmakeBool "SPDLOG_BUILD_TESTS" true)
-    (lib.cmakeBool "SPDLOG_FMT_EXTERNAL" true)
+    "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
+    "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
+    "-DSPDLOG_BUILD_EXAMPLE=OFF"
+    "-DSPDLOG_BUILD_BENCH=OFF"
+    "-DSPDLOG_BUILD_TESTS=ON"
+    "-DSPDLOG_FMT_EXTERNAL=ON"
   ];
 
-  outputs = [
-    "out"
-    "doc"
-    "dev"
-  ];
+  outputs = [ "out" "doc" "dev" ] ;
 
   postInstall = ''
     mkdir -p $out/share/doc/spdlog
@@ -56,19 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru = {
-    tests = {
-      inherit bear tiledb;
-    };
-    updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit bear tiledb;
   };
 
-  meta = {
-    description = "Very fast, header only, C++ logging library";
-    homepage = "https://github.com/gabime/spdlog";
-    changelog = "https://github.com/gabime/spdlog/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ obadz ];
-    platforms = lib.platforms.all;
+  meta = with lib; {
+    description    = "Very fast, header only, C++ logging library";
+    homepage       = "https://github.com/gabime/spdlog";
+    license        = licenses.mit;
+    maintainers    = with maintainers; [ obadz ];
+    platforms      = platforms.all;
   };
-})
+}

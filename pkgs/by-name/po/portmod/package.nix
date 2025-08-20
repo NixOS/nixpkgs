@@ -1,32 +1,31 @@
-{
-  lib,
-  bubblewrap,
-  cacert,
-  fetchFromGitLab,
-  git,
-  imagemagick,
-  openmw,
-  python3Packages,
-  rustPlatform,
-  tes3cmd,
-  tr-patcher,
+{ lib
+, bubblewrap
+, cacert
+, fetchFromGitLab
+, git
+, imagemagick
+, openmw
+, python3Packages
+, rustPlatform
+, tes3cmd
+, tr-patcher
 }:
 
 let
-  version = "2.8.1";
+  version = "2.6.2";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-d5XNfjDgtBkNkUMhShYTjKtMbwVa2tLXdvYi6sXQmIA=";
+    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
   };
 
-  portmod-rust = rustPlatform.buildRustPackage {
+  portmod-rust = rustPlatform.buildRustPackage rec {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
+    cargoHash = "sha256-sAjgGVVjgXaWbmN/eGEvatYjkHeFTZNX1GXFcJqs3GI=";
 
     nativeBuildInputs = [
       python3Packages.python
@@ -46,13 +45,13 @@ let
   ];
 
 in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   inherit src version;
 
   pname = "portmod";
   format = "pyproject";
 
-  # build the rust library independently
+  # build the rust library independantly
   prePatch = ''
     substituteInPlace setup.py \
       --replace "from setuptools_rust import Binding, RustExtension, Strip" "" \
@@ -85,12 +84,9 @@ python3Packages.buildPythonApplication {
     fasteners
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-    ]
-    ++ bin-programs;
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ] ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -117,11 +113,11 @@ python3Packages.buildPythonApplication {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
   '';
 
   meta = with lib; {
-    description = "Mod manager for openMW based on portage";
+    description = "mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ marius851000 ];

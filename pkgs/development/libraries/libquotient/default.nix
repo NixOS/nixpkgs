@@ -10,6 +10,9 @@
   qtkeychain,
 }:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation rec {
   pname = "libquotient";
   version = "0.9.1";
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DQuotient_ENABLE_E2EE=ON"
+    (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
   ];
 
   # https://github.com/quotient-im/libQuotient/issues/551
@@ -59,6 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://quotient-im.github.io/libQuotient/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [
+      colemickens
       matthiasbeyer
     ];
   };

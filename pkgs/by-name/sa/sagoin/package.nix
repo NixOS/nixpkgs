@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,14 +13,18 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "figsoda";
-    repo = "sagoin";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-zXYjR9ZFNX2guUSeMN/G77oBIlW3AowFWA4gwID2jQs=";
   };
 
-  cargoHash = "sha256-JM7m/VdaXpUlPOi+N7gue6mlQuxvRFU6++SaSq45Ntg=";
+  cargoHash = "sha256-NMv48gv3RUIjBRD2XuOhmS32d+MjZ/tP/ZhpRuyulgE=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   postInstall = ''
     installManPage artifacts/sagoin.1
@@ -27,12 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   GEN_ARTIFACTS = "artifacts";
 
-  meta = {
+  meta = with lib; {
     description = "Command-line submission tool for the UMD CS Submit Server";
     homepage = "https://github.com/figsoda/sagoin";
     changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "sagoin";
   };
 }

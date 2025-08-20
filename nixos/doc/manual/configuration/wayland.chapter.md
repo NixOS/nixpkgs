@@ -9,7 +9,9 @@ a Wayland Compositor such as sway without separately enabling a Wayland
 server:
 
 ```nix
-{ programs.sway.enable = true; }
+{
+programs.sway.enable = true;
+}
 ```
 
 This installs the sway compositor along with some essential utilities.

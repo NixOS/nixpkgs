@@ -5,14 +5,14 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wslu";
   version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = "wslu";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-ssiwYkQg2rOirC/ZZVq2bJm4Ggc364uRkoS2y365Eb0=";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX="
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
-    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ jamiemagee ];
-    platforms = lib.platforms.linux;
+    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jamiemagee ];
+    platforms = platforms.linux;
   };
-})
+}

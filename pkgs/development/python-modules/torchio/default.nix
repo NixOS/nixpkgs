@@ -1,56 +1,42 @@
 {
-  lib,
   stdenv,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  uv-build,
-
-  # dependencies
+  pytestCheckHook,
+  pythonOlder,
   deprecated,
-  einops,
+  humanize,
   matplotlib,
   nibabel,
   numpy,
-  packaging,
-  rich,
+  parameterized,
   scipy,
   simpleitk,
   torch,
   tqdm,
   typer,
-
-  # tests
-  humanize,
-  parameterized,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.21";
+  version = "0.20.0";
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
-    owner = "TorchIO-project";
+    owner = "fepegar";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-l2KQLZDxsP8Bjk/vPG2YbU+8Z6/lOvNvy9NYKTdW+cY=";
+    hash = "sha256-Soew23+Skpc2IpVBMuOnC5LBW0vFL/9LszLijkJgQoQ=";
   };
 
-  build-system = [
-    uv-build
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     deprecated
-    einops
     humanize
     nibabel
     numpy
-    packaging
-    rich
     scipy
     simpleitk
     torch
@@ -59,30 +45,28 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     matplotlib
     parameterized
-    pytestCheckHook
   ];
-
-  disabledTests = [
-    # tries to download models:
-    "test_load_all"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-    "test_queue_multiprocessing"
-  ];
-
+  disabledTests =
+    [
+      # tries to download models:
+      "test_load_all"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+      "test_queue_multiprocessing"
+    ];
   pythonImportsCheck = [
     "torchio"
     "torchio.data"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://docs.torchio.org";
-    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.bcdarwin ];
+    homepage = "https://torchio.readthedocs.io";
+    license = licenses.asl20;
+    maintainers = [ maintainers.bcdarwin ];
   };
 }

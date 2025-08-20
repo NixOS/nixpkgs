@@ -23,21 +23,21 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "25.2";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
-    tag = finalAttrs.version;
-    hash = "sha256-pVGut7kmwybPrR7ZaXPoDx03FOYeZSvchXl++2cdPck=";
+    rev = version;
+    hash = "sha256-KCjHT/4AeJ+RXCtawkhs6f4D8NCJotYIPk3tGr5YG9M=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-HKU4rd5OzxhYcN6QKiTVj+NnkdyG8T+D6X1txznZ/xM=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-XTfKqKs7874ak7Lzscxw8E2qcnJOWMZaaol8TpIB6Vw=";
   };
 
   nativeBuildInputs = [
@@ -78,13 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Listen to your favorite podcasts";
     mainProgram = "gnome-podcasts";
     homepage = "https://apps.gnome.org/Podcasts/";
-    changelog = "https://gitlab.gnome.org/World/podcasts/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    teams = [
-      lib.teams.gnome
-      lib.teams.gnome-circle
-    ];
+    maintainers = lib.teams.gnome.members ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };
-})
+}

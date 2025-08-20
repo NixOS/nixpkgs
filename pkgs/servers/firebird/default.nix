@@ -1,107 +1,86 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libedit,
-  autoreconfHook271,
-  zlib,
-  unzip,
-  libtommath,
-  libtomcrypt,
-  icu73,
-  superServer ? false,
-}:
+{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook271, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
 
-let
-  base = {
-    pname = "firebird";
+let base = {
+  pname = "firebird";
 
-    meta = with lib; {
-      description = "SQL relational database management system";
-      downloadPage = "https://github.com/FirebirdSQL/firebird/";
-      homepage = "https://firebirdsql.org/";
-      changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
-      license = [
-        "IDPL"
-        "Interbase-1.0"
-      ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        bbenno
-        marcweber
-      ];
+  meta = with lib; {
+    description = "SQL relational database management system";
+    downloadPage = "https://github.com/FirebirdSQL/firebird/";
+    homepage = "https://firebirdsql.org/";
+    changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
+    license = [ "IDPL" "Interbase-1.0" ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ marcweber ];
+  };
+
+  nativeBuildInputs = [ autoreconfHook271 ];
+
+  buildInputs = [ libedit icu ];
+
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ icu ];
+
+  configureFlags = [
+    "--with-system-editline"
+  ] ++ (lib.optional superServer "--enable-superserver");
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r gen/Release/firebird/* $out
+    runHook postInstall
+  '';
+
+}; in rec {
+
+  firebird_2_5 = stdenv.mkDerivation (base // rec {
+    version = "2.5.9";
+
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      sha256 = "sha256-YyvlMeBux80OpVhsCv+6IVxKXFRsgdr+1siupMR13JM=";
     };
 
-    nativeBuildInputs = [ autoreconfHook271 ];
-
-    buildInputs = [
-      libedit
-      icu73
-    ];
-
-    LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
-
-    configureFlags = [
-      "--with-system-editline"
-    ]
-    ++ (lib.optional superServer "--enable-superserver");
-
-    enableParallelBuilding = true;
+    configureFlags = base.configureFlags ++ [ "--with-system-icu" ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out
-      cp -r gen/Release/firebird/* $out
-      rm $out/lib/*.a  # they were just symlinks to /build/source/...
+      cp -r gen/firebird/* $out
       runHook postInstall
     '';
 
-  };
-in
-rec {
-  firebird_3 = stdenv.mkDerivation (
-    base
-    // rec {
-      version = "3.0.12";
+    meta = base.meta // { platforms = [ "x86_64-linux" ]; };
+  });
 
-      src = fetchFromGitHub {
-        owner = "FirebirdSQL";
-        repo = "firebird";
-        rev = "v${version}";
-        hash = "sha256-po8tMrOahfwayVXa7Eadr9+ZEmZizHlCmxi094cOJSY=";
-      };
+  firebird_3 = stdenv.mkDerivation (base // rec {
+    version = "3.0.10";
 
-      buildInputs = base.buildInputs ++ [
-        zlib
-        libtommath
-      ];
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "v${version}";
+      sha256 = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
+    };
 
-      meta = base.meta // {
-        platforms = [ "x86_64-linux" ];
-      };
-    }
-  );
+    buildInputs = base.buildInputs ++ [ zlib libtommath ];
 
-  firebird_4 = stdenv.mkDerivation (
-    base
-    // rec {
-      version = "4.0.6";
+    meta = base.meta // { platforms = [ "x86_64-linux" ]; };
+  });
 
-      src = fetchFromGitHub {
-        owner = "FirebirdSQL";
-        repo = "firebird";
-        rev = "v${version}";
-        hash = "sha256-65wfG6huDzvG/tEVllA58OfZqoL4U/ilw5YIDqQywTs=";
-      };
+  firebird_4 = stdenv.mkDerivation (base // rec {
+    version = "4.0.2";
 
-      nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
-      buildInputs = base.buildInputs ++ [
-        zlib
-        libtommath
-        libtomcrypt
-      ];
-    }
-  );
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "v${version}";
+      sha256 = "sha256-hddW/cozboGw693q4k5f4+x9ccQFWFytXPUaBVkFnL4=";
+    };
+
+    buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];
+  });
 
   firebird = firebird_4;
 }

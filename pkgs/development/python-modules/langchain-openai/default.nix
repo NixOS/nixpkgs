@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  poetry-core,
 
   # dependencies
   langchain-core,
@@ -13,11 +13,10 @@
 
   # tests
   freezegun,
-  langchain-tests,
+  langchain-standard-tests,
   lark,
   pandas,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -25,32 +24,28 @@
   responses,
   syrupy,
   toml,
-
-  # passthru
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.28";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
+    hash = "sha256-Gm7MAOuG+kYQ3TRTRdQXJ+HcoUz+iL9j+pTXz+zAySg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
-  build-system = [ pdm-backend ];
+  preConfigure = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=langchain_openai" ""
+  '';
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     langchain-core
@@ -60,11 +55,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    langchain-tests
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
@@ -74,7 +68,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  enabledTestPaths = [ "tests/unit_tests" ];
+  pytestFlagsArray = [ "tests/unit_tests" ];
 
   disabledTests = [
     # These tests require network access
@@ -87,27 +81,19 @@ buildPythonPackage rec {
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
     "test_chat_openai_get_num_tokens"
-    "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
-    "test_init_o1"
     "test_openai_get_num_tokens"
-  ];
-
-  disabledTestPaths = [
-    # TODO recheck on next update. Langchain has been working on Pydantic errors.
-    # ValidationError from pydantic
-    "tests/unit_tests/chat_models/test_responses_stream.py"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-openai==";
+  passthru = {
+    inherit (langchain-core) updateScript;
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;

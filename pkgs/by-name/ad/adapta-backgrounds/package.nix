@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ glib ];
 
-  meta = {
+  meta = with lib; {
     description = "Wallpaper collection for adapta-project";
     homepage = "https://github.com/adapta-project/adapta-backgrounds";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2
       cc-by-sa-40
     ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ romildo ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ romildo ];
   };
 }

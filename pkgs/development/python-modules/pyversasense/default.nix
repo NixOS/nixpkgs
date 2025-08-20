@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "imstevenxyz";
-    repo = "pyversasense";
+    repo = pname;
     rev = "v${version}";
     sha256 = "vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "tests/test.py" ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   disabledTests = [
     # Tests are not properly mocking network requests

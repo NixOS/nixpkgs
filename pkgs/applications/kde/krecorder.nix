@@ -15,7 +15,7 @@
   qtquickcontrols2,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "krecorder";
 
   nativeBuildInputs = [

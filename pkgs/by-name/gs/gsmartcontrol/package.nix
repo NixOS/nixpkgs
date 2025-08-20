@@ -1,9 +1,10 @@
 {
+  fetchurl,
   lib,
   stdenv,
-  fetchFromGitHub,
   smartmontools,
-  cmake,
+  autoreconfHook,
+  gettext,
   gtkmm3,
   pkg-config,
   wrapGAppsHook3,
@@ -11,28 +12,29 @@
   adwaita-icon-theme,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gsmartcontrol";
-  version = "2.0.2";
+  version = "1.1.4";
 
-  src = fetchFromGitHub {
-    owner = "ashaduri";
-    repo = "gsmartcontrol";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-eLzwFZ1PYqijFTxos9Osf7A2v4C8toM+TGV4/bU82NE=";
+  src = fetchurl {
+    url = "https://github.com/ashaduri/gsmartcontrol/releases/download/v${version}/gsmartcontrol-${version}.tar.bz2";
+    sha256 = "sha256-/ECfK4qEzEC7ED1sgkAbnUwBgtWjsiPJOVnHrWYZGEc=";
   };
 
+  patches = [
+    ./fix-paths.patch
+  ];
+
   postPatch = ''
-    substituteInPlace data/gsmartcontrol.in.desktop \
-      --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@/" ""
+    substituteInPlace data/org.gsmartcontrol.policy --replace "/usr/sbin" $out/bin
   '';
 
   nativeBuildInputs = [
-    cmake
+    autoreconfHook
+    gettext
     pkg-config
     wrapGAppsHook3
   ];
-
   buildInputs = [
     gtkmm3
     pcre-cpp
@@ -58,10 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
       It allows you to inspect the drive's SMART data to determine its health,
       as well as run various tests on it.
     '';
-    homepage = "https://gsmartcontrol.shaduri.dev";
-    mainProgram = "gsmartcontrol";
+    homepage = "https://gsmartcontrol.shaduri.dev/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qknight ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux;
   };
-})
+}

@@ -29,12 +29,12 @@ python3.pkgs.buildPythonApplication rec {
     "cansina"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Web Content Discovery Tool";
     homepage = "https://github.com/deibit/cansina";
     changelog = "https://github.com/deibit/cansina/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "cansina";
   };
 }

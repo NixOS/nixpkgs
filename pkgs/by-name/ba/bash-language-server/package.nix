@@ -1,40 +1,39 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_8,
   nodejs,
   makeBinaryWrapper,
   shellcheck,
   versionCheckHook,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.6.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
-    tag = "server-${finalAttrs.version}";
-    hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
+    rev = "server-${finalAttrs.version}";
+    hash = "sha256-yJ81oGd9aNsWQMLvDSgMVVH1//Mw/SVFYFIPsJTQYzE=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = pnpm_8.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 1;
-    hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
+    hash = "sha256-W25xehcxncBs9QgQBt17F5YHK0b+GDEmt27XzTkyYWg=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpm_8.configHook
     makeBinaryWrapper
     versionCheckHook
   ];
@@ -46,46 +45,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  preInstall = ''
-    # remove unnecessary files
-    rm node_modules/.modules.yaml
-    pnpm --ignore-scripts --prod prune
-    rm -r node_modules/.pnpm/@mixmark-io*/node_modules/@mixmark-io/domino/{test,.yarn}
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
-    # https://github.com/pnpm/pnpm/issues/3645
-    find node_modules server/node_modules -xtype l -delete
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/bash-language-server}
-    cp -r {node_modules,server} $out/lib/bash-language-server/
+    pnpm --offline \
+      --frozen-lockfile --ignore-script \
+      --filter=bash-language-server \
+      deploy --prod $out/lib/bash-language-server
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
     makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
       --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
-      --add-flags $out/lib/bash-language-server/server/out/cli.js
+      --add-flags $out/lib/bash-language-server/out/cli.js
 
     runHook postInstall
   '';
 
   doInstallCheck = true;
 
-  meta = {
-    description = "Language server for Bash";
+  meta = with lib; {
+    description = "A language server for Bash";
     homepage = "https://github.com/bash-lsp/bash-language-server";
-    changelog = "https://github.com/bash-lsp/bash-language-server/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      doronbehar
-      gepbird
-    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
     mainProgram = "bash-language-server";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 })

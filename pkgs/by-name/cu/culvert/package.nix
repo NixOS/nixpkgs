@@ -2,13 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
   dtc,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "culvert";
   version = "0.4.0.unstable-2024-10-17";
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/amboar/culvert";
-    description = "Test and Debug Tool for BMC AHB Interfaces ";
+    description = "A Test and Debug Tool for BMC AHB Interfaces ";
     mainProgram = "culvert";
     license = licenses.asl20;
     maintainers = [ maintainers.baloo ];

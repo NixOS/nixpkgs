@@ -1,7 +1,6 @@
 {
   lib,
   stdenvNoCC,
-  udevCheckHook,
 }:
 stdenvNoCC.mkDerivation {
   pname = "meletrix-udev-rules";
@@ -11,12 +10,6 @@ stdenvNoCC.mkDerivation {
 
   dontUnpack = true;
   dontBuild = true;
-
-  nativeBuildInputs = [
-    udevCheckHook
-  ];
-
-  doInstallCheck = true;
 
   installPhase = ''
     install -Dpm644 $src $out/lib/udev/rules.d/70-meletrix.rules

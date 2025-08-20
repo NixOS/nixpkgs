@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
-    repo = "fastnumbers";
+    repo = pname;
     tag = version;
     hash = "sha256-TC9+xOvskABpChlrSJcHy6O7D7EnIKL6Ekt/vaLBX2E=";
   };
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--hypothesis-profile=standard" ];
+  pytestFlagsArray = [ "--hypothesis-profile=standard" ];
 
   pythonImportsCheck = [ "fastnumbers" ];
 

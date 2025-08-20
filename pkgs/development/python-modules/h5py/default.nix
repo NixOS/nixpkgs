@@ -22,7 +22,7 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.13.0";
+  version = "3.12.1";
   pname = "h5py";
   pyproject = true;
 
@@ -30,24 +30,23 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GHDkZRhyACPahdCJWhlg/yzjmMVnHqw7GkHsaWtxBcM=";
+    hash = "sha256-Mm1wtT0xuqYfALiqX5XC/LliGj7oNl13DFUaE9u8v98=";
   };
 
   pythonRelaxDeps = [ "mpi4py" ];
 
-  # Avoid strict pinning of Numpy, can't be replaced with pythonRelaxDepsHook,
-  # as these are build time dependencies. See:
-  # https://github.com/NixOS/nixpkgs/issues/327941
+  # avoid strict pinning of numpy and mpi4py, can't be replaced with
+  # pythonRelaxDepsHook, see: https://github.com/NixOS/nixpkgs/issues/327941
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0, <3" "numpy"
+    substituteInPlace setup.py \
+      --replace-fail "mpi4py ==3.1.6" "mpi4py"
   '';
 
   env = {
     HDF5_DIR = "${hdf5}";
     HDF5_MPI = if mpiSupport then "ON" else "OFF";
-    # See discussion at https://github.com/h5py/h5py/issues/2560
-    H5PY_SETUP_REQUIRES = 0;
   };
 
   postConfigure = ''
@@ -67,14 +66,13 @@ buildPythonPackage rec {
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
 
-  dependencies = [
-    numpy
-  ]
-  ++ lib.optionals mpiSupport [
-    mpi4py
-    openssh
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  dependencies =
+    [ numpy ]
+    ++ lib.optionals mpiSupport [
+      mpi4py
+      openssh
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   nativeCheckInputs = [
     pytestCheckHook

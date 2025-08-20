@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hunleyd";
-    repo = "btrfs-auto-snapshot";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-QpuwkGaYAkpu5hYyb360Mr5tHsZc2LzMlKtpS8CyyhI=";
   };

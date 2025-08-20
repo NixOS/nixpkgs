@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,15 +19,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oytRquZJgb1sfpZil1bSGwIIvm+5N4mkVmIMzWyzDco=";
   };
 
-  cargoHash = "sha256-LXVP8cAbPCPCE3DNBX2znyFn/E/cN2civX0qT0B5FVw=";
+  cargoHash = "sha256-4AEuFSM2dY6UjjIFRU8ipkRMoEb2LjnOr3H6rZrLokE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   meta = with lib; {
     description = "Shell for research papers";

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "infrahq";
-    repo = "infra";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-uz4wimhOfeHSL949m+biIhjfDwwEGnTiJWaz/r3Rsko=";
   };
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
-    description = "Manages access to infrastructure such as Kubernetes";
+  meta = with lib; {
+    description = "Infra manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
-    license = lib.licenses.elastic20;
-    maintainers = with lib.maintainers; [ peterromfeldhk ];
+    license = licenses.elastic20;
+    maintainers = with maintainers; [ peterromfeldhk ];
     mainProgram = "infra";
   };
 }

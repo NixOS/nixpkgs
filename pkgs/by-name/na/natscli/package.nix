@@ -7,41 +7,31 @@
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.2.2";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "natscli";
     tag = "v${version}";
-    hash = "sha256-5iGU23HsaMuRDcy3qeCJZE3p2ikaIlLnuWyGfCAlMYQ=";
+    hash = "sha256-kdoBHTJq/Sj27BOD4NFDVpMlywG5H7vGRS6uUbPscOY=";
   };
 
-  vendorHash = "sha256-8JtMcEI3UMMuTa9jmkTspjKtseIb2XUcbNuWlrkAVfg=";
+  vendorHash = "sha256-RM0PskgKT+n2EQkoIwIbCAwh03TLdcwj7g8AjXBeZPY=";
 
   ldflags = [
-    "-s"
-    "-w"
-    "-X=main.version=${version}"
+    "-X main.version=${version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  preCheck = ''
-    # Remove tests that depend on CLI output
-    substituteInPlace internal/asciigraph/asciigraph_test.go \
-      --replace-fail "TestPlot" "SkipPlot"
-  '';
-
   doInstallCheck = true;
-
   versionCheckProgram = "${placeholder "out"}/bin/nats";
 
-  meta = {
+  meta = with lib; {
     description = "NATS Command Line Interface";
     homepage = "https://github.com/nats-io/natscli";
     changelog = "https://github.com/nats-io/natscli/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "nats";
   };
 }

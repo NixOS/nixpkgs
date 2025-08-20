@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   isPyPy,
   setuptools,
   python-dateutil,
@@ -11,18 +11,16 @@
 }:
 
 buildPythonPackage rec {
+  version = "0.9.8";
   pname = "vobject";
-  version = "0.9.9";
   pyproject = true;
 
-  disabled = isPyPy;
-
-  src = fetchFromGitHub {
-    owner = "py-vobject";
-    repo = "vobject";
-    tag = "v${version}";
-    hash = "sha256-OL0agVpV/kWph6KhpzDhfzayscs0OaJ2W9WIilXVaS0=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-2wCn9NtJOXFV3YpoceiioBdabrpaZUww6RD4KylRS1g=";
   };
+
+  disabled = isPyPy;
 
   build-system = [ setuptools ];
 
@@ -36,7 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   meta = with lib; {
     description = "Module for reading vCard and vCalendar files";

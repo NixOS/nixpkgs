@@ -8,27 +8,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alejandra";
-  version = "4.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "alejandra";
     rev = version;
-    hash = "sha256-Oi1n2ncF4/AWeY6X55o2FddIRICokbciqFYK64XorYk=";
+    hash = "sha256-g0SSfTWZ5mtMOpQic+eqq9sXMy1E/7yKxxfupZd9V4A=";
   };
 
-  cargoHash = "sha256-IX4xp8llB7USpS/SSQ9L8+17hQk5nkXFP8NgFKVLqKU=";
+  cargoHash = "sha256-s3932c/k9UTbJ79fBQBRDILN2VWNM1tNEV7cW4fQK74=";
 
   passthru.tests = {
     version = testers.testVersion { package = alejandra; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Uncompromising Nix Code Formatter";
     homepage = "https://github.com/kamadorueda/alejandra";
     changelog = "https://github.com/kamadorueda/alejandra/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [
+    license = licenses.unlicense;
+    maintainers = with maintainers; [
       _0x4A6F
       kamadorueda
       sciencentistguy

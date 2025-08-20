@@ -5,42 +5,45 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pytest-cov-stub,
   multidict,
   xmljson,
 }:
 
 buildPythonPackage rec {
   pname = "latex2mathml";
-  version = "3.78.0";
+  version = "3.77.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
-    repo = "latex2mathml";
-    tag = version;
-    hash = "sha256-FB1VM2z9y17q+6/wv4oTrhe/rD2QzdAc0VMbFmcrIAw=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-DLdSFMsNA0gD6Iw0kn+0IrbvyI0VEGOpz0ZYD48nRkY=";
   };
 
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     multidict
     xmljson
   ];
 
+  # Disable code coverage in check phase
+  postPatch = ''
+    sed -i '/--cov/d' pyproject.toml
+  '';
+
   pythonImportsCheck = [ "latex2mathml" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pure Python library for LaTeX to MathML conversion";
     homepage = "https://github.com/roniemartinez/latex2mathml";
-    changelog = "https://github.com/roniemartinez/latex2mathml/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/roniemartinez/latex2mathml/releases/tag/${version}";
+    license = licenses.mit;
     mainProgram = "latex2mathml";
-    maintainers = with lib.maintainers; [ sfrijters ];
+    maintainers = with maintainers; [ sfrijters ];
   };
 }

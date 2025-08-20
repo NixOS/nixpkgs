@@ -6,11 +6,9 @@
   libGL,
   libGLU,
   libpng,
-  libX11,
   nasm,
   pkg-config,
   zlib,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,14 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "zsnes";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-Xz+9YgMpnHyno7vP67aut4tIyG/gTn7SnU2FO2QMND0=";
   };
 
   nativeBuildInputs = [
     nasm
     pkg-config
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -35,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libpng
-    libX11
     zlib
   ];
 
@@ -58,13 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 icons/64x64x32.png $out/share/icons/hicolor/64x64/apps/zsnes.png
   '';
 
-  doInstallCheck = true;
-
   meta = {
     homepage = "https://github.com/xyproto/zsnes";
     description = "Maintained fork of zsnes";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
   };
 })

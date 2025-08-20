@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "xstatic";
   version = "1.0.3";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic";

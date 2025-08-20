@@ -9,7 +9,6 @@
   junction-font,
   knewave,
   league-gothic,
-  league-mono,
   league-script-number-one,
   league-spartan,
   linden-hill,

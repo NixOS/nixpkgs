@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "livi";
-  version = "0.3.2";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "guidog";
     repo = "livi";
     domain = "gitlab.gnome.org";
     rev = "v${version}";
-    hash = "sha256-cLvSK50RnXCYoXwpp+unTVnxqCkPa3Zr4dZT0TpYFpE=";
+    hash = "sha256-4CWH8TWxuDGYlOilxyCa/HL/vtO6A9u/x39s1OLDODo";
   };
   nativeBuildInputs = [
     meson
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   ];
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/guidog/livi";
     changelog = "https://gitlab.gnome.org/guidog/livi/-/blob/v${version}/NEWS?ref_type=tags";
     description = "Small video player targeting mobile devices (also named μPlayer)";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     mainProgram = "livi";
-    maintainers = with lib.maintainers; [ mksafavi ];
+    maintainers = with maintainers; [ mksafavi ];
   };
 }

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  pythonOlder,
   trio,
   hypothesis,
   outcome,
@@ -12,20 +12,19 @@
 buildPythonPackage rec {
   pname = "pytest-trio";
   version = "0.8.0";
-  pyproject = true;
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-trio";
-    repo = "pytest-trio";
-    tag = "v${version}";
-    hash = "sha256-gUH35Yk/pBD2EdCEt8D0XQKWU8BwmX5xtAW10qRhoYk=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-gUH35Yk/pBD2EdCEt8D0XQKWU8BwmX5xtAW10qRhoYk=";
   };
-
-  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     trio
     outcome
   ];
@@ -44,13 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_trio" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pytest plugin for trio";
     homepage = "https://github.com/python-trio/pytest-trio";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
-    maintainers = with lib.maintainers; [ hexa ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
   };
 }

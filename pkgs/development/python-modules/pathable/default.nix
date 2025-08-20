@@ -3,31 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pathable";
-  version = "0.4.4";
+  version = "0.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = "pathable";
+    repo = pname;
     tag = version;
-    hash = "sha256-nN5jpI0Zi5ofdSuN9QbTHDXPmQRq9KAn8SoHuNDpZaw=";
+    hash = "sha256-4QRFjbeaggoEPVGAmSY+qVMNW0DKqarNfRXaH6B58ew=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
 
   pythonImportsCheck = [ "pathable" ];
 

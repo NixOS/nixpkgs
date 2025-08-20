@@ -1,35 +1,32 @@
-{
-  lib,
-  mkXfceDerivation,
-  wayland-scanner,
-  exo,
-  garcon,
-  gtk3,
-  gtk-layer-shell,
-  glib,
-  libnotify,
-  libX11,
-  libXext,
-  libxfce4ui,
-  libxfce4util,
-  libxklavier,
-  upower,
-  # Disabled by default on upstream and actually causes issues:
-  # https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
-  withUpower ? false,
-  wlr-protocols,
-  xfconf,
-  xf86inputlibinput,
-  colord,
-  withColord ? true,
+{ lib
+, mkXfceDerivation
+, wayland-scanner
+, exo
+, garcon
+, gtk3
+, gtk-layer-shell
+, glib
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxklavier
+, upower
+# Disabled by default on upstream and actually causes issues:
+# https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
+, withUpower ? false
+, wlr-protocols
+, xfconf
+, xf86inputlibinput
+, colord
+, withColord ? true
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.20.2";
+  version = "4.20.0";
 
-  sha256 = "sha256-hx1ilXPcwWWDwNR/k2b+9vR5aCv9UlPR0d42OE6JxEk=";
+  sha256 = "sha256-0fMuAucyxLr2VzQqAB0CL+HgkHNJctiVNZmUmTNzaPc=";
 
   nativeBuildInputs = [
     wayland-scanner
@@ -42,8 +39,6 @@ mkXfceDerivation {
     gtk3
     gtk-layer-shell
     libnotify
-    libX11
-    libXext
     libxfce4ui
     libxfce4util
     libxklavier
@@ -63,6 +58,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Settings manager for Xfce";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

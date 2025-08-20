@@ -17,8 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "geopy";
-    repo = "geopy";
+    owner = pname;
+    repo = pname;
     tag = version;
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
-  pytestFlags = [ "--skip-tests-requiring-internet" ];
+  pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
 
   pythonImportsCheck = [ "geopy" ];
 

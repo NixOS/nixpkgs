@@ -2,33 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   microsoft-kiota-abstractions,
   pytest-asyncio,
   pendulum,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-form";
-  version = "1.9.5";
+  version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-form-v${version}";
-    hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
+    repo = "kiota-serialization-form-python";
+    tag = "v${version}";
+    hash = "sha256-yOdrqj8QPz497VWS4427zDRRFc/S5654JeYkO1ZcUcQ=";
   };
 
-  sourceRoot = "${src.name}/packages/serialization/form/";
-
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     microsoft-kiota-abstractions
@@ -43,14 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_serialization_form" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-serialization-form-v";
-  };
-
   meta = with lib; {
     description = "Form serialization implementation for Kiota clients in Python";
-    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/form";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-form-${src.tag}";
+    homepage = "https://github.com/microsoft/kiota-serialization-form-python";
+    changelog = "https://github.com/microsoft/kiota-serialization-form-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

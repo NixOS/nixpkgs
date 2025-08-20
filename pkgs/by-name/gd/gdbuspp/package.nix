@@ -6,7 +6,6 @@
   ninja,
   glib,
   pkg-config,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +29,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ glib ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GDBus++ - a glib2 D-Bus wrapper for C++";

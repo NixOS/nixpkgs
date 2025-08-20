@@ -28,6 +28,6 @@ buildPecl {
     description = "PHP extension to communicate with any AMQP compliant server";
     license = licenses.php301;
     homepage = "https://github.com/php-amqp/php-amqp";
-    teams = [ teams.php ];
+    maintainers = teams.php.members;
   };
 }

@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.3.1";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-bYwgxUrPMDaxv/Vv+DuMUzOT1/GRcvNHZW+fjiN5Kdo=";
+    sha256 = "sha256-HOmV3RBVn8xah/Bzt7OOXVE145uwn1SEFzvcVSLMHtE=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Settings daemon for Pantheon";
     homepage = "https://github.com/elementary/settings-daemon";
     license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.elementary.settings-daemon";
   };

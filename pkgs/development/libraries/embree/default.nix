@@ -15,15 +15,15 @@
   glib,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "embree";
-  version = "4.4.0";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
+    rev = "v${version}";
+    sha256 = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
   };
 
   postPatch = ''
@@ -55,16 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libX11
     libpthreadstubs
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
 
-  meta = {
+  meta = with lib; {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       hodapp
+      gebner
     ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
-})
+}

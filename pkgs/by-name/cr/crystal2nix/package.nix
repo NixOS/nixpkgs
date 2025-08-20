@@ -2,31 +2,29 @@
   lib,
   fetchFromGitHub,
   crystal,
-  makeBinaryWrapper,
+  makeWrapper,
   nix-prefetch-git,
 }:
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
-  version = "0.3.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "nix-community";
+    owner = "peterhoeg";
     repo = "crystal2nix";
     rev = "v${version}";
-    hash = "sha256-O8X2kTzl3LYMT97tVqbIZXDcFq24ZTfvd4yeMUhmBFs=";
+    hash = "sha256-gb2vgKWVXwYWfUUcFvOLFF0qB4CTBekEllpyKduU1Mo=";
   };
 
   format = "shards";
 
   shardsFile = ./shards.nix;
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    mkdir -p $out/libexec
-    mv $out/bin/${meta.mainProgram} $out/libexec
-    makeWrapper $out/libexec/${meta.mainProgram} $out/bin/${meta.mainProgram} \
+    wrapProgram $out/bin/crystal2nix \
       --prefix PATH : ${lib.makeBinPath [ nix-prefetch-git ]}
   '';
 

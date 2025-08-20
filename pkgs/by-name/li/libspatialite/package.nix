@@ -13,10 +13,9 @@
   sqlite,
   libiconv,
   zlib,
-  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libspatialite";
   version = "5.1.0";
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${finalAttrs.version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${version}.tar.gz";
     hash = "sha256-Q74t00na/+AW3RQAxdEShYKMIv6jXKUQnyHz7VBgUIA=";
   };
 
@@ -37,30 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     ./xmlNanoHTTPCleanup.patch
   ];
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    substituteInPlace spatialite.pc.in \
-      --replace-fail "@LIBS@ @LIBXML2_LIBS@ @SQLITE3_LIBS@ -lm" ""
-  '';
-
   nativeBuildInputs = [
     pkg-config
     validatePkgConfig
     geos # for geos-config
   ];
 
-  buildInputs = [
-    freexl
-    geos
-    librttopo
-    libxml2
-    minizip
-    proj
-    sqlite
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      freexl
+      geos
+      librttopo
+      libxml2
+      minizip
+      proj
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   enableParallelBuilding = true;
 
@@ -78,22 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
     export DYLD_LIBRARY_PATH=$(pwd)/src/.libs
   '';
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Extensible spatial index library in C++";
     homepage = "https://www.gaia-gis.it/fossil/libspatialite";
     # They allow any of these
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       lgpl21Plus
       mpl11
     ];
-    pkgConfigModules = [ "spatialite" ];
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dotlambda ];
-    teams = [ lib.teams.geospatial ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
   };
-})
+}

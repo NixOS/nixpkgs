@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitea,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -33,14 +34,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.3.2";
+  version = "3.1.9";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    hash = "sha256-a+lELkEjMtqeBYGj6yl+OoQ+I6neyJt6a1T83B2KWOk=";
+    hash = "sha256-D4W62IHuM7ofEeU/3sp038tv2a1+xQd0mdSKXaY7Ikg=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -50,24 +51,26 @@ stdenv.mkDerivation rec {
     ninja
     scdoc
   ];
-  buildInputs = [
-    freetype
-    fontconfig
-    nanosvg
-    pixman
-    tllist
-  ]
-  ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
-  ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
+  buildInputs =
+    [
+      freetype
+      fontconfig
+      nanosvg
+      pixman
+      tllist
+    ]
+    ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
+    ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
   nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags = [
-    (lib.mesonEnable "system-nanosvg" true)
-  ]
-  ++ builtins.map (
-    t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-  ) availableShapingTypes;
+  mesonFlags =
+    [
+      (lib.mesonEnable "system-nanosvg" true)
+    ]
+    ++ builtins.map (
+      t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
+    ) availableShapingTypes;
 
   doCheck = true;
 
@@ -82,18 +85,18 @@ stdenv.mkDerivation rec {
     onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";
     changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
     description = "Simple library for font loading and glyph rasterization";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       fionera
       sternenseemann
     ];
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       zlib
     ];
-    platforms = with lib.platforms; linux;
+    platforms = with platforms; linux;
   };
 }

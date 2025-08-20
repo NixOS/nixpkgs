@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "forge-sparks";
-  version = "1.0.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "forge-sparks";
     rev = finalAttrs.version;
-    hash = "sha256-4FzMhHE4601laKHYRN3NCZ7oBDH/2HaeCS9CdbmTNx0=";
+    hash = "sha256-H607u/VBuzzoYrYZc8fLqCQMZ+jRJOVZ34U8yKHfmYk=";
     fetchSubmodules = true;
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rafaelmardojai/forge-sparks";
     license = lib.licenses.mit;
     mainProgram = "forge-sparks";
-    teams = [ lib.teams.gnome-circle ];
+    maintainers = lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 })

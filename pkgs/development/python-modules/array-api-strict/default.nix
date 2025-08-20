@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  setuptools-scm,
   numpy,
   pytestCheckHook,
   hypothesis,
@@ -11,25 +10,17 @@
 
 buildPythonPackage rec {
   pname = "array-api-strict";
-  version = "2.4.1";
+  version = "2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-strict";
     tag = version;
-    hash = "sha256-m0uWaeUwHsWyAOxS7nxY8c+HWUhz+mOKNE4M0DsiClI=";
+    hash = "sha256-9WIKN2mekJIOD076946xkNqMlfeTaLuuB9qqAJN8Xwc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 61.0,<=75" "setuptools"
-  '';
-
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [ numpy ];
 
@@ -47,8 +38,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://data-apis.org/array-api-strict";
-    changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${src.tag}";
-    description = "Strict, minimal implementation of the Python array API";
+    changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${version}";
+    description = "A strict, minimal implementation of the Python array API";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ berquist ];
   };

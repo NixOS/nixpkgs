@@ -1,40 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
+  fetchPypi,
   setuptools,
-
-  # dependencies
-  numpy_1,
-  six,
-
-  # tests
   pytestCheckHook,
+  numpy,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "py-stringmatching";
   version = "0.4.6";
-
-  src = fetchFromGitHub {
-    owner = "anhaidgroup";
-    repo = "py_stringmatching";
-    tag = "v${version}";
-    hash = "sha256-gQiIIN0PeeM81ZHsognPFierf9ZXasq/JqxsYZmLAnU=";
-  };
-
   pyproject = true;
 
-  build-system = [
-    setuptools
-    cython
-  ];
+  disabled = pythonOlder "3.7";
 
-  dependencies = [
-    numpy_1
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-XdHLHwT/sgHM+uQ4lxw9c+AcAdJjL6OVgfwtJkYLoBs=";
+  };
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    numpy
     six
   ];
 

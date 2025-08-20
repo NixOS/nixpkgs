@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.jackett;
 
@@ -91,7 +86,7 @@ in
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         ReadWritePaths = [
-          cfg.dataDir
+          "${config.users.users.${cfg.user}.home}"
         ];
         RemoveIPC = true;
         RestrictAddressFamilies = [

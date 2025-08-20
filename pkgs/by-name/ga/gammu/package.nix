@@ -17,7 +17,7 @@
   libdbi ? null,
   libdbiDrivers ? null,
   postgresSupport ? false,
-  libpq ? null,
+  postgresql ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,20 +46,21 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    bash
-    bluez
-    libusb1
-    curl
-    gettext
-    sqlite
-    libiconv
-  ]
-  ++ lib.optionals dbiSupport [
-    libdbi
-    libdbiDrivers
-  ]
-  ++ lib.optionals postgresSupport [ libpq ];
+  buildInputs =
+    [
+      bash
+      bluez
+      libusb1
+      curl
+      gettext
+      sqlite
+      libiconv
+    ]
+    ++ lib.optionals dbiSupport [
+      libdbi
+      libdbiDrivers
+    ]
+    ++ lib.optionals postgresSupport [ postgresql ];
 
   meta = with lib; {
     homepage = "https://wammu.eu/gammu/";

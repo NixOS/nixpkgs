@@ -2,7 +2,6 @@
   aiohttp,
   aiohttp-sse-client2,
   aresponses,
-  awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -14,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.2.7";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
-    hash = "sha256-w5t8ApshET7DkxxDsEpRBdo3+sg05ch9ec85TI4dAms=";
+    hash = "sha256-qqvjLSGZx4F1U80jc0z42D7PuBw3D7EEbL4+GoTJgoE=";
   };
 
   build-system = [ poetry-core ];
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     aiohttp-sse-client2
-    awesomeversion
     mashumaro
   ];
 
@@ -41,10 +39,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
-    changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${src.tag}";
+    changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/v${version}";
     description = "Library implementing API control of the SMLIGHT SLZB-06 LAN Coordinators";
     homepage = "https://github.com/smlight-tech/pysmlight";
     license = lib.licenses.asl20;

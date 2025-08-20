@@ -45,9 +45,9 @@ buildPythonPackage rec {
     pytest-mock
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   pythonImportsCheck = [ "periodiq" ];
 

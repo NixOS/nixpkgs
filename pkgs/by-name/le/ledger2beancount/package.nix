@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perlPackages.perl
     beancount
-  ]
-  ++ perlDeps;
+  ] ++ perlDeps;
 
   makeFlags = [ "prefix=$(out)" ];
   installFlags = [ "INSTALL=install" ];

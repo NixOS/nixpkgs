@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "7.9.2";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
-    repo = "libserdes";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
   };

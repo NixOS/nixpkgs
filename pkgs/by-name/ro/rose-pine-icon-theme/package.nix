@@ -5,7 +5,7 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "rose-pine-icon-theme";
   version = "unstable-2022-09-01";
 

@@ -1,8 +1,4 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-}:
+{ lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
@@ -18,12 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "tenacity" ];
 
-  dependencies = with python3.pkgs; [
-    python-dateutil
-    tornado
-    python-daemon
-    tenacity
-  ];
+  dependencies = with python3.pkgs; [ python-dateutil tornado python-daemon tenacity ];
 
   pythonImportsCheck = [ "luigi" ];
 
@@ -33,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   # This enables accessing modules stored in cwd
   makeWrapperArgs = [ "--prefix PYTHONPATH . :" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python package that helps you build complex pipelines of batch jobs";
     longDescription = ''
       Luigi handles dependency resolution, workflow management, visualization,
@@ -41,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/spotify/luigi";
     changelog = "https://github.com/spotify/luigi/releases/tag/${version}";
-    license = [ lib.licenses.asl20 ];
-    maintainers = [ lib.maintainers.bhipple ];
+    license = [ licenses.asl20 ];
+    maintainers = [ maintainers.bhipple ];
   };
 }

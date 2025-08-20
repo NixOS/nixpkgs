@@ -1,8 +1,7 @@
 {
   mkKdeDerivation,
-  qtmultimedia,
-  qttools,
   qtwebengine,
+  qttools,
   libxslt,
 }:
 mkKdeDerivation {
@@ -10,8 +9,7 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ libxslt ];
   extraBuildInputs = [
-    qtmultimedia
-    qttools
     qtwebengine
+    qttools
   ];
 }

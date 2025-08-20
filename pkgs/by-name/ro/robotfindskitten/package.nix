@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://robotfindskitten.org/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "robotfindskitten";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

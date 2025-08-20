@@ -44,8 +44,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonRelaxDeps = true;
-
   pythonImportsCheck = [ "macaroonbakery" ];
 
   nativeCheckInputs = [

@@ -12,38 +12,42 @@
   libssh2,
   openssl,
   zlib,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "17.0.0";
+  version = "16.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-CMsvkASFVqmvIxvixoXYwvyAgp4Vq9rj17o50M8Fw1Q=";
+    hash = "sha256-jLv/9Fvg+1HNIhfm0D/vvMR9J+Enztj9rXQE1kZITGI=";
   };
 
-  cargoHash = "sha256-kp9liu8ZGL9Q+rH9XKWMgsA9hvkYEim90RdMp2+dVPg=";
+  cargoHash = "sha256-rwXpQkL6ysMBraLIMk2zQe0vmb9uuePWufBjRVzaBOA=";
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-    pkg-config
-    ronn
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      installShellFiles
+      pkg-config
+      ronn
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+    ];
 
-  buildInputs = [
-    libgit2
-    libssh2
-    openssl
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-  ];
+  buildInputs =
+    [
+      libgit2
+      libssh2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -60,12 +64,12 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       gerschtli
       Br1ght0ne
       johntitor

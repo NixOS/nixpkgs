@@ -118,10 +118,6 @@ in
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        # see https://github.com/prometheus-community/pro-bing#linux
-        AmbientCapabilities = "CAP_NET_RAW";
-        CapabilityBoundingSet = "CAP_NET_RAW";
-        NoNewPrivileges = true;
       };
 
       environment = {

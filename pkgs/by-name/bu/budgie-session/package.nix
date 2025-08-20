@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-session/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    teams = [ lib.teams.budgie ];
+    maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
   };
 })

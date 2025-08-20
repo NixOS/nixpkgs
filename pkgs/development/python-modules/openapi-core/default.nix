@@ -21,6 +21,7 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
   responses,
   requests,
   starlette,
@@ -30,21 +31,19 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.5";
+  version = "0.19.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
+    hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "werkzeug"
-  ];
 
   dependencies = [
     isodate
@@ -82,8 +81,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     webob
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # Requires secrets and additional configuration

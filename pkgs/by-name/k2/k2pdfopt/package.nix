@@ -4,7 +4,6 @@
   runCommand,
   fetchzip,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
   jbig2dec,
@@ -21,16 +20,12 @@
   mupdf,
   enableDJVU ? true,
   djvulibre,
-  enableGOCR ? false, # Disabled by default due to crashes
-  gocr,
-  # Tesseract support is currently broken
-  # See: https://github.com/NixOS/nixpkgs/issues/368349
-  enableTesseract ? false,
-  tesseract5,
-  enableLeptonica ? true,
+  enableGOCR ? false,
+  gocr, # Disabled by default due to crashes
+  enableTesseract ? true,
   leptonica,
+  tesseract5,
   opencl-headers,
-  fetchDebianPatch,
 }:
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
@@ -92,20 +87,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Fix-CMakeLists.patch
-    (fetchDebianPatch {
-      inherit pname;
-      version = "${version}+ds";
-      debianRevision = "3.1";
-      patch = "0007-k2pdfoptlib-k2ocr.c-conditionally-enable-tesseract-r.patch";
-      hash = "sha256-uJ9Gpyq64n/HKqo0hkQ2dnkSLCKNN4DedItPGzHfqR8=";
-    })
-    (fetchDebianPatch {
-      inherit pname;
-      version = "${version}+ds";
-      debianRevision = "3.1";
-      patch = "0009-willuslib-CMakeLists.txt-conditionally-add-source-fi.patch";
-      hash = "sha256-cBSlcuhsw4YgAJtBJkKLW6u8tK5gFwWw7pZEJzVMJDE=";
-    })
   ];
 
   postPatch = ''
@@ -136,43 +117,13 @@ stdenv.mkDerivation rec {
           cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./source/pdf/
         '';
       };
-      # mupdf_patch no longer applies cleanly against mupdf 1.25.0 or later, due to a conflicting
-      # hunk (mupdf_conflict) introduced in commit bd8d337939f36f55b96cb6984f5c7bbf2f488ce0 of mupdf.
-      # This merge conflict can be resolved as desired by reverting mupdf_conflict, applying mupdf_patch,
-      # and finally reapplying mupdf_conflict, with an increased fuzz factor (see mupdf_modded below).
-      # TODO: remove workaround with conflicting hunk when mupdf in k2pdfopt is updated to 1.25.0 or later
-      mupdf_conflict =
-        hash: revert:
-        fetchpatch {
-          name = "mupdf-conflicting-hunk" + (lib.optionalString revert "-reverted") + ".patch";
-          url = "https://github.com/ArtifexSoftware/mupdf/commit/bd8d337939f36f55b96cb6984f5c7bbf2f488ce0.patch";
-          inherit hash revert;
-          includes = [ "source/fitz/stext-device.c" ];
-          postFetch = ''
-            filterdiff -#6 "$out" > "$tmpfile"
-            mv "$tmpfile" "$out"
-          '';
-        };
       mupdf_modded = mupdf.overrideAttrs (
         {
           patches ? [ ],
           ...
         }:
         {
-          # The fuzz factor is increased to automatically resolve the merge conflict.
-          patchFlags = [
-            "-p1"
-            "-F3"
-          ];
-          # Reverting and reapplying the conflicting hunk is necessary, otherwise the result will be faulty.
-          patches = patches ++ [
-            # revert conflicting hunk
-            (mupdf_conflict "sha256-24tl9YBuZBYhb12yY3T0lKsA7NswfK0QcMYhb2IpepA=" true)
-            # apply modifications
-            mupdf_patch
-            # reapply conflicting hunk
-            (mupdf_conflict "sha256-bnBV7LyX1w/BXxBFF1bkA8x+/0I9Am33o8GiAeEKHYQ=" false)
-          ];
+          patches = patches ++ [ mupdf_patch ];
           # This function is missing in font.c, see font-win32.c
           postPatch = ''
             echo "void pdf_install_load_system_font_funcs(fz_context *ctx) {}" >> source/fitz/font.c
@@ -257,8 +208,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableMuPDF mupdf_modded
     ++ lib.optional enableDJVU djvulibre
     ++ lib.optional enableGOCR gocr
-    ++ lib.optional enableTesseract tesseract_modded
-    ++ lib.optional (enableLeptonica || enableTesseract) leptonica_modded;
+    ++ lib.optionals enableTesseract [
+      leptonica_modded
+      tesseract_modded
+    ];
 
   dontUseCmakeBuildDir = true;
 

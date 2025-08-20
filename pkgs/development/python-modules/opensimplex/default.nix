@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lmas";
-    repo = "opensimplex";
+    repo = pname;
     rev = "v${version}";
     sha256 = "C/MTKTHjxMsOgzuXvokw039Kv6N/PgBoOqKleWPLpw0=";
   };
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "tests/test_opensimplex.py" ];
+  pytestFlagsArray = [ "tests/test_opensimplex.py" ];
   pythonImportsCheck = [ "opensimplex" ];
 
   meta = with lib; {

@@ -7,11 +7,11 @@
 
 let
   pname = "electron-mail";
-  version = "5.3.0";
+  version = "5.2.3";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    hash = "sha256-QGYsD8Ec6/G4X2dGZfH7LwT6o6X599kP6V34y6WxP64=";
+    sha256 = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -33,12 +33,12 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
-    description = "Unofficial Election-based ProtonMail desktop client";
+  meta = with lib; {
+    description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.princemachiavelli ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };

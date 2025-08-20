@@ -16,49 +16,47 @@
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.13.4";
-  pyproject = true;
+  version = "0.13.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
     tag = "v${version}";
-    hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
+    hash = "sha256-C6uNp3knKKY0AX7fQYU85N82L6kyyO4HcExTz1bBtpE=";
   };
 
-  build-system = [ hatchling ];
-
   buildInputs = [
+    hatchling
     pytest
   ];
 
-  dependencies = [ vcrpy ];
+  propagatedBuildInputs = [ vcrpy ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
+  checkInputs = [
     pytestCheckHook
     pytest-httpbin
     pytest-mock
     requests
   ];
 
-  disabledTests = [
-    "test_block_network_with_allowed_hosts"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Missing socket.AF_NETLINK
-    "test_other_socket"
-  ];
+  disabledTests =
+    [ "test_block_network_with_allowed_hosts" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Missing socket.AF_NETLINK
+      "test_other_socket"
+    ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "pytest_recording" ];
 
-  meta = {
+  meta = with lib; {
     description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jbgosselin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jbgosselin ];
   };
 }

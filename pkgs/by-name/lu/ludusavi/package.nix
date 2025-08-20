@@ -1,57 +1,51 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  wrapGAppsHook3,
-  bzip2,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
-  libxkbcommon,
-  vulkan-loader,
-  wayland,
-  zenity,
-  libsForQt5,
-  cairo,
-  pango,
-  atkmm,
-  gdk-pixbuf,
-  dbus-glib,
-  gtk3,
-  glib,
-  rclone,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, cmake
+, pkg-config
+, makeWrapper
+, bzip2
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXrandr
+, libXi
+, libxkbcommon
+, vulkan-loader
+, wayland
+, zenity
+, libsForQt5
+, cairo
+, pango
+, atkmm
+, gdk-pixbuf
+, dbus-glib
+, gtk3
+, glib
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.29.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-IApPudo8oD6YkYJkGpowqpaqrsl2/Q2VFyYfYQI3mN0=";
+    rev = "v${version}";
+    hash = "sha256-YMTM0UKDGUiFmwmQXVJe5hccu4A8dhm0OFxTKLUb1jo=";
   };
 
-  cargoHash = "sha256-ixxUz+XJPzPu51sxHpXs92Tis2gj9SElqYtNiN+n2EY=";
-
-  dontWrapGApps = true;
+  cargoHash = "sha256-1IqjoprKwupwJwXyGtMwB7guG3j98ayWmmigY0fY12s=";
 
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
     makeWrapper
-    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -78,8 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
     install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
     install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ludusavi \
       --bash <($out/bin/ludusavi complete bash) \
       --fish <($out/bin/ludusavi complete fish) \
@@ -107,25 +100,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${
-        lib.makeBinPath [
-          rclone
-          zenity
-          libsForQt5.kdialog
-        ]
-      } \
-        "''${gappsWrapperArgs[@]}"
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]}
     '';
 
-  meta = {
+
+  meta = with lib; {
     description = "Backup tool for PC game saves";
     homepage = "https://github.com/mtkennerly/ludusavi";
-    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      pasqui23
-      megheaiulian
-    ];
+    changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pasqui23 megheaiulian];
     mainProgram = "ludusavi";
   };
-})
+}

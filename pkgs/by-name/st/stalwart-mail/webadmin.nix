@@ -1,37 +1,37 @@
 {
   lib,
   rustPlatform,
-  stalwart-mail,
   fetchFromGitHub,
   trunk,
-  tailwindcss_3,
+  tailwindcss,
   fetchNpmDeps,
   nix-update-script,
   nodejs,
   npmHooks,
   llvmPackages,
-  wasm-bindgen-cli_0_2_93,
+  wasm-bindgen-cli,
   binaryen,
   zip,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "webadmin";
-  version = "0.1.32";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HmQBMU7o0A20SY4tBw4SPVfHFfw8e0JsNQDNdZcex24=";
+    tag = "v${version}";
+    hash = "sha256-0/XiYFQDqcpRS9DXPyKQwoifnEd2YxFiyDbV12zd2RU=";
   };
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-npm-deps";
+    inherit src;
+    name = "${pname}-npm-deps";
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  cargoHash = "sha256-a2+3uNNSLfb81QXjZfftbwpgjORPRSgC056U3FINP4o=";
+  cargoHash = "sha256-uyLGrCZvKiePHFG0C++ELwT/1FTH8c4baAUxV2ueHZ8=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -43,11 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     llvmPackages.bintools-unwrapped
     nodejs
     npmHooks.npmConfigHook
-    tailwindcss_3
+    tailwindcss
     trunk
     # needs to match with wasm-bindgen version in upstreams Cargo.lock
-    wasm-bindgen-cli_0_2_93
-
+    (wasm-bindgen-cli.override {
+      version = "0.2.93";
+      hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
+      cargoHash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
+    })
     zip
   ];
 
@@ -70,8 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
     homepage = "https://github.com/stalwartlabs/webadmin";
-    changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/stalwartlabs/webadmin/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    inherit (stalwart-mail.meta) maintainers;
+    maintainers = with lib.maintainers; [ onny ];
   };
-})
+}

@@ -1,10 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-  polaris-web,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, polaris-web
+, darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +30,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
+  cargoHash = if stdenv.buildPlatform.isDarwin
+    then "sha256-HTqsghjfSjwOaN/ApPFvWVEoquZzE3MYzULkhUOXIWI"
+    else "sha256-Z3AbYtdNAyKT5EuGtCktEg0fxs/gpKdsrttRkxZhLAU";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.Security
+  ];
 
   # Compile-time environment variables for where to find assets needed at runtime
   env = {

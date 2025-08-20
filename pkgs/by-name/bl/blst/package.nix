@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blst";
-  version = "0.3.15";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "supranational";
     repo = "blst";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9/zGN93TnJt2c8YvSaURstoxT02ts3nVkO5V08m4TI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+Ae2cCVVEXnV/ftVOApxDcXM3COf/4DXXd1AOuGS5uc=";
   };
 
   buildPhase = ''
@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = with lib; {
-    changelog = "https://github.com/supranational/blst/releases/tag/${finalAttrs.src.tag}";
     description = "Multilingual BLS12-381 signature library";
     homepage = "https://github.com/supranational/blst";
     license = licenses.isc;

@@ -43,8 +43,6 @@ struct PriorityKey {
     root_index: usize,
 }
 
-const FHSENV_MARKER_FILE: &str = "nix-support/is-fhsenv";
-
 fn build_reference_map(refs: Vec<RefGraphNode>) -> HashMap<PathBuf, Vec<PathBuf>> {
     refs.into_iter()
         .map(|mut gn| {
@@ -121,11 +119,6 @@ fn collect_candidate_paths(
     let mut candidates: HashMap<_, Vec<_>> = HashMap::new();
 
     for (path, priority) in paths {
-        if path.join(FHSENV_MARKER_FILE).exists() {
-            // is another fhsenv, skip it
-            continue;
-        }
-
         for entry in WalkDir::new(&path).follow_links(true) {
             let entry: PathBuf = match entry {
                 Ok(ent) => {
@@ -141,7 +134,7 @@ fn collect_candidate_paths(
                         // could be a broken symlink, that's fine, we still want to handle those
                         Some(_) => e
                             .path()
-                            .ok_or_else(|| anyhow!("I/O error when walking {}", path.display()))?
+                            .ok_or_else(|| anyhow!("I/O error when walking {path:?}"))?
                             .into(),
                         None => {
                             // symlink loop
@@ -263,29 +256,13 @@ fn build_env(out: &Path, plan: HashMap<PathBuf, PathBuf>) -> anyhow::Result<()> 
             .parent()
             .ok_or(anyhow!("destination directory is root"))
             .with_context(|| {
-                format!(
-                    "When trying to determine destination directory for {}",
-                    full_dest.display()
-                )
+                format!("When trying to determine destination directory for {full_dest:?}")
             })?;
         fs::create_dir_all(dest_dir)
-            .with_context(|| format!("When trying to create directory {}", dest_dir.display()))?;
-        ufs::symlink(&src, &full_dest).with_context(|| {
-            format!(
-                "When symlinking {} to {}",
-                src.display(),
-                full_dest.display()
-            )
-        })?;
+            .with_context(|| format!("When trying to create directory {dest_dir:?}"))?;
+        ufs::symlink(&src, &full_dest)
+            .with_context(|| format!("When symlinking {src:?} to {full_dest:?}"))?;
     }
-
-    let marker = out.join(FHSENV_MARKER_FILE);
-    fs::create_dir_all(
-        marker
-            .parent()
-            .ok_or(anyhow!("marker file is in root, this should never happen"))?,
-    )?;
-    fs::write(marker, [])?;
 
     Ok(())
 }
@@ -306,7 +283,7 @@ fn main() -> anyhow::Result<()> {
 
         paths = extend_to_closure(paths, &refs)?;
         paths32 = extend_to_closure(paths32, &refs)?;
-    }
+    };
 
     let plan = build_plan(paths, paths32)?;
 

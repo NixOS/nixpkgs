@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   pkg-config,
   python3,
   xmlbird,
@@ -10,7 +10,7 @@
   libgee,
   glib,
   gtk3,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   libnotify,
   sqlite,
   vala,
@@ -18,18 +18,15 @@
   gsettings-desktop-schemas,
   wrapGAppsHook3,
   autoPatchelfHook,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "birdfont";
-  version = "2.33.6";
+  version = "2.33.3";
 
-  src = fetchFromGitHub {
-    owner = "johanmattssonm";
-    repo = "birdfont";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7xVjY/yH7pMlUBpQc5Gb4t4My24Mx5KkARVp2KSr+Iw=";
+  src = fetchurl {
+    url = "https://birdfont.org/releases/birdfont-${version}.tar.xz";
+    sha256 = "sha256-NNw7203BtHhNyyQezb3/EP98cTsu7ABDFBnM5Ms2ePY=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    webkitgtk_4_1
+    webkitgtk_4_0
     libnotify
     sqlite
     gsettings-desktop-schemas
@@ -64,12 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = "./install.py";
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
     homepage = "https://birdfont.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
   };
-})
+}

@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bebleo/smtpdfix";
     changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
     license = licenses.mit;
-    teams = [ teams.wdz ];
+    maintainers = teams.wdz.members;
   };
 }

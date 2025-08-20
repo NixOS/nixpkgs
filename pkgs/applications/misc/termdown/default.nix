@@ -10,28 +10,27 @@
 
 buildPythonApplication rec {
   pname = "termdown";
-  version = "1.18.0";
-  format = "setuptools";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
-    owner = "trehn";
+    rev = version;
+    sha256 = "1sd9z5n2a4ir35832wgxs68vwav7wxhq39b5h8pq934mp8sl3v2k";
     repo = "termdown";
-    tag = version;
-    hash = "sha256-Hnk/MOYdbOl14fI0EFbIq7Hmc7TyhcZWGEg2/jmNJ5Y=";
+    owner = "trehn";
   };
 
-  dependencies = [
+  propagatedBuildInputs = [
     python-dateutil
     click
     pyfiglet
     setuptools
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Starts a countdown to or from TIMESPEC";
     mainProgram = "termdown";
     longDescription = "Countdown timer and stopwatch in your terminal";
     homepage = "https://github.com/trehn/termdown";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
   };
 }

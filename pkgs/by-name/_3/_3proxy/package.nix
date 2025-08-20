@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
-  version = "0.9.5";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "3proxy";
-    repo = "3proxy";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-uy6flZ1a7o02pr5O0pgl9zCjh8mE9W5JxotJeBMB16A=";
+    sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests._3proxy;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tiny free proxy server";
     homepage = "https://github.com/3proxy/3proxy";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ misuzu ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ misuzu ];
   };
 }

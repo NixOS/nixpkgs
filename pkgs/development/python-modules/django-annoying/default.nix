@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-annoying";
-  version = "0.10.8";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
     repo = "django-annoying";
     tag = "v${version}";
-    hash = "sha256-zBOHVar4iKb+BioIwmDosNZKi/0YcjYfBusn0Lv8pMw=";
+    hash = "sha256-lEl9k2DOJUiCxiSp1xWIGsKbZ9iJlNWr3mxTXlKXbt4=";
   };
 
   build-system = [ setuptools ];

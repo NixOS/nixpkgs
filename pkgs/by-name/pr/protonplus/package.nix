@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonplus";
-  version = "0.5.12";
+  version = "0.4.20";
 
   src = fetchFromGitHub {
     owner = "Vysp3r";
     repo = "protonplus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-SarSM4AJB1LyENm/TG1VPdItZpsx0tgjfx+YhLKP+LA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nnobk1N+r1tLekc8CLiAULsEQFjgzoQQvRz3F8vVjzU=";
   };
 
   nativeBuildInputs = [
@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
-    mainProgram = "protonplus";
+  meta = with lib; {
+    mainProgram = "com.vysp3r.ProtonPlus";
     description = "Simple Wine and Proton-based compatibility tools manager";
     homepage = "https://github.com/Vysp3r/ProtonPlus";
     changelog = "https://github.com/Vysp3r/ProtonPlus/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ getchoo ];
+    platforms = platforms.linux;
   };
 })

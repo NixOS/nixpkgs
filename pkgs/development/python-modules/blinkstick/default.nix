@@ -5,7 +5,7 @@
   pyusb,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "blinkstick";
   version = "unstable-2023-05-04";
   format = "setuptools";

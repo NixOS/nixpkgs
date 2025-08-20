@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.35.3";
+  version = "1.33.1";
 
   subPackages = [ "cmd/telegraf" ];
 
@@ -18,10 +18,10 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    hash = "sha256-EwO7dvPJkLCxO9xZCW7gX57tCO7RIpJ23vqwOkMOVnw=";
+    hash = "sha256-35L83l1aa7TDis0bZss4xBrciK1QEofkKY04JInmRmo=";
   };
 
-  vendorHash = "sha256-DHtgN8yf+4YYrDJKnFasICScYqq65iPGi7pFoxQawv8=";
+  vendorHash = "sha256-JGG+IIYC0JKjetkrgTS6gwhk0/ehvSIxZi6ts234Gi4=";
   proxyVendor = true;
 
   ldflags = [
@@ -31,14 +31,15 @@ buildGoModule rec {
     "-X=github.com/influxdata/telegraf/internal.Version=${version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = telegraf;
+  passthru.tests =
+    {
+      version = testers.testVersion {
+        package = telegraf;
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) telegraf;
     };
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) telegraf;
-  };
 
   meta = with lib; {
     description = "Plugin-driven server agent for collecting & reporting metrics";

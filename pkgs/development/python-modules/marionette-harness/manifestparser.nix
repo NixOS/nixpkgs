@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "manifestparser";
   version = "1.1";
-  format = "setuptools";
 
   disabled = isPy3k;
 

@@ -4,96 +4,56 @@
   fetchFromGitHub,
   python3Packages,
   llvmPackages,
-  installShellFiles,
-  nix-update-script,
 }:
 
 let
   # mbuild is a custom build system used only to build xed
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
-    version = "2024.11.04";
-    pyproject = true;
+    version = "2022.07.28";
 
     src = fetchFromGitHub {
       owner = "intelxed";
       repo = "mbuild";
-      tag = "v${version}";
-      hash = "sha256-iQVykBG3tEPxI1HmqBkvO1q+K8vi64qBfVC63/rcTOk=";
-    };
-
-    build-system = with python3Packages; [ setuptools ];
-
-    meta = {
-      description = "Python-based build system used for building XED";
-      homepage = "https://github.com/intelxed/mbuild";
-      license = lib.licenses.asl20;
+      rev = "v${version}";
+      sha256 = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
     };
   };
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xed";
-  version = "2025.03.02";
+  version = "2024.02.22";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-shQYgbUC06+x+3TNdOJA6y6Wea/8lqexkgBWk3AOOMA=";
+    rev = "v${version}";
+    sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
-
-  postPatch = ''
-    patchShebangs mfile.py
-  '';
 
   nativeBuildInputs = [
     mbuild
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
 
   buildPhase = ''
-    runHook preBuild
+    patchShebangs mfile.py
 
     # this will build, test and install
     ./mfile.py test --prefix $out
-
-    runHook postBuild
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
     ./mfile.py examples
-
-    runHook postCheck
+    mkdir -p $out/bin
+    cp ./obj/wkit/examples/obj/xed $out/bin/
   '';
 
-  installPhase = ''
-    runHook preInstall
+  dontInstall = true; # already installed during buildPhase
 
-    installBin obj/wkit/examples/obj/xed
-
-    runHook postInstall
-  '';
-
-  passthru = {
-    inherit mbuild;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "mbuild"
-      ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isAarch64;
     description = "Intel X86 Encoder Decoder (Intel XED)";
     homepage = "https://intelxed.github.io/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ arturcygan ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ arturcygan ];
   };
-})
+}

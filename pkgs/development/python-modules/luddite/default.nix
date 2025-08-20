@@ -5,7 +5,6 @@
   setuptools,
   packaging,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -16,13 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jumptrading";
-    repo = "luddite";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-iJ3h1XRBzLd4cBKFPNOlIV5Z5XJ/miscfIdkpPIpbJ8=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
+      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
       --replace "--disable-socket" ""
   '';
 
@@ -34,7 +34,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     pytest-mock
   ];
 

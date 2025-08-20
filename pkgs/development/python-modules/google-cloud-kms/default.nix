@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
+  fetchPypi,
   google-api-core,
   grpc-google-iam-v1,
   mock,
@@ -10,32 +9,31 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "3.4.1";
+  version = "3.0.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "googleapis";
-    repo = "google-cloud-python";
-    tag = "google-cloud-kms-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    pname = "google_cloud_kms";
+    inherit version;
+    hash = "sha256-suyMBB/cl8hkW/w7S2TNFJ32JFl8dbSuS8qmIU7oSus=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-kms";
+  nativeBuildInputs = [ setuptools ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     grpc-google-iam-v1
     google-api-core
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -55,15 +53,11 @@ buildPythonPackage rec {
     "google.cloud.kms_v1"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "google-cloud-kms-v";
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-kms/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sarahec ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-kms-v${version}/packages/google-cloud-kms/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

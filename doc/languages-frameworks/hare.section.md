@@ -25,8 +25,7 @@ The following attributes are accepted by `hareHook`:
   hareHook,
   lib,
   stdenv,
-}:
-stdenv.mkDerivation {
+}: stdenv.mkDerivation {
   pname = "<name>";
   version = "<version>";
   src = "<src>";

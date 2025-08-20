@@ -12,9 +12,11 @@
   (let* ((default-directory (package-recipe--working-tree rcp)))
     (unwind-protect
         (let ((files (package-build-expand-files-spec rcp t)))
-          (if files
-              (funcall package-build-build-function rcp files)
-            (error "Unable to find files matching recipe patterns"))))))
+          (unless files
+            (error "Unable to find files matching recipe patterns"))
+          (if (> (length files) 1)
+              (package-build--build-multi-file-package rcp files)
+            (package-build--build-single-file-package rcp files))))))
 
 (defun melpa2nix-build-package ()
   (unless noninteractive

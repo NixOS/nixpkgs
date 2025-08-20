@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "alps";
   version = "2022-10-18";
 

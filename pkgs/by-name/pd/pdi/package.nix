@@ -30,15 +30,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pdi";
-  version = "1.9.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
-    tag = finalAttrs.version;
-    hash = "sha256-bbhsMbTVvG19vtkZyOiCRH168kCFk2ahSFc7davfXzo=";
+    tag = version;
+    hash = "sha256-l4vKWIitP0BqSRPxpv0UgjAOgHJ3Aecm1hT+f9BeqRA=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Force using nix gbenchmark instead of vendored version
-    (lib.cmakeFeature "USE_benchmark" "SYSTEM")
+    "-DUSE_benchmark=SYSTEM"
   ];
 
   passthru = {
@@ -79,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Library that aims todecouple high-performance simulation codes from I/O concerns";
+    description = "PDI supports loose coupling of simulation codes with data handling libraries";
     homepage = "https://pdi.dev/master/";
-    changelog = "https://github.com/pdidev/pdi/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/pdidev/pdi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     mainProgram = "pdirun";
     maintainers = with lib.maintainers; [ GaetanLepage ];
@@ -90,4 +90,4 @@ stdenv.mkDerivation (finalAttrs: {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-})
+}

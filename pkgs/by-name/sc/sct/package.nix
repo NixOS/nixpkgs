@@ -7,7 +7,7 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sct";
   version = "0.5";
 

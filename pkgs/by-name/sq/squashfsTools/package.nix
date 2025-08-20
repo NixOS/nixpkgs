@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    hash = "sha256-fJ+Ijg0cj92abGe80+1swVeZamarVpnPYM7+izcPJ+k=";
+    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
   };
 
   patches = [
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [
-    which
-  ]
-  # when cross-compiling help2man cannot run the cross-compiled binary
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
+  nativeBuildInputs =
+    [ which ]
+    # when cross-compiling help2man cannot run the cross-compiled binary
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
   buildInputs = [
     zlib
     xz

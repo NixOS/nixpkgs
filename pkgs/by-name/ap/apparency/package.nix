@@ -6,17 +6,17 @@
 }:
 
 let
-  snapshot = "20250105225747";
+  snapshot = "20240601172844";
 in
 stdenv.mkDerivation {
   pname = "apparency";
-  version = "2.2";
+  version = "2.0";
 
   src = fetchurl {
     # Use externally archived download URL because
     # upstream does not provide stable URLs for versioned releases
     url = "https://web.archive.org/web/${snapshot}/https://www.mothersruin.com/software/downloads/Apparency.dmg";
-    hash = "sha256-nktNbyJOXDydQPwb43Uq3nQv65XcwrqZTKu5OCcLyfU=";
+    hash = "sha256-XKxWxqfxy9AQneILLrN9XqLt4/k2N8yumZ5mrSvczFk=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -34,10 +34,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Toolkit for analysing macOS applications";
+    description = "App That Opens Apps";
     homepage = "https://www.mothersruin.com/software/Apparency/";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ andre4ik3 ];
+    maintainers = [ ];
     mainProgram = "appy";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -1,54 +1,48 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchYarnDeps,
-
-  cargo-tauri,
-  desktop-file-utils,
-  installShellFiles,
-  jq,
-  makeBinaryWrapper,
-  moreutils,
-  nodejs,
-  pkg-config,
-  yarnConfigHook,
-  wrapGAppsHook3,
-
-  glib-networking,
-  libayatana-appindicator,
-  openssl,
-  webkitgtk_4_1,
-
-  testers,
+{ lib
+, buildGoModule
+, copyDesktopItems
+, darwin
+, desktopToDarwinBundle
+, fetchFromGitHub
+, fetchYarnDeps
+, gtk3
+, installShellFiles
+, jq
+, libayatana-appindicator
+, libsoup_2_4
+, makeDesktopItem
+, mkYarnPackage
+, openssl
+, pkg-config
+, rust
+, rustPlatform
+, stdenv
+, testers
+, webkitgtk_4_0
 }:
 
 let
-  version = "0.6.15";
+  pname = "devpod";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
-    repo = "devpod";
-    tag = "v${version}";
-    hash = "sha256-fLUJeEwNDyzMYUEYVQL9XGQv/VAxjH4IZ1SJa6jx4Mw=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
     mainProgram = "devpod";
     homepage = "https://devpod.sh";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      maxbrunet
-      tomasajt
-    ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ maxbrunet ];
   };
-
-  devpod = buildGoModule (finalAttrs: {
-    pname = "devpod";
-    inherit version src meta;
+in
+rec {
+  devpod = buildGoModule {
+    inherit version src pname meta;
 
     vendorHash = null;
 
@@ -70,120 +64,124 @@ let
     '';
 
     passthru.tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      package = devpod;
       command = "devpod version";
       version = "v${version}";
     };
-  });
+  };
 
-  devpod-desktop = rustPlatform.buildRustPackage {
-    pname = "devpod-desktop";
-    inherit version src;
+  devpod-desktop =
+    let
+      frontend-build = mkYarnPackage {
+        inherit version;
+        pname = "devpod-frontend";
 
-    sourceRoot = "${src.name}/desktop";
+        src = "${src}/desktop";
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/desktop/yarn.lock";
-      hash = "sha256-0Ov+Ik+th2IiuuqJyiO9t8vTyMqxDa9juEwbwHFaoi4=";
-    };
+        offlineCache = fetchYarnDeps {
+          yarnLock = "${src}/desktop/yarn.lock";
+          hash = "sha256-vUV4yX+UvEKrP0vHxjGwtW2WyONGqHVmFor+WqWbkCc=";
+        };
 
-    cargoRoot = "src-tauri";
-    buildAndTestSubdir = "src-tauri";
+        packageJSON = ./package.json;
 
-    cargoHash = "sha256-BwuV5nAQcTAtdfK4+NKEt8Cj7gqnatRwHh/BYJJrIPo=";
+        buildPhase = ''
+          export HOME=$(mktemp -d)
+          yarn --offline run build
 
-    patches = [
-      # don't create a .desktop file automatically registered to open the devpod:// URI scheme
-      # we edit the in-store .desktop file in postInstall to support opening the scheme,
-      # but users will have to configure the default handler manually
-      ./dont-auto-register-scheme.patch
+          cp -r deps/devpod/dist $out
+        '';
 
-      # disable the button that symlinks the `devpod-cli` binary to ~/.local/bin/devpod
-      # and don't show popup where it prompts you to press the above mentioned button
-      # we'll symlink it manually to $out/bin/devpod in postInstall
-      ./dont-copy-sidecar-out-of-store.patch
+        doDist = false;
+        dontInstall = true;
+      };
 
-      # otherwise it's going to get stuck in an endless error cycle, quickly increasing the log file size
-      ./exit-update-checker-loop.patch
-    ];
+      rustTargetPlatformSpec = stdenv.hostPlatform.rust.rustcTarget;
+    in
+    rustPlatform.buildRustPackage {
+      inherit version src;
+      pname = "devpod-desktop";
 
-    postPatch = ''
-      ln -s ${lib.getExe devpod} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
+      sourceRoot = "${src.name}/desktop/src-tauri";
 
-      # disable upstream updater
-      jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
-        | sponge src-tauri/tauri.conf.json
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    '';
+      cargoLock = {
+        lockFile = ./Cargo.lock;
+        outputHashes = {
+          "tauri-plugin-log-0.0.0" = "sha256-tM6oLJe/wwqDDNMKBeMa5nNVvsmi5b104xMOvtm974Y=";
+        };
+      };
 
-    nativeBuildInputs = [
-      cargo-tauri.hook
-      jq
-      moreutils
-      nodejs
-      yarnConfigHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      desktop-file-utils
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+      # Workaround:
+      #   The `tauri` dependency features on the `Cargo.toml` file does not match the allowlist defined under `tauri.conf.json`.
+      #   Please run `tauri dev` or `tauri build` or add the `updater` feature.
+      # Upstream is not interested in fixing that: https://github.com/loft-sh/devpod/pull/648
+      patches = [ ./add-tauri-updater-feature.patch ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      openssl
-      webkitgtk_4_1
-    ];
+      postPatch = ''
+        ln -s ${devpod}/bin/devpod bin/devpod-cli-${rustTargetPlatformSpec}
+        cp -r ${frontend-build} frontend-build
 
-    postInstall =
-      lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # replace sidecar binary with symlink
-        ln -sf ${lib.getExe devpod} "$out/Applications/DevPod.app/Contents/MacOS/devpod-cli"
+        substituteInPlace tauri.conf.json --replace '"distDir": "../dist",' '"distDir": "frontend-build",'
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+        substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+          --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
-        makeWrapper "$out/Applications/DevPod.app/Contents/MacOS/DevPod Desktop" "$out/bin/DevPod Desktop"
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        # replace sidecar binary with symlink
-        ln -sf ${lib.getExe devpod} "$out/bin/devpod-cli"
-
-        # set up scheme handling
-        desktop-file-edit "$out/share/applications/DevPod.desktop" \
-          --set-key="Exec"     --set-value="\"DevPod Desktop\" %u" \
-          --set-key="MimeType" --set-value="x-scheme-handler/devpod"
-
-        # whitespace in the icon name causes gtk-update-icon-cache to fail
-        desktop-file-edit "$out/share/applications/DevPod.desktop" \
-          --set-key="Icon"     --set-value="DevPod-Desktop"
-
-        for dir in "$out"/share/icons/hicolor/*/apps; do
-          mv "$dir/DevPod Desktop.png" "$dir/DevPod-Desktop.png"
-        done
-      ''
-      + ''
-        # propagate the `devpod` command
-        ln -s ${lib.getExe devpod} "$out/bin/devpod"
+        # Since `cargo build` is used instead of `tauri build`, configs are merged manually.
+        jq --slurp '.[0] * .[1]' tauri.conf.json tauri-linux.conf.json >tauri.conf.json.merged
+        mv tauri.conf.json.merged tauri.conf.json
       '';
 
-    # we only want to wrap the main binary
-    dontWrapGApps = true;
+      nativeBuildInputs = [
+        copyDesktopItems
+        pkg-config
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+        jq
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        desktopToDarwinBundle
+      ];
 
-    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapGApp "$out/bin/DevPod Desktop"
-    '';
+      buildInputs = [
+        libsoup_2_4
+        openssl
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+        gtk3
+        libayatana-appindicator
+        webkitgtk_4_0
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.apple_sdk.frameworks.Carbon
+        darwin.apple_sdk.frameworks.Cocoa
+        darwin.apple_sdk.frameworks.WebKit
+      ];
 
-    meta = meta // {
-      mainProgram = "DevPod Desktop";
-      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      desktopItems = [
+        (makeDesktopItem {
+          name = "DevPod";
+          categories = [ "Development" ];
+          comment = "Spin up dev environments in any infra";
+          desktopName = "DevPod";
+          exec = "DevPod %U";
+          icon = "DevPod";
+          terminal = false;
+          type = "Application";
+          mimeTypes = [ "x-scheme-handler/devpod" ];
+        })
+      ];
+
+      postInstall = ''
+        ln -sf ${devpod}/bin/devpod $out/bin/devpod-cli
+        mv $out/bin/devpod-desktop $out/bin/DevPod
+
+        mkdir -p $out/share/icons/hicolor/{256x256@2,128x128,32x32}/apps
+        cp icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/DevPod.png
+        cp icons/128x128.png $out/share/icons/hicolor/128x128/apps/DevPod.png
+        cp icons/32x32.png $out/share/icons/hicolor/32x32/apps/DevPod.png
+      '';
+
+      meta = meta // {
+        mainProgram = "DevPod";
+        # darwin does not build
+        # https://github.com/h4llow3En/mac-notification-sys/issues/28
+        platforms = lib.platforms.linux;
+      };
     };
-  };
-in
-{
-  inherit devpod devpod-desktop;
 }

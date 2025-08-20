@@ -1,109 +1,39 @@
-{
-  config,
-  lib,
-  stdenv,
-  alsa-lib,
-  autoPatchelfHook,
-  chafa,
-  curl,
-  faad2,
-  fetchFromGitHub,
-  fftwFloat,
-  glib,
-  libogg,
-  libopus,
-  libjack2,
-  libpulseaudio,
-  libvorbis,
-  nix-update-script,
-  opusfile,
-  pkg-config,
-  taglib,
-  versionCheckHook,
-
-  withALSA ? stdenv.hostPlatform.isLinux,
-  withJACK ? false,
-  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg
+, fftwFloat
+, chafa
+, freeimage
+, glib
+, pkg-config
 }:
 
-let
-  uppercaseFirst =
-    x: (lib.toUpper (lib.substring 0 1 x)) + (lib.substring 1 ((lib.strings.stringLength x) - 1) x);
-in
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "kew";
-  version = "3.4.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dKjAv93NgP0iB5VMWWisvISXQOmx3lyUXG2zKCz2+Bc=";
+    rev = "v${version}";
+    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
-      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
-  '';
-
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
-  ];
-
-  buildInputs = [
-    fftwFloat.dev
-    chafa
-    curl.dev
-    glib.dev
-    libopus
-    opusfile
-    libvorbis
-    taglib
-    faad2
-    libogg
-  ];
-
-  runtimeDependencies =
-    lib.optionals withPulseaudio [
-      libpulseaudio
-    ]
-    ++ lib.optionals (withALSA || withJACK) [
-      alsa-lib
-    ]
-    ++ lib.optionals withJACK [
-      libjack2
-    ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      demine
-      matteopacini
-    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ demine ];
     mainProgram = "kew";
   };
-})
+}

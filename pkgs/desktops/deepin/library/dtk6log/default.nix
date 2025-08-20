@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   qt6Packages,
@@ -13,22 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6log";
-  version = "0.0.2";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6log";
     rev = finalAttrs.version;
-    hash = "sha256-uPuka+uVCcl2sBMr1SpgqLpcIqZm6BDZyGd7FOraHVM=";
+    hash = "sha256-R+jxlS8/FXUxnnzIDIePU2NwwNQU624n++E3q3oElco=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "resolve-compilation-issues-on-Qt-6_9.patch";
-      url = "https://github.com/linuxdeepin/dtklog/commit/ab7ed5aa8433c726470f2aecc1d99f118eae8b63.patch";
-      hash = "sha256-QK4MOAzTZjjK5qfmzguXAgHO9guMCRN/5y+llBSY2vk=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qt6Packages.qtbase
     spdlog
-  ]
-  ++ lib.optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" true)
@@ -56,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6log";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 })

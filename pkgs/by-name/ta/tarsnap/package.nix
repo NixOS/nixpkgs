@@ -6,7 +6,6 @@
   zlib,
   e2fsprogs,
   bzip2,
-  installShellFiles,
 }:
 
 let
@@ -17,46 +16,36 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tarsnap";
-  version = "1.0.41";
+  version = "1.0.40";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
-    hash = "sha256-vr2+Hm6RIzdVvrQu8LStvv2Vc0VSWPAJ+zMVVseZs9A=";
+    sha256 = "1mbzq81l4my5wdhyxyma04sblr43m8p7ryycbpi6n78w1hwfbjmw";
   };
 
-  configureFlags = [
-    "--with-bash-completion-dir=${placeholder "out"}/share/bash-completion/completions"
-    # required for cross builds
-    "--host=${stdenv.hostPlatform.system}"
-  ];
+  preConfigure = ''
+    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
+  '';
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
-
-  postPatch = ''
+  patchPhase = ''
     substituteInPlace Makefile.in \
-      --replace-fail "command -p mv" "mv"
+      --replace "command -p mv" "mv"
     substituteInPlace configure \
-      --replace-fail "command -p getconf PATH" "echo $PATH"
+      --replace "command -p getconf PATH" "echo $PATH"
   '';
 
   postInstall = ''
-    # install third-party zsh completions (bash completions already available)
-    installShellCompletion --cmd tarsnap \
-      --zsh ${zshCompletion}
+    # Install some handy-dandy shell completions
+    install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
-
-  buildInputs = [
-    openssl
-    zlib
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
-  ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
+    ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
 
   meta = {
     description = "Online backups for the truly paranoid";

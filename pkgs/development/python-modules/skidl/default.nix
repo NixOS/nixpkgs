@@ -6,18 +6,18 @@
   kinparse,
   pyspice,
   graphviz,
-  sexpdata,
 }:
+
 buildPythonPackage rec {
   pname = "skidl";
-  version = "2.0.1";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "devbisme";
+    owner = "xesscorp";
     repo = "skidl";
-    tag = version;
-    sha256 = "sha256-EzKtXdQFB6kjaIuCYAsyFPlwmkefb5RJcnpFYCVHHb8=";
+    rev = version;
+    sha256 = "1m0hllvmr5nkl4zy8yyzfgw9zmbrrzd5pw87ahd2mq68fjpcaqq5";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     kinparse
     pyspice
     graphviz
-    sexpdata
   ];
 
   # Checks require availability of the kicad symbol libraries.
@@ -33,9 +32,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "skidl" ];
 
   meta = with lib; {
-    description = "SKiDL is a module that extends Python with the ability to design electronic circuits";
+    description = "Module that extends Python with the ability to design electronic circuits";
     mainProgram = "netlist_to_skidl";
-    homepage = "https://devbisme.github.io/skidl/";
+    homepage = "https://xess.com/skidl/docs/_site/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];
   };

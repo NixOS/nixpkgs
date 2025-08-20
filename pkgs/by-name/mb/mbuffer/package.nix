@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbuffer";
-  version = "20250809";
+  version = "20241007";
   outputs = [
     "out"
     "man"
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${finalAttrs.version}.tgz";
-    sha256 = "sha256-mGXa5CRSQ3oZrkSEZ4EKA6pG1PJeKZlettbU85xnzR4=";
+    sha256 = "sha256-nXNjAQtO9FsWRva19QJ7SbtqIJxQL7hOKBx713HVa+0=";
   };
 
   buildInputs = [
@@ -25,12 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     which
   ];
-  nativeCheckInputs = [
-    openssl
-  ];
 
   doCheck = true;
-  strictDeps = true;
 
   meta = {
     description = "Tool for buffering data streams with a large set of unique features";

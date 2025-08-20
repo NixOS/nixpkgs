@@ -8,6 +8,8 @@
   protobuf,
   openssl,
   sqlite,
+  stdenv,
+  darwin,
   adaptor ? "sql",
 }:
 
@@ -51,10 +53,16 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   buildFeatures = [ "${adaptor}-adaptor" ];
 

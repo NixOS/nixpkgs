@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     "bin"
     "out"
     "dev"
-  ]
-  ++ lib.optionals withIntrospection [ "devdoc" ];
+  ] ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -47,7 +46,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (replaceVars ./fix-python-path.patch {
+    (substituteAll {
+      src = ./fix-python-path.patch;
       python = "${pythonEnv}/bin/python3";
     })
   ];
@@ -58,16 +58,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gi-docgen
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gi-docgen
+      vala
+    ];
 
   # all required in gusb.pc
   propagatedBuildInputs = [

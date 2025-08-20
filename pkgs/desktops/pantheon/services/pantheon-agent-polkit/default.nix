@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  meson,
-  ninja,
-  vala,
-  gtk4,
-  libadwaita,
-  libgee,
-  granite7,
-  pantheon-wayland,
-  polkit,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, meson
+, ninja
+, vala
+, gtk4
+, libadwaita
+, libgee
+, granite7
+, pantheon-wayland
+, polkit
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
   };
 }

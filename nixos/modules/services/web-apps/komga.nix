@@ -144,7 +144,7 @@ in
           PrivateTmp = true;
           ProtectProc = "invisible";
           ProtectClock = true;
-          ProcSubset = "all";
+          ProcSubset = "pid";
           PrivateUsers = true;
           PrivateDevices = true;
           ProtectHostname = true;
@@ -166,8 +166,5 @@ in
       };
     };
 
-  meta.maintainers = with maintainers; [
-    govanify
-    tebriel
-  ];
+  meta.maintainers = with maintainers; [ govanify ];
 }

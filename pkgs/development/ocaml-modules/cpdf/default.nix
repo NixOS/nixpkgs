@@ -5,6 +5,7 @@
   ocaml,
   findlib,
   camlpdf,
+  ncurses,
 }:
 
 if lib.versionOlder ocaml.version "4.10" then
@@ -13,19 +14,20 @@ else
 
   stdenv.mkDerivation rec {
     pname = "ocaml${ocaml.version}-cpdf";
-    version = "2.8";
+    version = "2.7.1";
 
     src = fetchFromGitHub {
       owner = "johnwhitington";
       repo = "cpdf-source";
       rev = "v${version}";
-      hash = "sha256-DvTY5EQcvnL76RlQTcVqBiycqbCdGQCXzarSMH2P/pg=";
+      hash = "sha256-lFI7f1t70Pw0LJjDrhaB7yQKR1N5906xNYB+fnrz55M=";
     };
 
     nativeBuildInputs = [
       ocaml
       findlib
     ];
+    buildInputs = [ ncurses ];
     propagatedBuildInputs = [ camlpdf ];
 
     strictDeps = true;

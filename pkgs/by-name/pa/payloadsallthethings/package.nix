@@ -2,54 +2,24 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  python3Packages,
-  yq,
 }:
-let
-  inherit (python3Packages) mkdocs mkdocs-material pymdown-extensions;
-in
+
 stdenvNoCC.mkDerivation {
   pname = "payloadsallthethings";
-  version = "2025.1";
+  version = "3.0-unstable-2024-01-21";
 
   src = fetchFromGitHub {
     owner = "swisskyrepo";
     repo = "PayloadsAllTheThings";
-    tag = "4.2";
-    hash = "sha256-LBPlGfmIyzgRhUdAJmPxjDB7D8iRHcSA8Tf5teMnFzA=";
+    rev = "97cfeee270395a838802fa1fcb8a4d5ffc6d6b48";
+    hash = "sha256-LRS60v0o5nPSLfGFH6P0Y5roN8Mk5/KyRF4SWTv/7Hw=";
   };
-
-  patches = [ ./mkdocs.patch ];
-
-  nativeBuildInputs = [
-    mkdocs
-    mkdocs-material
-    pymdown-extensions
-
-    yq
-  ];
-
-  outputs = [
-    "out"
-    "doc"
-  ];
-
-  buildPhase = ''
-    yq -yi '.docs_dir = "source"' mkdocs.yml
-    mkdir overrides
-    mv mkdocs.yml ..
-    cd ..
-    mkdocs build --theme material
-  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $doc/share/payloadsallthethings
-    cp -r site/* $doc/share/payloadsallthethings
-
     mkdir -p $out/share/payloadsallthethings
-    rm source/CONTRIBUTING.md source/custom.css
-    cp -r source/* $out/share/payloadsallthethings
+    rm CONTRIBUTING.md mkdocs.yml custom.css
+    cp -a * $out/share/payloadsallthethings
     runHook postInstall
   '';
 
@@ -57,10 +27,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/swisskyrepo/PayloadsAllTheThings";
     description = "List of useful payloads and bypass for Web Application Security and Pentest/CTF";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [
-      shard7
-      felbinger
-    ];
+    maintainers = with lib.maintainers; [ shard7 ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

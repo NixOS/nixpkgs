@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   clang,
-  ffmpeg-headless,
+  ffmpeg,
   openssl,
   alsa-lib,
   opencv,
@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tplay";
-  version = "0.6.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
     rev = "v${version}";
-    hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
+    hash = "sha256-SRn7kg5FdSimKMFowKNUIan+MrojtNO0apeehIRTzfw=";
   };
 
-  cargoHash = "sha256-LHRTmjAwDPMOP6YQfL01leEzqRKtteU1cnUqL6UeWKk=";
+  cargoHash = "sha256-ztWs20Vl+fX0enL12pybiM6lhFh0/EFa1aSTRpzz64g=";
   checkFlags = [
     # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
@@ -34,19 +34,20 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
     pkg-config
     clang
+    ffmpeg
     makeWrapper
   ];
 
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    ffmpeg-headless.dev
+    ffmpeg.dev
     opencv
   ];
 
   postFixup = ''
     wrapProgram $out/bin/tplay \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
   '';
 
   meta = {

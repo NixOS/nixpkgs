@@ -1,21 +1,12 @@
 {
   fetchzip,
-  licenseAccepted,
 }:
 let
   fetchzip' =
-    if !licenseAccepted then
-      throw ''
-        You must accept the Blizzard® Starcraft® II AI and Machine Learning License at
-        https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html
-        by setting nixpkgs config option 'sc2-headless.accept_license = true;'
-      ''
-    else
-      assert licenseAccepted;
-      args:
-      (fetchzip args).overrideAttrs (old: {
-        UNZIP = "-j -P iagreetotheeula";
-      });
+    args:
+    (fetchzip args).overrideAttrs (old: {
+      UNZIP = "-j -P iagreetotheeula";
+    });
 in
 {
   minigames = fetchzip {

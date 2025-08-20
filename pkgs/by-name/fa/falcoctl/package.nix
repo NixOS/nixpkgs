@@ -4,37 +4,34 @@
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "falcoctl";
-  version = "0.11.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "falcoctl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-cbrlFxRRHwrK1+mkvEktrOCbg5bhKG7GXvv+YJ6un7I=";
+    rev = "v${version}";
+    hash = "sha256-X4fZBTEbOIQbfmuxDODEkYW43ntVIkwFDULYq+ps+9s=";
   };
 
-  vendorHash = "sha256-L7VXGMWs2eRQUT37CCtQsiYZnsDi/a8QSwAw/f/mydc=";
+  vendorHash = "sha256-26EXoXMWK/zPX4M7kG3QRAb4aqtIWgSnSgXcxKUwfZk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/falcosecurity/falcoctl/cmd/version.semVersion=${finalAttrs.version}"
+    "-X github.com/falcosecurity/falcoctl/cmd/version.semVersion=${version}"
   ];
 
-  # require network
-  doCheck = false;
-
-  meta = {
+  meta = with lib; {
     description = "Administrative tooling for Falco";
     mainProgram = "falcoctl";
     homepage = "https://github.com/falcosecurity/falcoctl";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       developer-guy
       kranurag7
       LucaGuerra
     ];
   };
-})
+}

@@ -3,39 +3,41 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  gitMinimal,
+  git,
   python3,
   makeWrapper,
   writeScriptBin,
   versionCheckHook,
   nix-update-script,
-  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.82";
+  version = "0.0.77";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     tag = "v${version}";
-    hash = "sha256-cSMHd3j3xslSR/v4KZ5LUwxPPR/b+okwrT54gUyLXXw=";
+    hash = "sha256-MlDW3dNe9fdOzWp38VkjgoiqOYgBF+ezwTQE0+6SXCc=";
   };
 
-  cargoHash = "sha256-JrDj88JjQon2rtywa/PqnS1pTxTLigPHNnqQS/tO9RA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bkYRPwiB2BN4WNZ0HcOBiDbFyidftbHWyIDvJasnePc=";
 
   nativeBuildInputs = [
-    gitMinimal
+    git
     python3
     makeWrapper
-    writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3
   ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
 
   postInstall = ''
     mkdir -p $out/lib
@@ -49,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {

@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     "ready"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to check readiness of websites";
     homepage = "https://github.com/sesh/ready";
     changelog = "https://github.com/sesh/ready/releases/tag/v${version}";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "ready";
   };
 }

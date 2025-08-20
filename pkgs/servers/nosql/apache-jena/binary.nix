@@ -8,10 +8,10 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
-  version = "5.5.0";
+  version = "5.2.0";
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
-    hash = "sha256-atRcW9U3PjX/E3QhTa6dBfvb19Rb3n6ROpLeGinGD1U=";
+    hash = "sha256-M2WbqXHAL77fu9khTgb7BOe0mLgmU0Rcf9KN4KmvYAU=";
   };
   nativeBuildInputs = [
     makeWrapper
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "RDF database";
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };

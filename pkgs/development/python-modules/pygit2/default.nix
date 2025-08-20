@@ -6,6 +6,7 @@
   cached-property,
   cffi,
   fetchPypi,
+  fetchpatch,
   isPyPy,
   libgit2,
   pycparser,
@@ -16,29 +17,41 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.18.0";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+9AdBKTSziiaqgLPhYBDZ5vw3R+YVca4jtlTgsH1ARo=";
+    hash = "sha256-eymmeWuqFfyJ1EOsjVF3VBHZseWwbcQNRYxWyFdrSKI=";
   };
+
+  patches = [
+    # fix for GCC 14
+    (fetchpatch {
+      url = "https://github.com/libgit2/pygit2/commit/eba710e45bb40e18641c6531394bb46631e7f295.patch";
+      hash = "sha256-GFFzGVd/9+AcwicwOtBghhonijMp08svXTUZ/4/LmtI=";
+    })
+    # temp fix for Python 3.13 until next release after 1.16.0
+    (fetchpatch {
+      url = "https://github.com/libgit2/pygit2/commit/7f143e1c5beec01ec3429aa4db12435ac02977d3.patch";
+      hash = "sha256-2SiFFPWVVo9urKRu64AejjTZMoXo2r+v1OwEIF+AzNo=";
+    })
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ libgit2 ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     cached-property
     pycparser
-  ]
-  ++ lib.optionals (!isPyPy) [ cffi ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 

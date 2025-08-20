@@ -49,11 +49,7 @@ mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    runHook preInstallCheck
-
     $out/bin/openambit --version
-
-    runHook postInstallCheck
   '';
 
   postInstall = ''

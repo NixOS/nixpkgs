@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -29,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.1.2";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
-    tag = finalAttrs.version;
-    hash = "sha256-CW+8HEGxeDDfqbBtNHDKTvsZkbu0tCmD6OEDW07KG2k=";
+    rev = finalAttrs.version;
+    hash = "sha256-VxSADFTlaxQUDc81TzGkx54mjAUgY2L+suQC9zYGKo0=";
   };
 
   outputs = [
@@ -43,21 +44,34 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch = ''
-    substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
-      --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  patches = [
+    # Remove when version > 1.1.1
+    (fetchpatch {
+      name = "0002-morph-browser-Call-i18n-bindtextdomain-with-buildtime-determined-locale-path.patch";
+      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/3d9777fdc7d5b302a9f17679e4ea125e94468772.patch";
+      hash = "sha256-zx/pP72uNqAi8TZR4bKeONuqcJyK/vGtPglTA+5R5no=";
+    })
 
-    substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
-      --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
-      --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+    # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/589 merged & in release
+    ./1001-morph-browser-tst_AddressBar-Replace-wait-and-compare-with-tryCompare.patch
+  ];
 
-    substituteInPlace doc/CMakeLists.txt \
-      --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' ""
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
+        --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+
+      substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
+        --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
+        --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+
+      substituteInPlace doc/CMakeLists.txt \
+        --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(tests)' ""
+    '';
 
   strictDeps = true;
 
@@ -151,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
     ];
     mainProgram = "morph-browser";
-    teams = [ teams.lomiri ];
+    maintainers = teams.lomiri.members;
     platforms = platforms.linux;
   };
 })

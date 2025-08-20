@@ -3,33 +3,37 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  libcosmicAppHook,
   just,
-  nix-update-script,
-  nixosTests,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-applibrary";
-  version = "1.0.0-alpha.7";
+  version = "0-unstable-2024-02-09";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-applibrary";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-2rGw4Jmr2rL9X1URA5wVPIZocuroS8yaQs42sJqiTbw=";
+    repo = pname;
+    rev = "e214e9867876c96b24568d8a45aaca2936269d9b";
+    hash = "sha256-fZxDRktiHHmj7X3e5VyJJMO081auOpSMSsBnJdhhtR8=";
   };
 
-  cargoHash = "sha256-+nkXcbAPcIkg+p4ct/E0bm5O0n1MGN43AaWPjw13t9s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WCS1jCfnanILXGLq96+FI0gM1o4FIJQtSgZg86fe86E=";
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -44,31 +48,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
-  };
+  postInstall = ''
+    wrapProgram $out/bin/cosmic-app-library \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-app-library";
   };
-})
+}

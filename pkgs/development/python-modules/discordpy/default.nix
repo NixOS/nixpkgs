@@ -2,19 +2,18 @@
   lib,
   stdenv,
   aiohttp,
-  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
-  ffmpeg,
   libopus,
   pynacl,
-  setuptools,
   withVoice ? true,
+  ffmpeg,
+  setuptools,
 }:
 
 let
   pname = "discord.py";
-  version = "2.5.2";
+  version = "2.4.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,16 +23,12 @@ buildPythonPackage {
     owner = "Rapptz";
     repo = "discord.py";
     tag = "v${version}";
-    hash = "sha256-xaZeOkfOhm1CL5ceu9g/Vlas4jpYoQDlGMEtACFY7PE=";
+    hash = "sha256-GIwXx7bRCH2+G3zlilJ/Tb8el50SDbxGGX2/1bqL3+U=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-    audioop-lts
-  ]
-  ++ lib.optionals withVoice [ pynacl ];
+  dependencies = [ aiohttp ] ++ lib.optionals withVoice [ pynacl ];
 
   patchPhase = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \

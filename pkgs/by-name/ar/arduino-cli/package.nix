@@ -12,13 +12,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.2.2";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
-      tag = "v${version}";
-      hash = "sha256-zP0N9QfyaKCFP413S2rlrWwqVdfhdcxAgcxsAO/mfpE=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-eHDU1aoLBs3vDfFyM23R5wKNbbCmXrUgavP/JcdNCuM=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
@@ -27,7 +27,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-BOB9K5N4ELLWdSHCNdFYCypbEyoZz2dOz9wouwP7AHw=";
+    vendorHash = "sha256-3NG5+2qgCtmMxOmYS0RROoxajNiZorYL8+qXcDu4e+w=";
 
     postPatch =
       let
@@ -58,10 +58,9 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
-      "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+      "-X github.com/arduino/arduino-cli/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/version.commit=unknown"
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
@@ -72,16 +71,16 @@ let
       unset HOME
     '';
 
-    meta = {
+    meta = with lib; {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = with lib.licenses; [
-        gpl3Only
-        asl20
+      license = [
+        licenses.gpl3Only
+        licenses.asl20
       ];
-      maintainers = with lib.maintainers; [
+      maintainers = with maintainers; [
         ryantm
         sfrijters
       ];

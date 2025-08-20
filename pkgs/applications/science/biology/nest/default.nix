@@ -43,18 +43,19 @@ stdenv.mkDerivation rec {
     findutils
   ];
 
-  buildInputs = [
-    gsl
-    readline
-    libtool # libltdl
-    boost
-  ]
-  ++ lib.optionals withPython [
-    python3
-    python3.pkgs.cython
-  ]
-  ++ lib.optional withMpi mpi
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs =
+    [
+      gsl
+      readline
+      libtool # libltdl
+      boost
+    ]
+    ++ lib.optionals withPython [
+      python3
+      python3.pkgs.cython
+    ]
+    ++ lib.optional withMpi mpi
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = with python3.pkgs; [
     numpy
@@ -77,15 +78,15 @@ stdenv.mkDerivation rec {
     command = "nest --version";
   };
 
-  meta = {
-    description = "Command line tool for simulating neural networks";
+  meta = with lib; {
+    description = "NEST is a command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
     changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       jiegec
       davidcromp
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

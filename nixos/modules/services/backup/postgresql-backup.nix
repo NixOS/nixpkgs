@@ -35,7 +35,7 @@ let
 
       description = "Backup of ${db} database(s)";
 
-      requires = [ "postgresql.target" ];
+      requires = [ "postgresql.service" ];
 
       path = [
         pkgs.coreutils

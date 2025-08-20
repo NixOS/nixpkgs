@@ -13,7 +13,7 @@
   mkOpenModelicaDerivation,
 }:
 with openmodelica;
-mkOpenModelicaDerivation {
+mkOpenModelicaDerivation rec {
   pname = "omedit";
   omdir = "OMEdit";
   omdeps = [

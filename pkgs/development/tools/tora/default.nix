@@ -42,7 +42,7 @@ mkDerivation {
     loki
     libmysqlclient
     openssl
-    postgresql # needs libecpg, which is not available in libpq package
+    postgresql
     qscintilla
     qtbase
   ];

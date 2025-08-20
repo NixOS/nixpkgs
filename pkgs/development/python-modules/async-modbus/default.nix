@@ -4,7 +4,7 @@
   connio,
   fetchFromGitHub,
   fetchpatch,
-  pytest-cov-stub,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -35,6 +35,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace '"--cov=async_modbus",' "" \
+      --replace '"--cov-report=html", "--cov-report=term",' "" \
       --replace '"--durations=2", "--verbose"' ""
   '';
 
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-cov-stub
+    pytest-asyncio
     pytestCheckHook
   ];
 

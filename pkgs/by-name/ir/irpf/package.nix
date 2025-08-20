@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2025-1.6";
+  version = "2024-1.5";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     fetchzip {
       url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-      hash = "sha256-U2HweRi6acrmMT+9B1263mhGIn/84Z6JeqKP6XvTeXE=";
+      hash = "sha256-Pz8oI96GpLcHFEtnKUHnUHtZL3/QGhtG93ab5Au/tw0=";
     };
 
   passthru.updateScript = writeScript "update-irpf" ''
@@ -44,8 +44,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "irpf";
-      exec = "irpf";
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
       icon = "rfb64";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    BASEDIR="$out/share/irpf"
+    BASEDIR="$out/share/${finalAttrs.pname}"
     mkdir -p "$BASEDIR"
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
@@ -64,10 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/irpf \
-      --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
+    makeWrapper ${jdk11}/bin/java $out/bin/${finalAttrs.pname} \
+      --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
-      --add-flags "-jar $BASEDIR/irpf.jar" \
+      --add-flags "-jar $BASEDIR/${finalAttrs.pname}.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit

@@ -2,32 +2,34 @@
   lib,
   stdenv,
   fetchzip,
-  jdk24,
+  jre,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
 let
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  platform = selectSystem {
-    "x86_64-linux" = "linux-x86-64";
-  };
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  platform =
+    {
+      "x86_64-linux" = "linux-x86-64";
+    }
+    .${stdenv.system} or throwSystem;
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "weasis";
-  version = "4.6.2";
+  version = "4.4.0";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
-    url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
-    hash = "sha256-7oYrUNj9BBcFh+1CQQ4PJW8ln+fd5Ed9y9tMoixc5Mc=";
+    url = "https://github.com/nroduit/Weasis/releases/download/v${version}/weasis-native.zip";
+    hash = "sha256-+Bi9rTuM9osKzbKVA4exqsFm8p9+1OHgJqRSNnCC6QQ=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "Weasis";
       icon = "Weasis";
       desktopName = "Weasis";
-      comment = finalAttrs.meta.description;
+      comment = meta.description;
     })
   ];
 
@@ -53,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jdk24}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jre}
 
     runHook postBuild
   '';
@@ -63,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/{applications,pixmaps}
 
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
+    mv weasis-${platform}-jdk${lib.versions.major jre.version}-${version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
 
     runHook postInstall
@@ -73,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multipurpose standalone and web-based DICOM viewer with a highly modular architecture";
     homepage = "https://weasis.org";
     # Using changelog from releases as it is more accurate
-    changelog = "https://github.com/nroduit/Weasis/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/nroduit/Weasis/releases/tag/v${version}";
     license = with lib.licenses; [
       asl20
       epl20
@@ -82,4 +84,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";
   };
-})
+}

@@ -58,7 +58,7 @@ Each of those compiler versions has a corresponding attribute set `packages` bui
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.8 is `haskell.packages.ghc948`. In fact `haskellPackages` (at the time of writing) is just an alias
-for `haskell.packages.ghc984`:
+for `haskell.packages.ghc966`:
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
 
@@ -161,27 +161,6 @@ completely incompatible with packages from `haskellPackages`.
 
 <!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
-### GHC Deprecation Policy {#ghc-deprecation-policy}
-
-We remove GHC versions according to the following policy:
-
-#### Major GHC versions {#major-ghc-deprecation}
-
-We keep the following GHC major versions:
-1. The current Stackage LTS as the default and all later major versions.
-2. The two latest major versions older than our default.
-3. The currently recommended GHCup version and all later major versions.
-
-Older GHC versions might be kept longer, if there are in-tree consumers. We will coordinate with the maintainers of those dependencies to find a way forward.
-
-#### Minor GHC versions {#minor-ghc-deprecation}
-
-Every major version has a default minor version. The default minor version will be updated as soon as viable without breakage.
-
-Older minor versions for a supported major version will only be kept, if they are the last supported version of a major Stackage LTS release.
-
-<!-- Policy introduced here: https://discourse.nixos.org/t/nixpkgs-ghc-deprecation-policy-user-feedback-necessary/64153 -->
-
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
 Every haskell package set has its own haskell-aware `mkDerivation` which is used
@@ -222,10 +201,6 @@ If `null` (which is the default value), the one included in `src` is used.
 
 `editedCabalFile`
 : `sha256` hash of the cabal file identified by `revision` or `null`.
-
-`env`
-: Extra environment variables to set during the build.
-These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [`shellFor`](#haskell-shellFor) that includes this package.
 
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
@@ -322,8 +297,8 @@ Defaults to `false`.
 : Whether to build (HTML) documentation using [haddock][haddock].
 Defaults to `true` if supported.
 
-`testTargets`
-: Names of the test suites to build and run. If unset, all test suites will be executed.
+`testTarget`
+: Name of the test suite to build and run. If unset, all test suites will be executed.
 
 `preCompileBuildDriver`
 : Shell code to run before compiling `Setup.hs`.
@@ -512,7 +487,7 @@ so:
 
 ```nix
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> {};
   inherit (pkgs) haskell;
   inherit (haskell.lib.compose) overrideCabal;
 
@@ -536,7 +511,7 @@ let
     previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
   }) turtle;
 in
-turtle-incremental-build
+  turtle-incremental-build
 ```
 
 ## Development environments {#haskell-development-environments}
@@ -615,9 +590,7 @@ that:
 
 ```nix
 # Retrieve nixpkgs impurely from NIX_PATH for now, you can pin it instead, of course.
-{
-  pkgs ? import <nixpkgs> { },
-}:
+{ pkgs ? import <nixpkgs> {} }:
 
 # use the nixpkgs default haskell package set
 pkgs.haskellPackages.callPackage ./my-project.nix { }
@@ -645,12 +618,6 @@ this function and include all dependencies of the returned package in the build
 environment. This means you can reuse Nix expressions of packages included in
 nixpkgs, but also use local Nix expressions like this: `hpkgs: [
 (hpkgs.callPackage ./my-project.nix { }) ]`.
-
-`extraDependencies`
-: Extra dependencies, in the form of cabal2nix build attributes. An example use
-case is when you have Haskell scripts that use libraries that don't occur in
-your packages' dependencies. Example: `hpkgs: {libraryHaskellDepends =
-[ hpkgs.releaser ]}`. Defaults to `hpkgs: { }`.
 
 `nativeBuildInputs`
 : Expects a list of derivations to add as build tools to the build environment.
@@ -687,9 +654,7 @@ Say our example above depends on `distribution-nixpkgs` and we have a project
 file set up for both, we can add the following `shell.nix` expression:
 
 ```nix
-{
-  pkgs ? import <nixpkgs> { },
-}:
+{ pkgs ? import <nixpkgs> {} }:
 
 pkgs.haskellPackages.shellFor {
   packages = hpkgs: [
@@ -738,12 +703,7 @@ linked to work reliably. You can override the list of supported GHC versions
 with e.g.
 
 ```nix
-pkgs.haskell-language-server.override {
-  supportedGhcVersions = [
-    "90"
-    "94"
-  ];
-}
+pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "94" ]; }
 ```
 Where all strings `version` are allowed such that
 `haskell.packages.ghc${version}` is an existing package set.
@@ -783,7 +743,9 @@ need to build `nix-tree` with a more recent version of `brick` than the default
 one provided by `haskellPackages`:
 
 ```nix
-haskellPackages.nix-tree.override { brick = haskellPackages.brick_0_67; }
+haskellPackages.nix-tree.override {
+  brick = haskellPackages.brick_0_67;
+}
 ```
 
 <!-- TODO(@sternenseemann): This belongs in the next section
@@ -802,7 +764,7 @@ that depend on that library, you may want to use:
 
 ```nix
 haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_14_2_0;
+  Cabal = self.Cabal_3_14_1_0;
 })
 ```
 
@@ -839,8 +801,8 @@ let
       install -Dm644 man/${drv.pname}.1 -t "$out/share/man/man1"
     '';
   });
-
 in
+
 installManPage haskellPackages.pnbackup
 ```
 
@@ -924,9 +886,11 @@ for this to work.
   derivation:
 
   ```nix
-  pkgs.haskell.lib.overrideCabal (pkgs.haskell.lib.justStaticExecutables my-haskell-package) (drv: {
-    disallowGhcReference = false;
-  })
+  pkgs.haskell.lib.overrideCabal
+    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
+    (drv: {
+      disallowGhcReference = false;
+    })
   ```
 
   Then use `strings` to determine which libraries are responsible:
@@ -942,12 +906,14 @@ for this to work.
   Finally, use `remove-references-to` to delete those store paths from the produced output:
 
   ```nix
-  pkgs.haskell.lib.overrideCabal (pkgs.haskell.lib.justStaticExecutables my-haskell-package) (drv: {
-    postInstall = ''
-      ${drv.postInstall or ""}
-      remove-references-to -t ${pkgs.haskellPackages.hs-opentelemetry-sdk}
-    '';
-  })
+  pkgs.haskell.lib.overrideCabal
+    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
+    (drv: {
+      postInstall = ''
+        ${drv.postInstall or ""}
+        remove-references-to -t ${pkgs.haskellPackages.hs-opentelemetry-sdk}
+      '';
+    })
   ```
 
 [164630]: https://github.com/NixOS/nixpkgs/issues/164630
@@ -1156,20 +1122,12 @@ Haskell packages using [import from derivation][import-from-derivation].
 
 ```nix
 # cabal get mtl-2.2.1 && cd mtl-2.2.1 && cabal2nix .
-{
-  mkDerivation,
-  base,
-  lib,
-  transformers,
-}:
+{ mkDerivation, base, lib, transformers }:
 mkDerivation {
   pname = "mtl";
   version = "2.2.1";
   src = ./.;
-  libraryHaskellDepends = [
-    base
-    transformers
-  ];
+  libraryHaskellDepends = [ base transformers ];
   homepage = "http://github.com/ekmett/mtl";
   description = "Monad classes, using functional dependencies";
   license = lib.licenses.bsd3;
@@ -1308,77 +1266,68 @@ let
   ghcName = "ghc92";
   # Desired new setting
   enableProfiling = true;
-
 in
+
 [
   # The first overlay modifies the GHC derivation so that it does or does not
   # build profiling versions of the core libraries bundled with it. It is
   # recommended to only use such an overlay if you are enabling profiling on a
   # platform that doesn't by default, because compiling GHC from scratch is
   # quite expensive.
-  (
-    final: prev:
-    let
-      inherit (final) lib;
+  (final: prev:
+  let
+    inherit (final) lib;
+  in
 
-    in
-    {
-      haskell = prev.haskell // {
-        compiler = prev.haskell.compiler // {
-          ${ghcName} = prev.haskell.compiler.${ghcName}.override {
-            # Unfortunately, the GHC setting is named differently for historical reasons
-            enableProfiledLibs = enableProfiling;
+  {
+    haskell = prev.haskell // {
+      compiler = prev.haskell.compiler // {
+        ${ghcName} = prev.haskell.compiler.${ghcName}.override {
+          # Unfortunately, the GHC setting is named differently for historical reasons
+          enableProfiledLibs = enableProfiling;
+        };
+      };
+    };
+  })
+
+  (final: prev:
+  let
+    inherit (final) lib;
+    haskellLib = final.haskell.lib.compose;
+  in
+
+  {
+    haskell = prev.haskell // {
+      packages = prev.haskell.packages // {
+        ${ghcName} = prev.haskell.packages.${ghcName}.override {
+          overrides = hfinal: hprev: {
+            mkDerivation = args: hprev.mkDerivation (args // {
+              # Since we are forcing our ideas upon mkDerivation, this change will
+              # affect every package in the package set.
+              enableLibraryProfiling = enableProfiling;
+
+              # To actually use profiling on an executable, executable profiling
+              # needs to be enabled for the executable you want to profile. You
+              # can either do this globally or…
+              enableExecutableProfiling = enableProfiling;
+            });
+
+            # …only for the package that contains an executable you want to profile.
+            # That saves on unnecessary rebuilds for packages that you only depend
+            # on for their library, but also contain executables (e.g. pandoc).
+            my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+
+            # If you are disabling profiling to save on build time, but want to
+            # retain the ability to substitute from the binary cache. Drop the
+            # override for mkDerivation above and instead have an override like
+            # this for the specific packages you are building locally and want
+            # to make cheaper to build.
+            my-library = haskellLib.disableLibraryProfiling hprev.my-library;
           };
         };
       };
-    }
-  )
-
-  (
-    final: prev:
-    let
-      inherit (final) lib;
-      haskellLib = final.haskell.lib.compose;
-
-    in
-    {
-      haskell = prev.haskell // {
-        packages = prev.haskell.packages // {
-          ${ghcName} = prev.haskell.packages.${ghcName}.override {
-            overrides = hfinal: hprev: {
-              mkDerivation =
-                args:
-                hprev.mkDerivation (
-                  args
-                  // {
-                    # Since we are forcing our ideas upon mkDerivation, this change will
-                    # affect every package in the package set.
-                    enableLibraryProfiling = enableProfiling;
-
-                    # To actually use profiling on an executable, executable profiling
-                    # needs to be enabled for the executable you want to profile. You
-                    # can either do this globally or…
-                    enableExecutableProfiling = enableProfiling;
-                  }
-                );
-
-              # …only for the package that contains an executable you want to profile.
-              # That saves on unnecessary rebuilds for packages that you only depend
-              # on for their library, but also contain executables (e.g. pandoc).
-              my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
-
-              # If you are disabling profiling to save on build time, but want to
-              # retain the ability to substitute from the binary cache. Drop the
-              # override for mkDerivation above and instead have an override like
-              # this for the specific packages you are building locally and want
-              # to make cheaper to build.
-              my-library = haskellLib.disableLibraryProfiling hprev.my-library;
-            };
-          };
-        };
-      };
-    }
-  )
+    };
+  })
 ]
 ```
 

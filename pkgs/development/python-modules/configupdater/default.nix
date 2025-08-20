@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pytest-cov-stub,
   setuptools-scm,
 }:
 
@@ -18,14 +17,16 @@ buildPythonPackage rec {
     hash = "sha256-n9rFODHBsGKSm/OYtkm4fKMOfxpzXz+/SCBygEEGMGs=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace '--cov configupdater --cov-report term-missing' ""
+  '';
+
   nativeBuildInputs = [ setuptools-scm ];
 
   pythonImportsCheck = [ "configupdater" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Parser like ConfigParser but for updating configuration files";

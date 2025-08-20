@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   pytestCheckHook,
   pythonOlder,
   poetry-core,
@@ -11,16 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "cli-ui";
-  version = "0.18.0";
+  version = "0.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
 
-  src = fetchFromGitHub {
-    owner = "your-tools";
-    repo = "python-cli-ui";
-    tag = "v${version}";
-    hash = "sha256-kEML+V15bjSMoSf2NFc48A0ADsZ3nagllBpEXesMccc=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-L2flDPR052rRYMPmYLutmL+LjfuNhHdl86Jht+E8Bfo=";
   };
 
   pythonRelaxDeps = [ "tabulate" ];

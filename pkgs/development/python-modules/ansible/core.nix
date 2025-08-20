@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
   pythonOlder,
   installShellFiles,
   docutils,
   setuptools,
   ansible,
   cryptography,
+  importlib-resources,
   jinja2,
   junit-xml,
   lxml,
@@ -16,6 +16,7 @@
   packaging,
   paramiko,
   ansible-pylibssh,
+  passlib,
   pexpect,
   psutil,
   pycrypto,
@@ -26,21 +27,17 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
-  # Additional packages to add to dependencies
-  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.7";
+  version = "2.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-GhKb+fzV3KKxfoPOdxR+4vvDxRpJWJcBUol8xbbQquc=";
+    hash = "sha256-FMrB+Su9rogcsGFu3esXkl6MtQfkhgh5deckUz2d508=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -51,15 +48,6 @@ buildPythonPackage rec {
       --replace "[python," "["
 
     patchShebangs --build packaging/cli-doc/build.py
-
-    SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
-    PYPROJECT=$(cat pyproject.toml)
-    if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
-      echo "setuptools replace: ''${BASH_REMATCH[0]}"
-      echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
-    else
-      exit 2
-    fi
   '';
 
   nativeBuildInputs = [
@@ -69,32 +57,34 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    # depend on ansible instead of the other way around
-    ansible
-    # from requirements.txt
-    cryptography
-    jinja2
-    packaging
-    pyyaml
-    resolvelib
-    # optional dependencies
-    junit-xml
-    lxml
-    ncclient
-    paramiko
-    ansible-pylibssh
-    pexpect
-    psutil
-    pycrypto
-    requests
-    scp
-    xmltodict
-  ]
-  ++ lib.optionals windowsSupport [ pywinrm ]
-  ++ extraPackages python.pkgs;
+  dependencies =
+    [
+      # depend on ansible instead of the other way around
+      ansible
+      # from requirements.txt
+      cryptography
+      jinja2
+      packaging
+      passlib
+      pyyaml
+      resolvelib
+      # optional dependencies
+      junit-xml
+      lxml
+      ncclient
+      paramiko
+      ansible-pylibssh
+      pexpect
+      psutil
+      pycrypto
+      requests
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals windowsSupport [ pywinrm ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ];
 
-  pythonRelaxDeps = [ "resolvelib" ];
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
 
   postInstall = ''
     export HOME="$(mktemp -d)"
@@ -110,9 +100,6 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      HarisDotParis
-      robsliwi
-    ];
+    maintainers = [ ];
   };
 }

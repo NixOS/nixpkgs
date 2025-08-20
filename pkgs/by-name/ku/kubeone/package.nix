@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.11.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    hash = "sha256-K3Xo2tvtmkGbXl2yJjd8Q1xzdLSap8p824ommi+r8dY=";
+    hash = "sha256-k/okEg9jiLyVn1v3zeduSJ2dY8xWppH5V8L7rud4/H8=";
   };
 
-  vendorHash = "sha256-Wnnwp1GRlE1q8MSc23pOmSn9fKu5uHVzkivfuF2lnEk=";
+  vendorHash = "sha256-gwyY6g//uEvvzChLQrTKlzq9REMUIXVjIDZXBMOHNO8=";
 
   ldflags = [
     "-s"
@@ -42,11 +42,11 @@ buildGoModule rec {
     command = "kubeone version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments";
     homepage = "https://kubeone.io/";
     changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lblasc ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lblasc ];
   };
 }

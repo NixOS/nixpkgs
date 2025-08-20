@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "anyascii";
-  version = "0.3.3";
+  version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yU6d2dR7PZSU7KMF/vlEfQC0vxoyr/hap0b6Psf7lcM=";
+    hash = "sha256-nV0y74RP4iW4vHy6f5UFNPrk2iepvzpr6iyw6kbORzA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Unicode to ASCII transliteration";
     homepage = "https://github.com/anyascii/anyascii";
     license = licenses.isc;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

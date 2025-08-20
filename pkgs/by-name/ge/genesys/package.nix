@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out
     mv bin lib $out
-    wrapProgram $out/bin/genesys \
+    wrapProgram $out/bin/${finalAttrs.pname} \
       --set JAVA_HOME "${jre.home}" \
       --prefix PATH : "${graphviz}/bin"
 

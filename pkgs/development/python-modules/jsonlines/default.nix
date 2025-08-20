@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "jsonlines";
-  version = "4.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "wbolster";
-    repo = "jsonlines";
+    repo = pname;
     rev = version;
-    hash = "sha256-KNEJdAxEgd0NGPnk9J51C3yUN2e6Cvvevth0iKOMlhE=";
+    hash = "sha256-eMpUk5s49OyD+cNGdAeKA2LvpXdKta2QjZIFDnIBKC8=";
   };
 
   propagatedBuildInputs = [ attrs ];

@@ -7,7 +7,6 @@
   mashumaro,
   orjson,
   pytest-asyncio,
-  pytest-cov-stub,
   pytest-httpx,
   poetry-core,
   pytestCheckHook,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "3.1.0";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,10 +25,11 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "pydiscovergy";
     tag = "v${version}";
-    hash = "sha256-OrMuMGN1zB4q6t4fWyZeQ9WRmNZHFyq+wIRq1kG2N30=";
+    hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
   };
 
   postPatch = ''
+    sed -i '/addopts =/d' pyproject.toml
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
@@ -45,7 +45,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov-stub
     pytest-httpx
     pytestCheckHook
     respx

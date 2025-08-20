@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky-notes";
-  version = "0.2.7";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "sticky";
-    tag = "v${version}";
-    hash = "sha256-82Yxw8NSw82rxhuAgsdN2lCiQ/hli4tQiU6jCgGyp4U=";
+    rev = "v${version}";
+    hash = "sha256-+++xUiMjO+19hmLLBamOL6tMUqB0a8ixTXca/6A8ZK8=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-NDGuG2rXJH0bHsD7yQMY6HAZDkMq0j63SYVz8+X3fPQ=";
+    hash = "sha256-GThcufSAr/VYL9AWFOBY2FDXQZGY5L7TbBdadPh7CAc=";
   };
 
   preConfigure = ''

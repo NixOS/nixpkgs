@@ -1,8 +1,8 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
+  qtbase,
   lm_sensors,
   cmake,
   ninja,
@@ -10,36 +10,35 @@
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "corestats";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "corestats";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0d03y3AYWxXh9DZrbPWqk34yq7iy5xUn/oMmJBu5GqQ=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-584dSlXhPfvTBeDjex1o2TZPoG40tl1fNDiIYqjyzOI=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     lm_sensors
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "System resource viewer from the C Suite";
     mainProgram = "corestats";
     homepage = "https://gitlab.com/cubocore/coreapps/corestats";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

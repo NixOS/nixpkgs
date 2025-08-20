@@ -6,6 +6,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  darwin,
   vale,
 }:
 
@@ -26,27 +27,35 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        SystemConfiguration
+      ]
+    );
 
-  checkFlags = [
-    # The following tests are reaching to the network.
-    "--skip=vale::tests"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # This test does not account for the existence of aarch64-linux machines,
-    # despite upstream shipping artifacts for that architecture
-    "--skip=utils::tests::arch"
-  ];
+  checkFlags =
+    [
+      # The following tests are reaching to the network.
+      "--skip=vale::tests"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # This test does not account for the existence of aarch64-linux machines,
+      # despite upstream shipping artifacts for that architecture
+      "--skip=utils::tests::arch"
+    ];
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-KPgi0wZh1+PTKUmvCkLGPf+DZW5Tt4dQVK/cdxjm/1A=";
+  cargoHash = "sha256-YurMB54jeMQIAOgDQhXEYrkYUYrSl02M9JG5Wtp6Eb8=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
-      --suffix PATH : ${lib.makeBinPath [ vale ]}
+      --prefix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
   meta = with lib; {

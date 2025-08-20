@@ -6,7 +6,6 @@
   dart,
   lib,
   stdenv,
-  runCommand,
 }:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
@@ -70,33 +69,17 @@ let
             };
           };
         };
-        src =
-          let
-            source = fetchFromGitHub {
-              owner = "flutter";
-              repo = "flutter";
-              rev = version;
-              hash = flutterHash;
-            };
-          in
-          (
-            if lib.versionAtLeast version "3.32" then
-              # # Could not determine engine revision
-              (runCommand source.name { } ''
-                cp -r ${source} $out
-                chmod +w $out/bin
-                mkdir $out/bin/cache
-                cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp
-                touch $out/bin/cache/engine.realm
-              '')
-            else
-              source
-          );
+        src = fetchFromGitHub {
+          owner = "flutter";
+          repo = "flutter";
+          rev = version;
+          hash = flutterHash;
+        };
       };
     in
     (mkCustomFlutter args).overrideAttrs (
       prev: next: {
-        passthru = next.passthru // {
+        passthru = next.passthru // rec {
           inherit wrapFlutter mkCustomFlutter mkFlutter;
           buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
             flutter = wrapFlutter (mkCustomFlutter args);
@@ -129,11 +112,7 @@ let
 in
 flutterVersions
 // {
-  inherit wrapFlutter mkFlutter;
-}
-// lib.optionalAttrs (betaFlutterVersions != { }) {
   beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
-}
-// lib.optionalAttrs (stableFlutterVersions != { }) {
   stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
+  inherit wrapFlutter mkFlutter;
 }

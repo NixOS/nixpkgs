@@ -6,7 +6,7 @@
   cairo,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "inav-blackbox-tools";
   version = "unstable-2021-04-22";
 

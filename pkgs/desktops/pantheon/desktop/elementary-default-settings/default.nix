@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  nixos-artwork,
-  glib,
-  pkg-config,
-  dbus,
-  polkit,
-  accountsservice,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, nixos-artwork
+, glib
+, pkg-config
+, dbus
+, polkit
+, accountsservice
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "8.1.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
-    sha256 = "sha256-GUq7kXaidzvqbyeVh4ihcxRqZXOzZO3WMXEe8lf477I=";
+    sha256 = "sha256-vytjRlSXnC+cSIAn6v6wpoig4zjJZObGZ6MCLfsIwIA=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +39,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
-    # Do not ship elementary OS specific config files.
-    "-Dapparmor-profiles=false"
-    "-Dgeoclue=false"
   ];
 
   postFixup = ''
@@ -60,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
   };
 }

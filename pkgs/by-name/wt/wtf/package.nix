@@ -1,50 +1,49 @@
 {
-  lib,
+  buildGoModule,
   fetchFromGitHub,
-  stdenv,
-  cmake,
-  ninja,
-  pkg-config,
+  lib,
+  makeWrapper,
+  ncurses,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildGoModule rec {
   pname = "wtf";
-  version = "0.5.7";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
-    owner = "0vercl0k";
-    repo = "wtf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lfPx9RQEW457VQkDbvu/D9EFZrdNLz2ToQ9dfa7+tzY=";
+    owner = "wtfutil";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
+  vendorHash = "sha256-mQdKw3DeBEkCOtV2/B5lUIHv5EBp+8QSxpA13nFxESw=";
+  proxyVendor = true;
+
+  doCheck = false;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
-  sourceRoot = "source/src";
+  subPackages = [ "." ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 wtf $out/bin/wtf
-
-    runHook postInstall
+  postInstall = ''
+    mv "$out/bin/wtf" "$out/bin/wtfutil"
+    wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
   '';
 
-  meta = {
-    description = "Cross-platform snapshot-based fuzzer";
-    homepage = "https://github.com/0vercl0k/wtf";
-    changelog = "https://github.com/0vercl0k/wtf/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    platforms = with lib.platforms; [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ mikehorn ];
-    mainProgram = "wtf";
+  meta = with lib; {
+    description = "Personal information dashboard for your terminal";
+    homepage = "https://wtfutil.com/";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "wtfutil";
+    platforms = platforms.linux ++ platforms.darwin;
   };
-})
+}

@@ -24,7 +24,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    tag = version;
+    rev = version;
     hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     fetchSubmodules = true;
   };
@@ -75,12 +75,13 @@ buildBazelPackage rec {
       --replace-fail "https://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip" "file://${jp-zip-codes}/jigyosyo.zip"
   '';
 
-  preConfigure = ''
-    cd src
-  ''
-  + lib.optionalString (dictionaries != [ ]) ''
-    cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
-  '';
+  preConfigure =
+    ''
+      cd src
+    ''
+    + lib.optionalString (dictionaries != [ ]) ''
+      cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+    '';
 
   buildAttrs.installPhase = ''
     runHook preInstall
@@ -105,6 +106,8 @@ buildBazelPackage rec {
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [
+      gebner
+      ericsagnes
       pineapplehunter
     ];
   };

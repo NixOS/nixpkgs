@@ -9,17 +9,18 @@
   inih,
   lua,
   bash-completion,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tio";
-  version = "3.9";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-92+F41kDGKgzV0e7Z6xly1NRDm8Ayg9eqeKN+05B4ok=";
+    hash = "sha256-8BeTC3rlDK6xmfguNlKQg48L03knU7sb1t8F1oLIi8s=";
   };
 
   strictDeps = true;
@@ -28,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     inih
     lua
     glib
-    bash-completion
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    bash-completion
   ];
 
   meta = with lib; {

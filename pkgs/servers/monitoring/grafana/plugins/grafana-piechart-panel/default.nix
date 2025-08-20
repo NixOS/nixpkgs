@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin {
+grafanaPlugin rec {
   pname = "grafana-piechart-panel";
   version = "1.6.4";
   zipHash = "sha256-bdAl3OmZgSNB+IxxlCb81abR+4dykKkRY3MpQUQyLks=";

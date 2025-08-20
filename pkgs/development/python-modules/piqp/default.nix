@@ -40,10 +40,7 @@ buildPythonPackage rec {
         "${major python.pythonVersion}${minor python.pythonVersion}";
 
       # E.g. "linux-aarch64"
-      platform =
-        with stdenv.hostPlatform;
-        (lib.optionalString (!isDarwin) "${parsed.kernel.name}-${parsed.cpu.name}")
-        + (lib.optionalString isDarwin "macosx-${darwinMinVersion}-${darwinArch}");
+      platform = with stdenv.hostPlatform.parsed; "${kernel.name}-${cpu.name}";
     in
     ''
       build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}/${pname}.${pname}"
@@ -78,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Proximal Interior Point Quadratic Programming solver";
+    description = "A Proximal Interior Point Quadratic Programming solver";
     homepage = "https://github.com/PREDICT-EPFL/piqp";
     license = licenses.bsd2;
     maintainers = with maintainers; [ renesat ];

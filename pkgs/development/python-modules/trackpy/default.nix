@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "soft-matter";
-    repo = "trackpy";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-6i1IfdxgV6bpf//mXATpnsQ0zN26S8rlL0/1ql68sd8=";
   };

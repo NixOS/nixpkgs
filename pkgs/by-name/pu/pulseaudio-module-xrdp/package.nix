@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pulseaudio-module-xrdp";
-  version = "0.8";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "neutrinolabs";
-    repo = "pulseaudio-module-xrdp";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-R1ZPifEjlueTJma6a0UiGdiNwTSa5+HnW4w9qGrauxE=";
+    hash = "sha256-GT0kBfq6KvuiX30B9JzCiUxgSm9E6IhdJuQKKKprDCE=";
   };
 
   preConfigure = ''

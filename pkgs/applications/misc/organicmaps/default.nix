@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  which,
-  python3,
-  rsync,
-  wrapQtAppsHook,
-  qtbase,
-  qtpositioning,
-  qtsvg,
-  qtwayland,
-  libGLU,
-  libGL,
-  zlib,
-  icu,
-  freetype,
-  pugixml,
-  xorg,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, pkg-config
+, which
+, python3
+, rsync
+, wrapQtAppsHook
+, qtbase
+, qtpositioning
+, qtsvg
+, qtwayland
+, libGLU
+, libGL
+, zlib
+, icu
+, freetype
+, pugixml
+, nix-update-script
 }:
 
 let
@@ -30,25 +29,32 @@ let
     rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
     hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
-in
-stdenv.mkDerivation (finalAttrs: {
+in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2025.07.13-9";
+  version = "2024.11.27-12";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
-    tag = "${finalAttrs.version}-android";
-    hash = "sha256-cEQmghS5qg5HTyWfDIB4G/Arh9BpM3iz1tToRWY8KrE=";
+    rev = "${version}-android";
+    hash = "sha256-lBEDPqxdnaajMHlf7G/d1TYYL9yPZo8AGekoKmF1ObM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix for https://github.com/organicmaps/organicmaps/issues/7838
+    (fetchpatch {
+      url = "https://github.com/organicmaps/organicmaps/commit/1caf64e315c988cd8d5196c80be96efec6c74ccc.patch";
+      hash = "sha256-k3VVRgHCFDhviHxduQMVRUUvQDgMwFHIiDZKa4BNTyk=";
+    })
+  ];
 
   postPatch = ''
     # Disable certificate check. It's dependent on time
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings [ "." "-" ] [ "" "" ] finalAttrs.version}" > tools/unix/version.sh
+    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
@@ -79,9 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXcursor
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
@@ -91,21 +94,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [
-        "-vr"
-        "(.*)-android"
-      ];
+      extraArgs = [ "-vr" "(.*)-android" ];
     };
   };
 
-  meta = {
+  meta = with lib; {
     # darwin: "invalid application of 'sizeof' to a function type"
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://organicmaps.app/";
     description = "Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
     mainProgram = "OMaps";
   };
-})
+}

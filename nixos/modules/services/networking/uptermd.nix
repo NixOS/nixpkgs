@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -51,7 +46,7 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
         example = [ "--debug" ];
         description = ''
           Extra flags passed to the uptermd command.
@@ -84,9 +79,7 @@ in
       serviceConfig = {
         StateDirectory = "uptermd";
         WorkingDirectory = "/var/lib/uptermd";
-        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${
-          if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey
-        } ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey} ${concatStringsSep " " cfg.extraFlags}";
 
         # Hardening
         AmbientCapabilities = mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
@@ -105,11 +98,7 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         # AF_UNIX is for ssh-keygen, which relies on nscd to resolve the uid to a user
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

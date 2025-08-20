@@ -6,33 +6,27 @@
   unzip,
   runtimeShell,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
+  version = "0.9.0";
   pname = "zgrviewer";
-  version = "0.10.0";
-
   src = fetchurl {
-    url = "mirror://sourceforge/zvtm/zgrviewer/${finalAttrs.version}/zgrviewer-${finalAttrs.version}.zip";
-    hash = "sha256-0CrioPNtpUa8uCZOXpe2q/QOo90kYO7mC2s9x3ymP7I=";
+    url = "mirror://sourceforge/zvtm/${pname}/${version}/${pname}-${version}.zip";
+    sha256 = "1yg2rck81sqqrgfi5kn6c1bz42dr7d0zqpcsdjhicssi1y159f23";
   };
-
   nativeBuildInputs = [ unzip ];
-
   buildInputs = [ jre ];
-
+  buildPhase = "";
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out"/{bin,share/java/zvtm/plugins,share/doc/zvtm}
-    cp *.license.* "$out/share/doc/zvtm"
+
+    cp overview.html *.license.* "$out/share/doc/zvtm"
+
     cp -r target/* "$out/share/java/zvtm/"
+
     echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
-    echo "${lib.getExe jre} -jar '$out/share/java/zvtm/zgrviewer-${finalAttrs.version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
+    echo "${jre}/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
-
-    runHook postInstall
   '';
-
   meta = {
     # Quicker to unpack locally than load Hydra
     hydraPlatforms = [ ];
@@ -43,4 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; unix;
     mainProgram = "zgrviewer";
   };
-})
+}

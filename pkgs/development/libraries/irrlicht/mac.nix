@@ -4,13 +4,16 @@
   fetchzip,
   fetchFromGitHub,
   cmake,
+  Cocoa,
+  OpenGL,
+  IOKit,
 }:
 
 let
   common = import ./common.nix { inherit fetchzip; };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "irrlicht-mac";
   version = common.version;
 
@@ -38,6 +41,11 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    OpenGL
+    Cocoa
+    IOKit
+  ];
 
   meta = {
     homepage = "https://irrlicht.sourceforge.net/";

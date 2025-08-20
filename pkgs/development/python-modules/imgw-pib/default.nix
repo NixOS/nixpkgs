@@ -1,12 +1,10 @@
 {
-  aiofiles,
   aiohttp,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   lib,
-  orjson,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -15,23 +13,19 @@
 
 buildPythonPackage rec {
   pname = "imgw-pib";
-  version = "1.5.3";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = version;
-    hash = "sha256-rsR1ZlbNCAlJmiTefgJ4gurGaC17z/kKgDHpuMkyxz8=";
+    hash = "sha256-vEOqjdBtvUE4N/fzvx7puSqp2bL8XX1v1p7/PmAIv9M=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiofiles
-    aiohttp
-    orjson
-  ];
+  dependencies = [ aiohttp ];
 
   pythonImportsCheck = [ "imgw_pib" ];
 
@@ -44,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bieniu/imgw-pib/releases/tag/${src.tag}";
+    changelog = "https://github.com/bieniu/imgw-pib/releases/tag/${version}";
     description = "Python async wrapper for IMGW-PIB API";
     homepage = "https://github.com/bieniu/imgw-pib";
     license = lib.licenses.asl20;

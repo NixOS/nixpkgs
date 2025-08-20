@@ -41,9 +41,6 @@ buildPythonPackage rec {
     asttokens
     typing-extensions
   ];
-  pythonRelaxDeps = [
-    "asttokens"
-  ];
 
   nativeCheckInputs = [
     astor
@@ -67,9 +64,10 @@ buildPythonPackage rec {
     "tests/test_typeguard.py"
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # RuntimeWarning: coroutine '*' was never awaited
-    "-Wignore::RuntimeWarning"
+    "-W"
+    "ignore::RuntimeWarning"
   ];
 
   pythonImportsCheck = [ "icontract" ];

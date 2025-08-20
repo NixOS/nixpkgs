@@ -50,7 +50,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
+  pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
 
   __darwinAllowLocalNetworking = true;
 

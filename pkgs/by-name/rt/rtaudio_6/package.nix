@@ -13,6 +13,7 @@
   jackSupport ? true,
   libjack2,
   coreaudioSupport ? stdenv.hostPlatform.isDarwin,
+  darwin,
   validatePkgConfig,
 }:
 
@@ -44,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals jackSupport [
       libjack2
+    ]
+    ++ lib.optionals coreaudioSupport [
+      darwin.apple_sdk.frameworks.CoreAudio
     ];
 
   cmakeFlags = [

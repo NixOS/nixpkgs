@@ -9,7 +9,6 @@
   opentelemetry-sdk,
   orjson,
   pytest-asyncio,
-  pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
   pythonOlder,
@@ -22,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.17.1";
+  version = "8.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,12 +30,17 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     tag = "v${version}";
-    hash = "sha256-LWSvE88wEwMxRi6IZsMkIRP8UTRfImC9QZnuka1oiso=";
+    hash = "sha256-5bNsJd0td3aQR+PvDBHg0/f+qPyt/ckWmeDrQJzxhYY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov-report=term-missing --cov=elastic_transport" ""
+  '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     urllib3
     certifi
   ];
@@ -48,7 +52,6 @@ buildPythonPackage rec {
     opentelemetry-sdk
     orjson
     pytest-asyncio
-    pytest-cov-stub
     pytest-httpserver
     pytestCheckHook
     requests
@@ -58,8 +61,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -83,8 +87,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
-    homepage = "https://github.com/elastic/elastic-transport-python";
-    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
+    homepage = "https://github.com/elasticsearch/elastic-transport-python";
+    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

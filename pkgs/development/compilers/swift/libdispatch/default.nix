@@ -23,13 +23,12 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals useSwift [
-    ninja
-    swift
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals useSwift [
+      ninja
+      swift
+    ];
 
   patches = [ ./disable-swift-overlay.patch ];
 
@@ -49,7 +48,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-libdispatch";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cmm ];
-    teams = [ lib.teams.swift ];
+    maintainers = lib.teams.swift.members ++ (with lib.maintainers; [ cmm ]);
   };
 }

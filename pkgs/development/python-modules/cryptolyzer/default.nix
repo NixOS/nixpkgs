@@ -14,30 +14,30 @@
   pythonOlder,
   requests,
   setuptools,
-  setuptools-scm,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "1.0.0";
+  version = "0.12.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
+    hash = "sha256-Qc1L4F2U/nk37s/mIa2YgJZqC2dkPsB/Si84SEl576Q=";
   };
 
-  pythonRemoveDeps = [ "bs4" ];
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
+      --replace-warn "bs4" "beautifulsoup4"
+  '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
     beautifulsoup4
     certvalidator
@@ -56,12 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
-  meta = {
+  meta = with lib; {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kranzes ];
-    teams = with lib.teams; [ ngi ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ kranzes ];
   };
 }

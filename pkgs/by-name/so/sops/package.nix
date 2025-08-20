@@ -1,73 +1,55 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
   nix-update-script,
-  makeWrapper,
-  runCommand,
-  age,
 }:
 
-buildGoModule (final: {
+buildGo122Module rec {
   pname = "sops";
-  version = "3.10.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "getsops";
-    repo = final.pname;
-    tag = "v${final.version}";
-    hash = "sha256-IdQnxVBMAQpSAYB2S3D3lSULelFMBpjiBGOxeTgC10I=";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-U8ZJktOSj0JJ70CbXDS3FpNmk07cKnco5w2rt4BnQBU=";
   };
 
-  vendorHash = "sha256-7aHUIERVSxv3YGAMteGbqkAZQXXDVziV0rhUhjwch3U=";
+  vendorHash = "sha256-+UxngJgKG+gAjnXXEcdXPXQqRcMfRDn4wPeR1IhltC0=";
+
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.22" "go 1.22.7"
+  '';
 
   subPackages = [ "cmd/sops" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/getsops/sops/v3/version.Version=${final.version}"
+    "-X github.com/getsops/sops/v3/version.Version=${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-  ];
+  passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd sops --bash ${./bash_autocomplete}
     installShellCompletion --cmd sops --zsh ${./zsh_autocomplete}
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
-
-  # wrap sops with age plugins
-  passthru.withAgePlugins =
-    filter:
-    runCommand "sops-${final.version}-with-age-plugins"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        makeWrapper ${lib.getBin final.finalPackage}/bin/sops $out/bin/sops \
-          --prefix PATH : "${lib.makeBinPath (filter age.passthru.plugins)}"
-      '';
-
-  meta = {
+  meta = with lib; {
     homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
-    changelog = "https://github.com/getsops/sops/blob/v${final.version}/CHANGELOG.rst";
+    changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Scrumplex
       mic92
     ];
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
   };
-})
+}

@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/u1db-qt";
     changelog = "https://gitlab.com/ubports/development/core/u1db-qt/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl3Only;
-    teams = [ lib.teams.lomiri ];
+    maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "libu1db-qt5" ];
   };

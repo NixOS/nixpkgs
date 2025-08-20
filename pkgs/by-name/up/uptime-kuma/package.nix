@@ -46,13 +46,13 @@ buildNpmPackage rec {
 
   passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
 
-  meta = {
+  meta = with lib; {
     description = "Fancy self-hosted monitoring tool";
     mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
     changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ julienmalka ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ julienmalka ];
     # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
     broken = stdenv.hostPlatform.isDarwin;
   };

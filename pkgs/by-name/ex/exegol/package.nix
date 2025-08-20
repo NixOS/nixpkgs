@@ -1,53 +1,35 @@
 {
+  fetchPypi,
   lib,
-  fetchFromGitHub,
-  python3Packages,
+  python3,
   xorg,
 }:
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "exegol";
-  version = "5.1.1";
-  pyproject = true;
+  version = "4.3.9";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "ThePorgs";
-    repo = "Exegol";
-    tag = version;
-    hash = "sha256-q84uWxVooQ+tFA2NhQ5N30h8LPhT+fJfxVmcpMzOQVk=";
-  };
+  # Project has no unit tests
+  doCheck = false;
 
-  build-system = with python3Packages; [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    "rich"
-    "argcomplete"
-    "supabase"
-  ];
-
-  dependencies =
-    with python3Packages;
+  propagatedBuildInputs =
+    with python3.pkgs;
     [
-      argcomplete
-      cryptography
-      docker
-      gitpython
-      ifaddr
-      pydantic
-      pyjwt
       pyyaml
+      gitpython
+      docker
       requests
       rich
-      supabase
+      argcomplete
     ]
-    ++ pyjwt.optional-dependencies.crypto
-    ++ [ xorg.xhost ]
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) tzlocal;
+    ++ [ xorg.xhost ];
 
-  doCheck = true;
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
+  };
 
-  pythonImportsCheck = [ "exegol" ];
-
-  meta = {
+  meta = with lib; {
     description = "Fully featured and community-driven hacking environment";
     longDescription = ''
       Exegol is a community-driven hacking environment, powerful and yet
@@ -58,19 +40,10 @@ python3Packages.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${src.tag}";
-    license = with lib.licenses; [
-      gpl3Only
-      {
-        fullName = "Exegol Software License (ESL) - Version 1.0";
-        url = "https://docs.exegol.com/legal/software-license";
-        # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
-        free = false;
-        redistributable = false;
-      }
-    ];
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
+    license = licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       _0b11stan
       charB66
     ];

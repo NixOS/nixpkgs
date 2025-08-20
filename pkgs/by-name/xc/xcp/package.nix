@@ -2,44 +2,29 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
-  acl,
-  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "xcp";
-  version = "0.24.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "tarka";
-    repo = "xcp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-TI9lveFJsb/OgGQRiPW5iuatB8dsc7yxBs1rb148nEY=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-W9gSVZcL171ibcBBblQo1+baux78q+ZuGAOC7nAyQ20=";
   };
 
-  cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
+  # no such file or directory errors
+  doCheck = false;
 
-  checkInputs = [ acl ];
+  cargoHash = "sha256-P6A1tO+XlZobvptwfJ4KH6iE/p/T1Md1sOSKZ/H/xt4=";
 
-  # disable tests depending on special filesystem features
-  checkNoDefaultFeatures = true;
-  checkFeatures = [
-    "test_no_reflink"
-    "test_no_sparse"
-    "test_no_extents"
-    "test_no_acl"
-    "test_no_xattr"
-    "test_no_perms"
-  ];
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Extended cp(1)";
     homepage = "https://github.com/tarka/xcp";
-    changelog = "https://github.com/tarka/xcp/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ lom ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lom ];
     mainProgram = "xcp";
   };
-})
+}

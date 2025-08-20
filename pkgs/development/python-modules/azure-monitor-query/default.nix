@@ -1,24 +1,22 @@
 {
-  lib,
   azure-cli,
   azure-core,
   buildPythonPackage,
   fetchPypi,
   isodate,
+  lib,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-monitor-query";
-  version = "2.0.0";
-
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "azure_monitor_query";
-    inherit version;
-    hash = "sha256-ewXy/KxPtn/J93p9TF2YoPMJn7c7V8aewbCAdzmUZxs=";
+    inherit pname version;
+    hash = "sha256-aZxvPFlC8J2pjO8nP/u3QDkE7EP5PA1j8Qo2e0R54Ak=";
   };
 
   nativeBuildInputs = [ setuptools ];

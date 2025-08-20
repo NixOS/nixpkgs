@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test_apipkg.py" ];
+  pytestFlagsArray = [ "test_apipkg.py" ];
 
   pythonImportsCheck = [ "apipkg" ];
 

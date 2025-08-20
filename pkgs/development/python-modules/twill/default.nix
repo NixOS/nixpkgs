@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flask,
   httpx,
   lxml,
   pyparsing,
@@ -14,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "twill";
-  version = "3.3";
+  version = "3.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IprmAuqwzMwB6ryw0GsdRfeFK6ABP4nBM6VdlfgGNoQ=";
+    hash = "sha256-/WIcM/zQ2UjGlGiJRYg9iTCQayzisxGBa5P0/2FDK2Q=";
   };
 
   pythonRelaxDeps = [ "lxml" ];
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    flask
     pytestCheckHook
     quixote
   ];

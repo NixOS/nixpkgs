@@ -1,24 +1,24 @@
 {
-  lib,
-  gitMinimal,
   buildGoModule,
   fetchFromGitHub,
+  lib,
   installShellFiles,
+  git,
   makeWrapper,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "mani";
-  version = "0.31.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-sV3yxtLlOTtCCj0kNstJ07cvI+B+rL4QNPQKGo98V6A=";
+    rev = "v${version}";
+    sha256 = "sha256-LxW9LPK4cXIXhBWPhOYWLeV5PIf+o710SWX8JVpZhPI=";
   };
 
-  vendorHash = "sha256-PnQocOtnIBl0+5mDG7irEqGjAnzJ9Wk/fA4NW/nU+zw=";
+  vendorHash = "sha256-8ckflry+KsEu+QgqjocXg6yyfS9R7fCfCMXwUqUSlhE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,7 +27,8 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X github.com/alajmo/mani/cmd.version=${finalAttrs.version}"
+    "-w"
+    "-X github.com/alajmo/mani/cmd.version=${version}"
   ];
 
   postInstall = ''
@@ -37,7 +38,7 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/mani completion zsh)
 
     wrapProgram $out/bin/mani \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+      --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
   # Skip tests
@@ -45,12 +46,17 @@ buildGoModule (finalAttrs: {
   # know how to wrap the dependencies for these integration tests so skip for now.
   doCheck = false;
 
-  meta = {
-    changelog = "https://github.com/alajmo/mani/releases/tag/v${finalAttrs.version}";
+  meta = with lib; {
     description = "CLI tool to help you manage multiple repositories";
-    homepage = "https://manicli.com";
-    license = lib.licenses.mit;
     mainProgram = "mani";
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    longDescription = ''
+      mani is a CLI tool that helps you manage multiple repositories. It's useful
+      when you are working with microservices, multi-project systems, many
+      libraries or just a bunch of repositories and want a central place for
+      pulling all repositories and running commands over them.
+    '';
+    homepage = "https://manicli.com/";
+    changelog = "https://github.com/alajmo/mani/releases/tag/v${version}";
+    license = licenses.mit;
   };
-})
+}

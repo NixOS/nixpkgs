@@ -17,10 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
   };
 
-  pythonRelaxDeps = [
-    "watchfiles"
-  ];
-
   build-system = [
     python3.pkgs.babel
     python3.pkgs.pdm-backend
@@ -47,15 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   # no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nb_cli"
-    "nb_cli.cli"
-    "nb_cli.compat"
-    "nb_cli.config"
-    "nb_cli.handlers"
-    "nb_cli.i18n"
-    "nb_cli.log"
-  ];
+  pythonImportsCheck = [ "nb_cli" ];
 
   passthru.tests = {
     version = testers.testVersion { package = nb-cli; };

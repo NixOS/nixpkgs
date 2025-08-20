@@ -2,25 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lalrpop";
-  version = "0.22.2";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
     rev = version;
-    hash = "sha256-/mk4sTgwxBrB+LEBbWv4OQEEh2P2KVSh6v5ry9/Et4s=";
+    hash = "sha256-cFwBck+bdOjhF6rQQj03MOO+XCsrII5c4Xvhsw12ETA=";
   };
 
-  cargoHash = "sha256-3Lm25X2QQQ4+3Spe6Nz5PkIvFcgwHQ+hqAdjsFesgro=";
+  cargoHash = "sha256-zkPLas+fQQzm7LlWNpTooUR/e30KMS9OET6PMwQ2yAA=";
 
   patches = [
-    (replaceVars ./use-correct-binary-path-in-tests.patch {
+    (substituteAll {
+      src = ./use-correct-binary-path-in-tests.patch;
       target_triple = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];

@@ -44,20 +44,21 @@ assert enableQt -> qwt != null;
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    ncurses
-    libuuid
-    libjpeg
-    zlib
-    libewf
-  ]
-  ++ lib.optional enableNtfs ntfs3g
-  ++ lib.optional enableExtFs e2fsprogs
-  ++ lib.optionals enableQt [
-    qtbase
-    qttools
-    qwt
-  ];
+  buildInputs =
+    [
+      ncurses
+      libuuid
+      libjpeg
+      zlib
+      libewf
+    ]
+    ++ lib.optional enableNtfs ntfs3g
+    ++ lib.optional enableExtFs e2fsprogs
+    ++ lib.optionals enableQt [
+      qtbase
+      qttools
+      qwt
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 

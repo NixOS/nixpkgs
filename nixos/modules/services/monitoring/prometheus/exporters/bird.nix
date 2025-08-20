@@ -45,7 +45,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      SupplementaryGroups = "bird";
+      SupplementaryGroups = singleton (if cfg.birdVersion == 1 then "bird" else "bird2");
       ExecStart = ''
         ${pkgs.prometheus-bird-exporter}/bin/bird_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

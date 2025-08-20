@@ -19,14 +19,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cher-nov";
-    repo = "cryptg";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-GCTVxCJQvpvHpzaU+OaFM/AKoRvxLyA0u6VIV+94UTY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-+RNH9h40UTGUcr0PPJLllhAg81LM1IQnYKmrNxfPPv8=";
+    hash = "sha256-BqtswBTurZoKw7DR3S7woDKLqAqIjKdSS5TBwCI+Bps=";
   };
 
   build-system = [

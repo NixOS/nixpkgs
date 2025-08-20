@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open5gs";
-  version = "2.7.6";
+  version = "2.7.2";
 
   diameter = fetchFromGitHub {
     owner = "open5gs";
     repo = "freeDiameter";
-    rev = "13f5a5996b5fa1a46ed780635c7fc6fcd09b4290"; # r1.5.0
-    hash = "sha256-S8jL+9rW9RDwQc7NU8MOzMe9/iRbshWa2QLqXoiV85Q=";
+    rev = "20196a265aecb7b1573ceb526bb619e092c1fd3f"; # r1.5.0
+    hash = "sha256-0sxzQtKBx313+x3TRsmeswAq90Vk5jNA//rOJcEZJTQ=";
   };
 
   libtins = fetchFromGitHub {
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open5gs";
     repo = "open5gs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2k+S+OXfdskJPtDUFSxb/+2UZcUiOZzRSSGgsEJWolc=";
+    hash = "sha256-XSDjVW+5l2trrilKMcSfX6QIfh/ijWxjoJg33Bn1DBU=";
   };
 
   webui = buildNpmPackage {
@@ -129,10 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "4G/5G core network components";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      bot-wxt1221
-      xddxdd
-    ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     changelog = "https://github.com/open5gs/open5gs/releases/tag/v${finalAttrs.version}";
   };
 })

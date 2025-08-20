@@ -56,7 +56,7 @@ bash.runCommand "${pname}-${version}"
       description = "GNU Core Utilities";
       homepage = "https://www.gnu.org/software/coreutils";
       license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = platforms.unix;
     };
   }

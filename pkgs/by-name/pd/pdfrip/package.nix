@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PDF password cracking utility";
     homepage = "https://github.com/mufeedvh/pdfrip";
     changelog = "https://github.com/mufeedvh/pdfrip/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "pdfrip";
   };
 }

@@ -7,24 +7,15 @@
   runCommand,
   vimPlugins,
   tree-sitter-grammars,
-  writableTmpDirAsHomeHook,
 }:
 
 self: super:
 
 let
   inherit (neovimUtils) grammarToPlugin;
-
-  overrides = prev: {
+  generatedGrammars = callPackage ./generated.nix {
+    inherit (tree-sitter) buildGrammar;
   };
-
-  generatedGrammars =
-    let
-      generated = callPackage ./generated.nix {
-        inherit (tree-sitter) buildGrammar;
-      };
-    in
-    lib.overrideExisting generated (overrides generated);
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
 
@@ -89,22 +80,19 @@ in
         in
         runCommand "nvim-treesitter-check-queries"
           {
-            nativeBuildInputs = [
-              nvimWithAllGrammars
-              writableTmpDirAsHomeHook
-            ];
+            nativeBuildInputs = [ nvimWithAllGrammars ];
             CI = true;
           }
           ''
             touch $out
+            export HOME=$(mktemp -d)
             ln -s ${withAllGrammars}/CONTRIBUTING.md .
-            export ALLOWED_INSTALLATION_FAILURES=ipkg,norg,verilog
 
             nvim --headless "+luafile ${withAllGrammars}/scripts/check-queries.lua" | tee log
 
             if grep -q Warning log; then
-              echo "WARNING: warnings were emitted by the check"
-              echo "Check if they were expected warnings!"
+              echo "Error: warnings were emitted by the check"
+              exit 1
             fi
           '';
 

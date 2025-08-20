@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];
-  sourceRoot = "${finalAttrs.src.name}/xar";
+  sourceRoot = "source/xar";
 
   outputs = [
     "out"
@@ -68,32 +68,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # For some reason libxml2 package headers are in subdirectory and thus aren’t
-      # picked up by stdenv’s C compiler wrapper (see ccWrapper_addCVars). This
-      # doesn’t really belong here and either should be part of libxml2 package or
-      # libxml2 in Nixpkgs can just fix their header paths.
-      "-isystem ${libxml2.dev}/include/libxml2"
-    ]
-    ++ lib.optionals stdenv.cc.isGNU [
-      # fix build on GCC 14
-      "-Wno-error=implicit-function-declaration"
-      "-Wno-error=incompatible-pointer-types"
-    ]
-  );
+  # For some reason libxml2 package headers are in subdirectory and thus aren’t
+  # picked up by stdenv’s C compiler wrapper (see ccWrapper_addCVars). This
+  # doesn’t really belong here and either should be part of libxml2 package or
+  # libxml2 in Nixpkgs can just fix their header paths.
+  env.NIX_CFLAGS_COMPILE = "-isystem ${libxml2.dev}/include/libxml2";
 
-  buildInputs = [
-    # NB we use OpenSSL instead of CommonCrypto on Darwin.
-    openssl
-    zlib
-    libxml2
-    bzip2
-    xz
-    e2fsprogs
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux acl
-  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs =
+    [
+      # NB we use OpenSSL instead of CommonCrypto on Darwin.
+      openssl
+      zlib
+      libxml2
+      bzip2
+      xz
+      e2fsprogs
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux acl
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let
@@ -180,10 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/apple-oss-distributions/xar";
-    description = "Easily extensible archive format";
+    description = "An easily extensible archive format";
     license = lib.licenses.bsd3;
-    maintainers = lib.attrValues { inherit (lib.maintainers) tie; };
-    teams = [ lib.teams.darwin ];
+    maintainers =
+      lib.teams.darwin.members
+      ++ lib.attrValues { inherit (lib.maintainers) copumpkin tie; };
     platforms = lib.platforms.unix;
     mainProgram = "xar";
   };

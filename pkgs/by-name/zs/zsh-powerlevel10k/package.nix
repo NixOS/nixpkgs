@@ -7,20 +7,19 @@
   bash,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.20.15";
+  version = "1.20.14";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     # upstream doesn't seem to use tags anymore
-    rev = "36f3045d69d1ba402db09d09eb12b42eebe0fa3b";
-    hash = "sha256-BRJyGn+gTGUWifpJ1ziBKVHACcWw+R5N/HdUi8HzSvY=";
+    rev = "5e26473457d819fe148f7fff32db1082dae72012";
+    hash = "sha256-/+FEkgBR6EOTaCAc15vYGWNih2QZkN27ae6LMXlXZU4=";
   };
 
   strictDeps = true;
-
   buildInputs = [ bash ];
 
   patches = [
@@ -30,19 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHook preInstall
-
     install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
     install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
     install -D config/* --target-directory=$out/share/zsh-powerlevel10k/config
     install -D internal/* --target-directory=$out/share/zsh-powerlevel10k/internal
     cp -R gitstatus $out/share/zsh-powerlevel10k/gitstatus
-
-    runHook postInstall
   '';
 
   meta = {
-    changelog = "https://github.com/romkatv/powerlevel10k/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/romkatv/powerlevel10k/releases/tag/v${version}";
     description = "Fast reimplementation of Powerlevel9k ZSH theme";
     longDescription = ''
       To make use of this derivation, use
@@ -51,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/romkatv/powerlevel10k";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
-})
+}

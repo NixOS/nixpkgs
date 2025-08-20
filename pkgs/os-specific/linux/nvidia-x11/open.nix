@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
   nvidia_x11,
   hash,
   patches ? [ ],
@@ -26,12 +25,10 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernelModuleMakeFlags ++ [
-      "IGNORE_PREEMPT_RT_PRESENCE=1"
+    makeFlags = kernel.makeFlags ++ [
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-      "DATE="
       {
         aarch64-linux = "TARGET_ARCH=aarch64";
         x86_64-linux = "TARGET_ARCH=x86_64";

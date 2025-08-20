@@ -9,7 +9,7 @@
   volk,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sigutils";
   version = "unstable-2022-07-05";
 

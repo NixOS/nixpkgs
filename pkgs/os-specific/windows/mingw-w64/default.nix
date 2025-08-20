@@ -7,6 +7,11 @@
   crt ? stdenv.hostPlatform.libc,
 }:
 
+assert lib.assertOneOf "crt" crt [
+  "msvcrt"
+  "ucrt"
+];
+
 stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit (mingw_w64_headers) version src meta;
@@ -30,7 +35,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ mingw_w64_headers ];
+  buildInputs = [ windows.mingw_w64_headers ];
   hardeningDisable = [
     "stackprotector"
     "fortify"

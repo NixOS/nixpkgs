@@ -2,37 +2,38 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+  stdenv,
+  darwin,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "jnv";
-  version = "0.6.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VjT0S+eEaO8FOPb1grIpheeP9v1dCpV7FRHn+nJXOEM=";
+    rev = "v${version}";
+    hash = "sha256-ouWtMos4g9uIFEFeukgq8VgcxlSCzJnSYFNdNmOD5C8=";
   };
 
-  cargoHash = "sha256-dR9cb3TBxrRGP3BFYro/nGe5XVEfJuTZbQLo+FUfFNs=";
+  cargoHash = "sha256-+/Xk5bb8GpyeKZii5rG/qboIxUqOyxwCSUCL9jtGHys=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      CoreGraphics
+      AppKit
+    ]
+  );
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Interactive JSON filter using jq";
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
       nealfennimore
       nshalman
     ];
   };
-})
+}

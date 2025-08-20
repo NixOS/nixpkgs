@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.10.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WtjHyqxibP6bAO9HsXuqAW/Y1qgt/Tpj401CIk4bY7o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7IAkmlzgiPVd8yRv7LU5a7HWCB+eQk1Ur1KwZupwty0=";
   };
 
   outputs = [
@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postBuild = ''
-    pushd ../docs
+    pushd ../doc
     makeinfo *texi
     popd
   '';
 
   postInstall = ''
-    pushd ../docs
+    pushd ../doc
     install -Dm644 -t ''${!outputInfo}/share/info *info
     popd
   '';
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mighty JavaScript engine";
     license = lib.licenses.mit;
     mainProgram = "qjs";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
 })

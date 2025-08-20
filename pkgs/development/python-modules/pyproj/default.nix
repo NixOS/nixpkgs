@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  replaceVars,
+  substituteAll,
 
   certifi,
   cython,
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.7.1";
+  version = "3.7.0";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
@@ -26,12 +26,13 @@ buildPythonPackage rec {
     owner = "pyproj4";
     repo = "pyproj";
     tag = version;
-    hash = "sha256-tVzifc+Y5u9Try5FHt67rj/+zaok0JNn3M8plMqX90g=";
+    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
   };
 
   # force pyproj to use ${proj}
   patches = [
-    (replaceVars ./001.proj.patch {
+    (substituteAll {
+      src = ./001.proj.patch;
       proj = proj;
       projdev = proj.dev;
     })
@@ -108,10 +109,12 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      lsix
-      dotlambda
-    ];
-    teams = [ teams.geospatial ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        lsix
+        dotlambda
+      ];
   };
 }

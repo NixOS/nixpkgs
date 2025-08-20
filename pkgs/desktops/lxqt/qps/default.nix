@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qps";
-  version = "2.11.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-uWKTcFO5CoTU5jXB9x5tQ0goEvUpMaeUlMlTG2/xvYg=";
+    hash = "sha256-FJw1J4c8oLBo7adl1uhCuS+o/ZhJAOyLmbjUgtdt0ss=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qps";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

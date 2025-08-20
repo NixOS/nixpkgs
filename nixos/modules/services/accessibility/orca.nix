@@ -20,7 +20,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    systemd.services.display-manager.path = [ cfg.package ];
     services.speechd.enable = true;
   };
 }

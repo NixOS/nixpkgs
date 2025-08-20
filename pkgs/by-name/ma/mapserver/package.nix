@@ -17,10 +17,10 @@
   harfbuzz,
   libjpeg,
   libpng,
-  libpq,
   librsvg,
   libxml2,
   pkg-config,
+  postgresql,
   proj,
   protobufc,
   python3,
@@ -39,15 +39,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-XEjRklbvYV7UoVX12iW6s1mS8pzIljla488CQNuFfto=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ]
-  ++ lib.optionals withPython [
-    swig
-    python3.pkgs.setuptools
-    python3.pkgs.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals withPython [
+      swig
+      python3.pkgs.setuptools
+    ];
 
   buildInputs = [
     cairo
@@ -61,14 +61,13 @@ stdenv.mkDerivation rec {
     harfbuzz
     libjpeg
     libpng
-    libpq
     librsvg
     libxml2
+    postgresql
     proj
     protobufc
     zlib
-  ]
-  ++ lib.optional withPython python3;
+  ] ++ lib.optional withPython python3;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_KML" true)
@@ -83,19 +82,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
-  postInstall = lib.optionalString withPython ''
-    mkdir -p $out/${python3.sitePackages}
-    cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
-  '';
-
-  pythonImportsCheck = [ "mapscript" ];
-
   meta = {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members;
     platforms = lib.platforms.unix;
   };
 }

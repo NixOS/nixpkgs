@@ -1,10 +1,18 @@
 # This test does a basic functionality check for alice-lg
-{
-  pkgs,
-  ...
-}:
 
 {
+  system ? builtins.currentSystem,
+  pkgs ? import ../.. {
+    inherit system;
+    config = { };
+  },
+}:
+
+let
+  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+  inherit (pkgs.lib) optionalString;
+in
+makeTest {
   name = "alice-lg";
   nodes = {
     host1 = {

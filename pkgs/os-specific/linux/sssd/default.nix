@@ -61,13 +61,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.7";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-29KTvwm9ei1Z7yTSYmzcZtZMVvZpFWIlcLMlvRyWp/w=";
+    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
   };
 
   postPatch = ''
@@ -80,29 +80,31 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${libxml2.dev}/include/libxml2"
   ];
 
-  preConfigure = ''
-    export SGML_CATALOG_FILES="${docbookFiles}"
-    export PATH=$PATH:${openldap}/libexec
+  preConfigure =
+    ''
+      export SGML_CATALOG_FILES="${docbookFiles}"
+      export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
+      export PATH=$PATH:${openldap}/libexec
 
-    configureFlagsArray=(
-      --prefix=$out
-      --sysconfdir=/etc
-      --localstatedir=/var
-      --enable-pammoddir=$out/lib/security
-      --with-os=fedora
-      --with-pid-path=/run
-      --with-python3-bindings
-      --with-syslog=journald
-      --without-selinux
-      --without-semanage
-      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
-      --with-ldb-lib-dir=$out/modules/ldb
-      --with-nscd=${glibc.bin}/sbin/nscd
-    )
-  ''
-  + lib.optionalString withSudo ''
-    configureFlagsArray+=("--with-sudo")
-  '';
+      configureFlagsArray=(
+        --prefix=$out
+        --sysconfdir=/etc
+        --localstatedir=/var
+        --enable-pammoddir=$out/lib/security
+        --with-os=fedora
+        --with-pid-path=/run
+        --with-python3-bindings
+        --with-syslog=journald
+        --without-selinux
+        --without-semanage
+        --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
+        --with-ldb-lib-dir=$out/modules/ldb
+        --with-nscd=${glibc.bin}/sbin/nscd
+      )
+    ''
+    + lib.optionalString withSudo ''
+      configureFlagsArray+=("--with-sudo")
+    '';
 
   enableParallelBuilding = true;
   # Disable parallel install due to missing depends:
@@ -127,12 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     nfs-utils
     p11-kit
-    (python3.withPackages (
-      p: with p; [
-        distutils
-        python-ldap
-      ]
-    ))
+    python3
     popt
     talloc
     tdb
@@ -150,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     libuuid
+    python3.pkgs.python-ldap
     systemd
     nspr
     check

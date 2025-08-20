@@ -2,18 +2,19 @@
   lib,
   stdenv,
   kernel,
-  fetchFromGitHub,
+  fetchFromGitea,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "unstable-2025-06-17";
+  version = "unstable-2022-11-04";
 
-  src = fetchFromGitHub {
-    owner = "AliEmreSenel";
+  src = fetchFromGitea {
+    domain = "git.exozy.me";
+    owner = "a";
     repo = "zenpower3";
-    rev = "41e042935ee9840c0b9dd55d61b6ddd58bc4fde6";
-    hash = "sha256-0U/JmEd6OJJeUm1ZLFYxpKH15n7+QTWYOgtKIFAuf/4=";
+    rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
+    sha256 = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
   };
 
   hardeningDisable = [ "pic" ];

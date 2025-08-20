@@ -22,8 +22,6 @@
         user = "alice";
       };
 
-      programs.ydotool.enable = true;
-
       services.xserver.enable = true;
       services.displayManager.defaultSession = lib.mkForce "miracle-wm";
 
@@ -61,7 +59,7 @@
         ];
 
         # To help with OCR
-        etc."xdg/foot/foot.ini".source = (pkgs.formats.ini { }).generate "foot.ini" {
+        etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
           main = {
             font = "inconsolata:size=16";
           };
@@ -71,7 +69,7 @@
             regular2 = foreground;
           };
         };
-        etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
+        etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
           font = rec {
             normal.family = "Inconsolata";
             bold.family = normal.family;
@@ -116,17 +114,7 @@
           machine.wait_for_file("/tmp/test-wayland-exit-ok")
           machine.copy_from_vm("/tmp/test-wayland.out")
           machine.screenshot("foot_wayland_info")
-
-          # please actually register that we want to close the window
-          machine.succeed("ydotool mousemove -- 10 10")
-          machine.sleep(3)
-
           machine.send_chars("exit\n")
-
-          # please actually register that we want to close the window
-          machine.succeed("ydotool mousemove -- 10 10")
-          machine.sleep(3)
-
           machine.wait_until_fails("pgrep foot")
 
       # Test XWayland
@@ -137,17 +125,7 @@
           machine.wait_for_file("/tmp/test-x11-exit-ok")
           machine.copy_from_vm("/tmp/test-x11.out")
           machine.screenshot("alacritty_glinfo")
-
-          # please actually register that we want to close the window
-          machine.succeed("ydotool mousemove -- 10 10")
-          machine.sleep(3)
-
           machine.send_chars("exit\n")
-
-          # please actually register that we want to close the window
-          machine.succeed("ydotool mousemove -- 10 10")
-          machine.sleep(3)
-
           machine.wait_until_fails("pgrep alacritty")
     '';
 }

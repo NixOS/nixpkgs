@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     mainProgram = "crond";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
 })

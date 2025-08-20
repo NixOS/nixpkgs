@@ -13,7 +13,7 @@
   cacert,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
 
   pname = "irmin-graphql";
 

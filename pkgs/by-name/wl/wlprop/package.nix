@@ -10,7 +10,7 @@
   bash,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wlprop";
   version = "unstable-2022-08-18";
 

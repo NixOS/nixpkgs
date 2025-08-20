@@ -3,25 +3,24 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
   bc,
 }:
 
 stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2025-05-08";
+  version = "${kernel.version}-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
-    rev = "d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf";
-    hash = "sha256-ExT7ONQeejFoMwUUXKua7wMnRi+3IYayLmlWIEWteK4=";
+    rev = "2dce552dc6aa0cdab427bfa810c3df002eab0078";
+    hash = "sha256-8hGAfZyDCGl0RnPnYjc7iMEulZvoIGe2ghfIfoiz7ZI=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -38,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Realtek rtl8821cu driver";
-    homepage = "https://github.com/morrownr/8821cu-20210916";
+    homepage = "https://github.com/morrownr/8821cu";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.contrun ];

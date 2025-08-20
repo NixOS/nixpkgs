@@ -4,6 +4,8 @@
   fetchFromGitHub,
   protobuf,
   rustfmt,
+  stdenv,
+  darwin,
   pkg-config,
   openssl,
 }:
@@ -30,13 +32,17 @@ in
     pname = "teos";
     inherit version src;
 
-    cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
+    cargoHash = "sha256-U0imKEPszlBOaS6xEd3kfzy/w2SYe3EY/E1e0L+ViDk=";
 
     buildAndTestSubdir = "teos";
 
     nativeBuildInputs = [
       protobuf
       rustfmt
+    ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
     ];
 
     passthru.updateScript = updateScript;
@@ -52,7 +58,7 @@ in
     pname = "teos-watchtower-plugin";
     inherit version src;
 
-    cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
+    cargoHash = "sha256-3ke1qTFw/4I5dPLuPjIGp1n2C/eRfPB7A6ErMFfwUzE=";
 
     buildAndTestSubdir = "watchtower-plugin";
 
@@ -62,9 +68,13 @@ in
       rustfmt
     ];
 
-    buildInputs = [
-      openssl
-    ];
+    buildInputs =
+      [
+        openssl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.apple_sdk.frameworks.SystemConfiguration
+      ];
 
     passthru.updateScript = updateScript;
 

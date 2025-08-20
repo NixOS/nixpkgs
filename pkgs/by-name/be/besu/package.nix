@@ -9,12 +9,12 @@
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "besu";
   version = "24.1.2";
 
   src = fetchurl {
-    url = "https://hyperledger.jfrog.io/artifactory/besu-binaries/besu/${finalAttrs.version}/besu-${finalAttrs.version}.tar.gz";
+    url = "https://hyperledger.jfrog.io/artifactory/${pname}-binaries/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
   };
 
@@ -26,20 +26,20 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r bin $out/
     mkdir -p $out/lib
     cp -r lib $out/
-    wrapProgram $out/bin/besu \
+    wrapProgram $out/bin/${pname} \
       --set JAVA_HOME "${jre}" \
       --suffix ${
         if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
-      } : ${lib.makeLibraryPath finalAttrs.buildInputs}
+      } : ${lib.makeLibraryPath buildInputs}
   '';
 
   passthru.tests = {
     version = testers.testVersion {
       package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
+      version = "v${version}";
     };
     jemalloc =
-      runCommand "besu-test-jemalloc"
+      runCommand "${pname}-test-jemalloc"
         {
           nativeBuildInputs = [ finalAttrs.finalPackage ];
           meta.platforms = with lib.platforms; linux;

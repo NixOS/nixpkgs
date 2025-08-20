@@ -1,26 +1,32 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchurl,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation {
   pname = "noip";
-  version = "3.3.0";
+  version = "2.1.9-1";
 
   src = fetchurl {
-    url = "https://dmej8g5cpdyqd.cloudfront.net/downloads/noip-duc_${finalAttrs.version}.tar.gz";
-    hash = "sha256-e50Wv0dF4/8zp/z2Xp9x4YYWIbAcQ8U8OXoNAE/1ADA=";
+    url = "https://www.noip.com/client/linux/noip-duc-linux.tar.gz";
+    sha256 = "82b9bafab96a0c53b21aaef688bf70b3572e26217b5e2072bdb09da3c4a6f593";
   };
 
-  cargoHash = "sha256-IX1VrUvix50fFW9Pr6VxrpIhBBTkUuoNH+lXnA41I/4=";
+  makeFlags = [ "PREFIX=\${out}" ];
+  installPhase = ''
+    mkdir -p $out/bin
+    cp noip2 $out/bin
+  '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Dynamic DNS daemon for no-ip accounts";
     homepage = "http://noip.com/download?page=linux";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.iand675 ];
-    platforms = lib.platforms.linux;
-    mainProgram = "noip-duc";
+    platforms = platforms.linux;
+    mainProgram = "noip2";
   };
-})
+}

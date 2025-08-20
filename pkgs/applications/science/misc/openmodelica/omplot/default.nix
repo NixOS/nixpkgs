@@ -8,7 +8,7 @@
   mkOpenModelicaDerivation,
 }:
 
-mkOpenModelicaDerivation {
+mkOpenModelicaDerivation rec {
   pname = "omplot";
   omdir = "OMPlot";
   omdeps = [ openmodelica.omcompiler ];

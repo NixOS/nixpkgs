@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sagb";
-    repo = "alttab";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
   };
 

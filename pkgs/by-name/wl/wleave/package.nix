@@ -2,40 +2,39 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  installShellFiles,
-  pkg-config,
-  scdoc,
-  wrapGAppsHook4,
   at-spi2-atk,
+  pkg-config,
   glib,
-  gtk4,
-  gtk4-layer-shell,
+  gtk3,
+  gtk-layer-shell,
+  installShellFiles,
+  scdoc,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
-  version = "0.5.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
     rev = version;
-    hash = "sha256-xl0JOepQDvYdeTv0LFYzp8QdufKXkayJcHklLBjupeA=";
+    hash = "sha256-PkEj0RlSxhxG9qOJkuMTVj6r0lxsm7V8b1AIaCVaXCQ=";
   };
 
-  cargoHash = "sha256-csnArsVk/Ifhi3aO3bSG0mkSA81KACxR/xC1L8JJfmc=";
+  cargoHash = "sha256-ivKPGA5UADKT47CL5jSOB4ZEfKh9uJkXgv9vfvEnBzw=";
 
   nativeBuildInputs = [
-    installShellFiles
     pkg-config
+    installShellFiles
     scdoc
-    wrapGAppsHook4
   ];
 
   buildInputs = [
     at-spi2-atk
+    gtk3
+    gtk-layer-shell
     glib
-    gtk4
-    gtk4-layer-shell
   ];
 
   postPatch = ''
@@ -63,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Wayland-native logout script written in GTK4";
+    description = "Wayland-native logout script written in GTK3";
     homepage = "https://github.com/AMNatty/wleave";
     license = licenses.mit;
     mainProgram = "wleave";

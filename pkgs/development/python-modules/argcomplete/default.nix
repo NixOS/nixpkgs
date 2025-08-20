@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  hatchling,
-  hatch-vcs,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.6.2";
+  version = "3.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = "argcomplete";
     tag = "v${version}";
-    hash = "sha256-2o0gQtkQP9cax/8SUd9+65TwAIAjBYnI+ufuzZtrVyo=";
+    hash = "sha256-Tihb61LGTZ8tKrKKlxZ8scII2+pgzDHUkwVn54zlrug=";
   };
 
   build-system = [
-    hatchling
-    hatch-vcs
+    setuptools
+    setuptools-scm
   ];
 
   # Tries to build and install test packages which fails
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    changelog = "https://github.com/kislyuk/argcomplete/blob/${src.tag}/Changes.rst";
+    changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
     downloadPage = "https://github.com/kislyuk/argcomplete";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mobile-shell";
-    repo = "mosh";
+    repo = pname;
     rev = "mosh-${version}";
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
     openssl
     bash-completion
     perl
-  ]
-  ++ lib.optional withUtempter libutempter;
+  ] ++ lib.optional withUtempter libutempter;
 
   strictDeps = true;
 

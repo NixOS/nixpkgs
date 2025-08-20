@@ -47,6 +47,11 @@
   writeShellScript,
 }:
 let
+  # zerocallusedregs hardening breaks WeChat
+  glibcWithoutHardening = stdenv.cc.libc.overrideAttrs (old: {
+    hardeningDisable = (old.hardeningDisable or [ ]) ++ [ "zerocallusedregs" ];
+  });
+
   wechat-uos-env = stdenvNoCC.mkDerivation {
     meta.priority = 1;
     name = "wechat-uos-env";
@@ -63,6 +68,9 @@ let
   };
 
   wechat-uos-runtime = with xorg; [
+    # Make sure our glibc without hardening gets picked up first
+    (lib.hiPrio glibcWithoutHardening)
+
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -210,12 +218,6 @@ buildFHSEnv {
 
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
-
-    # See https://github.com/NixOS/nixpkgs/issues/413491
-    sed -i \
-      -e '/\[Desktop Entry\]/a\' \
-      -e 'StartupWMClass=wechat' \
-      $out/share/applications/com.tencent.wechat.desktop
   '';
   targetPkgs = pkgs: [ wechat-uos-env ];
 

@@ -1,33 +1,20 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (8.0.2)
-      base64
-      benchmark (>= 0.3)
-      bigdecimal
-      concurrent-ruby (~> 1.0, >= 1.3.1)
-      connection_pool (>= 2.2.5)
-      drb
+    activesupport (7.0.4.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
-      logger (>= 1.4.2)
       minitest (>= 5.1)
-      securerandom (>= 0.3)
-      tzinfo (~> 2.0, >= 2.0.5)
-      uri (>= 0.13.1)
-    base64 (0.3.0)
-    benchmark (0.4.1)
-    bigdecimal (3.2.2)
+      tzinfo (~> 2.0)
     cli-ui (1.5.1)
     color (1.8)
-    coltrane (4.1.2)
+    coltrane (4.1.1)
       activesupport (> 5.2)
       color (~> 1.8)
       dry-monads (~> 0.4)
-      gambiarra (= 0.0.6)
+      gambiarra (~> 0)
       paint (~> 2.0)
-    concurrent-ruby (1.3.5)
-    connection_pool (2.5.3)
-    drb (2.2.3)
+    concurrent-ruby (1.2.2)
     dry-core (0.9.1)
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
@@ -35,27 +22,24 @@ GEM
     dry-monads (0.4.0)
       dry-core (~> 0.3, >= 0.3.3)
       dry-equalizer
-    gambiarra (0.0.6)
+    gambiarra (0.0.5)
       activesupport (> 5.2)
       cli-ui (~> 1.1)
       thor (~> 1.1.0)
-    i18n (1.14.7)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    logger (1.7.0)
-    minitest (5.25.5)
+    minitest (5.18.0)
     paint (2.3.0)
-    securerandom (0.4.1)
     thor (1.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    uri (1.0.3)
-    zeitwerk (2.7.3)
+    zeitwerk (2.6.7)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   coltrane
 
 BUNDLED WITH
-   2.6.9
+   2.3.26

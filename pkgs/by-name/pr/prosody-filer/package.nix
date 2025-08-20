@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "prosody-filer";
   version = "unstable-2021-05-24";
 

@@ -9,7 +9,6 @@
 python3Packages.buildPythonPackage rec {
   pname = "mailnag-goa-plugin";
   version = "2.0.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pulb";

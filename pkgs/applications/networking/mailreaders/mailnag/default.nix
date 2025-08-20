@@ -16,7 +16,7 @@
   # Available plugins (can be overridden)
   availablePlugins,
   # Used in the withPlugins interface at passthru, can be overrided directly, or
-  # preferably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
+  # prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
   mailnag,
   userPlugins ? [ ],
   pluginsDeps ? [ ],
@@ -25,7 +25,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
   version = "2.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pulb";
@@ -44,8 +43,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     libsecret
-  ]
-  ++ pluginsDeps;
+  ] ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext

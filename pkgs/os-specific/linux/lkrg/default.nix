@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
 }:
 let
   isKernelRT =
@@ -26,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KERNEL=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

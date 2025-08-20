@@ -6,7 +6,7 @@
   fetchpatch,
   fetchpatch2,
   scons,
-  boost183,
+  boost,
   dvdauthor,
   dvdplusrwtools,
   enca,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost183
+    boost
     dvdauthor
     dvdplusrwtools
     enca

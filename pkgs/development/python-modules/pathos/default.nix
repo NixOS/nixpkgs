@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.3.4";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = "pathos";
+    repo = pname;
     tag = version;
-    hash = "sha256-oVqWrX40umazNw/ET/s3pKUwvh8ctgF9sS0U8WwFQkA=";
+    hash = "sha256-J3rwnsn/3DXmChydwNC5yvsdSk1mzvPSnSo21BwkhSE=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
-    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${src.tag}";
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = [ ];
   };

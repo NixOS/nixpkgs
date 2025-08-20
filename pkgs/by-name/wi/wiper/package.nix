@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  darwin,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -17,7 +19,9 @@ rustPlatform.buildRustPackage {
     hash = "sha256-IheSAPk1l6wJ2v4RLPIPvY/5XMfh+vJLyQ/Lc7RrCJQ=";
   };
 
-  cargoHash = "sha256-p2bUiRLI0vfOAAi4Cb8B9E8kMVS6aX4ksbF+H9gMsDs=";
+  cargoHash = "sha256-gYWTv0AXOmpx9Nc8akBMVWkESI0AtnGgvfH9hQZ0peo=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   meta = {
     description = "Disk analyser and cleanup tool";

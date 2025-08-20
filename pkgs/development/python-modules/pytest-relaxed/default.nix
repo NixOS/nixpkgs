@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "pytest_relaxed" ];
 

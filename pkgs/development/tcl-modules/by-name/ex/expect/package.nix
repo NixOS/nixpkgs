@@ -7,7 +7,7 @@
   makeWrapper,
   autoreconfHook,
   fetchpatch,
-  replaceVars,
+  substituteAll,
 }:
 
 tcl.mkTclDerivation rec {
@@ -20,7 +20,8 @@ tcl.mkTclDerivation rec {
   };
 
   patches = [
-    (replaceVars ./fix-build-time-run-tcl.patch {
+    (substituteAll {
+      src = ./fix-build-time-run-tcl.patch;
       tcl = "${buildPackages.tcl}/bin/tclsh";
     })
     # The following patches fix compilation with clang 15+

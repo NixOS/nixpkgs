@@ -10,23 +10,25 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.15.0";
+  version = "0.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
     tag = version;
-    hash = "sha256-hzPNj6hqNCnMx1iRK1c6Y70dUU/H4u6o+waEgOhyhuA=";
+    hash = "sha256-Cs78zpf3W5UZJkkUBEP6l6fi2J4OtJXGvqqQ8PWKx+8=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests/test.py" ];
 
   disabledTests = [
     # Tests require network access

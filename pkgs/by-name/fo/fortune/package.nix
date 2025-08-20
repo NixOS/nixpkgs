@@ -6,7 +6,6 @@
   recode,
   perl,
   rinutils,
-  fortune,
   withOffensive ? false,
 }:
 
@@ -25,18 +24,13 @@ stdenv.mkDerivation rec {
     cmake
     perl
     rinutils
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    # "strfile" must be in PATH for cross-compiling builds.
-    fortune
   ];
 
   buildInputs = [ recode ];
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-  ]
-  ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
+  ] ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
 
   patches = [
     (builtins.toFile "not-a-game.patch" ''

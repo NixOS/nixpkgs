@@ -6,9 +6,10 @@
   file,
   openssl,
   perl,
-  net-tools,
+  nettools,
   autoreconfHook,
   withPerlTools ? false,
+  darwin,
 }:
 let
 
@@ -65,11 +66,10 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--disable-embedded-perl"
     "--without-perl-modules"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
-    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${net-tools}/bin/netstat"
+    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
   postConfigure = ''
@@ -80,11 +80,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    net-tools
+    nettools
     file
     autoreconfHook
   ];
-  buildInputs = [ openssl ] ++ lib.optional withPerlTools perlWithPkgs;
+  buildInputs =
+    [ openssl ]
+    ++ lib.optional withPerlTools perlWithPkgs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.DiskArbitration
+    ];
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:

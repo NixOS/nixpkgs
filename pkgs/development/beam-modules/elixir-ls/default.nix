@@ -1,60 +1,77 @@
 {
   lib,
   elixir,
-  fetchpatch,
   fetchFromGitHub,
-  makeWrapper,
-  stdenv,
+  fetchMixDeps,
+  mixRelease,
   nix-update-script,
 }:
+# Based on the work of Hauleth
+# None of this would have happened without him
 
-stdenv.mkDerivation rec {
+let
   pname = "elixir-ls";
-  version = "0.28.1";
-
+  version = "0.26.2";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
+    hash = "sha256-ELjZFGzUQ14iUj2/WD55a6Yf8EMOEjb7MnCx0Nyg/vQ=";
+  };
+in
+mixRelease {
+  inherit
+    pname
+    version
+    src
+    elixir
+    ;
+
+  stripDebug = true;
+
+  mixFodDeps = fetchMixDeps {
+    pname = "mix-deps-${pname}";
+    inherit src version elixir;
+    hash = "sha256-I0u3eovTYNm0ncBCTEztg5fhLiLk+WNqcKfj3Za12zc=";
   };
 
-  patches = [
-    # fix elixir deterministic support https://github.com/elixir-lsp/elixir-ls/pull/1216
-    # remove > 0.28.1
-    (fetchpatch {
-      url = "https://github.com/elixir-lsp/elixir-ls/pull/1216.patch";
-      hash = "sha256-J1Q7XQXWYuCMq48e09deQU71DOElZ2zMTzrceZMky+0=";
-    })
+  # elixir-ls is an umbrella app
+  # override configurePhase to not skip umbrella children
+  configurePhase = ''
+    runHook preConfigure
+    mix deps.compile --no-deps-check
+    runHook postConfigure
+  '';
 
-    # patch wrapper script to remove elixir detection and inject necessary paths
-    ./launch.sh.patch
-  ];
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-
-  # for substitution
-  env.elixir = elixir;
-
-  dontConfigure = true;
-  dontBuild = true;
+  # elixir-ls require a special step for release
+  # compile and release need to be performed together because
+  # of the no-deps-check requirement
+  buildPhase = ''
+    runHook preBuild
+    mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
+    runHook postBuild
+  '';
 
   installPhase = ''
-    cp -R . $out
-    ln -s $out/VERSION $out/scripts/VERSION
-
-    substituteAllInPlace $out/scripts/launch.sh
-
+    runHook preInstall
     mkdir -p $out/bin
+    cp -Rv release $out/lib
+    # Prepare the wrapper script
+    substitute release/language_server.sh $out/bin/elixir-ls \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-ls
 
-    makeWrapper $out/scripts/language_server.sh $out/bin/elixir-ls \
-      --set ELS_LOCAL "1"
-
-    makeWrapper $out/scripts/debug_adapter.sh $out/bin/elixir-debug-adapter \
-      --set ELS_LOCAL "1"
-
+    substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-debug-adapter
+    # prepare the launchers
+    substituteInPlace $out/lib/launch.sh \
+      --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
+                "ERL_LIBS=$out/lib:\$ERL_LIBS" \
+      --replace "exec elixir" "exec ${elixir}/bin/elixir" \
+      --replace 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir"
+    substituteInPlace $out/lib/exec.zsh \
+      --replace "exec elixir" "exec ${elixir}/bin/elixir"
     runHook postInstall
   '';
 
@@ -72,7 +89,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "elixir-ls";
-    teams = [ teams.beam ];
+    maintainers = teams.beam.members;
   };
   passthru.updateScript = nix-update-script { };
 }

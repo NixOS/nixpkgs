@@ -7,7 +7,6 @@
   bison,
   flex,
   automake,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation (
@@ -23,14 +22,11 @@ stdenv.mkDerivation (
       bison
       flex
       automake
-      udevCheckHook
     ];
 
     configureFlags = [
       "--sysconfdir=$(out)/etc"
       "--prefix=$(out)"
     ];
-
-    doInstallCheck = true;
   }
 )

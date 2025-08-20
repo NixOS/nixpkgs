@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "paperlike-go";
-  version = "0-unstable-2021-03-26";
+  version = "unstable-2021-03-26";
 
   src = fetchFromGitHub {
     owner = "leoluk";

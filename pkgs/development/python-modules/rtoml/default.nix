@@ -19,14 +19,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = "rtoml";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-1movtKMQkQ6PEpKpSkK0Oy4AV0ee7XrS0P9m6QwZTaM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-/elui0Rf3XwvD2jX+NGoJgf9S3XSp16qzdwkGZbKaZg=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-BWcOIZMl4yHxxKxCn6Qh69MlMdz3REp3izN0A1eFX3o=";
   };
 
   build-system = with rustPlatform; [
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
     # TypeError: loads() got an unexpected keyword argument 'name'

@@ -35,10 +35,7 @@ Setup with Nginx + ACME (recommended):
     defaults.email = "you@example.com";
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }
 ```
 

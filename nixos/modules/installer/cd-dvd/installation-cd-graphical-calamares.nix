@@ -4,18 +4,16 @@
 { pkgs, ... }:
 let
   calamares-nixos-autostart = pkgs.makeAutostartItem {
-    name = "calamares";
+    name = "io.calamares.calamares";
     package = pkgs.calamares-nixos;
   };
 in
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
-  # required for kpmcore to work correctly
-  programs.partition-manager.enable = true;
-
   environment.systemPackages = with pkgs; [
     # Calamares for graphical installation
+    libsForQt5.kpmcore
     calamares-nixos
     calamares-nixos-autostart
     calamares-nixos-extensions

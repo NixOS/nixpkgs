@@ -1,57 +1,48 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  setuptools,
 
   # dependencies
-  chex,
+  corner,
   equinox,
+  evosax,
   jax,
-  jaxtyping,
+  jaxlib,
   optax,
-  scikit-learn,
   tqdm,
 
-  # tests
+  # checks
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flowmc";
-  version = "0.4.5";
+  version = "0.3.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
     tag = "flowMC-${version}";
-    hash = "sha256-D3K9cvmUvwsVAjvXdSDgYlqrzTYXVlSVQbfx7TANz8A=";
+    hash = "sha256-unvbNs0AOzW4OI+9y6KxoBC5yEjEz+q0PZblQLXCC/Y=";
   };
 
-  build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "jax"
-  ];
-
-  pythonRemoveDeps = [
-    # Not actual runtime dependencies
-    "pre-commit"
-    "pyright"
-    "pytest"
-    "ruff"
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    chex
+    corner
     equinox
+    evosax
     jax
-    jaxtyping
+    jaxlib
     optax
-    scikit-learn
     tqdm
   ];
 

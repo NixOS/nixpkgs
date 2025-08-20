@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Small utility for showing information about ELF files";
     mainProgram = "elfinfo";
     homepage = "https://elfinfo.roboticoverlords.org/";
     changelog = "https://github.com/xyproto/elfinfo/releases/tag/${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -5,31 +5,37 @@
   openssl,
   nushell,
   pkg-config,
+  Security,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nu_plugin_gstat";
-  inherit (nushell) version src cargoHash;
+rustPlatform.buildRustPackage rec {
+  pname = "nushell_plugin_gstat";
+  inherit (nushell) version src;
+  cargoHash = "sha256-xoiKsn3XkKkw+KpgnIPFw78JN3ERxkj+2SgrCoe9HOU=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  cargoBuildFlags = [ "--package nu_plugin_gstat" ];
 
-  buildAndTestSubdir = "crates/nu_plugin_gstat";
+  checkPhase = ''
+    cargo test --manifest-path crates/nu_plugin_gstat/Cargo.toml
+  '';
 
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.
     extraArgs = [ "--version=skip" ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Git status plugin for Nushell";
     mainProgram = "nu_plugin_gstat";
-    homepage = "https://github.com/nushell/nushell/tree/${finalAttrs.version}/crates/nu_plugin_gstat";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_gstat";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       mrkkrp
       aidalgol
     ];
+    platforms = with platforms; all;
   };
-})
+}

@@ -29,16 +29,12 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch = ''
-    sed -i "8i #include <time.h>" xprompt.c
-  ''
-  + (
+  postPatch =
     let
       configFile =
         if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
     in
-    lib.optionalString (conf != null) "cp ${configFile} config.h"
-  );
+    lib.optionalString (conf != null) "cp ${configFile} config.h";
 
   makeFlags = [
     "CC:=$(CC)"
@@ -55,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phillbush/xprompt";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
     mainProgram = "xprompt";
   };

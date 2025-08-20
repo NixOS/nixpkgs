@@ -37,7 +37,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 

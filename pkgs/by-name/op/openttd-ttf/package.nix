@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openttd-ttf";
-  version = "0.7";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
     tag = finalAttrs.version;
-    hash = "sha256-HKOG3Ov0LBCW7Z0FK5BrZRycn2S5gVRnwyU9fM3hb5M=";
+    hash = "sha256-Nr3oLiCEdpUhB/IczCEoLM8kb1hGDH/d6WYWRbjgOi8=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zephyris/openttd-ttf";
     changelog = "https://github.com/zephyris/openttd-ttf/releases/tag/${finalAttrs.version}";
     description = "TrueType typefaces for text in a pixel art style, designed for use in OpenTTD";
-    license = [ lib.licenses.gpl2 ];
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.sfrijters ];
+    license = [ licenses.gpl2 ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.sfrijters ];
   };
 })

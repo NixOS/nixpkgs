@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenv,
+  Security,
   nix-update-script,
 }:
 
@@ -16,7 +18,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-PF2TFfzWmHXLgTopzJ04dfnzd3Sc/A6Hduffz2guxmU=";
   };
 
-  cargoHash = "sha256-jymWM0DCR6jUE1Kyhbx6HHf6YlrGu1THKTyDHaPG+Vs=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ];
+
+  cargoHash = "sha256-4eaU6dOb97/vV3NSCCpdzK2oQUIHl4kdAtgWbGsY5LU=";
 
   passthru.updateScript = nix-update-script { };
 

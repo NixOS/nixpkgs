@@ -13,8 +13,6 @@
   zlib,
   zstd,
   scx-common,
-  protobuf,
-  libseccomp,
 }:
 
 let
@@ -67,28 +65,22 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
     substituteInPlace meson.build \
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
-
-    # TODO: Remove in next release.
-    substituteInPlace lib/scxtest/overrides.h \
-      --replace-fail '#define __builtin_preserve_enum_value(x,y,z) 1' '#define __builtin_preserve_enum_value(x,y) 1'
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    jq
-    pkg-config
-    zstd
-    protobuf
-    llvmPackages.libllvm
-  ]
-  ++ bpftools.buildInputs
-  ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      jq
+      pkg-config
+      zstd
+    ]
+    ++ bpftools.buildInputs
+    ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils
     zlib
-    libseccomp
   ];
 
   mesonFlags = [
@@ -103,7 +95,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
       "offline" = true;
-      # rust based schedulers are built separately
+      # rust based schedulers are built seperately
       "enable_rust" = false;
     })
     # Clang to use when compiling .bpf.c
@@ -117,9 +109,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   # We copy the compiled header files to the dev output
   # These are needed for the rust schedulers
-  postFixup = ''
-    mkdir -p ${placeholder "dev"}
-    cp -r libbpf ${placeholder "dev"}
+  preInstall = ''
+    mkdir -p ${placeholder "dev"}/libbpf ${placeholder "dev"}/bpftool
+    cp -r libbpf/* ${placeholder "dev"}/libbpf/
+    cp -r bpftool/* ${placeholder "dev"}/bpftool/
   '';
 
   outputs = [
@@ -128,7 +121,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  doCheck = true;
+  # Enable this when default kernel in nixpkgs is 6.12+
+  doCheck = false;
 
   meta = scx-common.meta // {
     description = "Sched-ext C userspace schedulers";

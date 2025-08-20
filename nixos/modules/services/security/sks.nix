@@ -119,7 +119,6 @@ in
       {
         sks-db = {
           description = "SKS database server";
-          documentation = [ "man:sks(8)" ];
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''

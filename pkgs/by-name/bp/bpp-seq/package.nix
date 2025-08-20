@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BioPP";
-    repo = "bpp-seq";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1mc09g8jswzsa4wgrfv59jxn15ys3q8s0227p1j838wkphlwn2qk";
   };
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bpp-core ];
 
   postFixup = ''
-    substituteInPlace $out/lib/cmake/bpp-seq/bpp-seq-targets.cmake  \
+    substituteInPlace $out/lib/cmake/${pname}/${pname}-targets.cmake  \
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
   # prevents cmake from exporting incorrect INTERFACE_INCLUDE_DIRECTORIES

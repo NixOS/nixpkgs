@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sqlmc" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to check URLs of a domain for SQL injections";
     homepage = "https://github.com/malvads/sqlmc";
     changelog = "https://github.com/malvads/sqlmc/releases/tag/${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "sqlmc";
   };
 }

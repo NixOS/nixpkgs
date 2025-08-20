@@ -2,31 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  nix-update-script,
   SDL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "matrix-brandy";
-  version = "1.23.5";
+  version = "1.23.3";
 
   src = fetchFromGitHub {
     owner = "stardot";
     repo = "MatrixBrandy";
     rev = "V${version}";
-    hash = "sha256-sMgYgV4/vV1x5xSICXRpW6K8uCdVlJrS7iEg6XzQRo8=";
+    hash = "sha256-jw5SxCQ2flvCjO/JO3BHpnpt31wBsBxDkVH7uwVxTS0=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./no-lrt.patch ];
-
-  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "CC=cc"
-    "LD=clang"
-  ];
-
   buildInputs = [
-    libX11
     SDL
   ];
 
@@ -35,14 +25,12 @@ stdenv.mkDerivation rec {
     cp brandy $out/bin
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
-    homepage = "https://brandy.matrixnetwork.co.uk/";
+    homepage = "http://brandy.matrixnetwork.co.uk/";
     description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
     mainProgram = "brandy";
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fiq ];
   };
 }

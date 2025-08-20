@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchPypi,
-  addBinToPathHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,10 +32,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    addBinToPathHook
     pytestCheckHook
     testtools
   ];
+
+  # Tests run eliot-tree in out/bin.
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
 
   pythonImportsCheck = [ "eliottree" ];
 

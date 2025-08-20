@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bleachbit";
-  version = "5.0.0";
+  version = "4.6.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-CU5IW8NVWuPl4PHu6mYpD5mOpRiDq6oZk9pDmuz8PjA=";
+    sha256 = "sha256-UwUphuUeXFy71I+tmKnRH858dPrA2+xDxnG9h26a+kE=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   meta = with lib; {
-    homepage = "https://bleachbit.sourceforge.net";
+    homepage = "http://bleachbit.sourceforge.net";
     description = "Program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = licenses.gpl3;

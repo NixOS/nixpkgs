@@ -16,22 +16,23 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ambermind";
-    repo = "minimacy";
+    repo = pname;
     rev = version;
     hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    libGL
-    libGLU
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libX11
-    libXext
-  ];
+  buildInputs =
+    [
+      libGL
+      libGLU
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libX11
+      libXext
+    ];
 
   enableParallelBuilding = true;
 

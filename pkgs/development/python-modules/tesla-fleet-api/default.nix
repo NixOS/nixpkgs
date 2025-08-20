@@ -3,8 +3,6 @@
   aiofiles,
   aiohttp,
   aiolimiter,
-  bleak,
-  bleak-retry-connector,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -15,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "1.2.3";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +22,7 @@ buildPythonPackage rec {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
     tag = "v${version}";
-    hash = "sha256-mNqntKsZeUZOhfquyaA+6IC29XnCf/a5FIm0cFzHg/M=";
+    hash = "sha256-45EfV6lqhOn8sorhyzUBKOj6xtd9OzYxB7SLK07IQ08=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +31,6 @@ buildPythonPackage rec {
     aiofiles
     aiohttp
     aiolimiter
-    bleak
-    bleak-retry-connector
     cryptography
     protobuf
   ];
@@ -47,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Tesla Fleet API and Teslemetry";
     homepage = "https://github.com/Teslemetry/python-tesla-fleet-api";
-    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,49 +1,36 @@
 {
   lib,
-  stdenv,
-  flutter332,
-  rustPlatform,
   fetchFromGitHub,
-  copyDesktopItems,
-  mpv-unwrapped,
+  flutter324,
+  pkg-config,
   webkitgtk_4_1,
+  mpv,
+  rustPlatform,
+  stdenv,
+  copyDesktopItems,
   makeDesktopItem,
-  writeText,
+  replaceVars,
 }:
-
 let
   pname = "mangayomi";
-  version = "0.6.3";
-
+  version = "0.3.8";
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-nlA5DLYSj9VVpDo7o5Umccoz8RAF+ac3LWV7108t2Ds=";
+    hash = "sha256-TOCDGmJ5tlpcGS8NeVdIdx946rM1/ItQVY9OnDS6uZ0=";
   };
-
-  metaCommon = {
-    changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
-    description = "Reading manga, novels, and watching animes";
-    homepage = "https://github.com/kodjodevf/mangayomi";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
-  };
-
   rustDep = rustPlatform.buildRustPackage {
     inherit pname version src;
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-DDHBLQWscORg4+0CX5c2wmrhm2t7wOpotZFB+85w+EA=";
+    cargoHash = "sha256-6Iraw5gtlVW3iSrT2zQh6JLubVTZy/y8/5quXKee2Ko=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
-
-    meta = metaCommon;
   };
 in
-flutter332.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -56,35 +43,38 @@ flutter332.buildFlutterApplication {
         inherit version src;
         inherit (src) passthru;
 
-        postPatch =
-          let
-            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
-              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
-                set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
-              endfunction()
-            '';
-          in
-          ''
-            cp ${fakeCargokitCmake} rust_builder/cargokit/cmake/cargokit.cmake
-          '';
+        patches = [
+          (replaceVars ./cargokit.patch {
+            output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
+          })
+        ];
 
         installPhase = ''
           runHook preInstall
 
-          cp -r . "$out"
+          cp -r . $out
 
           runHook postInstall
         '';
       };
   };
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = {
+    desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
+    flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
+    media_kit_libs_windows_video = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
+    media_kit_native_event_loop = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
+    media_kit_video = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
+  };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
 
   buildInputs = [
-    mpv-unwrapped
     webkitgtk_4_1
+    mpv
   ];
 
   desktopItems = [
@@ -110,15 +100,16 @@ flutter332.buildFlutterApplication {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/mangayomi/lib
+    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
 
-  passthru = {
-    inherit rustDep;
-    updateScript = ./update.sh;
-  };
-
-  meta = metaCommon // {
+  meta = {
+    changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
+    description = "Read manga and stream anime from a variety of sources including BitTorrent";
+    homepage = "https://github.com/kodjodevf/mangayomi";
     mainProgram = "mangayomi";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ aucub ];
+    platforms = lib.platforms.linux;
   };
 }

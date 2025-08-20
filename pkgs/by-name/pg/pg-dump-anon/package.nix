@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Export databases with data being anonymized with the anonymizer extension";
     homepage = "https://postgresql-anonymizer.readthedocs.io/en/stable/";
-    teams = [ teams.flyingcircus ];
+    maintainers = teams.flyingcircus.members;
     license = licenses.postgresql;
     mainProgram = "pg_dump_anon";
   };

@@ -5,21 +5,18 @@
   jdk,
   ant,
   git,
-  coreutils,
-  hostname,
-  gawk,
   unzip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rtg-tools";
-  version = "3.13";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
     rev = version;
-    hash = "sha256-vPzKrgnX6BCQmn9aOVWWpFLC6SbPBHZhZ+oL1LCbvmo=";
+    hash = "sha256-fMrrjrgaGxBVxn6qMq2g0oFv6qtfhZcQlkvv1E9Os6Y=";
   };
 
   nativeBuildInputs = [
@@ -47,16 +44,9 @@ stdenv.mkDerivation rec {
     # Use a location outside nix (must be writable)
     substituteInPlace installer/rtg \
       --replace-fail  '$THIS_DIR/rtg.cfg' '$HOME/.config/rtg-tools/rtg.cfg'  \
-       --replace-fail 'RTG_JAVA="java"' 'RTG_JAVA="${lib.getExe jdk}"' \
-      --replace-fail uname ${lib.getExe' coreutils "uname"} \
-      --replace-fail awk ${lib.getExe gawk} \
-      --replace-fail "hostname -s" "${lib.getExe hostname} -s"
+      --replace-fail 'RTG_JAVA="java"' 'RTG_JAVA="${jdk}/lib/openjdk/bin/java"'
 
     sed -i '/USER_JAVA_OPTS=$RTG_JAVA_OPTS/a mkdir -p $HOME/.config/rtg-tools'  installer/rtg
-  '';
-
-  checkPhase = ''
-    ant runalltests
   '';
 
   meta = with lib; {

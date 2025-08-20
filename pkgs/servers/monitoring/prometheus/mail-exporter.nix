@@ -34,6 +34,7 @@ buildGoModule {
     homepage = "https://github.com/cherti/mailexporter";
     license = licenses.gpl3;
     maintainers = with maintainers; [
+      willibutz
       globin
     ];
     platforms = platforms.linux;

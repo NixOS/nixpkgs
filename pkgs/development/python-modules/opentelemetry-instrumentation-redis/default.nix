@@ -1,5 +1,7 @@
 {
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
@@ -12,7 +14,7 @@
   fakeredis,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-redis";
   pyproject = true;

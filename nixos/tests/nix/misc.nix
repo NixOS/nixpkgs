@@ -3,16 +3,20 @@
 
 let
   inherit (pkgs) lib;
-  tests.default = testsForPackage { nixPackage = pkgs.nix; };
-
-  testsForPackage = args: {
-    # If the attribute is not named 'test'
-    # You will break all the universe on the release-*.nix side of things.
-    # `discoverTests` relies on `test` existence to perform a `callTest`.
-    test = testMiscFeatures args // {
-      passthru.override = args': (testsForPackage (args // args')).test;
-    };
+  tests = {
+    default = testsForPackage { nixPackage = pkgs.nix; };
+    lix = testsForPackage { nixPackage = pkgs.lix; };
   };
+
+  testsForPackage =
+    args:
+    lib.recurseIntoAttrs {
+      # If the attribute is not named 'test'
+      # You will break all the universe on the release-*.nix side of things.
+      # `discoverTests` relies on `test` existence to perform a `callTest`.
+      test = testMiscFeatures args;
+      passthru.override = args': testsForPackage (args // args');
+    };
 
   testMiscFeatures =
     { nixPackage, ... }:

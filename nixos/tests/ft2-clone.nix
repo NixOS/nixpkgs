@@ -1,31 +1,33 @@
-{ pkgs, ... }:
-{
-  name = "ft2-clone";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
-  };
-
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      imports = [
-        ./common/x11.nix
-      ];
-      environment.systemPackages = [ pkgs.ft2-clone ];
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "ft2-clone";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fgaz ];
     };
 
-  enableOCR = true;
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
+        environment.systemPackages = [ pkgs.ft2-clone ];
+      };
 
-  testScript = ''
-    machine.wait_for_x()
-    # Add a dummy sound card, or the program won't start
-    machine.execute("modprobe snd-dummy")
+    enableOCR = true;
 
-    machine.execute("ft2-clone >&2 &")
+    testScript = ''
+      machine.wait_for_x()
+      # Add a dummy sound card, or the program won't start
+      machine.execute("modprobe snd-dummy")
 
-    machine.wait_for_window(r"Fasttracker")
-    machine.sleep(5)
-    machine.wait_for_text(r"(Songlen|Repstart|Time|About|Nibbles|Help)")
-    machine.screenshot("screen")
-  '';
-}
+      machine.execute("ft2-clone >&2 &")
+
+      machine.wait_for_window(r"Fasttracker")
+      machine.sleep(5)
+      machine.wait_for_text(r"(Songlen|Repstart|Time|About|Nibbles|Help)")
+      machine.screenshot("screen")
+    '';
+  }
+)

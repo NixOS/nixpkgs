@@ -2,20 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-supply-chain";
-  version = "0.3.4";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = "cargo-supply-chain";
     rev = "v${version}";
-    hash = "sha256-LTr7Y1SHk56ltYAA6AESAiWD0Rr15cY1BtOyhM4Q5iE=";
+    hash = "sha256-KjeYB9TFbuJ2KPaObeM0ADs5F8uJJ6/czMPQjBUgIk8=";
   };
 
-  cargoHash = "sha256-Lk08Avmx563A2Ka5J/TqxY3FRNgbKRSsIpJWYlcLt0E=";
+  cargoHash = "sha256-Fx1C4X0dQqePqLa+X+4ZDrIMFKBQ6J50nBApYXcGbFM=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "Gather author, contributor and publisher data on crates in your dependency graph";

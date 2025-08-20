@@ -2,22 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
+  installShellFiles,
+  gitUpdater,
 }:
+
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "26.8.0";
+  version = "24.11.4";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
-    repo = "oh-my-posh";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-CWc9i+QGdcp+6eRfctn4oJFaQOy8D+jDTHTmUzBXez4=";
+    hash = "sha256-hb5XgwBg9llX/PDX8A8hL5fJbG03nTjrvEd252k2Il0=";
   };
 
-  vendorHash = "sha256-oqsQbcvcgid6odTZY7m74NNilBpukEmifqZGx+xeEXA=";
+  vendorHash = "sha256-bOjIwBPxu/BfRaAcZTXf4xCGvVXnumb2++JZTx7ZG1s=";
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -34,16 +40,20 @@ buildGoModule rec {
 
   postPatch = ''
     # these tests requires internet access
-    rm image/image_test.go config/migrate_glyphs_test.go upgrade/notice_test.go segments/upgrade_test.go
+    rm image/image_test.go config/migrate_glyphs_test.go upgrade/notice_test.go
   '';
 
   postInstall = ''
     mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
     cp -r $src/themes $out/share/oh-my-posh/
+    installShellCompletion --cmd oh-my-posh \
+      --bash <($out/bin/oh-my-posh completion bash) \
+      --fish <($out/bin/oh-my-posh completion fish) \
+      --zsh <($out/bin/oh-my-posh completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Prompt theme engine for any shell";

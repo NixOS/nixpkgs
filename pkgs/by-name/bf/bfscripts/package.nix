@@ -1,10 +1,8 @@
 {
+  stdenv,
   fetchFromGitHub,
-  git,
   lib,
   python3,
-  rpm,
-  stdenv,
 }:
 
 let
@@ -36,24 +34,19 @@ let
     "bfup"
   ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bfscripts";
-  version = "unstable-2025-06-27";
+  version = "unstable-2023-05-15";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = "bfscripts";
-    rev = "ed8ede79fa002a2d83719a1bef6fbe0f7dcf37a4";
-    hash = "sha256-x+hpH6D5HTl39zD0vYj6wRFw881M4AcfM+ePcgXMst8=";
+    repo = pname;
+    rev = "1da79f3ece7cdf99b2571c00e8b14d2e112504a4";
+    hash = "sha256-pTubrnZKEFmtAj/omycFYeYwrCog39zBDEszoCrsQNQ=";
   };
 
   buildInputs = [
     python3
-  ];
-
-  nativeBuildInputs = [
-    git
-    rpm
   ];
 
   installPhase = ''
@@ -65,9 +58,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Mellanox/bfscripts";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      nikstur
-      thillux
-    ];
+    maintainers = with maintainers; [ nikstur ];
   };
 }

@@ -56,8 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''

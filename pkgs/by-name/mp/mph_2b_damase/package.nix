@@ -1,6 +1,6 @@
 { stdenvNoCC, fetchzip }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "mph-2b-damase";
   version = "2";
 

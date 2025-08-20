@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
-    # DDE 23 releases has moved to `linuxdeepin/dde-session-shell-snipe`
-    repo = "dde-session-shell-snipe";
+    repo = pname;
     rev = version;
     hash = "sha256-v0+Bz6J77Kgf4YV1iDhCqhmcNn493GFq1IEQbXBAVUU=";
   };
@@ -106,6 +105,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-session-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

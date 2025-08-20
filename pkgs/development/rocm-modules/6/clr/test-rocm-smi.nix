@@ -22,6 +22,6 @@ makeImpureTest {
   '';
 
   meta = with lib; {
-    teams = [ teams.rocm ];
+    maintainers = teams.rocm.members;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GTK-based audio CD player/ripper";
-    homepage = "https://sourceforge.net/projects/grip/";
+    homepage = "http://nostatic.org/grip";
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [ marcweber ];

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   buildPythonPackage,
   python,
   pythonOlder,
@@ -31,14 +30,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-G1o0a57MRczwjGLl/tEYC+yx3nxpk6+E58RvR9kVJpA=";
   };
-
-  patches = [
-    # fix tests: https://github.com/behave/behave/pull/1214
-    (fetchpatch2 {
-      url = "https://github.com/behave/behave/pull/1214/commits/98b63a2524eff50ce1dc7360a46462a6f673c5ea.patch?full_index=1";
-      hash = "sha256-MwODEm6vhg/H8ksp5XBBP5Uhu2dhB5B1T6Owkxpy3v0=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -82,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/behave/behave/blob/${src.rev}/CHANGES.rst";
     homepage = "https://github.com/behave/behave";
-    description = "Behaviour-driven development, Python style";
+    description = "behaviour-driven development, Python style";
     mainProgram = "behave";
     license = licenses.bsd2;
     maintainers = with maintainers; [

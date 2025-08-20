@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -16,16 +15,14 @@
   narwhals,
   packaging,
   psutil,
-  pycrdt,
   pygments,
   pymdown-extensions,
-  pyyaml,
   ruff,
   starlette,
   tomlkit,
-  typing-extensions,
   uvicorn,
   websockets,
+  pyyaml,
 
   # tests
   versionCheckHook,
@@ -33,21 +30,18 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.13.6";
+  version = "0.10.9";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qsz0SJvWOJ/MH9eIMyBODCBCGC7vp2lzPsq+32tRKU8=";
+    hash = "sha256-WoMfybvKlD8Gy2sc3/EhQZVN9WPh8eEVPlG5ksyjjGc=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "pycrdt"
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
     click
@@ -58,17 +52,15 @@ buildPythonPackage rec {
     narwhals
     packaging
     psutil
-    pycrdt
     pygments
     pymdown-extensions
-    pyyaml
     ruff
     starlette
     tomlkit
     uvicorn
     websockets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "marimo" ];
 
@@ -76,7 +68,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

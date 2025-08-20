@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nlQdBwxHVbpOmb9Wq+ap2i4KI1zJYT3SEqvedDbVH8Q=";
   };
 
-  cargoHash = "sha256-hub64iZNVw/BJjibtDnJ3boIU27DEbYSlMLhFFVJ9ps=";
+  cargoHash = "sha256-KtNLLtStZ7SNndcPxWfNPA2duoXFVePrbNQFPUz2xFg=";
 
   meta = with lib; {
     homepage = "https://github.com/3andne/restls";

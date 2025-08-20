@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   gmp,
-  setuptools,
 }:
 
 let
@@ -12,22 +11,20 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.23.0";
-  pyproject = true;
+  version = "3.20.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
     tag = "v${version}";
-    hash = "sha256-x8QkRBwM/H/n7yHGjE8UfBhOzkGr0PBixe9g4EuZLUg=";
+    hash = "sha256-RPaBUj/BJCO+10maGDmugeEXxaIrlk2UHIvkbrQVM8c=";
   };
 
   postPatch = ''
     substituteInPlace lib/Crypto/Math/_IntegerGMP.py \
-      --replace-fail 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
+      --replace 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
   '';
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [ test-vectors ];
 
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
-    changelog = "https://github.com/Legrandin/pycryptodome/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/Legrandin/pycryptodome/blob/v${version}/Changelog.rst";
     license = with licenses; [
       bsd2 # and
       asl20

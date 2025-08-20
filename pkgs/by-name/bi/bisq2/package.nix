@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   lib,
-  makeBinaryWrapper,
+  makeWrapper,
   runtimeShell,
   fetchurl,
   makeDesktopItem,
@@ -14,17 +14,21 @@
   tor,
   zip,
   gnupg,
-  coreutils,
 }:
 
 let
-  version = "2.1.7";
+  version = "2.1.2";
 
   jdk = jdk23.override { enableJavaFX = true; };
 
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
+      # This is just a comment to convince Nix that Tor is a
+      # runtime dependency; The Tor binary is in a *.jar file,
+      # whereas Nix only scans for hashes in uncompressed text.
+      # ${lib.getExe' tor "tor"}
+
       rm -fR $HOME/.local/share/Bisq2/tor
 
       exec "${lib.getExe jdk}" -Djpackage.app-version=@version@ -classpath @out@/lib/app/desktop-app-launcher.jar:@out@/lib/app/* ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
@@ -37,15 +41,15 @@ let
     {
       "E222AA02" = fetchurl {
         url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
-        hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
+        sha256 = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
       };
 
       "387C8307" = fetchurl {
         url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
-        hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+        sha256 = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
       };
     }
-    ."E222AA02";
+    ."387C8307";
 in
 stdenvNoCC.mkDerivation rec {
   inherit version;
@@ -54,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
+    sha256 = "0zgv70xlz3c9mrwmiaa1dgagbc441ppk2vrkgard8zjrvk8rg7va";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -78,16 +82,17 @@ stdenvNoCC.mkDerivation rec {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-Cl9EIp+ycD8Tp/bx5dXQK206jZzrYJkI/U9ItfXDRWw=";
+    sha256 = "sha256-WZhI8RDmb7nQqpCQJM86vrp8qQNg+mvRVdSPcDqgzxE=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     dpkg
     imagemagick
-    makeBinaryWrapper
+    makeWrapper
     zip
     gnupg
+    makeWrapper
   ];
 
   desktopItems = [
@@ -137,21 +142,9 @@ stdenvNoCC.mkDerivation rec {
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
-    wrapProgram $out/bin/bisq2 --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
-    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "chess-clock";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-XDOCHFZC3s3b/4kD1ZkhWar3kozW3vXc0pk7O6oQfiE=";
   };
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/chess-clock";
     license = lib.licenses.gpl3Plus;
     mainProgram = "chess-clock";
-    teams = [ lib.teams.gnome-circle ];
+    maintainers = lib.teams.gnome-circle.members;
   };
 }

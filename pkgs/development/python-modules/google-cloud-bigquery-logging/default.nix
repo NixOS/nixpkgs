@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.6.3";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_logging";
     inherit version;
-    hash = "sha256-55xND/MHByzkQEmjeOnTEDEASqUR5zB/OvDHFsAEt8U=";
+    hash = "sha256-4eDfCpkZBDZySWq92C/fr0FKeKdbkymN6sbl+/qzKfg=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +33,7 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

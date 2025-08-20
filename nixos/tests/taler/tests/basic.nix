@@ -35,14 +35,13 @@ import ../../make-test-python.nix (
         inherit (cfgNodes) CURRENCY FIAT_CURRENCY;
         inherit (cfgScripts) commonScripts;
 
-        configFile = nodes.exchange.environment.etc."taler/taler.conf".source;
-        bankConfig = nodes.bank.environment.etc."libeufin/libeufin.conf".source;
+        bankConfig = nodes.bank.config.environment.etc."libeufin/libeufin.conf".source;
         bankSettings = nodes.bank.services.libeufin.settings.libeufin-bank;
         nexusSettings = nodes.bank.services.libeufin.nexus.settings;
 
         # Bank admin account credentials
         AUSER = "admin";
-        APASS = "testAdmin";
+        APASS = "admin";
 
         TUSER = "testUser";
         TPASS = "testUser";
@@ -77,28 +76,17 @@ import ../../make-test-python.nix (
 
 
         exchange.start()
-
-        # exchange credentials must be set at runtime because it requires a token from the bank
-        exchange.succeed("mkdir -p /etc/taler/secrets/")
-        exchange.succeed("touch /etc/taler/secrets/exchange-account.secret.conf")
-
         exchange.wait_for_open_port(8081)
 
-        # Create access token for exchange
-        accessTokenExchange = create_token(exchange, "exchange", "exchange")
-
-        exchange.succeed(f'echo "{create_exchange_auth(accessTokenExchange)}" > /etc/taler/secrets/exchange-account.secret.conf')
 
         with subtest("Set up exchange"):
-            # Set up exchange keys
-            exchange.wait_until_succeeds('taler-exchange-offline -c "${configFile}" download sign upload')
-
+            exchange.wait_until_succeeds("taler-exchange-offline download sign upload")
             # Enable exchange wire account
-            exchange.succeed('taler-exchange-offline -c "${configFile}" upload < ${exchangeAccount}')
+            exchange.succeed('taler-exchange-offline upload < ${exchangeAccount}')
 
-            # Set up wire fees, needed in order to deposit coins/pay merchant
-            exchange.succeed('taler-exchange-offline -c "${configFile}" wire-fee now x-taler-bank "${CURRENCY}:0.01" "${CURRENCY}:0.01" upload')
-            exchange.succeed('taler-exchange-offline -c "${configFile}" global-fee now "${CURRENCY}:0.01" "${CURRENCY}:0.0" "${CURRENCY}:0" 1h 6a 0 upload')
+            # NOTE: cannot deposit coins/pay merchant if wire fees are not set up
+            exchange.succeed('taler-exchange-offline wire-fee now x-taler-bank "${CURRENCY}:0" "${CURRENCY}:0" upload')
+            exchange.succeed('taler-exchange-offline global-fee now "${CURRENCY}:0" "${CURRENCY}:0" "${CURRENCY}:0" 1h 6a 0 upload')
 
 
         # Verify that exchange keys exist
@@ -108,14 +96,12 @@ import ../../make-test-python.nix (
         merchant.start()
         merchant.wait_for_open_port(8083)
 
-        # Create access token for merchant
-        accessTokenMerchant = create_token(client, "merchant", "merchant")
 
         with subtest("Set up merchant"):
             # Create default instance (similar to admin)
             succeed(merchant, [
                 "curl -X POST",
-                f"-H 'Authorization: Bearer {accessTokenMerchant}'",
+                "-H 'Authorization: Bearer secret-token:super_secret'",
                 """
                 --data '{
                   "auth": { "method": "external" },
@@ -142,7 +128,7 @@ import ../../make-test-python.nix (
                   "credit_facade_credentials":{"type":"basic","username":"merchant","password":"merchant"}
                 }'
                 """,
-                "-sSfL 'http://merchant:8083/instances/default/private/accounts'"
+                "-sSfL 'http://merchant:8083/private/accounts'"
             ])
             # Register a new product to be ordered
             succeed(merchant, [
@@ -158,14 +144,12 @@ import ../../make-test-python.nix (
                   "next_restock": { "t_s": "never" }
                 }'
                 """,
-                "-sSfL 'http://merchant:8083/instances/default/private/products'"
+                "-sSfL 'http://merchant:8083/private/products'"
             ])
 
 
         client.succeed("curl -s http://exchange:8081/")
 
-        # Create access token for user
-        accessTokenUser = create_token(client, "${TUSER}", "${TPASS}")
 
         # Make a withdrawal from the CLI wallet
         with subtest("Make a withdrawal from the CLI wallet"):
@@ -180,7 +164,7 @@ import ../../make-test-python.nix (
             withdrawal = json.loads(
                 succeed(client, [
                     "curl -X POST",
-                    f"-H 'Authorization: Bearer {accessTokenUser}'",
+                    "-u ${TUSER}:${TPASS}",
                     "-H 'Content-Type: application/json'",
                     f"""--data '{{"amount": "{balanceWanted}"}}'""", # double brackets escapes them
                     "-sSfL 'http://bank:8082/accounts/${TUSER}/withdrawals'"
@@ -189,16 +173,11 @@ import ../../make-test-python.nix (
 
             # Accept & confirm withdrawal
             with subtest("Accept & confirm withdrawal"):
-                # the withdrawal can only be confirmed if this is executed twice, for some reason
-                for i in range(2):
-                    wallet_cli(f"withdraw accept-uri {withdrawal["taler_withdraw_uri"]} --exchange 'http://exchange:8081/'")
-                    client.sleep(5) # needs some time to process things
-
+                wallet_cli(f"withdraw accept-uri {withdrawal["taler_withdraw_uri"]} --exchange http://exchange:8081/")
                 succeed(client, [
                     "curl -X POST",
-                    f"-H 'Authorization: Bearer {accessTokenUser}'",
+                    "-u ${TUSER}:${TPASS}",
                     "-H 'Content-Type: application/json'",
-                    f"""--data '{{"amount": "{balanceWanted}"}}'""", # double brackets escapes them
                     f"-sSfL 'http://bank:8082/accounts/${TUSER}/withdrawals/{withdrawal["withdrawal_id"]}/confirm'"
                 ])
 
@@ -209,8 +188,7 @@ import ../../make-test-python.nix (
 
 
         with subtest("Pay for an order"):
-            # after paying (1 for the order and 0.1 as fee)
-            balanceWanted = "${CURRENCY}:8.9"
+            balanceWanted = "${CURRENCY}:9" # after paying
 
             # Create an order to be paid
             response = json.loads(
@@ -223,7 +201,7 @@ import ../../make-test-python.nix (
                       "inventory_products": [{ "product_id": "1", "quantity": 1 }]
                     }'
                     """,
-                    "-sSfL 'http://merchant:8083/instances/default/private/orders'"
+                    "-sSfL 'http://merchant:8083/private/orders'"
                 ])
             )
             order_id = response["order_id"]
@@ -233,7 +211,7 @@ import ../../make-test-python.nix (
             response = json.loads(
                 succeed(merchant, [
                     "curl -sSfL",
-                    f"http://merchant:8083/instances/default/private/orders/{order_id}"
+                    f"http://merchant:8083/private/orders/{order_id}"
                 ])
             )
             wallet_cli("run-until-done")
@@ -253,17 +231,14 @@ import ../../make-test-python.nix (
             with subtest("Libeufin Nexus currency conversion"):
                 regionalWanted = "20"
 
-                # Create access token
-                accessTokenAdmin = create_token(bank, "${AUSER}", "${APASS}")
-
                 # Setup Nexus ebics keys
                 systemd_run(bank, "libeufin-nexus ebics-setup -L debug -c /etc/libeufin/libeufin.conf", "libeufin-nexus")
 
                 # Set currency conversion rates (1:1)
                 succeed(bank, [
                     "curl -X POST",
-                    f"-H 'Authorization: Bearer {accessTokenAdmin}'",
                     "-H 'Content-Type: application/json'",
+                    "-u ${AUSER}:${APASS}",
                     """
                     --data '{
                       "cashin_ratio": "1",
@@ -289,7 +264,7 @@ import ../../make-test-python.nix (
                 systemd_run(bank, f"""libeufin-nexus testing fake-incoming -c ${bankConfig} --amount="${FIAT_CURRENCY}:{regionalWanted}" --subject="{reservePub}" "payto://iban/CH4740123RW4167362694" """, "libeufin-nexus")
                 wallet_cli("run-until-done")
 
-                verify_conversion(regionalWanted, accessTokenExchange)
+                verify_conversion(regionalWanted)
       '';
   }
 )

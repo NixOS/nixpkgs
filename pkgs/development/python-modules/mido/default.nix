@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  replaceVars,
+  substituteAll,
 
   # build-system
   setuptools,
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./libportmidi-cdll.patch {
+    (substituteAll {
+      src = ./libportmidi-cdll.patch;
       libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

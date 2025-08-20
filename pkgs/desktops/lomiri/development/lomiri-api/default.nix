@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
       gpl3Only
     ];
-    teams = [ lib.teams.lomiri ];
+    maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"

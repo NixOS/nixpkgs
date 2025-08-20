@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.6";
-  format = "pyproject";
+  format = "setuptools";
 
   passthru.updateScript = nix-update-script { };
 
@@ -19,15 +19,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     notmuch2
     google-api-python-client
     google-auth-oauthlib
     tqdm
+    setuptools
   ];
 
   # no tests

@@ -9,7 +9,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
-  pytest-cov-stub,
   pytest-freezegun,
   pytestCheckHook,
   pythonOlder,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.19.5";
+  version = "0.19.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,12 +27,13 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     tag = version;
-    hash = "sha256-HPJORJQ/LqWCpywiZmwFXKKFRE8V9kG5iDrbzPX2YVg=";
+    hash = "sha256-GotVSRSMdbAtDmVEXNizf5Pf/02sva1R/6ULL6h7ciY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
   build-system = [ poetry-core ];
@@ -50,7 +50,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
-    pytest-cov-stub
     pytest-freezegun
     pytestCheckHook
   ];

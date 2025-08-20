@@ -5,7 +5,7 @@
   tclx,
 }:
 
-mkTclDerivation {
+mkTclDerivation rec {
   pname = "tcl-fcgi";
   version = "0.5.0";
 

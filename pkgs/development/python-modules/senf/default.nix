@@ -7,10 +7,9 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "senf";
   version = "1.5.0-unstable-2024-11-26";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "quodlibet";

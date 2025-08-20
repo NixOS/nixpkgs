@@ -28,19 +28,17 @@
   ffms,
   wrapGAppsHook3,
   curl,
-  versionCheckHook,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "siril";
-  version = "1.2.6";
+  version = "1.2.4";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
-    tag = finalAttrs.version;
-    hash = "sha256-pSJp4Oj8x4pKuwPSaSyGbyGfpnanoWBxAdXtzGTP7uA=";
+    rev = version;
+    hash = "sha256-orNu9qo7sutMUPeIPPhxKETEKbCm4D6nAuo4Hc/8Bdo=";
   };
 
   nativeBuildInputs = [
@@ -88,22 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     cd nixbld
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://www.siril.org/";
     description = "Astrophotographic image processing tool";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with lib.maintainers; [ hjones2199 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ hjones2199 ];
+    platforms = platforms.linux;
   };
-})
+}

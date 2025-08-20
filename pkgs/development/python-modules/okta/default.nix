@@ -25,15 +25,17 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.13";
+  version = "2.9.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jY6SZ1G3+NquF5TfLsGw6T9WO4smeBYT0gXLnRDoN+8=";
+    hash = "sha256-hLdq5AlTaCZ9x/x5VL4Q673th2HnE7haAaOp5zOQdjQ=";
   };
+
+  pythonRelaxDeps = [ "aenum" ];
 
   build-system = [ setuptools ];
 
@@ -60,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "tests/" ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"

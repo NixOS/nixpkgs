@@ -10,10 +10,9 @@
 }:
 
 with python3Packages;
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "gnomecast";
   version = "unstable-2022-04-23";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "keredson";

@@ -1,33 +1,55 @@
 {
   stdenv,
+  runCommand,
   lib,
   rustPlatform,
   nix-update-script,
   fetchFromGitHub,
+  IOKit,
+  CoreFoundation,
+  nushell,
+  skim,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "nu_plugin_skim";
-  version = "0.16.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "idanarye";
-    repo = "nu_plugin_skim";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bTVO5qLaxdSbgy0ybQJhUYa3imQSP5I6Vlban1qJeJg=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-z+NT5WjwBn5yrdQNuERswZgsfM4OJPKssWPyClIi0Fk=";
   };
 
-  cargoHash = "sha256-A90CfbgWQs/1AcoLZspiQ5aEz2rRjJKxHM0fTuyKSDw=";
+  cargoHash = "sha256-IcecexmlWjpmqgkuhJv58+GeLhi8cHNItKzUHC3+UCc=";
 
-  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    IOKit
+    CoreFoundation
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.check =
+      let
+        nu = lib.getExe nushell;
+        plugin = lib.getExe skim;
+      in
+      runCommand "${pname}-test" { } ''
+        touch $out
+        ${nu} -n -c "plugin add --plugin-config $out ${plugin}"
+        ${nu} -n -c "plugin use --plugin-config $out skim"
+      '';
+  };
 
-  meta = {
-    description = "Nushell plugin that adds integrates the skim fuzzy finder";
+  meta = with lib; {
+    description = "A nushell plugin that adds integrates the skim fuzzy finder";
     mainProgram = "nu_plugin_skim";
     homepage = "https://github.com/idanarye/nu_plugin_skim";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aftix ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ aftix ];
+    platforms = platforms.all;
   };
-})
+}

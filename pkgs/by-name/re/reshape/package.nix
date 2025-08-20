@@ -2,8 +2,10 @@
   lib,
   rustPlatform,
   fetchCrate,
+  darwin,
   postgresqlTestHook,
   postgresql,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +17,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wv2gKyXCEH+tnZkUUAisMbuseth3dsFiJujH8VO1ii4=";
   };
 
-  cargoHash = "sha256-lK54SEayI015f2AQ6h4zadgkECLp4jCeJO7enBG0LeM=";
+  cargoHash = "sha256-VTJ3FNhVLgxo/VVBhk1yF9UUktLXcbrEkYwoyoWFhXA=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   nativeCheckInputs = [
     postgresqlTestHook
@@ -30,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
 
-  meta = {
+  meta = with lib; {
     description = "Easy-to-use, zero-downtime schema migration tool for Postgres";
     mainProgram = "reshape";
     homepage = "https://github.com/fabianlindfors/reshape";
     changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilyakooo0 ];
   };
 }

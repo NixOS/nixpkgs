@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "d7d876d6868ae1d262a7de38cbffbb8521c4233c";
-  version = "2025-07-06";
+  rev = "408f74841b90169a7f674955389212e2d02f7f4d";
+  version = "2024-09-28";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "zAkuXAjF9JAyvOj5Qk/TYR++9OMrmRA3dxpY086zG48=";
+    sha256 = "2iXNs2Ks54Gj6T6PR5AtWrmR9uUxgFScAfek2v+qdTo=";
   };
 
   dontBuild = true;
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "More featureful runner for sbt, the simple/scala/standard build tool";
+    description = "A more featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "quantile-forest";
-  version = "1.4.0";
+  version = "1.3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "zillow";
     repo = "quantile-forest";
     tag = "v${version}";
-    hash = "sha256-VzHGjV2WWCebUh3UINFi4DbrXBnZXVK2GQtcJb0oKoM=";
+    hash = "sha256-0gdXjr+mRInZtvmgH1vRjLCkXZmTn1zWmD3E1ass9hQ=";
   };
 
   build-system = [

@@ -8,7 +8,7 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "communi";
   version = "3.6.0";
 

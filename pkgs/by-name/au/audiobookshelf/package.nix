@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
-  nodejs,
+  nodejs_18,
   ffmpeg-full,
   nunicode,
   util-linux,
@@ -14,12 +14,10 @@
 }:
 
 let
-  source = {
-    version = "2.28.0";
-    hash = "sha256-bbsiaSGIaD5oFnhk3e+SWzYxv4dsRXrgMVbe1lsj4pw=";
-    npmDepsHash = "sha256-JC2uOXV+EwS6CGwyOUTXcymFwLSz/KUqIoB4ccSGgbw=";
-    clientNpmDepsHash = "sha256-6l8apOd3R259+SlcD6P6rx1FkRnB80keoBGcfbQNhGU=";
-  };
+  nodejs = nodejs_18;
+
+  source = builtins.fromJSON (builtins.readFile ./source.json);
+  pname = "audiobookshelf";
 
   src = fetchFromGitHub {
     owner = "advplyr";
@@ -41,7 +39,7 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = source.clientNpmDepsHash;
+    npmDepsHash = source.clientDepsHash;
   };
 
   wrapper = import ./wrapper.nix {
@@ -55,16 +53,15 @@ let
 
 in
 buildNpmPackage {
-  pname = "audiobookshelf";
-
-  inherit src;
-  inherit (source) npmDepsHash version;
+  inherit pname src;
+  inherit (source) version;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
+  npmDepsHash = source.depsHash;
 
   installPhase = ''
     mkdir -p $out/opt/client
@@ -80,7 +77,7 @@ buildNpmPackage {
 
   passthru = {
     tests.basic = nixosTests.audiobookshelf;
-    updateScript = ./update.sh;
+    updateScript = ./update.nu;
   };
 
   meta = {
@@ -91,7 +88,6 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
-      tebriel
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";

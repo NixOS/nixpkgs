@@ -6,7 +6,7 @@
   pandocfilters,
   poetry-core,
   pythonOlder,
-  replaceVars,
+  substituteAll,
   texliveSmall,
 }:
 
@@ -19,13 +19,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";
-    repo = "pypandoc";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-9fpits8O/50maM/e1lVVqBoTwUmcI+/IAYhVX1Pt6ZE=";
   };
 
   patches = [
-    (replaceVars ./static-pandoc-path.patch {
+    (substituteAll {
+      src = ./static-pandoc-path.patch;
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
       pandocVersion = pandoc.version;
     })

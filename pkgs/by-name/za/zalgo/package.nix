@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zalgo";
-  version = "0-unstable-2020-08-26";
+  version = "unstable-2020-08-26";
 
   src = fetchFromGitHub {
     owner = "lunasorcery";

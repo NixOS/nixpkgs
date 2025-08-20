@@ -11,29 +11,25 @@
   pyyaml,
   requests,
   responses,
-  setuptools,
   unidiff,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
   version = "1.5.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = "detect-secrets";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     gibberish-detector
     pyyaml
     pyahocorasick
@@ -46,8 +42,11 @@ buildPythonPackage rec {
     responses
     unidiff
     pkgs.gitMinimal
-    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update
@@ -67,7 +66,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
-    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

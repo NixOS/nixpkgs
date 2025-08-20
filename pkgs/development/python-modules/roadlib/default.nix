@@ -1,40 +1,33 @@
 {
   lib,
-  aiohttp,
-  cryptography,
+  adal,
   buildPythonPackage,
   fetchPypi,
   pyjwt,
   pythonOlder,
   setuptools,
-  requests,
   sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "roadlib";
-  version = "1.4.0";
+  version = "0.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xiWX16bnEhy7Ykn0nEXpXLJJ5rsZrr2rYmu6WE5XhaQ=";
+    hash = "sha256-bCdPL9ic1zf6Kzv10bUQI5baqWofGDWk4ipuarsqbeY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    cryptography
+    adal
     pyjwt
-    requests
     sqlalchemy
   ];
-
-  optional-dependencies = {
-    async = [ aiohttp ];
-  };
 
   # Module has no test
   doCheck = false;

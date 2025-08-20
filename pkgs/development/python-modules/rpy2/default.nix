@@ -12,7 +12,6 @@
   xz,
   bzip2,
   zlib,
-  zstd,
   icu,
   ipython,
   jinja2,
@@ -48,30 +47,30 @@ buildPythonPackage rec {
     substituteInPlace 'requirements.txt' --replace 'pytest' ""
   '';
 
-  buildInputs = [
-    pcre
-    xz
-    bzip2
-    zlib
-    zstd
-    icu
-    libdeflate
-  ]
-  ++ (with rPackages; [
-    # packages expected by the test framework
-    ggplot2
-    dplyr
-    RSQLite
-    broom
-    DBI
-    dbplyr
-    hexbin
-    lazyeval
-    lme4
-    tidyr
-  ])
-  ++ extraRPackages
-  ++ rWrapper.recommendedPackages;
+  buildInputs =
+    [
+      pcre
+      xz
+      bzip2
+      zlib
+      icu
+      libdeflate
+    ]
+    ++ (with rPackages; [
+      # packages expected by the test framework
+      ggplot2
+      dplyr
+      RSQLite
+      broom
+      DBI
+      dbplyr
+      hexbin
+      lazyeval
+      lme4
+      tidyr
+    ])
+    ++ extraRPackages
+    ++ rWrapper.recommendedPackages;
 
   nativeBuildInputs = [
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
@@ -87,6 +86,8 @@ buildPythonPackage rec {
     tzlocal
     simplegeneric
   ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # https://github.com/rpy2/rpy2/issues/1111
   disabledTests = [

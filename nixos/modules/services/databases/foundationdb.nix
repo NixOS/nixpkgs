@@ -353,13 +353,14 @@ in
     assertions = [
       {
         assertion = lib.versionOlder cfg.package.version "6.1" -> cfg.traceFormat == "xml";
-        message = ''
-          Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
-          This option has no effect for version ''
-        + cfg.package.version
-        + ''
-          , and enabling it is an error.
-        '';
+        message =
+          ''
+            Versions of FoundationDB before 6.1 do not support configurable trace formats (only XML is supported).
+            This option has no effect for version ''
+          + cfg.package.version
+          + ''
+            , and enabling it is an error.
+          '';
       }
     ];
 
@@ -407,8 +408,7 @@ in
             cfg.logDir
             cfg.pidfile
             "/etc/foundationdb"
-          ]
-          ++ cfg.extraReadWritePaths;
+          ] ++ cfg.extraReadWritePaths;
         in
         {
           Type = "simple";

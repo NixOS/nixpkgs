@@ -5,24 +5,27 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
+  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-sqlite";
-  version = "0.2.0-unstable-2025-01-21";
+  version = "0.2.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-sqlite";
-    rev = "865350ce1a398acd7182f6f8429c3048db54ef1d";
-    hash = "sha256-NBgpLP3/UUrW/qM24jUyV4MH5c/uCVAfInZ6AKcl1X0=";
+    tag = "v${version}";
+    hash = "sha256-PQByKARf0OOMC9LRTz3XVrFZp6ODSggMJeA6PNK/AuA=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [ pysigma ];
+  propagatedBuildInputs = [ pysigma ];
 
   nativeCheckInputs = [
     pytestCheckHook

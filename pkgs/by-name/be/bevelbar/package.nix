@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "X11 status bar with beveled borders";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      AndersonTorres
       neeasade
     ];
     platforms = lib.platforms.linux;

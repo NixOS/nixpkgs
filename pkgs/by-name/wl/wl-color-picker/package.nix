@@ -9,40 +9,36 @@
   imagemagick,
   makeWrapper,
   bash,
-  libnotify,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wl-color-picker";
-  version = "1.4";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "jgmdev";
     repo = "wl-color-picker";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-u04eO5QfIEBNEoh9w0w2Kz+vyCLuIzCStyz+lKarF3w=";
+    rev = "v${version}";
+    sha256 = "sha256-lvhpXy4Sd1boYNGhbPoZTJlBhlW5obltDOrEzB1Gq0A=";
   };
 
   strictDeps = true;
-
-  nativeBuildInputs = [
-    makeWrapper
-    bash
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   patchPhase = ''
-    patchShebangs .
     substituteInPlace Makefile \
-      --replace "which" "ls" \
-      --replace "grim" "${lib.getExe grim}" \
-      --replace "slurp" "${lib.getExe slurp}" \
-      --replace "zenity" "${lib.getExe zenity}" \
-      --replace "convert" "${lib.getExe' imagemagick "convert"}" \
-      --replace "wl-copy" "${lib.getExe' wl-clipboard "wl-copy"}" \
-      --replace "notify-send" "${lib.getExe' libnotify "notify-send"}"
+      --replace 'which' 'ls' \
+      --replace 'grim' "${grim}/bin/grim" \
+      --replace 'slurp' "${slurp}/bin/slurp" \
+      --replace 'convert' "${imagemagick}/bin/convert" \
+      --replace 'zenity' "${zenity}/bin/zenity" \
+      --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+  ];
 
   postInstall = ''
     wrapProgram $out/usr/bin/wl-color-picker \
@@ -53,19 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
           imagemagick
           zenity
           wl-clipboard
-          libnotify
         ]
       }
     mkdir -p $out/bin
     ln -s $out/usr/bin/wl-color-picker $out/bin/wl-color-picker
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wayland color picker that also works on wlroots";
     homepage = "https://github.com/jgmdev/wl-color-picker";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
     mainProgram = "wl-color-picker";
   };
-})
+}

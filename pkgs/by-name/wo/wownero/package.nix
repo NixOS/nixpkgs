@@ -5,13 +5,14 @@
   fetchFromGitea,
   cmake,
   python3,
-  boost186,
+  boost,
   libsodium,
   openssl,
   rapidjson,
   readline,
   unbound,
   zeromq,
+  darwin,
 }:
 
 let
@@ -59,15 +60,19 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    boost186
-    libsodium
-    openssl
-    rapidjson
-    readline
-    unbound
-    zeromq
-  ];
+  buildInputs =
+    [
+      boost
+      libsodium
+      openssl
+      rapidjson
+      readline
+      unbound
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.IOKit
+    ];
 
   postUnpack = ''
     rm -r $sourceRoot/external/miniupnp

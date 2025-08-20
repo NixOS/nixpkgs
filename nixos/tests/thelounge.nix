@@ -7,8 +7,7 @@ import ./make-test-python.nix {
       {
         services.thelounge = {
           enable = true;
-          # nodePackages.thelounge-theme-* has been removed
-          # plugins = [ pkgs.theLoungePlugins.themes.solarized ];
+          plugins = [ pkgs.theLoungePlugins.themes.solarized ];
         };
       };
 
@@ -29,7 +28,7 @@ import ./make-test-python.nix {
       machine.wait_for_unit("thelounge.service")
       machine.wait_for_open_port(9000)
 
-    # private.wait_until_succeeds("journalctl -u thelounge.service | grep thelounge-theme-solarized")
+    private.wait_until_succeeds("journalctl -u thelounge.service | grep thelounge-theme-solarized")
     private.wait_until_succeeds("journalctl -u thelounge.service | grep 'in private mode'")
     public.wait_until_succeeds("journalctl -u thelounge.service | grep 'in public mode'")
   '';

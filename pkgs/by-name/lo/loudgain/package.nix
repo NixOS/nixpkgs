@@ -7,7 +7,7 @@
   ffmpeg,
   libebur128,
   libresample,
-  taglib_1,
+  taglib,
   zlib,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Moonbase59";
-    repo = "loudgain";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-XLj+n0GlY/GAkJlW2JVMd0jxMzgdv/YeSTuF6QUIGwU=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libebur128
     libresample
-    taglib_1
+    taglib
     zlib
   ];
 

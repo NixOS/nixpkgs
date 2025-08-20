@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linux enumeration tool with verbosity levels";
     homepage = "https://github.com/diego-treitos/linux-smart-enumeration";
     changelog = "https://github.com/diego-treitos/linux-smart-enumeration/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "lse.sh";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -7,6 +7,7 @@ let
     listToAttrs
     maintainers
     platforms
+    readFile
     ;
 in
 

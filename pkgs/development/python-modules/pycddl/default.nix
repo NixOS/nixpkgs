@@ -39,9 +39,10 @@ buildPythonPackage rec {
     rm tests/test_benchmarks.py
   '';
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Qep5YD4LQ+r118L5H+hUqeS00SibyvsbtLWDrJJBNc0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-VpJ/PLAwwuakwsNAtLDdWGXCxl6jGMTvsEhzIHk6a0g=";
   };
 
   nativeCheckInputs = [

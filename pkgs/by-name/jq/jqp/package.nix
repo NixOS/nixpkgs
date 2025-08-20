@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "noahgorstein";
-    repo = "jqp";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-i22qALVa8EUaTwgN6DocGJArNyOvkQbFuH++EQKBuIc=";
   };

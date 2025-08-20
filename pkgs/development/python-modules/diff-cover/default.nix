@@ -20,20 +20,20 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "9.6.0";
-  pyproject = true;
+  version = "9.2.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-deW8BW3Kpoxsh8n7TgfJ5g2u8VtujQNNVtLaniyEqHI=";
+    hash = "sha256-X6Wy1xzPXRbNIipxwsoGnZv1+j1lf2+sm02cIzeTI78=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     chardet
     jinja2
     jinja2-pluralize
@@ -56,9 +56,6 @@ buildPythonPackage rec {
     "file_does_not_exist"
     # Comparing console output doesn't work reliable
     "console"
-    # Assertion failure
-    "test_html_with_external_css"
-    "test_style_defs"
   ];
 
   pythonImportsCheck = [ "diff_cover" ];

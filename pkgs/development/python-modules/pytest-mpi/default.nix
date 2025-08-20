@@ -41,9 +41,10 @@ buildPythonPackage rec {
   # Tests cause the Python interpreter to crash from some reason, a hard issue
   # to debug. (TODO: discuss this with upstream)
   doCheck = false;
-  pytestFlags = [
+  pytestFlagsArray = [
     # https://github.com/aragilar/pytest-mpi/issues/4#issuecomment-634614337
-    "-ppytester"
+    "-p"
+    "pytester"
   ];
 
   pythonImportsCheck = [ "pytest_mpi" ];

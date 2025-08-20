@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "1fpsvideo";
     repo = "1fps";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3uPGFxEWmKQxQWPmotZI29GykUGQDjtDjFPps4QMs0M=";
   };
 
@@ -25,8 +25,7 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXtst
     xorg.libXi
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
 
   meta = {
     description = "Encrypted Screen Sharing";

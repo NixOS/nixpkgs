@@ -73,7 +73,6 @@ in
           "main"
           "network"
           "bus"
-          "device"
           "update"
           "other"
         ];

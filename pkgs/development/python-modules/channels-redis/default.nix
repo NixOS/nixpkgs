@@ -1,20 +1,21 @@
 {
   lib,
+  aioredis,
   asgiref,
   buildPythonPackage,
   channels,
   cryptography,
   fetchFromGitHub,
+  hiredis,
   msgpack,
   pythonOlder,
   redis,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "channels-redis";
-  version = "4.2.1";
-  pyproject = true;
+  version = "4.1.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -22,13 +23,16 @@ buildPythonPackage rec {
     owner = "django";
     repo = "channels_redis";
     tag = version;
-    hash = "sha256-jQkpuOQNU2KCWavXSE/n8gdpQhhAafQbZYfbX71Rcds=";
+    hash = "sha256-Eid9aWlLNnqr3WAnsLe+Pz9gsugCsdDKi0+nFNF02CI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  buildInputs = [
+    hiredis
     redis
+  ];
+
+  propagatedBuildInputs = [
+    aioredis
     asgiref
     channels
     msgpack

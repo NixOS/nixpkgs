@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dotwiz" ];
 
-  disabledTestPaths = [
-    "benchmarks"
-    "integration*"
+  pytestFlagsArray = [
+    "--ignore=benchmarks"
+    "--ignore-glob=*integration*"
   ];
 
   meta = with lib; {

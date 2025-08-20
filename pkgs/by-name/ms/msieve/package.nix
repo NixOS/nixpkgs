@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-6ErVn4pYPMG5VFjOQURLsHNpN0pGdp55+rjY8988onU=";
   };
 
-  patches = [ ./savefile_t-pointer-type.patch ];
-
   buildInputs = [
     zlib
     gmp
@@ -32,8 +30,6 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "all"
   ];
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p $out/bin/

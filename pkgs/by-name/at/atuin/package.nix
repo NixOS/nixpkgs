@@ -5,21 +5,49 @@
   installShellFiles,
   rustPlatform,
   nixosTests,
-  nix-update-script,
+  jq,
+  moreutils,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.8.0";
+  version = "18.4.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-FJEXIxdeg6ExXvrQ3dtugMK5xw+NwWyB+ld9rj7okoU=";
+    rev = "v${version}";
+    hash = "sha256-P/q4XYhpXo9kwiltA0F+rQNSlqI+s8TSi5v5lFJWJ/4=";
   };
 
-  cargoHash = "sha256-xJPSMu22Bq9Panrafsd5vUSnEQYuJB19OEZaAq8z0mw=";
+  # the interim crate contains both README.md and readme.md,
+  # which causes a hash mismatch on systems with a case-insensitive filesystem.
+  # This removes the readme files and updates cargo's checksum file accordingly
+  depsExtraArgs = {
+    nativeBuildInputs = [
+      jq
+      moreutils
+    ];
+
+    postBuild = ''
+      pushd $name/interim
+
+      if [ -e readme.md ]; then
+        rm --force --verbose README.md readme.md
+        jq 'del(.files."README.md") | del(.files."readme.md")' \
+          .cargo-checksum.json -c \
+          | sponge .cargo-checksum.json
+
+        popd
+      else
+        echo "ERROR: the interim crate has been updated"
+        echo "When you see this message, please remove the workaround for the interim crate from the atuin nix expression"
+        exit 1
+      fi
+    '';
+  };
+
+  cargoHash = "sha256-l8DsQwEJZL9kr9UIpZzebDSRYET2WM8VFwk+O1Qk9oQ=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -41,11 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) atuin;
-    };
-    updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) atuin;
   };
 
   checkFlags = [
@@ -69,8 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       SuperSandro2000
       sciencentistguy
       _0x4A6F
-      rvdp
     ];
     mainProgram = "atuin";
   };
-})
+}

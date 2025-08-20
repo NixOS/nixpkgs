@@ -1,15 +1,5 @@
-{
-  mkDerivation,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  pkg-config,
-  kcoreaddons,
-  ki18n,
-  kwallet,
-  mksh,
-  pinentry-qt,
-}:
+{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkg-config
+, kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
 
 mkDerivation rec {
   pname = "kwalletcli";
@@ -39,16 +29,9 @@ mkDerivation rec {
 
   makeFlags = [ "KDE_VER=5" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
-  propagatedBuildInputs = [
-    kcoreaddons
-    ki18n
-    (lib.getLib kwallet)
-  ];
+  propagatedBuildInputs = [ kcoreaddons ki18n (lib.getLib kwallet) ];
 
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1

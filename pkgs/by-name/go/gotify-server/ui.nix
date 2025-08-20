@@ -1,31 +1,45 @@
 {
-  src,
-  version,
   stdenv,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn,
+  fixup-yarn-lock,
   nodejs-slim,
   fetchYarnDeps,
+  gotify-server,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gotify-ui";
-  inherit version;
+  inherit (gotify-server) version;
 
-  src = src + "/ui";
+  src = gotify-server.src + "/ui";
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
     hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn
+    fixup-yarn-lock
     nodejs-slim
   ];
 
-  env.NODE_OPTIONS = "--openssl-legacy-provider";
+  postPatch = ''
+    export HOME=$NIX_BUILD_TOP/fake_home
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    export NODE_OPTIONS=--openssl-legacy-provider
+    yarn --offline build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -34,4 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-})
+}

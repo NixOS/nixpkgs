@@ -1,7 +1,6 @@
 {
   lib,
-  stdenv,
-  flutter332,
+  flutter327,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -9,16 +8,16 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.18-beta";
+  version = "0.9.12-beta";
 in
-flutter332.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-ea3+L6M2iaT1Rfy7tH1+3VpnjV+T8S86ZWc9l7pwW/4=";
+    hash = "sha256-hY+1BMQEACrpjKZnVwPqWY5M4m4U/Ys/bcqhGMeCE6U=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -30,8 +29,7 @@ flutter332.buildFlutterApplication {
 
   gitHashes = {
     balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
-    isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
-    isar_flutter_libs = "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=";
+    isar_generator = "sha256-lWnHmZmYx7qDG6mzyDqYt+Xude2xVOH1VW+BoDCas60=";
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
     palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
@@ -44,13 +42,12 @@ flutter332.buildFlutterApplication {
   '';
 
   postInstall = ''
-    install -Dm444 assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
-    install -Dm444 assets/com.unicornsonlsd.finamp.metainfo.xml -t $out/share/metainfo
+    install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = "com.unicornsonlsd.finamp";
+      name = "Finamp";
       desktopName = "Finamp";
       genericName = "Music Player";
       exec = "finamp";
@@ -67,8 +64,6 @@ flutter332.buildFlutterApplication {
   ];
 
   meta = {
-    # Finamp depends on `ìsar`, which for Linux is only compiled for x86_64. https://github.com/jmshrv/finamp/issues/766
-    broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64;
     description = "Open source Jellyfin music player";
     homepage = "https://github.com/jmshrv/finamp";
     license = lib.licenses.mpl20;

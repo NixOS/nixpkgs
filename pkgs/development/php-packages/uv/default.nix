@@ -22,7 +22,7 @@ buildPecl rec {
     description = "Interface to libuv for php";
     license = licenses.php301;
     homepage = "https://github.com/amphp/ext-uv";
-    teams = [ teams.php ];
+    maintainers = teams.php.members;
     platforms = platforms.linux;
   };
 }

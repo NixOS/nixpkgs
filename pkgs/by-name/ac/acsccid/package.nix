@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "acshk";
-    repo = "acsccid";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs = [
-    pcsclite
-    libusb1
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      pcsclite
+      libusb1
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   configureFlags = [
     "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card
@@ -79,8 +80,8 @@ stdenv.mkDerivation rec {
         services.pcscd.plugins = [ pkgs.acsccid ];
     '';
     homepage = src.meta.homepage;
-    license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = with platforms; unix;
   };
 }

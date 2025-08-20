@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abuild";
-  version = "3.15.0";
+  version = "3.14.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "abuild";
-    tag = finalAttrs.version;
-    hash = "sha256-vHRh36igfb6WZ8JdtxW8OOqgiVBAXreTy+QOOKaWEwA=";
+    rev = finalAttrs.version;
+    hash = "sha256-gNmje4USaklwmsVGs4NMFoharEk2syCmDdQ/SCSMKsI=";
   };
 
   buildInputs = [
@@ -53,8 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace ./Makefile \
-      --replace 'chmod 4555' '#chmod 4555' \
-      --replace 'pkg-config' "$PKG_CONFIG"
+      --replace 'chmod 4555' '#chmod 4555'
   '';
 
   makeFlags = [

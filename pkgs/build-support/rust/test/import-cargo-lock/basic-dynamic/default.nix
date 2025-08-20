@@ -1,12 +1,21 @@
-{ rustPlatform }:
-
+{ lib, rustPlatform }:
+let
+  fs = lib.fileset;
+in
 rustPlatform.buildRustPackage {
   pname = "basic-dynamic";
   version = "0.1.0";
 
-  src = ./package;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./Cargo.toml
+      ./Cargo.lock
+      ./src
+    ];
+  };
 
-  cargoLock.lockFileContents = builtins.readFile ./package/Cargo.lock;
+  cargoLock.lockFileContents = builtins.readFile ./Cargo.lock;
 
   doInstallCheck = true;
 

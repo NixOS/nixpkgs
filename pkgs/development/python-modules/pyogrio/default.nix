@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.11.0";
+  version = "0.10.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "pyogrio";
     tag = "v${version}";
-    hash = "sha256-3XrP3/sqGRtA+sfaoOV/ByGAtfpGZB5RYRr5lyYZUj0=";
+    hash = "sha256-AyKBktZWzUxD1HKKp89gQ97c4WPB5PkXnkFqN+RHx7c=";
   };
 
   postPatch = ''
@@ -39,8 +39,7 @@ buildPythonPackage rec {
     setuptools
     versioneer
     wheel
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ] ++ versioneer.optional-dependencies.toml;
 
   buildInputs = [ gdal ];
 
@@ -56,9 +55,9 @@ buildPythonPackage rec {
     python setup.py build_ext --inplace
   '';
 
-  disabledTestMarks = [
+  pytestFlagsArray = [
     # disable tests which require network access
-    "network"
+    "-m 'not network'"
   ];
 
   pythonImportsCheck = [ "pyogrio" ];
@@ -68,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://pyogrio.readthedocs.io/";
     changelog = "https://github.com/geopandas/pyogrio/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members;
   };
 }

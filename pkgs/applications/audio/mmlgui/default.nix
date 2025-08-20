@@ -9,10 +9,12 @@
   libX11,
   libXau,
   libXdmcp,
+  Carbon,
+  Cocoa,
   cppunit,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mmlgui";
   version = "210420-preview-unstable-2024-04-15";
 
@@ -50,15 +52,20 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    glfw
-    libvgm
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXau
-    libXdmcp
-  ];
+  buildInputs =
+    [
+      glfw
+      libvgm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXau
+      libXdmcp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ];
 
   checkInputs = [
     cppunit

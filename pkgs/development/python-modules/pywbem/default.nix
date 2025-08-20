@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.7.3";
-  pyproject = true;
+  version = "1.7.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0fCi69T/7e+NBnrzhVIW21GQx/byfI0tzUZ+CXAckLA=";
+    hash = "sha256-3Dt4WEABf1/LY4HFZoJZjOu/yEUYUXaPheIxioTga2g=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,6 @@ buildPythonPackage rec {
     pbr
     ply
     pyyaml
-    requests
     six
     yamlloader
   ];
@@ -55,6 +54,7 @@ buildPythonPackage rec {
     lxml
     pytest
     pytz
+    requests
     requests-mock
     testfixtures
   ];

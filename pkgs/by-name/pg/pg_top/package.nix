@@ -4,7 +4,7 @@
   lib,
   libbsd,
   ncurses,
-  libpq,
+  postgresql,
   stdenv,
 }:
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libbsd
-    libpq
     ncurses
+    postgresql
   ];
 
   nativeBuildInputs = [ cmake ];

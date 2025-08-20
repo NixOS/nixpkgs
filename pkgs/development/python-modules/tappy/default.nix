@@ -3,29 +3,26 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  hatchling,
+  setuptools,
   pyyaml,
   more-itertools,
   pytestCheckHook,
 }:
-let
-  version = "3.2.1";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "tap.py";
-  inherit version;
+  version = "3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "tap_py";
-    inherit version;
-    hash = "sha256-0DyeavClb62ZTxxp8UBB5naBHXPu7vIL9Ad8Q9Yh1gg=";
+    inherit pname version;
+    hash = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
   };
 
   build-system = [
-    hatchling
+    setuptools
   ];
 
   optional-dependencies = {
@@ -39,12 +36,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tap" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set of tools for working with the Test Anything Protocol (TAP) in Python";
     homepage = "https://github.com/python-tap/tappy";
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
     mainProgram = "tappy";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sfrijters ];
   };
 }

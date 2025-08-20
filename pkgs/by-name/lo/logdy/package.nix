@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "logdy";
-  version = "0.17.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "logdyhq";
     repo = "logdy-core";
-    tag = "v${version}";
-    hash = "sha256-NV1vgHUeIH1k1E5hdO3fXrXl1+B30AUM2aexlxz5g8o=";
+    rev = "v${version}";
+    hash = "sha256-lLQM9/QD/vB/KjyzSxVJzSMw0SQWyv/1qXbBBXatnCg=";
   };
 
   vendorHash = "sha256-kFhcbBMymzlJ+2zw7l09LJfCdps26Id+VzOehqrLDWU=";
@@ -38,19 +38,9 @@ buildGoModule rec {
       --zsh <($out/bin/logdy completion zsh)
   '';
 
-  checkFlags =
-    let
-      skippedTests = [
-        "TestClientLoad" # index out of range
-        "TestLogdyE2E_(No|Stdin)Command" # hang forever
-      ];
-    in
-    [
-      "-timeout=60s" # assume the test is hanging
-      "-skip=^${lib.concatStringsSep "|" skippedTests}$"
-    ];
-
-  __darwinAllowLocalNetworking = true;
+  checkFlags = [
+    "-skip=^TestClientLoad$" # index out of range
+  ];
 
   meta = {
     description = "Web based real-time log viewer";

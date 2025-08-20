@@ -9,13 +9,13 @@ let
     { modRoot, vendorHash }:
     buildGoModule rec {
       pname = "bird-lg-${modRoot}";
-      version = "1.3.8";
+      version = "1.3.5";
 
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
         rev = "v${version}";
-        hash = "sha256-j81cfHqXNsTM93ofxXz+smkjN8OdJXxtm9z5LdzC+r8=";
+        hash = "sha256-lWpTIuN+wCSDBHmpRIfVG8Z1Qx1s55MnJomQPjczB5k=";
       };
 
       doDist = false;
@@ -27,12 +27,12 @@ let
 
       inherit modRoot vendorHash;
 
-      meta = {
+      meta = with lib; {
         description = "Bird Looking Glass";
         homepage = "https://github.com/xddxdd/bird-lg-go";
         changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${version}";
-        license = lib.licenses.gpl3Plus;
-        maintainers = with lib.maintainers; [
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [
           tchekda
           e1mo
         ];
@@ -41,12 +41,12 @@ let
 
   bird-lg-frontend = generic {
     modRoot = "frontend";
-    vendorHash = "sha256-luJuIZ0xN8mdtWwTlfEDnAwMgt+Tzxlk2ZIDPIwHpcY=";
+    vendorHash = "sha256-+M9Mlqck2E/ETW+NXsKwIeWlmZAaBU07fgDhKUU9PAI=";
   };
 
   bird-lg-proxy = generic {
     modRoot = "proxy";
-    vendorHash = "sha256-OVyfPmLTHV5RFdLgRHEH/GqxuG5MnGt9Koz0DxpSg+4=";
+    vendorHash = "sha256-nBTLQUX68f98D0RTlyX0gnvhQ+bu8d3Vv67J/YoXJxs=";
   };
 in
 symlinkJoin {

@@ -25,11 +25,11 @@ assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
-  version = "5.3.2";
+  version = "5.3.1";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
-    hash = "sha256-+MNIZQnecFGSE4sA7ywAu73Q6Eww1cB9I/xzqdxMycw=";
+    hash = "sha256-aU23ZIEqYjZCPU/0DOt7bExEEwG3KtUCu1wn4AzVb3g=";
   };
 
   # PIE is incompatible with the "persistent malloc" ("pma") feature.
@@ -42,22 +42,22 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "info"
-  ]
-  ++ lib.optional (!interactive) "man";
+  ] ++ lib.optional (!interactive) "man";
 
   strictDeps = true;
 
   # no-pma fix
-  nativeBuildInputs = [
-    autoreconfHook
-    texinfo
-  ]
-  ++ lib.optionals interactive [
-    removeReferencesTo
-  ]
-  ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
-    glibcLocales
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      texinfo
+    ]
+    ++ lib.optionals interactive [
+      removeReferencesTo
+    ]
+    ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
+      glibcLocales
+    ];
 
   buildInputs =
     lib.optionals interactive [
@@ -71,11 +71,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # TODO: figure out a better way to unbreak _NSGetExecutablePath invocations
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
@@ -118,7 +113,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = lib.teams.helsinki-systems.members;
     mainProgram = "gawk";
   };
 }

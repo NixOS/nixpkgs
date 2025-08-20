@@ -4,32 +4,43 @@
   fetchFromGitHub,
   rustPlatform,
   just,
-  libcosmicAppHook,
-  nix-update-script,
-  nixosTests,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
+  appstream-glib,
+  desktop-file-utils,
+  intltool,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-launcher";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-niMsDLVMUEr8VyubDm6RGgS7p22v5nH/F8cASJOszhs=";
+    rev = "epoch-${version}";
+    hash = "sha256-0htDjdS8431orzNnetK0ubNvjO/5748YYqeESJKTUUs=";
   };
 
-  cargoHash = "sha256-Wh3vI42RBfXpI7mvPVUmGK3fITGi+EGyo+lG7VnZg3w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WW1o9MFxNd41ODS5p4piLQtpy277E5a/oN2yYdJc8y4=";
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    appstream-glib
+    desktop-file-utils
+    intltool
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -40,33 +51,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
   ];
 
-  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
+  postPatch = ''
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    passthru.updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
-  };
+  postInstall = ''
+    wrapProgram $out/bin/cosmic-launcher \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
+  '';
 
-  meta = {
+  RUSTFLAGS = "--cfg tokio_unstable";
+
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-launcher";
     description = "Launcher for the COSMIC Desktop Environment";
     mainProgram = "cosmic-launcher";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
   };
-})
+}

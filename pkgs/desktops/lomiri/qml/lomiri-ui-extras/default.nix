@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-extras";
-  version = "0.7.0";
+  version = "0.6.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
-    tag = finalAttrs.version;
-    hash = "sha256-fN9rZC8J8xyAStvBNTpLqAcssaiQQpu6INwMLlnkvfw=";
+    rev = finalAttrs.version;
+    hash = "sha256-SF/UF84K9kNtLHO9FDuIFdQId0NfbmRiRZiPrOKvE9o=";
   };
 
   postPatch = ''
     substituteInPlace modules/Lomiri/Components/Extras{,/{plugin,PamAuthentication}}/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
       lib.concatStringsSep ";" [
         # Exclude tests
@@ -104,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Lomiri UI Extra Components";
     longDescription = ''
       A collection of UI components that for various reasons can't be included in
@@ -113,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-ui-extras";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-ui-extras/-/blob/${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.lomiri ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
   };
 })

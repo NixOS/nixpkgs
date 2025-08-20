@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Run only tests which don't require network access
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   pythonImportsCheck = [ "pyowm" ];
 

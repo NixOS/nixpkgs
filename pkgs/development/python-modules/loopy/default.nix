@@ -1,75 +1,60 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  pytools,
-  pymbolic,
-  genpy,
-  numpy,
-  cgen,
-  islpy,
   codepy,
+  cgen,
   colorama,
+  fetchFromGitHub,
+  genpy,
+  immutables,
+  islpy,
   mako,
-  constantdict,
-  typing-extensions,
-
-  # optional-dependencies
+  numpy,
+  pymbolic,
   pyopencl,
-  fparser,
-  ply,
+  pyrsistent,
+  pythonOlder,
+  pytools,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "loopy";
-  version = "2025.1";
+  version = "2024.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "loopy";
     tag = "v${version}";
-    hash = "sha256-3Ebnje+EBw2Jdp2xLqffWx592OoUrSdRDXQkw6FpEzc=";
+    hash = "sha256-mU8vXEPR88QpJpzXZlZdDhMtlwIx5YpeYhXU8Vw2T9g=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };
 
-  build-system = [ hatchling ];
-
-  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    pytools
-    pymbolic
-    genpy
-    numpy
-    cgen
-    islpy
     codepy
+    cgen
     colorama
+    genpy
+    immutables
+    islpy
     mako
-    constantdict
+    numpy
+    pymbolic
+    pyopencl
+    pyrsistent
+    pytools
     typing-extensions
   ];
 
-  optional-dependencies = {
-    pyopencl = [
-      pyopencl
-    ];
-    fortran = [
-      fparser
-      ply
-    ];
-  };
+  postConfigure = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "loopy" ];
 
@@ -79,7 +64,6 @@ buildPythonPackage rec {
   meta = {
     description = "Code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
-    changelog = "https://github.com/inducer/loopy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

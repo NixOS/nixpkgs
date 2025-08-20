@@ -2,36 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
-  stdenv,
 }:
 
 buildGoModule rec {
   pname = "kubecm";
-  version = "0.33.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
     rev = "v${version}";
-    hash = "sha256-ooVKXFFrDKrxbmR3MJvu2KJQ2PW3zzJ7Qm8ck9Fje8A=";
+    hash = "sha256-qB3Xzw6nWViBd2QMa3gBLrYhflalkjyLqeyl+7ICoSA=";
   };
 
-  vendorHash = "sha256-HKHUN3vOhNl46T06pMUZIjcZMxDw/gkeimbs7kdmtdI=";
+  vendorHash = "sha256-Fr31wLvzIoN2wIU2EmUrsqiMcPpdJpQI3ZfB//JYIXE=";
   ldflags = [
     "-s"
     "-w"
     "-X github.com/sunny0826/kubecm/version.Version=${version}"
   ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd kubecm \
-      --bash <($out/bin/kubecm completion bash) \
-      --fish <($out/bin/kubecm completion fish) \
-      --zsh <($out/bin/kubecm completion zsh)
-  '';
 
   doCheck = false;
 
@@ -39,10 +28,7 @@ buildGoModule rec {
     description = "Manage your kubeconfig more easily";
     homepage = "https://github.com/sunny0826/kubecm/";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      qjoly
-      sailord
-    ];
+    maintainers = with maintainers; [ qjoly ];
     mainProgram = "kubecm";
   };
 }

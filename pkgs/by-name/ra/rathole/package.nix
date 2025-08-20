@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  rustc,
   pkg-config,
   openssl,
   nixosTests,
+  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rathole";
   version = "0.5.0-unstable-2024-06-06";
 
@@ -20,46 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-C0/G4JOZ4pTAvcKZhRHsGvlLlwAyWBQ0rMScLvaLSuA=";
   };
 
-  # Get rid of git dependency on vergen. No reason to require libgit2-sys as
-  # well as libz-sys. Vendored c libraries for libgit2/zlib fail to build on
-  # darwin and using libs from nixpkgs seems excessive.
-  patches = [
-    ./0001-no-more-vergen.patch
-  ];
-
-  # Build script is only needed for vergen and does nothing when not in a git
-  # repo.
-  postPatch = ''
-    rm build.rs
-  '';
-
-  cargoHash = "sha256-IgPDe8kuWzJ6nF2DceUbN7fw0eGkoYhu1IGMdlSMFos=";
+  cargoHash = "sha256-zlwIgzqpoEgYqZe4Gv8owJQ3m7UFgPA5joRMiyq+T/M=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
 
   __darwinAllowLocalNetworking = true;
-
-  nativeCheckInputs = [ openssl ];
-  preCheck = ''
-    patchShebangs examples/tls/create_self_signed_cert.sh
-    (cd examples/tls && chmod +x create_self_signed_cert.sh && ./create_self_signed_cert.sh)
-  '';
-
-  env = {
-    VERGEN_BUILD_TIMESTAMP = "0";
-    VERGEN_BUILD_SEMVER = version;
-    VERGEN_GIT_COMMIT_TIMESTAMP = "0";
-    VERGEN_GIT_BRANCH = "main";
-    VERGEN_RUSTC_SEMVER = rustc.version;
-    VERGEN_RUSTC_CHANNEL = "stable";
-    VERGEN_CARGO_PROFILE = "release";
-    VERGEN_CARGO_FEATURES = "";
-    VERGEN_CARGO_TARGET_TRIPLE = "${stdenv.hostPlatform.rust.rustcTarget}";
-  };
 
   passthru.tests = {
     inherit (nixosTests) rathole;

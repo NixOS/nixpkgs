@@ -18,7 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  cargoHash = "sha256-H65uAHMAIkJ9D5q/5HxMEbvcfoRhYdFgTQejp6bvu5w=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "stardust-xr-0.14.1" = "sha256-HEv1KzemGHEEcfFrzgKJmHUhGsW95J+6bcK7Bb8T9KE=";
+      "stardust-xr-molecules-0.29.0" = "sha256-yAdoJiTEulZiwRzhgoQ2cDUBxCe6NcTm88TfvDJ9Co4=";
+    };
+  };
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

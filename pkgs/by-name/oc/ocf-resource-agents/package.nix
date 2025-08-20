@@ -29,7 +29,7 @@ let
 
     src = fetchFromGitHub {
       owner = "ClusterLabs";
-      repo = "resource-agents";
+      repo = pname;
       rev = "v${version}";
       sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
     };

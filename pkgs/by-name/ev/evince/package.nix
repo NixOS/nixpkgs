@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "48.1";
+  version = "46.3.1";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fYuab6OgXT9bkEiFkCdojHOniP9ukjvDlFEmiElD+hA=";
+    hash = "sha256-lFwgpvI4ObDVMycpFxRY6QaA2oJk6Zxvn0HCGcfu7nw=";
   };
 
   depsBuildBuild = [
@@ -73,52 +73,54 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
   ];
 
-  buildInputs = [
-    atk
-    dbus # only needed to find the service directory
-    djvulibre
-    gdk-pixbuf
-    ghostscriptX
-    glib
-    gnome-desktop
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    libarchive
-    libgxps
-    libhandy
-    librsvg
-    libspectre
-    libxml2
-    pango
-    poppler
-    texlive.bin.core # kpathsea for DVI support
-  ]
-  ++ lib.optionals withLibsecret [
-    libsecret
-  ]
-  ++ lib.optionals supportMultimedia (
-    with gst_all_1;
+  buildInputs =
     [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
+      atk
+      dbus # only needed to find the service directory
+      djvulibre
+      gdk-pixbuf
+      ghostscriptX
+      glib
+      gnome-desktop
+      gsettings-desktop-schemas
+      gspell
+      gtk3
+      libarchive
+      libgxps
+      libhandy
+      librsvg
+      libspectre
+      libxml2
+      pango
+      poppler
+      texlive.bin.core # kpathsea for DVI support
     ]
-  );
+    ++ lib.optionals withLibsecret [
+      libsecret
+    ]
+    ++ lib.optionals supportMultimedia (
+      with gst_all_1;
+      [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
+        gst-plugins-ugly
+        gst-libav
+      ]
+    );
 
-  mesonFlags = [
-    "-Dnautilus=false"
-    "-Dps=enabled"
-  ]
-  ++ lib.optionals (!withLibsecret) [
-    "-Dkeyring=disabled"
-  ]
-  ++ lib.optionals (!supportMultimedia) [
-    "-Dmultimedia=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dnautilus=false"
+      "-Dps=enabled"
+    ]
+    ++ lib.optionals (!withLibsecret) [
+      "-Dkeyring=disabled"
+    ]
+    ++ lib.optionals (!supportMultimedia) [
+      "-Dmultimedia=disabled"
+    ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
@@ -149,9 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "evince";
-    teams = [
-      teams.gnome
-      teams.pantheon
-    ];
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 })

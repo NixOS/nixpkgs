@@ -1,60 +1,51 @@
 {
-  cargo-tauri,
-  fetchFromGitHub,
-  fetchYarnDeps,
   lib,
-  nix-update-script,
-  nodejs,
-  pkg-config,
-  rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  yarnConfigHook,
+  stdenv,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  webkitgtk_4_0,
 }:
 
-rustPlatform.buildRustPackage (rec {
-  pname = "headphones-toolbox";
-  version = "0.0.7";
-  tag = "test-tauri-v2-2";
+stdenv.mkDerivation (finalAttrs: {
+  name = "headphones-toolbox";
+  version = "0.0.5";
 
-  src = fetchFromGitHub {
-    owner = "george-norton";
-    repo = "headphones-toolbox";
-    rev = "${tag}";
-    hash = "sha256-X2HTEPxvBzbhfN1vqQVk81Qk1Z+EV+7/SpjZrDHv+fM=";
+  src = fetchurl {
+    url = "https://github.com/ploopyco/headphones-toolbox/releases/download/app-v${finalAttrs.version}/ploopy-headphones-toolbox_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-lWjmpybGcL3sbBng8zCTUtwYhlrQ6cCrKkhiu+g9MsE=";
   };
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-Ln5U0KKsKm6ZLViZIWfBiBjm/mQNEIxaj4nTR55PcRg=";
-  };
-
-  cargoHash = "sha256-VgCxYYNBV45sTzouS5NE7nOUViPj0gJO7DSKlJSAT4U=";
-  cargoRoot = "src-tauri";
-  buildAndTestSubdir = cargoRoot;
 
   nativeBuildInputs = [
-    cargo-tauri.hook
-    nodejs
-    pkg-config
-    wrapGAppsHook3
-    yarnConfigHook
+    dpkg
+    autoPatchelfHook
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    webkitgtk_4_0
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  installPhase = ''
+    runHook preInstall
 
-  meta = {
+    mkdir -p $out/bin
+    mv usr/bin $out
+    mv usr/lib $out
+    mv usr/share $out
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "UI for configuring Ploopy Headphones";
     homepage = "https://github.com/ploopyco/headphones-toolbox/";
-    license = lib.licenses.gpl3Only;
-    mainProgram = "headphones-toolbox";
-    maintainers = with lib.maintainers; [
-      flacks
+    maintainers = with maintainers; [
       knarkzel
       nyabinary
     ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "headphones-toolbox";
   };
 })

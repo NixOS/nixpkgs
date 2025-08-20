@@ -1,36 +1,48 @@
 {
-  fetchFromGitHub,
   lib,
-  nix-update-script,
-  oo7,
-  pkg-config,
   rustPlatform,
+  fetchFromGitHub,
+  oo7,
+  openssl,
+  pkg-config,
   testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oo7";
-  version = "0.4.3";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "oo7";
     rev = version;
-    hash = "sha256-P20hxwTT/O4o+Z1LnXJJkeEHv1IILfj4/pPMNde55mY=";
+    hash = "sha256-KoceqJCxb61EF29Fw9UU2LCHxDR0ExR3lnt85Nqg6tg=";
   };
 
-  # TODO: this won't cover tests from the client crate
-  # Additionally cargo-credential will also not be built here
-  buildAndTestSubdir = "cli";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  cargoHash = "sha256-VNgbdvX5ttW+/V2Zzkd3rGIjVe1ENRE6WLg7M48ij7o=";
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  postInstall = ''
+    install -Dm644 portal/data/oo7-portal.portal $out/share/xdg-desktop-portal/portals/oo7.portal
+    install -Dm644 portal/data/oo7-portal.service $out/share/dbus-1/services/oo7-portal.service
+    substituteInPlace $out/share/dbus-1/services/oo7-portal.service \
+      --replace-fail "@bindir@" "$out/bin"
+  '';
 
   passthru = {
     tests.testVersion = testers.testVersion { package = oo7; };
 
-    updateScript = nix-update-script { };
+    # TODO: re-enable this when upstream adds a Cargo.lock
+    # updateScript = nix-update-script { };
   };
 
   meta = with lib; {

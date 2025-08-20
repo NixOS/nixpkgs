@@ -20,7 +20,7 @@
   qt5,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "smuview";
   version = "0.0.5-unstable-2023-04-12";
 
@@ -35,8 +35,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     qt5.wrapQtAppsHook
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -50,8 +49,7 @@ stdenv.mkDerivation {
     python3
     pcre
     libsForQt5.qwt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
     description = "Qt based source measure unit GUI for sigrok";

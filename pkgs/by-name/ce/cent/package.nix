@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to handle Nuclei community templates";
     homepage = "https://github.com/xm1k3/cent";
     changelog = "https://github.com/xm1k3/cent/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.asl20;
+    maintainers = [ ];
     mainProgram = "cent";
   };
 }

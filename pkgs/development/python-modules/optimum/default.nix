@@ -8,15 +8,18 @@
   setuptools,
 
   # dependencies
+  coloredlogs,
   datasets,
   huggingface-hub,
   numpy,
   packaging,
+  sympy,
   torch,
   transformers,
 
   # optional-dependencies
   diffusers,
+  evaluate,
   h5py,
   onnx,
   onnxruntime,
@@ -28,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.26.1";
+  version = "1.23.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-GfUlvz7b0DlqBPibndRzUkszGnbYXg6E8u144ZFAZxA=";
+    hash = "sha256-GJp1ukrYxEEwmkge31b02ROWZW5V23TtoEUjhycHpSg=";
   };
 
   build-system = [ setuptools ];
@@ -45,36 +48,37 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "transformers" ];
 
   dependencies = [
+    coloredlogs
+    datasets
     huggingface-hub
     numpy
     packaging
+    sympy
     torch
     transformers
-  ]
-  ++ transformers.optional-dependencies.sentencepiece;
+  ] ++ transformers.optional-dependencies.sentencepiece;
 
   optional-dependencies = {
     onnxruntime = [
       onnx
-      datasets
-      protobuf
       onnxruntime
+      datasets
+      evaluate
+      protobuf
     ];
     exporters = [
       onnx
-      timm
       onnxruntime
-      protobuf
+      timm
     ];
     exporters-tf = [
+      tensorflow
+      tf2onnx
       onnx
+      onnxruntime
       timm
       h5py
-      tf2onnx
-      onnxruntime
       numpy
-      datasets
-      tensorflow
     ];
     diffusers = [ diffusers ];
     intel = [
@@ -116,7 +120,7 @@ buildPythonPackage rec {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/optimum/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

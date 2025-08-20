@@ -5,15 +5,15 @@
 }:
 buildGoModule rec {
   pname = "nodeinfo";
-  version = "1.0.0";
-  vendorHash = "sha256-P0klk3YWa2qprCUNUjiuF+Akxh246WCu4vwUAZmSDCw=";
+  version = "0.3.2";
+  vendorHash = "sha256-4nHdz/Js8xBUMiH+hH+hSYP25cB4yHbe+QVk0RMqLgc=";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "thefederationinfo";
     repo = "nodeinfo-go";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XwK3QeVDQMZD5G79XPJTAJyilVgYFVgZORHYTBI0gIQ=";
+    hash = "sha256-NNrMv4AS7ybuJfTgs+p61btSIxo+iMvzH7Y5ct46Dag=";
   };
 
   modRoot = "./cli";

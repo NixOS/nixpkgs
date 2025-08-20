@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     # No useful mainProgram
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "Fast and Easy to use microframework for the web";
+    description = "A Fast and Easy to use microframework for the web";
     homepage = "https://crowcpp.org/";
     maintainers = with lib.maintainers; [ l33tname ];
     platforms = lib.platforms.all;

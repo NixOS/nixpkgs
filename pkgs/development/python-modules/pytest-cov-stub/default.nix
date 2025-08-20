@@ -4,7 +4,7 @@
   hatchling,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pytest-cov-stub";
   # please use pythonRemoveDeps rather than change this version
   version = (lib.importTOML ./src/pyproject.toml).project.version;

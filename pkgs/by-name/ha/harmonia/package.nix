@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  libsodium,
   openssl,
   pkg-config,
   rustPlatform,
@@ -8,23 +9,24 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "2.1.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "harmonia";
-    tag = "harmonia-v${finalAttrs.version}";
-    hash = "sha256-Ch7CBPwSKZxCmZwFunNCA8E74TcOWp9MLbhe3/glQ6w=";
+    tag = "harmonia-v${version}";
+    hash = "sha256-tqkTzUdwnTfVuCrcFag7YKgGkiR9srR45e4v0XMXVCY=";
   };
 
-  cargoHash = "sha256-7HZoXNL7nf6NUNnh6gzXsZ2o4eeEQL7/KDdIcbh7/jM=";
+  cargoHash = "sha256-iZbIuYSC/RLmYEhBu46EEzN+WG2RoUJbZegedXkh+Rg=";
 
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libsodium
     openssl
   ];
 
@@ -38,11 +40,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = { inherit (nixosTests) harmonia; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Nix binary cache";
     homepage = "https://github.com/nix-community/harmonia";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mic92 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mic92 ];
     mainProgram = "harmonia";
   };
-})
+}

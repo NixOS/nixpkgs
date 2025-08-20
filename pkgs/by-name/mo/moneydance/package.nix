@@ -15,13 +15,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moneydance";
-  version = "2024.4_5253";
+  version = "2024.1_5118";
 
   src = fetchzip {
-    url = "https://infinitekind.com/stabledl/${
-      lib.replaceStrings [ "_" ] [ "." ] finalAttrs.version
-    }/moneydance-linux.tar.gz";
-    hash = "sha256-xOdkuaN17ss9tTSXgU//s6cBm2jGEgP9eTtvW0k3VWQ=";
+    url = "https://infinitekind.com/stabledl/2024_5118/moneydance-linux.tar.gz";
+    hash = "sha256-wwSb3CuhuXB4I9jq+TpLPbd1k9UzqQbAaZkGKgi+nns=";
   };
 
   # We must use wrapGAppsHook (since Java GUIs on Linux use GTK), but by
@@ -60,9 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
         "javafx.swing,javafx.controls,javafx.graphics"
         "-classpath"
         "${placeholder "out"}/libexec/*"
-      ]
-      ++ jvmFlags
-      ++ [ "Moneydance" ];
+      ] ++ jvmFlags ++ [ "Moneydance" ];
     in
     ''
       # This is in postFixup because gappsWrapperArgs is generated in preFixup
@@ -77,9 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://infinitekind.com/moneydance";
-    changelog = "https://infinitekind.com/stabledl/${
-      lib.replaceStrings [ "_" ] [ "." ] finalAttrs.version
-    }/changelog-stable.txt";
+    changelog = "https://infinitekind.com/stabledl/2024_5118/changelog.txt";
     description = "Easy to use and full-featured personal finance app that doesn't compromise your privacy";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.unfree;

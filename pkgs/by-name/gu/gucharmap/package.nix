@@ -65,26 +65,27 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook3
-    unzip
-    intltool
-    itstool
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_45
-    yelp-tools
-    libxml2
-    desktop-file-utils
-    gobject-introspection
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      python3
+      wrapGAppsHook3
+      unzip
+      intltool
+      itstool
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_45
+      yelp-tools
+      libxml2
+      desktop-file-utils
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     gtk3
@@ -116,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gucharmap";
     homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
     license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

@@ -7,12 +7,13 @@
   pkg-config,
   rustPlatform,
   scdoc,
+  sydbox,
   testers,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "sydbox";
-  version = "3.37.6";
+  version = "3.29.4";
 
   outputs = [
     "out"
@@ -23,11 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     domain = "gitlab.exherbo.org";
     owner = "Sydbox";
     repo = "sydbox";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dcUK6GQK/l6HCTh/k5yaC5VetQmY6J+YWu8VHU1037g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-k7qh375SuonybwgECI9Bl898FFigVxJ4L174AUDxntk=";
   };
 
-  cargoHash = "sha256-Ca4h7B5Vukd21HCEDpA5I+hgyQh7IFDLKeRxlVL0Uzo=";
+  cargoHash = "sha256-iupVEo7ZEcKfPw3MbZoQqwWw9lKAbcFKeiLy+1DwXHU=";
 
   nativeBuildInputs = [
     mandoc
@@ -68,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      package = sydbox;
       command = "syd -V";
     };
 
@@ -76,9 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Seccomp-based application sandbox";
+    description = "seccomp-based application sandbox";
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
-    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${finalAttrs.src.tag}/ChangeLog.md";
+    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       mvs
@@ -87,4 +88,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "syd";
     platforms = lib.platforms.linux;
   };
-})
+}

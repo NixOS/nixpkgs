@@ -2,25 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
   llama-index-core,
   llama-index-embeddings-openai,
   llama-index-llms-openai,
   llama-index-vector-stores-chroma,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-cli";
-  version = "0.4.4";
+  version = "0.4.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_cli";
     inherit version;
-    hash = "sha256-w68M8eKn5e9E0Lrlqo6IcrVMXda3Ma+66fE//rSZe+A=";
+    hash = "sha256-1qsgE1mWKoo0Norto6Sbu+Z+ngCcWb2SXE+yvkrOOQY=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core

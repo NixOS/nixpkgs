@@ -1,37 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  wrapGAppsHook3,
-  alsa-lib,
-  dbus,
-  fontconfig,
-  freetype,
-  glib,
-  gst_all_1,
-  libGL,
-  libinput,
-  libpulseaudio,
-  libsecret,
-  libtiff,
-  libxkbcommon,
-  libgbm,
-  openssl,
-  systemd,
-  xcb-util-cursor,
-  xorg,
-}:
+{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, makeWrapper, wrapGAppsHook3
+, alsa-lib, dbus, fontconfig, freetype, glib, gst_all_1, libGL
+, libinput, libpulseaudio, libsecret, libtiff, libxkbcommon
+, libgbm, openssl, systemd, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.22.11";
+  version = "9.19.0";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-b0aLGdncMwbVnPku6d8xYvX6ahJMoy9d6r9Y+RKtv2A=";
+    hash = "sha256-o0sB+JLwemUNRflp8cR0exc5QvCkpxIAVd/g4vwix6Q=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +38,6 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xcb-util-cursor
     xorg.libX11
     xorg.xcbutilwm
     xorg.xcbutilimage

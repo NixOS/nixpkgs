@@ -20,7 +20,6 @@
   netcat,
   timetrap,
   util-linux,
-  wayland,
 }:
 
 let
@@ -30,7 +29,6 @@ let
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
     "${xorg.libXrandr}/lib"
-    "${wayland.out}/lib"
   ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
@@ -43,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "20.4.1-55996";
+  version = "20.2.0-55872";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-CEyP8YZPLzjVAAjOaUqwQ4Ilzk9ybAtTTZUGZbSRrKQ=";
+    hash = "sha256-oOilbF5MzZxZXNVQYAp/JxyMVdM0oltG8pGfzzsQ1kY=";
   };
 
   hardeningDisable = [
@@ -64,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     p7zip
     perl
     undmg
-  ]
-  ++ kernel.moduleBuildDependencies;
+  ] ++ kernel.moduleBuildDependencies;
 
   buildInputs = [
     dbus-glib

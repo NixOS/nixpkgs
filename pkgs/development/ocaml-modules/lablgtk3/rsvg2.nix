@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "lablgtk3-rsvg2";
 
   inherit (lablgtk3) version src;

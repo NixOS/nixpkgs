@@ -22,7 +22,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "pytimeparse/tests/testtimeparse.py" ];
+  pytestFlagsArray = [ "pytimeparse/tests/testtimeparse.py" ];
 
   pythonImportsCheck = [ "pytimeparse" ];
 

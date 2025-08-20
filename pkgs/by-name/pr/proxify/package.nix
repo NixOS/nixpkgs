@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-eGcCc83napjt0VBhpDiHWn7+ew77XparDJ9uyjF353w=";
 
-  meta = {
+  meta = with lib; {
     description = "Proxy tool for HTTP/HTTPS traffic capture";
     longDescription = ''
       This tool supports multiple operations such as request/response dump, filtering
@@ -27,7 +27,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/proxify";
     changelog = "https://github.com/projectdiscovery/proxify/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

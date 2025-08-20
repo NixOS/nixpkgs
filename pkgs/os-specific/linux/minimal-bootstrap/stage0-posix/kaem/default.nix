@@ -58,7 +58,7 @@ derivationWithMeta {
     description = "Minimal build tool for running scripts on systems that lack any shell";
     homepage = "https://github.com/oriansj/mescc-tools";
     license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     inherit platforms;
   };
 }

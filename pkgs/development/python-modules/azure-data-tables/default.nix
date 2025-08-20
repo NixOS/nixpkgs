@@ -3,26 +3,25 @@
   azure-core,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   isodate,
+  pythonOlder,
   typing-extensions,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "azure-data-tables";
-  version = "12.7.0";
-  pyproject = true;
+  version = "12.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "azure_data_tables";
-    inherit version;
-    hash = "sha256-sU/JSjIjooNf9WiOF9jhB7J8fNfEEUE48qyBNzcjcF0=";
+    inherit pname version;
+    hash = "sha256-7qOTpjgMQusD6AeCXAN4MgA9CcgjKUgx2hXoEVWgtOY=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-core
     isodate
     typing-extensions

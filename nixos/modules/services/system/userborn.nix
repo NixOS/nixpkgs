@@ -31,7 +31,7 @@ let
         ;
       isNormal = opts.isNormalUser;
       shell = utils.toShellPath opts.shell;
-    }) (lib.filterAttrs (_: u: u.enable) config.users.users);
+    }) config.users.users;
   };
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
@@ -95,23 +95,16 @@ in
 
       # Create home directories, do not create /var/empty even if that's a user's
       # home.
-      tmpfiles.settings.home-directories =
-        lib.mapAttrs'
-          (
-            username: opts:
-            lib.nameValuePair (toString opts.home) {
-              d = {
-                mode = opts.homeMode;
-                user = opts.name;
-                inherit (opts) group;
-              };
-            }
-          )
-          (
-            lib.filterAttrs (
-              _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
-            ) userCfg.users
-          );
+      tmpfiles.settings.home-directories = lib.mapAttrs' (
+        username: opts:
+        lib.nameValuePair (toString opts.home) {
+          d = {
+            mode = opts.homeMode;
+            user = opts.name;
+            inherit (opts) group;
+          };
+        }
+      ) (lib.filterAttrs (_username: opts: opts.createHome && opts.home != "/var/empty") userCfg.users);
 
       services.userborn = {
         wantedBy = [ "sysinit.target" ];
@@ -148,7 +141,7 @@ in
           ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
           ExecStartPre = lib.mkMerge [
-            (lib.mkIf (cfg.passwordFilesLocation != "/etc") [
+            (lib.mkIf (!config.system.etc.overlay.mutable) [
               "${pkgs.coreutils}/bin/mkdir -p ${cfg.passwordFilesLocation}"
             ])
 

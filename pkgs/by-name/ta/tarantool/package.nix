@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tarantool";
-    repo = "tarantool";
-    tag = version;
+    repo = pname;
+    rev = version;
     hash = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
     fetchSubmodules = true;
   };

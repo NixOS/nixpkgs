@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "roland-bless";
-    repo = "ps2eps";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-SPLwsGKLVhANoqSQ/GJ938cYjbjMbUOXkNn9so3aJTA=";
   };

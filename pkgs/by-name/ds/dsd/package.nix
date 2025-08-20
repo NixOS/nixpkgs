@@ -12,7 +12,7 @@
 
 assert portaudioSupport -> portaudio != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dsd";
   version = "2022-03-14";
 
@@ -28,8 +28,7 @@ stdenv.mkDerivation {
     mbelib
     libsndfile
     itpp
-  ]
-  ++ lib.optionals portaudioSupport [ portaudio ];
+  ] ++ lib.optionals portaudioSupport [ portaudio ];
 
   doCheck = true;
 

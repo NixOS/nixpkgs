@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "13-CF";
     repo = "afetch";
-    tag = "v${version}";
+    rev = "V${version}";
     sha256 = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
   };
 
@@ -19,14 +19,15 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fetch program written in C";
     homepage = "https://github.com/13-CF/afetch";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      dan4ik605743
       jk
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "afetch";
   };
 }

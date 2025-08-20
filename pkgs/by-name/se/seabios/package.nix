@@ -34,17 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seabios";
-  version = "1.17.0";
+  version = "1.16.3";
 
   src = fetchgit {
     url = "https://git.seabios.org/seabios.git";
     rev = "rel-${finalAttrs.version}";
-    hash = "sha256-eDQpl8Mf30p9WRvsNW192ISfBnEtMCdsWjUbWMXWmWw=";
+    hash = "sha256-hWemj83cxdY8p+Jhkh5GcPvI0Sy5aKYZJCsKDjHTUUk=";
   };
-
-  postPatch = ''
-    echo ${finalAttrs.version} > .version
-  '';
 
   outputs = [
     "out"

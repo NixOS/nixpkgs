@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  replaceVars,
+  substituteAll,
   pkg-config,
   gobject-introspection,
   gdk-pixbuf,
@@ -26,10 +26,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (replaceVars ./fix-cli-paths.patch {
+    (substituteAll {
+      src = ./fix-cli-paths.patch;
       inherit dropboxd;
-      # patch context
-      DESKTOP_FILE_DIR = null;
     })
   ];
 
@@ -67,6 +66,6 @@ stdenv.mkDerivation rec {
       cc-by-nd-30
     ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

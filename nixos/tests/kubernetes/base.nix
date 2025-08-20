@@ -117,10 +117,11 @@ let
         ]
       ) machines;
 
-      testScript = ''
-        start_all()
-      ''
-      + test;
+      testScript =
+        ''
+          start_all()
+        ''
+        + test;
     };
 
   mkKubernetesMultiNodeTest =

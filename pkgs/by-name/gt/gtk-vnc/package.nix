@@ -24,9 +24,9 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gtk-vnc";
-  version = "1.5.0";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor finalAttrs.version}/gtk-vnc-${finalAttrs.version}.tar.xz";
-    sha256 = "wL60dHUorZMdpDrMVnxqAZD3/GJEZVce2czs4Cw03SM=";
+    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor version}/gtk-vnc-${version}.tar.xz";
+    sha256 = "G+ZMTkdgxSs+wzBnKQ0e+kCtTOyrbGc4E4BOPFWdloM=";
   };
 
   nativeBuildInputs = [
@@ -53,19 +53,20 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs = [
-    gnutls
-    cairo
-    gdk-pixbuf
-    zlib
-    glib
-    gmp
-    cyrus_sasl
-    gtk3
-  ]
-  ++ lib.optionals pulseaudioSupport [
-    libpulseaudio
-  ];
+  buildInputs =
+    [
+      gnutls
+      cairo
+      gdk-pixbuf
+      zlib
+      glib
+      gmp
+      cyrus_sasl
+      gtk3
+    ]
+    ++ lib.optionals pulseaudioSupport [
+      libpulseaudio
+    ];
 
   mesonFlags = lib.optionals (!pulseaudioSupport) [
     "-Dpulseaudio=disabled"
@@ -94,4 +95,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     mainProgram = "gvnccapture";
   };
-})
+}

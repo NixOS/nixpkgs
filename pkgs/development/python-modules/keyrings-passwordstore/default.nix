@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "keyrings.passwordstore";
   version = "0.1.0";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

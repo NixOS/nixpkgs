@@ -1,52 +1,28 @@
-inputs@{
-  autoconf,
-  automake,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  lib,
-  libtool,
+{
   stdenv,
+  lib,
+  fetchFromGitHub,
+  libtool,
+  automake,
+  autoconf,
   ucx,
-  # Configuration options
-  enableAvx ? stdenv.hostPlatform.avxSupport,
+  config,
   enableCuda ? config.cudaSupport,
+  cudaPackages,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
   enableSse41 ? stdenv.hostPlatform.sse4_1Support,
   enableSse42 ? stdenv.hostPlatform.sse4_2Support,
 }:
-let
-  inherit (lib.attrsets) getLib;
-  inherit (lib.lists) optionals;
-  inherit (lib.strings) concatStringsSep;
 
-  inherit (cudaPackages)
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cuda_nvml_dev
-    flags
-    nccl
-    ;
-
-  stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
-in
-effectiveStdenv.mkDerivation (finalAttrs: {
-  __structuredAttrs = true;
-  # TODO(@connorbaker):
-  # When strictDeps is enabled, `cuda_nvcc` is required as the argument to `--with-cuda` in `configureFlags` or else
-  # configurePhase fails with `checking for cuda_runtime.h... no`.
-  # This is odd, especially given `cuda_runtime.h` is provided by `cuda_cudart.dev`, which is already in `buildInputs`.
-  strictDeps = true;
-
+stdenv.mkDerivation rec {
   pname = "ucc";
-  version = "1.5.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8tUhwZNW39/J9Uz/b4arE1oWPaV0R3s4x12QqI8ovEA=";
+    rev = "v${version}";
+    sha256 = "sha256-xcJLYktkxNK2ewWRgm8zH/dMaIoI+9JexuswXi7MpAU=";
   };
 
   outputs = [
@@ -56,68 +32,51 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # NOTE: We use --replace-quiet because not all Makefile.am files contain /bin/bash.
   postPatch = ''
+
     for comp in $(find src/components -name Makefile.am); do
-      substituteInPlace "$comp" \
-        --replace-quiet \
-          "/bin/bash" \
-          "${effectiveStdenv.shell}"
+      substituteInPlace $comp \
+        --replace "/bin/bash" "${stdenv.shell}"
     done
   '';
 
   nativeBuildInputs = [
-    autoconf
-    automake
     libtool
-  ]
-  ++ optionals enableCuda [ cuda_nvcc ];
-
-  buildInputs = [
-    ucx
-  ]
-  ++ optionals enableCuda [
-    cuda_cccl
-    cuda_cudart
-    cuda_nvml_dev
-    nccl
-  ];
-
-  # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
-  # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
-  # referring to an array!
-  env.LDFLAGS = builtins.toString (
-    optionals enableCuda [
-      # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${getLib cuda_nvml_dev}/lib/stubs"
-    ]
-  );
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  configureFlags =
-    optionals enableSse41 [ "--with-sse41" ]
-    ++ optionals enableSse42 [ "--with-sse42" ]
-    ++ optionals enableAvx [ "--with-avx" ]
-    ++ optionals enableCuda [
-      "--with-cuda=${cuda_nvcc}"
-      "--with-nvcc-gencode=${concatStringsSep " " flags.gencode}"
+    automake
+    autoconf
+  ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  buildInputs =
+    [ ucx ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cccl
+      cudaPackages.cuda_cudart
     ];
 
-  postInstall = ''
-    find "$out/lib/" -name "*.la" -exec rm -f \{} \;
+  preConfigure =
+    ''
+      ./autogen.sh
+    ''
+    + lib.optionalString enableCuda ''
+      configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
+    '';
+  configureFlags =
+    [ ]
+    ++ lib.optional enableSse41 "--with-sse41"
+    ++ lib.optional enableSse42 "--with-sse42"
+    ++ lib.optional enableAvx "--with-avx"
+    ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
 
-    moveToOutput bin/ucc_info "$dev"
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput bin/ucc_info $dev
   '';
 
   meta = with lib; {
     description = "Collective communication operations API";
-    homepage = "https://openucx.github.io/ucc/";
     mainProgram = "ucc_info";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
   };
-})
+}

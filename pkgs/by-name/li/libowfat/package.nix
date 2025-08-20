@@ -1,8 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libowfat";
@@ -26,10 +22,7 @@ stdenv.mkDerivation rec {
     make headers
   '';
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -37,7 +30,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fefe.de/libowfat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    # build tool "json" is built for the host platform
-    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

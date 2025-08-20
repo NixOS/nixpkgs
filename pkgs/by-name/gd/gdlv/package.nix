@@ -1,7 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  AppKit,
+  CoreGraphics,
+  Foundation,
+  Metal,
 }:
 buildGoModule rec {
   pname = "gdlv";
@@ -16,6 +21,13 @@ buildGoModule rec {
 
   vendorHash = null;
   subPackages = ".";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    AppKit
+    CoreGraphics
+    Foundation
+    Metal
+  ];
 
   meta = with lib; {
     description = "GUI frontend for Delve";

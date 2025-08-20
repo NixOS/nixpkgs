@@ -1,6 +1,6 @@
 {
   autoreconfHook,
-  fetchFromGitHub,
+  fetchurl,
   fftwMpi,
   gsl,
   lib,
@@ -22,13 +22,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnfft-${precision}";
-  version = "1.0.7-alpha-unstable-2018-06-04";
+  version = "1.0.7-alpha";
 
-  src = fetchFromGitHub {
-    owner = "mpip";
-    repo = "pnfft";
-    rev = "a0bb24b8fa8af59c9e599b1cc3914586636d9125";
-    hash = "sha256-Cgusm/zWCLy//3qh/YAXjCZGl+QOnycUjUCQsd1HxvQ=";
+  src = fetchurl {
+    url = "https://www-user.tu-chemnitz.de/~potts/workgroup/pippig/software/pnfft-${finalAttrs.version}.tar.gz";
+    hash = "sha256-/aVY/1fuMRl1Q2O7bmc5M4aA0taGD+fcQgCdhVYr1no=";
   };
 
   outputs = [
@@ -45,14 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-threads"
     "--enable-portable-binary"
-  ]
-  ++ lib.optional (precision != "double") "--enable-${precision}";
+  ] ++ lib.optional (precision != "double") "--enable-${precision}";
 
   buildInputs = [ gsl ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs = [ pfft' ];
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 

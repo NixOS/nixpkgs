@@ -7,15 +7,15 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs_20,
+  nodejs,
   pnpm_9,
   python3,
-  gitMinimal,
+  git,
   jq,
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs_20;
+  nodeSources = srcOnly nodejs;
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -37,30 +37,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "1.0.12";
+  version = "0.14.1";
 
   src = fetchgit {
-    url = "https://git.taler.net/taler-typescript-core.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lTFiaIgkPw0FhrpYPwg5/MMl8Yo1MfkDPYEDSJ11rQ8=";
+    url = "https://git.taler.net/wallet-core.git";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Sae83qGPqVwuxKf30zHCmdOoo5rDPBHKSOE1hxNn7Xo=";
   };
 
   nativeBuildInputs = [
     customPython
-    nodejs_20
+    nodejs
     pnpm_9.configHook
-    gitMinimal
+    git
     jq
     zip
   ];
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
+    hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
   };
 
-  buildInputs = [ nodejs_20 ];
+  buildInputs = [ nodejs ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.
@@ -96,21 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postFixup = ''
-    # else it fails to find the python interpreter
-    patchShebangs --build $out/bin/taler-helper-sqlite3
-  '';
-
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   meta = {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.ngi ];
+    maintainers = lib.teams.ngi.members;
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
-    # ./configure doesn't understand --build / --host
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

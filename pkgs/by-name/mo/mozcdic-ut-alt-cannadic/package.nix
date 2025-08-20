@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Dictionary converted from alt-cannadic for Mozc";
+    description = "Mozc UT Alt-Cannadic Dictionary is a dictionary converted from Alt-Cannadic for Mozc.";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-alt-cannadic";
     license = with lib.licenses; [
       asl20

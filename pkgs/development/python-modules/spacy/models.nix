@@ -9,10 +9,7 @@
   setuptools,
   spacy,
   spacy-pkuseg,
-  spacy-curated-transformers,
-  sudachipy,
-  sudachidict-core,
-  transformers,
+  spacy-transformers,
   writeScript,
   stdenv,
   jq,
@@ -30,10 +27,7 @@ let
 
     let
       lang = builtins.substring 0 2 pname;
-      requires-protobuf =
-        pname == "fr_dep_news_trf" || pname == "sl_core_news_trf" || pname == "uk_core_news_trf";
-      requires-sentencepiece = pname == "fr_dep_news_trf" || pname == "sl_core_news_trf";
-      requires-transformers = pname == "uk_core_news_trf";
+      requires-protobuf = pname == "fr_dep_news_trf" || pname == "uk_core_news_trf";
     in
     buildPythonPackage {
       inherit pname version;
@@ -44,35 +38,21 @@ let
         inherit sha256;
       };
 
-      propagatedBuildInputs = [
-        spacy
-      ]
-      ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-curated-transformers ]
-      ++ lib.optionals requires-transformers [ transformers ]
-      ++ lib.optionals (lang == "ja") [
-        sudachidict-core
-        sudachipy
-      ]
-      ++ lib.optionals (lang == "ru") [ pymorphy3 ]
-      ++ lib.optionals (lang == "uk") [
-        pymorphy3
-        pymorphy3-dicts-uk
-      ]
-      ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
-      ++ lib.optionals requires-sentencepiece [ sentencepiece ];
+      propagatedBuildInputs =
+        [ spacy ]
+        ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-transformers ]
+        ++ lib.optionals (lang == "ru") [ pymorphy3 ]
+        ++ lib.optionals (lang == "uk") [
+          pymorphy3
+          pymorphy3-dicts-uk
+        ]
+        ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
+        ++ lib.optionals (pname == "fr_dep_news_trf") [ sentencepiece ];
 
-      postPatch =
-        lib.optionalString requires-protobuf ''
-          substituteInPlace meta.json \
-            --replace-fail "protobuf<3.21.0" "protobuf"
-        ''
-        + lib.optionalString (lang == "zh") ''
-          # Uses numpy 2.x, while the rest of the dependencies still uses
-          # numpy 1.x. Remove once all spaCy packages are updated for
-          # numpy 2.x.
-          substituteInPlace meta.json \
-            --replace-fail "spacy-pkuseg>=1.0.0,<2.0.0" "spacy-pkuseg"
-        '';
+      postPatch = lib.optionalString requires-protobuf ''
+        substituteInPlace meta.json \
+          --replace "protobuf<3.21.0" "protobuf"
+      '';
 
       nativeBuildInputs = [ setuptools ] ++ lib.optionals requires-protobuf [ protobuf ];
 

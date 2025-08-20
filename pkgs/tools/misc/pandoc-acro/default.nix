@@ -20,7 +20,6 @@ let
   };
 in
 buildPythonApplication {
-  format = "setuptools";
   inherit pname version src;
 
   propagatedBuildInputs = [

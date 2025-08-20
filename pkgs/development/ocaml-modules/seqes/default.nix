@@ -9,10 +9,10 @@
 
 buildDunePackage rec {
   pname = "seqes";
-  version = "0.4";
+  version = "0.2";
   src = fetchurl {
-    url = "https://gitlab.com/raphael-proust/seqes/-/archive/${version}/seqes-${version}.tar.gz";
-    hash = "sha256-E4BalN68CJP7u6NSC0XBooWvUeSNqV+3KEOtoJ4g/dM=";
+    url = "https://gitlab.com/nomadic-labs/seqes/-/archive/${version}/seqes-${version}.tar.gz";
+    sha256 = "sha256-IxLA0jaIPdX9Zn/GL8UHDJYjA1UBW6leGbZmp64YMjI=";
   };
 
   minimalOCamlVersion = "4.14";

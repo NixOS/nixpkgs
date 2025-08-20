@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,12 +6,13 @@ let
   cfg = config.services.soju;
   stateDir = "/var/lib/soju";
   runtimeDir = "/run/soju";
-  listen = cfg.listen ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
+  listen = cfg.listen
+    ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
   listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
-  tlsCfg = optionalString (
-    cfg.tlsCertificate != null
-  ) "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
-  logCfg = optionalString cfg.enableMessageLogging "message-store fs ${stateDir}/logs";
+  tlsCfg = optionalString (cfg.tlsCertificate != null)
+    "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
+  logCfg = optionalString cfg.enableMessageLogging
+    "message-store fs ${stateDir}/logs";
 
   configFile = pkgs.writeText "soju.conf" ''
     ${listenCfg}
@@ -31,7 +27,7 @@ let
   '';
 
   sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
-    exec ${lib.getExe' cfg.package "sojuctl"} --config ${cfg.configFile} "$@"
+    exec ${cfg.package}/bin/sojuctl --config ${configFile} "$@"
   '';
 in
 {
@@ -89,7 +85,7 @@ in
 
     httpOrigins = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
@@ -99,7 +95,7 @@ in
 
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*
@@ -111,18 +107,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Lines added verbatim to the generated configuration file.";
-    };
-
-    configFile = mkOption {
-      type = types.path;
-      default = configFile;
-      defaultText = "Config file generated from other options.";
-      description = ''
-        Path to config file. If this option is set, it will override any
-        configuration done using other options, including {option}`extraConfig`.
-      '';
-      example = literalExpression "./soju.conf";
+      description = "Lines added verbatim to the configuration file.";
     };
   };
 
@@ -146,11 +131,10 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      documentation = [ "man:soju(1)" ];
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
+        ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
       };

@@ -6,6 +6,7 @@
   cmake,
   zlib,
   curl,
+  taglib,
   dbus,
   pkg-config,
   qtbase,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-tuna";
-  version = "1.9.10";
+  version = "1.9.9";
 
   nativeBuildInputs = [
     cmake
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     zlib
     curl
+    taglib
     dbus
   ];
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "univrsal";
     repo = "tuna";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y4ny8XJIk4KtmRTWdO6tHevT4Ivr1TqkNMNhua499sY=";
+    hash = "sha256-qwOAidnCGZSwTahgbyf1K0KgoDvYpqDAQXM3l1lfZXg=";
     fetchSubmodules = true;
   };
 

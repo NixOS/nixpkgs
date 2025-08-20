@@ -16,21 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "71";
+  version = "69.9";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse --short HEAD > $out/COMMIT
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
-
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwwj0xGEiR3sg2WheurtQo6Hy5JAARcZJNHEHMfAoOE=";
+    hash = "sha256-rpm9v/7twsrImeipz3I7fHUrk98qzkLQ2b4Kz3Rc+GI=";
   };
 
   buildInputs = [
@@ -39,16 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     libnetfilter_queue
     libnfnetlink
   ];
-
   nativeBuildInputs = [
     iptables
     nftables
     gawk
   ];
-
-  preBuild = ''
-    makeFlagsArray+=("CFLAGS=-DZAPRET_GH_VER=${finalAttrs.src.tag} -DZAPRET_GH_HASH=`cat $src/COMMIT`")
-  '';
 
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 
@@ -101,10 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
-    changelog = "https://github.com/bol-van/zapret/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
-    platforms = lib.platforms.linux;
+
+    # probably gonna work on darwin, but untested
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

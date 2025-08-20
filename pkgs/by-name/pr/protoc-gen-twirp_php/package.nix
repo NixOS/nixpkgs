@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-twirp_php";
-  version = "0.14.0";
+  version = "0.12.0";
 
   # fetchFromGitHub currently not possible, because go.mod and go.sum are export-ignored
   src = fetchgit {
     url = "https://github.com/twirphp/twirp.git";
     rev = "v${version}";
-    hash = "sha256-yAq/bgzLJlkdWKdSpsi0QGDNFFvsM8lyjDxU0YvRcaI=";
+    hash = "sha256-GDDycFWGrNXWdWNjGhb+W6kImF1nqVVH+dJ8VjYQ2MQ=";
   };
 
-  vendorHash = "sha256-4/cIu6J0eQd61FWGyRQ5tMM3G9ev7TNIccrZi93ZlJg=";
+  vendorHash = "sha256-ErTXIbPKAFm8jBYRPuWSaCFbTS+5MPyto9edixbTR7E=";
 
   subPackages = [ "protoc-gen-twirp_php" ];
 

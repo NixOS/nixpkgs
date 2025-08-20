@@ -1,20 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pretalx-pages";
-  version = "1.7.0";
+  version = "1.6.0";
   pyproject = true;
 
-  # TODO: https://github.com/pretalx/pretalx-pages/issues/6
-  src = fetchPypi {
-    pname = "pretalx_pages";
-    inherit version;
-    hash = "sha256-XFZS0FUzouZzVh9AADK5dnezFZiAWoBihD4C184+690=";
+  src = fetchFromGitHub {
+    owner = "pretalx";
+    repo = "pretalx-pages";
+    rev = "v${version}";
+    hash = "sha256-9ZJSW6kdxpwHd25CuGTE4MMXylXaZKL3eAEKKdYiuXs=";
   };
 
   build-system = [ setuptools ];

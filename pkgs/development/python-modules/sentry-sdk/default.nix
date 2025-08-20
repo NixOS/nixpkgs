@@ -13,32 +13,31 @@
   # optional-dependencies
   aiohttp,
   anthropic,
-  apache-beam,
-  asttokens,
   asyncpg,
-  blinker,
+  apache-beam,
   bottle,
   celery,
   celery-redbeat,
   chalice,
   clickhouse-driver,
   django,
-  executing,
   falcon,
   fastapi,
   flask,
+  blinker,
+  markupsafe,
   grpcio,
-  httpcore,
+  protobuf,
   httpx,
   huey,
   huggingface-hub,
   langchain,
-  litestar,
   loguru,
-  markupsafe,
   openai,
-  protobuf,
+  tiktoken,
   pure-eval,
+  executing,
+  asttokens,
   pymongo,
   pyspark,
   quart,
@@ -46,11 +45,10 @@
   sanic,
   sqlalchemy,
   starlette,
-  tiktoken,
   tornado,
 
   # checks
-  brotli,
+  ipdb,
   jsonschema,
   pip,
   pyrsistent,
@@ -62,23 +60,22 @@
   pytest-xdist,
   pytest-watch,
   responses,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.25.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = version;
-    hash = "sha256-HQxZczpfTURbkLaWjOqnYB86UuFHD71kE7HPPjlkUqc=";
+    hash = "sha256-jrApaDZ+R/bMOqOuQZguP9ySt6nKJeJYNpJTNTxq3no=";
   };
 
   postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
+    sed -i "/addopts =/d" pytest.ini
   '';
 
   build-system = [
@@ -113,19 +110,15 @@ buildPythonPackage rec {
       grpcio
       protobuf
     ];
-    http2 = [ httpcore ] ++ httpcore.optional-dependencies.http2;
     httpx = [ httpx ];
     huey = [ huey ];
     huggingface-hub = [ huggingface-hub ];
     langchain = [ langchain ];
-    # TODO: launchdarkly
-    litestar = [ litestar ];
     loguru = [ loguru ];
     openai = [
       openai
       tiktoken
     ];
-    # TODO: openfeature
     # TODO: opentelemetry
     # TODO: opentelemetry-experimental
     pure_eval = [
@@ -144,13 +137,11 @@ buildPythonPackage rec {
     sqlalchemy = [ sqlalchemy ];
     starlette = [ starlette ];
     # TODO: starlite
-    # TODO: statsig
     tornado = [ tornado ];
-    # TODO: unleash
   };
 
   nativeCheckInputs = [
-    brotli
+    ipdb
     pyrsistent
     responses
     pysocks
@@ -164,15 +155,9 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
-  ]
-  ++ optional-dependencies.http2;
+  ];
 
   __darwinAllowLocalNetworking = true;
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # darwin: 'profiler should not be running'
-    "tests/profiler/test_continuous_profiler.py"
-  ];
 
   disabledTests = [
     # depends on git revision
@@ -205,15 +190,7 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
-    "test_continuous_profiler_auto"
-    "test_continuous_profiler_manual"
-    "test_stacktrace_big_recursion"
-    # assert ('socks' in "<class 'httpcore.connectionpool'>") == True
-    "test_socks_proxy"
-    # requires socksio to mock, but that crashes pytest-forked
-    "test_http_timeout"
-    # KeyError: 'sentry.release'
-    "test_logs_attributes"
+    "test_continuous_profiler_manual_start_and_stop"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     beautifulsoup4
     bibtexparser
@@ -44,7 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     six
-    standard-pipes # https://github.com/pubs/pubs/issues/282
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -72,13 +71,14 @@ python3.pkgs.buildPythonApplication rec {
     "pubs"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line bibliography manager";
     mainProgram = "pubs";
     homepage = "https://github.com/pubs/pubs";
     changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+      gebner
       dotlambda
     ];
   };

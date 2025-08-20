@@ -2,16 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  uv-dynamic-versioning,
+  poetry-core,
   pythonOlder,
-  reflex,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.8.2post1";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,34 +17,25 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     tag = "v${version}";
-    hash = "sha256-DugZRZpGP90EFkBjpAS1XkjrNPG6WWwCQPUcEZJ0ff8=";
+    hash = "sha256-Smkpcy6jPYTUWskZwWKkL9V545Ji/riQ8RFjJXm44qM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "uv-dynamic-versioning"' "" \
-      --replace-fail 'source = "uv-dynamic-versioning"' 'source = "env"${"\n"}variable = "version"'
-  '';
-
-  build-system = [
-    hatchling
-    uv-dynamic-versioning
+  pythonRemoveDeps = [
+    # Circular dependency
+    "reflex"
   ];
-  dependencies = [ reflex ];
 
-  pythonImportsCheck = [ "reflex_chakra" ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # pythonImportsCheck = [ "reflex_chakra" ];
 
-  # there are no "test_*.py" files, and the
-  # other files with `test_*` functions are not maintained it seems
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Chakra Implementation in Reflex";
     homepage = "https://github.com/reflex-dev/reflex-chakra";
-    changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/${src.tag}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

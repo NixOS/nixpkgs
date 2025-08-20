@@ -6,23 +6,18 @@ A NixOS test is a module that has the following structure:
 {
 
   # One or more machines:
-  nodes = {
-    machine =
-      { config, pkgs, ... }:
-      {
-        # ...
-      };
-    machine2 =
-      { config, pkgs, ... }:
-      {
-        # ...
-      };
-    # …
-  };
+  nodes =
+    { machine =
+        { config, pkgs, ... }: { /* ... */ };
+      machine2 =
+        { config, pkgs, ... }: { /* ... */ };
+      # …
+    };
 
-  testScript = ''
-    Python code…
-  '';
+  testScript =
+    ''
+      Python code…
+    '';
 }
 ```
 
@@ -51,7 +46,9 @@ Tests are invoked differently depending on whether the test is part of NixOS or 
 Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
 
 ```nix
-{ hostname = runTest ./hostname.nix; }
+{
+  hostname = runTest ./hostname.nix;
+}
 ```
 
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
@@ -78,10 +75,9 @@ Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
 `pkgs.testers`:
 
 ```nix
-let
-  pkgs = import <nixpkgs> { };
-
+let pkgs = import <nixpkgs> {};
 in
+
 pkgs.testers.runNixOSTest {
   imports = [ ./test.nix ];
   defaults.services.foo.package = mypkg;
@@ -96,7 +92,7 @@ There are a few special NixOS options for test VMs:
 
 `virtualisation.memorySize`
 
-:   The memory of the VM in MiB (1024×1024 bytes).
+:   The memory of the VM in megabytes.
 
 `virtualisation.vlans`
 
@@ -125,7 +121,8 @@ and checks that the output is more-or-less correct:
 ```py
 machine.start()
 machine.wait_for_unit("default.target")
-t.assertIn("Linux", machine.succeed("uname"), "Wrong OS")
+if not "Linux" in machine.succeed("uname"):
+  raise Exception("Wrong OS")
 ```
 
 The first line is technically unnecessary; machines are implicitly started
@@ -136,8 +133,6 @@ starting them in parallel:
 ```py
 start_all()
 ```
-
-Under the variable `t`, all assertions from [`unittest.TestCase`](https://docs.python.org/3/library/unittest.html) are available.
 
 If the hostname of a node contains characters that can't be used in a
 Python variable name, those characters will be replaced with
@@ -170,13 +165,13 @@ For faster dev cycles it's also possible to disable the code-linters
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
-    {
-      # configuration…
+    { # configuration…
     };
 
-  testScript = ''
-    Python code…
-  '';
+  testScript =
+    ''
+      Python code…
+    '';
 }
 ```
 
@@ -187,11 +182,12 @@ repository):
 
 ```nix
 {
-  testScript = ''
-    # fmt: off
-    Python code…
-    # fmt: on
-  '';
+  testScript =
+    ''
+      # fmt: off
+      Python code…
+      # fmt: on
+    '';
 }
 ```
 
@@ -203,8 +199,7 @@ way:
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
-    {
-      # configuration…
+    { # configuration…
     };
 }
 ```
@@ -279,62 +274,6 @@ added using the parameter `extraPythonPackages`. For example, you could add
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
 
-## Overriding a test {#sec-override-nixos-test}
-
-The NixOS test framework returns tests with multiple overriding methods.
-
-`overrideTestDerivation` *function*
-:   Like applying `overrideAttrs` on the [test](#test-opt-test) derivation.
-
-    This is a convenience for `extend` with an override on the [`rawTestDerivationArg`](#test-opt-rawTestDerivationArg) option.
-
-    *function*
-    :   An extension function, e.g. `finalAttrs: prevAttrs: { /* … */ }`, the result of which is passed to [`mkDerivation`](https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv).
-        Just as with `overrideAttrs`, an abbreviated form can be used, e.g. `prevAttrs: { /* … */ }` or even `{ /* … */ }`.
-        See [`lib.extends`](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.fixedPoints.extends).
-
-`extendNixOS { module = ` *module* `; specialArgs = ` *specialArgs* `; }`
-:   Evaluates the test with additional NixOS modules and/or arguments.
-
-    `module`
-    :   A NixOS module to add to all the nodes in the test. Sets test option [`extraBaseModules`](#test-opt-extraBaseModules).
-
-    `specialArgs`
-    :   An attribute set of arguments to pass to all NixOS modules. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. Sets test option [`node.specialArgs`](#test-opt-node.specialArgs).
-
-    This is a convenience function for `extend` that overrides the aforementioned test options.
-
-    :::{.example #ex-nixos-test-extendNixOS}
-
-    # Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
-
-    ```nix
-    mkDerivation (finalAttrs: {
-      # …
-      passthru = {
-        tests = {
-          nixos = nixosTests.openssh.extendNixOS {
-            module = {
-              services.openssh.package = finalAttrs.finalPackage;
-            };
-          };
-        };
-      };
-    })
-    ```
-    :::
-
-`extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
-:   Adds new `nixosTest` modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
-
-    If you're only looking to extend the _NixOS_ configurations of the test, and not something else about the test, you may use the `extendNixOS` convenience function instead.
-
-    `modules`
-    :   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
-
-    `specialArgs`
-    :   An attribute of arguments to pass to the test. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. See [`evalModules`/`specialArgs`](https://nixos.org/manual/nixpkgs/stable/#module-system-lib-evalModules-param-specialArgs).
-
 ## Test Options Reference {#sec-test-options-reference}
 
 The following options can be used when writing tests.
@@ -343,64 +282,4 @@ The following options can be used when writing tests.
 id-prefix: test-opt-
 list-id: test-options-list
 source: @NIXOS_TEST_OPTIONS_JSON@
-```
-
-## Accessing VMs in the sandbox with SSH {#sec-test-sandbox-breakpoint}
-
-::: {.note}
-For debugging with SSH access into the machines, it's recommended to try using
-[the interactive driver](#sec-running-nixos-tests-interactively) with its
-[SSH backdoor](#sec-nixos-test-ssh-access) first.
-
-This feature is mostly intended to debug flaky test failures that aren't
-reproducible elsewhere.
-:::
-
-As explained in [](#sec-nixos-test-ssh-access), it's possible to configure an
-SSH backdoor based on AF_VSOCK. This can be used to SSH into a VM of a running
-build in a sandbox.
-
-This can be done when something in the test fails, e.g.
-
-```nix
-{
-  nodes.machine = { };
-
-  sshBackdoor.enable = true;
-  enableDebugHook = true;
-
-  testScript = ''
-    start_all()
-    machine.succeed("false") # this will fail
-  '';
-}
-```
-
-For the AF_VSOCK feature to work, `/dev/vhost-vsock` is needed in the sandbox
-which can be done with e.g.
-
-```
-nix-build -A nixosTests.foo --option sandbox-paths /dev/vhost-vsock
-```
-
-This will halt the test execution on a test-failure and print instructions
-on how to enter the sandbox shell of the VM test. Inside, one can log into
-e.g. `machine` with
-
-```
-ssh -F ./ssh_config vsock/3
-```
-
-As described in [](#sec-nixos-test-ssh-access), the numbers for vsock start at
-`3` instead of `1`. So the first VM in the network (sorted alphabetically) can
-be accessed with `vsock/3`.
-
-Alternatively, it's possible to explicitly set a breakpoint with
-`debug.breakpoint()`. This also has the benefit, that one can step through
-`testScript` with `pdb` like this:
-
-```
-$ sudo /nix/store/eeeee-attach <id>
-bash# telnet 127.0.0.1 4444
-pdb$ …
 ```

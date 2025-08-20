@@ -5,10 +5,9 @@
   docopt,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "spoof-mac";
   version = "unstable-2018-01-27";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "feross";

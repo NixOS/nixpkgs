@@ -25,7 +25,7 @@ buildPythonPackage {
   # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "nielstron";
-    repo = "quantulum3";
+    repo = pname;
     rev = "9dafd76d3586aa5ea1b96164d86c73037e827294";
     hash = "sha256-fHztPeTbMp1aYsj+STYWzHgwdY0Q9078qXpXxtA8pPs=";
   };

@@ -5,7 +5,7 @@
   libgit2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "l2md";
   version = "unstable-2021-10-27";
 

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "3.2.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     repo = "hiredis-py";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-WaHjqp/18FquYU2H9ftPQSyunLMG29FVpu3maB3/0bs=";
+    hash = "sha256-PnCSf7ZEPNtweQEnWTHCCVCvg5QGxGeBSAZCFHOziDQ=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
-    changelog = "https://github.com/redis/hiredis-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/redis/hiredis-py/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

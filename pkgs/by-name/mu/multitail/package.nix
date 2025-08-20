@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
-    repo = "multitail";
+    repo = pname;
     rev = version;
     hash = "sha256-c9NlQLgHngNBbADZ6/legWFaKHJAQR/LZIfh8bJoc4Y=";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/folkertvanheusden/multitail";
-    description = "tail on steroids";
+    description = "tail on Steroids";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;

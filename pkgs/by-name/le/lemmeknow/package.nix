@@ -13,14 +13,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Q82tP4xNWAooFjHeJCFmuULnWlFbgca/9Y2lm8rVXKs=";
   };
 
-  cargoHash = "sha256-65PPIYfwVO8O4K8yr499vRQScpAREiBZ8O0rrDMCXB8=";
+  cargoHash = "sha256-slV9RxdFCEx1El7hngWGv+5CqDSQsU2ACF2nWQLOTU0=";
 
-  meta = {
+  meta = with lib; {
     description = "Tool to identify anything";
     homepage = "https://github.com/swanandx/lemmeknow";
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       figsoda
       Br1ght0ne
     ];

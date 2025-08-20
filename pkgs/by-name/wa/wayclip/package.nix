@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  gitUpdater,
+  nix-update-script,
   wayland,
   wayland-scanner,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "25.06";
+  version = "24.12";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
-    hash = "sha256-siZbbYrMGjhiof2M2ZBl2gekePuwsKvR8uZCdjyywiE=";
+    hash = "sha256-iXurkftPCfTL3a2zH1RSGIyMISFiUhDawyndNhY8Ynk=";
   };
 
   prePatch = ''
@@ -70,12 +70,13 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-  makeFlags = [
-    "SYSDEPS=true"
-    "PREFIX=$(out)"
-  ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILING=true"
-  ++ lib.optional headless "HEADLESS=true";
+  makeFlags =
+    [
+      "SYSDEPS=true"
+      "PREFIX=$(out)"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILING=true"
+    ++ lib.optional headless "HEADLESS=true";
 
   postInstall = ''
     wrapProgram $out/bin/Cardinal \

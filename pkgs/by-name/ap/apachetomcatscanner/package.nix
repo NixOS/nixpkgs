@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apachetomcatscanner" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to scan for Apache Tomcat server vulnerabilities";
     homepage = "https://github.com/p0dalirius/ApacheTomcatScanner";
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "ApacheTomcatScanner";
   };
 }

@@ -1,25 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libuv,
-  libmicrohttpd,
-  openssl,
-  hwloc,
-  kmod,
-  donateLevel ? 0,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, openssl
+, hwloc
+, donateLevel ? 0
 }:
 
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.24.0";
+  version = "6.22.2";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-AbiTInOMHZ/YOUyl8IMU62ETZtbSTUqaP4vCJKAOCYM=";
+    hash = "sha256-/1pSGbKBfin7xqoILacKp2//65NNiBXZxzhO39FOOjY=";
   };
 
   patches = [
@@ -30,10 +28,6 @@ stdenv.mkDerivation rec {
     substituteAllInPlace src/donate.h
     substituteInPlace cmake/OpenSSL.cmake \
       --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/hw/msr/Msr_linux.cpp \
-      --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
   '';
 
   nativeBuildInputs = [

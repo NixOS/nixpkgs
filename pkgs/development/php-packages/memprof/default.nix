@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.0.2";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "arnaud-lb";
     repo = "php-memory-profiler";
     rev = version;
-    hash = "sha256-gq+txAU2Fw+Zm1aIu0lwPUHRqtccNcHFpp0fm3f7BnQ=";
+    hash = "sha256-K8YcvCobErBkaWFTkVGLXXguQPOLIgQuRGWJF+HAIRA=";
   };
 
   configureFlags = [ "--with-judy-dir=${judy}" ];

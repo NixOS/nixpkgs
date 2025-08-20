@@ -7,7 +7,6 @@
   poetry-core,
   pyroute2,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -26,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-Ea+zxV2GUAaG/BxO103NhOLzzr/TNJaOsynDad2/2VA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -36,11 +40,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "unifi_discovery" ];
 

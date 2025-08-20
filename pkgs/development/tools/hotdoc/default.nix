@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildPythonApplication,
+  fetchpatch,
   fetchPypi,
-  replaceVars,
-  clang,
-  libclang,
   pytestCheckHook,
   pkg-config,
   cmake,
@@ -14,7 +12,6 @@
   json-glib,
   libxml2,
   appdirs,
-  backports-entry-points-selectable,
   dbus-deviation,
   faust-cchardet,
   feedgen,
@@ -32,22 +29,21 @@
 
 buildPythonApplication rec {
   pname = "hotdoc";
-  version = "0.17.4";
-  pyproject = true;
+  version = "0.15";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xNXf9kfwOqh6HS0GA10oGe3QmbkWNeOy7jkIKTV66fw=";
+    hash = "sha256-sfQ/iBd1Z+YqnaOg8j32rC2iucdiiK3Tff9NfYFnQyc=";
   };
 
   patches = [
-    (replaceVars ./clang.patch {
-      clang = lib.getExe clang;
-      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (fetchpatch {
+      name = "fix-test-hotdoc.patch";
+      url = "https://github.com/hotdoc/hotdoc/commit/d2415a520e960a7b540742a0695b699be9189540.patch";
+      hash = "sha256-9ORZ91c+/oRqEp2EKXjKkz7u8mLnWCq3uPsc3G4NB9E=";
     })
   ];
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     pkg-config
@@ -61,9 +57,8 @@ buildPythonApplication rec {
     libxml2.dev
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     appdirs
-    backports-entry-points-selectable
     dbus-deviation
     faust-cchardet
     feedgen
@@ -77,7 +72,9 @@ buildPythonApplication rec {
     wheezy-template
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
@@ -89,28 +86,21 @@ buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
-  pytestFlags = [
-    # Run the tests by package instead of current dir
+  # Run the tests by package instead of current dir
+  pytestFlagsArray = [
     "--pyargs"
     "hotdoc"
   ];
 
-  disabledTestPaths = [
-    # Executing hotdoc exits with code 1
-    "tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
-  ];
-
-  disabledTests = [
-    # Test does not correctly handle path normalization for test comparison
-    "test_cli_overrides"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
-    "test_index"
-  ];
+  disabledTests =
+    [
+      # Test does not correctly handle path normalization for test comparison
+      "test_cli_overrides"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+      "test_index"
+    ];
 
   # Hardcode libclang paths
   postPatch = ''

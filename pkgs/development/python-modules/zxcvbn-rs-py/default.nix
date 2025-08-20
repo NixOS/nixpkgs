@@ -2,22 +2,23 @@
   lib,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchPypi,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "zxcvbn-rs-py";
-  version = "0.2.0";
+  version = "0.1.1";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
     inherit version;
-    hash = "sha256-DQzdOngHGZma2NyfrNuMppG6GzpGoKfwVQGUVmN7erA=";
+    hash = "sha256-7EZJ/WGekfsnisqTs9dwwbQia6OlDEx3MR9mkqSI+gA=";
   };
 
   build-system = [
@@ -25,9 +26,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-WkaTEoVQVOwxcTyOIG5oHEvcv65fBEpokl3/6SxqiUw=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    hash = "sha256-OA6iyojBMAG9GtjHaIQ9cM0SEMwMa2bKFRIXmqp4OBE=";
   };
 
   pythonImportsCheck = [ "zxcvbn_rs_py" ];

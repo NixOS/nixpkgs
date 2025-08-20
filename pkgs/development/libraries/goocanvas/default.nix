@@ -9,13 +9,13 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "goocanvas";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/${lib.versions.majorMinor finalAttrs.version}/goocanvas-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-HAcu+IVnytJB+0rd7ibpvZZ0GxUD/3NtHBUvpthlcR4=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "07kicpcacbqm3inp7zq32ldp95mxx4kfxpaazd0x5jk7hpw2w1qw";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,11 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "goocanvas";
+      packageName = pname;
       versionPolicy = "odd-unstable";
       freeze = true;
     };
@@ -41,4 +39,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl2;
     platforms = lib.platforms.unix;
   };
-})
+}

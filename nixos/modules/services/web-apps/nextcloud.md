@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud31` which is also the latest
+The current default by NixOS is `nextcloud30` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -38,10 +38,7 @@ A very basic configuration may look like this:
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }
 ```
 
@@ -58,39 +55,6 @@ it's needed to add them to
 
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).
-
-## `nextcloud-occ` {#module-services-nextcloud-occ}
-
-The management command [`occ`](https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html) can be
-invoked by using the `nextcloud-occ` wrapper that's globally available on a system with Nextcloud enabled.
-
-It requires elevated permissions to become the `nextcloud` user. Given the way the privilege
-escalation is implemented, parameters passed via the environment to Nextcloud (e.g. `OC_PASS`) are
-currently ignored.
-
-Custom service units that need to run `nextcloud-occ` either need elevated privileges
-or the systemd configuration from `nextcloud-setup.service` (recommended):
-
-```nix
-{ config, ... }:
-{
-  systemd.services.my-custom-service = {
-    script = ''
-      nextcloud-occ …
-    '';
-    serviceConfig = {
-      inherit (config.systemd.services.nextcloud-cron.serviceConfig)
-        User
-        LoadCredential
-        KillMode
-        ;
-    };
-  };
-}
-```
-
-Please note that the options required are subject to change. Please make sure to read the
-release notes when upgrading.
 
 ## Common problems {#module-services-nextcloud-pitfalls-during-upgrade}
 
@@ -213,18 +177,8 @@ release notes when upgrading.
     the cache size to zero:
 
     ```nix
-    { services.nextcloud.phpOptions."realpath_cache_size" = "0"; }
+    services.nextcloud.phpOptions."realpath_cache_size" = "0";
     ```
-
-  - **Empty Files on chunked uploads**
-
-    Due to a limitation of PHP-FPM, Nextcloud is unable to handle chunked
-    uploads. See upstream issue
-    [nextcloud/server#7995](https://github.com/nextcloud/server/issues/7995)
-    for details.
-
-    A workaround is to disable chunked uploads with
-    {option}`nextcloud.nginx.enableFastcgiRequestBuffering`.
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
@@ -236,19 +190,13 @@ settings `listen.owner` &amp; `listen.group` in the
 
 An exemplary configuration may look like this:
 ```nix
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-{
+{ config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
     enable = true;
     hostName = "localhost";
 
-    # further, required options
+    /* further, required options */
   };
   services.phpfpm.pools.nextcloud.settings = {
     "listen.owner" = config.services.httpd.user;
@@ -293,25 +241,11 @@ This can be configured with the [](#opt-services.nextcloud.phpExtraExtensions) s
 
 Alternatively, extra apps can also be declared with the [](#opt-services.nextcloud.extraApps) setting.
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
-that are managed by Nix:
-
-```nix
-{ config, pkgs, ... }:
-{
-  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; {
-    inherit user_oidc calendar contacts;
-  };
-}
-```
-
-Keep in mind that this is essentially a mirror of the apps from the appstore, but managed in
-nixpkgs. This is by no means a curated list of apps that receive special testing on each update.
-
-If you want automatic updates it is recommended that you use web interface to install apps.
+that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
 
 ## Known warnings {#module-services-nextcloud-known-warnings}
 
-### Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
 
 This is because
 
@@ -319,12 +253,16 @@ This is because
 * the Logreader application that allows reading logs in the admin panel is enabled
   by default and requires logs written to a file.
 
-If you want to view logs in the admin panel,
-set [](#opt-services.nextcloud.settings.log_type) to "file".
+The logreader application doesn't work, as it was the case before. The only change is that
+it complains loudly now. So nothing actionable here by default. Alternatively you can
 
-If you prefer logs in the journal, disable the logreader application to shut up the
-"info". We can't really do that by default since whether apps are enabled/disabled
-is part of the application's state and tracked inside the database.
+* disable the logreader application to shut up the "error".
+
+  We can't really do that by default since whether apps are enabled/disabled is part
+  of the application's state and tracked inside the database.
+
+* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
+  from the admin panel.
 
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
@@ -348,7 +286,7 @@ in NixOS for a safe upgrade-path before removing those. In that case we should k
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
 ```nix
-# ...
+/* ... */
 {
   nextcloud17 = generic {
     version = "17.0.x";

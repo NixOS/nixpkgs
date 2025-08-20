@@ -4,28 +4,31 @@
   fetchFromGitHub,
   ...
 }:
-buildGoModule (finalAttrs: {
+let
+  version = "0.1.0";
+in
+buildGoModule {
   pname = "izrss";
-  version = "0.2.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "isabelroses";
     repo = "izrss";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-t+RtdKrYI0MNGSR1ABvClKv+hUJ4Tpg7yKS2qbm7BKc=";
+    tag = "v${version}";
+    hash = "sha256-Op9aiCQrBH8TuhMTt+3Wthd8UY3lU2g9yJ110v7TtXA=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-2L/EUoPbz6AZqv84XPhiZhImOL4wyBOzx6Od4+nTJeY=";
+  vendorHash = "sha256-/TRCD6akZV2qDqJz62p7UzFIGuTAKLnUtYqqvdw3rCI=";
 
   meta = {
     description = "RSS feed reader for the terminal written in Go";
-    changelog = "https://github.com/isabelroses/izrss/releases/v${finalAttrs.version}";
+    changelog = "https://github.com/isabelroses/izrss/releases/v${version}";
     homepage = "https://github.com/isabelroses/izrss";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -34,4 +37,4 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "izrss";
   };
-})
+}

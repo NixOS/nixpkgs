@@ -1,5 +1,4 @@
-{ ... }:
-{
+import ./make-test-python.nix {
   name = "nginx-etag";
 
   nodes = {
@@ -86,7 +85,7 @@
   testScript =
     { nodes, ... }:
     let
-      inherit (nodes.server.system.build) toplevel;
+      inherit (nodes.server.config.system.build) toplevel;
       newSystem = "${toplevel}/specialisation/pass-checks";
     in
     ''

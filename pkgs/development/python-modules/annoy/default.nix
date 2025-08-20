@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # nativeBuildInputs
   h5py,
-
-  # tests
   numpy,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "annoy";
   version = "1.17.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spotify";
@@ -51,15 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "annoy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
     homepage = "https://github.com/spotify/annoy";
     changelog = "https://github.com/spotify/annoy/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ timokau ];
-    badPlatforms = [
-      # Several tests fail with AssertionError
-      lib.systems.inspect.patterns.isDarwin
-    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ timokau ];
   };
 }

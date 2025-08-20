@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "toxiproxy";
-  version = "2.12.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
     rev = "v${version}";
-    sha256 = "sha256-CqJr3h2n+fzN6Ves38H7fYXd5vlpDVfF3kg4Tr8ThPc=";
+    sha256 = "sha256-1z4a69KnBurTrudqXiOPgrlICICu1ts86WrnFUlRWXE=";
   };
 
-  vendorHash = "sha256-4nKWTjB9aV5ILgHVceV76Ip0byBxlEY5TTAQwNLvL2s=";
+  vendorHash = "sha256-LQV+TFFcrq4Px580yOWU+8EuGt/7bFJYi35He2es6Q8=";
 
   excludedPackages = [ "test/e2e" ];
 

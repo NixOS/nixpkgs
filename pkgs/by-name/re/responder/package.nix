@@ -7,22 +7,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "responder";
-  version = "3.1.6.0";
+  version = "3.1.4.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
     tag = "v${version}";
-    hash = "sha256-2aNJkcdtTpw4OYHSTgJUYsGOsBD1I0ad3cSpVCS9kpo=";
+    hash = "sha256-BVSA/ZhpGz6UGyDRJUc4nlRJZ1/Y7er1vVOI+IbIqGk=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  dependencies = with python3.pkgs; [
-    aioquic
+  propagatedBuildInputs = with python3.pkgs; [
     netifaces
   ];
 
@@ -38,21 +37,21 @@ python3.pkgs.buildPythonApplication rec {
       --run "mkdir -p /tmp/Responder"
 
     substituteInPlace $out/share/Responder/Responder.conf \
-      --replace-fail "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
-      --replace-fail "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
-      --replace-fail "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
-      --replace-fail "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
-      --replace-fail "Responder.db" "/tmp/Responder/Responder.db"
+      --replace "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
+      --replace "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
+      --replace "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
+      --replace "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
+      --replace "Responder.db" "/tmp/Responder/Responder.db"
 
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server";
+    mainProgram = "responder";
     homepage = "https://github.com/lgandx/Responder";
     changelog = "https://github.com/lgandx/Responder/blob/master/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "responder";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

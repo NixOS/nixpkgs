@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastd";
-  version = "23";
+  version = "22";
 
   src = fetchFromGitHub {
-    owner = "neocturne";
+    owner = "Neoraider";
     repo = "fastd";
     rev = "v${version}";
-    sha256 = "sha256-Sz6VEjKziL/w2a4VWFfMPDYvm7UZh5A/NmzP10rJ2r8=";
+    sha256 = "0qni32j7d3za9f87m68wq8zgalvfxdrx1zxi6l4x7vvmpcw5nhpq";
   };
 
   nativeBuildInputs = [
@@ -32,16 +32,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    json_c
-    libcap
-    libsodium
-    libuecc
-    openssl
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    libmnl
-  ];
+  buildInputs =
+    [
+      json_c
+      libcap
+      libsodium
+      libuecc
+      openssl
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      libmnl
+    ];
 
   # some options are only available on x86
   mesonFlags = lib.optionals (!stdenv.hostPlatform.isx86) [
@@ -58,10 +59,7 @@ stdenv.mkDerivation rec {
       bsd3
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      fpletz
-      herbetom
-    ];
+    maintainers = with maintainers; [ fpletz ];
     mainProgram = "fastd";
   };
 }

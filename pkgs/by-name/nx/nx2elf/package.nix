@@ -5,9 +5,9 @@
   lz4,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nx2elf";
-  version = "0-unstable-2021-11-21";
+  version = "unstable-2021-11-21";
 
   src = fetchFromGitHub {
     owner = "shuffle2";

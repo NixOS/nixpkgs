@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/stedolan/ocaml-afl-persistent";
-    description = "Persistent-mode afl-fuzz for ocaml";
+    description = "persistent-mode afl-fuzz for ocaml";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

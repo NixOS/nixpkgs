@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -24,19 +24,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.27.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
-    owner = "gnome-pomodoro";
-    repo = "gnome-pomodoro";
+    owner = pname;
+    repo = pname;
     rev = version;
-    hash = "sha256-ZdTMaCzjA7tsXmnlHGl8MFGGViVPwMZuiu91q5v/v9U=";
+    hash = "sha256-icyS/K6H90/DWYvqJ7f7XXTTuIwLea3k+vDDEBYil6o=";
   };
 
   patches = [
     # Our glib setup hooks moves GSettings schemas to a subdirectory to prevent conflicts.
     # We need to patch the build script so that the extension can find them.
-    (replaceVars ./fix-schema-path.patch {
+    (substituteAll {
+      src = ./fix-schema-path.patch;
       inherit pname version;
     })
   ];

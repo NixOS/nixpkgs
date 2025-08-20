@@ -12,12 +12,17 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
-    repo = "pomsky";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
   };
 
-  cargoHash = "sha256-/tJwJ/xF5a2NEP5A/3swq75wCk9qxgbp7ilH1PqcWJY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "onig_sys-69.8.1" = "sha256-NJv/Dooh93yQ9KYyuNBhO1c4U7Gd7X007ECXyRsztrY=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -35,15 +40,15 @@ rustPlatform.buildRustPackage rec {
   # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Portable, modern regular expression language";
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
     changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

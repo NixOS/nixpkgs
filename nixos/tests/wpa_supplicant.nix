@@ -35,7 +35,7 @@ let
                 ssid = "nixos-test-sae";
                 authentication = {
                   mode = "wpa3-sae";
-                  saePasswords = [ { passwordFile = pkgs.writeText "password" naughtyPassphrase; } ];
+                  saePasswords = [ { password = naughtyPassphrase; } ];
                 };
                 bssid = "02:00:00:00:00:00";
               };

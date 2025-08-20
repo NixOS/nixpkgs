@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.4";
   src = fetchFromGitHub {
     owner = "soreau";
-    repo = "wayland-logout";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-VSAw6go4v937HWazXfMz8OdHgOnUtrlDXkslsV4eDIg=";
   };

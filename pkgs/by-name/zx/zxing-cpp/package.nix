@@ -1,37 +1,38 @@
 {
   lib,
-  cmake,
-  fetchFromGitHub,
-  gitUpdater,
-  python3,
   stdenv,
-  libzint,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "2.3.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-e3nSxjg8p+1DEUbZOh4C2zfnA6iGhNJMPiIe2oJEbRo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-teFspdATn9M7Z1vSr/7PdJx/xAv+TVai8rIekxqpBZk=";
   };
+
+  # c++ 20 needed for char8_t or clang-19 build fails
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
+  '';
 
   nativeBuildInputs = [
     cmake
-  ];
-
-  buildInputs = [
-    libzint
+    pkg-config
   ];
 
   cmakeFlags = [
-    "-DZXING_BLACKBOX_TESTS=OFF"
-    "-DZXING_DEPENDENCIES=LOCAL"
-    "-DZXING_EXAMPLES=OFF"
-    "-DZXING_USE_BUNDLED_ZINT=OFF"
+    "-DBUILD_EXAMPLES=OFF"
+    "-DBUILD_BLACKBOX_TESTS=OFF"
   ];
 
   passthru = {

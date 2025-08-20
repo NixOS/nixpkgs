@@ -2,95 +2,81 @@
   lib,
   stdenv,
   makeWrapper,
-  awscli2,
+  awscli,
   jq,
   unixtools,
   fetchFromGitHub,
   installShellFiles,
   bashInteractive,
-  getopt,
-  python3,
 }:
-let
-  runtimeDeps = [
-    awscli2
-    jq
-    unixtools.column
-    bashInteractive
-    getopt
-    (python3.withPackages (ps: [ ps.jmespath ]))
-  ];
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "bash-my-aws";
-  version = "0-unstable-2025-01-22";
+  version = "unstable-2020-01-11";
 
   src = fetchFromGitHub {
     owner = "bash-my-aws";
     repo = "bash-my-aws";
-    rev = "d338b43cc215719c1853ec500c946db6b9caaa11";
-    sha256 = "sha256-PR52T6XCrakQsBOJXf0PaYpYE5oMcIz5UDA4I9B7C38=";
+    rev = "5a97ce2c22affca1299022a5afa109d7b62242ba";
+    sha256 = "sha256-RZvaiyRK8FnZbHyLkWz5VrAcsnMtHCiIo64GpNZgvqY=";
   };
 
   dontConfigure = true;
+  dontBuild = true;
 
-  propagatedBuildInputs = runtimeDeps;
-
+  propagatedBuildInputs = [
+    awscli
+    jq
+    unixtools.column
+    bashInteractive
+  ];
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-    bashInteractive
   ];
 
-  patches = [
-    ./0001-update-paths-to-placeholders.patch
-    ./0002-fix-tests.patch
-  ];
-
-  postPatch = ''
-    patchShebangs --build ./scripts
-
-    substituteAllInPlace ./scripts/build
-    substituteAllInPlace ./scripts/build-completions
-    substituteAllInPlace ./bin/bma
+  checkPhase = ''
+    pushd test
+    ./shared-spec.sh
+    ./stack-spec.sh
+    popd
   '';
-
-  buildPhase = ''
-    runHook preBuild
-    ./scripts/build
-    runHook postBuild
-  '';
-
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out
     cp -r . $out
-
+  '';
+  postFixup = ''
+    pushd $out
+    substituteInPlace scripts/build \
+        --replace '~/.bash-my-aws' $out
+    substituteInPlace scripts/build-completions \
+        --replace "{HOME}" $out \
+        --replace '~/.bash-my-aws' $out
+    ./scripts/build
+    ./scripts/build-completions
+    substituteInPlace bash_completion.sh \
+        --replace "{HOME}" $out \
+        --replace .bash-my-aws ""
+    substituteInPlace bin/bma \
+        --replace '~/.bash-my-aws' $out
+    wrapProgram $out/bin/bma --prefix PATH : ${
+      lib.makeBinPath [
+        awscli
+        jq
+        unixtools.column
+        bashInteractive
+      ]
+    }
+    installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
+    chmod +x $out/lib/*
+    patchShebangs --host $out/lib
+    installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
     cat > $out/bin/bma-init <<EOF
     echo source $out/aliases
+    echo source $out/bash_completion.sh
     EOF
     chmod +x $out/bin/bma-init
-
-    installShellCompletion --bash --name bash-my-aws.bash $out/bash_completion.sh
-
-    runHook postInstall
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    pushd $out
-    make test
     popd
-    runHook postInstallCheck
-  '';
-
-  preFixup = ''
-    wrapProgram $out/bin/bma --prefix PATH : ${lib.makeBinPath runtimeDeps}
-
-    # make lib file executable so they are picked up by patchShebangs
-    chmod +x $out/lib/*
   '';
 
   meta = with lib; {
@@ -98,6 +84,5 @@ stdenv.mkDerivation {
     description = "CLI commands for AWS";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
-    mainProgram = "bma";
   };
 }

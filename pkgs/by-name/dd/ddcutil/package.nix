@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "2.2.1";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-cch2DDg91fohgXg5uGuYUKxtVY4TPi1v6ojfrwREiuY=";
+    hash = "sha256-4U/igqtgw2rwyuhEkV1pWYPIyNZEt2N6hlXJ9bDUyRw=";
   };
 
   nativeBuildInputs = [
@@ -39,14 +39,13 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.ddcutil.com/";
     description = "Query and change Linux monitor settings using DDC/CI and USB";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rnhmjoj ];
     changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
     mainProgram = "ddcutil";
   };

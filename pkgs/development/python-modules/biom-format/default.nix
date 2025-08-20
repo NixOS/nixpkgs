@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "biom_tests/tests" ];
+  pytestFlagsArray = [ "biom_tests/tests" ];
 
   pythonImportsCheck = [ "biom" ];
 

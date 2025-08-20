@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "adenum";
-  version = "0-unstable-2022-04-01";
+  version = "unstable-2022-04-01";
   format = "other";
 
   src = fetchFromGitHub {

@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bcunit";
   version = "linphone-4.4.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = "bcunit";
+    repo = pname;
     rev = "c5eebcc7f794e9567d3c72d15d3f28bffe6bfd0f";
     sha256 = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
   };

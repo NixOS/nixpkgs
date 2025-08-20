@@ -51,15 +51,16 @@ in
 
     boot.loader.grub.extraEntries = toString (map grubEntry scripts);
 
-    boot.loader.grub.extraFiles = {
-      "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn";
-    }
-    // builtins.listToAttrs (
-      map (name: {
-        name = name + ".ipxe";
-        value = scriptFile name;
-      }) scripts
-    );
+    boot.loader.grub.extraFiles =
+      {
+        "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn";
+      }
+      // builtins.listToAttrs (
+        map (name: {
+          name = name + ".ipxe";
+          value = scriptFile name;
+        }) scripts
+      );
   };
 
 }

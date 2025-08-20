@@ -35,9 +35,6 @@ stdenv.mkDerivation {
       several ways
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      ris
-      msanft
-    ];
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
   nixosTests,
 }:
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation {
     sed -e 's@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@' -i src/mod/*/Makefile
   '';
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "-C src/mod"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];

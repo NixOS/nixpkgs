@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "HolyPangolin";
     repo = "animatch";
     fetchSubmodules = true;
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-zBV45WMAXtCpPPbDpr04K/a9UtZ4KLP9nUauBlbhrFo=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jimfunk";
-    repo = "django-postgresql-netfields";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-76vGvxxfNZQBCCsTkkSgQZ8PpFspWxJQDj/xq9iOSTU=";
   };

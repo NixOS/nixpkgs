@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    mono4 # gmcs
   ];
 
   # Use msbuild when https://github.com/NixOS/nixpkgs/pull/43680 is merged

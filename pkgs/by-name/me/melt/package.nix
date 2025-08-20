@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Backup and restore Ed25519 SSH keys with seed words";
     mainProgram = "melt";
     homepage = "https://github.com/charmbracelet/melt";
     changelog = "https://github.com/charmbracelet/melt/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ penguwin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ penguwin ];
   };
 }

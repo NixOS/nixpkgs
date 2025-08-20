@@ -11,24 +11,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozphab";
-  version = "1.9.0";
-  pyproject = true;
+  version = "1.5.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
     tag = version;
-    hash = "sha256-CVpsq9YoEww47uruHYEsJk9YQ39ZFQsMdL0nBc8AHUM=";
+    hash = "sha256-HxwQ+mGtjnruppPAD01QUg3aca+k5vpj814BWM+3VfQ=";
   };
 
-  build-system = with python3.pkgs; [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "glean-sdk>=50.0.1,==50.*" "glean-sdk"
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
     setuptools
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [ "glean-sdk" ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     colorama
     distro
     glean-sdk
@@ -38,18 +41,19 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    git
-    mercurial
-    patch
-  ]
-  ++ (with python3.pkgs; [
-    callee
-    immutabledict
-    hg-evolve
-    mock
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      git
+      mercurial
+      patch
+    ]
+    ++ (with python3.pkgs; [
+      callee
+      immutabledict
+      hg-evolve
+      mock
+      pytestCheckHook
+    ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

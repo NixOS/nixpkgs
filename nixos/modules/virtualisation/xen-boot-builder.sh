@@ -1,8 +1,6 @@
 # This script is called by ./xen-dom0.nix to create the Xen boot entries.
 # shellcheck shell=bash
 
-export LC_ALL=C
-
 # Handle input argument and exit if the flag is invalid. See virtualisation.xen.efi.bootBuilderVerbosity below.
 [[ $# -ne 1 ]] && echo -e "\e[1;31merror:\e[0m xenBootBuilder must be called with exactly one verbosity argument. See the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option." && exit 1
 case "$1" in
@@ -91,8 +89,7 @@ EOF
         # https://xenbits.xenproject.org/docs/unstable/misc/efi.html.
         [ "$1" = "debug" ] && echo -e "\e[1;34mxenBootBuilder:\e[0m making Xen UKI..."
         xenEfi=$(jq -re '."org.xenproject.bootspec.v1".xen' "$bootspecFile")
-        finalSection=$(objdump --header --wide "$xenEfi" | tail -n +6 | sort --key="4,4" | tail -n 1 | grep -Eo '\.[a-z]*')
-        padding=$(objdump --header --section="$finalSection" "$xenEfi" | awk -v section="$finalSection" '$0 ~ section { printf("0x%016x\n", and(strtonum("0x"$3) + strtonum("0x"$4) + 0xfff, compl(0xfff)))};')
+        padding=$(objdump --header --section=".pad" "$xenEfi" | awk '/\.pad/ { printf("0x%016x\n", strtonum("0x"$3) + strtonum("0x"$4))};')
         [ "$1" = "debug" ] && echo "               - padding: $padding"
         objcopy \
             --add-section .config="$tmpCfg" \

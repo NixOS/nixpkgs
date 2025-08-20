@@ -4,12 +4,12 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "pitch-black";
-  version = "0-unstable-2019-07-23";
+  version = "unstable-2019-07-23";
 
   src = fetchFromGitHub {
-    repo = "pitch-black";
+    repo = pname;
     owner = "freefreeno";
     rev = "d8039341419aef1157c030bf3d9237bd926e0b95";
     hash = "sha256-Rn3ZMBD6srIkYFNN3HT5JFP46Akodmeqz5tbV2/2ZDA=";

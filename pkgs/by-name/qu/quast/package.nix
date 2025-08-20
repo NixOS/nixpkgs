@@ -15,7 +15,6 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "quast";
   version = "5.3.0";
-  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/ablab/quast/releases/download/${pname}_${version}/${pname}-${version}.tar.gz";

@@ -1,29 +1,22 @@
 {
+  fetchPypi,
   lib,
   python3Packages,
-  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "codecov-cli";
-  version = "10.4.0";
+  version = "9.1.1";
   pyproject = true;
 
-  src =
-    (fetchFromGitHub {
-      owner = "codecov";
-      repo = "codecov-cli";
-      tag = "v${version}";
-      hash = "sha256-R1GFQ81N/e2OX01oSs8Xs+PM0JKVZofiUPADVdxCzWk=";
-      fetchSubmodules = true;
-    }).overrideAttrs
-      (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
-      });
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-jaljYA2x2nZUOn9vy/CdtxfGjQKHtrtY13WmBdsICTA=";
+  };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   pythonRelaxDeps = [
     "httpx"
@@ -40,8 +33,6 @@ python3Packages.buildPythonApplication rec {
     responses
     test-results-parser
     tree-sitter
-    sentry-sdk
-    wrapt
   ];
 
   meta = {

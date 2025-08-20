@@ -1,26 +1,28 @@
 {
   lib,
-  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  hatchling,
-  fetchFromGitHub,
-  buildPythonPackage,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "entry-points-txt";
-  version = "0.2.1";
-  pyproject = true;
+  version = "0.2.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jwodder";
-    repo = "entry-points-txt";
-    tag = "v${version}";
-    hash = "sha256-hIUXxBJ0XSB4FrNZJdofJ1gTTncILNq9Xh+iAV1CD0s=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-klFSt3Od7xYgenpMP4DBFoZeQanGrmtJxDm5qeZ1Psc=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -32,8 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read & write entry_points.txt files";
     homepage = "https://github.com/jwodder/entry-points-txt";
-    changelog = "https://github.com/wheelodex/entry-points-txt/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ ayazhafiz ];
   };
 }

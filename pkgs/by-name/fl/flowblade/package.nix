@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.22.1";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
-    repo = "flowblade";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wHZNzGUQ89aDel5DOGIFG+zjF2yrI/JoIumXcTc+APw=";
+    sha256 = "sha256-zdQY85sm4bv0WBcCK+xo3j0zIjjMQ5j7w7zljqD9WU8=";
   };
 
   buildInputs = [

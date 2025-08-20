@@ -27,34 +27,23 @@
   requests,
   stevedore,
 
-  # optional dependencies
-  chardet,
-  citeproc-py,
-  jinja2,
-  markdownify,
-  whoosh,
-
-  # switch for optional dependencies
-  withOptDeps ? false,
-
   # tests
   docutils,
   git,
   pytestCheckHook,
-  pytest-cov-stub,
   sphinx,
   sphinx-click,
 }:
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.14.1";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "papis";
     repo = "papis";
     tag = "v${version}";
-    hash = "sha256-V4YswLNYwfBYe/Td0PEeDG++ClZoF08yxXjUXuyppPI=";
+    hash = "sha256-UpZoMYk4URN8tSFGIynVzWMk+9S0izROAgbx6uI2cN8=";
   };
 
   build-system = [ hatchling ];
@@ -79,18 +68,12 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ]
-  ++ lib.optionals withOptDeps optional-dependencies.complete;
+  ];
 
-  optional-dependencies = {
-    complete = [
-      chardet
-      citeproc-py
-      jinja2
-      markdownify
-      whoosh
-    ];
-  };
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=papis" ""
+  '';
 
   pythonImportsCheck = [ "papis" ];
 
@@ -98,7 +81,6 @@ buildPythonPackage rec {
     docutils
     git
     pytestCheckHook
-    pytest-cov-stub
     sphinx
     sphinx-click
   ];
@@ -107,7 +89,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "papis"
     "tests"
   ];
@@ -127,7 +109,7 @@ buildPythonPackage rec {
     description = "Powerful command-line document and bibliography manager";
     mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
-    changelog = "https://github.com/papis/papis/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nico202

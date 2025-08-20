@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  gtest,
-  gbenchmark,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  gpuTargets ? clr.localGpuTargets or [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, gtest
+, gbenchmark
+, buildTests ? false
+, buildBenchmarks ? false
+, gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocrand${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  pname = "rocrand";
+  version = "6.0.2";
 
   outputs = [
     "out"
-  ]
-  ++ lib.optionals buildTests [
+  ] ++ lib.optionals buildTests [
     "test"
-  ]
-  ++ lib.optionals buildBenchmarks [
+  ] ++ lib.optionals buildBenchmarks [
     "benchmark"
   ];
 
@@ -31,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-rrRLPqEw39M+6dtPW8DcnQiSZNwxWNINJ1wjU098Vkk=";
+    hash = "sha256-BBkcYOP+zh3OQTxuSkeiJizwnE9Gr5Jbhx0e8SU/mmU=";
   };
 
   nativeBuildInputs = [
@@ -40,58 +37,53 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs =
-    lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals buildBenchmarks [
-      gbenchmark
-    ];
+  buildInputs = lib.optionals buildTests [
+    gtest
+  ] ++ lib.optionals buildBenchmarks [
+    gbenchmark
+  ];
 
   cmakeFlags = [
+    "-DCMAKE_C_COMPILER=hipcc"
+    "-DCMAKE_CXX_COMPILER=hipcc"
     "-DHIP_ROOT_DIR=${clr}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optionals (gpuTargets != [ ]) [
+  ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ]
-  ++ lib.optionals buildTests [
+  ] ++ lib.optionals buildTests [
     "-DBUILD_TEST=ON"
-  ]
-  ++ lib.optionals buildBenchmarks [
+  ] ++ lib.optionals buildBenchmarks [
     "-DBUILD_BENCHMARK=ON"
   ];
 
-  postInstall =
-    lib.optionalString buildTests ''
-      mkdir -p $test/bin
-      mv $out/bin/test_* $test/bin
-    ''
-    + lib.optionalString buildBenchmarks ''
-      mkdir -p $benchmark/bin
-      mv $out/bin/benchmark_* $benchmark/bin
-    ''
-    + lib.optionalString (buildTests || buildBenchmarks) ''
-      rm -r $out/bin/rocRAND
-      # Fail if bin/ isn't actually empty
-      rmdir $out/bin
-    '';
+  postInstall = lib.optionalString buildTests ''
+    mkdir -p $test/bin
+    mv $out/bin/test_* $test/bin
+  '' + lib.optionalString buildBenchmarks ''
+    mkdir -p $benchmark/bin
+    mv $out/bin/benchmark_* $benchmark/bin
+  '' + lib.optionalString (buildTests || buildBenchmarks) ''
+    rm -r $out/bin/rocRAND
+    # Fail if bin/ isn't actually empty
+    rmdir $out/bin
+  '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
   };
 
   meta = with lib; {
     description = "Generate pseudo-random and quasi-random numbers";
     homepage = "https://github.com/ROCm/rocRAND";
     license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
+    maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: CMakeFiles/t4k_common.dir/t4k_throttle.c.o:(.bss+0x0): multiple definition of
   #     `wrapped_lines'; CMakeFiles/t4k_common.dir/t4k_audio.c.o:(.bss+0x0): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon -DGNULIB_UNISTR_U8_MBTOUC_UNSAFE -Wno-incompatible-pointer-types";
+  # TODO: revisit https://github.com/tux4kids/t4kcommon/pull/10 when merged.
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [
     cmake

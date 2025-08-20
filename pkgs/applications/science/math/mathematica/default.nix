@@ -72,11 +72,13 @@ callPackage ./generic.nix {
   );
   meta = with lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = "https://www.wolfram.com/mathematica/";
+    homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
+      herberteuler
       rafaelrc
+      chewblacka
     ];
     platforms = [ "x86_64-linux" ];
   };

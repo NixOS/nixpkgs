@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SMB network scanner";
     homepage = "https://github.com/viktor02/EroSmb";
     changelog = "https://github.com/viktor02/EroSmb/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "erosmb";
   };
 }

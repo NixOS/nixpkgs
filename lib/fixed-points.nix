@@ -389,7 +389,7 @@ rec {
 
       extensions = composeManyExtensions [ overlayA overlayB ];
 
-      # Calculate the fixed point of all composed overlays.
+      # Caluculate the fixed point of all composed overlays.
       fixedpoint = lib.fix (lib.extends extensions original );
 
     in fixedpoint

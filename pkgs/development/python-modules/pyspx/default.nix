@@ -6,6 +6,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,10 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cffi
     setuptools
+    wheel
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

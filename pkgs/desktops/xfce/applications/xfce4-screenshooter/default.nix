@@ -1,14 +1,7 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
-  gettext,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
+  mkXfceDerivation,
   wayland-scanner,
-  wrapGAppsHook3,
   exo,
   gtk3,
   libX11,
@@ -25,35 +18,18 @@
   zenity,
   jq,
   xclip,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.11.2";
+  version = "1.11.1";
+  odd-unstable = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "apps";
-    repo = "xfce4-screenshooter";
-    tag = "xfce4-screenshooter-${finalAttrs.version}";
-    hash = "sha256-LELPY3SU25e3Dk9/OljWMLIbZYrDiQD1h6dMq+jRaH8=";
-  };
-
-  strictDeps = true;
-
-  depsBuildBuild = [
-    pkg-config
-  ];
+  sha256 = "sha256-/N79YK233k9rVg5fGr27b8AZD9bCXllNQvrN4ghir/M=";
 
   nativeBuildInputs = [
-    gettext
-    glib # glib-compile-resources
-    meson
-    ninja
-    pkg-config
     wayland-scanner
-    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -86,14 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-screenshooter-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Screenshot utility for the Xfce desktop";
-    homepage = "https://gitlab.xfce.org/apps/xfce4-screenshooter";
-    license = lib.licenses.gpl2Plus;
     mainProgram = "xfce4-screenshooter";
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

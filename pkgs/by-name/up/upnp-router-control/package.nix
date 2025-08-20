@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upnp-router-control";
-  version = "0.3.5";
+  version = "0.3.4";
 
   src = fetchzip {
     url = "https://launchpad.net/upnp-router-control/trunk/${finalAttrs.version}/+download/upnp-router-control-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+yJzULNdzBkUw2EbHXoAbR9B/P0d6n8T7ojlYIrKgto=";
+    hash = "sha256-28F/OB2fHemn7HLVFEDmefRA5AsEaQKy+Qbcv75z9w0=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     gupnp_1_6
   ];
 
-  meta = {
+  meta = with lib; {
     # also https://gitlab.gnome.org/DnaX/upnp-router-control
     homepage = "https://launchpad.net/upnp-router-control";
     description = "Access some parameters of the router and manage port forwarding";
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
       the network speed, the external IP and the model name.
       It can manage port forwarding through a simple GUI interface.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
     mainProgram = "upnp-router-control";
   };
 })

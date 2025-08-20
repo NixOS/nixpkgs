@@ -24,13 +24,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-04-11";
+    version = "2024-05-01";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = "matcha-gtk-theme";
+      repo = pname;
       rev = version;
-      sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
+      sha256 = "trQwRZ/JKIS8TcRIg0eL5GmB/yymDwqqNued0ddRuqU=";
     };
 
     nativeBuildInputs = [
@@ -60,8 +60,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
         ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
         --dest $out/share/themes
 
-      mkdir -p $out/share/doc/matcha-gtk-theme
-      cp -a src/extra/firefox $out/share/doc/matcha-gtk-theme
+      mkdir -p $out/share/doc/${pname}
+      cp -a src/extra/firefox $out/share/doc/${pname}
 
       jdupes --quiet --link-soft --recurse $out/share
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "aeidon/test" ];
+  pytestFlagsArray = [ "aeidon/test" ];
 
   disabledTests = [
     # requires gspell to work with gobject introspection

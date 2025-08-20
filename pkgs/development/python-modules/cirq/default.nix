@@ -1,10 +1,5 @@
 {
   buildPythonPackage,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   cirq-aqt,
   cirq-core,
   cirq-google,
@@ -12,12 +7,11 @@
   cirq-pasqal,
   cirq-rigetti,
   cirq-web,
-
-  # tests
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cirq";
   pyproject = true;
   inherit (cirq-core) version src meta;
@@ -27,10 +21,10 @@ buildPythonPackage {
   dependencies = [
     cirq-aqt
     cirq-core
-    cirq-google
     cirq-ionq
-    cirq-pasqal
+    cirq-google
     cirq-rigetti
+    cirq-pasqal
     cirq-web
   ];
 

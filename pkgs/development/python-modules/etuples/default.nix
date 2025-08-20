@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytest-html
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--html=testing-report.html"
     "--self-contained-html"
   ];

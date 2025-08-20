@@ -9,14 +9,15 @@
 
 buildPythonPackage rec {
   pname = "quixote";
-  version = "3.7";
+  version = "3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F4u50xz6sNwBIzgEglVnwKTKxguE6f1m9Y2DAUEJsGQ=";
+    pname = "Quixote";
+    inherit version;
+    hash = "sha256-78t6tznI3+vIRkWNi0HDPGhR8aGaET3IMXQvmAPdSSY=";
   };
 
   build-system = [ setuptools ];

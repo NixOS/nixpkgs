@@ -36,8 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-  ]
-  ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
+  ] ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
 
   mesonBuildType = "release";
 

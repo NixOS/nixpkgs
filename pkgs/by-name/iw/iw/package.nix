@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.isc;
     mainProgram = "iw";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

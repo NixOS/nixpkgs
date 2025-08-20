@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zmartzone/cjose";
     changelog = "https://github.com/zmartzone/cjose/blob/${version}/CHANGELOG.md";
     description = "C library for Javascript Object Signing and Encryption. This is a maintained fork of the original project";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ midchildan ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ midchildan ];
+    platforms = platforms.all;
   };
 }

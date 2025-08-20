@@ -36,13 +36,13 @@ buildGoModule rec {
       --prefix XDG_DATA_DIRS : "${roboto.out}/share/" \
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Application to control your Elgato Stream Deck on Linux";
     mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
     changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

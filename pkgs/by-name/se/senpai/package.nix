@@ -4,21 +4,25 @@
   fetchFromSourcehut,
   installShellFiles,
   scdoc,
-  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "senpai";
-  version = "0.4.1";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~delthas";
     repo = "senpai";
     rev = "v${version}";
-    sha256 = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
+    sha256 = "sha256-A5kBrJJi+RcSpB0bi2heKzNl5LjdeT9h2Pc9kKXDg1A=";
   };
 
-  vendorHash = "sha256-6glslBPjJr0TmrAkDGbOQ4sDzvODlavVeTugs6RXsCU=";
+  vendorHash = "sha256-kKYee1QJX7N101MTikHUbX+AqZ2NhM4soE4JAAOdAPI=";
+
+  patches = [
+    # fix build failures, submitted upstream https://lists.sr.ht/~delthas/senpai-dev/patches/48581
+    ./bump-go-version.patch
+  ];
 
   subPackages = [
     "cmd/senpai"
@@ -35,14 +39,12 @@ buildGoModule rec {
     installManPage doc/senpai.*
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Your everyday IRC student";
     mainProgram = "senpai";
     homepage = "https://sr.ht/~delthas/senpai/";
     changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ malte-v ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ malte-v ];
   };
 }

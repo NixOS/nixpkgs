@@ -4,10 +4,9 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "avell-unofficial-control-center";
   version = "1.0.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rodgomesc";

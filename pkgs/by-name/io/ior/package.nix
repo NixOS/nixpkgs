@@ -5,25 +5,20 @@
   mpi,
   perl,
   autoreconfHook,
-  pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ior";
-  version = "4.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "hpc";
-    repo = "ior";
-    tag = finalAttrs.version;
-    hash = "sha256-WsfJWHHfkiHZ+rPk6ck6mDErTXwt6Dhgm+yqOtw4Fvo=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-pSjptDfiPlaToXe1yHyk9MQMC9PqcVSjqAmWLD11iOM=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     mpi
     perl
@@ -31,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://ior.readthedocs.io/en/latest/";
     description = "Parallel file system I/O performance test";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bzizou ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bzizou ];
   };
-})
+}

@@ -27,11 +27,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
-    "-pno:cacheprovider"
+  pytestFlagsArray = [
+    "-p no:cacheprovider"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-Wignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

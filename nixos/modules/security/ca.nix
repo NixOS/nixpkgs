@@ -5,6 +5,7 @@
   ...
 }:
 let
+
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
@@ -87,31 +88,22 @@ in
       '';
     };
 
-    security.pki.caBundle = lib.mkOption {
-      type = lib.types.path;
-      readOnly = true;
-      description = ''
-        (Read-only) the path to the final bundle of certificate authorities as a single file.
-      '';
-    };
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf cfg.installCACerts {
+  config = lib.mkIf cfg.installCACerts {
 
-      # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-      environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
+    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
-      # Old NixOS compatibility.
-      environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
+    # Old NixOS compatibility.
+    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
 
-      # CentOS/Fedora compatibility.
-      environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
+    # CentOS/Fedora compatibility.
+    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
-      # P11-Kit trust source.
-      environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
-    })
-    { security.pki.caBundle = caBundle; }
-  ];
+    # P11-Kit trust source.
+    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
+
+  };
 
 }

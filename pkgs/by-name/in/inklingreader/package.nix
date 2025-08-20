@@ -9,7 +9,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "inklingreader";
   version = "unstable-2017-09-07";
 

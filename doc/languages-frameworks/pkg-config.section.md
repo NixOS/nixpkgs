@@ -17,12 +17,9 @@ A good example of all these things is miniz:
 { pkg-config, testers, ... }:
 
 stdenv.mkDerivation (finalAttrs: {
-  # ...
+  /* ... */
 
-  nativeBuildInputs = [
-    pkg-config
-    validatePkgConfig
-  ];
+  nativeBuildInputs = [ pkg-config validatePkgConfig ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
@@ -30,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    # ...
+    /* ... */
     pkgConfigModules = [ "miniz" ];
   };
 })

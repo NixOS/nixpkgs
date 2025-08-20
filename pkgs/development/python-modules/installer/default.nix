@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pypa";
-    repo = "installer";
+    repo = pname;
     rev = version;
     hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
   };
@@ -55,7 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/installer";
     changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
     license = licenses.mit;
-    maintainers = [ maintainers.cpcloud ];
-    teams = [ teams.python ];
+    maintainers = teams.python.members ++ [ maintainers.cpcloud ];
   };
 }

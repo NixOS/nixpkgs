@@ -21,14 +21,14 @@
 
 buildPythonPackage {
   pname = "notobuilder";
-  version = "0-unstable-2025-05-20";
+  version = "0-unstable-2024-09-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notobuilder";
-    rev = "ff46ffb2e19ff8e8c36a4e3e0db334bb249896cb";
-    hash = "sha256-K4F+Et50QVXOOk00u/8ZXKj/TWoC6ndCeAF9jaMD7jI=";
+    rev = "8a60f1599ce86c4b3eacb5d01c3f17162bab67d3";
+    hash = "sha256-YBiDOnt2B7I/AcEfFgGrdzN/tNz/tQO0cv9N4PupPCE=";
   };
 
   postPatch = ''
@@ -53,8 +53,7 @@ buildPythonPackage {
     diffenator2
     chevron
     sh
-  ]
-  ++ gftools.optional-dependencies.qa;
+  ] ++ gftools.optional-dependencies.qa;
 
   pythonImportsCheck = [
     "notobuilder"

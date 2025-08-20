@@ -1,49 +1,38 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
   aiofiles,
-  aiohttp,
-
-  # optional dependencies
   aioftp,
-
-  # tests
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
   pytest-asyncio,
   pytest-localserver,
   pytest-socket,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "2.2.0";
+  version = "2.1.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "Cadair";
-    repo = "parfive";
-    tag = "v${version}";
-    hash = "sha256-DIjS2q/SOrnLspomLHk8ZJ+krdzMyQfbIpXxad30s1k=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-zWy0GSQhMHMM9B1M9vKE6/UPGnHObJUI4EZ+yY8X3I4=";
   };
 
-  pyproject = true;
+  buildInputs = [ setuptools-scm ];
 
-  build-system = [ setuptools-scm ];
-
-  dependencies = [
+  propagatedBuildInputs = [
+    aioftp
     aiohttp
     tqdm
   ];
-
-  optional-dependencies = {
-    ftp = [ aioftp ];
-  };
 
   nativeCheckInputs = [
     aiofiles
@@ -58,22 +47,15 @@ buildPythonPackage rec {
     "test_ftp"
     "test_ftp_pasv_command"
     "test_ftp_http"
-
-    # flaky comparison between runtime types
-    "test_http_callback_fail"
   ];
-
-  # Tests require local network access
-  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "parfive" ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP and FTP parallel file downloader";
     mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
-    changelog = "https://github.com/Cadair/parfive/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sarahec ];
+    license = licenses.mit;
+    maintainers = [ ];
   };
 }

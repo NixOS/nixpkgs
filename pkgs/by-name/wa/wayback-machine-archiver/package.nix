@@ -7,7 +7,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "wayback-machine-archiver";
   version = "1.9.1";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agude";
@@ -16,13 +15,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0dnnqx507gpj8wsx6f2ivfmha969ydayiqsvxh23p9qcixw9257x";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-    pypandoc
-  ];
-
-  dependencies = with python3.pkgs; [ requests ];
-
+  nativeBuildInputs = with python3.pkgs; [ pypandoc ];
+  propagatedBuildInputs = with python3.pkgs; [ requests ];
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
@@ -30,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail \"pytest-runner\", ""
+      --replace \"pytest-runner\", ""
   '';
 
   pythonImportsCheck = [ "wayback_machine_archiver" ];

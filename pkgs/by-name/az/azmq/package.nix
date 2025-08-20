@@ -2,23 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost183,
+  boost,
   cmake,
   ninja,
   zeromq,
   catch2,
-  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "azmq";
-  version = "1.0.3-unstable-2025-01-19";
+  version = "unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "azmq";
-    rev = "4e8f18bf3ac60f5c8126db61e48927ea19a88195";
-    hash = "sha256-0TYZvQefoW77RXhQ57niXs3Kcz2YHW9cBDNGFU47BBs=";
+    rev = "2c1adac46bced4eb74ed9be7c74563bb113eaacf";
+    hash = "sha256-4o1CHlg9kociIL6QN/kU2cojPvFRhtjFmKIAz0dapUM=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +26,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost183
+    boost
     catch2
     zeromq
   ];
@@ -35,15 +34,11 @@ stdenv.mkDerivation {
   # Broken for some reason on this platform.
   doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
-
   meta = with lib; {
     homepage = "https://github.com/zeromq/azmq";
     license = licenses.boost;
     description = "C++ language binding library integrating ZeroMQ with Boost Asio";
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
   };
 }

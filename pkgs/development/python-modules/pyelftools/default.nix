@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.32";
+  version = "0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "eliben";
     repo = "pyelftools";
     tag = "v${version}";
-    hash = "sha256-58Twjf7ECOPynQ5KPCTDQWdD3nb7ADJZISozWGRGoXM=";
+    hash = "sha256-kX89fMXqrEvhMAAjqKHzHmrYizKBt1uCWMOJtFNNhy4=";
   };
 
   build-system = [ setuptools ];

@@ -5,7 +5,7 @@
   async,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "faraday-async";
   inherit (faraday) version src;
 

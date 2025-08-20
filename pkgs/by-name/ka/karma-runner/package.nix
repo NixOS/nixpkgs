@@ -2,28 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
 buildNpmPackage rec {
   pname = "karma";
-  version = "6.4.4";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "karma-runner";
     repo = "karma";
-    tag = "v${version}";
-    hash = "sha256-RfEmzUMzgOY6YG0MBheCgwmwOU3C5G8hybH40gLmsr4=";
+    rev = "v${version}";
+    hash = "sha256-v6IiLz65NS8GwM/FPqRxR5qcFDDu7EqloR0SIensdDI=";
   };
 
-  npmDepsHash = "sha256-bGtiGLwr9Bmi3Jx2DImpyLhPnxUo7q6YcMCxoxqOkGY=";
+  patches = [
+    ./fix-package-lock.patch
+  ];
+
+  npmDepsHash = "sha256-nX4/96WdPEDZ6DASp+AOBbBbHyq+p2zIh2dZUbtmIPI=";
 
   env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
 
   meta = {
     description = "Spectacular Test Runner for JavaScript";

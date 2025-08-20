@@ -1,14 +1,13 @@
 {
   lib,
-  pythonPackages,
+  python3Packages,
   fetchPypi,
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
   version = "2.0.2";
-  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,17 +15,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
 
-  build-system = [
-    pythonPackages.setuptools
-  ];
-
-  dependencies = [
-    mopidy
-  ];
+  propagatedBuildInputs = [ mopidy ];
 
   doCheck = false;
-
-  pythonImportsCheck = [ "mopidy_somafm" ];
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";

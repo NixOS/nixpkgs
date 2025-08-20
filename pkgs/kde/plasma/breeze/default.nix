@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtbase,
-  qtsvg,
   libsForQt5,
 }:
 mkKdeDerivation {
@@ -12,8 +11,6 @@ mkKdeDerivation {
     "dev"
     "qt5"
   ];
-
-  extraBuildInputs = [ qtsvg ];
 
   # We can't add qt5 stuff to dependencies or the hooks blow up,
   # so manually point everything to everything. Oof.

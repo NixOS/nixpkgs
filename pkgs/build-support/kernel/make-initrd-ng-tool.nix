@@ -1,6 +1,10 @@
 {
   rustPlatform,
   lib,
+  makeWrapper,
+  patchelf,
+  glibc,
+  binutils,
 }:
 
 rustPlatform.buildRustPackage {

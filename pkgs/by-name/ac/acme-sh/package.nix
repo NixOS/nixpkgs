@@ -1,59 +1,57 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  curl,
-  dnsutils,
-  gnugrep,
-  gnused,
-  iproute2,
-  makeWrapper,
-  openssl,
-  socat,
-  unixtools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, curl
+, dnsutils
+, gnugrep
+, gnused
+, iproute2
+, makeWrapper
+, openssl
+, socat
+, unixtools
 }:
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "3.1.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     tag = version;
-    hash = "sha256-Fgik1TCWDlkyEI9QkXpc/94mGKb7U7hMoamdYU7nTJc=";
+    hash = "sha256-BPZ+5xvKqEaz+tkccVL0hEDAxLkICW5O+qPf73bOqRU=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  installPhase =
-    let
-      binPath = lib.makeBinPath [
-        coreutils
-        curl
-        dnsutils
-        gnugrep
-        gnused
-        openssl
-        socat
-        (if stdenv.hostPlatform.isLinux then iproute2 else unixtools.netstat)
-      ];
-    in
+  installPhase = let
+    binPath = lib.makeBinPath [
+      coreutils
+      curl
+      dnsutils
+      gnugrep
+      gnused
+      openssl
+      socat
+      (if stdenv.hostPlatform.isLinux then iproute2 else unixtools.netstat)
+    ];
+  in
     ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out $out/bin $out/libexec
-      cp -R $src/* $_
-      makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
-        --prefix PATH : "${binPath}"
+    mkdir -p $out $out/bin $out/libexec
+    cp -R $src/* $_
+    makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
+      --prefix PATH : "${binPath}"
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://acme.sh/";
     changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
     description = "Pure Unix shell script implementing ACME client protocol";
@@ -73,8 +71,8 @@ stdenv.mkDerivation rec {
       - IPv6 ready
       - Cron job notifications for renewal or error etc.
     '';
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.serokell ];
+    license = licenses.gpl3Only;
+    maintainers = lib.teams.serokell.members;
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
   };

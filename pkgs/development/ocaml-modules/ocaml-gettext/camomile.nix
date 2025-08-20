@@ -1,9 +1,11 @@
 {
   lib,
   buildDunePackage,
+  ocaml,
   ocaml_gettext,
   camomile,
-  ounit2,
+  ounit,
+  fileutils,
 }:
 
 buildDunePackage {
@@ -11,12 +13,15 @@ buildDunePackage {
   inherit (ocaml_gettext) src version;
 
   propagatedBuildInputs = [
-    camomile
+    (camomile.override { version = "1.0.2"; })
     ocaml_gettext
   ];
 
-  doCheck = true;
-  checkInputs = [ ounit2 ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [
+    ounit
+    fileutils
+  ];
 
   meta = (builtins.removeAttrs ocaml_gettext.meta [ "mainProgram" ]) // {
     description = "Internationalization library using camomile (i18n)";

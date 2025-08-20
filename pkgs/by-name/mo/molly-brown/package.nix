@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "molly-brown";
   version = "unstable-2023-02-10";
 

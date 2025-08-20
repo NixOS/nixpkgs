@@ -10,7 +10,7 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libsigrokdecode";
   version = "0.5.3-unstable-2024-10-01";
 

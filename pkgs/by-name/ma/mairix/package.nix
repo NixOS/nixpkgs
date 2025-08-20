@@ -1,22 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   zlib,
   bzip2,
   bison,
   flex,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mairix";
-  version = "0.24-unstable-2024-09-14";
+  version = "0.24";
 
-  src = fetchFromGitHub {
-    owner = "vandry";
-    repo = "mairix";
-    rev = "f6c7a5aa141d2b201e8a299ab889ff1ed23992ea";
-    hash = "sha256-7SgBbQPuz07eoZJ9km6yYEjkyf2p+BPW1ec0X2X8pKE=";
+  src = fetchurl {
+    url = "mirror://sourceforge/mairix/mairix-${version}.tar.gz";
+    sha256 = "0msaxz5c5hf7k1ci16i67m4ynrbrpsxbqzk84nz6z2vnkh3jww50";
   };
 
   buildInputs = [
@@ -26,6 +24,9 @@ stdenv.mkDerivation {
     flex
   ];
 
+  # https://github.com/rc0/mairix/pull/19
+  patches = [ ./mmap.patch ];
+
   enableParallelBuilding = true;
 
   meta = {
@@ -34,6 +35,6 @@ stdenv.mkDerivation {
     description = "Program for indexing and searching email messages stored in maildir, MH or mbox";
     mainProgram = "mairix";
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = with lib.platforms; all;
   };
 }

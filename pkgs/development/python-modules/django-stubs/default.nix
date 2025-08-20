@@ -1,38 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  django-stubs-ext,
   django,
-  fetchFromGitHub,
-  hatchling,
+  django-stubs-ext,
+  fetchPypi,
   mypy,
-  oracledb,
   pytestCheckHook,
-  pytest-mypy-plugins,
   pythonOlder,
-  redis,
+  setuptools,
   tomli,
   types-pytz,
   types-pyyaml,
-  types-redis,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.2.2";
+  version = "5.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "typeddjango";
-    repo = "django-stubs";
-    tag = version;
-    hash = "sha256-kF5g0/rkMQxYTfSrTqzZ6BuqGlE42K/AVhc1/ARc+/c=";
+  src = fetchPypi {
+    pname = "django_stubs";
+    inherit version;
+    hash = "sha256-Em01S73/SQbE6T5jYRl/b7+2Ixw99t74Wikdrm+fV3s=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ setuptools ];
 
   dependencies = [
     django
@@ -40,35 +35,17 @@ buildPythonPackage rec {
     types-pytz
     types-pyyaml
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
-    oracle = [ oracledb ];
-    redis = [
-      redis
-      types-redis
-    ];
   };
 
   nativeCheckInputs = [
-    pytest-mypy-plugins
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "django-stubs" ];
-
-  disabledTests = [
-    # AttributeError: module 'django.contrib.auth.forms' has no attribute
-    "test_find_classes_inheriting_from_generic"
-  ];
-
-  disabledTestPaths = [
-    # Skip type checking
-    "tests/typecheck/"
-  ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django";

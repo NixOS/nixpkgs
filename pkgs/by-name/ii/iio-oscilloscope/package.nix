@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -27,18 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
-    repo = "iio-oscilloscope";
+    repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}-master";
     hash = "sha256-wCeOLAkrytrBaXzUbNu8z2Ayz44M+b+mbyaRoWHpZYU=";
   };
-
-  patches = [
-    # make sure the sizeof argument to calloc is the second argument.
-    (fetchpatch {
-      url = "https://github.com/analogdevicesinc/iio-oscilloscope/commit/565cade20566d50adec7be191a6dd7b21217f878.patch";
-      hash = "sha256-JeRve3xtWi+EcZR+qZlek+YwAbPB56OYxkFVd8MmIb0=";
-    })
-  ];
 
   postPatch = ''
     # error: 'idx' may be used uninitialized
@@ -61,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     curl
     jansson
-  ]
-  ++ lib.optional enable9361 libad9361;
+  ] ++ lib.optional enable9361 libad9361;
 
   cmakeFlags = [
     "-DCMAKE_POLKIT_PREFIX=${placeholder "out"}"

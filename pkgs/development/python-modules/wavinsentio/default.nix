@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
   requests,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wavinsentio";
-  version = "0.5.4";
-  pyproject = true;
+  version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FlxeOaqQkJBWQtEUudbwlCzkK6HWmWTIxjgaI80BlxQ=";
+    hash = "sha256-Oko3Ivj95vajNWjQTQK18i5B/DIBngjw2HLlzYqLv2Y=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ requests ];
 
-  dependencies = [ requests ];
-
-  # Module has no tests
+  # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "wavinsentio" ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the Wavin Sentio underfloor heating system";
     homepage = "https://github.com/djerik/wavinsentio";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

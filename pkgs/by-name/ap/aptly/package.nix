@@ -12,18 +12,18 @@
   aptly,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "aptly";
-  version = "1.6.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "aptly-dev";
     repo = "aptly";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Jkljg05C4GJ4F9l6mKAU4JCH8I0/bjzfb74X714z4UI=";
+    rev = "v${version}";
+    sha256 = "sha256-LqGOLXXaGfQfoj2r+aY9SdOKUDI9+22EsHKBhHMidyk=";
   };
 
-  vendorHash = "sha256-3pFVAVvIpJut2YYxvnCQbBpdwwmUbZIyrx0WoQrU+nQ=";
+  vendorHash = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,24 +33,21 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X main.Version=${version}"
   ];
-
-  preBuild = ''
-    echo ${finalAttrs.version} > VERSION
-  '';
 
   postInstall = ''
     installShellCompletion --bash --name aptly completion.d/aptly
     installShellCompletion --zsh --name _aptly completion.d/_aptly
-    wrapProgram $out/bin/aptly \
-      --prefix PATH : ${
+    wrapProgram "$out/bin/aptly" \
+      --prefix PATH ":" "${
         lib.makeBinPath [
           gnupg
           bzip2
           xz
           graphviz
         ]
-      }
+      }"
   '';
 
   doCheck = false;
@@ -60,13 +57,12 @@ buildGoModule (finalAttrs: {
     command = "aptly version";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
-    license = lib.licenses.mit;
-    changelog = "https://github.com/aptly-dev/aptly/releases/tag/v${finalAttrs.version}";
-    maintainers = [ lib.maintainers.montag451 ];
-    teams = [ lib.teams.bitnomial ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
+    changelog = "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
     mainProgram = "aptly";
   };
-})
+}

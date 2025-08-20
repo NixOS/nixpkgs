@@ -21,22 +21,17 @@
   libvorbis,
   libopus,
   nlohmann_json,
-  expat,
-  libGL,
-  curl,
-  webkitgtk_4_1,
-  gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "1.2.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
-    tag = finalAttrs.version;
-    hash = "sha256-mp+6MFwUqV6aa1ACdIlel5VhjWDXf5QzfFu1I6If4aU=";
+    rev = finalAttrs.version;
+    hash = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
 
@@ -54,32 +49,28 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    alsa-lib
-    curl
-    expat
-    flac
-    fltk
-    fmt
-    gtk3
-    jack2
-    libGL
-    libXpm
-    libXrandr
-    libogg
-    libopus
-    libpulseaudio
-    libsamplerate
-    libsndfile
-    libvorbis
-    libmpg123
-    nlohmann_json
-    rtmidi
-    webkitgtk_4_1
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
-    fontconfig
-  ];
+  buildInputs =
+    [
+      rtmidi
+      fltk
+      fmt
+      libmpg123
+      libsndfile
+      libsamplerate
+      nlohmann_json
+      alsa-lib
+      libXpm
+      libpulseaudio
+      jack2
+      flac
+      libogg
+      libvorbis
+      libopus
+      libXrandr
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
+      fontconfig
+    ];
 
   meta = {
     description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";

@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.14";
+  version = "0.4.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = "aiocoap";
     tag = version;
-    hash = "sha256-v0OzRWHlGaBKqqcIyAlVafd/siXVwaTAZqw+Sstju3s=";
+    hash = "sha256-a2qhMDFkRbMK4+xvPc140i0lPaWbTWeFlpvdLaNtOxA=";
   };
 
   build-system = [ setuptools ];
@@ -59,14 +59,29 @@ buildPythonPackage rec {
     "tests/test_oscore_plugtest.py"
   ];
 
-  disabledTests = [
-    # Communication is not properly mocked
-    "test_uri_parser"
-    # Doctest
-    "test_001"
-    # CLI test
-    "test_help"
-  ];
+  disabledTests =
+    [
+      # Communication is not properly mocked
+      "test_uri_parser"
+      # Doctest
+      "test_001"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/chrysn/aiocoap/issues/339
+      "TestServerTCP::test_big_resource"
+      "TestServerTCP::test_empty_accept"
+      "TestServerTCP::test_error_resources"
+      "TestServerTCP::test_fast_resource"
+      "TestServerTCP::test_js_accept"
+      "TestServerTCP::test_manualbig_resource"
+      "TestServerTCP::test_nonexisting_resource"
+      "TestServerTCP::test_replacing_resource"
+      "TestServerTCP::test_root_resource"
+      "TestServerTCP::test_slow_resource"
+      "TestServerTCP::test_slowbig_resource"
+      "TestServerTCP::test_spurious_resource"
+      "TestServerTCP::test_unacceptable_accept"
+    ];
 
   pythonImportsCheck = [ "aiocoap" ];
 
@@ -74,7 +89,7 @@ buildPythonPackage rec {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
     changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

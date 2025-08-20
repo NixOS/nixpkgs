@@ -2,24 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   mkdocs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-redirects";
-  version = "1.2.2";
-  pyproject = true;
+  version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
-    repo = "mkdocs-redirects";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-YsMA00yajeGSqSB6CdKxGqyClC9Cgc3ImRBTucHEHhs=";
+    hash = "sha256-zv/tCsC2wrD0iH7Kvlq4nXJMPMGQ7+l68Y/q/x66LBg=";
   };
-
-  build-system = [ hatchling ];
 
   propagatedBuildInputs = [ mkdocs ];
 

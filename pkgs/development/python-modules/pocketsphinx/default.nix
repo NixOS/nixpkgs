@@ -1,13 +1,16 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cmake,
   cython,
+  fetchFromGitHub,
   memory-profiler,
   ninja,
   pathspec,
   pocketsphinx,
   pytestCheckHook,
+  scikit-build,
   scikit-build-core,
   sounddevice,
 }:

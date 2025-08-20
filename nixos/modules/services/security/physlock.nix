@@ -116,7 +116,6 @@ in
 
         systemd.services.physlock = {
           enable = true;
-          documentation = [ "man:physlock(1)" ];
           description = "Physlock";
           wantedBy =
             lib.optional cfg.lockOn.suspend "suspend.target"

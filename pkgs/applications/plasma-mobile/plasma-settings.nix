@@ -22,7 +22,7 @@
   util-linux,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "plasma-settings";
 
   nativeBuildInputs = [

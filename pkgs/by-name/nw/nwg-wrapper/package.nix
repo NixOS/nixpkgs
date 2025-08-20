@@ -12,11 +12,10 @@
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
   version = "0.1.3";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
-    repo = "nwg-wrapper";
+    repo = pname;
     tag = "v${version}";
     sha256 = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
   };
@@ -31,9 +30,7 @@ python3Packages.buildPythonPackage rec {
     gtk-layer-shell
   ];
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     i3ipc
     pygobject3
   ];

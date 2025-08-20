@@ -11,7 +11,7 @@
   uvloop,
   hypercorn,
   starlette,
-  pydantic,
+  pydantic_1,
 }:
 
 buildPythonPackage rec {
@@ -27,12 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-Crn+nRbptRycnWJzH8Tm/BBLcBSRCcNtLX8NoKnSDdA=";
   };
 
-  # pydantic==1.10.2 only affects checks
-  pythonRelaxDeps = [ "pydantic" ];
+  nativeBuildInputs = [ setuptools ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     requests
     pyyaml
   ];
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pydantic
+    pydantic_1
     uvloop
     hypercorn
     starlette

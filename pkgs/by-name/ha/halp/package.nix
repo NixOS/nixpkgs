@@ -4,30 +4,39 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  darwin,
   unixtools,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "halp";
-  version = "0.2.0";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "halp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tJ95rvYjqQn0ZTlEdqfs/LbyfBP7PqnevxX8b1VfokA=";
+    rev = "v${version}";
+    hash = "sha256-SeBponGeQWKjbiS4GL8YA7y92BqLL+ja6ZSKAI3CeRM=";
   };
 
-  cargoHash = "sha256-sJdZjTzfawwBK8KxQP7zvn+kByCMSxrrQjY1t9RWmhU=";
+  cargoHash = "sha256-/mzbLsIc0PW5yx/m9eq3IWYM6i1MKvmOY+17/Bwjguk=";
 
   patches = [
     # patch tests to point to the correct target directory
     ./fix-target-dir.patch
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  nativeCheckInputs = [ unixtools.script ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [
+    unixtools.script
+  ];
 
   # tests are failing on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -35,9 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # requires internet access
     "--skip=helper::docs::cheat::tests::test_fetch_cheat_sheet"
-    "--skip=helper::docs::cheat_sh::tests::test_fetch_cheat_sheet"
-    "--skip=helper::docs::cheatsheets::tests::test_fetch_cheatsheets"
-    "--skip=helper::docs::eg::tests::test_eg_page_fetch"
   ];
 
   postPatch = ''
@@ -64,15 +70,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm $out/bin/halp-{completions,mangen,test}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
-    changelog = "https://github.com/orhun/halp/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "halp";
   };
-})
+}

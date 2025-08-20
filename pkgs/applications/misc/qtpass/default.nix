@@ -12,7 +12,6 @@
   qttools,
   qmake,
   wrapQtAppsHook,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     qmake
     qttools
     wrapQtAppsHook
-    makeWrapper
   ];
 
   qmakeFlags = [
@@ -61,14 +59,6 @@ stdenv.mkDerivation rec {
       ]
     }"
   ];
-
-  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    runHook preInstall
-    mkdir -p $out/Applications
-    cp -r main/QtPass.app $out/Applications
-    makeWrapper $out/Applications/QtPass.app/Contents/MacOS/QtPass $out/bin/qtpass
-    runHook postInstall
-  '';
 
   postInstall = ''
     install -D qtpass.desktop -t $out/share/applications

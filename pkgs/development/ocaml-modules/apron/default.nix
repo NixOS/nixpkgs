@@ -10,7 +10,7 @@
   findlib,
   camlidl,
   mlgmpidl,
-  flint3,
+  flint,
   pplite,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     mpfr
     ppl
     camlidl
-    flint3
+    flint
     pplite
   ];
   propagatedBuildInputs = [ mlgmpidl ];

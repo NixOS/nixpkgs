@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
   setuptools-scm,
@@ -19,10 +18,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = "python-lsp-jsonrpc";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-5WN/31e6WCgXVzevMuQbNjyo/2jjWDF+m48nrLKS+64=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov-report html --cov-report term --junitxml=pytest.xml --cov pylsp_jsonrpc --cov test" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -31,10 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ujson ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pylsp_jsonrpc" ];
 

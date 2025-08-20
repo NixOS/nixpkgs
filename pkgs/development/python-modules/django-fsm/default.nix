@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   django,
-  python,
+  python3,
   django-guardian,
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ django-guardian ];
 
   checkPhase = ''
-    ${python.interpreter} tests/manage.py test
+    ${python3.interpreter} tests/manage.py test
   '';
 
   pythonImportsCheck = [ "django_fsm" ];

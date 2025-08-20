@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = "pymailgunner";
+    repo = pname;
     rev = version;
     hash = "sha256-QKwpW1aeN6OI76Kocow1Zhghq4/fl/cMPexny0MTwQs=";
   };

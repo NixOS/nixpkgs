@@ -21,51 +21,53 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "6.39";
+  version = "6.21";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
-    tag = "v${version}";
-    hash = "sha256-Lc0cwzt7rGfbJSLdZTDVdmkub6Z2KnTz5PRpEvtHsKM=";
+    rev = "v${version}";
+    hash = "sha256-65qaHgKQjzyGEbimEe8oJ83FzKUG23/cHUbZ/YdT72A=";
   };
 
-  buildInputs = [
-    libbsd
-    libevent
-    libjpeg
-    libdrm
-  ]
-  ++ lib.optionals withSystemd [
-    systemdLibs
-  ]
-  ++ lib.optionals withJanus [
-    janus-gateway
-    glib
-    alsa-lib
-    jansson
-    speex
-    libopus
-  ];
+  buildInputs =
+    [
+      libbsd
+      libevent
+      libjpeg
+      libdrm
+    ]
+    ++ lib.optionals withSystemd [
+      systemdLibs
+    ]
+    ++ lib.optionals withJanus [
+      janus-gateway
+      glib
+      alsa-lib
+      jansson
+      speex
+      libopus
+    ];
 
   nativeBuildInputs = [
     pkg-config
     which
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "WITH_V4P=1"
-  ]
-  ++ lib.optionals withSystemd [
-    "WITH_SYSTEMD=1"
-  ]
-  ++ lib.optionals withJanus [
-    "WITH_JANUS=1"
-    # Workaround issues with Janus C Headers
-    # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
-    "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "WITH_V4P=1"
+    ]
+    ++ lib.optionals withSystemd [
+      "WITH_SYSTEMD=1"
+    ]
+    ++ lib.optionals withJanus [
+      "WITH_JANUS=1"
+      # Workaround issues with Janus C Headers
+      # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
+      "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
+    ];
 
   enableParallelBuilding = true;
 

@@ -11,7 +11,6 @@
   kpackage,
   kscreenlocker,
   kwindowsystem,
-  udevCheckHook,
   wayland,
   wayland-scanner,
   pkg-config,
@@ -26,7 +25,6 @@ mkDerivation {
   nativeBuildInputs = [
     extra-cmake-modules
     pkg-config
-    udevCheckHook
     wayland-scanner
   ];
   buildInputs = [
@@ -47,5 +45,4 @@ mkDerivation {
     plasma-workspace
     plasma-wayland-protocols
   ];
-  doInstallCheck = true;
 }

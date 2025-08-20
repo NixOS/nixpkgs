@@ -1,28 +1,20 @@
 {
+  fetchurl,
   lib,
   stdenv,
-  fetchurl,
   libxcrypt,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pies";
-  version = "1.8";
+  version = "1.3";
 
   src = fetchurl {
-    url = "mirror://gnu/pies/pies-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ZSi00WmC6il4+aSohqFKrKjtp6xFXYE7IIRGVwFmHWw=";
+    url = "mirror://gnu/pies/${pname}-${version}.tar.bz2";
+    sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
 
   buildInputs = [ libxcrypt ];
-
-  patches = [ ./stdlib.patch ];
-
-  postPatch = ''
-    substituteInPlace configure \
-      --replace-fail "gl_cv_func_memchr_works=\"guessing no\"" "gl_cv_func_memchr_works=yes"
-  '';
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
@@ -30,11 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   meta = {
     description = "Program invocation and execution supervisor";
+
     longDescription = ''
       The name Pies (pronounced "p-yes") stands for Program Invocation and
       Execution Supervisor.  This utility starts and controls execution of
@@ -55,10 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
       Jabberd or MeTA1 (and it offers much more control over them than the
       native utilities).  Finally, it can replace the inetd utility!
     '';
-    homepage = "https://www.gnu.org/software/pies/";
+
     license = lib.licenses.gpl3Plus;
+
+    homepage = "https://www.gnu.org/software/pies/";
+
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
-    broken = stdenv.hostPlatform.system == "aarch64-linux";
     maintainers = [ ];
   };
-})
+}

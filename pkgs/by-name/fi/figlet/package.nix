@@ -5,14 +5,15 @@
   fetchpatch,
   fetchzip,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+stdenv.mkDerivation rec {
   pname = "figlet";
   version = "2.2.5";
 
   # some tools can be found here ftp://ftp.figlet.org/pub/figlet/util/
   src = fetchurl {
-    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-v4jED9Dwd9qycS9U+NOayVLk6fLhiC8Rlb6eXkJXQX0=";
+    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-${version}.tar.gz";
+    sha256 = "0za1ax15x7myjl8jz271ybly8ln9kb9zhm1gf6rdlxzhs07w925z";
   };
 
   contributed = fetchzip {
@@ -24,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/figlet/musl-fix-cplusplus-decls.patch?h=3.4-stable&id=71776c73a6f04b6f671430f702bcd40b29d48399";
       name = "musl-fix-cplusplus-decls.patch";
-      sha256 = "sha256-8tg/3rBnjFG2Q4W807+Z0NpTO7VZrontn6qm6fL7QJw=";
+      sha256 = "1720zgrfk9makznqkbjrnlxm7nnhk6zx7g458fv53337n3g3zn7j";
     })
     (fetchpatch {
       url = "https://github.com/cmatsuoka/figlet/commit/9a50c1795bc32e5a698b855131ee87c8d7762c9e.patch";
       name = "unistd-on-darwin.patch";
-      sha256 = "sha256-hyfY87N+yuAwjsBIjpgvcdJ1IbzlR4A2yUJQSzShCRI=";
+      sha256 = "hyfY87N+yuAwjsBIjpgvcdJ1IbzlR4A2yUJQSzShCRI=";
     })
   ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "LD:=$(CC)"
   ];
 
-  postInstall = "cp -ar ${finalAttrs.contributed}/* $out/share/figlet/";
+  postInstall = "cp -ar ${contributed}/* $out/share/figlet/";
 
   doCheck = true;
 
@@ -49,6 +50,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.afl21;
     maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.unix;
-    mainProgram = "figlet";
   };
-})
+}

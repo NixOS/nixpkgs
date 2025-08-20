@@ -13,11 +13,10 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "screenkey";
   version = "1.5";
-  pyproject = true;
 
   src = fetchFromGitLab {
-    owner = "screenkey";
-    repo = "screenkey";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };
@@ -33,9 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     libappindicator-gtk3
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     babel
     pycairo
     pygobject3
@@ -55,13 +52,11 @@ python3.pkgs.buildPythonApplication rec {
   # screenkey does not have any tests
   doCheck = false;
 
-  pythonImportsCheck = [ "Screenkey" ];
-
   # Fix CDLL python calls for non absolute paths of xorg libraries
   postPatch = ''
     substituteInPlace Screenkey/xlib.py \
-      --replace-fail libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
-      --replace-fail libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
+      --replace libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
+      --replace libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
   '';
 
   meta = with lib; {

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.7.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-FvPJLPG5rFd7I3RTEQsLZ7bY9qWnMb32PUYAuiCbA8s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IfdD3Nk+feLnILgEpccjEBlWfcW8ps7U+V7pTRG3LwM=";
   };
 
   nativeBuildInputs = with qt6; [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ _4825764518 ];
     license = licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
     platforms = platforms.unix;

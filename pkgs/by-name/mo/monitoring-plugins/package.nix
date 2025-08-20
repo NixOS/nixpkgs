@@ -35,6 +35,11 @@ let
     net-snmp
     procps
   ];
+
+  mailq = runCommand "mailq-wrapper" { preferLocalBuild = true; } ''
+    mkdir -p $out/bin
+    ln -s /run/wrappers/bin/sendmail $out/bin/mailq
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "monitoring-plugins";
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--libexecdir=${placeholder "out"}/bin"
-    "--with-mailq-command=/run/wrappers/bin/mailq"
+    "--with-mailq-command=${mailq}/bin/mailq"
     "--with-sudo-command=/run/wrappers/bin/sudo"
   ];
 

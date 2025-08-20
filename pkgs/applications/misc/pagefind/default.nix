@@ -5,20 +5,26 @@
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
+  httplz,
   binaryen,
   gzip,
   nodejs,
   npmHooks,
   python3,
   rustc,
-  versionCheckHook,
-  wasm-bindgen-cli_0_2_92,
+  wasm-bindgen-cli,
   wasm-pack,
 }:
 
 # TODO: package python bindings
 
 let
+
+  wasm-bindgen-92 = wasm-bindgen-cli.override {
+    version = "0.2.92";
+    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
+    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
+  };
 
   # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
   # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
@@ -41,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 
-  cargoHash = "sha256-e1JSK8RnBPGcAmgxJZ7DaYhMMaUqO412S9YvaqXll3E=";
+  cargoHash = "sha256-dfE4pfArW9hTPi7LCC9l274dNd1r0RAh50cciUGnv58=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -58,18 +64,13 @@ rustPlatform.buildRustPackage rec {
     src = "${src}/pagefind_ui/modular";
     hash = "sha256-O0RqZUsRFtByxMQdwNGNcN38Rh+sDqqNo9YlBcrnsF4=";
   };
-  env.cargoDeps_web = rustPlatform.fetchCargoVendor {
+  env.cargoDeps_web = rustPlatform.fetchCargoTarball {
     name = "cargo-deps-web";
     src = "${src}/pagefind_web/";
-    hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
+    hash = "sha256-vDkVXyDePKgYTYE5ZTLLfOHwPYfgaqP9p5/fKCQQi0g=";
   };
 
-  env.GIT_VERSION = version;
-
   postPatch = ''
-    # Set the correct version, e.g. for `pagefind --version`
-    node .backstage/version.cjs
-
     # Tricky way to run npmConfigHook multiple times
     (
       local postPatchHooks=() # written to by npmConfigHook
@@ -86,28 +87,47 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      patch -d $cargoDepsCopy/lindera-assets-*/ -p1 < ${./lindera-assets-support-file-paths.patch}
+      cd $cargoDepsCopy/lindera-unidic
+      oldHash=$(sha256sum build.rs | cut -d " " -f 1)
 
-      substituteInPlace $cargoDepsCopy/lindera-unidic-*/build.rs --replace-fail \
-          "${lindera-unidic-src.url}" \
-          "file://${lindera-unidic-src}"
+      # serve lindera-unidic on localhost vacant port
+      httplz_port="${
+        if stdenv.buildPlatform.isDarwin then
+          ''$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')''
+        else
+          "34567"
+      }"
+      mkdir .lindera-http-plz
+      ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
+      httplz --port "$httplz_port" -- .lindera-http-plz/ &
+      echo $! >$TMPDIR/.httplz_pid
+
+      # file:// does not work
+      substituteInPlace build.rs --replace-fail \
+          "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
+          "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
+
+      newHash=$(sha256sum build.rs | cut -d " " -f 1)
+      substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
     )
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    binaryen
-    gzip
-    nodejs
-    rustc
-    rustc.llvmPackages.lld
-    wasm-bindgen-cli_0_2_92
-    wasm-pack
-  ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    python3
-  ];
+  nativeBuildInputs =
+    [
+      binaryen
+      gzip
+      nodejs
+      rustc
+      rustc.llvmPackages.lld
+      wasm-bindgen-92
+      wasm-pack
+      httplz
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      python3
+    ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml
@@ -139,13 +159,12 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
+  # the file is also fetched during checkPhase
+  preInstall = ''
+    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $(cat $TMPDIR/.httplz_pid)
+  '';
+
   buildFeatures = [ "extended" ];
-
-  doInstallCheck = true;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
 
   meta = {
     description = "Generate low-bandwidth search index for your static website";

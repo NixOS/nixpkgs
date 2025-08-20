@@ -1,5 +1,5 @@
-preCheckHooks+=(postgresqlStart)
-postCheckHooks+=(postgresqlStop)
+preCheckHooks+=('postgresqlStart')
+postCheckHooks+=('postgresqlStop')
 
 
 postgresqlStart() {
@@ -69,7 +69,6 @@ EOF
 
   echo 'starting postgresql'
   eval "${postgresqlStartCommands:-pg_ctl start}"
-  failureHooks+=(postgresqlStop)
 
   echo 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
@@ -81,5 +80,4 @@ EOF
 postgresqlStop() {
   echo 'stopping postgresql'
   pg_ctl stop
-  failureHooks=("${failureHooks[@]/postgresqlStop}")
 }

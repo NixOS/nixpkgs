@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mediawriter";
-  version = "5.2.8";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
     tag = version;
-    hash = "sha256-8nTWwBf8I4IENh0wColzPg3xjsXg3bubg6ZqNpfLE3c=";
+    hash = "sha256-f8AHmRO0PbF4WZPUxrBy5cVb3Pj/PSAgBqpm5Kt/2o0=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to write images files to portable media";
     homepage = "https://github.com/FedoraQt/MediaWriter";
     changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${version}";
-    license = lib.licenses.lgpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "mediawriter";
   };
 }

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  replaceVars,
+  substituteAll,
   dconf,
   gettext,
   meson,
@@ -37,15 +37,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "48.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-s9q/fnm2Zf8SJB+9umFUiVE9iGIkdZmGr49IZXWSMV4=";
+    hash = "sha256-T00Y61YnXMVqGZOlofTRPVpkJoad5nCWuS8rKcryIjw=";
   };
 
   patches = [
-    (replaceVars ./0001-fix-paths.patch {
+    (substituteAll {
+      src = ./0001-fix-paths.patch;
       inherit tzdata;
       tecla = gnome-tecla;
     })
@@ -100,6 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-initial-setup/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 })

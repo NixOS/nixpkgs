@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rmscene";
-  version = "0.7.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ricklupton";
     repo = "rmscene";
     tag = "v${version}";
-    hash = "sha256-LaUzWEptzCGir6ZOgyMfP3Uf+jERT+cTb7Wx/eean1I=";
+    hash = "sha256-mgEjGfoQW73DcwMEXflR3/Ole4c5uXZJVJ699KNSqKg=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ricklupton/rmscene/blob/${src.tag}/README.md#changelog";
+    changelog = "https://github.com/ricklupton/rmscene/blob/${src.rev}/README.md#changelog";
     description = "Read v6 .rm files from the reMarkable tablet";
     homepage = "https://github.com/ricklupton/rmscene";
     license = lib.licenses.mit;

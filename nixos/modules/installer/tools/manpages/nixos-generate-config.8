@@ -12,8 +12,6 @@
 .Op Fl -force
 .Op Fl -root Ar root
 .Op Fl -dir Ar dir
-.Op Fl -flake
-.Op Fl -kernel Ar <lts|latest>
 .
 .
 .
@@ -67,20 +65,10 @@ instead of
 .Pa /etc/nixos Ns
 \&.
 .
-.It Fl -kernel Ar <lts|latest>
-Set the kernel in the generated configuration file.
-.
 .It Fl -force
 Overwrite
 .Pa /etc/nixos/configuration.nix
-(and
-.Pa /etc/nixos/flake.nix
-if --flake is passed) if already present.
-.
-.It Fl -flake
-Also generate
-.Pa /etc/nixos/flake.nix Ns
-\&.
+if it already exists.
 .
 .It Fl -no-filesystems
 Omit everything concerning file systems and swap devices from the hardware configuration.

@@ -7,20 +7,15 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "keymapviz";
   version = "1.14.1";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "yskoht";
-    repo = "keymapviz";
+    repo = pname;
     rev = version;
     sha256 = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [ regex ];
-
-  pythonImportsCheck = [ "keymapviz" ];
+  propagatedBuildInputs = with python3.pkgs; [ regex ];
 
   meta = with lib; {
     description = "Qmk keymap.c visualizer";

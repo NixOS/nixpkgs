@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "slugify/tests.py" ];
+  pytestFlagsArray = [ "slugify/tests.py" ];
 
   meta = with lib; {
     description = "Generates unicode slugs";

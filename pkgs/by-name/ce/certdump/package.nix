@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-buildDotnetModule {
+buildDotnetModule rec {
   pname = "certdump";
   version = "0-unstable-2023-12-25";
 

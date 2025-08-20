@@ -24,22 +24,23 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
-    repo = "statmake";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-3BZ71JVvj7GCojM8ycu160viPj8BLJ1SiW86Df2fzsw=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    attrs
-    cattrs
-    fonttools
-    # required by fonttools[ufo]
-    fs
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs =
+    [
+      attrs
+      cattrs
+      fonttools
+      # required by fonttools[ufo]
+      fs
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook

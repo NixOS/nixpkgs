@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.36.5";
+  version = "0.36.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
-    repo = "terraform-ls";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-oSrv0Ct60nN2AVihtcQcIWVpLFDra2Jv3bjjlM6pn9E=";
+    hash = "sha256-bn4eDAR3fYioT2kB7Hp0zP1190FMFAJ1L5lYFUUwhWk=";
   };
 
-  vendorHash = "sha256-Q2a6rCyx59cRaUBTzkKH6OgB9DRlkQSTgAI7WKDCbCI=";
+  vendorHash = "sha256-Qx18IisnEt0xr6Mb0nxjRp+ORu5xbmSJKrRCgRJFlbc=";
 
   ldflags = [
     "-s"
@@ -33,13 +33,13 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terraform Language Server (official)";
     mainProgram = "terraform-ls";
     homepage = "https://github.com/hashicorp/terraform-ls";
     changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
       mbaillie
       jk
     ];

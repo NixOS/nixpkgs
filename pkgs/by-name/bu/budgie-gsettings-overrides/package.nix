@@ -35,6 +35,9 @@ let
     [org.gnome.desktop.wm.preferences:Budgie]
     titlebar-font="Noto Sans Bold 10"
 
+    [org.gnome.mutter:Budgie]
+    edge-tiling=true
+
     [com.solus-project.budgie-menu:Budgie]
     use-default-menu-icon=true
 
@@ -57,8 +60,7 @@ let
     budgie-desktop-view
     gsettings-desktop-schemas
     mutter
-  ]
-  ++ extraGSettingsOverridePackages;
+  ] ++ extraGSettingsOverridePackages;
 
 in
 runCommand "budgie-gsettings-overrides" { preferLocalBuild = true; } ''

@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ]
-  ++ lib.optional (!static) "lib";
+  ] ++ lib.optional (!static) "lib";
   separateDebugInfo = true;
   makeFlags = [
     "prefix=$(out)"
@@ -34,25 +33,25 @@ stdenv.mkDerivation rec {
     "AR=${ar}"
     "RANLIB=${ranlib}"
     "static"
-  ]
-  ++ lib.optional (!static) "shared";
-  postInstall = ''
-    mkdir -p $dev/lib $out/bin
-    mv $out/lib/libcdb.a $dev/lib
-    rmdir $out/lib
-  ''
-  + (
-    if static then
-      ''
-        cp cdb $out/bin/cdb
-      ''
-    else
-      ''
-        mkdir -p $lib/lib
-        cp libcdb.so* $lib/lib
-        cp cdb-shared $out/bin/cdb
-      ''
-  );
+  ] ++ lib.optional (!static) "shared";
+  postInstall =
+    ''
+      mkdir -p $dev/lib $out/bin
+      mv $out/lib/libcdb.a $dev/lib
+      rmdir $out/lib
+    ''
+    + (
+      if static then
+        ''
+          cp cdb $out/bin/cdb
+        ''
+      else
+        ''
+          mkdir -p $lib/lib
+          cp libcdb.so* $lib/lib
+          cp cdb-shared $out/bin/cdb
+        ''
+    );
 
   src = fetchurl {
     url = "http://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
 
-    description = "Utility to manipulate constant databases (cdb)";
+    description = "utility to manipulate constant databases (cdb)";
     mainProgram = "cdb";
 
     longDescription = ''

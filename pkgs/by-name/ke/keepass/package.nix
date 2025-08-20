@@ -6,7 +6,7 @@
   mono,
   makeWrapper,
   icoutils,
-  replaceVars,
+  substituteAll,
   xsel,
   xorg,
   xdotool,
@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ icoutils ];
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       xsel = "${xsel}/bin/xsel";
       xprop = "${xorg.xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
@@ -123,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    target="$out/lib/dotnet/keepass"
+    target="$out/lib/dotnet/${finalAttrs.pname}"
     mkdir -p "$target"
 
     cp -rv $outputFiles "$target"
@@ -165,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
     maintainers = with lib.maintainers; [
+      amorsillo
       obadz
     ];
     platforms = with lib.platforms; all;

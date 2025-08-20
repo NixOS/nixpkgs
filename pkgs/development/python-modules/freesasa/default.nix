@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
 
   meta = {
     description = "FreeSASA Python Module";

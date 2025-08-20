@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
-    repo = "kirc";
+    repo = pname;
     rev = version;
     hash = "sha256-LiJZnFQMnyBEqeyyyqM56XXoYjbZPCWLfLX9OB/f+YM=";
   };
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       - Easy customized color scheme definition.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

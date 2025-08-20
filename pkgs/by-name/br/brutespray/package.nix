@@ -1,34 +1,47 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  python3,
   fetchFromGitHub,
-  makeBinaryWrapper,
+  makeWrapper,
   medusa,
 }:
 
-buildGoModule (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "brutespray";
-  version = "2.4.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "x90skysn3k";
-    repo = "brutespray";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tws3BvVQSlGcBgiJ8Ho7V/KJjzoq3TEOiChqTzrMbiU=";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-O9HOsj0R6oHI7jjG4FBqbrSAQSVomgeD7tyPDNCNmIo=";
   };
 
-  vendorHash = "sha256-Fe3W5rlKygw4z5bF+6xy5mv86wKcBuCf3nhtdtFWJPM=";
-
-  nativeBuildInputs = [ makeBinaryWrapper ];
-
-  postInstall = ''
-    wrapProgram $out/bin/brutespray \
-      --prefix PATH : ${lib.makeBinPath [ medusa ]}
-    mkdir -p $out/share/brutespray
-    cp -r wordlist $out/share/brutespray/wordlist
+  postPatch = ''
+    substituteInPlace brutespray.py \
+      --replace "/usr/share/brutespray" "$out/share/brutespray"
   '';
 
-  meta = {
+  dontBuild = true;
+  nativeBuildInputs = [
+    python3.pkgs.wrapPython
+    makeWrapper
+  ];
+  buildInputs = [ python3 ];
+
+  installPhase = ''
+    install -Dm0755 brutespray.py $out/bin/brutespray
+    patchShebangs $out/bin
+    patchPythonScript $out/bin/brutespray
+    wrapProgram $out/bin/brutespray \
+      --prefix PATH : ${lib.makeBinPath [ medusa ]}
+
+    mkdir -p $out/share/brutespray
+    cp -r wordlist/ $out/share/brutespray/wordlist
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/x90skysn3k/brutespray";
     description = "Tool to do brute-forcing from Nmap output";
     mainProgram = "brutespray";
@@ -36,7 +49,7 @@ buildGoModule (finalAttrs: {
       This tool automatically attempts default credentials on found services
       directly from Nmap output.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
   };
-})
+}

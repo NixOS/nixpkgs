@@ -18,32 +18,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.1.6";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YjCAMWyGSEEC4NhSKxWbaP11yP9xLs5Mk5B+NZRQwDo=";
+    hash = "sha256-+jJtvE28P/hoRIFP/fMUs8qVQU3QLxRTPGgGCNIYrtk=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) src pname version;
-    fetcherVersion = 1;
-    hash = "sha256-KupqObdNrnWbbt9C4NNmgmQCfJ2O4FjJBwGy6XQhhHg=";
+    hash = "sha256-CNk4zysIIDzDxozCrUnsR63eme28mDsBkRVB/1tXnJI=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      cargoRoot
-      ;
-    hash = "sha256-scgo526LDZTj7XHiX4/hF8PRPJuA7ul8DD3kIZyPUKs=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-Teno9y+busOGbreer2RzT+3sigRKvJbO1obfo0QpcPU=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Beautiful Private and Secure Desktop Investment Tracking Application";
+    description = "A Beautiful Private and Secure Desktop Investment Tracking Application";
     homepage = "https://wealthfolio.app/";
     license = lib.licenses.agpl3Only;
     mainProgram = "wealthfolio";

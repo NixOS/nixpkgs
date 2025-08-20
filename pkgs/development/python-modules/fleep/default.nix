@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "fleep";
   version = "1.0.1";
   format = "setuptools";

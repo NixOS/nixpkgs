@@ -2,18 +2,23 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
   stdenv,
+  overrideSDK,
 }:
-buildNpmPackage rec {
+let
+  buildNpmPackage' = buildNpmPackage.override {
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in
+buildNpmPackage' rec {
   pname = "eslint";
-  version = "9.32.0";
+  version = "9.10.0";
 
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
     tag = "v${version}";
-    hash = "sha256-ORqkolpd5B2mZ5lpePHU3RCpUHnl2p9ugMe2+A8sauA=";
+    hash = "sha256-R5DO4xN3PkwGAIfyMkohs9SvFiLjWf1ddOwkY6wbsjA=";
   };
 
   # NOTE: Generating lock-file
@@ -25,15 +30,10 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-9IWGjPwvZFPlbClQ5XRx0clN0HD6eyggX+v5mtU0exQ=";
-  npmInstallFlags = [ "--omit=dev" ];
+  npmDepsHash = "sha256-Nrcld0ONfjdSh/ItdbDMp6dXVFKoj83aaoGXDgoNE60=";
 
   dontNpmBuild = true;
   dontNpmPrune = true;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--generate-lockfile" ];
-  };
 
   meta = {
     description = "Find and fix problems in your JavaScript code";

@@ -11,7 +11,6 @@
   gnugrep,
   gnused,
   nvme-cli,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,10 +34,7 @@ stdenv.mkDerivation rec {
     iproute2
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    udevCheckHook
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -52,8 +48,6 @@ stdenv.mkDerivation rec {
       --subst-var-by logger "${util-linux}/bin/logger"
     patch -p1 < ./fix-paths.patch
   '';
-
-  doInstallCheck = true;
 
   installPhase = ''
     mkdir -p $out/{bin,etc,lib}

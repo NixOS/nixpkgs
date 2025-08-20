@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "1.0.7";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "urlscan";
     tag = version;
-    hash = "sha256-grQZ1dYa6OII1ah2FWOZg17rnTV/wfzXUtV3ijE8oDE=";
+    hash = "sha256-VbpKMaEjchfpLECCt1YtmiVynYgSLgAVP1iuHL7t8FQ=";
   };
 
   build-system = with python3.pkgs; [
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
     homepage = "https://github.com/firecat53/urlscan";
-    changelog = "https://github.com/firecat53/urlscan/releases/tag/${src.tag}";
+    changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dpaetzel ];
     mainProgram = "urlscan";

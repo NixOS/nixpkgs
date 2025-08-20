@@ -1,11 +1,6 @@
-{
-  lib,
-  fetchFromGitLab,
-  unstableGitUpdater,
-  rustPlatform,
-}:
+{ lib, fetchFromGitLab, unstableGitUpdater, rustPlatform }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
   version = "2.1-unstable-2023-07-23";
 
@@ -21,7 +16,12 @@ rustPlatform.buildRustPackage {
     tagPrefix = "v";
   };
 
-  cargoHash = "sha256-HcwdUwhiSkULCevsHTnRyazNfHDvLZv44SFXKxrHxYY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "kilexpr-0.1.0" = "sha256-Bw6vYtzhheAJ8NLQtr3gLjZ9/5ajuABURRYDnVF9W1Y=";
+    };
+  };
 
   meta = with lib; {
     description = "Tiling layout generator for river";

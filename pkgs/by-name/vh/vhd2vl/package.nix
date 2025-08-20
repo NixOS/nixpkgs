@@ -8,13 +8,13 @@
   which,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "vhd2vl";
-  version = "0-unstable-2022-12-26";
+  version = "unstable-2022-12-26";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";
-    repo = "vhd2vl";
+    repo = pname;
     rev = "869d442987dff6b9730bc90563ede89c1abfd28f";
     sha256 = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
   };

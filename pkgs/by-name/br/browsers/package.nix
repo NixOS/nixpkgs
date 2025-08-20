@@ -10,34 +10,49 @@
   glib,
   gtk3,
   pango,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "browsers";
-  version = "0.7.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Browsers-software";
     repo = "browsers";
     tag = version;
-    hash = "sha256-s03BEscaYdSitLtlqbX/tgGSLRHuXc9Ht+3RMCUIdY8=";
+    hash = "sha256-qLqyv5XXG7cpW+/eNCWguqemT3G2BhnolntHi2zZJ0o=";
   };
 
-  cargoHash = "sha256-tz4ju0NwgG5yb1VndYqyf+g631izPl904KYDUvawO28=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "druid-0.8.3" = "sha256-s9csjZ0ZimOrPnjJpPjrrMdNKAXFfroWHBPeR369Phk=";
+      "rolling-file-0.2.0" = "sha256-3xeOSXFVVgeKRE39gtzTURt0OkKScQ4uwtvLl4CE3R4=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
-    pango
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreText
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   postInstall = ''
     install -m 444 \

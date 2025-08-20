@@ -126,14 +126,22 @@ in
             "--trigger-level"
             cfg.triggerLevel
           ]
-          ++ (concatMap (model: [
-            "--preload-model"
-            model
-          ]) cfg.preloadModels)
-          ++ (concatMap (dir: [
-            "--custom-model-dir"
-            (toString dir)
-          ]) cfg.customModelsDirectories)
+          ++ concatMap (
+            model:
+            [
+              "--preload-model"
+              model
+            ]
+              cfg.preloadModels
+          )
+          ++ concatMap (
+            dir:
+            [
+              "--custom-model-dir"
+              (toString dir)
+            ]
+              cfg.customModelsDirectories
+          )
           ++ cfg.extraArgs
         );
         CapabilityBoundingSet = "";

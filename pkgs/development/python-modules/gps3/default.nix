@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "gps3";
   version = "unstable-2017-11-01";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wadda";
-    repo = "gps3";
+    repo = pname;
     rev = "91adcd7073b891b135b2a46d039ce2125cf09a09";
     hash = "sha256-sVK61l8YunKAGFTSAq/m5aUGFfnizwhqTYbdznBIKfk=";
   };

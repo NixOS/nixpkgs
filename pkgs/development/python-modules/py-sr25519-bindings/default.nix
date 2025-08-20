@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonOlder,
   pytestCheckHook,
   rustPlatform,
   stdenv,
@@ -11,8 +12,10 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.2.2";
-  pyproject = true;
+  version = "unstable-2023-03-15";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "polkascan";
@@ -21,9 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-mxNmiFvMbV9WQhGNIQXxTkOcJHYs0vyOPM6Nd5367RE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-OSnPGRZwuAzcvu80GgTXdc740SfhDIsXrQZq9a/BCdE=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-7fDlEYWOiRVpG3q0n3ZSS1dfNCOh0/4pX/PbcDBvoMI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -38,7 +42,7 @@ buildPythonPackage rec {
     py-bip39-bindings
   ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "sr25519" ];
 

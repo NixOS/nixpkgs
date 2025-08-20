@@ -37,7 +37,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huashengdun/webssh/";
     changelog = "https://github.com/huashengdun/webssh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ davidtwco ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

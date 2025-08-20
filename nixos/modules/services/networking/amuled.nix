@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
-}:
+{ config, lib, options, pkgs, ... }:
 let
   cfg = config.services.amule;
   opt = options.services.amule;
@@ -50,25 +44,22 @@ in
 
   };
 
+
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     users.users = lib.mkIf (cfg.user == null) [
-      {
-        name = "amule";
+      { name = "amule";
         description = "AMule daemon";
         group = "amule";
         uid = config.ids.uids.amule;
-      }
-    ];
+      } ];
 
     users.groups = lib.mkIf (cfg.user == null) [
-      {
-        name = "amule";
+      { name = "amule";
         gid = config.ids.gids.amule;
-      }
-    ];
+      } ];
 
     systemd.services.amuled = {
       description = "AMule daemon";

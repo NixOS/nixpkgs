@@ -1,38 +1,61 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
+  python3,
   libsForQt5,
   ghostscript,
+  qt5,
+  fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  py = python3.override {
+    self = py;
+    packageOverrides = self: super: {
+      # Can be removed once this is merged
+      # https://github.com/arminstraub/krop/pull/40
+      pypdf2 = super.pypdf2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.12.1";
+        src = fetchPypi {
+          pname = "PyPDF2";
+          inherit version;
+          hash = "sha256-4D7xirzHXadBoKzBp3SSU0loh744zZiHvM4c7jk9pF4=";
+        };
+      });
+    };
+  };
+in
+
+py.pkgs.buildPythonApplication rec {
   pname = "krop";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "arminstraub";
-    repo = "krop";
-    tag = "v${version}";
-    hash = "sha256-8mhTUP0oS+AnZXVmywxBTbR1OOg18U0RQ1H9lyjaiVI=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1ygzc7vlwszqmsd3v1dsqp1dpsn6inx7g8gck63alvf88dbn8m3s";
   };
 
-  nativeBuildInputs = [ libsForQt5.wrapQtAppsHook ];
-
-  buildInputs = [
-    libsForQt5.poppler
-    libsForQt5.qtwayland
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with py.pkgs; [
     pyqt5
     pypdf2
     poppler-qt5
     ghostscript
   ];
 
+  buildInputs = [
+    libsForQt5.poppler
+    libsForQt5.qtwayland
+  ];
+
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+
+  postInstall = ''
+    install -m666 -Dt $out/share/applications krop.desktop
+  '';
 
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;

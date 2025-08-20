@@ -3,16 +3,15 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  buildPackages,
   installShellFiles,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
+  testers,
   nix-update-script,
+  dprint,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.50.1";
+  version = "0.48.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -20,26 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    tag = finalAttrs.version;
-    hash = "sha256-Lt6CzSzppu5ULhzYN5FTCWtWK3AA4/8jRzXgQkU4Tco=";
+    tag = version;
+    hash = "sha256-Zem37oHku90c7PDV8ep/7FN128eGRUvfIvRsaXa7X9g=";
   };
 
-  cargoHash = "sha256-1opQaR3vbm/DpDY5oQ1VgA4nf0nCBknxfgOSPZQbtV4=";
+  cargoHash = "sha256-vlG+0cQMUev8iEgut9l1bCDpS85bRWsNWZyJJXcgSlw=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
-  # Adding "libunwind" in buildInputs did not resolve it.
-  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
-
-  cargoBuildFlags = [
-    "--package=dprint"
-    # Required only for dprint package tests; the binary is removed in postInstall.
-    "--package=test-process-plugin"
-  ];
-
-  cargoTestFlags = [
-    "--package=dprint"
+  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
   ];
 
   checkFlags = [
@@ -48,55 +35,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
-    # Requires deno for the testing, and making unstable results on darwin
-    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall =
-    let
-      dprint =
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          "$out/bin/dprint"
-        else
-          lib.getExe buildPackages.dprint;
-    in
-    ''
-      rm "$out/bin/test-process-plugin"
-      export DPRINT_CACHE_DIR="$(mktemp -d)"
-      installShellCompletion --cmd dprint \
-        --bash <(${dprint} completions bash) \
-        --zsh <(${dprint} completions zsh) \
-        --fish <(${dprint} completions fish)
-    '';
-
-  nativeInstallCheckInputs = [
-    writableTmpDirAsHomeHook
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/dprint";
-  versionCheckProgramArg = "--version";
-  versionCheckKeepEnvironment = [ "HOME" ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export DPRINT_CACHE_DIR="$(mktemp -d)"
+    installShellCompletion --cmd dprint \
+      --bash <($out/bin/dprint completions bash) \
+      --zsh <($out/bin/dprint completions zsh) \
+      --fish <($out/bin/dprint completions fish)
+  '';
 
   passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+
+      package = dprint;
+      command = ''
+        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
+      '';
+    };
+
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Code formatting platform written in Rust";
     longDescription = ''
       dprint is a pluggable and configurable code formatting platform written in Rust.
       It offers multiple WASM plugins to support various languages. It's written in
       Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
     homepage = "https://dprint.dev";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       khushraj
       kachick
-      phanirithvij
     ];
     mainProgram = "dprint";
   };
-})
+}

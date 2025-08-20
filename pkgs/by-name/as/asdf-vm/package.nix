@@ -46,15 +46,15 @@ let
     ${asdfReshimFile}
   '';
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "asdf-vm";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-quDgoYi+3hZUEAzXWTHuL5UK1T+4o7+G67w0UzZOjJA=";
+    rev = "v${version}";
+    sha256 = "sha256-quDgoYi+3hZUEAzXWTHuL5UK1T+4o7+G67w0UzZOjJA=";
   };
 
   nativeBuildInputs = [
@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
       --bash completions/asdf.bash
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extendable version manager with support for Ruby, Node.js, Erlang & more";
     homepage = "https://asdf-vm.com/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c4605 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.c4605 ];
     mainProgram = "asdf";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-})
+}

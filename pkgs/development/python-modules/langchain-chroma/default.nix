@@ -2,59 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
   chromadb,
   langchain-core,
   numpy,
-
-  # tests
-  langchain-tests,
+  poetry-core,
   pytestCheckHook,
   pytest-asyncio,
-
-  # passthru
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.4";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-w4xvPPLYkPiQA34bimVHLe+vghMI9Pq36CHoE/EMnr8=";
+    hash = "sha256-pU7H8OYXa+JjdkSO36xESPI6r3xA+9cFXxeJnfpYuHc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
   patches = [ ./001-async-test.patch ];
 
-  build-system = [ pdm-backend ];
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
+    "chromadb"
     "numpy"
   ];
 
   dependencies = [
-    chromadb
     langchain-core
+    chromadb
     numpy
   ];
 
   pythonImportsCheck = [ "langchain_chroma" ];
 
   nativeCheckInputs = [
-    langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
@@ -64,12 +51,12 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-chroma==";
+  passthru = {
+    inherit (langchain-core) updateScript;
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-chroma==${version}";
     description = "Integration package connecting Chroma and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/chroma";
     license = lib.licenses.mit;

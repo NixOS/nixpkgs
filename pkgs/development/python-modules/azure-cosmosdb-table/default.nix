@@ -25,8 +25,7 @@ buildPythonPackage rec {
     azure-common
     azure-storage-common
     azure-cosmosdb-nspkg
-  ]
-  ++ lib.optionals (!isPy3k) [ futures ];
+  ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # has no tests
   doCheck = false;

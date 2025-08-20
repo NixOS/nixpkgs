@@ -5,21 +5,23 @@
   pkg-config,
   openssl,
   spade,
+  stdenv,
+  darwin,
   git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swim";
-  version = "0.13.0";
+  version = "0.12.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "swim";
     rev = "v${version}";
-    hash = "sha256-0H45kOIwFMdp+eIQJNutLUC/jEpWKsPfEZXDUOUa12g=";
+    hash = "sha256-GJQzz9o0QKbnE8l1MEjdW36S/rJo2GoaK02Qnl9dtEA=";
   };
 
-  cargoHash = "sha256-fF+43tZzr6lxVovMCIaDwf9JKweqiMMR+BNojIqQREY=";
+  cargoHash = "sha256-OQpKy/TVsJV/AjqvvdqTnAnAc1+YhN83N1EyNfgF4qg=";
 
   preConfigure = ''
     # de-vendor spade git submodule
@@ -32,9 +34,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeCheckInputs = [ git ];
 

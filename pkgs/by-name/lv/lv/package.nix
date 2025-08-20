@@ -7,7 +7,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lv";
   version = "4.51-unstable-2020-08-03";
 

@@ -8,10 +8,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ephemeralpg";
-  version = "3.4";
+  version = "3.3";
   src = fetchurl {
     url = "https://eradman.com/ephemeralpg/code/${pname}-${version}.tar.gz";
-    hash = "sha256-IwAIJFW/ahDXGgINi4N9mG3XKw74JXK6+SLxGMZ8tS0=";
+    hash = "sha256-pVQrfSpwJnxCRXAUpZQZsb0Z/wlLbjdaYmhVevgHrgo=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

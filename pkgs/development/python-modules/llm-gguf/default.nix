@@ -10,7 +10,6 @@
   httpx,
   llama-cpp-python,
   llm,
-  llm-gguf,
 }:
 
 buildPythonPackage rec {
@@ -25,20 +24,20 @@ buildPythonPackage rec {
     hash = "sha256-ihMOiQnTfgZKICVDoQHLOMahrd+GiB+HwWFBMyIcs0A=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     httpx
-    llm
     llama-cpp-python
+    llm
   ];
 
   pythonImportsCheck = [ "llm_gguf" ];
 
   # Tests require internet access (downloading models)
   doCheck = false;
-
-  passthru.tests = llm.mkPluginTest llm-gguf;
 
   meta = {
     description = "Run models distributed as GGUF files using LLM";

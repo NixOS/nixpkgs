@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python binding for CRFsuite";
     homepage = "https://github.com/scrapinghub/python-crfsuite";
     license = licenses.mit;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

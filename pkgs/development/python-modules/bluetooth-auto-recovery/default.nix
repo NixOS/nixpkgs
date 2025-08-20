@@ -7,8 +7,6 @@
   fetchFromGitHub,
   poetry-core,
   pyric,
-  pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   usb-devices,
@@ -16,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.5.2";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,8 +23,13 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";
     tag = "v${version}";
-    hash = "sha256-9FwQNauWnWQ7BQoKMwYEEc96/iP6iH9SfvHxlZtePOQ=";
+    hash = "sha256-JaFazXjbHohj4+rPkQA/SaBP0irHrre3vaCqz7T2bwE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
+  '';
 
   build-system = [ poetry-core ];
 
@@ -38,11 +41,7 @@ buildPythonPackage rec {
     usb-devices
   ];
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bluetooth_auto_recovery" ];
 

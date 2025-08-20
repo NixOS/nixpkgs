@@ -1,21 +1,17 @@
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchzip,
-}:
+{ fetchzip, lib }:
 
 lib.makeOverridable (
   {
     owner,
     repo,
     rev,
-    name ? repoRevToNameMaybe repo rev "bitbucket",
+    name ? "source",
     ... # For hash agility
   }@args:
   fetchzip (
     {
       inherit name;
-      url = "https://bitbucket.org/${owner}/${repo}/get/${lib.strings.escapeURL rev}.tar.gz";
+      url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
       meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
     }
     // removeAttrs args [

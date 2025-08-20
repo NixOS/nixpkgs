@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "3.8.0";
-  srcHash = "sha256-vU8lyWnXU2KnayZ863MMTMOc1/AkQ6p+uNiJOFqDNJk=";
+  version = "2.8.3";
+  srcHash = "sha256-/Ozzibz2BhVSxQeH9tg3cC5uVl0gEA/Hw2AMOELW/I8=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in
@@ -18,16 +18,18 @@ in
     cd $out/bin
     for f in *; do
       if [ "$f" = cli ]; then
+        mv -- "$f" "woodpecker"
         # Issue a warning to the user if they call the deprecated executable
-        cat >woodpecker << EOF
+        cat >woodpecker-cli << EOF
     #!/bin/sh
-    echo 'WARNING: calling \`woodpecker\` is deprecated, use \`woodpecker-cli\` instead.' >&2
-    $out/bin/woodpecker-cli "\$@"
+    echo 'WARNING: calling \`woodpecker-cli\` is deprecated, use \`woodpecker\` instead.' >&2
+    $out/bin/woodpecker "\$@"
     EOF
-        chmod +x woodpecker
-        patchShebangs woodpecker
-      fi
+        chmod +x woodpecker-cli
+        patchShebangs woodpecker-cli
+      else
         mv -- "$f" "woodpecker-$f"
+      fi
     done
     cd -
   '';
@@ -35,7 +37,7 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X go.woodpecker-ci.org/woodpecker/v3/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/v2/version.Version=${version}"
   ];
 
   meta = with lib; {

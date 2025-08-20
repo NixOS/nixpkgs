@@ -10,7 +10,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "flasm";
   version = "1.64";
 

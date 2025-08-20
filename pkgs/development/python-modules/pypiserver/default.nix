@@ -40,8 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pip
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -55,8 +54,7 @@ buildPythonPackage rec {
     twine
     webtest
     build
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 

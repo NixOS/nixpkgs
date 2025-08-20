@@ -13,23 +13,28 @@
   pkg-config,
   python3,
   wrapGAppsHook4,
-  libzint,
+  zint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
-  version = "0.10";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "pablo-s";
     repo = "passes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e6nHCOrb2PX47REr7sy80n1aTdMZ0c2QZlIIib4vll8=";
+    hash = "sha256-RfoqIyqc9zwrWZ5RLhQl+6vTccbCTwtDcMlnWPCDOag=";
   };
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace-fail /app/lib ${lib.getLib libzint}/lib
+      --replace /app/lib ${zint}/lib
+    substituteInPlace src/view/window.blp \
+      --replace reveal_flap reveal-flap
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   strictDeps = true;
@@ -49,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libzint
+    zint
   ];
 
   meta = with lib; {

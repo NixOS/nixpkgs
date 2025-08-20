@@ -1,53 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  decorator,
+  fetchPypi,
+  future,
+  six,
   numpy,
   scipy,
   matplotlib,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mpl,
 }:
 
 buildPythonPackage rec {
   pname = "mir-eval";
-  version = "0.8.2";
-  pyproject = true;
+  version = "0.7";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "mir-evaluation";
-    repo = "mir_eval";
-    tag = version;
-    hash = "sha256-Dq/kqoTY8YGATsr6MSgfQxkWvFpmH/Pf1pKBLPApylY=";
+  src = fetchPypi {
+    pname = "mir_eval";
+    inherit version;
+    hash = "sha256-4f66pXZsZadUXCoXCyQUkPR6mJhzcLHgZ0JCTF3r5l4=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
-    decorator
+  propagatedBuildInputs = [
+    future
+    six
     numpy
     scipy
+    matplotlib
   ];
-
-  optional-dependencies.display = [ matplotlib ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    pytest-mpl
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    pushd tests
-  '';
-
-  postCheck = ''
-    popd
-  '';
 
   pythonImportsCheck = [ "mir_eval" ];
 

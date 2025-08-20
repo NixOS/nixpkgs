@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Iotic-Labs";
-    repo = "py-ubjson";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1frn97xfa88zrfmpnvdk1pc03yihlchhph99bhjayvzlfcrhm5v3";
   };
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "test_recursion"
   ];
 
-  enabledTestPaths = [ "test/test.py" ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ubjson" ];
 

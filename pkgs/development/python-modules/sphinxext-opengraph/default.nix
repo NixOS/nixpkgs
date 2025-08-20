@@ -35,8 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-  ]
-  ++ optional-dependencies.social_cards_generation;
+  ] ++ optional-dependencies.social_cards_generation;
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 

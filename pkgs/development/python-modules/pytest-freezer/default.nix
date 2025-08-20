@@ -11,23 +11,23 @@
 
 buildPythonPackage rec {
   pname = "pytest-freezer";
-  version = "0.4.9";
-  pyproject = true;
+  version = "0.4.8";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = "pytest-freezer";
+    repo = pname;
     tag = version;
-    hash = "sha256-WJGwkON/RAiUiGzNkeqjzch4CEr6mPXij5dqz1ncRXs=";
+    hash = "sha256-Eak6LNoyu2wvZbPaBBUO0UkyB9vni8YbsADGK0as7Cg=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [ freezegun ];
+  propagatedBuildInputs = [ freezegun ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

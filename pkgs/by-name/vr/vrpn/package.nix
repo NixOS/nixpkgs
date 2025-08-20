@@ -4,19 +4,20 @@
   fetchFromGitHub,
   unzip,
   cmake,
+  darwin,
   libGLU,
   libGL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vrpn";
-  version = "07.36";
+  version = "07.35";
 
   src = fetchFromGitHub {
     owner = "vrpn";
     repo = "vrpn";
     rev = "version_${version}";
-    hash = "sha256-eXmj9Wqm+ytsnypC+MrOLnJg9zlri5y0puavamZqFmY=";
+    hash = "sha256-vvlwhm5XHWD4Nh1hwY427pe36RQaqTDJiEtkCxHeCig=";
   };
 
   nativeBuildInputs = [
@@ -24,10 +25,17 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libGLU
-    libGL
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.GLUT
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.OpenGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+    ];
 
   meta = with lib; {
     description = "Virtual Reality Peripheral Network";

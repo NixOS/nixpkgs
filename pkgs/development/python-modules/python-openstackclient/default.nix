@@ -22,6 +22,7 @@
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
+  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -33,13 +34,14 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "8.1.0";
+  version = "7.2.1";
   pyproject = true;
 
+  disabled = pythonOlder "3.9";
+
   src = fetchPypi {
-    pname = "python_openstackclient";
-    inherit version;
-    hash = "sha256-m5xCs/a8S0tICmJU/FYKywGXh4MeCUOW2/msmuVxrks=";
+    inherit pname version;
+    hash = "sha256-65q+VrUnJiRbmb37U5ps1RlsBSA5gJcDxlxpBJ5Eyjk=";
   };
 
   build-system = [
@@ -69,8 +71,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run -E \
-      "openstackclient.tests.unit.network.v2.test_security_group_network.(TestCreateSecurityGroupNetwork.(test_create_with_tags|test_create_with_no_tag|test_create_min_options|test_create_all_options)|TestShowSecurityGroupNetwork.test_show_all_options)"
+    stestr run
     runHook postCheck
   '';
 
@@ -107,6 +108,6 @@ buildPythonPackage rec {
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

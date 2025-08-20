@@ -1,11 +1,9 @@
 {
-  lib,
-  stdenvNoCC,
   fetchurl,
+  lib,
   makeWrapper,
   patchelf,
-  bintools,
-  dpkg,
+  stdenv,
 
   # Linked dynamic libraries.
   alsa-lib,
@@ -94,13 +92,6 @@
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
 
-  # For QT support
-  qt6,
-
-  # Edge AAD sync
-  cacert,
-  libsecret,
-
   # Edge Specific
   libuuid,
 }:
@@ -109,80 +100,79 @@ let
 
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    bzip2
-    cacert
-    cairo
-    coreutils
-    cups
-    curl
-    dbus
-    expat
-    flac
-    fontconfig
-    freetype
-    gcc-unwrapped.lib
-    gdk-pixbuf
-    glib
-    harfbuzz
-    icu
-    libcap
-    libdrm
-    liberation_ttf
-    libexif
-    libglvnd
-    libkrb5
-    libpng
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libxkbcommon
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libxshmfence
-    libXtst
-    libgbm
-    nspr
-    nss
-    opusWithCustomModes
-    pango
-    pciutils
-    pipewire
-    snappy
-    speechd-minimal
-    systemd
-    util-linux
-    vulkan-loader
-    wayland
-    wget
-    libsecret
-    libuuid
-    gtk3
-    gtk4
-    qt6.qtbase
-    qt6.qtwayland
-  ]
-  ++ lib.optionals pulseSupport [ libpulseaudio ]
-  ++ lib.optionals libvaSupport [ libva ];
+  deps =
+    [
+      alsa-lib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      bzip2
+      cairo
+      coreutils
+      cups
+      curl
+      dbus
+      expat
+      flac
+      fontconfig
+      freetype
+      gcc-unwrapped.lib
+      gdk-pixbuf
+      glib
+      harfbuzz
+      icu
+      libcap
+      libdrm
+      liberation_ttf
+      libexif
+      libglvnd
+      libkrb5
+      libpng
+      libX11
+      libxcb
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libxkbcommon
+      libXrandr
+      libXrender
+      libXScrnSaver
+      libxshmfence
+      libXtst
+      libgbm
+      nspr
+      nss
+      opusWithCustomModes
+      pango
+      pciutils
+      pipewire
+      snappy
+      speechd-minimal
+      systemd
+      util-linux
+      vulkan-loader
+      wayland
+      wget
+      libuuid
+    ]
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional libvaSupport libva
+    ++ [
+      gtk3
+      gtk4
+    ];
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "139.0.3405.102";
+  version = "131.0.2903.112";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-rY6Q3sMIAGX/ZKOVvwSl6cxq24SB1PiCn7b1pMXMeps=";
+    hash = "sha256-4qQNcoBXOS4Uz+MR4jItOgcnMKqB6J541cvrb5md/oc=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -192,7 +182,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     patchelf
-    dpkg
   ];
 
   buildInputs = [
@@ -205,6 +194,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
+  unpackPhase = ''
+    runHook preUnpack
+    ar x $src
+    tar xf data.tar.xz
+    runHook postUnpack
+  '';
+
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binpath = lib.makeBinPath deps;
 
@@ -216,9 +212,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     exe=$out/bin/microsoft-edge
 
-    mkdir -p $out/bin
-    cp -v -a usr/share $out/share
-    cp -v -a opt/microsoft $out/share/microsoft
+    mkdir -p $out/bin $out/share
+    cp -v -a opt/* $out/share
+    cp -v -a usr/share/* $out/share
 
     # replace bundled vulkan-loader
     rm -v $out/share/microsoft/$appname/libvulkan.so.1
@@ -227,8 +223,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace $out/share/microsoft/$appname/microsoft-edge \
       --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/microsoft-edge.desktop \
-      --replace-fail /usr/bin/microsoft-edge-$dist $exe
-    substituteInPlace $out/share/applications/com.microsoft.Edge.desktop \
       --replace-fail /usr/bin/microsoft-edge-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
       --replace-fail /opt/microsoft/msedge $exe
@@ -251,16 +245,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
     makeWrapper "$out/share/microsoft/$appname/microsoft-edge" "$exe" \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -272,7 +262,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
 
     runHook postInstall
@@ -287,12 +277,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "microsoft-edge";
     maintainers = with lib.maintainers; [
-      cholli
-      ulrikstrid
-      maeve-oake
-      leleuvilela
-      bricklou
-      jonhermansen
+      zanculmarktum
+      kuwii
+      rhysmdnz
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

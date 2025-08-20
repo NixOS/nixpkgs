@@ -8,38 +8,38 @@
   openssl,
   upnpSupport ? true,
   miniupnpc,
+  aesniSupport ? stdenv.hostPlatform.aesSupport,
 }:
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.57.0";
+  version = "2.55.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
-    repo = "i2pd";
-    tag = version;
-    hash = "sha256-+LywTG+AXOas6fXF1pXjBkqa+fUbaWNMA3EqCEZfc/A=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-mdjt2+h+IWjHBRDUpx85ku6s6gKHjxUBuhv+gJK7QhU=";
   };
-
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
-    substituteInPlace Makefile.osx \
-      --replace-fail "-msse" ""
-  '';
 
   buildInputs = [
     boost
     zlib
     openssl
-  ]
-  ++ lib.optional upnpSupport miniupnpc;
+  ] ++ lib.optional upnpSupport miniupnpc;
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  makeFlags = [
-    "USE_UPNP=${if upnpSupport then "yes" else "no"}"
-  ];
+  makeFlags =
+    let
+      ynf = a: b: a + "=" + (if b then "yes" else "no");
+    in
+    [
+      (ynf "USE_AESNI" aesniSupport)
+      (ynf "USE_UPNP" upnpSupport)
+    ];
 
   enableParallelBuilding = true;
 
@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
     mainProgram = "i2pd";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

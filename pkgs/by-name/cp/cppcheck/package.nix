@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.18.0";
+  version = "2.16.2";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     tag = finalAttrs.version;
-    hash = "sha256-trbL2Me1VWmVMfL45H50xbR36izifFmoLHKQvte6oZQ=";
+    hash = "sha256-awmWfVl7gMLROEkjYdSpbXnFaWQwEX9Ah8B9E0OOFm0=";
   };
 
   nativeBuildInputs = [
@@ -64,24 +64,25 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   doInstallCheck = true;
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
-  ''
-  # Expected:
-  # Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid
-  #
-  # Actual:
-  # Internal Error. MathLib::toDoubleNumber: input was not completely consumed: 1invalid
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace test/testmathlib.cpp \
-      --replace-fail \
-        'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid");' \
-        "" \
-      --replace-fail \
-        'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1.1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1.1invalid");' \
-        ""
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile \
+        --replace-fail 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
+    ''
+    # Expected:
+    # Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid
+    #
+    # Actual:
+    # Internal Error. MathLib::toDoubleNumber: input was not completely consumed: 1invalid
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace test/testmathlib.cpp \
+        --replace-fail \
+          'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid");' \
+          "" \
+        --replace-fail \
+          'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1.1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1.1invalid");' \
+          ""
+    '';
 
   postBuild = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -116,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = with lib.maintainers; [
+      joachifm
+      paveloom
+    ];
     platforms = lib.platforms.unix;
   };
 })

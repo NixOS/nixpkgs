@@ -15,13 +15,12 @@
   responses,
   freezegun,
   pytest-subprocess,
-  logassert,
-  writableTmpDirAsHomeHook,
+  pytest-logdog,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.4.0";
+  version = "2.0.4";
 
   pyproject = true;
 
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-frcRv+19czsZ948SEKfYsMUP6n9MbJv6gxXUAdwFw4Y=";
+    hash = "sha256-f+0AEoVUFL/+v4sRYirc6OD5dYH4dlLk8h7im+CLuhM=";
   };
 
   patches = [
@@ -51,7 +50,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.9.1" "setuptools"
+      --replace-fail "setuptools==73.0.1" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -70,16 +69,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
+    pytest-logdog
     pytestCheckHook
     responses
-    writableTmpDirAsHomeHook
   ];
 
-  enabledTestPaths = [ "tests/unit" ];
+  preCheck = ''
+    mkdir -p check-phase
+    export HOME="$(pwd)/check-phase"
+  '';
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTestPaths = [
     # Relies upon "logassert" python package which isn't in nixpkgs
@@ -99,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

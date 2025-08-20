@@ -1,31 +1,55 @@
 {
   config,
   lib,
+  stdenv,
   callPackage,
+  AVFoundation,
+  AudioToolbox,
+  Cocoa,
+  CoreFoundation,
+  CoreMedia,
+  CoreServices,
+  CoreVideo,
+  DiskArbitration,
+  Foundation,
+  IOKit,
+  MediaToolbox,
+  OpenGL,
+  Security,
+  SystemConfiguration,
+  VideoToolbox,
+  xpc,
   ipu6ep-camera-hal,
   ipu6epmtl-camera-hal,
-  apple-sdk_13,
 }:
 
-let
-  apple-sdk_gstreamer = apple-sdk_13;
-in
 {
-  inherit apple-sdk_gstreamer;
+  inherit stdenv;
 
-  gstreamer = callPackage ./core { };
+  gstreamer = callPackage ./core { inherit Cocoa CoreServices xpc; };
 
   gstreamermm = callPackage ./gstreamermm { };
 
-  gst-plugins-base = callPackage ./base { };
+  gst-plugins-base = callPackage ./base { inherit Cocoa OpenGL; };
 
-  gst-plugins-good = callPackage ./good { };
+  gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { };
+  gst-plugins-bad = callPackage ./bad {
+    inherit
+      AudioToolbox
+      AVFoundation
+      Cocoa
+      CoreMedia
+      CoreVideo
+      Foundation
+      MediaToolbox
+      VideoToolbox
+      ;
+  };
 
-  gst-plugins-ugly = callPackage ./ugly { };
+  gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
-  gst-plugins-rs = callPackage ./rs { };
+  gst-plugins-rs = callPackage ./rs { inherit Security SystemConfiguration; };
 
   gst-rtsp-server = callPackage ./rtsp-server { };
 

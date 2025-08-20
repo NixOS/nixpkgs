@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.23.2";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lKPCtlTfIAb7axthl/PUU82cULafYIhZ5xJolFKSOno=";
+    hash = "sha256-RHxA0X3cqHtp4NZl7qlqBYkqOJay8IPoaj12bdouVkc=";
   };
 
   nativeBuildInputs = [
@@ -45,15 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     util-linux # waitpid
     newt # whiptail
     libnotify # notify
     bash # sh
     systemd
     python
-  ]
-  ++ lib.optionals uuctlSupport [ dmenu ];
+  ] ++ (lib.optionals uuctlSupport [ dmenu ]);
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
@@ -68,19 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     let
-      wrapperArgs = "--suffix PATH : ${lib.makeBinPath finalAttrs.buildInputs}";
+      wrapperArgs = ''
+        --suffix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
+      '';
     in
     ''
       wrapProgram $out/bin/uwsm ${wrapperArgs}
-    ''
-    + lib.optionalString uuctlSupport ''
-      wrapProgram $out/bin/uuctl ${wrapperArgs}
-    ''
-    + lib.optionalString uwsmAppSupport ''
-      wrapProgram $out/bin/uwsm-app ${wrapperArgs}
-    ''
-    + lib.optionalString fumonSupport ''
-      wrapProgram $out/bin/fumon ${wrapperArgs}
+      ${lib.optionalString uuctlSupport ''
+        wrapProgram $out/bin/uuctl ${wrapperArgs}
+      ''}
+      ${lib.optionalString uwsmAppSupport ''
+        wrapProgram $out/bin/uwsm-app ${wrapperArgs}
+      ''}
+      ${lib.optionalString fumonSupport ''
+        wrapProgram $out/bin/fumon ${wrapperArgs}
+      ''}
     '';
 
   outputs = [

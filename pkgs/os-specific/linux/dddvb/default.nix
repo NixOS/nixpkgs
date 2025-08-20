@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/DigitalDevices/dddvb";
-    description = "Device driver for all Digital Devices DVB demodulator and modulator cards";
+    description = "ddbridge linux driver";
     license = licenses.gpl2Only;
     maintainers = [ ];
     platforms = platforms.linux;

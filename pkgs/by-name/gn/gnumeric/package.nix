@@ -22,13 +22,13 @@
 let
   inherit (python3Packages) python pygobject3;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.59";
+  version = "1.12.57";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnumeric/${lib.versions.majorMinor finalAttrs.version}/gnumeric-${finalAttrs.version}.tar.xz";
-    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "r/ULG2I0DCT8z0U9X60+f7c/S8SzT340tsPS2a9qHk8=";
   };
 
   configureFlags = [ "--disable-component" ];
@@ -48,17 +48,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ToDo: optional libgda, introspection?
   # TODO: fix Perl plugin when cross-compiling
-  buildInputs = [
-    goffice
-    gtk3
-    adwaita-icon-theme
-    python
-    pygobject3
-  ]
-  ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]);
+  buildInputs =
+    [
+      goffice
+      gtk3
+      adwaita-icon-theme
+      python
+      pygobject3
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ]);
 
   enableParallelBuilding = true;
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gnumeric";
+      packageName = pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -81,4 +82,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
   };
-})
+}

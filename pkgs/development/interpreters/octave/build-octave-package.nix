@@ -9,7 +9,6 @@
   stdenv,
   config,
   octave,
-  callPackage,
   texinfo,
   computeRequiredOctavePackages,
   writeRequiredOctavePackagesHook,
@@ -63,8 +62,14 @@ let
   nativeBuildInputs' = [
     octave
     writeRequiredOctavePackagesHook
-  ]
-  ++ nativeBuildInputs;
+  ] ++ nativeBuildInputs;
+
+  passthru' = {
+    updateScript = [
+      ../../../../maintainers/scripts/update-octave-packages
+      (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
+    ];
+  } // passthru;
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
@@ -76,9 +81,9 @@ let
     "nativeBuildInputs"
     "passthru"
   ];
+
 in
 stdenv.mkDerivation (
-  finalAttrs:
   {
     packageName = "${fullLibName}";
     # The name of the octave package ends up being
@@ -131,22 +136,7 @@ stdenv.mkDerivation (
     # together with Octave.
     dontInstall = true;
 
-    passthru = {
-      updateScript = [
-        ../../../../maintainers/scripts/update-octave-packages
-        (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
-      ];
-    }
-    // passthru
-    // {
-      tests = {
-        testOctaveBuildEnv = (octave.withPackages (os: [ finalAttrs.finalPackage ])).overrideAttrs (old: {
-          name = "${finalAttrs.name}-pkg-install";
-        });
-        testOctavePkgTests = callPackage ./run-pkg-test.nix { } finalAttrs.finalPackage;
-      }
-      // passthru.tests or { };
-    };
+    passthru = passthru';
 
     inherit meta;
   }

@@ -3,44 +3,35 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "containerlab";
-  version = "0.69.3";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RJNJ5LUCGaARn5NOSepTL/0Owr/ozFUYAvlynDTyqfY=";
+    rev = "v${version}";
+    hash = "sha256-6WDmjVRLvh8FBydaN41Vj4B5BIkIF9VnvhRcJR3k9Ec=";
   };
 
-  vendorHash = "sha256-28Q1R6P2rpER5RxagnsKy9W3b4FUeRRbkPPovzag//U=";
+  vendorHash = "sha256-G9W4iC04R5Rvl3hAJtMlUKJKo7AAIE33Y2c+0HedXU8=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/srl-labs/containerlab/cmd/version.Version=${finalAttrs.version}"
-    "-X github.com/srl-labs/containerlab/cmd/version.commit=${finalAttrs.src.rev}"
-    "-X github.com/srl-labs/containerlab/cmd/version.date=1970-01-01T00:00:00Z"
+    "-X github.com/srl-labs/containerlab/cmd.version=${version}"
+    "-X github.com/srl-labs/containerlab/cmd.commit=${src.rev}"
+    "-X github.com/srl-labs/containerlab/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   preCheck = ''
     # Fix failed TestLabelsInit test
     export USER="runner"
   '';
-
-  # TestVerifyLinks wants to use docker.sock, which is not available in the Nix build environment.
-  checkFlags = [
-    "-skip=^TestVerifyLinks$"
-  ];
 
   postInstall = ''
     local INSTALL="$out/bin/containerlab"
@@ -50,16 +41,13 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/containerlab completion zsh)
   '';
 
-  doInstallCheck = true;
-  versionCheckProgramArg = "version";
-
   meta = {
     description = "Container-based networking lab";
     homepage = "https://containerlab.dev/";
-    changelog = "https://github.com/srl-labs/containerlab/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/srl-labs/containerlab/releases/tag/${src.rev}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "containerlab";
   };
-})
+}

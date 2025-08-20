@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   inkex,
@@ -10,7 +11,9 @@
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "3.3.2";
+  version = "3.3.0";
+
+  disabled = pythonOlder "3.7";
 
   pyproject = true;
 
@@ -18,7 +21,7 @@ buildPythonPackage rec {
     owner = "xyz2tex";
     repo = "svg2tikz";
     tag = "v${version}";
-    hash = "sha256-/yILTmF/N+ZJTKsyFI4vicOYlyuhkBgmFguglu3iXlc=";
+    hash = "sha256-IIsgyDZkNoKjXt1jyCdBkaT5EWTdS6AmJ4evwbw0fdg=";
   };
 
   build-system = [
@@ -31,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "inkex"
     "lxml"
   ];
 
@@ -39,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svg2tikz" ];
 
-  meta = {
-    changelog = "https://github.com/xyz2tex/svg2tikz/blob/${src.tag}/CHANGELOG.md";
+  meta = with lib; {
+    changelog = "https://github.com/xyz2tex/svg2tikz/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/xyz2tex/svg2tikz";
     description = "Set of tools for converting SVG graphics to TikZ/PGF code";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       dotlambda
       gal_bolle
     ];

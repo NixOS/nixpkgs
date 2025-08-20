@@ -5,16 +5,15 @@
   bison,
   lzo,
   db4,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "netboot";
   version = "0.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/netboot/netboot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4HFIsMOW+owsVCOZt5pq2q+oRoS5fAmR/R2sx/dKgCc=";
+    url = "mirror://sourceforge/netboot/netboot-${version}.tar.gz";
+    sha256 = "09w09bvwgb0xzn8hjz5rhi3aibysdadbg693ahn8rylnqfq4hwg0";
   };
 
   buildInputs = [
@@ -25,25 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  # mgllex.l:398:53: error: passing argument 1 of 'copy_string' from incompatible pointer type []
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   # Disable parallel build, errors:
   #  link: `parseopt.lo' is not a valid libtool object
   enableParallelBuilding = false;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/nbdbtool";
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  meta = {
+  meta = with lib; {
     description = "Mini PXE server";
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = [ maintainers.raskin ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.free;
   };
-})
+}

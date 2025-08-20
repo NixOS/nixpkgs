@@ -2,18 +2,17 @@
   stdenv,
   fetchFromGitHub,
   lib,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "microsocks";
-  version = "1.0.5";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = "microsocks";
     rev = "v${version}";
-    hash = "sha256-5NR2gtm+uMkjmkV/dv3DzSedfNvYpHZgFHVSrybl0Tk=";
+    hash = "sha256-cB2XMWjoZ1zLAmAfl/nqjdOyBDKZ+xtlEmqsZxjnFn0=";
   };
 
   installPhase = ''
@@ -23,8 +22,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/rofl0r/microsocks/releases/tag/v${version}";

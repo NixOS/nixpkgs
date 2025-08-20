@@ -8,21 +8,25 @@
   pkg-config,
   rustPlatform,
   wayland,
-  libgbm,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "woomer";
-  version = "0.2.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
     tag = version;
-    hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
+    hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
   };
 
-  cargoHash = "sha256-xll/A0synEsXy9kPThA3bR8LRuAOQH0T6CAfIEoYJ0w=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libwayshot-0.3.2-dev" = "sha256-QETmdzA7a1XMGdMU7tUNSJzzDw/4nkH9gKZv3pP0Nwc=";
+    };
+  };
 
   strictDeps = true;
 
@@ -35,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glfw3
     wayland
-    libgbm
   ];
 
   # `raylib-sys` wants to compile examples that don't exist in its crate

@@ -1,41 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  guile,
-  libgit2,
-  scheme-bytestructures,
-  autoreconfHook,
-  pkg-config,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitLab
+, guile
+, libgit2
+, scheme-bytestructures
+, autoreconfHook
+, pkg-config
+, texinfo
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "guile-git";
-  version = "0.10.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     owner = "guile-git";
-    repo = "guile-git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ihKpEnng6Uemrguecbd25vElEhIu2Efb86aM8679TAc=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-lFBoA1VBJRHcZkP3h2gnlXQrMjDFWS4jl9RlF8VVf/Q=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook
-    guile
-    pkg-config
-    texinfo
+    autoreconfHook guile pkg-config texinfo
   ];
   buildInputs = [
     guile
   ];
   propagatedBuildInputs = [
-    libgit2
-    scheme-bytestructures
+    libgit2 scheme-bytestructures
   ];
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   enableParallelBuilding = true;
@@ -45,13 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
   '';
 
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
+  meta = with lib; {
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ethancedwards8 ];
     platforms = guile.meta.platforms;
   };
-})
+}

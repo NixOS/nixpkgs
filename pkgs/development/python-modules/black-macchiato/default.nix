@@ -5,7 +5,6 @@
   pythonOlder,
   pytestCheckHook,
   black,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -17,18 +16,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wbolster";
-    repo = "black-macchiato";
+    repo = pname;
     rev = version;
     sha256 = "0lc9w50nlbmlzj44krk7kxcia202fhybbnwfh77xixlc7vb4rayl";
   };
-
-  patches = [
-    # fix empty multi-line string test
-    (fetchpatch {
-      url = "https://github.com/wbolster/black-macchiato/commit/d3243a1c95b5029b3ffa12417f0c587a2ba79bcd.patch";
-      hash = "sha256-3m8U6c+1UCRy/Fkq6lk9LhwrFyE+q3GD2jnMA7N4ZJs=";
-    })
-  ];
 
   propagatedBuildInputs = [ black ];
 

@@ -3,11 +3,13 @@
   atk,
   cairo,
   callPackage,
+  darwin,
   fetchFromGitHub,
   gdk-pixbuf,
   glib,
   gobject-introspection,
   gtk4,
+  overrideSDK,
   pango,
   pkg-config,
   rustPlatform,
@@ -19,18 +21,22 @@
 }:
 
 let
-  self = rustPlatform.buildRustPackage {
+  buildRustPackage' = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+
+  self = buildRustPackage' {
     pname = "czkawka";
-    version = "9.0.0";
+    version = "8.0.0";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
       tag = self.version;
-      hash = "sha256-ePiHDfQ1QC3nff8uWE0ggiTuulBomuoZ3ta0redUYXY=";
+      hash = "sha256-Uxko2TRIjqQvd7n9C+P7oMUrm3YY5j7TVzvijEjDwOM=";
     };
 
-    cargoHash = "sha256-Djvb5Hen6XPm6aJuwa6cGPojz9+kXXidysr3URDwDFM=";
+    cargoHash = "sha256-DR2JU+QcGWliNoRMjSjJns7FsicpNAX5gTariFuQ/dw=";
 
     nativeBuildInputs = [
       gobject-introspection
@@ -38,14 +44,22 @@ let
       wrapGAppsHook4
     ];
 
-    buildInputs = [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk4
-      pango
-    ];
+    buildInputs =
+      [
+        atk
+        cairo
+        gdk-pixbuf
+        glib
+        gtk4
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin (
+        with darwin.apple_sdk.frameworks;
+        [
+          AppKit
+          Foundation
+        ]
+      );
 
     nativeCheckInputs = [ xvfb-run ];
 
@@ -71,7 +85,7 @@ let
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
-    versionCheckProgramArg = "--version";
+    versionCheckProgramArg = [ "--version" ];
     doInstallCheck = true;
 
     passthru = {
@@ -91,6 +105,7 @@ let
       license = with lib.licenses; [ mit ];
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
+        AndersonTorres
         yanganto
         _0x4A6F
       ];

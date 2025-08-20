@@ -11,7 +11,7 @@
   gettext,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "kvirc";
   version = "2022-06-29";
 

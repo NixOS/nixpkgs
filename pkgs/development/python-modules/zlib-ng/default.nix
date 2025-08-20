@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
 
   # build-system
   cmake,
@@ -29,7 +29,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./version.patch {
+    (substituteAll {
+      src = ./version.patch;
       inherit version;
     })
   ];

@@ -24,13 +24,13 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  hash =
+  sha256 =
     {
-      x86_64-linux = "sha256-8gX4dyNL9meXZfYCDvnnurD51A35c/6WY2nlRVb6AyY=";
-      x86_64-darwin = "sha256-bbu/X4M2Yxm8HsdeJzgU77L87XbUQW+Laq1tYPqMw+M=";
-      aarch64-linux = "sha256-fKNIk6W5w9WAb4IoB03Pzz7pHwN+12YNUnRuI3ErJJw=";
-      aarch64-darwin = "sha256-+DtwJSlVxDrza5K55ZOd18isaoDVUu8j0pMBr/Us6FI=";
-      armv7l-linux = "sha256-QmAsja9eU9VEi38vtsCS0uXf5xHKjyI5IIEIi3qyDmE=";
+      x86_64-linux = "04q9jm91idlbqsyfjr194i3xayyind67hyk59x4wrmg25sdqa0km";
+      x86_64-darwin = "0a31fjsdx671crd9hs1c9vpqbnskgh57pq4j810v722rmfawn7g0";
+      aarch64-linux = "0i3kx0xsb920f2xnf1xxhf4415xnyljfmah222ikhf6q1lp8dkqd";
+      aarch64-darwin = "068h94fxdafgm7l0z9dvhlmmixp7w8nmll4rzm06i8s3243fzb84";
+      armv7l-linux = "1bqnrgd1ykn67gvscsbkv82bydpmfjq1pn0951iiv2sy4m1g9flr";
     }
     .${system} or throwSystem;
 
@@ -41,7 +41,7 @@ callPackage ./generic.nix rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.103.15418";
+  version = "1.96.2.24355";
   pname = "vscodium";
 
   executableName = "codium";
@@ -50,7 +50,7 @@ callPackage ./generic.nix rec {
 
   src = fetchurl {
     url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
-    inherit hash;
+    inherit sha256;
   };
 
   tests = nixosTests.vscodium;
@@ -62,7 +62,7 @@ callPackage ./generic.nix rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  meta = {
+  meta = with lib; {
     description = ''
       Open source source code editor developed by Microsoft for Windows,
       Linux and macOS (VS Code without MS branding/telemetry/licensing)
@@ -76,9 +76,9 @@ callPackage ./generic.nix rec {
     '';
     homepage = "https://github.com/VSCodium/vscodium";
     downloadPage = "https://github.com/VSCodium/vscodium/releases";
-    license = lib.licenses.mit;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
       synthetica
       bobby285271
       ludovicopiero
@@ -91,7 +91,5 @@ callPackage ./generic.nix rec {
       "aarch64-darwin"
       "armv7l-linux"
     ];
-    # requires libc.so.6 and other glibc specifics
-    broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;
   };
 }

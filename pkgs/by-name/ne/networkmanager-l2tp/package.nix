@@ -40,26 +40,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    glib # for gdbus-codegen
     pkg-config
-  ]
-  ++ lib.optionals withGnome [
-    gtk4 # for gtk4-builder-tool
   ];
 
-  buildInputs = [
-    networkmanager
-    ppp
-    openssl
-    nss
-  ]
-  ++ lib.optionals withGnome [
-    gtk3
-    gtk4
-    libsecret
-    libnma
-    libnma-gtk4
-  ];
+  buildInputs =
+    [
+      networkmanager
+      ppp
+      glib
+      openssl
+      nss
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      gtk4
+      libsecret
+      libnma
+      libnma-gtk4
+    ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -69,7 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  strictDeps = true;
 
   passthru = {
     networkManagerPlugin = "VPN/nm-l2tp-service.name";

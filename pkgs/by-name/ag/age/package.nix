@@ -2,26 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
-  age-plugin-fido2-hmac,
-  age-plugin-ledger,
-  age-plugin-se,
-  age-plugin-sss,
-  age-plugin-tpm,
-  age-plugin-yubikey,
-  age-plugin-1p,
-  makeWrapper,
-  runCommand,
 }:
 
-buildGoModule (final: {
+buildGoModule rec {
   pname = "age";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    tag = "v${final.version}";
+    rev = "v${version}";
     hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
   };
 
@@ -30,12 +22,10 @@ buildGoModule (final: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${final.version}"
+    "-X main.Version=${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   preInstall = ''
     installManPage doc/*.1
@@ -43,10 +33,10 @@ buildGoModule (final: {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    if [[ "$("$out/bin/${final.pname}" --version)" == "${final.version}" ]]; then
-      echo '${final.pname} smoke check passed'
+    if [[ "$("$out/bin/${pname}" --version)" == "${version}" ]]; then
+      echo '${pname} smoke check passed'
     else
-      echo '${final.pname} smoke check failed'
+      echo '${pname} smoke check failed'
       return 1
     fi
   '';
@@ -57,37 +47,12 @@ buildGoModule (final: {
     "TestScript/plugin"
   ];
 
-  # group age plugins together
-  passthru.plugins = {
-    inherit
-      age-plugin-fido2-hmac
-      age-plugin-ledger
-      age-plugin-se
-      age-plugin-sss
-      age-plugin-tpm
-      age-plugin-yubikey
-      age-plugin-1p
-      ;
-  };
-
-  # convenience function for wrapping sops with plugins
-  passthru.withPlugins =
-    filter:
-    runCommand "age-${final.version}-with-plugins"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
-          --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
-      '';
-
   meta = with lib; {
-    changelog = "https://github.com/FiloSottile/age/releases/tag/v${final.version}";
+    changelog = "https://github.com/FiloSottile/age/releases/tag/v${version}";
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;
     mainProgram = "age";
     maintainers = with maintainers; [ tazjin ];
   };
-})
+}

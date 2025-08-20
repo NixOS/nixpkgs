@@ -45,10 +45,6 @@ class AbstractLogger(ABC):
         pass
 
     @abstractmethod
-    def log_test_error(self, *args, **kwargs) -> None:  # type:ignore
-        pass
-
-    @abstractmethod
     def log_serial(self, message: str, machine: str) -> None:
         pass
 
@@ -100,9 +96,6 @@ class JunitXMLLogger(AbstractLogger):
     def error(self, *args, **kwargs) -> None:  # type: ignore
         self.tests[self.currentSubtest].stderr += args[0] + os.linesep
         self.tests[self.currentSubtest].failure = True
-
-    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
-        self.error(*args, **kwargs)
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
@@ -163,10 +156,6 @@ class CompositeLogger(AbstractLogger):
         for logger in self.logger_list:
             logger.warning(*args, **kwargs)
 
-    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
-        for logger in self.logger_list:
-            logger.log_test_error(*args, **kwargs)
-
     def error(self, *args, **kwargs) -> None:  # type: ignore
         for logger in self.logger_list:
             logger.error(*args, **kwargs)
@@ -213,7 +202,7 @@ class TerminalLogger(AbstractLogger):
         tic = time.time()
         yield
         toc = time.time()
-        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
+        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
     def info(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
@@ -232,11 +221,6 @@ class TerminalLogger(AbstractLogger):
             return
 
         self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)
-
-    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
-        prefix = Fore.RED + "!!! " + Style.RESET_ALL
-        # NOTE: using `warning` instead of `error` to ensure it does not exit after printing the first log
-        self.warning(f"{prefix}{args[0]}", *args[1:], **kwargs)
 
 
 class XMLLogger(AbstractLogger):
@@ -275,9 +259,6 @@ class XMLLogger(AbstractLogger):
         self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
-        self.log(*args, **kwargs)
-
-    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:

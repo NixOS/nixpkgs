@@ -13,26 +13,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.7.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
-    tag = "tauri-cli-v${version}";
-    hash = "sha256-0J55AvAvvqTVls4474GcgLPBtSC+rh8cXVKluMjAVBE=";
+    tag = "tauri-v${version}";
+    hash = "sha256-agmY/39tkz71kCSksIyrbxDrvnOJpBSYCdygjd4rOBY=";
   };
 
-  cargoHash = "sha256-nkY1ydc2VewRwY+B5nR68mz8Ff3FK1KoHE4dLzNtPkY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i4ACVFWVEs866kJHNE49fnFj87GZbJIg5p1J3eVLRwE=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gtk4
-    webkitgtk_4_1
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gtk4
+      webkitgtk_4_1
+    ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
   cargoTestFlags = cargoBuildFlags;
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "tauri-cli-v(.*)"
+        "tauri-v(.*)"
       ];
     };
   };
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
-    changelog = "https://github.com/tauri-apps/tauri/releases/tag/${src.tag}";
+    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${version}";
     license = with lib.licenses; [
       asl20 # or
       mit

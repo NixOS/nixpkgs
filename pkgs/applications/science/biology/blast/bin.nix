@@ -11,29 +11,25 @@
   glib,
   libxml2,
   coreutils,
-  sqlite,
 }:
 let
   pname = "blast-bin";
-  version = "2.16.0";
+  version = "2.14.1";
 
-  srcs = {
+  srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-linux.tar.gz";
-      hash = "sha256-sLEwmMkB0jsyStFwDnRxu3QIp/f1F9dNX6rXEb526PQ=";
+      hash = "sha256-OO8MNOk6k0J9FlAGyCOhP+hirEIT6lL+rIInB8dQWEU=";
     };
     aarch64-linux = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-aarch64-linux.tar.gz";
-      hash = "sha256-1EeiMu08R9Glq8qRky4OTT5lQPLJcM7iaqUrmUOS4MI=";
+      hash = "sha256-JlOyoxZQBbvUcHIMv5muTuGQgrh2uom3rzDurhHQ+FM=";
     };
     x86_64-darwin = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-macosx.tar.gz";
-      hash = "sha256-fu4edyD12q8G452ckrEl2Qct5+uB9JnABd7bCLkyMkw=";
+      hash = "sha256-eMfuwMCD6VlDgeshLslDhYBBp0YOpL+6q/zSchR0bAs=";
     };
-    aarch64-darwin = fetchurl {
-      url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-aarch64-macosx.tar.gz";
-      hash = "sha256-6NpPNLBCHaBRscLZ5fjh5Dv3bjjPk2Gh2+L7xEtiJNs=";
-    };
+    aarch64-darwin = x86_64-darwin;
   };
   src = srcs.${stdenv.hostPlatform.system};
 in
@@ -42,17 +38,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    python3
-    perl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    zlib
-    bzip2
-    glib
-    libxml2
-    sqlite
-  ];
+  buildInputs =
+    [
+      python3
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      zlib
+      bzip2
+      glib
+      libxml2
+    ];
 
   installPhase = ''
     runHook preInstall

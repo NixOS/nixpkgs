@@ -57,8 +57,7 @@ stdenv.mkDerivation {
     # at-spi2 needs dbus to be recognized by pkg-config
     at-spi2-core
     dbus
-  ]
-  ++ lib.optional speechSupport speechd-minimal;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   enableParallelBuilding = true;
 

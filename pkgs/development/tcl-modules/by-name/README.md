@@ -5,11 +5,10 @@ The structure of this directory is identical to the one described in
 The only difference is the scope:
 
 ```nix
-{
-  lib,
-  # You can get tclPackages attributes directly
-  mkTclDerivation,
-  tcllib,
+{ lib
+# You can get tclPackages attributes directly
+, mkTclDerivation
+, tcllib
 }:
 
 mkTclDerivation {

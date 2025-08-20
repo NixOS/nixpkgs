@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };
@@ -23,14 +23,21 @@ let
 
     sourceRoot = "${src.name}/svg-flatten";
 
-    preInstall = ''
-      mkdir -p $out/bin
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin" \
+        "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin/svg-flatten" \
     '';
 
-    installFlags = [ "PREFIX=$(out)" ];
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      PREFIX=$out make install
+      runHook postInstall
+    '';
 
     meta = with lib; {
-      description = "SVG-flatten SVG downconverter";
+      description = "svg-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
       license = with licenses; [ agpl3Plus ];
       maintainers = with maintainers; [ wulfsta ];
@@ -42,34 +49,35 @@ in
 python3Packages.buildPythonApplication rec {
   inherit version src;
   pname = "gerbolyze";
-  pyproject = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  format = "setuptools";
 
-  pythonRemoveDeps = [
-    # we already provide svg-flatten through a binary on the PATH
-    "svg-flatten-wasi"
+  nativeBuildInputs = [
+    python3Packages.setuptools
   ];
 
-  dependencies = with python3Packages; [
-    beautifulsoup4
-    click
-    numpy
-    python-slugify
-    lxml
-    gerbonara
+  propagatedBuildInputs = [
+    python3Packages.beautifulsoup4
+    python3Packages.click
+    python3Packages.numpy
+    python3Packages.scipy
+    python3Packages.python-slugify
+    python3Packages.lxml
+    python3Packages.gerbonara
+    resvg
+    svg-flatten
   ];
 
   preConfigure = ''
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
-      --replace-fail "version = get_version()," \
-                     "version = '${version}'," \
+      --replace "version = get_version()," \
+                "version = '${version}'," \
 
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
-      --replace-fail "long_description=format_readme_for_pypi()," \
-                     "long_description='\n'.join(Path('README.rst').read_text().splitlines()),"
+      --replace "long_description=format_readme_for_pypi()," \
+                "long_description='\n'.join(Path('README.rst').read_text().splitlines()),"
   '';
 
   pythonImportsCheck = [ "gerbolyze" ];
@@ -78,15 +86,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
     resvg
     svg-flatten
-  ];
-
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        resvg
-        svg-flatten
-      ]
-    }"
   ];
 
   passthru.updateScript = gitUpdater {

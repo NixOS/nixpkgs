@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
-    repo = "hashit";
+    repo = pname;
     rev = version;
     sha256 = "1s8fbzg1z2ypn55xg1pfm5xh15waq55fkp49j8rsqiq8flvg6ybf";
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Simple app for checking usual checksums - Designed for elementary OS";
     homepage = "https://github.com/artemanufrij/hashit";
     license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.artemanufrij.hashit";
   };

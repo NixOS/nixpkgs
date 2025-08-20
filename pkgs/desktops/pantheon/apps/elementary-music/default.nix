@@ -36,20 +36,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    elementary-icon-theme
-    glib
-    granite7
-    gtk4
-    libadwaita
-  ]
-  ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      elementary-icon-theme
+      glib
+      granite7
+      gtk4
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/music";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.music";
   };
 }

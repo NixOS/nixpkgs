@@ -16,13 +16,10 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "xmldiff";
   inherit version src;
-  pyproject = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     lxml
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
   meta = {

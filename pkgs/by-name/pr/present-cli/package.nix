@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "present";
-  version = "0.2.3";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "terror";
-    repo = "present";
-    rev = "43c10253dc31038614eba5824588dbf2716212d6A";
-    sha256 = "aMy8Qn1kUM7jmvD9nGjBk1XXQF1rTLfnPDJOh9d4uIg=";
+    repo = pname;
+    rev = version;
+    sha256 = "+kCHe84ikdCLd7j5YwP2j3xz+XTzzo/kLy+b9YUFDnI=";
   };
 
-  cargoHash = "sha256-rLLhZL8WQs68+nwCrJ9Dej3T1JU9t+ZrBhSMxAdOfbw=";
+  cargoHash = "sha256-VKY/FQUrFWtLxKoK6LP6qPMqNN4absZvnAbH9mha1fI=";
 
   # required for tests
   postPatch = ''

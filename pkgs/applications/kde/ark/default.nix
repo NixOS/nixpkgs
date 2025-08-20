@@ -33,8 +33,7 @@ let
     p7zip
     lrzip
     unar
-  ]
-  ++ lib.optional unfreeEnableUnrar unrar;
+  ] ++ lib.optional unfreeEnableUnrar unrar;
 in
 
 mkDerivation {
@@ -53,8 +52,7 @@ mkDerivation {
   buildInputs = [
     libarchive
     libzip
-  ]
-  ++ extraTools;
+  ] ++ extraTools;
 
   propagatedBuildInputs = [
     breeze-icons

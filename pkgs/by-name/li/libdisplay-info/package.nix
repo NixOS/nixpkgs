@@ -7,7 +7,7 @@
   ninja,
   python3,
   hwdata,
-  v4l-utils,
+  edid-decode,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
-    repo = "libdisplay-info";
+    repo = pname;
     rev = version;
     sha256 = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-    v4l-utils
+    edid-decode
     hwdata
     python3
   ];

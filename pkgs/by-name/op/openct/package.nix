@@ -3,33 +3,27 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  doxygen,
-  libxslt,
   pkg-config,
   pcsclite,
-  libtool,
   libusb-compat-0_1,
+  doxygen,
+  libxslt,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "openct";
   version = "0.6.20";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "openct";
-    rev = "openct-${finalAttrs.version}";
-    hash = "sha256-YloE4YsvvYwfwmMCsEMGctApO/ujyZP/iAz21iXAnSc=";
+    rev = "${pname}-${version}";
+    sha256 = "09wxq0jxdxhci3zr7jd3zcxjkl3j0r1v00k3q8gqrg9gighh8nk2";
   };
 
   postPatch = ''
-    substituteInPlace etc/Makefile.am \
-      --replace-fail "DESTDIR" "out"
+    sed -i 's,$(DESTDIR),$(out),g' etc/Makefile.am
   '';
-
-  # unbreak build on GCC 14, remove when https://github.com/OpenSC/openct/pull/12
-  # (or equivalent) is merged and released
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   configureFlags = [
     "--enable-api-doc"
@@ -41,29 +35,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    doxygen
-    libxslt # xsltproc
     pkg-config
   ];
-
   buildInputs = [
     pcsclite
-    libtool # libltdl
     libusb-compat-0_1
+    doxygen
+    libxslt
   ];
-
-  strictDeps = true;
 
   preInstall = ''
     mkdir -p $out/etc
   '';
 
-  meta = {
-    homepage = "https://github.com/OpenSC/openct/";
-    description = "Drivers for several smart card readers";
-    license = lib.licenses.lgpl21;
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://github.com/OpenSC/openct/";
+    license = licenses.lgpl21;
+    description = "Drivers for several smart card readers";
+    platforms = platforms.all;
   };
-})
+}

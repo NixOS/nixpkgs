@@ -2,7 +2,6 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
@@ -20,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

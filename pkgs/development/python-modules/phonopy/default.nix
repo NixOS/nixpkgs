@@ -1,59 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  nanobind,
-  ninja,
+  fetchPypi,
   numpy,
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  h5py,
-  matplotlib,
   pyyaml,
+  matplotlib,
+  h5py,
   scipy,
   spglib,
-  symfc,
-
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  scikit-build-core,
+  cmake,
+  setuptools-scm,
+  ninja,
+  pkg-config,
+  nanobind,
 }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.38.2";
+  version = "2.29.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "phonopy";
-    repo = "phonopy";
-    tag = "v${version}";
-    hash = "sha256-oQcKBwrjQGmjJIHROb9Z/8j7CmfoSxlIzHRABBg+tSs=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-MabBtEOyM82R0NbdVaY+2f9GT8rT44xjOi/o38GSRp8=";
   };
 
-  build-system = [
-    cmake
-    nanobind
-    ninja
-    numpy
-    scikit-build-core
+  nativeBuildInputs = [
     setuptools
+    scikit-build-core
+    nanobind
     setuptools-scm
+    ninja
+    cmake
   ];
   dontUseCmakeConfigure = true;
 
-  dependencies = [
+  propagatedBuildInputs = [
     h5py
     matplotlib
     numpy
     pyyaml
     scipy
     spglib
-    symfc
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -65,14 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phonopy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Modulefor phonon calculations at harmonic and quasi-harmonic levels";
     homepage = "https://phonopy.github.io/phonopy/";
-    changelog = "http://phonopy.github.io/phonopy/changelog.html";
-    license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [
-      psyanticy
-      chn
-    ];
+    changelog = "https://github.com/phonopy/phonopy/blob/v${version}/doc/changelog.md";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

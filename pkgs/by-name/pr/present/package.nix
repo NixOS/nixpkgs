@@ -18,16 +18,13 @@ in
 python3Packages.buildPythonPackage rec {
   pname = "present";
   version = "0.6.0";
-  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-l9W5L4LD9qRo3rLBkgd2I/aDaj+ucib5UYg+X4RYg6c=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     click
     pyyaml
     pyfiglet

@@ -34,7 +34,7 @@ with lib;
         ${optionalString (config.networking.hostName == "") ''
           echo "setting host name..."
           if [ -s /etc/ec2-metadata/hostname ]; then
-              ${lib.getExe pkgs.hostname-debian} -F /etc/ec2-metadata/hostname
+              ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
           fi
         ''}
 
@@ -87,7 +87,7 @@ with lib;
         # ec2-get-console-output.
         echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
         for i in /etc/ssh/ssh_host_*_key.pub; do
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" > /dev/console || true
+            ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" || true > /dev/console
         done
         echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
       '';

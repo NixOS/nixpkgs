@@ -17,25 +17,29 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = "sn0int";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-tiJLwlxZ9ndircgkH23ew+3QJeuuqt93JahAtFPcuG8=";
   };
 
-  cargoHash = "sha256-nDgWNm5HTvFEMQhUUnU7o2Rpzl3/bGwyB0N9Z1KorDs=";
+  cargoHash = "sha256-3FrUlv6UxULsrvgyV5mlry9j3wFMiXZVoxk6z6pRM3I=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [
-    libsodium
-    sqlite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libseccomp
-  ];
+  buildInputs =
+    [
+      libsodium
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.Security
+    ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
   # in "checkPhase", hence fails in sandbox of "nix".
@@ -48,16 +52,16 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/sn0int completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
     changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [
       fab
       xrelkd
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "sn0int";
   };
 }

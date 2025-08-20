@@ -2,25 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cmake,
-  ninja,
-  pybind11,
-  scikit-build-core,
-
-  # dependencies
   numpy,
-
-  # tests
+  pybind11,
   pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.3";
-  pyproject = true;
+  version = "1.0.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,22 +20,15 @@ buildPythonPackage rec {
     owner = "skogler";
     repo = "mapbox_earcut_python";
     tag = "v${version}";
-    hash = "sha256-2dUZ78yWSudjozV2zIRNQgUeaNrkL+NXnF51q4T+dRU=";
+    hash = "sha256-xR+nO5xdoDUhWZM19DOid3lsEXBood5NofQ0SezJ9OE=";
   };
 
-  build-system = [
-    pybind11
-    scikit-build-core
-  ];
-
   nativeBuildInputs = [
-    cmake
-    ninja
+    setuptools
+    pybind11
   ];
 
-  dontUseCmakeConfigure = true;
-
-  dependencies = [ numpy ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -51,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
-    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/v${version}";
     license = licenses.isc;
     description = "Mapbox-earcut fast triangulation of 2D-polygons";
     longDescription = ''

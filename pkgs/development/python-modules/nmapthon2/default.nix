@@ -15,14 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cblopez";
-    repo = "nmapthon2";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-4Na75TdKDywUomJF4tDWUWwCCtcOSxBUMOF7+FDhbpY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests/scanner_tests.py" ];
+  pytestFlagsArray = [ "tests/scanner_tests.py" ];
 
   pythonImportsCheck = [ "nmapthon2" ];
 

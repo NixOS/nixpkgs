@@ -3,28 +3,24 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  pkg-config,
   libheif,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "timewall";
-  version = "2.0.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "timewall";
     rev = version;
-    hash = "sha256-+jQ8cQENxTgCyekF65tr4d2a7OwbJvagUX01DiJ8ytg=";
+    hash = "sha256-B3pZCjl7Z78vAYYzceicwjmGfTbzYgrhpldUJnY8Aqs=";
   };
 
-  cargoHash = "sha256-HjwBpUhepF2bGQvzIMrNuwjNuh48V+Uv9eS4/ZbxT1c=";
+  cargoHash = "sha256-AYfRZyUitUgWIeDbg00RFbs+VLnIJFHrdpUcjDlkwE8=";
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ libheif ];
 

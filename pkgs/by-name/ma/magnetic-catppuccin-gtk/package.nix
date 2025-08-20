@@ -59,13 +59,13 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   stdenv.mkDerivation
   {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2025-04-25";
+    version = "0-unstable-2024-11-06";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "c961826d027ed93fae12a9a309616e36d140e6b9";
-      hash = "sha256-7F4FrhM+kBFPeLp2mjmYkoDiF9iKDUkC27LUBuFyz7g=";
+      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
+      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
     };
 
     nativeBuildInputs = [
@@ -101,11 +101,11 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
       runHook postInstall
     '';
 
-    meta = {
+    meta = with lib; {
       description = "GTK Theme with Catppuccin colour scheme";
       homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
-      license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ icy-thought ];
-      platforms = lib.platforms.all;
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [ icy-thought ];
+      platforms = platforms.all;
     };
   }

@@ -6,9 +6,9 @@
   SDL2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "paperview";
-  version = "0-unstable-2020-09-22";
+  version = "unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "glouw";

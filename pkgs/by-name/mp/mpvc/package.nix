@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mpc-like control interface for mpv";
     license = lib.licenses.mit;
     mainProgram = "mpvc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

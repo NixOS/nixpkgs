@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "material-color-utilities-python";
   version = "0.1.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

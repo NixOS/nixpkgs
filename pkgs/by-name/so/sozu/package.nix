@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  darwin,
   protobuf,
   nix-update-script,
   testers,
@@ -15,14 +16,16 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
-    repo = "sozu";
+    repo = pname;
     rev = version;
     hash = "sha256-Cda53lhKPxm2w8guoKuQjdjhZNWJinzR1PHc5S57y2w=";
   };
 
-  cargoHash = "sha256-AIj59MqK+TqyTTDjGzN1Oec3svPaXRBkHJTBtxTwZNg=";
+  cargoHash = "sha256-DCiPy9bU56ocWwQ8sTVZ5T9eMi1ifj3enCHPuC2x6aY=";
 
   nativeBuildInputs = [ protobuf ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   doCheck = false;
 
@@ -35,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
       Br1ght0ne
       gaelreyrol
     ];

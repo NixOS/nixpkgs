@@ -4,31 +4,25 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  django,
-  netaddr,
-  python,
+  pythonAtLeast,
 }:
 buildPythonPackage rec {
   pname = "netbox-topology-views";
-  version = "4.3.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = python.pythonVersion != netbox.python.pythonVersion;
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-topology-views";
-    tag = "v${version}";
-    hash = "sha256-K8hG2M8uWPk9+7u21z+hmedOovievkMNpn3p7I4+6t4=";
+    rev = "v${version}";
+    hash = "sha256-4ehIF6r4fCgBAaHImzofdQIywtD7ITQFP6DkHXHKMro=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    netbox
-    django
-    netaddr
-  ];
+  nativeCheckInputs = [ netbox ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH
@@ -39,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin for generate topology views/maps from your devices";
     homepage = "https://github.com/netbox-community/netbox-topology-views";
-    changelog = "https://github.com/netbox-community/netbox-topology-views/releases/tag/${src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-topology-views/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];

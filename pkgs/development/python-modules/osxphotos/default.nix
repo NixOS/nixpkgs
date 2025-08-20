@@ -25,7 +25,6 @@
   tenacity,
   textx,
   toml,
-  tzdata,
   wrapt,
   wurlitzer,
   xdg-base-dirs,
@@ -36,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.69.2";
+  version = "0.68.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${version}";
-    hash = "sha256-uVcoGIfxz+jKirnE3giST/v20eA5pq+LHgrsRb5b+Lc=";
+    hash = "sha256-5cKxlfm4i743bJlS2HVPBO1Fbvz1c6wgkkG8Vle8Ajo=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +67,6 @@ buildPythonPackage rec {
     tenacity
     textx
     toml
-    tzdata
     wrapt
     wurlitzer
     xdg-base-dirs
@@ -107,10 +105,9 @@ buildPythonPackage rec {
   meta = {
     description = "Export photos from Apple's macOS Photos app and query the Photos library database to access metadata about images";
     homepage = "https://github.com/RhetTbull/osxphotos";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    # missing utitools dependency
-    broken = true && stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

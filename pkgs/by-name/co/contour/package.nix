@@ -20,21 +20,21 @@
   yaml-cpp,
   ncurses,
   file,
-  darwin,
+  libutil,
+  sigtool,
   nixosTests,
   installShellFiles,
-  reflection-cpp,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (final: {
   pname = "contour";
-  version = "0.6.1.7494";
+  version = "0.5.1.7247";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-jgasZhdcJ+UF3VIl8HLcxBayvbA/dkaOG8UtANRgeP4=";
+    rev = "v${final.version}";
+    hash = "sha256-/vpbyaULemyM3elwaoofvbeeID7jNrmu8X8HlZxWGCk";
   };
 
   patches = [ ./dont-fix-app-bundle.diff ];
@@ -51,59 +51,62 @@ stdenv.mkDerivation (finalAttrs: {
     file
     qt6.wrapQtAppsHook
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs = [
-    boxed-cpp
-    fontconfig
-    freetype
-    libunicode
-    termbench-pro
-    qt6.qtmultimedia
-    qt6.qt5compat
-    pcre
-    boost
-    catch2_3
-    fmt
-    microsoft-gsl
-    range-v3
-    yaml-cpp
-    reflection-cpp
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libutil
-  ];
+  buildInputs =
+    [
+      boxed-cpp
+      fontconfig
+      freetype
+      libunicode
+      termbench-pro
+      qt6.qtmultimedia
+      qt6.qt5compat
+      pcre
+      boost
+      catch2_3
+      fmt
+      microsoft-gsl
+      range-v3
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libutil
+    ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
-  postInstall = ''
-    mkdir -p $out/nix-support $terminfo/share
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications
-    cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
-    mv $out/contour.app $out/Applications
-    ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    mv $out/share/terminfo $terminfo/share/
-  ''
-  + ''
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    rm -r $out/share/contour
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/nix-support $terminfo/share
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/Applications
+      installShellCompletion --zsh $out/contour.app/Contents/Resources/shell-integration/shell-integration.zsh
+      installShellCompletion --fish $out/contour.app/Contents/Resources/shell-integration/shell-integration.fish
+      cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
+      mv $out/contour.app $out/Applications
+      ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      mv $out/share/terminfo $terminfo/share/
+      installShellCompletion --zsh $out/share/contour/shell-integration/shell-integration.zsh
+      installShellCompletion --fish $out/share/contour/shell-integration/shell-integration.fish
+    ''
+    + ''
+      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 
-  meta = {
+  meta = with lib; {
     description = "Modern C++ Terminal Emulator";
     homepage = "https://github.com/contour-terminal/contour";
-    changelog = "https://github.com/contour-terminal/contour/raw/v${finalAttrs.version}/Changelog.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ moni ];
-    platforms = lib.platforms.unix;
+    changelog = "https://github.com/contour-terminal/contour/raw/v${version}/Changelog.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ moni ];
+    platforms = platforms.unix;
     mainProgram = "contour";
   };
 })

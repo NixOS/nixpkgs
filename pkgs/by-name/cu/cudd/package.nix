@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cudd";
   version = "3.0.0";
 

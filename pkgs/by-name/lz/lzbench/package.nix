@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lzbench";
-  version = "2.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "inikep";
-    repo = "lzbench";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JyK5Hah3X4zwmli44HEO62BYfNg7BBd0+DLlljeHmRc=";
+    sha256 = "19zlvcjb1qg4fx30rrp6m650660y35736j8szvdxmqh9ipkisyia";
   };
 
   enableParallelBuilding = true;
@@ -25,12 +25,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "In-memory benchmark of open-source LZ77/LZSS/LZMA compressors";
-    license = with licenses; [
-      gpl2Only
-      gpl3Only
-    ];
+    license = licenses.free;
     platforms = platforms.all;
-    maintainers = with lib.maintainers; [ videl ];
     mainProgram = "lzbench";
   };
 }

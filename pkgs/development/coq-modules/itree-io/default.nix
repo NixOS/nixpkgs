@@ -15,11 +15,13 @@ mkCoqDerivation {
 
   defaultVersion =
     let
-      case = case: out: { inherit case out; };
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      (case (range "8.12" "8.19") "0.1.1")
+      {
+        case = range "8.12" "8.19";
+        out = "0.1.1";
+      }
     ] null;
   release = {
     "0.1.1".sha256 = "sha256-IFwIj8dxW4jm2gvuUJ8LKZFSJeljp0bsn8fezxY6t2o=";
@@ -32,7 +34,7 @@ mkCoqDerivation {
   ];
 
   meta = {
-    description = "Interpret itree in the IO monad of simple-io";
+    description = "Interpret itree in the IO monad of simple-io.";
     license = lib.licenses.mit;
   };
 }

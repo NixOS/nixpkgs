@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "dasbus";
   version = "unstable-11-10-2022";
   pyproject = true;

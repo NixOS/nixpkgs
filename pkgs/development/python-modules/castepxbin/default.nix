@@ -12,9 +12,10 @@
 buildPythonPackage rec {
   pname = "castepxbin";
   version = "0.3.0";
-  pyproject = true;
 
   disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zhubonan";
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-6kumVnm4PLRxuKO6Uz0iHzfYuu21hFC7EPRsc3S1kxE=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     numpy
     scipy
   ];

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "litestar-htmx";
-  version = "0.5.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     pname = "litestar_htmx";
     inherit version;
-    hash = "sha256-4C0aOpIXLIdINfo+Z0nWWun8Ym0N9GcZSQoWKT4hRvs=";
+    hash = "sha256-uiU3AI64zBi/yL7lzssoCSTHgYuxwGbXnq5LIhaWygg=";
   };
 
   pyproject = true;

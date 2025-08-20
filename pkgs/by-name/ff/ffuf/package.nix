@@ -32,7 +32,7 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for web fuzzing";
     mainProgram = "ffuf";
     longDescription = ''
@@ -42,7 +42,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/ffuf/ffuf";
     changelog = "https://github.com/ffuf/ffuf/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

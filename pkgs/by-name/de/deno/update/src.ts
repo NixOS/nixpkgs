@@ -16,11 +16,11 @@ interface Replacer {
 const log = logger("src");
 
 const prefetchHash = (nixpkgs: string, version: string) =>
-  run("nurl", ["https://github.com/denoland/deno", version, "-H", "-n", nixpkgs, "-S"]);
+  run("nix-prefetch", ["-f", nixpkgs, "deno.src", "--rev", version]);
 const prefetchCargoHash = (nixpkgs: string) =>
   run(
-    "nurl",
-    ["-e", `(import ${nixpkgs} {}).deno.cargoDeps.overrideAttrs (_: { hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="; })`]
+    "nix-prefetch",
+    [`{ sha256 }: (import ${nixpkgs} {}).deno.cargoDeps.overrideAttrs (_: { hash = sha256; })`],
   );
 
 const replace = (str: string, replacers: Replacer[]) =>

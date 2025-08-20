@@ -1,47 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   smartypants,
-  hatchling,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "typogrify";
-  version = "2.1.0";
-  pyproject = true;
+  version = "2.0.7";
 
-  disabled = pythonOlder "3.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8KoATpgDKm5r5MnaZefrcVDjbKO/UIrbzagrTQA+Ye4=";
+    sha256 = "8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38";
   };
 
-  build-system = [ hatchling ];
+  propagatedBuildInputs = [ smartypants ];
 
-  dependencies = [ smartypants ];
+  # Wants to set up Django
+  doCheck = false;
 
   pythonImportsCheck = [ "typogrify.filters" ];
 
-  pytestFlags = [
-    "--doctest-modules"
-  ];
-
-  enabledTestPaths = [
-    "typogrify/filters.py"
-    "typogrify/packages/titlecase/tests.py"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
   meta = with lib; {
     description = "Filters to enhance web typography, including support for Django & Jinja templates";
-    homepage = "https://github.com/justinmayer/typogrify";
+    homepage = "https://github.com/mintchaos/typogrify";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
   };

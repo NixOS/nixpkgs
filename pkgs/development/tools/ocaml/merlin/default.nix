@@ -3,7 +3,7 @@
   fetchurl,
   fetchpatch,
   buildDunePackage,
-  replaceVars,
+  substituteAll,
   dot-merlin-reader,
   dune_2,
   yojson,
@@ -24,8 +24,9 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02.3";
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+    (substituteAll {
+      src = ./fix-paths.patch;
+      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
     # https://github.com/ocaml/merlin/pull/1798

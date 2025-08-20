@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  anyio,
   buildPythonPackage,
   fetchFromGitHub,
   oauthlib,
@@ -18,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.2.1";
+  version = "8.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-vSyZsWhqyQqKFukD6GbtkAJd3QBmRwdmRIYD19DXQW0=";
+    hash = "sha256-SRuBV7XWt4Myks7kbUzGAscggspUbRoLOvYNiorF8To=";
   };
 
   pythonRelaxDeps = [
@@ -46,7 +45,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    anyio
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -59,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";
     homepage = "https://github.com/jabesq/pyatmo";
-    changelog = "https://github.com/jabesq/pyatmo/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jabesq/pyatmo/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };

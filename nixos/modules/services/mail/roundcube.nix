@@ -272,18 +272,16 @@ in
     ];
 
     systemd.services.roundcube-setup = lib.mkMerge [
-      (lib.mkIf localDB {
-        requires = [ "postgresql.target" ];
-        after = [ "postgresql.target" ];
+      (lib.mkIf (cfg.database.host == "localhost") {
+        requires = [ "postgresql.service" ];
+        after = [ "postgresql.service" ];
       })
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        path = [
-          (if localDB then config.services.postgresql.package else pkgs.postgresql)
-        ];
+        path = [ config.services.postgresql.package ];
         script =
           let
             psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${

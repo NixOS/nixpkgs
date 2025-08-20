@@ -16,8 +16,6 @@ in
     programs.msmtp = {
       enable = lib.mkEnableOption "msmtp - an SMTP client";
 
-      package = lib.mkPackageOption pkgs "msmtp" { };
-
       setSendmail = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -36,7 +34,7 @@ in
         };
         description = ''
           Default values applied to all accounts.
-          See {manpage}`msmtp(1)` for the available options.
+          See msmtp(1) for the available options.
         '';
       };
 
@@ -54,7 +52,7 @@ in
         description = ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
-          See {manpage}`msmtp(1)` for the available options.
+          See msmtp(1) for the available options.
 
           Use `programs.msmtp.extraConfig` instead of this attribute set-based
           option if ordered account inheritance is needed.
@@ -70,18 +68,18 @@ in
         default = "";
         description = ''
           Extra lines to add to the msmtp configuration verbatim.
-          See {manpage}`msmtp(1)` for the syntax and available options.
+          See msmtp(1) for the syntax and available options.
         '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.msmtp ];
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
       program = "sendmail";
-      source = "${cfg.package}/bin/sendmail";
+      source = "${pkgs.msmtp}/bin/sendmail";
       setuid = false;
       setgid = false;
       owner = "root";

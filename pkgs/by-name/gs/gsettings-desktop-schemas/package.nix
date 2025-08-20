@@ -17,24 +17,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "48.0";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5o8VWBO/GPhlqLLI6dRzWItsytyvu2Zqt4iFfGwtG9M=";
+    hash = "sha256-pgIE2cnAobJk1tDRNKODQLpfxgdqNLhNqUXYv8x6KBU=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [
-    glib
-    meson
-    ninja
-    pkg-config
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      glib
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)
@@ -70,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas";
     description = "Collection of GSettings schemas for settings shared by various components of a desktop";
     license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

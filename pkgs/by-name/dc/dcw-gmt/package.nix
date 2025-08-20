@@ -30,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       for use by GMT, the Generic Mapping Tools.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ tviti ];
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ tviti ]);
   };
 
 })

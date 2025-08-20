@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo123Module,
+  buildGoModule,
   fetchzip,
   pkg-config,
   copyDesktopItems,
@@ -12,38 +12,34 @@
   vulkan-headers,
   libGL,
   xorg,
+  callPackage,
   buildPackages,
+  anvilExtras ? callPackage ./extras.nix { },
 }:
 
-buildGo123Module (finalAttrs: {
+buildGoModule rec {
   pname = "anvil-editor";
-  version = "0.6";
+  version = "0.4";
 
   # has to update vendorHash of extra package manually
   # nixpkgs-update: no auto update
   src = fetchzip {
-    url = "https://anvil-editor.net/releases/anvil-src-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-i0S5V3j6OPpu4z1ljDKP3WYa9L+EKwo/MBNgW2ENYk8=";
+    url = "https://anvil-editor.net/releases/anvil-src-v${version}.tar.gz";
+    hash = "sha256-0fi6UeppWC9KbWibjQYlPlRqsl9xsvij8YpJUS0S/wY=";
   };
 
   modRoot = "anvil/src/anvil";
 
   vendorHash = "sha256-1oFBV7D7JgOt5yYAxVvC4vL4ccFv3JrNngZbo+5pzrk=";
 
-  anvilExtras = buildGo123Module {
-    pname = "anvil-editor-extras";
-    inherit (finalAttrs) version src meta;
-    vendorHash = "sha256-4pfk5XuwDbCWFZIF+1l+dy8NfnGNjgHmSg9y6/RnTSo=";
-    modRoot = "anvil-extras";
-  };
-
-  nativeBuildInputs = [
-    pkg-config
-    copyDesktopItems
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     wayland
@@ -64,11 +60,8 @@ buildGo123Module (finalAttrs: {
       exec = "anvil";
       icon = "anvil";
       desktopName = "Anvil";
-      comment = finalAttrs.meta.description;
-      categories = [
-        "Utility"
-        "TextEditor"
-      ];
+      comment = meta.description;
+      categories = [ "TextEditor" ];
       startupWMClass = "anvil";
     })
   ];
@@ -83,8 +76,12 @@ buildGo123Module (finalAttrs: {
         install -Dm644 anvil_''${square}x32.png $out/share/icons/hicolor/''${square}/apps/anvil.png
       done
     popd
-    cp ${finalAttrs.anvilExtras}/bin/* $out/bin
+    cp ${anvilExtras}/bin/* $out/bin
   '';
+
+  passthru = {
+    inherit anvilExtras;
+  };
 
   meta = {
     description = "Graphical, multi-pane tiling editor inspired by Acme";
@@ -94,4 +91,4 @@ buildGo123Module (finalAttrs: {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = with lib.platforms; unix ++ windows;
   };
-})
+}

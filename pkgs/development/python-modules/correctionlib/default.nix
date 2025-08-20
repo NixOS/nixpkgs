@@ -2,17 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
-  pybind11,
-  scikit-build-core,
-  setuptools-scm,
-
-  # nativeBuildInputs
   cmake,
-  ninja,
+  scikit-build,
+  setuptools,
+  setuptools-scm,
+  pybind11,
 
-  # buildInputs
   zlib,
 
   # dependencies
@@ -21,8 +19,7 @@
   pydantic,
   rich,
 
-  # tests
-  addBinToPathHook,
+  # checks
   awkward,
   pytestCheckHook,
   scipy,
@@ -30,28 +27,34 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.7.0";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
     tag = "v${version}";
+    hash = "sha256-l+JjW/giGzU00z0jBN3D4KB/LjTIxeJb3CS+Ge0gbiA=";
     fetchSubmodules = true;
-    hash = "sha256-aLTeyDOo80p8xzl/IPnpT3BOjS2qOYn/Z7pidcLoEY8=";
   };
 
-  build-system = [
-    pybind11
-    scikit-build-core
-    setuptools-scm
+  patches = [
+    # fix https://github.com/Tencent/rapidjson/issues/2277
+    (fetchpatch {
+      url = "https://github.com/Tencent/rapidjson/pull/719.diff";
+      hash = "sha256-xarSfi9o73KoJo0ijT0G8fyTSYVuY0+9rLEtfUwas0Q=";
+      extraPrefix = "rapidjson/";
+      stripLen = 1;
+    })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    ninja
+    scikit-build
+    setuptools
+    setuptools-scm
+    pybind11
   ];
-  dontUseCmakeConfigure = true;
 
   buildInputs = [ zlib ];
 
@@ -62,16 +65,20 @@ buildPythonPackage rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    # One test requires running the produced `correctionlib` binary
-    addBinToPathHook
+  dontUseCmakeConfigure = true;
 
+  nativeCheckInputs = [
     awkward
     pytestCheckHook
     scipy
   ];
 
   pythonImportsCheck = [ "correctionlib" ];
+
+  # One test requires running the produced `correctionlib` binary
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
 
   meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";

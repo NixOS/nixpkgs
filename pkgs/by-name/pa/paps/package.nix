@@ -2,57 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
+  autoconf,
+  automake,
   pkg-config,
-  fmt,
-  glib,
+  intltool,
   pango,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "paps";
-  version = "0.8.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "dov";
-    repo = "paps";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bNF/kZl/fGAT+He9kMHYj5ERhJwCJJABjhV3H+bs3D0=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "129wpm2ayxs6qfh2761d4x9c034ivb2bcmmcnl56qs4448qb9495";
   };
-
-  patches = [
-    # remove when 0.8.1 is released
-    (fetchpatch {
-      url = "https://github.com/dov/paps/commit/e9270aaac5e0b8018a6fad9a562ee48e7b2c3113.patch";
-      name = "fix-g_utf8_next_char-cast";
-      hash = "sha256-fedkyjd8cGFUuUQCbGii7wfMCmK6vye/1/vHWuJiJI4=";
-    })
-  ];
 
   nativeBuildInputs = [
-    meson
-    ninja
+    autoconf
+    automake
     pkg-config
+    intltool
   ];
-  buildInputs = [
-    fmt
-    glib
-    pango
-  ];
+  buildInputs = [ pango ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
-  meta = {
+  meta = with lib; {
     description = "Pango to PostScript converter";
     homepage = "https://github.com/dov/paps";
-    license = lib.licenses.lgpl2;
+    license = licenses.lgpl2;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "paps";
   };
-})
+}

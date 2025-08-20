@@ -8,14 +8,14 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.6.7";
+  version = "1.4.11";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-OwfnCqxXp7qfDmMaWiuK1bBqPWIunV/26zNsp9zJrLc=";
+    hash = "sha256-gky/nv7GS6hR3Zjm+J1Ob0SSbw4PneOm54WK7Ls9i9g=";
   };
 
-  npmDepsHash = "sha256-DCtyA5hseXwvW9lRt60rENusEffOQ7RdLfW7okU7uos=";
+  npmDepsHash = "sha256-WvLASGTsNbM/IC+qyOAruiYKnHSx0bGc03Bh1wtnPn8=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -44,6 +44,6 @@ buildNpmPackage rec {
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ joshheinrichs-shopify ];
+    maintainers = with lib.maintainers; [ diegs ];
   };
 }

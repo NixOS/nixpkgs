@@ -1,16 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  installShellFiles,
-}:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles }:
 
 let
-  data = import ./data.nix { };
-in
-stdenv.mkDerivation {
+  data = import ./data.nix {};
+in stdenv.mkDerivation {
   pname = "pulumi";
   inherit (data) version;
 
@@ -22,24 +14,16 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D -t $out/bin/ *
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
-  ''
-  + ''
+  '' + ''
     installShellCompletion --cmd pulumi \
       --bash <($out/bin/pulumi completion bash) \
       --fish <($out/bin/pulumi completion fish) \
       --zsh  <($out/bin/pulumi completion zsh)
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook makeWrapper ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {
@@ -53,7 +37,6 @@ stdenv.mkDerivation {
       peterromfeldhk
       jlesquembre
       cpcloud
-      wrbbz
     ];
     hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };

@@ -1,4 +1,5 @@
 {
+  darwin,
   fetchCrate,
   iconv,
   lib,
@@ -10,26 +11,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-timelogs";
-  version = "0.6.0";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-oudVXG26w7LTye7M4Kr6N8rDFEuNljiNSzSAyKcHvf0=";
+    hash = "sha256-KTOI1NDsozALXqXHuF6kj/ADW7TzH8CkVvCOgrEwdxc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    iconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      iconv
+    ];
 
-  cargoHash = "sha256-lr9q9J4zHF50u23UQ3RZzd9CKcPtJSy+OT2XN2tpVEo=";
+  cargoHash = "sha256-MYqrA4uYgiuDJkUuXITpaJ0P555dTUmmQwJcPju9HwY=";
 
   meta = {
-    description = "CLI utility to support you with your time logs in GitLab";
+    description = " CLI utility to support you with your time logs in GitLab";
     mainProgram = "gitlab-timelogs";
     longDescription = ''
       CLI utility to support you with your time logs in GitLab.

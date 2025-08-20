@@ -16,18 +16,21 @@ buildPythonApplication rec {
   version = "0.11";
   pyproject = true;
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals withManpage [
-    "man"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals withManpage [
+      "man"
+    ];
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
     tag = version;
-    hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
+    sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
   postPatch = ''
@@ -35,12 +38,11 @@ buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools-scm
-  ]
-  ++ lib.optional withManpage sphinx;
+  ] ++ lib.optional withManpage sphinx;
 
-  dependencies = [
+  propagatedBuildInputs = [
     configobj
     file
     gpgme
@@ -93,13 +95,12 @@ buildPythonApplication rec {
       sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
-    changelog = "https://github.com/pazz/alot/releases/tag/${src.tag}";
     mainProgram = "alot";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ milibopp ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ milibopp ];
   };
 }

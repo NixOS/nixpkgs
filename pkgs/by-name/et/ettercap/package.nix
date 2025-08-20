@@ -8,7 +8,7 @@
   libnet,
   zlib,
   curl,
-  pcre2,
+  pcre,
   openssl,
   ncurses,
   glib,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libnet
     zlib
     curl
-    pcre2
+    pcre
     openssl
     ncurses
     glib

@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
-  version = "1.30.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-imLbsQ2F5CQiepwWSMcXj0Fgyv4liCMmCwA/0SE07Mo=";
+    tag = "v${version}";
+    hash = "sha256-xnsTYOjnfcaPHlLpf83efD3w5cjqyFV5bCV89zG1GaA=";
   };
 
-  cargoHash = "sha256-aNho9NavEgY4dwGcNXsLDnlVCB2rODIPae3LnfOwJIA=";
+  cargoHash = "sha256-cip1ZhHR39PE6ZX8PhGJ3oXCkR5LE/OWyjMqiG+lHvY=";
 
   patches = [
     # Backport fix for build error for lightningcss-napi
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Extremely fast CSS parser, transformer, and minifier written in Rust";
     homepage = "https://lightningcss.dev/";
-    changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       johnrtitor
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "lightningcss";
     platforms = lib.platforms.all;
   };
-})
+}

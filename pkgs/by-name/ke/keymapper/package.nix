@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "4.12.3";
+  version = "4.9.2";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
-    tag = finalAttrs.version;
-    hash = "sha256-ygy83eTibkxuC+1gK3eHDv0WK8wlzYTIPEJ2NAaWgo0=";
+    rev = finalAttrs.version;
+    hash = "sha256-8SHFIL0HLzi0UkZ8E+VnLf9pQ/I048/HhVx3eWavt/Y=";
   };
 
   # all the following must be in nativeBuildInputs

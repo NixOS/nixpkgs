@@ -8,7 +8,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
   version = "0.0.33";
-  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,11 +15,7 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
   };
 
-  build-system = [
-    pythonPackages.setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     mopidy
     pythonPackages.pykka
   ];

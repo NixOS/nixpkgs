@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "socksipy-branch";
   version = "1.01";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "SocksiPy-branch";

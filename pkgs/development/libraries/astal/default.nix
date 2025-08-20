@@ -1,6 +1,5 @@
 { wireplumber }:
 self: {
-  source = self.callPackage ./source.nix { };
   buildAstalModule = self.callPackage ./buildAstalModule.nix { };
 
   apps = self.callPackage ./modules/apps.nix { };

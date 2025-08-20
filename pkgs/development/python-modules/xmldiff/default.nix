@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmldiff" ];
 
-  meta = {
+  meta = with lib; {
     description = "Creates diffs of XML files";
     homepage = "https://github.com/Shoobx/xmldiff";
     changelog = "https://github.com/Shoobx/xmldiff/blob/master/CHANGES.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sfrijters ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sfrijters ];
   };
 }

@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "msldapdump";
-  version = "0-unstable-2023-06-12";
+  version = "unstable-2023-06-12";
   format = "other";
 
   src = fetchFromGitHub {

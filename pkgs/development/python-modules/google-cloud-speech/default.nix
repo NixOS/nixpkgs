@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
-  google-auth,
   mock,
   proto-plus,
   protobuf,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.33.0";
+  version = "2.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,18 +22,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_speech";
     inherit version;
-    hash = "sha256-/QhRG1Ek/ap2jXGkBU6EpdjrAlMctvhPMRwDh+oTFO0=";
+    hash = "sha256-7GPL1MK72wMGRioPMAgvRJXe3FBvDEoaKZDubmNGVEw=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     google-api-core
-    google-auth
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

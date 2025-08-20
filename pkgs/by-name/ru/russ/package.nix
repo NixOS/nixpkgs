@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -15,10 +17,18 @@ rustPlatform.buildRustPackage {
     hash = "sha256-/76CvSBYim831OZzLhsj2Hm+0hoY/FLtKQqt19E5YOI=";
   };
 
-  cargoHash = "sha256-G2s/IggPXfi7FXOoM5s9I9PEphYHjEdg9W1LCAxIk1M=";
+  cargoHash = "sha256-d3lJQafvBuj9Sb2Tuep3Ypt1sP+vlWHk4kuP99gMly8=";
 
   # tests are network based :(
   doCheck = false;
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      CoreServices
+      AppKit
+    ]
+  );
 
   meta = {
     changelog = "https://github.com/ckampfe/russ/blob/master/CHANGELOG.md";

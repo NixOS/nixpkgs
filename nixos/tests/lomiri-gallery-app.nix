@@ -1,310 +1,156 @@
-let
-  makeTest = import ./make-test-python.nix;
-  imageDataDir = "gallery-app-sampledata";
-  imageLabel = "Image";
+{ lib, ... }:
+{
+  name = "lomiri-gallery-app-standalone";
+  meta.maintainers = lib.teams.lomiri.members;
 
-  makeFormatTest =
+  nodes.machine =
+    { config, pkgs, ... }:
     {
-      file,
-      buttonIsOffset ? null,
-      customTest ? null,
-    }:
+      imports = [ ./common/x11.nix ];
 
-    makeTest (
-      { pkgs, lib, ... }:
+      services.xserver.enable = true;
 
-      assert lib.asserts.assertMsg (
-        buttonIsOffset != null || customTest != null
-      ) "Must either clarify button position, or define custom test code";
+      environment = {
+        systemPackages =
+          with pkgs;
+          [
+            ffmpeg # make a video from the image
+            (imagemagick.override { ghostscriptSupport = true; }) # example image creation
+            mpv # URI dispatching for video support
+            xdotool # mouse movement
+          ]
+          ++ (with pkgs.lomiri; [
+            suru-icon-theme
+            lomiri-gallery-app
+            lomiri-thumbnailer # finds new images & generates thumbnails
+          ]);
+        variables = {
+          UITK_ICON_THEME = "suru";
+        };
+      };
 
-      let
-        format = lib.lists.last (lib.strings.splitString "." file);
-      in
+      i18n.supportedLocales = [ "all" ];
 
-      {
-        name = "lomiri-gallery-app-standalone-format-${format}";
-        meta.maintainers = lib.teams.lomiri.members;
+      fonts = {
+        packages = with pkgs; [
+          # Intended font & helps with OCR
+          ubuntu-classic
+        ];
+      };
+    };
 
-        nodes.machine =
-          { config, pkgs, ... }:
-          {
-            imports = [ ./common/x11.nix ];
+  enableOCR = true;
 
-            services.xserver.enable = true;
+  testScript =
+    let
+      imageLabel = "Image";
+    in
+    ''
+      machine.wait_for_x()
 
-            environment = {
-              etc."${imageDataDir}".source =
-                pkgs.runCommand imageDataDir
-                  {
-                    nativeBuildInputs = with pkgs; [
-                      ffmpeg # make a video from the image
-                      (imagemagick.override { ghostscriptSupport = true; }) # add label for OCR
-                    ];
-                  }
-                  ''
-                    mkdir -p $out/{Pictures,Videos}
+      with subtest("lomiri gallery launches"):
+          machine.succeed("lomiri-gallery-app >&2 &")
+          machine.sleep(2)
+          machine.wait_for_text(r"(Albums|Events|Photos)")
+          machine.screenshot("lomiri-gallery_open")
 
-                    # Setup example data, OCR-friendly:
-                    # - White square, black text
-                    # - Small text for display OCR
-                    # - Big text for gallery preview OCR
-                    # - uppercase extension
-                    magick -size 500x500 -background white -fill black canvas:white \
-                      -pointsize 20 -annotate +100+100 '${imageLabel}' \
-                      -pointsize 70 -annotate +100+300 '${imageLabel}' \
-                      $out/Pictures/output.PNG
+      machine.succeed("pkill -f lomiri-gallery-app")
 
-                    # Different image formats
-                    magick $out/Pictures/output.PNG $out/Pictures/output.JPG
-                    magick $out/Pictures/output.PNG $out/Pictures/output.BMP
-                    magick $out/Pictures/output.PNG $out/Pictures/output.GIF
+      machine.succeed("mkdir /root/Pictures /root/Videos")
+      # Setup example data, OCR-friendly:
+      # - White square, black text
+      # - uppercase extension
+      machine.succeed("magick -size 500x500 -background white -fill black canvas:white -pointsize 70 -annotate +100+300 '${imageLabel}' /root/Pictures/output.PNG")
 
-                    # Video for dispatching
-                    ffmpeg -loop 1 -r 1 -i $out/Pictures/output.PNG -t 100 -pix_fmt yuv420p $out/Videos/output.MP4
-                  '';
-              systemPackages =
-                with pkgs;
-                [
-                  glib # Poke thumbnailer to process media via gdbus
-                  mpv # URI dispatching for video support
-                  xdotool # mouse movement
-                ]
-                ++ (with pkgs.lomiri; [
-                  suru-icon-theme
-                  lomiri-gallery-app
-                  lomiri-thumbnailer # finds new images & generates thumbnails
-                ]);
-              variables = {
-                UITK_ICON_THEME = "suru";
-              };
-            };
+      # Different image formats
+      machine.succeed("magick /root/Pictures/output.PNG /root/Pictures/output.JPG")
+      machine.succeed("magick /root/Pictures/output.PNG /root/Pictures/output.BMP")
+      machine.succeed("magick /root/Pictures/output.PNG /root/Pictures/output.GIF")
 
-            # Allow us to start thumbnailer ahead-of-time, hopefully let thumbnails get processed in peace
-            systemd.user.services."dbus-com.lomiri.Thumbnailer" = {
-              serviceConfig = {
-                Type = "dbus";
-                BusName = "com.lomiri.Thumbnailer";
-                ExecStart = "${pkgs.lomiri.lomiri-thumbnailer}/libexec/lomiri-thumbnailer/thumbnailer-service";
-              };
-            };
+      # Video for dispatching
+      machine.succeed("ffmpeg -loop 1 -r 1 -i /root/Pictures/output.PNG -t 100 -pix_fmt yuv420p /root/Videos/output.MP4")
 
-            fonts = {
-              packages = with pkgs; [
-                # Intended font & helps with OCR
-                ubuntu-classic
-              ];
-            };
-          };
+      with subtest("lomiri gallery handles files"):
+          machine.succeed("lomiri-gallery-app >&2 &")
+          machine.sleep(2)
+          machine.wait_for_text(r"(Albums|Events|Photos|${imageLabel})")
 
-        enableOCR = true;
+          machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
+          machine.sleep(2)
+          machine.succeed("xdotool mousemove 30 180 click 1") # photos
+          machine.sleep(2)
+          machine.wait_for_text("${imageLabel}") # should see thumbnail of at least one of them
+          machine.screenshot("lomiri-gallery_photos")
 
-        testScript = ''
-          machine.wait_for_x()
-
-          machine.succeed("mkdir /root/${builtins.dirOf file}")
-          machine.succeed("cp -vr /etc/${imageDataDir}/${file} /root/${builtins.dirOf file}")
-
-          # Start thumbnailer, wait for idle shutdown
-          machine.systemctl("start dbus-com.lomiri.Thumbnailer", "root")
-          machine.wait_until_succeeds(
-              "env XDG_RUNTIME_DIR=/run/user/0 "
-              + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
-          )
-          machine.wait_for_console_text("thumbnail cache:")
-
-          # Request thumbnail processing, get initial thumbnail image into cache
-          # This can randomly take abit longer, just run it until it succeeds
-          # Touch file to invalidate failure cache
-          machine.wait_until_succeeds(
-              "touch '/root/${file}' && "
-              + "env XDG_RUNTIME_DIR=/run/user/0 "
-              + "gdbus call -e "
-              + "-d com.lomiri.Thumbnailer -o /com/lomiri/Thumbnailer "
-              + "-m com.lomiri.Thumbnailer.GetThumbnail "
-              + "'/root/${file}' "
-              # Same size as source, to reduce processing - we're very close to hitting 20s on slow hardware here
-              + "'@(ii) (500,500)'"
-          )
-
-          machine.wait_for_console_text("Idle timeout reached")
-          machine.wait_until_fails(
-              "env XDG_RUNTIME_DIR=/run/user/0 "
-              + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
-          )
-
-          with subtest("lomiri gallery finds files"):
-              machine.succeed("lomiri-gallery-app >&2 &")
-              machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-              machine.sleep(10)
-              machine.send_key("alt-f10")
-              machine.sleep(5)
-              machine.wait_for_text(r"(Albums|Events|Photos|${imageLabel})")
-
-              machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
-              machine.sleep(2)
-              machine.succeed("xdotool mousemove 30 180 click 1") # photos
-              machine.sleep(2)
-              machine.screenshot("lomiri-gallery_photos")
-
-          machine.succeed("xdotool mousemove 80 140 click 1") # select first one
+          machine.succeed("xdotool mousemove 80 140 click 1") # select newest one
           machine.sleep(2)
           machine.succeed("xdotool mousemove 80 140 click 1") # enable top-bar
           machine.sleep(2)
 
-        ''
-        + (
-          if (customTest != null) then
-            customTest
-          else
-            ''
-              with subtest("lomiri gallery handles ${format}"):
-                  machine.succeed("xdotool mousemove ${
-                    if buttonIsOffset then "900" else "940"
-                  } 50 click 1") # open media information
-                  machine.sleep(2)
-                  machine.screenshot("lomiri-gallery_${format}_info")
-                  machine.send_key("esc")
-                  machine.sleep(2)
-                  machine.wait_for_text("${imageLabel}") # make sure media shows fine
-            ''
-        );
+          with subtest("lomiri gallery handles mp4"):
+              machine.succeed("xdotool mousemove 870 50 click 1") # open media information
+              machine.sleep(2)
+              machine.wait_for_text("MP4") # make sure we're looking at the right file
+              machine.screenshot("lomiri-gallery_mp4_info")
+              machine.send_key("esc")
 
-      }
-    );
-  makeFormatTests =
-    detailsList:
-    builtins.listToAttrs (
-      builtins.map (
-        {
-          name,
-          file,
-          buttonIsOffset ? null,
-          customTest ? null,
-        }:
-        {
-          name = "format-${name}";
-          value = makeFormatTest {
-            inherit
-              file
-              buttonIsOffset
-              customTest
-              ;
-          };
-        }
-      ) detailsList
-    );
-in
-{
-  basic = makeTest (
-    { lib, ... }:
-    {
-      name = "lomiri-gallery-app-standalone-basic";
-      meta.maintainers = lib.teams.lomiri.members;
+              machine.wait_for_text("${imageLabel}") # make sure thumbnail rendering worked
 
-      nodes.machine =
-        { config, pkgs, ... }:
-        {
-          imports = [ ./common/x11.nix ];
+              machine.succeed("xdotool mousemove 450 350 click 1") # dispatch to system's video handler
+              machine.wait_until_succeeds("pgrep -u root -f mpv") # wait for video to start
+              machine.sleep(10)
+              machine.succeed("pgrep -u root -f mpv") # should still be playing
+              machine.screenshot("lomiri-gallery_mp4_dispatch")
 
-          services.xserver.enable = true;
+              machine.send_key("q")
+              machine.wait_until_fails("pgrep mpv") # wait for video to stop
 
-          environment = {
-            systemPackages =
-              with pkgs;
-              [
-                xdotool # mouse movement
-              ]
-              ++ (with pkgs.lomiri; [
-                suru-icon-theme
-                lomiri-gallery-app
-              ]);
-            variables = {
-              UITK_ICON_THEME = "suru";
-            };
-          };
+              machine.send_key("right")
 
-          i18n.supportedLocales = [ "all" ];
+          with subtest("lomiri gallery handles gif"):
+              machine.succeed("xdotool mousemove 870 50 click 1") # open media information
+              machine.sleep(2)
+              machine.wait_for_text("GIF") # make sure we're looking at the right file
+              machine.screenshot("lomiri-gallery_gif_info")
+              machine.send_key("esc")
 
-          fonts = {
-            packages = with pkgs; [
-              # Intended font & helps with OCR
-              ubuntu-classic
-            ];
-          };
-        };
+              machine.wait_for_text("${imageLabel}") # make sure media shows fine
+              machine.send_key("right")
 
-      enableOCR = true;
+          with subtest("lomiri gallery handles bmp"):
+              machine.succeed("xdotool mousemove 840 50 click 1") # open media information (extra icon, different location)
+              machine.sleep(2)
+              machine.wait_for_text("BMP") # make sure we're looking at the right file
+              machine.screenshot("lomiri-gallery_bmp_info")
+              machine.send_key("esc")
 
-      testScript = ''
-        machine.wait_for_x()
+              machine.wait_for_text("${imageLabel}") # make sure media shows fine
+              machine.send_key("right")
 
-        with subtest("lomiri gallery launches"):
-            machine.succeed("lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-            machine.sleep(10)
-            machine.send_key("alt-f10")
-            machine.sleep(5)
-            machine.wait_for_text(r"(Albums|Events|Photos)")
-            machine.screenshot("lomiri-gallery_open")
+          with subtest("lomiri gallery handles jpg"):
+              machine.succeed("xdotool mousemove 840 50 click 1") # open media information (extra icon, different location)
+              machine.sleep(2)
+              machine.wait_for_text("JPG") # make sure we're looking at the right file
+              machine.screenshot("lomiri-gallery_jpg_info")
+              machine.send_key("esc")
 
-        machine.succeed("pgrep -afx lomiri-gallery-app >&2")
-        machine.succeed("pkill -efx lomiri-gallery-app >&2")
-        machine.wait_until_fails("pgrep -afx lomiri-gallery-app >&2")
+              machine.wait_for_text("${imageLabel}") # make sure media shows fine
+              machine.send_key("right")
 
+          with subtest("lomiri gallery handles png"):
+              machine.succeed("xdotool mousemove 840 50 click 1") # open media information (extra icon, different location)
+              machine.sleep(2)
+              machine.wait_for_text("PNG") # make sure we're looking at the right file
+              machine.screenshot("lomiri-gallery_png_info")
+              machine.send_key("esc")
 
-        with subtest("lomiri gallery localisation works"):
-            machine.succeed("env LANG=de_DE.UTF-8 lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-            machine.sleep(10)
-            machine.send_key("alt-f10")
-            machine.sleep(5)
-            machine.wait_for_text(r"(Alben|Ereignisse|Fotos)")
-            machine.screenshot("lomiri-gallery_localised")
-      '';
-    }
-  );
-}
-// makeFormatTests [
-  {
-    name = "mp4";
-    file = "Videos/output.MP4";
-    # MP4 gets special treatment
-    customTest = ''
-      with subtest("lomiri gallery handles mp4"):
-          machine.succeed("xdotool mousemove 935 40 click 1") # open media information
-          machine.sleep(2)
-          machine.screenshot("lomiri-gallery_mp4_info")
-          machine.send_key("esc")
-          machine.sleep(2)
+              machine.wait_for_text("${imageLabel}") # make sure media shows fine
 
-          machine.wait_for_text("${imageLabel}") # make sure thumbnail processing worked
-          machine.screenshot("lomiri-gallery_mp4_thumbnail")
+      machine.succeed("pkill -f lomiri-gallery-app")
 
-          machine.succeed("xdotool mousemove 510 380 click 1") # dispatch to system's video handler
-          machine.wait_until_succeeds("pgrep -u root -f mpv") # wait for video to start
-          machine.sleep(10)
-          machine.succeed("pgrep -u root -f mpv") # should still be playing
-          machine.screenshot("lomiri-gallery_mp4_dispatch")
+      with subtest("lomiri gallery localisation works"):
+          machine.succeed("env LANG=de_DE.UTF-8 lomiri-gallery-app >&2 &")
+          machine.wait_for_text(r"(Alben|Ereignisse|Fotos)")
+          machine.screenshot("lomiri-gallery_localised")
     '';
-  }
-  {
-    name = "gif";
-    file = "Pictures/output.GIF";
-    buttonIsOffset = false;
-  }
-  {
-    name = "bmp";
-    file = "Pictures/output.BMP";
-    buttonIsOffset = true;
-  }
-  {
-    name = "jpg";
-    file = "Pictures/output.JPG";
-    buttonIsOffset = true;
-  }
-  {
-    name = "png";
-    file = "Pictures/output.PNG";
-    buttonIsOffset = true;
-  }
-]
+}

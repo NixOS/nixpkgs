@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.7.1";
+  version = "1.6.3";
   pname = "nanoflann";
 
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A258WrJeHVrl5CMyzN2kq5fEOBaVU3VzrKWnEFNd35c=";
+    hash = "sha256-vtf/dkgvpeLvwtM5KMd23pOn1rye5tAJapYTAiDu9Ow=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/jlblancoc/nanoflann/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

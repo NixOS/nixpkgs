@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "i3-balance-workspace";
   version = "1.8.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

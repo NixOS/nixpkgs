@@ -6,23 +6,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
-  version = "1.23.1";
+  version = "1.20.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
     tag = "v${version}";
-    hash = "sha256-Yq6mpBUokt4Zi84xyA5bayW1WLXEUXFev2aDJ/q/Fgo=";
+    hash = "sha256-GnzN8z7LP9rVD0DnKkPxJ0BxiO1YDY7MyMWBt1CAh6g=";
   };
 
   preCheck = ''
     patchShebangs bin/dotbot
   '';
 
-  build-system = with python3Packages; [ hatchling ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [ pyyaml ];
+  propagatedBuildInputs = with python3Packages; [ pyyaml ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
       dotfiles.
     '';
     homepage = "https://github.com/anishathalye/dotbot";
-    changelog = "https://github.com/anishathalye/dotbot/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ludat ];
   };

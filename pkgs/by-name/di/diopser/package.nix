@@ -28,7 +28,7 @@ let
     };
   };
 
-  juce = {
+  juce = rec {
     version = "unstable-2021-04-07";
     src = fetchFromGitHub {
       owner = "juce-framework";
@@ -39,13 +39,13 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "diopser";
   version = "unstable-2021-5-13";
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = "diopser";
+    repo = pname;
     fetchSubmodules = true;
     rev = "d5fdc92f1caf5a828e071dac99e106e58f06d84d";
     sha256 = "06y1h895yxh44gp4vxzrna59lf7nlfw7aacd3kk4l1g56jhy9pdx";

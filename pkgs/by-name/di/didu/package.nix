@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
-    repo = "didu";
+    repo = pname;
     rev = "v${version}";
     sha256 = "szYWRN1NZbfpshipwMMJSWJw/NG4w7I+aqwtmqpT0R0=";
   };
 
-  cargoHash = "sha256-NDri4VuTI/ZsY3ZvpWmu/2I5GpmldQaoUSzyjGlq9lE=";
+  cargoHash = "sha256-O1kkfrwv7xiOh3wCV/ce6cqpkMPRRzcXOFESYMAhiKA=";
 
   meta = with lib; {
     description = "Duration conversion between units";

@@ -2,10 +2,8 @@
   coreutils,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
   stdenv,
   lib,
-  udevCheckHook,
   util-linux,
 }:
 
@@ -20,13 +18,11 @@ stdenv.mkDerivation (
     pname = "openrazer";
     version = "${common.version}-${kernel.version}";
 
-    nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;
+    nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernelModuleMakeFlags ++ [
+    makeFlags = kernel.makeFlags ++ [
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ];
-
-    doInstallCheck = true;
 
     installPhase = ''
       runHook preInstall

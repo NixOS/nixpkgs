@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  pkgs, # Only for pkgs.plantuml,
   lib,
   plantuml,
   markdown,
@@ -10,24 +9,22 @@
   runCommand,
   writeText,
   plantuml-markdown,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "plantuml-markdown";
-  version = "3.11.1";
+  version = "3.10.4";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikitex70";
-    repo = "plantuml-markdown";
+    repo = pname;
     tag = version;
-    hash = "sha256-DgHWqwPsZ5q1XqrfaAiUslKnJdHX4Pzw9lygF3iaxz4=";
+    hash = "sha256-5K8NSxMCdAsOtV0egY8gMbHnHifvYNRHzafR0LAcm+Q=";
   };
-
-  postPatch = ''
-    substituteInPlace plantuml_markdown/plantuml_markdown.py \
-      --replace-fail '"plantuml_cmd": ["plantuml"' '"plantuml_cmd": ["${lib.getExe pkgs.plantuml}"'
-  '';
 
   propagatedBuildInputs = [
     plantuml
@@ -37,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   # The package uses a custom script that downloads a certain version of plantuml for testing.
-  # Missing https://github.com/ezequielramos/http-server-mock which looks unmaintained
   doCheck = false;
 
   pythonImportsCheck = [ "plantuml_markdown" ];
@@ -56,15 +52,15 @@ buildPythonPackage rec {
       ! grep -q "Error" $out
     '';
 
-  meta = {
+  meta = with lib; {
     description = "PlantUML plugin for Python-Markdown";
     longDescription = ''
       This plugin implements a block extension which can be used to specify a PlantUML
       diagram which will be converted into an image and inserted in the document.
     '';
     homepage = "https://github.com/mikitex70/plantuml-markdown";
-    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${src.tag}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nikstur ];
+    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nikstur ];
   };
 }

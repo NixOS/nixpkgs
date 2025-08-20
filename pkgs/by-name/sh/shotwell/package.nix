@@ -24,6 +24,7 @@
   gcr,
   libgee,
   gexiv2,
+  librest,
   gettext,
   desktop-file-utils,
   gdk-pixbuf,
@@ -34,16 +35,15 @@
   libsecret,
   libportal-gtk3,
   gsettings-desktop-schemas,
-  libheif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.13";
+  version = "0.32.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-vdPoT2AuL8frQoQ8kKJes6pJ+y/7de21HbAb0pBdvR4=";
+    sha256 = "sha256-JuRaYbVDGwlv/NF28RW9B76ad6aDNYmVQhBuGeB/QA4=";
   };
 
   nativeBuildInputs = [
@@ -80,23 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gdk-pixbuf
     librsvg
+    librest
     gcr
     adwaita-icon-theme
     libsecret
     libportal-gtk3
   ];
-
-  postInstall = ''
-    # Pull in HEIF support.
-    # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${
-      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-        extraLoaders = [
-          libheif.out
-        ];
-      }
-    }"
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

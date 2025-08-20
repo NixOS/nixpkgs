@@ -6,18 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "openttd-nml";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
     repo = "nml";
-    tag = version;
-    hash = "sha256-LZhkyYTtolB9/1ZvwYa+TJJRBIifyuqlMawK7vhPV0k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OobTyPD7FtYMhJL3BDFXaZCOO2iPn8kjEw2OEdqQbr8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     pillow
+    ply
   ];
 
   meta = with lib; {

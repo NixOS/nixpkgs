@@ -4,25 +4,18 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "parsero";
   version = "0.81";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "behindthefirewalls";
-    repo = "parsero";
+    repo = pname;
     rev = "e5b585a19b79426975a825cafa4cc8a353cd267e";
     sha256 = "rqupeJxslL3AfQ+CzBWRb4ZS32VoYd8hlA+eACMKGPY=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  pythonRemoveDeps = [
-    "pip" # this dependency is never actually used
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
     urllib3
   ];

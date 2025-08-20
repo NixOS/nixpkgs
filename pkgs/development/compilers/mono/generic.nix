@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchurl,
   bison,
   pkg-config,
   glib,
@@ -8,13 +9,17 @@
   perl,
   libgdiplus,
   libX11,
+  callPackage,
   ncurses,
   zlib,
   bash,
+  withLLVM ? false,
   cacert,
+  Foundation,
+  libobjc,
   python3,
   version,
-  src,
+  sha256,
   autoconf,
   libtool,
   automake,
@@ -22,13 +27,22 @@
   which,
   gnumake42,
   enableParallelBuilding ? true,
+  srcArchiveSuffix ? "tar.bz2",
   extraPatches ? [ ],
   env ? { },
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  llvm = callPackage ./llvm.nix { };
+in
+stdenv.mkDerivation rec {
   pname = "mono";
-  inherit version src env;
+  inherit version env;
+
+  src = fetchurl {
+    inherit sha256;
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
+  };
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -42,23 +56,32 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     which
     gnumake42
-    gettext
   ];
-  buildInputs = [
-    glib
-    gettext
-    libgdiplus
-    libX11
-    ncurses
-    zlib
-    bash
-  ];
+  buildInputs =
+    [
+      glib
+      gettext
+      libgdiplus
+      libX11
+      ncurses
+      zlib
+      bash
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      libobjc
+    ];
 
-  configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
-    "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
-  ];
+  configureFlags =
+    [
+      "--x-includes=${libX11.dev}/include"
+      "--x-libraries=${libX11.out}/lib"
+      "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
+    ]
+    ++ lib.optionals withLLVM [
+      "--enable-llvm"
+      "--with-llvm=${llvm}"
+    ];
 
   configurePhase = ''
     patchShebangs autogen.sh mcs/build/start-compiler-server.sh
@@ -69,11 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
   # because we control pkg-config
   patches = [ ./pkgconfig-before-gac.patch ] ++ extraPatches;
 
-  # Patch all the necessary scripts
-  preBuild = ''
-    makeFlagsArray=(INSTALL=`type -tp install`)
-    substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
-  '';
+  # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
+  # LLVM path to point into the Mono LLVM build, since it's private anyway.
+  preBuild =
+    ''
+      makeFlagsArray=(INSTALL=`type -tp install`)
+      substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
+    ''
+    + lib.optionalString withLLVM ''
+      substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
+    '';
 
   # Fix mono DLLMap so it can find libX11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
@@ -87,41 +115,28 @@ stdenv.mkDerivation (finalAttrs: {
   # Without this, any Mono application attempting to open an SSL connection will throw with
   # The authentication or decryption has failed.
   # ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server.
-  postInstall = ''
-    echo "Updating Mono key store"
-    $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
-  ''
-  # According to [1], gmcs is just mcs
-  # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
-  + ''
-    ln -s $out/bin/mcs $out/bin/gmcs
-  '';
+  postInstall =
+    ''
+      echo "Updating Mono key store"
+      $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+    ''
+    # According to [1], gmcs is just mcs
+    # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
+    + ''
+      ln -s $out/bin/mcs $out/bin/gmcs
+    '';
 
   inherit enableParallelBuilding;
 
   meta = with lib; {
-    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
-    # Cross build is broken due to attempt to execute cert-sync built for the host.
+    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
     broken =
-      (
-        stdenv.hostPlatform.isDarwin
-        && stdenv.hostPlatform.isAarch64
-        && lib.versionOlder finalAttrs.version "6.12.0.129"
-      )
-      || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-    homepage =
-      if lib.versionOlder finalAttrs.version "6.14.0" then
-        "https://mono-project.com/"
-      else
-        "https://gitlab.winehq.org/mono/mono";
+      stdenv.hostPlatform.isDarwin
+      && stdenv.hostPlatform.isAarch64
+      && lib.versionOlder version "6.12.0.129";
+    homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
-    knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "6.14.0") [
-      ''
-        mono was archived upstream, see https://www.mono-project.com/
-        While WineHQ has taken over development, consider using 6.14.0 or newer.
-      ''
-    ];
     maintainers = with maintainers; [
       thoughtpolice
       obadz
@@ -145,4 +160,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "mono";
   };
-})
+}

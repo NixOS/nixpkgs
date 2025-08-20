@@ -9,7 +9,6 @@
 buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

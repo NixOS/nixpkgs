@@ -1,8 +1,6 @@
 {
   lib,
   aiohttp,
-  aiosqlite,
-  banks,
   buildPythonPackage,
   dataclasses-json,
   deprecated,
@@ -10,18 +8,17 @@
   fetchFromGitHub,
   filetype,
   fsspec,
-  hatchling,
   jsonpath-ng,
-  llama-index-workflows,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
-  nltk-data,
   nltk,
+  nltk-data,
   numpy,
   openai,
   pandas,
   pillow,
+  poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -39,16 +36,16 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.46";
+  version = "0.12.9.post1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-B1i5zabacapc/ipPTQtQzLVZql5ifqxfFoDhaBR+eYc=";
+    hash = "sha256-kpHemwEYeCBwb2kdvX/ubFHwX9AQ+zIhLudcgJ7u+QY=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -67,24 +64,18 @@ buildPythonPackage rec {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
-  pythonRelaxDeps = [
-    "setuptools"
-    "tenacity"
-  ];
+  pythonRelaxDeps = [ "tenacity" ];
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    aiosqlite
-    banks
     dataclasses-json
     deprecated
     dirtyjson
     filetype
     fsspec
     jsonpath-ng
-    llama-index-workflows
     llamaindex-py-client
     nest-asyncio
     networkx
@@ -134,35 +125,21 @@ buildPythonPackage rec {
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
-    "tests/schema/"
-    "tests/multi_modal_llms/"
   ];
 
   disabledTests = [
     # Tests require network access
-    "test_context_extraction_basic"
-    "test_context_extraction_custom_prompt"
-    "test_context_extraction_oversized_document"
-    "test_document_block_from_b64"
-    "test_document_block_from_bytes"
-    "test_document_block_from_path"
-    "test_document_block_from_url"
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
-    "test_mimetype_raw_data"
-    "test_multiple_documents_context"
-    "test_resource"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
     "test_SimpleDirectoryReader"
-    # RuntimeError
-    "test_str"
   ];
 
   meta = with lib; {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
-    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/run-llama/llama_index/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

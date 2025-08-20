@@ -1,58 +1,56 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  coreutils,
-  curl,
-  findutils,
-  gawk,
-  gnugrep,
-  gnused,
-  mktemp,
+  makeWrapper,
   netcat,
+  curl,
   unixtools,
+  coreutils,
+  mktemp,
+  findutils,
+  gnugrep,
+  fetchFromGitHub,
+  gawk,
+  gnused,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "tinystatus";
-  version = "0-unstable-2025-03-27";
+  version = "unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "bderenzo";
     repo = "tinystatus";
-    rev = "169ee0bb2efe4531080936d1e2a46e451feebe3e";
-    hash = "sha256-nPrABKKIDP1n1rhcojFJJ15kqa5b4s7F/wMAgD/eVBw=";
+    rev = "fc128adf240261ac99ea3e3be8d65a92eda52a73";
+    sha256 = "sha256-FvQwibm6F10l9/U3RnNTGu+C2JjHOwbv62VxXAfI7/s=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  runtimeInputs = [
+    curl
+    netcat
+    unixtools.ping
+    coreutils
+    mktemp
+    findutils
+    gnugrep
+    gawk
+    gnused
+  ];
 
   installPhase = ''
     runHook preInstall
-
-    install -Dm755 tinystatus $out/bin/tinystatus
+    install -Dm555 tinystatus $out/bin/tinystatus
     wrapProgram $out/bin/tinystatus \
-      --set PATH "${
-        lib.makeBinPath [
-          coreutils
-          curl
-          findutils
-          gawk
-          gnugrep
-          gnused
-          mktemp
-          netcat
-          unixtools.ping
-        ]
-      }"
-
+      --set PATH "${lib.makeBinPath runtimeInputs}"
     runHook postInstall
   '';
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    runHook preInstallCheck
+    runHook preCheck
 
     cat <<EOF >test.csv
     ping, 0, testing, this.should.fail.example.com
@@ -60,15 +58,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     $out/bin/tinystatus test.csv | grep Disrupted
 
-    runHook postInstallCheck
+    runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Static HTML status page generator written in pure shell";
     mainProgram = "tinystatus";
     homepage = "https://github.com/bderenzo/tinystatus";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthewcroughan ];
   };
-})
+}

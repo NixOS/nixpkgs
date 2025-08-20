@@ -4,8 +4,6 @@
   fetchPypi,
   mock,
   psutil,
-  pyasyncore,
-  pyasynchat,
   pyopenssl,
   pysendfile,
   pythonOlder,
@@ -14,23 +12,19 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "2.0.1";
+  version = "1.5.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7w0XKoK/rhDi3sIi6HUzUUYJ1Bv0sP0PB+KdQ4D7lr8=";
+    hash = "sha256-jb3rEhW8ui+3SNrjH/2xqwCFQMKNE7NwThePNooIcSg=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    pyasyncore
-    pyasynchat
-    pysendfile
-  ];
+  dependencies = [ pysendfile ];
 
   optional-dependencies = {
     ssl = [ pyopenssl ];

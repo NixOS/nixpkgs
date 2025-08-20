@@ -1,72 +1,61 @@
 {
   lib,
-  stdenv,
   buildGoModule,
-  buildPackages,
   fetchFromGitHub,
-  installShellFiles,
   testers,
   makeWrapper,
   python310,
+  kluctl,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "kluctl";
-  version = "2.27.0";
+  version = "2.26.0";
 
   src = fetchFromGitHub {
     owner = "kluctl";
     repo = "kluctl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-m/bfZb+sp0gqxfMdBr/gAOxfYHdrPwKRcJAqprkAkQE=";
+    rev = "v${version}";
+    hash = "sha256-qtntImc+fiRPMUHVM4A8d2e17zklV47CJ10M9A8oa7k=";
   };
 
   subPackages = [ "cmd" ];
 
-  vendorHash = "sha256-TKMMMZ+8bv5kKgrHIp3CXmt4tpi5VejPpXv/oiX4M3c=";
+  vendorHash = "sha256-89VEYX8xBdV36hHNIaRP8JoXTEGXmgzL7iL/Y4+1mzA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${finalAttrs.version}"
+    "-X main.version=v${version}"
   ];
 
   # Depends on docker
   doCheck = false;
 
   nativeBuildInputs = [
-    installShellFiles
     makeWrapper
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
+    package = kluctl;
+    version = "v${version}";
   };
 
-  postInstall =
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      mv $out/bin/{cmd,kluctl}
-      wrapProgram $out/bin/kluctl \
+  postInstall = ''
+    mv $out/bin/{cmd,kluctl}
+    wrapProgram $out/bin/kluctl \
         --set KLUCTL_USE_SYSTEM_PYTHON 1 \
         --prefix PATH : '${lib.makeBinPath [ python310 ]}'
-      installShellCompletion --cmd kluctl \
-        --bash <(${emulator} $out/bin/kluctl completion bash) \
-        --fish <(${emulator} $out/bin/kluctl completion fish) \
-        --zsh  <(${emulator} $out/bin/kluctl completion zsh)
-    '';
+  '';
 
-  meta = {
+  meta = with lib; {
     description = "Missing glue to put together large Kubernetes deployments";
     mainProgram = "kluctl";
     homepage = "https://kluctl.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       sikmir
       netthier
     ];
   };
-})
+}

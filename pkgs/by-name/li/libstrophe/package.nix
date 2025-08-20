@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.14.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "strophe";
-    repo = "libstrophe";
+    repo = pname;
     rev = version;
-    hash = "sha256-53O8hHyw9y0Bzs+BpGouAxuSGJxh6NSNNWZqi7RHAsY=";
+    hash = "sha256-JMuvWspgXs+1dVWoo6kJVaf6cVvYj8lhyyu4ZILKeOg=";
   };
 
   nativeBuildInputs = [

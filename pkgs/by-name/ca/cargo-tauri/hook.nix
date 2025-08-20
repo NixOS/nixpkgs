@@ -37,13 +37,12 @@ makeSetupHook {
     installScript =
       {
         darwin = ''
-          mkdir -p $out
+          mkdir $out
           mv "$targetDir"/bundle/macos $out/Applications
         '';
 
         linux = ''
-          mkdir -p $out
-          mv "$targetDir"/bundle/deb/*/data/usr/* $out/
+          mv "$targetDir"/bundle/deb/*/data/usr $out
         '';
       }
       .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");

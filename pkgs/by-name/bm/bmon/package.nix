@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libconfuse
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libnl;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libnl;
 
   preConfigure = ''
     # Must be an absolute path
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Network bandwidth monitor";
     homepage = "https://github.com/tgraf/bmon";
-    # Licensed under BSD and MIT
+    # Licensed unter BSD and MIT
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT
     license = licenses.bsd2;

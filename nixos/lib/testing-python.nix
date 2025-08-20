@@ -75,7 +75,6 @@ pkgs.lib.throwIf (args ? specialArgs)
           ),
         extraPythonPackages ? (_: [ ]),
         interactive ? { },
-        sshBackdoor ? { },
       }@t:
       let
         testConfig =

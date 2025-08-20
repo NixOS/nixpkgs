@@ -19,6 +19,12 @@ let
   );
   servicename =
     if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
+  # Ananicy-CPP with BPF is not supported on hardened kernels https://github.com/NixOS/nixpkgs/issues/327382
+  finalPackage =
+    if (servicename == "ananicy-cpp" && config.boot.kernelPackages.isHardened) then
+      (cfg.package.override { withBpf = false; })
+    else
+      cfg.package;
 in
 {
   options.services.ananicy = {
@@ -107,7 +113,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ cfg.package ];
+      systemPackages = [ finalPackage ];
       etc."ananicy.d".source =
         pkgs.runCommand "ananicyfiles"
           {
@@ -164,7 +170,7 @@ in
       );
 
     systemd = {
-      packages = [ cfg.package ];
+      packages = [ finalPackage ];
       services."${servicename}" = {
         wantedBy = [ "default.target" ];
       };

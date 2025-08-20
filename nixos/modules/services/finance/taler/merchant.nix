@@ -17,10 +17,8 @@ let
     "webhook"
     "wirewatch"
     "depositcheck"
-    "exchangekeyupdate"
+    "exchange"
   ];
-
-  configFile = config.environment.etc."taler/taler.conf".source;
 in
 {
   imports = [
@@ -90,8 +88,21 @@ in
       path = [ cfg.package ];
     };
 
-    systemd.services."taler-${talerComponent}-dbinit".script = ''
-      ${lib.getExe' cfg.package "taler-merchant-dbinit"} -c ${configFile}
-    '';
+    systemd.services."taler-${talerComponent}-dbinit".script =
+      let
+        # NOTE: not documented, but is necessary
+        dbScript = pkgs.writers.writeText "taler-merchant-db-permissions.sql" (
+          lib.concatStrings (
+            map (name: ''
+              GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA merchant TO "taler-merchant-${name}";
+              GRANT USAGE ON SCHEMA merchant TO "taler-merchant-${name}";
+            '') servicesDB
+          )
+        );
+      in
+      ''
+        ${lib.getExe' cfg.package "taler-merchant-dbinit"}
+        psql -U taler-${talerComponent}-httpd -f ${dbScript}
+      '';
   };
 }

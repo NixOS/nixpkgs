@@ -1,30 +1,30 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sendme";
-  version = "0.26.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
-    repo = "sendme";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-21JNyncChl8rv3IDdvYRF/nvMpAGCBps4xsBP9b/1lA=";
+    hash = "sha256-f3OgG6PTv9UUT5Gn1hBTHRIATrlvzBz1pjJ6fuWiCXM=";
   };
 
-  cargoHash = "sha256-1VVpjeGU6/+apTHv7klo7FkAQ3AVjiziQRNI7yFbvh0=";
+  cargoHash = "sha256-lWir4B3zGi7GBp5Of01GeGMV0SXzMjxcPBFipnoRRRk=";
 
-  __darwinAllowLocalNetworking = true;
-
-  # On Darwin, sendme invokes CoreFoundation APIs that read ICU data from the
-  # system. Ensure these paths are accessible in the sandbox to avoid segfaults
-  # during checkPhase.
-  sandboxProfile = ''
-    (allow file-read* (subpath "/usr/share/icu"))
-  '';
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      SystemConfiguration
+    ]
+  );
 
   meta = with lib; {
     description = "Tool to send files and directories, based on iroh";

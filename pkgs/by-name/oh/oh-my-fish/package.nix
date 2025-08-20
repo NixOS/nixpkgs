@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fish,
   runtimeShell,
-  replaceVars,
+  substituteAll,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,15 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -vr * $out/share/oh-my-fish
 
     cp -v ${
-      replaceVars ./omf-install {
+      substituteAll {
+        name = "omf-install";
+        src = ./omf-install;
+        omf = placeholder "out";
         inherit fish runtimeShell;
-        # replaced below
-        omf = null;
       }
     } $out/bin/omf-install
-
-    substituteInPlace $out/bin/omf-install \
-      --replace-fail '@omf@' "$out"
 
     chmod +x $out/bin/omf-install
     cat $out/bin/omf-install

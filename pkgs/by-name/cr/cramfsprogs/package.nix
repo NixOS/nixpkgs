@@ -1,20 +1,22 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cramfsprogs";
-  version = "2.1-unstable-2025-01-27";
+  version = "1.1";
 
-  src = fetchFromGitHub {
-    owner = "npitre";
-    repo = "cramfs-tools";
-    rev = "13ad7ee1df5ce42cf9758053186554d7cb15e2cc";
-    sha256 = "sha256-JlDOowJYJJNB1opNabJgYfdt0khQFsdDvzbtY/bJwRI=";
+  src = fetchurl {
+    url = "mirror://debian/pool/main/c/cramfs/cramfs_${version}.orig.tar.gz";
+    sha256 = "0s13sabykbkbp0pcw8clxddwzxckyq7ywm2ial343ip7qjiaqg0k";
   };
+
+  # CramFs is unmaintained upstream: https://tracker.debian.org/pkg/cramfs.
+  # So patch the "missing include" bug ourselves.
+  patches = [ ./include-sysmacros.patch ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -28,12 +30,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Tools to create, check, and extract content of CramFs images";
-    homepage = "https://github.com/npitre/cramfs-tools";
+    homepage = "https://packages.debian.org/jessie/cramfsprogs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      pamplemousse
-      blitz
-    ];
+    maintainers = with maintainers; [ pamplemousse ];
     platforms = platforms.linux;
   };
 }

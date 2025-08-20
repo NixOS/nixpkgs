@@ -27,7 +27,6 @@
   qimage2ndarray,
   scikit-image,
   scipy,
-  setuptools,
   tables,
 }:
 
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     ./0000-workaround-pyqtgraph.patch
   ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     opencv4
     pyqt5
     pyqtgraph

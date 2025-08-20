@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-config";
-  version = "2.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-iyAqdAWcg94a65lPjq412slvSKdP3W62LTyyvYdWipA=";
+    hash = "sha256-zAJD1p0iJUEN+pOW1nyVKrCBfew/uqVNqw9aCFq+JY4=";
   };
 
   nativeBuildInputs = [
@@ -64,8 +64,6 @@ stdenv.mkDerivation rec {
     xf86inputlibinput.dev
   ];
 
-  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
-
   postPatch = ''
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace-fail 'QStringLiteral("gsettings' \
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Tools to configure LXQt and the underlying operating system";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 
 }

@@ -39,18 +39,15 @@ stdenv.mkDerivation rec {
     SDL_gfx
   ];
 
-  env.NIX_CFLAGS_COMPILE =
-    toString (makeSDLFlags [
-      SDL
-      SDL_image
-      SDL_ttf
-      SDL_gfx
-    ])
-    + " -lSDL";
+  env.NIX_CFLAGS_COMPILE = toString (makeSDLFlags [
+    SDL
+    SDL_image
+    SDL_ttf
+    SDL_gfx
+  ]);
 
   patches = [
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
-    ./sdl-error.patch # Adds required include for SDL_GetError.
   ];
 
   meta = with lib; {

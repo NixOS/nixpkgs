@@ -39,11 +39,6 @@ let
   linkFarmFromAttrs = linkFarm "linkFarmFromAttrs" {
     inherit foo hello;
   };
-
-  linkFarmDelimitOptionList = linkFarm "linkFarmDelimitOptionList" {
-    "-foo" = foo;
-    "-hello" = hello;
-  };
 in
 runCommand "test-linkFarm" { } ''
   function assertPathEquals() {
@@ -66,9 +61,5 @@ runCommand "test-linkFarm" { } ''
 
   assertPathEquals "${linkFarmFromAttrs}/foo" "${foo}"
   assertPathEquals "${linkFarmFromAttrs}/hello" "${hello}"
-
-  assertPathEquals "${linkFarmDelimitOptionList}/-foo" "${foo}"
-  assertPathEquals "${linkFarmDelimitOptionList}/-hello" "${hello}"
-
   touch $out
 ''

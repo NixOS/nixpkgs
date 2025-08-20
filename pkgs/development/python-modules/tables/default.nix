@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.10.2";
+  version = "3.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
+    hash = "sha256-SqB6xzS5wDe66vRK7GTskCrSR/V4EbWfMMTjHTHxJs8=";
   };
 
   build-system = [
@@ -60,12 +59,15 @@ buildPythonPackage rec {
 
   # When doing `make distclean`, ignore docs
   postPatch = ''
+    substituteInPlace Makefile --replace "src doc" "src"
     # Force test suite to error when unittest runner fails
     substituteInPlace tables/tests/test_suite.py \
-      --replace-fail "return 0" "assert result.wasSuccessful(); return 0" \
-      --replace-fail "return 1" "assert result.wasSuccessful(); return 1"
-    substituteInPlace tables/__init__.py \
-      --replace-fail 'find_library("blosc2")' '"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"'  '';
+      --replace "return 0" "assert result.wasSuccessful(); return 0" \
+      --replace "return 1" "assert result.wasSuccessful(); return 1"
+    substituteInPlace requirements.txt \
+      --replace "cython>=0.29.21" "" \
+      --replace "blosc2~=2.0.0" "blosc2"
+  '';
 
   # Regenerate C code with Cython
   preBuild = ''

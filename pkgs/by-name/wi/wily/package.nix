@@ -20,7 +20,13 @@ stdenv.mkDerivation rec {
     libXt
   ];
 
-  patches = [ ./fix-gcc14-build.patch ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-int"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
 
   preInstall = ''
     mkdir -p $out/bin

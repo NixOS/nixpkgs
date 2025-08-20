@@ -2,15 +2,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   makeWrapper,
-  ast-grep,
   ripgrep,
-  versionCheckHook,
 }:
 let
   pname = "serpl";
-  version = "0.3.4";
+  version = "0.3.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,34 +16,20 @@ rustPlatform.buildRustPackage {
     owner = "yassinebridi";
     repo = "serpl";
     rev = version;
-    hash = "sha256-lEvUS1RlZ4CvervzyfODsFqRJAiA6PyLNUVWhSoPMDY=";
+    hash = "sha256-koD5aFqL+XVxc5Iq3reTYIHiPm0z7hAQ4K59IfbY4Hg=";
   };
-
-  buildFeatures = [ "ast_grep" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  cargoHash = "sha256-reeJsSNifPeDzqMKVpS1Pmyn9x1F+Vin/xy81d5rKVs=";
+  cargoHash = "sha256-8XYEZQfoizVmOuh0hymzMj2UDiXNkSeHqBAWOqaMY84=";
 
   postFixup = ''
     # Serpl needs ripgrep to function properly.
     wrapProgram $out/bin/serpl \
-      --prefix PATH : "${
-        lib.strings.makeBinPath [
-          ripgrep
-          ast-grep
-        ]
-      }"
+      --prefix PATH : "${lib.strings.makeBinPath [ ripgrep ]}"
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/serpl";
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Simple terminal UI for search and replace, ala VS Code";

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Old-school vertical shoot-em-up / bullet hell";
     mainProgram = "garden";
-    homepage = "https://sourceforge.net/projects/garden/";
+    homepage = "https://garden.sourceforge.net/drupal/";
     maintainers = [ ];
     license = licenses.gpl3;
   };

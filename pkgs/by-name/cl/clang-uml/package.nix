@@ -17,29 +17,30 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
-  version = "0.6.1";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
     rev = finalAttrs.version;
-    hash = "sha256-mY6kJnwWLgCeKXSquNTxsnr4S3bKwedgiRixzyLWTK8=";
+    hash = "sha256-fsN9l5sgQ9NIjS0Tn/tAUK/p2mdP7/R7a9BFb+9I0UU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    installShellFiles
-  ]
-  ++ (
-    if debug then
-      [
-        elfutils
-        libunwind
-      ]
-    else
-      [ ]
-  );
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      installShellFiles
+    ]
+    ++ (
+      if debug then
+        [
+          elfutils
+          libunwind
+        ]
+      else
+        [ ]
+    );
 
   cmakeFlags = [
     "-DCUSTOM_COMPILE_OPTIONS=-Wno-error=sign-compare"

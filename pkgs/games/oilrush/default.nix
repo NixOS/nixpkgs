@@ -130,6 +130,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://oilrush-game.com/";
     license = lib.licenses.unfree;
+    #maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

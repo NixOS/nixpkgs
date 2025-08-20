@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nanovms";
-    repo = "ops";
+    repo = pname;
     rev = version;
     sha256 = "sha256-ac+17hywzyK7ChCP/nhwTP1WEIZ89+BKX9/YmsPpfg8=";
   };

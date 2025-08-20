@@ -57,8 +57,7 @@ buildPythonPackage {
     types-ujson
     uvicorn
     autoflake
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  ] ++ uvicorn.optional-dependencies.standard;
 
   pythonImportsCheck = [ "unstructured_api_tools" ];
 

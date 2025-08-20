@@ -10,8 +10,6 @@
   nix-update-script,
   testers,
   awscli2,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -23,12 +21,11 @@ let
             "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
           ];
         });
-        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
+        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: {
           version = "2.8.2";
-          format = "setuptools";
           pyproject = null;
           src = prev.src.override {
-            inherit version;
+            version = "2.8.2";
             hash = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
           };
           patches = [
@@ -41,16 +38,16 @@ let
           ];
           postPatch = null;
         });
-        ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: rec {
-          version = "0.17.21";
+        ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
           src = prev.src.override {
-            inherit version;
+            version = "0.17.21";
             hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
           };
         });
         urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
+          pyproject = true;
           version = "1.26.18";
-          build-system = with final; [
+          nativeBuildInputs = with final; [
             setuptools
           ];
           src = prev.src.override {
@@ -65,24 +62,24 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.28.1"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.22.13"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-TpyjYnLTBPU83g6/h+BrX4hd4dUbZUvDyJ6m/3v38+A=";
+    hash = "sha256-yrkGfD2EBPsNRLcafdJE4UnYsK7EAfIA7TLa6smmWjY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
-      --replace-fail 'awscrt==' 'awscrt>=' \
+      --replace-fail 'awscrt>=0.19.18,<=0.22.0' 'awscrt>=0.22.0' \
+      --replace-fail 'cryptography>=40.0.0,<43.0.2' 'cryptography>=43.0.0' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
-      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
     substituteInPlace requirements-base.txt \
       --replace-fail "wheel==0.43.0" "wheel>=0.43.0"
@@ -103,12 +100,16 @@ py.pkgs.buildPythonApplication rec {
 
   dependencies = with py.pkgs; [
     awscrt
+    bcdoc
+    botocore
     colorama
+    cryptography
     distro
     docutils
     jmespath
     prompt-toolkit
     python-dateutil
+    pyyaml
     ruamel-yaml
     urllib3
   ];
@@ -119,20 +120,24 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with py.pkgs; [
-    addBinToPathHook
     jsonschema
     mock
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd aws \
-      --bash <(echo "complete -C $out/bin/aws_completer aws") \
-      --zsh $out/bin/aws_zsh_completer.sh
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-    rm $out/bin/aws.cmd
+  postInstall =
+    ''
+      installShellCompletion --cmd aws \
+        --bash <(echo "complete -C $out/bin/aws_completer aws") \
+        --zsh $out/bin/aws_zsh_completer.sh
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+      rm $out/bin/aws.cmd
+    '';
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
   '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
@@ -141,10 +146,7 @@ py.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  # tests/unit/customizations/sso/test_utils.py uses sockets
-  __darwinAllowLocalNetworking = true;
-
-  pytestFlags = [
+  pytestFlagsArray = [
     "-Wignore::DeprecationWarning"
   ];
 
@@ -158,12 +160,6 @@ py.pkgs.buildPythonApplication rec {
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
-  ];
-
-  disabledTests = [
-    # Requires networking (socket binding not possible in sandbox)
-    "test_is_socket"
-    "test_is_special_file_warning"
   ];
 
   pythonImportsCheck = [
@@ -186,12 +182,12 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       bhipple
       davegallant
       bryanasdev000

@@ -7,27 +7,30 @@
   stdenv,
   installShellFiles,
   libiconv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "novops";
-  version = "0.20.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "PierreBeucher";
-    repo = "novops";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-F3MtDTaeLoI54/xbbIU61hb+qLDn2u4lRv+3kU5c/D0=";
+    hash = "sha256-bpv8Ybrsb2CAV8Qxj69F2E/mekYsOuAiZWuDNHDtxw0=";
   };
 
-  cargoHash = "sha256-F+JIAHk28qpJy97aQQup1Ss5G1p4LQzkj1ptjBhp1CY=";
+  cargoHash = "sha256-5NKgGX4j2hQuP9/9OnABLXcWuTPMAfvX0oquoSXeEIE=";
 
-  buildInputs = [
-    openssl # required for openssl-sys
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl # required for openssl-sys
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [
     installShellFiles

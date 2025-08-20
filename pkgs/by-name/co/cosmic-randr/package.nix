@@ -6,33 +6,29 @@
   just,
   pkg-config,
   wayland,
-  nix-update-script,
-  nixosTests,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-randr";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-randr";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-vCGbWsG/F3WhWVSy8Z3r4ZHpks/X/57/ZZXuw6BFl+c=";
+    rev = "epoch-${version}";
+    hash = "sha256-mPi6TVUWKlHqLzGL84vSBZYuCjdThVVYc7hv9vq7zho=";
   };
 
-  cargoHash = "sha256-lW44Y7RhA1l+cCDwqSq9sbhWi+kONJ0zy1fUu8WPYw0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3I4ZyZvV9ELBNCvYVYBUHbh9bGw7B/RrwUlam5fdLxU=";
 
   nativeBuildInputs = [
     just
     pkg-config
   ];
-
   buildInputs = [ wayland ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -43,31 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-randr"
   ];
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-randr";
     description = "Library and utility for displaying and configuring Wayland outputs";
-    license = lib.licenses.mpl20;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-randr";
   };
-})
+}

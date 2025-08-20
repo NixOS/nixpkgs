@@ -20,7 +20,7 @@
   poppler,
   stdenv,
   testers,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "apvlv";
 
   # If you change the version, please also update src.rev accordingly
-  version = "0.6.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "naihe2010";
     repo = "apvlv";
-    tag = "v0.6.0-final";
-    hash = "sha256-iKhbLMXk5DpwO2El2yx6DvuK2HStkQVHlkXKwmGVbzM=";
+    tag = "v0.5.0-final";
+    hash = "sha256-5Wbv3dXieymhhPmEKQu8X/38WsDA1T/IBPoMXdpzcaA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence # otherwise warnings in compilation
     pcre
     poppler
-    webkitgtk_4_1
+    webkitgtk_4_0
   ];
 
   installPhase = ''

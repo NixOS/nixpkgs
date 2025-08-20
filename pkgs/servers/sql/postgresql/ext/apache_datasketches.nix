@@ -1,10 +1,11 @@
 {
-  boost186,
-  fetchFromGitHub,
+  stdenv,
   lib,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  boost,
   postgresqlTestExtension,
+  buildPostgresqlExtension,
 }:
 
 let
@@ -14,7 +15,7 @@ let
     name = "datasketches-postgresql";
     owner = "apache";
     repo = "datasketches-postgresql";
-    tag = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-W41uAs3W4V7c9O/wBw3rut65bcmY8EdQS1/tPszMGqA=";
   };
 
@@ -22,12 +23,12 @@ let
     name = "datasketches-cpp";
     owner = "apache";
     repo = "datasketches-cpp";
-    tag = "5.0.2";
+    rev = "refs/tags/5.0.2";
     hash = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
   };
 in
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "apache_datasketches";
   inherit version;
 
@@ -38,8 +39,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   sourceRoot = main_src.name;
 
-  # fails to build with boost 1.87
-  buildInputs = [ boost186 ];
+  buildInputs = [ boost ];
 
   patchPhase = ''
     runHook prePatch

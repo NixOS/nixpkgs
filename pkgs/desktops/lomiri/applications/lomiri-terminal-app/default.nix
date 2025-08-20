@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-terminal-app";
-  version = "2.0.5";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-terminal-app";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-STL8Km5NVSW3wEjC96sT4Q9z/lTSYKFQ6ku6M+CKM78=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-374ATxF+XhoALzYv6DEyj6IYgb82Ch4zcmqK0RXmlzI=";
   };
 
   postPatch = ''
@@ -56,31 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "INSTALL_TESTS" false)
-    (lib.cmakeBool "CLICK_MODE" false)
+    "-DINSTALL_TESTS=OFF"
+    "-DCLICK_MODE=OFF"
   ];
 
   passthru = {
-    tests = {
-      # The way the test works sometimes causes segfaults in qtfeedback
-      # https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/issues/117
-      # vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
-      inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
-    };
+    tests.vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Terminal app for desktop and mobile devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
-    }/ChangeLog";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";
-    teams = [ lib.teams.lomiri ];
-    platforms = lib.platforms.linux;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.linux;
   };
 })

@@ -19,7 +19,7 @@ let
     else
       indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "${wingpanel.pname}-with-indicators";
   inherit (wingpanel) version;
 
@@ -27,8 +27,7 @@ stdenv.mkDerivation {
 
   paths = [
     wingpanel
-  ]
-  ++ selectedIndicators;
+  ] ++ selectedIndicators;
 
   passAsFile = [ "paths" ];
 

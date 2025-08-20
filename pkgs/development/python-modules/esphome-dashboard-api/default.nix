@@ -3,28 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  wheel,
   aiohttp,
-  orjson,
 }:
 
 buildPythonPackage rec {
   pname = "esphome-dashboard-api";
-  version = "1.3.0";
-  pyproject = true;
+  version = "1.2.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard-api";
     tag = version;
-    hash = "sha256-b3PnMzlA9N8NH6R5ed6wf5QF45i887iQk2QgH7e755k=";
+    hash = "sha256-RFfS0xzRXoM6ETXmviiMPxffPzspjTqpkvHOlTJXN9g=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=65.6" "setuptools" \
+      --replace "wheel~=0.37.1" "wheel"
+  '';
 
-  dependencies = [
-    aiohttp
-    orjson
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
+
+  propagatedBuildInputs = [ aiohttp ];
 
   doCheck = false; # no tests
 

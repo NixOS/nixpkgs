@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "5.1.0";
+  version = "5.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joerick";
-    repo = "pyinstrument";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-t1kiHqzaJDnjdsHBLEcWHSxPM6jZ7rPctFCjDQpL8ks=";
+    hash = "sha256-uJ9KRgSETuxpeEIpBKFz66+Qci86jy36lKkUKpvmKIg=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Call stack profiler for Python";
     mainProgram = "pyinstrument";
     homepage = "https://github.com/joerick/pyinstrument";
-    changelog = "https://github.com/joerick/pyinstrument/releases/tag/${src.tag}";
+    changelog = "https://github.com/joerick/pyinstrument/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

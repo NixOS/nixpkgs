@@ -1,33 +1,31 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
   autoPatchelfHook,
-  wrapGAppsHook3,
   cairo,
   e2fsprogs,
+  fetchurl,
   gmp,
   gtk3,
   libGL,
   libX11,
+  lib,
+  stdenv,
   libgcrypt,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "banana-accounting";
-  version = "10.1.24";
+  version = "10.0.12";
 
   srcs = fetchurl {
-    url = "https://web.archive.org/web/20250416013207/https://www.banana.ch/accounting/files/bananaplus/exe/bananaplus.tgz";
-    hash = "sha256-5GewPGOCyeS6faL8aMUZ/JDUUn2PGuur0ws/7nlNX6M=";
+    url = "https://web.archive.org/web/20220821013214/https://www.banana.ch/accounting/files/bananaplus/exe/bananaplus.tgz";
+    hash = "sha256-Xs7K/Z6qM1fKKfYMkwAGznNR0Kt/gY7qTr8ZOriIdYw=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook3
-  ];
+  dontConfigure = true;
+  dontBuild = true;
 
   buildInputs = [
     cairo
@@ -40,28 +38,25 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
   ];
 
-  dontConfigure = true;
-
-  dontBuild = true;
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook3
+  ];
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/opt $out/bin $out/share
-    cp -r . $out/opt/banana-accounting
-    ln -s $out/opt/banana-accounting/usr/bin/bananaplus $out/bin/bananaplus
-    ln -s $out/opt/banana-accounting/usr/share/applications $out/share/applications
-    ln -s $out/opt/banana-accounting/usr/share/icons $out/share/icons
-
+    mkdir -p $out/bin
+    mv ./* $out
+    ln -s $out/usr/bin/bananaplus $out/bin/
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Accounting Software for small companies, associations and individuals";
-    homepage = "https://www.banana.ch";
-    license = lib.licenses.unfree;
+    homepage = "https://www.banana.ch/";
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ jacg ];
+    maintainers = with maintainers; [ jacg ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-})
+}

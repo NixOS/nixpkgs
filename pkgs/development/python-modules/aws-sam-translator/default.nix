@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.98.0";
+  version = "1.91.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-OfWH1V+F90ukVgan+eZKo00hrOMf/6x6HqxARzFiKHI=";
+    hash = "sha256-jcRpn9STkfg1xTwYzkpoYyuG0Hrv0XnbW1h6+SxzEjA=";
   };
 
   postPatch = ''
@@ -57,12 +57,9 @@ buildPythonPackage rec {
     export AWS_DEFAULT_REGION=us-east-1
   '';
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests"
-  ];
-
-  disabledTestMarks = [
-    "slow"
+    ''-m "not slow"''
   ];
 
   disabledTests = [
@@ -92,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/aws/serverless-application-model";
-    changelog = "https://github.com/aws/serverless-application-model/releases/tag/${src.tag}";
+    changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ ];
   };

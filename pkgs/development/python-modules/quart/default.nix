@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  flit-core,
+  poetry-core,
 
   # propagates
   aiofiles,
@@ -33,35 +33,36 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.20.0";
+  version = "0.19.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-NApev3nRBS4QDMGq8++rSmK5YgeljkaVAsdezsTbZr4=";
+    hash = "sha256-jekbrHpB+7d3IagVUtDYA1VFlWtnE7kPqIm19NB2scA=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    aiofiles
-    blinker
-    click
-    flask
-    hypercorn
-    itsdangerous
-    jinja2
-    markupsafe
-    pydata-sphinx-theme
-    python-dotenv
-    werkzeug
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-    typing-extensions
-  ];
+  dependencies =
+    [
+      aiofiles
+      blinker
+      click
+      flask
+      hypercorn
+      itsdangerous
+      jinja2
+      markupsafe
+      pydata-sphinx-theme
+      python-dotenv
+      werkzeug
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+      typing-extensions
+    ];
 
   pythonImportsCheck = [ "quart" ];
 
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

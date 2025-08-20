@@ -4,6 +4,8 @@
   fetchCrate,
   pkg-config,
   openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
-  cargoHash = "sha256-6SIwOkLQ6rayhRQEMSCm72mMhGJ6NlIBq4aKukXURdM=";
+  cargoHash = "sha256-B0yPTyZ+d+s0Mdgeb23IammuABpEYWvAksyP7d+MEig=";
 
   cargoPatches = [
     # fix build with rust 1.80+
@@ -26,16 +28,20 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple and opinionated tool to build your own magazine";
     homepage = "https://github.com/zineland/zine";
     changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       dit7ya
       figsoda
     ];

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,17 +15,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4Txw6Cmwwgu7K8VIVoX9GR76VUqAEw6uYptmczbjqg0=";
   };
 
-  cargoHash = "sha256-QjkUiPwjG25NsvAXM3jqQVtJzYiXhzVqFaDN1b7DXDE=";
+  cargoHash = "sha256-WU3lgGJH6qVDI1Un3HBqg0edqiP5sobTsAIXdnjeNTU=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # some examples fail to compile
   cargoTestFlags = [ "--tests" ];
 
-  meta = {
+  meta = with lib; {
     description = "Access the rust playground right in terminal";
     mainProgram = "rustycli";
     homepage = "https://github.com/pwnwriter/rustycli";
     changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

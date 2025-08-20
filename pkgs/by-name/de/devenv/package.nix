@@ -6,31 +6,28 @@
   rustPlatform,
   testers,
   cachix,
+  sqlx-cli,
   nixVersions,
   openssl,
-  dbus,
   pkg-config,
   glibcLocalesUtf8,
   devenv, # required to run version test
 }:
 
 let
-  devenv_nix =
-    (nixVersions.git.overrideSource (fetchFromGitHub {
-      owner = "cachix";
+  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
+    version = "2.24-devenv";
+    src = fetchFromGitHub {
+      owner = "domenkozar";
       repo = "nix";
-      rev = "031c3cf42d2e9391eee373507d8c12e0f9606779";
-      hash = "sha256-dOi/M6yNeuJlj88exI+7k154z+hAhFcuB8tZktiW7rg=";
-    })).overrideAttrs
-      (old: {
-        version = "2.30-devenv";
-        doCheck = false;
-        doInstallCheck = false;
-        # do override src, but the Nix way so the warning is unaware of it
-        __intentionallyOverridingVersion = true;
-      });
+      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
+      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
+    };
+    doCheck = false;
+    doInstallCheck = false;
+  });
 
-  version = "1.8.1";
+  version = "1.3.1";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -39,24 +36,32 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v${version}";
-    hash = "sha256-YsSFlVWUu4RSYnObqcBJ4Mr3bJVVhuFhaQAktHytBAI=";
+    rev = "v${version}";
+    hash = "sha256-FhlknassIb3rKEucqnfFAzgny1ANmenJcTyRaXYwbA0=";
   };
 
-  cargoHash = "sha256-zJorGAsp5k5oBuXogYqEPVexcNsYCeiTmrQqySd1AGs=";
+  cargoHash = "sha256-dJ8A2kVXkpJcRvMLE/IawFUZNJqok/IRixTRGtLsE3w=";
 
   buildAndTestSubdir = "devenv";
+
+  # Force sqlx to use the prepared queries
+  SQLX_OFFLINE = true;
+  # A local database to use for preparing queries
+  DATABASE_URL = "sqlite:nix-eval-cache.db";
+
+  preBuild = ''
+    cargo sqlx database setup --source devenv-eval-cache/migrations
+    cargo sqlx prepare --workspace
+  '';
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
+    sqlx-cli
   ];
 
-  buildInputs = [
-    openssl
-    dbus
-  ];
+  buildInputs = [ openssl ];
 
   postInstall =
     let

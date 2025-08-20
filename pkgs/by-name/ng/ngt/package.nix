@@ -7,7 +7,7 @@
   enableAVX ? stdenv.hostPlatform.avxSupport,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "NGT";
   version = "1.12.3-alpha";
 

@@ -6,7 +6,7 @@
   jansson,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "jshon";
   version = "20170302";
 

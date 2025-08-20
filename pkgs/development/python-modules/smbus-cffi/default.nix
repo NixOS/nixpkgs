@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   # requires hardware access
-  disabledTestPaths = [ "test/test_smbus_integration.py" ];
+  pytestFlagsArray = [ "--ignore=test/test_smbus_integration.py" ];
 
   nativeCheckInputs = [
     py

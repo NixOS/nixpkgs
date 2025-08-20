@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "25.05.0";
+  version = "21.09";
   pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "sha256-J72uTwAlWa/dRPf7/lO1epbmjTQar+3/U//+IJ9u4PM=";
+    sha256 = "sha256-5YzdaZ499AGiKAPUsgBCj3AQ9s0WlfgAbHhOQSOLLO8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

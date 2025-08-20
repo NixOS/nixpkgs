@@ -7,10 +7,14 @@
   valgrind,
   librandombytes,
   libcpucycles,
+  lib25519,
 }:
+let
+  version = "20241004";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
-  version = "20241004";
+  inherit version;
 
   src = fetchzip {
     url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
@@ -60,15 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      package = lib25519;
       command = "lib25519-test | head -n 2 | grep version";
-      version = "lib25519 version ${finalAttrs.version}";
+      version = "lib25519 version ${version}";
     };
   };
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";
-    description = "Simple API for applications generating fresh randomness";
+    description = "A simple API for applications generating fresh randomness";
     changelog = "https://randombytes.cr.yp.to/download.html";
     license = with lib.licenses; [
       # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
@@ -83,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       imadnyc
       jleightcap
     ];
-    teams = with lib.teams; [ ngi ];
     # This supports whatever platforms libcpucycles supports
     inherit (libcpucycles.meta) platforms;
   };

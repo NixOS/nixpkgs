@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "graphqlmaker";
   version = "0-unstable-2024-05-18";
 

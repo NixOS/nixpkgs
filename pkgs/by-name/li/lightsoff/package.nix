@@ -4,15 +4,18 @@
   fetchurl,
   vala,
   pkg-config,
-  glib,
-  gtk4,
-  libadwaita,
+  gtk3,
   gnome,
+  adwaita-icon-theme,
   gdk-pixbuf,
-  wrapGAppsHook4,
+  librsvg,
+  wrapGAppsHook3,
   gettext,
   itstool,
+  clutter,
+  clutter-gtk,
   libxml2,
+  appstream-glib,
   meson,
   ninja,
   python3,
@@ -20,19 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lightsoff";
-  version = "48.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${lib.versions.major version}/lightsoff-${version}.tar.xz";
-    hash = "sha256-LsmVAXE9vNE8WlZaLhGMxMwrUCg2s4enc2z7pAqLOYk=";
+    hash = "sha256-ZysVMuBkX64C8oN6ltU57c/Uw7pPcuWR3HP+R567i5I=";
   };
 
   nativeBuildInputs = [
     vala
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook3
     itstool
     gettext
+    appstream-glib
     libxml2
     meson
     ninja
@@ -40,29 +44,30 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
-    gtk4
-    libadwaita
+    gtk3
+    adwaita-icon-theme
+    gdk-pixbuf
+    librsvg
+    clutter
+    clutter-gtk
   ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "lightsoff"; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/lightsoff";
     changelog = "https://gitlab.gnome.org/GNOME/lightsoff/-/blob/${version}/NEWS?ref_type=tags";
     description = "Puzzle game, where the objective is to turn off all of the tiles on the board";
     mainProgram = "lightsoff";
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

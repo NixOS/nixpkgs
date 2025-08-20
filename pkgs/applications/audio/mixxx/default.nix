@@ -32,6 +32,7 @@
   microsoft-gsl,
   mp4v2,
   opusfile,
+  pcre,
   pkg-config,
   portaudio,
   portmidi,
@@ -56,20 +57,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mixxx";
-  version = "2.5.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-dKk3n3KDindnLbON52SW5h4cz96WVi0OPjwA27HqQCI=";
+    hash = "sha256-1ZE2hVwacZve0+IOQs+htK/kl7zFsOWkh/KcrnI6u/M=";
   };
-
-  # Should be removed when bumping to 2.6.x
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -107,6 +102,7 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     mp4v2
     opusfile
+    pcre
     portaudio
     portmidi
     protobuf
@@ -134,8 +130,6 @@ stdenv.mkDerivation rec {
   # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
-    # "BUILD_TESTING=OFF" must imply "BUILD_BENCH=OFF"
-    "-DBUILD_BENCH=OFF"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -148,16 +142,16 @@ stdenv.mkDerivation rec {
     cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
     changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
       benley
       bfortz
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

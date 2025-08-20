@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals requireSageTests [
-    # This is a hack to make sure sage-tests is evaluated. It doesn't actually
+    # This is a hack to make sure sage-tests is evaluated. It doesn't acutally
     # produce anything of value, it just decouples the tests from the build.
     sage-tests
   ];
@@ -44,26 +44,27 @@ stdenv.mkDerivation rec {
     "$out/bin/sage" -c 'browse_sage_doc._open("reference", testing=True)'
   '';
 
-  passthru = {
-    tests = sage-tests;
-    quicktest = sage-tests.override {
-      longTests = false;
-      timeLimit = 600;
-    }; # as many tests as possible in ~10m
-    lib = sage-with-env.env.lib;
-    with-env = sage-with-env;
-    kernelspec = jupyter-kernel-definition;
-  }
-  // lib.optionalAttrs withDoc {
-    doc = sagedoc;
-  };
+  passthru =
+    {
+      tests = sage-tests;
+      quicktest = sage-tests.override {
+        longTests = false;
+        timeLimit = 600;
+      }; # as many tests as possible in ~10m
+      lib = sage-with-env.env.lib;
+      with-env = sage-with-env;
+      kernelspec = jupyter-kernel-definition;
+    }
+    // lib.optionalAttrs withDoc {
+      doc = sagedoc;
+    };
 
   meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     mainProgram = "sage";
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
     platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

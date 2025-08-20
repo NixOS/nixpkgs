@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
 
@@ -15,10 +10,7 @@ in
 {
 
   imports = [
-    (lib.mkRemovedOptionModule [
-      "zramSwap"
-      "numDevices"
-    ] "Using ZRAM devices as general purpose ephemeral block devices is no longer supported")
+    (lib.mkRemovedOptionModule [ "zramSwap" "numDevices" ] "Using ZRAM devices as general purpose ephemeral block devices is no longer supported")
   ];
 
   ###### interface
@@ -81,16 +73,7 @@ in
       algorithm = lib.mkOption {
         default = "zstd";
         example = "lz4";
-        type =
-          with lib.types;
-          either (enum [
-            "842"
-            "lzo"
-            "lzo-rle"
-            "lz4"
-            "lz4hc"
-            "zstd"
-          ]) str;
+        type = with lib.types; either (enum [ "842" "lzo" "lzo-rle" "lz4" "lz4hc" "zstd" ]) str;
         description = ''
           Compression algorithm. `lzo` has good compression,
           but is slow. `lz4` has bad compression, but is fast.
@@ -124,24 +107,23 @@ in
 
     services.zram-generator.enable = true;
 
-    services.zram-generator.settings = lib.listToAttrs (
-      builtins.map (dev: {
-        name = dev;
-        value =
-          let
-            size = "${toString cfg.memoryPercent} / 100 * ram";
-          in
-          {
-            zram-size =
-              if cfg.memoryMax != null then "min(${size}, ${toString cfg.memoryMax} / 1024 / 1024)" else size;
-            compression-algorithm = cfg.algorithm;
-            swap-priority = cfg.priority;
-          }
-          // lib.optionalAttrs (cfg.writebackDevice != null) {
-            writeback-device = cfg.writebackDevice;
-          };
-      }) devices
-    );
+    services.zram-generator.settings = lib.listToAttrs
+      (builtins.map
+        (dev: {
+          name = dev;
+          value =
+            let
+              size = "${toString cfg.memoryPercent} / 100 * ram";
+            in
+            {
+              zram-size = if cfg.memoryMax != null then "min(${size}, ${toString cfg.memoryMax} / 1024 / 1024)" else size;
+              compression-algorithm = cfg.algorithm;
+              swap-priority = cfg.priority;
+            } // lib.optionalAttrs (cfg.writebackDevice != null) {
+              writeback-device = cfg.writebackDevice;
+            };
+        })
+        devices);
 
   };
 

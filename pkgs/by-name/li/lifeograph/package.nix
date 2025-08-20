@@ -1,27 +1,26 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchgit,
   pkg-config,
   meson,
   ninja,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   enchant,
-  gtkmm4,
+  gtkmm3,
   libchamplain,
   libgcrypt,
   shared-mime-info,
-  libshumate,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lifeograph";
-  version = "3.0.3";
+  version = "2.0.3";
 
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-VaDxmbTVx6wiFMDRYuBM5Y4oPODWPTm8QP6zpT+yBOY=";
+    rev = "v${version}";
+    hash = "sha256-RotbTdTtpwXmo+UKOyp93IAC6CCstv++KtnX2doN+nM=";
   };
 
   nativeBuildInputs = [
@@ -29,23 +28,27 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     shared-mime-info # for update-mime-database
-    wrapGAppsHook4
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     libgcrypt
     enchant
-    gtkmm4
+    gtkmm3
     libchamplain
-    libshumate
   ];
 
-  meta = {
-    homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
-    description = "Off-line and private journal and note taking application";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+  postInstall = ''
+    substituteInPlace $out/share/applications/net.sourceforge.Lifeograph.desktop \
+      --replace "Exec=" "Exec=$out/bin/"
+  '';
+
+  meta = with lib; {
+    homepage = "https://lifeograph.sourceforge.net/wiki/Main_Page";
+    description = "Lifeograph is an off-line and private journal and note taking application";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "lifeograph";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
-})
+}

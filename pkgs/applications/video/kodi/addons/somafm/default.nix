@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm";
     description = "SomaFM addon for Kodi";
     license = licenses.gpl3Plus;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,7 +15,6 @@
 
   # tests
   dm-haiku,
-  equinox,
   flax,
   funsor,
   graphviz,
@@ -30,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.19.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
+    hash = "sha256-6i7LPdmMakGeLujhA9d7Ep9oiVcND3ni/jzUkqgEqxw=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +50,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
-    equinox
     flax
     funsor
     graphviz
@@ -66,7 +63,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numpyro" ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # Tests memory consumption grows significantly with the number of parallel processes (reaches ~200GB with 80 jobs)
     "--maxprocesses=8"
 
@@ -74,35 +71,43 @@ buildPythonPackage rec {
     # UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1.
     # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
     # You can double-check how many devices are available in your system using `jax.local_device_count()`.
-    "-Wignore::UserWarning"
+    "-W"
+    "ignore::UserWarning"
   ];
 
   disabledTests = [
-    # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
-    "test_mcmc_parallel_chain"
+    # jax.errors.UnexpectedTracerError: Encountered an unexpected tracer
+    "test_haiku_state_dropout_smoke"
+    "test_flax_state_dropout_smoke"
 
     # AssertionError due to tolerance issues
-    "test_bijective_transforms"
+    "test_beta_binomial_log_prob"
+    "test_collapse_beta"
     "test_cpu"
-    "test_entropy_categorical"
-    "test_gaussian_model"
+    "test_gamma_poisson"
+    "test_gof"
+    "test_hpdi"
+    "test_kl_dirichlet_dirichlet"
+    "test_kl_univariate"
+    "test_mean_var"
 
-    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
-    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    # E        Emitted warnings: [].
-    "test_laplace_approximation_warning"
+    # Tests want to download data
+    "data_load"
+    "test_jsb_chorales"
+
+    # RuntimeWarning: overflow encountered in cast
+    "test_zero_inflated_logits_probs_agree"
+
+    # NameError: unbound axis name: _provenance
+    "test_model_transformation"
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: Not equal to tolerance rtol=0.06, atol=0
-    "test_functional_map"
   ];
 
   disabledTestPaths = [
-    # Require internet access
-    "test/test_example_utils.py"
+    # require jaxns (unpackaged)
+    "test/contrib/test_nested_sampling.py"
   ];
 
   meta = {

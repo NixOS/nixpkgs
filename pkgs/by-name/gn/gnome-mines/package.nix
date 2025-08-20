@@ -7,25 +7,26 @@
   vala,
   pkg-config,
   gnome,
-  gtk4,
-  libadwaita,
-  wrapGAppsHook4,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
   librsvg,
   gettext,
   itstool,
+  python3,
   libxml2,
-  libgnome-games-support_2_0,
+  libgnome-games-support,
   libgee,
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-mines";
-  version = "48.1";
+  version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${lib.versions.major finalAttrs.version}/gnome-mines-${finalAttrs.version}.tar.xz";
-    hash = "sha256-70stLd477GFBV+3eTZGJzGr+aSlSot1VsocOLmLtgQQ=";
+    url = "mirror://gnome/sources/gnome-mines/${lib.versions.major version}/gnome-mines-${version}.tar.xz";
+    hash = "sha256-NQLps/ccs7LnEcDmAZGH/rzCvKh349RW3KtwD3vjEnI=";
   };
 
   nativeBuildInputs = [
@@ -35,31 +36,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     itstool
+    python3
     libxml2
-    wrapGAppsHook4
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
   buildInputs = [
-    gtk4
-    libadwaita
-    libgnome-games-support_2_0
+    gtk3
     librsvg
+    adwaita-icon-theme
+    libgnome-games-support
     libgee
   ];
 
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
+
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-mines";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-mines"; };
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
     description = "Clear hidden mines from a minefield";
     mainProgram = "gnome-mines";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
-})
+}

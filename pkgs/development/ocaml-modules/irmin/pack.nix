@@ -17,7 +17,7 @@
   irmin-test,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   minimalOCamlVersion = "4.12";
 
   pname = "irmin-pack";

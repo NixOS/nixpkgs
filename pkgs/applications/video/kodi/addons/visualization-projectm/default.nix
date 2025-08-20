@@ -1,31 +1,18 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  pkg-config,
-  glm,
-  libGL,
-  projectm_3,
-}:
+{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, pkg-config, glm, libGL, projectm }:
 
 buildKodiBinaryAddon rec {
   pname = "visualization-projectm";
   namespace = "visualization.projectm";
-  version = "21.0.3";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-J3RtVl+hO8DspLyF2KAVMLDIJBiEb0bKosKhJyKy9hk=";
+    hash = "sha256-M+sHws9wp0sp1PnYXCLMZ9w48tJkG159XkyNvzHJNYo=";
   };
 
-  extraBuildInputs = [
-    pkg-config
-    libGL
-    projectm_3
-  ];
+  extraBuildInputs = [ pkg-config libGL projectm ];
 
   propagatedBuildInputs = [ glm ];
   meta = with lib; {
@@ -33,6 +20,6 @@ buildKodiBinaryAddon rec {
     description = "Projectm visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

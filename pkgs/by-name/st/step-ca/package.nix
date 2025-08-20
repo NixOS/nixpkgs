@@ -8,25 +8,21 @@
   pkg-config,
   hsmSupport ? true,
   nixosTests,
+  darwin,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.28.4";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     tag = "v${version}";
-    # Source uses git export-subst and isn't reproducible when fetching as git archive,
-    # see https://github.com/smallstep/certificates/blob/6a1250131284dce4aa66c0e0e3f7a3202dd56ad0/.gitattributes.
-    # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
-    # see https://github.com/NixOS/nixpkgs/issues/84312#issuecomment-2475948960.
-    forceFetchGit = true;
-    hash = "sha256-ZIpsSNdQVkelo5b3H03N8qToHU7z+lalAE7Ur6m2YwY=";
+    hash = "sha256-SFiGRmi8Bd0WEitvDvybfGMEw36gAVjtLrYbBpBAItU=";
   };
 
-  vendorHash = "sha256-gGPrrl5J8UrjUpof2DaSs1fAQsMSsyAMlC67h5V75+k=";
+  vendorHash = "sha256-t42TAjRuMo1AXq3IKbN2L7G50vJzi/2LmhPKrn5K1Io=";
 
   ldflags = [
     "-w"
@@ -35,7 +31,9 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
-  buildInputs = lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ];
+  buildInputs =
+    lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ]
+    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.PCSC ];
   postPatch = ''
     substituteInPlace authority/http_client_test.go --replace-fail 't.Run("SystemCertPool", func(t *testing.T) {' 't.Skip("SystemCertPool", func(t *testing.T) {'
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
@@ -63,13 +61,12 @@ buildGoModule rec {
 
   passthru.tests.step-ca = nixosTests.step-ca;
 
-  meta = {
+  meta = with lib; {
     description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    mainProgram = "step-ca";
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       cmcdragonkai
       techknowlogick
     ];

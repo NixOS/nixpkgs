@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       (such as the ITT's at QMC).
     '';
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
     mainProgram = "em";
   };

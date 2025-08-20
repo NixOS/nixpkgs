@@ -5,10 +5,10 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  replaceVars,
+  substituteAll,
 
   # build
-  libpq,
+  postgresql,
   setuptools,
 
   # propagates
@@ -29,24 +29,24 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
-  postgresql,
   postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.2.9";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = "psycopg";
+    repo = pname;
     tag = version;
-    hash = "sha256-mMhfULdvqphwdEqynLNq+7XCNmqmf+zi1SGumC/6qAc=";
+    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
   };
 
   patches = [
-    (replaceVars ./ctypes.patch {
-      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (substituteAll {
+      src = ./ctypes.patch;
+      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -73,13 +73,14 @@ let
 
     nativeBuildInputs = [
       cython
-      libpq.pg_config
+      # needed to find pg_config with strictDeps
+      postgresql
       setuptools
       tomli
     ];
 
     buildInputs = [
-      libpq
+      postgresql
     ];
 
     # tested in psycopg
@@ -122,8 +123,6 @@ buildPythonPackage rec {
 
   outputs = [
     "out"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     "doc"
   ];
 
@@ -146,10 +145,6 @@ buildPythonPackage rec {
     furo
     setuptools
     shapely
-  ]
-  # building the docs fails with the following error when cross compiling
-  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     sphinx-autodoc-typehints
     sphinxHook
   ];
@@ -170,16 +165,17 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs = [
-    anyio
-    pproxy
-    pytest-randomly
-    pytestCheckHook
-    postgresql
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
-  ++ optional-dependencies.c
-  ++ optional-dependencies.pool;
+  nativeCheckInputs =
+    [
+      anyio
+      pproxy
+      pytest-randomly
+      pytestCheckHook
+      postgresql
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -187,19 +183,18 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck = ''
-    cd ..
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-  '';
+  preCheck =
+    ''
+      cd ..
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+    '';
 
   disabledTests = [
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
-    # expects timeout, but we have no route in the sandbox
-    "test_connect_error_multi_hosts_each_message_preserved"
   ];
 
   disabledTestPaths = [
@@ -214,18 +209,17 @@ buildPythonPackage rec {
     "tests/test_notify_async.py"
   ];
 
-  pytestFlags = [
-    "-ocache_dir=.cache"
-  ];
-
-  disabledTestMarks = [
-    "refcount"
-    "timing"
-    "flakey"
+  pytestFlagsArray = [
+    "-o cache_dir=.cache"
+    "-m"
+    "'not refcount and not timing and not flakey'"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    "-W"
+    "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
   postCheck = ''
-    cd psycopg
+    cd ${pname}
   '';
 
   passthru = {

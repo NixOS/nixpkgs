@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   tenacity,
 }:
@@ -17,13 +16,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "basnijholt";
-    repo = "aiokef";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
+      --replace "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
       --replace "--mypy" ""
   '';
 
@@ -32,12 +32,9 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];
 
   meta = with lib; {

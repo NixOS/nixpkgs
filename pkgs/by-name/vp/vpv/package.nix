@@ -4,11 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libGL,
   libpng,
   libtiff,
   libjpeg,
-  libX11,
   SDL2,
   gdal,
   octave,
@@ -17,20 +15,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpv";
-  version = "0.9.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "kidanger";
     repo = "vpv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eyfRMoocKEt0VezDRm5Tq7CjpEyfrcEb6WcUSO5M1Og=";
+    sha256 = "sha256-mlBceYMfsAE7MI6J7xnkJHBJ8RInePooXH5YW9I47YM=";
   };
 
   cargoRoot = "src/fuzzy-finder";
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     sourceRoot = "${finalAttrs.src.name}/src/fuzzy-finder";
-    hash = "sha256-4XxhKzrfTulAnLvlzRCrxSxuR+Nl/ANqcUem0YqCQ0Y=";
+    hash = "sha256-CDKlmwA2Wj78xPaSiYPmIJ7xmiE5Co+oGGejZU3v1zI=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libGL
     libpng
     libtiff
     libjpeg
-    libX11
     SDL2
     gdal
     octave

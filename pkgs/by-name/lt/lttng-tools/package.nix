@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  babeltrace2,
   popt,
   libuuid,
   liburcu,
@@ -14,16 +13,15 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-tools";
-  version = "2.14.0";
+  version = "2.13.14";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-2MOcJs7BO3vYJVHNUqIu/DWLiI4268+cG2DvHDo8L9M=";
+    sha256 = "sha256-U733xK0H2/5mDuTZr/xj/kSuWemnPG96luD8oUDlrcs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    babeltrace2
     popt
     libuuid
     liburcu

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   alsa-lib,
   boost,
   curl,
@@ -36,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.10.1";
+  version = "1.10";
 
   src = fetchurl {
     url =
       let
-        date = "20250302";
+        date = "20240822";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    hash = "sha256-Jn8357JYR6cWISDxzYutLTWBDMTv0h923cSFf+RU8V8=";
+    hash = "sha256-Es2Uo0RIJHYeO/60XiHVLJe9Eoan8DREtAI2KGjuLaM=";
   };
 
   nativeBuildInputs = [

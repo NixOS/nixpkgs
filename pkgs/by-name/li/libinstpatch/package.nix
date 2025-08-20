@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libinstpatch";
-  version = "1.1.7";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "swami";
-    repo = "libinstpatch";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y3rmCQk3homgnWT/i/qhKJ6gRO8opMFnaC0T8d5UN48=";
+    sha256 = "sha256-OU6/slrPDgzn9tvXZJKSWbcFbpS/EAsOi52FtjeYdvA=";
   };
 
   nativeBuildInputs = [

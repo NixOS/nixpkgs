@@ -24,16 +24,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "ff2mpv-rust";
-  version = "1.1.7";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
     rev = version;
-    hash = "sha256-kJpKcwwwGjFYE7R4ZhkEGK44QqxsUEB/Scj0RoySta4=";
+    hash = "sha256-hAhHfNiHzrzACrijpVkzpXqrqGYKI3HIJZtUuTrRIcQ=";
   };
 
-  cargoHash = "sha256-O8OAynSdZdtqNS+wAQ1oAs2HjueC41O8RFqESRHr+6o=";
+  cargoHash = "sha256-EKmysiq1NTv1aQ1DZGS8bziY4lRr+KssBgXa8MO76Ac=";
 
   postInstall = ''
     $out/bin/ff2mpv-rust manifest > manifest.json

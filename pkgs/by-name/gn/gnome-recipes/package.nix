@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "Recipe management application for GNOME";
     mainProgram = "gnome-recipes";
     homepage = "https://gitlab.gnome.org/GNOME/recipes";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

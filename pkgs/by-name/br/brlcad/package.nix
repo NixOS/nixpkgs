@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  fontconfig,
-  libX11,
-  libXi,
-  freetype,
-  libgbm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, fontconfig
+, libX11
+, libXi
+, freetype
+, libgbm
 }:
 
 stdenv.mkDerivation rec {
@@ -57,10 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://brlcad.org";
     description = "BRL-CAD is a powerful cross-platform open source combinatorial solid modeling system";
     changelog = "https://github.com/BRL-CAD/brlcad/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = with licenses; [
-      lgpl21
-      bsd2
-    ];
+    license = with licenses; [ lgpl21 bsd2 ];
     maintainers = with maintainers; [ GaetanLepage ];
     platforms = platforms.linux;
     # error Exactly one of ON_LITTLE_ENDIAN or ON_BIG_ENDIAN should be defined.

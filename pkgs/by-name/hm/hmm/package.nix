@@ -3,7 +3,6 @@
   rustPlatform,
   fetchCrate,
   perl,
-  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,21 +15,24 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-WPePzqZ2iGeJ7kzTj8eg7q1JEjw91WY7gViJJ46SLRY=";
   };
 
-  cargoHash = "sha256-wyuV+jWY7w4VDn314yRkqmeqgRijPb+XgmUiy73U3Zc=";
+  cargoHash = "sha256-CQnM7pFnk4LcstKllhbeohbrggKV6MBQy03oq7DEkP4=";
 
   nativeCheckInputs = [
     perl
-    writableTmpDirAsHomeHook
   ];
   # FIXME: remove patch when upstream version of rustc-serialize is updated
   # https://github.com/NixOS/nixpkgs/pull/310673
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
-  meta = {
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  meta = with lib; {
     description = "Small command-line note-taking app";
     homepage = "https://github.com/samwho/hmm";
     changelog = "https://github.com/samwho/hmm/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -33,16 +33,16 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.2.1";
+  version = "8.1.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-ZLjCcH6cSG+LcoeSifBm6HGjnRFJwYNTXbcw9b/BeQY=";
+    hash = "sha256-NAFleaZaZFWwhAPsuJG9S81w/FlkHgefqVWg5F+lhUo=";
   };
 
   nativeBuildInputs = [
@@ -98,11 +98,15 @@ buildPythonPackage rec {
       --foxx.api=false &
   '';
 
-  pytestFlags = [
-    "--host=${testDBOpts.host}"
-    "--port=${testDBOpts.port}"
-    "--passwd=${testDBOpts.password}"
-    "--secret=${testDBOpts.secret}"
+  pytestFlagsArray = [
+    "--host"
+    testDBOpts.host
+    "--port"
+    testDBOpts.port
+    "--passwd"
+    testDBOpts.password
+    "--secret"
+    testDBOpts.secret
   ];
 
   disabledTests = [
@@ -149,7 +153,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Driver for ArangoDB";
     homepage = "https://github.com/ArangoDB-Community/python-arango";
-    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
+    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jsoo1 ];
   };

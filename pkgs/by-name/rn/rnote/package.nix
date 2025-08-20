@@ -27,18 +27,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.12.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    tag = "v${version}";
-    hash = "sha256-uEYamKIZIjR7c2LB+GydLmxy+EhcKrcxV+9vsveqGVk=";
+    rev = "v${version}";
+    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-bzB4yjBcMsOqbq1UCgPFErzVOXs55qy+CYBUinGEbg4=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-B6lT6qSOIHxqBpKTE4nO2+Xs9KF7JLVRUHOkYp8Sl+M=";
+      "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
+    };
   };
 
   nativeBuildInputs = [
@@ -64,18 +67,19 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs = [
-    appstream
-    glib
-    gst_all_1.gstreamer
-    gtk4
-    libadwaita
-    libxml2
-    poppler
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    [
+      appstream
+      glib
+      gst_all_1.gstreamer
+      gtk4
+      libadwaita
+      libxml2
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   postPatch = ''
     chmod +x build-aux/*.py
@@ -86,16 +90,16 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       dotlambda
       gepbird
       yrd
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

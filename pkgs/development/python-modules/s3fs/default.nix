@@ -1,73 +1,50 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   aiobotocore,
   aiohttp,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
   fsspec,
-
-  # tests
-  flask,
-  flask-cors,
-  moto,
-  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2025.2.0";
-  pyproject = true;
+  version = "2024.9.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "fsspec";
-    repo = "s3fs";
-    tag = version;
-    hash = "sha256-nnfvccORDspj54sRxL3d0hn4MpzKYGKE2Kl0v/wLaNw=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ZJNwWrtQN01reZT5YW0nrb3YohnIY1EAvcKGOC79kfU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  postPatch = ''
+    sed -i 's/fsspec==.*/fsspec/' requirements.txt
+  '';
 
-  pythonRelaxDeps = [ "fsspec" ];
+  buildInputs = [ docutils ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiobotocore
-    fsspec
     aiohttp
+    fsspec
   ];
 
-  optional-dependencies = {
-    awscli = aiobotocore.optional-dependencies.awscli;
-    boto3 = aiobotocore.optional-dependencies.boto3;
-  };
+  # Depends on `moto` which has a long dependency chain with exact
+  # version requirements that can't be made to work with current
+  # pythonPackages.
+  doCheck = false;
 
   pythonImportsCheck = [ "s3fs" ];
 
-  nativeCheckInputs = [
-    flask
-    flask-cors
-    moto
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # require network access
-    "test_async_close"
-  ];
-
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
+  meta = with lib; {
     description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
-    changelog = "https://github.com/fsspec/s3fs/blob/${version}/docs/source/changelog.rst";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ teh ];
+    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teh ];
   };
 }

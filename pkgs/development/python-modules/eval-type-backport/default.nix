@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "eval-type-backport";
   version = "0.2.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";

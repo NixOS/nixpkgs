@@ -11,8 +11,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "klauspost";
     repo = "asmfmt";
-    tag = "v${version}";
-    hash = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
+    rev = "v${version}";
+    sha256 = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
   };
 
   vendorHash = null;
@@ -29,7 +29,7 @@ buildGoModule rec {
   # There are no tests.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Go assembler formatter";
     mainProgram = "asmfmt";
     longDescription = ''
@@ -37,8 +37,8 @@ buildGoModule rec {
       your Go code.
     '';
     homepage = "https://github.com/klauspost/asmfmt";
-    changelog = "https://github.com/klauspost/asmfmt/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kalbasit ];
+    changelog = "https://github.com/klauspost/asmfmt/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
   };
 }

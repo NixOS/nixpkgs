@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "48.0.1";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OTF2hZogt9I138MDAxuiDGhkQRBpiNyRHdkbe21m4f0=";
+    hash = "sha256-5LFiZ5ryTH6W7m4itH1f8NqW4KD2FtE66xIHxgn4lIM=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";
     description = "Take pictures and videos on your computer, tablet, or phone";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "snapshot";

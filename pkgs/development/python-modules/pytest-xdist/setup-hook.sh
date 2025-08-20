@@ -1,5 +1,7 @@
 pytestXdistHook() {
-    appendToVar pytestFlags "--numprocesses=$NIX_BUILD_CORES"
+    pytestFlagsArray+=(
+        "--numprocesses=$NIX_BUILD_CORES"
+    )
 }
 
 if [ -z "${dontUsePytestXdist-}" ] && [ -z "${dontUsePytestCheck-}" ]; then

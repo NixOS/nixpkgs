@@ -9,15 +9,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gl3w";
-  version = "0-unstable-2025-08-02";
+  version = "0-unstable-2023-10-10";
 
   src = fetchFromGitHub {
     owner = "skaslev";
-    repo = "gl3w";
-    rev = "96ebe5eded05aa699e8feb25f7bbc9f1c821a207";
-    hash = "sha256-Juv1LI8bw/dU/SKmtoOqu8TrCf68uqkpesQ1leRox+E=";
+    repo = pname;
+    rev = "3a33275633ce4be433332dc776e6a5b3bdea6506";
+    hash = "sha256-kEm5QItpasSFJQ32YBHPpc+itz/nQ8bQMCavbOTGT/w=";
   };
 
   nativeBuildInputs = [

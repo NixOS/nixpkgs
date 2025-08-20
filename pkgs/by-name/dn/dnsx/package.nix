@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "dnsx";
-  version = "1.2.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
     tag = "v${version}";
-    hash = "sha256-v5GDDA+ubHtUtLvhe0Hwm6l3OqTcIFbdm6HuxxV2zco=";
+    hash = "sha256-scp0CDIO8F2TqpSCgXXfb8I83stvO/GZqSA5/BkN8pE=";
   };
 
-  vendorHash = "sha256-B9GwQaX/W2xjpIFicfFFGBcopxyhMKZZRKBPcQ/r5Oo=";
+  vendorHash = "sha256-WbFkBTPy4N+mAVSkq1q9XcNs1jk6YuBcYxiEmQV/TsM=";
 
   subPackages = [ "cmd/dnsx" ];
 
@@ -32,9 +32,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "-version";
+  versionCheckProgramArg = [ "-version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast and multi-purpose DNS toolkit";
     longDescription = ''
       dnsx is a fast and multi-purpose DNS toolkit allow to run multiple
@@ -44,8 +44,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/dnsx";
     changelog = "https://github.com/projectdiscovery/dnsx/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "dnsx";
   };
 }

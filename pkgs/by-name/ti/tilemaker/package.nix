@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPackages,
-  fetchpatch,
   cmake,
   installShellFiles,
   boost,
@@ -26,14 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-rB5oP03yaIzklwkGsIeS9ELbHOY9AObwjRrK9HBQFI4=";
   };
-
-  patches = [
-    # fixes for Boost 1.86
-    (fetchpatch {
-      url = "https://github.com/systemed/tilemaker/commit/6509f0cf50943a90b36b5c6802118b72124b1e7a.patch";
-      hash = "sha256-C4aCUGTTUtY24oARihMnljjRbw80xRdMUyvu/b1Nsdw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/options_parser.cpp \

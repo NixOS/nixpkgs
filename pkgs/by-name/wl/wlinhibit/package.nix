@@ -9,15 +9,15 @@
   wayland-protocols,
   wayland-scanner,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wlinhibit";
-  version = "0.1.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "0x5a4";
     repo = "wlinhibit";
-    rev = "v0.1.2";
-    hash = "sha256-mAEBnlIfW1R5+3CMH4ZumQ39Ss2K7PfW28I4/O9saWE=";
+    rev = "v0.1.1";
+    hash = "sha256-YQHJ9sLHSV8GJP7IpRzmtDbeB86y/a48mLcYy4iDciw=";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Simple, stupid idle inhibitor for wayland";
+    description = "simple, stupid idle inhibitor for wayland";
     license = lib.licenses.mit;
     homepage = "https://github.com/0x5a4/wlinhibit";
     platforms = lib.platforms.linux;

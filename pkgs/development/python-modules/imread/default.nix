@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
     "-v"
     "--pyargs"

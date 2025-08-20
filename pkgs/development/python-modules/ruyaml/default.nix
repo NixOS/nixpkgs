@@ -35,8 +35,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "ruyaml" ];

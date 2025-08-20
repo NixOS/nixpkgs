@@ -1,21 +1,19 @@
 {
   fetchFromGitHub,
-  gitUpdater,
   lib,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ubi_reader";
-  version = "0.8.10";
+  version = "0.8.9";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "ubi_reader";
     rev = "v${version}";
-    hash = "sha256-fXJiQZ1QWUmkRM+WI8DSIsay9s1w3hKloRuCcUNwZjM=";
+    hash = "sha256-04HwzkonPzzWfX8VE//fMoVv5ggAS+61zx2W8VEUIy4=";
   };
 
   build-system = [ python3.pkgs.poetry-core ];
@@ -24,13 +22,6 @@ python3.pkgs.buildPythonApplication rec {
 
   # There are no tests in the source
   doCheck = false;
-
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "_[a-z]+$";
-    };
-  };
 
   meta = {
     description = "Python scripts capable of extracting and analyzing the contents of UBI and UBIFS images";

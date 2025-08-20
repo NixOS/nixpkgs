@@ -5,13 +5,13 @@
   zsh,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zthrottle";
-  version = "0-unstable-2017-07-24";
+  version = "unstable-2017-7-24";
 
   src = fetchFromGitHub {
     owner = "anko";
-    repo = "zthrottle";
+    repo = pname;
     rev = "f62066661e49375baeb891fa8e43ad4527cbd0a0";
     sha256 = "1ipvwmcsigzmxlg7j22cxpvdcgqckkmfpsnvzy18nbybd5ars9l5";
   };

@@ -7,7 +7,7 @@
   dune-rpc,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "dune-action-plugin";
   inherit (dune_3) src version;
 

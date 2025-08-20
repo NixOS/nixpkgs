@@ -19,6 +19,7 @@
   paramiko,
   pbr,
   prettytable,
+  pynacl,
   python,
   pythonOlder,
   pyyaml,
@@ -33,12 +34,14 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "44.0.0";
+  version = "42.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R9V9NX5Pz4+1yV/OjtbuIOICZQnDt1wjDo6ZZP9ojkc=";
+    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
@@ -72,6 +75,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hacking
     oslotest
+    pynacl
     stestr
   ];
 
@@ -84,9 +88,6 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_resource_list
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_saved_state
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_take_action_got_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';
@@ -98,6 +99,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
     mainProgram = "tempest";
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

@@ -11,13 +11,13 @@
   xprop,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "undistract-me";
-  version = "0-unstable-2020-08-09";
+  version = "unstable-2020-08-09";
 
   src = fetchFromGitHub {
     owner = "jml";
-    repo = "undistract-me";
+    repo = pname;
     rev = "2f8ac25c6ad8efcf160d2b480825b1cbb6772aab";
     hash = "sha256-Qw7Cu9q0ZgK/RTvyDdHM5N3eBaKjtYqYH0J+hKMUZX8=";
   };

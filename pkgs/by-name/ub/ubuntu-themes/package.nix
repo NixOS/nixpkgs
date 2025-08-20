@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ubuntu-themes";
-  version = "24.04";
+  version = "20.10";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/ubuntu-themes/${version}-0ubuntu1/ubuntu-themes_${version}.orig.tar.gz";
-    hash = "sha256-/SMwwDaSUe86SXNe7U9Sh7SzzlC4yOXVA+urAIxeDxk=";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.orig.tar.gz";
+    sha256 = "00frn2dd4kjhlmwkasrx4a820fwrg8f8hmiwh51m63bpj00vwn0r";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,12 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons
     cp -a LoginIcons        $out/share/icons
+    cp -a suru-icons        $out/share/icons
     cp -a ubuntu-mobile     $out/share/icons
     cp -a ubuntu-mono-dark  $out/share/icons
     cp -a ubuntu-mono-light $out/share/icons
+
+    mv $out/share/icons/{suru-icons,suru}
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
@@ -65,16 +68,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  dontCheckForBrokenSymlinks = true;
-
-  meta = {
+  meta = with lib; {
     description = "Ubuntu monochrome and Suru icon themes, Ambiance and Radiance themes, and Ubuntu artwork";
     homepage = "https://launchpad.net/ubuntu-themes";
-    license = with lib.licenses; [
+    license = with licenses; [
       cc-by-sa-40
       gpl3
     ];
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.romildo ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "smpq";
     maintainers = with lib.maintainers; [
       aanderse
+      karolchmist
     ];
     platforms = lib.platforms.all;
   };

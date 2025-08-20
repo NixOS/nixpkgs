@@ -1,30 +1,27 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
 }:
-buildGoModule (finalAttrs: {
+let
+  version = "0.11.0";
+in
+
+buildGoModule {
   pname = "scion";
 
-  version = "0.12.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
+    rev = "v${version}";
+    hash = "sha256-JemqSr1XBwW1hLuWQrApY/hqLj/VpW3xSJedVIoFSiY=";
   };
 
-  vendorHash = "sha256-Ew/hQM8uhaM89sCcPKUBbiGukDq3h5x+KID3w/8BDHg=";
+  vendorHash = "sha256-akFbHgo8xI2/4aQsyutjhXPM5d0A3se3kG/6Ebw1Qcs=";
 
-  excludedPackages = [
-    "acceptance"
-    "demo"
-    "tools"
-    "pkg/private/xtest/graphupdater"
-  ];
+  excludedPackages = [ "acceptance" "demo" "tools" "pkg/private/xtest/graphupdater" ];
 
   postInstall = ''
     set +e
@@ -40,22 +37,15 @@ buildGoModule (finalAttrs: {
 
   tags = [ "sqlite_mattn" ];
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) scion-freestanding-deployment;
-    };
-    updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) scion-freestanding-deployment;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Future Internet architecture utilizing path-aware networking";
     homepage = "https://scion-architecture.net/";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      sarcasticadmin
-      matthewcroughan
-    ];
-    teams = with lib.teams; [ ngi ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sarcasticadmin matthewcroughan ];
   };
-})
+}

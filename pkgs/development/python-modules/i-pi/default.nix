@@ -5,7 +5,6 @@
   gfortran,
   makeWrapper,
   setuptools,
-  setuptools-scm,
   numpy,
   scipy,
   distutils,
@@ -17,20 +16,17 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.5.1";
+  version = "3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-az1rQlXwYUyPA4wP5wxBZtmJhQlvHxhRZF2O141i76o=";
+    hash = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gfortran
@@ -46,14 +42,9 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     pytest-mock
-  ]
-  ++ lib.optional (pythonAtLeast "3.12") distutils;
+  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
 
-  enabledTestPaths = [ "ipi_tests/unit_tests" ];
-  disabledTests = [
-    "test_driver_base"
-    "test_driver_forcebuild"
-  ];
+  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
 
   postFixup = ''
     wrapProgram $out/bin/i-pi \
@@ -66,7 +57,7 @@ buildPythonPackage rec {
       gpl3Only
       mit
     ];
-    homepage = "https://ipi-code.org/";
+    homepage = "http://ipi-code.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };

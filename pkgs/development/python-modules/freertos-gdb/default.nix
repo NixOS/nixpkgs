@@ -2,22 +2,16 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "freertos-gdb";
-  version = "1.0.4";
-  pyproject = true;
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lH/dlTX2PuZ89rX5zzpedHkqHvdVy+h6BzJ8rVFmkb8=";
+    hash = "sha256-5rkB01OdbD5Z4vA6dbqhWp5pGwqI1IlE4IE1dSdT1QE=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   # Project has no tests
   doCheck = false;

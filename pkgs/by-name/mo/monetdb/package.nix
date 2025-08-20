@@ -1,35 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  python3,
-  bison,
-  openssl,
-  readline,
-  bzip2,
-  nixosTests,
-}:
+{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2, nixosTests }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.53.9";
+  version = "11.51.7";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qltKYPEWU5w3SIJumxunUTwC//egn7UtvmcFL+bxIUk=";
+    hash = "sha256-lWURVG+5NSWBTxXC5slYSedMZC1Z/HGfzZ43tR7z4dE=";
   };
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    python3
-  ];
-  buildInputs = [
-    openssl
-    readline
-    bzip2
-  ];
+  nativeBuildInputs = [ bison cmake python3 ];
+  buildInputs = [ openssl readline bzip2 ];
 
   postPatch = ''
     substituteInPlace cmake/monetdb-packages.cmake --replace \
@@ -45,7 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/Mz.py \
       $out/bin/Mtest.py \
       $out/bin/sqlsample.pl \
-      $out/bin/malsample.pl
+      $out/bin/malsample.pl \
+      $out/bin/Mconvert.py
   '';
 
   passthru.tests = { inherit (nixosTests) monetdb; };

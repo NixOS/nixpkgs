@@ -1,11 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  replaceVars,
-  coreutils,
-  gnugrep,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, replaceVars
+, coreutils
+, gnugrep
 }:
 
 stdenv.mkDerivation rec {
@@ -33,14 +32,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://hpc.fau.de/research/tools/likwid/";
     changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${version}";
     description = "Performance monitoring and benchmarking suite";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     # Might work on ARM by appropriately setting COMPILER in config.mk
-    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
-    maintainers = [ lib.maintainers.vbgl ];
+    platforms = intersectLists platforms.linux platforms.x86;
+    maintainers = [ maintainers.vbgl ];
     mainProgram = "likwid-perfctr";
   };
 }

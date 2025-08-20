@@ -17,18 +17,17 @@
   opencc,
   libsoup_3,
   json-glib,
-  libnotify,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.16.4";
+  version = "1.15.8";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
-    tag = version;
-    hash = "sha256-ZIZ485Jk6LkFZ8TKEqlUeTZIIOZqo61uLQtPAfAX/Io=";
+    rev = version;
+    hash = "sha256-u21avBSSu/78tLoyFI9XGocC7rT/64L5HqQQj3Zg1Mc=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +59,16 @@ stdenv.mkDerivation rec {
     opencc
     libsoup_3
     json-glib
-    libnotify
   ];
 
-  meta = {
+  meta = with lib; {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
       linsui
+      ericsagnes
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

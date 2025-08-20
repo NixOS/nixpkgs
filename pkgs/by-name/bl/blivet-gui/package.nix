@@ -22,7 +22,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "blivet-gui";
   version = "2.6.0";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
@@ -35,8 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace blivetgui/gui_utils.py --replace-fail /usr/share $out/share
     substituteInPlace blivet-gui --replace-fail "pkexec blivet-gui-daemon" "pkexec $out/bin/blivet-gui-daemon"
     substituteInPlace blivet-gui --replace-fail "pkexec" "${pkexecPath}"
-    substituteInPlace blivet-gui.desktop --replace-fail /usr/bin/blivet-gui $out/bin/blivet-gui
-    substituteInPlace org.fedoraproject.pkexec.blivet-gui.policy --replace-fail /usr/bin/blivet-gui-daemon $out/bin/blivet-gui-daemon
   '';
 
   nativeBuildInputs = [
@@ -46,10 +44,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [ gtk3 ];
-
-  build-system = [
-    python3.pkgs.setuptools
-  ];
 
   dependencies = [
     python3.pkgs.blivet

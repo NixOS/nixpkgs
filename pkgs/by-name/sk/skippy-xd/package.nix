@@ -13,7 +13,7 @@
   giflib,
   pkg-config,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "skippy-xd";
   version = "0.8.0";
   src = fetchFromGitHub {

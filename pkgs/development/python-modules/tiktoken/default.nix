@@ -16,10 +16,10 @@
 }:
 let
   pname = "tiktoken";
-  version = "0.9.0";
+  version = "0.8.0";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Cpcpqk44EkOH/lXvEjIsHjIjLg5d74WJbH9iqx5LF0=";
+    hash = "sha256-nMuydA8kVCU0NpxWNc/ZsrPCSQdUp4rIgx2Z+J+U7rI=";
   };
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -41,14 +41,10 @@ buildPythonPackage {
     setuptools-rust
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      postPatch
-      ;
-    hash = "sha256-MfTTRbSM+KgrYrWHYlJkGDc1qn3oulalDJM+huTaJ0g=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src postPatch;
+    name = "${pname}-${version}";
+    hash = "sha256-XzUEqiUdi70bgQwARGHsgti36cFOh7QDiEkccjxlwls=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +68,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "tiktoken" ];
 
   meta = with lib; {
-    description = "Fast BPE tokeniser for use with OpenAI's models";
+    description = "tiktoken is a fast BPE tokeniser for use with OpenAI's models";
     homepage = "https://github.com/openai/tiktoken";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

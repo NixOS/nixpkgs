@@ -7,21 +7,19 @@
   perlPackages,
   tayga,
   iproute2,
-  nftables,
-  systemd,
+  iptables,
   nixosTests,
 }:
 
-assert (lib.assertMsg systemd.withNetworkd "systemd for clatd must be built with networkd support");
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "clatd";
-  version = "2.1.0";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "toreanderson";
     repo = "clatd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-hNFuS6pdaA/FTIUeuwjGovlHcPh248Au1VXCzMuYwLU=";
+    rev = "v${version}";
+    hash = "sha256-ZUGWQTXXgATy539NQxkZSvQA7HIWkIPsw1NJrz0xKEg=";
   };
 
   strictDeps = true;
@@ -35,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     NetIP
     NetDNS
-    JSON
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -50,10 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
       --set PERL5LIB $PERL5LIB \
       --prefix PATH : ${
         lib.makeBinPath [
-          tayga # tayga
-          iproute2 # ip
-          nftables # nft
-          systemd # networkctl
+          tayga
+          iproute2
+          iptables
         ]
       }
   '';
@@ -68,4 +64,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "clatd";
     platforms = platforms.linux;
   };
-})
+}

@@ -3,7 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitMinimal,
+  git,
   zsh,
   zlib,
   runtimeShell,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
   nativeInstallCheckInputs = [
-    gitMinimal
+    git
     zsh
   ];
   doInstallCheck = true;
@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       mmlb
+      hexa
       SuperSandro2000
     ];
     platforms = platforms.all;

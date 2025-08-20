@@ -3,7 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  llvmPackages_20,
+  llvmPackages_19,
   zlib,
   ncurses,
   libxml2,
@@ -11,20 +11,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.14";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
-    repo = "bpf-linker";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-accW1w0Mn9Mo9r2LrupQdgx+3850Dth8EfnnuzO+ZzM=";
+    hash = "sha256-CRYp1ktmmY4OS23+LNKOBQJUMkd+GXptBp5LPfbyZAc=";
   };
 
-  cargoHash = "sha256-D1N4zQjpllQg6Nn92+HWWsSmGsOon0mygErWg3X8Gx8=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "compiletest_rs-0.10.2" = "sha256-JTfVfMW0bCbFjQxeAFu3Aex9QmGnx0wp6weGrNlQieA=";
+    };
+  };
 
   buildNoDefaultFeatures = true;
 
-  nativeBuildInputs = [ llvmPackages_20.llvm ];
+  nativeBuildInputs = [ llvmPackages_19.llvm ];
   buildInputs = [
     zlib
     ncurses
@@ -35,15 +40,15 @@ rustPlatform.buildRustPackage rec {
   # rust-src and `-Z build-std=core` are required to properly run the tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Simple BPF static linker";
     mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with maintainers; [ nickcao ];
     # llvm-sys crate locates llvm by calling llvm-config
     # which is not available when cross compiling
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

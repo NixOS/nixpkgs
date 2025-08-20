@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  CoreFoundation,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
   pname = "macfsevents";
   version = "0.8.4";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "MacFSEvents";
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
-  patches = [ ./fix-packaging.patch ];
+  buildInputs = [
+    CoreFoundation
+    CoreServices
+  ];
 
   # Some tests fail under nix build directory
   doCheck = false;

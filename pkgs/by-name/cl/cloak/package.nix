@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,20 +10,18 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "evansmurithi";
-    repo = "cloak";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-Pd2aorsXdHB1bs609+S5s+WV5M1ql48yIKaoN8SEvsg=";
   };
 
-  cargoHash = "sha256-PAZOenugZrKYIP7zzxozerjkauwg7VN0mAlex0WPttQ=";
+  cargoHash = "sha256-m11A5fcJzWoDZglrr2Es1V5ZJNepEkGeIRVhexJ7jws=";
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/evansmurithi/cloak";
     description = "Command-line OTP authenticator application";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mvs ];
     mainProgram = "cloak";
   };
 }

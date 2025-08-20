@@ -7,7 +7,6 @@
   alsa-plugins,
   gettext,
   makeWrapper,
-  pkg-config,
   ncurses,
   libsamplerate,
   pciutils,
@@ -29,19 +28,18 @@ let
     paths = map (path: "${path}/lib/alsa-lib") plugin-packages;
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.14";
+  version = "1.2.13";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
+    url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
+    hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
   };
 
   nativeBuildInputs = [
     gettext
     makeWrapper
-    pkg-config
   ];
   buildInputs = [
     alsa-lib
@@ -69,17 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
   '';
 
-  postInstall = ''
-    # udev rules are super broken, violating `udevadm verify` in various creative ways.
-    # NixOS has its own set of alsa udev rules, we can just delete the udev rules for this package
-    rm -rf $out/lib/udev
-  '';
-
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/utils/";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
@@ -87,13 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = with lib.licenses; [
-      gpl2Plus
-      gpl2Only # alsactl (init_{parse,sysdeps,sysfs,utils_{run,string}}.c, rest GPL 2.0+)
-      lgpl21Plus # alsaucm
-    ];
-
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
-})
+}

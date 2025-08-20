@@ -7,20 +7,15 @@
 python3Packages.buildPythonApplication rec {
   pname = "lndmanage";
   version = "0.16.0";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bitromortac";
-    repo = "lndmanage";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-VUeGnk/DtNAyEYFESV6kXIRbKqUv4IcMnU3fo0NB4uQ=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     cycler
     decorator
     googleapis-common-protos
@@ -37,13 +32,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preBuild = ''
-    substituteInPlace setup.py --replace-fail '==' '>='
+    substituteInPlace setup.py --replace '==' '>='
   '';
 
-  # requires lnregtest
-  doCheck = false;
-
-  pythonImportsCheck = [ "lndmanage" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Channel management tool for lightning network daemon (LND) operators";

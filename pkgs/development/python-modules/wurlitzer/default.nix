@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wurlitzer" ];
 
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
 
   meta = with lib; {
     description = "Capture C-level output in context managers";

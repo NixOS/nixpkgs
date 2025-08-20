@@ -8,14 +8,13 @@
   pytestCheckHook,
   pytest-aiohttp,
   pytest-asyncio,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.7.4";
+  version = "4.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,12 +23,13 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aiohue";
     tag = version;
-    hash = "sha256-+vvdv8/rAoMdtH6XN9tq4zOLboTuz3CqruN2KkEMv+c=";
+    hash = "sha256-uS6pyJOntjbGa9UU1g53nuzgfP6AKAzN4meHrZY6Uic=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
   build-system = [ setuptools ];
@@ -44,7 +44,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-aiohttp
-    pytest-cov-stub
   ];
 
   pythonImportsCheck = [

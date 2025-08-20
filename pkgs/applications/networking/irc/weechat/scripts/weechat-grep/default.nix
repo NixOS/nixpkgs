@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "weechat-grep";
   version = "0.8.5";
 

@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  gitUpdater,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libz";
-  version = "1.2.8.2025.03.07";
+  version = "1.2.8.2015.12.26-unstable-2018-03-31";
 
   src = fetchFromGitLab {
     owner = "sortix";
     repo = "libz";
-    tag = "libz-${finalAttrs.version}";
-    hash = "sha256-tr9r0X+iHz3LZFgIxi3JMQUnSlyTRtAIhtjwI+DIhpc=";
+    rev = "752c1630421502d6c837506d810f7918ac8cdd27";
+    hash = "sha256-AQuZ0BOl1iP5Nub+tVwctlE2tfJe4Sq/KDGkjwBbsV4=";
   };
 
   outputs = [
@@ -22,15 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputDoc = "dev"; # single tiny man3 page
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "libz-";
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "libz-";
   };
 
   meta = {
     homepage = "https://sortix.org/libz/";
     description = "Clean fork of zlib";
     license = [ lib.licenses.zlib ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

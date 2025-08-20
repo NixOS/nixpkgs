@@ -3,12 +3,11 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
   kmod,
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fanout";
   version = "unstable-2022-10-17-${kernel.version}";
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

@@ -26,7 +26,6 @@ onerr() {
 }
 trap onerr ERR
 
-# shellcheck source-path=SCRIPTDIR
 source ./lib.sh
 
 (warn hi, this works >/dev/null) 2>&1 | grep -E $'.*warning:.* hi, this works' >/dev/null

@@ -5,7 +5,6 @@
   hatch-vcs,
   hatchling,
   httpx,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -13,38 +12,41 @@
 
 buildPythonPackage rec {
   pname = "iaqualink";
-  version = "0.5.3";
-  pyproject = true;
+  version = "0.5.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "flz";
     repo = "iaqualink-py";
-    tag = "v${version}";
-    hash = "sha256-2DqZJlsbDWo9fxIDg5P0CvZs8AuAh8XrhNiwIvuRm80=";
+    rev = "v${version}";
+    hash = "sha256-ewPP2Xq+ecZGc5kokvLEsRokGqTWlymrzkwk480tapk=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     hatch-vcs
     hatchling
   ];
 
-  dependencies = [ httpx ] ++ httpx.optional-dependencies.http2;
+  propagatedBuildInputs = [ httpx ] ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
-    pytest-cov-stub
     pytestCheckHook
     respx
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pytest --cov-config=pyproject.toml --cov-report=xml --cov-report=term --cov=src --cov=tests" ""
+  '';
 
   pythonImportsCheck = [ "iaqualink" ];
 
   meta = with lib; {
     description = "Python library for Jandy iAqualink";
     homepage = "https://github.com/flz/iaqualink-py";
-    changelog = "https://github.com/flz/iaqualink-py/releases/tag/v${src.tag}";
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

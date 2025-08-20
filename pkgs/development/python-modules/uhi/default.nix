@@ -4,30 +4,26 @@
   buildPythonPackage,
   hatchling,
   hatch-vcs,
-  fastjsonschema,
   numpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uhi";
-  version = "0.5.0";
-  pyproject = true;
+  version = "0.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lVm78vOPGKL8HY9zE5OWBo+I+JjWqa/IMyB+wP1Zoxw=";
+    hash = "sha256-DctrGXdQh9OKMe44jLLHDy7P4ExP/iymMiNBDK5b7vo=";
   };
 
-  build-system = [
+  buildInputs = [
     hatchling
     hatch-vcs
   ];
 
-  dependencies = [
-    fastjsonschema
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkInputs = [ pytestCheckHook ];
 

@@ -12,7 +12,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "open-web-calendar";
-  version = "1.49";
+  version = "1.42";
   pyproject = true;
 
   disabled = python.pythonOlder "3.9";
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "open_web_calendar";
-    hash = "sha256-vtmIqiF85zn8CiMUWsCKJUzfiiK/j+xlZIyuIMGxR4I=";
+    hash = "sha256-w4XaT1+qIM80K6B+LIAeYdZzYIw4FYSd/nvWphOx460=";
   };
 
   # The Pypi tarball doesn't contain open_web_calendars/features
@@ -35,7 +35,6 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [
     hatchling
     hatch-vcs
-    hatch-requirements-txt
   ];
 
   dependencies =
@@ -45,10 +44,6 @@ python.pkgs.buildPythonApplication rec {
       flask-allowed-hosts
       flask
       icalendar
-      icalendar-compatibility
-      cryptography
-      bcrypt
-      caldav
       requests
       pyyaml
       recurring-ical-events
@@ -57,13 +52,12 @@ python.pkgs.buildPythonApplication rec {
       beautifulsoup4
       lxml-html-clean
       pytz
-      mergecal
     ]
     ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
 
-  enabledTestPaths = [ "open_web_calendar/test" ];
+  pytestFlagsArray = [ "open_web_calendar/test" ];
 
   pythonImportsCheck = [ "open_web_calendar.app" ];
 

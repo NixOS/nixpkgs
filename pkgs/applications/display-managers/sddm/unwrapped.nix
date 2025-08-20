@@ -72,7 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUID_MIN=1000"
     "-DUID_MAX=29999"
 
-    "-DSDDM_INITIAL_VT=1"
+    # we still want to run the DM on VT 7 for the time being, as 1-6 are
+    # occupied by getties by default
+    "-DSDDM_INITIAL_VT=7"
 
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"

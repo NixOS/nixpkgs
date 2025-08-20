@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
-  version = "2.0.0";
+  version = "1.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_applehelp";
     inherit version;
-    hash = "sha256-LynvMxc1zpWO+kc0hz8ISUGXCJTGCQQIsHnGGy4cBtE=";
+    hash = "sha256-xApPlvN3bEOT2TNBIFOWL6wrhPTJmnmCukLglXanBhk=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "Sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
+    description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
     license = licenses.bsd2;
-    teams = [ teams.sphinx ];
+    maintainers = teams.sphinx.members;
   };
 }

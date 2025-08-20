@@ -5,7 +5,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "offzip";
   version = "0.4.1";
 

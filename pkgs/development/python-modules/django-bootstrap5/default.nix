@@ -4,17 +4,18 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
   jinja2,
   pillow,
   pytest-django,
   pytestCheckHook,
   pythonOlder,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "25.1";
+  version = "24.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,10 +24,13 @@ buildPythonPackage rec {
     owner = "zostera";
     repo = "django-bootstrap5";
     rev = "v${version}";
-    hash = "sha256-5VYw9Kq33/YFW9mFzkFzhrxavfx6r/CtC1SJhZbanhg=";
+    hash = "sha256-8e0Pi4uSvQhiLYiMgOqWJWDc/KPMXxyU5pnT9jvFZLU=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ django ];
 
@@ -40,8 +44,7 @@ buildPythonPackage rec {
     pillow
     pytest-django
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.app.settings

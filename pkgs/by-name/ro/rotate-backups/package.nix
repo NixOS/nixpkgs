@@ -7,7 +7,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
   version = "8.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.5.3";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,8 +35,14 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "gql";
     tag = "v${version}";
-    hash = "sha256-0mVMhJHlF6EZ3D9fuNrzkoHm9vIAKxbuajmUs1JL0HY=";
+    hash = "sha256-jm0X+X8gQyQYn03gT14bdr79+Wd5KL9ryvrU/0VUtEU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "websockets>=10,<11;python_version>'3.6'" \
+      "websockets>=10,<12;python_version>'3.6'"
+  '';
 
   build-system = [ setuptools ];
 
@@ -55,8 +61,7 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   optional-dependencies = {
     all = [
@@ -83,12 +88,9 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--asyncio-mode=auto"
-  ];
-
-  disabledTestMarks = [
-    "online"
+    "-m 'not online'"
   ];
 
   disabledTests = [
@@ -107,19 +109,15 @@ buildPythonPackage rec {
     # Exclude linter tests
     "gql-checker/tests/test_flake8_linter.py"
     "gql-checker/tests/test_pylama_linter.py"
-    "tests/test_httpx.py"
-    "tests/test_httpx_async.py"
   ];
 
   pythonImportsCheck = [ "gql" ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = with lib; {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
-    changelog = "https://github.com/graphql-python/gql/releases/tag/${src.tag}";
-    license = licenses.mit;
+    changelog = "https://github.com/graphql-python/gql/releases/tag/v${version}";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "gql-cli";
   };

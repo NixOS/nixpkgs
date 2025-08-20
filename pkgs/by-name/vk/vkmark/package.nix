@@ -14,24 +14,19 @@
   assimp,
   libxcb,
   xcbutilwm,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "vkmark";
-  version = "2025.01";
+  version = "2017.08-unstable-2023-04-12";
 
   src = fetchFromGitHub {
     owner = "vkmark";
     repo = "vkmark";
-    rev = finalAttrs.version;
-    sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
+    rev = "ab6e6f34077722d5ae33f6bd40b18ef9c0e99a15";
+    sha256 = "sha256-X1Y2U1aJymKrv3crJLN7tvXHG2W+w0W5gB2g00y4yvc=";
   };
-
-  postPatch = ''
-    substituteInPlace src/meson.build \
-      --replace-fail "vulkan_dep.get_pkgconfig_variable('prefix')" "'${vulkan-headers}'"
-  '';
 
   nativeBuildInputs = [
     meson
@@ -50,14 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Extensible Vulkan benchmarking suite";
     homepage = "https://github.com/vkmark/vkmark";
-    license = with lib.licenses; [ lgpl21Plus ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ muscaln ];
+    license = with licenses; [ lgpl21Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ muscaln ];
     mainProgram = "vkmark";
   };
-})
+}

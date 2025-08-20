@@ -126,18 +126,19 @@ in
     ];
     services.upower.enable = true;
 
-    services.clight.settings = {
-      gamma.temp =
-        with cfg.temperature;
-        mkDefault [
-          day
-          night
-        ];
-    }
-    // (optionalAttrs (config.location.provider == "manual") {
-      daytime.latitude = mkDefault config.location.latitude;
-      daytime.longitude = mkDefault config.location.longitude;
-    });
+    services.clight.settings =
+      {
+        gamma.temp =
+          with cfg.temperature;
+          mkDefault [
+            day
+            night
+          ];
+      }
+      // (optionalAttrs (config.location.provider == "manual") {
+        daytime.latitude = mkDefault config.location.latitude;
+        daytime.longitude = mkDefault config.location.longitude;
+      });
 
     services.geoclue2.appConfig.clightc = {
       isAllowed = true;

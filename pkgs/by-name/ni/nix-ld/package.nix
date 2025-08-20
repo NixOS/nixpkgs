@@ -8,16 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-ld";
-  version = "2.0.5";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
-    owner = "nix-community";
+    owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-7ev9V128h7ZWi9JsFje6X1OzE5maJfmBMkxohxQysOA=";
+    hash = "sha256-NRkLjdMtVfC6dD1gEbYZWFEtbmC2xfD6ft1IP7l76Vw=";
   };
 
-  cargoHash = "sha256-YR7j2dvZHMBUe0lW7GYFxJV11ZM+gX13NHj2uf3UEbQ=";
+  patches = [ ./rust-1.83.patch ];
+
+  cargoHash = "sha256-GOngDGRzWVuzGTX5xNb/nv5dJ6is6cH8K6kHTX3OoXE=";
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -44,11 +46,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = nixosTests.nix-ld;
 
-  meta = {
+  meta = with lib; {
     description = "Run unpatched dynamic binaries on NixOS";
-    homepage = "https://github.com/nix-community/nix-ld";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mic92 ];
-    platforms = lib.platforms.linux;
+    homepage = "https://github.com/Mic92/nix-ld";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mic92 ];
+    platforms = platforms.linux;
   };
 }

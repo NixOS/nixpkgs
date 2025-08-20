@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk,
-  libffi,
-  pkg-config,
-  texinfo,
-  stripJavaArchivesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, libffi
+, pkg-config
+, texinfo
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

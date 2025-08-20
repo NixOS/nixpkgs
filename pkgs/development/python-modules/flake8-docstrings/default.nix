@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = "flake8-docstrings";
+    repo = pname;
     tag = version;
     hash = "sha256-EafLWySeHB81HRcXiDs56lbUZzGvnT87WVqln0PoLCk=";
   };

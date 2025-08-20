@@ -3,38 +3,34 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sfml_2,
+  sfml,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "simplenes";
-  version = "0-unstable-2025-01-05";
+  version = "unstable-2019-03-13";
 
   src = fetchFromGitHub {
     owner = "amhndu";
     repo = "SimpleNES";
-    rev = "154a2fd4f2f2611a27197aa8d802bbcdfd1a0ea3";
-    hash = "sha256-4Nb42tb/pJaVOOhj7hH9cQLDKCz8GUXWz8KAHPOd9nE=";
+    rev = "4edb7117970c21a33b3bfe11a6606764fffc5173";
+    sha256 = "1nmwj431iwqzzcykxd4xinqmg0rm14mx7zsjyhcc5skz7pihz86g";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ sfml_2 ];
+  buildInputs = [ sfml ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin
     cp ./SimpleNES $out/bin
-
-    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/amhndu/SimpleNES";
     description = "NES emulator written in C++";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "SimpleNES";
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  bashNonInteractive,
+  bash,
   bzip2,
   coreutils,
   cpio,
@@ -22,6 +22,7 @@
   ld64,
   libffi,
   libiconv,
+  libtapi,
   libxml2,
   llvmPackages,
   ncurses,
@@ -130,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp ${getBin coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp -d ${getBin bashNonInteractive}/bin/{ba,}sh $out/bin
+      cp -d ${getBin bash}/bin/{ba,}sh $out/bin
       cp -d ${getBin diffutils}/bin/* $out/bin
       cp ${getBin findutils}/bin/{find,xargs} $out/bin
       cp -d ${getBin gawk}/bin/{g,}awk $out/bin
@@ -180,17 +181,18 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Copy tools needed to build the SDK
       cp -d ${getBin jq}/bin/* $out/bin
-      cp -d ${getBin llvmPackages.llvm}/bin/llvm-readtapi $out/bin
+      cp -d ${getBin libtapi}/bin/* $out/bin
 
       cp -d ${getLib jq}/lib/lib*.dylib $out/lib
       cp -d ${getLib oniguruma}/lib/lib*.dylib $out/lib
+      cp -d ${getLib libtapi}/lib/libtapi*.dylib $out/lib
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib
-      cp -d ${getBin bashNonInteractive}/bin/{ba,}sh unpack/bin
+      cp -d ${getBin bash}/bin/{bash,sh} unpack/bin
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
       cp ${getBin gnutar}/bin/tar unpack/bin
       cp ${getBin xz}/bin/xz unpack/bin
@@ -292,6 +294,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    teams = [ lib.teams.darwin ];
+    maintainers = [ lib.maintainers.copumpkin ];
   };
 })

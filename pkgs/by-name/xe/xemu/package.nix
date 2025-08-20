@@ -32,24 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-lTZ5j5ULh4GFW4zlQy4l7e4zr8TEIvenGNC59O6G0Wg=";
   };
 
-  nativeBuildInputs = [
-    SDL2
-    meson
-    ninja
-    perl
-    pkg-config
-    which
-    wrapGAppsHook3
-  ]
-  ++ (with python3Packages; [
-    python
-    pyyaml
-  ]);
+  nativeBuildInputs =
+    [
+      SDL2
+      meson
+      ninja
+      perl
+      pkg-config
+      which
+      wrapGAppsHook3
+    ]
+    ++ (with python3Packages; [
+      python
+      pyyaml
+    ]);
 
   buildInputs = [
     SDL2
@@ -91,15 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
   '';
 
-  preConfigure = ''
-    configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
-  ''
-  +
-    # When the data below can't be obtained through git, the build process tries
-    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
+  preConfigure =
     ''
-      echo '${finalAttrs.version}' > XEMU_VERSION
-    '';
+      configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
+    ''
+    +
+      # When the data below can't be obtained through git, the build process tries
+      # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
+      ''
+        echo '${finalAttrs.version}' > XEMU_VERSION
+      '';
 
   preBuild = ''
     cd build
@@ -145,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "xemu";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

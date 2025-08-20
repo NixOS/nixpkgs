@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytest7CheckHook ];
-  enabledTestPaths = [ "razdel" ];
+  pytestFlagsArray = [ "razdel" ];
   pythonImportsCheck = [ "razdel" ];
 
   meta = with lib; {

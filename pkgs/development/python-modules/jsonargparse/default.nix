@@ -16,7 +16,6 @@
   requests,
   ruyaml,
   setuptools,
-  toml,
   types-pyyaml,
   types-requests,
   typeshed-client,
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.40.2";
+  version = "4.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -33,7 +32,7 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-3Zs2F46tGcvIF9UOGI/P079BZLJJyEyP9LDPRfvSk4E=";
+    hash = "sha256-+gxwajChbdcsIa8Jp0iva3ik5vZeMRa38KuoQwIGNoU=";
   };
 
   build-system = [ setuptools ];
@@ -66,7 +65,6 @@ buildPythonPackage rec {
       docstring-parser
       typeshed-client
     ];
-    toml = [ toml ];
     urls = [ requests ];
   };
 
@@ -80,9 +78,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonargparse" ];
 
   meta = with lib; {
-    description = "Module to implement minimal boilerplate CLIs derived from various sources";
+    description = "Module to mplement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/omni-us/jsonargparse/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

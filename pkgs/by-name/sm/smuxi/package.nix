@@ -38,21 +38,22 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    autoconf
-    automake
-    itstool
-    intltool
-    gettext
-    mono
-    stfl
-  ]
-  ++ lib.optionals (guiSupport) [
-    gtk-sharp-2_0
-    # loaded at runtime by GTK#
-    gdk-pixbuf
-    pango
-  ];
+  buildInputs =
+    [
+      autoconf
+      automake
+      itstool
+      intltool
+      gettext
+      mono
+      stfl
+    ]
+    ++ lib.optionals (guiSupport) [
+      gtk-sharp-2_0
+      # loaded at runtime by GTK#
+      gdk-pixbuf
+      pango
+    ];
 
   preConfigure = ''
     NOCONFIGURE=1 NOGIT=1 ./autogen.sh
@@ -61,8 +62,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-frontend-gnome"
     "--enable-frontend-stfl"
-  ]
-  ++ lib.optional guiSupport "--enable-frontend-gnome";
+  ] ++ lib.optional guiSupport "--enable-frontend-gnome";
 
   postInstall = ''
     makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-message-buffer" \
@@ -125,14 +125,14 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://smuxi.im/";
     downloadPage = "https://smuxi.im/download/";
     changelog = "https://github.com/meebey/smuxi/releases/tag/v${version}";
     description = "irssi-inspired, detachable, cross-platform, multi-protocol (IRC, XMPP/Jabber) chat client for the GNOME desktop";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       meebey
     ];
   };

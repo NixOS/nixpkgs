@@ -8,7 +8,7 @@
   pkg-config,
   libdbusmenu-gtk3,
   gtk-layer-shell,
-  libsass,
+  stb,
   wayland-protocols,
   wayland-scanner,
   bluez,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation {
   pname = "gbar";
-  version = "0-unstable-2024-12-17";
+  version = "unstable-2023-09-21";
 
   src = fetchFromGitHub {
     owner = "scorpion-26";
     repo = "gBar";
-    rev = "03bedc7471add061fb15e0ca1c9d2f729b8c5d7b";
-    hash = "sha256-4OfcG1DcqemLrK5D75S1x25g9K0k2+eEUQUXgYEYBf8=";
+    rev = "96485f408efe411f281fa27dceb6d86399ec7804";
+    hash = "sha256-4zPvo0JBQOV1qn2X2iI8/JWYEQjFf9sDEICIWSCeaWk=";
     fetchSubmodules = true;
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     gtk3
     gtk-layer-shell
     libpulseaudio
-    libsass
+    stb
     libdbusmenu-gtk3
   ];
 

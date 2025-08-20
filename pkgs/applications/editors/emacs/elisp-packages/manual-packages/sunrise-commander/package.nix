@@ -2,6 +2,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -16,11 +17,13 @@ melpaBuild {
     hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
   };
 
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
   meta = {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
     description = "Orthodox (two-pane) file manager for Emacs";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.all;
   };
 }

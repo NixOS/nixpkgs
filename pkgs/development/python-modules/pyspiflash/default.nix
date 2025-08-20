@@ -1,26 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pyftdi,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyspiflash";
-  version = "0.6.5";
-  pyproject = true;
+  version = "0.6.3";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "eblot";
-    repo = "pyspiflash";
-    tag = "v${version}";
-    hash = "sha256-NXYXvGSRhsTHu10pDYaZF84+d4QyPKECpuKpmgFstg0=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0ifnw1qm4nssb03af93qw6vpa92rmyc2hisw9m4043pm9ryqcmpc";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyftdi ];
+  propagatedBuildInputs = [ pyftdi ];
 
   # tests are not shipped with the PyPI source
   doCheck = false;
@@ -30,8 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SPI data flash device drivers in Python";
     homepage = "https://github.com/eblot/pyspiflash";
-    changelog = "https://github.com/eblot/pyspiflash/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

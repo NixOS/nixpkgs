@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  doInstallCheck = true;
-
   postPatch = ''
     substituteInPlace Makefile \
       --replace " -o root -g root" "" \

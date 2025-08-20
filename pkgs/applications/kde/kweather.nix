@@ -18,7 +18,7 @@
   qtquickcontrols2,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "kweather";
 
   nativeBuildInputs = [

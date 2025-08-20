@@ -19,13 +19,13 @@ buildOctavePackage rec {
     matgeom
   ];
 
-  meta = {
-    homepage = "https://gnu-octave.github.io/packages/geometry/";
-    license = with lib.licenses; [
+  meta = with lib; {
+    homepage = "https://octave.sourceforge.io/geometry/index.html";
+    license = with licenses; [
       gpl3Plus
       boost
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Library for extending MatGeom functionality";
   };
 }

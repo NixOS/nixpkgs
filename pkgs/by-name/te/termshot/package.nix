@@ -5,24 +5,23 @@
   versionCheckHook,
   nix-update-script,
 }:
-
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "termshot";
-  version = "0.6.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-utaQhUBpFUpxqE+cEJqlQHyJXSo/4UzrA2uqUd88uaM=";
+    tag = "v${version}";
+    hash = "sha256-vkxOUo1RyzZBN2+wRn8yWV930HrKRJnPwpHnxza5GNE=";
   };
 
-  vendorHash = "sha256-3fUvl772pscrQv2wJkRX5wBhAt9fmfIPI7FGq7h7Fqw=";
+  vendorHash = "sha256-Wsoy0jlwMYlN8yh7xncGrxTl0qJsPXV4IdYzU7jStzw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/homeport/termshot/internal/cmd.version=${finalAttrs.version}"
+    "-X github.com/homeport/termshot/internal/cmd.version=${version}"
   ];
 
   checkFlags = [ "-skip=^TestPtexec$" ];
@@ -36,9 +35,9 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Creates screenshots based on terminal command output";
     homepage = "https://github.com/homeport/termshot";
-    changelog = "https://github.com/homeport/termshot/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/homeport/termshot/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "termshot";
   };
-})
+}

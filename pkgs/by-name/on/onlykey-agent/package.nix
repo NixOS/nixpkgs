@@ -11,7 +11,6 @@ let
     buildPythonPackage rec {
       pname = "bech32";
       version = "1.2.0";
-      format = "setuptools";
 
       src = fetchPypi {
         inherit pname version;
@@ -53,7 +52,6 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
   version = "1.1.15";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

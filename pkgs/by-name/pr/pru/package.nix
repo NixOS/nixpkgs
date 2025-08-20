@@ -18,7 +18,7 @@ bundlerApp {
       grep etc.).
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 
   passthru.updateScript = bundlerUpdateScript "pru";

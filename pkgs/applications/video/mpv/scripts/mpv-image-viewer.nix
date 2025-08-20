@@ -18,7 +18,7 @@ let
           hash = "sha256-VwIL1529CW9MLK4N9jHHddSSZD5RsJ5bWGWqGJ751C0=";
         };
 
-        sourceRoot = "${self.src.name}/scripts";
+        sourceRoot = "source/scripts";
 
         passthru = {
           updateScript = unstableGitUpdater { };

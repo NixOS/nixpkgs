@@ -61,14 +61,15 @@ buildPythonApplication rec {
     zulip
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-  ]
-  ++ (with python3.pkgs; [
-    pytestCheckHook
-    pytest-cov-stub
-    pytest-mock
-  ]);
+  nativeCheckInputs =
+    [
+      glibcLocales
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+      pytest-cov
+      pytest-mock
+    ]);
 
   makeWrapperArgs = [
     "--prefix"
@@ -77,11 +78,11 @@ buildPythonApplication rec {
     (lib.makeBinPath [ libnotify ])
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Zulip's official terminal client";
     homepage = "https://github.com/zulip/zulip-terminal";
     changelog = "https://github.com/zulip/zulip-terminal/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

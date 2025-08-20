@@ -4,7 +4,7 @@
   angstrom,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "angstrom-unix";
 
   inherit (angstrom) version src;

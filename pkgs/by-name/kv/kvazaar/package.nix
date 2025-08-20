@@ -18,11 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-d/OkX18nyHSQXJgNhBtiCLb/Fe8Y/MpddXxLpNMZiXI=";
   };
 
-  # https://github.com/ultravideo/kvazaar/pull/426
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail 'NOT LINUX' 'NOT LINUX AND NOT BSD'
-  '';
-
   nativeBuildInputs = [ cmake ];
 
   outputs = [

@@ -3,16 +3,13 @@
   github,
   yojson,
   atdgen,
-  atdgen-runtime,
 }:
 
 buildDunePackage {
   pname = "github-data";
   inherit (github) version src;
 
-  postPatch = ''
-    substituteInPlace lib_data/dune --replace-warn 'atdgen)' 'atdgen-runtime)'
-  '';
+  duneVersion = "3";
 
   nativeBuildInputs = [
     atdgen
@@ -20,7 +17,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     yojson
-    atdgen-runtime
+    atdgen
   ];
 
   meta = github.meta // {

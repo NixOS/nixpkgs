@@ -20,12 +20,12 @@ buildGoModule rec {
 
   buildInputs = [ pandoc ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to create a wiki page from a HedgeDoc";
     homepage = "https://github.com/Nerdbergev/seilfahrt";
     changelog = "https://github.com/Nerdbergev/seilfahrt/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xgwq ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ xgwq ];
     mainProgram = "seilfahrt";
   };
 }

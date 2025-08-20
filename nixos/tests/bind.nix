@@ -1,5 +1,4 @@
-{ ... }:
-{
+import ./make-test-python.nix {
   name = "bind";
 
   nodes.machine =

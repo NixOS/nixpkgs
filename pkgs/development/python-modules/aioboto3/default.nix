@@ -8,38 +8,39 @@
   dill,
   fetchFromGitHub,
   moto,
+  poetry-core,
+  poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
-  setuptools-scm,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "14.3.0";
+  version = "13.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-3GdTpbU0uEEzezQPHJTGPB42Qu604eIhcIAP4rZMQiY=";
+    hash = "sha256-g86RKQxTcfG1CIH3gfgn9Vl9JxUkeC1ztmLk4q/MVn0=";
   };
 
-  pythonRelaxDeps = [
-    "aiobotocore"
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  pythonRelaxDeps = [ "aiobotocore" ];
 
   dependencies = [
     aiobotocore
     aiofiles
-  ]
-  ++ aiobotocore.optional-dependencies.boto3;
+  ] ++ aiobotocore.optional-dependencies.boto3;
 
   optional-dependencies = {
     chalice = [ chalice ];
@@ -51,21 +52,26 @@ buildPythonPackage rec {
     moto
     pytest-asyncio
     pytestCheckHook
-  ]
-  ++ moto.optional-dependencies.server
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  disabledTests = [
-    "test_patches"
-  ];
+    requests
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioboto3" ];
 
-  meta = {
+  disabledTests = [
+    # Our moto package is not ready to support more tests
+    "encrypt_decrypt_aes_cbc"
+    "test_chalice_async"
+    "test_dynamo"
+    "test_flush_doesnt_reset_item_buffer"
+    "test_kms"
+    "test_s3"
+  ];
+
+  meta = with lib; {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";
     homepage = "https://github.com/terrycain/aioboto3";
     changelog = "https://github.com/terrycain/aioboto3/blob/${src.rev}/CHANGELOG.rst";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }

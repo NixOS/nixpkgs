@@ -42,7 +42,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sismic" ];
 
-  enabledTestPaths = [ "tests/" ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     # Time related tests, might lead to flaky tests on slow/busy machines

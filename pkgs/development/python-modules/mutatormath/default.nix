@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "mutatormath";
   version = "3.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "MutatorMath";

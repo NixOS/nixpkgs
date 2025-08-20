@@ -8,7 +8,7 @@
   ppx_sexp_conv,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "ipaddr";
 
   inherit (macaddr) version src;

@@ -10,7 +10,7 @@
   nixosTests,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "atd";
   inherit (atdgen-codec-runtime) version src;
 

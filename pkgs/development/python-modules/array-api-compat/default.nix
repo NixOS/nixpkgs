@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.11.2";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-qGf1XDhRx9hJJP0LcZF7lA8tl+LKYNCw0xTqGjsZYj8=";
+    hash = "sha256-X6y6hX/HdkiLZkj9AOEYsZOlYhR7wUt9kQjHfMfWqIc=";
   };
 
   build-system = [ setuptools ];
@@ -39,19 +39,19 @@ buildPythonPackage rec {
     dask
     sparse
     array-api-strict
-  ]
-  ++ lib.optionals cudaSupport [ cupy ];
+  ] ++ lib.optionals cudaSupport [ cupy ];
 
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  disabledTests = [
-    "cupy"
+  pytestFlagsArray = [
+    "-k"
+    "'not cupy'"
   ];
 
   meta = {
     homepage = "https://data-apis.org/array-api-compat";
-    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${src.tag}";
+    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${version}";
     description = "Compatibility layer for NumPy to support the Python array API";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ berquist ];

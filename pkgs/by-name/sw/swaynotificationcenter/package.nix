@@ -5,19 +5,18 @@
   testers,
   wrapGAppsHook3,
   bash-completion,
-  blueprint-compiler,
   dbus,
   dbus-glib,
   fish,
   gdk-pixbuf,
   glib,
   gobject-introspection,
-  gtk4-layer-shell,
-  gtk4,
+  gtk-layer-shell,
+  gtk3,
   gvfs,
   json-glib,
-  libadwaita,
   libgee,
+  libhandy,
   libnotify,
   libpulseaudio,
   librsvg,
@@ -27,22 +26,20 @@
   python3,
   scdoc,
   vala,
-  wayland-scanner,
   xvfb-run,
   sassc,
   pantheon,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.12.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = "SwayNotificationCenter";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4DDlQRHG90ee4Tu9y0lkY6hZxhPFyJmacbWJMErfFlk=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-SR3FfEit50y4XSCLh3raUoigRNXpxh0mk4qLhQ/FozM=";
   };
 
   # build pkg-config is required to locate the native `scdoc` input
@@ -50,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bash-completion
-    blueprint-compiler
     # cmake # currently conflicts with meson
     fish
     glib
@@ -70,18 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     gdk-pixbuf
     glib
-    gtk4-layer-shell
-    gtk4
+    gtk-layer-shell
+    gtk3
     gvfs
     json-glib
-    libadwaita
     libgee
+    libhandy
     libnotify
     libpulseaudio
     librsvg
-    pantheon.granite7
+    pantheon.granite
     # systemd # ends with broken permission
-    wayland-scanner
   ];
 
   postPatch = ''
@@ -94,16 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     command = "${xvfb-run}/bin/xvfb-run swaync --version";
   };
-  passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
-    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     mainProgram = "swaync";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       berbiche
       pedrohlc
     ];

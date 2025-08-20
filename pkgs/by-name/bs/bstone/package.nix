@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sdl2-compat,
+  SDL2,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
-  version = "1.2.16";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6BNIMBbLBcQoVx5lnUz14viAvBcFjoZLY8c30EgcvKQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jK40/FdC11SWe2Vmh6cbNTxPeM1vrAveEtUWoiAh+jc=";
   };
 
   nativeBuildInputs = [
@@ -22,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    sdl2-compat
+    libGL
+    SDL2
   ];
 
   postInstall = ''
-    mkdir -p $out/{bin,share/bibendovsky/bstone}
-    mv $out/bstone $out/bin
-    mv $out/*.txt $out/share/bibendovsky/bstone
+    mkdir -p $out/bin
+    mv $out/bstone* $out/bin
   '';
 
   meta = {

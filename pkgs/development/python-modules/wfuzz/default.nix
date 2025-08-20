@@ -14,8 +14,6 @@
   setuptools,
   six,
   fetchpatch2,
-  pythonAtLeast,
-  legacy-cgi,
 }:
 
 buildPythonPackage rec {
@@ -55,9 +53,7 @@ buildPythonPackage rec {
     six
     setuptools
     pyparsing
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
   nativeCheckInputs = [
     netaddr

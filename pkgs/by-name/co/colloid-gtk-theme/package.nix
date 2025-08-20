@@ -16,7 +16,7 @@ let
   pname = "colloid-gtk-theme";
 
 in
-lib.checkListOfEnum "colloid-gtk-theme: theme variants"
+lib.checkListOfEnum "${pname}: theme variants"
   [
     "default"
     "purple"
@@ -31,15 +31,15 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
   ]
   themeVariants
   lib.checkListOfEnum
-  "colloid-gtk-theme: color variants"
+  "${pname}: color variants"
   [ "standard" "light" "dark" ]
   colorVariants
   lib.checkListOfEnum
-  "colloid-gtk-theme: size variants"
+  "${pname}: size variants"
   [ "standard" "compact" ]
   sizeVariants
   lib.checkListOfEnum
-  "colloid-gtk-theme: tweaks"
+  "${pname}: tweaks"
   [
     "nord"
     "dracula"
@@ -57,13 +57,13 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-07-31";
+    version = "2024-11-16";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = "colloid-gtk-theme";
+      repo = pname;
       rev = version;
-      hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
+      hash = "sha256-70HDn87acG0me+zbXk6AoGmakY6VLuawq1ubgGcRZVk=";
     };
 
     nativeBuildInputs = [

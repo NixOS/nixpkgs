@@ -4,24 +4,21 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+with python3.pkgs;
+
+buildPythonApplication rec {
   pname = "pew";
   version = "1.2.0";
-  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "04anak82p4v9w0lgfs55s7diywxil6amq8c8bhli143ca8l2fcdq";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = [
     virtualenv
     virtualenv-clone
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
   # no tests are packaged

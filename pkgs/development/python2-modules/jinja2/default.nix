@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "Jinja2";
   version = "2.11.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

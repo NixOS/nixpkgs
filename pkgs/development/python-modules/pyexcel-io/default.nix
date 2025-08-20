@@ -1,26 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+  fetchPypi,
   lml,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-io";
-  version = "0.6.7.1";
-  pyproject = true;
+  version = "0.6.6";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "pyexcel";
-    repo = "pyexcel-io";
-    tag = "v${version}";
-    hash = "sha256-DBiHHiKXR26/WPJDmEZpRgjvJitFaidbV41Tvn0etLY=";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-9ghL8a+l+/TGHPffRDcPpROCGvGIsC4+GbXvtm2Klp8=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ lml ];
+  propagatedBuildInputs = [ lml ];
 
   # Tests depend on stuff that depends on this.
   doCheck = false;

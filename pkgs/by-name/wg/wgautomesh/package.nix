@@ -3,7 +3,7 @@
   fetchFromGitea,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "wgautomesh";
   version = "unstable-20240524";
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-1xphnyuRMZEeq907nyhAW7iERYJLS1kxH0wRBsfYL40=";
   };
 
-  cargoHash = "sha256-Lshj8L880gGLi5xY1H/7twrL3YHolqloOfXeckGw/VE=";
+  cargoHash = "sha256-HZ1VImsfxRd0sFN/vKAKgwIV2eio2GiEz+6c1+dCmdk=";
 
   meta = with lib; {
     description = "Simple utility to help connect wireguard nodes together in a full mesh topology";

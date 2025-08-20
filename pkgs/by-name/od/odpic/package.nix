@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "5.6.2";
+  version = "5.4.1";
   libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "sha256-UBLv7iTqwjxDuLc09zxACYQxoU3/AKNPfNOwgMJ2qjw=";
+    sha256 = "sha256-CvsQ/w5r0d/l0m6wkgZtVBkX66Hcrz4U3b8qpHM0Dm8=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -47,6 +47,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Oracle ODPI-C library";
     homepage = "https://oracle.github.io/odpi/";
+    maintainers = with maintainers; [ mkazulak ];
     license = licenses.asl20;
     platforms = [
       "x86_64-linux"

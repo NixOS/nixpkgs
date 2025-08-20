@@ -6,23 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "typstwriter";
-  version = "0.3";
+  version = "0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bzero";
     repo = "typstwriter";
-    tag = "V${version}";
-    hash = "sha256-0tCl/dMSWmUWZEVystb6BIYTwW7b6PH4LyERK4mi/LQ=";
+    rev = "V${version}";
+    hash = "sha256-LhK1e6q7nmk13ZW55/1uEKhg7stQLIs+2bdFJDc24bg=";
   };
 
   build-system = [ python3.pkgs.flit-core ];
 
   dependencies = with python3.pkgs; [
-    platformdirs
     pygments
     pyside6
     qtpy
+    send2trash
     superqt
   ];
 

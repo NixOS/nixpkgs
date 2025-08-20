@@ -9,7 +9,6 @@
   libffi,
   libsForQt5,
   libzip,
-  libX11,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -40,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableQt "-qt"
     + lib.optionalString (!enableQt) "-sdl"
     + lib.optionalString forceWayland "-wayland";
-  version = "1.19.3";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-71oIjUXYGFNyhcXQP65Bd2gYF6golrPR4USwS7bTxFQ=";
+    hash = "sha256-X5Sb6oxjjhlsm1VN9e0Emk4SqiHTe3G3ZiuIgw5DSds=";
   };
 
   patches = lib.optionals useSystemFfmpeg [
@@ -65,33 +64,30 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ]
-  ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
-  buildInputs = [
-    SDL2
-    libX11
-    glew
-    libzip
-    zlib
-  ]
-  ++ lib.optionals useSystemFfmpeg [
-    ffmpeg_6
-  ]
-  ++ lib.optionals useSystemSnappy [
-    snappy
-  ]
-  ++ lib.optionals enableQt [
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals enableVulkan [ vulkan-loader ]
-  ++ lib.optionals vulkanWayland [
-    wayland
-    libffi
-  ];
-
-  dontWrapQtApps = true;
+  buildInputs =
+    [
+      SDL2
+      glew
+      libzip
+      zlib
+    ]
+    ++ lib.optionals useSystemFfmpeg [
+      ffmpeg_6
+    ]
+    ++ lib.optionals useSystemSnappy [
+      snappy
+    ]
+    ++ lib.optionals enableQt [
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals enableVulkan [ vulkan-loader ]
+    ++ lib.optionals vulkanWayland [
+      wayland
+      libffi
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "HEADLESS" (!enableQt))
@@ -151,16 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
         lib.optionals enableVulkan [
           "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
         ]
-        ++ (
-          if enableQt then
-            [
-              "\${qtWrapperArgs[@]}"
-            ]
-          else
-            [
-              "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
-            ]
-        )
+        ++ lib.optionals (!enableQt) [
+          "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
+        ]
       );
       binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
     in
@@ -183,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
       not run those.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     mainProgram = "ppsspp";
     platforms = lib.platforms.linux;
   };

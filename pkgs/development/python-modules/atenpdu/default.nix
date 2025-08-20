@@ -39,6 +39,5 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "pductl";
-    broken = versionAtLeast pysnmp.version "7";
   };
 }

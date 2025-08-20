@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "fusesoc";
   version = "2.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

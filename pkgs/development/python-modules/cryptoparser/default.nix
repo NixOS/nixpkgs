@@ -8,26 +8,27 @@
   python-dateutil,
   pythonOlder,
   setuptools,
-  setuptools-scm,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "1.0.0";
+  version = "0.12.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
+    hash = "sha256-t8vK7T6nz1iH81fTMEYkQv7E7EjmkTx3u4zUIybEm5E=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     asn1crypto

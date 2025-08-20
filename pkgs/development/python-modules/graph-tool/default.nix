@@ -32,12 +32,12 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.97";
+  version = "2.85";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-Yt2PuLuvvv4iNcv6UHzr5lTwFkReVtVO/znSADkxjKU=";
+    hash = "sha256-GX0JUz5G7gtLemwlY1prQvCxIxpuyclo+1LN68j2H9o=";
   };
 
   postPatch = ''
@@ -73,8 +73,7 @@ buildPythonPackage rec {
     pygobject3
     scipy
     sparsehash
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "graph_tool" ];
 

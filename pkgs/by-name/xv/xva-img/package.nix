@@ -1,32 +1,28 @@
 {
-  lib,
   stdenv,
+  lib,
   cmake,
   fetchFromGitHub,
   openssl,
-  xxHash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xva-img";
-  version = "1.5";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "eriklax";
     repo = "xva-img";
-    tag = version;
-    hash = "sha256-YyWfN6VcEABmzHkkoA/kRehLum1UxsNJ58XBs1pl+c8=";
+    rev = version;
+    sha256 = "sha256-QHCKGsHSMT2P64No1IUCjenm1XZMSgEvsJGJOyHFZS8=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    openssl
-    xxHash
-  ];
+  buildInputs = [ openssl ];
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ willibutz ];
     description = "Tool for converting Xen images to raw and back";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

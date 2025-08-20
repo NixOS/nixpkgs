@@ -5,6 +5,8 @@
   pkg-config,
   openssl,
   zlib,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,16 +20,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IF+8lu56fzYM79p7MiNpVLFIs2GKPlzw5pNXD/hT6BM=";
   };
 
-  cargoHash = "sha256-iWLRXi7Xt4FQPgXGhk6+mDi1T+Jxrvh7S4myL0cYXec=";
+  cargoHash = "sha256-p3iMqnRW/quk2AHr2nLgOTvtshZ+xo6DGvWDsDj+bvU=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    zlib
-  ];
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

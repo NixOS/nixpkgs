@@ -6,6 +6,7 @@
   libnotify,
   pcsclite,
   pkg-config,
+  darwin,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,9 @@ buildGoModule rec {
     sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux (lib.getDev pcsclite);
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isLinux (lib.getDev pcsclite)
+    ++ lib.optional stdenv.hostPlatform.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 

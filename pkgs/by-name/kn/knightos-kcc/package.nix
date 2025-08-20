@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
 
   meta = with lib; {
-    homepage = "https://github.com/KnightOS/kcc";
+    homepage = "https://knightos.org/";
     description = "KnightOS C compiler";
     mainProgram = "kcc";
     license = licenses.gpl2Plus;

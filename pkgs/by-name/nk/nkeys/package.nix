@@ -6,23 +6,23 @@
 
 buildGoModule rec {
   pname = "nkeys";
-  version = "0.4.11";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = "nkeys";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-dSkIT+KW+hT/Rk3NSkrb5ABLLiGGz2dppr9rwhjLOnM=";
+    hash = "sha256-5HmtCzY2EmlnBqg36JcjaaM2ivrM5f719bkWqpxekVI=";
   };
 
-  vendorHash = "sha256-89DGLTkt9c8jJhAX3Uo8BBtLcBbnYE0q4mCqq/RGXM4=";
+  vendorHash = "sha256-AJrfHMNjuGO8LbuP4cAVClKWHkqkG+nPzQw+B+nRpxM=";
 
-  meta = {
+  meta = with lib; {
     description = "Public-key signature system for NATS";
     homepage = "https://github.com/nats-io/nkeys";
     changelog = "https://github.com/nats-io/nkeys/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "nk";
   };
 }

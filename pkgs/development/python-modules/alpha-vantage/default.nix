@@ -49,8 +49,7 @@ buildPythonPackage rec {
     aioresponses
     requests-mock
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Starting with 3.0.0 most tests require an API key
   doCheck = false;

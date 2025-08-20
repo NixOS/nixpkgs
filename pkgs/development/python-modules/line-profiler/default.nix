@@ -38,8 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     ubelt
-  ]
-  ++ optional-dependencies.ipython;
+  ] ++ optional-dependencies.ipython;
 
   dontUseCmakeConfigure = true;
 

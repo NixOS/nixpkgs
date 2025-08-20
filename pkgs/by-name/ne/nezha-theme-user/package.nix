@@ -2,18 +2,17 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "nezha-theme-user";
-  version = "1.13.3";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "hamster1963";
     repo = "nezha-dash-v1";
     tag = "v${version}";
-    hash = "sha256-dg46wJtaY+b0gfL0+HchVNGFAx41Cz/moqL/8InNYp4=";
+    hash = "sha256-vd242bYWT7AgpKDyYEb+Kc+8o1qtuTusmxqLnWGo5pE=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
@@ -27,7 +26,7 @@ buildNpmPackage rec {
       --replace-fail '/commit/' '/tree/'
   '';
 
-  npmDepsHash = "sha256-n7ejpEkakvWO89GhHyy/QbxNvDaXXIDGERc8neeIyoU=";
+  npmDepsHash = "sha256-jWCgeT3IvTZZTh/kKq+mRc0tAVoptl3rrlwcbUSs5uc=";
 
   npmPackFlags = [ "--ignore-scripts" ];
 
@@ -41,8 +40,6 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "Nezha monitoring user frontend based on next.js";

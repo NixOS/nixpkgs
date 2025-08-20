@@ -17,22 +17,20 @@
   # tests
   absl-py,
   jaxlib,
-  omegaconf,
-  pydantic,
   pytestCheckHook,
   torch,
 }:
 
 buildPythonPackage rec {
   pname = "treescope";
-  version = "0.1.10";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "treescope";
     tag = "v${version}";
-    hash = "sha256-SfycwuI/B7S/rKkaqxtnJI26q89313pvj/Xsomg6qyA=";
+    hash = "sha256-fDwiKKXgisJ4Z/CBv4Vwtd7QaGscu5teZo11mSGZjbE=";
   };
 
   build-system = [ flit-core ];
@@ -53,16 +51,14 @@ buildPythonPackage rec {
     absl-py
     jax
     jaxlib
-    omegaconf
-    pydantic
     pytestCheckHook
     torch
   ];
 
   meta = {
-    description = "Interactive HTML pretty-printer for machine learning research in IPython notebooks";
+    description = "An interactive HTML pretty-printer for machine learning research in IPython notebooks";
     homepage = "https://github.com/google-deepmind/treescope";
-    changelog = "https://github.com/google-deepmind/treescope/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/treescope/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

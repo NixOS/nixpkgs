@@ -69,61 +69,42 @@ This produces some files in a directory `nix`, which will be part of your Nix
 expression. The next step is to write that expression:
 
 ```nix
-{
-  stdenv,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  fetchFromGitHub,
-}:
+{ stdenv, swift, swiftpm, swiftpm2nix, fetchFromGitHub }:
 
 let
   # Pass the generated files to the helper.
   generated = swiftpm2nix.helpers ./nix;
-
 in
-stdenv.mkDerivation (finalAttrs: {
+
+stdenv.mkDerivation rec {
   pname = "myproject";
   version = "0.0.0";
 
   src = fetchFromGitHub {
     owner = "nixos";
-    repo = "myproject";
-    tag = finalAttrs.version;
-    hash = "";
+    repo = pname;
+    rev = version;
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
   # This by default performs a release build using SwiftPM, essentially:
   #   swift build -c release
-  nativeBuildInputs = [
-    swift
-    swiftpm
-  ];
+  nativeBuildInputs = [ swift swiftpm ];
 
   # The helper provides a configure snippet that will prepare all dependencies
   # in the correct place, where SwiftPM expects them.
-  configurePhase = ''
-    runHook preConfigure
-
-    ${generated.configure}
-
-    runHook postConfigure
-  '';
+  configurePhase = generated.configure;
 
   installPhase = ''
-    runHook preInstall
-
     # This is a special function that invokes swiftpm to find the location
     # of the binaries it produced.
     binPath="$(swiftpmBinPath)"
     # Now perform any installation steps.
     mkdir -p $out/bin
     cp $binPath/myproject $out/bin/
-
-    runHook postInstall
   '';
-})
+}
 ```
 
 ### Custom build flags {#ssec-swiftpm-custom-build-flags}
@@ -131,13 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
 If you'd like to build a different configuration than `release`:
 
 ```nix
-{ swiftpmBuildConfig = "debug"; }
+{
+  swiftpmBuildConfig = "debug";
+}
 ```
 
 It is also possible to provide additional flags to `swift build`:
 
 ```nix
-{ swiftpmFlags = [ "--disable-dead-strip" ]; }
+{
+  swiftpmFlags = [ "--disable-dead-strip" ];
+}
 ```
 
 The default `buildPhase` already passes `-j` for parallel building.
@@ -151,7 +136,9 @@ Including `swiftpm` in your `nativeBuildInputs` also provides a default
 `checkPhase`, but it must be enabled with:
 
 ```nix
-{ doCheck = true; }
+{
+  doCheck = true;
+}
 ```
 
 This essentially runs: `swift test -c release`
@@ -168,17 +155,11 @@ with a writable copy:
 
 ```nix
 {
-  configurePhase = ''
-    runHook preConfigure
-
-    ${generated.configure}
-
+  configurePhase = generated.configure ++ ''
     # Replace the dependency symlink with a writable copy.
     swiftpmMakeMutable swift-crypto
     # Now apply a patch.
     patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
-
-    runHook postConfigure
   '';
 }
 ```

@@ -142,7 +142,7 @@ in
     systemd.services.grafana-image-renderer = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      description = "Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
+      description = " A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
 
       environment = {
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";

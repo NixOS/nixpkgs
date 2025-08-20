@@ -1,18 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "jq-lsp";
-  version = "0.1.13";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
     tag = "v${version}";
-    hash = "sha256-Oa9MuE6nUaxAlKeFnx4qjPldDfmLrbBraFkUsp5K5gY=";
+    hash = "sha256-jnHM3VSfi0KioNmXlkjVIlV7/7bKipEvpnV+z13+59Y=";
   };
 
   vendorHash = "sha256-8sZGnoP7l09ZzLJqq8TUCquTOPF0qiwZcFhojUnnEIY=";

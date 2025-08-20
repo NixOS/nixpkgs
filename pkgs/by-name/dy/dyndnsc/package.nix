@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic DNS update client with support for multiple protocols";
     longDescription = ''
       Dyndnsc is a command line client for sending updates to Dynamic
@@ -62,9 +62,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/infothrill/python-dyndnsc";
     changelog = "https://github.com/infothrill/python-dyndnsc/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = [ ];
     mainProgram = "dyndnsc";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

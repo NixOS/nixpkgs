@@ -8,18 +8,17 @@
   buildPythonApplication,
   pytestCheckHook,
   requests-mock,
-  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "meraki-cli";
-  version = "1.5.1";
-  pyproject = true;
+  version = "1.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "meraki_cli";
     inherit version;
-    hash = "sha256-FHcKgppclc0L6yuCkpVYfr+jq8hNkt7Hq/44mpHMR20=";
+    hash = "sha256-YOyeovqRqt6ZMXgLnIxRvPkcW259K8NIBGdb3PwjkMg=";
   };
 
   disabledTests = [
@@ -30,19 +29,18 @@ buildPythonApplication rec {
     "TestUpgrade"
   ];
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     argcomplete
     jinja2
     meraki
     rich
   ];
 
-  nativeCheckInputs = [
+  nativeBuildInputs = [
     pytestCheckHook
+  ];
+
+  nativeCheckInputs = [
     requests-mock
   ];
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fyta-cli";
-  version = "0.7.2";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dontinelli";
     repo = "fyta_cli";
     tag = "v${version}";
-    hash = "sha256-YYH15ZuRZirSFC7No1goY/afk2BGtCCykcZAnCDdq7U=";
+    hash = "sha256-OgpQh7WyZynFd308TjIGkQNoy8TFu9gynbDiLueqB/0=";
   };
 
   build-system = [ hatchling ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fyta_cli" ];
 
-  pytestFlags = [ "--snapshot-update" ];
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to access the FYTA API";

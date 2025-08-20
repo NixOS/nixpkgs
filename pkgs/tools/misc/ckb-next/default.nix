@@ -2,7 +2,7 @@
   lib,
   wrapQtAppsHook,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   udev,
   stdenv,
   pkg-config,
@@ -18,18 +18,17 @@
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   quazip,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.2";
+  version = "0.6.0";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
+    hash = "sha256-G0cvET3wMIi4FlBmaTkdTyYtcdVGzK4X0C2HYZr43eg=";
   };
 
   buildInputs = [
@@ -41,14 +40,12 @@ stdenv.mkDerivation rec {
     qtx11extras
     libdbusmenu
     quazip
-  ]
-  ++ lib.optional withPulseaudio libpulseaudio;
+  ] ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     wrapQtAppsHook
     pkg-config
     cmake
-    udevCheckHook
   ];
 
   cmakeFlags = [
@@ -60,12 +57,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./install-dirs.patch
-    (replaceVars ./modprobe.patch {
+    (substituteAll {
+      name = "ckb-next-modprobe.patch";
+      src = ./modprobe.patch;
       inherit kmod;
     })
   ];
-
-  doInstallCheck = true;
 
   postInstall = ''
     substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \

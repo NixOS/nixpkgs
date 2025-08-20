@@ -1,5 +1,4 @@
-{ ... }:
-{
+import ./make-test-python.nix {
   name = "nginx-etag-compression";
 
   nodes.machine =

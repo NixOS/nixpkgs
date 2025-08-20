@@ -1,56 +1,59 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
+  rustPlatform,
   pkg-config,
   openssl,
-  versionCheckHook,
-  nix-update-script,
+  darwin,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
+in
+rustPlatform.buildRustPackage rec {
   pname = "rojo";
-  version = "7.5.1";
+  version = "7.4.4";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-awMio62guyP5qZH4i5hwXV5re6o45HDwqIJb3Dd71Is=";
+    rev = "v${version}";
+    hash = "sha256-5jiqR3gn3X+klcYr1zTEB9omxWwHKQNLKCVXhry1jjY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-iWRjXC+JaBA/z2eOHiiqFFtS2gug5/hkIpYrPdHyux0=";
+  cargoHash = "sha256-J5297V6cHyWZYRyTTKM0V71QoHdHidtQCoAbQ2IoJrc=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      SystemConfiguration
+    ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
-  env.OPENSSL_NO_VENDOR = true;
+  OPENSSL_NO_VENDOR = "1";
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/rojo";
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
-    changelog = "https://github.com/rojo-rbx/rojo/blob/v${finalAttrs.version}/CHANGELOG.md";
+  meta = with lib; {
     description = "Project management tool for Roblox";
-    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${finalAttrs.version}";
-    homepage = "https://rojo.space";
-    license = lib.licenses.mpl20;
-    longDescription = ''
-      Tool designed to enable Roblox developers to use professional-grade software engineering tools.
-    '';
     mainProgram = "rojo";
-    maintainers = with lib.maintainers; [
-      wackbyte
-      HeitorAugustoLN
-    ];
+    longDescription = ''
+      Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
+    '';
+    homepage = "https://rojo.space";
+    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
+    changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ wackbyte ];
   };
-})
+}

@@ -5,13 +5,12 @@
   lxml,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "et-xmlfile";
-  version = "2.0.0";
-  pyproject = true;
+  version = "1.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -19,11 +18,9 @@ buildPythonPackage rec {
     domain = "foss.heptapod.net";
     owner = "openpyxl";
     repo = "et_xmlfile";
-    tag = version;
-    hash = "sha256-JZ1fJ9o4/Z+9uSlaoq+pNpLSwl5Yv6BJCI1G7GOaQ1I=";
+    rev = version;
+    hash = "sha256-MJimcnYKujOL3FedGreNpuw1Jpg48ataDmFd1qwTS5A=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     lxml

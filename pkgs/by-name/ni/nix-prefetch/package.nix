@@ -3,38 +3,31 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-
-  # nativeBuildInputs
+  installShellFiles,
+  makeWrapper,
   asciidoc,
   docbook_xml_dtd_45,
+  git,
   docbook_xsl,
-  installShellFiles,
   libxml2,
   libxslt,
-  makeWrapper,
-
-  # wrapper
   coreutils,
   gawk,
-  gitMinimal,
   gnugrep,
   gnused,
   jq,
   nix,
-
-  versionCheckHook,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "nix-prefetch";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
-    tag = finalAttrs.version;
-    hash = "sha256-6UOxRz/2Rhjl/9nyGJrl3fjl6Fkwc38HONi/UEw3my8=";
+    rev = version;
+    sha256 = "0bwv6x651gyq703pywrhb7lfby6xwnd1iwnrzzjihipn7x3v2hz9";
     # the stat call has to be in a subshell or we get the current date
     postFetch = ''
       echo $(stat -c %Y $out) > $out/.timestamp
@@ -50,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    lib=$out/lib/nix-prefetch
+    lib=$out/lib/${pname}
 
     substituteInPlace doc/nix-prefetch.1.asciidoc \
       --subst-var-by version $version
@@ -83,12 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
-    makeWrapper $lib/main.sh $out/bin/nix-prefetch \
+    makeWrapper $lib/main.sh $out/bin/${pname} \
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
           gawk
-          gitMinimal
+          git
           gnugrep
           gnused
           jq
@@ -98,29 +91,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     installManPage doc/nix-prefetch.?
 
-    installShellCompletion --name nix-prefetch contrib/nix-prefetch-completion.{bash,zsh}
+    installShellCompletion --name ${pname} contrib/nix-prefetch-completion.{bash,zsh}
 
-    mkdir -p $out/share/doc/nix-prefetch/contrib
-    cp -r contrib/hello_rs $out/share/doc/nix-prefetch/contrib
+    mkdir -p $out/share/doc/${pname}/contrib
+    cp -r contrib/hello_rs $out/share/doc/${pname}/contrib
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = gitUpdater { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Prefetch any fetcher function call, e.g. package sources";
+    license = licenses.mit;
+    maintainers = with maintainers; [ msteen ];
     homepage = "https://github.com/msteen/nix-prefetch";
-    changelog = "https://github.com/msteen/nix-prefetch/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ msteen ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     mainProgram = "nix-prefetch";
   };
-})
+}

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -16,6 +15,8 @@
   libcap,
   libgbm,
   xorg,
+  libpng,
+  ffmpeg,
   hwdata,
   seatd,
   vulkan-loader,
@@ -71,31 +72,29 @@ let
         pkg-config
         wayland-scanner
         glslang
-        hwdata
-      ]
-      ++ extraNativeBuildInputs;
+      ] ++ extraNativeBuildInputs;
 
-      buildInputs = [
-        libliftoff
-        libdisplay-info
-        libGL
-        libcap
-        libinput
-        libxkbcommon
-        libgbm
-        pixman
-        seatd
-        vulkan-loader
-        wayland
-        wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
-      ]
-      ++ lib.optional finalAttrs.enableXWayland xwayland
-      ++ extraBuildInputs;
+      buildInputs =
+        [
+          libGL
+          libcap
+          libinput
+          libpng
+          libxkbcommon
+          libgbm
+          pixman
+          seatd
+          vulkan-loader
+          wayland
+          wayland-protocols
+          xorg.libX11
+          xorg.xcbutilerrors
+          xorg.xcbutilimage
+          xorg.xcbutilrenderutil
+          xorg.xcbutilwm
+        ]
+        ++ lib.optional finalAttrs.enableXWayland xwayland
+        ++ extraBuildInputs;
 
       mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
 
@@ -130,6 +129,7 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [
+          primeos
           synthetica
           rewine
         ];
@@ -149,30 +149,29 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-    patches = [
-      (fetchpatch {
-        # SIGCHLD here isn't fatal: we have other means of notifying that things were
-        # successful or failure, and it causes many compositors to have to do a bunch
-        # of extra work: https://github.com/qtile/qtile/issues/5101
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/631e5be0d7a7e4c7086b9778bc8fac809f96d336.patch";
-        hash = "sha256-3Jnx4ZeKc3+NxraK2T7nZ2ibtWJuTEFmxa976fjAqsM=";
-      })
+    extraNativeBuildInputs = [
+      hwdata
+    ];
+    extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
     ];
   };
 
   wlroots_0_18 = generic {
     version = "0.18.2";
     hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
     extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
       lcms2
     ];
   };
 
-  wlroots_0_19 = generic {
-    version = "0.19.0";
-    hash = "sha256-I8z50yA/ukvXEC5TksG84+GrQpfC4drBJDRGw0R8RLk=";
-    extraBuildInputs = [
-      lcms2
-    ];
-  };
+  wlroots = wlroots_0_18;
 }

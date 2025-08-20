@@ -14,7 +14,7 @@
   postgresql,
   postgresqlTestHook,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "schemainspect";
   version = "3.1.1663587362";
   format = "pyproject";
@@ -22,7 +22,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = "schemainspect";
+    repo = pname;
     # no tags on github, version patch number is unix time.
     rev = "066262d6fb4668f874925305a0b7dbb3ac866882";
     hash = "sha256-SYpQQhlvexNc/xEgSIk8L8J+Ta+3OZycGLeZGQ6DWzk=";
@@ -92,15 +92,11 @@ buildPythonPackage {
     "test_weird_names"
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "-x"
     "-svv"
-  ];
-
-  enabledTestPaths = [
     "tests"
   ];
-
   pythonImportsCheck = [ "schemainspect" ];
 
   postUnpack = ''
@@ -112,6 +108,6 @@ buildPythonPackage {
     description = "Schema inspection for PostgreSQL, and potentially others";
     homepage = "https://github.com/djrobstep/schemainspect";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ bpeetz ];
+    maintainers = with maintainers; [ soispha ];
   };
 }

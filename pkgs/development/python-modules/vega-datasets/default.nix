@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [ "--doctest-modules" ];
+  pytestFlagsArray = [ "--doctest-modules" ];
 
   pythonImportsCheck = [ "vega_datasets" ];
 

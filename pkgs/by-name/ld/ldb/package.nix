@@ -1,22 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  pkg-config,
-  readline,
-  tdb,
-  talloc,
-  tevent,
-  popt,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  cmocka,
-  wafHook,
-  buildPackages,
-  libxcrypt,
-  testers,
+{ lib, stdenv
+, fetchurl
+, python3
+, pkg-config
+, readline
+, tdb
+, talloc
+, tevent
+, popt
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, cmocka
+, wafHook
+, buildPackages
+, libxcrypt
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,10 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0VWIQALHnbscPYZC+LEBPy5SCzru/W6WQSrexbjWy8A=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -68,8 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
     "--without-ldb-lmdb"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-compile"
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
@@ -79,16 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
-
-  stripDebugList = [
-    "bin"
-    "lib"
-    "modules"
-  ];
+  stripDebugList = [ "bin" "lib" "modules" ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;

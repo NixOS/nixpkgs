@@ -50,7 +50,7 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
 
   postPatch = ''
     substituteInPlace Makefile \

@@ -1,36 +1,35 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
+  qtbase,
   libzen,
   libmediainfo,
   zlib,
-  qt6,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "coreinfo";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "coreinfo";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/L69lrkJZh+SJRoNxvogdJ5KRIorwcBzm7WGxrNpexM=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-DmvmFMttEvNnIp1zwCe0BLrMx3Wlw1U9LcJwyb4Mx9U=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     libzen
     libmediainfo
     zlib
@@ -38,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "File information tool from the C Suite";
     mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

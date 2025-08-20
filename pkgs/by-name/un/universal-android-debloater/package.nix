@@ -8,28 +8,26 @@
   lib,
   libglvnd,
   libxkbcommon,
+  wayland,
   makeWrapper,
   mold,
-  nix-update-script,
   pkg-config,
   rustPlatform,
-  wayland,
-  writableTmpDirAsHomeHook,
   xorg,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "universal-android-debloater";
-  version = "1.1.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Universal-Debloater-Alliance";
     repo = "universal-android-debloater-next-generation";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-DapPUvkI4y159gYbSGJQbbDfW+C0Ggvaxo45Qj3mLrQ=";
+    rev = "v${version}";
+    hash = "sha256-o54gwFl2x0/nE1hiE5F8D18vQSNCKU9Oxiq8RA+yOoE=";
   };
 
-  cargoHash = "sha256-eXbReRi/0h4UyJwIMI3GfHcQzX1E5Spoa4moMXtrBng=";
+  cargoHash = "sha256-Zm0zC9GZ2IsjVp5Phd38UAiBH8n0O/i56CEURBUapAg=";
 
   buildInputs = [
     expat
@@ -45,34 +43,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     clang
-    writableTmpDirAsHomeHook
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/uad-ng --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        fontconfig
-        freetype
-        libglvnd
-        libxkbcommon
-        wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
-      ]
-    } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
+  preCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    wrapProgram $out/bin/uad-ng \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          fontconfig
+          freetype
+          libglvnd
+          libxkbcommon
+          wayland
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+        ]
+      } \
+      --suffix PATH : ${lib.makeBinPath [ android-tools ]}
+  '';
 
   meta = {
-    changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/tag/v${finalAttrs.version}";
     description = "Tool to debloat non-rooted Android devices";
+    changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation";
     license = lib.licenses.gpl3Only;
     mainProgram = "uad-ng";
     maintainers = with lib.maintainers; [ lavafroth ];
     platforms = lib.platforms.linux;
   };
-})
+}

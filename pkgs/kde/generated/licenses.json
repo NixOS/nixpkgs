@@ -6,11 +6,9 @@
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-3.0-only",
-    "LGPL-3.0-or-later",
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "akonadi": [
-    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
@@ -19,9 +17,7 @@
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
-    "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
     "MIT"
   ],
   "akonadi-calendar": [
@@ -32,7 +28,6 @@
     "GPL-3.0-or-later",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "akonadi-calendar-tools": [
@@ -45,15 +40,13 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "akonadi-import-wizard": [
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "akonadi-mime": [
     "BSD-3-Clause",
@@ -63,8 +56,7 @@
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "akonadi-search": [
     "BSD-3-Clause",
@@ -77,8 +69,7 @@
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "akonadiconsole": [
     "BSD-3-Clause",
@@ -88,8 +79,7 @@
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
-    "LicenseRef-KDE-Accepted-GPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-GPL"
   ],
   "akregator": [
     "BSD-2-Clause",
@@ -97,7 +87,6 @@
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "alligator": [
@@ -119,11 +108,14 @@
     "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
+    "GPL-2.0-only",
     "GPL-2.0-or-later",
+    "GPL-3.0-only",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-GPL",
     "LicenseRef-KDE-Accepted-LGPL",
     "MIT"
   ],
@@ -193,11 +185,6 @@
     "LGPL-2.1-or-later",
     "LicenseRef-KDE-Accepted-GPL"
   ],
-  "aurorae": [
-    "CC0-1.0",
-    "GPL-2.0-or-later",
-    "MIT"
-  ],
   "baloo": [
     "BSD-3-Clause",
     "CC0-1.0",
@@ -265,9 +252,7 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
-    "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-Qt-Commercial",
     "MIT"
   ],
   "breeze-grub": [
@@ -307,7 +292,6 @@
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "calindori": [
@@ -341,6 +325,9 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL"
+  ],
+  "cervisia": [
+    "CC0-1.0"
   ],
   "colord-kde": [
     "CC0-1.0",
@@ -381,11 +368,10 @@
     "GPL-2.0-or-later"
   ],
   "dragon": [
-    "BSD-2-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
+    "GPL-2.0-or-later",
     "GPL-3.0-only",
-    "LGPL-3.0-or-later",
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "drkonqi": [
@@ -395,7 +381,6 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
-    "LGPL-2.0-only",
     "LGPL-2.1-only",
     "LGPL-3.0-only",
     "LGPL-3.0-or-later",
@@ -417,7 +402,6 @@
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "extra-cmake-modules": [
@@ -490,16 +474,14 @@
   "grantlee-editor": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "GPL-2.0-or-later",
-    "MIT"
+    "GPL-2.0-or-later"
   ],
   "grantleetheme": [
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later",
-    "MIT"
+    "LGPL-2.1-or-later"
   ],
   "gwenview": [
     "BSD-3-Clause",
@@ -515,7 +497,6 @@
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "isoimagewriter": [
@@ -549,6 +530,7 @@
   "kaccounts-providers": [
     "CC0-1.0",
     "GPL-2.0-or-later",
+    "GPL-3.0-or-later",
     "LGPL-2.0-or-later"
   ],
   "kactivitymanagerd": [
@@ -567,13 +549,11 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "kajongg": [
     "CC0-1.0",
-    "GPL-2.0",
-    "GPL-2.0-only"
+    "GPL-2.0"
   ],
   "kalarm": [
     "BSD-3-Clause",
@@ -613,6 +593,7 @@
   "kamoso": [
     "CC0-1.0",
     "GPL-2.0-or-later",
+    "LGPL-2.1-only",
     "LGPL-2.1-or-later"
   ],
   "kanagram": [
@@ -734,8 +715,7 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later",
-    "MIT"
+    "LGPL-2.1-or-later"
   ],
   "kcharselect": [
     "BSD-3-Clause",
@@ -775,7 +755,6 @@
   ],
   "kcolorscheme": [
     "BSD-2-Clause",
-    "CC-BY-SA-4.0",
     "CC0-1.0",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -892,8 +871,7 @@
   "kdebugsettings": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "kdeclarative": [
     "CC0-1.0",
@@ -933,17 +911,10 @@
     "CC0-1.0"
   ],
   "kdegraphics-mobipocket": [
-    "CC0-1.0",
-    "GPL-2.0-or-later",
-    "LGPL-2.1-or-later"
+    "CC0-1.0"
   ],
   "kdegraphics-thumbnailers": [
-    "CC0-1.0",
-    "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "CC0-1.0"
   ],
   "kdenetwork-filesharing": [
     "BSD-3-Clause",
@@ -980,7 +951,6 @@
     "GPL-3.0-only",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
     "LicenseRef-KDE-Accepted-LGPL",
@@ -1126,7 +1096,6 @@
     "CC0-1.0",
     "GPL-3.0-or-later",
     "LGPL-2.1-only",
-    "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-LGPL"
   ],
@@ -1161,8 +1130,7 @@
   ],
   "kget": [
     "BSD-3-Clause",
-    "CC0-1.0",
-    "LGPL-3.0-or-later"
+    "CC0-1.0"
   ],
   "kglobalaccel": [
     "CC0-1.0",
@@ -1206,8 +1174,11 @@
   "khangman": [
     "BSD-2-Clause",
     "CC0-1.0",
+    "GPL-2.0-only",
     "GPL-2.0-or-later",
-    "LGPL-2.1-or-later"
+    "GPL-3.0-only",
+    "LGPL-2.1-or-later",
+    "LicenseRef-KDE-Accepted-GPL"
   ],
   "khealthcertificate": [
     "Apache-2.0",
@@ -1228,13 +1199,11 @@
     "Bison-exception-2.2",
     "CC0-1.0",
     "GPL-3.0-or-later",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LGPL-2.0-or-later"
   ],
   "ki18n": [
     "BSD-3-Clause",
+    "BSD-3-clause",
     "CC0-1.0",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -1262,8 +1231,7 @@
     "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kidletime": [
     "CC0-1.0",
@@ -1313,8 +1281,7 @@
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "kinfocenter": [
     "BSD-2-Clause",
@@ -1432,13 +1399,9 @@
     "ODbL-1.0"
   ],
   "kjobwidgets": [
-    "BSD-2-Clause",
     "CC0-1.0",
     "LGPL-2.0-only",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LGPL-2.0-or-later"
   ],
   "kjournald": [
     "BSD-3-Clause",
@@ -1467,6 +1430,7 @@
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LGPL-3.0-or-later",
@@ -1507,7 +1471,6 @@
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "kmail-account-wizard": [
@@ -1516,22 +1479,19 @@
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kmailtransport": [
     "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later",
-    "MIT"
+    "LGPL-2.1-or-later"
   ],
   "kmbox": [
     "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-only",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "kmenuedit": [
     "CC0-1.0",
@@ -1550,7 +1510,6 @@
     "GPL-2.0-or-later"
   ],
   "kmix": [
-    "BSD-2-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later"
   ],
@@ -1598,7 +1557,6 @@
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "knotifications": [
-    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-only",
@@ -1615,13 +1573,10 @@
     "BSD-3-Clause",
     "CC-BY-4.0",
     "CC0-1.0",
-    "GPL-2.0-only",
-    "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-GPL",
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kolf": [
@@ -1634,13 +1589,7 @@
     "GPL-2.0-or-later"
   ],
   "kolourpaint": [
-    "BSD-2-Clause",
-    "CC0-1.0",
-    "LGPL-2.0-only",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "CC0-1.0"
   ],
   "kompare": [
     "CC0-1.0",
@@ -1694,7 +1643,6 @@
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "kontactinterface": [
@@ -1704,8 +1652,7 @@
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kontrast": [
     "BSD-2-Clause",
@@ -1731,13 +1678,13 @@
   "korganizer": [
     "BSD-3-Clause",
     "CC0-1.0",
+    "GPL-2.0-only",
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-LGPL",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "kosmindoormap": [
@@ -1751,8 +1698,7 @@
   "kpackage": [
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later"
+    "LGPL-2.0-or-later"
   ],
   "kparts": [
     "CC0-1.0",
@@ -1784,8 +1730,7 @@
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kpipewire": [
     "Apache-2.0",
@@ -1799,8 +1744,7 @@
   "kpkpass": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "kplotting": [
     "CC0-1.0",
@@ -1878,6 +1822,9 @@
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-LGPL"
   ],
+  "kross-interpreters": [
+    "CC0-1.0"
+  ],
   "kruler": [
     "BSD-3-Clause",
     "CC0-1.0",
@@ -1885,7 +1832,6 @@
   ],
   "krunner": [
     "BSD-2-Clause",
-    "CC-BY-SA-4.0",
     "CC0-1.0",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -1910,7 +1856,6 @@
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "kscreenlocker": [
-    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
@@ -1943,8 +1888,7 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later",
-    "MIT"
+    "LGPL-2.1-or-later"
   ],
   "ksnakeduel": [
     "BSD-3-Clause",
@@ -1966,13 +1910,8 @@
     "GPL-2.0-or-later"
   ],
   "kstatusnotifieritem": [
-    "BSD-2-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "ksudoku": [
     "BSD-3-Clause",
@@ -2029,8 +1968,7 @@
   "ktnef": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "ktorrent": [
     "BSD-3-Clause",
@@ -2050,7 +1988,6 @@
   "ktrip": [
     "BSD-2-Clause",
     "BSD-3-Clause",
-    "CC-BY-SA-4.0",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-3.0-only",
@@ -2078,12 +2015,8 @@
     "LGPL-2.0-or-later"
   ],
   "kunitconversion": [
-    "BSD-2-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LGPL-2.0-or-later"
   ],
   "kuserfeedback": [
     "BSD-3-Clause",
@@ -2093,12 +2026,10 @@
   "kwallet": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "GPL-3.0-only",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later",
-    "LGPL-3.0-or-later",
-    "LicenseRef-KDE-Accepted-GPL"
+    "LGPL-3.0-or-later"
   ],
   "kwallet-pam": [
     "BSD-3-Clause",
@@ -2143,12 +2074,10 @@
     "LGPL-2.1-or-later"
   ],
   "kweathercore": [
-    "BSD-2-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later"
   ],
   "kwidgetsaddons": [
-    "BSD-2-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
@@ -2160,22 +2089,6 @@
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kwin": [
-    "BSD-2-Clause",
-    "BSD-3-Clause",
-    "CC0-1.0",
-    "GPL-2.0-only",
-    "GPL-2.0-or-later",
-    "GPL-3.0-only",
-    "LGPL-2.0-only",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-2.1-or-later",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
-  ],
-  "kwin-x11": [
     "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
@@ -2232,8 +2145,7 @@
   "libgravatar": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "libkcddb": [
     "BSD-3-Clause",
@@ -2262,7 +2174,6 @@
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
-    "MIT",
     "Qt-Commercial-exception-1.0"
   ],
   "libkeduvocdocument": [
@@ -2283,11 +2194,12 @@
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "libkleo": [
-    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
+    "GCC-exception-3.1",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
+    "GPL-3.0-or-later",
     "LGPL-2.0-or-later"
   ],
   "libkmahjongg": [
@@ -2320,14 +2232,14 @@
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "libksysguard": [
     "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
+    "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -2382,8 +2294,7 @@
     "LGPL-2.0-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "mailimporter": [
     "BSD-3-Clause",
@@ -2392,8 +2303,7 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
-    "LicenseRef-KDE-Accepted-GPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-GPL"
   ],
   "marble": [
     "Apache-2.0",
@@ -2421,8 +2331,7 @@
   "mbox-importer": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "GPL-2.0-or-later",
-    "MIT"
+    "GPL-2.0-or-later"
   ],
   "merkuro": [
     "BSD-2-Clause",
@@ -2590,22 +2499,19 @@
     "CC0-1.0",
     "GFDL-1.2-or-later",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "pim-sieve-editor": [
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "pimcommon": [
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later",
-    "MIT"
+    "LGPL-2.0-or-later"
   ],
   "plasma-activities": [
     "CC0-1.0",
@@ -2628,13 +2534,9 @@
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "plasma-browser-integration": [
-    "BSD-2-Clause",
     "CC0-1.0",
-    "GPL-2.0-only",
     "GPL-2.0-or-later",
-    "GPL-3.0-only",
     "GPL-3.0-or-later",
-    "LicenseRef-KDE-Accepted-GPL",
     "MIT"
   ],
   "plasma-desktop": [
@@ -2701,6 +2603,7 @@
   ],
   "plasma-mobile": [
     "Apache-2.0",
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -2717,10 +2620,10 @@
   "plasma-nano": [
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later"
+    "LGPL-2.0-or-later",
+    "MIT"
   ],
   "plasma-nm": [
-    "BSD-2-Clauses",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -2774,7 +2677,6 @@
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "plasma-vault": [
-    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-3.0-only",
@@ -2814,13 +2716,10 @@
   "plasma5support": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "GPL-2.0-only",
     "GPL-2.0-or-later",
-    "GPL-3.0-only",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later",
-    "LicenseRef-KDE-Accepted-GPL"
+    "LGPL-2.1-or-later"
   ],
   "plasmatube": [
     "CC-BY-SA-4.0",
@@ -2828,7 +2727,6 @@
     "GPL-2.0-only",
     "GPL-3.0-only",
     "GPL-3.0-or-later",
-    "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
@@ -2914,14 +2812,6 @@
     "LicenseRef-Qt-Commercial",
     "MIT"
   ],
-  "qrca": [
-    "BSD-2-Clause",
-    "BSD-3-Clause",
-    "CC0-1.0",
-    "GPL-3.0-or-later",
-    "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later"
-  ],
   "rocs": [
     "BSD-2-Clause",
     "CC0-1.0",
@@ -2984,10 +2874,7 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-only",
-    "LGPL-3.0-only",
-    "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LicenseRef-KDE-Accepted-GPL"
   ],
   "spectacle": [
     "BSD-3-Clause",
@@ -3057,10 +2944,8 @@
     "LGPL-2.0-or-later"
   ],
   "tokodon": [
-    "AGPL-3.0-or-later",
     "BSD-2-Clause",
     "BSD-3-Clause",
-    "CC-BY-SA-4.0",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -3091,7 +2976,6 @@
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
-    "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-LGPL",
     "MIT"

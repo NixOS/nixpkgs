@@ -20,7 +20,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
   version = "24.5.17";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
@@ -53,11 +52,7 @@ python3Packages.buildPythonApplication rec {
     glib # For compiling gsettings-schemas
   ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     urllib3
     babel
     psutil

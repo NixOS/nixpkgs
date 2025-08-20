@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  replaceVars,
+  substituteAll,
   pkg-config,
   glib,
   shadow,
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Hardcode dependency paths.
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit shadow coreutils;
     })
 
@@ -55,19 +56,20 @@ stdenv.mkDerivation rec {
     ./get-dm-type-from-config.patch
   ];
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-    python3
-    vala
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      gettext
+      gobject-introspection
+      meson
+      ninja
+      pkg-config
+      python3
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     dbus
@@ -99,12 +101,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
-    teams = with lib.teams; [ freedesktop ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ pSub ]);
+    platforms = platforms.linux;
   };
 }

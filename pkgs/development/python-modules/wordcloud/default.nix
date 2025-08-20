@@ -7,7 +7,6 @@
   numpy,
   pillow,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
   setuptools-scm,
@@ -31,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-snPYpd7ZfT6tkEBGtJRk3LcRGe5534dQcqTBBcrdNHo=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report xml --tb=short" ""
+  '';
+
   nativeBuildInputs = [ cython ];
 
   dependencies = [
@@ -39,10 +43,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd test

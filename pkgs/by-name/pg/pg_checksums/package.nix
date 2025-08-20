@@ -1,27 +1,24 @@
 {
   lib,
-  clangStdenv,
+  stdenv,
   fetchFromGitHub,
   libxslt,
   docbook_xsl,
   postgresql,
 }:
 
-clangStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pg_checksums";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "credativ";
-    repo = "pg_checksums";
+    repo = pname;
     rev = version;
     sha256 = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
   };
 
-  nativeBuildInputs = [
-    libxslt.bin
-    postgresql.pg_config
-  ];
+  nativeBuildInputs = [ libxslt.bin ];
 
   buildInputs = [ postgresql ];
 

@@ -1,37 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  glib,
-  libadwaita,
-  libgee,
-  granite7,
-  gexiv2,
-  gnome-settings-daemon,
-  elementary-settings-daemon,
-  gtk4,
-  gala,
-  wingpanel,
-  wingpanel-indicator-keyboard,
-  wingpanel-quick-settings,
-  switchboard,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, glib
+, libadwaita
+, libgee
+, granite7
+, gexiv2
+, gnome-settings-daemon
+, elementary-settings-daemon
+, gtk4
+, gala
+, wingpanel
+, wingpanel-indicator-keyboard
+, wingpanel-quick-settings
+, switchboard
+, gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.2.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "settings-desktop";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-TYwiL6+VjfSDiFAlMe482gB8a/OtCYHl5r8gh9Hcvfg=";
+    sha256 = "sha256-S6EJGF9jRiCzH0f7WNrbLtAX23fjD/Hzd8YLEzkXesw=";
   };
 
   nativeBuildInputs = [
@@ -64,9 +63,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Desktop Plug";
-    homepage = "https://github.com/elementary/settings-desktop";
+    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
   };
 }

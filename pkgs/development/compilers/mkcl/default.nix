@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
     mainProgram = "mkcl";
-    teams = [ lib.teams.lisp ];
+    maintainers = lib.teams.lisp.members;
     platforms = platforms.linux;
   };
 }

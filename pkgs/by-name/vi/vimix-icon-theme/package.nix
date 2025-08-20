@@ -29,13 +29,13 @@ lib.checkListOfEnum "${pname}: color variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025.02.10";
+    version = "2023-06-26";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = "vimix-icon-theme";
+      repo = pname;
       rev = version;
-      hash = "sha256-HNwEqp6G9nZDIJo9b6FD4d5NSXUx523enENM0NVwviA=";
+      sha256 = "5pTYsWdmjSDyrEK+Jbg/9dQ1FHI2rdnr1n0Ysd5mg/U=";
     };
 
     nativeBuildInputs = [

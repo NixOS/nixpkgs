@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test/test-*.py" ];
+  pytestFlagsArray = [ "test/test-*.py" ];
 
   meta = {
     homepage = "https://www.gnu.org/software/libcdio/";

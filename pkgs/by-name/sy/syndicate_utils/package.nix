@@ -1,32 +1,35 @@
 {
   lib,
-  buildNimSbom,
+  buildNimPackage,
   fetchFromGitea,
   libxml2,
   libxslt,
   openssl,
-  libpq,
+  postgresql,
   sqlite,
 }:
 
-buildNimSbom (finalAttrs: {
+buildNimPackage (finalAttrs: {
   pname = "syndicate_utils";
+  version = "20240509";
 
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
     repo = "syndicate_utils";
     rev = finalAttrs.version;
-    hash = "sha256-zHVL2A5mAZX73Xk6Pcs02wHCAVfsOYxDO8/yKX0FvBs=";
+    hash = "sha256-Sy6Ad0nNr/0y5W4z3SzlwfsA8hiXzlOPDOGdwbCYROs=";
   };
 
   buildInputs = [
-    libpq
+    postgresql.out
     sqlite
     libxml2
     libxslt
     openssl
   ];
+
+  lockFile = ./lock.json;
 
   meta = finalAttrs.src.meta // {
     description = "Utilities for the Syndicated Actor Model";
@@ -34,4 +37,4 @@ buildNimSbom (finalAttrs: {
     maintainers = [ lib.maintainers.ehmry ];
     license = lib.licenses.unlicense;
   };
-}) ./sbom.json
+})

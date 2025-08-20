@@ -4,22 +4,22 @@
   fetchPypi,
   pythonOlder,
   unittestCheckHook,
-  pdm-backend,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "webcolors";
-  version = "24.11.1";
+  version = "24.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7LPXaPMiAq93BHe4tl8xj6T1ZsIpSGc6l3sA1YndgPY=";
+    hash = "sha256-CLB68oagG80w1YOnrK32KVg9H3m/7yfdLCxcJjgXJ30=";
   };
 
-  build-system = [ pdm-backend ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

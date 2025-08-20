@@ -9,17 +9,17 @@
 
 let
   pname = "s3proxy";
-  version = "2.6.0";
+  version = "2.1.0";
 in
 maven.buildMavenPackage {
   inherit pname version;
-  mvnHash = "sha256-OCFs1Q4NL5heP8AVvkQ+ZdhmPD2SNZMCF2gxjXpbfW4=";
+  mvnHash = "sha256-85mE/pZ0DXkzOKvTAqBXGatAt8gc4VPRCxmEyIlyVGI=";
 
   src = fetchFromGitHub {
     owner = "gaul";
-    repo = "s3proxy";
+    repo = pname;
     rev = "s3proxy-${version}";
-    hash = "sha256-wd3GdSAcoJvlyFqnccdhM83IY2Q7KJQHoyV+sQGEwo4=";
+    hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -33,12 +33,12 @@ maven.buildMavenPackage {
       --add-flags "-jar $out/share/s3proxy/s3proxy-${version}-jar-with-dependencies.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Access other storage backends via the S3 API";
     mainProgram = "s3proxy";
     homepage = "https://github.com/gaul/s3proxy";
     changelog = "https://github.com/gaul/s3proxy/releases/tag/s3proxy-${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ camelpunch ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ camelpunch ];
   };
 }

@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin {
+grafanaPlugin rec {
   pname = "redis-app";
   version = "2.2.1";
   zipHash = "sha256-1ZzJaGhlM6CaTecj69aqJ9fqN7wYSsiDCMTRVkZJUb0=";

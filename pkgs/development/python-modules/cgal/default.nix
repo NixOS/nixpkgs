@@ -39,18 +39,19 @@ buildPythonPackage rec {
     swig
   ];
 
-  buildInputs = [
-    cgal
-    gmp
-    mpfr
-    boost
-    zlib
-    tbb
-    eigen
-  ]
-  ++ lib.optionals withLAS [
-    LAStools
-  ];
+  buildInputs =
+    [
+      cgal
+      gmp
+      mpfr
+      boost
+      zlib
+      tbb
+      eigen
+    ]
+    ++ lib.optionals withLAS [
+      LAStools
+    ];
 
   dependencies = [
     numpy
@@ -82,5 +83,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/CGAL/cgal-swig-bindings";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbsds ];
+    # error: no template named 'unary_function' in namespace 'boost::functional::detail'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

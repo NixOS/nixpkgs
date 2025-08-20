@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "iotools";
   version = "unstable-2017-12-11";
 
   src = fetchFromGitHub {
     owner = "adurbin";
-    repo = "iotools";
+    repo = pname;
     rev = "18949fdc4dedb1da3f51ee83a582b112fb9f2c71";
     hash = "sha256-tlGXJn3n27mQDupMIVYDd86YaWazVwel/qs0QqCy1W8=";
   };

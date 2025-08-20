@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  setuptools,
   requests,
   beautifulsoup4,
   feather-format,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "nemosis";
-  version = "3.8.1";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UNSW-CEEM";
     repo = "NEMOSIS";
     tag = "v${version}";
-    hash = "sha256-4Bb9yZUfwkFQVNSVGtg3APXPovos23oHAx4v+6aa7MM=";
+    hash = "sha256-7jIPBTvL7Y3945GEpa1/DQVdbPsSxVdYoOFTIaIgPag=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ setuptools ];
   dependencies = [
     beautifulsoup4
     feather-format

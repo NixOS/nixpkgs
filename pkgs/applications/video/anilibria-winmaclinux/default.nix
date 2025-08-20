@@ -21,22 +21,21 @@
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "2.2.29";
+  version = "2.2.24";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    hash = "sha256-R/EP4AmKKUe2osycToeMAFQHsdL16vCRalzPh+kPZ2A=";
+    hash = "sha256-FAnVgrH6ZXfIp8FaacSpcHIwF6DCFt4K5e+UMAUb6qI=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  qmakeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
+  qmakeFlags =
+    [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -70,21 +69,22 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    qtbase
-    qtquickcontrols2
-    qtwebsockets
-    qtmultimedia
-  ]
-  ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-base
-    gst-libav
-    gstreamer
-  ])
-  ++ lib.optionals withVLC [ libvlc ]
-  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
+  buildInputs =
+    [
+      qtbase
+      qtquickcontrols2
+      qtwebsockets
+      qtmultimedia
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-base
+      gst-libav
+      gstreamer
+    ])
+    ++ lib.optionals withVLC [ libvlc ]
+    ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
     (makeDesktopItem (rec {

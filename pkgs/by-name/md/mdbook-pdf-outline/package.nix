@@ -6,13 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mdbook-pdf-outline";
-  version = "0.1.6";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "mdbook_pdf_outline";
-    hash = "sha256-GPTDlgYpfPtcq+rJCjxgexfViYiqHoVZ8iQkyWXNogw=";
+    inherit pname version;
+    hash = "sha256-STi+54iT+5+Xi0IzGXv2dxVS91+T6fjg3xmbJjekpPE=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/HollowMan6/mdbook-pdf";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hollowman6 ];
+    maintainers = with maintainers; [ nix-julia ];
 
   };
 }

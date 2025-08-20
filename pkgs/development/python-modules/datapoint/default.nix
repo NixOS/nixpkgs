@@ -2,40 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   appdirs,
-  geojson,
-  hatchling,
+  pytz,
   requests,
   pytestCheckHook,
   requests-mock,
-  versioningit,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "datapoint";
-  version = "0.13.0";
+  version = "0.9.9";
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
-    owner = "Perseudonymous";
+    owner = "ejep";
     repo = "datapoint-python";
-    tag = version;
-    hash = "sha256-vgwuoG/2Lzo56cAiXEYNPsXQYfx8Cwg0NJgojDBxoug=";
+    tag = "v${version}";
+    hash = "sha256-zUvwfBwJe8SaB96/Jz7Qeanz1mHmLVp2JW9qkR2dRnY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
-
-  build-system = [
-    hatchling
-    versioningit
+  patches = [
+    (fetchpatch2 {
+      # Hardcode version (instead of using versioneer)
+      url = "https://github.com/EJEP/datapoint-python/commit/57e649b26ecf39fb11f507eb920b1d059d433721.patch";
+      hash = "sha256-trOPtwlaJDeA4Kau4fwZCxqJiw96+T/le461t09O8io=";
+    })
   ];
 
-  dependencies = [
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     appdirs
-    geojson
+    pytz
     requests
   ];
 
@@ -44,12 +47,14 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pytestFlagsArray = [ "tests/unit" ];
+
   pythonImportsCheck = [ "datapoint" ];
 
   meta = {
     description = "Python interface to the Met Office's Datapoint API";
-    homepage = "https://github.com/Perseudonymous/datapoint-python";
-    changelog = "https://github.com/Perseudonymous/datapoint-python/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/ejep/datapoint-python";
+    changelog = "https://github.com/EJEP/datapoint-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

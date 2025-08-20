@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "airtouch5py";
-  version = "0.3.0";
+  version = "0.2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,15 +26,11 @@ buildPythonPackage rec {
     owner = "danzel";
     repo = "airtouch5py";
     tag = version;
-    hash = "sha256-St2FjyUXyTmy0shQfUzuB+lUSaadEyjdNJJkQA4aCxQ=";
+    hash = "sha256-qJSqgdT1G26JOEjmsQv07IdWvApFvtHIdRGi9TFaKZ8=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "bitarray"
-    "crc"
-  ];
+  pythonRelaxDeps = [ "crc" ];
 
   dependencies = [
     bitarray

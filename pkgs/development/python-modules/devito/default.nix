@@ -1,151 +1,135 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
   anytree,
+  buildPythonPackage,
+  setuptools,
+  cached-property,
   cgen,
-  cloudpickle,
+  click,
   codepy,
+  distributed,
+  fetchFromGitHub,
+  gcc,
   llvmPackages,
+  matplotlib,
   multidict,
-  numpy,
-  packaging,
+  nbval,
   psutil,
   py-cpuinfo,
-  sympy,
-
-  # tests
-  click,
-  gcc,
-  matplotlib,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   scipy,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.19";
+  version = "4.8.11";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-kE4u5r2GFe4Y+IdSEnNZEOAO9WoSIM00Ify1eLaflWI=";
+    hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
   };
+
+  # packaging.metadata.InvalidMetadata: 'python_version_3.8_' is invalid for 'provides-extra'
+  postPatch = ''
+    substituteInPlace requirements-testing.txt \
+      --replace-fail 'pooch; python_version >= "3.8"' "pooch"
+  '';
 
   pythonRemoveDeps = [ "pip" ];
 
   pythonRelaxDeps = true;
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     anytree
+    cached-property
     cgen
-    cloudpickle
+    click
     codepy
+    distributed
+    nbval
     multidict
-    numpy
-    packaging
     psutil
     py-cpuinfo
+    scipy
     sympy
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeCheckInputs = [
-    click
     gcc
     matplotlib
     pytest-xdist
     pytestCheckHook
-    scipy
   ];
 
-  pytestFlags = [
-    "-x"
-  ];
+  pytestFlagsArray = [ "-x" ];
 
-  disabledTestMarks = [
-    # Tests marked as 'parallel' require mpi and fail in the sandbox:
-    # FileNotFoundError: [Errno 2] No such file or directory: 'mpiexec'
-    "parallel"
-  ];
-
-  disabledTests = [
-    # Download dataset from the internet
-    "test_gs_2d_float"
-    "test_gs_2d_int"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
-    "test_v0"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
-    "test_special_symbols"
-
-    # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
-    "test_v0"
-
-    # AssertionError: assert(np.allclose(grad_u.data, grad_v.data, rtol=tolerance, atol=tolerance))
-    "test_gradient_equivalence"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # Numerical tests
-    "test_lm_fb"
-    "test_lm_ds"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Numerical error
-    "test_pow_precision"
-  ];
-
-  disabledTestPaths =
-    lib.optionals
-      ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
-      [
-        # Flaky: codepy.CompileError: module compilation failed
-        "tests/test_dse.py"
-      ]
+  # I've had to disable the following tests since they fail while using nix-build, but they do pass
+  # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
+  disabledTests =
+    [
+      "test_assign_parallel"
+      "test_cache_blocking_structure_distributed"
+      "test_codegen_quality0"
+      "test_coefficients_w_xreplace"
+      "test_docstrings"
+      "test_docstrings[finite_differences.coefficients]"
+      "test_gs_parallel"
+      "test_if_halo_mpi"
+      "test_if_parallel"
+      "test_index_derivative"
+      "test_init_omp_env_w_mpi"
+      "test_loop_bounds_forward"
+      "test_min_max_mpi"
+      "test_mpi"
+      "test_mpi_nocomms"
+      "test_new_distributor"
+      "test_setupWOverQ"
+      "test_shortcuts"
+      "test_stability_mpi"
+      "test_subdomainset_mpi"
+      "test_subdomains_mpi"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # assert np.all(f.data == check)
-      # assert Data(False)
-      "tests/test_data.py::TestDataReference::test_w_data"
-
-      # AssertionError: assert 'omp for schedule(dynamic,1)' == 'omp for coll...le(dynamic,1)'
-      "tests/test_dle.py::TestNestedParallelism::test_nested_cache_blocking_structure_subdims"
-
-      # codepy.CompileError: module compilation failed
-      # FAILED compiler invocation
-      "tests/test_dle.py::TestNodeParallelism::test_dynamic_nthreads"
-
-      # AssertionError: assert all(not i.pragmas for i in iters[2:])
-      "tests/test_dle.py::TestNodeParallelism::test_incr_perfect_sparse_outer"
+      # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
+      "test_v0"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # IndexError: tuple index out of range
-      "tests/test_dle.py::TestNestedParallelism"
+      # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
+      "test_special_symbols"
 
-      # codepy.CompileError: module compilation failed
-      "tests/test_autotuner.py::test_nested_nthreads"
-
-      # assert np.all(np.isclose(f0.data, check0))
-      # assert Data(false)
-      "tests/test_interpolation.py::TestSubDomainInterpolation::test_inject_subdomain"
+      # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
+      "test_v0"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Numerical tests
+      "test_lm_fb"
+      "test_lm_ds"
     ];
+
+  disabledTestPaths =
+    [
+      "tests/test_pickle.py"
+      "tests/test_benchmark.py"
+      "tests/test_mpi.py"
+      "tests/test_autotuner.py"
+      "tests/test_data.py"
+      "tests/test_dse.py"
+      "tests/test_gradient.py"
+    ]
+    ++ lib.optionals (
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin
+    ) [ "tests/test_dle.py" ];
 
   pythonImportsCheck = [ "devito" ];
 

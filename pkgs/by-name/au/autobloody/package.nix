@@ -36,12 +36,12 @@ python3.pkgs.buildPythonApplication rec {
     "autobloody"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to automatically exploit Active Directory privilege escalation paths";
     homepage = "https://github.com/CravateRouge/autobloody";
     changelog = "https://github.com/CravateRouge/autobloody/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "autobloody";
   };
 }

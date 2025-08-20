@@ -9,6 +9,13 @@
   which,
   DarwinTools,
   xcbuild,
+  AppKit,
+  Carbon,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Kernel,
+  MultitouchSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,17 +27,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
   };
 
-  nativeBuildInputs = [
-    flex
-    bison
-    which
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DarwinTools
-    xcbuild
-  ];
+  nativeBuildInputs =
+    [
+      flex
+      bison
+      which
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      DarwinTools
+      xcbuild
+    ];
 
-  buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  buildInputs =
+    [ libsndfile ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Carbon
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Kernel
+      MultitouchSupport
+    ];
 
   patches = [ ./darwin-limits.patch ];
 

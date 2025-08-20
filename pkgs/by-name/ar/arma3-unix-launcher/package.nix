@@ -11,24 +11,24 @@
   nlohmann_json,
   qt5,
   spdlog,
-  steam-run,
-  replaceVars,
+  substituteAll,
   buildDayZLauncher ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arma3-unix-launcher";
-  version = "420";
+  version = "413";
 
   src = fetchFromGitHub {
     owner = "muttleyxd";
     repo = "arma3-unix-launcher";
-    tag = "commit-${finalAttrs.version}";
-    hash = "sha256-QY3zDtfZt2ifF69Jzp0Ls1SpDCliKdkwLaGFXneT79o=";
+    rev = "2ea62d961522f1542d4c8e669ef5fe856916f9ec";
+    hash = "sha256-uym93mYmVj9UxT8RbwdRUyIPrQX7nZTNWUUVjxCQmVU=";
   };
 
   patches = [
     # prevent CMake from trying to get libraries on the internet
-    (replaceVars ./dont_fetch_dependencies.patch {
+    (substituteAll {
+      src = ./dont_fetch_dependencies.patch;
       argparse_src = fetchFromGitHub {
         owner = "p-ranav";
         repo = "argparse";
@@ -53,11 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       doctest_src = null;
       trompeloeil_src = null;
     })
-
-    # use steam-run when running the game directly
-    (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run;
-    })
+    # game won't launch with steam integration anyways, disable it
+    ./disable_steam_integration.patch
   ];
 
   nativeBuildInputs = [

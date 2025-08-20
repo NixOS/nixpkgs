@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "keepassxc-go";
-  version = "1.6.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "keepassxc-go";
     rev = "v${version}";
-    hash = "sha256-Z4SbPxhs+umsUlby7idxofCjP+uLPvp/2oUCpnAS2/A=";
+    hash = "sha256-seCeHNEj5GxAI7BVMPzh+YuoxivmTwvhVCqY5LKHpQk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-+cgf2FxpbLu+Yuhk6T0ZBnDH7We2DVu65xFaruk9I0E=";
+  vendorHash = "sha256-jscyNyVr+RDN1EaxIOc3aYCAVT+1eO/c+dxEsIorDIs=";
 
   checkFlags = [
     # Test tries to monkey-patch the stdlib, fails with permission denied error.
@@ -34,12 +34,12 @@ buildGoModule rec {
       --zsh <($out/bin/keepassxc-go completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Library and basic CLI tool to interact with KeepassXC via unix socket";
     homepage = "https://github.com/MarkusFreitag/keepassxc-go";
     changelog = "https://github.com/MarkusFreitag/keepassxc-go/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xgwq ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ xgwq ];
     mainProgram = "keepassxc-go";
   };
 }

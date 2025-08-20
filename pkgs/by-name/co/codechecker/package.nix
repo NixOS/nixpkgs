@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    distutils # required in python312 to call subcommands (see https://github.com/Ericsson/codechecker/issues/4350)
     lxml
     sqlalchemy
     alembic
@@ -110,19 +109,16 @@ python3Packages.buildPythonApplication rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Ericsson/codechecker";
     changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${version}";
     description = "Analyzer tooling, defect database and viewer extension for the Clang Static Analyzer and Clang Tidy";
-    license = with lib.licenses; [
-      asl20
-      llvm-exception
-    ];
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20-llvm;
+    maintainers = with maintainers; [
       zebreus
       felixsinger
     ];
     mainProgram = "CodeChecker";
-    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

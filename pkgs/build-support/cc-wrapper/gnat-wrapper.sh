@@ -174,7 +174,7 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-export PATH="$path_backup"
+PATH="$path_backup"
 # Old bash workaround, see above.
 exec @prog@ \
     ${extraBefore+"${extraBefore[@]}"} \

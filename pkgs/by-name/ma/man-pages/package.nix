@@ -2,61 +2,40 @@
   lib,
   stdenv,
   fetchurl,
-  directoryListingUpdater,
-  man,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "6.15";
+  version = "6.9.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
-    hash = "sha256-A9jr9hi9XfV8tL81Xvo/TNOgC3ce/WI9T9BCtdzrRGU=";
+    url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
+    hash = "sha256-4jy6wp8RC6Vx8NqFI+edNzaRRm7X8qMTAXIYF9NFML0=";
   };
 
-  nativeInstallCheckInputs = [ man ];
-
-  dontBuild = true;
-  enableParallelInstalling = true;
-  doInstallCheck = true;
-
   makeFlags = [
-    "-R"
-    "VERSION=${finalAttrs.version}"
     "prefix=${placeholder "out"}"
   ];
 
-  preConfigure = ''
-    # If not provided externally, the makefile will attempt to determine the
-    # date and time of the release from the Git repository log, which is not
-    # available in the distributed tarball. We therefore supply it from
-    # $SOURCE_DATE_EPOCH, which is based on the most recent modification time
-    # of all source files. Cf.
-    # nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-    export DISTDATE="$(date --utc --date="@$SOURCE_DATE_EPOCH")"
+  dontBuild = true;
+
+  outputDocdev = "out";
+
+  enableParallelInstalling = true;
+
+  postInstall = ''
+    # The manpath executable looks up manpages from PATH. And this package won't
+    # appear in PATH unless it has a /bin folder. Without the change
+    # 'nix-shell -p man-pages' does not pull in the search paths.
+    # See 'man 5 manpath' for the lookup order.
+    mkdir -p $out/bin
   '';
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    # Check for a few well‐known man pages
-    for page in ldd write printf null hosts random ld.so; do
-      man -M "$out/share/man" -P cat "$page" >/dev/null
-    done
-
-    runHook postInstallCheck
-  '';
-
-  passthru.updateScript = directoryListingUpdater {
-    url = "https://www.kernel.org/pub/linux/docs/man-pages/";
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
     priority = 30; # if a package comes with its own man page, prefer it
   };
-})
+}

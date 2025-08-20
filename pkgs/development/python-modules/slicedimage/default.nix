@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spacetx";
-    repo = "slicedimage";
+    repo = pname;
     rev = version;
     sha256 = "1vpg8varvfx0nj6xscdfm7m118hzsfz7qfzn28r9rsfvrhr0dlcw";
   };
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Ignore tests which require setup, check again if disabledTestFiles can be used
-  disabledTestPaths = [ "tests/io_" ];
+  pytestFlagsArray = [ "--ignore tests/io_" ];
 
   pythonImportsCheck = [ "slicedimage" ];
 

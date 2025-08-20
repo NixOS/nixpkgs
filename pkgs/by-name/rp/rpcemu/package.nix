@@ -10,12 +10,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcemu";
-  version = "0.9.5";
+  version = "0.9.4";
 
   src = fetchhg {
     url = "http://www.home.marutan.net/hg/rpcemu";
     rev = "release_${finalAttrs.version}";
-    sha256 = "sha256-raZ+u8CnX33CsOSI20utegwPVVk8bcZqDNJ/5UcMP9w=";
+    sha256 = "sha256-UyjfTfUpSvJNFPkQWPKppxp/kO0hVGo5cE9RuCU8GJI=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
       using them with RPCEmu.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers) AndersonTorres;
+    };
     platforms = lib.platforms.linux;
   };
 })

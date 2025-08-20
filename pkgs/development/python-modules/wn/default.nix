@@ -4,27 +4,27 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
-  hatchling,
-  httpx,
+  flit-core,
+  requests,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.11.0";
+  version = "0.9.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TDvTNh+5cxgBoy9nuXItHOdtfbsP+3F16egZjUBSpak=";
+    hash = "sha256-muYuDmYH9W5j6euDYJMMgzfsxE6eBIhDCqH6P7nFG+Q=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ flit-core ];
 
-  dependencies = [
-    httpx
+  propagatedBuildInputs = [
+    requests
     tomli
   ];
 

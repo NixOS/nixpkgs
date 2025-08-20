@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  texinfo6,
+  texinfo6_5,
   libXext,
   xorgproto,
   libX11,
@@ -11,7 +11,6 @@
   libXcursor,
   alsa-lib,
   cmake,
-  pkg-config,
   zlib,
   libpng,
   libvorbis,
@@ -37,12 +36,9 @@ stdenv.mkDerivation rec {
     ./encoding.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    texinfo6
+    texinfo6_5
     libXext
     xorgproto
     libX11

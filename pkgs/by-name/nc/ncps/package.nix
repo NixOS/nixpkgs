@@ -8,22 +8,22 @@
 let
   finalAttrs = {
     pname = "ncps";
-    version = "0.2.0";
+    version = "v0.1.1";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-CjiPn5godd8lT3eE9e7MnZ0/2hOEq+CG0bpgRtLtwHo=";
+      rev = finalAttrs.version;
+      hash = "sha256-Vr/thppCABdZDl1LEc7l7c7Ih55U/EFwJInWSUWoLJA";
     };
 
     ldflags = [
-      "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
+      "-X github.com/kalbasit/ncps/cmd.Version=${finalAttrs.version}"
     ];
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-El3yvYYnase4ztG3u7xxcKE5ARy5Lvp/FVosBwOXzbU=";
+    vendorHash = "sha256-xPrWofNyDFrUPQ42AYDs2x2gGoQ2w3tRrMIsu3SVyHA=";
     doCheck = true;
 
     nativeBuildInputs = [

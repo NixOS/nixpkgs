@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitLab,
   libvirt,
+  AppKit,
+  Foundation,
   autoreconfHook,
   pkg-config,
   ocaml,
@@ -33,6 +35,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
       findlib
       perl
       ocaml
+    ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      AppKit
     ];
 
     strictDeps = true;

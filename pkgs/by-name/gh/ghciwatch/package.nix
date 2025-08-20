@@ -3,20 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ghciwatch";
-  version = "1.1.5";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
     rev = "v${version}";
-    hash = "sha256-K7BNGRilzi01loE0yS4CZFDNz8TQ9Z+fELO5HUvGObE=";
+    hash = "sha256-jHjUpLSu1+rshZ37ZyXjh5Q4WrFkqZUk8gxErN+vpQM=";
   };
 
-  cargoHash = "sha256-kH5YTadpaUXDma+7SfBJxrOIsd9Gm0EU3MfhFmQ3U80=";
+  cargoHash = "sha256-TiMqWF+MJseK5KMj+G4j66gJ0mQdW+VKglgBq2qPd6A=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   # integration tests are not run but the macros need this variable to be set
   GHC_VERSIONS = "";

@@ -1,25 +1,25 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  pkg-config,
   gst_all_1,
+  lib,
   libX11,
   pipewire,
+  pkg-config,
   pulseaudio,
   qt6,
+  stdenv,
   wayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "4.6.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     tag = version;
-    hash = "sha256-avn7ywYJNZdUe1aTLmT2t1BB6Lvn5eUiQBMZCQnNFKs=";
+    hash = "sha256-5rESTLIvjc/Jztc7LAPl74fxgDsam9SfBa6B5yTXb8E=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     qt6.qmake
     qt6.wrapQtAppsHook
   ];
-
   buildInputs = [
     gst_all_1.gstreamer
     libX11
@@ -63,15 +62,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "User friendly Open Source screencaster for Linux and Windows";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       shamilton
       dietmarw
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "vokoscreenNG";
   };
 }

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "xrq";
-  version = "0-unstable-2016-01-15";
+  version = "unstable-2016-01-15";
 
   src = fetchFromGitHub {
     owner = "arianon";

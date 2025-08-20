@@ -11,7 +11,6 @@
   lxml,
   pillow,
   pycryptodomex,
-  pyjwt,
   pyyaml,
   qrcode,
   qrcode-terminal,
@@ -20,25 +19,23 @@
   setuptools-scm,
   tqdm,
   yarl,
-  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "17.3.0";
+  version = "16.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bilibili_api_python";
     inherit version;
-    hash = "sha256-Rlnz3ws023x5MiwabGR4gARH0bdUgucoixIMRqj+Z64=";
+    hash = "sha256-mwhyFc3b1qA7W76gaBcAup+Wca6gQAdRwZJaZXOHqCw=";
   };
 
-  # The upstream uses requirements.txt, which overly strict version constraints.
-  pythonRelaxDeps = [
-    "beautifulsoup4"
-    "lxml"
-    "pillow"
-  ];
+  postPatch = ''
+    # The upstream uses requirements.txt, which overly strict version constraints.
+    substituteInPlace requirements.txt \
+      --replace-fail "~=" ">="
+  '';
 
   build-system = [
     setuptools-scm
@@ -60,7 +57,6 @@ buildPythonPackage rec {
     tqdm
     yarl
     pycryptodomex
-    pyjwt
     qrcode-terminal
   ];
 
@@ -68,8 +64,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "bilibili_api" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Nemo2011/bilibili-api/releases/tag/${version}";

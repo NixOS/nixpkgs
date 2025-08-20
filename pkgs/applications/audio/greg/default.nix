@@ -8,7 +8,6 @@ with pythonPackages;
 buildPythonApplication rec {
   pname = "greg";
   version = "0.4.8";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

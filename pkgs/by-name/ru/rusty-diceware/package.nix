@@ -15,16 +15,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GDWvHHl4EztTaR0jI4XL1I9qE2KSL+q9C8IvLWQF4Ys=";
   };
 
-  cargoHash = "sha256-f+jvrokt5kuHYKKfluu4OvI7dzp9rFPlTo4KC4jKb0o=";
+  cargoHash = "sha256-5SAKrNgFG3O+hLKvEGhawyRi7wiEPWmxPsLtEX0OkDM=";
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Commandline diceware, with or without dice, written in Rustlang";
     homepage = "https://gitlab.com/yuvallanger/rusty-diceware";
     changelog = "https://gitlab.com/yuvallanger/rusty-diceware/-/blob/v${version}/CHANGELOG.md?ref_type=heads";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ cherrykitten ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ cherrykitten ];
     mainProgram = "diceware";
   };
 }

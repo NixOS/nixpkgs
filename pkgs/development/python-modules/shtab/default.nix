@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-timeout,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
   setuptools-scm,
@@ -25,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+  '';
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -34,7 +38,6 @@ buildPythonPackage rec {
     bashInteractive
     pytest-timeout
     pytestCheckHook
-    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "shtab" ];

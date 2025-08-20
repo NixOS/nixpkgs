@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "2.0.7";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,13 +24,10 @@ buildPythonPackage rec {
     owner = "mcaulifn";
     repo = "solcast";
     tag = "v${version}";
-    hash = "sha256-VNT86sZyQBNCA4jq+uYp2sBd/FLN0c5tp2u4/PjVGnA=";
+    hash = "sha256-x91QVCDPjfC8rCVam/mrc8HP84ONa2/mJtSV64hrilc=";
   };
 
-  pythonRelaxDeps = [
-    "isodate"
-    "responses"
-  ];
+  pythonRelaxDeps = [ "responses" ];
 
   build-system = [
     poetry-core
@@ -54,8 +51,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the Solcast API";
     homepage = "https://github.com/mcaulifn/solcast";
-    changelog = "https://github.com/mcaulifn/solcast/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    changelog = "https://github.com/mcaulifn/solcast/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

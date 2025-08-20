@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dtk6systemsettings";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 }

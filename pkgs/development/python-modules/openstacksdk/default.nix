@@ -14,6 +14,7 @@
   os-service-types,
   pbr,
   psutil,
+  pythonOlder,
   pyyaml,
   requestsexceptions,
   setuptools,
@@ -22,8 +23,10 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.6.0";
+  version = "4.2.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"
@@ -32,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5H4WbEcy6a6mUijmGNSQ5L5d8GUmobleLVmV19CXfT0=";
+    hash = "sha256-XLlFDczoBUosr4nYvp5VBX3fohmpVOeBAyJB6ykoBEU=";
   };
 
   postPatch = ''
@@ -79,6 +82,6 @@ buildPythonPackage rec {
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

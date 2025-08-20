@@ -19,20 +19,14 @@ stdenv.mkDerivation rec {
     libXpm
   ];
 
-  buildFlags = [
-    "all"
-    "HIGH_SCORES_FILE=.xgalaga++.scores"
-    "CXX=${stdenv.cc.targetPrefix}c++" # fix darwin and cross-compiled builds
-  ];
+  buildPhase = ''
+    make all HIGH_SCORES_FILE=.xgalaga++.scores
+  '';
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin $out/share/man
     mv xgalaga++ $out/bin
     mv xgalaga++.6x $out/share/man
-
-    runHook postInstall
   '';
 
   meta = with lib; {
@@ -40,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "XGalaga++ is a classic single screen vertical shoot ’em up. It is inspired by XGalaga and reuses most of its sprites";
     mainProgram = "xgalaga++";
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

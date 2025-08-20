@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -13,17 +12,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tomasbasham";
-    repo = "ratelimit";
+    repo = pname;
     rev = "v${version}";
     sha256 = "04hy3hhh5xdqcsz0lx8j18zbj88kh5ik4wyi5d3a5sfy2hx70in2";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
+  '';
 
-  enabledTestPaths = [ "tests" ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "ratelimit" ];
 

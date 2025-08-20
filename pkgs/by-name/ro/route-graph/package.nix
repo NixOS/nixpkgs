@@ -26,14 +26,15 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ]
-  ++ (with python3.pkgs; [
-    scapy
-    typer
-    typing-extensions
-  ]);
+  propagatedBuildInputs =
+    [
+      graphviz
+    ]
+    ++ (with python3.pkgs; [
+      scapy
+      typer
+      typing-extensions
+    ]);
 
   # Project has no tests
   doCheck = false;
@@ -42,12 +43,12 @@ python3.pkgs.buildPythonApplication rec {
     "route_graph"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for creating graphs of routes";
     homepage = "https://github.com/audiusGmbH/route-graph";
     changelog = "https://github.com/audiusGmbH/route-graph/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "route-graph";
   };
 }

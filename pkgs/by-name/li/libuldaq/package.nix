@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  doInstallCheck = true;
-
   meta = with lib; {
     description = "Library to talk to uldaq devices";
     longDescription = ''

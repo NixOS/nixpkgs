@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathemagix";
-  version = "11229";
+  version = "11126";
 
   src = fetchsvn {
     url = "https://subversion.renater.fr/anonscm/svn/mmx/";
     rev = finalAttrs.version;
-    hash = "sha256-JSjgvbOjV/66wjFpLGI1vCTvNGdYX48JTGGvWdBzQm8=";
+    hash = "sha256-AFnYd5oFg/wgaHPjfZmqXNljEpoFW4h6f3UG+KZauEs=";
   };
 
   strictDeps = true;

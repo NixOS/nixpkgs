@@ -2,30 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rpdb";
-  version = "0.2.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-g0bw3UmKHDB2ivPTUozf6AhtjAV8n8y1Qwta7DKuFqs=";
+    sha256 = "5d1a1cee34378ab075879dc30fa6328d448a9f680a66c4e84cac7382ad92f15f";
   };
 
-  build-system = [
-    poetry-core
-  ];
-
-  meta = {
-    description = "PDB wrapper with remote access via TCP socket";
+  meta = with lib; {
+    description = "pdb wrapper with remote access via tcp socket";
     homepage = "https://github.com/tamentis/rpdb";
-    license = lib.licenses.bsd2;
-    maintainers = [ ];
+    license = licenses.bsd2;
   };
 }

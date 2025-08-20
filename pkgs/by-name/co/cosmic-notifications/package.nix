@@ -4,35 +4,49 @@
   fetchFromGitHub,
   rustPlatform,
   just,
-  libcosmicAppHook,
   which,
-  nixosTests,
-  nix-update-script,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
+  appstream-glib,
+  desktop-file-utils,
+  intltool,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-notifications";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-xcGmcOoxHb7gj6fW7xPZ5R0MTkMVXNJgvr9d5LPy9kw=";
+    rev = "epoch-${version}";
+    hash = "sha256-xUyBXHhpYgwr3A34oLF5l1xB8f++wtx0mTr2p8WX89o=";
   };
 
-  cargoHash = "sha256-7EDe1OjGS6Xl0N/BrZG8lzWO0pFbwiEp+kn6WyydJQM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-froRGGsK5qoia5wHtxLhljKueMCYafhika9Drsp906E=";
+
+  postPatch = ''
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
   nativeBuildInputs = [
     just
     which
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    appstream-glib
+    desktop-file-utils
+    intltool
   ];
 
   dontUseJustBuild = true;
-  # Runs the default checkPhase instead
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -43,32 +57,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-notifications"
   ];
 
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
+  postInstall = ''
+    wrapProgram $out/bin/cosmic-notifications \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
+  '';
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-notifications";
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
   };
-})
+}

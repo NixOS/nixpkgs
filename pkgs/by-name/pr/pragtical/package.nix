@@ -15,19 +15,18 @@
   mbedtls_2,
   pcre2,
   SDL2,
-  xz,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.6.0";
-  pluginManagerVersion = "1.4.0";
+  version = "3.5.1";
+  pluginManagerVersion = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "pragtical";
     repo = "pragtical";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
 
     # also fetch required git submodules
@@ -45,13 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-rJEUTLjMTv19W1wSvW2HJaxHrzrBQHiG74v8XlcqgMc=";
+    hash = "sha256-o19akSgsWLRTyHT+dvmTeTS4HtNfzEyNXBhVot92OD4=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
-    lua5_4 # needed for built-time lua bytecode generation
     meson
     ninja
     pkg-config
@@ -67,9 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls_2
     pcre2
     SDL2
-    xz
     zlib
   ];
+
+  # workaround for `libmbedx509.so.1, libmbedcrypto.so.7: error adding symbols: DSO missing from command line`
+  env.NIX_LDFLAGS = "-lmbedx509 -lmbedcrypto";
 
   mesonFlags = [ "-Duse_system_lua=true" ];
 

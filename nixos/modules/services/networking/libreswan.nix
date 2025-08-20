@@ -153,8 +153,7 @@ in
       '';
       "ipsec.conf".source = "${pkgs.libreswan}/etc/ipsec.conf";
       "ipsec.d/01-nixos.conf".source = configFile;
-    }
-    // policyFiles;
+    } // policyFiles;
 
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
@@ -166,7 +165,7 @@ in
         procps
         nssTools
         iptables
-        net-tools
+        nettools
       ];
       preStart = lib.optionalString cfg.disableRedirects ''
         # Disable send/receive redirects

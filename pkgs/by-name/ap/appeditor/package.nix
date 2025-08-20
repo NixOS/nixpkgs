@@ -56,8 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Edit the Pantheon desktop application menu";
     homepage = "https://github.com/donadigo/appeditor";
-    maintainers = with maintainers; [ xiorcale ];
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "com.github.donadigo.appeditor";

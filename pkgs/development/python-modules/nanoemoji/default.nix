@@ -23,19 +23,21 @@
 
 buildPythonPackage rec {
   pname = "nanoemoji";
-  version = "0.15.8";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nanoemoji";
     tag = "v${version}";
-    hash = "sha256-QufiPTVb4bjWgb76DOOt0u4WGiZkbYC7oKkwxv3S8us=";
+    hash = "sha256-P/lT0PnjTdYzyttICzszu4OL5kj+X8GHZ8doL3tpXQM=";
   };
 
   patches = [
     # this is necessary because the tests clear PATH/PYTHONPATH otherwise
     ./test-pythonpath.patch
+    # minor difference in the test output, most likely due to different dependency versions
+    ./fix-test.patch
   ];
 
   build-system = [
@@ -89,11 +91,11 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
-    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/${src.tag}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ _999eagle ];
+    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ _999eagle ];
   };
 }

@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyrosimple";
-  version = "2.14.2";
+  version = "2.14.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kannibalox";
-    repo = "pyrosimple";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-qER73B6wuRczwV23A+NwfDL4oymvSwmauA0uf2AE+kY=";
+    hash = "sha256-vYwdlFHfh59P62aYbaQSJJfkFC0WtX2UYmww3k30j08=";
   };
 
   pythonRelaxDeps = [
@@ -63,11 +63,14 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "RTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ vamega ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      ne9z
+      vamega
+    ];
   };
 }

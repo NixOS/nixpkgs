@@ -1,87 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
+, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
+, libpulseaudio, libopus, libogg, jansson, libsodium
 
-  # build-time deps
-  libtool,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
+, postgresqlSupport ? true, postgresql }:
 
-  # runtime deps
-  adns,
-  bashNonInteractive,
-  curl,
-  gettext,
-  gmp,
-  gnutls,
-  jansson,
-  libextractor,
-  libgcrypt,
-  libgnurl,
-  libidn,
-  libmicrohttpd,
-  libogg,
-  libopus,
-  libpulseaudio,
-  libsodium,
-  libunistring,
-  libxml2,
-  ncurses,
-  sqlite,
-  zlib,
-
-  postgresqlSupport ? true,
-  libpq,
-}:
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.24.3";
+  version = "0.23.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WwaJew6ESJu7Q4J47HPkNiRCsuBaY+QAI+wdDMzGxXY=";
+    url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
+    hash = "sha256-b9BbaQdrOxqOfiCyVOBE/dTG2lMTGWMX894Ij30CXPI=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    gettext # msgfmt
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-  ];
-
+  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
-    adns
-    bashNonInteractive
-    curl
-    gmp
-    gnutls
-    jansson
-    libextractor
-    libgcrypt
-    libgnurl
-    libidn
-    libmicrohttpd
-    libogg
-    libopus
-    libpulseaudio
-    libsodium
-    libtool
-    libunistring
-    libxml2
-    ncurses
-    sqlite
-    zlib
-  ]
-  ++ lib.optional postgresqlSupport libpq;
-
-  strictDeps = true;
+    adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
+    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
+    sqlite zlib libpulseaudio libopus libogg jansson
+  ] ++ lib.optional postgresqlSupport postgresql;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
@@ -104,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -k check
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -123,12 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://gnunet.org/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ pstn ];
-    teams = with lib.teams; [ ngi ];
-    platforms = lib.platforms.unix;
-    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${finalAttrs.version}";
-    # meson: "Can not run test applications in this cross environment." (for dane_verify_crt_raw)
-    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ pstn ];
+    platforms = platforms.unix;
+    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
-})
+}

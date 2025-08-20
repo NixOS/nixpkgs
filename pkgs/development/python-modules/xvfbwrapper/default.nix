@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "xvfbwrapper";
-  version = "0.2.10";
+  version = "0.2.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1mLPjyZu/T0KHAIu67jSwECD1uh/2BOS+1QA2VA27Yw=";
+    sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };
   propagatedBuildInputs = [ xorg.xvfb ];
 

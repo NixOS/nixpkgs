@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "4.3.1";
+  version = "4.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
-    repo = "bitstring";
+    repo = pname;
     tag = "bitstring-${version}";
-    hash = "sha256-ZABAd42h+BqcpKTFV5PxcBN3F8FKV6Qw3rhP13eX57k=";
+    hash = "sha256-m2LZdUWOMxzr/biZhD1nWagab8PohHTcr+U1di0nkrU=";
   };
-
-  pythonRelaxDeps = [ "bitarray" ];
 
   build-system = [ setuptools ];
 
@@ -34,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--benchmark-disable"
   ];
 
@@ -49,7 +47,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
-    changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

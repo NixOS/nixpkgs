@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "dmenu-python";
   version = "0.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

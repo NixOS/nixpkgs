@@ -4,60 +4,56 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  airportsdata,
   interegular,
   cloudpickle,
   datasets,
   diskcache,
-  jinja2,
+  joblib,
   jsonschema,
-  numpy,
-  outlines-core,
+  pyairports,
   pycountry,
   pydantic,
   lark,
   nest-asyncio,
-  referencing,
-  requests,
+  numba,
+  scipy,
   torch,
   transformers,
 }:
 
 buildPythonPackage rec {
   pname = "outlines";
-  version = "0.1.13";
+  version = "0.0.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
-    repo = "outlines";
+    repo = pname;
     tag = version;
-    hash = "sha256-HuJqLbBHyoyY5ChQQi+9ftvPjLuh63Guk2w6KSZxq6s=";
+    hash = "sha256-6VH9BcMRVRf2xvLcK3GNA1pGgAOs95UOlFQ6KxHXwKo=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
-    airportsdata
+  propagatedBuildInputs = [
     interegular
     cloudpickle
     datasets
     diskcache
-    jinja2
+    joblib
     jsonschema
-    outlines-core
     pydantic
     lark
     nest-asyncio
-    numpy
-    referencing
-    requests
+    numba
+    scipy
     torch
     transformers
     pycountry
+    pyairports
   ];
 
   checkPhase = ''

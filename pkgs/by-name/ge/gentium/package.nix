@@ -4,26 +4,26 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "gentium";
-  version = "7.000";
+  version = "6.200";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/Gentium-${finalAttrs.version}.zip";
-    hash = "sha256-RBBecFdi/yyFfBk1CcQebOuAdKNUczpwOP52zVtbc2o=";
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
   };
 
   installPhase = ''
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
-    cp -r documentation $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${pname}-${version}
+    cp -r documentation $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
     description = "High-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
@@ -35,19 +35,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       The design is intended to be highly readable, reasonably compact, and
       visually attractive. The additional ‘extended’ Latin letters are designed
       to naturally harmonize with the traditional 26 ones. Diacritics are
-      treated with careful thought and attention to their use. Gentium also
+      treated with careful thought and attention to their use. Gentium Plus also
       supports both polytonic and monotonic Greek.
 
-      This package contains the regular and italic styles for the Gentium font
-      family, along with documentation.
+      This package contains the regular and italic styles for the Gentium Plus
+      font family, along with documentation.
     '';
     downloadPage = "https://software.sil.org/gentium/download/";
-    maintainers = with lib.maintainers; [
-      b-fein
+    maintainers = with maintainers; [
       raskin
       rycee
     ];
-    license = lib.licenses.ofl;
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-})
+}

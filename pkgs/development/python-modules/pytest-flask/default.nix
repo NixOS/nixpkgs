@@ -36,8 +36,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_flask" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_live_server.py"
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--ignore=tests/test_live_server.py"
   ];
 
   meta = with lib; {

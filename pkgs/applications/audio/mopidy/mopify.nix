@@ -6,29 +6,21 @@
 }:
 
 pythonPackages.buildPythonApplication rec {
-  pname = "mopidy-mopify";
+  pname = "Mopidy-Mopify";
   version = "1.7.3";
-  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "Mopidy-Mopify";
+    inherit pname version;
     hash = "sha256-RlCC+39zC+LeA/QDWPHYx5TrEwOgVrnvcH1Xg12qSLE=";
   };
 
-  build-system = [
-    pythonPackages.setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = with pythonPackages; [
     mopidy
-    pythonPackages.configobj
+    configobj
   ];
 
   # no tests implemented
   doCheck = false;
-
-  pythonImportsCheck = [ "mopidy_mopify" ];
 
   meta = with lib; {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";

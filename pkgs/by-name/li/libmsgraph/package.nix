@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsgraph";
-  version = "0.3.3";
+  version = "0.2.3";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/msgraph/${lib.versions.majorMinor finalAttrs.version}/msgraph-${finalAttrs.version}.tar.xz";
-    hash = "sha256-N9fhLyqZBJCuohGE8LJ+C5Feu05QlvTWYyxiBRwFQBI=";
+    hash = "sha256-7ULoAMt/CgdHfNnj50TNwaJApq16uWuKh1gGJnqf3bA=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc/msgraph-1" "$devdoc"
+    moveToOutput "share/doc/msgraph-0" "$devdoc"
   '';
 
   passthru = {
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/msgraph";
     changelog = "https://gitlab.gnome.org/GNOME/msgraph/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

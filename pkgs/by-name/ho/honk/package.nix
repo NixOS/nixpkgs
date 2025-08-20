@@ -6,13 +6,14 @@
   installShellFiles,
   nixosTests,
 }:
-buildGoModule (finalAttrs: {
+
+buildGoModule rec {
   pname = "honk";
-  version = "1.5.2";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "https://humungus.tedunangst.com/r/honk/d/honk-${finalAttrs.version}.tgz";
-    hash = "sha256-7dIui+VMHn916yMdhqN6Pk2P/s0vvXzVKFsTZ5wp12A=";
+    url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
+    hash = "sha256-o9K/ht31nEbx2JmLG3OSIgKZGygpDhZYqCxs6tuSnlc=";
   };
   vendorHash = null;
 
@@ -36,8 +37,8 @@ buildGoModule (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/honk
-    mkdir -p $out/share/doc/honk
+    mkdir -p $out/share/${pname}
+    mkdir -p $out/share/doc/${pname}
 
     mv docs/{,honk-}intro.1
     mv docs/{,honk-}hfcs.1
@@ -46,8 +47,8 @@ buildGoModule (finalAttrs: {
 
     installManPage docs/honk.1 docs/honk.3 docs/honk.5 docs/honk.8 \
       docs/honk-intro.1 docs/honk-hfcs.1 docs/honk-vim.3 docs/honk-activitypub.7
-    mv docs/{*.html,*.txt,*.jpg,*.png} $out/share/doc/honk
-    mv views $out/share/honk
+    mv docs/{*.html,*.txt,*.jpg,*.png} $out/share/doc/${pname}
+    mv views $out/share/${pname}
   '';
 
   passthru.tests = {
@@ -55,11 +56,11 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://humungus.tedunangst.com/r/honk/v/v${finalAttrs.version}/f/docs/changelog.txt";
+    changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
     description = "ActivityPub server with minimal setup and support costs";
     homepage = "https://humungus.tedunangst.com/r/honk";
     license = lib.licenses.isc;
     mainProgram = "honk";
     maintainers = with lib.maintainers; [ huyngo ];
   };
-})
+}

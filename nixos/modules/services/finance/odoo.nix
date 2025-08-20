@@ -100,13 +100,14 @@ in
         };
       };
 
-      services.odoo.settings.options = {
-        data_dir = "/var/lib/private/odoo/data";
-        proxy_mode = cfg.domain != null;
-      }
-      // (lib.optionalAttrs (cfg.addons != [ ]) {
-        addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
-      });
+      services.odoo.settings.options =
+        {
+          data_dir = "/var/lib/private/odoo/data";
+          proxy_mode = cfg.domain != null;
+        }
+        // (lib.optionalAttrs (cfg.addons != [ ]) {
+          addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
+        });
 
       users.users.odoo = {
         isSystemUser = true;
@@ -118,13 +119,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-          "postgresql.target"
+          "postgresql.service"
         ];
 
         # pg_dump
         path = [ config.services.postgresql.package ];
 
-        requires = [ "postgresql.target" ];
+        requires = [ "postgresql.service" ];
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/odoo";

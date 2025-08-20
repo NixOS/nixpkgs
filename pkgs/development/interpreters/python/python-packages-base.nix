@@ -126,8 +126,6 @@ in
     isPy310
     isPy311
     isPy312
-    isPy313
-    isPy314
     isPy3k
     isPyPy
     pythonAtLeast
@@ -147,5 +145,8 @@ in
   python = toPythonModule python;
 
   # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
-  pythonPackages = self;
+  # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
+  pythonPackages = self // {
+    __attrsFailEvaluation = true;
+  };
 }

@@ -35,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 exe-thumbnailer.thumbnailer -t $out/share/thumbnailers
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extract icons from Windows PE files";
     homepage = "https://github.com/jlu5/icoextract";
     changelog = "https://github.com/jlu5/icoextract/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       bryanasdev000
       donovanglover
     ];

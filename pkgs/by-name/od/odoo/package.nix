@@ -1,5 +1,6 @@
 {
   lib,
+  fetchgit,
   fetchzip,
   python312,
   rtlcss,
@@ -9,7 +10,7 @@
 
 let
   odoo_version = "18.0";
-  odoo_release = "20250506";
+  odoo_release = "20241010";
   python = python312.override {
     self = python;
   };
@@ -24,7 +25,7 @@ python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
+    hash = "sha256-TUfLyB0m8XyEiS493Q/ECgSJutAd1rtWX93f3mwfOK0="; # odoo
   };
 
   makeWrapperArgs = [
@@ -97,11 +98,11 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
       mkg20001
       siriobalmelli
     ];

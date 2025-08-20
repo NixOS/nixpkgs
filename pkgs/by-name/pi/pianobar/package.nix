@@ -10,7 +10,7 @@
   curl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pianobar";
   version = "2022.04.01-unstable-2024-08-16";
 

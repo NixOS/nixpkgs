@@ -9,7 +9,6 @@
   openal,
   pkg-config,
   SDL2,
-  libX11,
   stdenv,
   vulkan-loader,
   wayland,
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     openal
     SDL2
-    libX11
     vulkan-loader
     wayland
     waylandpp

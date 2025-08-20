@@ -10,7 +10,7 @@
   numpy,
   cffi,
   openfst,
-  replaceVars,
+  substituteAll,
   callPackage,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "daanzu";
-    repo = "kaldi-active-grammar";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
   };
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     # Uses the dependencies' binaries from $PATH instead of a specific directory
     ./0002-exec-path.patch
     # Makes it dynamically link to the correct Kaldi library
-    (replaceVars ./0003-ffi-path.patch {
+    (substituteAll {
+      src = ./0003-ffi-path.patch;
       kaldiFork = "${kaldi}/lib";
     })
   ];

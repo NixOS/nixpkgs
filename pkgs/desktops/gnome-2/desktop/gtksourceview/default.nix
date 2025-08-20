@@ -4,7 +4,6 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
-  gtk-doc,
   pkg-config,
   atk,
   cairo,
@@ -52,26 +51,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     intltool
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoreconfHook
-    gtk-doc
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ autoreconfHook ];
+  buildInputs =
+    [
+      atk
+      cairo
+      glib
+      gtk2
+      pango
+      libxml2Python
+      perl
+      gettext
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gnome-common
+      gtk-mac-integration-gtk2
+    ];
 
-  buildInputs = [
-    atk
-    cairo
-    glib
-    gtk2
-    pango
-    libxml2Python
-    perl
-    gettext
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gnome-common
-    gtk-mac-integration-gtk2
-  ];
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    intltoolize --force
+  '';
 
   doCheck = false; # requires X11 daemon
 

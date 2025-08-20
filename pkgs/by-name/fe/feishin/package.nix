@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_36,
+  electron_31,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.12.6";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
+    hash = "sha256-UpNtRZhAqRq/sRVkgg/RbLUWNXvHkAyGhu29zWE6Lk0=";
   };
 
-  electron = electron_36;
+  electron = electron_31;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
+  npmDepsHash = "sha256-0YfydhQZgxjMvZYosuS+rGA+9qzSYTLilQqMqlnR1oQ=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -37,20 +37,21 @@ buildNpmPackage {
     lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
-  postPatch = ''
-    # release/app dependencies are installed on preConfigure
-    substituteInPlace package.json \
-      --replace-fail "electron-builder install-app-deps &&" ""
+  postPatch =
+    ''
+      # release/app dependencies are installed on preConfigure
+      substituteInPlace package.json \
+        --replace-fail "electron-builder install-app-deps &&" ""
 
-    # Don't check for updates.
-    substituteInPlace src/main/main.ts \
-      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/main.ts \
-      --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
-  '';
+      # Don't check for updates.
+      substituteInPlace src/main/main.ts \
+        --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # https://github.com/electron/electron/issues/31121
+      substituteInPlace src/main/main.ts \
+        --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
+    '';
 
   preConfigure =
     let
@@ -59,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
+        npmDepsHash = "sha256-KZ4TDf9Nz1/dPWAN/gI3tq0gvzI4BvSR3fawte2n9u0=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -94,39 +95,40 @@ buildNpmPackage {
         -c.npmRebuild=false
     '';
 
-  installPhase = ''
-    runHook preInstall
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/{Applications,bin}
-    cp -r release/build/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/feishin
-    pushd release/build/*/
-    cp -r locales resources{,.pak} $out/share/feishin
-    popd
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/{Applications,bin}
+      cp -r release/build/**/Feishin.app $out/Applications/
+      makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p $out/share/feishin
+      pushd release/build/*/
+      cp -r locales resources{,.pak} $out/share/feishin
+      popd
 
-    # Code relies on checking app.isPackaged, which returns false if the executable is electron.
-    # Set ELECTRON_FORCE_IS_PACKAGED=1.
-    # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-    makeWrapper ${lib.getExe electron} $out/bin/feishin \
-      --add-flags $out/share/feishin/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set ELECTRON_FORCE_IS_PACKAGED=1 \
-      --inherit-argv0
+      # Code relies on checking app.isPackaged, which returns false if the executable is electron.
+      # Set ELECTRON_FORCE_IS_PACKAGED=1.
+      # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
+      makeWrapper ${lib.getExe electron} $out/bin/feishin \
+        --add-flags $out/share/feishin/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --set ELECTRON_FORCE_IS_PACKAGED=1 \
+        --inherit-argv0
 
-    for size in 32 64 128 256 512 1024; do
-      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      ln -s \
-        $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
-        $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
-    done
-  ''
-  + ''
-    runHook postInstall
-  '';
+      for size in 32 64 128 256 512 1024; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+        ln -s \
+          $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
+          $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
+      done
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -143,15 +145,15 @@ buildNpmPackage {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
     mainProgram = "feishin";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       onny
       jlbribeiro
     ];

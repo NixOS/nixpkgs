@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "urlfinder";
-  version = "0.0.3";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "urlfinder";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dtCXCRnI05822+a5Os+I+ZAmL/hC884PRCIPlEY3jok=";
+    hash = "sha256-hORZzeGNcRTcFsvY8pfs8f1JNpdTJjMdO/lJHR83DfY=";
   };
 
-  vendorHash = "sha256-9sIBj1K4N+HTd0OWnhP8+T1pPG9un8+FlpbPFwsV8P8=";
+  vendorHash = "sha256-Wu9itQfcrwWuzRHtTKk+lF7n6eIzSfATWtI+8xLQQsI=";
 
   ldflags = [
     "-s"

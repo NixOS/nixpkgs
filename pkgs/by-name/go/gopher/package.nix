@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gopher";
-  version = "3.0.19";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "jgoerzen";
-    repo = "gopher";
+    repo = pname;
     rev = "release/${version}";
-    sha256 = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
+    sha256 = "1j6xh5l8v231d4mwl9gj1c34dc0jmazz6zg1qqfxmqr9y609jq3h";
   };
 
   buildInputs = [ ncurses ];

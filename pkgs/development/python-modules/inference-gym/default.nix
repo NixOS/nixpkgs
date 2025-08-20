@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "inference-gym";
-  version = "0.0.5";
+  version = "0.0.4";
   format = "wheel";
 
   src = fetchPypi {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     pname = "inference_gym";
     dist = "py3";
     python = "py3";
-    hash = "sha256-E3lNgCZIObPBkl0PWACUG19XOiCOh1+N/sUFHQyA/wE=";
+    hash = "sha256-bpi/IB8PuLPIKoTjmBeVl/4XGvE/yyG8WYxNqNcruvE=";
   };
 
   pythonImportsCheck = [ "inference_gym" ];

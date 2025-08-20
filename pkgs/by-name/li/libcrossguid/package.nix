@@ -6,13 +6,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lib" + "crossguid" + "-" + version;
+  name = "lib" + pname + "-" + version;
   pname = "crossguid";
   version = "2016-02-21";
 
   src = fetchFromGitHub {
     owner = "graeme-hill";
-    repo = "crossguid";
+    repo = pname;
     rev = "8f399e8bd4252be9952f3dfa8199924cc8487ca4";
     sha256 = "1i29y207qqddvaxbn39pk2fbh3gx8zvdprfp35wasj9rw2wjk3s9";
   };

@@ -5,53 +5,26 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial)
-    oldestSupportedReleaseIsAtLeast
-    mergeAttrs
-    warn
-    warnIf
-    ;
-  inherit (lib.strings)
-    concatStringsSep
-    concatMapStringsSep
-    escapeNixIdentifier
-    sanitizeDerivationName
-    ;
-  inherit (lib.lists)
-    filter
-    foldr
-    foldl'
-    concatMap
-    elemAt
-    all
-    partition
-    groupBy
-    take
-    foldl
-    ;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
+  inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
-  inherit (builtins)
-    attrNames
-    listToAttrs
-    hasAttr
-    isAttrs
-    getAttr
-    removeAttrs
-    intersectAttrs
-    ;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
+
 
   /**
     Return an attribute from nested attribute sets.
 
-    Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
     # and
     (x.${f p}."example.com" or 6) == attrByPath [ (f p) "example.com" ] 6 x
     ```
+
 
     # Inputs
 
@@ -90,24 +63,23 @@ rec {
     :::
   */
   attrByPath =
-    attrPath: default: set:
+    attrPath:
+    default:
+    set:
     let
       lenAttrPath = length attrPath;
-      attrByPath' =
-        n: s:
-        (
-          if n == lenAttrPath then
-            s
-          else
-            (
-              let
-                attr = elemAt attrPath n;
-              in
-              if s ? ${attr} then attrByPath' (n + 1) s.${attr} else default
-            )
-        );
+      attrByPath' = n: s: (
+        if n == lenAttrPath then s
+        else (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then attrByPath' (n + 1) s.${attr}
+          else default
+        )
+      );
     in
-    attrByPath' 0 set;
+      attrByPath' 0 set;
 
   /**
     Return if an attribute from nested attribute set exists.
@@ -124,6 +96,7 @@ rec {
      1.  ```nix
          hasAttrByPath [] x == true
          ```
+
 
     # Inputs
 
@@ -158,22 +131,21 @@ rec {
     :::
   */
   hasAttrByPath =
-    attrPath: e:
+    attrPath:
+    e:
     let
       lenAttrPath = length attrPath;
-      hasAttrByPath' =
-        n: s:
-        (
-          n == lenAttrPath
-          || (
-            let
-              attr = elemAt attrPath n;
-            in
-            if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr} else false
-          )
-        );
+      hasAttrByPath' = n: s: (
+        n == lenAttrPath || (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
+          else false
+        )
+      );
     in
-    hasAttrByPath' 0 e;
+      hasAttrByPath' 0 e;
 
   /**
     Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
@@ -191,6 +163,7 @@ rec {
     2.  ```nix
         hasAttrByPath (attrsets.longestValidPathPrefix p x) x == true
         ```
+
 
     # Inputs
 
@@ -227,7 +200,8 @@ rec {
     :::
   */
   longestValidPathPrefix =
-    attrPath: v:
+    attrPath:
+    v:
     let
       lenAttrPath = length attrPath;
       getPrefixForSetAtIndex =
@@ -238,26 +212,28 @@ rec {
         # the length of the prefix we've already checked.
         remainingPathIndex:
 
-        if remainingPathIndex == lenAttrPath then
-          # All previously checked attributes exist, and no attr names left,
-          # so we return the whole path.
-          attrPath
-        else
-          let
-            attr = elemAt attrPath remainingPathIndex;
-          in
-          if remainingSet ? ${attr} then
-            getPrefixForSetAtIndex remainingSet.${attr} # advance from the set to the attribute value
-              (remainingPathIndex + 1) # advance the path
+          if remainingPathIndex == lenAttrPath then
+            # All previously checked attributes exist, and no attr names left,
+            # so we return the whole path.
+            attrPath
           else
-            # The attribute doesn't exist, so we return the prefix up to the
-            # previously checked length.
-            take remainingPathIndex attrPath;
+            let
+              attr = elemAt attrPath remainingPathIndex;
+            in
+            if remainingSet ? ${attr} then
+              getPrefixForSetAtIndex
+                remainingSet.${attr}      # advance from the set to the attribute value
+                (remainingPathIndex + 1)  # advance the path
+            else
+              # The attribute doesn't exist, so we return the prefix up to the
+              # previously checked length.
+              take remainingPathIndex attrPath;
     in
-    getPrefixForSetAtIndex v 0;
+      getPrefixForSetAtIndex v 0;
 
   /**
     Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
+
 
     # Inputs
 
@@ -287,12 +263,15 @@ rec {
     :::
   */
   setAttrByPath =
-    attrPath: value:
+    attrPath:
+    value:
     let
       len = length attrPath;
-      atDepth = n: if n == len then value else { ${elemAt attrPath n} = atDepth (n + 1); };
-    in
-    atDepth 0;
+      atDepth = n:
+        if n == len
+        then value
+        else { ${elemAt attrPath n} = atDepth (n + 1); };
+    in atDepth 0;
 
   /**
     Like `attrByPath`, but without a default value. If it doesn't find the
@@ -301,10 +280,11 @@ rec {
     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
-    x.a.b == getAttrFromPath ["a" "b"] x
+    x.a.b == getAttrByPath ["a" "b"] x
     # and
-    x.${f p}."example.com" == getAttrFromPath [ (f p) "example.com" ] x
+    x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
     ```
+
 
     # Inputs
 
@@ -337,11 +317,13 @@ rec {
     :::
   */
   getAttrFromPath =
-    attrPath: set:
-    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'")) set;
+    attrPath:
+    set:
+    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.
+
 
     # Inputs
 
@@ -375,7 +357,12 @@ rec {
 
     :::
   */
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
+  concatMapAttrs = f: v:
+    foldl' mergeAttrs { }
+      (attrValues
+        (mapAttrs f v)
+      );
+
 
   /**
     Update or set specific paths of an attribute set.
@@ -433,83 +420,74 @@ rec {
 
     :::
   */
-  updateManyAttrsByPath =
-    let
-      # When recursing into attributes, instead of updating the `path` of each
-      # update using `tail`, which needs to allocate an entirely new list,
-      # we just pass a prefix length to use and make sure to only look at the
-      # path without the prefix length, so that we can reuse the original list
-      # entries.
-      go =
-        prefixLength: hasValue: value: updates:
-        let
-          # Splits updates into ones on this level (split.right)
-          # And ones on levels further down (split.wrong)
-          split = partition (el: length el.path == prefixLength) updates;
+  updateManyAttrsByPath = let
+    # When recursing into attributes, instead of updating the `path` of each
+    # update using `tail`, which needs to allocate an entirely new list,
+    # we just pass a prefix length to use and make sure to only look at the
+    # path without the prefix length, so that we can reuse the original list
+    # entries.
+    go = prefixLength: hasValue: value: updates:
+      let
+        # Splits updates into ones on this level (split.right)
+        # And ones on levels further down (split.wrong)
+        split = partition (el: length el.path == prefixLength) updates;
 
-          # Groups updates on further down levels into the attributes they modify
-          nested = groupBy (el: elemAt el.path prefixLength) split.wrong;
+        # Groups updates on further down levels into the attributes they modify
+        nested = groupBy (el: elemAt el.path prefixLength) split.wrong;
 
-          # Applies only nested modification to the input value
-          withNestedMods =
-            # Return the value directly if we don't have any nested modifications
-            if split.wrong == [ ] then
-              if hasValue then
-                value
-              else
-                # Throw an error if there is no value. This `head` call here is
-                # safe, but only in this branch since `go` could only be called
-                # with `hasValue == false` for nested updates, in which case
-                # it's also always called with at least one update
-                let
-                  updatePath = (head split.right).path;
-                in
-                throw (
-                  "updateManyAttrsByPath: Path '${showAttrPath updatePath}' does "
-                  + "not exist in the given value, but the first update to this "
-                  + "path tries to access the existing value."
-                )
+        # Applies only nested modification to the input value
+        withNestedMods =
+          # Return the value directly if we don't have any nested modifications
+          if split.wrong == [] then
+            if hasValue then value
             else
+              # Throw an error if there is no value. This `head` call here is
+              # safe, but only in this branch since `go` could only be called
+              # with `hasValue == false` for nested updates, in which case
+              # it's also always called with at least one update
+              let updatePath = (head split.right).path; in
+              throw
+              ( "updateManyAttrsByPath: Path '${showAttrPath updatePath}' does "
+              + "not exist in the given value, but the first update to this "
+              + "path tries to access the existing value.")
+          else
             # If there are nested modifications, try to apply them to the value
-            if !hasValue then
+            if ! hasValue then
               # But if we don't have a value, just use an empty attribute set
               # as the value, but simplify the code a bit
               mapAttrs (name: go (prefixLength + 1) false null) nested
             else if isAttrs value then
               # If we do have a value and it's an attribute set, override it
               # with the nested modifications
-              value // mapAttrs (name: go (prefixLength + 1) (value ? ${name}) value.${name}) nested
+              value //
+              mapAttrs (name: go (prefixLength + 1) (value ? ${name}) value.${name}) nested
             else
               # However if it's not an attribute set, we can't apply the nested
               # modifications, throw an error
-              let
-                updatePath = (head split.wrong).path;
-              in
-              throw (
-                "updateManyAttrsByPath: Path '${showAttrPath updatePath}' needs to "
-                + "be updated, but path '${showAttrPath (take prefixLength updatePath)}' "
-                + "of the given value is not an attribute set, so we can't "
-                + "update an attribute inside of it."
-              );
+              let updatePath = (head split.wrong).path; in
+              throw
+              ( "updateManyAttrsByPath: Path '${showAttrPath updatePath}' needs to "
+              + "be updated, but path '${showAttrPath (take prefixLength updatePath)}' "
+              + "of the given value is not an attribute set, so we can't "
+              + "update an attribute inside of it.");
 
-          # We get the final result by applying all the updates on this level
-          # after having applied all the nested updates
-          # We use foldl instead of foldl' so that in case of multiple updates,
-          # intermediate values aren't evaluated if not needed
-        in
-        foldl (acc: el: el.update acc) withNestedMods split.right;
+        # We get the final result by applying all the updates on this level
+        # after having applied all the nested updates
+        # We use foldl instead of foldl' so that in case of multiple updates,
+        # intermediate values aren't evaluated if not needed
+      in foldl (acc: el: el.update acc) withNestedMods split.right;
 
-    in
-    updates: value: go 0 true value updates;
+  in updates: value: go 0 true value updates;
 
   /**
     Return the specified attributes from a set.
+
 
     # Inputs
 
     `nameList`
 
-    : The list of attributes to fetch from `set`. Each attribute name must exist on the attribute set
+    : The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
 
     `set`
 
@@ -532,7 +510,10 @@ rec {
 
     :::
   */
-  attrVals = nameList: set: map (x: set.${x}) nameList;
+  attrVals =
+    nameList:
+    set: map (x: set.${x}) nameList;
+
 
   /**
     Return the values of all attributes in the given set, sorted by
@@ -557,9 +538,11 @@ rec {
   */
   attrValues = builtins.attrValues;
 
+
   /**
     Given a set of attribute names, return the set of the corresponding
     attributes from the given set.
+
 
     # Inputs
 
@@ -588,7 +571,9 @@ rec {
 
     :::
   */
-  getAttrs = names: attrs: genAttrs names (name: attrs.${name});
+  getAttrs =
+    names:
+    attrs: genAttrs names (name: attrs.${name});
 
   /**
     Collect each attribute named `attr` from a list of attribute
@@ -623,25 +608,17 @@ rec {
   */
   catAttrs = builtins.catAttrs;
 
+
   /**
     Filter an attribute set by removing all attributes for which the
     given predicate return false.
+
 
     # Inputs
 
     `pred`
 
     : Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
-
-      <!-- TIP -->
-      If possible, decide on `name` first and on `value` only if necessary.
-      This avoids evaluating the value if the name is already enough, making it possible, potentially, to have the argument reference the return value.
-      (Depending on context, that could still be considered a self reference by users; a common pattern in Nix.)
-
-      <!-- TIP -->
-      `filterAttrs` is occasionally the cause of infinite recursion in configuration systems that allow self-references.
-      To support the widest range of user-provided logic, perform the `filterAttrs` call as late as possible.
-      Typically that's right before using it in a derivation, as opposed to an implicit conversion whose result is accessible to the user's expressions.
 
     `set`
 
@@ -664,11 +641,15 @@ rec {
 
     :::
   */
-  filterAttrs = pred: set: removeAttrs set (filter (name: !pred name set.${name}) (attrNames set));
+  filterAttrs =
+    pred:
+    set:
+    removeAttrs set (filter (name: ! pred name set.${name}) (attrNames set));
 
   /**
     Filter an attribute set recursively by removing all attributes for
     which the given predicate return false.
+
 
     # Inputs
 
@@ -698,23 +679,21 @@ rec {
     :::
   */
   filterAttrsRecursive =
-    pred: set:
+    pred:
+    set:
     listToAttrs (
-      concatMap (
-        name:
-        let
-          v = set.${name};
-        in
-        if pred name v then
-          [
-            (nameValuePair name (if isAttrs v then filterAttrsRecursive pred v else v))
-          ]
-        else
-          [ ]
+      concatMap (name:
+        let v = set.${name}; in
+        if pred name v then [
+          (nameValuePair name (
+            if isAttrs v then filterAttrsRecursive pred v
+            else v
+          ))
+        ] else []
       ) (attrNames set)
     );
 
-  /**
+   /**
     Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
@@ -723,6 +702,7 @@ rec {
 
     There is a completely different function `lib.foldAttrs`
     which has nothing to do with this function, despite the similar name.
+
 
     # Inputs
 
@@ -792,12 +772,15 @@ rec {
 
     :::
   */
-  foldlAttrs =
-    f: init: set:
-    foldl' (acc: name: f acc name set.${name}) init (attrNames set);
+  foldlAttrs = f: init: set:
+    foldl'
+      (acc: name: f acc name set.${name})
+      init
+      (attrNames set);
 
   /**
     Apply fold functions to values grouped by key.
+
 
     # Inputs
 
@@ -831,15 +814,21 @@ rec {
     :::
   */
   foldAttrs =
-    op: nul: list_of_attrs:
-    foldr (
-      n: a: foldr (name: o: o // { ${name} = op n.${name} (a.${name} or nul); }) a (attrNames n)
-    ) { } list_of_attrs;
+    op:
+    nul:
+    list_of_attrs:
+    foldr (n: a:
+        foldr (name: o:
+          o // { ${name} = op n.${name} (a.${name} or nul); }
+        ) a (attrNames n)
+    ) {} list_of_attrs;
+
 
   /**
     Recursively collect sets that verify a given predicate named `pred`
     from the set `attrs`. The recursion is stopped when the predicate is
     verified.
+
 
     # Inputs
 
@@ -873,16 +862,18 @@ rec {
     :::
   */
   collect =
-    pred: attrs:
+    pred:
+    attrs:
     if pred attrs then
       [ attrs ]
     else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
     else
-      [ ];
+      [];
 
   /**
     Return the cartesian product of attribute set value combinations.
+
 
     # Inputs
 
@@ -914,12 +905,12 @@ rec {
   */
   cartesianProduct =
     attrsOfLists:
-    foldl' (
-      listOfAttrs: attrName:
-      concatMap (
-        attrs: map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
+    foldl' (listOfAttrs: attrName:
+      concatMap (attrs:
+        map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
       ) listOfAttrs
-    ) [ { } ] (attrNames attrsOfLists);
+    ) [{}] (attrNames attrsOfLists);
+
 
   /**
     Return the result of function f applied to the cartesian product of attribute set value combinations.
@@ -951,11 +942,13 @@ rec {
     ```
 
     :::
+
   */
   mapCartesianProduct = f: attrsOfLists: map f (cartesianProduct attrsOfLists);
 
   /**
     Utility function that creates a `{name, value}` pair as expected by `builtins.listToAttrs`.
+
 
     # Inputs
 
@@ -984,7 +977,11 @@ rec {
 
     :::
   */
-  nameValuePair = name: value: { inherit name value; };
+  nameValuePair =
+    name:
+    value:
+    { inherit name value; };
+
 
   /**
     Apply a function to each element in an attribute set, creating a new attribute set.
@@ -1019,10 +1016,12 @@ rec {
   */
   mapAttrs = builtins.mapAttrs;
 
+
   /**
     Like `mapAttrs`, but allows the name of each attribute to be
     changed in addition to the value.  The applied function should
     return both the new name and value as a `nameValuePair`.
+
 
     # Inputs
 
@@ -1052,7 +1051,11 @@ rec {
 
     :::
   */
-  mapAttrs' = f: set: listToAttrs (mapAttrsToList f set);
+  mapAttrs' =
+    f:
+    set:
+    listToAttrs (map (attr: f attr set.${attr}) (attrNames set));
+
 
   /**
     Call a function for each attribute in the given set and return
@@ -1086,7 +1089,10 @@ rec {
 
     :::
   */
-  mapAttrsToList = f: attrs: attrValues (mapAttrs f attrs);
+  mapAttrsToList =
+    f:
+    attrs:
+    map (name: f name attrs.${name}) (attrNames attrs);
 
   /**
     Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
@@ -1133,6 +1139,7 @@ rec {
   */
   attrsToList = mapAttrsToList nameValuePair;
 
+
   /**
     Like `mapAttrs`, except that it recursively applies itself to the *leaf* attributes of a potentially-nested attribute set:
     the second argument of the function will never be an attrset.
@@ -1158,7 +1165,11 @@ rec {
     mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
     ```
   */
-  mapAttrsRecursive = f: set: mapAttrsRecursiveCond (as: true) f set;
+  mapAttrsRecursive =
+    f:
+    set:
+    mapAttrsRecursiveCond (as: true) f set;
+
 
   /**
     Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
@@ -1173,7 +1184,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (path: x: x.name)
+      (x: x.name)
       attrs
     ```
     :::
@@ -1184,20 +1195,24 @@ rec {
     ```
   */
   mapAttrsRecursiveCond =
-    cond: f: set:
+    cond:
+    f:
+    set:
     let
-      recurse =
-        path:
-        mapAttrs (
-          name: value:
-          if isAttrs value && cond value then recurse (path ++ [ name ]) value else f (path ++ [ name ]) value
-        );
+      recurse = path:
+        mapAttrs
+          (name: value:
+            if isAttrs value && cond value
+            then recurse (path ++ [ name ]) value
+            else f (path ++ [ name ]) value);
     in
     recurse [ ] set;
+
 
   /**
     Generate an attribute set by mapping a function over a list of
     attribute names.
+
 
     # Inputs
 
@@ -1226,11 +1241,16 @@ rec {
 
     :::
   */
-  genAttrs = names: f: listToAttrs (map (n: nameValuePair n (f n)) names);
+  genAttrs =
+    names:
+    f:
+    listToAttrs (map (n: nameValuePair n (f n)) names);
+
 
   /**
     Check whether the argument is a derivation. Any set with
     `{ type = "derivation"; }` counts as a derivation.
+
 
     # Inputs
 
@@ -1258,10 +1278,12 @@ rec {
 
     :::
   */
-  isDerivation = value: value.type or null == "derivation";
+  isDerivation =
+    value: value.type or null == "derivation";
 
-  /**
+   /**
     Converts a store path to a fake derivation.
+
 
     # Inputs
 
@@ -1275,24 +1297,25 @@ rec {
     toDerivation :: Path -> Derivation
     ```
   */
-  toDerivation =
-    path:
-    let
-      path' = builtins.storePath path;
-      res = {
-        type = "derivation";
-        name = sanitizeDerivationName (builtins.substring 33 (-1) (baseNameOf path'));
-        outPath = path';
-        outputs = [ "out" ];
-        out = res;
-        outputName = "out";
-      };
-    in
-    res;
+   toDerivation =
+     path:
+     let
+       path' = builtins.storePath path;
+       res =
+         { type = "derivation";
+           name = sanitizeDerivationName (builtins.substring 33 (-1) (baseNameOf path'));
+           outPath = path';
+           outputs = [ "out" ];
+           out = res;
+           outputName = "out";
+         };
+    in res;
+
 
   /**
     If `cond` is true, return the attribute set `as`,
     otherwise an empty attribute set.
+
 
     # Inputs
 
@@ -1323,11 +1346,16 @@ rec {
 
     :::
   */
-  optionalAttrs = cond: as: if cond then as else { };
+  optionalAttrs =
+    cond:
+    as:
+    if cond then as else {};
+
 
   /**
     Merge sets of attributes and use the function `f` to merge attributes
     values.
+
 
     # Inputs
 
@@ -1361,13 +1389,14 @@ rec {
     :::
   */
   zipAttrsWithNames =
-    names: f: sets:
-    listToAttrs (
-      map (name: {
-        inherit name;
-        value = f name (catAttrs name sets);
-      }) names
-    );
+    names:
+    f:
+    sets:
+    listToAttrs (map (name: {
+      inherit name;
+      value = f name (catAttrs name sets);
+    }) names);
+
 
   /**
     Merge sets of attributes and use the function f to merge attribute values.
@@ -1397,6 +1426,7 @@ rec {
   */
   zipAttrsWith =
     builtins.zipAttrsWith or (f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets);
+
 
   /**
     Merge sets of attributes and combine each attribute value in to a list.
@@ -1428,6 +1458,7 @@ rec {
     The result is the same as `foldl mergeAttrs { }`, but the performance is better for large inputs.
     For n list elements, each with an attribute set containing m unique attributes, the complexity of this operation is O(nm log n).
 
+
     # Inputs
 
     `list`
@@ -1453,18 +1484,17 @@ rec {
 
     :::
   */
-  mergeAttrsList =
-    list:
+  mergeAttrsList = list:
     let
       # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
       # Type: Int -> Int -> Attrs
-      binaryMerge =
-        start: end:
+      binaryMerge = start: end:
         # assert start < end; # Invariant
         if end - start >= 2 then
           # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
           # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
+          binaryMerge start (start + (end - start) / 2)
+          // binaryMerge (start + (end - start) / 2) end
         else
           # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
           elemAt list start;
@@ -1475,6 +1505,7 @@ rec {
     else
       binaryMerge 0 (length list);
 
+
   /**
     Does the same as the update operator '//' except that attributes are
     merged until the given predicate is verified.  The predicate should
@@ -1482,6 +1513,7 @@ rec {
     the first attribute set and a part of the second attribute set.  When
     the predicate is satisfied, the value of the first attribute set is
     replaced by the value of the second attribute set.
+
 
     # Inputs
 
@@ -1531,28 +1563,27 @@ rec {
     :::
   */
   recursiveUpdateUntil =
-    pred: lhs: rhs:
-    let
-      f =
-        attrPath:
-        zipAttrsWith (
-          n: values:
-          let
-            here = attrPath ++ [ n ];
-          in
-          if length values == 1 || pred here (elemAt values 1) (head values) then
-            head values
-          else
-            f here values
-        );
-    in
-    f [ ] [ rhs lhs ];
+    pred:
+    lhs:
+    rhs:
+    let f = attrPath:
+      zipAttrsWith (n: values:
+        let here = attrPath ++ [n]; in
+        if length values == 1
+        || pred here (elemAt values 1) (head values) then
+          head values
+        else
+          f here values
+      );
+    in f [] [rhs lhs];
+
 
   /**
     A recursive variant of the update operator ‘//’.  The recursion
     stops when one of the attribute values is not an attribute set,
     in which case the right hand side value takes precedence over the
     left hand side value.
+
 
     # Inputs
 
@@ -1591,16 +1622,16 @@ rec {
     :::
   */
   recursiveUpdate =
-    lhs: rhs:
-    recursiveUpdateUntil (
-      path: lhs: rhs:
-      !(isAttrs lhs && isAttrs rhs)
-    ) lhs rhs;
+    lhs:
+    rhs:
+    recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs)) lhs rhs;
+
 
   /**
     Recurse into every attribute set of the first argument and check that:
     - Each attribute path also exists in the second argument.
     - If the attribute's value is not a nested attribute set, it must have the same value in the right argument.
+
 
     # Inputs
 
@@ -1630,26 +1661,29 @@ rec {
     :::
   */
   matchAttrs =
-    pattern: attrs:
+    pattern:
+    attrs:
     assert isAttrs pattern;
-    all (
-      # Compare equality between `pattern` & `attrs`.
+    all
+    ( # Compare equality between `pattern` & `attrs`.
       attr:
       # Missing attr, not equal.
-      attrs ? ${attr}
-      && (
+      attrs ? ${attr} && (
         let
           lhs = pattern.${attr};
           rhs = attrs.${attr};
         in
         # If attrset check recursively
-        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
+        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs
+        else lhs == rhs
       )
-    ) (attrNames pattern);
+    )
+    (attrNames pattern);
 
   /**
     Override only the attributes that are already present in the old set
     useful for deep-overriding.
+
 
     # Inputs
 
@@ -1682,13 +1716,18 @@ rec {
 
     :::
   */
-  overrideExisting = old: new: mapAttrs (name: value: new.${name} or value) old;
+  overrideExisting =
+    old:
+    new:
+    mapAttrs (name: value: new.${name} or value) old;
+
 
   /**
     Turns a list of strings into a human-readable description of those
     strings represented as an attribute path. The result of this function is
     not intended to be machine-readable.
     Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
+
 
     # Inputs
 
@@ -1717,12 +1756,15 @@ rec {
   */
   showAttrPath =
     path:
-    if path == [ ] then "<root attribute path>" else concatMapStringsSep "." escapeNixIdentifier path;
+    if path == [] then "<root attribute path>"
+    else concatMapStringsSep "." escapeNixIdentifier path;
+
 
   /**
     Get a package output.
     If no output is found, fallback to `.out` and then to the default.
     The function is idempotent: `getOutput "b" (getOutput "a" p) == getOutput "a" p`.
+
 
     # Inputs
 
@@ -1751,13 +1793,14 @@ rec {
 
     :::
   */
-  getOutput =
-    output: pkg:
-    if !pkg ? outputSpecified || !pkg.outputSpecified then pkg.${output} or pkg.out or pkg else pkg;
+  getOutput = output: pkg:
+    if ! pkg ? outputSpecified || ! pkg.outputSpecified
+      then pkg.${output} or pkg.out or pkg
+      else pkg;
 
   /**
     Get the first of the `outputs` provided by the package, or the default.
-    This function is aligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
     Like `getOutput`, the function is idempotent.
 
     # Inputs
@@ -1793,7 +1836,10 @@ rec {
       outputs = builtins.filter (name: hasAttr name pkg) candidates;
       output = builtins.head outputs;
     in
-    if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${output};
+    if pkg.outputSpecified or false || outputs == [ ] then
+      pkg
+    else
+      pkg.${output};
 
   /**
     Get a package's `bin` output.
@@ -1823,6 +1869,7 @@ rec {
     :::
   */
   getBin = getOutput "bin";
+
 
   /**
     Get a package's `lib` output.
@@ -1880,11 +1927,8 @@ rec {
 
     :::
   */
-  getStatic = getFirstOutput [
-    "static"
-    "lib"
-    "out"
-  ];
+  getStatic = getFirstOutput [ "static" "lib" "out" ];
+
 
   /**
     Get a package's `dev` output.
@@ -1942,11 +1986,8 @@ rec {
 
     :::
   */
-  getInclude = getFirstOutput [
-    "include"
-    "dev"
-    "out"
-  ];
+  getInclude = getFirstOutput [ "include" "dev" "out" ];
+
 
   /**
     Get a package's `man` output.
@@ -2001,6 +2042,7 @@ rec {
     This function only affects a single attribute set; it does not
     apply itself recursively for nested attribute sets.
 
+
     # Inputs
 
     `attrs`
@@ -2028,10 +2070,13 @@ rec {
 
     :::
   */
-  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+  recurseIntoAttrs =
+    attrs:
+    attrs // { recurseForDerivations = true; };
 
   /**
     Undo the effect of recurseIntoAttrs.
+
 
     # Inputs
 
@@ -2045,13 +2090,16 @@ rec {
     dontRecurseIntoAttrs :: AttrSet -> AttrSet
     ```
   */
-  dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
+  dontRecurseIntoAttrs =
+    attrs:
+    attrs // { recurseForDerivations = false; };
 
   /**
     `unionOfDisjoint x y` is equal to `x // y // z` where the
     attrnames in `z` are the intersection of the attrnames in `x` and
     `y`, and all values `assert` with an error message.  This
      operator is commutative, unlike (//).
+
 
     # Inputs
 
@@ -2069,26 +2117,25 @@ rec {
     unionOfDisjoint :: AttrSet -> AttrSet -> AttrSet
     ```
   */
-  unionOfDisjoint =
-    x: y:
+  unionOfDisjoint = x: y:
     let
       intersection = builtins.intersectAttrs x y;
       collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
-      mask = builtins.mapAttrs (
-        name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
-      ) intersection;
+      mask = builtins.mapAttrs (name: value: builtins.throw
+        "unionOfDisjoint: collision on ${name}; complete list: ${collisions}")
+        intersection;
     in
-    (x // y) // mask;
+      (x // y) // mask;
 
   # DEPRECATED
-  zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
+  zipWithNames = warn
+    "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
 
   # DEPRECATED
-  zip = warn "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
+  zip = warn
+    "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 
   # DEPRECATED
-  cartesianProductOfSets =
-    warnIf (oldestSupportedReleaseIsAtLeast 2405)
-      "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct."
-      cartesianProduct;
+  cartesianProductOfSets = warnIf (oldestSupportedReleaseIsAtLeast 2405)
+    "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }

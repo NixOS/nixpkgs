@@ -8,7 +8,7 @@
   pkg-config,
   vala,
   gtk-doc,
-  docbook-xsl-nons,
+  docbook_xsl,
   docbook_xml_dtd_412,
   glib,
   gdk-pixbuf,
@@ -16,9 +16,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libmediaart";
-  version = "1.9.7";
+  version = "1.9.6";
 
   outputs = [
     "out"
@@ -27,23 +27,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libmediaart/${lib.versions.majorMinor finalAttrs.version}/libmediaart-${finalAttrs.version}.tar.xz";
-    sha256 = "K0Pdn1Tw2NC4nirduDNBqwbXuYyxsucEODWEr5xWD2s=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "w7xQJdfbOAWH+cjrgAxhH2taFta0t4/P+T9ih2pnfxc=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    vala
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_412
-    gobject-introspection
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      vala
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_412
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib
@@ -56,15 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "libmediaart";
+      packageName = pname;
       versionPolicy = "none";
     };
   };
 
   meta = with lib; {
     description = "Library tasked with managing, extracting and handling media art caches";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
-})
+}

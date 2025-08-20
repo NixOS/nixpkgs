@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.7";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DM/zDFoTYgaW+o2YYv4bDAja5iwabIBfFJ7Yep4Fywc=";
+    hash = "sha256-juubQHAAQYN9mSssfF3prYByy+wxscZFxwgspJU8zYA=";
   };
 
   build-system = [ hatchling ];

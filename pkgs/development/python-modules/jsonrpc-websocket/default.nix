@@ -38,11 +38,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--asyncio-mode=auto"
-  ];
-
-  enabledTestPaths = [
     "tests.py"
   ];
 

@@ -6,7 +6,6 @@
   cmake,
   rocm-cmake,
   rocblas,
-  rocprim,
   rocsparse,
   clr,
   fmt,
@@ -15,90 +14,73 @@
   lapack-reference,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? (
-    clr.localGpuTargets or [
-      "gfx900"
-      "gfx906"
-      "gfx908"
-      "gfx90a"
-      "gfx942"
-      "gfx1010"
-      "gfx1030"
-      "gfx1100"
-      "gfx1101"
-      "gfx1102"
-      "gfx1200"
-      "gfx1201"
-    ]
-  ),
+  gpuTargets ? [ ], # gpuTargets = [ "gfx803" "gfx900" "gfx906:xnack-" ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  pname = "rocsolver";
+  version = "6.0.2";
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals buildTests [
-    "test"
-  ]
-  ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-+sGU+0CB48iolJSyYo+xH36q5LCUp+nKtOYbguzMuhg=";
+    hash = "sha256-tglQpwCSFABRuEDiJrzQVFIdx9p85E2MiUYN0aoTAXo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    # no ninja, it buffers console output and nix times out long periods of no output
-    rocm-cmake
-    clr
-  ]
-  ++ lib.optionals (buildTests || buildBenchmarks) [
-    gfortran
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      rocm-cmake
+      clr
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      gfortran
+    ];
 
-  buildInputs = [
-    # FIXME: rocblas and rocsolver can't build in parallel
-    # but rocsolver doesn't need rocblas' offload builds at build time
-    # could we build against a rocblas-minimal?
-    rocblas
-    rocprim
-    rocsparse
-    fmt
-  ]
-  ++ lib.optionals buildTests [
-    gtest
-  ]
-  ++ lib.optionals (buildTests || buildBenchmarks) [
-    lapack-reference
-  ];
+  buildInputs =
+    [
+      rocblas
+      rocsparse
+      fmt
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      lapack-reference
+    ];
 
-  cmakeFlags = [
-    "-DHIP_CLANG_NUM_PARALLEL_JOBS=4"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ]
-  ++ lib.optionals buildTests [
-    "-DBUILD_CLIENTS_TESTS=ON"
-  ]
-  ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_BENCHMARKS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DCMAKE_CXX_FLAGS=-Wno-switch" # Way too many warnings
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_CLIENTS_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ];
 
   postInstall =
     lib.optionalString buildTests ''
@@ -114,8 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = rocmUpdateScript {
-    name = "rocsolver";
-    inherit (finalAttrs.src) owner repo;
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -124,9 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCm/rocSOLVER";
     license = with licenses; [ bsd2 ];
-    teams = [ teams.rocm ];
+    maintainers = teams.rocm.members;
     platforms = platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

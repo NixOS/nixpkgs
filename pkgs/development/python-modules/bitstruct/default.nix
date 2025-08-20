@@ -1,32 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.21.0";
-  pyproject = true;
+  version = "8.19.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "eerimoq";
-    repo = "bitstruct";
-    tag = version;
-    hash = "sha256-r2FPfSoW1Za7kglwpPXnWvWwzhAB8fQXiLPmbsi/8Ps=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-11up3e2FwX6IWiCaAOuOJI7kB2IUny8qeTYMqFdGfaw=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
   pythonImportsCheck = [ "bitstruct" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   meta = with lib; {
     description = "Python bit pack/unpack package";

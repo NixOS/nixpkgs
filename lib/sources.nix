@@ -3,7 +3,7 @@
 
 # Tested in lib/tests/sources.sh
 let
-  inherit (lib.strings)
+  inherit (builtins)
     match
     split
     storeDir
@@ -18,20 +18,10 @@ let
     pathIsRegularFile
     ;
 
-  /**
+  /*
     A basic filter for `cleanSourceWith` that removes
     directories of version control system, backup files (*~)
     and some generated files.
-
-    # Inputs
-
-    `name`
-
-    : 1\. Function argument
-
-    `type`
-
-    : 2\. Function argument
   */
   cleanSourceFilter =
     name: type:
@@ -42,9 +32,7 @@ let
       # Filter out version control software files/directories
       (
         baseName == ".git"
-        ||
-          type == "directory"
-          && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg" || baseName == ".jj")
+        || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")
       )
       ||
         # Filter out editor backup / swap files.
@@ -64,24 +52,11 @@ let
         (type == "unknown")
     );
 
-  /**
+  /*
     Filters a source tree removing version control files and directories using cleanSourceFilter.
 
-    # Inputs
-
-    `src`
-
-    : 1\. Function argument
-
-    # Examples
-    :::{.example}
-    ## `cleanSource` usage example
-
-    ```nix
-    cleanSource ./.
-    ```
-
-    :::
+    Example:
+             cleanSource ./.
   */
   cleanSource =
     src:
@@ -90,30 +65,23 @@ let
       inherit src;
     };
 
-  /**
+  /*
     Like `builtins.filterSource`, except it will compose with itself,
     allowing you to chain multiple calls together without any
     intermediate copies being put in the nix store.
 
-    # Examples
-    :::{.example}
-    ## `cleanSourceWith` usage example
+    Example:
+        lib.cleanSourceWith {
+          filter = f;
+          src = lib.cleanSourceWith {
+            filter = g;
+            src = ./.;
+          };
+        }
+        # Succeeds!
 
-    ```nix
-    lib.cleanSourceWith {
-      filter = f;
-      src = lib.cleanSourceWith {
-        filter = g;
-        src = ./.;
-      };
-    }
-    # Succeeds!
-
-    builtins.filterSource f (builtins.filterSource g ./.)
-    # Fails!
-    ```
-
-    :::
+        builtins.filterSource f (builtins.filterSource g ./.)
+        # Fails!
   */
   cleanSourceWith =
     {
@@ -139,20 +107,10 @@ let
       name = if name != null then name else orig.name;
     };
 
-  /**
+  /*
     Add logging to a source, for troubleshooting the filtering behavior.
-
-    # Inputs
-
-    `src`
-
-    : Source to debug. The returned source will behave like this source, but also log its filter invocations.
-
-    # Type
-
-    ```
-    sources.trace :: sourceLike -> Source
-    ```
+    Type:
+      sources.trace :: sourceLike -> Source
   */
   trace =
     # Source to debug. The returned source will behave like this source, but also log its filter invocations.
@@ -175,28 +133,10 @@ let
       satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
     };
 
-  /**
+  /*
     Filter sources by a list of regular expressions.
 
-    # Inputs
-
-    `src`
-
-    : 1\. Function argument
-
-    `regexes`
-
-    : 2\. Function argument
-
-    # Examples
-    :::{.example}
-    ## `sourceByRegex` usage example
-
-    ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
-    ```
-
-    :::
+    Example: src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
   */
   sourceByRegex =
     src: regexes:
@@ -215,37 +155,16 @@ let
       inherit src;
     };
 
-  /**
+  /*
     Get all files ending with the specified suffices from the given
     source directory or its descendants, omitting files that do not match
     any suffix. The result of the example below will include files like
     `./dir/module.c` and `./dir/subdir/doc.xml` if present.
 
-    # Inputs
+    Type: sourceLike -> [String] -> Source
 
-    `src`
-
-    : Path or source containing the files to be returned
-
-    `exts`
-
-    : A list of file suffix strings
-
-    # Type
-
-    ```
-    sourceLike -> [String] -> Source
-    ```
-
-    # Examples
-    :::{.example}
-    ## `sourceFilesBySuffices` usage example
-
-    ```nix
-    sourceFilesBySuffices ./. [ ".xml" ".c" ]
-    ```
-
-    :::
+    Example:
+      sourceFilesBySuffices ./. [ ".xml" ".c" ]
   */
   sourceFilesBySuffices =
     # Path or source containing the files to be returned
@@ -264,24 +183,10 @@ let
 
   pathIsGitRepo = path: (_commitIdFromGitRepoOrError path) ? value;
 
-  /**
+  /*
     Get the commit id of a git repo.
 
-    # Inputs
-
-    `path`
-
-    : 1\. Function argument
-
-    # Examples
-    :::{.example}
-    ## `commitIdFromGitRepo` usage example
-
-    ```nix
-    commitIdFromGitRepo <nixpkgs/.git>
-    ```
-
-    :::
+    Example: commitIdFromGitRepo <nixpkgs/.git>
   */
   commitIdFromGitRepo =
     path:
@@ -405,101 +310,6 @@ let
       };
     };
 
-  # urlToName : (URL | Path | String) -> String
-  #
-  # Transform a URL (or path, or string) into a clean package name.
-  urlToName =
-    url:
-    let
-      inherit (lib.strings) stringLength;
-      base = baseNameOf (lib.removeSuffix "/" (lib.last (lib.splitString ":" (toString url))));
-      # chop away one git or archive-related extension
-      removeExt =
-        name:
-        let
-          matchExt = match "(.*)\\.(git|tar|zip|gz|tgz|bz|tbz|bz2|tbz2|lzma|txz|xz|zstd)$" name;
-        in
-        if matchExt != null then lib.head matchExt else name;
-      # apply function f to string x while the result shrinks
-      shrink =
-        f: x:
-        let
-          v = f x;
-        in
-        if stringLength v < stringLength x then shrink f v else x;
-    in
-    shrink removeExt base;
-
-  # shortRev : (String | Integer) -> String
-  #
-  # Given a package revision (like "refs/tags/v12.0"), produce a short revision ("12.0").
-  shortRev =
-    rev:
-    let
-      baseRev = baseNameOf (toString rev);
-      matchHash = match "[a-f0-9]+" baseRev;
-      matchVer = match "([A-Za-z]+[-_. ]?)*(v)?([0-9.]+.*)" baseRev;
-    in
-    if matchHash != null then
-      builtins.substring 0 7 baseRev
-    else if matchVer != null then
-      lib.last matchVer
-    else
-      baseRev;
-
-  # revOrTag : String -> String -> String
-  #
-  # Turn git `rev` and `tag` pair into a revision usable in `repoRevToName*`.
-  revOrTag =
-    rev: tag:
-    if tag != null then
-      tag
-    else if rev != null then
-      rev
-    else
-      "HEAD";
-
-  # repoRevToNameFull : (URL | Path | String) -> (String | Integer | null) -> (String | null) -> String
-  #
-  # See `repoRevToName` below.
-  repoRevToNameFull =
-    repo_: rev_: suffix_:
-    let
-      repo = urlToName repo_;
-      rev = if rev_ != null then "-${shortRev rev_}" else "";
-      suffix = if suffix_ != null then "-${suffix_}" else "";
-    in
-    "${repo}${rev}${suffix}-source";
-
-  # repoRevToName : String -> (URL | Path | String) -> (String | Integer | null) -> String -> String
-  #
-  # Produce derivation.name attribute for a given repository URL/path/name and (optionally) its revision/version tag.
-  #
-  # This is used by fetch(zip|git|FromGitHub|hg|svn|etc) to generate discoverable
-  # /nix/store paths.
-  #
-  # This uses a different implementation depending on the `pretty` argument:
-  #  "source" -> name everything as "source"
-  #  "versioned" -> name everything as "${repo}-${rev}-source"
-  #  "full" -> name everything as "${repo}-${rev}-${fetcher}-source"
-  repoRevToName =
-    kind:
-    # match on `kind` first to minimize the thunk
-    if kind == "source" then
-      (
-        repo: rev: suffix:
-        "source"
-      )
-    else if kind == "versioned" then
-      (
-        repo: rev: suffix:
-        repoRevToNameFull repo rev null
-      )
-    else if kind == "full" then
-      repoRevToNameFull
-    else
-      throw "repoRevToName: invalid kind";
-
 in
 {
 
@@ -527,11 +337,6 @@ in
     cleanSourceFilter
     pathHasContext
     canCleanSource
-
-    urlToName
-    shortRev
-    revOrTag
-    repoRevToName
 
     sourceByRegex
     sourceFilesBySuffices

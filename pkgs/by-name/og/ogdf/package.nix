@@ -6,15 +6,15 @@
   doxygen,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ogdf";
-  version = "2023.09";
+  version = "2022.02";
 
   src = fetchFromGitHub {
-    owner = "ogdf";
-    repo = "ogdf";
-    tag = "elderberry-202309";
-    hash = "sha256-vnhPuMhz+pE4ExhRhjwHy4OilIkJ/kXc2LWU+9auY9k=";
+    owner = pname;
+    repo = pname;
+    rev = "dogwood-202202";
+    sha256 = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
   };
 
   nativeBuildInputs = [
@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     "-DOGDF_WARNING_ERRORS=OFF"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
     homepage = "http://www.ogdf.net";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.ianwookim ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.ianwookim ];
+    platforms = platforms.all;
     longDescription = ''
       OGDF stands both for Open Graph Drawing Framework (the original name) and
       Open Graph algorithms and Data structures Framework.

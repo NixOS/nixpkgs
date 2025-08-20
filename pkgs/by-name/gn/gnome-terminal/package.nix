@@ -1,13 +1,13 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
   python3,
   libxml2,
-  gnome,
+  gitUpdater,
   nautilus,
   glib,
   gtk4,
@@ -30,11 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.56.2";
+  version = "3.54.2";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor finalAttrs.version}/gnome-terminal-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I1vAnfo0zF8elRIum/YCA6hNr4Yc+s9+RJbF9UgjmXg=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-terminal";
+    rev = finalAttrs.version;
+    hash = "sha256-81dOdmIwa3OmuUTciTlearqic6bFMfiX1nvoIxJCt/M=";
   };
 
   nativeBuildInputs = [
@@ -75,9 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-terminal";
-      versionPolicy = "odd-unstable";
+    updateScript = gitUpdater {
+      odd-unstable = true;
     };
 
     tests = {
@@ -91,6 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 })

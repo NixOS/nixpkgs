@@ -2,28 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  setuptools,
+  vcversioner,
   flask,
   pymongo,
+  six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-pymongo";
-  version = "3.0.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "flask_pymongo";
+    pname = "Flask-PyMongo";
     inherit version;
-    hash = "sha256-0iW1HCHOyi5nDmzKebXFhK0XuWJStI6E47Qj3bczBMw=";
+    hash = "sha256-Yg6wLciAil/LkPJsq2y6nWv0l7FQMq48qZ34A2bjMxQ=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [
+    setuptools
+    vcversioner
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     flask
     pymongo
+    six
   ];
 
   pythonImportsCheck = [ "flask_pymongo" ];

@@ -22,13 +22,17 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  env = {
+    CGO_CFLAGS = "-Wno-undef-prefix";
+  };
+
+  meta = with lib; {
     description = "Distributed port scanner";
     homepage = "https://github.com/nray-scanner/nray";
     changelog = "https://github.com/nray-scanner/nray/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "nray";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

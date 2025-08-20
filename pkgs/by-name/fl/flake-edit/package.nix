@@ -4,29 +4,37 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  stdenv,
   installShellFiles,
-  nix-update-script,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flake-edit";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
     rev = "v${version}";
-    hash = "sha256-7n8WANm9AijZYI5nlnevLI+aZtV55teroeQIEld7tkE=";
+    hash = "sha256-dNTvAYBVZLeDlC1bsaonwojE7+1CD16/sCxtQVvT9WE=";
   };
 
-  cargoHash = "sha256-hK79yHSneD9OFm+M+RPSfu6HW1MmdpcMLysPIKlFDv8=";
+  cargoHash = "sha256-ipLjbfnNqrUUD40awRnE8URX5pHhG4SwUM9JedoBM8Y=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env.ASSET_DIR = "target/assets";
 
@@ -37,8 +45,6 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish --name flake-edit.fish target/assets/flake-edit.fish
     installShellCompletion --zsh --name _flake-edit target/assets/_flake-edit
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Edit your flake inputs with ease";

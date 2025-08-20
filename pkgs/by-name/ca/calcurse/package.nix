@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/bin/calcurse-caldav
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://calcurse.org/";
     changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

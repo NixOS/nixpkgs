@@ -2,57 +2,50 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  autoreconfHook,
   libzip,
   boost,
-  wt,
+  wt4,
   libconfig,
   pkg-config,
-  libarchive,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "fileshelter";
-  version = "6.2.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "fileshelter";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-21ANNJB7rbGAdlS7ELyGAEIjvK8biFlH27yVHrLKpwY=";
+    rev = "v${version}";
+    sha256 = "07n70wwqj7lqdxs3wya1m8bwg8l6lgmmlfpwyv3r3s4dfzb1b3ka";
   };
-
-  postPatch = ''
-    sed -i '1i #include <algorithm>' src/fileshelter/ui/ShareCreateFormView.cpp
-  '';
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    cmake
+    autoreconfHook
     pkg-config
   ];
-
   buildInputs = [
     libzip
     boost
-    wt
+    wt4
     libconfig
-    libarchive
   ];
 
   NIX_LDFLAGS = "-lpthread";
 
   postInstall = ''
-    ln -s ${wt}/share/Wt/resources $out/share/fileshelter/docroot/resources
+    ln -s ${wt4}/share/Wt/resources $out/share/fileshelter/docroot/resources
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/epoupon/fileshelter";
-    description = "One-click file sharing web application";
+    description = "FileShelter is a 'one-click' file sharing web application";
     mainProgram = "fileshelter";
-    maintainers = [ ];
-    license = lib.licenses.gpl3;
+    maintainers = [ maintainers.willibutz ];
+    license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
   };
-})
+}

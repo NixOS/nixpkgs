@@ -9,14 +9,14 @@
 let
   generic =
     { version, hash }:
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       inherit version;
       pname = "h3";
 
       src = fetchFromGitHub {
         owner = "uber";
         repo = "h3";
-        tag = "v${version}";
+        rev = "v${version}";
         inherit hash;
       };
 
@@ -28,23 +28,23 @@ let
       nativeBuildInputs = [ cmake ];
 
       cmakeFlags = [
-        (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-        (lib.cmakeBool "BUILD_BENCHMARKS" false)
-        (lib.cmakeBool "BUILD_FUZZERS" false)
-        (lib.cmakeBool "BUILD_GENERATORS" false)
-        (lib.cmakeBool "ENABLE_COVERAGE" false)
-        (lib.cmakeBool "ENABLE_FORMAT" false)
-        (lib.cmakeBool "ENABLE_LINTING" false)
+        "-DBUILD_SHARED_LIBS=ON"
+        "-DBUILD_BENCHMARKS=OFF"
+        "-DBUILD_FUZZERS=OFF"
+        "-DBUILD_GENERATORS=OFF"
+        "-DENABLE_COVERAGE=OFF"
+        "-DENABLE_FORMAT=OFF"
+        "-DENABLE_LINTING=OFF"
         (lib.cmakeBool "BUILD_FILTERS" withFilters)
       ];
 
-      meta = {
+      meta = with lib; {
         homepage = "https://h3geo.org/";
         description = "Hexagonal hierarchical geospatial indexing system";
-        license = lib.licenses.asl20;
+        license = licenses.asl20;
         changelog = "https://github.com/uber/h3/raw/v${version}/CHANGELOG.md";
-        platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ kalbasit ];
+        platforms = platforms.all;
+        maintainers = with maintainers; [ kalbasit ];
       };
     };
 in
@@ -55,7 +55,7 @@ in
   };
 
   h3_4 = generic {
-    version = "4.2.0";
-    hash = "sha256-SzuxoYjsXCLhlAhQS7JoKvH8C3vquXttf58d4LnkeVM=";
+    version = "4.1.0";
+    hash = "sha256-7qyN73T8XDwZLgMZld7wwShUwoLEi/2gN2oiZX8n5nQ=";
   };
 }

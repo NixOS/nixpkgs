@@ -13,13 +13,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.24.0";
+  version = "0.23.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/gnunet-gtk-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rsQzMvOoQEuushd0jBGQt9j6zXj2G1SMax8d4QoDV6s=";
+    url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
+    hash = "sha256-bmU3799pZVUyrsJ92MKgn5NIqCW76ml4N42Ewi+VWvI=";
   };
 
   nativeBuildInputs = [
@@ -50,4 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNUnet GTK User Interface";
     homepage = "https://git.gnunet.org/gnunet-gtk.git";
   };
-})
+}

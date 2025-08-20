@@ -1,41 +1,55 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  pkgsBuildBuild,
-  stdenv,
-  zlib,
-  writableTmpDirAsHomeHook,
+  openssl,
+  pkg-config,
+  python3,
+  xorg,
+  cmake,
+  libgit2,
+  darwin,
+  curl,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "amp";
-  version = "0.7.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = "amp";
-    tag = finalAttrs.version;
-    hash = "sha256-YK+HSWTtSVLK8n7NDiif3bBqp/dQW2UTYo3yYcZ5cIA=";
+    rev = version;
+    hash = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
   };
 
-  cargoHash = "sha256-6enFOmIAYOgOdoeA+pk37+BobI5AGPBxjp73Gd4C+gI=";
+  cargoPatches = [ ./update_time_crate.patch ];
+
+  cargoHash = "sha256-EYD1gQgkHemT/3VewdsU5kOGQKY3OjIHRiTSqSRNwtU=";
 
   nativeBuildInputs = [
-    # git rev-parse --short HEAD
-    (pkgsBuildBuild.writeShellScriptBin "git" "echo 0000000")
+    cmake
+    pkg-config
+    python3
   ];
+  buildInputs =
+    [
+      openssl
+      xorg.libxcb
+      libgit2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        curl
+        Security
+        AppKit
+      ]
+    );
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    zlib
-  ];
-
-  # Needing libgit2 <=1.8.0
-  #env.LIBGIT2_NO_VENDOR = 1;
-
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ];
+  # Tests need to write to the theme directory in HOME.
+  preCheck = "export HOME=`mktemp -d`";
 
   meta = {
     description = "Modern text editor inspired by Vim";
@@ -47,4 +61,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "amp";
   };
-})
+}

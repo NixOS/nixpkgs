@@ -1,6 +1,7 @@
 {
   lib,
-  python,
+  fetchFromGitHub,
+  pythonPackages,
   buildPythonPackage,
   cmake,
   ninja,
@@ -21,7 +22,7 @@
   wheel,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "libmambapy";
   pyproject = true;
 
@@ -39,7 +40,7 @@ buildPythonPackage {
   };
 
   buildInputs = [
-    (libmamba.override { python3 = python; })
+    (libmamba.override { python3Packages = pythonPackages; })
     curl
     zstd
     bzip2

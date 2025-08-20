@@ -7,6 +7,7 @@
   pytestCheckHook,
   scipy,
   numpy,
+  numpy_1,
   scikit-learn,
   pandas,
   matplotlib,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.4";
+  version = "0.23.3";
   pyproject = true;
 
   disabled = isPy27;
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-xoAHYRmqN5SrEWlc18ntTZ6WAznBlVZdf+x5Yev3ysE=";
+    hash = "sha256-c6I0dwu4y/Td2G6m2WP/52W4noQUmQMDvpzXA9RZauo=";
   };
 
   build-system = [ setuptools ];
@@ -39,13 +40,13 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    # https://github.com/rasbt/mlxtend/issues/1117
-    ./0001-StackingCVClassifier-fit-ensure-compatibility-with-s.patch
+    # https://github.com/rasbt/mlxtend/pull/1119
+    ./0001-fix-test-replace-np.float_-to-np.float64.patch
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [ "-sv" ];
+  pytestFlagsArray = [ "-sv" ];
 
   disabledTests = [
     # Type changed in numpy2 test should be updated
@@ -59,10 +60,6 @@ buildPythonPackage rec {
     "mlxtend/evaluate/tests/test_feature_importance.py" # urlopen error
     "mlxtend/evaluate/tests/test_bias_variance_decomp.py" # keras.api._v2
     "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
-    # Failing tests, most likely an upstream issue. See https://github.com/rasbt/mlxtend/issues/1117
-    "mlxtend/classifier/tests/test_ensemble_vote_classifier.py"
-    "mlxtend/classifier/tests/test_stacking_classifier.py"
-    "mlxtend/classifier/tests/test_stacking_cv_classifier.py"
   ];
 
   meta = {

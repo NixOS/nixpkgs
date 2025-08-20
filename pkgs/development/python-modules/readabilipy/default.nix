@@ -2,22 +2,18 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
-  buildNpmPackage,
   fetchFromGitHub,
   html5lib,
   lxml,
-  nodejs,
   pytestCheckHook,
   pythonOlder,
   regex,
   setuptools,
-  testers,
-  readabilipy,
 }:
 
 buildPythonPackage rec {
   pname = "readabilipy";
-  version = "0.3.0";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,81 +22,41 @@ buildPythonPackage rec {
     owner = "alan-turing-institute";
     repo = "ReadabiliPy";
     tag = "v${version}";
-    hash = "sha256-FYdSbq3rm6fBHm5fDRAB0airX9fNcUGs1wHN4i6mnG0=";
+    hash = "sha256-XrmdQjLFYdadWeO5DoKAQeEdta+6T6BqfvGlDkzLMyM=";
   };
 
-  javascript = buildNpmPackage {
-    pname = "readabilipy-javascript";
-    inherit version;
+  nativeBuildInputs = [ setuptools ];
 
-    src = src;
-    sourceRoot = "${src.name}/readabilipy/javascript";
-    npmDepsHash = "sha256-LiPSCZamkJjivzpawG7H9IEXYjn3uzFeY2vfucyHfUo=";
-
-    postPatch = ''
-      cp ${./package-lock.json} package-lock.json
-    '';
-
-    dontNpmBuild = true;
-  };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     beautifulsoup4
     html5lib
     lxml
     regex
   ];
 
-  postPatch = ''
-    ln -s $javascript/lib/node_modules/ReadabiliPy/node_modules readabilipy/javascript/node_modules
-    echo "recursive-include readabilipy/javascript *" >MANIFEST.in
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/readabilipy \
-      --prefix PATH : ${nodejs}/bin
-  '';
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    nodejs
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "readabilipy" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_extract_simple_article_with_readability_js"
+    "test_extract_article_from_page_with_readability_js"
+    "test_plain_element_with_comments"
+    "test_content_digest_on_filled_and_empty_elements"
+  ];
 
   disabledTestPaths = [
     # Exclude benchmarks
     "tests/test_benchmarking.py"
   ];
 
-  disabledTests = [
-    # IndexError: list index out of range
-    "test_html_blacklist"
-    "test_prune_div_with_one_empty_span"
-    "test_prune_div_with_one_whitespace_paragraph"
-    "test_empty_page"
-    "test_contentless_page"
-    "test_extract_title"
-    "test_iframe_containing_tags"
-    "test_iframe_with_source"
-  ];
-
-  passthru = {
-    tests.version = testers.testVersion {
-      package = readabilipy;
-      command = "readabilipy --version";
-      version = "${version} (Readability.js supported: yes)";
-    };
-  };
-
   meta = with lib; {
     description = "HTML content extractor";
+    mainProgram = "readabilipy";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
-    changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "readabilipy";
   };
 }

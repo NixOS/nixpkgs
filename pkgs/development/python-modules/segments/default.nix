@@ -8,7 +8,6 @@
   csvw,
   clldutils,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -25,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "sha256-Z9AQnsK/0HUCZDzdpQKNfSBWxfAOjWNBytcfI6yBY84=";
   };
 
+  patchPhase = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov" ""
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -35,7 +39,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     pytest-mock
   ];
 

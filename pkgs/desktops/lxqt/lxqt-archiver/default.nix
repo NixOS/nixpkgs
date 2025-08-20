@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "1.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    hash = "sha256-4xGP/3ft29PFzJ3ty/9wJbv/hqcdTw9U+4xDneKHF8g=";
+    hash = "sha256-a3NdU1OZI+BqtvpUhqhwylf5upFJxeg8B+1cPTAdDr4=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-archiver";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
-    teams = [ teams.lxqt ];
+    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
   };
 }

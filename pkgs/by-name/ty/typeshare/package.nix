@@ -1,23 +1,22 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
-  version = "1.13.3";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
     rev = "v${version}";
-    hash = "sha256-80wfQGfmzAuxAFS5jRlxLHh39G/5il6EXlrqeoNtkrk=";
+    hash = "sha256-ZoCl/dWGtoHUtNsNhHQvMjyUnoVdkGBuiBkWPwaQeIQ=";
   };
 
-  cargoHash = "sha256-Hmgg+nLtAmOB0h91wwQc2jZLibpWptPpf8Vizuz0jVE=";
+  cargoHash = "sha256-TfYWzBK4ZVp65GmamYOL9b/+uuP0NVxxviHE9A7vTC8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,15 +29,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typeshare completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command Line Tool for generating language files with typeshare";
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
     changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

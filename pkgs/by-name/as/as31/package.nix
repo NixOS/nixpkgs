@@ -2,29 +2,22 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   bison,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "as31";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/a/as31/as31_${finalAttrs.version}.orig.tar.gz";
-    name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "http://wiki.erazor-zone.de/_media/wiki:projects:linux:as31:${pname}-${version}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     hash = "sha256-zSEyWHFon5nyq717Mpmdv1XZ5Hz0e8ZABqsP8M83c1U=";
   };
 
   patches = [
     # Check return value of getline in run.c
     ./0000-getline-break.patch
-
-    # fix build with gcc14
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/as31/-/raw/76735fbf1fb00ce70ffd98385137908b7bd9bd5c/debian/patches/update_sizebuf_types.patch";
-      hash = "sha256-ERrPdY0afKwXmdSLoWmWR55nKfvmieGlz+nhwFWRnrM=";
-    })
   ];
 
   postPatch = ''
@@ -41,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  meta = {
-    homepage = "https://www.pjrc.com/tech/8051/tools/as31-doc.html";
+  meta = with lib; {
+    homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
     description = "8031/8051 assembler";
     mainProgram = "as31";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
-})
+}

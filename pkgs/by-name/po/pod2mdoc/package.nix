@@ -4,19 +4,14 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pod2mdoc";
-  version = "0.2";
+  version = "0.0.10";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
-    hash = "sha256-dPH+MfYdyHauClcD7N1zwjw4EPdtt9uQGCUh9OomsPw=";
+    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${version}.tgz";
+    sha256 = "0nwa9zv9gmfi5ysz1wfm60kahc7nv0133n3dfc2vh2y3gj8mxr4f";
   };
-
-  # use compat_ohash instead of system ohash, which is BSD-specific
-  postPatch = ''
-    substituteInPlace Makefile --replace-fail "-DHAVE_OHASH=1" "-DHAVE_OHASH=0"
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -25,14 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 0444 pod2mdoc.1 $out/share/man/man1
   '';
 
-  enableParallelBuild = true;
-
-  meta = {
-    homepage = "https://mandoc.bsd.lv/pod2mdoc/";
-    description = "Converter from POD into mdoc";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ramkromberg ];
+  meta = with lib; {
+    homepage = "http://mdocml.bsd.lv/";
+    description = "converter from POD into mdoc";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ramkromberg ];
     mainProgram = "pod2mdoc";
   };
-})
+}

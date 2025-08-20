@@ -7,6 +7,7 @@
   cu2qu,
   defcon,
   fetchPypi,
+  fetchpatch2,
   fontmath,
   fonttools,
   pytestCheckHook,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.5.1";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FUITbL+FnscmZjZMlgh/dX4+tJR6MD0LoH5jDNisQkI=";
+    hash = "sha256-DPfbxyPI8dVwPxOBIy55C3XNvWZqQ1Zd6/L8liCdbyg=";
   };
 
   build-system = [
@@ -35,19 +36,20 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  dependencies = [
-    cu2qu
-    fontmath
-    fonttools
-    defcon
-    compreffor
-    booleanoperations
-    cffsubr
-    ufolib2
-    skia-pathops
-  ]
-  ++ fonttools.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      cu2qu
+      fontmath
+      fonttools
+      defcon
+      compreffor
+      booleanoperations
+      cffsubr
+      ufolib2
+      skia-pathops
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
     pytestCheckHook

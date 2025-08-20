@@ -29,14 +29,14 @@ let
   procps_pkg = if stdenv.hostPlatform.isLinux then procpsWithoutSystemd else procps;
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "tpm2-tss";
   version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
+    repo = pname;
+    rev = version;
     hash = "sha256-BP28utEUI9g1VNv3lCXuiKrDtEImFQxxZfIjLiE3Wr8=";
   };
 
@@ -54,22 +54,23 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs = [
-    openssl
-    json_c
-    curl
-    libgcrypt
-    uthash
-    libuuid
-    libtpms
-  ]
-  # cmocka is checked in the configure script
-  # when unit and/or integration testing is enabled
-  # cmocka doesn't build with pkgsStatic, and we don't need it anyway
-  # when tests are not run
-  ++ lib.optional finalAttrs.doInstallCheck cmocka;
+  buildInputs =
+    [
+      openssl
+      json_c
+      curl
+      libgcrypt
+      uthash
+      libuuid
+      libtpms
+    ]
+    # cmocka is checked in the configure script
+    # when unit and/or integration testing is enabled
+    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+    # when tests are not run
+    ++ lib.optional doInstallCheck cmocka;
 
-  nativeInstallCheckInputs = lib.optionals finalAttrs.doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     cmocka
     which
     openssl
@@ -100,32 +101,33 @@ stdenv.mkDerivation (finalAttrs: {
     ./no-shadow.patch
   ];
 
-  postPatch = ''
-    patchShebangs script
-    substituteInPlace src/tss2-tcti/tctildr-dl.c \
-      --replace-fail '@PREFIX@' $out/lib/
-    substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace-fail '@PREFIX@' $out/lib/
-    substituteInPlace ./bootstrap \
-      --replace-fail 'git describe --tags --always --dirty' 'echo "${finalAttrs.version}"'
-    for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
-      substituteInPlace "$src" \
-        --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
-        --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
-    done
-  ''
-  # tcti tests rely on mocking function calls, which appears not to be supported
-  # on clang
-  + lib.optionalString stdenv.cc.isClang ''
-    sed -i '/TESTS_UNIT / {
-      /test\/unit\/tcti-swtpm/d;
-      /test\/unit\/tcti-mssim/d;
-      /test\/unit\/tcti-device/d
-    }' Makefile-test.am
-  '';
+  postPatch =
+    ''
+      patchShebangs script
+      substituteInPlace src/tss2-tcti/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./test/unit/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./bootstrap \
+        --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
+      for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
+        substituteInPlace "$src" \
+          --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
+          --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
+      done
+    ''
+    # tcti tests rely on mocking function calls, which appears not to be supported
+    # on clang
+    + lib.optionalString stdenv.cc.isClang ''
+      sed -i '/TESTS_UNIT / {
+        /test\/unit\/tcti-swtpm/d;
+        /test\/unit\/tcti-mssim/d;
+        /test\/unit\/tcti-device/d
+      }' Makefile-test.am
+    '';
 
   configureFlags =
-    lib.optionals finalAttrs.doInstallCheck [
+    lib.optionals doInstallCheck [
       "--enable-unit"
       "--enable-integration"
     ]
@@ -135,8 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
       # uchar.h required
       "--disable-fapi"
       "--disable-policy"
-      # uses fallocate
-      "--disable-tcti-libtpms"
     ];
 
   postInstall = ''
@@ -147,10 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
   doInstallCheck =
-    stdenv.buildPlatform.canExecute stdenv.hostPlatform
-    && !stdenv.hostPlatform.isDarwin
-    # Tests rely on mocking, which can't work with static libs.
-    && !stdenv.hostPlatform.isStatic;
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase
@@ -163,4 +160,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ baloo ];
   };
-})
+}

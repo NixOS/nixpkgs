@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -10,15 +11,13 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.7";
+  version = "1.6";
 
-  src = fetchFromGitHub {
-    owner = "fwupd";
-    repo = "fwupd-efi";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-PcVqnnFrxedkhYgm+8EUF2I65R5gTXqbVrk69Pw1m1g=";
+  src = fetchurl {
+    url = "https://github.com/fwupd/fwupd-efi/releases/download/${version}/fwupd-efi-${version}.tar.xz";
+    hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
   };
 
   nativeBuildInputs = [
@@ -45,10 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Defi-ldsdir=${gnu-efi}/lib"
     "-Defi_sbat_distro_id=nixos"
     "-Defi_sbat_distro_summary=NixOS"
-    "-Defi_sbat_distro_pkgname=${finalAttrs.pname}"
-    "-Defi_sbat_distro_version=${finalAttrs.version}"
+    "-Defi_sbat_distro_pkgname=${pname}"
+    "-Defi_sbat_distro_version=${version}"
     "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd-efi&from=0&size=50&sort=relevance&query=fwupd-efi"
-    "-Dgenpeimg=disabled"
   ];
 
   meta = with lib; {
@@ -57,4 +55,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
-})
+}

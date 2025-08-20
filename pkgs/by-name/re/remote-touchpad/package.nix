@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "remote-touchpad";
-  version = "1.5.0";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "unrud";
-    repo = "remote-touchpad";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UZjbU9Ti5+IjcxIf+LDWlcqxb4kMIwa8zHmZDdZbnw8=";
+    sha256 = "sha256-C/qaLEYvIbl0XINsumAFLnsQgy+EDjoX446BJnuE6eQ=";
   };
 
   buildInputs = [
@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
   tags = [ "portal,x11" ];
 
-  vendorHash = "sha256-4TJ9Nok1P3qze69KvrwFo5sMJ4nDYhDNuApsNlZLWCI=";
+  vendorHash = "sha256-bt5KUgNDgWX7CVHvX5c0uYqoxGRDbGbae52+mpnBEZU=";
 
   meta = with lib; {
     description = "Control mouse and keyboard from the web browser of a smartphone";

@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   autoreconfHook,
   coreutils,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -20,10 +20,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-udev" ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    udevCheckHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   patches = [
     ./0001-define-light-loglevel-as-extern.patch
@@ -35,8 +32,6 @@ stdenv.mkDerivation {
       --replace-fail '/bin/chgrp' '${coreutils}/bin/chgrp' \
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
   '';
-
-  doInstallCheck = true;
 
   meta = {
     description = "GNU/Linux application to control backlights";

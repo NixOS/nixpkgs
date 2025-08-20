@@ -6,8 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
-  version = "0-unstable-2021-02-08";
-  format = "pyproject";
+  version = "unstable-2021-02-08";
 
   src = fetchFromGitHub {
     owner = "sommer";
@@ -18,11 +17,7 @@ python3.pkgs.buildPythonApplication {
 
   patches = [ ./wxpython.patch ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     six
     wxpython
   ];

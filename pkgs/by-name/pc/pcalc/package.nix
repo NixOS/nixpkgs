@@ -6,7 +6,7 @@
   flex,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pcalc";
   version = "20181202";
 

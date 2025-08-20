@@ -12,7 +12,7 @@
   pytest-html,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "minikanren";
   version = "1.0.3";
   format = "setuptools";
@@ -38,7 +38,7 @@ buildPythonPackage {
     pytest-html
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--html=testing-report.html"
     "--self-contained-html"
   ];

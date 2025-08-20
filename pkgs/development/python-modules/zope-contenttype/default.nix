@@ -1,41 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  pythonOlder,
   setuptools,
+  zope-testrunner,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-contenttype";
-  version = "5.2";
+  version = "5.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.contenttype";
-    tag = version;
-    hash = "sha256-mY6LlJn44hUfXpxEa99U6FNcsV9xJbR5w/iIS6hG+m4=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    pname = "zope.contenttype";
+    inherit version;
+    hash = "sha256-AAHvG2XKZQUZBW3OUwxY0LOWlXzPBQIyPIoVSdtk0xc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" setuptools
-  '';
+  nativeBuildInputs = [ setuptools ];
 
-  build-system = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    zope-testrunner
+  ];
 
   pythonImportsCheck = [ "zope.contenttype" ];
 
-  pythonNamespaces = [ "zope" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
     description = "Utility module for content-type (MIME type) handling";
     changelog = "https://github.com/zopefoundation/zope.contenttype/blob/${version}/CHANGES.rst";
-    license = lib.licenses.zpl21;
+    license = licenses.zpl21;
     maintainers = [ ];
   };
 }

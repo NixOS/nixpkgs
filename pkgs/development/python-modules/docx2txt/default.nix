@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "docx2txt";
-  version = "0.9";
+  version = "0.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GAE/YimxSQkCixmqe/T489bkYy17CJqyn38KTR9mDig=";
+    hash = "sha256-LAbZjXz+LTlH5XYKV9kk4/8HdFs3nIc3cjki5wCSNuU=";
   };
 
   pythonImportsCheck = [ "docx2txt" ];

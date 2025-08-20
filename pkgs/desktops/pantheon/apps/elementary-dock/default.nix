@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-dock";
-  version = "8.1.2";
+  version = "8.0.2";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "elementary";
     repo = "dock";
     rev = finalAttrs.version;
-    hash = "sha256-hZ1xfEBN+pGj0TxNy5dSQrYuba2I0dmXl0p65rU73H4=";
+    hash = "sha256-bixNYpPdWU2FndiCPX7SxNTz2MEttRuj35NaWn3GJrI=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -51,10 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  # Fix building with GCC 14
-  # https://github.com/elementary/dock/issues/418
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -64,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/elementary/dock";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.pantheon ];
+    maintainers = lib.teams.pantheon.members;
     mainProgram = "io.elementary.dock";
   };
 })

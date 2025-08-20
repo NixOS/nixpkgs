@@ -1,30 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  isPy3k,
   fetchFromGitHub,
-  poetry-core,
+  attrs,
   click,
   colorama,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
-  version = "0.3.0";
-  format = "pyproject";
+  version = "0.2.2";
+  format = "setuptools";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "python-${pname}";
-    tag = "v${version}";
-    hash = "sha256-KjZbxA92h25ghbItdmPvkSPvDZUSRWkl4vnJDBMN71s=";
+    rev = "v${version}";
+    hash = "sha256-b9tBXN9dBdAeGg3xf5ZBdd6kPpFzseJl6wRTTfNZEwo=";
   };
 
-  build-system = [ poetry-core ];
-
   propagatedBuildInputs = [
+    attrs
     click
     colorama
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "shamir_mnemonic" ];
 

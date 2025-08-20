@@ -15,6 +15,7 @@
   suggestSupport ? false,
   zeromq,
   libevent,
+  openssl,
   lz4Support ? false,
   lz4,
   zlibSupport ? true,
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.1.3";
+  version = "14.0.6";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-L8UHjYBQf9iADvIs7QNZA/81FmVY/+gCwS73ff62dYc=";
+    hash = "sha256-1caTQAycvpG2PgtbxIn58HrxvWjxKgiczRSC72nWzGw=";
   };
 
   patches = [
@@ -40,24 +41,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    rapidjson
-    xxHash
-    zstd
-    mecab
-    kytea
-    msgpack-c
-  ]
-  ++ lib.optionals lz4Support [
-    lz4
-  ]
-  ++ lib.optional zlibSupport [
-    zlib
-  ]
-  ++ lib.optionals suggestSupport [
-    zeromq
-    libevent
-  ];
+  buildInputs =
+    [
+      rapidjson
+      xxHash
+      zstd
+      mecab
+      kytea
+      msgpack-c
+    ]
+    ++ lib.optionals lz4Support [
+      lz4
+    ]
+    ++ lib.optional zlibSupport [
+      zlib
+    ]
+    ++ lib.optionals suggestSupport [
+      zeromq
+      libevent
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 
@@ -72,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://groonga.org/";
     description = "Open-source fulltext search engine and column store";
-    license = lib.licenses.lgpl21;
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.ericsagnes ];
+    platforms = platforms.all;
     longDescription = ''
       Groonga is an open-source fulltext search engine and column store.
       It lets you write high-performance applications that requires fulltext search.

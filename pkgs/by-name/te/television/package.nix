@@ -2,35 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeWrapper,
   testers,
   television,
   nix-update-script,
-  extraPackages ? [ ],
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "television";
-  version = "0.13.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
-    tag = finalAttrs.version;
-    hash = "sha256-Ur6UTd3XsI2ZyVboQA9r3WDkl7hd1wQ0NCgTlYFF/C0=";
+    tag = version;
+    hash = "sha256-XMANif4WbI+imSYeQRlvZJYjtaVbKrD4wVx2mQ1HYHg=";
   };
 
-  cargoHash = "sha256-LfaYRrJ4ZXoNVDsI650t+A7mWB9+2+znATp+mqDwTiE=";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postInstall = lib.optionalString (extraPackages != [ ]) ''
-    wrapProgram $out/bin/tv \
-      --prefix PATH : ${lib.makeBinPath extraPackages}
-  '';
-
-  # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
-  # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
-  doCheck = false;
+  cargoHash = "sha256-IXtmQdDO3OHBZALWQKhJVgEimvuNyAj0/7aUlnL395M=";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -41,15 +28,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Blazingly fast general purpose fuzzy finder TUI";
+    description = "Television is a blazingly fast general purpose fuzzy finder";
+
     longDescription = ''
-      Television is a fast and versatile fuzzy finder TUI.
-      It lets you quickly search through any kind of data source (files, git
-      repositories, environment variables, docker images, you name it) using a
-      fuzzy matching algorithm and is designed to be easily extensible.
+      Television is a blazingly fast general purpose fuzzy finder TUI written
+      in Rust. It is inspired by the neovim telescope plugin and is designed
+      to be fast, efficient, simple to use and easily extensible. It is built
+      on top of tokio, ratatui and the nucleo matcher used by the helix editor.
     '';
+
     homepage = "https://github.com/alexpasmantier/television";
-    changelog = "https://github.com/alexpasmantier/television/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/alexpasmantier/television/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "tv";
     maintainers = with lib.maintainers; [
@@ -57,4 +46,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
       getchoo
     ];
   };
-})
+}

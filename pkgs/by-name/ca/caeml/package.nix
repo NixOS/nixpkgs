@@ -3,13 +3,13 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule {
+buildGoModule rec {
   pname = "caeml";
-  version = "0-unstable-2023-05-24";
+  version = "unstable-2023-05-24";
 
   src = fetchFromGitHub {
     owner = "ferdinandyb";
-    repo = "caeml";
+    repo = pname;
     rev = "25dbe10e99aac9b0ce3b80787c162628104f5cd2";
     sha256 = "UIQCNkUyrtMF0IiAfkDvE8siqxNvfFc9TZdlZiTxCVc=";
   };

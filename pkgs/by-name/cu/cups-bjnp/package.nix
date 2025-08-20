@@ -5,29 +5,22 @@
   cups,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "cups-bjnp";
-  version = "2.0.3";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cups-bjnp/cups-bjnp-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yRSy/Z2OJs4i8t9iRNne/uwx7ppTYPcj7ss7APIWhQA=";
+    url = "mirror://sourceforge/cups-bjnp/cups-bjnp-${version}.tar.gz";
+    sha256 = "0sb0vm1sf8ismzd9ba33qswxmsirj2z1b7lnyrc9v5ixm7q0bnrm";
   };
 
-  preConfigure = ''
-    mkdir -p $out/lib/cups/backend
-    configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"
-  '';
+  preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [ cups ];
-
   env.NIX_CFLAGS_COMPILE = toString [
     "-include stdio.h"
     "-Wno-error=stringop-truncation"
     "-Wno-error=deprecated-declarations"
-    "-Wno-unused-variable"
-    "-Wno-error=address"
-    "-Wno-error=dangling-pointer"
   ];
 
   meta = {
@@ -40,4 +33,4 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://cups-bjnp.sourceforge.net";
     platforms = lib.platforms.linux;
   };
-})
+}

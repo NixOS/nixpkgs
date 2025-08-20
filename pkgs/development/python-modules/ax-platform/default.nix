@@ -1,42 +1,38 @@
 {
   lib,
-  stdenv,
+  botorch,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  botorch,
+  hypothesis,
   ipywidgets,
   jinja2,
-  markdown,
+  jupyter,
+  mercurial,
   pandas,
   plotly,
-  pyre-extensions,
-  scikit-learn,
-  scipy,
-  sympy,
-
-  # tests
   pyfakefs,
+  pyre-extensions,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
   sqlalchemy,
-  tabulate,
+  typeguard,
+  yappi,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "1.0.0";
+  version = "0.4.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     tag = version;
-    hash = "sha256-DFsV1w6J7bTZNUq9OYExDvfc7IfTcthGKAnRMNujRKI=";
+    hash = "sha256-jmBjrtxqg4Iu3Qr0HRqjVfwURXzbJaGm+DBFNHYk/vA=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -50,45 +46,41 @@ buildPythonPackage rec {
     botorch
     ipywidgets
     jinja2
-    markdown
     pandas
     plotly
+    typeguard
     pyre-extensions
-    scikit-learn
-    scipy
-    sympy
   ];
 
+  optional-dependencies = {
+    mysql = [ sqlalchemy ];
+    notebook = [ jupyter ];
+  };
+
   nativeCheckInputs = [
+    hypothesis
+    mercurial
     pyfakefs
-    # pytest-xdist
     pytestCheckHook
-    sqlalchemy
-    tabulate
-  ];
+    yappi
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     "ax/benchmark"
     "ax/runners/tests/test_torchx.py"
-
+    # requires pyre_extensions
+    "ax/telemetry/tests"
+    "ax/core/tests/test_utils.py"
+    "ax/early_stopping/tests/test_strategies.py"
     # broken with sqlalchemy 2
     "ax/core/tests/test_experiment.py"
     "ax/service/tests/test_ax_client.py"
     "ax/service/tests/test_scheduler.py"
     "ax/service/tests/test_with_db_settings_base.py"
-
-    # Hangs forever
-    "ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
+    "ax/storage"
   ];
 
   disabledTests = [
-    # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
-    "SQAStoreUtilsTest"
-    "SQAStoreTest"
-
-    # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
-    "test_get_next_trials_with_db"
-
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
     # AssertionError: 5 != 2
@@ -97,12 +89,6 @@ buildPythonPackage rec {
     "test_validate_kwarg_typing"
     # uses torch.equal
     "test_convert_observations"
-    # broken with sqlalchemy 2
-    "test_sql_storage"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # flaky on x86
-    "test_gen_with_expanded_parameter_space"
   ];
 
   pythonImportsCheck = [ "ax" ];

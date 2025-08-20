@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   perl,
   bsd-finger,
   withAbook ? true,
@@ -28,22 +29,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lbdb";
-  version = "0.56";
+  version = "0.48.1";
 
   src = fetchurl {
-    url = "https://www.spinnaker.de/lbdb/download/lbdb-${version}.tar.gz";
-    sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
+    url = "https://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
+    sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";
   };
 
-  buildInputs = [
-    perl'
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
-  ++ lib.optional withAbook abook
-  ++ lib.optional withGnupg gnupg
-  ++ lib.optional withGoobook goobook
-  ++ lib.optional withKhard khard
-  ++ lib.optional withMu mu;
+  buildInputs =
+    [ perl' ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
+    ++ lib.optional withAbook abook
+    ++ lib.optional withGnupg gnupg
+    ++ lib.optional withGoobook goobook
+    ++ lib.optional withKhard khard
+    ++ lib.optional withMu mu;
 
   configureFlags =
     [ ]
@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./add-methods-to-rc.patch
+    # fix undefined exec_prefix. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/RolandRosenfeld/lbdb/commit/60b7bae255011f59212d96adfbded459d6a27129.patch";
+      sha256 = "129zg086glmlalrg395jq8ljcp787dl3rxjf9v7apsd8mqfdkl2v";
+      excludes = [ "debian/changelog" ];
+    })
   ];
 
   meta = with lib; {

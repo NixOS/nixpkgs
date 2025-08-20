@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
-  version = "3.3.3316";
+  version = "3.3.3312";
 
   src = fetchzip {
     url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
     stripRoot = false;
-    hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
+    hash = "sha256-mvup4yMfFfzL2iLMj9vlFFrJT0wLmeadNEnf2QO53H0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       };
 
       javaOptions = [
-        "-Dawt.useSystemAAFontSettings=gasp"
+        "-Dawt.useSystemAAFontSettings=on"
       ];
 
     in
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/bin"
       wrapProgram "$out/share/ganttproject/ganttproject" \
         --set JAVA_HOME "${jre}" \
-        --prefix _JAVA_OPTIONS " " "${builtins.toString javaOptions}"
+        --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 

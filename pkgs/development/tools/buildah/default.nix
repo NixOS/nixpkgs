@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.41.3";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-mpCskwwxYbjAuLDZLB53sOKOPV35FBEORdEXF+CXGG8=";
+    hash = "sha256-avQdK7+kMrPc8rp/2nTiUC/ZTW8nUem9v3u0xsE0oGM=";
   };
 
   outputs = [
@@ -45,16 +45,17 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs = [
-    gpgme
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    btrfs-progs
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
-  ];
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -86,6 +87,6 @@ buildGoModule rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

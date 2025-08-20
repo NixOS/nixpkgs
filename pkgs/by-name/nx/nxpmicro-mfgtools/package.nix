@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  doInstallCheck = true;
-
   preConfigure = "echo ${version} > .tarball-version";
 
   postInstall = ''

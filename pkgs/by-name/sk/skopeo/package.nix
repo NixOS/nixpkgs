@@ -19,13 +19,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.20.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    hash = "sha256-uw41kaIljz9Y378rX2BK0W/ZVUx8IjlIBqYHDuLgZpA=";
+    hash = "sha256-IoYeCGiGOjz+8HPzYPXUWsHADtrWHvJm9YhKeMJJf0k=";
   };
 
   outputs = [
@@ -44,43 +44,33 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    gpgme
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    lvm2
-    btrfs-progs
-  ];
+  buildInputs =
+    [ gpgme ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      lvm2
+      btrfs-progs
+    ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/skopeo docs
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    make completions
-  ''
-  + ''
+    make bin/skopeo completions docs
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-    PREFIX=${placeholder "out"} make install-binary install-docs
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    PREFIX=${placeholder "out"} make install-completions
-  ''
-  + ''
-    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/skopeo \
-      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
-  ''
-  + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      PREFIX=${placeholder "out"} make install-binary install-completions install-docs
+      install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram $out/bin/skopeo \
+        --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru = {
     policy = runCommand "policy" { } ''
@@ -99,12 +89,13 @@ buildGoModule rec {
     description = "Command line utility for various operations on container images and image repositories";
     mainProgram = "skopeo";
     homepage = "https://github.com/containers/skopeo";
-    maintainers = with maintainers; [
-      lewo
-      developer-guy
-      ryan4yin
-    ];
-    teams = [ teams.podman ];
+    maintainers =
+      with maintainers;
+      [
+        lewo
+        developer-guy
+      ]
+      ++ teams.podman.members;
     license = licenses.asl20;
   };
 }

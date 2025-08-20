@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "zipp";
   version = "1.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

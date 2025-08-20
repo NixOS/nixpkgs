@@ -52,8 +52,7 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
   doCheck = false;
@@ -68,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.jupyter ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "apenwarr";
-    repo = "git-subtrac";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-3Z1AbPPsTBa3rqfvNAMBz7CIRq/zc9q5/TcLJWYSNlw=";
   };

@@ -1,5 +1,4 @@
 {
-  lib,
   mkDerivation,
   libgeom,
   libufs,
@@ -17,12 +16,6 @@ let
       # geli isn't okay with just libcrypt, it wants files in here
       "sys/crypto/sha2"
       "sys/opencrypto"
-    ];
-
-    outputs = [
-      "out"
-      "man"
-      "debug"
     ];
 
     # libgeom needs sbuf and bsdxml but linker doesn't know that
@@ -44,19 +37,8 @@ mkDerivation {
     "lib/Makefile.inc"
     "lib/geom"
   ];
-  outputs = [
-    "out"
-    "man"
-    "debug"
-  ];
 
   GEOM_CLASS_DIR = "${libs}/lib";
-
-  # link in man pages from libs
-  postInstall = ''
-    mkdir -p $man/share/man/man8
-    ln -s ${lib.getMan libs}/share/man/man8/*.8* $man/share/man/man8/
-  '';
 
   buildInputs = [ libgeom ];
 }

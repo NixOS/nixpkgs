@@ -45,13 +45,13 @@ python3Packages.buildPythonApplication rec {
     "-Dhwdbdir=${placeholder "out"}/etc/udev/hwdb.d"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "D-Bus service to check the availability of dual-GPU";
     mainProgram = "switcherooctl";
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
   };
 }

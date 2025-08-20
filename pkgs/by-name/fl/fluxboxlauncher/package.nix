@@ -13,10 +13,9 @@
   fluxbox,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "fluxboxlauncher";
   version = "0.2.1";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mothsart";
@@ -46,11 +45,7 @@ python3.pkgs.buildPythonApplication {
     "--set CHARSET en_us.UTF-8"
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pygobject3
   ];
 

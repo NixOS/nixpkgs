@@ -48,7 +48,7 @@ buildPythonPackage rec {
     webtest
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "wsme/tests"
     "tests/pecantest"
     "tests/test_sphinxext.py"

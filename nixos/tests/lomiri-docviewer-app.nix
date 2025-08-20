@@ -46,9 +46,6 @@ in
 
     with subtest("lomiri docviewer launches"):
         machine.succeed("lomiri-docviewer-app >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
         machine.wait_for_text("No documents")
         machine.screenshot("lomiri-docviewer_open")
 
@@ -60,9 +57,6 @@ in
 
     with subtest("lomiri docviewer txt works"):
         machine.succeed("lomiri-docviewer-app /etc/docviewer-sampletext.txt >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
         machine.wait_for_text("${exampleText}")
         machine.screenshot("lomiri-docviewer_txt")
 
@@ -70,9 +64,6 @@ in
 
     with subtest("lomiri docviewer odt works"):
         machine.succeed("lomiri-docviewer-app /root/docviewer-sampletext.odt >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
         machine.wait_for_text("${exampleText}")
         machine.screenshot("lomiri-docviewer_odt")
 
@@ -80,9 +71,6 @@ in
 
     with subtest("lomiri docviewer pdf works"):
         machine.succeed("lomiri-docviewer-app /root/docviewer-sampletext.pdf >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
         machine.wait_for_text("${exampleText}")
         machine.screenshot("lomiri-docviewer_pdf")
 
@@ -90,9 +78,6 @@ in
 
     with subtest("lomiri docviewer localisation works"):
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-docviewer-app >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
         machine.wait_for_text("Keine Dokumente")
         machine.screenshot("lomiri-docviewer_localised")
   '';

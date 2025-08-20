@@ -1,12 +1,13 @@
 {
+  stdenv,
+  lib,
   fetchFromGitHub,
   fetchpatch,
-  lib,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension {
+buildPostgresqlExtension {
   pname = "pg_similarity";
   version = "pg_similarity_1_0-unstable-2021-01-12";
 
@@ -14,7 +15,7 @@ postgresqlBuildExtension {
     owner = "eulerto";
     repo = "pg_similarity";
     rev = "b9cb0a2d501b91e33cd1ef550b05483ca3563f71";
-    hash = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
+    sha256 = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
   };
 
   patches = [

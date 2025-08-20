@@ -11,7 +11,7 @@
   glibc,
   gnugrep,
   gnused,
-  net-tools,
+  nettools,
   openssh,
   postgresql,
   ps,
@@ -48,7 +48,7 @@ resholve.mkDerivation rec {
         glibc # for ldd command
         gnugrep
         gnused
-        net-tools
+        nettools
         openssh
         postgresql # for psql command
         ps

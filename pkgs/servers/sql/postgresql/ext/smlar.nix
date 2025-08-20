@@ -1,11 +1,12 @@
 {
-  fetchgit,
   lib,
+  stdenv,
+  fetchgit,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension {
+buildPostgresqlExtension rec {
   pname = "smlar-unstable";
   version = "2021-11-08";
 
@@ -17,13 +18,13 @@ postgresqlBuildExtension {
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  meta = {
+  meta = with lib; {
     description = "Compute similary of any one-dimensional arrays";
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     maintainers = [ ];
-    # Broken with no upstream fix available.
-    broken = lib.versionAtLeast postgresql.version "16";
+    # Broken on darwin and linux (JIT) with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
   };
 }

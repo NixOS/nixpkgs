@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "6.13";
+  version = "6.12";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "byobu";
     rev = finalAttrs.version;
-    hash = "sha256-h+3BEMfBRozmpqFNRyfKzjKgevaYm8v7DsJMwkhiCQ4=";
+    hash = "sha256-NzC9Njsnz14mfKnERGDZw8O3vux0wnfCKwjUeTBQswc=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "byobu";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

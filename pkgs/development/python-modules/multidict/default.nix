@@ -2,10 +2,8 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  objgraph,
-  pytestCheckHook,
-  pytest-codspeed,
   pytest-cov-stub,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   typing-extensions,
@@ -13,14 +11,17 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.4.4";
+  version = "6.1.0";
+
+  disabled = pythonOlder "3.8";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${version}";
-    hash = "sha256-crnWaThjymY0nbY4yvD+wX20vQcBkPrFAI+UkexNAbo=";
+    hash = "sha256-rvL1XzMNBVBlElE5wznecL3Ku9h4tG9VeqGRd04iPXw=";
   };
 
   postPatch = ''
@@ -36,10 +37,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    objgraph
-    pytestCheckHook
-    pytest-codspeed
     pytest-cov-stub
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -50,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "multidict" ];
 
   meta = with lib; {
-    changelog = "https://github.com/aio-libs/multidict/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/multidict/blob/v${version}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;

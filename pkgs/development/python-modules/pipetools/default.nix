@@ -6,15 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pipetools";
   version = "1.1.0";
-  format = "setuptools";
 
   # Used github as the src since the pypi package does not include the tests
   src = fetchFromGitHub {
     owner = "0101";
-    repo = "pipetools";
+    repo = pname;
     rev = "6cba9fadab07a16fd85eed16d5cffc609f84c62b";
     hash = "sha256-BoZFePQCQfz1dkct5p/WQLuXoNX3eLcnKf3Mf0fG6u8=";
   };

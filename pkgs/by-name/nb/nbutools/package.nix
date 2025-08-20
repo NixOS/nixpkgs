@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "nbutools";
-  version = "0-unstable-2023-06-06";
-  pyproject = true;
+  version = "unstable-2023-06-06";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "airbus-seclab";
@@ -16,9 +16,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-YOiFlTIDpeTFOHPU37v0pYf8s3HdaE/4pnd9qrsFtSI=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
     beautifulsoup4

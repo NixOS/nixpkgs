@@ -5,17 +5,20 @@
   dulwich,
   pbr,
   sphinx,
+  pythonAtLeast,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "3.5.0";
+  version = "3.4.1";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3h1dXtIMk1/CgbUP30ppUo+Q8qdb7PQtGIRD9eGWwJ8=";
+    hash = "sha256-OPT2rGO967RlJ17iEm5oMuaxqZ8Y8ya+gKMzU0qaGzk=";
   };
 
   postPatch = ''
@@ -39,6 +42,6 @@ buildPythonPackage rec {
     description = "Sphinx theme for RST-sourced documentation published to docs.openstack.org";
     homepage = "https://github.com/openstack/openstackdocstheme";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

@@ -25,6 +25,7 @@ primarily for Chez Scheme in a derivation, one might write:
     akkuPackages.chez-srfi
   ];
 }
+
 ```
 
 The package index is located in `pkgs/tools/package-management/akku`

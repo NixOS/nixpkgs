@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.16.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = "felix";
     tag = "v${version}";
-    hash = "sha256-QslV0MVbIuiFDmd8A69+7nTPAUhDrn/dndZsIiNkeZ8=";
+    hash = "sha256-PcC0lZ41qTVE4V3VdwBq83qYfEJO3RJouuS2+bpcBfo=";
   };
 
-  cargoHash = "sha256-1JjvfXyjGUHIwJJAlI2pB829kHcPrVmKOp+msDk5Qp4=";
+  cargoHash = "sha256-4tvk7H2CrTx9m1f0PLnNv+LWg6oIGTUfirRhIaz2lHo=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -49,12 +49,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
     changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "fx";
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-core";
-  version = "5.8.1";
+  version = "5.7.2";
   disabled = pythonOlder "3.7";
 
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jupyter";
     repo = "jupyter_core";
     tag = "v${version}";
-    hash = "sha256-opTFYVDqzkjeFC+9IZXPRCoV2QCTm1ze6ldrOZN0aUc=";
+    hash = "sha256-qu25ryZreRPHoubFJTFusGdkTPHbl/yl94g+XU5A5Mc=";
   };
 
   patches = [ ./tests_respect_pythonpath.patch ];
@@ -45,9 +45,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # suppress pytest.PytestUnraisableExceptionWarning: Exception ignored in: <socket.socket fd=-1, family=AddressFamily.AF_UNIX, type=SocketKind.SOCK_STREAM, proto=0>
-    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+    "-W ignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    teams = [ teams.jupyter ];
+    maintainers = teams.jupyter.members;
   };
 }

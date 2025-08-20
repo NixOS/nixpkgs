@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "urlhunter";
-  version = "0.2.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "utkusen";
-    repo = "urlhunter";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QRQLN8NFIIvlK+sHNj0MMs7tlBODMKHdWJFh/LwnysI=";
+    sha256 = "sha256-lX5zh+fYVSyWPUOnfRNMGZPsiuxjKBSpluPUMN9mZ+k=";
   };
 
-  vendorHash = "sha256-tlFCovCzqgaLcxcGmWXLYUjaAvFG0o11ei8uMzWJs6Q=";
+  vendorHash = "sha256-JDDxarFROBhdi76mY6udn++lReKLdju/JBpj3JhGdQA=";
 
   meta = with lib; {
     description = "Recon tool that allows searching shortened URLs";

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotman";
-  version = "0.4.10";
+  version = "0.4.7";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
-    repo = "shotman";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-j9HNqRJnGiy720uS0zC6Tt1WjF4b6+XqPEMTqTEOD6w=";
+    hash = "sha256-kf/qloCaptxPzPEgd8fkzTfgqsI/PC3KJfHpBQWadjQ=";
   };
 
-  cargoHash = "sha256-+PpNf79yz5e5Mr6HAqE9Wg/0S8JO4rWrMT7JtQYAWPs=";
+  cargoHash = "sha256-a70zJdhPncagah/gCvkHtSvnYhnYMTINCd5ZyBeDwAE=";
 
   nativeBuildInputs = [
     pkg-config

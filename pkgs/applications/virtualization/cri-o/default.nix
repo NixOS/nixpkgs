@@ -12,18 +12,17 @@
   lvm2,
   pkg-config,
   nixosTests,
-  go-md2man,
 }:
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.33.3";
+  version = "1.31.3";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    hash = "sha256-nDBXXsvzoaJwbeLAXwCdJcxSZjo9Y7CcPBpkNTN2ey0=";
+    hash = "sha256-uoB5v+dl3895sW597f/Y49E2BJvy89871xu/rqWd7kw=";
   };
   vendorHash = null;
 
@@ -35,27 +34,26 @@ buildGoModule rec {
   ];
   nativeBuildInputs = [
     installShellFiles
-    go-md2man
     pkg-config
   ];
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
-  ]
-  ++ lib.optionals (glibc != null) [
-    glibc
-    glibc.static
-  ];
+  buildInputs =
+    [
+      btrfs-progs
+      gpgme
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ]
+    ++ lib.optionals (glibc != null) [
+      glibc
+      glibc.static
+    ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
     runHook preBuild
-    sed -i 's;\thack/;\tbash ./hack/;g' Makefile
     make binaries docs BUILDTAGS="$BUILDTAGS"
     runHook postBuild
   '';
@@ -84,7 +82,7 @@ buildGoModule rec {
       Kubernetes Container Runtime Interface
     '';
     license = licenses.asl20;
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

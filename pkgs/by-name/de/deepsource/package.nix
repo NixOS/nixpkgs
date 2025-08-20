@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "deepsource";
-  version = "0.10.1";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "DeepSourceCorp";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-eJRoy/mgcdYgUV9covQbWwn5sk1hJB1UkKnNd/hjuEY=";
+    hash = "sha256-6uNb4cQVerrlW/eUkjmlO1i1YKYX3qaVdo0i5cczt+I=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,8 +48,6 @@ buildGoModule rec {
       --zsh <($out/bin/deepsource completion zsh)
   '';
 
-  doInstallCheck = true;
-  versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

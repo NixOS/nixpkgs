@@ -51,11 +51,11 @@ buildPythonPackage rec {
     "solid"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to the OpenSCAD declarative geometry language";
     homepage = "https://github.com/SolidCode/SolidPython";
     changelog = "https://github.com/SolidCode/SolidPython/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ jfly ];
-    license = lib.licenses.lgpl21Plus;
+    maintainers = with maintainers; [ jfly ];
+    license = licenses.lgpl21Plus;
   };
 }

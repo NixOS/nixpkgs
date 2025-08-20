@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "datemath" ];
 

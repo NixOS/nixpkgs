@@ -1,6 +1,8 @@
 {
+  stdenv,
   fetchFromGitLab,
   lib,
+  darwin,
   nettle,
   nix-update-script,
   rustPlatform,
@@ -8,22 +10,21 @@
   capnproto,
   installShellFiles,
   openssl,
-  cacert,
   sqlite,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "1.3.1";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lM+j1KtH3U/lbPXnKALAP75YokDufbdz8s8bjb0VXUY=";
+    rev = "v${version}";
+    hash = "sha256-m6uUqTXswzdtIabNgijdU54VGQSk0SkSqdh+7m1Q7RU=";
   };
 
-  cargoHash = "sha256-3z1Qm/eeVlH0/x3C8PSSPIlQaRKk1U6mRlEiKk0AaVQ=";
+  cargoHash = "sha256-tq0TLiu8pdLIP0hGQ5x6TJKhweio0XdBMvlTdl8MvEY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,17 +33,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    nettle
+  buildInputs =
+    [
+      openssl
+      sqlite
+      nettle
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
+
+  checkFlags = [
+    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
+    "--skip=sq_autocrypt_import"
   ];
 
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
-  # Needed for avoiding "OpenSSL error" since 1.2.0
   preCheck = ''
     export HOME=$(mktemp -d)
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   env.ASSET_OUT_DIR = "/tmp/";
@@ -61,10 +73,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Command line application exposing a useful set of OpenPGP functionality for common tasks";
+    description = "Cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${finalAttrs.version}/NEWS";
-    license = lib.licenses.lgpl2Plus;
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       minijackson
       doronbehar
@@ -72,4 +84,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "sq";
   };
-})
+}

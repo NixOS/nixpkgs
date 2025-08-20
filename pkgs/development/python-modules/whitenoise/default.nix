@@ -5,33 +5,36 @@
   django,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.9.0";
+  version = "6.7.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
-    repo = "whitenoise";
+    repo = pname;
     tag = version;
-    hash = "sha256-UmM8Az22ql3uUpyY6jj7ky3LelmttFBqGMYlzlNRAHg=";
+    hash = "sha256-4SrTiTqBrfFuQ/8mqQL+YiehFWW+ZzKiAF0h2XyYuSs=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [ brotli ];
+  propagatedBuildInputs = [ brotli ];
 
   nativeCheckInputs = [
     django
     pytestCheckHook
     requests
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   disabledTestPaths = [
     # Don't run Django tests

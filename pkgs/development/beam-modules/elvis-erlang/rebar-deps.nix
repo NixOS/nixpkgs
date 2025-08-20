@@ -14,11 +14,11 @@ let
   packages = with self; {
     unicode_util_compat = builder {
       name = "unicode_util_compat";
-      version = "0.7.1";
+      version = "0.7.0";
       src = fetchHex {
         pkg = "unicode_util_compat";
-        version = "0.7.1";
-        sha256 = "sha256-s6kXhUzjriM2GXRK0eAQLgVnMTZ3b7L6diNPPgOyNkI=";
+        version = "0.7.0";
+        sha256 = "sha256-Je7m1n32GWDPanlCOVZlmbCeF+Zo03ACR7xJhjgVJSE=";
       };
       beamDeps = [ ];
     };
@@ -44,11 +44,11 @@ let
     };
     mimerl = builder {
       name = "mimerl";
-      version = "1.4.0";
+      version = "1.3.0";
       src = fetchHex {
         pkg = "mimerl";
-        version = "1.4.0";
-        sha256 = "sha256-E68V+faMZYhOzKOjiR1Qp7V9ghUnkvPhnYhlCqEmsUQ=";
+        version = "1.3.0";
+        sha256 = "sha256-oeFaUNGIchfelfC5sHk+MoU/fCWKXNInZQiJs4g5/p0=";
       };
       beamDeps = [ ];
     };
@@ -74,21 +74,21 @@ let
     };
     certifi = builder {
       name = "certifi";
-      version = "2.15.0";
+      version = "2.13.0";
       src = fetchHex {
         pkg = "certifi";
-        version = "2.15.0";
-        sha256 = "sha256-sUftIs5x1y6v2tlPBVFlwcGC9hov9J3yi8xx0dW5SmA=";
+        version = "2.13.0";
+        sha256 = "sha256-jz2VM6DwYHCv39XVlrMuIcZYBmekkokYUbDic3vFB6E=";
       };
       beamDeps = [ ];
     };
     zipper = builder {
       name = "zipper";
-      version = "1.1.0";
+      version = "1.0.1";
       src = fetchHex {
         pkg = "zipper";
-        version = "1.1.0";
-        sha256 = "sha256-RkTIOug+88CYYMte1Zewx1n7vNZK1bAKYvUa5IrvdTU=";
+        version = "1.0.1";
+        sha256 = "sha256-ah/T4fDMHR31ZCyaDOIXgDZBGwpclkKFHR2idr1zfC0=";
       };
       beamDeps = [ ];
     };
@@ -104,11 +104,11 @@ let
     };
     katana_code = builder {
       name = "katana_code";
-      version = "2.4.1";
+      version = "2.1.0";
       src = fetchHex {
         pkg = "katana_code";
-        version = "2.4.1";
-        sha256 = "sha256-WO/GO12dq8giMMq1DN5/eyWSh6aQ7Wmfeaf6gPSbCzo=";
+        version = "2.1.0";
+        sha256 = "sha256-rju6yhh1EViPaWlan/IiUcssxnL9zMGAKJd5vdJRde8=";
       };
       beamDeps = [ ];
     };
@@ -152,21 +152,21 @@ let
     };
     getopt = builder {
       name = "getopt";
-      version = "1.0.3";
+      version = "1.0.2";
       src = fetchHex {
         pkg = "getopt";
-        version = "1.0.3";
-        sha256 = "sha256-fgHekKxUDyFJT/cnkrHjFi05mWbrv8Z0tM5Sy49JMk8=";
+        version = "1.0.2";
+        sha256 = "sha256-oAKa6kMi+4KmH2h2ptnGbcmHi2y2H6oT3zGHOE/U6iY=";
       };
       beamDeps = [ ];
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "4.1.1";
+      version = "3.2.3";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "4.1.1";
-        sha256 = "sha256-gKViV0uNl0oudUTpqUVXFtBMngldvIyJFeJGgDHdE4U=";
+        version = "3.2.3";
+        sha256 = "sha256-oPDWgczZNVoWXDWXNnVVHxAhaHz5kvFcW/9mtmZO3gQ=";
       };
       beamDeps = [
         katana_code

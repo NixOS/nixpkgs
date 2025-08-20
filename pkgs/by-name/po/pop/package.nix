@@ -39,12 +39,12 @@ buildGoModule rec {
       --zsh <($out/bin/pop completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Send emails from your terminal";
     homepage = "https://github.com/charmbracelet/pop";
     changelog = "https://github.com/charmbracelet/pop/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       caarlos0
       maaslalani
     ];

@@ -9,7 +9,6 @@
   p7zip,
   bash,
   writeScript,
-  libGL,
 }:
 let
 
@@ -21,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "briar-desktop";
-  version = "0.6.3-beta";
+  version = "0.6.0-beta";
 
   src = fetchurl {
     url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
-    hash = "sha256-8JX4cgRJZDCBlu5iVL7t5nZSZn8XTk3DU3rasViQgtg=";
+    hash = "sha256-ITlg2THQwP91nVxHhLfXPBtC4e3EU9V7D/15XqWC7FE=";
   };
 
   dontUnpack = true;
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libnotify
-          libGL
         ]
       }"
   '';
@@ -59,14 +57,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Decentralized and secure messenger";
+    description = "Decentalized and secure messnger";
     mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
     license = licenses.gpl3;
-    maintainers = with maintainers; [
-      onny
-      supinie
-    ];
+    maintainers = with maintainers; [ onny ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -63,8 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ das-g ];
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
     platforms = platforms.unix;
     mainProgram = "ili2c";
   };

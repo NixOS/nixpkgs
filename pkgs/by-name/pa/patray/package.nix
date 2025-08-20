@@ -1,14 +1,13 @@
 {
   lib,
-  python312,
+  python3,
   fetchPypi,
   qt5,
 }:
 
-python312.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "patray";
   version = "0.1.2";
-  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
@@ -21,9 +20,7 @@ python312.pkgs.buildPythonApplication rec {
     sed -i '/pyside2/d' requirements/production.in
   '';
 
-  build-system = with python312.pkgs; [ setuptools ];
-
-  dependencies = with python312.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pulsectl
     loguru
     cock
@@ -41,7 +38,7 @@ python312.pkgs.buildPythonApplication rec {
     description = "Yet another tray pulseaudio frontend";
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ domenkozar ];
     mainProgram = "patray";
   };
 }

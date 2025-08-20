@@ -1,17 +1,16 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  pytest-cov-stub,
+  lib,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "in-place";
-  version = "1.0.1";
-  pyproject = true;
+  version = "1.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -19,22 +18,23 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = "inplace";
     tag = "v${version}";
-    hash = "sha256-PyOSuHHtftEPwL3mTwWYStZNXYX3EhptKfTu0PJjOZ8=";
+    hash = "sha256-TfWfSb1GslzcT30/xvBg5Xui7ptp7+g89Fq/giLCoQ8=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace tox.ini --replace "--cov=in_place --no-cov-on-fail" ""
+  '';
 
-  nativeCheckInputs = [
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "in_place" ];
 
   meta = with lib; {
     description = "In-place file processing";
     homepage = "https://github.com/jwodder/inplace";
-    changelog = "https://github.com/jwodder/inplace/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jwodder/inplace/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

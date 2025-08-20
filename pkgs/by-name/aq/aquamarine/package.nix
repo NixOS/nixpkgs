@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.9.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ZIa0peLluZ0AVT0f6bMW+bRCIxMRUVlN798PE4iHRAw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Gxv1kTz5jEvIzmkF6XgsdKglL2jmjJOQdZ+hO9uVnlQ=";
   };
 
   nativeBuildInputs = [
@@ -68,10 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/hyprwm/aquamarine/releases/tag/v${finalAttrs.version}";
-    description = "Very light linux rendering backend library";
+    description = "A very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      johnrtitor
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

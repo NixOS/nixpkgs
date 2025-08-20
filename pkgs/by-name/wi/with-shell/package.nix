@@ -5,9 +5,9 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "with";
-  version = "0-unstable-2018-03-20";
+  version = "unstable-2018-03-20";
 
   src = fetchFromGitHub {
     owner = "mchav";
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
       To exit use either :q or :exit.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
     mainProgram = "with";
   };

@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Simple XML editor based on qt libraries";
     homepage = "https://sourceforge.net/projects/qxmledit";
-    license = lib.licenses.lgpl2;
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
     changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
     mainProgram = "qxmledit";
   };

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   cxxtools,
-  libpq,
+  postgresql,
   libmysqlclient,
   sqlite,
   zlib,
@@ -24,12 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    libpq.pg_config
   ];
 
   buildInputs = [
     cxxtools
-    libpq
+    postgresql
     libmysqlclient
     sqlite
     zlib

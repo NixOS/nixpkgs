@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.9";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-x4DhPxiwPR16xQpBFnJ1DiU435BHOOs6pFj+zJQXFUI=";
+    hash = "sha256-6Slh1uZglRNBLQ1ziKf2xaP+NK6Abug/6TZcYy2HFPQ=";
   };
 
   cmakeFlags = [
@@ -52,37 +52,38 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    fcitx5
-    fcitx5-qt
-    qtbase
-    qtsvg
-    qtwayland
-    kitemviews
-    kwidgetsaddons
-    isocodes
-    xkeyboardconfig
-    libxkbfile
-  ]
-  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtx11extras
-  ]
-  ++ lib.optionals kcmSupport (
+  buildInputs =
     [
-      qtdeclarative
-      kcoreaddons
-      kdeclarative
+      fcitx5
+      fcitx5-qt
+      qtbase
+      qtsvg
+      qtwayland
+      kitemviews
+      kwidgetsaddons
+      isocodes
+      xkeyboardconfig
+      libxkbfile
     ]
     ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtquickcontrols2
-      plasma-framework
-      kirigami2
+      qtx11extras
     ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-      libplasma
-      kirigami
-    ]
-  );
+    ++ lib.optionals kcmSupport (
+      [
+        qtdeclarative
+        kcoreaddons
+        kdeclarative
+      ]
+      ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+        qtquickcontrols2
+        plasma-framework
+        kirigami2
+      ]
+      ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+        libplasma
+        kirigami
+      ]
+    );
 
   meta = with lib; {
     description = "Configuration Tool for Fcitx5";

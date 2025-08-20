@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "repoze/lru/tests.py" ];
+  pytestFlagsArray = [ "repoze/lru/tests.py" ];
 
   disabledTests = [
     # time sensitive tests
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "http://www.repoze.org/";
     changelog = "https://github.com/repoze/repoze.lru/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

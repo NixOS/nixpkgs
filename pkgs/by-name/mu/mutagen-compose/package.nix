@@ -1,21 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "mutagen-compose";
-  version = "0.18.1";
+  version = "0.18.0-1";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
-    repo = "mutagen-compose";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-MK/icz/d7wymUm0m3aq4bBR1ZmxFngPVp+iPC9ufluU=";
+    hash = "sha256-awnRQVoqIISB3ksDlr3ZtzUCuAMAtEts5JX29oM45wI=";
   };
 
-  vendorHash = "sha256-+lF59qWdC5hnVehM0EDR1pyKXmodtWJSUVIfAIlAWeA=";
+  vendorHash = "sha256-2+1PTUvhAS28lMXMLockLvX6aJyZsjuXZq8kIx4un8E=";
 
   doCheck = false;
 
@@ -23,12 +19,12 @@ buildGoModule rec {
 
   tags = [ "mutagencompose" ];
 
-  meta = {
+  meta = with lib; {
     description = "Compose with Mutagen integration";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen-compose/releases/tag/v${version}";
-    maintainers = [ lib.maintainers.matthewpi ];
-    license = lib.licenses.mit;
+    maintainers = [ maintainers.matthewpi ];
+    license = licenses.mit;
     mainProgram = "mutagen-compose";
   };
 }

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pcre2-py";
-  version = "0.5.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grtetrault";
     repo = "pcre2.py";
-    tag = "v${version}";
-    hash = "sha256-W3oKluXC4orw1ThYM1Beeu8+6rNMr8FSCqep84SmXLE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NPpI3IWg58num0MZjlEam37Qz9D3dDMhFjfVXB8ugOg=";
     fetchSubmodules = false;
   };
 
@@ -51,20 +51,21 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    haskellPackages.bz2
-    haskellPackages.memfd
-  ]
-  ++ [
-    build
-    bzip2
-    editline
-    libedit
-    libz
-    pcre2
-    readline
-    requests
-  ];
+  dependencies =
+    [
+      haskellPackages.bz2
+      haskellPackages.memfd
+    ]
+    ++ [
+      build
+      bzip2
+      editline
+      libedit
+      libz
+      pcre2
+      readline
+      requests
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

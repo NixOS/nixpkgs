@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -9,16 +10,14 @@
   # dependencies
   aiosmtpd,
   django,
+  looseversion,
 
   # tests
   factory-boy,
   mock,
   pip,
-  postgresql,
-  postgresqlTestHook,
   pygments,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-django,
   shortuuid,
   vobject,
@@ -27,21 +26,39 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "4.1";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "django-extensions";
-    repo = "django-extensions";
+    owner = pname;
+    repo = pname;
     tag = version;
-    hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
+    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Replace dead asyncore, smtp implementation with aiosmtpd
+      name = "django-extensions-aiosmtpd.patch";
+      url = "https://github.com/django-extensions/django-extensions/commit/37d56c4a4704c823ac6a4ef7c3de4c0232ceee64.patch";
+      hash = "sha256-49UeJQKO0epwY/7tqoiHgOXdgPcB/JBIZaCn3ulaHTg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov=django_extensions --cov-report html --cov-report term" ""
+
+    substituteInPlace django_extensions/management/commands/pipchecker.py \
+      --replace-fail "from distutils.version" "from looseversion"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiosmtpd
     django
+    looseversion
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -50,10 +67,7 @@ buildPythonPackage rec {
     factory-boy
     mock
     pip
-    postgresql
-    postgresqlTestHook
     pygments # not explicitly declared in setup.py, but some tests require it
-    pytest-cov-stub
     pytest-django
     pytestCheckHook
     shortuuid
@@ -61,20 +75,19 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  env = {
-    postgresqlEnableTCP = 1;
-    PGUSER = "postgres";
-    PGPASSWORD = "postgres";
-    PGDATABASE = "django_extensions_test";
-  };
+  disabledTests = [
+    # Mismatch in expectation of exception message
+    "test_installed_apps_no_resolve_conflicts_function"
+  ];
 
   disabledTestPaths = [
-    # https://github.com/django-extensions/django-extensions/issues/1871
+    # requires network access
+    "tests/management/commands/test_pipchecker.py"
+    # django.db.utils.OperationalError: no such table: django_extensions_permmodel
     "tests/test_dumpscript.py"
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
     description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;

@@ -42,7 +42,7 @@ let
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      tag = "v${version}-docking";
+      rev = "v${version}-docking";
       hash = "sha256-Y8lZb1cLJF48sbuxQ3vXq6GLru/WThR78pq7LlORIzc=";
     };
   };
@@ -74,7 +74,7 @@ let
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
       repo = "StormLib";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
     };
     nativeBuildInputs = prev.nativeBuildInputs ++ [ pkg-config ];
@@ -90,7 +90,7 @@ let
   thread_pool = fetchFromGitHub {
     owner = "bshoshany";
     repo = "thread-pool";
-    tag = "v4.1.0";
+    rev = "v4.1.0";
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
   };
 
@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/HarbourMasters/2ship2harkinian";
-    description = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
+    description = "A PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ qubitnano ];

@@ -6,7 +6,6 @@
   SDL,
   SDL_image,
   libgbm,
-  libGL,
   libtheora,
   libvorbis,
   libogg,
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getDev SDL)
     SDL_image
     libgbm
-    libGL
     libtheora
     libvorbis.dev
     libogg

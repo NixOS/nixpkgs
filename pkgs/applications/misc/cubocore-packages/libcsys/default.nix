@@ -1,22 +1,22 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
   udisks2,
-  qt6,
+  qtbase,
   cmake,
   ninja,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "libcsys";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore";
-    repo = "libcsys";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-53vneIR2uy3VtbnOlEHl1anj3nXA3MU2KQt1PWm7KGI=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-1MHyx01w+dCeAeumcSXRBStgAec2yu1rLwaZaCXRgTc=";
   };
 
   nativeBuildInputs = [
@@ -25,17 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     udisks2
   ];
 
-  dontWrapQtApps = true;
-
-  meta = {
+  meta = with lib; {
     description = "Library for managing drive and getting system resource information in real time";
     homepage = "https://gitlab.com/cubocore/libcsys";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

@@ -91,12 +91,7 @@ See [](#ex-portableService-hello) to understand how to use the output of `portab
 The following example builds a Portable Service image with the `hello` package, along with a service unit that runs it.
 
 ```nix
-{
-  lib,
-  writeText,
-  portableService,
-  hello,
-}:
+{ lib, writeText, portableService, hello }:
 let
   hello-service = writeText "hello.service" ''
     [Unit]
@@ -156,13 +151,7 @@ To make things available globally, you must specify the `symlinks` attribute whe
 The following package builds on the package from [](#ex-portableService-hello) to make `/etc/ssl` available globally (this is only for illustrative purposes, because `hello` doesn't use `/etc/ssl`).
 
 ```nix
-{
-  lib,
-  writeText,
-  portableService,
-  hello,
-  cacert,
-}:
+{ lib, writeText, portableService, hello, cacert }:
 let
   hello-service = writeText "hello.service" ''
     [Unit]
@@ -178,10 +167,7 @@ portableService {
   inherit (hello) version;
   units = [ hello-service ];
   symlinks = [
-    {
-      object = "${cacert}/etc/ssl";
-      symlink = "/etc/ssl";
-    }
+    { object = "${cacert}/etc/ssl"; symlink = "/etc/ssl"; }
   ];
 }
 ```

@@ -12,24 +12,28 @@ in
 python3Packages.buildPythonApplication {
   pname = "mimeo";
   inherit version;
-  pyproject = true;
 
   src = fetchurl {
     url = "https://xyne.dev/projects/mimeo/src/mimeo-${version}.tar.xz";
     hash = "sha256-CahvSypwR1aHVDHTdtty1ZfaKBWPolxc73uZ5OyeqZA=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  buildInputs = [
+    file
+    desktop-file-utils
+  ];
 
-  dependencies = [ python3Packages.pyxdg ];
+  propagatedBuildInputs = [ python3Packages.pyxdg ];
 
-  postPatch = ''
+  preConfigure = ''
     substituteInPlace Mimeo.py \
-      --replace-fail "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
-                     "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
-      --replace-fail "EXE_FILE = 'file'" \
-                     "EXE_FILE = '${file}/bin/file'"
+      --replace "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
+                "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
+      --replace "EXE_FILE = 'file'" \
+                "EXE_FILE = '${file}/bin/file'"
   '';
+
+  installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
 
   doInstallCheck = true;
   installCheckPhase = ''

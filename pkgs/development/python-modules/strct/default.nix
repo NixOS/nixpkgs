@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "strct";
-  version = "0.0.35";
+  version = "0.0.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaypal5";
     repo = "strct";
-    tag = "v${version}";
-    hash = "sha256-4IykGzy1PTrRAbx/sdtzL4My4cDSlplL9rOFBcLbaB8=";
+    rev = "v${version}";
+    hash = "sha256-uPM2U+emZUCGqEhIeTBmaOu8eSfK4arqvv9bItBWpUs=";
   };
 
   # don't append .dev0 to version

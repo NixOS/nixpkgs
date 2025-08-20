@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   stdenv,
-  undmg,
+  _7zz,
 }:
 
 # This cannot be built from source due to the problematic nature of XCode - so
@@ -10,22 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "MonitorControl";
-  version = "4.3.3";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://github.com/MonitorControl/${pname}/releases/download/v${version}/MonitorControl.${version}.dmg";
-    hash = "sha256-myx3adoU3FYYrs6LFRSiXtwSsoaujjQ/PYgAF/Xuk2g=";
+    sha256 = "Q96uK6wVe1D2uLvWL+pFR6LcmrU7cgmr2Y5tPvvTDgI=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  # MonitorControl.${version}.dmg is APFS formatted, unpack with 7zz
+  nativeBuildInputs = [ _7zz ];
 
   sourceRoot = "MonitorControl.app";
-
-  unpackCmd = ''
-    runHook preUnpack
-    undmg $src
-    runHook postUnpack
-  '';
 
   installPhase = ''
     mkdir -p "$out/Applications/MonitorControl.app"

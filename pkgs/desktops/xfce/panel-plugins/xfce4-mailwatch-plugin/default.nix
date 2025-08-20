@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   gettext,
-  meson,
-  ninja,
   pkg-config,
   xfce4-panel,
   libxfce4ui,
@@ -17,21 +15,21 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  category = "panel-plugins";
+in
+
+stdenv.mkDerivation rec {
   pname = "xfce4-mailwatch-plugin";
-  version = "1.4.0";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://xfce/src/panel-plugins/xfce4-mailwatch-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-mailwatch-plugin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XCEQJdsQlmY/prjMQSE0ZKbXHyTnYyZJnYV/+B6jhh8=";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-xHg/FTOJHNLgw0Bm2oWYZNzkWiPKpgFbWMufqdZafkQ=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     gettext
-    meson
-    ninja
     pkg-config
   ];
 
@@ -47,15 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/xfce4-mailwatch-plugin";
-    rev-prefix = "xfce4-mailwatch-plugin-";
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mailwatch-plugin";
     description = "Mail watcher plugin for Xfce panel";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    teams = [ lib.teams.xfce ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

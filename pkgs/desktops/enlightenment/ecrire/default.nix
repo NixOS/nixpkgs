@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    teams = [ teams.enlightenment ];
+    maintainers = teams.enlightenment.members;
   };
 }

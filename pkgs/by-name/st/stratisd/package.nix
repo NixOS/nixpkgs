@@ -23,25 +23,24 @@
   curl,
   tpm2-tools,
   coreutils,
-  udevCheckHook,
   clevisSupport ? false,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.8.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = "stratisd";
+    repo = pname;
     tag = "stratisd-v${version}";
-    hash = "sha256-7AT1+kqMFcsJXNsdArwbjLyOTe69X85iMhSbqn6929w=";
+    hash = "sha256-W8ssLTFU36t6iLrt9S9V8qcN7EP4IsL7VbhNPLpftio=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-zehtQHCjvDjNoY2UNte77kbUCq5j6dkUwIGhyh2VXgo=";
+    hash = "sha256-Qv2qknWNx2OQeucUFwL1veu3MSF+fd19jFfHCCVGprM=";
   };
 
   postPatch = ''
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     ncurses # tput
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -109,8 +107,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-
-  doInstallCheck = true;
 
   # remove files for supporting dracut
   postInstall = ''

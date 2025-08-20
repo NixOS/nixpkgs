@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.14.1";
+  version = "0.13.0";
 
   build-system = [ setuptools ];
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "symengine";
     repo = "symengine.py";
     tag = "v${version}";
-    hash = "sha256-adzODm7gAqwAf7qzfRQ1AG8mC3auiXM4OsV/0h+ZmUg=";
+    hash = "sha256-PJUzA86SGCnDpqU9j/dr3PlM9inyi8SQX0HGqPQ9wQw=";
   };
 
   env = {
@@ -32,13 +32,14 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "'cython>=0.29.24'" "'cython'"
+
+    export PATH=${cython}/bin:$PATH
   '';
 
   dontUseCmakeConfigure = true;
-  nativeBuildInputs = [
-    cmake
-    cython
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ cython ];
 
   nativeCheckInputs = [
     pytest

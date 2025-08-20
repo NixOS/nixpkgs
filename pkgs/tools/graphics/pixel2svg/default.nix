@@ -2,21 +2,19 @@
   lib,
   buildPythonPackage,
   fetchurl,
-  pillow,
-  svgwrite,
+  python310Packages,
 }:
 
-buildPythonPackage rec {
+python310Packages.buildPythonPackage rec {
   pname = "pixel2svg";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchurl {
     url = "https://static.florian-berger.de/pixel2svg-${version}.zip";
     sha256 = "sha256-aqcTTmZKcdRdVd8GGz5cuaQ4gjPapVJNtiiZu22TZgQ=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python310Packages; [
     pillow
     svgwrite
   ];

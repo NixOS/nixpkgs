@@ -1,30 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libzen,
-  zlib,
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib
 
-  # Whether to enable resolving URLs via libcurl
-  curlSupport ? true,
-  curl,
+# Whether to enable resolving URLs via libcurl
+, curlSupport ? true, curl
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "25.07.1";
+  version = "24.12";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-jm6S8gzyynzoq6U60LWJqJovp9/T55cdOFAQms1JvtU=";
+    hash = "sha256-H0mGIH913rKQkV5r8LM+PkVXdDBd0mb/6Jl8AarWWyc=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ zlib ] ++ lib.optionals curlSupport [ curl ];
   propagatedBuildInputs = [ libzen ];
 
@@ -37,8 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
-  ]
-  ++ lib.optionals curlSupport [
+  ] ++ lib.optionals curlSupport [
     "--with-libcurl"
   ];
 

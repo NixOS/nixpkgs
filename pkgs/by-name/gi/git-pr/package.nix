@@ -6,42 +6,26 @@
 
 buildGoModule rec {
   pname = "git-pr";
-  version = "0.3.0";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "picosh";
     repo = "git-pr";
     rev = "v${version}";
-    hash = "sha256-2A2rP7yr8faVoIYAWprr+t7MwDPerhsuOjWWEl1mhXw=";
+    hash = "sha256-7Ka8p5X8nQBXKiT6QsWOWMQJL8rePKrHz/LZU1W+oQ8=";
   };
 
-  vendorHash = "sha256-7aHr5CWZVmhBiuCXaK49zYJXMufCxZBnS917mF0QJlg=";
-
-  subPackages = [
-    "cmd/ssh"
-    "cmd/web"
-  ];
-
-  env.CGO_ENABLED = 0;
-
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  vendorHash = "sha256-tu5C7hz6UTgn/jCCotXzZHlUmGVNERhA7Osxi31Domk=";
 
   postInstall = ''
     mv $out/bin/ssh $out/bin/git-ssh
-    mv $out/bin/web $out/bin/git-web
   '';
 
   meta = {
     homepage = "https://pr.pico.sh";
     description = "Simple git collaboration tool";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      sigmanificient
-      jolheiser
-    ];
-    mainProgram = "git-ssh";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    mainProgram = "git-pr";
   };
 }

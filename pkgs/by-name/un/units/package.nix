@@ -27,12 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  buildInputs = [
-    readline
-  ]
-  ++ lib.optionals enableCurrenciesUpdater [
-    pythonEnv
-  ];
+  buildInputs =
+    [
+      readline
+    ]
+    ++ lib.optionals enableCurrenciesUpdater [
+      pythonEnv
+    ];
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "units";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
 })

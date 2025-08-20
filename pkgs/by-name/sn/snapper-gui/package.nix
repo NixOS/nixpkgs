@@ -11,14 +11,13 @@
   gobject-introspection,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "snapper-gui";
   version = "2020-10-20";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ricardomv";
-    repo = "snapper-gui";
+    repo = pname;
     rev = "f0c67abe0e10cc9e2ebed400cf80ecdf763fb1d1";
     sha256 = "13j4spbi9pxg69zifzai8ifk4207sn0vwh6vjqryi0snd5sylh7h";
   };

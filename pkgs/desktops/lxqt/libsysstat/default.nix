@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lxqt/libsysstat";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

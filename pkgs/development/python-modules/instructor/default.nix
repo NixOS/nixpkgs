@@ -2,19 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  hatchling,
+  poetry-core,
 
   # dependencies
   aiohttp,
   docstring-parser,
-  jinja2,
   jiter,
   openai,
   pydantic,
-  requests,
   rich,
   tenacity,
   typer,
@@ -24,6 +21,7 @@
   diskcache,
   fastapi,
   google-generativeai,
+  jinja2,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
@@ -32,30 +30,31 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.9";
+  version = "1.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
+    hash = "sha256-iPTZFXypcpO+PkcJHTdpkpiIU589XPcy+aNO/JqASCQ=";
   };
 
-  build-system = [ hatchling ];
+  pythonRelaxDeps = [
+    "docstring-parser"
+    "jiter"
+    "pydantic"
+    "tenacity"
+  ];
 
-  pythonRelaxDeps = [ "rich" ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     docstring-parser
-    jinja2
     jiter
     openai
     pydantic
-    requests
     rich
     tenacity
     typer
@@ -66,6 +65,7 @@ buildPythonPackage rec {
     diskcache
     fastapi
     google-generativeai
+    jinja2
     pytest-asyncio
     pytestCheckHook
     python-dotenv
@@ -82,14 +82,6 @@ buildPythonPackage rec {
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
-
-    # Checks magic values and this fails on Python 3.13
-    "test_raw_base64_autodetect_jpeg"
-    "test_raw_base64_autodetect_png"
-
-    # Performance benchmarks that sometimes fail when running many parallel builds
-    "test_combine_system_messages_benchmark"
-    "test_extract_system_messages_benchmark"
   ];
 
   disabledTestPaths = [
@@ -99,9 +91,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

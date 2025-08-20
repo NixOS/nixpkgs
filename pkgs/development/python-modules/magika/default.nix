@@ -6,7 +6,7 @@
   magika,
   numpy,
   onnxruntime,
-  hatchling,
+  poetry-core,
   python-dotenv,
   pythonOlder,
   stdenv,
@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "magika";
-  version = "0.6.2";
+  version = "0.5.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N+tq6AIPbmjyMbwGBSwKDL6Ob6J0kts0Xo3IZ9vOsGc=";
+    hash = "sha256-Q9wRU6FjcyciWmJqFVDAo5Wh1F6jPsH11GubCAI4vuA=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click
@@ -42,12 +42,11 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = magika; };
 
   meta = with lib; {
-    description = "Detect file content types with deep learning";
+    description = "Magika: Detect file content types with deep learning";
     homepage = "https://github.com/google/magika";
-    changelog = "https://github.com/google/magika/blob/python-v${version}/python/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ mihaimaruseac ];
-    mainProgram = "magika-python-client";
+    mainProgram = "magika";
     # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };

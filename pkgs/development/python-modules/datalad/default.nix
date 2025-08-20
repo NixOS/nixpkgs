@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.2.1";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = version;
-    hash = "sha256-QcKhMiJNlETlxmRoPwKKGYK7zKbJ0pQpbRZDyJ+yrN0=";
+    hash = "sha256-XwzYlSP2MbEb0U3tuVOq3NNqLTS08UzSfSFBidHbpAY=";
   };
 
   postPatch = ''
@@ -82,22 +82,23 @@ buildPythonPackage rec {
     optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
 
   optional-dependencies = {
-    core = [
-      platformdirs
-      chardet
-      distro
-      iso8601
-      humanize
-      fasteners
-      packaging
-      patool
-      tqdm
-      annexremote
-      looseversion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    core =
+      [
+        platformdirs
+        chardet
+        distro
+        iso8601
+        humanize
+        fasteners
+        packaging
+        patool
+        tqdm
+        annexremote
+        looseversion
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+      ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+      ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
     downloaders = [
       boto3
       keyrings-alt
@@ -229,9 +230,10 @@ buildPythonPackage rec {
     httpretty
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # Deprecated in 3.13. Use exc_type_str instead.
-    "-Wignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];

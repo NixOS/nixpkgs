@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-celery";
   pyproject = true;

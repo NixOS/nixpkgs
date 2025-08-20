@@ -7,7 +7,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "luabind";
   version = "0.9.1";
 

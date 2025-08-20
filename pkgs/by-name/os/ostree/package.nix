@@ -1,108 +1,83 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  gtk-doc,
-  nixosTests,
-  pkgsCross,
-  curl,
-  glib,
-  xz,
-  e2fsprogs,
-  libsoup_3,
-  gpgme,
-  which,
-  makeWrapper,
-  autoconf,
-  automake,
-  libtool,
-  fuse3,
-  util-linuxMinimal,
-  libselinux,
-  libsodium,
-  libarchive,
-  libcap,
-  bzip2,
-  bison,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  python3,
-  buildPackages,
-  withComposefs ? false,
-  composefs,
-  withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs,
-  gjs,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  replaceVars,
-  openssl,
-  ostree-full,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, gtk-doc
+, gobject-introspection
+, gjs
+, nixosTests
+, pkgsCross
+, curl
+, glib
+, systemd
+, xz
+, e2fsprogs
+, libsoup_2_4
+, glib-networking
+, wrapGAppsNoGuiHook
+, gpgme
+, which
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, fuse3
+, util-linuxMinimal
+, libselinux
+, libsodium
+, libarchive
+, libcap
+, bzip2
+, bison
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, python3
+
+  # Optional ComposeFS support
+, withComposefs ? false
+, composefs
 }:
 
 let
-  testPython = python3.withPackages (
-    p: with p; [
-      pyyaml
-    ]
-  );
-in
-stdenv.mkDerivation (finalAttrs: {
+  testPython = python3.withPackages (p: with p; [
+    pyyaml
+  ]);
+in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2025.2";
+  version = "2024.10";
 
-  outputs = [
-    "out"
-    "dev"
-    "man"
-    "installedTests"
-  ];
+  outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
+    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
+    sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
   };
 
-  patches = [
-    # Workarounds for installed tests failing in pseudoterminal
-    # https://github.com/ostreedev/ostree/issues/1592
-    ./fix-1592.patch
-
-    # Hard-code paths in installed tests
-    (replaceVars ./fix-test-paths.patch {
-      python3 = testPython.interpreter;
-      openssl = "${openssl}/bin/openssl";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     pkg-config
-    glib
     gtk-doc
+    gobject-introspection
     which
     makeWrapper
     bison
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     curl
     glib
+    systemd
     e2fsprogs
-    libsoup_3 # for trivial-httpd for tests
+    libsoup_2_4
+    glib-networking
     gpgme
     fuse3
     libselinux
@@ -115,15 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # for installed tests
     testPython
-  ]
-  ++ lib.optionals withComposefs [
-    (lib.getDev composefs)
-  ]
-  ++ lib.optionals withGjs [
     gjs
-  ]
-  ++ lib.optionals withSystemd [
-    systemd
+  ] ++ lib.optionals withComposefs [
+    (lib.getDev composefs)
   ];
 
   enableParallelBuilding = true;
@@ -134,8 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
     "--with-ed25519-libsodium"
-  ]
-  ++ lib.optionals withComposefs [
+  ] ++ lib.optionals withComposefs [
     "--with-composefs"
   ];
 
@@ -152,24 +120,21 @@ stdenv.mkDerivation (finalAttrs: {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  postFixup =
-    let
-      typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
-        (placeholder "out")
-        glib.out
-      ];
-    in
-    lib.optionalString withIntrospection ''
-      for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-        wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
-      done
-    '';
+  postFixup = let
+    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
+      (placeholder "out")
+      gobject-introspection
+    ];
+  in ''
+    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
+    done
+  '';
 
   passthru = {
     tests = {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
-      inherit ostree-full;
     };
   };
 
@@ -178,6 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ostreedev.github.io/ostree/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ copumpkin ];
   };
-})
+}

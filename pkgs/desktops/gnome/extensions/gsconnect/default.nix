@@ -1,48 +1,43 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  openssl,
-  gsound,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook3,
-  glib,
-  glib-networking,
-  gtk3,
-  openssh,
-  gnome-shell,
-  evolution-data-server-gtk4,
-  gjs,
-  nixosTests,
-  desktop-file-utils,
+{ stdenv
+, lib
+, fetchFromGitHub
+, substituteAll
+, openssl
+, gsound
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook3
+, glib
+, glib-networking
+, gtk3
+, openssh
+, gnome-shell
+, evolution-data-server-gtk4
+, gjs
+, nixosTests
+, desktop-file-utils
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "66";
+  version = "58";
 
-  outputs = [
-    "out"
-    "installedTests"
-  ];
+  outputs = [ "out" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QPvdSmt4aUkPvaOUonovrCxW4pxrgoopXGi3KSukVD8=";
+    rev = "v${version}";
+    hash = "sha256-bpy4G+f3NJ2iVsycPluV+98at0G2wlp7t5cPEMGM90s=";
   };
 
   patches = [
     # Make typelibs available in the extension
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       gapplication = "${glib.bin}/bin/gapplication";
-      # Replaced in postPatch
-      typelibPath = null;
     })
 
     # Allow installing installed tests to a separate output
@@ -88,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
-      --subst-var-by GSETTINGS_SCHEMA_DIR \
-        ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
+      --subst-var-by GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   postFixup = ''
@@ -117,12 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
-    teams = [ lib.teams.gnome ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members ++ [ maintainers.doronbehar ];
+    platforms = platforms.linux;
   };
-})
+}

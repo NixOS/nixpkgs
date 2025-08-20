@@ -35,7 +35,6 @@ libeufinComponent:
           cfg.settings."libeufin-${libeufinComponent}db-postgres".CONFIG;
 
       bankPort = cfg.settings."${if isNexus then "nexus-httpd" else "libeufin-bank"}".PORT;
-      bankHost = lib.elemAt (lib.splitString "/" cfg.settings.libeufin-bank.BASE_URL) 2;
     in
     lib.mkIf cfg.enable {
       services.libeufin.settings = cfg.settings;
@@ -83,7 +82,7 @@ libeufinComponent:
                 args = lib.cli.toGNUCommandLineShell { } {
                   c = configFile;
                   inherit (account) username password name;
-                  payto_uri = "payto://x-taler-bank/${bankHost}/${account.username}?receiver-name=${account.name}";
+                  payto_uri = "payto://x-taler-bank/bank:${toString bankPort}/${account.username}?receiver-name=${account.name}";
                   exchange = lib.toLower account.username == "exchange";
                 };
               in
@@ -96,9 +95,7 @@ libeufinComponent:
             };
           in
           {
-            path = [
-              (if cfg.createLocalDatabase then config.services.postgresql.package else pkgs.postgresql)
-            ];
+            path = [ config.services.postgresql.package ];
             serviceConfig = {
               Type = "oneshot";
               DynamicUser = true;
@@ -110,20 +107,21 @@ libeufinComponent:
               ${lib.getExe' cfg.package "libeufin-${libeufinComponent}"} dbinit ${args}
             '';
             # Grant DB permissions after schemas have been created
-            postStart = ''
-              psql -U "${dbName}" -f "${dbScript}"
-            ''
-            + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
-              # only register initial accounts once
-              if [ ! -e /var/lib/libeufin-dbinit/init ]; then
-                ${initialAccountRegistration}
+            postStart =
+              ''
+                psql -U "${dbName}" -f "${dbScript}"
+              ''
+              + lib.optionalString ((!isNexus) && (cfg.initialAccounts != [ ])) ''
+                # only register initial accounts once
+                if [ ! -e /var/lib/libeufin-dbinit/init ]; then
+                  ${initialAccountRegistration}
 
-                touch /var/lib/libeufin-dbinit/init
-                echo "Bank initialisation complete"
-              fi
-            '';
-            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
-            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
+                  touch /var/lib/libeufin-dbinit/init
+                  echo "Bank initialisation complete"
+                fi
+              '';
+            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
+            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
           };
       };
 

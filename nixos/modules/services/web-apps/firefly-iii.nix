@@ -303,13 +303,12 @@ in
         "pm.min_spare_servers" = lib.mkDefault 2;
         "pm.max_spare_servers" = lib.mkDefault 4;
         "pm.max_requests" = lib.mkDefault 500;
-      }
-      // cfg.poolConfig;
+      } // cfg.poolConfig;
     };
 
     systemd.services.firefly-iii-setup = {
       after = [
-        "postgresql.target"
+        "postgresql.service"
         "mysql.service"
       ];
       requiredBy = [ "phpfpm-firefly-iii.service" ];
@@ -317,8 +316,7 @@ in
       serviceConfig = {
         ExecStart = firefly-iii-maintenance;
         RemainAfterExit = true;
-      }
-      // commonServiceConfig;
+      } // commonServiceConfig;
       unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
       restartTriggers = [ cfg.package ];
       partOf = [ "phpfpm-firefly-iii.service" ];
@@ -327,15 +325,14 @@ in
     systemd.services.firefly-iii-cron = {
       after = [
         "firefly-iii-setup.service"
-        "postgresql.target"
+        "postgresql.service"
         "mysql.service"
       ];
       wants = [ "firefly-iii-setup.service" ];
       description = "Daily Firefly III cron job";
       serviceConfig = {
         ExecStart = "${artisan} firefly-iii:cron";
-      }
-      // commonServiceConfig;
+      } // commonServiceConfig;
     };
 
     systemd.timers.firefly-iii-cron = {

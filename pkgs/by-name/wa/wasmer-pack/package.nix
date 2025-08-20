@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +17,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+wqgYkdkuhPFkJBdQLnUKAGmUfGBU9mBfMRNBFmiT4E=";
   };
 
-  cargoHash = "sha256-PZudXmdPz6fG7NDC/yN7qG+RQFSzNynXo6SpYJEku9A=";
+  cargoHash = "sha256-nyhjwEZyT8IEb0pTbou/EtN47gehge3fUCQVPs2TkIY=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   cargoBuildFlags = [ "-p=wasmer-pack-cli" ];
 

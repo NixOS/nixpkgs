@@ -1,70 +1,71 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
   nix-update-script,
+  rustPlatform,
   vimUtils,
 }:
 let
-  version = "2.2.7";
+  version = "0-unstable-2024-12-17";
   src = fetchFromGitHub {
     owner = "vyfor";
     repo = "cord.nvim";
-    tag = "v${version}";
-    hash = "sha256-SONErPOIaRltx51+GCsGtR0FDSWp/36x3lDbYLSMxXM=";
+    rev = "c82ab475e7bb198d6fac20833a3468de1a1d14d0";
+    hash = "sha256-GVy8q9Fxb3mzx6mUQyIMumjnwZ7W08dPz1O3ckzVvdE=";
   };
-  cord-server = rustPlatform.buildRustPackage {
-    pname = "cord";
-    inherit src version;
+  extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
+  cord-nvim-rust = rustPlatform.buildRustPackage {
+    pname = "cord.nvim-rust";
+    inherit version src;
 
-    # The version in .github/server-version.txt differs from the one in Cargo.toml
-    postPatch = ''
-      substituteInPlace .github/server-version.txt \
-        --replace-fail "2.2.6" "${version}"
-    '';
+    cargoHash = "sha256-unE600Uo8fXaFV0UWRhBenhQaXftDH7K+HyQ/9xo7JY=";
 
-    cargoHash = "sha256-14u3rhpDYNKZ4YLoGp6OPeeXDo3EzGYO3yhE9BkDSC0=";
-
-    # cord depends on nightly features
-    RUSTC_BOOTSTRAP = 1;
-
-    nativeInstallCheckInputs = [
-      versionCheckHook
-    ];
-    versionCheckProgramArg = "--version";
-    doInstallCheck = false;
-
-    meta.mainProgram = "cord";
+    installPhase =
+      let
+        cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
+      in
+      ''
+        install -D target/${cargoTarget}/release/libcord.${extension} $out/lib/cord.${extension}
+      '';
   };
 in
 vimUtils.buildVimPlugin {
   pname = "cord.nvim";
   inherit version src;
 
-  # Patch the logic used to find the path to the cord server
-  # This still lets the user set config.advanced.server.executable_path
-  # https://github.com/vyfor/cord.nvim/blob/v2.2.3/lua/cord/server/fs/init.lua#L10-L15
-  postPatch = ''
-    substituteInPlace lua/cord/server/fs/init.lua \
-      --replace-fail \
-        "or M.get_data_path()" \
-        "or '${cord-server}'"
+  nativeBuildInputs = [
+    cord-nvim-rust
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    install -D ${cord-nvim-rust}/lib/cord.${extension} cord.${extension}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D cord $out/lua/cord.${extension}
+
+    runHook postInstall
   '';
 
   passthru = {
     updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.cord-nvim.cord-nvim-rust";
     };
 
     # needed for the update script
-    inherit cord-server;
+    inherit cord-nvim-rust;
   };
 
   meta = {
     homepage = "https://github.com/vyfor/cord.nvim";
     license = lib.licenses.asl20;
-    changelog = "https://github.com/vyfor/cord.nvim/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

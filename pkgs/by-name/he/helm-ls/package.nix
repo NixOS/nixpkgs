@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "helm-ls";
-  version = "0.4.1";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
-    hash = "sha256-z+gSD7kcDxgJPoYQ7HjokJONjgAAuIIkg1VGyV3v01k=";
+    hash = "sha256-pf/gC0jIrJUfU//uj+CGkUsNDVFeS6Wm4kx3Di9wpVI=";
   };
 
-  vendorHash = "sha256-w/BWPbpSYum0SU8PJj76XiLUjTWO4zNQY+khuLRK0O8=";
+  vendorHash = "sha256-VAxmMDZIbbcGHoRL06oqWkDnWZBuweKyoCLSqItWHyg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,12 +41,12 @@ buildGoModule rec {
     command = "helm_ls version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Language server for Helm";
     changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${version}";
     homepage = "https://github.com/mrjosh/helm-ls";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stehessel ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ stehessel ];
     mainProgram = "helm_ls";
   };
 }

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  gitMinimal,
+  git,
   pytestCheckHook,
   setuptools,
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    gitMinimal
+    git
     setuptools
   ];
 

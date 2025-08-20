@@ -1,21 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
+{ lib
+, fetchFromGitHub
+, buildGoModule
 }:
 
 buildGoModule rec {
   pname = "bee";
-  version = "2.6.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
     rev = "v${version}";
-    hash = "sha256-Yz23iVYGZ4PS1jbV5zFaCEsQOoAbHBpePml0zp5GSkQ=";
+    hash = "sha256-/fyonUp8LxZrnvIk06DnacHlKgSLjIjirGr7MEVU9nc=";
   };
 
-  vendorHash = "sha256-0czsloD2EhSWKQbj7NJ4IqGgKM9+Vp8gSIhOKWg/onA=";
+  vendorHash = "sha256-kxfdreEGRY9NHxpGwgvdeYBg0m+itEhy7ih1JSD2E44=";
 
   subPackages = [ "cmd/bee" ];
 

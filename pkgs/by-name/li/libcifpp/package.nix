@@ -1,25 +1,26 @@
-{
-  lib,
-  stdenv,
-  boost,
-  cmake,
-  fetchFromGitHub,
-  eigen,
-  zlib,
+{ lib
+, stdenv
+, boost
+, cmake
+, fetchFromGitHub
+, eigen
+, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcifpp";
-  version = "8.0.1";
+  version = "7.0.8";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "libcifpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cfyou+R0VrAfYM8ez5myZkDKO5VfB9WAQF+amy3oRzU=";
+    hash = "sha256-PD811D/n++PM45H/BatlLiMaIeUEiisLU/bGhiUhPU0=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   cmakeFlags = [
     # disable network access
@@ -37,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/libcifpp
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Manipulate mmCIF and PDB files";
     homepage = "https://github.com/PDB-REDO/libcifpp";
     changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
   };
 })

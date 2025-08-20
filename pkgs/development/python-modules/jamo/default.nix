@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Hangul syllable decomposition and synthesis using jamo";
     homepage = "https://github.com/JDongian/python-jamo";
     license = licenses.asl20;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

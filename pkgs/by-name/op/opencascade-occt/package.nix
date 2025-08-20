@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  ninja,
-  rapidjson,
-  tcl,
-  tk,
-  libGL,
-  libGLU,
-  libXext,
-  libXmu,
-  libXi,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, ninja
+, tcl
+, tk
+, libGL
+, libGLU
+, libXext
+, libXmu
+, libXi
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencascade-occt";
   version = "7.8.1";
-  commit = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
+  commit = "V${builtins.replaceStrings ["."] ["_"] version}";
 
   src = fetchurl {
     name = "occt-${commit}.tar.gz";
@@ -48,19 +47,17 @@ stdenv.mkDerivation rec {
     libXext
     libXmu
     libXi
-    rapidjson
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
-  cmakeFlags = [ "-DUSE_RAPIDJSON=ON" ];
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = "https://www.opencascade.org/";
-    license = licenses.lgpl21; # essentially...
+    license = licenses.lgpl21;  # essentially...
     # The special exception defined in the file OCCT_LGPL_EXCEPTION.txt
     # are basically about making the license a little less share-alike.
-    maintainers = with maintainers; [ amiloradovsky ];
+    maintainers = with maintainers; [ amiloradovsky gebner ];
     platforms = platforms.all;
   };
 

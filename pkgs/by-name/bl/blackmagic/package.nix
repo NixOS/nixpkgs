@@ -2,120 +2,62 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gcc-arm-embedded-13,
+  gcc-arm-embedded,
   pkg-config,
-  meson,
-  ninja,
+  python3,
   hidapi,
   libftdi1,
   libusb1,
-  libgpiod_1,
-  versionCheckHook,
-  udevCheckHook,
 }:
-let
-  libopencm3Src = fetchFromGitHub {
-    owner = "libopencm3";
-    repo = "libopencm3";
-    rev = "8a96a9d95a8e5c187a53652540b25a8f4d73a432";
-    hash = "sha256-PylP95hpPeg3rqfelHW9qz+pi/qOP60RfvkurxbkWDs=";
-  };
 
-  ctxlinkWinc1500Src = fetchFromGitHub {
-    owner = "sidprice";
-    repo = "ctxlink_winc1500";
-    rev = "debeab9516e33622439f727a68bddabcdf52c528";
-    hash = "sha256-IWLIJu2XuwsnP8/2C9uj09EBU2VtwTke3XXbc3NyZt4=";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "blackmagic";
-  version = "2.0.0";
+  version = "1.8.2";
   # `git describe --always`
   firmwareVersion = "v${version}";
 
   src = fetchFromGitHub {
-    owner = "blackmagic-debug";
+    owner = "blacksphere";
     repo = "blackmagic";
     rev = firmwareVersion;
-    hash = "sha256-JbPeN0seSkxV2uZ8BvsvjDUBMOyJu2BxqMgNkhLOiFI=";
+    hash = "sha256-NGzoohmpVwGOncr9AvHYANMf/oEskjmTXYj/Kdx2RwM=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded-13 # fails to build with 14
+    gcc-arm-embedded
     pkg-config
-    meson
-    ninja
-    udevCheckHook
+    python3
   ];
 
   buildInputs = [
     hidapi
     libftdi1
     libusb1
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
+  ];
 
   strictDeps = true;
 
-  postUnpack = ''
-    mkdir -p $sourceRoot/deps/libopencm3
-    cp -r ${libopencm3Src}/* $sourceRoot/deps/libopencm3/
+  postPatch = ''
+    # Prevent calling out to `git' to generate a version number:
+    substituteInPlace src/Makefile \
+      --replace '$(shell git describe --always --dirty)' '${firmwareVersion}'
 
-    mkdir -p $sourceRoot/deps/winc1500
-    cp -r ${ctxlinkWinc1500Src}/* $sourceRoot/deps/winc1500/
+    # Fix scripts that generate headers:
+    for f in $(find scripts libopencm3/scripts -type f); do
+      patchShebangs "$f"
+    done
   '';
 
   buildPhase = ''
     runHook preBuild
-
-    echo "Building host cli"
-    meson compile -C .
-
-    echo "Building probe firmware"
-    pushd ..
-    for cf in cross-file/*.ini; do
-      target=$(basename "''${cf%.ini}")
-
-      if [ "$target" = "arm-none-eabi" ]; then
-        echo "Skipping arm-none-eabi target"
-        continue
-      fi
-
-      echo "Building target: $target"
-      mkdir -p "build/firmware/$target"
-      meson setup "build/firmware/$target" --cross-file "$cf"
-      meson compile -C "build/firmware/$target"
-    done
-    popd
-
+    ${stdenv.shell} ${./helper.sh}
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  dontInstall = true;
 
-    echo "Installing host cli"
-    install -Dm555 blackmagic $out/bin/blackmagic
-
-    echo "Installing probe firmware"
-    for targetDir in firmware/*; do
-      target=$(basename "$targetDir")
-      echo "Installing firmware for target: $target"
-      for f in $targetDir/*.{bin,elf}; do
-        install -Dm444 $f $out/firmware/$target/$(basename "$f")
-      done
-    done
-
-    echo "Installing udev rules"
-    install -Dm444 ../driver/99-blackmagic-plugdev.rules $out/lib/udev/rules.d/99-blackmagic-plugdev.rules
-
-    runHook postInstall
-  '';
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--help";
-  doInstallCheck = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "In-application debugger for ARM Cortex microcontrollers";
@@ -136,7 +78,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       pjones
       sorki
-      carlossless
     ];
     platforms = platforms.unix;
   };

@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zodbpickle,
+  fetchPypi,
+  isPy27,
   zope-interface,
   zope-location,
   zope-schema,
@@ -11,31 +10,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope-copy";
-  version = "5.0";
-  pyproject = true;
+  pname = "zope.copy";
+  version = "4.3";
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.copy";
-    tag = version;
-    hash = "sha256-uQUvfZGrMvtClXa8tLKZFYehbcBIRx7WQnumUrdQjIk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-epg2yjqX9m1WGzYPeGUBKGif4JNAddzg75ECe9xPOlc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools < 74" "setuptools"
-  '';
+  propagatedBuildInputs = [ zope-interface ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
-    zodbpickle
-    zope-interface
-  ];
-
-  pythonImportsCheck = [ "zope.copy" ];
-
+  doCheck = !isPy27; # namespace conflicts
   nativeCheckInputs = [
     unittestCheckHook
     zope-location
@@ -47,13 +32,7 @@ buildPythonPackage rec {
     "src/zope/copy"
   ];
 
-  pythonNamespaces = [ "zope" ];
-
   meta = {
-    description = "Pluggable object copying mechanism";
-    homepage = "https://github.com/zopefoundation/zope.copy";
-    changelog = "https://github.com/zopefoundation/zope.copy/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

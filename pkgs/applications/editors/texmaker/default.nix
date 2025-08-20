@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "6.0.1";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/texmaker-${version}.tar.bz2";
-    hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
+    hash = "sha256-l3zlgOJcGrbgvD2hA74LQ+v2C4zg0nJzEE/df1hhd/w=";
   };
 
   buildInputs = [

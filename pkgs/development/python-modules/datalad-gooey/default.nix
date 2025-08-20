@@ -3,7 +3,9 @@
   lib,
   git,
   fetchFromGitHub,
+  darwin,
   setuptools,
+  stdenv,
   git-annex,
   pyside6,
   pyqtdarktheme,
@@ -35,7 +37,7 @@ buildPythonPackage {
     datalad-next
     outdated
     datalad
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppleScriptKit ];
 
   pythonRemoveDeps = [ "applescript" ];
 

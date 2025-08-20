@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchgit,
   pkg-config,
   git,
   libmicrohttpd,
@@ -11,22 +11,15 @@ stdenv.mkDerivation rec {
   pname = "fileshare";
   version = "0.2.4";
 
-  src = fetchFromGitea {
-    domain = "git.tkolb.de";
-    owner = "Public";
-    repo = "fileshare";
+  src = fetchgit {
+    url = "https://git.tkolb.de/Public/fileshare.git";
     rev = "v${version}";
-    sha256 = "sha256-00MxPivZngQ2I7Hopz2MipJFnbvSZU0HF2wZucmEWQ4=";
+    sha256 = "03jrhk4vj6bc2w3lsrfjpfflb4laihysgs5i4cv097nr5cz32hyk";
   };
 
   postPatch = ''
     sed -i 's,$(shell git rev-parse --short HEAD),/${version},g' Makefile
-    substituteInPlace Makefile \
-      --replace-fail pkg-config "${stdenv.cc.targetPrefix}pkg-config" \
-      --replace-fail gcc "${stdenv.cc.targetPrefix}cc"
   '';
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [
     pkg-config

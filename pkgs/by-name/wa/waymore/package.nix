@@ -9,7 +9,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "waymore";
   version = "4.7";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
@@ -26,11 +25,6 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  pythonRemoveDeps = [
-    # python already provides urllib.parse
-    "urlparse3"
-  ];
-
   dependencies = with python3Packages; [
     requests
     termcolor
@@ -39,8 +33,6 @@ python3Packages.buildPythonApplication rec {
     uritools
     tldextract
   ];
-
-  pythonImportsCheck = [ "waymore.waymore" ];
 
   passthru.tests.version = testers.testVersion {
     package = waymore;

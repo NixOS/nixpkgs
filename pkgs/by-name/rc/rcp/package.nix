@@ -3,20 +3,28 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.17.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-mFFMxGu/r8xtfMkpDW2Rk/oTWQcS9oK6ngoRKCc+STo=";
+    hash = "sha256-gFkrUqG3GXPAg9Zqv7Wr3axQ30axYGXw8bo+P1kmSJM=";
   };
 
-  cargoHash = "sha256-2S3bygSu9ouT/RYCmafFGvFHHFJXVryb5E3PMmcZs0U=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      IOKit
+    ]
+  );
+
+  cargoHash = "sha256-loS55mQUVbIm+5VcQnPf6olERNTm3dbnQu5SPXe6a8I=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -25,15 +33,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=copy::copy_tests::check_default_mode"
   ];
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/wykurz/rcp/releases/tag/v${version}";
     description = "Tools to efficiently copy, remove and link large filesets";
     homepage = "https://github.com/wykurz/rcp";
-    license = with lib.licenses; [ mit ];
+    license = with licenses; [ mit ];
     mainProgram = "rcp";
-    maintainers = with lib.maintainers; [ wykurz ];
-    # Building procfs on an for a unsupported platform. Currently only linux and android are supported
-    # (Your current target_os is macos)
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ wykurz ];
+    # = note: Undefined symbols for architecture x86_64: "_utimensat"
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

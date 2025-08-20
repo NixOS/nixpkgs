@@ -45,8 +45,7 @@ else
     buildInputs = [
       topkg
       uutf
-    ]
-    ++ lib.optional cmdlinerSupport cmdliner;
+    ] ++ lib.optional cmdlinerSupport cmdliner;
 
     strictDeps = true;
 

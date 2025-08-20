@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   runtimeShell,
   buildPackages,
   gettext,
@@ -19,7 +18,6 @@
   net-snmp,
   curl,
   systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libxml2,
   poppler,
   gawk,
@@ -30,7 +28,7 @@
   libtool,
   autoconf-archive,
 
-  # List of { src name backend } attribute sets - see installFirmware below:
+  # List of { src name backend } attibute sets - see installFirmware below:
   extraFirmware ? [ ],
 
   # For backwards compatibility with older setups; use extraFirmware instead:
@@ -44,23 +42,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sane-backends";
-  version = "1.4.0";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "sane-project";
     repo = "backends";
     rev = "refs/tags/${version}";
-    hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
+    hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
   };
-
-  # Fix hangs in tests, hopefully
-  # FIXME: remove in next release
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/sane-project/backends/-/commit/8acc267d5f4049d8438456821137ae56e91baea9.patch";
-      hash = "sha256-IyupDeH1MPvEBnGaUzBbCu106Gp7zXxlPGFAaiiINQI=";
-    })
-  ];
 
   postPatch = ''
     # Do not create lock dir in install phase
@@ -105,34 +94,32 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    avahi
-    libgphoto2
-    libjpeg
-    libpng
-    libtiff
-    libusb1
-    curl
-    libxml2
-    poppler
-    gawk
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libieee1284
-    libv4l
-    net-snmp
-  ]
-  ++ lib.optionals withSystemd [
-    systemd
-  ];
+  buildInputs =
+    [
+      avahi
+      libgphoto2
+      libjpeg
+      libpng
+      libtiff
+      libusb1
+      curl
+      libxml2
+      poppler
+      gawk
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libieee1284
+      libv4l
+      net-snmp
+      systemd
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-lockdir=/var/lock/sane"
-  ]
-  ++ lib.optional (avahi != null) "--with-avahi"
-  ++ lib.optional (libusb1 != null) "--with-usb";
+  configureFlags =
+    [ "--with-lockdir=/var/lock/sane" ]
+    ++ lib.optional (avahi != null) "--with-avahi"
+    ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
@@ -187,8 +174,6 @@ stdenv.mkDerivation rec {
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
-
-  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) sane;

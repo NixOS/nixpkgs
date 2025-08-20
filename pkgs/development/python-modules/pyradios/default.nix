@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyradios";
-  version = "2.1.1";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FRAd1M8JZIsogLa/W78IQddMxG0Z8tAP+IiVtHU9fp4=";
+    hash = "sha256-XTpw8bgFZo35PJngr9oweU6fY3KAphJsrEhkKzWHLIA=";
   };
 
   propagatedBuildInputs = [

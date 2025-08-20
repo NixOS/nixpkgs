@@ -13,7 +13,6 @@
   glew,
   libGLU,
   libGL,
-  libX11,
   boost,
   glm,
   tinyxml,
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     SDL2_image
     libGLU
     libGL
-    libX11
     boost
     glm
     freetype

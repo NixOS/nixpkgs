@@ -1,6 +1,6 @@
 { alephone, fetchurl }:
 
-alephone.makeWrapper {
+alephone.makeWrapper rec {
   pname = "pathways-into-darkness";
   desktopName = "Pathways-Into-Darkness";
   version = "1.1.1";

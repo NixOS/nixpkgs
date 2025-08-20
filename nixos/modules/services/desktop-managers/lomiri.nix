@@ -49,22 +49,6 @@ in
         ];
       };
 
-      # Override GSettings defaults
-      programs.dconf = {
-        enable = true;
-        profiles.user.databases = [
-          {
-            settings = {
-              "com/lomiri/shell/launcher" = {
-                logo-picture-uri = "file://${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
-                home-button-background-color = "#5277C3";
-              };
-            };
-            lockAll = true;
-          }
-        ];
-      };
-
       fonts.packages = with pkgs; [
         ubuntu-classic # Ubuntu is default font
       ];
@@ -78,11 +62,9 @@ in
         packages = (
           with pkgs;
           [
+            ayatana-indicator-datetime # Clock
             ayatana-indicator-session # Controls for shutting down etc
           ]
-          ++ (with lomiri; [
-            lomiri-indicator-datetime # Clock
-          ])
         );
       };
     })
@@ -104,7 +86,6 @@ in
             libusermetrics
             lomiri
             lomiri-calculator-app
-            lomiri-calendar-app
             lomiri-camera-app
             lomiri-clock-app
             lomiri-content-hub
@@ -114,19 +95,18 @@ in
             lomiri-gallery-app
             lomiri-history-service
             lomiri-mediaplayer-app
-            lomiri-music-app
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
             lomiri-session # wrappers to properly launch the session
             lomiri-sounds
             lomiri-system-settings
-            lomiri-telephony-service
             lomiri-terminal-app
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
             morph-browser
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
+            telephony-service
             teleports
           ]);
       };
@@ -148,11 +128,12 @@ in
         lomiri-download-manager
       ];
 
+      # Copy-pasted basic stuff
+      hardware.graphics.enable = lib.mkDefault true;
+      fonts.enableDefaultPackages = lib.mkDefault true;
+      programs.dconf.enable = lib.mkDefault true;
+
       services.accounts-daemon.enable = true;
-      services.udisks2.enable = true;
-      services.upower.enable = true;
-      services.geoclue2.enable = true;
-      services.telepathy.enable = true;
 
       services.ayatana-indicators = {
         enable = true;
@@ -171,10 +152,14 @@ in
           )
           ++ (
             with pkgs.lomiri;
-            [ lomiri-telephony-service ]
+            [ telephony-service ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };
+
+      services.udisks2.enable = true;
+      services.upower.enable = true;
+      services.geoclue2.enable = true;
 
       services.gnome.evolution-data-server = {
         enable = true;
@@ -182,6 +167,8 @@ in
           # TODO: lomiri.address-book-service
         ];
       };
+
+      services.telepathy.enable = true;
 
       services.displayManager = {
         defaultSession = lib.mkDefault "lomiri";
@@ -211,70 +198,53 @@ in
         "/share/sounds"
       ];
 
-      systemd.user.services =
-        let
-          lomiriService = "lomiri.service";
-          lomiriServiceNames = [
-            lomiriService
+      systemd.user.services = {
+        # Unconditionally run service that collects system-installed URL handlers before LUD
+        # TODO also run user-installed one?
+        "lomiri-url-dispatcher-update-system-dir" = {
+          description = "Lomiri URL dispatcher system directory updater";
+          wantedBy = [ "lomiri-url-dispatcher.service" ];
+          before = [ "lomiri-url-dispatcher.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.lomiri.lomiri-url-dispatcher}/libexec/lomiri-url-dispatcher/lomiri-update-directory /run/current-system/sw/share/lomiri-url-dispatcher/urls/";
+          };
+        };
+
+        "lomiri-polkit-agent" = rec {
+          description = "Lomiri Polkit agent";
+          wantedBy = [
+            "lomiri.service"
             "lomiri-full-greeter.service"
             "lomiri-full-shell.service"
             "lomiri-greeter.service"
             "lomiri-shell.service"
           ];
-        in
-        {
-          # Unconditionally run service that collects system-installed URL handlers before LUD
-          # TODO also run user-installed one?
-          "lomiri-url-dispatcher-update-system-dir" = {
-            description = "Lomiri URL dispatcher system directory updater";
-            wantedBy = [ "lomiri-url-dispatcher.service" ];
-            before = [ "lomiri-url-dispatcher.service" ];
-            serviceConfig = {
-              Type = "oneshot";
-              ExecStart = "${pkgs.lomiri.lomiri-url-dispatcher}/libexec/lomiri-url-dispatcher/lomiri-update-directory /run/current-system/sw/share/lomiri-url-dispatcher/urls/";
-            };
-          };
-
-          "lomiri-polkit-agent" = {
-            description = "Lomiri Polkit agent";
-            wantedBy = [ lomiriService ];
-            after = [ lomiriService ];
-            partOf = [ lomiriService ];
-            serviceConfig = {
-              Type = "simple";
-              Restart = "always";
-              ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
-            };
-          };
-
-          "mediascanner-2.0" = {
-            description = "Media Scanner";
-            wantedBy = lomiriServiceNames;
-            before = lomiriServiceNames;
-            partOf = lomiriServiceNames;
-            serviceConfig = {
-              Type = "dbus";
-              BusName = "com.lomiri.MediaScanner2.Daemon";
-              Restart = "on-failure";
-              ExecStart = "${lib.getExe pkgs.lomiri.mediascanner2}";
-            };
+          after = [ "graphical-session.target" ];
+          partOf = wantedBy;
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
           };
         };
+      };
 
       systemd.services = {
         "dbus-com.lomiri.UserMetrics" = {
-          serviceConfig = {
-            Type = "dbus";
-            BusName = "com.lomiri.UserMetrics";
-            User = "usermetrics";
-            StandardOutput = "syslog";
-            SyslogIdentifier = "com.lomiri.UserMetrics";
-            ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
-          }
-          // lib.optionalAttrs (!config.security.apparmor.enable) {
-            # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
-            Environment = "USERMETRICS_NO_AUTH=1";
-          };
+          serviceConfig =
+            {
+              Type = "dbus";
+              BusName = "com.lomiri.UserMetrics";
+              User = "usermetrics";
+              StandardOutput = "syslog";
+              SyslogIdentifier = "com.lomiri.UserMetrics";
+              ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
+            }
+            // lib.optionalAttrs (!config.security.apparmor.enable) {
+              # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
+              Environment = "USERMETRICS_NO_AUTH=1";
+            };
         };
       };
 

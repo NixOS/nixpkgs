@@ -2,15 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   setuptools,
-
-  # dependencies
+  wheel,
   jinja2,
   jupyterhub,
-
-  # tests
+  pythonOlder,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -21,6 +17,8 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "batchspawner";
@@ -28,17 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-Z7kB8b7s11wokTachLI/N+bdUV+FfCRTemL1KYQpzio=";
   };
 
-  # When using pytest-asyncio>=0.24, jupyterhub no longer re-defines the event_loop function in its
-  # conftest.py, so it cannot be imported from there.
-  postPatch = ''
-    substituteInPlace batchspawner/tests/conftest.py \
-      --replace-fail \
-        "from jupyterhub.tests.conftest import db, event_loop  # noqa" \
-        "from jupyterhub.tests.conftest import db"
-  '';
-
   build-system = [
     setuptools
+    wheel
   ];
 
   dependencies = [
@@ -54,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "batchspawner" ];
 
-  meta = {
+  meta = with lib; {
     description = "Spawner for Jupyterhub to spawn notebooks using batch resource managers";
     mainProgram = "batchspawner-singleuser";
     homepage = "https://github.com/jupyterhub/batchspawner";
     changelog = "https://github.com/jupyterhub/batchspawner/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.6.1";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     tag = "v${version}";
-    hash = "sha256-CfAgN5vxHbVyDSeP0KR1QFnL6gDQsd46Q0zosr0ALqM=";
+    hash = "sha256-rKa441hiO4M/sC6wxU9yeCu6IQJMZroyi7bad/j6brw=";
   };
 
   build-system = [
@@ -39,8 +39,7 @@ buildPythonPackage rec {
     requests
     typing-extensions
     urllib3
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   # Test suite makes REST calls against github.com
   doCheck = false;
@@ -50,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
-    changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
+    changelog = "https://github.com/PyGithub/PyGithub/raw/v${version}/doc/changes.rst";
     license = licenses.lgpl3Plus;
     maintainers = [ ];
   };

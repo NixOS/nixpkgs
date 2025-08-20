@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Make PyGObject’s gi library available.
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
@@ -91,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

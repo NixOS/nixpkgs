@@ -24,11 +24,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nsq.io/";
     description = "Realtime distributed messaging platform";
     changelog = "https://github.com/nsqio/nsq/raw/v${version}/ChangeLog.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blakesmith ];
+    license = licenses.mit;
   };
 }

@@ -1,31 +1,32 @@
 {
   lib,
   buildPythonPackage,
+  darwin,
   fetchFromGitHub,
   pythonOlder,
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rubicon-objc";
-  version = "0.5.0";
+  version = "0.4.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "rubicon-objc";
-    tag = "v${version}";
-    hash = "sha256-yEsW8xHW004O7aDU4/mlbfTuF2H5UcpbNR9NACxQv3M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jQ/q2yIXJp+X4ajcbEqxXuYtYeyZJ1xTBjSlzqLuRpg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.7.0" "setuptools" \
-      --replace-fail "setuptools_scm==8.1.0" "setuptools_scm"
+      --replace-fail "setuptools==69.5.1" "setuptools" \
+      --replace-fail "setuptools_scm==8.0.4" "setuptools_scm"
   '';
 
   build-system = [
@@ -37,7 +38,9 @@ buildPythonPackage rec {
     make -C tests/objc
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  checkInputs = [ darwin.apple_sdk.frameworks.Foundation ];
 
   pythonImportsCheck = [ "rubicon.objc" ];
 
@@ -46,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bridge interface between Python and Objective-C";
     homepage = "https://github.com/beeware/rubicon-objc/";
-    changelog = "https://github.com/beeware/rubicon-objc/releases/tag/${src.tag}";
+    changelog = "https://github.com/beeware/rubicon-objc/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.darwin;

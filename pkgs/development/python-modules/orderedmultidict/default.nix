@@ -3,33 +3,29 @@
   buildPythonPackage,
   fetchPypi,
   flake8,
-  pytestCheckHook,
-  setuptools,
   six,
+  pythonOlder,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "orderedmultidict";
   version = "1.0.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BAcLu16HKRzJv6Ud9BNnf68hQcc8YdKl97Jr6jzYgq0=";
+    sha256 = "1bc2v0yflsxjyyjx4q9wqx0j3bvzcw9z87d5pz4iqac7bsxhn1q4";
   };
 
-  build-system = [ setuptools ];
+  nativeCheckInputs = [ flake8 ];
 
-  dependencies = [ six ];
+  propagatedBuildInputs = [ six ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  pythonImportsCheck = [ "orderedmultidict" ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  meta = {
+  meta = with lib; {
     description = "Ordered Multivalue Dictionary";
     homepage = "https://github.com/gruns/orderedmultidict";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ vanzef ];
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ vanzef ];
   };
 }

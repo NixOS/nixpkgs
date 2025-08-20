@@ -51,12 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Mobile-friendly Gtk frontend for password-store";
     mainProgram = "caerbannog";
     homepage = "https://sr.ht/~craftyguy/caerbannog/";
     changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

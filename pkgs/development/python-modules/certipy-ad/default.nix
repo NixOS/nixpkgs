@@ -1,62 +1,57 @@
 {
   lib,
-  argcomplete,
   asn1crypto,
-  beautifulsoup4,
   buildPythonPackage,
   cryptography,
   dnspython,
   dsinternals,
   fetchFromGitHub,
-  httpx,
   impacket,
   ldap3,
   pyasn1,
   pycryptodome,
   pyopenssl,
+  pythonOlder,
   requests,
-  setuptools,
+  requests-ntlm,
   unicrypto,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "5.0.3";
+  version = "4.8.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
     tag = version;
-    hash = "sha256-rS2d7jYHzmb2x6wKJizKrkna2xKrTAGwpSANnmbU16I=";
+    hash = "sha256-Era5iNLJkZIRvN/p3BiD/eDiDQme24G65VSG97tuEOQ=";
   };
 
-  pythonRelaxDeps = [
-    "argcomplete"
-    "cryptography"
-    "pycryptodome"
-    "ldap3"
-    "pyopenssl"
-  ];
+  postPatch = ''
+    # pin does not apply because our ldap3 contains a patch to fix pyasn1 compability
+    substituteInPlace setup.py \
+      --replace "pyasn1==0.4.8" "pyasn1"
+  '';
 
-  pythonRemoveDeps = [ "bs4" ];
+  nativeBuildInputs = [ setuptools ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
-    argcomplete
+  propagatedBuildInputs = [
     asn1crypto
-    beautifulsoup4
     cryptography
     dnspython
     dsinternals
-    httpx
     impacket
     ldap3
     pyasn1
     pycryptodome
     pyopenssl
     requests
+    requests-ntlm
     setuptools
     unicrypto
   ];
@@ -68,10 +63,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
-    homepage = "https://github.com/ly4k/Certipy";
-    changelog = "https://github.com/ly4k/Certipy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
     mainProgram = "certipy";
+    homepage = "https://github.com/ly4k/Certipy";
+    changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

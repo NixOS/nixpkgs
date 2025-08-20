@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  flit-core,
   pytest,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.5.3";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-I1fX33fDldMMDElXck/fzhp16ovJ6yMIwP/lb2KscMo=";
+    hash = "sha256-UiTvzvBZv38M2iU/jQ9icEtIGf9IyT9RxnWupqAU9lA=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ flit-core ];
 
   buildInputs = [ pytest ];
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_check" ];
 
   meta = with lib; {
-    description = "Pytest plugin allowing multiple failures per test";
+    description = "pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
     changelog = "https://github.com/okken/pytest-check/releases/tag/${version}";
     license = licenses.mit;

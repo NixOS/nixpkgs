@@ -1,10 +1,11 @@
 {
+  check_interfaces,
   fetchurl,
   lib,
   net-snmp,
   nix-update-script,
   stdenv,
-  versionCheckHook,
+  testers,
 }:
 stdenv.mkDerivation rec {
   pname = "check_interfaces";
@@ -26,11 +27,11 @@ stdenv.mkDerivation rec {
     rm --recursive $out/include
   '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = check_interfaces;
+    };
   };
 
   meta = {

@@ -15,7 +15,7 @@
   cinnamon-desktop,
   cinnamon-session,
   cinnamon-settings-daemon,
-  cinnamon,
+  cinnamon-common,
   bulky,
 }:
 
@@ -35,12 +35,11 @@ let
     cinnamon-desktop
     cinnamon-session
     cinnamon-settings-daemon
-    cinnamon
+    cinnamon-common
     gnome-terminal
     gsettings-desktop-schemas
     gtk3
-  ]
-  ++ extraGSettingsOverridePackages;
+  ] ++ extraGSettingsOverridePackages;
 
   gsettingsOverrides = ''
     # Use Fedora's default to make text readable and

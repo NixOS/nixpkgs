@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       of the desktop environment spectrum.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
 })

@@ -12,7 +12,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-keysign";
   version = "1.3.0";
-  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -22,14 +21,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    gobject-introspection
-  ]
-  ++ (with python3.pkgs; [
-    babel
-    babelgladeextractor
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+      gobject-introspection
+    ]
+    ++ (with python3.pkgs; [
+      babel
+      babelgladeextractor
+    ]);
 
   buildInputs = [
     # TODO: add avahi support
@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
     license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

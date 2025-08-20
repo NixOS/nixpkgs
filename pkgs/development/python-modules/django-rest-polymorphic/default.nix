@@ -11,7 +11,7 @@
   six,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "django-rest-polymorphic";
   version = "0.1.10";
   format = "setuptools";

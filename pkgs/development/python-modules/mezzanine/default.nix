@@ -53,8 +53,7 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
     tzlocal
-  ]
-  ++ bleach.optional-dependencies.css;
+  ] ++ bleach.optional-dependencies.css;
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;

@@ -34,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   # it would use the erroneous tag 3.5.1
-  # nixpkgs-update: no auto update
   passthru.skipBulkUpdate = true;
 
   meta = with lib; {

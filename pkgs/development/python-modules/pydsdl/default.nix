@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "pydsdl/_test.py" ];
+  pytestFlagsArray = [ "pydsdl/_test.py" ];
 
   meta = with lib; {
     description = "Library to process Cyphal DSDL";

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  replaceVars,
+  substituteAll,
   fetchurl,
   meson,
   ninja,
@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Make PyGObject’s gi library available.
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
-    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Python bindings for the Nautilus Extension API";
     homepage = "https://gitlab.gnome.org/GNOME/nautilus-python";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 })

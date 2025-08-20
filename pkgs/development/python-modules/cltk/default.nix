@@ -19,23 +19,24 @@
   scipy,
   spacy,
   stanza,
+  stringcase,
   torch,
   tqdm,
 
   # tests
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 buildPythonPackage rec {
   pname = "cltk";
-  version = "1.5.0";
+  version = "1.3.0";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cltk";
     repo = "cltk";
-    tag = "v${version}";
-    hash = "sha256-aeWbfDVNn6DwW+KFh62n5RBgWp5uSWDv2RHmB27/xI4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/rdv96lnSGN+aJJmPSIan79zoXxnStokFEAjBtCLKy4=";
   };
 
   postPatch = ''
@@ -65,14 +66,18 @@ buildPythonPackage rec {
     scipy
     spacy
     stanza
+    stringcase
     torch
     tqdm
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   # Most of tests fail as they require local files to be present and also internet access
   doCheck = false;

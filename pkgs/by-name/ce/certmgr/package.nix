@@ -1,8 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -18,12 +17,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
 
   passthru.tests = { inherit (nixosTests) certmgr; };
+
 
   meta = with lib; {
     homepage = "https://cfssl.org/";
@@ -31,9 +28,6 @@ buildGoModule rec {
     mainProgram = "certmgr";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = with maintainers; [
-      johanot
-      srhb
-    ];
+    maintainers = with maintainers; [ johanot srhb ];
   };
 }

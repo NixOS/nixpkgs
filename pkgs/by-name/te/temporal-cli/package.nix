@@ -4,21 +4,20 @@
   buildGoModule,
   installShellFiles,
   stdenv,
-  nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "temporal-cli";
-  version = "1.4.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fbaqRjYFDeGuCheg3EIUVh/QMhFzLNUb6MUoc/J51Ko=";
+    rev = "v${version}";
+    hash = "sha256-7wURMdi357w5S4s909PTUZanRzFyWM588DMY7iYWP88=";
   };
 
-  vendorHash = "sha256-dWcf4X8/Wy/TULdT6PbiMaOd1d+haBlnII+6VKazrD4=";
+  vendorHash = "sha256-umGwew8RwewlYJQD1psYSd9bu67cPEiHBJkQRJGjyGY=";
 
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
@@ -37,7 +36,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/temporalio/cli/temporalcli.Version=${finalAttrs.version}"
+    "-X github.com/temporalio/cli/temporalcli.Version=${version}"
   ];
 
   # Tests fail with x86 on macOS Rosetta 2
@@ -56,8 +55,6 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
     homepage = "https://docs.temporal.io/cli";
@@ -65,4 +62,4 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "temporal";
   };
-})
+}

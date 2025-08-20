@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "colanderclchemy";
   version = "0.3.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

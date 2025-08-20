@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "File systems verification utility and library, in likeness of mtree(8)";
     changelog = "https://github.com/vbatts/go-mtree/releases/tag/v${version}";
     homepage = "https://github.com/vbatts/go-mtree";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ phanirithvij ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "gomtree";
   };
 }

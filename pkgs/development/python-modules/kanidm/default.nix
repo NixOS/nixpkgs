@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   pythonImportsCheck = [ "kanidm" ];
 

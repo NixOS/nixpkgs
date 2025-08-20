@@ -18,10 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace manlifter \
-      --replace-fail '/usr/bin/env python2' '/usr/bin/env python3' \
-      --replace-fail 'import thread, threading, Queue' 'import _thread, threading, queue' \
-      --replace-fail 'thread.get_ident' '_thread.get_ident' \
-      --replace-fail 'Queue.Queue' 'queue.Queue'
+      --replace-fail '/usr/bin/env python2' '/usr/bin/env python3'
+    2to3 -w manlifter
   '';
 
   nativeBuildInputs = [

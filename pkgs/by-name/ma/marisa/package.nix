@@ -2,27 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "marisa";
-  version = "0.3.0";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "s-yata";
     repo = "marisa-trie";
-    tag = "v${version}";
-    hash = "sha256-XOXX0NuU+erL/KDAZgBeX+LKO9uSEOyP1/VuMDE5pi0=";
+    rev = "v${version}";
+    sha256 = "1hy8hfksizk1af6kg8z3b9waiz6d5ggd73fiqcvmhfgra36dscyq";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://github.com/s-yata/marisa-trie";
-    changelog = "https://github.com/s-yata/marisa-trie/releases/tag/${src.tag}";
     description = "Static and space-efficient trie data structure library";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];

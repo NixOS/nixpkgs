@@ -1,20 +1,17 @@
 {
   lib,
-  aiofiles,
   aiohttp,
-  awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.7.3";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,21 +20,16 @@ buildPythonPackage rec {
     owner = "mib1185";
     repo = "py-synologydsm-api";
     tag = "v${version}";
-    hash = "sha256-LaeqAY+8WfoMwrZhwZUEcuafGvv+7reuxEh8zQ7j5S4=";
+    hash = "sha256-CjsSn9kbSOSiia47gDHUbMCgJs3pDJaJfQOwMPP+5WI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiofiles
-    aiohttp
-    awesomeversion
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    syrupy
   ];
 
   pythonImportsCheck = [ "synology_dsm" ];

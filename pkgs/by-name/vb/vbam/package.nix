@@ -13,21 +13,21 @@
   openal,
   pkg-config,
   SDL2,
-  sfml_2,
+  sfml,
   zip,
   zlib,
   wrapGAppsHook3,
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
   version = "2.1.11";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
+    rev = "v${version}";
+    sha256 = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     openal
     SDL2
-    sfml_2
+    sfml
     zip
     zlib
     wxGTK32
@@ -53,16 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_FFMPEG" true)
-    (lib.cmakeBool "ENABLE_LINK" true)
-    (lib.cmakeFeature "SYSCONFDIR" "etc")
-    (lib.cmakeBool "ENABLE_SDL" true)
+    "-DENABLE_FFMPEG='true'"
+    "-DENABLE_LINK='true'"
+    "-DSYSCONFDIR=etc"
+    "-DENABLE_SDL='true'"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Merge of the original Visual Boy Advance forks";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
       lassulus
       netali
     ];
@@ -70,4 +70,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "visualboyadvance-m";
   };
-})
+}

@@ -21,7 +21,7 @@
 }:
 
 let
-  bantorra = buildDunePackage {
+  bantorra = buildDunePackage rec {
     pname = "bantorra";
     version = "unstable-2022-05-08";
     src = fetchFromGitHub {

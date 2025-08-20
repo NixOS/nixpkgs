@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libasn1c";
-  version = "0.9.38";
+  version = "0.9.37";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libasn1c";
     rev = version;
-    hash = "sha256-cnXcUvP6WwHVvpdsIVsMkizlLyg9KMwVj8XYX/nIfic=";
+    hash = "sha256-st5KbAUhNFSJ0DmPFYOnNvDQ8xtTNi4t8DNYvEjt9Ns=";
   };
 
   postPatch = ''

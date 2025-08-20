@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "3.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "crocoddyl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-eUH9fMhuIUp5kuDKNo4B8iJ3JlMIqv7wX6meOpyPTJk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
   };
 
   outputs = [
@@ -32,30 +32,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
-  propagatedBuildInputs = [
-    blas
-    ipopt
-    lapack
-  ]
-  ++ lib.optionals (!pythonSupport) [
-    example-robot-data
-    pinocchio
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.example-robot-data
-    python3Packages.pinocchio
-    python3Packages.scipy
-  ];
+  propagatedBuildInputs =
+    [
+      blas
+      ipopt
+      lapack
+    ]
+    ++ lib.optionals (!pythonSupport) [
+      example-robot-data
+      pinocchio
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.example-robot-data
+      python3Packages.pinocchio
+      python3Packages.scipy
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)

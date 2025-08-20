@@ -1,5 +1,4 @@
 {
-  composefs,
   curl,
   dbus,
   fetchFromGitHub,
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.14";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
-    owner = "rauc";
-    repo = "rauc";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tpynDSCQ8E5DE82BvIJ2lEmwFQQpyYkV9UqjKKlArpw=";
+    sha256 = "sha256-sFOvkr6WbiP99GNAttK9ZmRg+O/hoUQDCnW7vq9s/vo=";
   };
 
   passthru = {
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    composefs
     curl
     dbus
     glib
@@ -55,12 +53,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--buildtype=release"
-    (lib.mesonEnable "composefs" true)
     (lib.mesonOption "systemdunitdir" "${placeholder "out"}/lib/systemd/system")
     (lib.mesonOption "dbusinterfacesdir" "${placeholder "out"}/share/dbus-1/interfaces")
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
-    (lib.mesonOption "systemdcatalogdir" "${placeholder "out"}/lib/systemd/catalog")
   ];
 
   meta = with lib; {

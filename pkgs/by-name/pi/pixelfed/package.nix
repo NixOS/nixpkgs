@@ -1,29 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  php,
-  nixosTests,
-  nix-update-script,
-  dataDir ? "/var/lib/pixelfed",
-  runtimeDir ? "/run/pixelfed",
+{ lib
+, fetchFromGitHub
+, php
+, nixosTests
+, nix-update-script
+, dataDir ? "/var/lib/pixelfed"
+, runtimeDir ? "/run/pixelfed"
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.5";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bPoYEPCWj7vAKDL/P4yjhrfp4HK9sbBh4eK0Co+xaZc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CKjqnxp7p2z/13zfp4HQ1OAmaoUtqBKS6HFm6TV8Jwg=";
   };
 
-  vendorHash = "sha256-nJCxWIrsdGQxdiJe9skHv4AnqUpqZHuqXrl/cQrT9Ps=";
+  vendorHash = "sha256-zjIjGkR9MCnjRho/ViqZ5EbS9MJ7OQ1kkg93jBssuZU=";
 
   postInstall = ''
-    chmod -R u+w $out/share
-    mv "$out/share/php/pixelfed"/* $out
+    mv "$out/share/php/${finalAttrs.pname}"/* $out
     rm -R $out/bootstrap/cache
     # Move static contents for the NixOS module to pick it up, if needed.
     mv $out/bootstrap $out/bootstrap-static
@@ -36,7 +34,7 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests.pixelfed) standard; };
+    tests = { inherit (nixosTests) pixelfed; };
     updateScript = nix-update-script { };
   };
 

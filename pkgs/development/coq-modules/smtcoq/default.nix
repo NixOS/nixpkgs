@@ -3,7 +3,9 @@
   pkgs,
   mkCoqDerivation,
   coq,
+  veriT,
   zchaff,
+  fetchurl,
   cvc5,
   stdlib,
   version ? null,
@@ -75,17 +77,18 @@ mkCoqDerivation {
       }
     ] null;
 
-  propagatedBuildInputs = [
-    cvc5
-    # veriT'  # c.f. comment above
-    zchaff
-    stdlib
-  ]
-  ++ (with coq.ocamlPackages; [
-    findlib
-    num
-    zarith
-  ]);
+  propagatedBuildInputs =
+    [
+      cvc5
+      # veriT'  # c.f. comment above
+      zchaff
+      stdlib
+    ]
+    ++ (with coq.ocamlPackages; [
+      findlib
+      num
+      zarith
+    ]);
   mlPlugin = true;
   nativeBuildInputs = (with pkgs; [ gnumake42 ]) ++ (with coq.ocamlPackages; [ ocamlbuild ]);
 

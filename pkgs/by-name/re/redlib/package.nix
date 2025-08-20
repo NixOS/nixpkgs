@@ -1,27 +1,31 @@
 {
   lib,
+  stdenv,
   cacert,
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
+  darwin,
 }:
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "redlib";
-  version = "0.36.0-unstable-2025-07-21";
+  version = "0.35.1-unstable-2024-11-27";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "3e67694e2b9a4012b259264af5f2b81807dbadf0";
-    hash = "sha256-vFK9DiVANbTKi19DCWdRG8gKKwcyoAcLa1teXCZ9nfE=";
+    rev = "9f6b08cbb2d0f43644a34f5d0210ac32b9add30c";
+    hash = "sha256-lFvlrVFzMk6igH/h/3TZnkl8SooanVyIRYbSyleb2OU=";
   };
 
-  cargoHash = "sha256-FDeENHY6bwwCq6leSoIuCqPI6PCHpEod7KN2grS2gFw=";
+  cargoHash = "sha256-BorE3wcT8eCgIatHyNr3p9ewj7cX8yYer0vPEuBYPj4=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   postInstall = ''
-    install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';
@@ -62,18 +66,18 @@ rustPlatform.buildRustPackage {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  passthru = {
-    tests = nixosTests.redlib;
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.tests = {
+    inherit (nixosTests) redlib;
   };
 
   meta = {
+    changelog = "https://github.com/redlib-org/redlib/releases/tag/v${version}";
     description = "Private front-end for Reddit (Continued fork of Libreddit)";
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
     maintainers = with lib.maintainers; [
-      bpeetz
+      soispha
       Guanran928
     ];
   };

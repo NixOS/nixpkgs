@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "log4jcheck";
-  version = "0-unstable-2021-12-14";
+  version = "unstable-2021-12-14";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "NorthwaveSecurity";
-    repo = "log4jcheck";
+    repo = pname;
     rev = "736f1f4044e8a9b7bf5db515e2d1b819253f0f6d";
     sha256 = "sha256-1al7EMYbE/hFXKV4mYZlkEWTUIKYxgXYU3qBLlczYvs=";
   };
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication {
 
   installPhase = ''
     runHook preInstall
-    install -vD nw_log4jcheck.py $out/bin/log4jcheck
+    install -vD nw_log4jcheck.py $out/bin/${pname}
     runHook postInstall
   '';
 

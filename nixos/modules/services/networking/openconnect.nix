@@ -159,5 +159,5 @@ in
     }) cfg.interfaces;
   };
 
-  meta.maintainers = with maintainers; [ pentane ];
+  meta.maintainers = with maintainers; [ alyaeanyx ];
 }

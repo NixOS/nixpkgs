@@ -2,40 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.23.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
-    owner = "mubeng";
+    owner = "kitabisa";
     repo = "mubeng";
     tag = "v${version}";
-    hash = "sha256-Zd9Cl4sFf1neDHgydxp24k84JKTAkkLB9DKRfTnKHgc=";
+    hash = "sha256-LApviKG6sgIYtosU0xW4lkBH0iB7MGB4bfG9fPI16iQ=";
   };
 
-  vendorHash = "sha256-1YO4NOxHHoSF9waI7x7yRvO4HOrs3qqaQxo3tiCp4t4=";
+  vendorHash = "sha256-Uvxkvj5hodVQ0j05HZdSKammGWy9DxEIBT0VnCW8QuI=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/mubeng/mubeng/common.Version=${version}"
+    "-X=ktbs.dev/mubeng/common.Version=${version}"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
-
-  meta = {
+  meta = with lib; {
     description = "Proxy checker and IP rotator";
-    homepage = "https://github.com/mubeng/mubeng";
-    changelog = "https://github.com/mubeng/mubeng/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    homepage = "https://github.com/kitabisa/mubeng";
+    changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "mubeng";
   };
 }

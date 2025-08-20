@@ -27,16 +27,14 @@ buildOctavePackage rec {
     statistics
   ];
 
-  meta = {
-    homepage = "https://gnu-octave.github.io/packages/optim/";
-    license = with lib.licenses; [
+  meta = with lib; {
+    homepage = "https://octave.sourceforge.io/optim/index.html";
+    license = with licenses; [
       gpl3Plus
       publicDomain
     ];
     # Modified BSD code seems removed
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Non-linear optimization toolkit";
-    # Hasn't been updated since 2022, and fails to build with octave >= 10.1.0
-    broken = true;
   };
 }

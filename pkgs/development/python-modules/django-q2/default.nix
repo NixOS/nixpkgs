@@ -14,19 +14,18 @@
   poetry-core,
   pytest-django,
   pytestCheckHook,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "django-q2";
-  version = "1.7.6";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
     tag = "v${version}";
-    hash = "sha256-L2IrLKszo2UCpeioAwI8c636KwQgNCEJjHUDY2Ctv4A=";
+    hash = "sha256-mp/IZkfT64xW42B1TEO6lSHxvLQbeH4td8vqZH7wUxM=";
   };
 
   postPatch = ''
@@ -66,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_q" ];
 
   preCheck = ''
-    ${pkgs.valkey}/bin/redis-server &
+    ${pkgs.redis}/bin/redis-server &
     REDIS_PID=$!
   '';
 
@@ -82,31 +81,19 @@ buildPythonPackage rec {
   disabledTests = [
     # requires a running mongodb
     "test_mongo"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # fails with an assertion
-    "test_max_rss"
-    "test_recycle"
-    # cannot connect to redis
-    "test_broker"
-    "test_custom"
-    "test_redis"
-    "test_redis_connection"
   ];
 
   disabledTestPaths = [
     "django_q/tests/test_commands.py"
   ];
 
-  pytestFlags = [ "-vv" ];
+  pytestFlagsArray = [ "-vv" ];
 
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
+  meta = with lib; {
     description = "Multiprocessing distributed task queue for Django based on Django-Q";
     homepage = "https://github.com/django-q2/django-q2";
     changelog = "https://github.com/django-q2/django-q2/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

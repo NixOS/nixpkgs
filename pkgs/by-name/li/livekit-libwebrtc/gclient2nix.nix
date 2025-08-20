@@ -8,7 +8,7 @@
   nix-prefetch-git,
   nix,
   coreutils,
-  nixfmt,
+  nixfmt-rfc-style,
   makeWrapper,
 }:
 # Based on https://github.com/milahu/gclient2nix
@@ -19,19 +19,19 @@ let
     nix-prefetch-git
     nix
     coreutils
-    nixfmt
+    nixfmt-rfc-style
   ];
 in
 buildPythonPackage {
   pname = "gclient2nix";
-  version = "0.2.0-unstable-2025-04-04";
+  version = "0.2.0-unstable-2024-12-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WeetHet";
     repo = "gclient2nix";
-    rev = "ec5fff1082cd4fff352e4c57baf9b1a7dbbcc94b";
-    hash = "sha256-BK8GUpuqFOeK5d5wKVFYCfR5f6jCrke/2xxoVlmKpRI=";
+    rev = "bdf5ab79818595be9dcfc655bd6784cf4bcdb863";
+    hash = "sha256-KOXG8E2g30XyZGmM4ZnYPBSybBhHIjOZL8ZXRKYrkZQ=";
   };
 
   build-system = [

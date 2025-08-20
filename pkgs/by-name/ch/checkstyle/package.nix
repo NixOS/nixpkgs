@@ -1,18 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
-  jre,
-}:
+{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "10.26.1";
+  version = "10.21.1";
   pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-5BwkQzcjujEKMOQdpPRJwQWtR8qyrp5r5eBmBqZH28o=";
+    sha256 = "sha256-u8248qMMHRBxWk7VpFripdLQSbcAL3ApLtCQa6TyMJ4=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -28,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Checks Java source against a coding standard";
     mainProgram = "checkstyle";
     longDescription = ''
@@ -38,9 +32,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://checkstyle.org/";
     changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ pSub ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ pSub ];
     platforms = jre.meta.platforms;
   };
 }

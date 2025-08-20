@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.6.3";
+  version = "0.5.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sbidy";
-    repo = "pywizlight";
-    tag = "v${version}";
-    hash = "sha256-rCoWdqvFLSLNBAHeFJ6f9kZpIg4WyE8VJLpmsYl+gJM=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-IkuAYEg5nuUT6zxmuJe6afp4MVWf0+HAnEoAdOrdTvQ=";
   };
 
   propagatedBuildInputs = [ click ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Tests requires network features (e. g., discovery testing)
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "Python connector for WiZ light bulbs";
     mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
-    changelog = "https://github.com/sbidy/pywizlight/releases/tag/${src.tag}";
+    changelog = "https://github.com/sbidy/pywizlight/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

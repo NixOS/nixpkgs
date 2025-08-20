@@ -22,15 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  # Tests are comparing output
-  doCheck = false;
-
-  meta = {
+  meta = with lib; {
     description = "Scrape domain names from SSL certificates of arbitrary hosts";
     homepage = "https://github.com/glebarez/cero";
     changelog = "https://github.com/glebarez/cero/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "cero";
   };
 }

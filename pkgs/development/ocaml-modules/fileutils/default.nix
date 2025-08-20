@@ -10,14 +10,14 @@
 
 buildDunePackage rec {
   pname = "fileutils";
-  version = "0.6.6";
+  version = "0.6.4";
 
   src = fetchurl {
     url = "https://github.com/gildor478/ocaml-fileutils/releases/download/v${version}/fileutils-${version}.tbz";
-    hash = "sha256-eW1XkeK/ezv/IAz1BXp6GHhDnrzXTtDxCIz4Z1bVK+Y=";
+    hash = "sha256-enu2vGo2tuvawrTkap6bENNmxaLUQXpfHWih+7oKRF8=";
   };
 
-  minimalOCamlVersion = "4.14";
+  minimalOCamlVersion = "4.03";
 
   propagatedBuildInputs = [
     seq

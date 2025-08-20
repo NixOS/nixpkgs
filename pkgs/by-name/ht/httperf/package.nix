@@ -6,13 +6,13 @@
   openssl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "httperf";
   version = "0.9.1";
 
   src = fetchFromGitHub {
-    repo = "httperf";
-    owner = "httperf";
+    repo = pname;
+    owner = pname;
     rev = "3209c7f9b15069d4b79079e03bafba5b444569ff";
     sha256 = "0p48z9bcpdjq3nsarl26f0xbxmqgw42k5qmfy8wv5bcrz6b3na42";
   };
@@ -21,14 +21,10 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ openssl ];
 
   configurePhase = ''
-    runHook preConfigure
-
     autoreconf -i
     mkdir -pv build
     cd build
     ../configure
-
-    runHook postConfigure
   '';
 
   installPhase = ''
@@ -37,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "HTTP load generator";
+    description = "Httperf HTTP load generator";
     homepage = "https://github.com/httperf/httperf";
     maintainers = [ ];
     license = licenses.gpl2Plus;

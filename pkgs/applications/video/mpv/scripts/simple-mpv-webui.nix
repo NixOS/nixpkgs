@@ -20,10 +20,6 @@ buildLua rec {
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  postInstall = ''
-    rm -f $out/share/mpv/scripts/webui/setup.cfg
-  '';
-
   scriptPath = ".";
   passthru.scriptName = "webui";
 

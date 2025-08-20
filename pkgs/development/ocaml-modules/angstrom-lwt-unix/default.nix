@@ -5,7 +5,7 @@
   lwt,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "angstrom-lwt-unix";
 
   inherit (angstrom) version src;

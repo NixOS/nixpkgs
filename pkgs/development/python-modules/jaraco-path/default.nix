@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jaraco-path";
-  version = "3.7.2";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.path";
     tag = "v${version}";
-    hash = "sha256-uLkNMhB7aeDJ3fF0Ynjd8MD6+CTKKH8vsB5cH9RPcok=";
+    hash = "sha256-i6FPM4aPfpwLdde1COXZNoKel3sRK8PXnkzy50XvVdw=";
   };
 
   build-system = [ setuptools-scm ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.path/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.path/blob/${src.rev}/NEWS.rst";
     description = "Miscellaneous path functions";
     homepage = "https://github.com/jaraco/jaraco.path";
     license = lib.licenses.mit;

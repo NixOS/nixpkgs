@@ -3,24 +3,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   cctools,
   which,
 }:
 
 buildPythonPackage rec {
   pname = "miniupnpc";
-  version = "2.3.3";
-  pyproject = true;
+  version = "2.2.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7l6Vffgo0vocw2TmDFg9EEOREIiPCGyRggcclqN0sq0=";
+    hash = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -28,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "MiniUPnP client";
+    description = "miniUPnP client";
     homepage = "http://miniupnp.free.fr/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

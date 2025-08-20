@@ -6,6 +6,7 @@
   libxcb,
   libXau,
   libXdmcp,
+  darwin,
   lib,
 }:
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libXau
     libXdmcp
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
   nativeBuildInputs = [
     cmake
     pkg-config

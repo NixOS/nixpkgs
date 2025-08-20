@@ -25,16 +25,16 @@
 
 buildPythonPackage rec {
   pname = "python-troveclient";
-  version = "8.8.0";
+  version = "8.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-troveclient";
     tag = version;
-    hash = "sha256-WBMXSZhkrKlEkVpy56zdBRzspUjUsj0dQ4OR250Fo+s=";
+    hash = "sha256-6JviPG2ikKRqvW/eqPIHMvpV6GjqbaXYHhcOOpaIS4U=";
   };
 
   env.PBR_VERSION = version;
@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Trove API";
     license = lib.licenses.asl20;
     mainProgram = "trove";
-    teams = [ lib.teams.openstack ];
+    maintainers = lib.teams.openstack.members;
   };
 }

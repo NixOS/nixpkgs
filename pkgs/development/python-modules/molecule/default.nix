@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "25.7.0";
+  version = "24.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oljMrwotFaoLSS/Epa1jhouyKeCYRRzZpY+/QBW7pRA=";
+    hash = "sha256-ckP/WOC4FZqiz0ZbqWBdZX8dYUYXJkMHvvWzJRhGev4=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,7 @@ buildPythonPackage rec {
     rich
     yamllint
     wcmatch
-  ]
-  ++ lib.optional withPlugins molecule-plugins;
+  ] ++ lib.optional withPlugins molecule-plugins;
 
   pythonImportsCheck = [ "molecule" ];
 
@@ -68,7 +67,7 @@ buildPythonPackage rec {
       });
 
   meta = with lib; {
-    description = "Aids in the development and testing of Ansible roles";
+    description = "Molecule aids in the development and testing of Ansible roles";
     homepage = "https://github.com/ansible-community/molecule";
     changelog = "https://github.com/ansible/molecule/releases/tag/v${version}";
     license = licenses.mit;

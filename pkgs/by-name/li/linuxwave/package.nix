@@ -3,23 +3,23 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  zig_0_14,
+  zig_0_13,
   callPackage,
 }:
 
 let
-  zig = zig_0_14;
+  zig = zig_0_13;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linuxwave";
-  version = "0.3.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
+    hash = "sha256-mPBtffqd0+B7J8FxolzOarCyJIZBWkWPBbqZlhX0VSY=";
   };
 
   postPatch = ''

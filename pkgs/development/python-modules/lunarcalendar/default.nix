@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "lunarcalendar";
   version = "0.0.9";
   format = "setuptools";

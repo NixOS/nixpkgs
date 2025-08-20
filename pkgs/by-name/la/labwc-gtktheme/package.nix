@@ -8,16 +8,16 @@
   unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "labwc-gtktheme";
-  version = "0-unstable-2025-02-11";
+  version = "0-unstable-2022-07-17";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-gtktheme";
-    rev = "619fa316702a6c21a0d974d7cf3dde0b82f9f64b";
-    hash = "sha256-mhpN8H42dJwc+3os3I48mmAWQJQCrO4yjbuMPTmHbsI=";
+    rev = "0eb103701775ecd3aa4d517f42dede4f56381241";
+    hash = "sha256-aeF6unzR9bqaKXkqOHlGrMdPx3xXCtig58tKVliUO4g=";
   };
 
   nativeBuildInputs = [

@@ -1,48 +1,29 @@
 {
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  gzip,
   lib,
-  nodejs,
-  pnpm_9,
   restic,
-  stdenv,
   util-linux,
-  makeBinaryWrapper,
+  stdenv,
 }:
 let
   pname = "backrest";
-  version = "1.8.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-lpYny+5bXIxj+ZFhbSn200sBrDShISESZw+L5sy+X+Q=";
+    hash = "sha256-qxEZkRKkwKZ+EZ3y3aGcX2ioKOz19SRdi3+9mjF1LpE=";
   };
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
+  frontend = buildNpmPackage {
     inherit version;
     pname = "${pname}-webui";
     src = "${src}/webui";
 
-    nativeBuildInputs = [
-      nodejs
-      pnpm_9.configHook
-    ];
-
-    pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 1;
-      hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-      export BACKREST_BUILD_VERSION=${version}
-      pnpm build
-      runHook postBuild
-    '';
+    npmDepsHash = "sha256-mS8G3+JuASaOkAYi+vgWztrSIIu7vfaasu+YeRJjWZw=";
 
     installPhase = ''
       runHook preInstall
@@ -50,45 +31,29 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
-  });
+  };
 in
 buildGoModule {
   inherit pname src version;
 
-  postPatch = ''
-    sed -i -e \
-      '/func installRestic(targetPath string) error {/a\
-        return fmt.Errorf("installing restic from an external source is prohibited by nixpkgs")' \
-      internal/resticinstaller/resticinstaller.go
-  '';
-
-  vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
-
-  nativeBuildInputs = [
-    gzip
-    makeBinaryWrapper
-  ];
+  vendorHash = "sha256-YukcHnXa/QimfX3nDtQI6yfPkEK9j5SPXOPIT++eWsU=";
 
   preBuild = ''
     mkdir -p ./webui/dist
     cp -r ${frontend}/* ./webui/dist
-
-    go generate -skip="npm" ./...
   '';
 
   nativeCheckInputs = [ util-linux ];
 
   checkFlags =
     let
-      skippedTests = [
-        "TestMultihostIndexSnapshots"
-        "TestRunCommand"
-        "TestSnapshot"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "TestBackup" # relies on ionice
-        "TestCancelBackup"
-      ];
+      skippedTests =
+        [
+          "TestServeIndex" # Fails with handler returned wrong content encoding
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "TestBackup" # relies on ionice
+        ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
@@ -98,17 +63,12 @@ buildGoModule {
     export HOME=$(pwd)
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/backrest \
-      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
-  '';
-
   meta = {
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ interdependence ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

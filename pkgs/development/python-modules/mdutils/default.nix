@@ -3,27 +3,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
-  setuptools,
 }:
+
 buildPythonPackage rec {
   pname = "mdutils";
-  version = "1.8.0";
-  pyproject = true;
+  version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "didix21";
-    repo = "mdutils";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-UBq6xSGG49zaRVWe2RmsCDkpa3vZFqKRJZQEVUegTSM=";
+    hash = "sha256-xF6z63CjL/qSBQsm/fSTQhwpg9yJU4qrY06cjn1PbCk=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "mdutils" ];
 
-  meta = {
+  meta = with lib; {
     description = "Set of basic tools that can help to create Markdown files";
     longDescription = ''
       This Python package contains a set of basic tools that can help to create
@@ -33,8 +31,8 @@ buildPythonPackage rec {
       this way, mdutils will make things easy for creating Markdown files.
     '';
     homepage = "https://github.com/didix21/mdutils";
-    changelog = "https://github.com/didix21/mdutils/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.azahi ];
+    changelog = "https://github.com/didix21/mdutils/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ azahi ];
   };
 }

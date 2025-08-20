@@ -5,26 +5,26 @@
 }:
 let
   pname = "wait4x";
-  version = "3.5.1";
+  version = "2.14.2";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "wait4x";
-    repo = "wait4x";
+    owner = "atkrad";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-VAt61k2eHQwyLSsvbWxe7jJ/Wyj4U4O2+LzCsoP/Yq4=";
+    hash = "sha256-fNPZ/qgAn4odd5iWnDK1RWPxeBhS/l4ffHLFB27SAoM=";
   };
 
-  vendorHash = "sha256-KJOKLTjwwgu2MFNIRDk8eeSVnZyjO9dfVyWrF5vqj9g=";
+  vendorHash = "sha256-Eio6CoYaChG59rHL4tfl7dNWliD7ksRyhoCPxMvMmrQ=";
 
   # Tests make network access
   doCheck = false;
 
   meta = with lib; {
-    description = "Allows you to wait for a port or a service to enter the requested state";
-    homepage = "https://github.com/wait4x/wait4x";
+    description = "Wait4X allows you to wait for a port or a service to enter the requested state";
+    homepage = "https://github.com/atkrad/wait4x";
     license = licenses.asl20;
     maintainers = with maintainers; [ jfvillablanca ];
     mainProgram = "wait4x";

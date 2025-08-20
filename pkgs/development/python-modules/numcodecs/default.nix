@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  python,
   pythonOlder,
 
   # build-system
@@ -12,11 +13,7 @@
   py-cpuinfo,
 
   # dependencies
-  deprecated,
   numpy,
-
-  # optional-dependencies
-  crc32c,
 
   # tests
   msgpack,
@@ -26,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.16.1";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xH8g1lZFRWjGtGl84CCB5ru1EvGYc4xqVvr+gCnJf7E=";
+    hash = "sha256-o883iB3wiY86nA1Ed9+IEz/oUYW//le6MbzC+iB3Cbw=";
   };
 
   build-system = [
@@ -43,13 +40,9 @@ buildPythonPackage rec {
     py-cpuinfo
   ];
 
-  dependencies = [
-    deprecated
-    numpy
-  ];
+  dependencies = [ numpy ];
 
   optional-dependencies = {
-    crc32c = [ crc32c ];
     msgpack = [ msgpack ];
     # zfpy = [ zfpy ];
   };
@@ -60,9 +53,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    msgpack
     importlib-metadata
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";

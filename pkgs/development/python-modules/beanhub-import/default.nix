@@ -7,8 +7,8 @@
   beancount-black,
   beancount-parser,
   beanhub-extract,
-  hatchling,
   jinja2,
+  poetry-core,
   pydantic,
   pytz,
   pyyaml,
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.2.0";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,15 +25,10 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-oExJ8BWJmJkJMGGIYp+Xtf0rzUcQKD8YKo51E+KbRN0=";
+    hash = "sha256-6Y1gYAi8A6H0a0vj2avWxGS7hvjrvLBUS+LsgvY4sZo=";
   };
 
-  build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # pytz>=2023.1,<2025, but we have 2025.1
-    "pytz"
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     beancount-black
@@ -52,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";
     homepage = "https://github.com/LaunchPlatform/beanhub-import/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${src.tag}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
   };

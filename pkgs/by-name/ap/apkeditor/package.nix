@@ -40,8 +40,7 @@ let
               fromSource
               binaryBytecode # mitm cache
             ];
-          }
-          // args.meta;
+          } // args.meta;
         }
       );
     in
@@ -69,7 +68,7 @@ let
       src = fetchFromGitHub {
         owner = "REAndroid";
         repo = "APKEditor";
-        tag = "v${version}";
+        rev = "V${version}";
         hash = "sha256-a72j9qGjJXnTFeqLez2rhBSArFVYCX+Xs7NQd8CY5Yk=";
       };
 

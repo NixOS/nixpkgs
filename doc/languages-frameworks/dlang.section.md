@@ -22,7 +22,7 @@ buildDubPackage rec {
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-3sSZq+5UJH02IO0Y1yL3BLHDb4lk8k6awb5ZysBQciE=";
   };
 

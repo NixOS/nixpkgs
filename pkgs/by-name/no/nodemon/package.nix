@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "nodemon";
-  version = "3.1.10";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "remy";
     repo = "nodemon";
     rev = "v${version}";
-    hash = "sha256-wr/HNa+iqHhlE/Qp62d1EgcwA6hsv8CsJg9NLgEa15g=";
+    hash = "sha256-D0trs/Il7ekXXuLIsp8b9VPxQW1qqTc7DduGymv6jyU=";
   };
 
   npmDepsHash = "sha256-cZHfaUWhKZYKRe4Foc2UymZ8hTPrGLzlcXe1gMsW1pU=";

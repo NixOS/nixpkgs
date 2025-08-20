@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   kernel,
-  kernelModuleMakeFlags,
   kmod,
   zlib,
 }:
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
     kmod=${kmod} substituteAllInPlace netatop.service
   '';
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernel.makeFlags;
 
   preInstall = ''
     mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}

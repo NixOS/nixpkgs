@@ -11,7 +11,6 @@
   rootModules,
   kmod,
   allowMissing ? false,
-  extraFirmwarePaths ? [ ],
 }:
 
 stdenvNoCC.mkDerivation {
@@ -26,7 +25,6 @@ stdenvNoCC.mkDerivation {
     firmware
     rootModules
     allowMissing
-    extraFirmwarePaths
     ;
   allowedReferences = [ "out" ];
 }

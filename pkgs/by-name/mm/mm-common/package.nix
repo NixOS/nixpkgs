@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mm-common";
-  version = "1.0.7";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "SUq/zngUGCWbHp2IiMc69N5LbzvjbMddm6qLqg8qejk=";
+    sha256 = "tVxGA3282rxc7js4nqEcw5EK22jr6IPpR3hHqmYIYuc=";
   };
 
   strictDeps = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtkmm.org";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -1,33 +1,40 @@
 {
-  autoreconfHook,
-  fetchFromGitHub,
   lib,
-  libtraceevent,
-  nix-update-script,
-  nixosTests,
-  perl,
-  pkg-config,
-  sqlite,
   stdenv,
-  # Options
-  enableDmidecode ? stdenv.hostPlatform.isx86_64,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glibcLocales,
+  kmod,
+  coreutils,
+  perl,
   dmidecode,
+  hwdata,
+  sqlite,
+  libtraceevent,
+  fetchpatch,
+  nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "rasdaemon";
-  version = "0.8.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-veaqAbSJvoUzkn1OLYY3t3y9Bh8dzuenpLGO2yz/yaM=";
+    rev = "v${version}";
+    sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
   };
 
-  strictDeps = true;
-
-  enableParallelBuilding = true;
+  patches = [
+    (fetchpatch {
+      # fix #295002 (segfault on AMD), will be in the release after 0.8.0
+      name = "fix crash on AMD";
+      url = "https://github.com/mchehab/rasdaemon/commit/f1ea76375281001cdf4a048c1a4a24d86c6fbe48.patch";
+      hash = "sha256-1VPDTrAsvZGiGbh52EUdG6tYV/n6wUS0mphOSXzran0=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -35,21 +42,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    coreutils
+    glibcLocales
+    hwdata
+    kmod
+    sqlite
     libtraceevent
     (perl.withPackages (
       ps: with ps; [
+        DBI
         DBDSQLite
       ]
     ))
-    sqlite
-  ]
-  ++ lib.optionals enableDmidecode [
-    dmidecode
-  ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ dmidecode ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
     "--enable-all"
   ];
 
@@ -73,15 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
 
-  postPatch = ''
-    patchShebangs contrib/
-  '';
-
-  preConfigure = ''
-    substituteInPlace Makefile.am \
-      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/dimm_labels.d"' '"$(prefix)@sysconfdir@/ras/dimm_labels.d"' \
-      --replace-fail '"$(DESTDIR)@SYSCONFDEFDIR@/rasdaemon"' '"$(prefix)@SYSCONFDEFDIR@/rasdaemon"' \
-      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/triggers' '"$(prefix)@sysconfdir@/ras/triggers'
+  postConfigure = ''
+    substituteInPlace Makefile \
+      --replace '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
   '';
 
   outputs = [
@@ -96,16 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm 0755 contrib/edac-tests $inject/bin/edac-tests
   '';
 
-  postFixup = lib.optionalString enableDmidecode ''
-    substituteInPlace $out/bin/ras-mc-ctl \
-      --replace-fail 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
-  '';
+  postFixup =
+    ''
+      # Fix dmidecode and modprobe paths
+      substituteInPlace $out/bin/ras-mc-ctl \
+        --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isAarch64) ''
+      substituteInPlace $out/bin/ras-mc-ctl \
+        --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
+    '';
 
   passthru.tests = nixosTests.rasdaemon;
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = ''
       A Reliability, Availability and Serviceability (RAS) logging tool using EDAC kernel tracing events
     '';
@@ -117,9 +125,9 @@ stdenv.mkDerivation (finalAttrs: {
       drivers for other architectures like arm also exists.
     '';
     homepage = "https://github.com/mchehab/rasdaemon";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ evils ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
+    maintainers = with maintainers; [ evils ];
   };
-})
+}

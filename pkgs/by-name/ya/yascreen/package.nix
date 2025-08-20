@@ -3,29 +3,35 @@
   stdenv,
   go-md2man,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "yascreen";
-  version = "2.06";
+  version = "1.86";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "yascreen";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-CIeWghtOnuQmEMwIpC1Xo1zLsuV4c0V7YAXTqUAzX1g=";
+    rev = "v${version}";
+    sha256 = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
   };
 
   nativeBuildInputs = [ go-md2man ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/bbonev/yascreen/commit/a30b8fce66a3db9f1194fede30a48424ed3d696b.patch";
+      sha256 = "sha256-Bnaf3OVMlqyYMdGsJ6fF3oYsWT01FcjuRzxi6xfbnZg=";
+    })
+  ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bbonev/yascreen";
-    changelog = "https://github.com/bbonev/yascreen/releases/tag/${finalAttrs.src.tag}";
-    description = "Curses replacement for daemons and embedded apps";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.arezvov ];
-    platforms = lib.platforms.linux;
+    description = "Yet Another Screen Library (curses replacement for daemons and embedded apps)";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.arezvov ];
+    platforms = platforms.linux;
   };
-})
+}

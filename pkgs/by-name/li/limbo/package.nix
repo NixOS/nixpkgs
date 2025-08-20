@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "limbo";
-  version = "0.0.14";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "limbo";
     tag = "v${version}";
-    hash = "sha256-t3bIW+HuuZzj3NOw2lnTZw9qxj7lGWtR8RbZF0rVbQ4=";
+    hash = "sha256-Lmtvn7hWdrqumtTpiYK0sTsESeKo4Mfao32K0DfHmrc=";
   };
 
-  cargoHash = "sha256-DDUl/jojhDmSQY7iI/Dn+Lg4eNuNhj8jyakPtgg4d2k=";
+  cargoHash = "sha256-hOKTN41yqMPh/Zo8jVRiOSL331py9QRzLhkTL2Jz0yI=";
 
   cargoBuildFlags = [
     "-p"
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 

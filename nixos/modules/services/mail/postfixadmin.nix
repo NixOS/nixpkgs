@@ -1,14 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, config, pkgs, ... }:
 let
   cfg = config.services.postfixadmin;
   fpm = config.services.phpfpm.pools.postfixadmin;
   localDB = cfg.database.host == "localhost";
-  pgsql = config.services.postgresql;
   user = if localDB then cfg.database.username else "nginx";
 in
 {
@@ -58,7 +52,6 @@ in
           If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
         '';
       };
-
       host = lib.mkOption {
         type = lib.types.str;
         default = "localhost";
@@ -69,12 +62,10 @@ in
           permissions.
         '';
       };
-
       passwordFile = lib.mkOption {
         type = lib.types.path;
         description = "Password file for the postgresql connection. Must be readable by user `nginx`.";
       };
-
       dbname = lib.mkOption {
         type = lib.types.str;
         default = "postfixadmin";
@@ -98,9 +89,7 @@ in
       $CONF['database_type'] = 'pgsql';
       $CONF['database_host'] = ${if localDB then "null" else "'${cfg.database.host}'"};
       ${lib.optionalString localDB "$CONF['database_user'] = '${cfg.database.username}';"}
-      $CONF['database_password'] = ${
-        if localDB then "'dummy'" else "file_get_contents('${cfg.database.passwordFile}')"
-      };
+      $CONF['database_password'] = ${if localDB then "'dummy'" else "file_get_contents('${cfg.database.passwordFile}')"};
       $CONF['database_name'] = '${cfg.database.dbname}';
       $CONF['configured'] = true;
 
@@ -137,42 +126,39 @@ in
 
     services.postgresql = lib.mkIf localDB {
       enable = true;
-      ensureUsers = [
-        {
-          name = cfg.database.username;
-        }
-      ];
+      ensureUsers = [ {
+        name = cfg.database.username;
+      } ];
     };
-
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
     # here.
-    systemd.services.postfixadmin-postgres = lib.mkIf localDB {
-      after = [ "postgresql.target" ];
-      bindsTo = [ "postgresql.target" ];
+    systemd.services.postfixadmin-postgres = let pgsql = config.services.postgresql; in lib.mkIf localDB {
+      after = [ "postgresql.service" ];
+      bindsTo = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         pgsql.package
         pkgs.util-linux
       ];
       script = ''
-        set -euo pipefail
+        set -eu
 
         PSQL() {
-            psql --port=${toString pgsql.settings.port} "$@"
+            psql --port=${toString pgsql.port} "$@"
         }
 
         PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.database.dbname}'" | grep -q 1 || PSQL -tAc 'CREATE DATABASE "${cfg.database.dbname}" OWNER "${cfg.database.username}"'
         current_owner=$(PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.database.dbname}'")
         if [[ "$current_owner" != "${cfg.database.username}" ]]; then
             PSQL -tAc 'ALTER DATABASE "${cfg.database.dbname}" OWNER TO "${cfg.database.username}"'
-            if [[ -e "${pgsql.dataDir}/.reassigning_${cfg.database.dbname}" ]]; then
+            if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.database.dbname}" ]]; then
                 echo "Reassigning ownership of database ${cfg.database.dbname} to user ${cfg.database.username} failed on last boot. Failing..."
                 exit 1
             fi
-            touch "${pgsql.dataDir}/.reassigning_${cfg.database.dbname}"
+            touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.database.dbname}"
             PSQL "${cfg.database.dbname}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.database.username}\""
-            rm "${pgsql.dataDir}/.reassigning_${cfg.database.dbname}"
+            rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.database.dbname}"
         fi
       '';
 
@@ -188,8 +174,7 @@ in
       isSystemUser = true;
       createHome = false;
     };
-
-    users.groups.${user} = lib.mkIf localDB { };
+    users.groups.${user} = lib.mkIf localDB {};
 
     services.phpfpm.pools.postfixadmin = {
       user = user;
@@ -198,7 +183,7 @@ in
         error_log = 'stderr'
         log_errors = on
       '';
-      settings = lib.mapAttrs (_: lib.mkDefault) {
+      settings = lib.mapAttrs (name: lib.mkDefault) {
         "listen.owner" = "nginx";
         "listen.group" = "nginx";
         "listen.mode" = "0660";

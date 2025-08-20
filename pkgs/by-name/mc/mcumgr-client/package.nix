@@ -6,6 +6,7 @@
   pkg-config,
   udev,
   stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +20,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
   };
 
-  cargoHash = "sha256-+n+Z/o+DvP2ltos8DP8nTyKbn/Zr3ln6cLyKJ+yWm1M=";
+  cargoHash = "sha256-9jlthe7YQJogcjGv+TOk+O2YW3Xrq6h9tTjXdKHG99k=";
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   meta = with lib; {
     description = "Client for mcumgr commands";

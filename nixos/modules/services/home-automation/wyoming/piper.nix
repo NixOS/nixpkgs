@@ -70,7 +70,7 @@ in
               };
 
               noiseScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.667;
                 description = ''
                   Generator noise value.
@@ -79,7 +79,7 @@ in
               };
 
               noiseWidth = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.333;
                 description = ''
                   Phoneme width noise value.
@@ -88,16 +88,12 @@ in
               };
 
               lengthScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 1.0;
                 description = ''
                   Phoneme length value.
                 '';
                 apply = toString;
-              };
-
-              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
-                default = true;
               };
 
               extraArgs = mkOption {
@@ -140,13 +136,18 @@ in
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-piper";
-            StateDirectory = [ "wyoming/piper" ];
+            StateDirectory = [
+              "wyoming/piper"
+              "wyoming/piper/models"
+            ];
             # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
             ExecStart = escapeSystemdExecArgs (
               [
                 (lib.getExe cfg.package)
                 "--data-dir"
                 "/var/lib/wyoming/piper"
+                "--download-dir"
+                "/var/lib/wyoming/piper/models"
                 "--uri"
                 options.uri
                 "--piper"
@@ -162,16 +163,13 @@ in
                 "--noise-w"
                 options.noiseWidth
               ]
-              ++ lib.optionals options.streaming [
-                "--streaming"
-              ]
               ++ options.extraArgs
             );
             CapabilityBoundingSet = "";
             DeviceAllow = "";
             DevicePolicy = "closed";
             LockPersonality = true;
-            MemoryDenyWriteExecute = false; # required for onnxruntime
+            MemoryDenyWriteExecute = true;
             PrivateDevices = true;
             PrivateUsers = true;
             ProtectHome = true;

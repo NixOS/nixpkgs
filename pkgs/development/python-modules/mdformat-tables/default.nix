@@ -2,39 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-
-  # build dependencies
   flit-core,
-
-  # dependencies
   mdformat,
-  wcwidth,
-
-  # tests
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-tables";
-  version = "1.0.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = "mdformat-tables";
-    tag = "v${version}";
-    hash = "sha256-7MbpGBGprhGrQ9P31HUU2h0bjyHWap6DETVN/dCDA1w=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-Q61GmaRxjxJh9GjyR8QCZOH0njFUtAWihZ9lFQJ2nQQ=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
-  dependencies = [
-    mdformat
-    wcwidth
-  ];
+  propagatedBuildInputs = [ mdformat ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

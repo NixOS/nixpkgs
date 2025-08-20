@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kqtquickcharts";
-
-  extraBuildInputs = [ qtdeclarative ];
+  # FIXME(qt5)
+  meta.broken = true;
 }

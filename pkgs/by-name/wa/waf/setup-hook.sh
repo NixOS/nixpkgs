@@ -3,10 +3,9 @@
 wafConfigurePhase() {
     runHook preConfigure
 
-    if [ -f "${wafPath:=./waf}" ]; then
-        patchShebangs --build "${wafPath}"
-    else
-        wafPath="@waf@/bin/waf"
+    if ! [ -f "${wafPath:=./waf}" ]; then
+        echo "copying waf to $wafPath..."
+        cp @waf@/bin/waf "$wafPath"
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
@@ -21,7 +20,7 @@ wafConfigurePhase() {
     concatTo flagsArray wafConfigureFlags wafConfigureFlagsArray wafConfigureTargets=configure
 
     echoCmd 'waf configure flags' "${flagsArray[@]}"
-    "$wafPath" "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
@@ -43,7 +42,7 @@ wafBuildPhase () {
     concatTo flagsArray wafFlags wafFlagsArray wafBuildFlags wafBuildFlagsArray wafBuildTargets=build
 
     echoCmd 'waf build flags' "${flagsArray[@]}"
-    "$wafPath" "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
 }
@@ -59,7 +58,7 @@ wafInstallPhase() {
     concatTo flagsArray wafFlags wafFlagsArray wafInstallFlags wafInstallFlagsArray wafInstallTargets=install
 
     echoCmd 'waf install flags' "${flagsArray[@]}"
-    "$wafPath" "${flagsArray[@]}"
+    python "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall
 }

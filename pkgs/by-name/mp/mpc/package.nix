@@ -24,8 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmpdclient
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/refs/heads/master/NEWS";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "webern";
-    repo = "cargo-readme";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
   };
 
-  cargoHash = "sha256-24D+ZcMGZN175LZNcNW8F5IsStk4au4xB0ZFe95EjPk=";
+  cargoHash = "sha256-OEArMqOiT+PZ+zMRt9h0EzeP7ikFuOYR8mFGtm+xCkQ=";
 
   # disable doc tests
   cargoTestFlags = [

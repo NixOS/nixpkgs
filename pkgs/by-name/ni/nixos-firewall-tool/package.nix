@@ -3,7 +3,7 @@
   lib,
   bash,
   installShellFiles,
-  buildPackages,
+  shellcheck-minimal,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ installShellFiles ];
-  nativeCheckInputs = [ buildPackages.shellcheck-minimal ];
+  nativeCheckInputs = [ shellcheck-minimal ];
 
   postPatch = ''
     patchShebangs --host nixos-firewall-tool
@@ -26,13 +26,16 @@ stdenvNoCC.mkDerivation {
     installShellCompletion nixos-firewall-tool.{bash,fish}
   '';
 
-  doCheck = buildPackages.shellcheck-minimal.compiler.bootstrapAvailable;
+  # Skip shellcheck if GHC is not available, see writeShellApplication.
+  doCheck =
+    lib.meta.availableOn stdenvNoCC.buildPlatform shellcheck-minimal.compiler
+    && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
   checkPhase = ''
     shellcheck nixos-firewall-tool
   '';
 
   meta = with lib; {
-    description = "Tool to temporarily manipulate the NixOS firewall";
+    description = "A tool to temporarily manipulate the NixOS firewall";
     license = licenses.mit;
     maintainers = with maintainers; [
       clerie

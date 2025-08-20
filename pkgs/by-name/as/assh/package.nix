@@ -15,8 +15,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
-    tag = "v${version}";
-    hash = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
+    rev = "v${version}";
+    sha256 = "sha256-rvJJZqVSBdaJ154NV6RaxbymsSsHbKnlJDeR6KHQE7M=";
   };
 
   vendorHash = "sha256-L2Uo/jsMtxQClF1UDa7NIUbOm7BflvncNsjqGnCsPKo=";
@@ -41,12 +41,12 @@ buildGoModule rec {
     $out/bin/assh --help > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -2,27 +2,31 @@
   lib,
   pkgs,
   python3Packages,
-  fetchFromGitHub,
+  fetchPypi,
   nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "steck";
-  version = "0.8.0";
-  pyproject = true;
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "supakeen";
-    repo = "steck";
-    tag = "v${version}";
-    hash = "sha256-5Spops8ERQ7TgFYH7n+c4hKdIQfjjujKaGhmhfAszgQ=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
+  postPatch = ''
+    cat setup.py
+    substituteInPlace setup.py \
+      --replace 'click>=7.0,<8.0' 'click' \
+      --replace 'termcolor>=1.1.0,<2.0.0' 'termcolor'
+  '';
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pkgs.git
     appdirs
     click
@@ -32,19 +36,16 @@ python3Packages.buildPythonApplication rec {
     toml
   ];
 
-  pythonRelaxDeps = [ "termcolor" ];
-
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  # tests are not in pypi package
+  doCheck = false;
 
   passthru.tests = nixosTests.pinnwand;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/supakeen/steck";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "Client for pinnwand pastebin";
     mainProgram = "steck";
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

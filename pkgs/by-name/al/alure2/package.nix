@@ -9,9 +9,9 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "alure2";
-  version = "0-unstable-2020-02-06";
+  version = "unstable-2020-02-06";
 
   src = fetchFromGitHub {
     owner = "kcat";

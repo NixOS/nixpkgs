@@ -7,14 +7,14 @@
   gattlib,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pybluez";
   version = "unstable-2022-01-28";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "pybluez";
-    repo = "pybluez";
+    owner = pname;
+    repo = pname;
     rev = "5096047f90a1f6a74ceb250aef6243e144170f92";
     hash = "sha256-GA58DfCFaVzZQA1HYpGQ68bznrt4SX1ojyOVn8hyCGo=";
   };

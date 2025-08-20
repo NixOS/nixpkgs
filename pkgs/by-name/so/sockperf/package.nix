@@ -24,11 +24,10 @@ stdenv.mkDerivation rec {
     doxygen
   ];
 
-  configureFlags = [
-    "--enable-doc"
-  ]
-  ++ lib.optional enableTest "--enable-test"
-  ++ lib.optional enableTool "--enable-tool";
+  configureFlags =
+    [ "--enable-doc" ]
+    ++ lib.optional enableTest "--enable-test"
+    ++ lib.optional enableTool "--enable-tool";
 
   doCheck = true;
 

@@ -50,8 +50,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "mapclassify/tests/test_greedy.py"
     "mapclassify/tests/test_rgba.py"
-    # Abort trap: 6
-    "mapclassify/tests/test_mapclassify.py"
   ];
 
   pythonImportsCheck = [ "mapclassify" ];
@@ -61,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://pysal.org/mapclassify/";
     changelog = "https://github.com/pysal/mapclassify/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members;
   };
 }

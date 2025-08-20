@@ -14,12 +14,12 @@
 
   programs = {
     dconf.enable = lib.mkDefault true;
-    xwayland.enable = lib.mkIf enableXWayland (lib.mkDefault true);
+    xwayland.enable = lib.mkDefault enableXWayland;
   };
 
   services.graphical-desktop.enable = true;
 
-  xdg.portal.wlr.enable = lib.mkIf enableWlrPortal true;
+  xdg.portal.wlr.enable = enableWlrPortal;
   xdg.portal.extraPortals = lib.mkIf enableGtkPortal [
     pkgs.xdg-desktop-portal-gtk
   ];

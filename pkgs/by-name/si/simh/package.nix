@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "simh";
-    repo = "simh";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
   };
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       available copies of significant or representative software.
     '';
     license = with licenses; mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
   };
 }

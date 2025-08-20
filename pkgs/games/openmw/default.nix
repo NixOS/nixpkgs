@@ -7,6 +7,9 @@
   pkg-config,
   wrapQtAppsHook,
   SDL2,
+  CoreMedia,
+  VideoToolbox,
+  VideoDecodeAcceleration,
   boost,
   bullet,
   # Please unpin this on the next OpenMW release.
@@ -77,13 +80,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-function-inclusion-fixes-for-gcc14.patch ];
 
-  postPatch = ''
-    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Don't fix Darwin app bundle
-    sed -i '/fixup_bundle/d' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Don't fix Darwin app bundle
+      sed -i '/fixup_bundle/d' CMakeLists.txt
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -94,29 +98,36 @@ stdenv.mkDerivation rec {
   # If not set, OSG plugin .so files become shell scripts on Darwin.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  buildInputs = [
-    SDL2
-    boost
-    bullet'
-    ffmpeg_6
-    libXt
-    luajit
-    lz4
-    mygui
-    openal
-    osg'
-    recastnavigation
-    unshield
-    yaml-cpp
-  ];
+  buildInputs =
+    [
+      SDL2
+      boost
+      bullet'
+      ffmpeg_6
+      libXt
+      luajit
+      lz4
+      mygui
+      openal
+      osg'
+      recastnavigation
+      unshield
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreMedia
+      VideoDecodeAcceleration
+      VideoToolbox
+    ];
 
-  cmakeFlags = [
-    "-DOpenGL_GL_PREFERENCE=${GL}"
-    "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENMW_OSX_DEPLOYMENT=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DOpenGL_GL_PREFERENCE=${GL}"
+      "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DOPENMW_OSX_DEPLOYMENT=ON"
+    ];
 
   meta = with lib; {
     description = "Unofficial open source engine reimplementation of the game Morrowind";

@@ -40,8 +40,7 @@ in
       ];
     })
 
-  ]
-  ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
+  ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
     ramMB = mkOption {
@@ -114,7 +113,7 @@ in
       postVM = ''
          extension=''${rootDiskImage##*.}
          friendlyName=$out/${config.image.baseName}
-         rootDisk="$friendlyName.$extension"
+         rootDisk="$friendlyName.root.$extension"
          mv "$rootDiskImage" "$rootDisk"
 
          mkdir -p $out/nix-support

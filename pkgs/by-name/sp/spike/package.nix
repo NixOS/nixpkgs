@@ -6,7 +6,7 @@
   pkgsCross,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "spike";
   version = "1.1.0-unstable-2024-09-21";
 

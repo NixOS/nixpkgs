@@ -13,6 +13,7 @@
   iconv,
   pillow,
   pyperclip,
+  pythonOlder,
   rustPlatform,
   rustc,
   setuptools,
@@ -23,20 +24,23 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.12";
+  version = "0.2.11";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    tag = version;
-    hash = "sha256-CMO3qhxYmwB9kWIiHWV/0gAfs/yCnHzpfNYLTy4wX78=";
+    rev = "0586591e948977ca5945252c893ba8f766ff8d28";
+    hash = "sha256-daDxkQ7N0+yS2JOLfXJq4jv+5VQNnwtqIMy2p8j+Sag=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    hash = "sha256-+2hENnrG35eRgQwtCCJUux9mYEkzD2astLgOqWHrH/M=";
+    name = "${pname}-${version}";
+    hash = "sha256-dGWPgyg8Ibyz3KcrMUI7xL7gTJ7iZ4sN0zOxFxcIrhM=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -63,8 +67,7 @@ buildPythonPackage rec {
     pyperclip
     tqdm
     unicrypto
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;
@@ -76,7 +79,7 @@ buildPythonPackage rec {
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

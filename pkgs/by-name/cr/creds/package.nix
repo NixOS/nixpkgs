@@ -6,29 +6,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "creds";
-  version = "0.5.3";
-  format = "pyproject";
+  version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ihebski";
     repo = "DefaultCreds-cheat-sheet";
     tag = "creds-v${version}";
-    hash = "sha256-nATmzEUwvJwzPZs+bO+/6ZHIrGgvjApaEwVpMyCXmik=";
+    hash = "sha256-CtwGSF3EGcPqL49paNRCsB2qxYjKpCLqyRsC67nAyVk=";
   };
 
-  pythonRelaxDeps = [ "tinydb" ];
-  pythonRemoveDeps = [ "pathlib" ];
-
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "tinydb==4.3" "tinydb" \
+      --replace "pathlib" ""
     substituteInPlace creds \
-      --replace-fail "pathlib.Path(__file__).parent" "pathlib.Path.home()"
+      --replace "pathlib.Path(__file__).parent" "pathlib.Path.home()"
   '';
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     fire
     prettytable
     requests
@@ -42,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to search a collection of default credentials";
     mainProgram = "creds";
     homepage = "https://github.com/ihebski/DefaultCreds-cheat-sheet";
-    changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/${src.tag}";
+    changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/creds-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

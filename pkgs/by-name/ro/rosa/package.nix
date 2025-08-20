@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.55";
+  version = "1.2.49";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-IarqpS3KY6cL5Njkd14APfPcUqicNzODIZz6CiuCzIk=";
+    hash = "sha256-x1P9Z0TpKw90/eLJHMcoO7niqSM3F+iFVKKTcJAstng=";
   };
   vendorHash = null;
 
@@ -37,8 +37,7 @@ buildGoModule rec {
       skippedTests = [
         "TestCluster"
         "TestRhRegionCommand"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "mdx_truly_sane_lists/tests.py" ];
+  pytestFlagsArray = [ "mdx_truly_sane_lists/tests.py" ];
 
   meta = {
     description = "Extension for Python-Markdown that makes lists truly sane";

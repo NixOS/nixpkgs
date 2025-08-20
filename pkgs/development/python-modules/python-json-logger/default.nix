@@ -1,31 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
+  fetchPypi,
+  setuptools,
   pytestCheckHook,
   pythonAtLeast,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-json-logger";
-  version = "3.2.1";
+  version = "2.0.7";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "nhairs";
-    repo = "python-json-logger";
-    tag = "v${version}";
-    hash = "sha256-dM9/ehPY/BnJSNBq1BiTUpJRigdzbGb3jD8Uhx+hmKc=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-I+fsAtNCN8WqHimgcBk6Tqh1g7tOf4/QbT3oJkxLLhw=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    freezegun
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests =
     lib.optionals (pythonAtLeast "3.12") [

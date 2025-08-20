@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  autocommand,
   more-itertools,
   beautifulsoup4,
   mechanize,
@@ -27,29 +27,31 @@
   cherrypy,
   importlib-resources,
   pyparsing,
-  pytest-responses,
-  net-tools,
+  requests-mock,
+  nettools,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-net";
-  version = "10.2.3";
-  pyproject = true;
+  version = "10.2.0";
+
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.net";
     tag = "v${version}";
-    hash = "sha256-yZbiCGUZqJQdV3/vtNLs+B9ZDin2PH0agR4kYvB5HxA=";
+    hash = "sha256-z9+gz6Sos0uluU5icXJN9OMmWFErVrJXBvoBcKv6Wwg=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
-    autocommand
+  propagatedBuildInputs = [
     more-itertools
     beautifulsoup4
     mechanize
@@ -66,8 +68,7 @@ buildPythonPackage rec {
     python-dateutil
     pathvalidate
     jsonpickle
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
 
   pythonImportsCheck = [ "jaraco.net" ];
 
@@ -76,19 +77,23 @@ buildPythonPackage rec {
     cherrypy
     importlib-resources
     pyparsing
-    pytest-responses
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ net-tools ];
+    requests-mock
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
 
   disabledTestPaths = [
+    # doesn't actually contain tests
+    "fabfile.py"
     # require networking
-    "jaraco/net/icmp.py"
     "jaraco/net/ntp.py"
     "jaraco/net/scanner.py"
+    "tests/test_cookies.py"
   ];
 
+  # cherrypy does not support Python 3.11
+  doCheck = pythonOlder "3.11";
+
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.net/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.net/blob/${src.rev}/CHANGES.rst";
     description = "Networking tools by jaraco";
     homepage = "https://github.com/jaraco/jaraco.net";
     license = lib.licenses.mit;

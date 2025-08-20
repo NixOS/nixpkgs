@@ -11,23 +11,20 @@
   gnutls,
   perl,
   libmaxminddb,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdc";
-  version = "1.25";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${finalAttrs.version}.tar.gz";
-    # Hashes listed at https://dev.yorhel.nl/download
-    sha256 = "b9be58e7dbe677f2ac1c472f6e76fad618a65e2f8bf1c7b9d3d97bc169feb740";
+    hash = "sha256-Koq5rX1D8Bj8c7qLq9aJ36RKuozsU7iOR3AYXLl3ePc=";
   };
 
   nativeBuildInputs = [
     perl
     pkg-config
-    versionCheckHook
   ];
   buildInputs = [
     ncurses
@@ -40,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [ "--with-geoip" ];
-
-  doInstallCheck = true;
 
   meta = {
     changelog = "https://dev.yorhel.nl/ncdc/changes";

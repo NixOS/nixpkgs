@@ -5,7 +5,6 @@
   faker,
   fetchPypi,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -21,10 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     factory-boy

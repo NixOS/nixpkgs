@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
       fdl11Plus
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ chpatrick ];
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
   };
 }

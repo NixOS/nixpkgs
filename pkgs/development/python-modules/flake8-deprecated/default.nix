@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "run_tests.py" ];
+  pytestFlagsArray = [ "run_tests.py" ];
 
   pythonImportsCheck = [ "flake8_deprecated" ];
 

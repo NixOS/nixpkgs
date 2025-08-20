@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patchPhase = ''
-    runHook prePatch
+    runHook preHook
 
     substituteInPlace ./custom_video_xrandr.cpp \
       --replace-fail libX11.so ${xorg.libX11}/lib/libX11.so \
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./custom_video_drmkms.cpp \
       --replace-fail libdrm.so ${libdrm}/lib/libdrm.so \
 
-    runHook postPatch
+    runHook postHook
   '';
 
   env = {

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   dontWrapPythonPrograms = true;
 
-  # Project thas no released tests
+  # Projec thas no released tests
   doCheck = false;
 
   pythonImportsCheck = [ "exrex" ];

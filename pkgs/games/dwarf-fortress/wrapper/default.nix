@@ -2,19 +2,18 @@
   stdenv,
   lib,
   buildEnv,
-  replaceVars,
+  substituteAll,
   makeWrapper,
   runCommand,
   coreutils,
   gawk,
   dwarf-fortress,
   dwarf-therapist,
-  SDL2_mixer,
   enableDFHack ? false,
   dfhack,
   enableSoundSense ? false,
   soundSense,
-  jre,
+  jdk,
   expect,
   xvfb-run,
   writeText,
@@ -182,12 +181,15 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
   "dwarf-fortress: text mode and TWBT are mutually exclusive"
 
   stdenv.mkDerivation
-  {
+  rec {
     pname = "dwarf-fortress";
     version = dwarf-fortress.dfVersion;
 
-    dfInit = replaceVars ./dwarf-fortress-init.in {
+    dfInit = substituteAll {
+      name = "dwarf-fortress-init";
+      src = ./dwarf-fortress-init.in;
       inherit env;
+      inherit (dwarf-fortress) exe;
       stdenv_shell = "${stdenv.shell}";
       cp = "${coreutils}/bin/cp";
       rm = "${coreutils}/bin/rm";
@@ -196,7 +198,6 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
       mkdir = "${coreutils}/bin/mkdir";
       printf = "${coreutils}/bin/printf";
       uname = "${coreutils}/bin/uname";
-      SDL2_mixer = "${SDL2_mixer}/lib/libSDL2_mixer.so";
     };
 
     runDF = ./dwarf-fortress.in;
@@ -215,29 +216,30 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
     dontUnpack = true;
     dontBuild = true;
     preferLocalBuild = true;
-    installPhase = ''
-      mkdir -p $out/bin
+    installPhase =
+      ''
+        mkdir -p $out/bin
 
-      substitute $runDF $out/bin/dwarf-fortress \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by dfExe ${dwarf-fortress.exe} \
-        --subst-var dfInit
-      chmod 755 $out/bin/dwarf-fortress
-    ''
-    + lib.optionalString enableDFHack ''
-      substitute $runDF $out/bin/dfhack \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by dfExe dfhack \
-        --subst-var dfInit
-      chmod 755 $out/bin/dfhack
-    ''
-    + lib.optionalString enableSoundSense ''
-      substitute $runSoundSense $out/bin/soundsense \
-        --subst-var-by stdenv_shell ${stdenv.shell} \
-        --subst-var-by jre ${jre} \
-        --subst-var dfInit
-      chmod 755 $out/bin/soundsense
-    '';
+        substitute $runDF $out/bin/dwarf-fortress \
+          --subst-var-by stdenv_shell ${stdenv.shell} \
+          --subst-var-by dfExe ${dwarf-fortress.exe} \
+          --subst-var dfInit
+        chmod 755 $out/bin/dwarf-fortress
+      ''
+      + lib.optionalString enableDFHack ''
+        substitute $runDF $out/bin/dfhack \
+          --subst-var-by stdenv_shell ${stdenv.shell} \
+          --subst-var-by dfExe dfhack \
+          --subst-var dfInit
+        chmod 755 $out/bin/dfhack
+      ''
+      + lib.optionalString enableSoundSense ''
+        substitute $runSoundSense $out/bin/soundsense \
+          --subst-var-by stdenv_shell ${stdenv.shell} \
+          --subst-var-by jre ${jdk.jre} \
+          --subst-var dfInit
+        chmod 755 $out/bin/soundsense
+      '';
 
     doInstallCheck = stdenv.hostPlatform.isLinux;
     nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -247,17 +249,28 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
 
     installCheckPhase =
       let
-        commonExpectStatements = ''
-          expect "Loading bindings from data/init/interface.txt"
-        '';
+        commonExpectStatements =
+          fmod:
+          lib.optionalString isAtLeast50 ''
+            expect "Loading audio..."
+          ''
+          + lib.optionalString (!fmod && isAtLeast50) ''
+            expect "Failed to load fmod, trying SDL_mixer"
+          ''
+          + lib.optionalString isAtLeast50 ''
+            expect "Audio loaded successfully!"
+          ''
+          + ''
+            expect "Loading bindings from data/init/interface.txt"
+          '';
         dfHackExpectScript = writeText "dfhack-test.exp" (
           ''
             spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
           ''
-          + commonExpectStatements
+          + commonExpectStatements false
           + ''
             expect "DFHack is ready. Have a nice day!"
-            expect "DFHack version ${dfhack'.version}"
+            expect "DFHack version ${version}"
             expect "\[DFHack\]#"
             send -- "lua print(os.getenv('out'))\r"
             expect "$env(out)"
@@ -271,7 +284,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
             ''
               spawn env NIXPKGS_DF_OPTS=debug,${lib.optionalString fmod "fmod"} xvfb-run $env(out)/bin/dwarf-fortress
             ''
-            + commonExpectStatements
+            + commonExpectStatements fmod
             + ''
               exit 0
             ''

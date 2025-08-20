@@ -1,8 +1,7 @@
 {
+  fetchFromGitHub,
   lib,
   stdenv,
-  fetchFromGitHub,
-  replaceVars,
   appstream-glib,
   desktop-file-utils,
   meson,
@@ -19,37 +18,42 @@
   wayland,
   gocryptfs,
   cryfs,
-  fuse,
-  util-linux,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "vaults";
-  version = "0.10.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
-    repo = "vaults";
-    tag = finalAttrs.version;
-    hash = "sha256-B4CNEghMfP+r0poyhE102zC1Yd2U5ocV1MCMEVEMjEY=";
+    repo = "Vaults";
+    rev = "v${version}";
+    hash = "sha256-USVP/7TNdpUNx1kDsCReGYIP8gHUeij2dqy8TR4R+CE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-my4CxFIEN19juo/ya2vlkejQTaZsyoYLtFTR7iCT9s0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-h25YRqQ4Z+Af+zHITnmnwpg09V7sik88YRGbG8BZUjg=";
   };
-
-  patches = [
-    (replaceVars ./remove_flatpak_dependency.patch {
-      cryfs = lib.getExe' cryfs "cryfs";
-      gocryptfs = lib.getExe' gocryptfs "gocryptfs";
-      fusermount = lib.getExe' fuse "fusermount";
-      umount = lib.getExe' util-linux "umount";
-    })
-  ];
 
   postPatch = ''
     patchShebangs build-aux
+  '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gocryptfs
+          cryfs
+        ]
+      }"
+    )
   '';
 
   nativeBuildInputs = [
@@ -77,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GTK frontend for encrypted vaults supporting gocryptfs and CryFS for encryption";
     homepage = "https://mpobaschnig.github.io/vaults/";
-    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       benneti
@@ -86,4 +90,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };
-})
+}

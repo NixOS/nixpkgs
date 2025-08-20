@@ -1,8 +1,9 @@
 {
-  stdenv,
   mkXfceDerivation,
   lib,
+  gobject-introspection,
   perl,
+  vala,
   libICE,
   libSM,
   libepoxy,
@@ -12,27 +13,19 @@
   xfconf,
   gtk3,
   libxfce4util,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  vala,
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.20.2";
+  version = "4.20.0";
 
-  sha256 = "sha256-NsTrJ2271v8vMMyiEef+4Rs0KBOkSkKPjfoJdgQU0ds=";
+  sha256 = "sha256-M+OapPHQ/WxlkUzHPx+ELstVyGoZanCxCL0N8hDWSN8=";
 
   nativeBuildInputs = [
-    perl
-  ]
-  ++ lib.optionals withIntrospection [
     gobject-introspection
-    vala # vala bindings require GObject introspection
+    perl
+    vala
   ];
 
   buildInputs = [
@@ -61,6 +54,6 @@ mkXfceDerivation {
       lgpl2Plus
       lgpl21Plus
     ];
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -6,27 +6,25 @@
 
 buildGoModule rec {
   pname = "distrobox-tui";
-  version = "0.2.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "phanirithvij";
     repo = "distrobox-tui";
     rev = "v${version}";
-    hash = "sha256-uOeJ9f2yXszGUYTxMLwvXCRkmT9Uo7mkZVhpf5HVhbg=";
+    hash = "sha256-J5stvhUNaU9YMczE56vC5bw2g67zsdVWiCi8k6KV/pU=";
   };
 
-  vendorHash = "sha256-y64KqlJsZ8aVK7oBcduEC8VvbutoRC15LMUeZdokPfY=";
+  vendorHash = "sha256-F7X3FBM/F0uPxbM3en0sk9a58O/meKnVsASgIlL7FCo=";
 
   ldflags = [ "-s" ];
 
-  meta = {
+  meta = with lib; {
+    description = "A TUI for DistroBox";
     changelog = "https://github.com/phanirithvij/distrobox-tui/releases/tag/v${version}";
-    description = "TUI for DistroBox";
     homepage = "https://github.com/phanirithvij/distrobox-tui";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ phanirithvij ];
     mainProgram = "distrobox-tui";
-    maintainers = with lib.maintainers; [ phanirithvij ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 }

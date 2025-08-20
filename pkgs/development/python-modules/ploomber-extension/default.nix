@@ -1,7 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   hatchling,
   hatch-jupyter-builder,
@@ -15,7 +15,9 @@
 buildPythonPackage rec {
   pname = "ploomber-extension";
   version = "0.1.1";
+
   pyproject = true;
+  disabled = pythonOlder "3.6";
 
   # using pypi archive which includes pre-built assets
   src = fetchPypi {
@@ -38,15 +40,12 @@ buildPythonPackage rec {
     pytest-jupyter
   ];
 
-  # Tests fail on Darwin when sandboxed
-  doCheck = !stdenv.buildPlatform.isDarwin;
-
   pythonImportsCheck = [ "ploomber_extension" ];
 
-  meta = {
+  meta = with lib; {
     description = "Ploomber extension";
     homepage = "https://pypi.org/project/ploomber-extension";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.euxane ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ euxane ];
   };
 }

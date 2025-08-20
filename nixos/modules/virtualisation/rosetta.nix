@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.virtualisation.rosetta;
@@ -60,9 +55,10 @@ in
       fsType = "virtiofs";
     };
 
+
     nix.settings = {
       extra-platforms = [ "x86_64-linux" ];
-      extra-sandbox-paths = [
+      extra-sandbox-paths =  [
         "/run/binfmt"
         cfg.mountPoint
       ];

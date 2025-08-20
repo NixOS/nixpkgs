@@ -11,7 +11,7 @@
   zita-convolver,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ir.lv2";
   version = "0-unstable-2018-06-21";
 

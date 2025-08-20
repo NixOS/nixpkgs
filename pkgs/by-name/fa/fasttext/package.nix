@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fasttext";
   version = "0.9.2-unstable-2023-11-28";
 

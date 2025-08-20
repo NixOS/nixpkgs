@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # tests are missing from the PyPi tarball
   src = fetchFromGitHub {
     owner = "glenfant";
-    repo = "stopit";
+    repo = pname;
     rev = version;
     hash = "sha256-uXJUA70JOGWT2NmS6S7fPrTWAJZ0mZ/hICahIUzjfbw=";
   };

@@ -8,16 +8,11 @@
   libtorrent-rasterbar-1_2_x,
   qt5,
   nix-update-script,
-  boost186,
 }:
 
 let
-  # libtorrent-rasterbar-1_2_x requires python311 and boost 1.86
-  python3 = python311.override {
-    packageOverrides = final: prev: {
-      boost = boost186;
-    };
-  };
+  # libtorrent-rasterbar-1_2_x requires python311
+  python3 = python311;
   libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -29,10 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
   };
 
-  patches = [
-    ./startupwmclass.patch
-  ];
-
   nativeBuildInputs = [
     python3.pkgs.wrapPython
     makeWrapper
@@ -43,54 +34,53 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ python3.pkgs.python ];
 
-  pythonPath = [
-    libtorrent
-  ]
-  ++ (with python3.pkgs; [
-    # requirements-core.txt
-    aiohttp
-    aiohttp-apispec
-    anyio
-    chardet
-    configobj
-    cryptography
-    decorator
-    faker
-    libnacl
-    lz4
-    marshmallow
-    netifaces
-    networkx
-    pony
-    psutil
-    pyasn1
-    pydantic_1
-    pyopenssl
-    pyyaml
-    sentry-sdk
-    service-identity
-    yappi
-    yarl
-    bitarray
-    filelock
-    (pyipv8.overrideAttrs (p: rec {
-      version = "2.10.0";
-      src = fetchPypi {
-        inherit (p) pname;
-        inherit version;
-        hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
-      };
-    }))
-    file-read-backwards
-    brotli
-    human-readable
-    # requirements.txt
-    pillow
-    pyqt5
-    pyqt5-sip
-    pyqtgraph
-    pyqtwebengine
-  ]);
+  pythonPath =
+    [ libtorrent ]
+    ++ (with python3.pkgs; [
+      # requirements-core.txt
+      aiohttp
+      aiohttp-apispec
+      anyio
+      chardet
+      configobj
+      cryptography
+      decorator
+      faker
+      libnacl
+      lz4
+      marshmallow
+      netifaces
+      networkx
+      pony
+      psutil
+      pyasn1
+      pydantic_1
+      pyopenssl
+      pyyaml
+      sentry-sdk
+      service-identity
+      yappi
+      yarl
+      bitarray
+      filelock
+      (pyipv8.overrideAttrs (p: rec {
+        version = "2.10.0";
+        src = fetchPypi {
+          inherit (p) pname;
+          inherit version;
+          hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
+        };
+      }))
+      file-read-backwards
+      brotli
+      human-readable
+      # requirements.txt
+      pillow
+      pyqt5
+      pyqt5-sip
+      pyqtgraph
+      pyqtwebengine
+    ]);
 
   installPhase = ''
     mkdir -pv $out

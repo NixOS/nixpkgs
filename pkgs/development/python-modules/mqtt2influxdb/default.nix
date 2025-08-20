@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mqtt2influxdb" ];
 
-  enabledTestPaths = [ "tests/test.py" ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Flexible MQTT to InfluxDB Bridge";

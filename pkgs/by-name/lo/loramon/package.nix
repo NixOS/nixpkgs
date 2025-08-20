@@ -24,12 +24,12 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
   ];
 
-  meta = {
+  meta = with lib; {
     description = "LoRa packet sniffer for RNode hardware";
     mainProgram = "loramon";
     homepage = "https://github.com/markqvist/LoRaMon";
     changelog = "https://github.com/markqvist/LoRaMon/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ erethon ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ erethon ];
   };
 }

@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cowsql/raft";
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
-    teams = [ teams.lxc ];
+    maintainers = teams.lxc.members;
   };
 }

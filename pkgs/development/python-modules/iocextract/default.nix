@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iocextract" ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   disabledTests = [
     # AssertionError: 'http://exampledotcom/test' != 'http://example.com/test'

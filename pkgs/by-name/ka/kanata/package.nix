@@ -1,38 +1,51 @@
 {
   stdenv,
   lib,
-  apple-sdk_13,
-  darwinMinVersionHook,
+  darwin,
   rustPlatform,
   fetchFromGitHub,
+  jq,
+  moreutils,
   versionCheckHook,
   nix-update-script,
-  writeShellScriptBin,
   withCmd ? false,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.9.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
-    repo = "kanata";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
+    sha256 = "sha256-cG9so0x0y8CbTxLOxSQwn5vG72KxHJzzTIH4lQA4MvE=";
   };
 
-  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
+  cargoHash = "sha256-QQrFUJ24Qnrx8+7+h9riycXZSQUdH1sXMhpDzU9AXiI=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
-  ];
+  # the dependency native-windows-gui contains both README.md and readme.md,
+  # which causes a hash mismatch on systems with a case-insensitive filesystem
+  # this removes the readme files and updates cargo's checksum file accordingly
+  depsExtraArgs = {
+    nativeBuildInputs = [
+      jq
+      moreutils
+    ];
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    (writeShellScriptBin "sw_vers" ''
-      echo 'ProductVersion: 13.0'
-    '')
-  ];
+    postBuild = ''
+      pushd $name/native-windows-gui
+
+      rm --force --verbose README.md readme.md
+      jq 'del(.files."README.md") | del(.files."readme.md")' \
+        .cargo-checksum.json -c \
+        | sponge .cargo-checksum.json
+
+      popd
+    '';
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
@@ -59,5 +72,6 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.unix;
     mainProgram = "kanata";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

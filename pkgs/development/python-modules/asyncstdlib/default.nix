@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.13.1";
+  version = "3.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "maxfischer2781";
     repo = "asyncstdlib";
     tag = "v${version}";
-    hash = "sha256-U2/LPbg/U6CUB22EpsJHprK2ngjQmZhLtEEuszuzB8Q=";
+    hash = "sha256-0VEJ26MP6gIgPvjan7LgCEtSLpg4wXhmFNPGZGntPD8=";
   };
 
   build-system = [ flit-core ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library that extends the Python asyncio standard library";
     homepage = "https://asyncstdlib.readthedocs.io/";
-    changelog = "https://github.com/maxfischer2781/asyncstdlib/releases/tag/${src.tag}";
+    changelog = "https://github.com/maxfischer2781/asyncstdlib/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "074anvhyjgsv2iby2ql1ixfvjgmhnvcwjbdz8gk70xzkzcm1fx5q";
   };
-
-  patches = [
-    # https://github.com/fancycode/pylzma/pull/82/
-    (fetchpatch {
-      url = "https://github.com/fancycode/pylzma/commit/2fe0a4ed0588fd572931da4be10ad955636afde4.patch";
-      hash = "sha256-sWdMAmOPVTDnxNTjzPlqQYxqnjmRpK+OqwWF6jpXvIw=";
-    })
-  ];
 
   pythonImportsCheck = [ "pylzma" ];
 

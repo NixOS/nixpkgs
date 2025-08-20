@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://launchpad.net/libqtdbustest";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    teams = [ teams.lomiri ];
+    maintainers = teams.lomiri.members;
     mainProgram = "qdbus-simple-test-runner";
     pkgConfigModules = [
       "libqtdbustest-1"

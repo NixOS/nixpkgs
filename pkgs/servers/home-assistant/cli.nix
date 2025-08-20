@@ -59,6 +59,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
     changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.home-assistant ];
+    maintainers = lib.teams.home-assistant.members;
   };
 }

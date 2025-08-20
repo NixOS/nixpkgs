@@ -6,20 +6,15 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "joystickwake";
   version = "0.4.2";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "foresto";
-    repo = "joystickwake";
+    repo = pname;
     tag = "v${version}";
     sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     dbus-next
     pyudev
     xlib

@@ -7,19 +7,17 @@
   file,
   readline,
   python3,
-  nix-update-script,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "clifm";
-  version = "1.25";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "leo-arch";
-    repo = "clifm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Q4BzkLclJJGybx6tnOhfRE3X5iFtuYTfbAvSLO7isX4=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-keoQUfRQA77+1ArVRKYiWGACXAi505jLXSVXUpuMlMc=";
   };
 
   buildInputs = [
@@ -37,18 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeCheckInputs = [ versionCheckHook ];
-  doCheck = true;
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/leo-arch/clifm";
-    changelog = "https://github.com/leo-arch/clifm/releases/tag/v${finalAttrs.version}";
-    description = "CLI-based, shell-like, and non-curses terminal file manager";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ nadir-ishiguro ];
-    platforms = lib.platforms.unix;
+    description = "CliFM is a CLI-based, shell-like, and non-curses terminal file manager written in C: simple, fast, extensible, and lightweight as hell";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ nadir-ishiguro ];
+    platforms = platforms.unix;
     mainProgram = "clifm";
   };
-})
+}

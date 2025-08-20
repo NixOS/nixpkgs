@@ -71,8 +71,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "certomancer" ];
 

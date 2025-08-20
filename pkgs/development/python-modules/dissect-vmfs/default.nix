@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-vmfs";
-  version = "3.11";
+  version = "3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.vmfs";
     tag = version;
-    hash = "sha256-jGPHZ26DDIcblgx4hP6L2BLHYY8YeIBcbxNR7bN/49g=";
+    hash = "sha256-/D5EaTNLxdzTMF/9S9esFXAxIwesEp0tdAMUAyeNtSI=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the VMFS file system";
     homepage = "https://github.com/fox-it/dissect.vmfs";
-    changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

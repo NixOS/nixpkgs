@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
-}:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -28,7 +22,7 @@ in
     };
 
     environment.lxqt.excludePackages = mkOption {
-      default = [ ];
+      default = [];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
       description = "Which LXQt packages to exclude from the default environment";
@@ -59,9 +53,11 @@ in
     };
 
     environment.systemPackages =
-      pkgs.lxqt.preRequisitePackages
-      ++ pkgs.lxqt.corePackages
-      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages);
+      pkgs.lxqt.preRequisitePackages ++
+      pkgs.lxqt.corePackages ++
+      (utils.removePackagesByName
+        pkgs.lxqt.optionalPackages
+        config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
@@ -78,10 +74,7 @@ in
     xdg.portal.lxqt.enable = mkDefault true;
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
-    xdg.portal.config.lxqt.default = mkDefault [
-      "lxqt"
-      "gtk"
-    ];
+    xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];
   };
 
 }

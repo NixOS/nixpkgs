@@ -6,7 +6,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cnping";
   version = "1.0.0-unstable-2024-02-29";
 

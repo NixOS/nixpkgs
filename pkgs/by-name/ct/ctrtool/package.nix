@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "ctrtool-v"; };
 
-  meta = {
-    license = lib.licenses.mit;
+  meta = with lib; {
+    license = licenses.mit;
     description = "Tool to extract data from a 3ds rom";
-    platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.marius851000 ];
     mainProgram = "ctrtool";
   };
 

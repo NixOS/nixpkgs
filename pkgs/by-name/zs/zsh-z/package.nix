@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "zsh-z";
-  version = "0-unstable-2021-02-15";
+  version = "unstable-2021-02-15";
 
   src = fetchFromGitHub {
     owner = "agkozak";
-    repo = "zsh-z";
+    repo = pname;
     rev = "595c883abec4682929ffe05eb2d088dd18e97557";
     sha256 = "sha256-HnwUWqzwavh/Qox+siOe5lwTp7PBdiYx+9M0NMNFx00=";
   };

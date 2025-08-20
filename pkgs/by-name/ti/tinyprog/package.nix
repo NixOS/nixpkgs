@@ -9,7 +9,6 @@ buildPythonApplication rec {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
   version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinyfpga";
@@ -20,21 +19,18 @@ buildPythonApplication rec {
 
   sourceRoot = "${src.name}/programmer";
 
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pyserial
     jsonmerge
     intelhex
     tqdm
     six
     packaging
-    setuptools # pkg_resources is imported during runtime
+    setuptools
     pyusb
   ];
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   meta = with lib; {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";

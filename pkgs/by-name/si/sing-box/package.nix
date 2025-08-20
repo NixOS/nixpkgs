@@ -1,25 +1,27 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  buildPackages,
   coreutils,
   nix-update-script,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "sing-box";
-  version = "1.11.15";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
-    repo = "sing-box";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-uqPV3PGk3hFpV1B8+htBG9x58RVWew0sBDUItpxyv8Q=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-+0wzCFeQ0ZdjYKGQQcwBOAj3bGRHOaHeFMMg/hyXDGQ=";
   };
 
-  vendorHash = "sha256-qZlnY0MxB4/ttgjuAroTfqGWqGRea549EyIjSxPAlOI=";
+  vendorHash = "sha256-Z3SGEDphy4U+AJzI7QSTEWG/T+U/FwTlP/zJN/mBAL0=";
 
   tags = [
     "with_quic"
@@ -40,31 +42,35 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
+    "-X=github.com/sagernet/sing-box/constant.Version=${version}"
   ];
 
-  postInstall = ''
-    installShellCompletion release/completions/sing-box.{bash,fish,zsh}
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd sing-box \
+        --bash <(${emulator} $out/bin/sing-box completion bash) \
+        --fish <(${emulator} $out/bin/sing-box completion fish) \
+        --zsh  <(${emulator} $out/bin/sing-box completion zsh )
 
-    substituteInPlace release/config/sing-box{,@}.service \
-      --replace-fail "/usr/bin/sing-box" "$out/bin/sing-box" \
-      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
-    install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
-  '';
+      substituteInPlace release/config/sing-box{,@}.service \
+        --replace-fail "/usr/bin/sing-box" "$out/bin/sing-box" \
+        --replace-fail "/bin/kill" "${coreutils}/bin/kill"
+      install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
     tests = { inherit (nixosTests) sing-box; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sing-box.sagernet.org";
     description = "Universal proxy platform";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      nickcao
-      prince213
-    ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nickcao ];
     mainProgram = "sing-box";
   };
-})
+}

@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation {
+mkCoqDerivation rec {
   pname = "lemma-overloading";
   inherit version;
 

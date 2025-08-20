@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "erlyaws";
-    repo = "yaws";
-    rev = "yaws-${version}";
+    repo = pname;
+    rev = "${pname}-${version}";
     hash = "sha256-acO8Vc8sZJl22HUml2kTxVswLEirqMbqHQdRIbkkcvs=";
   };
 

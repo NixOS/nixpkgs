@@ -17,7 +17,7 @@
 
 let
   pname = "hassil";
-  version = "2.2.3";
+  version = "2.1.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,7 +27,7 @@ buildPythonPackage {
     owner = "home-assistant";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+    hash = "sha256-CGobMgaDHcruvOzVBIc6xS0tuaMT410t62KD3Hg30EY=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +45,6 @@ buildPythonPackage {
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
     license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    maintainers = teams.home-assistant.members;
   };
 }

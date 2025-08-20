@@ -1,73 +1,64 @@
 {
   lib,
   fetchFromGitHub,
-  mkLibretroCore,
-  nix-update-script,
-  asciidoctor,
   cmake,
-  doxygen,
-  pkg-config,
-  flac,
-  fluidsynth,
+  fetchpatch,
   fmt,
   freetype,
-  glib,
   harfbuzz,
-  lhasa,
   liblcf,
   libpng,
   libsndfile,
-  libsysprof-capture,
   libvorbis,
   libxmp,
+  mkLibretroCore,
   mpg123,
-  nlohmann_json,
   opusfile,
-  pcre2,
+  pcre,
   pixman,
+  pkg-config,
   speexdsp,
-  wildmidi,
 }:
-mkLibretroCore rec {
+mkLibretroCore {
   core = "easyrpg";
-  # liblcf needs to be updated before this.
-  version = "0.8.1.1";
+  version = "0.8-unstable-2023-04-29";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
-    rev = version;
-    hash = "sha256-2a8IdYP6Suc8a+Np5G+xoNzuPxkk9gAgR+sjdKUf89M=";
+    rev = "f8e41f43b619413f95847536412b56f85307d378";
+    hash = "sha256-nvWM4czTv/GxY9raomBEn7dmKBeLtSA9nvjMJxc3Q8s=";
     fetchSubmodules = true;
   };
 
   extraNativeBuildInputs = [
-    asciidoctor
     cmake
-    doxygen
     pkg-config
   ];
   extraBuildInputs = [
-    flac # needed by libsndfile
-    fluidsynth
     fmt
     freetype
-    glib
     harfbuzz
-    lhasa
     liblcf
     libpng
     libsndfile
-    libsysprof-capture # needed by glib
     libvorbis
     libxmp
     mpg123
-    nlohmann_json
     opusfile
-    pcre2 # needed by glib
+    pcre
     pixman
     speexdsp
-    wildmidi
+  ];
+  patches = [
+    # The following patch is shared with easyrpg-player.
+    # Update when new versions of liblcf and easyrpg-player are released.
+    # See easyrpg-player expression for details.
+    (fetchpatch {
+      name = "0001-Fix-building-with-fmtlib-10.patch";
+      url = "https://github.com/EasyRPG/Player/commit/ab6286f6d01bada649ea52d1f0881dde7db7e0cf.patch";
+      hash = "sha256-GdSdVFEG1OJCdf2ZIzTP+hSrz+ddhTMBvOPjvYQHy54=";
+    })
   ];
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -76,13 +67,12 @@ mkLibretroCore rec {
   ];
   makefile = "Makefile";
 
-  # Since liblcf needs to be updated before this, we should not
-  # use the default unstableGitUpdater.
-  passthru.updateScript = nix-update-script { };
+  # Do not update automatically since we want to pin a specific version
+  passthru.updateScript = null;
 
   meta = {
     description = "EasyRPG Player libretro port";
     homepage = "https://github.com/EasyRPG/Player";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
   };
 }

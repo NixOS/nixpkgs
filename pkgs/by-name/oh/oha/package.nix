@@ -1,25 +1,24 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  openssl,
-  rust-jemalloc-sys,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, openssl
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "1.9.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
-    repo = "oha";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-ZUZee+jEhTaVGwYtNvYHckdLxb9axOsLUYkKrd07Zvg=";
+    hash = "sha256-P710b6Bs3O4pNrusoXLmIfYzmAB+BzXCuSX9k7KOWno=";
   };
 
-  cargoHash = "sha256-HUy41huDWTmpdPkcCB4Kti7oAI7M5q5gB8u/UZlLrU4=";
+  cargoHash = "sha256-k4nG95cPntlMYnICYSDIgXPgD8vBCk4q5/XO4ykJyZU=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
@@ -27,18 +26,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # tests don't work inside the sandbox
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
     changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "oha";
   };
 }

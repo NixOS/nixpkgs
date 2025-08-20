@@ -1,22 +1,22 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   gobject-introspection,
   wrapGAppsHook3,
   killall,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "waypaper";
-  version = "2.6";
+  version = "2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
     tag = version;
-    hash = "sha256-MGfTuQcVChI4g7RONiTZZ4a5uX5SDjfLeMxbLIZ7VH4=";
+    hash = "sha256-ty3KiKkIyv6aqTua3YUB2smYJv7dXGPP5k3lXoxDzI0=";
   };
 
   nativeBuildInputs = [
@@ -24,15 +24,13 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  dependencies = with python3Packages; [
-    imageio
-    imageio-ffmpeg
-    pillow
-    platformdirs
-    pygobject3
-    screeninfo
+  dependencies = [
+    python3.pkgs.pygobject3
+    python3.pkgs.platformdirs
+    python3.pkgs.importlib-metadata
+    python3.pkgs.pillow
   ];
 
   propagatedBuildInputs = [ killall ];
@@ -46,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
@@ -56,11 +54,8 @@ python3Packages.buildPythonApplication rec {
       If wallpaper does not change, make sure that swaybg or swww is installed.
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      prince213
-      totalchaos
-    ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ totalchaos ];
+    platforms = platforms.linux;
   };
 }

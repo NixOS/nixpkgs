@@ -10,13 +10,11 @@ A minimal configuration for Mosquitto is
 {
   services.mosquitto = {
     enable = true;
-    listeners = [
-      {
-        acl = [ "pattern readwrite #" ];
-        omitPasswordAuth = true;
-        settings.allow_anonymous = true;
-      }
-    ];
+    listeners = [ {
+      acl = [ "pattern readwrite #" ];
+      omitPasswordAuth = true;
+      settings.allow_anonymous = true;
+    } ];
   };
 }
 ```
@@ -32,20 +30,18 @@ like
 {
   services.mosquitto = {
     enable = true;
-    listeners = [
-      {
-        users = {
-          monitor = {
-            acl = [ "read #" ];
-            password = "monitor";
-          };
-          service = {
-            acl = [ "write service/#" ];
-            password = "service";
-          };
+    listeners = [ {
+      users = {
+        monitor = {
+          acl = [ "read #" ];
+          password = "monitor";
         };
-      }
-    ];
+        service = {
+          acl = [ "write service/#" ];
+          password = "service";
+        };
+      };
+    } ];
   };
 }
 ```
@@ -56,17 +52,15 @@ TLS authentication is configured by setting TLS-related options of the listener:
 {
   services.mosquitto = {
     enable = true;
-    listeners = [
-      {
-        port = 8883; # port change is not required, but helpful to avoid mistakes
-        # ...
-        settings = {
-          cafile = "/path/to/mqtt.ca.pem";
-          certfile = "/path/to/mqtt.pem";
-          keyfile = "/path/to/mqtt.key";
-        };
-      }
-    ];
+    listeners = [ {
+      port = 8883; # port change is not required, but helpful to avoid mistakes
+      # ...
+      settings = {
+        cafile = "/path/to/mqtt.ca.pem";
+        certfile = "/path/to/mqtt.pem";
+        keyfile = "/path/to/mqtt.key";
+      };
+    } ];
   };
 }
 ```

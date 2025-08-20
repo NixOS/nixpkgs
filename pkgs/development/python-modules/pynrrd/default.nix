@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "1.1.3";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhe";
-    repo = "pynrrd";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-qu3s3XswJCUchqYfYMuqIzI4sfeXrttvXSEW9/GSENA=";
+    hash = "sha256-B/G46/9Xf1LRu02p0X4/UeW1RYotSXKXRO9VZDPhkNU=";
   };
 
   build-system = [ setuptools ];

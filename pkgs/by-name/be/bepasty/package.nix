@@ -57,7 +57,7 @@ bepastyPython.pkgs.buildPythonPackage rec {
     build
     flake8
     pytestCheckHook
-    pytest-cov-stub
+    pytest-cov
     selenium
     tox
     twine

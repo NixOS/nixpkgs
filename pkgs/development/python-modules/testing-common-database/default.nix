@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Utilities for testing.* packages";
+    description = "utilities for testing.* packages";
     homepage = "https://github.com/tk0miya/testing.common.database";
     license = licenses.asl20;
     maintainers = with maintainers; [ jluttine ];

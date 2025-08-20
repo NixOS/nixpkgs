@@ -1,27 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  dotnetCorePackages,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, dotnetCorePackages
 }:
 
 let
-  dotnet =
-    with dotnetCorePackages;
-    combinePackages [
-      runtime_8_0-bin
-      aspnetcore_8_0-bin
-    ];
-in
-stdenv.mkDerivation rec {
   pname = "bililiverecorder";
-  version = "2.17.3";
+
+  dotnet = with dotnetCorePackages; combinePackages [
+    runtime_6_0
+    aspnetcore_6_0
+  ];
+
+  version = "2.13.0";
+  hash = "sha256-4OQ2gut/eLk4CXRN5E3Z8XobXsT3bSmtmJEcHzHcz/0=";
+
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchzip {
     url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${version}/BililiveRecorder-CLI-any.zip";
-    hash = "sha256-bmwRa8pQWCzP3SeZQsUZ9r0UbGypN5c6oeGa6XR/Hqo=";
     stripRoot = false;
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,21 +31,22 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
-    cp -r . $out/lib/bililiverecorder
-    makeWrapper ${dotnet}/bin/dotnet $out/bin/BililiveRecorder \
-      --add-flags $out/lib/bililiverecorder/BililiveRecorder.Cli.dll
+    mkdir -p $out/{bin,share/${pname}-${version}}
+    cp -r * $out/share/${pname}-${version}/.
+
+    makeWrapper "${dotnet}/bin/dotnet" $out/bin/BililiveRecorder \
+      --add-flags "$out/share/${pname}-${version}/BililiveRecorder.Cli.dll"
 
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
     changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
     mainProgram = "BililiveRecorder";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ zaldnoay ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ zaldnoay ];
+    platforms = platforms.unix;
   };
 }

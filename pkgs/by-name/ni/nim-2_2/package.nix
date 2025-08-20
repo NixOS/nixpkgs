@@ -9,6 +9,7 @@
   openssl,
   pcre,
   nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
+  Security ? darwin.Security,
 }:
 
 let
@@ -27,6 +28,7 @@ let
 
       # Needed for any nim package that uses the standard library's
       # 'std/sysrand' module.
+      depsTargetTargetPropagated = lib.optional stdenv.hostPlatform.isDarwin Security;
 
       inherit patches;
 
@@ -104,37 +106,38 @@ let
         # Use the custom configuration
       ];
 
-      installPhase = ''
-        runHook preInstall
+      installPhase =
+        ''
+          runHook preInstall
 
-        mkdir -p $out/bin $out/etc
+          mkdir -p $out/bin $out/etc
 
-        cp -r config $out/etc/nim
+          cp -r config $out/etc/nim
 
-        for binpath in ${nimUnwrapped}/bin/nim?*; do
-          local binname=`basename $binpath`
+          for binpath in ${nimUnwrapped}/bin/nim?*; do
+            local binname=`basename $binpath`
+            makeWrapper \
+              $binpath $out/bin/${targetPlatformConfig}-$binname \
+              $wrapperArgs
+            ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
+          done
+
           makeWrapper \
-            $binpath $out/bin/${targetPlatformConfig}-$binname \
+            ${nimUnwrapped}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
+            --set-default CC $(command -v $CC) \
+            --set-default CXX $(command -v $CXX) \
             $wrapperArgs
-          ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
-        done
+          ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
 
-        makeWrapper \
-          ${nimUnwrapped}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
-          --set-default CC $(command -v $CC) \
-          --set-default CXX $(command -v $CXX) \
-          $wrapperArgs
-        ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
+          makeWrapper \
+            ${nimUnwrapped}/bin/testament $out/bin/${targetPlatformConfig}-testament \
+            $wrapperArgs
+          ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
 
-        makeWrapper \
-          ${nimUnwrapped}/bin/testament $out/bin/${targetPlatformConfig}-testament \
-          $wrapperArgs
-        ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
-
-      ''
-      + ''
-        runHook postInstall
-      '';
+        ''
+        + ''
+          runHook postInstall
+        '';
 
       passthru = nimUnwrapped.passthru // {
         inherit wrapNim;

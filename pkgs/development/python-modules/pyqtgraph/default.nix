@@ -52,7 +52,7 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontsConf}
   '';
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     # we only want to run unittests
     "tests"
   ];

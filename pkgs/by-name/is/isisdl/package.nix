@@ -6,11 +6,11 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "isisdl";
-  version = "1.3.21";
+  version = "1.3.20";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YyR0A7NqmUcR+hQnQlIgBdU6CxfHtDOjR3q5I21ROCI=";
+    hash = "sha256-s0vGCJVSa6hf6/sIhzmaxpziP4izoRwcZfxvm//5inY=";
   };
 
   pyproject = true;

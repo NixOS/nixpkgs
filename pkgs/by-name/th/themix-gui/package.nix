@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "themix-project";
     repo = "themix-gui";
-    tag = version;
+    rev = version;
     hash = "sha256-xFtwNx1c7Atb+9yorZhs/uVkkoxbZiELJ0SZ88L7KMs=";
     fetchSubmodules = true;
   };

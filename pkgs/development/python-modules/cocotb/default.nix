@@ -11,6 +11,7 @@
   iverilog,
   ghdl,
   stdenv,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hypengw";
     repo = "Qcm";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-41GsG+NKCMw+LuRUf31ilRso/SkKYVV3IrMSviOZdWs=";
   };
@@ -40,12 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     ffmpeg
     cubeb
-  ];
+  ] ++ cubeb.passthru.backendLibs;
 
   # Correct qml import path
   postInstall = ''
     mv $out/lib/qt6 $out/lib/qt-6
   '';
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath cubeb.passthru.backendLibs}"
+  ];
 
   meta = {
     description = "Unofficial Qt client for netease cloud music";

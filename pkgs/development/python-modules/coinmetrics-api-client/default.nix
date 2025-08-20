@@ -5,7 +5,6 @@
   orjson,
   pandas,
   poetry-core,
-  polars,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2025.8.8.16";
+  version = "2024.12.23.19";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,14 +27,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
-    hash = "sha256-/k0LwHxPZEF1Hyll3Xemzg/LqWtKnU+AToK1BpYfUDY=";
+    hash = "sha256-AX+UFQ+Usq9MzbnlZjZQXw9cP6fhO78iFsh0KsbZfw4=";
   };
 
   pythonRelaxDeps = [ "typer" ];
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     orjson
     python-dateutil
     requests
@@ -44,24 +45,22 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  optional-dependencies = {
-    pandas = [ pandas ];
-    polars = [ polars ];
-  };
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ optional-dependencies.pandas;
 
   pythonImportsCheck = [ "coinmetrics.api_client" ];
 
+  optional-dependencies = {
+    pandas = [ pandas ];
+  };
+
   meta = with lib; {
     description = "Coin Metrics API v4 client library";
+    mainProgram = "coinmetrics";
     homepage = "https://coinmetrics.github.io/api-client-python/site/index.html";
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];
-    mainProgram = "coinmetrics";
   };
 }

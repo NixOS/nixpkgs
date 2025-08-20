@@ -24,7 +24,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
   version = "8.5.3";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
@@ -58,9 +57,7 @@ python3Packages.buildPythonApplication rec {
       ''--prefix PATH : "${archivers}"''
     ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = [ python3Packages.invoke ];
 
   passthru.updateScript = gitUpdater { };
 

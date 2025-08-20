@@ -1,14 +1,5 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  cmake,
-  yaml-cpp,
-  libevdev,
-  udev,
-  boost,
-}:
+{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, yaml-cpp,
+  libevdev, udev, boost }:
 
 stdenv.mkDerivation rec {
   pname = "interception-tools";
@@ -20,16 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-  buildInputs = [
-    libevdev
-    udev
-    yaml-cpp
-    boost
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libevdev udev yaml-cpp boost ];
 
   meta = {
     description = "Minimal composable infrastructure on top of libudev and libevdev";

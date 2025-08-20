@@ -4,7 +4,7 @@
   mparser,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mparser-pcre";
   useDune2 = true;
 

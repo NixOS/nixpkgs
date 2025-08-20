@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.2.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Otk5W3VTbOAeZOVnXvW8VSxU1nHa8zUvmvduRTdlwVs=";
+    hash = "sha256-yITcVEBtqH1B+MyhQweOzmdgPgWrueAkczp/UsT4J/4=";
   };
 
   build-system = [ poetry-core ];

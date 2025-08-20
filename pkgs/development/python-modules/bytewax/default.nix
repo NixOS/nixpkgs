@@ -1,8 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  pythonOlder,
 
   # build-system
   cmake,
@@ -16,7 +17,6 @@
 
   # dependencies
   jsonpickle,
-  prometheus-client,
 
   # optional dependencies
   confluent-kafka,
@@ -24,31 +24,37 @@
   # test
   myst-docutils,
   pytestCheckHook,
-  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.21.1";
-  pyproject = true;
+  version = "0.17.2";
+  format = "pyproject";
 
-  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
-  disabled = pythonAtLeast "3.13";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bytewax";
-    repo = "bytewax";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-O5q1Jd3AMUaQwfQM249CUnkjqEkXybxtM9SOISoULZk=";
+    hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
   };
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-TTB1//Xza47rnfvlIs9qMvwHPj/U3w2cGTmWrEokriQ=";
+  # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
+  # Package uses old version.
+  patches = [ ./remove-docs-test.patch ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "columnation-0.1.0" = "sha256-RAyZKR+sRmeWGh7QYPZnJgX9AtWqmca85HcABEFUgX8=";
+      "timely-0.12.0" = "sha256-sZuVLBDCXurIe38m4UAjEuFeh73VQ5Jawy+sr3U/HbI=";
+      "libsqlite3-sys-0.26.0" = "sha256-WpJA+Pm5dWKcdUrP0xS5ps/oE/yAXuQvvsdyDfDet1o=";
+    };
   };
 
   nativeBuildInputs = [
@@ -66,10 +72,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  dependencies = [
-    jsonpickle
-    prometheus-client
-  ];
+  propagatedBuildInputs = [ jsonpickle ];
 
   optional-dependencies = {
     kafka = [ confluent-kafka ];
@@ -79,20 +82,10 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  nativeCheckInputs = [
+  checkInputs = [
     myst-docutils
     pytestCheckHook
-    pytest-benchmark
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  pytestFlags = [
-    "--benchmark-disable"
-  ];
-
-  enabledTestPaths = [
-    "pytests"
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # dependens on an old myst-docutils version
@@ -101,14 +94,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bytewax" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python Stream Processing";
     homepage = "https://github.com/bytewax/bytewax";
     changelog = "https://github.com/bytewax/bytewax/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       mslingsby
       kfollesdal
     ];
+    # mismatched type expected u8, found i8
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

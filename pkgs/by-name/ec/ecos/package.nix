@@ -4,52 +4,39 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ecos";
-  version = "2.0.10";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WMgqDc+XAY3g2wwlefjJ0ATxR5r/jL971FZKtxsunnU=";
+    rev = version;
+    sha256 = "1hsndim5kjvcwk5svqa4igawzahj982180xj1d7yd0dbjlgxc7w7";
   };
 
   buildPhase = ''
-    runHook preBuild
-
     make all shared
-
-    runHook postBuild
   '';
 
   doCheck = true;
-
   checkPhase = ''
-    runHook preCheck
-
     make test
     ./runecos
-
-    runHook postCheck
   '';
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/lib
     cp lib*.a lib*.so $out/lib
     cp -r include $out/
-
-    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight conic solver for second-order cone programming";
     homepage = "https://www.embotech.com/ECOS";
     downloadPage = "https://github.com/embotech/ecos/releases";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bhipple ];
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bhipple ];
   };
-})
+}

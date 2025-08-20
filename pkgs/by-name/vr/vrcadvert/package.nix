@@ -4,18 +4,17 @@
   fetchFromGitHub,
   lib,
   versionCheckHook,
-  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "vrcadvert";
-  version = "1.0.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "VrcAdvert";
     tag = "v${version}";
-    hash = "sha256-lrRH+BBeVpYVAdFdlsYVxsBOENZseBVoAxb5v9+E7g8=";
+    hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -26,13 +25,20 @@ buildDotnetModule rec {
 
   executables = [ "VrcAdvert" ];
 
+  postPatch = ''
+    substituteInPlace VrcAdvert.csproj \
+      --replace-fail 'net6.0' 'net8.0'
+    substituteInPlace global.json \
+      --replace-fail '6.0.0' '8.0.0'
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/VrcAdvert";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Advertise your OSC app through OSCQuery";

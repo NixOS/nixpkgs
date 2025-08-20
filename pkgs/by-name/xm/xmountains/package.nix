@@ -2,40 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xbitmaps,
-  libX11,
-  imake,
-  gccmakedep,
+  xorg,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xmountains";
-  version = "2.11";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "spbooth";
-    repo = "xmountains";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-q2+aJ5ISoSXUW4BaAf9Qq/d+DEBSylceZNKKmN4SbQQ=";
+    repo = pname;
+    rev = "aa3bcbfed228adf3fff0fe4295589f13fc194f0b";
+    sha256 = "0dx4n2y736lv04sj41cp1dw8n5zkw5gyd946a6zsiv0k796s9ra9";
   };
 
   buildInputs = [
-    xbitmaps
-    libX11
+    xorg.xbitmaps
+    xorg.libX11
   ];
-
-  nativeBuildInputs = [
+  nativeBuildInputs = with xorg; [
     imake
     gccmakedep
   ];
 
   installPhase = "install -Dm755 xmountains -t $out/bin";
 
-  meta = {
+  meta = with lib; {
     description = "X11 based fractal landscape generator";
     homepage = "https://spbooth.github.io/xmountains";
-    license = lib.licenses.hpndSellVariant;
-    maintainers = with lib.maintainers; [ djanatyn ];
+    license = licenses.hpndSellVariant;
+    maintainers = with maintainers; [ djanatyn ];
     mainProgram = "xmountains";
   };
-})
+}

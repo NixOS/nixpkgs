@@ -1,9 +1,4 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "dolphin";
-
-  extraBuildInputs = [ qtmultimedia ];
 }

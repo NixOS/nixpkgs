@@ -1,13 +1,12 @@
 {
-  lib,
   stdenv,
   fetchzip,
   dos2unix,
   soundPack ? stdenv.mkDerivation {
     name = "soundsense-soundpack";
     src = fetchzip {
-      url = "https://df.zweistein.cz/soundsense/soundpack.zip";
-      hash = "sha256-yjlhBLYYv/FXsk5IpiZNDG2ugDldaD5mf+Dyc6es4GM=";
+      url = "http://df.zweistein.cz/soundsense/soundpack.zip";
+      sha256 = "0qz0mjkp7wp0gxk3ws2x760awv8c9lkacj2fn9bz3gqqnq262ffa";
     };
     installPhase = ''
       cp -r . $out
@@ -21,8 +20,8 @@ stdenv.mkDerivation rec {
   inherit soundPack;
   pname = "soundsense";
   src = fetchzip {
-    url = "https://df.zweistein.cz/soundsense/soundSense_${version}.zip";
-    hash = "sha256-c+LOUxmJaZ3VqVOBYSQypiZxWyNAXOlRQVD3QZPReb4=";
+    url = "http://df.zweistein.cz/soundsense/soundSense_${version}.zip";
+    sha256 = "1gkrs69l3xsh858yjp204ddp29m668j630akm7arssc9359wxqkk";
   };
   nativeBuildInputs = [ dos2unix ];
   buildPhase = ''
@@ -36,14 +35,4 @@ stdenv.mkDerivation rec {
     ln -s $soundPack $out/soundsense/packs
   '';
   passthru = { inherit version dfVersion; };
-  meta = {
-    description = "Plays sound based on Dwarf Fortress game logs";
-    maintainers = with lib.maintainers; [
-      numinit
-    ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
-    homepage = "https://df.zweistein.cz/soundsense";
-  };
 }

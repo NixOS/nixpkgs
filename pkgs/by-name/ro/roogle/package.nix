@@ -6,16 +6,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "roogle";
-  version = "1.0.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hkmatsumoto";
-    repo = "roogle";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-oeQwRcDn4X/CL+O4APmGv9T19c9oD5tCBRz4K41K1Zg=";
+    sha256 = "1h0agialbvhhiijkdnr47y7babq432limdl6ag2rmjfs7yishn4r";
   };
 
-  cargoHash = "sha256-lmRo6Q67hJ3hv0jQt6epiNOckRv0rA0a0DNEKIdDoUE=";
+  cargoHash = "sha256-CzFfFKTmBUAafk8PkkWmUkRIyO+yEhmCfN1zsLRq4Iw=";
+
+  postInstall = ''
+    mkdir -p $out/share/roogle
+    cp -r assets $out/share/roogle
+  '';
 
   meta = with lib; {
     description = "Rust API search engine which allows you to search functions by names and type signatures";

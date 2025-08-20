@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kilobyte";
-    repo = "compsize";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
   };
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Find compression type/ratio on a file or set of files in the Btrfs filesystem";
+    description = "btrfs: Find compression type/ratio on a file or set of files";
     mainProgram = "compsize";
     homepage = "https://github.com/kilobyte/compsize";
     license = licenses.gpl2Plus;

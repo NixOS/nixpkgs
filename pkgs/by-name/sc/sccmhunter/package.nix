@@ -1,27 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  # Pinned to Python 3.12 because future-1.0.0 is not supported for Python 3.13:
-  # error: future-1.0.0 not supported for interpreter python3.13
-  python312Packages,
+  python3Packages,
 }:
-python312Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "sccmhunter";
-  version = "1.1.10";
+  version = "1.0.6-unstable-2024-11-07";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
-    tag = "v${version}";
-    hash = "sha256-657xwD5Sk8vU3MSGj7Yuu/lh7SRS25VFk/igKhq1pks=";
+    rev = "33c23f0d71e48127a0b03b06a019148df71049ef";
+    hash = "sha256-mU3GKgX8gcuJ+YT3xL0/dDds34uhFD+Rc3m15W7zoKc=";
   };
 
-  build-system = with python312Packages; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python312Packages; [
+  dependencies = with python3Packages; [
     cmd2
     cryptography
     impacket
@@ -43,7 +41,7 @@ python312Packages.buildPythonApplication rec {
   meta = {
     description = "Post exploitation tool to identify and attack SCCM related assets in an Active Directory domain";
     homepage = "https://github.com/garrettfoster13/sccmhunter";
-    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${src.rev}/changelog.md";
     license = lib.licenses.mit;
     mainProgram = "sccmhunter.py";
     maintainers = with lib.maintainers; [ purpole ];

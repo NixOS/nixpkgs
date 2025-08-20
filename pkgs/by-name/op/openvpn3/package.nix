@@ -22,19 +22,19 @@
   gdbuspp,
   cmake,
   git,
-  nix-update-script,
   enableSystemdResolved ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  version = "25";
+  # also update openvpn3-core
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     tag = "v${version}";
-    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
+    hash = "sha256-e3NRLrznTEolTzMO+kGEh48MCrcEr8p7JG3hG889aK4=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
@@ -87,8 +87,7 @@ stdenv.mkDerivation rec {
     protobuf
     tinyxml-2
     gdbuspp
-  ]
-  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ] ++ lib.optionals enableSystemdResolved [ systemd.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")
@@ -114,8 +113,6 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lpthread";
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenVPN 3 Linux client";

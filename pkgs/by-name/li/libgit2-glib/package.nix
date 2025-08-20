@@ -14,11 +14,12 @@
   libgit2,
   glib,
   python3,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "1.2.1";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -27,9 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgit2-glib/${lib.versions.majorMinor finalAttrs.version}/libgit2-glib-${finalAttrs.version}.tar.xz";
-    sha256 = "l0I6d5ACs76HUcdfnXkEnfzMo2FqJhWfwWJIZ3K6eF8=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "EzHa2oOPTh9ZGyZFnUQSajJd52LcPNJhU6Ma+9/hgZA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-libgit2-1.8.patch";
+      # https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/40
+      url = "https://gitlab.gnome.org/GNOME/libgit2-glib/-/commit/a76fdf96c3af9ce9d21a3985c4be8a1aa6eea661.patch";
+      hash = "sha256-ysU8pAixyftensfEC9bE0RUFMPMei0jYT26WKN5uOFE=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -63,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "libgit2-glib";
+      packageName = pname;
       versionPolicy = "none";
     };
   };
@@ -72,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glib wrapper library around the libgit2 git access library";
     homepage = "https://gitlab.gnome.org/GNOME/libgit2-glib";
     license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-})
+}

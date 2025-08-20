@@ -4,7 +4,7 @@
   flit-core,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "${python.libPrefix}-bootstrap-${flit-core.pname}";
   inherit (flit-core)
     version

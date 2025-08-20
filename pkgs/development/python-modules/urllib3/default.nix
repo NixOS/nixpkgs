@@ -12,7 +12,6 @@
   brotli,
   brotlicffi,
   pysocks,
-  zstandard,
 
   # tests
   pytestCheckHook,
@@ -24,12 +23,12 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.4.0";
+    version = "2.2.3";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-QUvGU1t4f+vXVngEzAFf7jnaq4rYYmjxMQqSUGl95GY=";
+      hash = "sha256-59gUqB2tgebK8uyf3tsoTsyccwdrYmVFR8xkzNyuJuk=";
     };
 
     build-system = [
@@ -40,7 +39,6 @@ let
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
-      zstd = [ zstandard ];
     };
 
     nativeCheckInputs = [
@@ -48,8 +46,7 @@ let
       pytestCheckHook
       tornado
       trustme
-    ]
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

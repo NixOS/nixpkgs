@@ -46,38 +46,39 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "31.0";
-  slang = "Gallium";
+  version = "29.0";
+  slang = "Copper";
 
   src = fetchurl {
     url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-qUOE8A1TeRy7S02Dq0Fge8cZYtQkYfAtcRFsT/bcpWc=";
+    hash = "sha256-0vuzuND/g5RYcunm+iWOk0pwY2DmmNrjtNX5ca3fdJM=";
   };
 
   preConfigure = ''
-    substituteInPlace src/dune --replace-warn " bytes " " "
+    substituteInPlace src/dune --replace " bytes " " "
   '';
 
-  postConfigure = "patchShebangs ivette/api.sh";
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ]
-  ++ (with ocamlPackages; [
-    ocaml
-    findlib
-    dune_3
-    menhir
-  ]);
+  nativeBuildInputs =
+    [ wrapGAppsHook3 ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      dune_3
+      menhir
+    ]);
 
   buildInputs = with ocamlPackages; [
     dune-site
     dune-configurator
+    ltl2ba
     ocamlgraph
     yojson
     menhirLib
+    camlzip
     lablgtk3
     lablgtk3-sourceview3
     coq
@@ -88,6 +89,7 @@ stdenv.mkDerivation rec {
     mlgmpidl
     doxygen
     ppx_deriving
+    ppx_import
     ppx_deriving_yaml
     ppx_deriving_yojson
     gdk-pixbuf

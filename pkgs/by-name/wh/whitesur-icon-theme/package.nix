@@ -32,13 +32,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-10";
+    version = "2024-09-07";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = "WhiteSur-icon-theme";
-      tag = "v${version}";
-      hash = "sha256-spTmS9Cn/HAnbgf6HppwME63cxWEbcKwWYMMj8ajFyY=";
+      repo = pname;
+      rev = version;
+      hash = "sha256-/cW/ymT9MjB07Sw7ifpr6x8oaaeI4PSyaOdLci7AncY=";
     };
 
     nativeBuildInputs = [

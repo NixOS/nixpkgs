@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "urxvt-theme-switch";
   version = "unstable-2014-12-21";
 

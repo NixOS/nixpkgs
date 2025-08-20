@@ -21,7 +21,12 @@ rustPlatform.buildRustPackage rec {
     ./cargo-lock-bump-time.patch
   ];
 
-  cargoHash = "sha256-I0hY2WmaHu/HKQJHyZp0C6wIi0++w5dFeExVMyhInJY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "hdf5-0.8.1" = "sha256-qWF2mURVblSLPbt4oZSVxIxI/RO3ZNcZdwCdaOTACYs=";
+    };
+  };
 
   # only the ladspa plugin part has been packaged so far...
 

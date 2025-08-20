@@ -35,7 +35,7 @@ buildPythonPackage {
     six
   ];
 
-  # Don't run integration tests
+  # Don't run intergration tests
   doCheck = false;
 
   meta = with lib; {

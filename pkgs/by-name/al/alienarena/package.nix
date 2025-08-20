@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
     description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
@@ -59,8 +59,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://alienarena.org";
     # Engine is under GPLv2, everything else is under
-    license = lib.licenses.unfreeRedistributable;
-    platforms = lib.platforms.linux;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
     hydraPlatforms = [ ];
   };
 }

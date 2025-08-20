@@ -1,6 +1,5 @@
 {
   lib,
-  boto3,
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oras";
-  version = "0.2.37";
+  version = "0.2.25";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "oras-project";
     repo = "oras-py";
     tag = version;
-    hash = "sha256-pXIA970QBIlbFVFpN1Yl71ojc+atdXQuNoPEW+PrrWc=";
+    hash = "sha256-o9PSd5vZ5qllL73WPSlSaLA5QmKKLshGgfidiM4h+5g=";
   };
 
   build-system = [ setuptools ];
@@ -31,23 +30,19 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    boto3
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oras" ];
 
   disabledTests = [
     # Test requires network access
     "test_get_many_tags"
-    "test_ssl"
   ];
 
   meta = with lib; {
     description = "ORAS Python SDK";
     homepage = "https://github.com/oras-project/oras-py";
-    changelog = "https://github.com/oras-project/oras-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/oras-project/oras-py/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tubing and extrusion library";
-    homepage = "https://www.linas.org/gle/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

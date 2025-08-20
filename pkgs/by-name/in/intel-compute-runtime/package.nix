@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "25.27.34303.6";
+  version = "24.52.32224.5";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-AgdPhEAg9N15lNfcX/zQLxBUDTzEEvph+y0FYbB6iCs=";
+    rev = version;
+    hash = "sha256-Unoh33bZFsMCqJ2hWEYVEdMF2V/aSIDynThz1pUyM7Q=";
   };
 
   nativeBuildInputs = [
@@ -34,14 +34,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "SKIP_UNIT_TESTS" true)
-    (lib.cmakeFeature "IGC_DIR" (builtins.toString intel-graphics-compiler))
-    (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
+    "-DSKIP_UNIT_TESTS=1"
+    "-DIGC_DIR=${intel-graphics-compiler}"
+    "-DOCL_ICD_VENDORDIR=${placeholder "out"}/etc/OpenCL/vendors"
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-    # disable spectre mitigations (already mitigated in the kernel)
-    # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
-    (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   outputs = [
@@ -72,16 +69,16 @@ stdenv.mkDerivation rec {
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
-  meta = {
-    description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
+  meta = with lib; {
+    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
     changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

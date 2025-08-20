@@ -5,44 +5,41 @@
   re2c,
   z3,
   hiredis,
-  llvm,
+  llvm_18,
   cmake,
   ninja,
-  nix-update-script,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "alive2";
-  version = "21.0";
+  version = "0-unstable-2024-09-23";
 
   src = fetchFromGitHub {
     owner = "AliveToolkit";
     repo = "alive2";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-LL6/Epn6iHQJGKb8PX+U6zvXK/WTlvOIJPr6JuGRsSU=";
+    rev = "05a964284056b38a6dc1f807e7acad64a0308328";
+    sha256 = "sha256-okKKUU7WLXLD9Hvsfoz+1HQWoyQ/bqRpBk5ogr7kSJA=";
   };
 
   nativeBuildInputs = [
     cmake
-    ninja
-    re2c
   ];
   buildInputs = [
+    re2c
     z3
     hiredis
-    llvm
+    llvm_18
+    ninja
   ];
-  strictDeps = true;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail '-Werror' "" \
       --replace-fail 'find_package(Git REQUIRED)' ""
   '';
 
   env = {
     ALIVE2_HOME = "$PWD";
-    LLVM2_HOME = "${llvm}";
+    LLVM2_HOME = "${llvm_18}";
     LLVM2_BUILD = "$LLVM2_HOME/build";
   };
 
@@ -59,15 +56,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Automatic verification of LLVM optimizations";
     homepage = "https://github.com/AliveToolkit/alive2";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "alive";
   };
 })

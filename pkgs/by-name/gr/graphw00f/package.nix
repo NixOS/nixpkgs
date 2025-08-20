@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "graphw00f";
-  version = "1.2.1";
+  version = "1.1.19";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "dolevf";
     repo = "graphw00f";
     tag = version;
-    hash = "sha256-8fOvcc//UdDawgGMAhbYQ/O5kd1l2skWGDlFNYocNY8=";
+    hash = "sha256-w2iVgs3WnEYCiCfwxB/HcwNRoWTlLfVJIzfp1VbrQXA=";
   };
 
   dependencies = with python3.pkgs; [ requests ];

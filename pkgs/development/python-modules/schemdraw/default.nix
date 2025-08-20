@@ -11,21 +11,20 @@
   ziamath,
   pytestCheckHook,
   nbval,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.20";
+  version = "0.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = "schemdraw";
-    tag = version;
-    hash = "sha256-mt1XTrUH570zrJpCFo0jORAE/jo7H2T7sKpIskYw8bk=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +47,6 @@ buildPythonPackage rec {
     latex2mathml
     ziafont
     ziamath
-    writableTmpDirAsHomeHook
   ];
 
   # Strip out references to unfree fonts from the test suite
@@ -58,7 +56,7 @@ buildPythonPackage rec {
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
-  pytestFlags = [ "--nbval-lax" ];
+  pytestFlagsArray = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "schemdraw" ];
 

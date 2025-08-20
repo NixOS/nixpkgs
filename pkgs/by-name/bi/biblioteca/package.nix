@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biblioteca";
-  version = "1.6";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "workbenchdev";
     repo = "Biblioteca";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-9AL8obvXB/bgqhTw8VE30OytNFQmxvJ6TYGN8ir+NfI=";
+    hash = "sha256-zrrI3u4ukGN6eb/eK/aZG4gi/xtXciyRS+JX9Js9KEw=";
   };
 
   patches = [
@@ -65,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       libadwaita.devdoc
       webkitgtk.devdoc
       gobject-introspection.devdoc
-    ]
-    ++ extraDocsPackage;
+    ] ++ extraDocsPackage;
   };
 
   postPatch = ''
@@ -102,8 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://apps.gnome.org/Biblioteca/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    teams = [ lib.teams.gnome-circle ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ] ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Only;
     description = "Documentation viewer for GNOME";
     mainProgram = "biblioteca";

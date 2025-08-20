@@ -21,11 +21,10 @@ in
       '';
       default = { };
       example = {
-        DATABASE_URL = "postgres://postgres:postgres@postgres/postgres";
         CORE_SECRET = "changethis";
-        CORE_HOSTNAME = "0.0.0.0";
+        CORE_DATABASE_URL = "postgres://postgres:postgres@postgres/postgres";
+        CORE_HOST = "0.0.0.0";
         CORE_PORT = "3000";
-        DATASOURCE_TYPE = "local";
         DATASOURCE_LOCAL_DIRECTORY = "/var/lib/zipline/uploads";
       };
 
@@ -38,7 +37,7 @@ in
           ]);
 
         options = {
-          CORE_HOSTNAME = lib.mkOption {
+          CORE_HOST = lib.mkOption {
             type = lib.types.str;
             description = "The hostname to listen on.";
             default = "127.0.0.1";
@@ -75,8 +74,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.zipline.settings = {
-      DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://zipline@localhost/zipline?host=/run/postgresql";
-      DATASOURCE_TYPE = lib.mkDefault "local";
+      CORE_DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://zipline@localhost/zipline?host=/run/postgresql";
       DATASOURCE_LOCAL_DIRECTORY = lib.mkDefault "/var/lib/zipline/uploads"; # created automatically by zipline
     };
 
@@ -93,8 +91,8 @@ in
       wantedBy = [ "multi-user.target" ];
 
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
-      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
 
       environment = lib.mapAttrs (_: value: toString value) cfg.settings;
 
@@ -107,11 +105,9 @@ in
         ExecStart = lib.getExe cfg.package;
 
         # Hardening
-        AmbientCapabilities = "";
         CapabilityBoundingSet = [ "" ];
-        DevicePolicy = "closed";
+        DeviceAllow = [ "" ];
         LockPersonality = true;
-        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
@@ -125,19 +121,15 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET AF_INET6 AF_UNIX AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
-          "@chown"
-        ];
-        UMask = "0077";
       };
     };
   };

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "xstatic-jquery-file-upload";
   version = "10.31.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-jQuery-File-Upload";

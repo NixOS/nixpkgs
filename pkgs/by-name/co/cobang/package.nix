@@ -1,76 +1,89 @@
 {
   lib,
   python3Packages,
-  blueprint-compiler,
-  desktop-file-utils,
   fetchFromGitHub,
   gst_all_1,
   gobject-introspection,
-  libadwaita,
-  libportal-gtk4,
-  meson,
+  gtk3,
+  libhandy,
+  librsvg,
   networkmanager,
-  ninja,
-  pipewire,
-  pkg-config,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
-  version = "1.7.1";
-  pyproject = false; # Built with meson
+  version = "0.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
-    hash = "sha256-rBGz9g6+6jguJggBQKlyOWoME3VHOP8Gq4VtYywoVdI=";
+    hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
   };
 
-  # https://github.com/hongquan/CoBang/issues/117
   postPatch = ''
-    substituteInPlace src/window.blp \
-      --replace-fail 'seeing-symbolic' 'scanner-symbolic'
+    # Fixes "Multiple top-level packages discovered in a flat-layout"
+    sed -i '$ a\[tool.setuptools]' pyproject.toml
+    sed -i '$ a\packages = ["cobang"]' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    blueprint-compiler
-    desktop-file-utils
+  nativeBuildInputs = with python3Packages; [
     # Needed to recognize gobject namespaces
     gobject-introspection
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook3
+    setuptools
   ];
 
-  buildInputs = [
-    gst_all_1.gst-plugins-base
+  buildInputs = with python3Packages; [
     # Requires v4l2src
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    # gtk4paintablesink
-    gst_all_1.gst-plugins-rs
-    libadwaita
-    libportal-gtk4
+    # For gobject namespaces
+    libhandy
     networkmanager
-    pipewire
   ];
 
   dependencies = with python3Packages; [
+    brotlicffi
+    kiss-headers
     logbook
-    # Needed as a gobject namespace and to fix 'Caps' object is not subscriptable
-    gst-python
     pillow
+    requests
+    single-version
+    # Unlisted dependencies
     pygobject3
     python-zbar
+    # Needed as a gobject namespace and to fix 'Caps' object is not subscriptable
+    gst-python
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "Pillow"
   ];
 
   # Wrapping this manually for SVG recognition
   dontWrapGApps = true;
 
+  postInstall = ''
+    # Needed by the application
+    cp -R data $out/${python3Packages.python.sitePackages}/
+
+    # Icons and applications
+    install -Dm 644 $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.svg -t $out/share/pixmaps/
+    install -Dm 644 $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop.in -t $out/share/applications/
+    mv $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop{.in,}
+  '';
+
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    wrapProgram $out/bin/cobang \
+      ''${gappsWrapperArgs[@]} \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
   '';
 
   meta = {

@@ -2,23 +2,19 @@
   lib,
   buildPythonApplication,
   fetchPypi,
-  libevdev,
-  paramiko,
-  pynput,
-  screeninfo,
+  python3Packages,
 }:
 
 buildPythonApplication rec {
   pname = "remarkable-mouse";
   version = "7.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-82P9tE3jiUlKBGZCiWDoL+9VJ06Bc+If+aMfcEEU90U=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     screeninfo
     paramiko
     pynput

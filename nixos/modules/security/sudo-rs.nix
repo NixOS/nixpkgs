@@ -36,7 +36,7 @@ in
 
     defaultOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ "SETENV" ];
+      default = [ ];
       description = ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
@@ -286,7 +286,7 @@ in
       in
       {
         sudo = {
-          source = "${lib.getExe cfg.package}";
+          source = "${cfg.package.out}/bin/sudo";
           inherit
             owner
             group

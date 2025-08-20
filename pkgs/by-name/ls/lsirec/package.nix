@@ -5,9 +5,9 @@
   python3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lsirec";
-  version = "0-unstable-2019-03-03";
+  version = "unstable-2019-03-03";
 
   src = fetchFromGitHub {
     owner = "marcan";

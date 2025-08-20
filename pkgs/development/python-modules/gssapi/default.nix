@@ -13,6 +13,7 @@
   decorator,
 
   # native dependencies
+  GSS,
   krb5-c, # C krb5 library, not PyPI krb5
 
   # tests
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.9.0";
+  version = "1.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "pythongssapi";
     repo = "python-${pname}";
     tag = "v${version}";
-    hash = "sha256-Y53HoLcamoFIrwZtNcL1BOrzBjRD09mT3AiS0QUT7dY=";
+    hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
   };
 
   postPatch = ''
@@ -51,6 +52,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ decorator ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

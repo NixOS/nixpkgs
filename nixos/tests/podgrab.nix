@@ -2,38 +2,40 @@ let
   defaultPort = 8080;
   customPort = 4242;
 in
-{ pkgs, ... }:
-{
-  name = "podgrab";
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "podgrab";
 
-  nodes = {
-    default =
-      { ... }:
-      {
-        services.podgrab.enable = true;
-      };
-
-    customized =
-      { ... }:
-      {
-        services.podgrab = {
-          enable = true;
-          port = customPort;
+    nodes = {
+      default =
+        { ... }:
+        {
+          services.podgrab.enable = true;
         };
-      };
-  };
 
-  testScript = ''
-    start_all()
+      customized =
+        { ... }:
+        {
+          services.podgrab = {
+            enable = true;
+            port = customPort;
+          };
+        };
+    };
 
-    default.wait_for_unit("podgrab")
-    default.wait_for_open_port(${toString defaultPort})
-    default.succeed("curl --fail http://localhost:${toString defaultPort}")
+    testScript = ''
+      start_all()
 
-    customized.wait_for_unit("podgrab")
-    customized.wait_for_open_port(${toString customPort})
-    customized.succeed("curl --fail http://localhost:${toString customPort}")
-  '';
+      default.wait_for_unit("podgrab")
+      default.wait_for_open_port(${toString defaultPort})
+      default.succeed("curl --fail http://localhost:${toString defaultPort}")
 
-  meta.maintainers = with pkgs.lib.maintainers; [ ambroisie ];
-}
+      customized.wait_for_unit("podgrab")
+      customized.wait_for_open_port(${toString customPort})
+      customized.succeed("curl --fail http://localhost:${toString customPort}")
+    '';
+
+    meta.maintainers = with pkgs.lib.maintainers; [ ambroisie ];
+  }
+)

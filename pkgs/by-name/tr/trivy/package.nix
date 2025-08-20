@@ -2,28 +2,28 @@
   lib,
   stdenv,
   buildPackages,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   trivy,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "trivy";
-  version = "0.65.0";
+  version = "0.58.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${version}";
-    hash = "sha256-xOYLIBLy+0avsTp+Sind6IJc9O17aF4inRNnhuHwz1M=";
+    hash = "sha256-td0FYnrfq+bBpH3YdNbLJp3MG6hiGD5fU77+sO6HP9k=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-2O0zmPgXL0FZbnzEME8pBPizhWcCgKOukoNJhDhjCrQ=";
+  vendorHash = "sha256-6RUPSYSvhGqtnX/eeOtIdBZVsv+faGOimYt74f598qM=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -61,7 +61,7 @@ buildGo124Module rec {
     version = "Version: ${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     homepage = "https://github.com/aquasecurity/trivy";
     changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
@@ -73,8 +73,8 @@ buildGo124Module rec {
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
     mainProgram = "trivy";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       fab
       jk
     ];

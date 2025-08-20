@@ -32,8 +32,7 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tlocke/pg8000";
     changelog = "https://github.com/tlocke/pg8000#release-notes";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 }

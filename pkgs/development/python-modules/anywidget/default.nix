@@ -3,29 +3,26 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
   pythonOlder,
   hatch-jupyter-builder,
   hatchling,
   importlib-metadata,
-  ipykernel,
   ipywidgets,
   psygnal,
-  pydantic,
   typing-extensions,
   watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "anywidget";
-  version = "0.9.18";
+  version = "0.9.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jiz0WbUXp9BE1vvIS5U+nIPwJnkLLdPOkPIaf47e0A8=";
+    hash = "sha256-xlVFW/UfghgusjxZR9N8xB8LH/rK9+K3YxR6IzLLPwc=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -45,15 +42,11 @@ buildPythonPackage rec {
     ipywidgets
     psygnal
     typing-extensions
-  ]
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook
-    ipykernel
-    pydantic
     watchfiles
-    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [

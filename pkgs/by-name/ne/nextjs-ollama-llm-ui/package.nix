@@ -14,8 +14,7 @@
 }:
 
 let
-  version = "1.2.0";
-  tag = "v.${version}";
+  version = "1.1.0";
 in
 buildNpmPackage {
   pname = "nextjs-ollama-llm-ui";
@@ -24,10 +23,10 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "jakobhoeg";
     repo = "nextjs-ollama-llm-ui";
-    inherit tag;
-    hash = "sha256-hgLeTWtnyxGMkMsAGBbaM2yeS/H8AStMPR2bjLdjwEc=";
+    rev = "v${version}";
+    hash = "sha256-IA7g96u5QY8cOuTbJEWw7+U+hSFBzIQVk4Kv3qHKAdM=";
   };
-  npmDepsHash = "sha256-9+A+85IK4zmMGlBsVoLg7RnST72AhAM6xPGnBZLgLTk=";
+  npmDepsHash = "sha256-3M0BZ9KZZ0ONwvTLycfMR8skMQf8mzjeqYCwJY4l040=";
 
   patches = [
     # nextjs tries to download google fonts from the internet during buildPhase and fails in Nix sandbox.
@@ -92,7 +91,7 @@ buildNpmPackage {
 
   meta = {
     description = "Simple chat web interface for Ollama LLMs";
-    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/${tag}";
+    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/v${version}";
     mainProgram = "nextjs-ollama-llm-ui";
     homepage = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui";
     license = lib.licenses.mit;

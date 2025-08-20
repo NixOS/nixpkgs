@@ -9,7 +9,7 @@
   mkOpenModelicaDerivation,
 }:
 
-mkOpenModelicaDerivation {
+mkOpenModelicaDerivation rec {
   pname = "omshell";
   omdir = "OMShell";
   omdeps = [ openmodelica.omcompiler ];

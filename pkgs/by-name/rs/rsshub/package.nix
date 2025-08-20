@@ -7,49 +7,48 @@
   replaceVars,
   stdenv,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2025-05-31";
+  version = "0-unstable-2024-09-16";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "2dce2e32dd5f4dade2fc915ac8384c953e11cc83";
-    hash = "sha256-gS/t6O3MishJgi2K9hV22hT95oYHfm44cJqrUo2GPlM=";
+    rev = "6de50fb35dbdb93be43f315a8c2651e90c5195a9";
+    hash = "sha256-fxkK1prrKfAmB5yqiOKdLPeJp/hO07KJNHLnYSQGPNE=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
       "GIT_HASH" = finalAttrs.src.rev;
     })
-    ./0002-fix-network-call.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-7qh6YZbIH/kHVssDZxHY7X8bytrnMcUq0MiJzWZYItc=";
+    hash = "sha256-mAAo4SdJ8cj8aqnbm+azcnxq8lFBvOy3BlSEKz9MA0Q=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''
     runHook preBuild
+
     pnpm build
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin $out/lib/rsshub
     cp -r lib node_modules assets api package.json tsconfig.json $out/lib/rsshub
+
     runHook postInstall
   '';
 

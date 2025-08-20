@@ -26,11 +26,11 @@ buildGoModule rec {
     mv $out/bin/src $out/bin/$pname
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatically spawn a reverse shell fully interactive for Linux or Windows victim";
     homepage = "https://github.com/nodauf/Girsh";
     changelog = "https://github.com/nodauf/Girsh/releases/tag/v${version}";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

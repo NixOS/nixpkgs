@@ -6,24 +6,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudflare-dyndns";
-  version = "5.4";
+  version = "5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kissgyorgy";
     repo = "cloudflare-dyndns";
     rev = "v${version}";
-    hash = "sha256-tCZX9CKDwGAZ8/rwI764uuE9SQ1A5WhVoqgUegJ19g4=";
+    hash = "sha256-tI6qdNxIMEuAR+BcqsRi2EBXTQnfdDLKW7Y+fbcmlao=";
   };
 
   build-system = with python3.pkgs; [
-    hatchling
+    poetry-core
   ];
 
   dependencies = with python3.pkgs; [
+    attrs
     click
-    httpx
+    cloudflare
     pydantic
+    requests
+    httpx
     truststore
   ];
 

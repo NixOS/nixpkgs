@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/onboarding";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.onboarding";
   };
 }

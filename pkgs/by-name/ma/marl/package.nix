@@ -5,13 +5,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "marl";
   version = "1.0.0"; # Based on marl's CHANGES.md
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = "marl";
+    repo = pname;
     sha256 = "0pnbarbyv82h05ckays2m3vgxzdhpcpg59bnzsddlb5v7rqhw51w";
     rev = "40209e952f5c1f3bc883d2b7f53b274bd454ca53";
   };

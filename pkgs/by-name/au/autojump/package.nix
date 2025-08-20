@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [
+      domenkozar
       yurrriq
     ];
   };

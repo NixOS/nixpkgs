@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
   pytestCheckHook,
   setuptools,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ancp-bids";
-  version = "0.3.0";
+  version = "0.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,9 +20,9 @@ buildPythonPackage rec {
   # `tests/data` dir missing from PyPI dist
   src = fetchFromGitHub {
     owner = "ANCPLabOldenburg";
-    repo = "ancp-bids";
+    repo = pname;
     tag = version;
-    hash = "sha256-n8QfQ2PGdAO6kTfkbFpj3f2gYa3vwuYg+vPpZlGNpb0=";
+    hash = "sha256-JxF1W4yMPFIQXPH7QHfcHssWMP/Uci07e66WE5qVJx4=";
   };
 
   build-system = [ setuptools ];
@@ -34,14 +35,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ancpbids" ];
 
-  enabledTestPaths = [ "tests/auto" ];
+  pytestFlagsArray = [ "tests/auto" ];
 
   disabledTests = [ "test_fetch_dataset" ];
 
   meta = with lib; {
     homepage = "https://ancpbids.readthedocs.io";
     description = "Read/write/validate/query BIDS datasets";
-    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${src.tag}";
+    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

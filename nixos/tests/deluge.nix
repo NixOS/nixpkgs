@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "deluge";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli ];
@@ -27,14 +26,11 @@
           allow_remote = true;
           download_location = "/var/lib/deluge/my-download";
           daemon_port = 58846;
-          listen_ports = [
-            6881
-            6889
-          ];
+          listen_ports = [ 6881 6889 ];
         };
         web = {
           enable = true;
-          port = 3142;
+          port =  3142;
         };
         authFile = pkgs.writeText "deluge-auth" ''
           localclient:a7bef72a890:10
@@ -64,4 +60,4 @@
         "(deluge-console 'connect 127.0.0.1:58846 andrew password; help' || true) | grep -q 'rm.*Remove a torrent'"
     )
   '';
-}
+})

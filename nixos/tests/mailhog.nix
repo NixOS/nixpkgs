@@ -1,12 +1,8 @@
-{ lib, ... }:
-{
+import ./make-test-python.nix ({lib, ...}: {
   name = "mailhog";
-  meta.maintainers = with lib.maintainers; [
-    jojosch
-    RTUnreal
-  ];
+  meta.maintainers = with lib.maintainers; [jojosch RTUnreal];
 
-  nodes.machine = _: {
+  nodes.machine = {pkgs, ...}: {
     services.mailhog.enable = true;
   };
 
@@ -23,4 +19,4 @@
     )
     assert all(msg in res for msg in ["this is the body of the email", "sender@example.com", "root@example.com"])
   '';
-}
+})

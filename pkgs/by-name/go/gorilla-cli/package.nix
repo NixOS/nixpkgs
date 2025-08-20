@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gorilla-cli";
   version = "0.0.9";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gorilla-llm";
@@ -19,11 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabled = python3.pythonOlder "3.6";
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     requests
     halo
     prompt-toolkit
@@ -34,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "LLMs for your CLI";
     homepage = "https://github.com/gorilla-llm/gorilla-cli";
     changelog = "https://github.com/gorilla-llm/gorilla-cli/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
     mainProgram = "gorilla";
   };
 }

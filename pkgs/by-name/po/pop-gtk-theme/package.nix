@@ -12,10 +12,9 @@
   gdk-pixbuf,
   librsvg,
   python3,
-  buildPackages,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
   version = "2021-08-19";
 
@@ -51,9 +50,9 @@ stdenv.mkDerivation {
     for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="${buildPackages.inkscape}/bin/inkscape"' \
+                  'INKSCAPE="${inkscape}/bin/inkscape"' \
         --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="${buildPackages.optipng}/bin/optipng"'
+                  'OPTIPNG="${optipng}/bin/optipng"'
     done
   '';
 

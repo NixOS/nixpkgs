@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "duckinator";
-    repo = "bork";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
   };
@@ -35,18 +35,18 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "packaging"
-    "urllib3"
   ];
 
-  dependencies = [
-    build
-    coloredlogs
-    packaging
-    pip
-    urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ toml ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies =
+    [
+      build
+      coloredlogs
+      packaging
+      pip
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ toml ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [
     "bork"
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # tries to call python -m bork

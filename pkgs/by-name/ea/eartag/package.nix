@@ -22,15 +22,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.5";
+  version = "0.6.4";
   format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "eartag";
+    repo = pname;
     rev = version;
-    hash = "sha256-sxVivQppX8KdkvHaW6xQ64Wi8Nfv5Rmwf4NADBDpOOo=";
+    hash = "sha256-K93sj84MdDCQgIMghkjpGIieSrlnlQiw85JSgggRlf4=";
   };
 
   postPatch = ''
@@ -52,8 +52,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook4
     blueprint-compiler
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [
     librsvg
@@ -87,7 +86,6 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
   };
 }

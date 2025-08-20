@@ -22,13 +22,10 @@
 
 let
   pname = "typora";
-  version = "1.10.8";
+  version = "1.9.3";
   src = fetchurl {
-    urls = [
-      "https://download.typora.io/linux/typora_${version}_amd64.deb"
-      "https://download2.typoraio.cn/linux/typora_${version}_amd64.deb"
-    ];
-    hash = "sha256-7auxTtdVafvM2fIpQVvEey1Q6eLVG3mLdjdZXcqSE/Q=";
+    url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
+    hash = "sha256-3rR/CvFFjRPkz27mm1Wt5hwgRUnLL7lpLFKA2moILx8=";
   };
 
   typoraBase = stdenv.mkDerivation {
@@ -41,11 +38,9 @@ let
 
     installPhase = ''
       runHook preInstall
-
       mkdir -p $out/bin $out/share
       mv usr/share $out
       ln -s $out/share/typora/Typora $out/bin/Typora
-
       runHook postInstall
     '';
   };
@@ -124,19 +119,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
     mkdir -p $out/bin
     ln -s ${launchScript} $out/bin/typora
     ln -s ${typoraBase}/share/ $out
-
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Markdown editor, a markdown reader";
     homepage = "https://typora.io/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ npulidomateo ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ npulidomateo ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "typora";
   };

@@ -7,12 +7,11 @@
   pkg-config,
   libpng,
   libjpeg,
-  pcre2,
+  pcre,
   SDL2_image,
   glew,
   libGLU,
   libGL,
-  libX11,
   boost,
   glm,
   freetype,
@@ -20,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "logstalgia";
-  version = "1.1.4";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
+    sha256 = "1agwjlwzp1c86hqb1p7rmzqzhd3wpnyh8whsfq4sbx01wj0l0gzd";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,19 +33,13 @@ stdenv.mkDerivation rec {
     ftgl
     libpng
     libjpeg
-    libX11
-    pcre2
+    pcre
     SDL2_image
     libGLU
     libGL
     boost
     glm
     freetype
-  ];
-
-  configureFlags = [
-    "--with-boost-system=boost_system"
-    "--with-boost-filesystem=boost_filesystem"
   ];
 
   meta = with lib; {

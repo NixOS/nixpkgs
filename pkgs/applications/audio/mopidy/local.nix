@@ -1,35 +1,37 @@
 {
   lib,
   mopidy,
-  pythonPackages,
+  python3Packages,
   fetchPypi,
+  fetchpatch,
 }:
 
-pythonPackages.buildPythonApplication rec {
-  pname = "mopidy-local";
-  version = "3.3.0";
-  pyproject = true;
+python3Packages.buildPythonApplication rec {
+  pname = "Mopidy-Local";
+  version = "3.2.1";
 
   src = fetchPypi {
-    inherit version;
-    pname = "mopidy_local";
-    hash = "sha256-y6btbGk5UiVan178x7d9jq5OTnKMbuliHv0aRxuZK3o=";
+    inherit pname version;
+    sha256 = "18w39mxpv8p17whd6zfw5653d21q138f8xd6ili6ks2g2dbm25i9";
   };
 
-  build-system = [
-    pythonPackages.setuptools
+  patches = [
+    # Fix tests with newer Mopidy versions >=3.4.0 -- mopidy/mopidy-local#69
+    (fetchpatch {
+      name = "update-tests-for-mopidy-3.4.0.patch";
+      url = "https://github.com/mopidy/mopidy-local/commit/f2c198f8eb253f62100afc58f652e73a76d5a090.patch";
+      hash = "sha256-jrlZc/pd00S5q9nOfV1OXu+uP/SvH+Xbi7U52aZajj4=";
+    })
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     mopidy
-    pythonPackages.uritools
+    python3Packages.uritools
   ];
 
   nativeCheckInputs = [
-    pythonPackages.pytestCheckHook
+    python3Packages.pytestCheckHook
   ];
-
-  pythonImportsCheck = [ "mopidy_local" ];
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-local";

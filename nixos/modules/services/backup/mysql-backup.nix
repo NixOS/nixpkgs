@@ -8,18 +8,6 @@ let
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
 
-  # Newer mariadb versions warn of the usage of 'mysqldump' and recommend 'mariadb-dump' (https://mariadb.com/kb/en/mysqldump/)
-  dumpBinary =
-    if
-      (
-        lib.getName config.services.mysql.package == lib.getName pkgs.mariadb
-        && lib.versionAtLeast config.services.mysql.package.version "11.0.0"
-      )
-    then
-      "${config.services.mysql.package}/bin/mariadb-dump"
-    else
-      "${config.services.mysql.package}/bin/mysqldump";
-
   compressionAlgs = {
     gzip = rec {
       pkg = pkgs.gzip;
@@ -51,13 +39,6 @@ let
   selectedAlg = compressionAlgs.${cfg.compressionAlg};
   compressionCmd = selectedAlg.cmd compressionLevelFlag;
 
-  shouldUseSingleTransaction =
-    db:
-    if lib.isBool cfg.singleTransaction then
-      cfg.singleTransaction
-    else
-      lib.elem db cfg.singleTransaction;
-
   backupScript = ''
     set -o pipefail
     failed=""
@@ -70,7 +51,7 @@ let
 
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}${selectedAlg.ext}"
-    if ${dumpBinary} ${lib.optionalString (shouldUseSingleTransaction db) "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
+    if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -145,13 +126,9 @@ in
 
       singleTransaction = lib.mkOption {
         default = false;
-        type = lib.types.oneOf [
-          lib.types.bool
-          (lib.types.listOf lib.types.str)
-        ];
+        type = lib.types.bool;
         description = ''
-          Whether to create database dump in a single transaction.
-          Can be either a boolean for all databases or a list of database names.
+          Whether to create database dump in a single transaction
         '';
       };
 
@@ -176,12 +153,6 @@ in
           || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
         message = "${cfg.compressionAlg} compression level must be between ${toString selectedAlg.minLevel} and ${toString selectedAlg.maxLevel}";
       }
-      {
-        assertion =
-          !(lib.isList cfg.singleTransaction)
-          || lib.all (db: lib.elem db cfg.databases) cfg.singleTransaction;
-        message = "All databases in singleTransaction must be included in the databases option";
-      }
     ];
 
     # ensure unix user to be used to perform backup exist.
@@ -204,7 +175,7 @@ in
         ensurePermissions =
           let
             privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-            grant = db: lib.nameValuePair "\\`${db}\\`.*" privs;
+            grant = db: lib.nameValuePair "${db}.*" privs;
           in
           lib.listToAttrs (map grant cfg.databases);
       }

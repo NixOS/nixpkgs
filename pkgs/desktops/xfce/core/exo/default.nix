@@ -32,6 +32,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Application library for Xfce";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

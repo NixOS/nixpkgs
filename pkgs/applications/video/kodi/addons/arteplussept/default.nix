@@ -35,6 +35,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/thomas-ernest/plugin.video.arteplussept";
     description = "Watch videos available on Arte+7";
     license = licenses.mit;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

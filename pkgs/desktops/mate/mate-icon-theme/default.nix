@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

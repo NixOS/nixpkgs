@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  unstableGitUpdater,
+  nix-update-script,
   stdenv,
   testers,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = nix-update-script { };
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 

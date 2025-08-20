@@ -7,15 +7,15 @@
   futhark,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "smlfut";
-  version = "1.6.4";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlfut";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xICcobdvSdHZfNxz4WRDOsaL4JGFRK7LmhMzKOZY5FY=";
+    rev = "v${version}";
+    hash = "sha256-0Bqgoyp43Y961BMghJFBUx+1lcM2HHlPDjPyLHquWiE=";
   };
 
   enableParallelBuilding = true;
@@ -43,4 +43,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ athas ];
     mainProgram = "smlfut";
   };
-})
+}

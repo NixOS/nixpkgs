@@ -6,7 +6,6 @@
   lib,
   fetchzip,
   build-asdf-system,
-  stdenv,
   ...
 }:
 
@@ -15921,8 +15920,6 @@ lib.makeScope pkgs.newScope (self: {
       lispLibs = [ (getAttr "cffi" self) ];
       meta = {
         hydraPlatforms = [ ];
-        # darwin cannot find libpango.dylib
-        broken = stdenv.hostPlatform.isDarwin;
       };
     }
   );
@@ -39540,8 +39537,6 @@ lib.makeScope pkgs.newScope (self: {
       ];
       meta = {
         hydraPlatforms = [ ];
-        # darwin cannot find libpango.dylib
-        broken = stdenv.hostPlatform.isDarwin;
       };
     }
   );

@@ -1,49 +1,41 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  rust-jemalloc-sys,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, rust-jemalloc-sys
+, stdenv
+, darwin
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "1.6.0";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
-    owner = "oxc-project";
+    owner = "web-infra-dev";
     repo = "oxc";
-    tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-URgz9k89WgYfCu9OlNCZk5wRt8upt58rIxFWa90L+OQ=";
+    rev = "oxlint_v${version}";
+    hash = "sha256-cH3Sosfmx0eOWWOjglcB3puiK0XKbO0wua45/YMZe+0=";
   };
 
-  cargoHash = "sha256-s1UXL+y/BISOnPJmdpQFztYRd5je9C8jcc+e+iWtRuU=";
+  cargoHash = "sha256-Yfk5DGOo3GLHzqJYCFrlLB7soHFI+zBRR93daVOgrmk=";
 
   buildInputs = [
     rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
-  env.OXC_VERSION = finalAttrs.version;
+  env.OXC_VERSION = version;
 
-  cargoBuildFlags = [
-    "--bin=oxlint"
-    "--bin=oxc_language_server"
-  ];
-  cargoTestFlags = finalAttrs.cargoBuildFlags;
+  cargoBuildFlags = [ "--bin=oxlint" ];
+  cargoTestFlags = cargoBuildFlags;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
-    description = "Collection of JavaScript tools written in Rust";
-    homepage = "https://github.com/oxc-project/oxc";
-    changelog = "https://github.com/oxc-project/oxc/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+  meta = with lib; {
+    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
+    homepage = "https://github.com/web-infra-dev/oxc";
+    changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "oxlint";
   };
-})
+}

@@ -28,6 +28,5 @@ let
     ./custom-cert-1.pem
     ./custom-cert-2.pem # ...
   ];
-in
-citrix_workspace.override { inherit extraCerts; }
+in citrix_workspace.override { inherit extraCerts; }
 ```

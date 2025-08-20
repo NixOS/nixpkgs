@@ -216,9 +216,8 @@ in
   /**
     Wrap a derivation such that instantiating it produces a warning.
 
-    All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
-    and `.type` which are used by `nix search`, and `.outputName` which avoids
-    double warnings with `nix-instantiate` and `nix-build`.
+    All attributes apart from `meta`, `name`, and `type` (which are used by
+    `nix search`) will be wrapped in `lib.warn`.
 
     # Inputs
 
@@ -247,7 +246,6 @@ in
         "meta"
         "name"
         "type"
-        "outputName"
       ];
     in
     drv // mapAttrs (_: lib.warn msg) drvToWrap;

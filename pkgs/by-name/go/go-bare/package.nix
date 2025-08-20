@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "go-bare";
   version = "0-unstable-2021-04-06";
 

@@ -26,14 +26,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lokinet";
-  version = "0.9.13";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6TVMuT4O8zJj97873BTsR1PJU8NaBgYr/nBkc/EfQuQ=";
+    hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
   };
 
   patches = [
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     "-DWITH_SETCAP=OFF"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Anonymous, decentralized and IP based overlay network for the internet";
     homepage = "https://lokinet.org/";
     changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ wyndon ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wyndon ];
   };
 }

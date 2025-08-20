@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  hatchling,
+  setuptools,
   h5py,
   numpy,
   scipy,
@@ -12,23 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pymatreader";
-  version = "1.0.0";
+  version = "0.0.31";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "obob";
     repo = "pymatreader";
-    tag = "v${version}";
-    hash = "sha256-cDEGEvBSj3gmjA+8aXULwuBVk09BLQbA91CNAxgtiLA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pYObmvqA49sHjpZcwXkN828R/N5CSpmr0OyyxzDiodQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'source = "regex_commit"' "" \
-      --replace-fail '"hatch-regex-commit"' ""
-  '';
-
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h5py

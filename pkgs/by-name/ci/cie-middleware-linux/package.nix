@@ -15,19 +15,19 @@
   libxml2,
   openssl,
   pcsclite,
-  podofo_0_10,
+  podofo,
   ghostscript,
 }:
 
 let
   pname = "cie-middleware-linux";
-  version = "1.5.9";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
-    repo = "cie-middleware-linux";
+    repo = pname;
     rev = version;
-    hash = "sha256-2UMKxanF35oBNBtIqfU46QUYJwXiTU1xCrCMqzqetgI=";
+    sha256 = "sha256-2P/1hQTmeQ6qE7RgAeLOZTszcLcIpa2XX1S2ahXRHcc=";
   };
 
   gradle = gradle_8;
@@ -54,12 +54,14 @@ stdenv.mkDerivation {
   buildInputs = [
     cryptopp
     fontconfig
-    podofo_0_10
+    podofo
     openssl
     pcsclite
     curl
     libxml2
   ];
+
+  patches = [ ./use-system-podofo.patch ];
 
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
@@ -112,7 +114,6 @@ stdenv.mkDerivation {
     popd
 
     # Install the Java application
-    ls cie-java/build/libs/CIEID-standalone.jar
     install -Dm755 cie-java/build/libs/CIEID-standalone.jar \
                    "$out/share/cieid/cieid.jar"
 
@@ -120,13 +121,13 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/cieid" \
       --add-flags "-Djna.library.path='$out/lib:${libraries}'" \
-      --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
+      --add-flags '-Dawt.useSystemAAFontSettings=on' \
       --add-flags "-cp $out/share/cieid/cieid.jar" \
-      --add-flags "app.m0rf30.cieid.MainApplication"
+      --add-flags "it.ipzs.cieid.MainApplication"
 
     # Install other files
-    install -Dm644 data/app.m0rf30.cieid.desktop -t "$out/share/applications"
-    install -Dm755 data/app.m0rf30.cieid.svg -t "$out/share/pixmaps"
+    install -Dm644 data/cieid.desktop "$out/share/applications/cieid.desktop"
+    install -Dm755 data/logo.png "$out/share/pixmaps/cieid.png"
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
   '';
 
@@ -145,6 +146,8 @@ stdenv.mkDerivation {
     '';
     license = licenses.bsd3;
     platforms = platforms.unix;
+    # Note: fails due to a lot of broken type conversions
+    badPlatforms = platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

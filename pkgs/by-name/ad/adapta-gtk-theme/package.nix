@@ -54,14 +54,14 @@ stdenv.mkDerivation rec {
     "--disable-unity"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Adaptive GTK theme based on Material Design Guidelines";
     homepage = "https://github.com/adapta-project/adapta-gtk-theme";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2
       cc-by-sa-30
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ romildo ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

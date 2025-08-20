@@ -1,38 +1,36 @@
-{
-  stdenv,
-  mkXfceDerivation,
-  lib,
-  docbook_xsl,
-  exo,
-  gdk-pixbuf,
-  gtk3,
-  libexif,
-  libgudev,
-  libnotify,
-  libX11,
-  libxfce4ui,
-  libxfce4util,
-  libxslt,
-  pcre2,
-  xfce4-panel,
-  xfconf,
-  withIntrospection ? false,
-  gobject-introspection,
+{ mkXfceDerivation
+, lib
+, docbook_xsl
+, exo
+, gdk-pixbuf
+, gtk3
+, libexif
+, libgudev
+, libnotify
+, libX11
+, libxfce4ui
+, libxfce4util
+, libxslt
+, pcre2
+, xfce4-panel
+, xfconf
+, gobject-introspection
+, makeWrapper
+, symlinkJoin
+, thunarPlugins ? []
 }:
 
-mkXfceDerivation {
+let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.20.4";
+  version = "4.20.1";
 
-  sha256 = "sha256-0yDZI82ePjZSSd0aKlfjr2IVPyNkvSWqa4l6Dse98w8=";
+  sha256 = "sha256-+Iz9tkP8foEtor1HFBB1/fyMXdLm3mXCoP9j9bug8po=";
 
   nativeBuildInputs = [
     docbook_xsl
-    libxslt
-  ]
-  ++ lib.optionals withIntrospection [
     gobject-introspection
+    libxslt
   ];
 
   buildInputs = [
@@ -72,6 +70,12 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Xfce file manager";
     mainProgram = "thunar";
-    teams = [ teams.xfce ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-}
+};
+
+in if thunarPlugins == [] then unwrapped
+  else import ./wrapper.nix {
+    inherit makeWrapper symlinkJoin thunarPlugins lib;
+    thunar = unwrapped;
+  }

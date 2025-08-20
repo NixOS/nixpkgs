@@ -7,6 +7,7 @@
   go-md2man,
   installShellFiles,
   linenoise,
+  darwin,
   lrzsz,
 }:
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     linenoise
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   makeFlags = [
     "HISTFILE=.cache/picocom_history"

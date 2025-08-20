@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "arubaotp-seed-extractor";
-  version = "0-unstable-2022-12-22";
+  version = "unstable-22-12-2022";
 
   src = fetchFromGitHub {
     owner = "andry08";

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://galenframework.com";
+    homepage = "http://galenframework.com";
     description = "Automated layout testing for websites";
     mainProgram = "galen";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

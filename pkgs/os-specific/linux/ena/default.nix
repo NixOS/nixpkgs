@@ -4,11 +4,10 @@
   fetchFromGitHub,
   gitUpdater,
   kernel,
-  kernelModuleMakeFlags,
 }:
 let
   rev-prefix = "ena_linux_";
-  version = "2.15.0";
+  version = "2.13.2";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -18,13 +17,13 @@ stdenv.mkDerivation {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "${rev-prefix}${version}";
-    hash = "sha256-AwA7YduFACxmDk4+K/ghp39tdkjewgk4NLktnrSpK5k=";
+    hash = "sha256-v4S23lG3DGcsLcxwl4F11UlN7xD69mg0yS4fWs89+kM=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernel.makeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 

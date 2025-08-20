@@ -7,7 +7,6 @@
   pkg-config,
   gdb,
   freetype,
-  nix-update-script,
   freetypeSupport ? true,
   withExtensions ? true,
   extraFlags ? "",
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2025-04-11";
+  version = "0-unstable-2024-08-21";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "162249220bde1c9fef7d87f8bb9128be9323d93f";
-    hash = "sha256-wP8ELlqtMwYv6/jQzKahaX7vlMKLUBgxm5Io49tphsM=";
+    rev = "40f2ae604f3b94b7f818680ac53d4683c629bcf3";
+    hash = "sha256-Z8hW/GQjnnojoLeetrBlMnAJ9sP9ELv1lSQJjYPxtRc=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libX11
     gdb
-  ]
-  ++ lib.optional freetypeSupport freetype;
+  ] ++ lib.optional freetypeSupport freetype;
 
   patches = [
     ./build-use-optional-freetype-with-pkg-config.patch
@@ -68,8 +66,6 @@ stdenv.mkDerivation {
   postFixup = ''
     wrapProgram $out/bin/gf2 --prefix PATH : ${lib.makeBinPath [ gdb ]}
   '';
-
-  passthru.updateScript = nix-update-script { extraArgs = lib.singleton "--version=branch"; };
 
   meta = with lib; {
     description = "GDB Frontend";

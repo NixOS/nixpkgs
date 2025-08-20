@@ -9,17 +9,6 @@ let
   cfg = config.services.ntpd-rs;
   format = pkgs.formats.toml { };
   configFile = format.generate "ntpd-rs.toml" cfg.settings;
-
-  validateConfig =
-    file:
-    pkgs.runCommand "validate-ntpd-rs.toml"
-      {
-        nativeBuildInputs = [ cfg.package ];
-      }
-      ''
-        ntp-ctl validate -c ${file}
-        ln -s "${file}" "$out"
-      '';
 in
 {
   options.services.ntpd-rs = {
@@ -74,7 +63,7 @@ in
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (
         map (ts: {
-          mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
+          mode = "server";
           address = ts;
         }) config.networking.timeServers
       );
@@ -88,51 +77,8 @@ in
         DynamicUser = true;
         ExecStart = [
           ""
-          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${validateConfig configFile}"
+          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}"
         ];
-
-        CapabilityBoundingSet = [
-          "CAP_SYS_TIME"
-          "CAP_NET_BIND_SERVICE"
-        ];
-        AmbientCapabilities = [
-          "CAP_SYS_TIME"
-          "CAP_NET_BIND_SERVICE"
-        ];
-        LimitCORE = 0;
-        LimitNOFILE = 65535;
-        LockPersonality = true;
-        MemorySwapMax = 0;
-        MemoryZSwapMax = 0;
-        PrivateTmp = true;
-        ProcSubset = "pid";
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        Restart = "on-failure";
-        RestartSec = "10s";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-          "AF_NETLINK"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "@resources"
-          "@network-io"
-          "@clock"
-        ];
-        NoNewPrivileges = true;
-        UMask = "0077";
       };
     };
 
@@ -144,46 +90,8 @@ in
         DynamicUser = true;
         ExecStart = [
           ""
-          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${validateConfig configFile}"
+          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}"
         ];
-
-        CapabilityBoundingSet = [ ];
-        LimitCORE = 0;
-        LimitNOFILE = 65535;
-        LockPersonality = true;
-        MemorySwapMax = 0;
-        MemoryZSwapMax = 0;
-        PrivateTmp = true;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        PrivateDevices = true;
-        RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "@network-io"
-          "~@privileged"
-          "~@resources"
-          "~@mount"
-        ];
-        NoNewPrivileges = true;
-        UMask = "0077";
       };
     };
   };

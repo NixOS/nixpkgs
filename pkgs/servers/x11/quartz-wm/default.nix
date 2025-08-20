@@ -5,6 +5,9 @@
   xorg,
   pixman,
   pkg-config,
+  AppKit,
+  Foundation,
+  Xplugin,
 }:
 
 let
@@ -30,6 +33,9 @@ stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
+    AppKit
+    Xplugin
+    Foundation
   ];
   meta = with lib; {
     license = licenses.apple-psl20;

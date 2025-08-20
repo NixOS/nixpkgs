@@ -9,7 +9,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tmpi";
   version = "0-unstable-2022-02-22";
 

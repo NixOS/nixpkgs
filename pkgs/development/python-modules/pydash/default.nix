@@ -5,7 +5,6 @@
   invoke,
   mock,
   pytest7CheckHook,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
   sphinx-rtd-theme,
@@ -26,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-4zNljz0U/iQd2DMC43qkdOY/mwtPlizgLmoaB7BVmxw=";
   };
 
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+    sed -i "/--no-cov/d" pyproject.toml
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ typing-extensions ];
@@ -34,7 +38,6 @@ buildPythonPackage rec {
     invoke
     mock
     pytest7CheckHook
-    pytest-cov-stub
     sphinx-rtd-theme
   ];
 

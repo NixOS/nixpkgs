@@ -1,23 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.sanoid;
 
-  datasetSettingsType =
-    with lib.types;
-    (attrsOf (
-      nullOr (oneOf [
-        str
-        int
-        bool
-        (listOf str)
-      ])
-    ))
-    // {
+  datasetSettingsType = with lib.types;
+    (attrsOf (nullOr (oneOf [ str int bool (listOf str) ]))) // {
       description = "dataset/template options";
     };
 
@@ -57,54 +43,15 @@ let
       type = with lib.types; nullOr bool;
       default = null;
     };
-
-    pre_snapshot_script = lib.mkOption {
-      description = "Script to run before taking snapshot.";
-      type = with lib.types; nullOr str;
-      default = null;
-    };
-
-    post_snapshot_script = lib.mkOption {
-      description = "Script to run after taking snapshot.";
-      type = with lib.types; nullOr str;
-      default = null;
-    };
-
-    pruning_script = lib.mkOption {
-      description = "Script to run after pruning snapshot.";
-      type = with lib.types; nullOr str;
-      default = null;
-    };
-
-    no_inconsistent_snapshot = lib.mkOption {
-      description = "Whether to take a snapshot if the pre script fails";
-      type = with lib.types; nullOr bool;
-      default = null;
-    };
-
-    force_post_snapshot_script = lib.mkOption {
-      description = "Whether to run the post script if the pre script fails";
-      type = with lib.types; nullOr bool;
-      default = null;
-    };
-
-    script_timeout = lib.mkOption {
-      description = "Time limit for pre/post/pruning script execution time (<=0 for infinite).";
-      type = with lib.types; nullOr int;
-      default = null;
-    };
   };
 
   datasetOptions = rec {
     use_template = lib.mkOption {
       description = "Names of the templates to use for this dataset.";
-      type = lib.types.listOf (
-        lib.types.str
-        // {
-          check = (lib.types.enum (lib.attrNames cfg.templates)).check;
-          description = "configured template name";
-        }
-      );
+      type = lib.types.listOf (lib.types.str // {
+        check = (lib.types.enum (lib.attrNames cfg.templates)).check;
+        description = "configured template name";
+      });
       default = [ ];
     };
     useTemplate = use_template;
@@ -116,12 +63,7 @@ let
         recursively in an atomic way without the possibility to
         override settings for child datasets.
       '';
-      type =
-        with lib.types;
-        oneOf [
-          bool
-          (enum [ "zfs" ])
-        ];
+      type = with lib.types; oneOf [ bool (enum [ "zfs" ]) ];
       default = false;
     };
 
@@ -138,32 +80,26 @@ let
 
   # Function to build "zfs allow" and "zfs unallow" commands for the
   # filesystems we've delegated permissions to.
-  buildAllowCommand =
-    zfsAction: permissions: dataset:
-    lib.escapeShellArgs [
-      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-      "-+/run/booted-system/sw/bin/zfs"
-      zfsAction
-      "sanoid"
-      (lib.concatStringsSep "," permissions)
-      dataset
-    ];
+  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
+    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+    "-+/run/booted-system/sw/bin/zfs"
+    zfsAction
+    "sanoid"
+    (lib.concatStringsSep "," permissions)
+    dataset
+  ];
 
   configFile =
     let
-      mkValueString =
-        v: if lib.isList v then lib.concatStringsSep "," v else lib.generators.mkValueStringDefault { } v;
+      mkValueString = v:
+        if lib.isList v then lib.concatStringsSep "," v
+        else lib.generators.mkValueStringDefault { } v;
 
-      mkKeyValue =
-        k: v:
-        if v == null then
-          ""
-        else if k == "processChildrenOnly" then
-          ""
-        else if k == "useTemplate" then
-          ""
-        else
-          lib.generators.mkKeyValueDefault { inherit mkValueString; } "=" k v;
+      mkKeyValue = k: v:
+        if v == null then ""
+        else if k == "processChildrenOnly" then ""
+        else if k == "useTemplate" then ""
+        else lib.generators.mkKeyValueDefault { inherit mkValueString; } "=" k v;
     in
     lib.generators.toINI { inherit mkKeyValue; } cfg.settings;
 
@@ -175,7 +111,7 @@ in
   options.services.sanoid = {
     enable = lib.mkEnableOption "Sanoid ZFS snapshotting service";
 
-    package = lib.mkPackageOption pkgs "sanoid" { };
+    package = lib.mkPackageOption pkgs "sanoid" {};
 
     interval = lib.mkOption {
       type = lib.types.str;
@@ -190,32 +126,21 @@ in
     };
 
     datasets = lib.mkOption {
-      type = lib.types.attrsOf (
-        lib.types.submodule (
-          { config, options, ... }:
-          {
-            freeformType = datasetSettingsType;
-            options = commonOptions // datasetOptions;
-            config.use_template = lib.modules.mkAliasAndWrapDefsWithPriority lib.id (
-              options.useTemplate or { }
-            );
-            config.process_children_only = lib.modules.mkAliasAndWrapDefsWithPriority lib.id (
-              options.processChildrenOnly or { }
-            );
-          }
-        )
-      );
+      type = lib.types.attrsOf (lib.types.submodule ({ config, options, ... }: {
+        freeformType = datasetSettingsType;
+        options = commonOptions // datasetOptions;
+        config.use_template = lib.modules.mkAliasAndWrapDefsWithPriority lib.id (options.useTemplate or { });
+        config.process_children_only = lib.modules.mkAliasAndWrapDefsWithPriority lib.id (options.processChildrenOnly or { });
+      }));
       default = { };
       description = "Datasets to snapshot.";
     };
 
     templates = lib.mkOption {
-      type = lib.types.attrsOf (
-        lib.types.submodule {
-          freeformType = datasetSettingsType;
-          options = commonOptions;
-        }
-      );
+      type = lib.types.attrsOf (lib.types.submodule {
+        freeformType = datasetSettingsType;
+        options = commonOptions;
+      });
       default = { };
       description = "Templates for datasets.";
     };
@@ -232,11 +157,7 @@ in
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = [
-        "--verbose"
-        "--readonly"
-        "--debug"
-      ];
+      example = [ "--verbose" "--readonly" "--debug" ];
       description = ''
         Extra arguments to pass to sanoid. See
         <https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options>
@@ -256,29 +177,14 @@ in
     systemd.services.sanoid = {
       description = "Sanoid snapshot service";
       serviceConfig = {
-        ExecStartPre = (
-          map (buildAllowCommand "allow" [
-            "snapshot"
-            "mount"
-            "destroy"
-          ]) datasets
-        );
-        ExecStopPost = (
-          map (buildAllowCommand "unallow" [
-            "snapshot"
-            "mount"
-            "destroy"
-          ]) datasets
-        );
-        ExecStart = lib.escapeShellArgs (
-          [
-            "${cfg.package}/bin/sanoid"
-            "--cron"
-            "--configdir"
-            (pkgs.writeTextDir "sanoid.conf" configFile)
-          ]
-          ++ cfg.extraArgs
-        );
+        ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
+        ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
+        ExecStart = lib.escapeShellArgs ([
+          "${cfg.package}/bin/sanoid"
+          "--cron"
+          "--configdir"
+          (pkgs.writeTextDir "sanoid.conf" configFile)
+        ] ++ cfg.extraArgs);
         User = "sanoid";
         Group = "sanoid";
         DynamicUser = true;

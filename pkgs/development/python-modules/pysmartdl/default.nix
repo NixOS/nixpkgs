@@ -22,11 +22,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://docs.python.org/3/whatsnew/3.13.html#unittest
-  preCheck = ''
-    substituteInPlace test/test_pySmartDL.py \
-      --replace-fail 'unittest.makeSuite(' 'unittest.TestLoader().loadTestsFromTestCase('
-  '';
   disabledTests = [
     # touch the network
     "test_basic_auth"

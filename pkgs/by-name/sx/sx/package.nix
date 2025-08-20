@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeDesktopItem,
   patsh,
-  coreutils,
   xorg,
   nixosTests,
 }:
@@ -25,13 +24,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ patsh ];
 
   buildInputs = [
-    coreutils # needed for cross
     xorg.xauth
     xorg.xorgserver
   ];
 
   postInstall = ''
-    patsh -f $out/bin/sx -s ${builtins.storeDir} --path "$HOST_PATH"
+    patsh -f $out/bin/sx -s ${builtins.storeDir}
 
     install -Dm755 -t $out/share/xsessions ${
       makeDesktopItem {

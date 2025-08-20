@@ -1,10 +1,9 @@
-{
-  buildNpmPackage,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  lib,
-  nix-update-script,
+{ buildNpmPackage
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, lib
+, nix-update-script
 }:
 let
   pname = "scrutiny";

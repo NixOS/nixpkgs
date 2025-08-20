@@ -1,43 +1,37 @@
 {
   lib,
   buildNpmPackage,
-  fetchFromGitHub,
+  fetchurl,
+  testers,
+  mongosh,
 }:
 
-buildNpmPackage (finalAttrs: {
+let
+  source = lib.importJSON ./source.json;
+in
+buildNpmPackage {
   pname = "mongosh";
-  version = "2.5.6";
+  inherit (source) version;
 
-  src = fetchFromGitHub {
-    owner = "mongodb-js";
-    repo = "mongosh";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-QK2woc6tlnTwYCZ7QEWCn2bRknye2qY8AYAHMVR9i24=";
+  src = fetchurl {
+    url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
+    hash = source.integrity;
   };
 
-  npmDepsHash = "sha256-TfakEOiCtoRz2Fhwz5teOWq0OLb7uZaYiKHLSq/c1OU=";
-
-  patches = [
-    ./disable-telemetry.patch
-  ];
-
-  npmFlags = [
-    "--omit=optional"
-    "--ignore-scripts"
-  ];
-  npmBuildScript = "compile";
-  dontNpmInstall = true;
-  installPhase = ''
-    runHook preInstall
-    npmWorkspace=packages/mongosh npmInstallHook
-    cp -r packages configs $out/lib/node_modules/mongosh/
-    rm $out/lib/node_modules/mongosh/node_modules/@mongosh/docker-build-scripts # dangling symlink
-    runHook postInstall
+  postPatch = ''
+    ln -s ${./package-lock.json} package-lock.json
   '';
 
-  passthru = {
-    # Version testing is skipped because upstream often forgets to update the version.
+  npmDepsHash = source.deps;
 
+  makeCacheWritable = true;
+  dontNpmBuild = true;
+  npmFlags = [ "--omit=optional" ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = mongosh;
+    };
     updateScript = ./update.sh;
   };
 
@@ -48,4 +42,4 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "mongosh";
   };
-})
+}

@@ -5,7 +5,7 @@
   ninja,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "ninja";
   inherit (ninja) version;
   format = "pyproject";

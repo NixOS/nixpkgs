@@ -24,46 +24,47 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.6.5";
+  version = "3.6.1";
 
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optional withIntrospection "devdoc";
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-aJF2Wqw+lJAXlFw+rr2MyCFt93JFbcn0YJdvvbetojQ=";
+    sha256 = "sha256-zrHxqivdc7LNgVnTmYyWxV7wl+8V5LTzYCkgn6GK+Dg=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-    python3
-  ]
-  ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
-  buildInputs = [
-    sqlite
-    libpsl
-    glib.out
-    brotli
-    libnghttp2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libsysprof-capture
-  ];
+  buildInputs =
+    [
+      sqlite
+      libpsl
+      glib.out
+      brotli
+      libnghttp2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libsysprof-capture
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -112,6 +113,6 @@ stdenv.mkDerivation rec {
     description = "HTTP client/server library for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
-    inherit (glib.meta) maintainers platforms teams;
+    inherit (glib.meta) maintainers platforms;
   };
 }

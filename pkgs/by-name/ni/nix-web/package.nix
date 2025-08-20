@@ -7,6 +7,7 @@
   openssl,
   nixVersions,
   nixPackage ? nixVersions.stable,
+  darwin,
 }:
 
 let
@@ -26,11 +27,18 @@ rustPlatform.buildRustPackage rec {
     rev = "nix-web-v${version}";
     hash = "sha256-lAk2VfhclHswsctA0RQgEj5oEX1fowh8TCaKykGEioY=";
   };
-
-  cargoHash = "sha256-PfbDod1vQDnWqbhRgXbOvidxGWIXIe7XIgqiLVbovh0=";
+  cargoHash = "sha256-romL/RALr/pmwUA8/SN4AOwc+Vndspd1Yrqs0AHPYRY=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) openssl;
+  buildInputs =
+    lib.optional (!stdenv.hostPlatform.isDarwin) openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \

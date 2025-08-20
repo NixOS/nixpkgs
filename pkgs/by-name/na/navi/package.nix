@@ -8,21 +8,20 @@
   libiconv,
   withFzf ? true,
   fzf,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.24.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
-    tag = "v${version}";
-    hash = "sha256-zvqxVu147u/m/4B3fhbuQ46txGMrlgQv9d4GGiR8SoQ=";
+    rev = "v${version}";
+    sha256 = "sha256-pqBTrHBvsuosyQqCnSiI3+pOe2J6XeIQ8dai+kTVFjc=";
   };
 
-  cargoHash = "sha256-tQCm8KMVWo6KiKVOMDitHtDXwYGM7INXcT+7fEEiIiI=";
+  cargoHash = "sha256-dx13p+kEyqhyaF8ejJLWsgW3IpEvS9nlIHhjxOpp4d8=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -39,14 +38,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_parse_variable_line"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Interactive cheatsheet tool for the command-line and application launchers";
     homepage = "https://github.com/denisidoro/navi";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
     mainProgram = "navi";
-    maintainers = with lib.maintainers; [ cust0dian ];
+    maintainers = with maintainers; [ cust0dian ];
   };
 }

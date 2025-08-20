@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "factory-boy";
-  version = "3.3.3";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "factory_boy";
     inherit version;
-    hash = "sha256-hmhi0iYSjfrH8rQWAofomdr1TyYSd4Mn3QPQ4ssePQM=";
+    hash = "sha256-gxeqUonN/EX5yuVw/rB6YXcxbILjTRTfPC4fIvJqvvA=";
   };
 
   build-system = [ setuptools ];

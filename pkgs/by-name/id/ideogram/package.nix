@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
-    repo = "ideogram";
+    repo = pname;
     rev = version;
     sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
     homepage = "https://github.com/cassidyjames/ideogram";
     license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.cassidyjames.ideogram";
   };

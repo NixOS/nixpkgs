@@ -46,6 +46,7 @@ in
     ./wmderland.nix
     ./wmii.nix
     ./xmonad.nix
+    ./yeahwm.nix
     ./qtile.nix
     ./none.nix
   ];

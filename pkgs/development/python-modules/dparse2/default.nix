@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = "dparse2";
+    repo = pname;
     tag = version;
     hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
   };
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Requires pipenv
+    # Requries pipenv
     "tests/test_parse.py"
   ];
 

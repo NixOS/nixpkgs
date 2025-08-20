@@ -29,17 +29,17 @@
   forceInstallAllHacks ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   nixosTests,
-  replaceVars,
+  substituteAll,
   wrapperPrefix ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.12";
+  version = "6.09";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T/Z5ghfju7w8cza+7afoPq+/AzAawpsiNtpmoPExdkM=";
+    hash = "sha256-9GZ3Ba24zEP9LzlzqIobVLFvIBkK/pOyHiIfL1cyCwU=";
   };
 
   outputs = [
@@ -74,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.LWPProtocolHttps
     perlPackages.MozillaCA
     perlPackages.perl
-  ]
-  ++ lib.optionals withSystemd [ systemd ];
+  ] ++ lib.optionals withSystemd [ systemd ];
 
   postPatch = ''
     pushd hacks
@@ -84,7 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (replaceVars ./xscreensaver-wrapper-prefix.patch {
+    (substituteAll {
+      src = ./xscreensaver-wrapper-prefix.patch;
       inherit wrapperPrefix;
     })
   ];
@@ -102,28 +102,29 @@ stdenv.mkDerivation (finalAttrs: {
   # "marbling" has NEON code that mixes signed and unsigned vector types
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
-  postInstall = ''
-    for bin in $out/bin/*; do
-      wrapProgram "$bin" \
-        --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            coreutils
-            perlPackages.perl
-            xorg.appres
-          ]
-        }" \
-        --prefix PERL5LIB ':' $PERL5LIB
-    done
-  ''
-  + lib.optionalString forceInstallAllHacks ''
-    make -j$NIX_BUILD_CORES -C hacks/glx dnalogo
-    cat hacks/Makefile.in \
-      | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks
-    cat hacks/glx/Makefile.in \
-      | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks/glx
-    cp -f $(find hacks -type f -perm -111 "!" -name "*.*" ) "$out/libexec/xscreensaver"
-  '';
+  postInstall =
+    ''
+      for bin in $out/bin/*; do
+        wrapProgram "$bin" \
+          --prefix PATH : "$out/libexec/xscreensaver" \
+          --prefix PATH : "${
+            lib.makeBinPath [
+              coreutils
+              perlPackages.perl
+              xorg.appres
+            ]
+          }" \
+          --prefix PERL5LIB ':' $PERL5LIB
+      done
+    ''
+    + lib.optionalString forceInstallAllHacks ''
+      make -j$NIX_BUILD_CORES -C hacks/glx dnalogo
+      cat hacks/Makefile.in \
+        | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks
+      cat hacks/glx/Makefile.in \
+        | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks/glx
+      cp -f $(find hacks -type f -perm -111 "!" -name "*.*" ) "$out/libexec/xscreensaver"
+    '';
 
   passthru.tests = {
     xscreensaver = nixosTests.xscreensaver;
@@ -136,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
+      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };

@@ -8,28 +8,28 @@
   sphinx,
   coreutils,
   iptables,
-  net-tools,
+  nettools,
   openssh,
   procps,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.3.2";
-  pyproject = true;
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
-    tag = "v${version}";
-    hash = "sha256-Rvhh99DO/4J1p0JZJauOnvQZKtZBvxu+7hNnNgsXn2w=";
+    rev = "v${version}";
+    hash = "sha256-7jiDTjtL4FiQ4GimSPtUDKPUA29l22a7XILN/s4/DQY=";
   };
 
-  build-system = [ python3Packages.hatchling ];
+  patches = [ ./sudo.patch ];
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    python3Packages.setuptools-scm
     sphinx
   ];
 
@@ -55,13 +55,13 @@ python3Packages.buildPythonApplication rec {
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables
-            net-tools
+            nettools
           ]
         )
       }" \
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Transparent proxy server that works as a poor man's VPN";
     mainProgram = "sshuttle";
     longDescription = ''
@@ -70,9 +70,10 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     homepage = "https://github.com/sshuttle/sshuttle";
-    changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
+      domenkozar
       carlosdagos
     ];
   };

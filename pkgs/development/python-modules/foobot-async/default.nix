@@ -23,12 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-QQjysk2m8QkOpLBdC8kfuoA9PcljgEwzKyrIAhxHB4c=";
   };
 
-  postPatch = ''
-    # https://github.com/reefab/foobot_async/issues/7
-    substituteInPlace foobot_async/__init__.py \
-      --replace-fail "with async_timeout.timeout" "async with async_timeout.timeout"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [

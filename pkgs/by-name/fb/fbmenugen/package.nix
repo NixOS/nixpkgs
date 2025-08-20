@@ -5,7 +5,7 @@
   gnused,
   makeWrapper,
   perlPackages,
-  replaceVars,
+  substituteAll,
   xorg,
   wrapGAppsHook3,
   gitUpdater,
@@ -17,17 +17,16 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "trizen";
-    repo = "fbmenugen";
+    repo = pname;
     rev = version;
     sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
 
   patches = [
-    (replaceVars ./0001-Fix-paths.patch {
+    (substituteAll {
+      src = ./0001-Fix-paths.patch;
       xmessage = xorg.xmessage;
       inherit fluxbox gnused;
-      # replaced in postPatch
-      fbmenugen = null;
     })
   ];
 
@@ -59,13 +58,13 @@ perlPackages.buildPerlPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -D -t $out/bin fbmenugen
-    install -D -t $out/etc/xdg/fbmenugen schema.pl
+    install -D -t $out/bin ${pname}
+    install -D -t $out/etc/xdg/${pname} schema.pl
     runHook postInstall
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/fbmenugen" --prefix PERL5LIB : "$PERL5LIB"
+    wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   passthru.updateScript = gitUpdater { };

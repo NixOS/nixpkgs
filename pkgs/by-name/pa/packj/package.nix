@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
     "packj"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to detect malicious/vulnerable open-source dependencies";
     homepage = "https://github.com/ossillate-inc/packj";
     changelog = "https://github.com/ossillate-inc/packj/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "packj";
   };
 }

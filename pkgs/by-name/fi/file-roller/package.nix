@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file-roller";
-  version = "44.5";
+  version = "44.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${lib.versions.major finalAttrs.version}/file-roller-${finalAttrs.version}.tar.xz";
-    hash = "sha256-369LuYnAuJhr6L2un//quNDzBmmuOmJ+jD35TyOIgzk=";
+    hash = "sha256-uMMJ2jqnhMcZVYw0ZkAjePSj1sro7XfPaEmqzVbOuew=";
   };
 
   nativeBuildInputs = [
@@ -70,10 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    teams = [
-      teams.gnome
-      teams.pantheon
-    ];
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
     mainProgram = "file-roller";
   };
 })

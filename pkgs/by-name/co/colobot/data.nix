@@ -10,15 +10,15 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "colobot-data";
-  version = "0.2.2-alpha";
+  version = "0.2.0-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = "colobot-data";
-    tag = "colobot-gold-${finalAttrs.version}";
-    hash = "sha256-Voxfc5iCFT7gyahaai5wLPi6fe7dWryYLjfNjfXpwWs=";
+    rev = "colobot-gold-${version}";
+    sha256 = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ gettext ];
 
+  enableParallelBuilding = false;
   # Build procedure requires the data folder
   patchPhase = ''
     cp -r $src localSrc
@@ -44,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     cd localSrc
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://colobot.info/";
     description = "Game data for colobot";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ freezeboy ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ freezeboy ];
+    platforms = platforms.linux;
   };
-})
+}

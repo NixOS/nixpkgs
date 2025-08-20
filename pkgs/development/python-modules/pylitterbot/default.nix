@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2024.2.3";
+  version = "2023.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = "v${version}";
-    hash = "sha256-r0Nd9xDj6l913ofu7jeBbCud01yw/lgiHO1L6XN9B+Y=";
+    hash = "sha256-Mpqa7pMxnFdSL1KGTUbgjh1zd8bAcoyzgxRZZ4SGfYc=";
   };
 
   pythonRelaxDeps = [ "deepdiff" ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${src.tag}";
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

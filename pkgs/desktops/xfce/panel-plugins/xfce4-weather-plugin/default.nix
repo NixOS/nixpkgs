@@ -2,49 +2,37 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   gettext,
-  meson,
-  ninja,
   pkg-config,
   glib,
   gtk3,
   json_c,
   libxml2,
-  libsoup_3,
+  libsoup_2_4,
   upower,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
   xfconf,
+  hicolor-icon-theme,
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  category = "panel-plugins";
+in
+
+stdenv.mkDerivation rec {
   pname = "xfce4-weather-plugin";
-  version = "0.12.0";
+  version = "0.11.3";
 
   src = fetchurl {
-    url = "mirror://xfce/src/panel-plugins/xfce4-weather-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-weather-plugin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XdkLAywG70tkuBgCMVTvlGOixpSgKQ5X80EilsdUX/Y=";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-AC0f5jkG0vOgEvPLWMzv8d+8xGZ1njbHbTsD3QHA3Fc=";
   };
-
-  patches = [
-    # meson-build: Add missing HAVE_UPOWER_GLIB definition
-    # https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/merge_requests/37
-    (fetchpatch {
-      url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/commit/1d8e5e5dbbc4d53e4b810f9b01a460197cd47b64.patch";
-      hash = "sha256-g9AIp1iBcA3AxD1tpnv32PvxxulXYjFvQh3EqD1gmHg=";
-    })
-  ];
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     gettext
-    glib # glib-compile-resources
-    meson
-    ninja
     pkg-config
   ];
 
@@ -53,24 +41,27 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     json_c
     libxml2
-    libsoup_3
+    libsoup_2_4
     upower
     libxfce4ui
     libxfce4util
     xfce4-panel
     xfconf
+    hicolor-icon-theme
   ];
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin";
-    rev-prefix = "xfce4-weather-plugin-";
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-weather-plugin";
     description = "Weather plugin for the Xfce desktop environment";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    teams = [ lib.teams.xfce ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

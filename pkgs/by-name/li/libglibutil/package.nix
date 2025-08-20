@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
-  version = "1.0.80";
+  version = "1.0.79";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
-    repo = "libglibutil";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-wp87cStOuQILSKFPFlFDL2vGvTQ4Cg5kuSlwnM4kc64=";
+    sha256 = "sha256-UJsKjvigZuwDL4DyjUE6fXEecgoHrTE+5pO0hVyCwP4=";
   };
 
   outputs = [

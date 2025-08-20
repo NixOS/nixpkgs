@@ -8,15 +8,15 @@
   libminc,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mni_autoreg";
-  version = "0.99.70-unstable-2024-10-04";
+  version = "unstable-2022-05-20";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = "mni_autoreg";
-    rev = "85265398d90dc1bfef886e2cf876a1a2caae86b4";
-    hash = "sha256-tKCDrIHlkArF5Xv6NlSkvmNMIMDsxEf5O3ATzm6DabQ=";
+    repo = pname;
+    rev = "be7bd25bf7776974e0f2c1d90b6e7f8ccc0c8874";
+    sha256 = "sGMZbCrdV6yAOgGiqvBFOUr6pGlTCqwy8yNrPxMoKco=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +30,7 @@ stdenv.mkDerivation {
     MNI-Perllib
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=incompatible-pointer-types"
-  ];
-
-  cmakeFlags = [
-    "-DLIBMINC_DIR=${libminc}/lib/cmake"
-    (lib.cmakeFeature "PERL_EXECUTABLE" (lib.getExe perlPackages.perl))
-  ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 
   postFixup = ''
@@ -48,11 +40,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";
-    maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.free;
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    license = licenses.free;
   };
 }

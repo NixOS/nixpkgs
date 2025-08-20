@@ -3,10 +3,10 @@
   buildPythonPackage,
   fetchPypi,
   fixtures,
+  hacking,
   jsonschema,
   openstacksdk,
   oslotest,
-  pbr,
   python-glanceclient,
   setuptools,
   stestr,
@@ -17,27 +17,23 @@
 
 buildPythonPackage rec {
   pname = "os-client-config";
-  version = "2.3.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "os_client_config";
-    inherit version;
-    hash = "sha256-4WomDy/VAK8U8Ve5t7fWkpLOg7D4pGHsaM5qikKWfL0=";
+    inherit pname version;
+    hash = "sha256-q8OKNR+MAG009+5fP2SN5ePs9kVcxdds/YidKRzfP04=";
   };
 
-  build-system = [
-    pbr
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     openstacksdk
-    pbr
     python-glanceclient
   ];
 
   nativeCheckInputs = [
+    hacking
     fixtures
     jsonschema
     subunit
@@ -58,9 +54,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "os_client_config" ];
 
   meta = with lib; {
-    description = "Unified config handling for client libraries and programs";
-    homepage = "https://github.com/openstack/os-client-config";
+    homepage = "https://opendev.org/openstack/os-client-config";
+    description = "Collect client configuration for using OpenStack in consistent and comprehensive manner";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

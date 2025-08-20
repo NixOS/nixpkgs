@@ -4,7 +4,9 @@
   fetchPypi,
   cliff,
   fixtures,
-  flit-core,
+  future,
+  pbr,
+  setuptools,
   subunit,
   testtools,
   tomlkit,
@@ -14,21 +16,30 @@
 
 buildPythonPackage rec {
   pname = "stestr";
-  version = "4.2.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rexjny0cw3LjYwYTuT83zynT3+adSdTz+UCNN7Ebwpw=";
+    hash = "sha256-X2HDae7OY8KS0TWZ4SqhWK92hZkGQ/JN1vp/q/406Yo=";
   };
 
-  build-system = [
-    flit-core
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
+
+  nativeBuildInputs = [
+    pbr
+    setuptools
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     cliff
     fixtures
+    future
+    pbr
     subunit
     testtools
     tomlkit
@@ -49,6 +60,6 @@ buildPythonPackage rec {
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

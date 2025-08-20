@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs2btrfs";
-  version = "20250616";
+  version = "20240115";
 
   src = fetchFromGitHub {
     owner = "maharmstone";
     repo = "ntfs2btrfs";
     tag = version;
-    hash = "sha256-hRPidvpBVm42Rg+acwHQ6b8WHGMPbE6SHwlrQrB+fD8=";
+    hash = "sha256-sZ8AWREe2jasy3hqLTjaLcOMCNsrDjz2eIuknA2TsEs=";
   };
 
   nativeBuildInputs = [

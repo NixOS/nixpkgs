@@ -35,13 +35,14 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pkgs.notmuch
-  ]
-  ++ (with python3Packages; [
-    freezegun
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      pkgs.notmuch
+    ]
+    ++ (with python3Packages; [
+      freezegun
+      pytestCheckHook
+    ]);
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${pkgs.notmuch}/bin"''
@@ -59,11 +60,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/afewmail/afew";
     description = "Initial tagging script for notmuch mail";
     mainProgram = "afew";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ flokli ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ flokli ];
   };
 }

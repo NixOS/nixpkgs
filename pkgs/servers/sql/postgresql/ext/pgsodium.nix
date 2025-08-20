@@ -1,26 +1,25 @@
 {
-  bash,
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
   libsodium,
   postgresql,
-  postgresqlBuildExtension,
   postgresqlTestExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pgsodium";
   version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "michelp";
     repo = "pgsodium";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y8xL3PxF1GQV1JIgolMI1e8oGcUvWAgrPv84om7wKP8=";
   };
 
   buildInputs = [
-    bash # required for patchShebangs
     libsodium
   ];
 
@@ -44,11 +43,11 @@ postgresqlBuildExtension (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Modern cryptography for PostgreSQL using libsodium";
     homepage = "https://github.com/michelp/pgsodium";
     changelog = "https://github.com/michelp/pgsodium/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.postgresql;
+    license = licenses.postgresql;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

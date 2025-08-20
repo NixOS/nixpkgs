@@ -7,17 +7,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cc1541";
-  version = "4.2";
+  version = "4.1";
 
   src = fetchFromBitbucket {
     owner = "ptv_claus";
     repo = "cc1541";
     rev = finalAttrs.version;
-    hash = "sha256-+9ri3fUmxLHXxq9vNMjeNXfHula3PZpjewHO6z7pIhc=";
+    hash = "sha256-b8cEGC3WxrjebQjed/VD9SIWkiQpNaE2yW+bQRCtmSs=";
   };
 
-  # Manual generation broke in 4.2
-  env.ENABLE_MAN = false;
+  env.ENABLE_MAN = 1;
 
   makeFlags = [ "prefix=$(out)" ];
 
@@ -25,11 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  checkPhase = ''
+  installCheckPhase = ''
     runHook preCheck
-
     make test
-
     runHook postCheck
   '';
 

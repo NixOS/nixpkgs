@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "src/blockdiag/tests/" ];
+  pytestFlagsArray = [ "src/blockdiag/tests/" ];
 
   disabledTests = [
     # Test require network access

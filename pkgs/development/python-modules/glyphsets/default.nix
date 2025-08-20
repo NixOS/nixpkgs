@@ -12,29 +12,27 @@
   requests,
   setuptools-scm,
   setuptools,
-  tabulate,
   unicodedata2,
-  youseedee,
 }:
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "1.1.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jza6VQ3PZAQPku2hyo0KeO59r64Q9TpqLCI0dIX/URU=";
+    hash = "sha256-fa+W1IGIZcn1P1xNKm1Yb/TOuf4QdDVnIvlDkOLOcLY=";
   };
+
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "setuptools_scm>=8.1.0,<8.2" setuptools_scm
+      --replace-fail "setuptools_scm>=8.0.4,<8.1" "setuptools_scm"
   '';
-
-  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   build-system = [
     setuptools
@@ -48,9 +46,7 @@ buildPythonPackage rec {
     glyphslib
     pyyaml
     requests
-    tabulate
     unicodedata2
-    youseedee
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -62,7 +58,7 @@ buildPythonPackage rec {
   disabledTests = [
     # This "test" just tries to connect to PyPI and look for newer releases. Not needed.
     "test_dependencies"
-    # 616 instead of 617 glyphs in a glyphset
+    # AssertionError
     "test_definitions"
   ];
 

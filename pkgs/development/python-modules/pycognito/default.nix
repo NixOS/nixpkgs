@@ -36,8 +36,7 @@ buildPythonPackage rec {
     envs
     pyjwt
     requests
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     freezegun
@@ -45,10 +44,9 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     requests-mock
-  ]
-  ++ moto.optional-dependencies.cognitoidp;
+  ] ++ moto.optional-dependencies.cognitoidp;
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   disabledTests = [
     # Test requires network access

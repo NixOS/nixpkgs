@@ -8,7 +8,6 @@
   zlib,
   fetchurl,
   fetchpatch,
-  python312,
   openssl,
   # pin Boost 1.86 due to use of boost/asio/io_service.hpp
   boost186,
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python312 # 2to3
     scons
   ];
 

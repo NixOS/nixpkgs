@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "utterly-round-plasma-style";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "HimDek";
-    repo = "utterly-round-plasma-style";
+    repo = pname;
     rev = "6280f69781b7fa9613b7a9c502d8d61e11fefca5";
     hash = "sha256-b0vah/rkcJH01bnDOGXQ04vrRR1c1Ijgc2HPBmToLuc=";
   };

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "prefix=$(out)" ];
 
   patches = [
-    # Allow adding a config file path during build via macro.
+    # Allow adding a config file path during build via makro.
     # Used to add the store path of the included config file through CFLAGS.
     # This won't be merged upstream.
     ./configpath.patch

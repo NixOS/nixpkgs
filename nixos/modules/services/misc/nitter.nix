@@ -64,10 +64,6 @@ in
       "nitter"
       "replaceInstagram"
     ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
-    (lib.mkRenamedOptionModule
-      [ "services" "nitter" "guestAccounts" ]
-      [ "services" "nitter" "sessionsFile" ]
-    )
   ];
 
   options = {
@@ -322,24 +318,24 @@ in
           Add settings here to override NixOS module generated settings.
 
           Check the official repository for the available settings:
-          <https://github.com/zedeus/nitter/blob/master/nitter.example.conf>
+          https://github.com/zedeus/nitter/blob/master/nitter.example.conf
         '';
       };
 
-      sessionsFile = lib.mkOption {
+      guestAccounts = lib.mkOption {
         type = lib.types.path;
-        default = "/var/lib/nitter/sessions.jsonl";
+        default = "/var/lib/nitter/guest_accounts.jsonl";
         description = ''
-          Path to the session tokens file.
+          Path to the guest accounts file.
 
-          This file contains a list of session tokens that can be used to
+          This file contains a list of guest accounts that can be used to
           access the instance without logging in. The file is in JSONL format,
           where each line is a JSON object with the following fields:
 
           {"oauth_token":"some_token","oauth_token_secret":"some_secret_key"}
 
-          See <https://github.com/zedeus/nitter/wiki/Creating-session-tokens>
-          for more information on session tokens and how to generate them.
+          See https://github.com/zedeus/nitter/wiki/Guest-Account-Branch-Deployment
+          for more information on guest accounts and how to generate them.
         '';
       };
 
@@ -373,11 +369,11 @@ in
       after = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;
-        LoadCredential = "sessionsFile:${cfg.sessionsFile}";
+        LoadCredential = "guestAccountsFile:${cfg.guestAccounts}";
         StateDirectory = "nitter";
         Environment = [
           "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf"
-          "NITTER_SESSIONS_FILE=%d/sessionsFile"
+          "NITTER_ACCOUNTS_FILE=%d/guestAccountsFile"
         ];
         # Some parts of Nitter expect `public` folder in working directory,
         # see https://github.com/zedeus/nitter/issues/414

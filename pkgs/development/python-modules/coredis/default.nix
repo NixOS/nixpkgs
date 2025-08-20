@@ -2,52 +2,39 @@
   lib,
   async-timeout,
   buildPythonPackage,
-  setuptools,
-  versioneer,
   deprecated,
   fetchFromGitHub,
-  packaging,
   pympler,
   pytest-asyncio,
-  pytest-lazy-fixtures,
   pytestCheckHook,
+  pythonOlder,
   redis,
-  typing-extensions,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.24.0";
-  pyproject = true;
+  version = "4.17.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
-    repo = "coredis";
+    repo = pname;
     tag = version;
-    hash = "sha256-vqgxj366x+TphGxUBXUHJpEM0zAdr6Ia4pDPKGWUx14=";
+    hash = "sha256-HfGmsIi8PnYbnC2020x474gtq0eqHjF7mSmRSHb0QxY=";
   };
 
   postPatch = ''
-    sed -i '/mypy==/d' pyproject.toml
-    sed -i '/packaging/d' pyproject.toml
-    sed -i '/pympler/d' pyproject.toml
-    sed -i '/types_deprecated/d' pyproject.toml
     substituteInPlace pytest.ini \
-      --replace-fail "-K" ""
+      --replace "-K" ""
   '';
 
-  build-system = [
-    setuptools
-    versioneer
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     async-timeout
     deprecated
-    packaging
     pympler
-    typing-extensions
     wrapt
   ];
 
@@ -55,12 +42,11 @@ buildPythonPackage rec {
     pytestCheckHook
     redis
     pytest-asyncio
-    pytest-lazy-fixtures
   ];
 
   pythonImportsCheck = [ "coredis" ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     # All other tests require Docker
     "tests/test_lru_cache.py"
     "tests/test_parsers.py"
@@ -68,11 +54,11 @@ buildPythonPackage rec {
     "tests/test_utils.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
-    changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
-    license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
+    changelog = "https://github.com/alisaifee/coredis/blob/${src.rev}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = teams.wdz.members;
   };
 }

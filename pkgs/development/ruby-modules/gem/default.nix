@@ -1,7 +1,7 @@
 # This builds gems in a way that is compatible with bundler.
 #
 # Bundler installs gems from git sources _very_ differently from how RubyGems
-# installs gem packages, though they both install gem packages similarly.
+# installes gem packages, though they both install gem packages similarly.
 #
 # We monkey-patch Bundler to remove any impurities and then drive its internals
 # to install git gems.
@@ -24,6 +24,7 @@
   fetchgit,
   makeWrapper,
   gitMinimal,
+  libobjc,
   ruby,
   bundler,
 }@defs:
@@ -115,18 +116,21 @@ lib.makeOverridable (
       inherit suffix;
       gemType = type;
 
-      nativeBuildInputs = [
-        ruby
-        makeWrapper
-      ]
-      ++ lib.optionals (type == "git") [ gitMinimal ]
-      ++ lib.optionals (type != "gem") [ bundler ]
-      ++ nativeBuildInputs;
+      nativeBuildInputs =
+        [
+          ruby
+          makeWrapper
+        ]
+        ++ lib.optionals (type == "git") [ gitMinimal ]
+        ++ lib.optionals (type != "gem") [ bundler ]
+        ++ nativeBuildInputs;
 
-      buildInputs = [
-        ruby
-      ]
-      ++ buildInputs;
+      buildInputs =
+        [
+          ruby
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
+        ++ buildInputs;
 
       #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
       name = attrs.name or "${namePrefix}${gemName}-${suffix}";
@@ -299,8 +303,7 @@ lib.makeOverridable (
         # default to Ruby's platforms
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
-      }
-      // meta;
+      } // meta;
     }
   )
 

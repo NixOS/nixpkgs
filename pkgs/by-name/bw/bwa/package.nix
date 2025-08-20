@@ -5,15 +5,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bwa";
-  version = "0.7.19";
+  version = "unstable-2022-09-23";
 
   src = fetchFromGitHub {
     owner = "lh3";
     repo = "bwa";
-    tag = "v${version}";
-    hash = "sha256-o3+7kf+49mnRn5PjtdOiAaI9VK1cyT9p5QUSQ/W4GxI=";
+    rev = "139f68fc4c3747813783a488aef2adc86626b01b";
+    hash = "sha256-8u35lTK6gBKeapYoIkG9MuJ/pyy/HFA2OiPn+Ml2C6c=";
   };
 
   buildInputs = [ zlib ];

@@ -28,14 +28,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "matlo";
     repo = "GIMX";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-BcFLdQgEAi6Sxyb5/P9YAIkmeXNZXrKcOa/6g817xQg=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
-  patches = [ ./conf.patch ];
-  makeFlags = [ "build-core" ];
+  patches = [
+    ./conf.patch
+    ./gcc14.patch
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXi
   ];
+  makeFlags = [ "build-core" ];
 
   installPhase = ''
     runHook preInstall
@@ -67,10 +70,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/matlo/GIMX";
     description = "Game Input Multiplexer";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
   };
 }

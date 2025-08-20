@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gsmlib";
   version = "unstable-2017-10-06";
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = "threat9-test-bed";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
@@ -38,8 +38,7 @@ buildPythonPackage rec {
     gunicorn
     pyopenssl
     requests
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

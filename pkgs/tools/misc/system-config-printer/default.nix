@@ -59,9 +59,6 @@ stdenv.mkDerivation rec {
 
     # switch to pep517 build tools
     ./pep517.patch
-
-    # FIXME: remove when gettext is fixed
-    ./gettext-0.25.patch
   ];
 
   buildInputs = [
@@ -122,7 +119,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  doInstallCheck = true;
 
   postInstall = ''
     buildPythonPath "$out $pythonPath"

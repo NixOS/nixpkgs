@@ -1,51 +1,27 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
+  mkXfceDerivation,
   gtk3,
   glib,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "apps";
   pname = "gigolo";
-  version = "0.6.0";
+  version = "0.5.4";
+  odd-unstable = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "apps";
-    repo = "gigolo";
-    tag = "gigolo-${finalAttrs.version}";
-    hash = "sha256-tyFjVvtDE25y6rnmlESdl8s/GdyHGqbn2Dn/ymIIgWs=";
-  };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    glib # glib-compile-resources
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
-  ];
+  sha256 = "sha256-gRv1ZQLgwwzFERnco2Dm2PkT/BNDIZU6fX+HdhiRCJk=";
 
   buildInputs = [
     gtk3
     glib
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "gigolo-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Frontend to easily manage connections to remote filesystems";
-    homepage = "https://gitlab.xfce.org/apps/gigolo";
-    license = lib.licenses.gpl2Plus;
     mainProgram = "gigolo";
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

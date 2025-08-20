@@ -5,9 +5,7 @@
   fetchpatch,
   gitUpdater,
   testers,
-  # dbus-cpp not compatible with Boost 1.87
-  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -52,25 +50,22 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/569f6b35d8bcdb2ae5ff84549cd92cfc0899675b.patch";
       hash = "sha256-3lrdVIzscXGiLKwftC5oECICVv3sBoS4UedfRHx7uOs=";
     })
-
-    # Fix compatibility with glog 0.7.x
-    # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/18 merged & in release
-    ./1001-treewide-Switch-to-glog-CMake-module.patch
   ];
 
-  postPatch = ''
-    # pkg-config patching hook expects prefix variable
-    substituteInPlace data/trust-store.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  postPatch =
+    ''
+      # pkg-config patching hook expects prefix variable
+      substituteInPlace data/trust-store.pc.in \
+        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
-    substituteInPlace src/core/trust/terminal_agent.h \
-      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' ""
-  '';
+      substituteInPlace src/core/trust/terminal_agent.h \
+        --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(tests)' ""
+    '';
 
   strictDeps = true;
 
@@ -84,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     cmake-extras
     dbus-cpp
     glog
@@ -138,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Common implementation of a trust store to be used by trusted helpers";
     homepage = "https://gitlab.com/ubports/development/core/trust-store";
     license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
+    maintainers = teams.lomiri.members;
     platforms = platforms.linux;
     pkgConfigModules = [
       "trust-store"

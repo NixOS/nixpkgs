@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgreen";
-  version = "1.6.4";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = finalAttrs.version;
-    sha256 = "sha256-W4MdB3acZcxavjRupJa4eXAv9g4QgYXFAQWOLoHrQZ8=";
+    sha256 = "sha256-qcOj+NlgbHCYuNsM6ngNI2fNhkCwLL6mIVkNSv9hRE8=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern Unit Test and Mocking Framework for C and C++";
     mainProgram = "cgreen-runner";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

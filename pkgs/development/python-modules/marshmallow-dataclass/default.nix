@@ -31,17 +31,17 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     typing-inspect
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
     typeguard
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
-    "-Wignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [

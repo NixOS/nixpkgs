@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
@@ -12,21 +13,30 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.1.7";
-  pyproject = true;
+  version = "2.1.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Doist";
-    repo = "todoist-api-python";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-qOb9qAwjQ0MqR+mdNEkt7W8SiBhZ8gRf01TsHDkLPS4=";
+    hash = "sha256-Xi3B/Nl5bMbW0lYwrkEbBgFTEl07YkFyN18kN0WyGyw=";
   };
 
-  build-system = [ poetry-core ];
+  patches = [
+    # Switch to poetry-core, https://github.com/Doist/todoist-api-python/pull/81
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/Doist/todoist-api-python/commit/42288e066d2f0c69611ab50cb57ca98b8c6bd1ca.patch";
+      hash = "sha256-yq+VVvjPYywvUn+ydyWVQPkiYPYWe9U6w38G54L2lkE=";
+    })
+  ];
 
-  dependencies = [ requests ];
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytest-asyncio

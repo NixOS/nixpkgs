@@ -8,8 +8,7 @@
   libbsd,
   libpng,
   libvorbis,
-  libX11,
-  sdl2-compat,
+  SDL2,
   makeWrapper,
   lua5_2,
   glew,
@@ -21,33 +20,31 @@
   libopus,
   openscad,
   libxcrypt-legacy,
-  curlMinimal,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "snis";
-  version = "1.0.9";
+stdenv.mkDerivation {
+  pname = "snis_launcher";
+  version = "2024-08-02";
 
   src = fetchFromGitHub {
     owner = "smcameron";
     repo = "space-nerds-in-space";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-H6ZeZOeKy8Z5HGicQs9CmjR2tDzD8AGvLr75Xx0YkAg=";
+    rev = "1dadfca31513561cf95f1229af34341bd1a1bb2a";
+    sha256 = "sha256-Qi4lbq1rsayMdRWMAF44K2DNtlZxNUyjnO6kXCW5QhA=";
   };
 
   enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
-      --replace-fail "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
+      --replace "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
+      --replace "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
     substituteInPlace snis_text_to_speech.sh \
-      --replace-fail "pico2wave" "${sox}/bin/pico2wave" \
-      --replace-fail "espeak" "${espeak-classic}/bin/espeak" \
-      --replace-fail "aplay" "${alsa-utils}/bin/aplay" \
-      --replace-fail "play" "${sox}/bin/play" \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+      --replace "pico2wave" "${sox}/bin/pico2wave" \
+      --replace "espeak" "${espeak-classic}/bin/espeak" \
+      --replace "play" "${sox}/bin/play" \
+      --replace "aplay" "${alsa-utils}/bin/aplay" \
+      --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
   nativeBuildInputs = [
@@ -62,8 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
     libpng
     libvorbis
-    libX11
-    sdl2-compat
+    SDL2
     lua5_2
     glew
     openssl
@@ -72,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-utils
     libopus
     libxcrypt-legacy
-    curlMinimal
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -81,14 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     "models"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pentane ];
+    maintainers = with maintainers; [ alyaeanyx ];
     platforms = platforms.linux;
-    mainProgram = "snis_launcher";
   };
-})
+}

@@ -32,15 +32,16 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
-  buildInputs = [
-    alsa-lib
-    dbus
-    libjack2
-  ]
-  ++ (with python3Packages; [
-    python
-    dbus-python
-  ]);
+  buildInputs =
+    [
+      alsa-lib
+      dbus
+      libjack2
+    ]
+    ++ (with python3Packages; [
+      python
+      dbus-python
+    ]);
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
@@ -49,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     homepage = "https://a2jmidid.ladish.org/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Only;
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

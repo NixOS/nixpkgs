@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
-}:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -15,10 +9,7 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "kubernetes" "proxy" "address" ]
-      [ "services" "kubernetes" "proxy" "bindAddress" ]
-    )
+    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
   ];
 
   ###### interface
@@ -71,24 +62,16 @@ in
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kubernetes.target" ];
       after = [ "kube-apiserver.service" ];
-      path = with pkgs; [
-        iptables
-        conntrack-tools
-      ];
+      path = with pkgs; [ iptables conntrack-tools ];
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''
           ${top.package}/bin/kube-proxy \
           --bind-address=${cfg.bindAddress} \
-          ${optionalString (top.clusterCidr != null) "--cluster-cidr=${top.clusterCidr}"} \
-          ${
-            optionalString (cfg.featureGates != { })
-              "--feature-gates=${
-                concatStringsSep "," (
-                  builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates)
-                )
-              }"
-          } \
+          ${optionalString (top.clusterCidr!=null)
+            "--cluster-cidr=${top.clusterCidr}"} \
+          ${optionalString (cfg.featureGates != {})
+            "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
           --hostname-override=${cfg.hostname} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \

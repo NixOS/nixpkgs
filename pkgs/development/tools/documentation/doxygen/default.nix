@@ -7,20 +7,21 @@
   flex,
   bison,
   qt5,
+  CoreServices,
   libiconv,
   spdlog,
   sqlite,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.14.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-d90fIP8rDQ30fY1vF3wAPlIa8xrSEOdHTpPjYnduZdI=";
+    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-XKzH2nMByE0WE7WX4YYj2boq9+iwD7SyO5w9/4g9cGE=";
   };
 
   # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
@@ -38,24 +39,26 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  buildInputs = [
-    libiconv
-    spdlog
-    sqlite
-  ]
-  ++ lib.optionals (qt5 != null) (
-    with qt5;
+  buildInputs =
     [
-      qtbase
-      wrapQtAppsHook
+      libiconv
+      spdlog
+      sqlite
     ]
-  );
+    ++ lib.optionals (qt5 != null) (
+      with qt5;
+      [
+        qtbase
+        wrapQtAppsHook
+      ]
+    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cmakeFlags = [
+    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
-  ]
-  ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
   outputs = [
@@ -84,4 +87,4 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
-})
+}

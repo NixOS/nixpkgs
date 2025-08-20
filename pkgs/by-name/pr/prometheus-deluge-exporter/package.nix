@@ -4,10 +4,9 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "deluge-exporter";
   version = "2.4.0-unstable-2024-06-02";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibizaman";
@@ -16,9 +15,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-1brLWx6IEGffcvHPCkz10k9GCNQIXXJ9PYZuEzlKHTA=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     deluge-client
     loguru
     prometheus-client

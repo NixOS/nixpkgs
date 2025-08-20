@@ -1,9 +1,11 @@
 {
   lib,
+  buildPackages,
   buildPythonPackage,
   fetchFromGitHub,
   python,
   pythonOlder,
+  python3,
 
   # build
   meson,
@@ -31,7 +33,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.2";
+    version = "1.3.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -40,7 +42,7 @@ let
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-mtD54KfCm1vNBjcGuAKqRpKF+FLy3WmTYo7FLoE01QY=";
+      hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
     };
 
     # prevent unnecessary references to the build python when cross compiling
@@ -88,7 +90,8 @@ let
 
     # remove references to buildPackages.python3, which is not allowed for cross builds.
     preFixup = ''
-      nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
+      nuke-refs -e "${buildPackages.python3}" \
+        $out/${python3.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
     '';
 
     meta = with lib; {

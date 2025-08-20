@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     description = "Relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
     mainProgram = "edit";
   };

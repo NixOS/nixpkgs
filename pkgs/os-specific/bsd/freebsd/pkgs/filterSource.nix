@@ -21,17 +21,12 @@ in
 runCommand "${pname}-filtered-src"
   {
     nativeBuildInputs = [
-      (
-        (pkgsBuildBuild.rsync.override {
-          enableZstd = false;
-          enableXXHash = false;
-          enableOpenSSL = false;
-          enableLZ4 = false;
-        }).overrideAttrs
-        {
-          doCheck = false;
-        }
-      )
+      (pkgsBuildBuild.rsync.override {
+        enableZstd = false;
+        enableXXHash = false;
+        enableOpenSSL = false;
+        enableLZ4 = false;
+      })
     ];
   }
   ''

@@ -1,37 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   cairocffi,
   cssselect2,
   defusedxml,
+  fetchPypi,
   pillow,
-  tinycss2,
-
-  # testing
   pytestCheckHook,
+  setuptools,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
   pname = "cairosvg";
-  version = "2.8.2";
+  version = "2.7.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "Kozea";
-    repo = "CairoSVG";
-    tag = version;
-    hash = "sha256-KWUZA8pcHMnDEkAYZt3zDzPNynhGBuLZuagNPfHF8EA=";
+  src = fetchPypi {
+    pname = "CairoSVG";
+    inherit version;
+    hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     cairocffi
     cssselect2
     defusedxml
@@ -39,11 +32,21 @@ buildPythonPackage rec {
     tinycss2
   ];
 
-  nativeBuildInputs = [ cairocffi ];
+  propagatedNativeBuildInputs = [ cairocffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "cairosvg/test_api.py" ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" "" \
+      --replace "pytest-flake8" "" \
+      --replace "pytest-isort" "" \
+      --replace "pytest-cov" "" \
+      --replace "--flake8" "" \
+      --replace "--isort" ""
+  '';
+
+  pytestFlagsArray = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 

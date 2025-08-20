@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "events" ];
 
-  enabledTestPaths = [ "events/tests/tests.py" ];
+  pytestFlagsArray = [ "events/tests/tests.py" ];
 
   meta = with lib; {
     description = "Bringing the elegance of C# EventHanlder to Python";

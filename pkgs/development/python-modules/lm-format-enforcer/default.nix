@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "lm-format-enforcer";
-  version = "0.10.11";
+  version = "0.10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noamgat";
-    repo = "lm-format-enforcer";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-8BsfA1R/X+wA0H0MqQKn+CljUIT8VdoInoczSGvu74o=";
+    hash = "sha256-8+hve/6YezM07+4BmmBEAPZ0B2d8xDguXoHf7FuQWP8=";
   };
 
   build-system = [ poetry-core ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Enforce the output format (JSON Schema, Regex etc) of a language model";
-    changelog = "https://github.com/noamgat/lm-format-enforcer/releases/tag/${src.tag}";
+    changelog = "https://github.com/noamgat/lm-format-enforcer/releases/tag/v${version}";
     homepage = "https://github.com/noamgat/lm-format-enforcer";
     license = licenses.mit;
     maintainers = with maintainers; [ cfhammill ];

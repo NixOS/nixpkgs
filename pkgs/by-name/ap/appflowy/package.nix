@@ -17,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-GhQaT6vby0VD8dPr88JcDLcBX+r0apdOyip3tk30was=";
+        hash = "sha256-fn1UK8+7+vFL4nTnnRbfjCgttVYSw6pmmqabeHqTY3g=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-/hj+8okWufI2ow54xCD+XMZiEsPh0jjG8VN/phx+zgs=";
+        hash = "sha256-MoK6GlGmRVRp6feH8hab4CYpP4bXJN3XH7eHHSnhpS4=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +30,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.9.5";
+  version = "0.7.1";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -41,8 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3
@@ -94,15 +93,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "appflowy";
       desktopName = "AppFlowy";
       comment = finalAttrs.meta.description;
-      exec = "appflowy %U";
+      exec = "appflowy";
       icon = "appflowy";
       categories = [ "Office" ];
-      mimeTypes = [ "x-scheme-handler/appflowy-flutter" ];
     })
   ];
 
   meta = with lib; {
-    description = "Open-source alternative to Notion";
+    description = "An open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;

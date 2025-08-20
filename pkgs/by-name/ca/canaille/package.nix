@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchFromGitLab,
-  fetchpatch,
   openldap,
   nixosTests,
 }:
@@ -12,7 +11,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.74";
+  version = "0.0.56";
   pyproject = true;
 
   disabled = python.pythonOlder "3.10";
@@ -21,16 +20,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "yaal";
     repo = "canaille";
     rev = "refs/tags/${version}";
-    hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
+    hash = "sha256-cLsLwttUDxMKVqtVDCY5A22m1YY1UezeZQh1j74WzgU=";
   };
-
-  patches = [
-    # https://gitlab.com/yaal/canaille/-/merge_requests/275
-    (fetchpatch {
-      url = "https://gitlab.com/yaal/canaille/-/commit/1c7fc8b1034a4423f7f46ad8adeced854910b702.patch";
-      hash = "sha256-fu7D010NG7yUChOve7HY3e7mm2c/UGpfcTAiTU8BnGg=";
-    })
-  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -41,12 +32,9 @@ python.pkgs.buildPythonApplication rec {
   dependencies =
     with python.pkgs;
     [
-      blinker
       flask
-      flask-caching
       flask-wtf
       pydantic-settings
-      httpx
       wtforms
     ]
     ++ sentry-sdk.optional-dependencies.flask;
@@ -58,25 +46,20 @@ python.pkgs.buildPythonApplication rec {
       coverage
       flask-webtest
       pyquery
-      pytest-cov-stub
+      pytest-cov
       pytest-httpserver
       pytest-lazy-fixtures
       pytest-smtpd
       pytest-xdist
-      scim2-tester
       slapd
       toml
       faker
       time-machine
-      pytest-scim2-server
     ]
     ++ optional-dependencies.front
     ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
     ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ optional-dependencies.postgresql;
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -91,47 +74,28 @@ python.pkgs.buildPythonApplication rec {
     export SCHEMA="${openldap}/etc/schema"
 
     # Just use their example config for testing
-    export CONFIG=tests/app/fixtures/default-config.toml
+    export CONFIG=canaille/config.sample.toml
   '';
 
   optional-dependencies = with python.pkgs; {
     front = [
       email-validator
       flask-babel
-      flask-talisman
       flask-themer
       pycountry
       pytz
-      tomlkit
+      toml
       zxcvbn-rs-py
     ];
-    oidc = [
-      authlib
-      joserfc
-    ];
-    scim = [
-      httpx
-      scim2-models
-      authlib
-      scim2-client
-    ];
+    oidc = [ authlib ];
     ldap = [ python-ldap ];
     sentry = [ sentry-sdk ];
     postgresql = [
-      flask-alembic
       passlib
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ]
-    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
-    otp = [
-      otpauth
-      pillow
-      qrcode
-    ];
-    sms = [ smpplib ];
-    server = [ hypercorn ];
+    ] ++ sqlalchemy.optional-dependencies.postgresql;
   };
 
   passthru = {

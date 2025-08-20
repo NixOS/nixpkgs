@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sseclient" ];
 
-  enabledTestPaths = [ "tests/unittests.py" ];
+  pytestFlagsArray = [ "tests/unittests.py" ];
 
   meta = with lib; {
     description = "Pure-Python Server Side Events (SSE) client";

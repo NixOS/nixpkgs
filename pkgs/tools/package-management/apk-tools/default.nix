@@ -1,40 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  scdoc,
-  openssl,
-  zlib,
-  luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
-  lua,
+{ lib, stdenv, fetchFromGitLab, pkg-config, scdoc, openssl, zlib
+, luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform, lua
 }:
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
-  version = "2.14.10";
+  version = "2.14.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
-    sha256 = "sha256-9TSkcJe7FVdTtfcCmwp+IWMYa/OL9OXJwPcKLyj5AAA=";
+    sha256 = "sha256-4MA+wP8G1Qbv8mbzx1R0eFG7gbwUAfSAFJZ6ulrBHUY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    scdoc
-  ]
-  ++ lib.optionals luaSupport [
-    lua
-    lua.pkgs.lua-zlib
-  ];
-  buildInputs = [
-    openssl
-    zlib
-  ]
-  ++ lib.optional luaSupport lua;
+  nativeBuildInputs = [ pkg-config scdoc ]
+    ++ lib.optionals luaSupport [ lua lua.pkgs.lua-zlib ];
+  buildInputs = [ openssl zlib ] ++ lib.optional luaSupport lua;
   strictDeps = true;
 
   makeFlags = [

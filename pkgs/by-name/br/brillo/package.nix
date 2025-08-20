@@ -4,40 +4,33 @@
   fetchFromGitLab,
   go-md2man,
   coreutils,
-  replaceVars,
-  udevCheckHook,
+  substituteAll,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
-  version = "1.4.13";
+  version = "1.4.12";
 
   src = fetchFromGitLab {
     owner = "cameronnemo";
     repo = "brillo";
     rev = "v${version}";
-    hash = "sha256-+BUyM3FFnsk87NFaD9FBwdLqf6wsNhX+FDB7nqhgAmM=";
+    hash = "sha256-dKGNioWGVAFuB4kySO+QGTnstyAD0bt4/6FBVwuRxJo=";
   };
 
   patches = [
-    (replaceVars ./udev-rule.patch {
+    (substituteAll {
+      src = ./udev-rule.patch;
       inherit coreutils;
-      # patch context
-      group = null;
     })
   ];
 
-  nativeBuildInputs = [
-    go-md2man
-    udevCheckHook
-  ];
+  nativeBuildInputs = [ go-md2man ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "AADIR=$(out)/etc/apparmor.d"
   ];
-
-  doInstallCheck = true;
 
   installTargets = [ "install-dist" ];
 
@@ -46,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
-      licenses.gpl3Only
+      licenses.gpl3
       licenses.bsd0
     ];
     platforms = platforms.linux;

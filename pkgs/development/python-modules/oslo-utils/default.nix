@@ -2,55 +2,39 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-
-  # build-system
-  pbr,
-  setuptools,
-
-  # dependencies
+  ddt,
   debtcollector,
+  eventlet,
+  fixtures,
   iso8601,
   netaddr,
   netifaces,
   oslo-i18n,
+  oslotest,
   packaging,
-  psutil,
+  pbr,
   pyparsing,
   pytz,
-  tzdata,
-
-  # tests
-  ddt,
-  eventlet,
-  fixtures,
-  iana-etc,
-  libredirect,
-  libxcrypt-legacy,
-  oslotest,
-  pyyaml,
   qemu-utils,
-  replaceVars,
-  stdenv,
+  setuptools,
   stestr,
   testscenarios,
+  tzdata,
+  pyyaml,
+  iana-etc,
+  libredirect,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "9.0.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo_utils";
+    pname = "oslo.utils";
     inherit version;
-    hash = "sha256-1FobkOoUlliVYtOP6EP9p/okf5p+YXhIhZkdIPtmOkM=";
+    hash = "sha256-WaXT5Oe7x42AHM68K4I+QptiTBK7bjtudvccKfK/Id8=";
   };
-
-  patches = [
-    (replaceVars ./ctypes.patch {
-      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -58,19 +42,18 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     pbr
     setuptools
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     debtcollector
     iso8601
     netaddr
     netifaces
     oslo-i18n
     packaging
-    psutil
     pyparsing
     pytz
     tzdata
@@ -80,12 +63,11 @@ buildPythonPackage rec {
     ddt
     eventlet
     fixtures
-    libredirect.hook
     oslotest
-    pyyaml
     qemu-utils
     stestr
     testscenarios
+    pyyaml
   ];
 
   # disabled tests:
@@ -94,20 +76,20 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
-      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
     ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = {
+  meta = with lib; {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = lib.licenses.asl20;
-    teams = [ lib.teams.openstack ];
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }

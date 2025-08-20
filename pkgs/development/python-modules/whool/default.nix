@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "whool";
-  version = "1.3";
+  version = "1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbidoul";
     repo = "whool";
     tag = "v${version}";
-    hash = "sha256-vY7MPTBjNy3LY29k0MjMDnPiU7l9lUvPvTCrji8A5Cw=";
+    hash = "sha256-uIHtygDeFbtIZLn0YwGzAHD7B+EZQ3JAovuNMZ5YMxc=";
   };
 
   build-system = [ hatch-vcs ];
@@ -28,8 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     manifestoo-core
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "whool" ];
 
@@ -43,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standards-compliant Python build backend to package Odoo addons";
     homepage = "https://github.com/sbidoul/whool";
-    changelog = "https://github.com/sbidoul/whool/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sbidoul/whool/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.yajo ];
   };

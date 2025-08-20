@@ -6,26 +6,26 @@
 
 buildGoModule rec {
   pname = "pretender";
-  version = "1.3.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
-    repo = "pretender";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-c8uXN7UMj6UZPVt2aNSg6mRex8w+u7J5I7TAB7MzEWg=";
+    hash = "sha256-adWdUlsReRptSgRAjNH9bWy9dpwpuAWtVxlbDL2pMmk=";
   };
 
-  vendorHash = "sha256-UzKprzkxqG7FOPWcFQGuZtn+gHMeMy4jqCLUSdyO2l0=";
+  vendorHash = "sha256-kDHRjd3Y90ocBGSJ0B2jAM9tO+iDSXoUOzLEWX2G0J4=";
 
   # Tests require network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for handling machine-in-the-middle tasks";
     mainProgram = "pretender";
     homepage = "https://github.com/RedTeamPentesting/pretender";
     changelog = "https://github.com/RedTeamPentesting/pretender/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

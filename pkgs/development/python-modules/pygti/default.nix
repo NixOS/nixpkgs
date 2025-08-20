@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   aiohttp,
@@ -10,19 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pygti";
-  version = "0.10.0";
-  pyproject = true;
+  version = "0.9.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "pygti";
-    tag = version;
+    tag = "v${version}";
     hash = "sha256-2T4Yw4XEOkv+IWyB4Xa2dPu929VH0tLeUjQ5S8EVXz0=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     pytz
     voluptuous
@@ -37,11 +40,10 @@ buildPythonPackage rec {
     "pygti.gti"
   ];
 
-  meta = {
-    changelog = "https://github.com/vigonotion/pygti/releases/tag/${src.tag}";
+  meta = with lib; {
     description = "Access public transport information in Hamburg, Germany";
     homepage = "https://github.com/vigonotion/pygti";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

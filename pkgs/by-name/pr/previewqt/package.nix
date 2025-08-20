@@ -18,52 +18,44 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "4.0";
+  version = "3.0";
 
   src = fetchFromGitLab {
+    name = "previewqt-sources-${finalAttrs.version}";
     owner = "lspies";
     repo = "previewqt";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wzMo5igLTVxUo3E8X2mRbOTuhW3CS4fISgVntgPbZlY=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-cDtqgezKGgSdhw8x1mM4cZ0H3SfUPEyWP6rRD+kRwXc=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    exiv2
-    imagemagick
-    libarchive
-    libdevil
-    libraw
-    mpv
-    resvg
-    vips
-  ]
-  ++ [
-    qt6Packages.poppler
-    qt6Packages.qtmultimedia
-    qt6Packages.qtquick3d
-    qt6Packages.qtsvg
-    qt6Packages.qttools
-    qt6Packages.qtwebengine
-  ];
+  buildInputs =
+    [
+      exiv2
+      extra-cmake-modules
+      imagemagick
+      libarchive
+      libdevil
+      libraw
+      mpv
+      resvg
+      vips
+    ]
+    ++ [
+      qt6Packages.poppler
+      qt6Packages.qtmultimedia
+      qt6Packages.qtquick3d
+      qt6Packages.qtsvg
+      qt6Packages.qttools
+      qt6Packages.qtwebengine
+    ];
 
   strictDeps = true;
-
-  cmakeFlags = [
-    (lib.cmakeBool "WITH_FREEIMAGE" false)
-  ];
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/previewqt.app $out/Applications
-    makeWrapper $out/{Applications/previewqt.app/Contents/MacOS,bin}/previewqt
-  '';
 
   meta = {
     homepage = "https://previewqt.org/";
@@ -100,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/lspies/previewqt/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl2Plus;
     mainProgram = "previewqt";
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 })

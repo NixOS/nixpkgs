@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "testfixtures/tests/test_django"
   ];
 
-  enabledTestPaths = [ "testfixtures/tests" ];
+  pytestFlagsArray = [ "testfixtures/tests" ];
 
   pythonImportsCheck = [ "testfixtures" ];
 

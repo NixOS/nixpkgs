@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin {
+grafanaPlugin rec {
   pname = "grafana-worldmap-panel";
   version = "1.0.6";
   zipHash = "sha256-/lgsdBEL9HdJX1X1Qy0THBlYdUUI8SRtgF1Wig1Ktpk=";

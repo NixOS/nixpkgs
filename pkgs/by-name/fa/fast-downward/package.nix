@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-downward";
-  version = "24.06.1";
+  version = "24.06.0";
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-JwBdV44h6LAJeIjKHPouvb3ZleydAc55QiuaFGrFx1Y=";
+    sha256 = "sha256-iIBoJZCFd05bKUeftvl2YBTmSQuFvATIQAYMITDywWA=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 
   configurePhase = ''
-    runHook preConfigure
-
     python build.py release
-
-    runHook postConfigure
   '';
 
   postPatch = ''

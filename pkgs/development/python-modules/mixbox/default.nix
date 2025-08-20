@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mixbox" ];
 
-  enabledTestPaths = [ "test/*.py" ];
+  pytestFlagsArray = [ "test/*.py" ];
 
   disabledTests = [
     # Tests are out-dated

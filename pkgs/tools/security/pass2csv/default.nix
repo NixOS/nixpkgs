@@ -8,12 +8,12 @@
 
 buildPythonApplication rec {
   pname = "pass2csv";
-  version = "1.2.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IdcSwQ9O2HmCvT8p4tC7e2GQuhkE3kvMINszZH970og=";
+    hash = "sha256-p7r+zDakKy/N+RbxAfGatvkYCDKRh5T3owoYUrHJ5N0=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Export pass(1), \"Standard unix password manager\", to CSV";
     mainProgram = "pass2csv";
-    homepage = "https://codeberg.org/svartstare/pass2csv";
+    homepage = "https://github.com/reinefjord/pass2csv";
     license = licenses.mit;
     maintainers = [ ];
   };

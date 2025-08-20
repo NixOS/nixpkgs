@@ -1,35 +1,34 @@
 {
   lib,
-  azure-common,
-  azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
   msrest,
   msrestazure,
-  setuptools,
+  azure-common,
+  isPy3k,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-advisor";
   version = "9.0.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-/ECLNzFf6EeBtRkST4yxuKwQsvQkHkOdDT4l/WyhjXs=";
+    sha256 = "fc408b37315fe84781b519124f8cb1b8ac10b2f4241e439d0d3e25fd6ca18d7b";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
     azure-mgmt-core
-  ];
+  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
-  # Module has no tests
+  # has no tests
   doCheck = false;
 
   meta = with lib; {

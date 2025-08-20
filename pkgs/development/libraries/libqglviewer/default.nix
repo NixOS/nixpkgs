@@ -1,50 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  libGLU,
-}:
+{ lib, stdenv, fetchurl, qmake, qtbase, libGLU, AGL }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libqglviewer";
   version = "2.9.1";
 
-  src = fetchFromGitHub {
-    owner = "GillesDebunne";
-    repo = "libQGLViewer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-T8KAcw3cXbp0FZm53OjlQBnUvLRFdoj80dIQzQY0/yw=";
+  src = fetchurl {
+    url = "http://www.libqglviewer.com/src/libQGLViewer-${version}.tar.gz";
+    sha256 = "sha256-J4+DKgstPvvg1pUhGd+8YFh5C3oPGHaQmDfLZzzkP/M=";
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [
-    qtbase
-    libGLU
-  ];
+  buildInputs = [ qtbase libGLU ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   dontWrapQtApps = true;
 
-  # Fix build on darwin, and install dylib instead of framework
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace QGLViewer/QGLViewer.pro \
-      --replace-fail \
-        "LIB_DIR_ = /Library/Frameworks" \
-        "LIB_DIR_ = \$\$""{PREFIX_}/lib" \
-      --replace-fail \
-        "!staticlib: CONFIG *= lib_bundle" \
-        ""
-  '';
-
-  preConfigure = ''
+  postPatch = ''
     cd QGLViewer
   '';
 
-  meta = {
+  meta = with lib; {
     description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
-    homepage = "https://github.com/GillesDebunne/libQGLViewer";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.all;
+    homepage = "http://libqglviewer.com";
+    license = licenses.gpl2;
+    platforms = platforms.all;
   };
-})
+}

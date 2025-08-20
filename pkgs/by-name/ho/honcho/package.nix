@@ -4,22 +4,22 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
   pname = "honcho";
-  version = "2.0.0";
-  pyproject = true;
+in
+
+python3Packages.buildPythonApplication rec {
+  name = "${pname}-${version}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nickstenning";
     repo = "honcho";
-    tag = "v${version}";
-    hash = "sha256-hXPoqxK9jzCn7KrQ6zH0E/3YVC60OSoiUx6654+bhhw=";
+    rev = "v${version}";
+    sha256 = "1y0r8dw4pqcq7r4n58ixjdg1iy60lp0gxsd7d2jmhals16ij71rj";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ python3Packages.setuptools ];
 
   nativeCheckInputs = with python3Packages; [
     jinja2
@@ -33,18 +33,16 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-
     PATH=$out/bin:$PATH coverage run -m pytest
-
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python clone of Foreman, a tool for managing Procfile-based applications";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/nickstenning/honcho";
-    maintainers = with lib.maintainers; [ benley ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ benley ];
+    platforms = platforms.unix;
     mainProgram = "honcho";
   };
 }

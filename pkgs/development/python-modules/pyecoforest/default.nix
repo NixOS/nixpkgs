@@ -5,7 +5,6 @@
   httpx,
   poetry-core,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -25,13 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-C8sFq0vsVsq6irWbRd0eq18tfKu0qRRBZHt23CiDTGU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=pyecoforest --cov-report=term-missing:skip-covered" ""
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
     respx
   ];

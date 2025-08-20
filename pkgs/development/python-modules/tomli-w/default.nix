@@ -3,35 +3,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pytestCheckHook,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "tomli-w";
-  version = "1.2.0";
-  pyproject = true;
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = "tomli-w";
+    repo = pname;
     rev = version;
-    hash = "sha256-Du37ySvAL9iwGec5wbWxwLTYm+kcDSOs5OJ5Sw7R87g=";
+    hash = "sha256-wZSC5uOi1JUeKXIli1I8/Vo0wGsv9Q1I84dAMQQP95w=";
   };
 
-  build-system = [ flit-core ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    tomli
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   pythonImportsCheck = [ "tomli_w" ];
 
   meta = with lib; {
     description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
     homepage = "https://github.com/hukkin/tomli-w";
-    changelog = "https://github.com/hukkin/tomli-w/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };

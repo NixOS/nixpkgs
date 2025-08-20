@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "equinor";
-    repo = "segyio";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
   };

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = "py-desmume";
+    repo = pname;
     tag = version;
     hash = "sha256-aH7f/BI89VLUGqwA8Y7ThSpmKxWffYRETT/+EjPVTg8=";
     fetchSubmodules = true;

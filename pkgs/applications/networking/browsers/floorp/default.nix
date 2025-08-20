@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.29.0";
+    packageVersion = "11.22.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,17 +17,18 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.13.0";
+    version = "128.7.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-uTTI9n99P4hHDf849lR7oiNGLbCa03ivjE1xF0gyT4Y=";
+      hash = "sha256-gPFWSCACWUk7QE85I6alT6hsjMengjiiSE4J9px0Z58=";
     };
 
     extraConfigureFlags = [
+      "--with-app-name=${pname}"
       "--with-app-basename=${applicationName}"
       "--with-unsigned-addon-scopes=app,system"
       "--enable-proxy-bypass-protection"
@@ -45,7 +46,7 @@
     updateScript = ./update.sh;
 
     meta = {
-      description = "Fork of Firefox that seeks balance between versatility, privacy and web openness";
+      description = "Fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
       homepage = "https://floorp.app/";
       maintainers = with lib.maintainers; [ christoph-heiss ];
       platforms = lib.platforms.unix;
@@ -66,9 +67,8 @@
     privacySupport = true;
     webrtcSupport = true;
     enableOfficialBranding = false;
-    geolocationSupport = true;
-    # https://github.com/NixOS/nixpkgs/issues/418473
-    ltoSupport = false;
+    googleAPISupport = true;
+    mlsAPISupport = true;
   }
 ).overrideAttrs
   (prev: {

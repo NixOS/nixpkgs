@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "warp-plus";
-  version = "1.2.6";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
     rev = "v${version}";
-    hash = "sha256-Zi428QI0DBIPEywXPi0TwDQWJuQyQcB6N5nqtYkkpHk=";
+    hash = "sha256-fFyYch14JqXSmnplPJ8c3epOxromZmEJAdcuSgkKbcM=";
   };
 
-  vendorHash = "sha256-cCMbda2dVZypGqy9zoh0D3lVHWw/HNbCaSe0Nj5wL6s=";
+  vendorHash = "sha256-/rBZqrX9xZT8yOZwynkOOQyPl0govNmvsEqWVxsuvB4=";
 
   ldflags = [
     "-s"
@@ -32,7 +32,6 @@ buildGoModule rec {
       # Skip tests that require network access
       skippedTests = [
         "TestConcurrencySafety"
-        "TestNoiseHandshake"
         "TestTwoDevicePing"
       ];
     in
@@ -47,10 +46,7 @@ buildGoModule rec {
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ paveloom ];
     mainProgram = "warp-plus";
-    # Doesn't work with Go toolchain >1.22, runtime error:
-    # 'panic: tls.ConnectionState doesn't match'
-    broken = true;
   };
 }

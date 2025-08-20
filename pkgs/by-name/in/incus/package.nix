@@ -1,9 +1,9 @@
 import ./generic.nix {
-  hash = "sha256-HhgAZ/MDNX6v1tBLv4sMHfFQMPoYkTaaWM8aLkl31Mg=";
-  version = "6.15.0";
-  vendorHash = "sha256-pCpOHFWyacJ3K1EyK2Pkezv0Ooj+sFQ3ZmtBmhZJYNE=";
-  patches = [ ];
-  nixUpdateExtraArgs = [
-    "--override-filename=pkgs/by-name/in/incus/package.nix"
+  hash = "sha256-Ir+cT+2xA+L4kBXhwA0XXE/D8zjMPGYiwW0VrEdobZ4=";
+  version = "6.8.0";
+  vendorHash = "sha256-CDLq41AB2Y9nYlTuXZaAOgwXIin9CbqSXCFoigsc14A=";
+  patches = [
+    # qemu 9.2 support
+    ./1531.diff
   ];
 }

@@ -15,13 +15,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wikiman";
-  version = "2.14.1";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "filiparag";
     repo = "wikiman";
     tag = finalAttrs.version;
-    hash = "sha256-EvYMUHKFJhSFyoW85EEzI7q5OMGGe9c+A2JlkAoxt3o=";
+    hash = "sha256-gk/9PVIRw9OQrdCSS+LcniXDYNcHUQUxZ2XGQCwpHaI=";
   };
 
   patches = [ ./fix-paths.patch ];

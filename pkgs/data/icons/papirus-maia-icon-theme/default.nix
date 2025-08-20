@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  dontWrapQtApps = true;
-
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /usr "$out"
   '';
@@ -47,11 +45,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Manjaro variation of Papirus icon theme";
     homepage = "https://github.com/Ste74/papirus-maia-icon-theme";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
   };
 }

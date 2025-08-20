@@ -1,32 +1,57 @@
 {
+  fetchurl,
   lib,
   stdenv,
-  fetchFromGitHub,
-  gradle,
+  unzip,
+  ant,
+  javac,
+  jvm,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  xbeans = fetchurl {
+    url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
+    sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
+  };
+in
+stdenv.mkDerivation rec {
   pname = "rhino";
-  version = "1.8.0";
+  version = "1.7R2";
 
-  src = fetchFromGitHub {
-    owner = "mozilla";
-    repo = "rhino";
-    tag = "Rhino1_8_0_Release";
-    hash = "sha256-H8DbcRPMm4SKmGf40dXnjGeEbbj9COzdHgUIkcCimTM=";
+  src = fetchurl {
+    url = "mirror://mozilla/js/rhino1_7R2.zip";
+    sha256 = "1p32hkghi6bkc3cf2dcqyaw5cjj7403mykcp0fy8f5bsnv0pszv7";
   };
 
-  nativeBuildInputs = [ gradle ];
+  patches = [ ./gcj-type-mismatch.patch ];
 
-  mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
-    data = ./deps.json;
-  };
+  hardeningDisable = [
+    "fortify"
+    "format"
+  ];
 
+  preConfigure = ''
+    find -name \*.jar -or -name \*.class -exec rm -v {} \;
+
+    # The build process tries to download it by itself.
+    mkdir -p "build/tmp-xbean"
+    ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
+  '';
+
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [
+    ant
+    javac
+    jvm
+  ];
+
+  buildPhase = "ant jar";
+  doCheck = false;
+
+  # FIXME: Install javadoc as well.
   installPhase = ''
     mkdir -p "$out/share/java"
-    cp -v rhino-all/build/libs/rhino-all-*.jar "$out/share/java/js-$pkgver.jar"
-    ln -s "js-$pkgver.jar" "$out/share/java/js.jar"
+    cp -v *.jar "$out/share/java"
   '';
 
   meta = with lib; {
@@ -38,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       to provide scripting to end users.
     '';
 
-    homepage = "https://rhino.github.io/";
+    homepage = "http://www.mozilla.org/rhino/";
 
     license = with licenses; [
       mpl11 # or
@@ -46,4 +71,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-})
+}

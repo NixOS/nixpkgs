@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipper2";
-  version = "1.5.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
     repo = "Clipper2";
     rev = "Clipper2_${version}";
-    hash = "sha256-6lvzU93+UnArEtRe2mJ4YB16+5sDCrBcPzljNAEFt8M=";
+    hash = "sha256-ASL9uKkXsWyIbD1qaKEL7gf/JuCqzZQZSKHwLT5dKJU=";
   };
 
   sourceRoot = "${src.name}/CPP";
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     "-DCLIPPER2_EXAMPLES=OFF"
     "-DCLIPPER2_TESTS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  patches = [
+    ./0001-fix-pc-paths.patch
   ];
 
   meta = {

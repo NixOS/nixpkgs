@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "phase1geo";
-    repo = "minder";
+    repo = pname;
     rev = version;
     sha256 = "sha256-LZm2TLUugW/lSHp+y3Sz9IacQCEFQloVnZ9MoBjqHvI=";
   };
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phase1geo/Minder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     mainProgram = "com.github.phase1geo.minder";
   };
 }

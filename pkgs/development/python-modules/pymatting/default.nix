@@ -28,16 +28,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    numba
-    numpy
-    pillow
-    scipy
-  ]
-  ++ lib.optionals cudaSupport [
-    cupy
-    pyopencl
-  ];
+  dependencies =
+    [
+      numba
+      numpy
+      pillow
+      scipy
+    ]
+    ++ lib.optionals cudaSupport [
+      cupy
+      pyopencl
+    ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -57,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymatting/pymatting";
     changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ blaggacao ];
   };
 }

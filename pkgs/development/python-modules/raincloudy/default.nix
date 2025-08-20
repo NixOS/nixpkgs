@@ -21,7 +21,6 @@
 buildPythonPackage rec {
   pname = "raincloudy";
   version = "1.2.0";
-  format = "setuptools";
   pypriject = true;
 
   # https://github.com/vanstinator/raincloudy/issues/65

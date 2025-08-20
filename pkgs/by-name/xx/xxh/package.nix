@@ -5,24 +5,22 @@
   openssh,
   nixosTests,
 }:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "xxh";
-  version = "0.8.14";
-  pyproject = true;
+  version = "0.8.12";
+  format = "setuptools";
+
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "xxh";
-    repo = "xxh";
+    owner = pname;
+    repo = pname;
     tag = version;
-    hash = "sha256-Y1yTn0lZemQgWsW9wlW+aNndyTXGo46PCbCl0TGYspQ=";
+    hash = "sha256-3/AU2o72X7FE11NSXC6m9fFhmjzEDZ+OpTXg8yvv62A=";
   };
 
-  build-system = [
-    python3.pkgs.setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     python3.pkgs.pexpect
     python3.pkgs.pyyaml
     openssh

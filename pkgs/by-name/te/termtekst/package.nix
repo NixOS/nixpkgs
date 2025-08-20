@@ -8,11 +8,10 @@
 python3Packages.buildPythonApplication rec {
   pname = "termtekst";
   version = "1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zevv";
-    repo = "termtekst";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1gm7j5d49a60wm7px82b76f610i8pl8ccz4r6qsz90z4mp3lyw9b";
   };

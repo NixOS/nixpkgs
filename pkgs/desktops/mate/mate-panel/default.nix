@@ -1,12 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
+  fetchurl,
   pkg-config,
   gettext,
-  gtk-doc,
   itstool,
   glib,
   gtk-layer-shell,
@@ -17,42 +14,32 @@
   libxml2,
   dconf,
   dconf-editor,
-  mate-common,
   mate-desktop,
   mate-menus,
   hicolor-icon-theme,
   wayland,
   gobject-introspection,
   wrapGAppsHook3,
-  yelp-tools,
   marco,
-  gitUpdater,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.5";
+  version = "1.28.4";
 
-  src = fetchFromGitHub {
-    owner = "mate-desktop";
-    repo = "mate-panel";
-    tag = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-P1zrOH1xTbKXIoP13azAFDv2Q05dubR1AfmuLbgh250=";
+  src = fetchurl {
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-AvCesDFMKsGXtvCJlQpXHNujm/0D1sOguP13JSqWiHQ=";
   };
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
     gobject-introspection
     gettext
-    gtk-doc
     itstool
     libxml2 # xmllint
-    mate-common # mate-common.m4 macros
     pkg-config
     wrapGAppsHook3
-    yelp-tools
   ];
 
   buildInputs = [
@@ -94,10 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    odd-unstable = true;
-  };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE panel";
@@ -108,6 +92,6 @@ stdenv.mkDerivation rec {
       fdl11Plus
     ];
     platforms = platforms.unix;
-    teams = [ teams.mate ];
+    maintainers = teams.mate.members;
   };
 }

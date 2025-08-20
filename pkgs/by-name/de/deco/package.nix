@@ -7,21 +7,21 @@
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "deco";
   version = "unstable-2019-04-03";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
-    repo = "deco";
+    repo = pname;
     rev = "dd8ec7905bc85d085eb2ee3bddabea451054288c";
     sha256 = "sha256-/3GeNvWOCRPOYTUbodXDUxR5QVDEyx6x2Jt5PxsPdvk=";
   };
 
   installPhase = ''
     mkdir -p $out/bin
-    cp deco $out/bin
-    chmod +x $out/bin/deco
+    cp ${pname} $out/bin
+    chmod +x $out/bin/${pname}
   '';
 
   postFixup = ''

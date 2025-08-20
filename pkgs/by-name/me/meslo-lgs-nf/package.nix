@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "meslo-lgs-nf";
   version = "unstable-2023-04-03";
 

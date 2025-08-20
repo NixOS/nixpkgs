@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "vamolessa";
-    repo = "verco";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-M3Utrt350I67kqzEH130tgBIiI7rY8ODCSxgMohWWWM=";
   };
 
-  cargoHash = "sha256-cpPEIFoEqc/4Md+/5e09B/ZQ+7cflLE+PY4ATAgWUvo=";
+  cargoHash = "sha256-urnTPlQTmOPq7mHZjsTqxql/FQe7NYHE8sVJJ4fno+U=";
 
   meta = with lib; {
     description = "Simple Git/Mercurial/PlasticSCM tui client based on keyboard shortcuts";

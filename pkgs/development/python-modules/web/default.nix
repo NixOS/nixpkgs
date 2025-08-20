@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pytestCheckHook,
   cheroot,
-  legacy-cgi,
   dbutils,
   mysqlclient,
   pymysql,
@@ -15,7 +13,6 @@
 
 buildPythonPackage rec {
   version = "0.62";
-  format = "setuptools";
   pname = "web.py";
 
   src = fetchPypi {
@@ -23,10 +20,7 @@ buildPythonPackage rec {
     sha256 = "5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e";
   };
 
-  propagatedBuildInputs = [
-    cheroot
-  ]
-  ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
+  propagatedBuildInputs = [ cheroot ];
 
   # requires multiple running databases
   doCheck = false;

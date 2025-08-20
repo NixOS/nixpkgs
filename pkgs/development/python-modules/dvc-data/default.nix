@@ -1,46 +1,42 @@
 {
   lib,
-  attrs,
   buildPythonPackage,
   dictdiffer,
   diskcache,
   dvc-objects,
   fetchFromGitHub,
-  fsspec,
-  orjson,
+  funcy,
   pygtrie,
   pythonOlder,
   setuptools-scm,
+  shortuuid,
   sqltrie,
-  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "3.16.10";
+  version = "3.16.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-data";
     tag = version;
-    hash = "sha256-kYPgEsLrcSYf6YAjFENf2HZKdQ4391pFxaZDIFOubkY=";
+    hash = "sha256-lm8GU3Mu+i+9uop5Wdam0kGDzXCeAhzq4/P5WcWj/oQ=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    attrs
     dictdiffer
     diskcache
     dvc-objects
-    fsspec
-    orjson
+    funcy
     pygtrie
+    shortuuid
     sqltrie
-    tqdm
   ];
 
   # Tests depend on upath which is unmaintained and only available as wheel
@@ -50,10 +46,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "DVC's data management subsystem";
+    mainProgram = "dvc-data";
     homepage = "https://github.com/iterative/dvc-data";
     changelog = "https://github.com/iterative/dvc-data/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "dvc-data";
   };
 }

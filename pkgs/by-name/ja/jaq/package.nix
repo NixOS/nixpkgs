@@ -6,23 +6,23 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "2.3.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ZVTDbJ5RPgQeB4ntnNQcbbWquPFL7q4WYyQ5ihCVB64=";
+    tag = "v${version}";
+    hash = "sha256-J+48TWGio6KplqYFJM25LGIuf+yAyE7NMqgPUPgpTeY=";
   };
 
-  cargoHash = "sha256-hEILrjIJK/8CrQv5QcHu+AtPV7KcPdmw6422MyNoPwo=";
+  cargoHash = "sha256-9N24D4fKsy/n+f5uTNkbQNgW+BgGkdEvgitvqbnOcGs=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -30,13 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
-    changelog = "https://github.com/01mf02/jaq/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/01mf02/jaq/releases/tag/v${version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
       figsoda
       siraben
     ];
     mainProgram = "jaq";
   };
-})
+}

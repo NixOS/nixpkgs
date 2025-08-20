@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.1.6";
+  version = "4.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-E04ETXfrh+1OY8WsNNJEeYlnqQcHWR3CX/E7SOd7/24=";
+    hash = "sha256-AzAN7reBAI4atEFutgFrdQHFy/Qc90PQxwSaHaftn5Q=";
   };
 
   postPatch = ''
@@ -41,8 +41,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "incremental" ];
+
   dependencies = [
     aiohttp
+    incremental
     packaging
     systembridgemodels
   ];
@@ -56,14 +59,12 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   disabledTests = [
     "test_get_data"
     "test_wait_for_response_timeout"
   ];
 
-  pytestFlags = [ "--snapshot-warn-unused" ];
+  pytestFlagsArray = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";

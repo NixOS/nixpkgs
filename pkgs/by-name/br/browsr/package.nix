@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     "browsr"
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--snapshot-update"
   ];
 
@@ -85,12 +85,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_textual_app_context_path"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

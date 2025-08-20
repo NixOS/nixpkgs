@@ -11,7 +11,7 @@ let
     [
       cloud-init
       iproute2
-      net-tools
+      nettools
       openssh
       shadow
       util-linux

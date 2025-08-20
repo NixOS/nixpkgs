@@ -11,6 +11,11 @@
   result,
   SDL2,
   pkg-config,
+  AudioToolbox,
+  Cocoa,
+  CoreAudio,
+  CoreVideo,
+  ForceFeedback,
 }:
 
 if lib.versionOlder ocaml.version "4.03" then
@@ -42,11 +47,19 @@ else
       topkg
     ];
     buildInputs = [ topkg ];
-    propagatedBuildInputs = [
-      SDL2
-      ctypes
-      ctypes-foreign
-    ];
+    propagatedBuildInputs =
+      [
+        SDL2
+        ctypes
+        ctypes-foreign
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        AudioToolbox
+        Cocoa
+        CoreAudio
+        CoreVideo
+        ForceFeedback
+      ];
 
     preConfigure = ''
       # The following is done to avoid an additional dependency (ncurses)

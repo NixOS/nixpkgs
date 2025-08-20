@@ -9,16 +9,17 @@
   testers,
 }:
 let
-  pname = "soundcard";
-  version = "0.4.4";
+  version = "0.4.3";
 in
 buildPythonPackage {
-  inherit pname version;
+  inherit version;
+  pname = "soundcard";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h9+cS47JdYX+RAodnbr6vOzljq5YV+0AXmuzhbIXnP8=";
+    inherit version;
+    pname = "SoundCard";
+    hash = "sha256-QQg1UUuhCAmAPLmIfUJw85K1nq82WRW7lFFq8/ix0Dc=";
   };
 
   patchPhase = ''

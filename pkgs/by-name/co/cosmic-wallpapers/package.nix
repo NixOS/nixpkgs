@@ -8,16 +8,15 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-wallpapers";
-    tag = "epoch-${finalAttrs.version}";
+    rev = "epoch-${finalAttrs.version}";
     forceFetchGit = true;
     fetchLFS = true;
-    hash = "sha256-XtNmV6fxKFlirXQvxxgAYSQveQs8RCTfcFd8SVdEXtE=";
+    hash = "sha256-Exrps3DicL/G/g0kbSsCvoFhiJn1k3v8I09GhW7EwNM=";
   };
 
   patches = [
@@ -27,12 +26,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [ "prefix=$(out)" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version"
-      "unstable"
       "--version-regex"
       "epoch-(.*)"
     ];
@@ -53,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # round_moons_nasa.jpg: https://www.planetary.org/space-images/the-solar-systems-round-moons
       publicDomain
     ];
-    teams = [ lib.teams.cosmic ];
+    maintainers = with lib.maintainers; [ pandapip1 ];
     platforms = lib.platforms.unix;
   };
 })

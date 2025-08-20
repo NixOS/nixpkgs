@@ -14,13 +14,13 @@
   procps,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rofi-screenshot";
   version = "2024-09-27";
 
   src = fetchFromGitHub {
     owner = "ceuk";
-    repo = "rofi-screenshot";
+    repo = pname;
     rev = "09a07d9c2ff2efbf75b1753bb412f4f8f086708f";
     hash = "sha256-3UpYdXAX3LD1ZAQ429JkzWWooiBpuf/uPf0CRh5EXd8=";
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   postFixup = ''
-    wrapProgram $out/bin/rofi-screenshot \
+    wrapProgram $out/bin/${pname} \
       --set PATH ${
         lib.makeBinPath [
           libnotify
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -Dm755 rofi-screenshot $out/bin/rofi-screenshot
+    install -Dm755 ${pname} $out/bin/${pname}
   '';
 
   meta = {

@@ -11,37 +11,54 @@
   libXi,
   libXtst,
   zlib,
+  darwin,
   electron,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks)
+    Carbon
+    CoreFoundation
+    ApplicationServices
+    OpenGL
+    ;
+in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2025.2.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
+    hash = "sha256-o65UPPyGgmFe8+HANmnyVgPITk8gY7uvIzx7QZUluBU=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
   # robotjs node-gyp dependencies
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libpng
-    libX11
-    libXi
-    libXtst
-    zlib
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libpng
+      libX11
+      libXi
+      libXtst
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreFoundation
+      ApplicationServices
+      OpenGL
+    ];
 
-  npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
+  npmDepsHash = "sha256-16yWCI408tkkzvrx2fBPSNSUa9dRej9LrnNpqobwfl8=";
 
   makeCacheWritable = true;
 
@@ -126,8 +143,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
     license = licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = [ maintainers.tomasajt ];
-    teams = [ teams.jitsi ];
+    maintainers = teams.jitsi.members ++ [ maintainers.tomasajt ];
     inherit (electron.meta) platforms;
   };
 }

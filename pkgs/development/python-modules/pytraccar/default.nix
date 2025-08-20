@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo

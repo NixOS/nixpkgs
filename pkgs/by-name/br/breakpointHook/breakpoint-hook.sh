@@ -6,7 +6,9 @@ breakpointHook() {
 
     # provide the user with an interactive shell for better experience
     export bashInteractive="@bashInteractive@"
-    dumpVars
+    if [ -z "$debugShell" ]; then
+        export debugShell="@bashInteractive@"
+    fi
 
     local id
     id="$(shuf -i 999999-9999999 -n1)"

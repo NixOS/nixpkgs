@@ -23,6 +23,6 @@ in
   '';
 
   platforms = platforms.unix;
-  teams = [ teams.gcc ];
+  maintainers = teams.gcc.members;
 
 }

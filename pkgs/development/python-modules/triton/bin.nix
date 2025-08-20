@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  addDriverRunpath,
   cudaPackages,
   buildPythonPackage,
   fetchurl,
   python,
+  pythonOlder,
   autoPatchelfHook,
   filelock,
   lit,
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "3.4.0";
+  version = "3.1.0";
   format = "wheel";
 
   src =
@@ -23,6 +25,8 @@ buildPythonPackage rec {
       srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in
     fetchurl srcs;
+
+  disabled = pythonOlder "3.8";
 
   pythonRemoveDeps = [
     "cmake"
@@ -50,7 +54,7 @@ buildPythonPackage rec {
     ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Language and compiler for custom Deep Learning operations";
     homepage = "https://github.com/triton-lang/triton/";
     changelog = "https://github.com/triton-lang/triton/releases/tag/v${version}";
@@ -58,11 +62,12 @@ buildPythonPackage rec {
     # https://docs.nvidia.com/cuda/eula/index.html
     # triton's license is MIT.
     # triton-bin includes ptxas binary, therefore unfreeRedistributable is set.
-    license = with lib.licenses; [
+    license = with licenses; [
       unfreeRedistributable
       mit
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ junjihashimoto ];
   };
 }

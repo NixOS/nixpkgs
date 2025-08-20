@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "obconf-qt";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    teams = [ lib.teams.lxqt ];
+    maintainers = lib.teams.lxqt.members;
   };
 }

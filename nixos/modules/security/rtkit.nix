@@ -1,13 +1,7 @@
 # A module for ‘rtkit’, a DBus system service that hands out realtime
 # scheduling priority to processes that ask for it.
 
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
-}:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -15,8 +9,7 @@ let
   cfg = config.security.rtkit;
   package = pkgs.rtkit;
 
-in
-{
+in {
 
   options = {
 
@@ -33,7 +26,7 @@ in
 
     security.rtkit.args = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Command-line options for `rtkit-daemon`.
       '';
@@ -44,6 +37,7 @@ in
     };
 
   };
+
 
   config = mkIf cfg.enable {
 
@@ -58,17 +52,18 @@ in
 
     systemd.services.rtkit-daemon = {
       serviceConfig.ExecStart = [
-        "" # Resets command from upstream unit.
+        ""  # Resets command from upstream unit.
         "${package}/libexec/rtkit-daemon ${utils.escapeSystemdExecArgs cfg.args}"
       ];
     };
 
-    users.users.rtkit = {
-      isSystemUser = true;
-      group = "rtkit";
-      description = "RealtimeKit daemon";
-    };
-    users.groups.rtkit = { };
+    users.users.rtkit =
+      {
+        isSystemUser = true;
+        group = "rtkit";
+        description = "RealtimeKit daemon";
+      };
+    users.groups.rtkit = {};
 
   };
 

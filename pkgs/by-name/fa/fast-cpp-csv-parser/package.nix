@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fast-cpp-csv-parser";
   version = "2021-01-03";
 
   src = fetchFromGitHub {
     owner = "ben-strasser";
-    repo = "fast-cpp-csv-parser";
+    repo = pname;
     rev = "75600d0b77448e6c410893830df0aec1dbacf8e3";
     sha256 = "04kalwgsr8khqr1j5j13vzwaml268c5dvc9wfcwfs13wp3snqwf2";
   };

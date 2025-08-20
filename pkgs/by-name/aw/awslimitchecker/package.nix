@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "awslimitchecker.checker" ];
 
-  meta = {
+  meta = with lib; {
     description = "Script and python package to check your AWS service limits and usage via boto3";
     homepage = "http://awslimitchecker.readthedocs.org";
     changelog = "https://github.com/jantman/awslimitchecker/blob/${version}/CHANGES.rst";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ zakame ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ zakame ];
     mainProgram = "awslimitchecker";
   };
 }

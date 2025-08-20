@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lukesmithxyz-bible-kjv";
   version = "unstable-2022-06-01";
 

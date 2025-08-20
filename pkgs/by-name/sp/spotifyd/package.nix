@@ -2,82 +2,76 @@
   lib,
   stdenv,
   config,
-  alsa-lib,
-  apple-sdk_11,
-  cmake,
-  dbus,
   fetchFromGitHub,
-  libjack2,
-  libpulseaudio,
-  nix-update-script,
-  openssl,
+  rustPackages,
   pkg-config,
-  portaudio,
-  rustPlatform,
-  testers,
+  openssl,
   withALSA ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
   withJack ? stdenv.hostPlatform.isLinux,
-  withMpris ? stdenv.hostPlatform.isLinux,
-  withPortAudio ? stdenv.hostPlatform.isDarwin,
+  libjack2,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  withPortAudio ? stdenv.hostPlatform.isDarwin,
+  portaudio,
+  withMpris ? stdenv.hostPlatform.isLinux,
+  withKeyring ? true,
+  dbus,
+  withPipe ? true,
+  nix-update-script,
+  testers,
+  spotifyd,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.4.1";
+  version = "0.3.5-unstable-2024-12-27";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
+    rev = "c6e6af449b75225224158aeeef64de485db1139e";
+    hash = "sha256-0HDrnEeqynb4vtJBnXyItprJkP+ZOAKIBP68Ht9xr2c=";
   };
 
-  cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
+  cargoHash = "sha256-bRO7cK+BlAUEr6DlK7GSJf/WNoCM4SYq/lZ8e9ENJZw=";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
-    ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio;
-
-  # `aws-lc-sys` fails with this enabled
-  hardeningDisable = [ "strictoverflow" ];
+    ++ lib.optional withPortAudio portaudio
+    # The `dbus_keying` feature works on other platforms, but only requires
+    # `dbus` on Linux
+    ++ lib.optional ((withMpris || withKeyring) && stdenv.hostPlatform.isLinux) dbus;
 
   buildNoDefaultFeatures = true;
   buildFeatures =
     lib.optional withALSA "alsa_backend"
     ++ lib.optional withJack "rodiojack_backend"
-    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend";
+    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withPipe "pipe_backend"
+    ++ lib.optional withKeyring "dbus_keyring";
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    # `assertion failed: shell.is_some()`
-    # Internally it's trying to query the user's shell through `dscl`. This is bad
-    # https://github.com/Spotifyd/spotifyd/blob/8777c67988508d3623d3f6b81c9379fb071ac7dd/src/utils.rs#L45-L47
-    "--skip=utils::tests::test_ffi_discovery"
-  ];
+  doCheck = false;
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = spotifyd;
+      version = builtins.head (lib.splitString "-" version);
+    };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
     description = "Open source Spotify client running as a UNIX daemon";
     homepage = "https://spotifyd.rs/";
-    changelog = "https://github.com/Spotifyd/spotifyd/releases/tag/${toString finalAttrs.src.tag}";
+    changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       anderslundstedt
@@ -87,4 +81,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "spotifyd";
   };
-})
+}

@@ -1,23 +1,19 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "starboard";
-  version = "0.15.26";
-
-  __darwinAllowLocalNetworking = true; # for tests
+  version = "0.15.23";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = "starboard";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-yQ4ABzN8EvD5qs0yjTaihM145K79LglprC2nlqAw0XU=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-eBAOrIGlAJ7r9UviCZUELG5p3k08OqvFUGZ8Ovnxsis=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +25,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-6SqghCM2dwNyosZo0wfMMHlgrgY+Ts+7lIN7+qSp0GI=";
+  vendorHash = "sha256-meZMuo+3Qv95TYYDslMpdfFG0KAbY/tufjcT7HgZB2c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,22 +34,18 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${finalAttrs.version}"
+    "-X main.version=v${version}"
   ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
-    ldflags+=" -X main.commit=$(cat COMMIT)"
-    ldflags+=" -X main.date=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''
     # Remove test that requires networking
     rm pkg/plugin/aqua/client/client_integration_test.go
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-      # Remove "[It] should make a request to fetch registries" test that fails on x86_64-darwin
-      rm pkg/plugin/aqua/client/client_test.go
-    ''}
 
     # Feed in all but the integration tests for testing
     # This is because subPackages above limits what is built to just what we
@@ -70,13 +62,17 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/starboard completion zsh)
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "version";
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/starboard --help
+    $out/bin/starboard version | grep "v${version}"
+    runHook postInstallCheck
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/aquasecurity/starboard";
-    changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
     mainProgram = "starboard";
     longDescription = ''
@@ -88,7 +84,7 @@ buildGoModule (finalAttrs: {
       plug-in that make security reports available through familiar Kubernetes
       tools.
     '';
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jk ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jk ];
   };
-})
+}

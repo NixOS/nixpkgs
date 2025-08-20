@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_11,
   nix,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "zon2nix";
-  version = "0.1.3-unstable-2025-03-20";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "zon2nix";
-    rev = "2360e358c2107860dadd340f88b25d260b538188";
-    hash = "sha256-89hYzrzQokQ+HUOd3g4epP9jdajaIoaMG81SrCNCqqU=";
+    rev = "v${version}";
+    hash = "sha256-pS0D+wdebtpNaGpDee9aBwEKTDvNU56VXer9uzULXcM=";
   };
 
   nativeBuildInputs = [
-    zig_0_14.hook
+    zig_0_11.hook
   ];
 
   zigBuildFlags = [
@@ -29,16 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dnix=${lib.getExe nix}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Convert the dependencies in `build.zig.zon` to a Nix expression";
     mainProgram = "zon2nix";
     homepage = "https://github.com/nix-community/zon2nix";
-    changelog = "https://github.com/nix-community/zon2nix/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      figsoda
-      RossComputerGuy
-    ];
-    inherit (zig_0_14.meta) platforms;
+    changelog = "https://github.com/nix-community/zon2nix/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ figsoda ];
+    inherit (zig_0_11.meta) platforms;
   };
-})
+}

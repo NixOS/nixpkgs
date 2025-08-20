@@ -8,39 +8,34 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
-  version = "1.4.0";
-  pyproject = true;
+  version = "1.3.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
     tag = "v${version}";
-    hash = "sha256-nUkR5xTyeBv7ziJ6Mej9TKvMOa5/k+ELBqt4BVam/wk=";
+    hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs manage.py
   '';
 
-  dependencies = [ djangorestframework ];
+  propagatedBuildInputs = [ djangorestframework ];
 
   checkPhase = ''
-    runHook preCheck
-
     ./manage.py test
-
-    runHook postCheck
   '';
 
   pythonImportsCheck = [ "rest_framework_dataclasses" ];
 
-  meta = {
-    changelog = "https://github.com/oxan/djangorestframework-dataclasses/blob/${src.tag}/CHANGELOG.rst";
-    description = "Dataclasses serializer for Django REST framework";
+  meta = with lib; {
+    description = " Dataclasses serializer for Django REST framework";
     homepage = "https://github.com/oxan/djangorestframework-dataclasses";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

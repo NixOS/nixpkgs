@@ -13,14 +13,15 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.27.1";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
     tag = "v${version}";
-    hash = "sha256-EFEyP7eqB4sUQ2ksD67kCr0BEShTiKWbk1PxXOUOGc4=";
+    hash = "sha256-kiYu46qv8sBBcPoCo3PN1q9F0EJ1s5hAMKavPaztM4s=";
+    fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
   };
 
   build-system = [

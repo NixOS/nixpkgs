@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "md_toc/tests/*.py" ];
+  pytestFlagsArray = [ "md_toc/tests/*.py" ];
 
   pythonImportsCheck = [ "md_toc" ];
 

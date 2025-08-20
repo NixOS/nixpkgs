@@ -1,7 +1,8 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
+  fetchpatch,
   appstream-glib,
   biblesync,
   cmake,
@@ -9,34 +10,46 @@
   desktop-file-utils,
   docbook2x,
   docbook_xml_dtd_412,
+  enchant2,
   glib,
+  gtk3,
   gtkhtml,
   icu,
   intltool,
+  isocodes,
   itstool,
   libuuid,
   libxslt,
   minizip,
   pkg-config,
   sword,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   wrapGAppsHook3,
   yelp-tools,
   zip,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xiphos";
-  version = "4.3.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
-    tag = finalAttrs.version;
-    hash = "sha256-HTndBWfze8tV4G9npLYB7SkgpJNQcQBZqHKjxhZU6JY=";
+    rev = version;
+    hash = "sha256-H5Q+azE2t3fgu77C9DxrkeUCJ7iJz3Cc91Ln4dqLvD8=";
   };
 
   patches = [
+    # GLIB_VERSION_MIN_REQUIRED is not defined.
+    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
+    (fetchpatch {
+      name = "xiphos-glibc.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos&id=bb816f43ba764ffac1287ab1e2a649c2443e3ce8";
+      sha256 = "he3U7phU2/QCrZidHviupA7YwzudnQ9Jbb8eMZw6/ck=";
+      extraPrefix = "";
+    })
+
     # Fix D-Bus build
     # https://github.com/crosswire/xiphos/pull/1103
     ./0001-Add-dbus-glib-dependency-to-main.patch
@@ -60,13 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     biblesync
     dbus-glib
+    enchant2
     glib
+    gtk3
     gtkhtml
     icu
+    isocodes
     libuuid
     minizip
     sword
-    webkitgtk_4_1
+    webkitgtk_4_0
   ];
 
   cmakeFlags = [
@@ -76,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     # The build script won't continue without the version saved locally.
-    echo "${finalAttrs.version}" > cmake/source_version.txt
+    echo "${version}" > cmake/source_version.txt
 
     export SWORD_HOME=${sword};
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool
@@ -90,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
       modules from The SWORD Project and elsewhere.
     '';
     homepage = "https://www.xiphos.org/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
-})
+}

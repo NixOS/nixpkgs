@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
   ];
 
   goSrpVersion = "0.1.5";
-  postPatch = ''
+  configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto "$goModules" "$cargoDepsCopy/go-srp-$goSrpVersion/go/vendor"
+    cp -r --reflink=auto $goModules ../cargo-vendor-dir/go-srp-$goSrpVersion/go/vendor
   '';
 
   goModules =
@@ -44,7 +44,12 @@ rustPlatform.buildRustPackage {
       vendorHash = "sha256-QPj2jq8hWL4kZellM/VwqrO/Oku/JW1Cig1Iv5YSI1U=";
     }).goModules;
 
-  cargoHash = "sha256-w2hrrFHpgeAPcP/swerZu0VJ34T/9/JeQkipp4IQ2js=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "you-have-mail-common-0.8.1" = "sha256-jDOIMvHqWvPpnyZ5V+6VsyFUDXz84yFROkInXE5CIyE=";
+    };
+  };
 
   meta = {
     description = "Small application to notify you when you receive an email in your email account";

@@ -1,11 +1,13 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
   ffmpeg,
   cmake,
   ninja,
+  qtbase,
+  qtx11extras,
+  qtconnectivity,
   v4l-utils,
   grim,
   wf-recorder,
@@ -27,15 +29,15 @@
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "coretoppings";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "coretoppings";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wHVdZqXn8DXqLbCdKz2fI8BjNVai5dRq3a45HVCvLa8=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-IYUkPGgFGI6889IyromMBobIoqSZtALVsSswQ7O1Bp0=";
   };
 
   patches = [
@@ -46,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtconnectivity
+    qtbase
+    qtx11extras
+    qtconnectivity
     libdbusmenu
     ffmpeg
     v4l-utils
@@ -76,12 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Additional features,plugins etc for CuboCore Application Suite";
     mainProgram = "shareIT";
     homepage = "https://gitlab.com/cubocore/coreapps/coretoppings";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

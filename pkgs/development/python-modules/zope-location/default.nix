@@ -1,60 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-interface,
+  fetchPypi,
   zope-proxy,
-  zope-schema,
-  zope-component,
-  zope-configuration,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "zope-location";
+  pname = "zope.location";
   version = "5.0";
-  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.location";
-    tag = version;
-    hash = "sha256-C8tQ4qqzkQx+iU+Pm3iCEchtqOZT/qcYFSzJWzqlhnI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-AW/qk0uX2tKwimTqfy+8PeVduwdMRh9m2HHHC/OqrqU=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ zope-proxy ];
 
-  dependencies = [
-    zope-interface
-    zope-proxy
-    zope-schema
-  ];
-
-  optional-dependencies = {
-    zcml = [ zope-configuration ];
-    component = [ zope-component ];
-  };
-
-  pythonImportsCheck = [ "zope.location" ];
-
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  # prevent cirtular import
-  preCheck = ''
-    rm src/zope/location/tests/test_configure.py
-    rm src/zope/location/tests/test_pickling.py
+  # ignore circular dependency on zope-schema
+  preBuild = ''
+    sed -i '/zope.schema/d' setup.py
   '';
 
-  unittestFlagsArray = [ "src/zope/location/tests" ];
+  doCheck = false;
 
-  pythonNamespaces = [ "zope" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.location/";
     description = "Zope Location";
-    changelog = "https://github.com/zopefoundation/zope.location/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.zpl21;
+    license = licenses.zpl20;
     maintainers = [ ];
   };
 }

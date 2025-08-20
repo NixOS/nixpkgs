@@ -41,13 +41,13 @@
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.10.0";
+  version = "1.8.6";
   disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GeXWzvpwmXGY94vGZe9NPTy1MyW1uYpy5Rrvra9rPg4=";
+    hash = "sha256-l3sTFej3D5QWPsB+MeVXG+g/Kt1gIxQcWgascAEm+NE=";
   };
 
   postPatch = ''
@@ -93,7 +93,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    pytest nipype/tests -k 'not display and not test_no_et_multiproc'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'
   '';
   pythonImportsCheck = [ "nipype" ];
 

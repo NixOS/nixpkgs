@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   automaticcomponenttoolkit,
@@ -13,34 +12,18 @@
   openssl,
   libuuid,
   zlib,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lib3mf";
-  version = "2.4.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
-    repo = "lib3mf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-wq/dT/8m+em/qFoNNj6s5lyx/MgNeEBGSMBpuJiORqA=";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-XEwrJINiNpI2+1wXxczirci8VJsUVs5iDUAMS6jWuNk=";
   };
-
-  patches = [
-    # some patches are required for the gcc 14 source build
-    # remove next release
-    # https://github.com/3MFConsortium/lib3mf/pull/413
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/413/commits/96b2f5ec9714088907fe8a6f05633e2bbd82053f.patch?full_index=1";
-      hash = "sha256-cJRc+SW1/6Ypf2r34yroVTxu4NMJWuoSmzsmoXogrUk=";
-    })
-    # https://github.com/3MFConsortium/lib3mf/pull/421
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/421/commits/6d7b5709a4a1cf9bd55ae8b4ae999c9ca014f62c.patch?full_index=1";
-      hash = "sha256-rGOyXZUZglRNMu1/oVhgSpRdi0pUa/wn5SFHCS9jVOY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -66,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     openssl
     zlib
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
@@ -97,14 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
-    changelog = "https://github.com/3MFConsortium/lib3mf/releases/tag/${finalAttrs.src.tag}";
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };
-})
+}

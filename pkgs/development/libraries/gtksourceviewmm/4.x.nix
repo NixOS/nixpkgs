@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

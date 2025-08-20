@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qca";
-  version = "2.3.10";
+  version = "2.3.9";
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-HFtyLak9VZNlcZImuxIccm7DwNxMZ96jTx5Q5ODRSgI=";
+    sha256 = "sha256-xVXVKYzde2uv4rH5YQbzDPpUOiPUWdUMipHqwzxHbk4=";
   };
 
   buildInputs = [

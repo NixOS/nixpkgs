@@ -1,34 +1,28 @@
-{
-  pkgsBuildBuild,
-  go,
-  buildGoModule,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  autoSignDarwinBinariesHook,
-  nix-update-script,
+{ pkgsBuildBuild
+, go
+, buildGoModule
+, stdenv
+, lib
+, fetchFromGitHub
+, nixosTests
+, autoSignDarwinBinariesHook
+, nix-update-script
 }:
 
 let
-  common =
-    {
-      stname,
-      target,
-      postInstall ? "",
-    }:
+  common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.30.0";
+      version = "1.29.2";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-GKyzJ2kzs2h/tfb3StSleGBofiKk6FwVcSkCjsJRvRY=";
+        hash = "sha256-1IQdwnP4nUcDtSeqrnTF8OtlIZTnPlgP1NLnLJnOAbk=";
       };
 
-      vendorHash = "sha256-Soky/3wEmP1QRy8xfL68sTHi3CSl4nbCINmG0DY2Qys=";
+      vendorHash = "sha256-eLUHYpAjq+viRwNiqC+42FKswdItBA0QriHn3JK1B5M=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -65,13 +59,7 @@ let
 
       passthru = {
         tests = {
-          inherit (nixosTests)
-            syncthing
-            syncthing-init
-            syncthing-many-devices
-            syncthing-no-settings
-            syncthing-relay
-            ;
+          inherit (nixosTests) syncthing syncthing-init syncthing-relay;
         };
         updateScript = nix-update-script { };
       };
@@ -81,10 +69,7 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [
-          joko
-          peterhoeg
-        ];
+        maintainers = with lib.maintainers; [ joko peterhoeg ];
         mainProgram = target;
         platforms = lib.platforms.unix;
       };
@@ -105,10 +90,7 @@ in
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
-      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
-
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing@.service \

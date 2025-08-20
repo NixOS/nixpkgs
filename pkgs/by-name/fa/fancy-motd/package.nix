@@ -11,13 +11,13 @@
   procps,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fancy-motd";
-  version = "0-unstable-2022-06-06";
+  version = "unstable-2022-06-06";
 
   src = fetchFromGitHub {
     owner = "bcyran";
-    repo = "fancy-motd";
+    repo = pname;
     rev = "812c58f04f65053271f866f3797baa2eba7324f5";
     sha256 = "sha256-O/euB63Dyj+NyfZK42egSEYwZhL8B0jCxSSDYoT4cpo=";
   };

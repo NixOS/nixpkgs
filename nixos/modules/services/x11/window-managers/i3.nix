@@ -52,11 +52,13 @@ in
       default = with pkgs; [
         dmenu
         i3status
+        i3lock
       ];
       defaultText = literalExpression ''
         with pkgs; [
           dmenu
           i3status
+          i3lock
         ]
       '';
       description = ''
@@ -79,7 +81,6 @@ in
         '';
       }
     ];
-    programs.i3lock.enable = mkDefault true;
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     environment.etc."i3/config" = mkIf (cfg.configFile != null) {
       source = cfg.configFile;

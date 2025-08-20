@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
-    repo = "smbus2";
+    repo = pname;
     tag = version;
     hash = "sha256-3ZAjviVLO/c27NzrPcWf6RlZYclYkmUmOskTP9TVbNM=";
   };

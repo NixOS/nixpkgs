@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Small version of UniDic";
     homepage = "https://github.com/polm/unidic-lite";
     license = licenses.mit;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

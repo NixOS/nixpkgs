@@ -4,7 +4,6 @@
   fetchFromGitLab,
   python-musicpd,
   requests,
-  sphinxHook,
 }:
 
 buildPythonApplication rec {
@@ -19,16 +18,6 @@ buildPythonApplication rec {
   };
 
   format = "setuptools";
-
-  postPatch = ''
-    sed -i '/intersphinx/d' doc/source/conf.py
-  '';
-
-  nativeBuildInputs = [
-    sphinxHook
-  ];
-
-  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     requests

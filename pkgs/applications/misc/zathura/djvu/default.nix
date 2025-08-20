@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  gtk3,
+  gtk,
   zathura_core,
   girara,
   djvulibre,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     djvulibre
     gettext
     zathura_core
-    gtk3
+    gtk
     girara
   ];
 

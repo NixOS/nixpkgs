@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "10.0.1";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JUiPhmPdFSiuH1T5SsHqUa4ltNUxU5uLxwf+0YTRaEU=";
+    hash = "sha256-/x0PwjRmiMYsAVFUcTasMOMiiW7YrzFu92AsR9qUJs8=";
   };
 
   build-system = [ setuptools ];

@@ -14,18 +14,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.15";
+  version = "7.1.5";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    xxd
-  ];
+  nativeBuildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      xxd
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     apple-sdk_15
@@ -67,20 +66,32 @@ stdenv.mkDerivation (finalAttrs: {
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-QDGt/v5t7g6+y6ijpLRF7YkqF8bISfxk684m7uUg4eM=";
+        hash = "sha256-o+9Z3Kxo1ff1TZPmmE6ptdOSsruQzxZm59bdYvhRo3c=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-HvaMPmXNlFVOezqWxqXaAUq8E8O2ZkXMQPwkKXCAOcY=";
+        hash = "sha256-6HBWJvjVWagtHrfjWaYSRcnQOuwTBVeVxo3wc+jSlyE=";
       };
     };
 
     updateScript = writeShellScript "update-yabai" ''
-      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
+      set -o errexit
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
+      NEW_VERSION=$(curl --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        update-source-version "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python,
+  python3,
   qt5,
   fetchFromGitHub,
   wrapPython,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
   pythonPath = [
     pyqt5.dev
     pyserial

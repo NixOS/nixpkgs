@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qwyWj0vPWQOZYib2ZZutX25a4wwnG1kFAiRCWqGyVms=";
   };
 
-  cargoHash = "sha256-6UMmYbLgMg+wLDsL63f5OvWbtHtDXo0mByz6OZp1lsw=";
+  cargoHash = "sha256-ifw/n7eejUWUqhieDLojuO3xgosn28NnjAKkq/ZSLEI=";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";

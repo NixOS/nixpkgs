@@ -17,6 +17,9 @@
   pcaudiolib,
   sonicSupport ? true,
   sonic,
+  CoreAudio,
+  AudioToolbox,
+  AudioUnit,
   alsa-plugins,
   makeWrapper,
 }:
@@ -32,19 +35,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-aAJ+k+kkOS6k835mEW7BvgAIYGhUHxf7Q4P5cKO8XTk=";
   };
 
-  patches = [
-    # Fix build with Clang 16.
-    (fetchpatch {
-      url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
-      hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
-    })
-  ]
-  ++ lib.optionals mbrolaSupport [
-    # Hardcode correct mbrola paths.
-    (replaceVars ./mbrola.patch {
-      inherit mbrola;
-    })
-  ];
+  patches =
+    [
+      # Fix build with Clang 16.
+      (fetchpatch {
+        url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
+        hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
+      })
+    ]
+    ++ lib.optionals mbrolaSupport [
+      # Hardcode correct mbrola paths.
+      (replaceVars ./mbrola.patch {
+        inherit mbrola;
+      })
+    ];
 
   nativeBuildInputs = [
     autoconf
@@ -59,7 +63,12 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
-    ++ lib.optional sonicSupport sonic;
+    ++ lib.optional sonicSupport sonic
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreAudio
+      AudioToolbox
+      AudioUnit
+    ];
 
   # touch ChangeLog to avoid below error on darwin:
   # Makefile.am: error: required file './ChangeLog.md' not found

@@ -5,7 +5,7 @@
   autoreconfHook,
   callPackage,
   pkg-config,
-  pcre2,
+  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    pcre2
+    pcre
   ];
 
   passthru.tests = {
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ucg";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin;
   };

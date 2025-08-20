@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "damon";
   version = "unstable-2021-10-06";
 
@@ -21,7 +21,7 @@ buildGoModule {
     homepage = "https://github.com/hashicorp/damon";
     license = licenses.mpl20;
     description = "Terminal UI (TUI) for HashiCorp Nomad";
-    teams = [ teams.iog ];
+    maintainers = teams.iog.members;
     mainProgram = "damon";
   };
 }

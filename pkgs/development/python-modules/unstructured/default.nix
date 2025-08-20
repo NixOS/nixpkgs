@@ -3,9 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
-  setuptools,
-
   # core networking and async dependencies
   anyio,
   backoff,
@@ -33,9 +30,9 @@
   olefile,
   orderly-set,
   python-dateutil,
-  python-iso639,
+  # python-iso639,
   python-magic,
-  python-oxmsg,
+  # python-oxmsg,
   rapidfuzz,
   regex,
   soupsieve,
@@ -68,7 +65,7 @@
   pypandoc,
   pypdf,
   python-docx,
-  unstructured-client,
+  # unstructured-client,
   # unstructured-pytesseract,
   # optional dependencies
   # csv
@@ -116,23 +113,21 @@
   grpcio,
 }:
 let
-  version = "0.17.2";
+  version = "0.16.13";
 in
 buildPythonPackage {
   pname = "unstructured";
   inherit version;
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-DbNfhJzpPJObACWSc2r16kjIE2X/CrOCiT7fdgGNwIg=";
+    hash = "sha256-VVgSrXqfWEOjZAU54rGBW3m4FxZKJDmbFsWdgjiqMSs=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     # Base dependencies
     anyio
     backoff
@@ -168,9 +163,9 @@ buildPythonPackage {
     pycparser
     pypdf
     python-dateutil
-    python-iso639
+    # python-iso639
     python-magic
-    python-oxmsg
+    # python-oxmsg
     rapidfuzz
     regex
     requests
@@ -181,7 +176,7 @@ buildPythonPackage {
     tqdm
     typing-extensions
     typing-inspect
-    unstructured-client
+    # unstructured-client
     urllib3
     webencodings
     wrapt

@@ -3,7 +3,6 @@
   caqti,
   ocaml_sqlite3,
   alcotest,
-  dune-site,
 }:
 
 buildDunePackage {
@@ -15,10 +14,7 @@ buildDunePackage {
     ocaml_sqlite3
   ];
 
-  checkInputs = [
-    alcotest
-    dune-site
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

@@ -1,36 +1,40 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  openssl,
+  darwin,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.12.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
-    tag = finalAttrs.version;
-    hash = "sha256-gJJnmJ1dpKVCRZtzL1R86s607hOCHTpsFDPsQKOnvvA=";
+    rev = version;
+    hash = "sha256-+M0s6v9ULf+D2pPOE8KlHoyV+jBMbPsAXpYxGjms5DY=";
   };
 
-  cargoHash = "sha256-WMRDUAefYjXY03EqTZf3VNJuypxu07RTyDmdlB6a0kk=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk_11_0.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  cargoHash = "sha256-UwDaf4osH9Kj1cF2BYbyuv9HmmPGxTB/ynNBAuwa5fs=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple but detailed weather indicator for Waybar using wttr.in";
     homepage = "https://github.com/bjesus/wttrbar";
-    changelog = "https://github.com/bjesus/wttrbar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
     mainProgram = "wttrbar";
   };
-})
+}

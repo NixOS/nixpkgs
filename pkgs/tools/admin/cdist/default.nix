@@ -10,7 +10,6 @@
 buildPythonApplication rec {
   pname = "cdist";
   version = "7.0.0";
-  format = "setuptools";
   outputs = [
     "out"
     "man"

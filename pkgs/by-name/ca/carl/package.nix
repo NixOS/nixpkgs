@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  cargoHash = "sha256-kzHMjrLCiiMLMTSozKq5jMWq3rGb+xsXhZoOuod7qGE=";
+  cargoHash = "sha256-nBl34szwEQX26MibfT10E55czYXN3/9W3y2z936KqTc=";
 
   meta = {
     description = "cal(1) with more features and written in rust";

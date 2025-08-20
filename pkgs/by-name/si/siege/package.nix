@@ -1,9 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -33,12 +32,12 @@ stdenv.mkDerivation rec {
     "--with-zlib=${zlib.dev}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "HTTP load tester";
     homepage = "https://www.joedog.org/siege-home/";
     changelog = "https://github.com/JoeDog/siege/blob/v${version}/ChangeLog";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
 }

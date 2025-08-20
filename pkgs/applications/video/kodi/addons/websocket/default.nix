@@ -32,6 +32,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/websocket-client/websocket-client";
     description = "WebSocket client for Python";
     license = licenses.lgpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

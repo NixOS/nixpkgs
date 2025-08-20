@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.5.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${version}";
-    hash = "sha256-iiFpX4w6vdsRxjhRcxXTTtSAb8WPwg1afqwgBpzjhoA=";
+    hash = "sha256-EudcANZ0aUImQ/HWSX1PRklvhP2D5L3ugXaC0GKyF0Q=";
   };
 
   outputs = [
@@ -63,20 +63,21 @@ stdenv.mkDerivation rec {
 
   sphinxRoot = "./Documentation";
 
-  buildInputs = [
-    libcap_ng
-    openssl
-    perl
-    procps
-    python3
-    util-linux
-    which
-  ]
-  ++ (lib.optionals withDPDK [
-    dpdk
-    numactl
-    libpcap
-  ]);
+  buildInputs =
+    [
+      libcap_ng
+      openssl
+      perl
+      procps
+      python3
+      util-linux
+      which
+    ]
+    ++ (lib.optionals withDPDK [
+      dpdk
+      numactl
+      libpcap
+    ]);
 
   preConfigure = "./boot.sh";
 
@@ -84,8 +85,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ]
-  ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
+  ] ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -116,15 +116,14 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  nativeCheckInputs = [
-    iproute2
-  ]
-  ++ (with python3.pkgs; [
-    netaddr
-    pyparsing
-    pytest
-    setuptools
-  ]);
+  nativeCheckInputs =
+    [ iproute2 ]
+    ++ (with python3.pkgs; [
+      netaddr
+      pyparsing
+      pytest
+      setuptools
+    ]);
 
   passthru = {
     tests = {
@@ -135,7 +134,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
@@ -149,13 +148,13 @@ stdenv.mkDerivation rec {
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
     '';
     homepage = "https://www.openvswitch.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       adamcstephens
       kmcopper
       netixx
       xddxdd
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

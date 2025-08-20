@@ -3,32 +3,32 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sdl3,
+  SDL2,
 }:
 
 #TODO: tests
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "faudio";
-  version = "25.08";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
-    tag = finalAttrs.version;
-    hash = "sha256-yhKmY5aysu1wIx0BDdQ6fyf5qn9XCwtNCIjDeJjBGg8=";
+    rev = version;
+    sha256 = "sha256-k/cu8yqrwohpr37oZNBi7+Ln+Fj0TGXkl5VmdcjZB1o=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ sdl3 ];
+  buildInputs = [ SDL2 ];
 
-  meta = {
+  meta = with lib; {
     description = "XAudio reimplementation focusing to develop a fully accurate DirectX audio library";
     homepage = "https://github.com/FNA-XNA/FAudio";
-    changelog = "https://github.com/FNA-XNA/FAudio/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.zlib;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.marius851000 ];
+    changelog = "https://github.com/FNA-XNA/FAudio/releases/tag/${version}";
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.marius851000 ];
   };
-})
+}

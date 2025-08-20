@@ -5,7 +5,6 @@
   poetry-core,
   importlib-metadata,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   toml,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mjpieters";
-    repo = "aiolimiter";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-wgHR0GzaPXlhL4ErklFqmWNFO49dvd5X5MgyYHVH4Eo=";
   };
@@ -31,10 +30,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
     toml
   ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=aiolimiter --cov-config=tox.ini --cov-report term-missing" ""
+  '';
 
   pythonImportsCheck = [ "aiolimiter" ];
 

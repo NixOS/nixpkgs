@@ -6,16 +6,15 @@
   nodejs,
   dart-sass,
   nix-update-script,
-  nixosTests,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.04.1";
+  version = "24.12.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-hvDrFGv6Mht9whA2lJbDLQnP2LkOiCo3NtjMpWr/q6A=";
+    hash = "sha256-nOhovVqWlHPunwruJrgqFhhDxccKBp/iEyB3Y3C5Cz8=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -25,8 +24,7 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
-    fetcherVersion = 1;
-    hash = "sha256-y1R+rlaOtFOHHAgEHPBl40536U10Ft0iUSfGcfXS08Y=";
+    hash = "sha256-+FijxCiI5pr6kp+/99DJJOJSI9w6pbtfW25SUyEcWio=";
   };
 
   # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
@@ -56,15 +54,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests = {
-      inherit (nixosTests.homer) caddy nginx;
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Very simple static homepage for your server";
+    description = "A very simple static homepage for your server.";
     homepage = "https://homer-demo.netlify.app/";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;

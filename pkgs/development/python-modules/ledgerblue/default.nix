@@ -53,8 +53,7 @@ buildPythonPackage rec {
     python-gnupg
     python-u2flib-host
     websocket-client
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
 
   # No tests
   doCheck = false;

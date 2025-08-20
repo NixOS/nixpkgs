@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   libusb1,
-  sfml_2,
+  sfml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gotos";
     repo = "cutecapture";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V8BlZykh9zOTcEypu96Ft9/6CtjsybtD8lBsg9sF5sQ=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libusb1
-    sfml_2
+    sfml
   ];
 
   postPatch = ''
@@ -34,19 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
-  doInstallCheck = true;
-
   postInstall = ''
     install -Dm644 -t $out/lib/udev/rules.d 95-{3,}dscapture.rules
     install -Dm444 -t $out/share/applications Cute{3,}DSCapture.desktop
     install -Dm444 -t $out/share/icons/hicolor/128x128/apps Cute{3,}DSCapture.png
   '';
 
-  meta = {
-    description = "Nintendo DS and 3DS capture software for Linux and Mac";
+  meta = with lib; {
+    description = "(3)DS capture software for Linux and Mac";
     homepage = "https://github.com/Gotos/CuteCapture";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ raphaelr ];
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ raphaelr ];
   };
 })

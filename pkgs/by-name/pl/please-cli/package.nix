@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "please-cli";
-  version = "0.4.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "TNG";
     repo = "please-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Kpb36Fm49Cxr3PMlSoUfTNEMNmWFktgEoej1904DmEE=";
+    hash = "sha256-rJIR4eMhXL4K9iO7JxnkgWNsICV3hPQb0aobWNuHAG0=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

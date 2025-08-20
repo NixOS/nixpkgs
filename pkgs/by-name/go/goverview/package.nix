@@ -35,12 +35,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Tool to get an overview of the list of URLs";
     mainProgram = "goverview";
     homepage = "https://github.com/j3ssie/goverview";
     changelog = "https://github.com/j3ssie/goverview/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

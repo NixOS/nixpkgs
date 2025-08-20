@@ -1,11 +1,11 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin {
+grafanaPlugin rec {
   pname = "volkovlabs-variable-panel";
-  version = "4.1.0";
-  zipHash = "sha256-3AkCebT9KcQdsi+T3+0XMhwZaEmqlOmY90RidcVqUb4=";
+  version = "3.5.0";
+  zipHash = "sha256-SqMTCdB+8OUo94zJ3eS5NoCeyjc7sdMCR0CTvVe/L1g=";
   meta = with lib; {
-    description = "Variable panel allows you to have dashboard filters in a separate panel which you can place anywhere on the dashboard";
+    description = "The Variable panel allows you to have dashboard filters in a separate panel which you can place anywhere on the dashboard.";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

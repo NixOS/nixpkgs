@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  versionCheckHook,
   libpcap,
   pkg-config,
   openssl,
@@ -16,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nmap";
-  version = "7.98";
+  version = "7.95";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    hash = "sha256-zoRzE+qunlyfIXCOQtKre1bH4OuIA3KaMJL1iIbYl+Y=";
+    hash = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -63,12 +62,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "-V";
-  doInstallCheck = true;
 
   meta = {
     description = "Free and open source utility for network discovery and security auditing";

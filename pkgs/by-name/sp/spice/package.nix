@@ -50,32 +50,33 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
   ];
 
-  buildInputs = [
-    cyrus_sasl
-    glib
-    gst_all_1.gst-plugins-base
-    libXext
-    libXfixes
-    libXinerama
-    libXrandr
-    libXrender
-    libcacard
-    libjpeg
-    libopus
-    lz4
-    openssl
-    orc
-    pixman
-    python3.pkgs.pyparsing
-    spice-protocol
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gdk-pixbuf
-  ];
+  buildInputs =
+    [
+      cyrus_sasl
+      glib
+      gst_all_1.gst-plugins-base
+      libXext
+      libXfixes
+      libXinerama
+      libXrandr
+      libXrender
+      libcacard
+      libjpeg
+      libopus
+      lz4
+      openssl
+      orc
+      pixman
+      python3.pkgs.pyparsing
+      spice-protocol
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gdk-pixbuf
+    ];
 
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
 
     maintainers = with maintainers; [
+      bluescreen303
       atemu
     ];
     platforms = with platforms; linux ++ darwin;

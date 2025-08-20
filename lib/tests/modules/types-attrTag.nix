@@ -7,7 +7,7 @@
 let
   inherit (lib) mkOption types;
   forceDeep = x: builtins.deepSeq x x;
-  mergedSubOption = (options.merged.type.getSubOptions options.merged.loc).extensible;
+  mergedSubOption = (options.merged.type.getSubOptions options.merged.loc).extensible."merged.<name>";
 in
 {
   options = {

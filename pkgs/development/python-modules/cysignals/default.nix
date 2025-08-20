@@ -1,35 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
+  autoreconfHook,
+  fetchPypi,
   buildPythonPackage,
   cython,
-  meson-python,
-  ninja,
+  pariSupport ? true,
+  pari, # for interfacing with the PARI/GP signal handler
 
   # Reverse dependency
   sage,
 }:
 
+assert pariSupport -> pari != null;
+
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.12.4";
-  pyproject = true;
+  version = "1.11.4";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "sagemath";
-    repo = "cysignals";
-    tag = version;
-    hash = "sha256-VwjAgJTrK703Eg+H9c8lJt2+5DGSSKv49YeWl7SPDck=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Dx4yHlWgf5AchqNqHkSX9v+d/nAGgdATCjjDbk6yOMM=";
   };
-
-  build-system = [
-    cython
-    meson-python
-    ninja
-  ];
-
-  dontUseCmakeConfigure = true;
-  enableParallelBuilding = true;
 
   # explicit check:
   # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"
@@ -44,6 +36,19 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
+  propagatedBuildInputs =
+    [ cython ]
+    ++ lib.optionals pariSupport [
+      # When cysignals is built with pari, including cysignals into the
+      # buildInputs of another python package will cause cython to link against
+      # pari.
+      pari
+    ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit sage;
   };
@@ -52,7 +57,7 @@ buildPythonPackage rec {
     description = "Interrupt and signal handling for Cython";
     mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
     license = licenses.lgpl3Plus;
   };
 }

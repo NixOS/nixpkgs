@@ -8,13 +8,13 @@
 let
   drv = stdenv.mkDerivation rec {
     pname = "controller-topology-project";
-    version = "1.0.7";
+    version = "1.0.0";
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = "controller-topology-project";
       rev = "v${version}";
-      sha256 = "sha256-LzwMKsoip+ajmmk4qUJynOmhhf3Auivn8Af8VRGWkTA=";
+      sha256 = "sha256-6g4dyR34b0YgxlzRRS2C/gY3wjlO9MMYEB2fHLSCqC4=";
     };
 
     postPatch = ''
@@ -36,7 +36,7 @@ let
       homepage = "https://github.com/kodi-game/controller-topology-project";
       description = "Models how controllers connect to and map to each other for all gaming history";
       license = with licenses; [ odbl ];
-      teams = [ teams.kodi ];
+      maintainers = teams.kodi.members;
     };
   };
 in

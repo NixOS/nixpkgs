@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ggrandou/abootimg";
     description = "Manipulate Android Boot Images";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ flokli ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.flokli ];
   };
 }

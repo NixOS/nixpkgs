@@ -1,54 +1,36 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  go-md2man,
-  installShellFiles,
-  pkg-config,
-  which,
-  libapparmor,
-  libseccomp,
-  libselinux,
-  runtimeShell,
-  makeWrapper,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-md2man
+, installShellFiles
+, pkg-config
+, which
+, libapparmor
+, libseccomp
+, libselinux
+, makeWrapper
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.3.0";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    tag = "v${version}";
-    hash = "sha256-oXoDio3l23Z6UyAhb9oDMo1O4TLBbFyLh9sRWXnfLVY=";
+    rev = "v${version}";
+    hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
   };
 
   vendorHash = null;
-  outputs = [
-    "out"
-    "man"
-  ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [
-    go-md2man
-    installShellFiles
-    makeWrapper
-    pkg-config
-    which
-  ];
+  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
-  buildInputs = [
-    libselinux
-    libseccomp
-    libapparmor
-  ];
+  buildInputs = [ libselinux libseccomp libapparmor ];
 
-  makeFlags = [
-    "BUILDTAGS+=seccomp"
-    "SHELL=${runtimeShell}"
-  ];
+  makeFlags = [ "BUILDTAGS+=seccomp" ];
 
   buildPhase = ''
     runHook preBuild
@@ -72,8 +54,7 @@ buildGoModule rec {
     homepage = "https://github.com/opencontainers/runc";
     description = "CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
     mainProgram = "runc";
   };

@@ -7,7 +7,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "check-openvpn";
   version = "0.0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "liquidat";

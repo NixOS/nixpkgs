@@ -12,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "aaronjanse";
-    repo = "3mux";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
@@ -50,7 +50,7 @@ buildGoModule rec {
     wrapProgram $out/bin/3mux --prefix PATH : $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terminal multiplexer inspired by i3";
     mainProgram = "3mux";
     longDescription = ''
@@ -58,11 +58,11 @@ buildGoModule rec {
       mouse-controlled scrollback, and i3-like keybindings
     '';
     homepage = "https://github.com/aaronjanse/3mux";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       aaronjanse
       Br1ght0ne
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

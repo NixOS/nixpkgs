@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     unittest-xml-reporting
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "test"
   ];
 
@@ -69,11 +69,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_data_reader_exception"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Fitting and data analysis for small angle scattering data";
     homepage = "https://www.sasview.org";
     changelog = "https://github.com/SasView/sasview/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ rprospero ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ rprospero ];
   };
 }

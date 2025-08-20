@@ -2,34 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  versionCheckHook,
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.3.3";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    tag = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-8EWchUppW4H2kEUCGBXIk1meARJj2usKKO5gFYPoW3s=";
+    rev = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-kPH5nr+rIcF3mxl+L0kN5dn+9xvQccVa8EduwhuYboY=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/miniupnpc";
-
-  patches = [
-    # fix missing include
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/miniupnp/miniupnp/commit/e263ab6f56c382e10fed31347ec68095d691a0e8.patch";
-      hash = "sha256-PHqjruFOcsGT3rdFS/GD3wEvalCmoRY4BtIKFxCjKDw=";
-      stripLen = 1;
-    })
-  ];
+  sourceRoot = "${src.name}/miniupnpc";
 
   nativeBuildInputs = [ cmake ];
 
@@ -38,35 +26,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgram = "${placeholder "out"}/bin/upnpc";
-  doInstallCheck = true;
-
   doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   postInstall = ''
     mv $out/bin/upnpc-* $out/bin/upnpc
     mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
     mv $out/bin/external-ip.sh $out/bin/external-ip
-    chmod +x $out/bin/external-ip
-    patchShebangs $out/bin/external-ip
-    substituteInPlace $out/bin/external-ip \
-      --replace-fail "upnpc" $out/bin/upnpc
   '';
-
-  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     inherit (nixosTests) upnp;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Client that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = with lib.platforms; linux ++ freebsd ++ darwin;
-    license = lib.licenses.bsd3;
+    platforms = with platforms; linux ++ freebsd ++ darwin;
+    license = licenses.bsd3;
     mainProgram = "upnpc";
   };
-})
+}

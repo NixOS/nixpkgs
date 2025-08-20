@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "imgpkg";
-  version = "0.46.1";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "imgpkg";
     rev = "v${version}";
-    hash = "sha256-OrZjk0ap7ZNlxe/1FIVCZX93bVYxCJzFiijnQOIPeWk=";
+    hash = "sha256-M8OUeB2aigwlvGznByVEsDZnSQb0ggqQA73lXFwbY2c=";
   };
 
   vendorHash = null;

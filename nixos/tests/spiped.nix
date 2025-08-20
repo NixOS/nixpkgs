@@ -5,7 +5,7 @@ in
 {
   name = "spiped";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
+    maintainers = [ tomfitzhenry ];
   };
 
   nodes = {

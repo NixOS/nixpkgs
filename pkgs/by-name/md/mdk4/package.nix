@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "mdk4";
-  version = "4.2-unstable-2024-08-16";
+  version = "unstable-2021-04-27";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "mdk4";
-    rev = "36ca143a2e6c0b75b5ec60143b0c5eddd3d2970c";
-    hash = "sha256-iwESQgvt9gLQeDKVkf9KcztQmjdCLOE0+Q0FlfbbjEU=";
+    rev = "e94422ce8e4b8dcd132d658345814df7e63bfa41";
+    sha256 = "sha256-pZS7HQBKlSZJGqoZlSyBUzXC3osswcB56cBzgm+Sbwg=";
   };
 
   preBuild = ''
@@ -37,13 +37,11 @@ stdenv.mkDerivation {
     "SBINDIR=$(PREFIX)/bin"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = {
+  meta = with lib; {
     description = "Tool that injects data into wireless networks";
     homepage = "https://github.com/aircrack-ng/mdk4";
-    maintainers = with lib.maintainers; [ moni ];
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ moni ];
+    license = licenses.gpl2Plus;
     mainProgram = "mdk4";
   };
 }

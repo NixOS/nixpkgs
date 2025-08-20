@@ -1,7 +1,12 @@
 {
-  runTest,
-  forgejoPackage,
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  forgejoPackage ? pkgs.forgejo,
 }:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
 
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
@@ -19,19 +24,37 @@ let
   '';
   signingPrivateKeyId = "4D642DE8B678C79D";
 
+  actionsWorkflowYaml = ''
+    run-name: dummy workflow
+    on:
+      push:
+    jobs:
+      cat:
+        runs-on: native
+        steps:
+          - uses: http://localhost:3000/test/checkout@main
+          - run: cat testfile
+  '';
+  # https://github.com/actions/checkout/releases
+  checkoutActionSource = pkgs.fetchFromGitHub {
+    owner = "actions";
+    repo = "checkout";
+    rev = "v4.1.1";
+    hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
+  };
+
   metricSecret = "fakesecret";
 
-  base =
-    {
-      lib,
-      pkgs,
-      type,
-      ...
-    }:
-
-    {
+  supportedDbTypes = [
+    "mysql"
+    "postgres"
+    "sqlite3"
+  ];
+  makeForgejoTest =
+    type:
+    nameValuePair type (makeTest {
       name = "forgejo-${type}";
-      meta.maintainers = with lib.maintainers; [
+      meta.maintainers = with maintainers; [
         bendlas
         emilylange
       ];
@@ -60,6 +83,7 @@ let
               pkgs.gnupg
               pkgs.jq
               pkgs.file
+              pkgs.htmlq
             ];
             services.openssh.enable = true;
 
@@ -117,25 +141,6 @@ let
             "${backupDir}/${file}";
           remoteUri = "forgejo@server:test/repo";
           remoteUriCheckoutAction = "forgejo@server:test/checkout";
-
-          actionsWorkflowYaml = ''
-            run-name: dummy workflow
-            on:
-              push:
-            jobs:
-              cat:
-                runs-on: native
-                steps:
-                  - uses: http://localhost:3000/test/checkout@main
-                  - run: cat testfile
-          '';
-          # https://github.com/actions/checkout/releases
-          checkoutActionSource = pkgs.fetchFromGitHub {
-            owner = "actions";
-            repo = "checkout";
-            rev = "v4.1.1";
-            hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
-          };
         in
         ''
           import json
@@ -252,22 +257,27 @@ let
               client.succeed("git -C /tmp/repo push origin main")
 
               def poll_workflow_action_status(_) -> bool:
-                  try:
-                      response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
-                      status = json.loads(response).get("workflow_runs")[0].get("status")
+                  output = server.succeed(
+                      "curl --fail http://localhost:3000/test/repo/actions | "
+                      + 'htmlq ".flex-item-leading span" --attribute "data-tooltip-content"'
+                  ).strip()
 
-                  except IndexError:
-                      status = "???"
+                  # values taken from https://codeberg.org/forgejo/forgejo/src/commit/af47c583b4fb3190fa4c4c414500f9941cc02389/options/locale/locale_en-US.ini#L3649-L3661
+                  if output in [ "Failure", "Canceled", "Skipped", "Blocked" ]:
+                      raise Exception(f"Workflow status is '{output}', which we consider failed.")
+                      server.log(f"Command returned '{output}', which we consider failed.")
 
-                  server.log(f"Workflow status: {status}")
+                  elif output in [ "Unknown", "Waiting", "Running", "" ]:
+                      server.log(f"Workflow status is '{output}'. Waiting some more...")
+                      return False
 
-                  if status == "failure":
-                      raise Exception("Workflow failed")
+                  elif output in [ "Success" ]:
+                      return True
 
-                  return status == "success"
+                  raise Exception(f"Workflow status is '{output}', which we don't know. Value mappings likely need updating.")
 
               with server.nested("Waiting for the workflow run to be successful"):
-                  retry(poll_workflow_action_status, 60)
+                  retry(poll_workflow_action_status)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
@@ -275,19 +285,7 @@ let
               assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
               server.copy_from_vm("${dumpFile}")
         '';
-    };
+    });
 in
-{
-  mysql = runTest {
-    imports = [ base ];
-    _module.args.type = "mysql";
-  };
-  sqlite3 = runTest {
-    imports = [ base ];
-    _module.args.type = "sqlite3";
-  };
-  postgres = runTest {
-    imports = [ base ];
-    _module.args.type = "postgres";
-  };
-}
+
+listToAttrs (map makeForgejoTest supportedDbTypes)

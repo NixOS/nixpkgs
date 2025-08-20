@@ -33,7 +33,6 @@
   libdrm,
   libpng,
   libuuid,
-  libsecret,
   libX11,
   libxcb,
   libxkbcommon,
@@ -101,7 +100,7 @@ let
 
     installPhase = ''
       cp -r . $out
-      wrapProgram $out/bin/studio \
+      wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
@@ -131,7 +130,6 @@ let
             git
             ps
             usbutils
-            libsecret
           ]
         }" \
         --prefix LD_LIBRARY_PATH : "${
@@ -144,7 +142,6 @@ let
             libXi
             libXrender
             libXtst
-            libsecret
 
             # No crash, but attempted to load at startup
             e2fsprogs
@@ -207,7 +204,6 @@ let
         ]
       }"
     '';
-    meta.mainProgram = "studio";
   };
 
   desktopItem = makeDesktopItem {
@@ -283,7 +279,7 @@ let
                 unset ANDROID_HOME
               fi
             ''}
-            exec ${fhsEnv}/bin/${drvName}-fhs-env ${lib.getExe androidStudio} "$@"
+            exec ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
           '';
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -326,19 +322,12 @@ let
           # source-code itself).
           platforms = [ "x86_64-linux" ];
           maintainers =
+            with lib.maintainers;
             rec {
-              stable = with lib.maintainers; [
+              stable = [
                 alapshin
-              ];
-              beta = stable;
-              canary = stable;
-              dev = stable;
-            }
-            ."${channel}";
-          teams =
-            rec {
-              stable = with lib.teams; [
-                android
+                johnrtitor
+                numinit
               ];
               beta = stable;
               canary = stable;

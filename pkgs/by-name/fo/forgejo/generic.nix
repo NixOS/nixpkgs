@@ -40,9 +40,9 @@ let
     pname = "forgejo-frontend";
     inherit src version npmDepsHash;
 
-    buildPhase = ''
-      ./node_modules/.bin/webpack
-    '';
+    patches = [
+      ./package-json-npm-build-frontend.patch
+    ];
 
     # override npmInstallHook
     installPhase = ''
@@ -119,18 +119,15 @@ buildGoModule rec {
   checkFlags =
     let
       skippedTests = [
+        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
-        "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
-
-  preInstall = ''
-    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/gitea"
-  '';
 
   postInstall = ''
     mkdir $data
@@ -191,7 +188,7 @@ buildGoModule rec {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = lib.licenses.gpl3Plus;
+    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
     maintainers = with lib.maintainers; [
       emilylange
       urandom

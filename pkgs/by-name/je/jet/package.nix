@@ -3,14 +3,15 @@
   buildGraalvmNativeImage,
   fetchurl,
   testers,
+  jet,
 }:
 
-buildGraalvmNativeImage (finalAttrs: {
+buildGraalvmNativeImage rec {
   pname = "jet";
   version = "0.7.27";
 
   src = fetchurl {
-    url = "https://github.com/borkdude/jet/releases/download/v${finalAttrs.version}/jet-${finalAttrs.version}-standalone.jar";
+    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
     sha256 = "sha256-250/1DBNCXlU1b4jjLUUOXI+uSbOyPXtBN1JJRpdmFc=";
   };
 
@@ -22,17 +23,16 @@ buildGraalvmNativeImage (finalAttrs: {
   ];
 
   passthru.tests.version = testers.testVersion {
-    inherit (finalAttrs) version;
-    package = finalAttrs.finalPackage;
+    inherit version;
+    package = jet;
     command = "jet --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI to transform between JSON, EDN, YAML and Transit, powered with a minimal query language";
     homepage = "https://github.com/borkdude/jet";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.epl10;
-    maintainers = with lib.maintainers; [ ericdallo ];
-    mainProgram = "jet";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
+    maintainers = with maintainers; [ ericdallo ];
   };
-})
+}

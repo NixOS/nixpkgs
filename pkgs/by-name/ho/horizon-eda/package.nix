@@ -11,12 +11,13 @@
 let
   base = callPackage ./base.nix { };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit (base)
     pname
     version
     src
     meta
+    CASROOT
     env
     ;
 

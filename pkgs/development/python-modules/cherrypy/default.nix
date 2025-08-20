@@ -10,7 +10,6 @@
   path,
   portend,
   pyopenssl,
-  pytest-cov-stub,
   pytest-forked,
   pytest-services,
   pytestCheckHook,
@@ -39,7 +38,10 @@ buildPythonPackage rec {
   postPatch = ''
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
-      --replace-fail "--doctest-modules" "-vvv"
+      --replace-fail "--doctest-modules" "-vvv" \
+      --replace-fail "-p pytest_cov" "" \
+      --replace-fail "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
   '';
 
   build-system = [ setuptools-scm ];
@@ -55,7 +57,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     objgraph
     path
-    pytest-cov-stub
     pytest-forked
     pytest-services
     pytestCheckHook
@@ -66,39 +67,41 @@ buildPythonPackage rec {
     export CI=true
   '';
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Keyboard interrupt ends test suite run
-    "KeyboardInterrupt"
-    # daemonize and autoreload tests have issue with sockets within sandbox
-    "daemonize"
-    "Autoreload"
+  disabledTests =
+    [
+      # Keyboard interrupt ends test suite run
+      "KeyboardInterrupt"
+      # daemonize and autoreload tests have issue with sockets within sandbox
+      "daemonize"
+      "Autoreload"
 
-    "test_antistampede"
-    "test_file_stream"
-    "test_basic_request"
-    "test_3_Redirect"
-    "test_4_File_deletion"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.11") [
-    "testErrorHandling"
-    "testHookErrors"
-    "test_HTTP10_KeepAlive"
-    "test_No_Message_Body"
-    "test_HTTP11_Timeout"
-    "testGzip"
-    "test_malformed_header"
-    "test_no_content_length"
-    "test_post_filename_with_special_characters"
-    "test_post_multipart"
-    "test_iterator"
-    "test_1_Ram_Concurrency"
-    "test_2_File_Concurrency"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
+      "test_antistampede"
+      "test_file_stream"
+      "test_basic_request"
+      "test_3_Redirect"
+      "test_4_File_deletion"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      "testErrorHandling"
+      "testHookErrors"
+      "test_HTTP10_KeepAlive"
+      "test_No_Message_Body"
+      "test_HTTP11_Timeout"
+      "testGzip"
+      "test_malformed_header"
+      "test_no_content_length"
+      "test_post_filename_with_special_characters"
+      "test_post_multipart"
+      "test_iterator"
+      "test_1_Ram_Concurrency"
+      "test_2_File_Concurrency"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "cherrypy/test/test_config_server.py"

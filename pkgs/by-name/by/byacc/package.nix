@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://invisible-island.net/byacc/CHANGES.html";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

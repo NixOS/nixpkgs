@@ -253,8 +253,7 @@ in
 
       tmpDirs = [
         (attrByPath [ "druid.lookup.snapshotWorkingDir" ] "" cfg."${name}".config)
-      ]
-      ++ (map (x: x.path) cfg."${name}".segmentLocations);
+      ] ++ (map (x: x.path) cfg."${name}".segmentLocations);
 
       allowedTCPPorts = [ (attrByPath [ "druid.plaintextPort" ] 8083 cfg."${name}".config) ];
 
@@ -267,8 +266,7 @@ in
 
       tmpDirs = [
         "/var/log/druid/indexer"
-      ]
-      ++ [ (attrByPath [ "druid.indexer.task.baseTaskDir" ] "" cfg."${name}".config) ];
+      ] ++ [ (attrByPath [ "druid.indexer.task.baseTaskDir" ] "" cfg."${name}".config) ];
 
       allowedTCPPorts = [ (attrByPath [ "druid.plaintextPort" ] 8091 cfg."${name}".config) ];
 

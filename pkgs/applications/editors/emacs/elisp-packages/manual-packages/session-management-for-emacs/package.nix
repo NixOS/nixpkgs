@@ -8,7 +8,6 @@ melpaBuild rec {
   pname = "session-management-for-emacs";
   ename = "session";
   version = "2.2a";
-  melpaVersion = "2.2"; # default value derived from version is not valid for Emacs
 
   src = fetchzip {
     url = "mirror://sourceforge/emacs-session/session-${version}.tar.gz";

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = "mdit-py-plugins";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-aY2DMLh1OkWVcN6A29FLba1ETerf/EOqSjHVpsdE21M=";
   };

@@ -6,7 +6,6 @@
   markupsafe,
   jinja2,
   pytestCheckHook,
-  pytest-cov-stub,
   zope-deprecation,
   pyramid,
   pythonOlder,
@@ -35,8 +34,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     webtest
     pytestCheckHook
-    pytest-cov-stub
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov" ""
+  '';
 
   pythonImportsCheck = [ "pyramid_jinja2" ];
 
@@ -51,6 +54,6 @@ buildPythonPackage rec {
     description = "Jinja2 template bindings for the Pyramid web framework";
     homepage = "https://github.com/Pylons/pyramid_jinja2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

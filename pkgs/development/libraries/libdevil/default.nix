@@ -12,6 +12,7 @@
   libGL,
   libX11,
   pkg-config,
+  OpenGL,
   runtimeShell,
   withXorg ? true,
   testers,
@@ -39,18 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    libjpeg
-    libpng
-    libmng
-    lcms1
-    libtiff
-    openexr
-  ]
-  ++ lib.optionals withXorg [
-    libX11
-    libGL
-  ];
+  buildInputs =
+    [
+      libjpeg
+      libpng
+      libmng
+      lcms1
+      libtiff
+      openexr
+    ]
+    ++ lib.optionals withXorg [
+      libX11
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
   configureFlags = [
     "--enable-ILU"

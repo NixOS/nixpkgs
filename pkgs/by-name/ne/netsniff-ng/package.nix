@@ -16,18 +16,19 @@
   liburcu,
   ncurses,
   pkg-config,
+  gnumake42,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.9";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
-    repo = "netsniff-ng";
-    owner = "netsniff-ng";
+    repo = pname;
+    owner = pname;
     rev = "v${version}";
-    hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
+    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     flex
     makeWrapper
     pkg-config
+    gnumake42 # fails with make 4.4
   ];
 
   buildInputs = [
@@ -53,13 +55,9 @@ stdenv.mkDerivation rec {
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
-    runHook preConfigure
-
     patchShebangs configure
     substituteInPlace configure --replace "which" "command -v"
     NACL_INC_DIR=${libsodium.dev}/include/sodium NACL_LIB=sodium ./configure
-
-    runHook postConfigure
   '';
 
   enableParallelBuilding = true;

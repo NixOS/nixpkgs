@@ -4,27 +4,22 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "untie";
   version = "0.3";
   src = fetchurl {
-    url = "http://guichaz.free.fr/untie/files/untie-${finalAttrs.version}.tar.bz2";
+    url = "http://guichaz.free.fr/untie/files/${pname}-${version}.tar.bz2";
     sha256 = "1334ngvbi4arcch462mzi5vxvxck4sy1nf0m58116d9xmx83ak0m";
   };
 
-  patches = [
-    # fix build with gcc14
-    ./add-define-gnu-source.patch
-  ];
-
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to run processes untied from some of the namespaces";
     mainProgram = "untie";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 
   passthru = {
@@ -32,4 +27,4 @@ stdenv.mkDerivation (finalAttrs: {
       downloadPage = "http://guichaz.free.fr/untie";
     };
   };
-})
+}

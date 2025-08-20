@@ -8,7 +8,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bc-soci";
   version = "linphone-4.4.1";
 

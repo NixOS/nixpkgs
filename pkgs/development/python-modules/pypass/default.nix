@@ -5,7 +5,7 @@
   click,
   colorama,
   fetchPypi,
-  gitMinimal,
+  git,
   gnugrep,
   gnupg,
   pbr,
@@ -13,7 +13,7 @@
   pythonAtLeast,
   pytestCheckHook,
   setuptools,
-  replaceVars,
+  substituteAll,
   tree,
   xclip,
 }:
@@ -32,8 +32,9 @@ buildPythonPackage rec {
 
   # Set absolute nix store paths to the executables that pypass uses
   patches = [
-    (replaceVars ./mark-executables.patch {
-      git_exec = "${gitMinimal}/bin/git";
+    (substituteAll {
+      src = ./mark-executables.patch;
+      git_exec = "${git}/bin/git";
       grep_exec = "${gnugrep}/bin/grep";
       gpg_exec = "${gnupg}/bin/gpg2";
       tree_exec = "${tree}/bin/tree";
@@ -42,9 +43,9 @@ buildPythonPackage rec {
   ];
 
   # Remove enum34 requirement if Python >= 3.4
-  pythonRemoveDeps = lib.optionals (pythonAtLeast "3.4") [
-    "enum34"
-  ];
+  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
+    substituteInPlace requirements.txt --replace "enum34" ""
+  '';
 
   build-system = [ setuptools ];
 
@@ -56,18 +57,15 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  nativeCheckInputs = [
-    gitMinimal
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Configuration so that the tests work
   preCheck = ''
     export HOME=$(mktemp -d)
     export GNUPGHOME=pypass/tests/gnupg
-    git config --global user.email "nix-builder@nixos.org"
-    git config --global user.name "Nix Builder"
-    git config --global pull.ff only
+    ${git}/bin/git config --global user.email "nix-builder@nixos.org"
+    ${git}/bin/git config --global user.name "Nix Builder"
+    ${git}/bin/git config --global pull.ff only
     make setup_gpg
   '';
 

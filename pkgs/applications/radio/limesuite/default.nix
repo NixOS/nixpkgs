@@ -11,6 +11,7 @@
   libX11,
   gnuplot,
   fltk,
+  GLUT,
   withGui ? false,
 }:
 
@@ -29,24 +30,25 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
-  ]
-  ++ lib.optional (!withGui) "-DENABLE_GUI=OFF";
+  ] ++ lib.optional (!withGui) "-DENABLE_GUI=OFF";
 
-  buildInputs = [
-    libusb1
-    sqlite
-    gnuplot
-    libusb1
-    soapysdr
-  ]
-  ++ lib.optionals withGui [
-    fltk
-    libX11
-    mesa_glu
-    wxGTK32
-  ];
-
-  doInstallCheck = true;
+  buildInputs =
+    [
+      libusb1
+      sqlite
+      gnuplot
+      libusb1
+      soapysdr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      GLUT
+    ]
+    ++ lib.optionals withGui [
+      fltk
+      libX11
+      mesa_glu
+      wxGTK32
+    ];
 
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d ../udev-rules/64-limesuite.rules

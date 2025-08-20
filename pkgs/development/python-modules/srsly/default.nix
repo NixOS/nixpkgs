@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  cython,
+  cython_0,
   catalogue,
   mock,
   numpy,
@@ -16,22 +16,22 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.5.1";
+  version = "2.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
+    hash = "sha256-J3Z1LNsUJ1ygHpp7epwEfM8x2xfwB25zNDz8yajfbL0=";
   };
 
-  build-system = [
-    cython
+  nativeBuildInputs = [
+    cython_0
     setuptools
   ];
 
-  dependencies = [ catalogue ];
+  propagatedBuildInputs = [ catalogue ];
 
   nativeCheckInputs = [
     mock

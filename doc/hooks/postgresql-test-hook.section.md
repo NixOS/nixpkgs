@@ -4,11 +4,7 @@
 This hook starts a PostgreSQL server during the `checkPhase`. Example:
 
 ```nix
-{
-  stdenv,
-  postgresql,
-  postgresqlTestHook,
-}:
+{ stdenv, postgresql, postgresqlTestHook }:
 stdenv.mkDerivation {
 
   # ...
@@ -22,13 +18,13 @@ stdenv.mkDerivation {
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-checkPhase ''
-  runHook preCheck
+  checkPhase ''
+    runHook preCheck
 
-  # ... your tests
+    # ... your tests
 
-  runHook postCheck
-''
+    runHook postCheck
+  ''
 ```
 
 ## Variables {#sec-postgresqlTestHook-variables}

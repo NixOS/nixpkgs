@@ -5,6 +5,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  darwin,
   libiconv,
   installShellFiles,
   nix-update-script,
@@ -23,17 +24,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-15FUA4fszbAVXop3IyOHfxroyTt9/SkWZsSTUh9RtwY=";
   };
 
-  cargoHash = "sha256-IkwCa+MioL2F3fiUYm3HQOeO2yb+58YQzM9YJ2oILj4=";
+  cargoHash = "sha256-vMeljXNWfFRyeQ4ZQ/Qe1vcW5bg5Y14aEH5HgEwOX3Q=";
   cargoExtraArgs = "-p nix-weather";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   outputs = [
     "out"
@@ -58,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   # be able to find updates through repology and we need this.
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Check Cache Availablility of NixOS Configurations";
     longDescription = ''
       Fast rust tool to check availability of your entire system in caches. It
@@ -69,12 +73,12 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://git.fem.gg/cafkafk/nix-weather";
     changelog = "https://git.fem.gg/cafkafk/nix-weather/releases/tag/v${version}";
-    license = lib.licenses.eupl12;
+    license = licenses.eupl12;
     mainProgram = "nix-weather";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       cafkafk
       freyacodes
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

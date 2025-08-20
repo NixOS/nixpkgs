@@ -6,6 +6,8 @@
   openssl,
   sqlite,
   zlib,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,18 +21,29 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Jm9ZsqCKOIxZsXQbCluYu7MgOD7hXYljcv/URaNVUW0=";
   };
 
-  cargoHash = "sha256-YDfyixNfJsKigf3W5265CWl4ETQDeBHYpquBoFoj4Tw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "hematite-nbt-0.5.2" = "sha256-ohhsMlRLFNesccxhqn0GAiVswcdMldD3gv0AXcviHU8=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    zlib
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   meta = with lib; {
     mainProgram = "mchprs";

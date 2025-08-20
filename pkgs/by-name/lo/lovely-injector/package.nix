@@ -2,40 +2,26 @@
   fetchFromGitHub,
   rustPlatform,
   lib,
-  versionCheckHook,
-  writeShellScript,
-  lua,
 }:
 let
-  version = "0.7.1";
+  version = "0.6.0";
+  lovelyInjector = fetchFromGitHub {
+    owner = "vgskye";
+    repo = "lovely-injector";
+    rev = "3224915f4d47b557c34b5012797cf92d4cc629af";
+    hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
+  };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "lovely-injector";
   inherit version;
-  src = fetchFromGitHub {
-    owner = "ethangreen-dev";
-    repo = "lovely-injector";
-    tag = "v${version}";
-    hash = "sha256-j03/DOnLFfFYTwGGh+7BalS779jyg+p0UqtcTTyHgv4=";
-  };
-
-  cargoHash = "sha256-hHq26kSKcqEldxUb6bn1laTpKGFplP9/2uogsal8T5A=";
+  src = lovelyInjector;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Mkmj+ENdUge1V1cVAQOV2K01sYKEyhxTse0f5o6H6Xc=";
   # no tests
   doCheck = false;
   # lovely-injector depends on nightly rust features
   env.RUSTC_BOOTSTRAP = 1;
-  nativeBuildInputs = [
-    lua
-  ];
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = [ "${placeholder "out"}" ];
-  versionCheckProgram = writeShellScript "lovely-version-check" ''
-    export LD_PRELOAD="$1/lib/liblovely.so"
-    exec ${lua}/bin/lua < /dev/null
-  '';
 
   meta = {
     description = "Runtime lua injector for games built with LÖVE";
@@ -48,6 +34,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/ethangreen-dev/lovely-injector";
     downloadPage = "https://github.com/ethangreen-dev/lovely-injector/releases";
     maintainers = [ lib.maintainers.antipatico ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cc65";
-    repo = "cc65";
+    repo = pname;
     rev = "V${version}";
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
@@ -56,7 +56,7 @@ gccStdenv.mkDerivation rec {
       shouldn't be too much work.
     '';
     license = licenses.zlib;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

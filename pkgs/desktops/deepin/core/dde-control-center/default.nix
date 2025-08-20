@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -33,14 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
         "ucm2/Intel/bytcr-rt5640/bytcr-rt5640.conf"
     )
 
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
     for file in "''${files[@]}"; do
         substituteInPlace "$file" \
             --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
     done
-  ''
-  + ''
 
     mkdir -p $out/share/alsa
     cp -r ucm ucm2 $out/share/alsa
@@ -63,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.roastiek ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.linux;
   };
 })

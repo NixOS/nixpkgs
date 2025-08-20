@@ -40,6 +40,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${version}/ChangeLog";
     license = lib.licenses.openldap;
     maintainers = with lib.maintainers; [
+      copumpkin
       ivan
     ];
   };

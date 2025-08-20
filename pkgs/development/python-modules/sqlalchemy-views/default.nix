@@ -13,7 +13,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = "sqlalchemy-views";
+    repo = pname;
     owner = "jklukas";
     tag = "v${version}";
     hash = "sha256-MJgikWXo3lpMsSYbb5sOSOTbJPOx5gEghW1V9jKvHKU=";

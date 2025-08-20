@@ -49,7 +49,6 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "pyca";
   version = "4.5";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opencast";
@@ -58,9 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     pycurl
     python-dateutil
     configobj
@@ -74,8 +71,6 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     sed -i -e 's#static_folder=.*#static_folder="${frontend}/static")#' pyca/ui/__init__.py
   '';
-
-  pythonImportsCheck = [ "pyca" ];
 
   passthru = {
     inherit frontend;

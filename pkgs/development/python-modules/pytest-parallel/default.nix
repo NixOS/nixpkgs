@@ -20,7 +20,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "kevlened";
-    repo = "pytest-parallel";
+    repo = pname;
     tag = version;
     hash = "sha256-ddpoWBTf7Zor569p6uOMjHSTx3Qa551f4mSwyTLDdBU=";
   };

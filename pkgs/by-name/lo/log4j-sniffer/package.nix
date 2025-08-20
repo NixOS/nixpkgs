@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitMinimal,
+  git,
 }:
 
 buildGoModule rec {
@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "palantir";
-    repo = "log4j-sniffer";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-pO6difzNvQvKQtRLyksXmExtQHlnnwyF3iNEmSBgUmU=";
   };
@@ -19,7 +19,7 @@ buildGoModule rec {
   vendorHash = null;
 
   nativeCheckInputs = [
-    gitMinimal
+    git
   ];
 
   preCheck = ''

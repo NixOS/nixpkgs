@@ -1,79 +1,73 @@
 {
   lib,
   stdenv,
-  appstream,
-  desktop-file-utils,
   fetchFromGitLab,
-  glib,
-  graphene,
+  meson,
+  ninja,
+  pkg-config,
   gtk4,
+  libgee,
+  libadwaita,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  libpeas,
+  libportal-gtk4,
   gusb,
   hidapi,
   json-glib,
-  libadwaita,
-  libpeas2,
-  libportal-gtk4,
   libsecret,
   libsoup_3,
-  meson,
-  ninja,
+  libpeas2,
   nix-update-script,
-  pkg-config,
-  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "boatswain";
-  version = "5.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "boatswain";
-    tag = finalAttrs.version;
-    hash = "sha256-XE4MxaV9BXl5EQjumO/6HhRHfAyjjc5BeYFPAa+mdWY=";
+    rev = version;
+    hash = "sha256-Yqf7NJMyE6mg1zJJCLrIr6Emwt/nvlLHLAEtCXqFT8M=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
-    glib
-    gtk4
-    json-glib
-    libpeas2
     meson
     ninja
     pkg-config
     wrapGAppsHook4
+    appstream-glib
+    desktop-file-utils
   ];
 
   buildInputs = [
-    graphene
     gtk4
+    libadwaita
+    libgee
+    libpeas
+    libportal-gtk4
     gusb
     hidapi
-    libadwaita
-    libpeas2
-    libportal-gtk4
+    json-glib
     libsecret
     libsoup_3
+    libpeas2
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Control Elgato Stream Deck devices";
     homepage = "https://gitlab.gnome.org/World/boatswain";
-    changelog = "https://gitlab.gnome.org/World/boatswain/-/releases/${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0xMRTT ];
-    teams = [ lib.teams.gnome-circle ];
     mainProgram = "boatswain";
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
     broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}

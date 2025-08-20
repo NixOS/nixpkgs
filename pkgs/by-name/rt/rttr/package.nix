@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
 
   src = fetchFromGitHub {
-    owner = "rttrorg";
-    repo = "rttr";
+    owner = "${pname}org";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1yxad8sj40wi75hny8w6imrsx8wjasjmsipnlq559n4b6kl84ijp";
   };

@@ -10,6 +10,8 @@
   protobuf,
   protoc,
   pyarrow,
+  Security,
+  SystemConfiguration,
   typing-extensions,
   pythonOlder,
 }:
@@ -45,10 +47,10 @@ buildPythonPackage rec {
     hash = "sha256-5WOSlx4XW9zO6oTY16lWQElShLv0ubflVPfSSEGrFgg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
     inherit src;
-    hash = "sha256-xUpchV4UFEX1HkCpClOwxnEfGLVlOIX4UmzYKiUth9U=";
+    hash = "sha256-hN03tbnH77VsMDxSMddMHIH00t7lUs5h8rTHbiMIExw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -57,17 +59,17 @@ buildPythonPackage rec {
     protoc
   ];
 
-  buildInputs = [
-    protobuf
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ protobuf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+      SystemConfiguration
+    ];
 
   dependencies = [
     pyarrow
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -76,7 +78,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datafusion" ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--pyargs"
     pname
   ];

@@ -38,15 +38,16 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs = [
-    pixman
-    tllist
-    wayland
-    wayland-protocols
-  ]
-  ++ lib.optional enablePNG libpng
-  ++ lib.optional enableJPEG libjpeg
-  ++ lib.optional enableWebp libwebp;
+  buildInputs =
+    [
+      pixman
+      tllist
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optional enablePNG libpng
+    ++ lib.optional enableJPEG libjpeg
+    ++ lib.optional enableWebp libwebp;
 
   mesonBuildType = "release";
 
@@ -60,13 +61,13 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Wallpaper application for Wayland compositors";
     homepage = "https://codeberg.org/dnkl/wbg";
     changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ];
-    platforms = with lib.platforms; linux;
+    license = licenses.isc;
+    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux;
     mainProgram = "wbg";
   };
 }

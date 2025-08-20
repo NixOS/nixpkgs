@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pkg-config,
   txt2tags,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +22,6 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     txt2tags
-    udevCheckHook
   ];
   buildInputs = [ boost ];
 
@@ -32,10 +30,8 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
   ];
 
-  doInstallCheck = true;
-
   meta = {
-    description = "Thunderbolt user-space components";
+    description = "Thunderbolt(TM) user-space components";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ryantrinkle ];
     homepage = "https://01.org/thunderbolt-sw";

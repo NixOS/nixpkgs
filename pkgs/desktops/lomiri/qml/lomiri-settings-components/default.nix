@@ -22,16 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-H7G3dzzitdyahB/MwgtfRBpo+qMOhmQSzN4EGYculks=";
   };
 
-  postPatch = ''
-    patchShebangs tests/imports/check_imports.py
+  postPatch =
+    ''
+      patchShebangs tests/imports/check_imports.py
 
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i CMakeLists.txt \
-      -e '/add_subdirectory(tests)/d'
-  '';
+      substituteInPlace CMakeLists.txt \
+        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i CMakeLists.txt \
+        -e '/add_subdirectory(tests)/d'
+    '';
 
   strictDeps = true;
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-settings-components";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-settings-components/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
+    maintainers = teams.lomiri.members;
     platforms = platforms.linux;
   };
 })

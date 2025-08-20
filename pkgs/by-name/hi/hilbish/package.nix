@@ -35,12 +35,12 @@ buildGoModule rec {
     cp -r nature $out/share/hilbish/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Interactive Unix-like shell written in Go";
     mainProgram = "hilbish";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";
-    maintainers = with lib.maintainers; [ moni ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ moni ];
+    license = licenses.mit;
   };
 }

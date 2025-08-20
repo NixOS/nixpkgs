@@ -12,14 +12,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mmcloughlin";
-    repo = "luhn";
+    repo = pname;
     rev = version;
     hash = "sha256-ZifaCjOVhWdXuzi5n6V+6eVN5vrEHKgUdpSOXoMyR18=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
 
   pythonImportsCheck = [ "luhn" ];
 

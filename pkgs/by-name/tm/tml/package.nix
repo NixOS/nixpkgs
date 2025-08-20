@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tiny markup language for terminal output";
     mainProgram = "tml";
     homepage = "https://github.com/liamg/tml";
     changelog = "https://github.com/liamg/tml/releases/tag/v${version}";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

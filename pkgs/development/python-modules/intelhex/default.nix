@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "intelhex/test.py" ];
+  pytestFlagsArray = [ "intelhex/test.py" ];
 
   pythonImportsCheck = [ "intelhex" ];
 

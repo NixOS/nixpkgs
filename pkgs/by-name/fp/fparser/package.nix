@@ -5,9 +5,9 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fparser";
-  version = "0-unstable-2015-09-25";
+  version = "unstable-2015-09-25";
 
   src = fetchFromGitHub {
     owner = "thliebig";

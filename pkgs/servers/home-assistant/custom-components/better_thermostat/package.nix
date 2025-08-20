@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "KartoffelToby";
   domain = "better_thermostat";
-  version = "1.7.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "KartoffelToby";
     repo = "better_thermostat";
     tag = version;
-    hash = "sha256-rE14iKAXo3hecK3bQ9MLcOtnZviwjOpYKGlIc4+uCfw=";
+    hash = "sha256-zXO2UDLhSTOemzsO9G5ZUzr50Zg8kDW/aObn6Y3j70k=";
   };
 
   passthru.updateScript = gitUpdater {

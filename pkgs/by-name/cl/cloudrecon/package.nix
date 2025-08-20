@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to find assets from certificates";
     homepage = "https://github.com/g0ldencybersec/CloudRecon";
     changelog = "https://github.com/g0ldencybersec/CloudRecon/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "cloudrecon";
   };
 }

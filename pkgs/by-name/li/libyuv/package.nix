@@ -4,30 +4,31 @@
   fetchgit,
   cmake,
   libjpeg,
-  gtest,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libyuv";
-  version = "1908"; # Defined in: include/libyuv/version.h
+  version = "1787"; # Defined in: include/libyuv/version.h
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/libyuv/libyuv.git";
-    rev = "b7a857659f8485ee3c6769c27a3e74b0af910746"; # upstream does not do tagged releases
-    hash = "sha256-4Irs+hlAvr6v5UKXmKHhg4IK3cTWdsFWxt1QTS0rizU=";
+    rev = "eb6e7bb63738e29efd82ea3cf2a115238a89fa51"; # refs/heads/stable
+    hash = "sha256-DtRYoaAXb9ZD2OLiKbzKzH5vzuu+Lzu4eHaDgPB9hjU=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  cmakeFlags = [
-    "-DUNIT_TEST=ON"
+  # NEON does not work on aarch64, we disable it
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-DCMAKE_CXX_FLAGS=-DLIBYUV_DISABLE_NEON"
   ];
 
-  buildInputs = [
-    libjpeg
-    gtest
+  buildInputs = [ libjpeg ];
+
+  patches = [
+    ./link-library-against-libjpeg.patch
   ];
 
   postPatch = ''
@@ -37,19 +38,6 @@ stdenv.mkDerivation {
     substituteInPlace $out/lib/pkgconfig/libyuv.pc \
       --replace "@PREFIX@" "$out" \
       --replace "@VERSION@" "$version"
-  '';
-
-  # [==========] 3454 tests from 8 test suites ran.
-  # [  PASSED  ] 3376 tests.
-  # [  FAILED  ] 78 tests
-  doCheck = !stdenv.hostPlatform.isLoongArch64;
-
-  checkPhase = ''
-    runHook preCheck
-
-    ./libyuv_unittest
-
-    runHook postCheck
   '';
 
   meta = with lib; {

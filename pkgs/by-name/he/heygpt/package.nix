@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "fuyufjh";
-    repo = "heygpt";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-oP0yIdYytXSsbZ2pNaZ8Rrak1qJsudTe/oP6dGncGUM=";
   };
 
-  cargoHash = "sha256-z5Y/dhDEAd6JcWItlGyH+kDxHxIiyJw0KrjiTDT+Fwc=";
+  cargoHash = "sha256-yKHAZpELuUD7wlM3Mi7XvxbKgdU1QxD9hsvIFcj3twE=";
 
   nativeBuildInputs = [ openssl ];
 
@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR = "${lib.getDev openssl}";
 
-  meta = {
+  meta = with lib; {
     description = "Simple command-line interface for ChatGPT API";
     homepage = "https://github.com/fuyufjh/heygpt";
     changelog = "https://github.com/fuyufjh/heygpt/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "heygpt";
-    maintainers = with lib.maintainers; [ aldoborrero ];
+    maintainers = with maintainers; [ aldoborrero ];
   };
 }

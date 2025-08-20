@@ -4,31 +4,25 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  django,
-  netaddr,
-  python,
+  pythonAtLeast,
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
-  version = "0.7.0";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = python.pythonVersion != netbox.python.pythonVersion;
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-floorplan-plugin";
     tag = version;
-    hash = "sha256-ecwPdcVuXU6OIVbafYGaY6+pbBHxhh1AlNmDBlUk1Ss=";
+    hash = "sha256-cJrqSXRCBedZh/pIozz/bHyhQosTy8cFYyji3KJva9Q=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    netbox
-    django
-    netaddr
-  ];
+  nativeCheckInputs = [ netbox ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH

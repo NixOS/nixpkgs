@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "confetty";
-  version = "0-unstable-2022-11-05";
+  version = "unstable-2022-11-05";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Confetti in your TTY";
     homepage = "https://github.com/maaslalani/confetty";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "confetty";
   };
 }

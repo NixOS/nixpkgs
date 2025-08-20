@@ -4,7 +4,7 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeWrapper,
-  ffmpeg-headless,
+  ffmpeg,
   yt-dlp,
   makeDesktopItem,
   electron,
@@ -12,23 +12,23 @@
 
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.19.1";
+  version = "3.18.5";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     tag = "v${version}";
-    hash = "sha256-EweQgKA0CNgiO7q+WTLsUJHpiuRJBQox2FEgjh6CHDQ=";
+    hash = "sha256-914sEFUVwiHMXwnwZjdeSQmeSPRREeoihLKYYTTKAcs=";
   };
 
-  npmDepsHash = "sha256-moOxzvzBFNqEe2xd2jVyotxaSsIi+F7J6Dwvqp2Bs08=";
+  npmDepsHash = "sha256-zBFRzVBmKAncZFTFa0hhv5BaE0rsAv9IdezZBNd5J2E=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
   buildInputs = [
-    ffmpeg-headless
+    ffmpeg
     yt-dlp
   ];
 
@@ -56,7 +56,7 @@ buildNpmPackage rec {
   # Also stop it from downloading ytdlp
   postPatch = ''
     substituteInPlace src/renderer.js \
-      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
+      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg}' \
       --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
       --replace-fail '!!localStorage.getItem("fullYtdlpBinPresent")' 'true'
     # Disable auto-updates
@@ -66,8 +66,7 @@ buildNpmPackage rec {
 
   postInstall = ''
     makeWrapper ${electron}/bin/electron $out/bin/ytdownloader \
-        --add-flags $out/lib/node_modules/ytdownloader/main.js \
-        --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
+        --add-flags $out/lib/node_modules/ytdownloader/main.js
 
     install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
   '';

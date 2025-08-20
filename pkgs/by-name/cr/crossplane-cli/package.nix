@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "crossplane-cli";
-  version = "2.0.2";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
     rev = "v${version}";
-    hash = "sha256-EIDrBQmtMaHlapVNUYABKejIj1I02g5R5h4cADZvtAg=";
+    hash = "sha256-G4Kve77BoQ/RphvggLHIVV+hhkjmTS3q1nQWnDhAjHA=";
   };
 
-  vendorHash = "sha256-8VqKtWbnDGbmgxT13v2d4+nXHouZ4hi2c2m66SAd1KM=";
+  vendorHash = "sha256-yUaCmiY+qPUfUi2/+c9deSa2atPRWtZ03jHHQ2HmjTM=";
 
   ldflags = [
     "-s"
@@ -40,12 +40,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.crossplane.io/";
     changelog = "https://github.com/crossplane/crossplane/releases/tag/v${version}";
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ selfuryon ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ selfuryon ];
   };
 }

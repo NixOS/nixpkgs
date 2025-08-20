@@ -12,13 +12,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rofi-top";
-  version = "0-unstable-2017-10-16";
+  version = "unstable-2017-10-16";
 
   src = fetchFromGitHub {
     owner = "davatorium";
-    repo = "rofi-top";
+    repo = pname;
     rev = "9416addf91dd1bd25dfd5a8c5f1c7297c444408e";
     sha256 = "sha256-lNsmx1xirepITpUD30vpcs5slAQYQcvDW8FkA2K9JtU=";
   };

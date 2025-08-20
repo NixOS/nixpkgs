@@ -4,7 +4,6 @@
   autoreconfHook,
   fetchFromGitHub,
   libGLU,
-  libX11,
   pkg-config,
   stdenv,
 }:
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
-    libX11
     SDL2
   ];
 
@@ -54,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "aranym";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

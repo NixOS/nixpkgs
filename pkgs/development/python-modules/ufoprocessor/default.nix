@@ -24,16 +24,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    defcon
-    fontmath
-    fontparts
-    fonttools
-    mutatormath
-  ]
-  ++ defcon.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      defcon
+      fontmath
+      fontparts
+      fonttools
+      mutatormath
+    ]
+    ++ defcon.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
   checkPhase = ''
     runHook preCheck

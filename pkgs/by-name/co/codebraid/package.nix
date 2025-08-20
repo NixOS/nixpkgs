@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "gpoore";
-    repo = "codebraid";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-E9vzGK9ZEVwF+UBpSkdM+hm6vINen/A+LgnnPpc77QQ=";
   };

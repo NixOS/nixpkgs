@@ -9,7 +9,7 @@
   util-linux,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "kpmcore";
 
   patches = [

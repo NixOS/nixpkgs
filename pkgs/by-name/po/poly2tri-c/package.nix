@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jtojnar";
-    repo = "poly2tri-c";
+    repo = pname;
     rev = "p2tc-${version}";
     sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
   };

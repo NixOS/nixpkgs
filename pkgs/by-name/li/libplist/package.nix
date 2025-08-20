@@ -11,20 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2.7.0";
+  version = "2.6.0";
 
   outputs = [
     "bin"
     "dev"
     "out"
-  ]
-  ++ lib.optional enablePython "py";
+  ] ++ lib.optional enablePython "py";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = "libplist";
+    repo = pname;
     rev = version;
-    hash = "sha256-Rc1KwJR+Pb2lN8019q5ywERrR7WA2LuLRiEvNsZSxXc=";
+    hash = "sha256-hitRcOjbF+L9Og9/qajqFqOhKfRn9+iWLoCKmS9dT80=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +40,13 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  configureFlags = [
-    "--enable-debug"
-  ]
-  ++ lib.optionals (!enablePython) [
-    "--without-cython"
-  ];
+  configureFlags =
+    [
+      "--enable-debug"
+    ]
+    ++ lib.optionals (!enablePython) [
+      "--without-cython"
+    ];
 
   doCheck = true;
 

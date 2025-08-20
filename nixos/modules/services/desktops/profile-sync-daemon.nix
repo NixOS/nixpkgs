@@ -43,7 +43,7 @@ in
               rsync
               kmod
               gawk
-              net-tools
+              nettools
               util-linux
               profile-sync-daemon
             ];
@@ -69,7 +69,7 @@ in
               rsync
               kmod
               gawk
-              net-tools
+              nettools
               util-linux
               profile-sync-daemon
             ];

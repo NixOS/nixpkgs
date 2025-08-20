@@ -17,8 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "kornia";
-    repo = "kornia";
+    owner = pname;
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-pMCGL33DTnMLlxRbhBhRuR/ZA575+kbUJ59N3nuqpdI=";
   };

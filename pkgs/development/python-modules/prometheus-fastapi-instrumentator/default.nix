@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-fastapi-instrumentator";
-  version = "7.1.0";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
     tag = "v${version}";
-    hash = "sha256-54h/kwIdzFzxdYglwcEBPkLYno1YH2iWklg35qY2b00=";
+    hash = "sha256-yvKdhQdbY0+jEc8TEHNNgtdnqE0abnd4MN/JZFQwQ2E=";
   };
 
   build-system = [
@@ -45,20 +44,17 @@ buildPythonPackage rec {
     requests
   ];
 
-  # numerous test failures on Darwin
-  doCheck = stdenv.hostPlatform.isLinux;
-
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
   meta = {
     description = "Instrument FastAPI with Prometheus metrics";
     homepage = "https://github.com/trallnag/prometheus-fastapi-instrumentator";
-    changelog = "https://github.com/trallnag/prometheus-fastapi-instrumentator/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/trallnag/prometheus-fastapi-instrumentator/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       isc
       bsd3
     ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux; # numerous test failures on Darwin
   };
 }

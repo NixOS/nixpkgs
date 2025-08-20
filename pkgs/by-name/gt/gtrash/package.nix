@@ -1,8 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -40,12 +39,12 @@ buildGoModule rec {
       --zsh <($out/bin/gtrash completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Trash CLI manager written in Go";
     homepage = "https://github.com/umlx5h/gtrash";
     changelog = "https://github.com/umlx5h/gtrash/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ umlx5h ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ umlx5h ];
     mainProgram = "gtrash";
   };
 }

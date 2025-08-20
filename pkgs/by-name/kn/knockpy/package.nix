@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "knock" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to scan subdomains";
     homepage = "https://github.com/guelfoweb/knock";
     changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "knockpy";
   };
 }

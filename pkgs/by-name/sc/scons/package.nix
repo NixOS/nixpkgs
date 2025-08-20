@@ -31,10 +31,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
   ];
 
-  dependencies = [
-    python3Packages.distutils
-  ];
-
   setupHook = ./setup-hook.sh;
 
   passthru = {

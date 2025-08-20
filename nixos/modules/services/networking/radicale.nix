@@ -119,14 +119,6 @@ in
           are mutually exclusive.
         '';
       }
-      {
-        assertion = cfg.config != "" || (cfg.settings ? auth && cfg.settings.auth ? type);
-        message = ''
-          Radicale 3.5.0 changed the default value for `auth.type` from `none` to `denyall`.
-          You probably don't want `denyall`, so please set this explicitly.
-          https://github.com/Kozea/Radicale/blob/v3.5.0/CHANGELOG.md
-        '';
-      }
     ];
 
     warnings =
@@ -213,7 +205,6 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
-          "AF_UNIX" # To log with systemd
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

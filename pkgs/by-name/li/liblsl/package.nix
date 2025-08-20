@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +15,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
   };
-  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ cmake ];
 
@@ -28,6 +26,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/sccn/liblsl/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ abcsds ];
+    mainProgram = "liblsl";
     platforms = lib.platforms.all;
   };
 }

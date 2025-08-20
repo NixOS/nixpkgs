@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    homepage = "https://github.com/neovim/unibilium";
     description = "Very basic terminfo library";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

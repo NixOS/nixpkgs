@@ -1,53 +1,50 @@
 {
   lib,
   buildPythonPackage,
+  # cudf,
   dask,
+  dask-expr,
   duckdb,
   fetchFromGitHub,
   hatchling,
   hypothesis,
-  ibis-framework,
-  packaging,
+  # modin,
   pandas,
   polars,
-  pyarrow-hotfix,
   pyarrow,
-  pyspark,
   pytest-env,
   pytestCheckHook,
-  rich,
-  sqlframe,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.40.0";
+  version = "1.18.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
+    hash = "sha256-PpkwiM5qRVLdmxbOHqzr1354nSgqPVlENIXhGhNSq9A=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
-    dask = [ dask ] ++ dask.optional-dependencies.dataframe;
+    dask = [
+      dask
+      dask-expr
+    ];
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
-    pyspark = [ pyspark ];
-    ibis = [
-      ibis-framework
-      rich
-      packaging
-      pyarrow-hotfix
-    ];
-    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [
@@ -55,29 +52,19 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
-  disabledTests = [
-    # Flaky
-    "test_rolling_var_hypothesis"
-    # Missing file
-    "test_pyspark_connect_deps_2517"
-    # Timezone issue
-    "test_to_datetime"
-    "test_unary_two_elements"
-  ];
-
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "iodash";
   version = "0.1.7";
 

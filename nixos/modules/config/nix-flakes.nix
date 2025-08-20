@@ -19,10 +19,6 @@ let
 
   cfg = config.nix;
 
-  flakeRefFormat = ''
-    The format of flake references is described in {manpage}`nix3-flake(1)`.
-  '';
-
 in
 {
   options = {
@@ -50,11 +46,7 @@ in
                     type = "indirect";
                     id = "nixpkgs";
                   };
-                  description = ''
-                    The flake reference to be rewritten.
-
-                    ${flakeRefFormat}
-                  '';
+                  description = "The flake reference to be rewritten.";
                 };
                 to = mkOption {
                   type = referenceAttrs;
@@ -63,11 +55,7 @@ in
                     owner = "my-org";
                     repo = "my-nixpkgs";
                   };
-                  description = ''
-                    The flake reference {option}`from` is rewritten to.
-
-                    ${flakeRefFormat}
-                  '';
+                  description = "The flake reference {option}`from` is rewritten to.";
                 };
                 flake = mkOption {
                   type = types.nullOr types.attrs;
@@ -108,8 +96,6 @@ in
         default = { };
         description = ''
           A system-wide flake registry.
-
-          See {manpage}`nix3-registry(1)` for more information.
         '';
       };
     };

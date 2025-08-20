@@ -1,22 +1,56 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, nixosTests
+, nix-update-script
+, python3
 }:
-python3Packages.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy_1_4;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.24";
-  pyproject = true;
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
-    tag = version;
-    hash = "sha256-DYhlD3ly6U/e5cDlsubDyW1uKeCtB+HrpagJlNDJhyI=";
+    rev = version;
+    hash = "sha256-nWZmDasBH+DW/+Cvw510mOv11CXorRnoBwNFpoKPErY=";
   };
+
+  propagatedBuildInputs = with python.pkgs; [
+    advocate
+    apscheduler
+    babel
+    bleach
+    chardet
+    flask
+    flask-babel
+    flask-limiter
+    flask-login
+    flask-principal
+    flask-simpleldap
+    flask-wtf
+    iso-639
+    jsonschema
+    lxml
+    pypdf
+    python-magic
+    pytz
+    regex
+    requests
+    sqlalchemy
+    tornado
+    unidecode
+    wand
+    werkzeug
+  ];
 
   patches = [
     # default-logger.patch switches default logger to /dev/stdout. Otherwise calibre-web tries to open a file relative
@@ -35,123 +69,24 @@ python3Packages.buildPythonApplication rec {
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
 
-    substituteInPlace pyproject.toml \
-      --replace-fail 'cps = "calibreweb:main"' 'calibre-web = "calibreweb:main"'
+    substituteInPlace setup.cfg \
+      --replace-fail "cps = calibreweb:main" "calibre-web = calibreweb:main"
   '';
 
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = with python3Packages; [
-    apscheduler
-    babel
-    bleach
-    chardet
-    cryptography
-    flask
-    flask-babel
-    flask-httpauth
-    flask-limiter
-    flask-principal
-    flask-wtf
-    iso-639
-    lxml
-    netifaces-plus
-    pycountry
-    pypdf
-    python-magic
-    pytz
-    regex
-    requests
-    sqlalchemy
-    tornado
-    unidecode
-    urllib3
-    wand
-  ];
-
-  optional-dependencies = {
-    comics = with python3Packages; [
-      comicapi
-      natsort
-    ];
-
-    gdrive = with python3Packages; [
-      gevent
-      google-api-python-client
-      greenlet
-      httplib2
-      oauth2client
-      pyasn1-modules
-      # https://github.com/NixOS/nixpkgs/commit/bf28e24140352e2e8cb952097febff0e94ea6a1e
-      # pydrive2
-      pyyaml
-      rsa
-      uritemplate
-    ];
-
-    gmail = with python3Packages; [
-      google-api-python-client
-      google-auth-oauthlib
-    ];
-
-    # We don't support the goodreads feature, as the `goodreads` package is
-    # archived and depends on other long unmaintained packages (rauth & nose)
-    # goodreads = [ ];
-
-    kobo = with python3Packages; [ jsonschema ];
-
-    ldap = with python3Packages; [
-      flask-simpleldap
-      python-ldap
-    ];
-
-    metadata = with python3Packages; [
-      faust-cchardet
-      html2text
-      markdown2
-      mutagen
-      py7zr
-      pycountry
-      python-dateutil
-      rarfile
-      scholarly
-    ];
-
-    oauth = with python3Packages; [
-      flask-dance
-      sqlalchemy-utils
-    ];
-  };
-
-  pythonRelaxDeps = [
-    "apscheduler"
-    "bleach"
-    "cryptography"
-    "flask"
-    "flask-limiter"
-    "lxml"
-    "pypdf"
-    "regex"
-    "tornado"
-    "unidecode"
-  ];
-
-  nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);
-
-  pythonImportsCheck = [ "calibreweb" ];
+  # Upstream repo doesn't provide any tests.
+  doCheck = false;
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit (nixosTests) calibre-web; };
+    tests.calibre-web = nixosTests.calibre-web;
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
-    changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pborzenkov ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pborzenkov ];
+    platforms = platforms.all;
     mainProgram = "calibre-web";
-    platforms = lib.platforms.all;
   };
 }

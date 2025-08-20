@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     mainProgram = "dialog";
     maintainers = with lib.maintainers; [
+      AndersonTorres
       spacefrogg
     ];
     inherit (ncurses.meta) platforms;

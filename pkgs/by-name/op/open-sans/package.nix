@@ -34,6 +34,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://www.opensans.com";
     license = licenses.asl20;
     platforms = platforms.all;
-    teams = [ teams.pantheon ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 }

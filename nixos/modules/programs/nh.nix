@@ -8,10 +8,7 @@ let
   cfg = config.programs.nh;
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    NotAShelf
-    viperML
-  ];
+  meta.maintainers = [ lib.maintainers.viperML ];
 
   options.programs.nh = {
     enable = lib.mkEnableOption "nh, yet another Nix CLI helper";
@@ -19,21 +16,12 @@ in
     package = lib.mkPackageOption pkgs "nh" { };
 
     flake = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
-        The string that will be used for the `NH_FLAKE` environment variable.
+        The path that will be used for the `FLAKE` environment variable.
 
-        `NH_FLAKE` is used by nh as the default flake for performing actions, such as
-        `nh os switch`. This behaviour can be overriden per-command with environment
-        variables that will take priority.
-
-        - `NH_OS_FLAKE`: will take priority for `nh os` commands.
-        - `NH_HOME_FLAKE`: will take priority for `nh home` commands.
-        - `NH_DARWIN_FLAKE`: will take priority for `nh darwin` commands.
-
-        The formerly valid `FLAKE` is now deprecated by nh, and will cause hard errors
-        in future releases if `NH_FLAKE` is not set.
+        `FLAKE` is used by nh as the default flake for performing actions, like `nh os switch`.
       '';
     };
 
@@ -89,7 +77,7 @@ in
     environment = lib.mkIf cfg.enable {
       systemPackages = [ cfg.package ];
       variables = lib.mkIf (cfg.flake != null) {
-        NH_FLAKE = cfg.flake;
+        FLAKE = cfg.flake;
       };
     };
 
@@ -99,7 +87,6 @@ in
         script = "exec ${lib.getExe cfg.package} clean all ${cfg.clean.extraArgs}";
         startAt = cfg.clean.dates;
         path = [ config.nix.package ];
-        after = [ "multi-user.target" ];
         serviceConfig.Type = "oneshot";
       };
 

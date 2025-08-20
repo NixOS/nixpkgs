@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "nats-io";
-    repo = "nats-streaming-server";
+    repo = pname;
     sha256 = "sha256-i5fNxeJQXiyy+9NOGT1X68u9Pztxvnnba64rxIgjbZc=";
   };
 

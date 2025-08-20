@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osqp-eigen";
-  version = "0.10.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "osqp-eigen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kK3Le8BSh81LbzjUaV6bQu2S9FfvpnC2NpM0ICfrr9c=";
+    hash = "sha256-mN9oU+qXm+Kob8M4rtxv4qNSbXlFCqpN+s8dHedU8Mo=";
   };
 
   cmakeFlags = [

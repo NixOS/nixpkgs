@@ -2,29 +2,33 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
   openssl,
   pkg-config,
-  cacert,
+  darwin,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "prr";
-  version = "0.20.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "danobi";
-    repo = "prr";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-duoC3TMgW+h5OrRCbqYPppMtnQBfS9R7ZpHQySgPRv4=";
+    hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
   };
 
-  cargoHash = "sha256-W66kbTk0IAThl2H35EYuXr6UAyWfhmV0DxpnABhppSQ=";
+  cargoHash = "sha256-vCZjgmBYO+I6MZLCOMp50bWEeHwLbZsxSz5gRmBykvI=";
 
-  buildInputs = [ openssl ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [ pkg-config ];
-
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  checkInputs = [ cacert ];
 
   meta = with lib; {
     description = "Tool that brings mailing list style code reviews to Github PRs";

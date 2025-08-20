@@ -1,28 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
+  fetchPypi,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "binary";
-  version = "1.0.2";
-  pyproject = true;
+  version = "1.0.0";
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "ofek";
-    repo = "binary";
-    tag = "v${version}";
-    hash = "sha256-dU+E6MxAmH8AEGTW2/lZmtgRTinKCv9gDiVeb4n78U4=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-bsAQ5Y9zMevIvJY42+bGbWNd5g1YGLByO+9N6tDsKKY=";
   };
 
-  build-system = [
-    hatchling
-    hatch-vcs
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,7 +29,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/ofek/binary/releases/tag/${src.tag}";
     description = "Easily convert between binary and SI units (kibibyte, kilobyte, etc.)";
     homepage = "https://github.com/ofek/binary";
     license = with licenses; [

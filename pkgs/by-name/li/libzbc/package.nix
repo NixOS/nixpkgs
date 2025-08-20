@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     libtool
-  ]
-  ++ lib.optionals guiSupport [ pkg-config ];
+  ] ++ lib.optionals guiSupport [ pkg-config ];
 
   buildInputs = lib.optionals guiSupport [ gtk3 ];
 

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = "systeroid";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-nyQFNPmPcguPGeArd+w1Jexj4/J53PXAeGDvoRSsh/k=";
   };
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
   '';
 
-  cargoHash = "sha256-KopbqiQKHzz40SYJXexIAUCoF7224JtmQ0jkhFSTr4c=";
+  cargoHash = "sha256-ErNSsObo4Tbt9uvbIqOgR6dnSsL25urqocSGN/Won4A=";
 
   buildInputs = [
     xorg.libxcb

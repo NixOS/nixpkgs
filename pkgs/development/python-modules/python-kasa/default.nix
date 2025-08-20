@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.10.2";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     tag = version;
-    hash = "sha256-OIkqNGTnIPoHYrE5NhAxSsRCTyMGvNADvIg28EuKsEw=";
+    hash = "sha256-9y0M2CYG7tFdT9nAcQLhgvTKeaxoFHAVihM2Rj+0N34=";
   };
 
   build-system = [ hatchling ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTestPaths = [
     # Skip the examples tests

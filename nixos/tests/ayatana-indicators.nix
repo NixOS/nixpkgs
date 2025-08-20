@@ -42,9 +42,8 @@ in
             ayatana-indicator-sound
           ]
           ++ (with pkgs.lomiri; [
-            lomiri-indicator-datetime
             lomiri-indicator-network
-            lomiri-telephony-service
+            telephony-service
           ]);
       };
 

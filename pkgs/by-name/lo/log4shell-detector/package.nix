@@ -4,23 +4,19 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "log4shell-detector";
-  version = "0-unstable-2021-12-16";
-  format = "pyproject";
+  version = "unstable-2021-12-16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Neo23x0";
-    repo = "log4shell-detector";
+    repo = pname;
     rev = "622b88e7ea36819da23ce6ac090785cd6cca77f9";
     sha256 = "sha256-N81x9hq473LfM+bQIQLWizCAsVc/pzyB84PV7/N5jk4=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     zstandard
   ];
 
@@ -30,7 +26,7 @@ python3.pkgs.buildPythonApplication {
 
   installPhase = ''
     runHook preInstall
-    install -vD log4shell-detector.py $out/bin/log4shell-detector
+    install -vD ${pname}.py $out/bin/${pname}
     install -vd $out/${python3.sitePackages}/
     cp -R Log4ShellDetector $out/${python3.sitePackages}
     runHook postInstall

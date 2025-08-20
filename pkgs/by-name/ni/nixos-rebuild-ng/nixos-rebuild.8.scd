@@ -17,12 +17,11 @@ nixos-rebuild - reconfigure a NixOS machine
 
 # SYNOPSIS
 
-; document here only non-deprecated flags
 _nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS]++
 	\[--include INCLUDE] [--quiet] [--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file]++
 	\[--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file] [--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT]++
 	\[--no-build-output] [--use-substitutes] [--help] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader] [--profile-name PROFILE_NAME]++
-	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
+	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--fast]++
 	\[--image-variant VARIANT]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
@@ -171,7 +170,7 @@ It must be one of the following:
 	Causes the boot loader to be (re)installed on the device specified by
 	the relevant configuration options.
 
-*--no-reexec*
+*--fast*
 	Normally, *nixos-rebuild* first finds and builds itself from the
 	_config.system.build.nixos-rebuild_ attribute from the current user
 	channel or flake and exec into it. This allows *nixos-rebuild* to run
@@ -190,9 +189,9 @@ It must be one of the following:
 	trusted user in the Nix daemon. This can be achieved by using the
 	_nix.settings.trusted-users_ NixOS option. Examples values for that
 	option are described in the “Remote builds” chapter in the Nix manual,
-	(i.e. ‘--builders "ssh://bigbrother x86_64-linux"’). By specifying an
+	(i.e. ‘--builders "ssh://bigbrother x86_64-linux"‘). By specifying an
 	empty string existing builders specified in /etc/nix/machines can be
-	ignored: ‘--builders ""’ for example when they are not reachable due to
+	ignored: ‘--builders ""‘ for example when they are not reachable due to
 	network connectivity.
 
 *--profile-name* _name_, *-p* _name_
@@ -200,7 +199,7 @@ It must be one of the following:
 	track of the current and previous system configurations, use
 	_/nix/var/nix/profiles/system-profiles/name_. When you use GRUB 2, for
 	every system profile created with this flag, NixOS will create a submenu
-	named “NixOS - Profile _name_” in GRUB's boot menu, containing the
+	named “NixOS - Profile _name_“ in GRUB's boot menu, containing the
 	current and previous configurations of this profile.
 
 	For instance, if you want to test a configuration file named _test.nix_
@@ -209,7 +208,7 @@ It must be one of the following:
 		$ nixos-rebuild switch -p test -I nixos-config=./test.nix
 
 	The new configuration will appear in the GRUB 2 submenu “NixOS - Profile
-	‘test’”.
+	‘test’“.
 
 *--specialisation* _name_, *-c* _name_
 	Activates given specialisation; when not specified, switching and testing
@@ -251,10 +250,10 @@ It must be one of the following:
 
 *--use-substitutes*
 	When set, nixos-rebuild will add *--use-substitutes* to each invocation
-	of _nix copy_. This will only affect the behavior of nixos-rebuild if
-	*--target-host* or *--build-host* is also set. This is useful when the
-	target-host connection to cache.nixos.org is faster than the connection
-	between hosts.
+	of _nix-copy-closure_/_nix copy_. This will only affect the behavior of
+	nixos-rebuild if *--target-host* or *--build-host* is also set. This is
+	useful when the target-host connection to cache.nixos.org is faster than
+	the connection between hosts.
 
 *--sudo*
 	When set, *nixos-rebuild* prefixes activation commands with sudo.
@@ -306,7 +305,7 @@ Builder options:
 
 *--verbose,*  *-v*,  *--quiet*,  *--log-format*,  *--no-build-output*, *-Q*,
 *--max-jobs*, *-j*, *--cores*, *--keep-going*, *-k*, *--keep-failed*, *-K*,
-*--fallback*, *--include*, *-I*, *--option*, *--repair*, *--builders*,
+*--fallback*, *--incllude*, *-I*, *--option*, *--repair*, *--builders*,
 *--print-build-logs*, *-L*, *--show-trace*
 
 See the Nix manual, *nix flake lock --help* or *nix-build --help* for details.

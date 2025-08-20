@@ -1,35 +1,32 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  mkDerivation,
+  fetchzip,
   installShellFiles,
   pkg-config,
   qmake,
   qtbase,
   kcoreaddons,
   kwidgetsaddons,
-  qtsvg,
-  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qelectrotech";
-  version = "0.9.0";
+  version = "0.8.0";
 
-  src = fetchFromGitHub {
-    owner = "qelectrotech";
-    repo = "qelectrotech-source-mirror";
-    tag = "0.9";
-    hash = "sha256-tj8q+mRVtdeDXbpiv4retdbNiIfvAFlutXn7BmjqFYU=";
+  src = fetchzip {
+    url = "https://git.tuxfamily.org/qet/qet.git/snapshot/qet-${version}.tar.gz";
+    sha256 = "sha256-op2vnMPF9bNnHGphWFB/HEeoThE6tX+9UvX8LWVwkzI=";
   };
 
   postPatch = ''
     substituteInPlace qelectrotech.pro \
-      --replace-fail 'GIT_COMMIT_SHA="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --verify HEAD)\\\""' \
+      --replace 'GIT_COMMIT_SHA="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --verify HEAD)\\\""' \
                 'GIT_COMMIT_SHA="\\\"${version}\\\""' \
-      --replace-fail "COMPIL_PREFIX              = '/usr/local/'" \
+      --replace "COMPIL_PREFIX              = '/usr/local/'" \
                 "COMPIL_PREFIX              = '$out/'" \
-      --replace-fail "INSTALL_PREFIX             = '/usr/local/'" \
+      --replace "INSTALL_PREFIX             = '/usr/local/'" \
                 "INSTALL_PREFIX             = '$out/'"
   '';
 
@@ -37,14 +34,12 @@ stdenv.mkDerivation rec {
     installShellFiles
     pkg-config
     qmake
-    wrapQtAppsHook
   ];
 
   buildInputs = [
     kcoreaddons
     kwidgetsaddons
     qtbase
-    qtsvg
   ];
 
   qmakeFlags = [
@@ -57,6 +52,9 @@ stdenv.mkDerivation rec {
     install -Dm555 qelectrotech $out/bin/qelectrotech
 
     install -Dm444 -t $out/share/applications misc/qelectrotech.desktop
+    install -Dm444 -t $out/share/applications misc/x-qet-titleblock.desktop
+    install -Dm444 -t $out/share/applications misc/x-qet-element.desktop
+    install -Dm444 -t $out/share/applications misc/x-qet-project.desktop
 
     mkdir -p $out/share/qelectrotech
     cp -r elements $out/share/qelectrotech
@@ -70,12 +68,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Free software to create electric diagrams";
     mainProgram = "qelectrotech";
     homepage = "https://qelectrotech.org/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ yvesf ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

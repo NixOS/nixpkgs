@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "heapdict";
   version = "1.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "HeapDict";

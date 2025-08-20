@@ -6,20 +6,20 @@
   libgit2,
   rust-jemalloc-sys,
   zlib,
-  gitMinimal,
+  git,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "2.2.0";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
-    rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-i4SSEiU3gQRgOUyMxomCos3Ly20pzQQG20nTdYzY75E=";
+    rev = "cli/v${version}";
+    hash = "sha256-oK1tCPoTeUHvVdi+ym4J5xEj2NIi2zHQpNU1KUchQfY=";
   };
 
-  cargoHash = "sha256-f7ve9VAnkyxp7s7Xf3MXAft4mAfMwLiajst4aCwUyjs=";
+  cargoHash = "sha256-4vITbsXfgNFoeWMHz7a9Rk7FrsEZRe75nHiyHSMujEQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,24 +29,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [ git ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
-    # fails due to cargo insta
-    "-- --skip=commands::check::print_json"
-    "--skip=commands::check::print_json_pretty"
-    "--skip=commands::explain::explain_logs"
-    "--skip=commands::format::print_json"
-    "--skip=commands::format::print_json_pretty"
-    "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
-    "--skip=cases::migrate_v2::should_successfully_migrate_sentry"
-  ];
+  cargoTestFlags =
+    cargoBuildFlags
+    ++
+    # skip a broken test from v1.7.3 release
+    # this will be removed on the next version
+    [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
 
   env = {
-    BIOME_VERSION = finalAttrs.version;
+    BIOME_VERSION = version;
     LIBGIT2_NO_VENDOR = 1;
-    INSTA_UPDATE = "no";
   };
 
   preCheck = ''
@@ -60,13 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
-    changelog = "https://github.com/biomejs/biome/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/biomejs/biome/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
       isabelroses
-      wrbbz
     ];
     mainProgram = "biome";
   };
-})
+}

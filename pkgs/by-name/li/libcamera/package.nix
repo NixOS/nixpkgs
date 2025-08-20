@@ -16,8 +16,7 @@
   doxygen,
   python3,
   python3Packages,
-  udev,
-  libpisp,
+  systemd, # for libudev
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
   withQcam ? false,
@@ -27,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.1";
+  version = "0.4.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-JV5sa/jiqubcenSeYC4jlB/RgGJt3o1HTIyy7U4Ljlg=";
+    hash = "sha256-m55SojGt5v5AEatBZiVqQA3xP9eeRWqHa+C3JsTiErQ=";
   };
 
   outputs = [
@@ -62,36 +61,36 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    udev
+      # hotplugging
+      systemd
 
-    # pycamera
-    python3Packages.pybind11
+      # pycamera
+      python3Packages.pybind11
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
-  ++ lib.optionals withTracing [ lttng-ust ]
-  ++ lib.optionals withQcam [
-    libtiff
-    qt6.qtbase
-    qt6.qttools
-  ];
+      gtest
+    ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt6.qtbase
+      qt6.qttools
+    ];
 
   nativeBuildInputs = [
     meson
@@ -105,8 +104,7 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ]
-  ++ lib.optional withQcam qt6.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
@@ -134,7 +132,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
-    platforms = platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

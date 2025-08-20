@@ -29,7 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-Hf+Ii1xIKsW8Yn8S4QhEX+/LPWAMQ/Y2M5dTFv5hetg=";
   };
 
-  dependencies = [
+  propagatedBuildInputs = [
     coloredlogs
     numpy
     onnx
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "onnxruntime_tools" ];
 
-  meta = {
+  meta = with lib; {
     description = "Transformers Model Optimization Tool of ONNXRuntime";
     homepage = "https://pypi.org/project/onnxruntime-tools/";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ happysalada ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ happysalada ];
   };
 }

@@ -13,7 +13,7 @@
   xvfb-run,
   scrot,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pyautogui";
   version = "0.9.53";
   format = "setuptools";

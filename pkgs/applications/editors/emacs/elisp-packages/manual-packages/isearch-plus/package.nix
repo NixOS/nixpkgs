@@ -23,6 +23,9 @@ melpaBuild {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Extensions to isearch";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
+    maintainers = with lib.maintainers; [
+      leungbk
+      AndersonTorres
+    ];
   };
 }

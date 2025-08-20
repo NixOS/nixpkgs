@@ -19,12 +19,12 @@ python3Packages.buildPythonApplication rec {
   # Tests requires to start containers
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "TCP/UDP communication suite";
     homepage = "https://pwncat.org/";
     changelog = "https://github.com/cytopia/pwncat/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "pwncat";
   };
 }

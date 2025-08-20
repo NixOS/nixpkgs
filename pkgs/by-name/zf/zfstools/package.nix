@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ruby,
   zfs,
-  freebsd,
   makeWrapper,
 }:
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*; do
       wrapProgram $f \
         --set RUBYLIB $out/lib \
-        --prefix PATH : ${if stdenv.hostPlatform.isFreeBSD then freebsd.zfs else zfs}/bin
+        --prefix PATH : ${zfs}/bin
     done
   '';
 
@@ -44,6 +43,6 @@ stdenv.mkDerivation rec {
       for ZFS, which also supports auto snapshotting mysql databases.
     '';
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.linux;
   };
 }

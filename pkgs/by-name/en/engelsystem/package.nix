@@ -1,73 +1,53 @@
 {
   lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarn,
-  yarnBuildHook,
-  yarnConfigHook,
+  fetchzip,
   nixosTests,
   php,
+  stdenv,
+  writeText,
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.6.0";
+  version = "3.5.0";
 
-  src = fetchFromGitHub {
-    owner = "engelsystem";
-    repo = "engelsystem";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Pi+nowImUvENx2c4gsku1KkFb3pLM84oT8WevI6ImQg=";
+  src = fetchzip {
+    url = "https://github.com/engelsystem/engelsystem/releases/download/v${version}/engelsystem-v${version}.zip";
+    hash = "sha256-RbzAHBZN02u14WaLtq5EOh4XwIdHKvzX7NhDBhn/CaU=";
   };
 
-  inherit php;
+  buildInputs = [ php ];
 
-  vendorHash = "sha256-0Mv48mB/pTQtYd2do6wTdhD/c2zwbU1gTYsdU7rELPY=";
-  composoerNoDev = true;
-  composerStrictValidation = false;
+  installPhase = ''
+    runHook preInstall
 
-  yarnOfflineCache = fetchYarnDeps {
-    pname = "${finalAttrs.pname}-yarn-deps";
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-nyCLM9OF2qwlW+VK38kiRMo6jMlupNFG+91N3Fb/WLY=";
-  };
+    # prepare
+    rm -r ./storage/
 
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    nodejs
-    yarn
-    yarnConfigHook
-  ];
-
-  preBuild = ''
-    yarn build
-  '';
-
-  preInstall = ''
-    rm -rf node_modules
-
-    # link config and storage into FHS locations
     ln -sf /etc/engelsystem/config.php ./config/config.php
-    rm -rf storage
-    ln -snf /var/lib/engelsystem/storage/ ./storage
-  '';
+    ln -sf /var/lib/engelsystem/storage/ ./storage
 
-  postInstall = ''
-    mkdir $out/bin
-    ln -s $out/share/php/engelsystem/bin/migrate $out/bin/migrate
+    mkdir -p $out/share/engelsystem
+    mkdir -p $out/bin
+    cp -r . $out/share/engelsystem
+
+    echo $(command -v php)
+    # The patchShebangAuto function always used the php without extensions, so path the shebang manually
+    sed -i -e "1 s|.*|#\!${lib.getExe php}|" "$out/share/engelsystem/bin/migrate"
+    ln -s "$out/share/engelsystem/bin/migrate" "$out/bin/migrate"
+
+    runHook postInstall
   '';
 
   passthru.tests = nixosTests.engelsystem;
 
-  meta = {
-    changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${finalAttrs.version}";
+  meta = with lib; {
+    changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${version}";
     description = "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     homepage = "https://engelsystem.de";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
-})
+}

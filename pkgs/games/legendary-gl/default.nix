@@ -8,10 +8,9 @@
   filelock,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "legendary-gl"; # Name in pypi
   version = "0.20.34";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "derrod";

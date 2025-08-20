@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "hdl-dump";
   version = "unstable-2022-09-19";
 
   src = fetchFromGitHub {
     owner = "ps2homebrew";
-    repo = "hdl-dump";
+    repo = pname;
     rev = "87d3099d2ba39a15e86ebc7dc725e8eaa49f2d5f";
     hash = "sha256-eBqF4OGEaLQXQ4JMtD/Yn+f97RzKVsnC+4oyiEhLTUM=";
   };

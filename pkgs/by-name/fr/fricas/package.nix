@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fricas";
-  version = "1.3.12";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "fricas";
     repo = "fricas";
     rev = version;
-    sha256 = "sha256-GUGJR65K1bPC0D36l4Yyj3GOsWtUrSKLu6JnlfjHzDc=";
+    sha256 = "sha256-EX/boSs6rK4RrJ5W6Rd0TSHsbQsNiFI1evFuNPBMeu8=";
   };
 
   buildInputs = [
@@ -36,11 +36,7 @@ stdenv.mkDerivation rec {
 
   # Remove when updating to next version
   configurePhase = ''
-    runHook preConfigure
-
     ./configure --prefix=$out --with-lisp='sbcl --dynamic-space-size 3072'
-
-    runHook postConfigure
   '';
 
   dontStrip = true;

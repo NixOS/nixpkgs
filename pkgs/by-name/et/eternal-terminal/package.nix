@@ -9,17 +9,18 @@
   protobuf,
   zlib,
   catch2,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.2.11";
+  version = "6.2.9";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     tag = "et-v${version}";
-    hash = "sha256-d3mCZQO12NUQjGIOX1FWTLUq+adMTNb9QYCSU3ibZMY=";
+    hash = "sha256-vukh3a6SxHaVCT4hmoVt4hEGB8Sqylu53Nz8fgBWkTM";
   };
 
   nativeBuildInputs = [
@@ -51,15 +52,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       dezgeg
       jshort
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -26,6 +26,7 @@
   exiv2,
   libxml2,
   libxslt,
+  ffmpeg,
   jasper,
   eigen,
   lensfun,
@@ -63,25 +64,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.6.0";
+  version = "8.5.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CMyvNOAlIqD6OeqUquQ+/sOiBXmEowZe3/qmaXxh0X0=";
+    hash = "sha256-KO6kq0SlYzu7sh6+7JQWhIeHNowy3fx03OFTdDwyR10=";
   };
 
   patches = [
     ./disable-tests-download.patch
-
-    # Fix build with Qt 6.9
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://invent.kde.org/graphics/digikam/-/commit/325b19fc7f0d04cdc1308f235c207c1ab43e945d.patch";
-      hash = "sha256-bsxaNuLuU9MyDRmenOqO4JuzsbpUvfKQwcSCDfLHoWQ=";
-    })
   ];
 
   strictDeps = true;
@@ -203,9 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/bin/perl" "${lib.getExe perl}" \
       --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
-
-  # over 3h in a normal build slot (2 cores
-  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Photo management application";

@@ -6,9 +6,5 @@ for path in $paths; do
         exit 1
     fi
     mkdir -p $out/$(dirname $path)
-    if [[ -d $src/$path ]]; then
-        ln -s $src/$path $out/$path
-    else
-        cp -RL $src/$path $out/$path
-    fi
+    ln -s $src/$path $out/$path
 done

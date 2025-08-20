@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2 Kart";
-      exec = "srb2kart";
-      icon = "srb2kart";
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
       comment = "Kart racing mod based on SRB2";
       desktopName = name;
       genericName = name;
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Classic styled kart racer";
+    description = "SRB2Kart is a classic styled kart racer";
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

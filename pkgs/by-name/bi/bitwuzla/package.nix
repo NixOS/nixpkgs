@@ -12,22 +12,20 @@
   gmp,
   cadical,
   cryptominisat,
-  kissat,
   zlib,
   pkg-config,
   cmake,
-  aiger,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.8.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     rev = finalAttrs.version;
-    hash = "sha256-v5r+BWXUUbKtkos6qmGMC9MMytS/h759SHY6lsTHU1k=";
+    hash = "sha256-S8CtK8WEehUdOoqOmu5KnoqHFpCGrYWjZKv1st4M7bo=";
   };
 
   strictDeps = true;
@@ -39,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     cmake
   ];
-
   buildInputs = [
     cadical
     cryptominisat
@@ -47,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     symfpu
     gmp
     zlib
-    kissat
-    aiger
   ];
 
   mesonFlags = [
@@ -56,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     # but setting it to shared works even in pkgsStatic
     "-Ddefault_library=shared"
     "-Dcryptominisat=true"
-    "-Dkissat=true"
-    "-Daiger=true"
 
     (lib.strings.mesonEnable "testing" finalAttrs.finalPackage.doCheck)
   ];
@@ -84,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     set -euxo pipefail;
     $out/bin/bitwuzla -S cms -j 3 -m file.smt2 | tee /dev/stderr | grep $needle;
     $out/bin/bitwuzla -S cadical -m file.smt2 | tee /dev/stderr | grep $needle;
-    $out/bin/bitwuzla -S kissat -m file.smt2 | tee /dev/stderr | grep $needle;
     )
 
     runHook postInstallCheck

@@ -2,26 +2,21 @@
   lib,
   fetchFromGitHub,
   python3,
-  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "arsenal";
-  version = "1.2.7";
-  pyproject = true;
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
-    tag = version;
-    sha256 = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
+    rev = version;
+    sha256 = "sha256-NbNXyR5aNKvRJU9JWGk/ndwU1bhNgDOdcRqBkAY9nPA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     libtmux
     docutils
     pyfzf
@@ -29,18 +24,18 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  # Project has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "arsenal"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to generate commands for security and network tools";
     homepage = "https://github.com/Orange-Cyberdefense/arsenal";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "arsenal";
   };
 }

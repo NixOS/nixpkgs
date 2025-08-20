@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  cmake,
-  gtk3-x11,
-  python3,
-  protobuf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, cmake
+, gtk3-x11
+, python3
+, protobuf
 }:
 
 stdenv.mkDerivation rec {
   pname = "cdogs-sdl";
-  version = "2.3.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-jdrmtI/FADZ0vJDtX4Kq0A9RJ1ELjsQZjO2nMDf/fT8=";
+    sha256 = "sha256-uZPCki9G62nSrf8YfdyCfY1qgWlPT9BB2FqPicw32FM=";
   };
 
   postPatch = ''
@@ -40,12 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    (python3.withPackages (
-      pp: with pp; [
-        pp.protobuf
-        setuptools
-      ]
-    ))
+    (python3.withPackages (pp: with pp; [ pp.protobuf setuptools ]))
   ];
 
   buildInputs = [

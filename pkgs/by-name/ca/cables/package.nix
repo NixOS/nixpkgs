@@ -7,12 +7,12 @@
 
 let
   pname = "cables";
-  version = "0.7.1";
+  version = "0.5.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/cables-gl/cables_electron/releases/download/v${version}/cables-${version}-linux-x64.AppImage";
-    sha256 = "sha256-CsKwb9anK7yHM+1mf9tPyjQ1GLYiUkrO7oP+GxFTqx0=";
+    sha256 = "sha256-rwnCIIPQ7a+SDehtl72Q3K3igJmVcOyhKUb9lpW7Zvo=";
   };
 
   appimageContents = appimageTools.extract {
@@ -32,7 +32,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Standalone version of cables, a tool for creating beautiful interactive content";
+    description = "Standalone version of cables, a tool for creating beautiful interactive content.";
     homepage = "https://cables.gl";
     changelog = "https://cables.gl/changelog";
     license = licenses.mit;

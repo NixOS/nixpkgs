@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "interactsh";
-  version = "1.2.4";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = "interactsh";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-28d+ghJ/A/dg6aeypqPF4EAhDp8k3yXLYylxnQR/J+M=";
+    hash = "sha256-ugrcGOlVRPTWhIX6Bpzl9iVydiVY5BWN3yNK/CaZS6A=";
   };
 
-  vendorHash = "sha256-1ZTvIGgFEXxW//d3bD4kYRYj5+n/NzJW2oSnbjyXLGA=";
+  vendorHash = "sha256-HgYaSjg4oFNOTOiUd2YXpdUWdpKqJFF5KDejxp0J4cU=";
 
   modRoot = ".";
   subPackages = [
@@ -26,7 +26,7 @@ buildGoModule rec {
   # Test files are not part of the release tarball
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Out of bounds interaction gathering server and client library";
     longDescription = ''
       Interactsh is an Open-Source Solution for Out of band Data Extraction,
@@ -35,7 +35,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/interactsh";
     changelog = "https://github.com/projectdiscovery/interactsh/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hanemile ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ hanemile ];
   };
 }

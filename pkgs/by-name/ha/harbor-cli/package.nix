@@ -4,33 +4,31 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
+  harbor-cli,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "harbor-cli";
-  version = "0.0.9";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-3LgFhSG/k4cnpxiYaXTPr52n1cntIG2qfLkYaOyaqGw=";
+    rev = "v${version}";
+    hash = "sha256-baS4UHjmE2eURFMDBhXbx9lcKPArb2RH2NVDt3MPE4s=";
   };
 
-  vendorHash = "sha256-QnKSzWa/XTrA83d/DXcS5PE59CL4wD2sISNDV5pBIfM=";
+  vendorHash = "sha256-rw2VPRi0VTm7/zVnQ8zL5f4mbzYKnmuxgCbgrpcukaU=";
 
-  excludedPackages = [
-    "dagger"
-    "doc"
-  ];
+  excludedPackages = [ "dagger" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${finalAttrs.version}"
+    "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${version}"
   ];
 
   doCheck = false; # Network required
@@ -45,16 +43,16 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = harbor-cli;
     command = "HOME=\"$(mktemp -d)\" harbor version";
   };
 
   meta = {
     homepage = "https://github.com/goharbor/harbor-cli";
     description = "Command-line tool facilitates seamless interaction with the Harbor container registry";
-    changelog = "https://github.com/goharbor/harbor-cli/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/goharbor/harbor-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "harbor";
   };
-})
+}

@@ -1,30 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
-  pkg-config,
-  meson,
-  ninja,
-  libevdev,
-  mtdev,
-  udev,
-  libwacom,
-  documentationSupport ? false,
-  doxygen,
-  graphviz,
-  runCommand,
-  eventGUISupport ? false,
-  cairo,
-  glib,
-  gtk3,
-  testsSupport ? false,
-  check,
-  valgrind,
-  python3,
-  nixosTests,
-  wayland-scanner,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, pkg-config
+, meson
+, ninja
+, libevdev
+, mtdev
+, udev
+, libwacom
+, documentationSupport ? false
+, doxygen
+, graphviz
+, runCommand
+, eventGUISupport ? false
+, cairo
+, glib
+, gtk3
+, testsSupport ? false
+, check
+, valgrind
+, python3
+, nixosTests
+, wayland-scanner
 }:
 
 let
@@ -32,13 +30,11 @@ let
 
   sphinx-build =
     let
-      env = python3.withPackages (
-        pp: with pp; [
-          sphinx
-          recommonmark
-          sphinx-rtd-theme
-        ]
-      );
+      env = python3.withPackages (pp: with pp; [
+        sphinx
+        recommonmark
+        sphinx-rtd-theme
+      ]);
     in
     # Expose only the sphinx-build binary to avoid contaminating
     # everything with Sphinx’s Python environment.
@@ -50,20 +46,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.29.0";
+  version = "1.27.0";
 
-  outputs = [
-    "bin"
-    "out"
-    "dev"
-  ];
+  outputs = [ "bin" "out" "dev" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-wZRec6zIOALy1O6/NRRl0VxuS16SiL5SjXsley4K+c0=";
+    hash = "sha256-aeCMZnH4RPvaV4+1kqeOSqIj1ViUlaryEXQAo8KaOQE=";
   };
 
   patches = [
@@ -74,9 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    udevCheckHook
-  ]
-  ++ lib.optionals documentationSupport [
+  ] ++ lib.optionals documentationSupport [
     doxygen
     graphviz
     sphinx-build
@@ -86,16 +76,13 @@ stdenv.mkDerivation rec {
     libevdev
     mtdev
     libwacom
-    (python3.withPackages (
-      pp: with pp; [
-        pp.libevdev # already in scope
-        pyudev
-        pyyaml
-        setuptools
-      ]
-    ))
-  ]
-  ++ lib.optionals eventGUISupport [
+    (python3.withPackages (pp: with pp; [
+      pp.libevdev # already in scope
+      pyudev
+      pyyaml
+      setuptools
+    ]))
+  ] ++ lib.optionals eventGUISupport [
     # GUI event viewer
     cairo
     glib
@@ -122,8 +109,6 @@ stdenv.mkDerivation rec {
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  doInstallCheck = true;
-
   postPatch = ''
     patchShebangs \
       test/symbols-leak-test \
@@ -149,12 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ codyopel ];
-    teams = [ teams.freedesktop ];
+    maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
-    badPlatforms = [
-      # Mandatory shared library.
-      lib.systems.inspect.platformPatterns.isStatic
-    ];
   };
 }

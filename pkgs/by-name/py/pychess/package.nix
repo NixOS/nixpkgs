@@ -8,13 +8,11 @@
   gtk3,
   gst_all_1,
   gtksourceview,
-  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pychess";
   version = "1.0.5";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pychess";
@@ -27,7 +25,6 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     gobject-introspection
     wrapGAppsHook3
-    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -36,9 +33,7 @@ python3Packages.buildPythonApplication rec {
     gtksourceview
   ];
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pygobject3
     pycairo
     sqlalchemy
@@ -55,6 +50,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preBuild = ''
+    export HOME=$(mktemp -d)
     export PYTHONPATH=./lib:$PYTHONPATH
     python pgn2ecodb.py
     python create_theme_preview.py
@@ -66,8 +62,6 @@ python3Packages.buildPythonApplication rec {
 
   # No tests available.
   doCheck = false;
-
-  pythonImportsCheck = [ "pychess" ];
 
   meta = {
     description = "Advanced GTK chess client written in Python";

@@ -2,29 +2,24 @@
   lib,
   stdenv,
   python3Packages,
-  fetchFromGitHub,
+  fetchPypi,
   nix-update-script,
   s-tui,
   testers,
-  stress,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.1.6";
 
-  src = fetchFromGitHub {
-    owner = "amanusk";
-    repo = "s-tui";
-    tag = "v${version}";
-    hash = "sha256-VdQSDRDdRO6jHSuscOQZXnVM6nWHaXRfR4sZ3x5lriI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-nSdpnM8ubodlPwmvdmNFTn9TsS8i7lWBZ2CifMHDe1c=";
   };
 
-  propagatedBuildInputs = [
-    python3Packages.urwid
-    python3Packages.psutil
-    stress
+  propagatedBuildInputs = with python3Packages; [
+    urwid
+    psutil
   ];
 
   passthru = {
@@ -36,7 +31,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lilacious ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/amanusk/s-tui/issues/49
     mainProgram = "s-tui";
   };

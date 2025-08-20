@@ -5,12 +5,11 @@
   gitUpdater,
   testers,
   cmake,
-  nlohmann_json,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.13.1";
+  version = "1.13.0";
 
   outputs = [
     "out"
@@ -21,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fraunhoferhhi";
     repo = "vvenc";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-DPR1HmUYTjhKI+gTHERtxqThZ5oKKMoqYsfE709IrhA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9fWKunafTniBsY9hK09+xYwvB7IgGPhZmgqauPHgB/g=";
   };
 
   patches = [ ./unset-darwin-cmake-flags.patch ];
@@ -34,13 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  buildInputs = [ nlohmann_json ];
-
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     (lib.cmakeBool "VVENC_INSTALL_FULLFEATURE_APP" true)
-    (lib.cmakeBool "VVENC_ENABLE_THIRDPARTY_JSON" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 

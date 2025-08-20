@@ -3,12 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  versionCheckHook,
-  _experimental-update-script-combinators,
-  nix-update-script,
-  writeShellApplication,
-  nix,
-  gnugrep,
+  apple-sdk,
 }:
 
 let
@@ -29,31 +24,29 @@ let
       "unknown";
 
   # These files can be found in src/evaluate.h
-  nnueBigFile = "nn-1c0000000000.nnue";
-  nnueBigHash = "sha256-HAAAAAAApn1imZnZMtDDc/dFDOQ80S0FYoaPTq+a4q0=";
+  nnueBigFile = "nn-1111cefa1111.nnue";
   nnueBig = fetchurl {
     name = nnueBigFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    hash = nnueBigHash;
+    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
-  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   nnueSmall = fetchurl {
     name = nnueSmallFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    hash = nnueSmallHash;
+    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "17.1";
+  version = "17";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
-    tag = "sf_${version}";
-    hash = "sha256-c8o1d7/yPnF3Eo7M/MSzYuYQr2qt2tIwyu7WfuKMAzg=";
+    rev = "sf_${version}";
+    sha256 = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
   };
 
   postUnpack = ''
@@ -70,37 +63,6 @@ stdenv.mkDerivation rec {
   buildFlags = [ "build" ];
 
   enableParallelBuilding = true;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/stockfish";
-  versionCheckProgramArg = "--help";
-
-  passthru = {
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script {
-        extraArgs = [ "--version-regex=^sf_([\\d.]+)$" ];
-      })
-      (lib.getExe (writeShellApplication {
-        name = "${pname}-nnue-updater";
-        runtimeInputs = [
-          nix
-          gnugrep
-        ];
-        runtimeEnv = {
-          PNAME = pname;
-          PKG_FILE = builtins.toString ./package.nix;
-          NNUE_BIG_FILE = nnueBigFile;
-          NNUE_BIG_HASH = nnueBigHash;
-          NNUE_SMALL_FILE = nnueSmallFile;
-          NNUE_SMALL_HASH = nnueSmallHash;
-        };
-        text = builtins.readFile ./update.bash;
-      }))
-    ];
-  };
 
   meta = with lib; {
     homepage = "https://stockfishchess.org/";

@@ -1,19 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) mkIf mkOption;
-  inherit (lib.types)
-    nullOr
-    path
-    bool
-    listOf
-    str
-    ;
+  inherit (lib.types) nullOr path bool listOf str;
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
@@ -26,8 +15,7 @@ in
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "yggdrasil" "config" ]
-      [ "services" "yggdrasil" "settings" ]
-    )
+      [ "services" "yggdrasil" "settings" ])
   ];
 
   options = {
@@ -133,10 +121,7 @@ in
       extraArgs = mkOption {
         type = listOf str;
         default = [ ];
-        example = [
-          "-loglevel"
-          "info"
-        ];
+        example = [ "-loglevel" "info" ];
         description = "Extra command line arguments.";
       };
 
@@ -149,12 +134,10 @@ in
       binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
     in
     {
-      assertions = [
-        {
-          assertion = config.networking.enableIPv6;
-          message = "networking.enableIPv6 must be true for yggdrasil to work";
-        }
-      ];
+      assertions = [{
+        assertion = config.networking.enableIPv6;
+        message = "networking.enableIPv6 must be true for yggdrasil to work";
+      }];
 
       # This needs to be a separate service. The yggdrasil service fails if
       # this is put into its preStart.
@@ -197,23 +180,20 @@ in
           set -euo pipefail
 
           # prepare config file
-          ${
-            (
-              if settingsProvided || configFileProvided || cfg.persistentKeys then
-                "echo "
+          ${(if settingsProvided || configFileProvided || cfg.persistentKeys then
+            "echo "
 
-                + (lib.optionalString settingsProvided "'${builtins.toJSON cfg.settings}'")
-                + (lib.optionalString configFileProvided "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
-                + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-                + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
-              else
-                "${binYggdrasil} -genconf"
-            )
-            + " > /run/yggdrasil/yggdrasil.conf"
-          }
+            + (lib.optionalString settingsProvided
+              "'${builtins.toJSON cfg.settings}'")
+            + (lib.optionalString configFileProvided
+              "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
+            + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
+            + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+          else
+            "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 
           # start yggdrasil
-          exec ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
+          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
         '';
 
         serviceConfig = {
@@ -225,7 +205,8 @@ in
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
           BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
-          LoadCredential = mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+          LoadCredential =
+            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
@@ -238,19 +219,10 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @keyring"
-          ];
-        }
-        // (
-          if (cfg.group != null) then
-            {
-              Group = cfg.group;
-            }
-          else
-            { }
-        );
+          SystemCallFilter = [ "@system-service" "~@privileged @keyring" ];
+        } // (if (cfg.group != null) then {
+          Group = cfg.group;
+        } else { });
       };
 
       networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
@@ -262,10 +234,6 @@ in
   );
   meta = {
     doc = ./yggdrasil.md;
-    maintainers = with lib.maintainers; [
-      gazally
-      ehmry
-      nagy
-    ];
+    maintainers = with lib.maintainers; [ gazally ehmry nagy ];
   };
 }

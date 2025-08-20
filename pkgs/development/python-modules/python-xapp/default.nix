@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Cross-desktop libraries and common resources for python";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

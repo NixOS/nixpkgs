@@ -4,7 +4,7 @@
   logs,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-block-combinators";
   inherit (mirage-block) version src;
 

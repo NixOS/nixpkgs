@@ -27,7 +27,6 @@
   jbig2dec,
   libGL,
   libdrm,
-  libgbm,
   libinput,
   libjpeg,
   libpng,
@@ -39,9 +38,9 @@
   libtiff,
   libwebp,
   libxkbcommon,
-  lua,
+  luajit,
   lz4,
-  mesa-gl-headers,
+  mesa,
   mint-x-icons,
   openjpeg,
   openssl,
@@ -60,11 +59,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.28.1";
+  version = "1.27.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
+    sha256 = "sha256-PfuZ+8wmjAvHl+L4PoxQPvneZihPQLOBu1l6CBhcAPQ=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +91,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa-gl-headers
+    mesa
     openssl
     systemd
     udev
@@ -119,7 +118,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
-    libgbm
     libinput
     libjpeg
     libraw
@@ -127,7 +125,7 @@ stdenv.mkDerivation rec {
     libspectre
     libwebp
     libxkbcommon
-    lua
+    luajit
     mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
@@ -220,10 +218,12 @@ stdenv.mkDerivation rec {
       licenses.zlib
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      matejc
-      ftrvxmtrx
-    ];
-    teams = [ teams.enlightenment ];
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

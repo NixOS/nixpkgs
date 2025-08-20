@@ -6,7 +6,7 @@
   ppx_sexp_conv,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "ipaddr-sexp";
 
   inherit (ipaddr) version src;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
-    repo = "pytest-resource-path";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1siv3pk4fsabz254fdzr7c0pxy124habnbw4ym66pfk883fr96g2";
   };

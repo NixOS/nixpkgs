@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   file, # for libmagic
@@ -11,17 +10,18 @@
   zlib,
   cmake,
   gperf,
-  nix-update-script,
+  stdenv,
+  darwin,
 }:
 
 let
-  version = "5.8.4";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-PfiTIq8xomqp4ewawbX56hFgA4x5z8SI2w9husMtZPc=";
+    hash = "sha256-NrAU47GA7ZASJ7vCo1S8nyGBpfsZn4EBBqx2c4HKx7k=";
   };
 
   libcgowm = buildGoModule {
@@ -29,18 +29,14 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-HC7tJRk7Pqw3AUDEP2fGqYQLjIGf0CgB36K3PBYsBMM=";
+    vendorHash = "sha256-EdbOO5cCDT1CcPlCBgMoPDg65FcoOYvBwZa4bz0hfGE=";
 
     buildPhase = ''
-      runHook preBuild
-
       mkdir -p $out/
       go build -o $out/ -buildmode=c-archive
       mv $out/go.a $out/libcgowm.a
       ln -s $out/libcgowm.a $out/libref-cgowm.a
       mv $out/go.h $out/libcgowm.h
-
-      runHook postBuild
     '';
   };
 in
@@ -79,28 +75,27 @@ stdenv.mkDerivation rec {
     libcgowm
   ];
 
-  buildInputs = [
-    file # for libmagic
-    ncurses
-    openssl
-    readline
-    sqlite
-    zlib
-  ];
+  buildInputs =
+    [
+      file # for libmagic
+      ncurses
+      openssl
+      readline
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        Cocoa
+        Foundation
+      ]
+    );
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
-
-  passthru = {
-    inherit libcgowm;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "libcgowm"
-      ];
-    };
-  };
 
   meta = {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";

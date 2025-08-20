@@ -6,7 +6,7 @@
   php,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "anuko-time-tracker";
   version = "1.22.19.5806";
 

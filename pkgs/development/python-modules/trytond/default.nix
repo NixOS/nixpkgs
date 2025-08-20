@@ -20,63 +20,54 @@
   weasyprint,
   gevent,
   pillow,
-  pwdlib,
-  simpleeval,
   withPostgresql ? true,
   psycopg2,
   unittestCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.6.5";
+  version = "7.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1HMFHBRuVJG5oonfxQzsgonJGG5ZmOXoLDkRlryTSXM=";
+    hash = "sha256-vOaYdIrcpedpJEb0ILzILrEutqLmmVDDOV/UgnHgvuQ=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    defusedxml
-    lxml
-    relatorio
-    genshi
-    python-dateutil
-    polib
-    python-sql
-    werkzeug
-    passlib
+  dependencies =
+    [
+      defusedxml
+      lxml
+      relatorio
+      genshi
+      python-dateutil
+      polib
+      python-sql
+      werkzeug
+      passlib
 
-    # extra dependencies
-    pydot
-    levenshtein
-    html2text
-    weasyprint
-    gevent
-    pillow
-    pwdlib
-    simpleeval
-  ]
-  ++ relatorio.optional-dependencies.fodt
-  ++ passlib.optional-dependencies.bcrypt
-  ++ passlib.optional-dependencies.argon2
-  ++ lib.optional withPostgresql psycopg2;
+      # extra dependencies
+      pydot
+      levenshtein
+      html2text
+      weasyprint
+      gevent
+      pillow
+    ]
+    ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
+    ++ lib.optional withPostgresql psycopg2;
 
-  # Fontconfig error: Cannot load default config file: No such file: (null)
-  doCheck = false;
-
-  nativeCheckInputs = [
-    unittestCheckHook
-    writableTmpDirAsHomeHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
   '';
@@ -86,7 +77,7 @@ buildPythonPackage rec {
     "trytond.tests"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
@@ -98,9 +89,9 @@ buildPythonPackage rec {
     '';
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       udono
       johbo
     ];

@@ -5,44 +5,38 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  cmake,
+  autoreconfHook,
   fetchFromGitHub,
+  jam,
   lib,
   libGL,
   libGLU,
-  libwebp,
-  libtiff,
   libX11,
   libxml2,
-  libxmlxx5,
   libxslt,
   physfs,
   pkg-config,
   xorgproto,
   zlib,
-  gettext,
-  include-what-you-use,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "lincity-ng";
-  version = "2.13.1";
+  version = "2.9beta.20211125";
 
   src = fetchFromGitHub {
     owner = "lincity-ng";
     repo = "lincity-ng";
-    rev = "lincity-ng-${finalAttrs.version}";
-    hash = "sha256-ACJVhMq2IEJNrbAdmkgHxQV0uKSXpwR8a/5jcrQS+oI=";
+    rev = "b9062bec252632ca5d26b98d71453b8762c63173";
+    sha256 = "0l07cn8rmpmlqdppjc2ikh5c7xmwib27504zpmn3n9pryp394r46";
   };
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    cmake
+    autoreconfHook
+    jam
     pkg-config
-    gettext
-    include-what-you-use
-    libxml2
   ];
 
   buildInputs = [
@@ -54,9 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libX11
-    libwebp
-    libtiff
-    libxmlxx5
     libxml2
     libxslt
     physfs
@@ -64,16 +55,26 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags = [
-    "-DLIBXML2_LIBRARY=${lib.getLib libxml2}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DLIBXML2_XMLCATALOG_EXECUTABLE=${lib.getBin libxml2}/bin/xmlcatalog"
-    "-DLIBXML2_XMLLINT_EXECUTABLE=${lib.getBin libxml2}/bin/xmllint"
-  ];
+  autoreconfPhase = ''
+    ./autogen.sh
+  '';
 
-  env.NIX_CFLAGS_COMPILE = "
-    -I${lib.getDev SDL2_image}/include/SDL2
-    -I${lib.getDev SDL2_mixer}/include/SDL2
-  ";
+  buildPhase = ''
+    runHook preBuild
+
+    AR='ar r' jam -j $NIX_BUILD_CORES
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    touch CREDITS
+    AR='ar r' jam install
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "City building game";
@@ -82,4 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-})
+}

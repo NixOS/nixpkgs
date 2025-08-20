@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "linuxpy";
-  version = "0.21.0";
+  version = "0.20.0";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-13TWyTM1FvyAPNUQ4o3yTQHh7ezxysVMiEl+eLDkHGo=";
+    sha256 = "sha256-mNWmzl52GEZUEL3q8cP59qxMduG1ijgsvGoD5ddSG94=";
   };
 
   pythonImportsCheck = [ "linuxpy" ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Human friendly interface to Linux subsystems using Python";
     homepage = "https://github.com/tiagocoutinho/linuxpy";
     license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ willow ];
+    maintainers = with lib.maintainers; [ kekschen ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   cmake,
   makeWrapper,
@@ -24,17 +24,16 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.10";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-js2sLRtsOUA/aT10OCDaTjO80yplqwOIaLUqEe0nMx0=";
+    hash = "sha256-sAObJHBZjJHzYR62g+BLNBNq19cqb5LTw73H8m57K0w=";
   };
 
   depsBuildBuild = [
@@ -66,10 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
-
-  dontStrip = debug;
-
   dontWrapQtApps = true;
 
   postInstall = ''
@@ -96,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      khaneliman
+    ];
     platforms = lib.platforms.linux;
   };
 })

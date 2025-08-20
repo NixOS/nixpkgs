@@ -6,8 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "antfs-cli";
-  version = "0-unstable-2017-02-11";
-  format = "pyproject";
+  version = "unstable-2017-02-11";
 
   meta = with lib; {
     homepage = "https://github.com/Tigge/antfs-cli";
@@ -24,7 +23,5 @@ python3Packages.buildPythonApplication {
     sha256 = "0v8y64kldfbs809j1g9d75dd1vxq7mfxnp4b45pz8anpxhjf64fy";
   };
 
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = [ python3Packages.openant ];
+  propagatedBuildInputs = [ python3Packages.openant ];
 }

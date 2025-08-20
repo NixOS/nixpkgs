@@ -5,7 +5,7 @@
   makeBinaryWrapper,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "cddl";
 
   gemfile = ./Gemfile;

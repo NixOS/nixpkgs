@@ -7,6 +7,7 @@
   libkate,
   pango,
   cairo,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     libkate
     pango
     cairo
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";

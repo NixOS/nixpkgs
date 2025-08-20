@@ -90,6 +90,7 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;
     maintainers = with maintainers; [
+      chewblacka
       ShamrockLee
     ];
   };

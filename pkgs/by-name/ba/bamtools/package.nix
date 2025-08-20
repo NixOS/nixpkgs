@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bamtools";
-  version = "2.5.3";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "pezmaster31";
     repo = "bamtools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kIa407YgBpulh2koQQFK/RLmGEZvEvTnZyWKm+pngg=";
+    hash = "sha256-l2DmA4P1kPneTCL9YVACE6LcQHT0F+mufPyM69VkksE=";
   };
 
   nativeBuildInputs = [

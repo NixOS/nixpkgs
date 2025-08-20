@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "thatvegandev";
-    repo = "thokr";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0aryfx9qlnjdq3iq2d823c82fhkafvibmbz58g48b8ah5x5fv3ir";
   };
 
-  cargoHash = "sha256-BjUPXsErdLGmZaDIMaY+iV3XcoQHGNZbRmFJb/fblwU=";
+  cargoHash = "sha256-gEpmXyLmw6bX3enA3gNVtXNMlkQl6J/8AwJQSY0RtFw=";
 
   meta = with lib; {
     description = "Typing tui with visualized results and historical logging";

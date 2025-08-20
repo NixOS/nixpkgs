@@ -1,33 +1,30 @@
 /*
-  # Updating
 
-  To update the list of packages from ELPA,
+# Updating
 
-  1. Run `./update-elpa-devel`.
-  2. Check for evaluation errors:
-       # "../../../../../" points to the default.nix from root of Nixpkgs tree
-       env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaDevelPackages
-  3. Run `git commit -m "elpa-devel-packages $(date -Idate)" -- elpa-devel-generated.nix`
+To update the list of packages from ELPA,
 
-  ## Update from overlay
+1. Run `./update-elpa-devel`.
+2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
+     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaDevelPackages
+3. Run `git commit -m "elpa-devel-packages $(date -Idate)" -- elpa-devel-generated.nix`
 
-  Alternatively, run the following command:
+## Update from overlay
 
-  ./update-from-overlay
+Alternatively, run the following command:
 
-  It will update both melpa and elpa packages using
-  https://github.com/nix-community/emacs-overlay. It's almost instantaneous and
-  formats commits for you.
+./update-from-overlay
+
+It will update both melpa and elpa packages using
+https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+formats commits for you.
+
 */
 
-{
-  lib,
-  pkgs,
-  buildPackages,
-}:
+{ lib, pkgs, buildPackages }:
 
-self:
-let
+self: let
 
   inherit (import ./lib-override-helper.nix pkgs lib)
     markBroken
@@ -36,41 +33,26 @@ let
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
 
-  generateElpa = lib.makeOverridable (
-    {
-      generated ? ./elpa-devel-generated.nix,
-    }:
-    let
+  generateElpa = lib.makeOverridable ({
+    generated ? ./elpa-devel-generated.nix
+  }: let
 
-      imported = import generated {
-        callPackage =
-          pkgs: args:
-          self.callPackage pkgs (
-            args
-            // {
-              inherit fetchurl;
-            }
-          );
-      };
+    imported = import generated {
+      callPackage = pkgs: args: self.callPackage pkgs (args // {
+        inherit fetchurl;
+      });
+    };
 
-      super = imported;
+    super = imported;
 
-      commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
+    commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
-      overrides = self: super: {
-        # keep-sorted start block=yes newline_separated=yes
-        # keep-sorted end
-      };
+    overrides = self: super: {
+    };
 
-      elpaDevelPackages =
-        let
-          super' = super // (commonOverrides self super);
-        in
-        super' // (overrides self super');
+    elpaDevelPackages =
+      let super' = super // (commonOverrides self super); in super' // (overrides self super');
 
-    in
-    elpaDevelPackages
-  );
+  in elpaDevelPackages);
 
-in
-generateElpa { }
+in generateElpa { }

@@ -23,52 +23,37 @@
   xdg-utils,
 
   nix-update-script,
-  withGraphics ? false,
 }:
 let
-  rpathLibs = [
-    expat
-    fontconfig
-    freetype
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXxf86vm
-    xorg.libxcb
-    libxkbcommon
-    wayland
-  ];
+  rpathLibs =
+    [
+      expat
+      fontconfig
+      freetype
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXxf86vm
+      xorg.libxcb
+      libxkbcommon
+      wayland
+    ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.15.1" + lib.optionalString withGraphics "-graphics";
+  version = "0.15.0";
 
-  src =
-    # by default we want the official package
-    if !withGraphics then
-      fetchFromGitHub {
-        owner = "alacritty";
-        repo = "alacritty";
-        tag = "v${version}";
-        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
-      }
-    # optionally we want to build the sixels feature fork
-    else
-      fetchFromGitHub {
-        owner = "ayosec";
-        repo = "alacritty";
-        tag = "v${version}";
-        hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
-      };
+  src = fetchFromGitHub {
+    owner = "alacritty";
+    repo = "alacritty";
+    tag = "v${version}";
+    hash = "sha256-CAxf0ltvYXYTdjQmLQnRwRRJUBgABbHSB8DxfAbgBdo=";
+  };
 
-  cargoHash =
-    if !withGraphics then
-      "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="
-    else
-      "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
+  cargoHash = "sha256-pVwPo9O3ortTtVzZn1p1grFGLBA2gVTOatdNFqNQ5zc=";
 
   nativeBuildInputs = [
     cmake
@@ -142,16 +127,16 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       Br1ght0ne
       rvdp
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };
 }

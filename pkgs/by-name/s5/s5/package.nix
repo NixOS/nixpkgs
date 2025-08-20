@@ -10,14 +10,14 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
-    repo = "s5";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-QQMnzDRWdW0awwNx2vqtzrOW9Ua7EmJ9YFznQoK33J0=";
   };
 
   vendorHash = "sha256-axcZ4XzgsPVU9at/g3WS8Hv92P2hmZRb+tUfw+h9iH0=";
 
-  subPackages = [ "cmd/s5" ];
+  subPackages = [ "cmd/${pname}" ];
 
   ldflags = [
     "-X main.version=v${version}"
@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Cipher/decipher text within a file";
+    description = "cipher/decipher text within a file";
     mainProgram = "s5";
     homepage = "https://github.com/mvisonneau/s5";
     license = licenses.asl20;

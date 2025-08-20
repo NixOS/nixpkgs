@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "ixia";
-  version = "2.0.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "ixia";
     tag = version;
-    hash = "sha256-8STtLL63V+XnDqDNZOx7X9mkjUu176SSyQOL55LXFz0=";
+    hash = "sha256-lsov5AIT5uRf9nmS8ZsFmInKUFAxUATTbpfhV1fabhA=";
   };
 
-  build-system = [ hatchling ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ poetry-core ];
   pythonImportsCheck = [ "ixia" ];
 
   meta = {

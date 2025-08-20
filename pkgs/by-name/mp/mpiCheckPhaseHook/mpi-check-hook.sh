@@ -55,21 +55,19 @@ setupMpiCheck() {
       # The solution is to use a preset cpu topology file and disable ucx model.
 
       # Disable sysfs cpu topology directory discovery.
-      export HWLOC_XMLFILE="@topology@"
+      export PRTE_MCA_hwloc_use_topo_file="@topology@"
       # Use the network model ob1 instead of ucx.
       export OMPI_MCA_pml=ob1
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox
-      export HYDRA_IFACE="@iface@"
+      export HYDRA_IFACE=lo
       # Disable sysfs cpu topology directory discovery.
       export HWLOC_XMLFILE="@topology@"
       ;;
     MVAPICH)
       # Disable CPU pinning
       export MV2_ENABLE_AFFINITY=0
-      # Disable sysfs cpu topology directory discovery.
-      export HWLOC_XMLFILE="@topology@"
       ;;
   esac
 

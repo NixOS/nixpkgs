@@ -1,36 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
-}:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, testers, podman-tui }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "podman-tui";
-  version = "1.7.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WNaHpr5Ujq2xiA0LJV7KHRT3qGHojYex4LZhiFTGusk=";
+    rev = "v${version}";
+    hash = "sha256-3AgPt7dRZaHrM4/y35Z5elBFq1b2ZhvwBd4CKNBbgTk=";
   };
 
   vendorHash = null;
 
   env.CGO_ENABLED = 0;
 
-  tags = [
-    "containers_image_openpgp"
-    "remote"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
+  tags = [ "containers_image_openpgp" "remote" ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
+
+  preCheck = ''
+    export USER="$(whoami)"
+    export HOME="$(mktemp -d)"
+  '';
 
   checkFlags =
     let
@@ -43,9 +36,9 @@ buildGoModule (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = podman-tui;
     command = "HOME=$(mktemp -d) podman-tui version";
-    version = "v${finalAttrs.version}";
+    version = "v${version}";
   };
 
   meta = {
@@ -55,4 +48,4 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "podman-tui";
   };
-})
+}

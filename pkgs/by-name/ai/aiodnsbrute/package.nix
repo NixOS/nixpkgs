@@ -7,20 +7,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "aiodnsbrute";
   version = "0.3.3";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "blark";
-    repo = "aiodnsbrute";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-cEpk71VoQJZfKeAZummkk7yjtXKSMndgo0VleYiMlWE=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiodns
     click
     tqdm
@@ -34,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     "aiodnsbrute.cli"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "DNS brute force utility";
     mainProgram = "aiodnsbrute";
     homepage = "https://github.com/blark/aiodnsbrute";
     changelog = "https://github.com/blark/aiodnsbrute/releases/tag/v${version}";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
   };
 }

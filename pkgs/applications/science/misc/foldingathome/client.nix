@@ -1,27 +1,26 @@
-{
-  lib,
-  buildFHSEnv,
-  fetchFromGitHub,
-  ocl-icd,
-  openssl,
-  re2,
-  libevent,
-  git,
-  zlib,
-  expat,
-  scons,
-  stdenv,
-  extraPkgs ? [ ],
+{ lib
+, buildFHSEnv
+, fetchFromGitHub
+, ocl-icd
+, openssl
+, re2
+, libevent
+, git
+, zlib
+, expat
+, scons
+, stdenv
+, extraPkgs ? [ ]
 }:
 let
   pname = "fah-client";
-  version = "8.4.9";
+  version = "8.3.18";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    sha256 = "sha256-xApE5m8YyIFRJLQYeboWelWukuuIjHNZxPDyq0RzSL4=";
+    sha256 = "sha256-BQNomjz6Bhod3FOC5iICwt1rPrZgIxGQ08yspSvAnJc=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -31,15 +30,10 @@ let
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      sha256 = "sha256-PewXhmkTru2yJhMkenbn7pcmVsa7eomjrMvs1PUGph8=";
+      sha256 = "sha256-lqpC1fAMFb8iX02daVre/pE0c7DkwswlFigJS3ZGEjM=";
     };
 
-    nativeBuildInputs = [
-      scons
-      re2
-      libevent
-      git
-    ];
+    nativeBuildInputs = [ scons re2 libevent git ];
 
     buildInputs = [ openssl ];
 
@@ -74,15 +68,7 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  targetPkgs =
-    _:
-    [
-      fah-client
-      ocl-icd
-      zlib
-      expat
-    ]
-    ++ extraPkgs;
+  targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
 
   runScript = "/bin/fah-client";
 

@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.bazarr;
 in
@@ -13,12 +8,6 @@ in
       enable = lib.mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
       package = lib.mkPackageOption pkgs "bazarr" { };
-
-      dataDir = lib.mkOption {
-        type = lib.types.str;
-        default = "/var/lib/bazarr";
-        description = "The directory where Bazarr stores its data files.";
-      };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
@@ -47,24 +36,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.settings."10-bazarr".${cfg.dataDir}.d = {
-      inherit (cfg) user group;
-      mode = "0700";
-    };
-
     systemd.services.bazarr = {
       description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = {
+      serviceConfig = rec {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = "bazarr";
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
           ${cfg.package}/bin/bazarr \
-            --config '${cfg.dataDir}' \
+            --config '/var/lib/${StateDirectory}' \
             --port ${toString cfg.listenPort} \
             --no-update True
         '';
@@ -82,12 +67,12 @@ in
       bazarr = {
         isSystemUser = true;
         group = cfg.group;
-        home = cfg.dataDir;
+        home = "/var/lib/${config.systemd.services.bazarr.serviceConfig.StateDirectory}";
       };
     };
 
     users.groups = lib.mkIf (cfg.group == "bazarr") {
-      bazarr = { };
+      bazarr = {};
     };
   };
 }

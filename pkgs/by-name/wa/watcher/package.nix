@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watcher";
-  version = "0.13.6";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "e-dant";
     repo = "watcher";
     tag = version;
-    hash = "sha256-mcnItyXjU4ylNvM6QLlmUDybhwdxi7D6e3z8saZubMY=";
+    hash = "sha256-PpDeZBOdWJewZAyE1J1+IF8TxlkPXUuA9TDpQqtG8I4=";
   };
 
   nativeBuildInputs = [
@@ -25,10 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/e-dant/watcher";
     changelog = "https://github.com/e-dant/watcher/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      gaelreyrol
-      matthiasbeyer
-    ];
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "tw";
     platforms = lib.platforms.all;
   };

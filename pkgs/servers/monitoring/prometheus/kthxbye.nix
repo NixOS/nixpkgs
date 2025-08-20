@@ -10,7 +10,7 @@ buildGoModule rec {
   pname = "kthxbye";
   version = "0.16";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "prymitive";
     repo = "kthxbye";
     rev = "v${version}";

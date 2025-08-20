@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   name = "regal";
-  version = "0.34.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "StyraInc";
     repo = "regal";
     rev = "v${version}";
-    hash = "sha256-gdoQ+u9YbwTq28b3gYsNA0SxYFigeKK2JUd0paz8WYQ=";
+    hash = "sha256-sr+tGfKDSgJ5SiHihJ/aMAn6AnAC8bEb838+xYdFosc=";
   };
 
-  vendorHash = "sha256-FycDMCfvpUkW7KcTLMUBOjbU4JnKCJrWQalNKSY1RkM=";
+  vendorHash = "sha256-6JheW6JHkAidZda7WWHSfEAuPYoBdli8wWHp2sX2r5Q=";
 
   ldflags = [
     "-s"

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,15 +17,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dlvfY2AMBvTl0j9YaT+u4CeWQGGihFD8AZaAK4/hUWU=";
   };
 
-  cargoHash = "sha256-+VVkrXvsqtizeVhfuO0U8ADfSkmovpT7DVwrz7QljU0=";
+  cargoHash = "sha256-SkvAtV613+ARk79dB2zRKoLjPgdzoEKQa3JrRw9qBkA=";
 
-  meta = {
-    description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
+  ];
+
+  meta = with lib; {
+    description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis 🐱";
     mainProgram = "mdbook-emojicodes";
     homepage = "https://github.com/blyxyas/mdbook-emojicodes";
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      blaggacao
       matthiasbeyer
     ];
   };

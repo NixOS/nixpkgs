@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       are used in workstations and PCs.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 })

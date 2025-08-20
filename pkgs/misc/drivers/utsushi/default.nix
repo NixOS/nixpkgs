@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
+  doInstallCheck = false;
 
   postInstall = lib.optionalString withNetworkScan ''
     ln -s ${utsushi-networkscan}/libexec/utsushi/networkscan $out/libexec/utsushi

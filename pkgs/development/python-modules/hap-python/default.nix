@@ -51,8 +51,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ optional-dependencies.QRCode;
+  ] ++ optional-dependencies.QRCode;
 
   disabledTestPaths = [
     # Disable tests requiring network access

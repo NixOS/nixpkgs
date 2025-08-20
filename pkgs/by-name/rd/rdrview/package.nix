@@ -6,18 +6,17 @@
   curl,
   libseccomp,
   installShellFiles,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rdrview";
-  version = "0.1.4";
+  version = "unstable-2021-05-30";
 
   src = fetchFromGitHub {
     owner = "eafer";
     repo = "rdrview";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wYeDtgfq6/W92WguPh9wiFaxR7CWSfLnfqTX1N7eT10=";
+    rev = "444ce3d6efd8989cd6ecfdc0560071b20e622636";
+    sha256 = "02VC8r8PdcAfMYB0/NtbPnhsWatpLQc4mW4TmSE1+zk=";
   };
 
   buildInputs = [
@@ -43,6 +42,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ djanatyn ];
     mainProgram = "rdrview";
   };
-
-  passthru.updateScript = nix-update-script { };
-})
+}

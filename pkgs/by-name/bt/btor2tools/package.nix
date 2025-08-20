@@ -3,12 +3,13 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "btor2tools";
-  version = "0-unstable-2024-08-07";
+  version = "unstable-2024-08-07";
 
   src = fetchFromGitHub {
     owner = "boolector";
@@ -44,13 +45,14 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  cmakeFlags = [
-    # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-  ];
+  cmakeFlags =
+    [
+      # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    ];
 
   meta = with lib; {
     description = "Generic parser and tool package for the BTOR2 format";

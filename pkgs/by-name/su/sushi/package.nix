@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/sushi";
     changelog = "https://gitlab.gnome.org/GNOME/sushi/-/blob/${version}/NEWS?ref_type=tags";
     description = "Quick previewer for Nautilus";
     mainProgram = "sushi";
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

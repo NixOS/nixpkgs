@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "badaix";
-    repo = "popl";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-AkqFRPK0tVdalL+iyMou0LIUkPkFnYYdSqwEbFbgzqI=";
   };
@@ -32,6 +32,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/badaix/popl";
     changelog = "https://github.com/badaix/popl/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
   };
 }

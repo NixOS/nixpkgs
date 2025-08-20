@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plum" ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTestPaths = [
     # tests enum.IntFlag behaviour which has been disallowed in python 3.11.6

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
-    repo = "html5-parser";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-0Qn+To/d3+HMx+KhhgJBEHVYPOfIeBnngBraY7r4uSs=";
   };
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html5_parser" ];
 
-  enabledTestPaths = [ "test/*.py" ];
+  pytestFlagsArray = [ "test/*.py" ];
 
   meta = with lib; {
     description = "Fast C based HTML 5 parsing for python";

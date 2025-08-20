@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.42";
+  version = "1.41";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     tag = "v${version}";
-    hash = "sha256-/xinm/Jz4JVmm0jioLAhkbBueZCM0ehgt4gsgE7hX6I=";
+    hash = "sha256-ViELR5pbGZc1vMxluHWBARuP6N031u+75WmJEYdckJo=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interactive command line interface to Borg Backup";
     homepage = "https://github.com/KenKundert/emborg";
-    changelog = "https://github.com/KenKundert/emborg/releases/tag/${src.tag}";
+    changelog = "https://github.com/KenKundert/emborg/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jpetrucciani ];
   };

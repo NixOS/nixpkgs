@@ -2,23 +2,20 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "proglog";
-  version = "0.1.12";
-  pyproject = true;
+  version = "0.1.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nh7gdHIcJ3uJt1wGEzbLjF8ofJKwQ++lYsz3hmzakxw=";
+    hash = "sha256-ZYwoycguTK6y8l9Ij/+c6s4i+NabFdDByG1kJ15N2rQ=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ tqdm ];
+  propagatedBuildInputs = [ tqdm ];
 
   meta = with lib; {
     description = "Logs and progress bars manager for Python";

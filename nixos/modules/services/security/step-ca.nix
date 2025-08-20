@@ -60,10 +60,7 @@ in
         '';
       };
       intermediatePasswordFile = lib.mkOption {
-        type = lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        };
+        type = lib.types.path;
         example = "/run/keys/smallstep-password";
         description = ''
           Path to the file containing the password for the intermediate
@@ -89,6 +86,17 @@ in
       );
     in
     {
+      assertions = [
+        {
+          assertion = !lib.isStorePath cfg.intermediatePasswordFile;
+          message = ''
+            <option>services.step-ca.intermediatePasswordFile</option> points to
+            a file in the Nix store. You should use a quoted absolute path to
+            prevent this.
+          '';
+        }
+      ];
+
       systemd.packages = [ cfg.package ];
 
       # configuration file indirection is needed to support reloading

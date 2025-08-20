@@ -27,12 +27,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tool that generates an AI-based risk score";
     homepage = "https://github.com/projectdiscovery/openrisk";
     changelog = "https://github.com/projectdiscovery/openrisk/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "openrisk";
   };
 }

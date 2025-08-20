@@ -1,6 +1,7 @@
 {
   lib,
   boost,
+  breakpad,
   ceres-solver,
   cgal,
   cmake,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boostWithZstd
+    breakpad
     ceres-solver
     cgal
     eigen

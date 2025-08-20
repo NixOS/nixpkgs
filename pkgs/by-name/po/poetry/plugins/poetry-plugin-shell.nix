@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  stdenv,
   pexpect,
   poetry,
   poetry-core,
@@ -10,7 +9,6 @@
   pytest-xdist,
   pytestCheckHook,
   shellingham,
-  darwin,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +38,6 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.ps
   ];
 
   meta = {

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   autoPatchelfHook,
+  darwin,
   graalvm-ce,
   makeWrapper,
   zlib,
@@ -33,18 +34,19 @@ stdenv.mkDerivation (
   {
     pname = product;
 
-    nativeBuildInputs = [
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ extraNativeBuildInputs;
+    nativeBuildInputs =
+      [ makeWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+      ++ extraNativeBuildInputs;
 
-    buildInputs = [
-      (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      zlib
-      libxcrypt-legacy # libcrypt.so.1 (default is .2 now)
-    ]
-    ++ extraBuildInputs;
+    buildInputs =
+      [
+        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+        zlib
+        libxcrypt-legacy # libcrypt.so.1 (default is .2 now)
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation
+      ++ extraBuildInputs;
 
     unpackPhase = ''
       runHook preUnpack
@@ -72,8 +74,7 @@ stdenv.mkDerivation (
         ./update.sh
         product
       ];
-    }
-    // (args.passhtru or { });
+    } // (args.passhtru or { });
 
     meta = (
       {
@@ -81,7 +82,7 @@ stdenv.mkDerivation (
           homepage
           license
           sourceProvenance
-          teams
+          maintainers
           platforms
           ;
         description = "High-Performance Polyglot VM (Product: ${product})";

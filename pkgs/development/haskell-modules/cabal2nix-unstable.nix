@@ -2,7 +2,7 @@
 {
   mkDerivation,
   aeson,
-  ansi-terminal,
+  ansi-wl-pprint,
   base,
   bytestring,
   Cabal,
@@ -23,7 +23,6 @@
   mtl,
   optparse-applicative,
   pretty,
-  prettyprinter,
   process,
   split,
   tasty,
@@ -35,17 +34,17 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "unstable-2025-06-14";
+  version = "unstable-2024-12-31";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/e9e2ebd9ab5c89c6cd55dd2c568dd46086f2addb.tar.gz";
-    sha256 = "0in0vab4vihamdhf0zs8y22dwm7h4fqzryq47cxb48cxg29rfz9y";
+    url = "https://github.com/NixOS/cabal2nix/archive/e290b906f056dd1414ede71b4bb6375be2d0aa5d.tar.gz";
+    sha256 = "0x94w4dfjfxp3f5h7w5738znkyb8barzjki0xsf94asiffiqsgxn";
   };
   postUnpack = "sourceRoot+=/cabal2nix; echo source root reset to $sourceRoot";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     aeson
-    ansi-terminal
+    ansi-wl-pprint
     base
     bytestring
     Cabal
@@ -61,7 +60,6 @@ mkDerivation {
     lens
     optparse-applicative
     pretty
-    prettyprinter
     process
     split
     text

@@ -31,14 +31,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    hidapi
-  ]
-  ++ lib.optionals withExamples [
-    SDL2
-    glew
-    libGL
-  ];
+  buildInputs =
+    [
+      hidapi
+    ]
+    ++ lib.optionals withExamples [
+      SDL2
+      glew
+      libGL
+    ];
 
   cmakeFlags = [
     "-DBUILD_BOTH_STATIC_SHARED_LIBS=ON"

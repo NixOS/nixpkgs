@@ -8,15 +8,15 @@
   withFDT ? null,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "opensbi";
-  version = "1.6";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "opensbi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-X3j+4hdNDq36O/vFdlnd/QvDVIkXtvFbheFaZwf4GQY=";
+    rev = "v${version}";
+    hash = "sha256-qb3orbmZJtesIBj9F2OX+BhrlctymZA1ZIbV/GVa0lU=";
   };
 
   postPatch = ''
@@ -29,26 +29,27 @@ stdenv.mkDerivation (finalAttrs: {
     "I=$(out)"
   ];
 
-  makeFlags = [
-    "PLATFORM=${withPlatform}"
-  ]
-  ++ lib.optionals (withPayload != null) [
-    "FW_PAYLOAD_PATH=${withPayload}"
-  ]
-  ++ lib.optionals (withFDT != null) [
-    "FW_FDT_PATH=${withFDT}"
-  ];
+  makeFlags =
+    [
+      "PLATFORM=${withPlatform}"
+    ]
+    ++ lib.optionals (withPayload != null) [
+      "FW_PAYLOAD_PATH=${withPayload}"
+    ]
+    ++ lib.optionals (withFDT != null) [
+      "FW_FDT_PATH=${withFDT}"
+    ];
 
   enableParallelBuilding = true;
 
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     description = "RISC-V Open Source Supervisor Binary Interface";
     homepage = "https://github.com/riscv-software-src/opensbi";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
       ius
       nickcao
       zhaofengli
@@ -58,4 +59,4 @@ stdenv.mkDerivation (finalAttrs: {
       "riscv32-linux"
     ];
   };
-})
+}

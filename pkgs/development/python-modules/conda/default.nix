@@ -26,9 +26,8 @@
   defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
 }:
 buildPythonPackage rec {
-  __structuredAttrs = true;
   pname = "conda";
-  version = "25.5.1";
+  version = "24.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     tag = version;
-    hash = "sha256-BHy0t+5jz1WdSElCQBgFh5VJC3iIYelS01iQeQByr+0=";
+    hash = "sha256-e+C+tSUdSGyotuZzkOuV0e0hOj+MZRuq1fHzsu3LERQ=";
   };
 
   build-system = [
@@ -64,17 +63,9 @@ buildPythonPackage rec {
   patches = [ ./0001-conda_exe.patch ];
 
   makeWrapperArgs = [
-    "--set"
-    "CONDA_EXE"
-    "${placeholder "out"}/bin/conda"
-
-    "--set-default"
-    "CONDA_ENVS_PATH"
-    defaultEnvPath
-
-    "--set-default"
-    "CONDA_PKGS_DIRS"
-    defaultPkgPath
+    "--set CONDA_EXE ${placeholder "out"}/bin/conda"
+    ''--set-default CONDA_ENVS_PATH "${defaultEnvPath}"''
+    ''--set-default CONDA_PKGS_DIRS "${defaultPkgPath}"''
   ];
 
   pythonImportsCheck = [ "conda" ];

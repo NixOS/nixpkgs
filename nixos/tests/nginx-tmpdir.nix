@@ -1,8 +1,7 @@
 let
   dst-dir = "/run/nginx-test-tmpdir-uploads";
 in
-{ ... }:
-{
+import ./make-test-python.nix {
   name = "nginx-tmpdir";
 
   nodes.machine =

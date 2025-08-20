@@ -14,7 +14,7 @@ let
     types
     ;
 
-  cfg = config.services.bird;
+  cfg = config.services.bird2;
   caps = [
     "CAP_NET_ADMIN"
     "CAP_NET_BIND_SERVICE"
@@ -24,9 +24,8 @@ in
 {
   ###### interface
   options = {
-    services.bird = {
+    services.bird2 = {
       enable = mkEnableOption "BIRD Internet Routing Daemon";
-      package = lib.mkPackageOption pkgs "bird3" { };
       config = mkOption {
         type = types.lines;
         description = ''
@@ -38,7 +37,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether bird should be automatically reloaded when the configuration changes.
+          Whether bird2 should be automatically reloaded when the configuration changes.
         '';
       };
       checkConfig = mkOption {
@@ -59,7 +58,7 @@ in
         '';
         description = ''
           Commands to execute before the config file check. The file to be checked will be
-          available as `bird.conf` in the current directory.
+          available as `bird2.conf` in the current directory.
 
           Files created with this option will not be available at service runtime, only during
           build time checking.
@@ -69,39 +68,36 @@ in
   };
 
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "bird2" ]
-      "Use services.bird instead. bird3 is the new default bird package. You can choose to remain with bird2 by setting the service.bird.package option."
-    )
-    (lib.mkRemovedOptionModule [ "services" "bird6" ] "Use services.bird instead")
+    (lib.mkRemovedOptionModule [ "services" "bird" ] "Use services.bird2 instead")
+    (lib.mkRemovedOptionModule [ "services" "bird6" ] "Use services.bird2 instead")
   ];
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.bird ];
 
-    environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
-      name = "bird";
+    environment.etc."bird/bird2.conf".source = pkgs.writeTextFile {
+      name = "bird2";
       text = cfg.config;
-      derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
       checkPhase = optionalString cfg.checkConfig ''
-        ln -s $out bird.conf
+        ln -s $out bird2.conf
         ${cfg.preCheckConfig}
-        bird -d -p -c bird.conf
+        ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
       '';
     };
 
-    systemd.services.bird = {
+    systemd.services.bird2 = {
       description = "BIRD Internet Routing Daemon";
       wantedBy = [ "multi-user.target" ];
-      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
+      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird2.conf".source;
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
-        User = "bird";
-        Group = "bird";
-        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
-        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
-        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
+        User = "bird2";
+        Group = "bird2";
+        ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf";
+        ExecReload = "${pkgs.bird}/bin/birdc configure";
+        ExecStop = "${pkgs.bird}/bin/birdc down";
         RuntimeDirectory = "bird";
         CapabilityBoundingSet = caps;
         AmbientCapabilities = caps;
@@ -116,16 +112,12 @@ in
       };
     };
     users = {
-      users.bird = {
+      users.bird2 = {
         description = "BIRD Internet Routing Daemon user";
-        group = "bird";
+        group = "bird2";
         isSystemUser = true;
       };
-      groups.bird = { };
+      groups.bird2 = { };
     };
-  };
-
-  meta = {
-    maintainers = with lib.maintainers; [ herbetom ];
   };
 }

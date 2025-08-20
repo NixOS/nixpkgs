@@ -2,39 +2,37 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "atlantis";
-  version = "0.35.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-xYj6qu5bXpryuh2vqtYF+8HP/JRM5Cc8ctT+1S1gS2Q=";
+    rev = "v${version}";
+    hash = "sha256-7D7msKDnHym3uiMJur2kCRf6MurwkMEKI+aYcwqOVX0=";
   };
-
   ldflags = [
-    "-X=main.version=${finalAttrs.version}"
+    "-X=main.version=${version}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-ac2IGN+wtDAXei1uxCIZQGOmwJ3+AhIX2qq0RMqO0G8=";
+  vendorHash = "sha256-wPsEE6sR1GDD3Npdcf/JmeZc451+x9UBE8+DwXkj/qE=";
 
   subPackages = [ "." ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/atlantis";
-  versionCheckProgramArg = "version";
+  installCheckPhase = ''
+    $out/bin/atlantis version | grep ${version} > /dev/null
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/runatlantis/atlantis";
     description = "Terraform Pull Request Automation";
     mainProgram = "atlantis";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jpotier ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jpotier ];
   };
-})
+}

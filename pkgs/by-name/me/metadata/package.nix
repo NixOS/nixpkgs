@@ -9,7 +9,7 @@
   installShellFiles,
   asciidoc,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "metadata";
   version = "0.1.9";
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ugirYg3l+zIfKAqp2smLgG99mX9tsy9rmGe6lFAwx5o=";
   };
 
-  cargoHash = "sha256-CqPRhfhTAEXTXRAJ9T5gQZx5jAQmJXYPbfQmyXkO6Sk=";
+  cargoHash = "sha256-OMm39sgbq2wTRJTVoCf5imJe3hmf+Djq9w9tzKBrkIM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ clevor ];
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";

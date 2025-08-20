@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   popt,
   mandoc,
@@ -47,7 +48,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rhboot/efivar";
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
-    # See https://github.com/NixOS/nixpkgs/issues/388309
-    broken = stdenv.hostPlatform.is32bit;
   };
 }

@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://liblas.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ michelk ];
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ lib.maintainers.michelk ];
   };
 }

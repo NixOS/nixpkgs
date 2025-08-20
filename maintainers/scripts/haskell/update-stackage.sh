@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq git gnused gnugrep -I nixpkgs=.
+#! nix-shell -i bash -p nix curl jq git gnused gnugrep -I nixpkgs=.
 # shellcheck shell=bash
 
 set -eu -o pipefail
@@ -8,7 +8,7 @@ set -eu -o pipefail
 # (should be capitalized like the display name)
 SOLVER=LTS
 # Stackage solver verson, if any. Use latest if empty
-VERSION=
+VERSION=22
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
 readonly VERSION
@@ -46,7 +46,7 @@ sed -r \
     -e '/^with-compiler:/d' \
     -e '/installed$/d' \
     -e '/^$/d' \
-    < "${tmpfile}" | LC_ALL=C.UTF-8 sort --ignore-case >"${tmpfile_new}"
+    < "${tmpfile}" | sort --ignore-case >"${tmpfile_new}"
 
 cat > $stackage_config << EOF
 # Stackage $version

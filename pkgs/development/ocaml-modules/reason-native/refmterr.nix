@@ -2,7 +2,6 @@
   lib,
   buildDunePackage,
   atdgen,
-  atdgen-runtime,
   re,
   reason,
   pastel,
@@ -15,17 +14,13 @@ buildDunePackage {
   pname = "refmterr";
   version = "3.3.0-unstable-2024-05-07";
 
-  postPatch = ''
-    substituteInPlace src/refmterr/lib/dune --replace-warn 'atdgen re' 'atdgen-runtime re'
-  '';
-
   nativeBuildInputs = [
     atdgen
     reason
   ];
 
   propagatedBuildInputs = [
-    atdgen-runtime
+    atdgen
     re
     pastel
   ];

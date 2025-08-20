@@ -7,7 +7,7 @@
   # build-system
   flit-core,
 
-  # dependencies
+  # dependenices
   progress,
   pyserial,
 
@@ -50,10 +50,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   meta = with lib; {
     description = "Flash firmware to STM32 microcontrollers in Python";

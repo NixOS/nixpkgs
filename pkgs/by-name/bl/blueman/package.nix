@@ -20,7 +20,6 @@
   networkmanager,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  procps,
 }:
 
 let
@@ -29,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.4.6";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xxKnN/mFWQZoTAdNFm1PEMfxZTeK+WYSgYu//Pv45WY=";
+    sha256 = "sha256-vfxJkJdCy3koj4oR1vZmt1wnE7kcCF5tDdMpQ0eT/oU=";
   };
 
   nativeBuildInputs = [
@@ -45,17 +44,17 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    bluez
-    gtk3
-    pythonPackages.python
-    librsvg
-    adwaita-icon-theme
-    networkmanager
-    procps
-  ]
-  ++ pythonPath
-  ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs =
+    [
+      bluez
+      gtk3
+      pythonPackages.python
+      librsvg
+      adwaita-icon-theme
+      networkmanager
+    ]
+    ++ pythonPath
+    ++ lib.optional withPulseAudio libpulseaudio;
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
@@ -93,12 +92,12 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/blueman-project/blueman";
     description = "GTK-based Bluetooth Manager";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

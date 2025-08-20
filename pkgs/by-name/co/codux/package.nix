@@ -6,11 +6,11 @@
 
 let
   pname = "codux";
-  version = "15.42.0";
+  version = "15.41.0";
 
   src = fetchurl {
     url = "https://github.com/wixplosives/codux-versions/releases/download/${version}/Codux-${version}.x86_64.AppImage";
-    hash = "sha256-rD0yXZAEUcPtxWlWuZD77gjw6JlcUvBsaDYGj+NgLss=";
+    hash = "sha256-l1Z4jcbsTdzn4kFDcAGENAuewIThP2ENB/fbG7XerdY=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -20,17 +20,17 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/codux.desktop -t $out/share/applications
+    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
-    substituteInPlace $out/share/applications/codux.desktop  --replace 'Exec=AppRun' 'Exec=codux'
+    substituteInPlace $out/share/applications/${pname}.desktop  --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visual IDE for React";
     homepage = "https://www.codux.com";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       dit7ya
       kashw2
     ];

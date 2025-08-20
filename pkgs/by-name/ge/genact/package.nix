@@ -12,12 +12,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "svenstaro";
-    repo = "genact";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-Rn9kJWutWKPj9cLu2ZJKITmC+I8/ikhCAoIp00Yg6ZA=";
   };
 
-  cargoHash = "sha256-Ttg9stfiIYCXk35+GWdGOzQrM/aYZPZK+e9y+zw1ZXQ=";
+  cargoHash = "sha256-kmXtwS5pCLEq5dbNHtWYGzDKjOUlVlr5xippVd2wl8k=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/genact --print-completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "genact";
   };
 }

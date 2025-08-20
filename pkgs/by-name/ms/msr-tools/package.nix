@@ -1,25 +1,29 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
+  fetchurl,
+  unzip,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "msr-tools";
-  version = "1.3-unstable-2022-08-05";
+  version = "1.3";
 
-  src = fetchFromGitHub {
-    owner = "intel";
-    repo = "msr-tools";
-    rev = "7d78c80d66463ac598bcc8bf1dc260418788dfda";
-    hash = "sha256-p+bfS1Fsz9MqPLmiVD8d+93oeUxxU2raKdRY7pThlzk=";
+  src = fetchurl {
+    url = "https://01.org/sites/default/files/downloads/msr-tools/${pname}-${version}.zip";
+    sha256 = "07hxmddg0l31kjfmaq84ni142lbbvgq6391r8bd79wpm819pnigr";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ unzip ];
+
+  preInstall = ''
+    mkdir -p $out/bin
+    substituteInPlace Makefile \
+      --replace /usr/sbin $out/bin
+  '';
 
   meta = with lib; {
-    description = "Tools to read/write from/to MSR CPU registers on Linux";
+    description = "Tool to read/write from/to MSR CPU registers on Linux";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];

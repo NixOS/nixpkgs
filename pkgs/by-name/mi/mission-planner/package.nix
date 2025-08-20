@@ -34,17 +34,7 @@ stdenv.mkDerivation rec {
     mono
     unzip
   ];
-
-  # zip has no outer directory, so make one and unpack there
-  unpackPhase = ''
-    runHook preUnpack
-
-    mkdir -p source
-    cd source
-    unzip -q $src
-
-    runHook postUnpack
-  '';
+  sourceRoot = ".";
 
   AOT_FILES = [
     "MissionPlanner.exe"

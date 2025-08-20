@@ -7,15 +7,15 @@
   remind,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wyrd";
-  version = "1.7.4";
+  version = "1.7.1";
 
   src = fetchFromGitLab {
     owner = "wyrd-calendar";
     repo = "wyrd";
-    tag = finalAttrs.version;
-    hash = "sha256-9HCwc4yrBi0D+fv7vOPstxN1tqqNyGRgpkce1uLVxTg=";
+    tag = version;
+    hash = "sha256-RwGzXJLoCWRGgHf1rayBgkZuRwA1TcYNfN/h1rhJC+8=";
   };
 
   strictDeps = true;
@@ -28,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ocamlPackages.camlp-streams
     ocamlPackages.curses
     ocamlPackages.yojson
     remind
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ remind ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
@@ -54,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/wyrd-calendar/wyrd";
     downloadPage = "https://gitlab.com/wyrd-calendar/wyrd";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.prikhi ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.prikhi ];
+    platforms = platforms.unix;
     mainProgram = "wyrd";
   };
-})
+}

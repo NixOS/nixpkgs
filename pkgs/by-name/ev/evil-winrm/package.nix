@@ -1,19 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bundlerEnv,
-  bundlerUpdateScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bundlerEnv
 }:
-let
-  rubyEnv = bundlerEnv {
-    name = "evil-winrm";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
-  };
-in
+
 stdenv.mkDerivation rec {
   pname = "evil-winrm";
   version = "3.5";
@@ -25,12 +16,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
   };
 
+  env = bundlerEnv {
+    name = pname;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
+
   nativeBuildInputs = [
     makeWrapper
   ];
 
   buildInputs = [
-    rubyEnv.wrappedRuby
+    env.wrappedRuby
   ];
 
   installPhase = ''
@@ -38,13 +36,11 @@ stdenv.mkDerivation rec {
     cp evil-winrm.rb $out/bin/evil-winrm
   '';
 
-  passthru.updateScript = bundlerUpdateScript "evil-winrm";
-
-  meta = {
+  meta = with lib; {
     description = "WinRM shell for hacking/pentesting";
     mainProgram = "evil-winrm";
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
   };
 }

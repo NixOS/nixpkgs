@@ -23,8 +23,7 @@ rustPlatform.buildRustPackage rec {
     tag = "v${version}";
     hash = "sha256-W8IglZVvhFqn0TH1ZBGWERizCxCQ+C4SckYFLCzB3yc=";
   };
-
-  cargoHash = "sha256-iMzHoB1nfRDDSpHBrwKzW64fw7aYqh7uB14idbHTKH0=";
+  cargoHash = "sha256-gHrsdlmA8QxahrWIy6+5knLydVcSbEfS7+02fF1sSsA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {

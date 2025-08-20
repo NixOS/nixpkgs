@@ -4,7 +4,6 @@
   cmake,
   pkg-config,
   gobject-introspection,
-  vala,
   glib,
   libsndfile,
   zlib,
@@ -21,9 +20,9 @@
 let
   inherit
     (callPackage ./common-drv-attrs.nix {
-      version = "3.2.10";
+      version = "3.2.9";
       pname = "libmirage";
-      hash = "sha256-+T5Gu3VcprCkSJcq/kTySRnNI7nc+GbRtctLkzPhgK4=";
+      hash = "sha256-JBd+wHSZRyRW1SZsaAaRO2dNUFkpwRCr3s1f39KyWIs=";
     })
     pname
     version
@@ -49,7 +48,6 @@ stdenv.mkDerivation {
     pkg-config
     intltool
     gobject-introspection
-    vala
   ];
   propagatedBuildInputs = [
     pcre

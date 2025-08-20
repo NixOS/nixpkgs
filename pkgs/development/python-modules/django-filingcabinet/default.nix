@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -26,18 +25,16 @@
   camelot,
   pytesseract,
   pytest-factoryboy,
-  poppler-utils,
+  poppler_utils,
   pytest-playwright,
   playwright-driver,
-  pnpm,
+  pnpm_9,
   nodejs,
-  markdown,
-  nh3,
 }:
 
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-07-01";
+  version = "0-unstable-2024-11-15";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,13 +42,11 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "ff39722209acf70bc73fa7074c16ed8a787fceea";
-    hash = "sha256-9SrMWBTk7RQCbVPHOU5rB/pi286hb6UONaLmBOtx6X0=";
+    rev = "33c88e1ca9fccd0ea70f8b609580eeec486bda5c";
+    hash = "sha256-p7VJUiO7dhTR+S3/4QrmrQeJO6xGj7D7I8W3CBF+jo8=";
   };
 
   postPatch = ''
-    # zipstream is discontinued and outdated
-    # https://github.com/okfde/django-filingcabinet/issues/90
     substituteInPlace pyproject.toml \
       --replace-fail "zipstream" "zipstream-ng"
   '';
@@ -60,7 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   dependencies = [
@@ -73,8 +68,6 @@ buildPythonPackage rec {
     djangorestframework
     feedgen
     jsonschema
-    markdown
-    nh3
     pikepdf
     pycryptodome
     pypdf
@@ -92,10 +85,9 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
+    hash = "sha256-32kOhB2+37DD4hKXKep08iDxhXpasKPfcv9fkwISxeU=";
   };
 
   postBuild = ''
@@ -107,7 +99,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    poppler-utils
+    poppler_utils
     pytest-django
     pytest-factoryboy
     pytest-playwright
@@ -121,26 +113,18 @@ buildPythonPackage rec {
     # playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded
     "test_sidebar_hide"
     "test_show_search_bar"
-    # Unable to launch browser
-    "test_document_viewer"
   ];
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE="test_project.settings"
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 
-  # Playwright tests not supported on RiscV yet
-  doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
-
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";
     homepage = "https://github.com/okfde/django-filingcabinet";
-    changelog = "https://github.com/feincms/django-cabinet/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };

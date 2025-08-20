@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch,
   zlib,
 }:
 let
@@ -14,13 +15,21 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "breakpad";
 
-  version = "2024.02.16";
+  version = "2023.06.01";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yk+TSzjmAr9QMTYduKVe/Aizph/NNmSS385pvGJckiQ=";
+    hash = "sha256-8AkC/8oX4OWAcV21laJ0AeMRB9G04rFc6UJFy7Wus4A=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gcc-14-fixes.patch";
+      url = "https://github.com/google/breakpad/commit/898a997855168c0e6a689072fefba89246271a5d.patch";
+      hash = "sha256-OxodMx7XfKiD9j6b8oFvloslYagSSpQn7BPdpMVOoDY=";
+    })
+  ];
 
   buildInputs = [ zlib ];
 

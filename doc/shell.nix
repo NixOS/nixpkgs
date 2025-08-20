@@ -1,1 +1,7 @@
-(import ./default.nix { }).shell
+let
+  pkgs = import ../. {
+    config = { };
+    overlays = [ ];
+  };
+in
+pkgs.nixpkgs-manual.shell

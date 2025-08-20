@@ -9,8 +9,6 @@
   libGLU,
   libSM,
 
-  libXcomposite,
-  libXi,
   libXrender,
   libX11,
 
@@ -37,22 +35,14 @@ let
       "amd64"
     else
       throw "Unsupported system ${stdenv.hostPlatform.system} ";
-
-  libxml2' = libxml2.overrideAttrs rec {
-    version = "2.13.8";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-    };
-  };
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.6.10201";
+  version = "7.3.6.9796";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "sha256-LqkXOSfE52+7x+Y0DBjYzvVKO0meytLNHuS/ia88FbI=";
+    sha256 = "sha256-Wv2jPGN7LC5T32WdX3W1BfGYrcXTNWTI1Wv+PmD0gNM=";
   };
 
   nativeBuildInputs = [
@@ -73,12 +63,10 @@ mkDerivation rec {
     libGLU
     libSM
     libX11
-    libXcomposite
-    libXi
     libXrender
     libproxy
     libxcb
-    libxml2'
+    libxml2
     sqlite
     zlib
     alsa-lib
@@ -89,13 +77,9 @@ mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
-    runHook preUnpack
-
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     mkdir deb
     dpkg --fsys-tarfile $src | tar --extract -C deb
-
-    runHook postUnpack
   '';
 
   installPhase = ''

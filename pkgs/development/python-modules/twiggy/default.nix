@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "twiggy";
   version = "0.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Twiggy";

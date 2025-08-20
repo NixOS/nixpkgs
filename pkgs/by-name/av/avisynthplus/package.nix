@@ -4,42 +4,34 @@
   fetchFromGitHub,
   testers,
   cmake,
-  pkg-config,
   gitUpdater,
+  fetchpatch,
   libdevil,
-  soundtouch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avisynthplus";
-  version = "3.7.5";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "AviSynth";
     repo = "AviSynthPlus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RkEZWsAKZABtl+SbRLCjMqyQoi9ainbaI9hWlpO6Fwo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-v/AErktcegdrwxDbD0DZ/ZAxgaZmkZD+qxR3EPFsT08=";
   };
 
-  patchPhase = ''
-    substituteInPlace ./avs_core/avisynth_conf.h.in \
-        --replace-fail '@CORE_PLUGIN_INSTALL_PATH@' '/run/current-system/sw/lib'
-  '';
-
-  buildInputs = [
-    libdevil
-    soundtouch
+  patches = [
+    # Remove after next relaese
+    (fetchpatch {
+      name = "fix-absolute-path.patch";
+      url = "https://github.com/AviSynth/AviSynthPlus/commit/818983691e962ec3e590fcad07032f8a139a6b16.patch";
+      hash = "sha256-4yUOnjtOroX+bhNUKbYz/giKaslzYdwPaaJWNkrTBr4=";
+    })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  buildInputs = [ libdevil ];
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  nativeBuildInputs = [ cmake ];
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

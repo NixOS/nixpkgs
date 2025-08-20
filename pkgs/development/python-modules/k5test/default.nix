@@ -6,7 +6,7 @@
   krb5-c,
   pythonOlder,
   setuptools,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit findutils;
       krb5 = krb5-c;
       # krb5-config is in dev output

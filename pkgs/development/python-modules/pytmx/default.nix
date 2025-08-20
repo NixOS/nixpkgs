@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pytmx";
   version = "3.32";
 

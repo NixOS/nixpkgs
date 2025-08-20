@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   writeText,
-  replaceVars,
+  substituteAll,
   meson,
   pkg-config,
   ninja,
@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
     # fix FHS hardcoded paths
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       fcmatch = "${fontconfig}/bin/fc-match";
     })
   ];
@@ -126,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

@@ -12,14 +12,13 @@
   segno,
   setuptools-scm,
   syrupy,
-  tenacity,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "1.5.1";
-  pyproject = true;
+  version = "1.4.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "2Fake";
     repo = "devolo_plc_api";
     tag = "v${version}";
-    hash = "sha256-bmZcjvqZwVJzDsdtSbQvJpry2QSSuB6/jOTWG1+jyV4=";
+    hash = "sha256-EP99AswHmLO+8ZQAPjJyw/P9QqfDawy3AqyJR870Qms=";
   };
 
   postPatch = ''
@@ -35,13 +34,12 @@ buildPythonPackage rec {
       --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     httpx
     protobuf
     segno
-    tenacity
     zeroconf
   ];
 

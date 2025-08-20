@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "norouter";
-    repo = "norouter";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-EY/Yfyaz2DeQKHJ4awpQDbrVkse9crIZlLzfviPy3Tk=";
   };
@@ -34,7 +34,7 @@ buildGoModule rec {
     description = "Tool to handle unprivileged networking by using multiple loopback addresses";
     homepage = "https://github.com/norouter/norouter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ blaggacao ];
     mainProgram = "norouter";
   };
 }

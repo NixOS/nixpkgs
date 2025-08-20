@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jitsi/jigasi";
     license = licenses.asl20;
-    teams = [ teams.jitsi ];
+    maintainers = teams.jitsi.members;
     platforms = platforms.linux;
   };
 }

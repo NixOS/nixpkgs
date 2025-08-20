@@ -44,12 +44,6 @@ in
 
   zfs = incusTest {
     inherit lts pkgs system;
-    storageZfs = true;
-  };
-
-  appArmor = incusTest {
-    inherit lts pkgs system;
-    appArmor = true;
-    allTests = true;
+    storageLvm = true;
   };
 }

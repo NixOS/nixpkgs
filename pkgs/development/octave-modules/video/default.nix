@@ -9,13 +9,13 @@
 
 buildOctavePackage rec {
   pname = "video";
-  version = "2.1.3";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Andy1978";
     repo = "octave-video";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fn9LNfuS9dSStBfzBjRRkvP50JJ5K+Em02J9+cHqt6w=";
+    rev = version;
+    hash = "sha256-JFySAu/3lCnfuFMNGYPzX2MqhsRi1+IyJQBcKB9vCo0=";
   };
 
   nativeBuildInputs = [
@@ -26,13 +26,13 @@ buildOctavePackage rec {
     ffmpeg
   ];
 
-  meta = {
-    homepage = "https://gnu-octave.github.io/packages/video/";
-    license = with lib.licenses; [
+  meta = with lib; {
+    homepage = "https://octave.sourceforge.io/video/index.html";
+    license = with licenses; [
       gpl3Plus
       bsd3
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
   };
 }

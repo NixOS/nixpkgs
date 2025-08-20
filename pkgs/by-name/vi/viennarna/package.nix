@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  dlib,
   gsl,
   mpfr,
   perl,
@@ -11,20 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "viennarna";
-  version = "2.7.0";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_7_x/ViennaRNA-${version}.tar.gz";
-    hash = "sha256-mpn9aO04CJTe+01eaooocWKScAKM338W8KBdpujHFHM=";
+    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_5_x/ViennaRNA-${version}.tar.gz";
+    sha256 = "sha256-BUAEN88VWV4QsaJd9snEiFbzVhMPnR44D6iGa20n9Fc=";
   };
-
-  # use nixpkgs dlib sources instead of bundled ones
-  # using dlib-19.24.8 fixes the build with modern compilers (such as clang-19)
-  postPatch = ''
-    rm -rf ./src/dlib-19.24
-    cp -a ${dlib.src} ./src/dlib-19.24
-    find ./src/dlib-19.24 -type d -exec chmod +w {} \;
-  '';
 
   buildInputs = [
     gsl
@@ -38,11 +29,11 @@ stdenv.mkDerivation rec {
     "--with-kinwalker"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Prediction and comparison of RNA secondary structures";
     homepage = "https://www.tbi.univie.ac.at/RNA/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prusnak ];
-    platforms = lib.platforms.unix;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ prusnak ];
+    platforms = platforms.unix;
   };
 }

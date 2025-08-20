@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlitedict" ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = with lib; {
     description = "Persistent, thread-safe dict";

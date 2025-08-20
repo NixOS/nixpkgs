@@ -99,14 +99,15 @@ else
 
     strictDeps = true;
 
-    nativeBuildInputs = [
-      which
-      ocaml
-      ocamlbuild
-    ]
-    ++ lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
-      findlib
-    ];
+    nativeBuildInputs =
+      [
+        which
+        ocaml
+        ocamlbuild
+      ]
+      ++ lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
+        findlib
+      ];
 
     buildInputs = lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
       camlp-streams

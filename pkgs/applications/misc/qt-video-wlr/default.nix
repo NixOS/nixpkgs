@@ -24,7 +24,7 @@ let
       gst-plugins-ugly
     ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qt-video-wlr";
   version = "2023-07-22";
 

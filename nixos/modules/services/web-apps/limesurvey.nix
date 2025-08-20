@@ -336,8 +336,7 @@ in
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      }
-      // cfg.poolConfig;
+      } // cfg.poolConfig;
     };
     systemd.services.phpfpm-limesurvey.serviceConfig = {
       ExecStartPre = pkgs.writeShellScript "limesurvey-phpfpm-exec-pre" ''
@@ -414,7 +413,7 @@ in
     systemd.services.limesurvey-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
+      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       environment.DBENGINE = "${cfg.database.dbEngine}";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
@@ -444,7 +443,8 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
+      optional mysqlLocal "mysql.service"
+      ++ optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

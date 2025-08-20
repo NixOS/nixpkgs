@@ -26,11 +26,11 @@
 
 buildDunePackage rec {
   pname = "mrmime";
-  version = "0.7.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/mrmime/releases/download/v${version}/mrmime-${version}.tbz";
-    hash = "sha256-w23xtro9WgyLLwqdwfqLMN/ZDqwpvFcEvurbsqnsJLc=";
+    hash = "sha256-Dzsr7xPzu5RIzIdubF4OAAjHJY7CdBVnHRZxQbcCsBY=";
   };
 
   propagatedBuildInputs = [

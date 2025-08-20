@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://math.nist.gov/scimark2/download_c.html";
     license = lib.licenses.publicDomain;
     mainProgram = "scimark4";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
 })
+# TODO [ AndersonTorres ]: Java version

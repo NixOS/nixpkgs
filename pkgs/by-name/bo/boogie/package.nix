@@ -4,21 +4,20 @@
   fetchFromGitHub,
   z3,
   dotnetCorePackages,
-  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.5.5";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
-    tag = "v${version}";
-    hash = "sha256-OuNzxzcoWrDCmUfQNXEif5wIY+L5jql14231m7nNBe4=";
+    rev = "v${version}";
+    hash = "sha256-IWtYbb1IFB6DLIYYTP+q7q+h/0aqonxr/mWwf+83aRo=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.json;
 
@@ -43,6 +42,7 @@ buildDotnetModule rec {
 
   postFixup = ''
     ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
+    rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
   '';
 
   doInstallCheck = true;
@@ -50,11 +50,8 @@ buildDotnetModule rec {
     $out/bin/boogie ${./install-check-file.bpl}
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Intermediate verification language";
-    changelog = "https://github.com/boogie-org/boogie/releases/tag/${src.tag}";
     homepage = "https://github.com/boogie-org/boogie";
     longDescription = ''
       Boogie is an intermediate verification language (IVL), intended as a
@@ -62,9 +59,8 @@ buildDotnetModule rec {
 
       This derivation may be used as a vim plugin to provide syntax highlighting.
     '';
-    license = lib.licenses.mspl;
-    mainProgram = "boogie";
-    maintainers = with lib.maintainers; [ taktoa ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mspl;
+    maintainers = [ maintainers.taktoa ];
+    platforms = with platforms; (linux ++ darwin);
   };
 }

@@ -9,10 +9,8 @@
   makeDesktopItem,
   copyDesktopItems,
   testers,
-  z3,
-  cvc5,
+  git,
   key,
-  substitute,
 }:
 
 let
@@ -21,31 +19,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.12.3";
+  version = "2.12.2";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    tag = "KEY-${version}";
-    hash = "sha256-1pN0lmr/teVitpMIM9M9lSTkmnVcZwdAQay2pzgJDCk=";
+    tag = "KeY-${version}";
+    hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
   };
-
-  patches = [
-    # Remove linting framework, causes issues with the update script.
-    (substitute {
-      src = ./remove-eisop-checker.patch;
-      substitutions = [
-        "--subst-var-by"
-        "version"
-        version
-      ];
-    })
-  ];
 
   nativeBuildInputs = [
     jdk
     gradle
     makeWrapper
     copyDesktopItems
+    git
   ];
 
   desktopItems = [
@@ -67,7 +54,8 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # TODO: on update to 2.12.4+, try again
+  # tests are broken on darwin
+  # TODO: on update to 2.12.3+, restore to !stdenv.hostPlatform.isDarwin;
   # (currently some tests are failing)
   doCheck = false;
 
@@ -80,12 +68,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${lib.getExe jre} $out/bin/KeY \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          z3
-          cvc5
-        ]
-      } \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall

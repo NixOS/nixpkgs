@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sord";
-  version = "0.16.18";
+  version = "0.16.16";
 
   src = fetchFromGitHub {
     owner = "drobilla";
-    repo = "sord";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-cFobmmO2RHJdfCgTyGigzsdLpj7YF6U3r71i267Azks=";
+    hash = "sha256-GDs1m8KoEhJDdCf7kacQMZzCNPoZhESJds6KupQvOkU=";
   };
 
   outputs = [

@@ -1,55 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  libxml2,
-  findXMLCatalogs,
-  gettext,
-  python3,
-  ncurses,
-  libgcrypt,
-  cryptoSupport ? false,
-  pythonSupport ? libxml2.pythonSupport,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, libxml2
+, findXMLCatalogs
+, gettext
+, python
+, ncurses
+, libxcrypt
+, libgcrypt
+, cryptoSupport ? false
+, pythonSupport ? libxml2.pythonSupport
+, gnome
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
-  version = "1.1.43";
+  version = "1.1.42";
 
-  outputs = [
-    "bin"
-    "dev"
-    "out"
-    "doc"
-    "devdoc"
-  ]
-  ++ lib.optional pythonSupport "py";
+  outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wj1rODylr8I1sXERjpD1/2qifp/qMwMGUjGm1APwGDo=";
+    hash = "sha256-hcpiysDUH8d9P2Az2p32/XPSDqL8GLCjYJ/7QRDhuus=";
   };
-
-  patches = [
-    # Fix use-after-free with key data stored cross-RVT
-    # https://gitlab.gnome.org/GNOME/libxslt/-/issues/144
-    # Source: https://gitlab.gnome.org/GNOME/libxslt/-/merge_requests/77
-    ./77-Use-a-dedicated-node-type-to-maintain-the-list-of-cached-rv-ts.patch
-
-    # Fix type confusion in xmlNode.psvi between stylesheet and source nodes
-    # https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
-    # Fix heap-use-after-free in xmlFreeID caused by `atype` corruption
-    # https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
-    #
-    # Depends on unmerged libxml2 patch that breaks ABI.
-    #
-    # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxslt/chromium/new-unified-atype-extra.patch
-    ./new-unified-atype-extra.patch
-  ];
 
   strictDeps = true;
 
@@ -59,17 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libxml2.dev
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxml2.dev libxcrypt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gettext
-  ]
-  ++ lib.optionals pythonSupport [
+  ] ++ lib.optionals pythonSupport [
     libxml2.py
-    python3
+    python
     ncurses
-  ]
-  ++ lib.optionals cryptoSupport [
+  ] ++ lib.optionals cryptoSupport [
     libgcrypt
   ];
 
@@ -78,9 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
+    "--without-debug"
+    "--without-mem-debug"
+    "--without-debugger"
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
-    (lib.withFeature cryptoSupport "crypto")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+  ] ++ lib.optionals (!cryptoSupport) [
+    "--without-crypto"
   ];
 
   enableParallelBuilding = true;
@@ -88,11 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
-  ''
-  + lib.optionalString pythonSupport ''
+  '' + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python3.sitePackages} "$py"
+    moveToOutput ${python.sitePackages} "$py"
   '';
 
   passthru = {

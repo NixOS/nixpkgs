@@ -14,9 +14,9 @@
   scdoc,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.2.0";
+  version = "0.1.9";
 
   strictDeps = true;
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "adnano";
     repo = "wmenu";
-    tag = finalAttrs.version;
-    hash = "sha256-JkKA3MUfRLsZWgvDyiYdqb8u4nGSfboL6Ecy7poPW1k=";
+    rev = version;
+    hash = "sha256-TF5BvgThvTOqxyfz5Zt/Z1cqjFJwvla+dgdyvz7Zhrg=";
   };
 
   nativeBuildInputs = [
@@ -48,10 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/adnano/wmenu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      eken
-      sweiglbosker
-    ];
+    maintainers = with maintainers; [ eken ];
     mainProgram = "wmenu";
   };
-})
+}

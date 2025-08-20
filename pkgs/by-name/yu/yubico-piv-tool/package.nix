@@ -2,6 +2,7 @@
   lib,
   check,
   cmake,
+  darwin,
   fetchFromGitHub,
   gengetopt,
   help2man,
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.7.2";
+  version = "2.7.1";
 
   outputs = [
     "out"
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Yubico";
     repo = "yubico-piv-tool";
     tag = "yubico-piv-tool-${finalAttrs.version}";
-    hash = "sha256-1VLSlwwubxCYqdU1ueD2FXEqS5xKtHk4bsJAXOHCDKY=";
+    hash = "sha256-ow9SS7YGCZzSxds3WKsHx9/Vxloy9RqvDjpIBJUBSb0=";
   };
 
   postPatch = ''
@@ -46,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     zlib
-  ]
-  ++ lib.optionals (!withApplePCSC) [ pcsclite ];
+  ] ++ (if withApplePCSC then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
     (lib.cmakeBool "GENERATE_MAN_PAGES" true)

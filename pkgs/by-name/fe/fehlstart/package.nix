@@ -2,45 +2,39 @@
   lib,
   stdenv,
   pkg-config,
-  gtk3,
-  glib,
-  keybinder3,
-  fetchFromGitea,
+  gtk2,
+  keybinder,
+  fetchFromGitLab,
 }:
 
 stdenv.mkDerivation {
   pname = "fehlstart";
-  version = "0.5-unstable-2025-01-12";
+  version = "unstable-2016-05-23";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "chuvok";
+  src = fetchFromGitLab {
+    owner = "fehlstart";
     repo = "fehlstart";
-    rev = "cf08d6c3964da9abc8d1af0725894fef62352064";
-    hash = "sha256-qq0IhLzSvYnooPb4w+lno8P/tbedrDKTk27HGtQlp2I=";
+    rev = "9f4342d75ec5e2a46c13c99c34894bc275798441";
+    sha256 = "1rfzh7w6n2s9waprv7m1bhvqrk36a77ada7w655pqiwkhdj5q95i";
   };
 
   patches = [ ./use-nix-profiles.patch ];
-
-  strictDeps = true;
-
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
-    gtk3
-    keybinder3
+    gtk2
+    keybinder
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev glib}/include/gio-unix-2.0";
+  preConfigure = ''
+    export PREFIX=$out
+  '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  meta = {
+  meta = with lib; {
     description = "Small desktop application launcher with reasonable memory footprint";
-    homepage = "https://codeberg.org/Chuvok/fehlstart";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.mounium ];
-    platforms = lib.platforms.linux;
+    homepage = "https://gitlab.com/fehlstart/fehlstart";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.mounium ];
+    platforms = platforms.all;
     mainProgram = "fehlstart";
   };
 }

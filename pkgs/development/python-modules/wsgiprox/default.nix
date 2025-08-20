@@ -6,7 +6,7 @@
   certauth,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "wsgiprox";
   version = "1.5.2";
   format = "setuptools";

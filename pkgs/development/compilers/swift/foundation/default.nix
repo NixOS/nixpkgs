@@ -1,3 +1,8 @@
+# TODO: We already package the CoreFoundation component of Foundation in:
+#   pkgs/os-specific/darwin/swift-corelibs/corefoundation.nix
+# This is separate because the CF build is completely different and part of
+# stdenv. Merging the two was kept outside of the scope of Swift work.
+
 {
   lib,
   stdenv,
@@ -75,6 +80,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-foundation";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    teams = [ lib.teams.swift ];
+    maintainers = lib.teams.swift.members;
   };
 }

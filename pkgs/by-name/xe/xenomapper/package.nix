@@ -7,23 +7,15 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "xenomapper";
   version = "1.0.2";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "genomematt";
-    repo = "xenomapper";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [ statistics ];
-
-  pythonImportsCheck = [
-    "xenomapper.xenomapper"
-    "xenomapper.mappability"
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ statistics ];
 
   meta = with lib; {
     homepage = "https://github.com/genomematt/xenomapper";

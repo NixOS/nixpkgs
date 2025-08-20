@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchzip,
   fetchFromGitHub,
-  butler,
   electron,
   steam-run,
   makeWrapper,
@@ -13,9 +12,14 @@
 
 let
   version = "26.1.9";
+  butler = fetchzip {
+    url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
+    stripRoot = false;
+    hash = "sha256-jHni/5qf7xST6RRonP2EW8fJ6647jobzrnHe8VMx4IA=";
+  };
 
   itch-setup = fetchzip {
-    url = "https://broth.itch.zone/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
+    url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
     stripRoot = false;
     hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
@@ -36,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchzip {
-    url = "https://broth.itch.zone/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
     stripRoot = false;
     hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
   };
@@ -89,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags $out/share/itch/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set BROTH_USE_LOCAL butler,itch-setup \
-      --prefix PATH : ${butler}/bin/:${itch-setup}
+      --prefix PATH : ${butler}:${itch-setup}
   '';
 
   meta = {

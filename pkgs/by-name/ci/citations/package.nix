@@ -1,5 +1,6 @@
 {
   cargo,
+  darwin,
   desktop-file-utils,
   fetchFromGitLab,
   gettext,
@@ -23,19 +24,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.8.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-aJp9UrfRXAsnHFGgMTHGRgCvlPEa62r9/0hEp5YKRzE=";
+    hash = "sha256-WYy6cyPmyWL/11yHf+dRbcZGBfvVfELeTwKvpJMu5ns=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-ZoflXdou6S7CYFF5x1pB71Ur08X1W6wPaJIm1sYsI2w=";
+    hash = "sha256-SmKt3oPzeJRAFjgZvJubNCTsjhqCrGZfE1LfDQ8AxZA=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    gtksourceview5
-    libadwaita
-    poppler
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      gtksourceview5
+      libadwaita
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (
     lib.concatStringsSep " " [
@@ -89,8 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Manage your bibliographies using the BibTeX format";
     homepage = "https://apps.gnome.org/app/org.gnome.World.Citations";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
     mainProgram = "citations";
   };

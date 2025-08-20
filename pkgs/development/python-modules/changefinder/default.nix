@@ -34,7 +34,7 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "test/test.py" ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "changefinder" ];
 

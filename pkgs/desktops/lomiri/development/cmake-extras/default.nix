@@ -8,23 +8,23 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cmake-extras";
-  version = "1.8";
+  version = "1.7";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/cmake-extras";
-    tag = finalAttrs.version;
-    hash = "sha256-4KPk8GrpmrrwN6epmzGVh0fCBgP765xR3Im5mMmE9vw=";
+    rev = finalAttrs.version;
+    hash = "sha256-5bLMk21pSZkuU3jAGTnjPc9ZrvVZqMUWSfFgkTtkYLw=";
   };
 
   postPatch = ''
     # We have nothing to build here, no need to depend on a C compiler
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'project(cmake-extras' 'project(cmake-extras LANGUAGES NONE'
+      --replace 'project(cmake-extras' 'project(cmake-extras LANGUAGES NONE'
 
     # This is in a function that reverse dependencies use to determine where to install their files to
     substituteInPlace src/QmlPlugins/QmlPluginsConfig.cmake \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
@@ -40,12 +40,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     qtbase
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of add-ons for the CMake build tool";
-    homepage = "https://gitlab.com/ubports/development/core/cmake-extras";
-    changelog = "https://gitlab.com/ubports/development/core/cmake-extras/-/blob/${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.lomiri ];
-    platforms = lib.platforms.all;
+    homepage = "https://gitlab.com/ubports/development/core/cmake-extras/";
+    license = licenses.gpl3Only;
+    maintainers = teams.lomiri.members;
+    platforms = platforms.all;
   };
 })

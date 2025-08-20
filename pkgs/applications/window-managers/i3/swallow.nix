@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 

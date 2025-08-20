@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.56.0";
+  version = "4.55.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,14 +36,8 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
+    hash = "sha256:1y2sxzl9is3k1gmf9rvvxk9294dwbma1sh2ip56h7q1073346bv3";
   };
-
-  patches = [
-    # https://github.com/fonttools/fonttools/pull/3855
-    # FIXME: remove when merged
-    ./python-3.13.4.patch
-  ];
 
   build-system = [
     setuptools
@@ -74,24 +68,25 @@ buildPythonPackage rec {
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
-  nativeCheckInputs = [
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    pytest7CheckHook
-  ]
-  ++ lib.concatLists (
-    lib.attrVals (
-      [
-        "woff"
-        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-        "ufo"
-      ]
-      ++ lib.optionals (!skia-pathops.meta.broken) [
-        "pathops" # broken
-      ]
-      ++ [ "repacker" ]
-    ) optional-dependencies
-  );
+  nativeCheckInputs =
+    [
+      # test suite fails with pytest>=8.0.1
+      # https://github.com/fonttools/fonttools/issues/3458
+      pytest7CheckHook
+    ]
+    ++ lib.concatLists (
+      lib.attrVals (
+        [
+          "woff"
+          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+          "ufo"
+        ]
+        ++ lib.optionals (!skia-pathops.meta.broken) [
+          "pathops" # broken
+        ]
+        ++ [ "repacker" ]
+      ) optional-dependencies
+    );
 
   pythonImportsCheck = [ "fontTools" ];
 
@@ -124,7 +119,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

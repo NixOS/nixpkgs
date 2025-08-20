@@ -18,13 +18,7 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  sourceRoot = "source";
-
-  unpackPhase = ''
-    runHook preUnpack
-    unzip $src -d $sourceRoot
-    runHook postUnpack
-  '';
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall

@@ -1,15 +1,27 @@
 {
   lib,
   fetchFromGitHub,
+  fetchPypi,
   python3,
   installShellFiles,
-  nix-update-script,
 }:
 
 let
   py = python3.override {
     self = py;
     packageOverrides = self: super: {
+
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+
+        src = fetchPypi {
+          pname = "click";
+          inherit version;
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
+        };
+        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
+      });
+
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
         version = "0.10.0";
         src = oldAttrs.src.override {
@@ -19,29 +31,27 @@ let
         };
         doCheck = false;
       });
+
     };
   };
 in
+with py.pkgs;
 
-py.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.64.0";
-  pyproject = true;
+  version = "3.14.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
-    repo = "oci-cli";
-    tag = "v${version}";
-    hash = "sha256-ywLeU/qX3sJfVothJ/JSEdp3VEkRI9nXNcWHGuY+X84=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-yooEZuSIw2EMJVyT/Z/x4hJi8a1F674CtsMMGkMAYLg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with py.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with py.pkgs; [
+  propagatedBuildInputs = [
     arrow
     certifi
     click
@@ -58,20 +68,14 @@ py.pkgs.buildPythonApplication rec {
     terminaltables
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "PyYAML"
-    "cryptography"
-    "oci"
-    "prompt-toolkit"
-    "pyOpenSSL"
-    "terminaltables"
-  ];
-
-  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-  # when used in nix-shell.
-  postFixup = ''
-    rm $out/nix-support/propagated-build-inputs
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
+      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
+      --replace "PyYAML>=5.4,<6" "PyYAML" \
+      --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
+      --replace "terminaltables==3.1.0" "terminaltables" \
+      --replace "oci==2.78.0" "oci"
   '';
 
   postInstall = ''
@@ -92,13 +96,12 @@ py.pkgs.buildPythonApplication rec {
       --zsh oci.zsh
   '';
 
-  doCheck = true;
+  # https://github.com/oracle/oci-cli/issues/187
+  doCheck = false;
 
   pythonImportsCheck = [
-    "oci_cli"
+    " oci_cli "
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
@@ -107,9 +110,6 @@ py.pkgs.buildPythonApplication rec {
       asl20 # or
       upl
     ];
-    maintainers = with maintainers; [
-      ilian
-      FKouhai
-    ];
+    maintainers = with maintainers; [ ilian ];
   };
 }

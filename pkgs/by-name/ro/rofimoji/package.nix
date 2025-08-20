@@ -7,6 +7,7 @@
   waylandSupport ? true,
   x11Support ? true,
 
+  rofi,
   wl-clipboard,
   wtype,
   xdotool,
@@ -32,17 +33,19 @@ python3Packages.buildPythonApplication rec {
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = [
-    python3Packages.configargparse
-  ]
-  ++ lib.optionals waylandSupport [
-    wl-clipboard
-    wtype
-  ]
-  ++ lib.optionals x11Support [
-    xdotool
-    xsel
-  ];
+  propagatedBuildInputs =
+    [
+      python3Packages.configargparse
+      rofi
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+      wtype
+    ]
+    ++ lib.optionals x11Support [
+      xdotool
+      xsel
+    ];
 
   # The 'extractors' sub-module is used for development
   # and has additional dependencies.

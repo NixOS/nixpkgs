@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "d5h-foss";
-    repo = "grpc-interceptor";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-GJkVCslPXShJNDrqhFtCsAK5+VaG8qFJo0RQTsiMIFY=";
   };

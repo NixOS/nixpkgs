@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "1.1.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "lit26";
     repo = "finvizfinance";
     tag = "v${version}";
-    hash = "sha256-QVR0ig51EHdMVzg6wBDpvMGjPnmO2ZGBs2Q0SVxauik=";
+    hash = "sha256-HCxq8jCT3aHOXeYue7KP5sYzO6nJnB9Sy8gKGZpZHbc=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Finviz Finance information downloader";
     homepage = "https://github.com/lit26/finvizfinance";
-    changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
+    changelog = "https://github.com/lit26/finvizfinance/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ icyrockcom ];
   };

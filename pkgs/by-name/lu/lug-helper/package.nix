@@ -15,12 +15,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "lug-helper";
-  version = "4.2";
+  version = "3.6";
   src = fetchFromGitHub {
     owner = "starcitizen-lug";
     repo = "lug-helper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W8GwDXYHfGdruAMdBei53V5UPYE6yks0+FW48pARknY=";
+    hash = "sha256-k41aVNpgkrz06T33UOAzhj2EfJg+YoifYQoyxRQ9/hQ=";
   };
 
   buildInputs = [
@@ -62,8 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           unzip
           libnotify
         ]
-      } \
-      --prefix XDG_DATA_DIRS : "$out"
+      }
 
   '';
   passthru.updateScript = nix-update-script { };

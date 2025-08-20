@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
-    repo = "mari0";
+    repo = pname;
     rev = version;
     sha256 = "1zqaq4w599scsjvy1rsb21fd2r8j3srx9vym4ir9bh666dp36gxa";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "mari0";
-      exec = "mari0";
+      exec = pname;
       comment = "Crossover between Super Mario Bros. and Portal";
       desktopName = "mari0";
       genericName = "mari0";

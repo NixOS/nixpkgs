@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
-    repo = "extra-container";
+    repo = pname;
     rev = version;
     hash = "sha256-vgh3TqfkFdnPxREBedw4MQehIDc3N8YyxBOB45n+AvU=";
   };
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     " $out/bin/extra-container
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Run declarative containers without full system rebuilds";
     homepage = "https://github.com/erikarvstedt/extra-container";
     changelog = "https://github.com/erikarvstedt/extra-container/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.erikarvstedt ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.erikarvstedt ];
     mainProgram = "extra-container";
   };
 }

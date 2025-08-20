@@ -26,6 +26,7 @@
   libssh,
   openexr,
   libtirpc,
+  ilmbase,
   phonon,
   qtsvg,
   samba,
@@ -89,4 +90,5 @@ mkDerivation {
       --replace Exec=$out Exec=${kio}
   '';
 
+  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 }

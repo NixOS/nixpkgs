@@ -7,7 +7,7 @@
   beautifulsoup4,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
   format = "pyproject";
@@ -36,6 +36,6 @@ buildPythonApplication {
     homepage = "https://github.com/xueyuanl/cambrinary";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
   };
 }

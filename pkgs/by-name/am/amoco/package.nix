@@ -7,20 +7,19 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "amoco";
   version = "2.9.8";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = "amoco";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-3+1ssFyU7SKFJgDYBQY0kVjmTHOD71D2AjnH+4bfLXo=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
+  nativeBuildInputs = with python3.pkgs; [
   ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     blessed
     click
     crysp

@@ -1,12 +1,11 @@
 {
-  stdenv,
   lib,
   python3Packages,
   fetchFromGitHub,
   makeWrapper,
   gdal,
   geos,
-  pnpm,
+  pnpm_9,
   nodejs,
   postgresql,
   postgresqlTestHook,
@@ -15,45 +14,26 @@
 let
 
   python = python3Packages.python.override {
-    packageOverrides = self: super: {
-      django_5 = super.django_5.override { withGdal = true; };
-      django = super.django_5;
-      # custom python module part of froide
-      dogtail = super.buildPythonPackage {
-        pname = "dogtail";
-        version = "0-unstable-2024-11-27";
-        pyproject = true;
-
-        src = fetchFromGitHub {
-          owner = "okfde";
-          repo = "dogtail";
-          rev = "d2f341cab0f05ef4e193f0158fe5a64aadc5bae6";
-          hash = "sha256-2lQZgvFXAz6q/3NpBcwckUologWxKmwXI0ZG5nylajg=";
-        };
-
-        build-system = with super; [ setuptools ];
-      };
-    };
+    packageOverrides = self: super: { django = super.django.override { withGdal = true; }; };
   };
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2025-07-01";
+  version = "0-unstable-2024-11-22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "362bddb5a8fdfe762d59cdebd29016568c9531b2";
-    hash = "sha256-c8I/FvXQSkAeacxMQJCpCMKFueNEnLI4R0ElqRbVbNg=";
+    rev = "a90f5c4d40b46a161111eefdc84e5214e85715b0";
+    hash = "sha256-Q+iNI3yqxqAtDONHY+SaZeMyjY6hqTxwy7YmiiY94+0=";
   };
 
   patches = [ ./django_42_storages.patch ];
 
-  # Relax dependency pinning
-  # Channels: https://github.com/okfde/froide/issues/995
   pythonRelaxDeps = [
+    "pikepdf"
     "channels"
   ];
 
@@ -62,13 +42,15 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   dependencies = with python.pkgs; [
+    bleach
     celery
     celery-singleton
     channels
+    coreapi
     dj-database-url
     django
     django-celery-beat
@@ -79,6 +61,9 @@ python.pkgs.buildPythonApplication rec {
     django-elasticsearch-dsl
     django-filingcabinet
     django-filter
+    # Project discontinued upstream
+    # https://github.com/okfde/froide/issues/893
+    django-fsm
     django-json-widget
     django-leaflet
     django-mfa3
@@ -90,7 +75,6 @@ python.pkgs.buildPythonApplication rec {
     djangorestframework
     djangorestframework-csv
     djangorestframework-jsonp
-    dogtail
     drf-spectacular
     drf-spectacular-sidecar
     easy-thumbnails
@@ -99,7 +83,6 @@ python.pkgs.buildPythonApplication rec {
     geoip2
     icalendar
     markdown
-    nh3
     phonenumbers
     pillow
     pikepdf
@@ -116,10 +99,9 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
+    hash = "sha256-DMoaXNm5S64XBERHFnFM6IKBkzXRGDEYWSTruccK9Hc=";
   };
 
   postBuild = ''
@@ -129,7 +111,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     cp -r build manage.py $out/${python.sitePackages}/froide/
     makeWrapper $out/${python.sitePackages}/froide/manage.py $out/bin/froide \
-      --prefix PYTHONPATH : "${python3Packages.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
@@ -144,7 +126,6 @@ python.pkgs.buildPythonApplication rec {
 
   checkInputs = with python.pkgs; [
     beautifulsoup4
-    pytest-asyncio
     pytest-factoryboy
     time-machine
   ];
@@ -172,9 +153,6 @@ python.pkgs.buildPythonApplication rec {
     "test_bouncing_email"
     "test_multiple_partial"
     "test_logfile_rotation"
-    # Test hangs
-    "test_collapsed_menu"
-    "test_make_request_logged_out_with_existing_account"
   ];
 
   preCheck = ''
@@ -183,13 +161,8 @@ python.pkgs.buildPythonApplication rec {
     export postgresqlTestUserOptions="LOGIN SUPERUSER"
     export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
     export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
     export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
   '';
-
-  # Playwright tests not supported on RiscV yet
-  doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 
   meta = {
     description = "Freedom of Information Portal";

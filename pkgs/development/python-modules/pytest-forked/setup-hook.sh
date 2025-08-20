@@ -1,5 +1,7 @@
 pytestForkedHook() {
-    appendToVar pytestFlags "--forked"
+    pytestFlagsArray+=(
+        "--forked"
+    )
 
     # Using --forked on darwin leads to crashes when fork safety is
     # enabled. This often happens when urllib tries to request proxy

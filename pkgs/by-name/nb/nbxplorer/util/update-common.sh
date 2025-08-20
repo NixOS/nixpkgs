@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_8 git gnupg
+#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_6 git gnupg nixFlakes
 set -euo pipefail
 
 # This script uses the following env vars:
@@ -58,7 +58,7 @@ echo
 echo "Verifying commit"
 git -C $repo verify-commit HEAD
 rm -rf $repo/.git
-newHash=$(nix --extra-experimental-features nix-command hash path $repo)
+newHash=$(nix hash-path $repo)
 rm -rf $tmpdir
 echo
 

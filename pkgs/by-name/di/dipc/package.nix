@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "dipc";
   version = "1.0.0";
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-RXEC8bwdnUOaDmYIb7ci/JD+vi16tBn55FRsUmwaRzk=";
   };
 
-  cargoHash = "sha256-1vjVuAawuquPqem1as6xIv/ZJCzjgC4k0uyPSlrvpeg=";
+  cargoHash = "sha256-XQ85T64K1NLdSOtAFr0XluvFNTaHzoWKxoQtBQ+uSKQ=";
 
   meta = with lib; {
     description = "Convert your favorite images and wallpapers with your favorite color palettes/themes";

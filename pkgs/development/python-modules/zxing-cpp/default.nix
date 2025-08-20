@@ -7,7 +7,6 @@
   pybind11,
   libzxing-cpp,
   pytestCheckHook,
-  libzint,
 }:
 
 buildPythonPackage rec {
@@ -21,34 +20,26 @@ buildPythonPackage rec {
   # https://pybind11.readthedocs.io/en/stable/installing.html#include-with-pypi
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "pybind11[global]" "pybind11"
-
-    substituteInPlace setup.py \
-      --replace-fail "cfg = 'Debug' if self.debug else 'Release'" "cfg = 'Release'" \
-      --replace-fail " '-DVERSION_INFO=' + self.distribution.get_version()]" " '-DVERSION_INFO=' + self.distribution.get_version(), '-DZXING_DEPENDENCIES=LOCAL', '-DZXING_USE_BUNDLED_ZINT=OFF']"
+      --replace "pybind11[global]" "pybind11"
   '';
 
   dontUseCmakeConfigure = true;
 
-  build-system = [
-    setuptools-scm
-    pybind11
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  dependencies = [ numpy ];
+  buildInputs = [ pybind11 ];
 
   nativeBuildInputs = [
     cmake
+    setuptools-scm
   ];
-
-  buildInputs = [ libzint ];
 
   nativeCheckInputs = [
     pillow
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
 
   pythonImportsCheck = [ "zxingcpp" ];
 }

@@ -7,6 +7,7 @@
   dune-configurator,
   pkg-config,
   cairo,
+  ApplicationServices,
 }:
 
 buildDunePackage rec {
@@ -25,7 +26,7 @@ buildDunePackage rec {
   buildInputs = [
     cairo
     dune-configurator
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
   doCheck =
     !(

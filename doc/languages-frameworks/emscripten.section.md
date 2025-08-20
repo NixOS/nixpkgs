@@ -38,13 +38,13 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 
 
 ```nix
-(pkgs.zlib.override { stdenv = pkgs.emscriptenStdenv; }).overrideAttrs (old: {
+(pkgs.zlib.override {
+  stdenv = pkgs.emscriptenStdenv;
+}).overrideAttrs
+(old: rec {
   buildInputs = old.buildInputs ++ [ pkg-config ];
   # we need to reset this setting!
-  env = (old.env or { }) // {
-    NIX_CFLAGS_COMPILE = "";
-  };
-
+  env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
   configurePhase = ''
     # FIXME: Some tests require writing at $HOME
     HOME=$TMPDIR
@@ -55,29 +55,15 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 
     runHook postConfigure
   '';
-
   dontStrip = true;
   outputs = [ "out" ];
-
   buildPhase = ''
-    runHook preBuild
-
     emmake make
-
-    runHook postBuild
   '';
-
   installPhase = ''
-    runHook preInstall
-
     emmake make install
-
-    runHook postInstall
   '';
-
   checkPhase = ''
-    runHook preCheck
-
     echo "================= testing zlib using node ================="
 
     echo "Compiling a custom test"
@@ -96,8 +82,6 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
       echo "it seems to work! very good."
     fi
     echo "================= /testing zlib using node ================="
-
-    runHook postCheck
   '';
 
   postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
@@ -116,27 +100,11 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 This `xmlmirror` example features an Emscripten package that is defined completely from this context and no `pkgs.zlib.override` is used.
 
 ```nix
-pkgs.buildEmscriptenPackage {
-  pname = "xmlmirror";
-  version = "1.2.3";
+pkgs.buildEmscriptenPackage rec {
+  name = "xmlmirror";
 
-  buildInputs = [
-    pkg-config
-    autoconf
-    automake
-    libtool
-    gnumake
-    libxml2
-    nodejs
-    openjdk
-    json_c
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-    writableTmpDirAsHomeHook
-    zlib
-  ];
+  buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
+  nativeBuildInputs = [ pkg-config zlib ];
 
   src = pkgs.fetchgit {
     url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -145,8 +113,6 @@ pkgs.buildEmscriptenPackage {
   };
 
   configurePhase = ''
-    runHook preConfigure
-
     rm -f fastXmlLint.js*
     # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
     # https://gitlab.com/odfplugfest/xmlmirror/issues/8
@@ -156,26 +122,16 @@ pkgs.buildEmscriptenPackage {
     sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
     # https://gitlab.com/odfplugfest/xmlmirror/issues/11
     sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
-
-    runHook postConfigure
   '';
 
   buildPhase = ''
-    runHook preBuild
-
+    HOME=$TMPDIR
     make -f Makefile.emEnv
-
-    runHook postBuild
   '';
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs = [ "out" "doc" ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/share
     mkdir -p $doc/share/${name}
 
@@ -189,14 +145,9 @@ pkgs.buildEmscriptenPackage {
     cp *.json $out/share
     cp *.rng $out/share
     cp README.md $doc/share/${name}
-
-    runHook postInstall
   '';
-
   checkPhase = ''
-    runHook preCheck
 
-    runHook postCheck
   '';
 }
 ```

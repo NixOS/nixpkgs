@@ -1,6 +1,6 @@
 { stdenv, lib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zsh-clipboard";
   version = "1.0";
 

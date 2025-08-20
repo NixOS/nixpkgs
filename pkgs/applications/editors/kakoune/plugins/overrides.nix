@@ -32,7 +32,7 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
-  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: {
+  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
         fzfImpl='${fzf}/bin/fzf'
@@ -172,7 +172,7 @@ self: super: {
       git
     ];
 
-    cargoHash = "sha256-cgUBa0rgfJFnosCgD20G1rlOl/nyXJ9bA9SSf4BuqAs=";
+    cargoHash = "sha256-EjSj/+BysGwJBxK6Ccg2+pXHdB2Lg3dxIURRsSVTHVY=";
 
     postInstall = ''
       mkdir -p $out/share/kak/bin
@@ -180,7 +180,7 @@ self: super: {
     '';
 
     meta = with lib; {
-      description = "Hinting brought to Kakoune selections";
+      description = "hinting brought to Kakoune selections";
       homepage = "https://git.sr.ht/~hadronized/hop.kak/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ oleina ];

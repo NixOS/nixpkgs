@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   nodejs,
   pnpm,
   fetchFromGitHub,
@@ -8,7 +7,6 @@
   installShellFiles,
   callPackage,
   nixosTests,
-  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
 }:
 
 let
@@ -18,8 +16,7 @@ let
     src
     vendorHash
     ;
-
-  web = authelia-web;
+  web = callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; };
 in
 buildGoModule rec {
   inherit
@@ -52,19 +49,13 @@ buildGoModule rec {
       "-X ${p}.BuildExtra=nixpkgs"
     ];
 
-  # It is required to set this to avoid a change in the
-  # handling of sync map in go 1.24+
-  # Upstream issue: https://github.com/authelia/authelia/issues/8980
-  env.GOEXPERIMENT = "nosynchashtriemap";
-
   # several tests with networking and several that want chromium
   doCheck = false;
 
   postInstall = ''
     mkdir -p $out/etc/authelia
     cp config.template.yml $out/etc/authelia
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+
     installShellCompletion --cmd authelia \
       --bash <($out/bin/authelia completion bash) \
       --fish <($out/bin/authelia completion fish) \

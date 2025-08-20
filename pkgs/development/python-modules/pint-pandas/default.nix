@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -8,7 +9,6 @@
   wheel,
   pint,
   pandas,
-  packaging,
   pytestCheckHook,
 }:
 
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   dependencies = [
     pint
     pandas
-    packaging
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Pandas support for pint";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";

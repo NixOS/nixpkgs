@@ -9,40 +9,27 @@
 
 buildMozillaMach rec {
   pname = "firefox-devedition";
-  binaryName = pname;
-  version = "142.0b9";
-  applicationName = "Firefox Developer Edition";
+  version = "135.0b4";
+  applicationName = "Mozilla Firefox Developer Edition";
   requireSigning = false;
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "1223065e5c614be9b72f3306daebc98e032d993797bab4d8e646523dfcd9aa554f442b302a32e6281ebb41fcbed49f63097a58fef2a612ae8ff0371f670bad3c";
+    sha512 = "d3ee20d264c4c26308b814f4cc997349a6df32da17b9a29514b0504f7548606f4b6793ccd2e7464babf6588f13bfcc0e0641f9ac8d620f7da7d7e45684fdf775";
   };
-
-  # buildMozillaMach sets MOZ_APP_REMOTINGNAME during configuration, but
-  # unfortunately if the branding file also defines MOZ_APP_REMOTINGNAME, the
-  # branding file takes precedence. ("aurora" is the only branding to do this,
-  # so far.) We remove it so that the name set in buildMozillaMach takes
-  # effect.
-  extraPostPatch = ''
-    sed -i '/^MOZ_APP_REMOTINGNAME=/d' browser/branding/aurora/configure.sh
-  '';
 
   meta = {
     changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
     description = "Web browser built from Firefox Developer Edition source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
-    maintainers = with lib.maintainers; [
-      jopejoe1
-      rhendric
-    ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
     # since Firefox 60, build on 32-bit platforms fails with "out of memory".
     # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
-    mainProgram = binaryName;
+    mainProgram = "firefox";
   };
   tests = {
     inherit (nixosTests) firefox-devedition;

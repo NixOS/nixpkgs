@@ -9,8 +9,8 @@ buildGoModule rec {
   version = "0.20.3";
 
   src = fetchFromGitHub {
-    owner = "reviewdog";
-    repo = "reviewdog";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-B0gu6vhbnhMx2CNQzQlIIwsycBup6bnmAk/1C6F/AWE=";
   };
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X github.com/reviewdog/reviewdog/commands.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";
     mainProgram = "reviewdog";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/blob/v${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ ];
-    license = lib.licenses.mit;
+    maintainers = [ ];
+    license = licenses.mit;
   };
 }

@@ -5,35 +5,31 @@
   gettext,
   mock,
   pytestCheckHook,
-  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "bagit";
-  version = "1.9.0";
-  pyproject = true;
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  version = "1.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";
     repo = "bagit-python";
-    tag = "v${version}";
-    hash = "sha256-gHilCG07BXL28vBOaqvKhEQw+9l/AkzZRQxucBTEDos=";
+    rev = "v${version}";
+    hash = "sha256-t01P7MPWgOrktuW2zF0TIzt6u/jkLmrpD2OnqawhJaI=";
   };
 
   nativeBuildInputs = [
     gettext
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
-  enabledTestPaths = [ "test.py" ];
+  pytestFlagsArray = [ "test.py" ];
   pythonImportsCheck = [ "bagit" ];
 
   meta = with lib; {

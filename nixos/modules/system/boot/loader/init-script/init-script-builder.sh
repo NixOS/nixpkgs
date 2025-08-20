@@ -27,6 +27,9 @@ tmpOther="$targetOther.tmp"
 
 
 configurationCounter=0
+numAlienEntries=`cat <<EOF | egrep '^[[:space:]]*title' | wc -l
+@extraEntries@
+EOF`
 
 
 

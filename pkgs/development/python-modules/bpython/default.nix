@@ -1,70 +1,63 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   curtsies,
   cwcwidth,
   greenlet,
   jedi,
   pygments,
   pytestCheckHook,
+  pythonOlder,
   pyperclip,
   pyxdg,
   requests,
-  setuptools,
+  typing-extensions,
   urwid,
   watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.25";
-  pyproject = true;
+  version = "0.24";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "bpython";
-    repo = "bpython";
-    tag = version;
-    hash = "sha256-p5+IQiHNRRazqr+WRdx3Yw+ImG25tdZGLXvMf7woD9w=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-mHNv/XqMSP0r+1PYmKR19CQb3gtnISVwavBNnQj9Pb0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version = "unknown"' 'version = "${version}"'
-  '';
-
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     curtsies
     cwcwidth
     greenlet
+    jedi
     pygments
+    pyperclip
     pyxdg
     requests
+    typing-extensions
+    urwid
+    watchdog
   ];
-
-  optional-dependencies = {
-    clipboard = [ pyperclip ];
-    jedi = [ jedi ];
-    urwid = [ urwid ];
-    watch = [ watchdog ];
-  };
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
-      --replace "Exec=/usr/bin/bpython" "Exec=bpython"
+      --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bpython" ];
 
+  disabledTests = [
+    # Check for syntax error ends with an AssertionError
+    "test_syntaxerror"
+  ];
+
   meta = with lib; {
-    changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;

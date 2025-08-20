@@ -1,31 +1,41 @@
 # Test for cntr tool
-
-{ runTest, lib }:
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  lib ? pkgs.lib,
+}:
 
 let
+  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+
   mkOCITest =
     backend:
-    runTest {
+    makeTest {
       name = "cntr-${backend}";
 
-      meta.maintainers = with lib.maintainers; [
-        sorki
-        mic92
-      ];
+      meta = {
+        maintainers = with lib.maintainers; [
+          sorki
+          mic92
+        ];
+      };
 
-      nodes.${backend} =
-        { pkgs, ... }:
-        {
-          environment.systemPackages = [ pkgs.cntr ];
-          virtualisation.oci-containers = {
-            inherit backend;
-            containers.nginx = {
-              image = "nginx-container";
-              imageStream = pkgs.dockerTools.examples.nginxStream;
-              ports = [ "8181:80" ];
+      nodes = {
+        ${backend} =
+          { pkgs, ... }:
+          {
+            environment.systemPackages = [ pkgs.cntr ];
+            virtualisation.oci-containers = {
+              inherit backend;
+              containers.nginx = {
+                image = "nginx-container";
+                imageStream = pkgs.dockerTools.examples.nginxStream;
+                ports = [ "8181:80" ];
+              };
             };
           };
-        };
+      };
 
       testScript = ''
         start_all()
@@ -43,16 +53,18 @@ let
       '';
     };
 
-  mkContainersTest = runTest {
+  mkContainersTest = makeTest {
     name = "cntr-containers";
 
-    meta.maintainers = with lib.maintainers; [
-      sorki
-      mic92
-    ];
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [
+        sorki
+        mic92
+      ];
+    };
 
     nodes.machine =
-      { pkgs, ... }:
+      { lib, ... }:
       {
         environment.systemPackages = [ pkgs.cntr ];
         containers.test = {
@@ -80,4 +92,7 @@ in
 {
   nixos-container = mkContainersTest;
 }
-// (lib.genAttrs [ "docker" "podman" ] mkOCITest)
+// (lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; }) { } [
+  "docker"
+  "podman"
+])

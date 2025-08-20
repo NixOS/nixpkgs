@@ -8,40 +8,45 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gotify-server";
-  version = "2.6.3";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9vIReA29dWf3QwUYEW8JhzF9o74JZqG4zGobgI+gIWE=";
+    rev = "v${version}";
+    hash = "sha256-6PmJnRBovyufrSB+uMbU+bqhZb1bEs39MxBVMnnE6f8=";
   };
 
-  vendorHash = "sha256-rs6EfnJT6Jgif2TR5u5Tp5/Ozn+4uhSapksyKFnQiCo=";
+  # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
+  # argument for Go builds which apparently breaks the UI like this:
+  #
+  #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
+  allowGoReference = true;
 
-  # No test
+  vendorHash = "sha256-aru1Q3esLtyxV6CVup4qjsuaJlM5DuLuP8El4RYoVVE=";
+
   doCheck = false;
 
   buildInputs = [
     sqlite
   ];
 
-  ui = callPackage ./ui.nix { inherit (finalAttrs) src version; };
+  ui = callPackage ./ui.nix { };
 
-  # Use preConfigure instead of preBuild to keep goModules independent from ui
-  preConfigure = ''
-    cp -r ${finalAttrs.ui} ui/build
+  preBuild = ''
+    if [ -n "$ui" ] # to make the preBuild a no-op inside the goModules fixed-output derivation, where it would fail
+    then
+      cp -r $ui ui/build
+    fi
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "ui"
-      ];
-    };
+    # For nix-update to detect the location of this attribute from this
+    # derivation.
+    inherit (ui) offlineCache;
+    updateScript = nix-update-script { };
     tests = {
       nixos = nixosTests.gotify-server;
     };
@@ -51,21 +56,16 @@ buildGoModule (finalAttrs: {
   # produce binaries which panic when executed and are not interesting at all
   subPackages = [ "." ];
 
-  # Based on LD_FLAGS in upstream's .github/workflows/build.yml:
-  # https://github.com/gotify/server/blob/v2.6.3/.github/workflows/build.yml#L33
   ldflags = [
-    "-s"
-    "-X main.Version=${finalAttrs.version}"
+    "-X main.Version=${version}"
     "-X main.Mode=prod"
-    "-X main.Commit=refs/tags/v${finalAttrs.version}"
-    "-X main.BuildDate=unknown"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple server for sending and receiving messages in real-time per WebSocket";
     homepage = "https://gotify.net";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
     mainProgram = "server";
   };
-})
+}

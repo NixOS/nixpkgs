@@ -6,7 +6,6 @@
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   inherit (pkgs.file) pname version src;
 
   patchPhase = ''

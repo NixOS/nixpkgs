@@ -6,7 +6,7 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "locale";
   version = "118";
 
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-KzaAlqXqfJW2s31qmA0D7qteaZY57Va2o86aZrwyR74=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/usr-share-locale.tproj";
+  sourceRoot = "source/usr-share-locale.tproj";
 
   postPatch = ''
     # bmake expects `Makefile` not `BSDmakefile`.
@@ -58,6 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lib.licenses.apsl10
       lib.licenses.apsl20
     ];
-    teams = [ lib.teams.darwin ];
+    maintainers = lib.teams.darwin.members;
   };
-})
+}

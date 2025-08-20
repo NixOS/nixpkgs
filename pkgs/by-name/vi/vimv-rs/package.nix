@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jbRsgEsRYF5hlvo0jEB4jhy5jzCAXNzOsNWWyh4XULQ=";
   };
 
-  cargoHash = "sha256-A+Ba3OWQDAramwin1Yc1YDOyabuEEaZGhE1gel2tFoM=";
+  cargoHash = "sha256-rYQxIttuGBGEkYkFtSBl8ce1I/Akm6FxeITJcaIeP6M=";
 
   meta = with lib; {
     description = "Command line utility for batch-renaming files";

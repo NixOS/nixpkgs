@@ -4,23 +4,26 @@
   fetchFromGitLab,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vcard";
-  version = "1.0.0";
+  version = "0.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitLab {
     owner = "engmark";
     repo = "vcard";
-    tag = "v${version}";
-    hash = "sha256-c6lj4sCXlQd5Bh5RLuZUIaTirVHtkRfYUAUtZI+1MeI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cz1WF8LQsyJwcVKMSWmFb6OB/JWyfc2FgcOT3jJ45Cg=";
   };
+
+  pythonRelaxDeps = [ "python-dateutil" ];
 
   build-system = [ setuptools ];
 

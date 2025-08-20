@@ -13,14 +13,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "m4";
-    tag = "om4-${version}";
-    hash = "sha256-/b+Fcz6lg2hW541TzBhB9M86wUS7BT6pHzqXxTs0BxI=";
+    rev = "${pname}-${version}";
+    sha256 = "04h76hxwb5rs3ylkw1dv8k0kmkzl84ccqlwdwxb6i0x57rrqbgzx";
   };
-
-  patches = [
-    # parser.y:51:25: error: implicit declaration of function 'exit' []
-    ./include-exit.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -30,17 +25,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-m4" ];
 
-  meta = {
+  meta = with lib; {
     description = "Portable OpenBSD m4 macro processor";
     homepage = "https://github.com/ibara/m4";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsd2
       bsd3
       isc
       publicDomain
     ];
     mainProgram = "m4";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ ];
   };
 }

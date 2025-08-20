@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jpcima";
-    repo = "stone-phaser";
+    repo = pname;
     rev = "v${version}";
     sha256 = "180b32z8h9zi8p0q55r1dzxfckamnngm52zjypjjvvy7qdj3mfcd";
     fetchSubmodules = true;

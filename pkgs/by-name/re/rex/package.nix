@@ -70,7 +70,7 @@ perlPackages.buildPerlPackage rec {
     FileLibMagic
     HashMerge
     HTTPMessage
-    IOTty
+    IOPty
     IOString
     JSONMaybeXS
     LWP

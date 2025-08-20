@@ -12,7 +12,6 @@
   runCommand,
   translatelocally,
   translatelocally-models,
-  buildArch ? "x86-64",
 }:
 
 let
@@ -66,10 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBLAS_LIBRARIES=-lblas"
     "-DCBLAS_LIBRARIES=-lcblas"
-
-    # See the following for context:
-    # https://github.com/NixOS/nixpkgs/pull/385549
-    (lib.optionalString stdenv.hostPlatform.isx86_64 "-DBUILD_ARCH=${buildArch}")
   ];
 
   passthru.tests = {

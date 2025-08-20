@@ -1,41 +1,47 @@
 {
-  lib,
+  config,
   pkgs ? import <nixpkgs> { },
-  licenseAccepted ? pkgs.callPackage ./license.nix { },
+  licenseAccepted ?
+    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
-lib.recurseIntoAttrs rec {
+rec {
   composeAndroidPackages = pkgs.callPackage ./compose-android-packages.nix {
-    inherit licenseAccepted meta;
+    inherit licenseAccepted;
   };
 
   buildApp = pkgs.callPackage ./build-app.nix {
-    inherit composeAndroidPackages meta;
+    inherit composeAndroidPackages;
   };
 
   emulateApp = pkgs.callPackage ./emulate-app.nix {
-    inherit composeAndroidPackages meta;
+    inherit composeAndroidPackages;
   };
 
   androidPkgs = composeAndroidPackages {
-    # Support roughly the last 5 years of Android packages and system images by default in nixpkgs.
-    numLatestPlatformVersions = 5;
-    includeEmulator = "if-supported";
-    includeSystemImages = "if-supported";
-    includeNDK = "if-supported";
+    platformVersions = [
+      "28"
+      "29"
+      "30"
+      "31"
+      "32"
+      "33"
+      "34"
+      "35"
+    ];
+    includeEmulator = true;
+    includeSystemImages = true;
+    includeNDK = true;
   };
 
-  test-suite = pkgs.callPackage ./test-suite.nix {
-    inherit meta;
-  };
+  test-suite = pkgs.callPackage ./test-suite.nix { };
 
-  inherit (test-suite) passthru;
-
-  meta = {
-    homepage = "https://developer.android.com/tools";
-    description = "Android SDK tools, packaged in Nixpkgs";
-    license = lib.licenses.unfree;
-    platforms = lib.platforms.all;
-    teams = [ lib.teams.android ];
+  meta = with pkgs.lib; {
+    description = "Android SDK & sdkmanager";
+    homepage = "https://developer.android.com/tools/sdkmanager";
+    maintainers = with maintainers; [
+      numinit
+      hadilq
+    ];
   };
 }

@@ -21,13 +21,13 @@
   requests,
 }:
 let
-  version = "2.1.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
     tag = "v${version}";
-    hash = "sha256-4R2rOCfnhElII0+a5hnvbn+kKQLEtH1jBvfFdxpLEBk=";
+    hash = "sha256-6ohh4NSYqJ+i1JRdsKbcJZns07c+roVJ87r0lvBbExU=";
   };
 
   models =
@@ -101,16 +101,27 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rapidocr_onnxruntime" ];
 
-  # As of version 2.1.0, 61 out of 70 tests require internet access.
-  # It's just not plausible to manually pick out ones that actually work
-  # in a hermetic build environment anymore :(
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
+
+  # These are tests for different backends.
+  disabledTestPaths = [
+    "tests/test_vino.py"
+    "tests/test_paddle.py"
+  ];
+
+  disabledTests = [
+    # Needs Internet access
+    "test_long_img"
+  ];
 
   meta = {
     # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
     # Also some related issue: https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
     badPlatforms = [ "aarch64-linux" ];
-    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
+    changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/v${version}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";
     license = with lib.licenses; [ asl20 ];

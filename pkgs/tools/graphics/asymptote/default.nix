@@ -32,10 +32,11 @@
   curl,
   texinfo,
   texliveSmall,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.05";
+  version = "2.95";
   pname = "asymptote";
 
   outputs = [
@@ -48,45 +49,52 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
+    hash = "sha256-FWBP0Cy23bxbgHUp0ub8YXyCWhhN0Ne3E5DFZ66seOc=";
   };
+
+  # https://github.com/vectorgraphics/asymptote/issues/513
+  postConfigure = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    substituteInPlace Makefile \
+      --replace-fail 'glew.o -lGLX' 'glew.o'
+  '';
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;
   texdocContainer = null;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    flex
-    bison
-    texinfo
-    wrapQtAppsHook
-    cmake
-    ghostscriptX
-    perl
-    pkg-config
-    (python3.withPackages (
-      ps: with ps; [
-        click
-        cson
-        numpy
-        pyqt5
-      ]
-    ))
-  ]
-  ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
-    texliveSmall.withPackages (
-      ps: with ps; [
-        epsf
-        cm-super
-        ps.texinfo
-        media9
-        ocgx2
-        collection-latexextra
-      ]
-    )
-  );
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      flex
+      bison
+      texinfo
+      wrapQtAppsHook
+      cmake
+      ghostscriptX
+      perl
+      pkg-config
+      (python3.withPackages (
+        ps: with ps; [
+          click
+          cson
+          numpy
+          pyqt5
+        ]
+      ))
+    ]
+    ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
+      texliveSmall.withPackages (
+        ps: with ps; [
+          epsf
+          cm-super
+          ps.texinfo
+          media9
+          ocgx2
+          collection-latexextra
+        ]
+      )
+    );
 
   buildInputs = [
     ghostscriptX
@@ -113,18 +121,26 @@ stdenv.mkDerivation (finalAttrs: {
         pyqt5
       ]
     ))
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 
-  propagatedBuildInputs = [
-    glm
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libglut
-    libGLU
-    libGL
-    libglvnd
-  ];
+  propagatedBuildInputs =
+    [
+      glm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libglut
+      libGLU
+      libGL
+      libglvnd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        OpenGL
+        GLUT
+        Cocoa
+      ]
+    );
 
   dontWrapQtApps = true;
 

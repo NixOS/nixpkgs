@@ -53,8 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_ARGS" true)
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   meta = {
     description = "Rewrite of the advanced file download/sync tool zsync";
     homepage = "https://github.com/AppImageCommunity/zsync2";

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgepub";
-  version = "0.7.3";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "WlZpWqipEy1nwHkqQPJSzgpI2dAytOGops6YrxT9Xhs=";
+    sha256 = "o+SzGiMmWdJqVLkSGziCw9c5fDz0SuXGS4ZwCYC8f2A=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     description = "GObject based library for handling and rendering epub documents";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

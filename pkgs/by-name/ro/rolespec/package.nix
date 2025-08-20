@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rolespec";
   version = "20161104";
 

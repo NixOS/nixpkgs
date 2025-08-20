@@ -1,25 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   fetchpatch,
-
-  # build-system
   setuptools,
-
-  # dependencies
   absl-py,
+  flax,
+  jax,
   jaxlib,
   jmp,
   numpy,
   tabulate,
-
-  # optional-dependencies
-  jax,
-  flax,
-
-  # tests
   pytest-xdist,
   pytestCheckHook,
   bsuite,
@@ -39,9 +30,6 @@ let
     version = "0.0.13";
     pyproject = true;
 
-    # ImportError: `haiku.experimental.flax` features require `flax` to be installed.
-    disabled = pythonAtLeast "3.13";
-
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "dm-haiku";
@@ -57,17 +45,6 @@ let
         hash = "sha256-qV94TdJnphlnpbq+B0G3KTx5CFGPno+8FvHyu/aZeQE=";
       })
     ];
-
-    # AttributeError: jax.core.Var was removed in JAX v0.6.0. Use jax.extend.core.Var instead, and
-    # see https://docs.jax.dev/en/latest/jax.extend.html for details.
-    # Already on master: https://github.com/google-deepmind/dm-haiku/commit/cfe8480d253a93100bf5e2d24c40435a95399c96
-    # TODO: remove at the next release
-    postPatch = ''
-      substituteInPlace haiku/_src/jaxpr_info.py \
-        --replace-fail "jax.core.JaxprEqn" "jax.extend.core.JaxprEqn" \
-        --replace-fail "jax.core.Var" "jax.extend.core.Var" \
-        --replace-fail "jax.core.Jaxpr" "jax.extend.core.Jaxpr"
-    '';
 
     build-system = [ setuptools ];
 
@@ -140,11 +117,11 @@ let
       dontInstall = true;
     });
 
-    meta = {
+    meta = with lib; {
       description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
       homepage = "https://github.com/deepmind/dm-haiku";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ ndl ];
+      license = licenses.asl20;
+      maintainers = with maintainers; [ ndl ];
     };
   };
 in

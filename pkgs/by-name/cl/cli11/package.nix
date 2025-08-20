@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cli11";
-  version = "2.5.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-73dfpZDnKl0cADM4LTP3/eDFhwCdiHbEaGRF7ZyWsdQ=";
+    hash = "sha256-BLjGKN/UQIPVFlZaJ2VxTLFfY6otpJZ6HqfLtt5+r88=";
   };
 
   buildInputs = [ catch2 ];

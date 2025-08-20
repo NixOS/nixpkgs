@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "wwkimball";
-    repo = "yamlpath";
+    repo = pname;
     tag = "v${version}";
     sha256 = "sha256-6N2s/LWFa3mgMQ88rt3IaWk+b2PTWfT7z1mi+ioQEyU=";
   };
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     "yamlpath"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line processors for YAML/JSON/Compatible data";
     homepage = "https://github.com/wwkimball/yamlpath";
     changelog = "https://github.com/wwkimball/yamlpath/releases/tag/v${version}";
@@ -45,8 +45,8 @@ python3.pkgs.buildPythonApplication rec {
       Command-line get/set/merge/validate/scan/convert/diff processors for YAML/JSON/Compatible data
       using powerful, intuitive, command-line friendly syntax
     '';
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ Flakebi ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ Flakebi ];
 
     # No support for ruamel.yaml > 0.17.21
     # https://github.com/wwkimball/yamlpath/issues/217

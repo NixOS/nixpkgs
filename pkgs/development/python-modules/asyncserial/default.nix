@@ -5,7 +5,7 @@
   pyserial,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "asyncserial";
   version = "unstable-2022-06-10";
   format = "setuptools";

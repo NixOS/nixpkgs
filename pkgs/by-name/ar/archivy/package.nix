@@ -22,23 +22,21 @@ let
     };
   };
 in
-py.pkgs.buildPythonApplication rec {
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "archivy";
   version = "1.7.3";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
   };
 
-  build-system = with py.pkgs; [
-    setuptools
-  ];
-
   pythonRelaxDeps = true;
 
-  dependencies = with py.pkgs; [
+  propagatedBuildInputs = [
     appdirs
     attrs
     beautifulsoup4
@@ -52,7 +50,7 @@ py.pkgs.buildPythonApplication rec {
     python-frontmatter
     readability-lxml
     requests
-    setuptools # uses pkg_resources during runtime
+    setuptools
     tinydb
     validators
     wtforms

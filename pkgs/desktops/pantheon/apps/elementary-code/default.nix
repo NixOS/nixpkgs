@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  appstream,
+  desktop-file-utils,
   meson,
   ninja,
   pkg-config,
@@ -17,26 +19,26 @@
   libgee,
   libgit2-glib,
   libhandy,
-  libpeas2,
-  libsoup_3,
+  libpeas,
+  libsoup_2_4,
   vte,
   ctags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.1.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    hash = "sha256-pL/xyD9jwuPixbVdjPa3vdZWHxI+T2ARI4BvcTV61jc=";
+    sha256 = "sha256-KoRpGBYen1eOdMBHOTBMopC+mPMOkD+iYWV3JA21mKc=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
+    appstream
+    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -54,9 +56,8 @@ stdenv.mkDerivation rec {
     libgee
     libgit2-glib
     libhandy
-    libpeas2
-    libsoup_3
-    vala # for ValaSymbolResolver provided by libvala
+    libpeas
+    libsoup_2_4
     vte
   ];
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.code";
   };
 }

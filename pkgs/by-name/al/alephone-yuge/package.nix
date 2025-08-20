@@ -1,6 +1,6 @@
 { alephone, fetchurl }:
 
-alephone.makeWrapper {
+alephone.makeWrapper rec {
   pname = "yuge";
   version = "0";
   desktopName = "Marathon-Yuge";

@@ -9,7 +9,7 @@
   npy,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "owl";
 
   inherit (owl-base) version src meta;

@@ -1,145 +1,67 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  nodejs,
-  yarn-berry,
-  cacert,
-  nix-update-script,
-  formats,
+  fetchYarnDeps,
+  mkYarnPackage,
   baseUrl ? null,
+  writeShellScriptBin,
 }:
 
-let
-  config = lib.optionalAttrs (baseUrl != null) { restrictBaseUrl = baseUrl; };
-  configFormat = formats.json { };
-  configFile = configFormat.generate "synapse-admin-config" config;
-in
-
-stdenv.mkDerivation (finalAttrs: {
+mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.11.1";
-
+  version = "0.10.0";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
-    repo = "synapse-admin";
-    tag = finalAttrs.version;
-    hash = "sha256-rK1Tc1K3wx6/1J8TEw5Lb9g09gbt/1HoZdDrEFzxTQQ=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
 
-  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
-  yarnOfflineCache = stdenv.mkDerivation {
-    pname = "yarn-deps";
-    inherit (finalAttrs) version src;
+  packageJSON = ./package.json;
 
-    nativeBuildInputs = [ yarn-berry ];
-
-    dontInstall = true;
-
-    env = {
-      YARN_ENABLE_TELEMETRY = 0;
-      NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    };
-
-    supportedArchitectures = builtins.toJSON {
-      os = [
-        "darwin"
-        "linux"
-      ];
-      cpu = [
-        "arm"
-        "arm64"
-        "ia32"
-        "x64"
-      ];
-      libc = [
-        "glibc"
-        "musl"
-      ];
-    };
-
-    configurePhase = ''
-      runHook preConfigure
-
-      export HOME="$NIX_BUILD_TOP"
-      yarn config set enableGlobalCache false
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures "$supportedArchitectures"
-
-      runHook postConfigure
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      mkdir -p $out
-      yarn install --immutable --mode skip-build
-
-      runHook postBuild
-    '';
-
-    outputHash = "sha256-IiViodAB1KAYsRRr8+zw3vrCbUYp7Mdtazi0Y6SEFNU=";
-    outputHashMode = "recursive";
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-vpCwPL1B+hbIaVSHtlkGjPAteu9BFNNmCTE66CSyFkg=";
   };
 
   nativeBuildInputs = [
-    nodejs
-    yarn-berry
+    (writeShellScriptBin "git" "echo ${version}")
   ];
 
-  env = {
-    NODE_ENV = "production";
-  };
+  NODE_ENV = "production";
+  ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;
 
-  postPatch = ''
-    substituteInPlace vite.config.ts \
-      --replace-fail "git describe --tags" "echo ${finalAttrs.version}"
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME="$NIX_BUILD_TOP"
-    yarn config set enableGlobalCache false
-    yarn config set cacheFolder $yarnOfflineCache
-
-    runHook postConfigure
-  '';
+  # error:0308010C:digital envelope routines::unsupported
+  NODE_OPTIONS = "--openssl-legacy-provider";
 
   buildPhase = ''
     runHook preBuild
 
-    yarn install --immutable --immutable-cache
-    yarn build
+    export HOME=$(mktemp -d)
+    yarn --offline run build
 
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  distPhase = ''
+    runHook preDist
 
-    cp -r dist $out
-    cp ${configFile} $out/config.json
+    cp -r deps/synapse-admin/dist $out
 
-    runHook postInstall
+    runHook postDist
   '';
 
-  passthru.updateScript = nix-update-script { };
+  dontFixup = true;
+  dontInstall = true;
 
-  meta = {
+  meta = with lib; {
     description = "Admin UI for Synapse Homeservers";
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
-    changelog = "https://github.com/Awesome-Technologies/synapse-admin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       mkg20001
       ma27
     ];
   };
-})
+}

@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   lib,
 
   # build-system
@@ -22,24 +21,13 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.8.0";
+  version = "2.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vlGNGxtf9UwRqtoeD9EpQlCepwWB4KizmipHOgstvTY=";
+    hash = "sha256-N0TFyLur8YFyhJx3Mb4A3C5eRPjFVtN8hQ54h5SuCvQ=";
   };
-
-  patches = [
-    # Fix a broken test. The issue has been reported upstream at
-    # https://github.com/sirfz/tesserocr/issues/363
-    # Check the status of the issue before removing this patch at the next
-    # update.
-    (fetchpatch {
-      url = "https://github.com/sirfz/tesserocr/commit/78d9e8187bd4d282d572bd5221db2c69e560e017.patch";
-      hash = "sha256-s51s9EIV9AZT6UoqwTuQ8lOjToqwIIUkDLjsvCsyYFU=";
-    })
-  ];
 
   # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
@@ -67,12 +55,12 @@ buildPythonPackage rec {
     rm -rf tesserocr
   '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";
     description = "Simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mtrsk ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ mtrsk ];
+    platforms = platforms.linux;
   };
 }

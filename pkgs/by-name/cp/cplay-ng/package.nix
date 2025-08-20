@@ -1,27 +1,32 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   makeWrapper,
   mpv,
   pulseaudio,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cplay-ng";
-  version = "5.4.0";
-  pyproject = true;
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "cplay-ng";
-    tag = version;
-    hash = "sha256-ob5wX+Q5XKB/fTYG5phLU61imonpk2A/fk5cg/dfr1Y=";
+    rev = version;
+    hash = "sha256-6mphhoLDkGZ2r+elzLlPl3B8fNz3loqrQB8x8276AHI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [
+    python3.pkgs.setuptools
+  ];
+
+  pyproject = true;
 
   postInstall = ''
     wrapProgram $out/bin/cplay-ng \
@@ -33,7 +38,7 @@ python3Packages.buildPythonApplication rec {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/xi/cplay-ng";
     description = "Simple curses audio player";
     mainProgram = "cplay-ng";
@@ -50,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       maintained. This is a rewrite that aims to stay true to the original
       design while evolving with a shifting environment.
     '';
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fgaz ];
   };
 }

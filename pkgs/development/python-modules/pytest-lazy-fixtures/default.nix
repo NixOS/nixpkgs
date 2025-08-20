@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.1.2";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
     tag = version;
-    hash = "sha256-EkvSmSTwoWmQlUZ4qBBqboOomxwn72H8taJ3CY142ms=";
+    hash = "sha256-2gaGIv4vfMdhLXQeYMbbx9B6tIsCGw4rytaO8bfRuEI=";
   };
 
   build-system = [ poetry-core ];

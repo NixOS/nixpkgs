@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   plan9port,
+  darwin,
   ...
 }:
 
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     plan9port
+    darwin.apple_sdk.frameworks.Carbon
   ];
   makeFlags = [ "prefix=${placeholder "out"}" ];
 

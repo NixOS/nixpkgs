@@ -1,6 +1,6 @@
 {
   lib,
-  replaceVars,
+  substituteAll,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = "termplotlib";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
   };
@@ -33,7 +33,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   patches = [
-    (replaceVars ./gnuplot-subprocess.patch {
+    (substituteAll {
+      src = ./gnuplot-subprocess.patch;
       gnuplot = "${gnuplot.out}/bin/gnuplot";
     })
   ];
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Matplotlib for your terminal";
+    description = "matplotlib for your terminal";
     homepage = "https://github.com/nschloe/termplotlib";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ thoughtpolice ];

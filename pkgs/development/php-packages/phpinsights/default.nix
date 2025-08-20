@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   php,
-  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -12,26 +11,20 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nunomaduro";
     repo = "phpinsights";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XuvwO/MkGBMWo2hjDPDDYS3JmfWJH75mbNn6oKsMWps=";
   };
 
-  composerLock = ./composer.lock;
-  vendorHash = "sha256-CwIfRmwJREz24Qj6J2PKQp+ix+/ZXo1oamcHc1fPUoc=";
+  vendorHash = "sha256-xeruE3oCrl6usg/7Wmop/w/CrIZfT+zMTQiQJXtBExw=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  composerLock = ./composer.lock;
 
   meta = {
-    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/nunomaduro/phpinsights/releases/tag/v${finalAttrs.version}";
     description = "Instant PHP quality checks from your console";
     homepage = "https://phpinsights.com/";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
-    teams = [ lib.teams.php ];
+    maintainers = [ ];
   };
 })

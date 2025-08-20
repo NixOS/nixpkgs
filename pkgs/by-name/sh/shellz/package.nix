@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "evilsocket";
-    repo = "shellz";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-sUYDopSxaUPyrHev8XXobRoX6uxbdf5goJ75KYEPFNY=";
   };

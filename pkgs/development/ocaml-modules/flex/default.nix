@@ -5,7 +5,7 @@
   reason,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "flex";
   version = "unstable-2020-09-12";
 

@@ -4,12 +4,12 @@
   fetchFromGitHub,
   python3,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "g203-led";
-  version = "0-unstable-2021-05-08";
+  version = "unstable-2021-05-08";
   src = fetchFromGitHub {
     owner = "smasty";
-    repo = "g203-led";
+    repo = pname;
     rev = "f9d10ba3aa8f9359f928bbab0a2ea00cefc69f4b";
     sha256 = "1fhaimci80xmihg84bgrml61zr56pi9rkxfbs13vvw9dwjf031k0";
   };

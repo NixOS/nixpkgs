@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notroj";
     repo = "litmus";
-    tag = version;
+    rev = version;
     # Required for neon m4 macros, bundled neon not used
     fetchSubmodules = true;
     hash = "sha256-jWz0cnytgn7px3vvB9/ilWBNALQiW5/QvgguM27I3yQ=";

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = "markdown-it-py";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
   };
@@ -50,8 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ]
-  ++ optional-dependencies.linkify;
+  ] ++ optional-dependencies.linkify;
 
   # disable and remove benchmark tests
   preCheck = ''

@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "avfs";
-  version = "1.2.0";
+  version = "1.1.5";
   src = fetchurl {
     url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-olqOxDwe4XJiThpMec5mobkwhBzbVFtyXx7GS8q+iJw=";
+    sha256 = "sha256-rZ87ZBBNYAmgWMcPZwiPeZMJv4UZsUsVSvrSJqRScs8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

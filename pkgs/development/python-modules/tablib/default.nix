@@ -7,7 +7,6 @@
   openpyxl,
   pandas,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   pyyaml,
   setuptools-scm,
@@ -19,15 +18,20 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.8.0";
+  version = "3.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lNi83GWnFaACSm1bcBpfMeRb0VkmnmLHNzHeefBI2ys=";
+    hash = "sha256-+duE7TmN9RCb1pwR1GYT0WzFcvua0yE/ENleK18SwY4=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -57,7 +61,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    pytest-cov-stub
     unicodecsv
   ];
 

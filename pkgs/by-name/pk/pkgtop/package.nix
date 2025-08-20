@@ -21,12 +21,12 @@ buildGoModule rec {
     mv $out/bin/{cmd,pkgtop}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Interactive package manager and resource monitor designed for the GNU/Linux";
     homepage = "https://github.com/orhun/pkgtop";
     changelog = "https://github.com/orhun/pkgtop/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "pkgtop";
   };
 }

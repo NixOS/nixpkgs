@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "kde-gruvbox";
-  version = "0-unstable-2015-08-09";
+  version = "unstable-2015-08-09";
 
   src = fetchFromGitHub {
     owner = "printesoi";
-    repo = "kde-gruvbox";
+    repo = pname;
     rev = "2dd95283076d7194345a460edb3630cfd020759c";
     sha256 = "sha256-ppAeEfwoHZg7XEj3zGc+uq4Z6hUgJNM2EjuDsc8pFQo=";
   };

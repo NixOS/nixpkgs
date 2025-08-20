@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pycrc";
   version = "1.21";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyCRC";

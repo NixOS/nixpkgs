@@ -7,32 +7,23 @@
   pillow,
   zbar,
   pytestCheckHook,
-  setuptools,
 }:
 
-let
-  zbar' = zbar.override {
-    enableVideo = false;
-    withXorg = false;
-  };
-in
 buildPythonPackage rec {
   pname = "pyzbar";
   version = "0.1.9";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";
     repo = "pyzbar";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
   };
 
-  build-system = [ setuptools ];
+  buildInputs = [ zbar ];
 
-  buildInputs = [ zbar' ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pillow
     numpy
   ];
@@ -43,9 +34,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = ''
     substituteInPlace pyzbar/zbar_library.py \
-      --replace-fail \
+      --replace \
         "find_library('zbar')" \
-        '"${lib.getLib zbar'}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
+        '"${lib.getLib zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   disabledTests = [

@@ -2,42 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  duckdb,
-  sqlalchemy,
-
-  # testing
-  fsspec,
-  hypothesis,
-  pandas,
-  pyarrow,
-  pytest-remotedata,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  python,
+  duckdb,
+  hypothesis,
+  pandas,
+  pyarrow,
+  poetry-core,
+  pytest-remotedata,
   snapshottest,
+  sqlalchemy,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.17.0";
+  version = "0.14.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     tag = "v${version}";
-    hash = "sha256-AhYCiIhi7jMWKIdDwZZ8MgfDg3F02/jooGLOp6E+E5g=";
+    hash = "sha256-ZPvkLVPyRPBc9O/yIowY6J1Ve4bxL+opBxrBHIFpFhk=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     duckdb
     sqlalchemy
   ];
@@ -49,17 +45,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
-    fsspec
     hypothesis
     pandas
-    pyarrow
     pytest-remotedata
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
+    pyarrow
+  ] ++ lib.optionals (pythonOlder "3.12") [
     # requires wasmer which is broken for python 3.12
     # https://github.com/wasmerio/wasmer-python/issues/778
     snapshottest
+  ];
+
+  pytestFlagsArray = [
+    "-m"
+    "'not remote_data'"
   ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
@@ -67,29 +66,22 @@ buildPythonPackage rec {
     "duckdb_engine/tests/test_datatypes.py"
   ];
 
-  disabledTestMarks = [
-    "remote_data"
-  ];
-
   disabledTests = [
-    # user agent not available in nixpkgs
-    "test_user_agent"
-    "test_user_agent_with_custom_user_agent"
-
-    # Fail under nixpkgs-review in the sandbox due to "missing tables"
-    "test_get_columns"
-    "test_get_foreign_keys"
-    "test_get_check_constraints"
-    "test_get_unique_constraints"
+    # incompatible with duckdb 1.1.1
+    "test_with_cache"
+  ] ++ lib.optionals (python.pythonVersion == "3.11") [
+    # incompatible with duckdb 1.1.1
+    "test_all_types_reflection"
+    "test_nested_types"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];
 
-  meta = {
+  meta = with lib; {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
-    changelog = "https://github.com/Mause/duckdb_engine/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

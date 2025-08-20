@@ -3,42 +3,34 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pkg-config,
   xcbuild,
-  cython,
-  setuptools,
-  hidapi,
-  libusb1,
+  cython_0,
   udev,
+  darwin,
 }:
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.14.0.post4";
-  pyproject = true;
+  version = "0.14.0.post2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SPziU+Um0XtmP7+ZicccfvdlPO1fS+ZfFDfDE/s9vfY=";
+    sha256 = "sha256-bA6XumsFmjCdUbSVqPDV77zqh1a2QNmLb2u5/e8kWKw=";
   };
 
-  build-system = [
-    cython
-    setuptools
-  ];
+  nativeBuildInputs = [ cython_0 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    hidapi
-    libusb1
-  ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    HIDAPI_SYSTEM_HIDAPI = true;
-  };
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  propagatedBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        CoreFoundation
+        IOKit
+      ]
+    );
 
   pythonImportsCheck = [ "hid" ];
 

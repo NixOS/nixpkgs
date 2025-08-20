@@ -3,17 +3,16 @@
   lib,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation rec {
   pname = "nullfs";
-  version = "0.19";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "nullfsvfs";
     rev = "v${version}";
-    sha256 = "sha256-nEwLxcELLBd+BN7OHYLJZCpie0rG0a1wj0RCOKpZkRU=";
+    sha256 = "sha256-Hkplhem4Gb1xsYQtRSWub0m15Fiil3qJAO183ygP+WI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Virtual black hole file system that behaves like /dev/null";
+    description = "A virtual black hole file system that behaves like /dev/null";
     homepage = "https://github.com/abbbi/nullfsvfs";
     license = licenses.gpl3;
     platforms = platforms.linux;

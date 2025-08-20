@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchPypi,
   kissfft,
   miniaudio,
   pkg-config,
@@ -17,7 +16,6 @@
   librsvg,
   libsamplerate,
   libvorbis,
-  xorg,
   mpg123,
   opusfile,
   pango,
@@ -28,34 +26,15 @@
   withDiscordRPC ? true,
 }:
 
-let
-  # fork of pypresence, to be reverted if/when there's an upstream release
-  lynxpresence = python3Packages.buildPythonPackage rec {
-    pname = "lynxpresence";
-    version = "4.4.1";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
-    };
-
-    build-system = with python3Packages; [ setuptools ];
-
-    doCheck = false; # tests require internet connection
-    pythonImportsCheck = [ "lynxpresence" ];
-  };
-in
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "8.0.1";
-  pyproject = true;
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
-    tag = "v${version}";
-    hash = "sha256-m94/zdlJu/u/dchIXhqB47bkl6Uej2hVr8R6RNg8Vaw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-A7JRJ0Eh0ynuwPYZFLEeqWLf6OKdN59jM2vozdpSZC8=";
   };
 
   postUnpack = ''
@@ -66,29 +45,32 @@ python3Packages.buildPythonApplication rec {
     ln -s ${miniaudio.src} source/src/phazor/miniaudio
   '';
 
-  patches = [
-    ./install_mode_true.patch
-  ];
-
   postPatch = ''
-    substituteInPlace src/tauon/t_modules/t_phazor.py \
-      --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
+    substituteInPlace tauon.py \
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
+
+    substituteInPlace t_modules/t_main.py \
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so'
+
+    substituteInPlace t_modules/t_phazor.py \
+      --replace-fail 'lib/libphazor' '../../lib/libphazor'
+
+    substituteInPlace compile-phazor*.sh --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
+
+    substituteInPlace extra/tauonmb.desktop --replace-fail 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
-  pythonRemoveDeps = [
-    "opencc"
-    "tekore"
-  ];
+  postBuild = ''
+    bash ./compile-phazor.sh
+    bash ./compile-phazor-pipewire.sh
+  '';
 
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
     gobject-introspection
-  ];
-
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
@@ -112,7 +94,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       beautifulsoup4
-      colored-traceback
       dbus-python
       unidecode
       jxlpy
@@ -125,46 +106,47 @@ python3Packages.buildPythonApplication rec {
       pychromecast
       pylast
       pygobject3
-      pysdl3
+      pysdl2
       requests
       send2trash
       setproctitle
-      tidalapi
     ]
-    ++ lib.optional withDiscordRPC lynxpresence
+    ++ lib.optional withDiscordRPC pypresence
     ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
     "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath (
-        [
-          game-music-emu
-          libopenmpt
-          pulseaudio
-        ]
-        ++ lib.optional stdenv.hostPlatform.isLinux xorg.libXcursor
-      )
+      lib.makeLibraryPath [
+        game-music-emu
+        pulseaudio
+      ]
     }"
     "--prefix PYTHONPATH : $out/share/tauon"
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
   ];
 
-  postInstall = ''
-    mv $out/bin/tauonmb $out/bin/tauon
+  installPhase = ''
+    install -Dm755 tauon.py $out/bin/tauon
+    mkdir -p $out/share/tauon
+    cp -r lib $out
+    cp -r assets input.txt t_modules theme templates $out/share/tauon
+
+    wrapPythonPrograms
+
     mkdir -p $out/share/applications
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Linux desktop music player from the future";
     mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
-    changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jansol ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jansol ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

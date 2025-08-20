@@ -21,8 +21,6 @@ runCommand "sddm-wrapped"
       ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
     nativeBuildInputs = [ wrapQtAppsHook ];
 
-    strictDeps = true;
-
     passthru = {
       inherit unwrapped;
       inherit (unwrapped.passthru) tests;

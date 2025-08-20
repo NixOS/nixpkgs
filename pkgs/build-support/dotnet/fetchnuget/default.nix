@@ -1,5 +1,4 @@
 {
-  lib,
   fetchurl,
   buildDotnetPackage,
   unzip,
@@ -15,12 +14,10 @@ attrs@{
   ...
 }:
 if md5 != "" then
-  throw "fetchnuget does not support md5 anymore, please use 'hash' attribute with SRI hash: ${
-    lib.generators.toPretty { } attrs
-  }"
+  throw "fetchnuget does not support md5 anymore, please use 'hash' attribute with SRI hash"
 # This is also detected in fetchurl, but we just throw here to avoid confusion
 else if (sha256 != "" && hash != "") then
-  throw "multiple hashes passed to fetchNuGet: ${lib.generators.toPretty { } url}"
+  throw "multiple hashes passed to fetchNuGet"
 else
   buildDotnetPackage (
     {

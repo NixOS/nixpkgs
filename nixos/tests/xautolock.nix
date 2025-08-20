@@ -1,23 +1,27 @@
-{
-  name = "xautolock";
-  meta.maintainers = [ ];
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
 
-  nodes.machine = {
-    imports = [
-      ./common/x11.nix
-      ./common/user-account.nix
-    ];
+  {
+    name = "xautolock";
+    meta.maintainers = [ ];
 
-    test-support.displayManager.auto.user = "bob";
-    services.xserver.xautolock.enable = true;
-    services.xserver.xautolock.time = 1;
-  };
+    nodes.machine = {
+      imports = [
+        ./common/x11.nix
+        ./common/user-account.nix
+      ];
 
-  testScript = ''
-    machine.start()
-    machine.wait_for_x()
-    machine.fail("pgrep xlock")
-    machine.sleep(120)
-    machine.succeed("pgrep xlock")
-  '';
-}
+      test-support.displayManager.auto.user = "bob";
+      services.xserver.xautolock.enable = true;
+      services.xserver.xautolock.time = 1;
+    };
+
+    testScript = ''
+      machine.start()
+      machine.wait_for_x()
+      machine.fail("pgrep xlock")
+      machine.sleep(120)
+      machine.succeed("pgrep xlock")
+    '';
+  }
+)

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   autoconf-archive,
   gtk-doc,
@@ -42,12 +43,13 @@ stdenv.mkDerivation rec {
     cp "${language_subtag_registry}" data/language-subtag-registry
   '';
 
-  configureFlags = [
-    "ac_cv_va_copy=1"
-  ]
-  ++ lib.optional (
-    stdenv.hostPlatform.libc == "glibc"
-  ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
+  configureFlags =
+    [
+      "ac_cv_va_copy=1"
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform.libc == "glibc"
+    ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
   buildInputs = [
     gettext

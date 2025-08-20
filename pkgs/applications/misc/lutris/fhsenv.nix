@@ -21,7 +21,7 @@ let
       gtksourceview
       gnome-desktop
       libgnome-keyring
-      webkitgtk_4_1
+      webkitgtk_4_0
     ];
   xorgDeps =
     pkgs: with pkgs.xorg; [

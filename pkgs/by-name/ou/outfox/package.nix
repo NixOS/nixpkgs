@@ -70,19 +70,19 @@ stdenv.mkDerivation rec {
     makeWrapper $out/share/OutFox/OutFox $out/bin/OutFox --argv0
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Rhythm game engine forked from StepMania";
     homepage = "https://projectoutfox.com";
     changelog = "https://projectoutfox.com/releases/${version}";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
       "armv7l-linux"
     ];
-    maintainers = with lib.maintainers; [ maxwell-lt ];
+    maintainers = with maintainers; [ maxwell-lt ];
     mainProgram = "OutFox";
   };
 }

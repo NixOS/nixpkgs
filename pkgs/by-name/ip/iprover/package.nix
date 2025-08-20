@@ -8,13 +8,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "iprover";
   version = "3.8.1";
 
   src = fetchFromGitLab {
     owner = "korovin";
-    repo = "iprover";
+    repo = pname;
     rev = "f61edb113b705606c7314dc4dce0687832c3169f";
     hash = "sha256-XXqbEoYKjoktE3ZBEIEFjLhA1B75zhnfPszhe8SvbI8=";
   };
@@ -25,23 +25,23 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    eprover
-  ]
-  ++ (with ocamlPackages; [
-    ocaml
-    findlib
-  ]);
-  buildInputs = [
-    zlib
-    ocamlPackages.z3
-    z3
-  ]
-  ++ (with ocamlPackages; [
-    ocamlgraph
-    yojson
-    zarith
-  ]);
+  nativeBuildInputs =
+    [ eprover ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
+  buildInputs =
+    [
+      zlib
+      ocamlPackages.z3
+      z3
+    ]
+    ++ (with ocamlPackages; [
+      ocamlgraph
+      yojson
+      zarith
+    ]);
 
   preConfigure = "patchShebangs .";
 
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
     maintainers = with maintainers; [
       raskin
+      gebner
     ];
     platforms = platforms.linux;
     license = licenses.gpl3;

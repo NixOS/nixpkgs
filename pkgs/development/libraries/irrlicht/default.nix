@@ -14,19 +14,20 @@ let
   common = import ./common.nix { inherit fetchzip; };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = common.pname;
   version = common.version;
 
   src = common.src;
 
-  postPatch = ''
-    sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
-  ''
-  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace source/Irrlicht/Makefile \
-      --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
-  '';
+  postPatch =
+    ''
+      sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace source/Irrlicht/Makefile \
+        --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
+    '';
 
   preConfigure = ''
     cd source/Irrlicht
@@ -49,8 +50,7 @@ stdenv.mkDerivation {
     libXrandr
     libX11
     libXxf86vm
-  ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
+  ] ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 
   meta = {
     homepage = "https://irrlicht.sourceforge.io/";

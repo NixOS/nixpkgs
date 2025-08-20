@@ -5,9 +5,7 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "fileinfo";
-  version = "0-unstable-2022-09-16";
-  format = "pyproject";
-
+  version = "unstable-2022-09-16";
   src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "fileinfo";
@@ -15,9 +13,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-tEmCsR3LmTxeDZAbMvbIwqp/6uaGNUhgGlm18gdsnOw=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [ requests ];
+  propagatedBuildInputs = with python3Packages; [ requests ];
 
   meta = with lib; {
     homepage = "https://github.com/sdushantha/fileinfo";

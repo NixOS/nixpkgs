@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.4.5";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "nemo";
+    repo = pname;
     rev = version;
-    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
+    hash = "sha256-3FALXfW0PzWuirX7bxP8BFkIRyQzvg3xBQCdddSpmOg=";
   };
 
   patches = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       licenses.lgpl2
     ];
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
     mainProgram = "nemo";
   };
 }

@@ -10,24 +10,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polylux2pdfpc";
-  version = "0.4.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "polylux-typ";
+    owner = "andreasKroepelin";
     repo = "polylux";
-    tag = "v${version}";
+    rev = "v${version}";
     sparseCheckout = [ dirname ];
-    hash = "sha256-41FgRejonvVTmE89WGm0Cqumm8lb6kkfxtkWV74UKJA=";
+    hash = "sha256-GefX7XsUfOMCp2THstSizRGpKAoq7yquVukWQjGuFgc=";
   };
   sourceRoot = "${src.name}/${dirname}";
 
-  cargoHash = "sha256-9nA18f+Dwps45M/OIY0jtx7QgyJDTVUsPndFdNBKHCQ=";
+  cargoHash = "sha256-vmCaQxPkzz1ZVmtX7L3VeQb3kWhVqyPoQ1NrTSiJN9Y=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool to make pdfpc interpret slides created by polylux correctly";
-    homepage = "https://github.com/polylux-typ/polylux/tree/main/pdfpc-extractor";
+    homepage = "https://github.com/andreasKroepelin/polylux/tree/main/pdfpc-extractor";
     license = licenses.mit;
     mainProgram = "polylux2pdfpc";
     maintainers = [ maintainers.diogotcorreia ];

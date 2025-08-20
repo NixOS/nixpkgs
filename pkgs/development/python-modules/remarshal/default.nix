@@ -53,6 +53,5 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
     maintainers = with maintainers; [ offline ];
-    mainProgram = "remarshal";
   };
 }

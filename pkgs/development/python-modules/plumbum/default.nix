@@ -42,8 +42,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMP
@@ -67,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module Shell Combinators";
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
-    homepage = "https://github.com/tomerfiliba/plumbum";
+    homepage = " https://github.com/tomerfiliba/plumbum";
     license = licenses.mit;
     maintainers = [ ];
   };

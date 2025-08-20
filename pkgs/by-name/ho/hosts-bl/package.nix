@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "hosts-bl";
   version = "0-unstable-2024-11-17";
 

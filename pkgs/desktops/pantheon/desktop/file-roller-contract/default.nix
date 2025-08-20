@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Contractor extension for File Roller";
     homepage = "https://github.com/elementary/file-roller-contract";
     license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

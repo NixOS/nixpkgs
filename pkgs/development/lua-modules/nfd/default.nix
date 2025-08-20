@@ -1,11 +1,13 @@
 {
+  stdenv,
   fetchFromGitHub,
   buildLuarocksPackage,
   lua,
   pkg-config,
   lib,
-  replaceVars,
+  substituteAll,
   zenity,
+  AppKit,
 }:
 
 buildLuarocksPackage {
@@ -22,7 +24,8 @@ buildLuarocksPackage {
 
   # use zenity because default gtk impl just crashes
   patches = [
-    (replaceVars ./zenity.patch {
+    (substituteAll {
+      src = ./zenity.patch;
       inherit zenity;
     })
   ];
@@ -30,6 +33,8 @@ buildLuarocksPackage {
 
   luarocksConfig.variables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   postInstall = ''
     find $out -name nfd_zenity.so -execdir mv {} nfd.so \;
@@ -42,7 +47,7 @@ buildLuarocksPackage {
   '';
 
   meta = {
-    description = "Tiny, neat Lua library that invokes native file open and save dialogs";
+    description = "A tiny, neat lua library that portably invokes native file open and save dialogs.";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.scoder12 ];

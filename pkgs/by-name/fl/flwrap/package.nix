@@ -16,17 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-g1V7bOcgVHpD+Ndn02Nj4I3rGItuQ2qLGlrZZshfGP8=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
   buildInputs = [
     fltk13
     libjpeg
   ];
 
-  configureFlags = [
-    "FLTK_CONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   meta = {

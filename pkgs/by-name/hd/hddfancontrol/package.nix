@@ -1,68 +1,45 @@
 {
   lib,
-  rustPlatform,
+  python3Packages,
   fetchFromGitHub,
   hddtemp,
   hdparm,
-  sdparm,
   smartmontools,
-  makeWrapper,
-  installShellFiles,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+
+python3Packages.buildPythonPackage rec {
   pname = "hddfancontrol";
-  version = "2.0.4";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "desbma";
-    repo = "hddfancontrol";
-    tag = finalAttrs.version;
-    hash = "sha256-RnqKqXyR3XN/UL70vG/+NtkxxbwvAoIQaFipUtRQOlE=";
+    repo = pname;
+    rev = version;
+    sha256 = "0b2grf98qnikayn18xll01dkm5pjpcjxdffgx1nyw9s0gqig8dg0";
   };
 
-  cargoHash = "sha256-2jwfdUBpzamsbvkpP+Fn5dz8jj9+Wnp2JpoAT6tHUac=";
-
-  nativeBuildInputs = [
-    makeWrapper
-    installShellFiles
+  propagatedBuildInputs = [
+    python3Packages.python-daemon
+    hddtemp
+    hdparm
+    smartmontools
   ];
-
-  postBuild = ''
-    mkdir -p target/man
-    cargo run --features gen-man-pages -- target/man
-  '';
 
   postInstall = ''
     mkdir -p $out/etc/systemd/system
     substitute systemd/hddfancontrol.service $out/etc/systemd/system/hddfancontrol.service \
-      --replace-fail /usr/bin/hddfancontrol $out/bin/hddfancontrol
+        --replace /usr/bin/hddfancontrol $out/bin/hddfancontrol
     sed -i -e '/EnvironmentFile=.*/d' $out/etc/systemd/system/hddfancontrol.service
-
-    cd target/man
-    installManPage hddfancontrol-daemon.1 hddfancontrol-pwm-test.1 hddfancontrol.1
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/hddfancontrol \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          hddtemp
-          hdparm
-          sdparm
-          smartmontools
-        ]
-      }
-  '';
+  passthru.tests = { inherit (nixosTests) hddfancontrol; };
 
-  meta = {
+  meta = with lib; {
     description = "Dynamically control fan speed according to hard drive temperature on Linux";
-    changelog = "https://github.com/desbma/hddfancontrol/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/desbma/hddfancontrol";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      benley
-      philipwilk
-    ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ benley ];
     mainProgram = "hddfancontrol";
   };
-})
+}

@@ -2,8 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  isPy3k,
   attrs,
   coverage,
+  enum34,
   pexpect,
   doCheck ? true,
   pytest,
@@ -20,7 +22,6 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   version = "4.57.1";
-  format = "setuptools";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     attrs
     coverage
     sortedcontainers
-  ];
+  ] ++ lib.optional (!isPy3k) enum34;
 
   nativeCheckInputs = [
     pytest

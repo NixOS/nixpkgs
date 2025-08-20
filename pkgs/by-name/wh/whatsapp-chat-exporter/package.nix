@@ -4,19 +4,16 @@
   fetchFromGitHub,
 }:
 
-let
-  version = "0.12.0";
-in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "whatsapp-chat-exporter";
-  inherit version;
-  pyproject = true;
+  version = "0.10.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     tag = version;
-    hash = "sha256-0FJZqqmuSA+te5lzi1okkmuT3s2JNX7uHoYl9ayNt/Q=";
+    hash = "sha256-TPXQaWnUy+blTS+Tz84K6cxJu4+dLbT2Dl9SKqlhDHY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -24,10 +21,9 @@ python3Packages.buildPythonApplication {
     jinja2
     pycryptodome
     javaobj-py3
-    vobject
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter";
     description = "WhatsApp database parser";
     changelog = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter/releases/tag/${version}";
@@ -36,11 +32,8 @@ python3Packages.buildPythonApplication {
       you the history of your WhatsApp conversations inHTML and JSON. Android
       Backup Crypt12, Crypt14 and Crypt15 supported.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "wtsexporter";
-    maintainers = with lib.maintainers; [
-      bbenno
-      EstebanMacanek
-    ];
+    maintainers = with maintainers; [ bbenno ];
   };
 }

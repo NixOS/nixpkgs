@@ -6,7 +6,7 @@
   bintools-unwrapped,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "python-cosmopolitan";
   version = "3.6.14";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     platforms = platforms.x86_64;
     badPlatforms = platforms.darwin;
     license = licenses.isc;
-    teams = [ teams.cosmopolitan ];
+    maintainers = teams.cosmopolitan.members;
     mainProgram = "python.com";
   };
 }

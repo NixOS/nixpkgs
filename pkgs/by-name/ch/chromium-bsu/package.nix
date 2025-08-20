@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Fast paced, arcade-style, top-scrolling space shooter";
     mainProgram = "chromium-bsu";
     license = licenses.artistic1;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }
+# TODO [ AndersonTorres ]: joystick; gothic uralic font

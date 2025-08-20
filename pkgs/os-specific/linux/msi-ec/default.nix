@@ -5,29 +5,25 @@
   linuxPackages,
   git,
   kernel ? linuxPackages.kernel,
-  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2025-05-17";
+  version = "0-unstable-2024-11-04";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";
     repo = "msi-ec";
-    rev = "796be9047b13c311ac4cdec33913775f4057f600";
-    hash = "sha256-npJbnWFBVb8TK9ynVD/kXWq2iqO0ACKF4UYsu5mQuok=";
+    rev = "be6f7156cd15f6ecf9d48dfcc30cbd1f693916b8";
+    hash = "sha256-gImiP4OaBt80n+qgVnbhd0aS/zW+05o3DzGCw0jq+0g=";
   };
 
   dontMakeSourcesWritable = false;
 
-  patches = [
-    ./patches/makefile.patch
-    ./patches/kernel-string-choices.patch
-  ];
+  patches = [ ./patches/makefile.patch ];
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];

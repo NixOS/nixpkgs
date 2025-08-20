@@ -7,19 +7,19 @@
 
 let
   pname = "pack";
-  version = "0.37.0";
+  version = "0.36.2";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "buildpacks";
-    repo = "pack";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
+    hash = "sha256-pITQAGt0aMhEfoauPWxAqnr8JxGi4DcqcmgqtooLkd4=";
   };
 
-  vendorHash = "sha256-W8FTk2eJYaTE9gCRwrT+mDhda/ZZeCytqQ9vvVZZHSQ=";
+  vendorHash = "sha256-51Qqq2Jpd1XxUoMN+6j4/VZ4fLCm4I9JwBeTcdSHgQw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

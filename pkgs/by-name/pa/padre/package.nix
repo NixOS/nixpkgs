@@ -22,13 +22,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Advanced exploiting tool for Padding Oracle attacks against CBC mode encryption";
     homepage = "https://github.com/glebarez/padre";
     changelog = "https://github.com/glebarez/padre/releases/tag/v${version}";
     # https://github.com/glebarez/padre/issues/28
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "padre";
   };
 }

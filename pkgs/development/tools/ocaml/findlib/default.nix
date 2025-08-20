@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "all"
-  ]
-  ++ lib.optionals ocaml.nativeCompilers [
     "opt"
   ];
 

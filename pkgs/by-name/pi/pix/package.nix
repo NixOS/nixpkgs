@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.4.6";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "pix";
+    repo = pname;
     rev = version;
-    hash = "sha256-jlaqlA3akRNnBPTdtkWl+0NXqFbYw9uJKRfE/oTJMSg=";
+    hash = "sha256-c/+NQHvscW/XE49Twmg1Rk1IfsjReCtRQWffobZtgTs=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pjmp";
-    repo = "ikill";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
   };
 
-  cargoHash = "sha256-Xbl9cQKWxtwNQqWW41mQrVAsvMLUkTb0irDLD/XstMI=";
+  cargoHash = "sha256-zKa2FP0lBS2XjgPWfyPZ60aHyeAe0uNIFbmuX4Uo1rA=";
 
   meta = with lib; {
     description = "Interactively kill running processes";

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ntlmrecon";
   version = "0.4";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwnfoo";
@@ -16,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0rrx49li2l9xlcax84qxjf60nbzp3fgq77c36yqmsp0pc9i89ah6";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     colorama
     iptools
     requests
@@ -32,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     "ntlmrecon"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Information enumerator for NTLM authentication enabled web endpoints";
     mainProgram = "ntlmrecon";
     homepage = "https://github.com/pwnfoo/NTLMRecon";
     changelog = "https://github.com/pwnfoo/NTLMRecon/releases/tag/v-${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

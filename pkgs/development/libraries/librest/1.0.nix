@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/librest";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 }

@@ -7,7 +7,7 @@
   withGraphics ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "icon-lang";
   version = "unstable-2020-02-05";
   src = fetchFromGitHub {

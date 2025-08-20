@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
   SDL2,
   SDL2_mixer,
   buildOpenGLES ? false,
@@ -26,15 +25,13 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
     SDL2
     SDL2_mixer
   ];
 
   cmakeFlags = [
     "-Wno-dev"
-  ]
-  ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
+  ] ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 
   meta = {
     description = "Modern re-implementation of the classic DOS game Duke Nukem II";

@@ -13,10 +13,11 @@
 # - Instead of providing different releases for each version of CUDA, CuTensor has multiple subdirectories in `lib`
 #   -- one for each version of CUDA.
 {
-  cudaLib,
-  cudaMajorMinorVersion,
+  cudaVersion,
+  flags,
   lib,
-  redistSystem,
+  mkVersionedPackageName,
+  stdenv,
 }:
 let
   inherit (lib)
@@ -24,8 +25,11 @@ let
     lists
     modules
     versions
+    strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   redistName = "cutensor";
   pname = "libcutensor";
@@ -37,7 +41,6 @@ let
     "1.6.2"
     "1.7.0"
     "2.0.2"
-    "2.1.0"
   ];
 
   # Manifests :: { redistrib, feature }
@@ -70,7 +73,7 @@ let
       releaseGrabber
     ]) cutensorVersions;
 
-  # Our cudaMajorMinorVersion tells us which version of CUDA we're building against.
+  # Our cudaVersion tells us which version of CUDA we're building against.
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
   # Typically the names will look like this:
   #
@@ -82,22 +85,25 @@ let
   # libPath :: String
   libPath =
     let
-      cudaMajorVersion = versions.major cudaMajorMinorVersion;
+      cudaMajorMinor = versions.majorMinor cudaVersion;
+      cudaMajor = versions.major cudaVersion;
     in
-    if cudaMajorMinorVersion == "10.2" then cudaMajorMinorVersion else cudaMajorVersion;
+    if cudaMajorMinor == "10.2" then cudaMajorMinor else cudaMajor;
 
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer
   # CUDA versions than another.
+  # redistArch :: String
+  redistArch = flags.getRedistArch hostPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
     { feature, redistrib, ... }:
     (attrsets.attrByPath [
       pname
-      redistSystem
+      redistArch
     ] null feature) != null;
 
-  # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
+  # TODO(@connorbaker): With an auxilliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.
   # However, we don't have that currently, so we make a best-effort to try to build TensorRT with whatever
   # libPath corresponds to our CUDA version.
@@ -107,8 +113,7 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: RedistribRelease -> String
-  computeName =
-    { version, ... }: cudaLib.mkVersionedName redistName (lib.versions.majorMinor version);
+  computeName = { version, ... }: mkVersionedPackageName redistName version;
 in
 final: _:
 let
@@ -121,8 +126,28 @@ let
         redistribRelease = redistrib.${pname};
         featureRelease = feature.${pname};
       };
+      fixedDrv = drv.overrideAttrs (prevAttrs: {
+        buildInputs =
+          prevAttrs.buildInputs
+          ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [ final.cudatoolkit ]
+          ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
+            [ final.libcublas.lib ]
+            # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
+            ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [ final.cuda_cudart.lib ]
+          );
+        meta = prevAttrs.meta // {
+          description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
+          homepage = "https://developer.nvidia.com/cutensor";
+          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.obsidian-systems-maintenance ];
+          license = lib.licenses.unfreeRedistributable // {
+            shortName = "cuTENSOR EULA";
+            fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+            url = "https://docs.nvidia.com/cuda/cutensor/license.html";
+          };
+        };
+      });
     in
-    attrsets.nameValuePair (computeName redistrib.${pname}) drv;
+    attrsets.nameValuePair (computeName redistrib.${pname}) fixedDrv;
 
   extension =
     let

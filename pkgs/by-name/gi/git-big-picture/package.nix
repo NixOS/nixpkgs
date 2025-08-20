@@ -1,28 +1,26 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchPypi,
   git,
   graphviz,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-big-picture";
-  version = "1.3.0";
-  pyproject = true;
+  version = "1.1.1";
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "git-big-picture";
-    repo = "git-big-picture";
-    tag = "v${version}";
-    hash = "sha256-aBwSw7smeRkkXSPY02Cs+jFI1wvgj1JisUny+R8G59E=";
+  src = fetchPypi {
+    inherit format version;
+    pname = "git_big_picture"; # underscores needed for working download URL
+    python = "py3"; # i.e. no Python 2.7
+    sha256 = "a20a480057ced1585c4c38497d27a5012f12dd29697313f0bb8fa6ddbb5c17d8";
   };
-
-  build-system = with python3Packages; [ setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \
-      --prefix PATH : ${
+      --prefix PATH ":" ${
         lib.makeBinPath [
           git
           graphviz

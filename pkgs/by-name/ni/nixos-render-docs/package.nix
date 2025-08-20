@@ -38,12 +38,9 @@ python.pkgs.buildPythonApplication rec {
     src = ./src;
   };
 
-  nativeCheckInputs = [
-    python.pkgs.pytestCheckHook
-  ];
-
-  build-system = [
-    python.pkgs.setuptools
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -51,11 +48,8 @@ python.pkgs.buildPythonApplication rec {
     mdit-py-plugins
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "-vvrP"
-  ];
-
-  enabledTestPaths = [
     "tests/"
   ];
 

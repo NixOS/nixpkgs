@@ -7,7 +7,7 @@
   git,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openttd-grfcodec";
   version = "unstable-2021-03-10";
 

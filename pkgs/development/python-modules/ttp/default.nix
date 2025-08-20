@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
-    repo = "ttp";
+    repo = pname;
     tag = version;
     hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
   };
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     "test_ttp_templates_dir_env_variable"
   ];
 
-  enabledTestPaths = [ "test/pytest" ];
+  pytestFlagsArray = [ "test/pytest" ];
 
   meta = with lib; {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";

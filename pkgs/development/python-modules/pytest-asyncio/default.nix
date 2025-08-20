@@ -4,19 +4,22 @@
   callPackage,
   fetchFromGitHub,
   pytest,
+  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.26.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  version = "0.23.8"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     tag = "v${version}";
-    hash = "sha256-GEhFwwQCXwtqfSiew/sOvJYV3JREqOGD4fQONlRR/Mw=";
+    hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
   };
 
   outputs = [
@@ -41,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
-    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/v${version}/docs/source/reference/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

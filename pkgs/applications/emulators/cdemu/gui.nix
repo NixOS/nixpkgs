@@ -9,7 +9,6 @@
   intltool,
   adwaita-icon-theme,
   gdk-pixbuf,
-  libappindicator-gtk3,
 }:
 python3Packages.buildPythonApplication {
 
@@ -36,7 +35,6 @@ python3Packages.buildPythonApplication {
     libnotify
     adwaita-icon-theme
     gdk-pixbuf
-    libappindicator-gtk3
   ];
   propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 

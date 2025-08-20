@@ -1,11 +1,9 @@
-diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
-index cc992b4d2..0a01ff03a 100644
 --- a/src/core/CMakeLists.txt
 +++ b/src/core/CMakeLists.txt
-@@ -368,6 +368,7 @@ foreach(arch ${archs})
-             devtools_skip_typecheck=false
+@@ -366,6 +366,7 @@ foreach(arch ${archs})
              content_enable_legacy_ipc=true
-             headless_use_policy=false
+             enable_extensions_legacy_ipc=true
+             enable_bound_session_credentials=false
 +            link_pulseaudio=true
          )
          extend_gn_list(gnArgArg

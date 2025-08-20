@@ -68,20 +68,17 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  postFixup = ''
-    patchShebangs --update --host $out/share/dialect/search_provider
-  '';
-
   doCheck = false;
 
-  strictDeps = true;
+  # handle setup hooks better
+  strictDeps = false;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/dialect-app/dialect";
     description = "Translation app for GNOME";
-    teams = [ lib.teams.gnome-circle ];
+    maintainers = lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "dialect";

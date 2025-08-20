@@ -2,12 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  node-gyp,
+  fetchpatch2,
+  buildNpmPackage,
   nodejs_20,
   nixosTests,
   gettext,
   python3,
   giflib,
+  darwin,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -16,8 +18,7 @@
   qpdf,
   tesseract5,
   unpaper,
-  pnpm,
-  poppler-utils,
+  poppler_utils,
   liberation_ttf,
   xcbuild,
   pango,
@@ -25,143 +26,138 @@
   nltk-data,
   xorg,
 }:
+
 let
-  version = "2.17.1";
+  version = "2.13.5";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
-    tag = "v${version}";
-    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AVfm5tC2+hTdEv0ildEj0El1M/sF7ftkEn3pUkG1O7Q=";
   };
 
+  # subpath installation is broken with uvicorn >= 0.26
+  # https://github.com/NixOS/nixpkgs/issues/298719
+  # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_1;
+      django = prev.django_5;
 
-      # TODO remove when paperless-ngx is updated past 2.17.1
-      imap-tools = prev.imap-tools.overridePythonAttrs {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "ikvk";
-          repo = "imap_tools";
-          tag = "v1.10.0";
-          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
-        };
-      };
+      django-extensions = prev.django-extensions.overridePythonAttrs (_: {
+        # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
+        # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
+        doCheck = false;
+      });
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
+
+      uvicorn = prev.uvicorn.overridePythonAttrs (_: {
+        version = "0.25.0";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "uvicorn";
+          rev = "0.25.0";
+          hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
+        };
+      });
     };
   };
 
   path = lib.makeBinPath [
     ghostscript_headless
-    (imagemagickBig.override { ghostscript = ghostscript_headless; })
+    imagemagickBig
     jbig2enc
     optipng
     pngquant
     qpdf
     tesseract5
     unpaper
-    poppler-utils
+    poppler_utils
   ];
 
-  frontend =
-    let
-      frontendSrc = src + "/src-ui";
-    in
-    stdenv.mkDerivation rec {
-      pname = "paperless-ngx-frontend";
-      inherit version;
+  frontend = buildNpmPackage {
+    pname = "paperless-ngx-frontend";
+    inherit version src;
 
-      src = frontendSrc;
+    nodejs = nodejs_20;  # does not build with 22
 
-      pnpmDeps = pnpm.fetchDeps {
-        inherit pname version src;
-        fetcherVersion = 1;
-        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
-      };
+    postPatch = ''
+      cd src-ui
+    '';
 
-      nativeBuildInputs = [
-        node-gyp
-        nodejs_20
+    npmDepsHash = "sha256-pBCWcdCTQh0N4pRLBWLZXybuhpiat030xvPZ5z7CUJ0=";
+
+    nativeBuildInputs =
+      [
         pkg-config
-        pnpm.configHook
         python3
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         xcbuild
       ];
 
-      buildInputs = [
+    buildInputs =
+      [
         pango
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         giflib
+        darwin.apple_sdk.frameworks.CoreText
       ];
 
-      CYPRESS_INSTALL_BINARY = "0";
-      NG_CLI_ANALYTICS = "false";
+    CYPRESS_INSTALL_BINARY = "0";
+    NG_CLI_ANALYTICS = "false";
 
-      buildPhase = ''
-        runHook preBuild
+    npmBuildFlags = [
+      "--"
+      "--configuration"
+      "production"
+    ];
 
-        pushd node_modules/canvas
-        node-gyp rebuild
-        popd
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
 
-        pnpm run build --configuration production
-
-        runHook postBuild
-      '';
-
-      doCheck = true;
-      checkPhase = ''
-        runHook preCheck
-
-        pnpm run test
-
-        runHook postCheck
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/lib/paperless-ui
-        mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-        runHook postInstall
-      '';
-    };
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/lib/paperless-ui
+      mv ../src/documents/static/frontend $out/lib/paperless-ui/
+      runHook postInstall
+    '';
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
-  pyproject = true;
+  pyproject = false;
 
   inherit version src;
 
+  patches = [
+    (fetchpatch2 {
+      name = "ocrmypdf-16.6-compat.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/d1f255a22ea53712cb9101277ec57ea1976f9c02.patch?full_index=1";
+      hash = "sha256-V2nnNeNCcfSrjOttQ5rgDj7gnxpfpBPVeDDnMea0C3U=";
+    })
+  ];
+
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
-    if (( $NIX_BUILD_CORES > 3)); then
-      NIX_BUILD_CORES=3
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
     fi
-    substituteInPlace pyproject.toml \
-      --replace-fail '"--numprocesses=auto",' "" \
-      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES" \
-      --replace-fail "djangorestframework-guardian~=0.3.0" "djangorestframework-guardian2"
+    substituteInPlace src/setup.cfg \
+      --replace-fail "--numprocesses auto --maxprocesses=16" "--numprocesses $NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
     gettext
     xorg.lndir
-  ];
-
-  pythonRelaxDeps = [
-    "django-allauth"
-    "pathvalidate"
-    "redis"
   ];
 
   dependencies =
@@ -172,18 +168,8 @@ python.pkgs.buildPythonApplication rec {
       channels-redis
       concurrent-log-handler
       dateparser
-      django
-      # django-allauth version 65.9.X not yet supported
-      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
-      (django-allauth.overrideAttrs (
-        new: prev: rec {
-          version = "65.7.0";
-          src = prev.src.override {
-            tag = version;
-            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
-          };
-        }
-      ))
+      django_5
+      django-allauth
       django-auditlog
       django-celery-results
       django-compression-middleware
@@ -195,13 +181,11 @@ python.pkgs.buildPythonApplication rec {
       django-soft-delete
       djangorestframework
       djangorestframework-guardian2
-      drf-spectacular
-      drf-spectacular-sidecar
       drf-writable-nested
       filelock
       flower
       gotenberg-client
-      granian
+      gunicorn
       httpx-oauth
       imap-tools
       inotifyrecursive
@@ -225,14 +209,15 @@ python.pkgs.buildPythonApplication rec {
       setproctitle
       tika-client
       tqdm
+      uvicorn
       watchdog
       whitenoise
-      whoosh-reloaded
+      whoosh
       zxing-cpp
     ]
-    ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ redis.optional-dependencies.hiredis;
+    ++ redis.optional-dependencies.hiredis
+    ++ uvicorn.optional-dependencies.standard;
 
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
@@ -254,7 +239,7 @@ python.pkgs.buildPythonApplication rec {
       runHook preInstall
 
       mkdir -p $out/lib/paperless-ngx/static/frontend
-      cp -r {src,static,LICENSE} $out/lib/paperless-ngx
+      cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
       lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
       chmod +x $out/lib/paperless-ngx/src/manage.py
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
@@ -289,7 +274,7 @@ python.pkgs.buildPythonApplication rec {
   # manually managed in postPatch
   dontUsePytestXdist = false;
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "src"
   ];
 
@@ -307,7 +292,6 @@ python.pkgs.buildPythonApplication rec {
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
     "test_script_exit_non_zero"
-    "testDocumentPageCountMigrated"
     # AssertionError: 10 != 4 (timezone/time issue)
     # Due to getting local time from modification date in test_consumer.py
     "testNormalOperation"
@@ -315,9 +299,6 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
-    # Favicon tests fail due to static file handling in the test environment
-    "test_favicon_view"
-    "test_favicon_view_missing_file"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -330,21 +311,20 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt-tab
-      snowball-data
+      punkt_tab
+      snowball_data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    mainProgram = "paperless-ngx";
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       leona
       SuperSandro2000
       erikarvstedt

@@ -4,36 +4,34 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
+  testers,
+  gdu,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gdu";
-  version = "5.31.0";
+  version = "5.30.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MAkD4Mh7aXWc8Y4TkXH7NSDgPQugB7Gjhr4nfOr/X1U=";
+    tag = "v${version}";
+    hash = "sha256-3SymmE3J+lphyRKTQ+sLsnXaBvLyjJRlwpy79U4+t5o=";
   };
 
   vendorHash = "sha256-aKhHC3sPRyi/l9BxeUgx+3TdYulb0cI9WxuPvbLoswg=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/dundee/gdu/v${lib.versions.major finalAttrs.version}/build.Version=${finalAttrs.version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
   ];
 
   postPatch = ''
     substituteInPlace cmd/gdu/app/app_test.go \
-      --replace-fail "development" "${finalAttrs.version}"
+      --replace-fail "development" "${version}"
   '';
 
   postInstall = ''
@@ -45,12 +43,11 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     # https://github.com/dundee/gdu/issues/371
     "-skip=TestStoredAnalyzer"
-    "-skip=TestAnalyzePathWithIgnoring"
   ];
 
-  doInstallCheck = true;
+  passthru.tests.version = testers.testVersion { package = gdu; };
 
-  meta = {
+  meta = with lib; {
     description = "Disk usage analyzer with console interface";
     longDescription = ''
       Gdu is intended primarily for SSD disks where it can fully
@@ -58,12 +55,12 @@ buildGoModule (finalAttrs: {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
-    changelog = "https://github.com/dundee/gdu/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
       fab
       zowoq
     ];
     mainProgram = "gdu";
   };
-})
+}

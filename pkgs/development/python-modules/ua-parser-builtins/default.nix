@@ -14,8 +14,9 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/ua-parser-builtins";
 
   postPatch = ''
-    # don't use git to determine version
+    # break dependency cycle and don't use git to determine version
     substituteInPlace pyproject.toml \
+      --replace-fail 'dependencies = ["ua-parser"]' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 

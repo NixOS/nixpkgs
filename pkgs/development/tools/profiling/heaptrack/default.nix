@@ -1,25 +1,7 @@
 {
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  extra-cmake-modules,
-  makeBinaryWrapper,
-  zlib,
-  boost,
-  libunwind,
-  elfutils,
-  sparsehash,
-  zstd,
-  qtbase,
-  kio,
-  kitemmodels,
-  threadweaver,
-  kconfigwidgets,
-  kcoreaddons,
-  kdiagram,
+  lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules, makeBinaryWrapper,
+  zlib, boost, libunwind, elfutils, sparsehash, zstd,
+  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
 mkDerivation rec {
@@ -41,26 +23,11 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules makeBinaryWrapper ];
   buildInputs = [
-    zlib
-    boost
-    libunwind
-    sparsehash
-    zstd
-    qtbase
-    kio
-    kitemmodels
-    threadweaver
-    kconfigwidgets
-    kcoreaddons
-    kdiagram
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    zlib boost libunwind sparsehash zstd
+    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     elfutils
   ];
 
@@ -75,7 +42,7 @@ mkDerivation rec {
     homepage = "https://github.com/KDE/heaptrack";
     license = licenses.lgpl21Plus;
     mainProgram = "heaptrack_gui";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
   };
 }

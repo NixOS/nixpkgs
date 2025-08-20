@@ -48,10 +48,12 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [
-      matejc
-      ftrvxmtrx
-    ];
-    teams = [ teams.enlightenment ];
+    maintainers =
+      with lib.maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

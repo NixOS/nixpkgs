@@ -31,13 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    blas
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.cython
-    python3Packages.numpy
-  ];
+  buildInputs =
+    [ blas ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.cython
+      python3Packages.numpy
+    ];
 
   cmakeFlags = [ (lib.cmakeBool "TRLIB_BUILD_PYTHON3" pythonSupport) ];
 

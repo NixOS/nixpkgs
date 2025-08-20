@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlags = [ "--asyncio-mode=auto" ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "aiosyncthing" ];
 

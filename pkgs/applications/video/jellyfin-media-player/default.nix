@@ -1,36 +1,39 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkDerivation,
-  stdenv,
-  SDL2,
-  cmake,
-  libGL,
-  libX11,
-  libXrandr,
-  libvdpau,
-  mpv,
-  ninja,
-  pkg-config,
-  python3,
-  qtbase,
-  qtwayland,
-  qtwebchannel,
-  qtwebengine,
-  qtx11extras,
-  jellyfin-web,
-  withDbus ? stdenv.hostPlatform.isLinux,
+{ lib
+, fetchFromGitHub
+, mkDerivation
+, stdenv
+, Cocoa
+, CoreAudio
+, CoreFoundation
+, MediaPlayer
+, SDL2
+, cmake
+, libGL
+, libX11
+, libXrandr
+, libvdpau
+, mpv
+, ninja
+, pkg-config
+, python3
+, qtbase
+, qtwayland
+, qtwebchannel
+, qtwebengine
+, qtx11extras
+, jellyfin-web
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.12.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-IXinyenadnW+a+anQ9e61h+N8vG2r77JPboHm5dN4Iw=";
+    sha256 = "sha256-Jsn4kWQzUaQI9MpbsLJr6JSJk9ZSnMEcrebQ2DYegSU=";
   };
 
   patches = [
@@ -51,9 +54,13 @@ mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtx11extras
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    CoreAudio
+    CoreFoundation
+    MediaPlayer
   ];
 
   nativeBuildInputs = [
@@ -66,8 +73,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DQTROOT=${qtbase}"
     "-GNinja"
-  ]
-  ++ lib.optionals (!withDbus) [
+  ] ++ lib.optionals (!withDbus) [
     "-DLINUX_X11POWER=ON"
   ];
 
@@ -76,7 +82,7 @@ mkDerivation rec {
     ln -s ${jellyfin-web}/share/jellyfin-web .
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
@@ -85,21 +91,9 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
-    license = with licenses; [
-      gpl2Only
-      mit
-    ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    maintainers = with maintainers; [
-      jojosch
-      kranzes
-      paumr
-    ];
+    license = with licenses; [ gpl2Only mit ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    maintainers = with maintainers; [ jojosch kranzes paumr ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

@@ -1,25 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchurl,
-  unzip,
-  jdk,
-}:
+{ lib, stdenv, makeWrapper, fetchurl, unzip, jdk }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcl";
-  version = "25.2.2.199.0918";
+  version = "24.3.2.330.1718";
 
   src = fetchurl {
     url = "https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-${finalAttrs.version}.zip";
-    hash = "sha256-YsIEJkQXeVIABsCXNBfT6WZbrXur1hoEZFj97JvGHV8=";
+    hash = "sha256-7+cC7RJ4fXtNwEoZvTc2pVPpChQXxhp2XafrTLny6pw=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    unzip
-  ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   unpackCmd = "unzip $curSrc";
 

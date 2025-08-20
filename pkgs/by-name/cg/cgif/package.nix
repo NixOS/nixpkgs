@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgif";
-  version = "0.5.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "dloebl";
     repo = "cgif";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-i8xngmVhRCGkczY3NzomLkXj+iqPb81lvLn6dXsByYs=";
+    rev = "V${finalAttrs.version}";
+    sha256 = "sha256-FvqpToIVYblpuRWeEaUA8MA2Bnp9dpqGquylnXevhX4=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/dloebl/cgif";
-    description = "GIF encoder written in C";
+    description = "CGIF, a GIF encoder written in C";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;

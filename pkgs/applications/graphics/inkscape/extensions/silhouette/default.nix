@@ -2,8 +2,8 @@
   fetchFromGitHub,
   lib,
   gettext,
+  pkgs,
   python3,
-  udevCheckHook,
   umockdev,
   writeScript,
 }:
@@ -54,16 +54,14 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
-    udevCheckHook
     umockdev
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "test"
   ];
 
   doCheck = true;
-  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

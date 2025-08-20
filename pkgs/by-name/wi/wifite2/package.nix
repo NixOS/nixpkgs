@@ -29,7 +29,6 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "wifite2";
   version = "2.7.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
@@ -68,8 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     john
     iw
     macchanger
-  ]
-  ++ pythonDependencies;
+  ] ++ pythonDependencies;
 
   nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 

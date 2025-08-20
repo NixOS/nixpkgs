@@ -7,18 +7,14 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ghdorker";
   version = "0.3.2";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-wF4QoXxH55SpdYgKLHf4sCwUk1rkCpSdnIX5FvFi/BU=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     ghapi
     glom
     python-dotenv

@@ -1,26 +1,27 @@
 {
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "periods";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "xocolatl";
-    repo = "periods";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-97v6+WNDcYb/KivlE/JBlRIZ3gYHj68AlK0fylp1cPo=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-97v6+WNDcYb/KivlE/JBlRIZ3gYHj68AlK0fylp1cPo=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
     homepage = "https://github.com/xocolatl/periods";
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = with maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.postgresql;
+    license = licenses.postgresql;
   };
-})
+}

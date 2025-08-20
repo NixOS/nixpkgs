@@ -44,12 +44,12 @@ buildGoModule rec {
     command = "HOME=$TMP rhoas version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Command Line Interface for Red Hat OpenShift Application Services";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/redhat-developer/app-services-cli";
     changelog = "https://github.com/redhat-developer/app-services-cli/releases/v${version}";
-    maintainers = with lib.maintainers; [ stehessel ];
+    maintainers = with maintainers; [ stehessel ];
     mainProgram = "rhoas";
   };
 }

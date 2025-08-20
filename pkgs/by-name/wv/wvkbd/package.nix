@@ -10,28 +10,26 @@
   cairo,
   pkg-config,
   libxkbcommon,
-  scdoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.17";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
-    repo = "wvkbd";
-    tag = "v${version}";
-    hash = "sha256-Vjbj3rxTe60Q+6IcX43WCBHMyPFECjc8w9D6qed0w0I=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-9gDxMH1hghqjcXlbda7CHjDdjcjApjjie7caihKIg9M=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "pkg-config" "$PKG_CONFIG"
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
 
   nativeBuildInputs = [
     pkg-config
-    scdoc
     wayland-scanner
   ];
   buildInputs = [
@@ -43,8 +41,6 @@ stdenv.mkDerivation rec {
     wayland
   ];
   installFlags = [ "PREFIX=$(out)" ];
-
-  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/jjsullivan5196/wvkbd";

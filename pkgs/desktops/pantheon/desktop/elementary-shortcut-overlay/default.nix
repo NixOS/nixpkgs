@@ -1,34 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  meson,
-  ninja,
-  vala,
-  desktop-file-utils,
-  gala,
-  gsettings-desktop-schemas,
-  gtk4,
-  glib,
-  gnome-settings-daemon,
-  granite7,
-  libgee,
-  mutter,
-  pantheon-wayland,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gala
+, gsettings-desktop-schemas
+, gtk4
+, glib
+, gnome-settings-daemon
+, granite7
+, libgee
+, mutter
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "8.1.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-oGExG7eWiZqXEPBRuLRTnbgo3hRVKo8vO51vMBPoQb0=";
+    sha256 = "sha256-RWFzs4rw/KC0MXkNfA178FejMbuIBh5FVox1RxmxCJA=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +47,6 @@ stdenv.mkDerivation rec {
     gtk4
     libgee
     mutter # org.gnome.mutter.keybindings
-    pantheon-wayland
   ];
 
   passthru = {
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.shortcut-overlay";
   };
 }

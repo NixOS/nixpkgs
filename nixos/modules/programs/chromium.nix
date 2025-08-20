@@ -22,7 +22,7 @@ in
 
   options = {
     programs.chromium = {
-      enable = lib.mkEnableOption "policies for chromium based browsers like Chromium, Google Chrome or Brave";
+      enable = lib.mkEnableOption "{command}`chromium` policies";
 
       enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 

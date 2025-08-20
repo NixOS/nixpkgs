@@ -6,7 +6,7 @@
   fetchpatch,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "skydns";
   version = "unstable-2019-10-15";
 

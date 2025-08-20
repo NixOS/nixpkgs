@@ -2,117 +2,123 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
-  nodejs_24,
-  makeWrapper,
-  prisma-engines,
-  ffmpeg,
-  openssl,
-  vips,
-  versionCheckHook,
-  nix-update-script,
-  nixosTests,
-  node-gyp,
+  nodejs,
+  yarn-berry,
   pkg-config,
+  makeWrapper,
+  cacert,
+  prisma-engines,
+  openssl,
+  ffmpeg,
   python3,
+  vips,
+  nixosTests,
 }:
 
 let
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_PATH = lib.getExe ffmpeg;
-    FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
+    FFMPEG_BIN = lib.getExe ffmpeg;
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
-
-  vips' = vips.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "8.17.1";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
-        postFetch = ''
-          rm -r $out/test/test-suite/images/
-        '';
-      };
-      outputs = lib.remove "devdoc" prevAttrs.outputs;
-      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
-    }
-  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.3";
+  version = "3.7.11";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
-    leaveDotGit = true;
-    postFetch = ''
-      git -C $out rev-parse --short HEAD > $out/.git_head
-      rm -rf $out/.git
-    '';
+    hash = "sha256-sogsPx6vh+1+ew9o3/0B4yU9I/Gllo9XLJqvMvGZ89Q=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
-  };
-
-  buildInputs = [
-    openssl
-    vips'
+  patches = [
+    # Update prisma to match the version in nixpkgs exactly (currently 6.0.1). To create this patch, change the
+    # versions in `package.json`, then run `nix run nixpkgs#yarn-berry -- install --mode update-lockfile`
+    # to update `yarn.lock`.
+    ./prisma6.patch
   ];
 
+  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
+  yarnOfflineCache = stdenv.mkDerivation {
+    pname = "yarn-deps";
+    inherit (finalAttrs) version src patches;
+
+    nativeBuildInputs = [ yarn-berry ];
+
+    dontInstall = true;
+
+    YARN_ENABLE_TELEMETRY = "0";
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    configurePhase = ''
+      export HOME="$NIX_BUILD_TOP"
+      yarn config set enableGlobalCache false
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '[ "arm64", "x64" ]'
+    '';
+
+    buildPhase = ''
+      mkdir -p $out
+      yarn install --immutable --mode skip-build
+    '';
+
+    outputHash = "sha256-kWE6YVhyH5Lk/SO0h624Zq9/6ztoUE3FNzHB0dyl5aI=";
+    outputHashMode = "recursive";
+  };
+
   nativeBuildInputs = [
-    pnpm_10.configHook
-    nodejs_24
-    makeWrapper
-    # for sharp build:
-    node-gyp
     pkg-config
+    makeWrapper
+    nodejs
+    yarn-berry
     python3
   ];
 
-  env = environment;
+  buildInputs = [
+    vips
+    openssl
+  ];
+
+  YARN_ENABLE_TELEMETRY = "0";
+
+  ZIPLINE_DOCKER_BUILD = "true";
+
+  configurePhase = ''
+    export HOME="$NIX_BUILD_TOP"
+    yarn config set enableGlobalCache false
+    yarn config set cacheFolder $yarnOfflineCache
+
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") environment
+    )}
+  '';
 
   buildPhase = ''
-    runHook preBuild
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
 
-    # Force build of sharp against native libvips (requires running install scripts).
-    # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
-    pnpm config set nodedir ${nodejs_24}
-    pnpm install --force --offline --frozen-lockfile
-
-    pnpm build
-
-    runHook postBuild
+    yarn install --immutable --immutable-cache
+    yarn build
   '';
 
   installPhase = ''
-    runHook preInstall
-
-    pnpm prune --prod
-    find node_modules -xtype l -delete
-
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r dist public node_modules .next prisma next.config.js mimes.json package.json $out/share/zipline
 
     mkBin() {
-      makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
+      makeWrapper ${lib.getExe nodejs} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
-        --set NODE_ENV production \
-        --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -120,34 +126,29 @@ stdenv.mkDerivation (finalAttrs: {
             lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") environment
           )
         } \
-        --add-flags "--enable-source-maps build/$2"
+        --add-flags "--enable-source-maps $2"
     }
 
-    mkBin zipline server
-    mkBin ziplinectl ctl
-
-    runHook postInstall
+    mkBin zipline dist
+    for script in dist/scripts/*.js; do
+      mkBin "zipline-$(basename $script .js)" "$script"
+    done
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
   passthru = {
-    inherit prisma-engines;
     tests = { inherit (nixosTests) zipline; };
-    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    homepage = "https://zipline.diced.sh/";
-    downloadPage = "https://github.com/diced/zipline";
     changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
+    homepage = "https://zipline.diced.sh/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

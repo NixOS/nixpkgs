@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "More standards compliant C library written in M2-Planet's C subset";
     homepage = "https://github.com/oriansj/m2libc";
     license = licenses.gpl3Only;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [
       "i686-linux"
       "x86_64-linux"

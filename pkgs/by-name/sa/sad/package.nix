@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.32";
+  version = "0.4.31";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "sad";
     tag = "v${version}";
-    hash = "sha256-c5TYIVUrfKrVuyolVe7+EhiM/SOFNahz8X6F8WrKEa0=";
+    hash = "sha256-frsOfv98VdetlwgNA6O0KEhcCSY9tQeEwkl2am226ko=";
   };
 
-  cargoHash = "sha256-hS66/bPRUpwmW/wSpZCq4kVKFkIhttsozIr3SCyZqQI=";
+  cargoHash = "sha256-2oZf2wim2h/krGZMg7Psxx0VLFE/Xf1d1vWqkVtjSmo=";
 
   nativeBuildInputs = [ python3 ];
 
@@ -26,15 +26,12 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool to search and replace";
     homepage = "https://github.com/ms-jpq/sad";
     changelog = "https://github.com/ms-jpq/sad/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      fab
-      ryan4yin
-    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "sad";
   };
 }

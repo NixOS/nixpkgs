@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pytestCheckHook,
-  setuptools,
   formencode,
   pastedeploy,
   paste,
@@ -13,21 +12,18 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.13.0";
-  pyproject = true;
+  version = "3.11.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "sqlobject";
-    repo = "sqlobject";
-    tag = version;
-    hash = "sha256-KcpbGqNsR77kwbTLKwvwWpyLvF1UowIsKM7Kirs7Zw4=";
+  src = fetchPypi {
+    pname = "SQLObject";
+    inherit version;
+    hash = "sha256-QrGyrM6e1cxCtF4GxoivXU/Gj2H8VnG7EFcgimLfdng=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     formencode
     paste
     pastedeploy

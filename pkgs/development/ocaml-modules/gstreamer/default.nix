@@ -1,8 +1,11 @@
 {
   lib,
+  stdenv,
   buildDunePackage,
   fetchFromGitHub,
   dune-configurator,
+  AppKit,
+  Foundation,
   pkg-config,
   glib,
   gst_all_1,
@@ -20,7 +23,12 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ];
+  buildInputs =
+    [ dune-configurator ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Foundation
+    ];
   propagatedBuildInputs = [
     glib.dev
     gst_all_1.gstreamer.dev

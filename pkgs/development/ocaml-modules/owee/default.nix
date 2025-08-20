@@ -5,13 +5,13 @@
 }:
 
 buildDunePackage rec {
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.06";
   pname = "owee";
-  version = "0.8";
+  version = "0.7";
 
   src = fetchurl {
     url = "https://github.com/let-def/owee/releases/download/v${version}/owee-${version}.tbz";
-    hash = "sha256-Bk9iRfWZXV0vTx+cbSmS4v2+Pd4ygha67Hz6vUhXlA0=";
+    hash = "sha256-9FXcmddHg5mk5UWgYd4kTPOLOY/p6A/OBuvfas4elUA=";
   };
 
   meta = with lib; {

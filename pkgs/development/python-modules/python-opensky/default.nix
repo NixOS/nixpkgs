@@ -7,7 +7,6 @@
   poetry-core,
   pydantic,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -30,7 +29,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
     substituteInPlace src/python_opensky/opensky.py \
       --replace ".joinpath(uri)" "/ uri"
   '';
@@ -46,7 +46,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

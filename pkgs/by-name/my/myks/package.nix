@@ -1,5 +1,4 @@
-{
-  lib,
+{ lib,
   buildGoModule,
   fetchFromGitHub,
   testers,
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "myks";
-  version = "4.11.2";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
     tag = "v${version}";
-    hash = "sha256-T+ur6JSSC71mStc8/HxkGN4tMS4pEvoHBpsYkukYvRQ=";
+    hash = "sha256-r8OT5cbHicJVAVIJ9cfDHPLcJrZGPVYdZ42Sbvu8Jvc=";
   };
 
-  vendorHash = "sha256-9dT3Y+d6JNSzVLxB8I0rsVLSPDH4ijeeehX9RWWo7hI=";
+  vendorHash = "sha256-LmWuztR6X3x0aOYCqRv3aLiFEZQkaSnh3LT7IOu2Xa0=";
 
   subPackages = ".";
 
@@ -37,21 +36,22 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = myks; };
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd myks \
-      --bash <($out/bin/myks completion bash) \
-      --zsh <($out/bin/myks completion zsh) \
-      --fish <($out/bin/myks completion fish)
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd myks \
+        --bash <($out/bin/myks completion bash) \
+        --zsh <($out/bin/myks completion zsh) \
+        --fish <($out/bin/myks completion fish)
+    '';
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";
     description = "Configuration framework for Kubernetes applications";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/mykso/myks";
-    maintainers = with lib.maintainers; [
-      lib.maintainers.kbudde
-      lib.maintainers.zebradil
+    maintainers = [
+      maintainers.kbudde
+      maintainers.zebradil
     ];
     mainProgram = "myks";
   };

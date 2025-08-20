@@ -1,21 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "sqlboiler";
-  version = "4.19.5";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "volatiletech";
     repo = "sqlboiler";
     tag = "v${version}";
-    hash = "sha256-GbQCHScE04nM8QzQzPSpD3efmfYEQRbioNfVcdmfPlc=";
+    hash = "sha256-gpRegyW6LrKj45MDl+eOKrTqTo1wn7JOd4zPDexOB6M=";
   };
 
-  vendorHash = "sha256-LMHFDOKZQa0DJLHehRBzGGlb7apppnMDbjnJ4spuZtA=";
+  vendorHash = "sha256-BTrQPWThfJ7gWXi/Y1l/s2BmkW5lVYS/PP0WRwntQxA=";
 
   tags = [
     "mysql"
@@ -32,12 +31,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Generate a Go ORM tailored to your database schema";
     homepage = "https://github.com/volatiletech/sqlboiler";
     changelog = "https://github.com/volatiletech/sqlboiler/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mrityunjaygr8 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mrityunjaygr8 ];
     mainProgram = "sqlboiler";
   };
 }

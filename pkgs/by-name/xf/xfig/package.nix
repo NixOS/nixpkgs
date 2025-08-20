@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.9a";
+  version = "3.2.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    hash = "sha256-vFcqGIHl4gmHrFkBWLBBq3gDhFqWkQNtO6XpgvZtnKM=";
+    hash = "sha256-E+2dBNG7wt7AnafvSc7sJ4OC0pD2zZJkdMLy0Bb+wvc=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/main.c --replace-fail '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
   '';
 
   postInstall = ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/{16x16,22x22,48x48,64x64}/apps
 
     for dimension in 16x16 22x22 48x48; do
-      magick convert doc/html/images/xfig-logo.png -geometry $dimension\
+      convert doc/html/images/xfig-logo.png -geometry $dimension\
         $out/share/icons/hicolor/16x16/apps/xfig.png
     done
     install doc/html/images/xfig-logo.png \
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
     description = "Interactive drawing tool for X11";
     mainProgram = "xfig";

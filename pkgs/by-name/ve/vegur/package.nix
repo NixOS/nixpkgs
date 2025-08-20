@@ -4,14 +4,16 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "vegur";
-  version = "${finalAttrs.majorVersion}.${finalAttrs.minorVersion}";
+let
   majorVersion = "0";
   minorVersion = "701";
+in
+stdenvNoCC.mkDerivation {
+  pname = "vegur";
+  version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/files/fonts/vegur_${finalAttrs.majorVersion}${finalAttrs.minorVersion}.zip";
+    url = "https://dotcolon.net/download/fonts/vegur_${majorVersion}${minorVersion}.zip";
     hash = "sha256-sGb3mEb3g15ZiVCxEfAanly8zMUopLOOjw8W4qbXLPA=";
     stripRoot = false;
   };
@@ -25,13 +27,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/fonts/vegur/";
+    homepage = "http://dotcolon.net/font/vegur/";
     description = "Humanist sans serif font";
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      djacu
-      minijackson
-    ];
+    maintainers = with maintainers; [ minijackson ];
     license = licenses.cc0;
   };
-})
+}

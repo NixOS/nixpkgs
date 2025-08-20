@@ -8,7 +8,7 @@
   tldextract,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "surt";
   version = "0.3.1";
   format = "setuptools";

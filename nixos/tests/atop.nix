@@ -1,8 +1,11 @@
 {
-  pkgs,
-  runTest,
-  ...
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
 
 let
   assertions = rec {
@@ -126,7 +129,7 @@ let
   };
 in
 {
-  justThePackage = runTest {
+  justThePackage = makeTest {
     name = "atop-justThePackage";
     nodes.machine = {
       environment.systemPackages = [ pkgs.atop ];
@@ -145,7 +148,7 @@ in
       ];
     inherit meta;
   };
-  defaults = runTest {
+  defaults = makeTest {
     name = "atop-defaults";
     nodes.machine = {
       programs.atop = {
@@ -166,7 +169,7 @@ in
       ];
     inherit meta;
   };
-  minimal = runTest {
+  minimal = makeTest {
     name = "atop-minimal";
     nodes.machine = {
       programs.atop = {
@@ -190,7 +193,7 @@ in
       ];
     inherit meta;
   };
-  netatop = runTest {
+  netatop = makeTest {
     name = "atop-netatop";
     nodes.machine = {
       programs.atop = {
@@ -212,7 +215,7 @@ in
       ];
     inherit meta;
   };
-  atopgpu = runTest {
+  atopgpu = makeTest {
     name = "atop-atopgpu";
     nodes.machine = {
       programs.atop = {
@@ -234,7 +237,7 @@ in
       ];
     inherit meta;
   };
-  everything = runTest {
+  everything = makeTest {
     name = "atop-everything";
     nodes.machine = {
       programs.atop = {

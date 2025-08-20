@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
-  replaceVars,
+  substituteAll,
   testers,
   dbus-test-runner,
   dpkg,
@@ -63,7 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./2001-Mark-problematic-tests.patch
 
-    (replaceVars ./2002-Nixpkgs-versioned-QML-path.patch.in {
+    (substituteAll {
+      src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
+      name = "2002-Nixpkgs-versioned-QML-path.patch";
       qtVersion = lib.versions.major qtbase.version;
     })
   ];
@@ -241,7 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       cc-by-sa-30
     ];
-    teams = [ lib.teams.lomiri ];
+    maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "LomiriGestures"

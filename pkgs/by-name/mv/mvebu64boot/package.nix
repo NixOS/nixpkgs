@@ -5,9 +5,9 @@
   ncurses,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mvebu64boot";
-  version = "0-unstable-2022-10-20";
+  version = "unstable-2022-10-20";
 
   src = fetchFromGitHub {
     owner = "pali";

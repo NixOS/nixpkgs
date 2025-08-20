@@ -2,10 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cacert,
-  faster-whisper,
   flac,
-  google-cloud-speech,
   groq,
   httpx,
   openai-whisper,
@@ -18,13 +15,12 @@
   respx,
   setuptools,
   soundfile,
-  standard-aifc,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.14.3";
+  version = "3.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +29,7 @@ buildPythonPackage rec {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = version;
-    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
+    hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
   };
 
   postPatch = ''
@@ -47,16 +43,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    standard-aifc
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
-    faster-whisper = [ faster-whisper ];
-    google-cloud = [ google-cloud-speech ];
     groq = [
       groq
       httpx
@@ -77,8 +68,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pocketsphinx
     respx
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -90,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
     license = with licenses; [
       gpl2Only
       bsd3

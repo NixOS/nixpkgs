@@ -1,40 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  enableVTK ? true,
-  vtk,
-  DarwinTools, # sw_vers
-  enablePython ? false,
-  python ? null,
-  swig,
-  expat,
-  libuuid,
-  openjpeg,
-  zlib,
-  pkg-config,
-  ctestCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, enableVTK ? true
+, vtk
+, DarwinTools # sw_vers
+, enablePython ? false
+, python ? null
+, swig
+, expat
+, libuuid
+, openjpeg
+, zlib
+, pkg-config
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.26";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GuTxFgK5nfP4l36uqSOMrOkiwTi/T2ywcLh4LDNkKsI=";
+    tag = "v${version}";
+    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
-
-  patches = [
-    ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch
-    # Fix vtk deprecated api, See https://docs.vtk.org/en/latest/release_details/9.3.html#id13.
-    # Upstream mailing list: https://sourceforge.net/p/gdcm/mailman/message/59197515.
-    ./fix-vtk-deprecated-api.patch
-  ];
 
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
@@ -48,11 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optionals enableVTK [
+  ] ++ lib.optionals enableVTK [
     "-DGDCM_USE_VTK=ON"
-  ]
-  ++ lib.optionals enablePython [
+  ] ++ lib.optionals enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
     "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}/python_gdcm"
   ];
@@ -60,28 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
 
   buildInputs = [
     expat
     libuuid
     openjpeg
     zlib
-  ]
-  ++ lib.optionals enableVTK [
+  ] ++ lib.optionals enableVTK [
     vtk
-  ]
-  ++ lib.optionals enablePython [
-    swig
-    python
-  ];
+  ] ++ lib.optionals enablePython [ swig python ];
 
   postInstall = lib.optionalString enablePython ''
     substitute \
       ${./python_gdcm.egg-info} \
-      $out/${python.sitePackages}/python_gdcm-${finalAttrs.version}.egg-info \
-      --subst-var-by GDCM_VER "${finalAttrs.version}"
+      $out/${python.sitePackages}/python_gdcm-${version}.egg-info \
+      --subst-var-by GDCM_VER "${version}"
   '';
 
   disabledTests = [
@@ -97,31 +79,28 @@ stdenv.mkDerivation (finalAttrs: {
     "TestWrapPython"
     # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
     "TestUIDGeneratorPython"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
 
-  nativeCheckInputs = [
-    ctestCheckHook
-  ];
-
+  checkPhase = ''
+    runHook preCheck
+    ctest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+    runHook postCheck
+  '';
   doCheck = true;
   # note that when the test data is available to the build via `fetchSubmodules = true`,
   # a number of additional but much slower tests are enabled
 
-  meta = {
+  meta = with lib; {
     description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
-    homepage = "https://gdcm.sourceforge.net";
-    license = with lib.licenses; [
-      bsd3
-      asl20
-    ];
-    maintainers = with lib.maintainers; [ tfmoraes ];
-    platforms = lib.platforms.all;
+    homepage = "https://gdcm.sourceforge.net/";
+    license = with licenses; [ bsd3 asl20 ];
+    maintainers = with maintainers; [ tfmoraes ];
+    platforms = platforms.all;
   };
-})
+}

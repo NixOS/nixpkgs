@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "10.2.4";
+  version = "10.2.1";
 
   src = fetchFromGitHub {
     owner = "schollz";
-    repo = "croc";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-iC2Yki8RN+csvNvIQP65bAIN1Q0KR5DUIiZqEVZqG+o=";
+    hash = "sha256-T75RyUjni7pNOxSe90xYW8426g3XjtI7YN0z8WADusQ=";
   };
 
-  vendorHash = "sha256-bFn2C5py2STLz8YBlnyK2XDBlgoBnXujeBizN9cDTI0=";
+  vendorHash = "sha256-IL2nKlxJ08xBCW9mnHlPlOccgjHSeLt6ISpMMiBf7J8=";
 
   subPackages = [ "." ];
 
@@ -47,7 +47,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       equirosa
       SuperSandro2000
-      ryan4yin
     ];
     mainProgram = "croc";
   };

@@ -1,45 +1,52 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
+
+  flit-core,
+
   prometheus-client,
-  pytest-asyncio,
-  pytestCheckHook,
-  twisted,
   typing-extensions,
   wrapt,
+  aiohttp,
+  twisted,
+
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-async";
-  version = "25.1.0";
+  version = "22.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "prometheus-async";
     rev = version;
-    hash = "sha256-e/BVxATpafxddq26Rt7XTiK4ajY+saUApXbmTG0/I6I=";
+    hash = "sha256-2C4qr0gLYHndd49UfjtuF/v05Hl2PuyegPUhCAmd5/E=";
   };
 
-  build-system = [
-    hatch-vcs
-    hatchling
+  nativeBuildInputs = [
+    flit-core
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     prometheus-client
     typing-extensions
     wrapt
   ];
 
   optional-dependencies = {
-    aiohttp = [ aiohttp ];
-    consul = [ aiohttp ];
-    twisted = [ twisted ];
+    aiohttp = [
+      aiohttp
+    ];
+    consul = [
+      aiohttp
+    ];
+    twisted = [
+      twisted
+    ];
   };
 
   nativeCheckInputs = [

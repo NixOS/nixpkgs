@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "go-blueprint";
-  version = "0.10.11";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "Melkeydev";
     repo = "go-blueprint";
     rev = "v${version}";
-    hash = "sha256-ahvSCu4bqzPmscHSQmaxhbUtlEL7T0T/13RY2sIGWjA=";
+    hash = "sha256-/MIMDQKdpgY0bCwrYpJNC6jiEhNECROe61uuoFz8P68=";
   };
 
   ldflags = [

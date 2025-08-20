@@ -14,8 +14,8 @@ NixOS manual is shown automatically on TTY 8, udisks is disabled.
 Autologin is enabled as `nixos` user, while passwordless
 login as both `root` and `nixos` is possible.
 Passwordless `sudo` is enabled too.
-[NetworkManager](#opt-networking.networkmanager.enable) is
-enabled and can be configured interactively with `nmtui`.
+[wpa_supplicant](#opt-networking.wireless.enable) is
+enabled, but configured to not autostart.
 
 It is explained how to login, start the ssh server, and if available,
 how to start the display manager.

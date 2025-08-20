@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "midiutil";
   version = "1.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "MIDIUtil";

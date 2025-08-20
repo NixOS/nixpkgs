@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  darwin,
   xercesc,
 }:
 
@@ -29,9 +30,17 @@ stdenv.mkDerivation rec {
     "CXXFLAGS=-std=c++14"
   ];
 
-  buildInputs = [
-    xercesc
-  ];
+  buildInputs =
+    [
+      xercesc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        SystemConfiguration
+      ]
+    );
 
   meta = with lib; {
     description = "XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";

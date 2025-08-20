@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   stdenv,
-  replaceVars,
+  substituteAll,
   vim,
   sendmailPath ? "/usr/sbin/sendmail",
 }:
@@ -17,7 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (replaceVars ./0000-nixpkgs-specific.diff {
+    (substituteAll {
+      src = ./0000-nixpkgs-specific.diff;
       inherit sendmailPath;
       viPath = lib.getExe' vim "vim";
       defPath = lib.concatStringsSep ":" [
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Daemon for running commands at specific times";
     license = lib.licenses.bsd0;
     mainProgram = "cron";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "baseline";
   version = "1.2.1";
   format = "setuptools";

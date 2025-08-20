@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "ydotool";
     maintainers = with lib.maintainers; [
+      willibutz
       kraem
     ];
     platforms = lib.platforms.linux;

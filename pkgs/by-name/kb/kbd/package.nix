@@ -37,10 +37,6 @@ stdenv.mkDerivation rec {
     "--enable-optional-progs"
     "--enable-libkeymap"
     "--disable-nls"
-  ]
-  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
   patches = [

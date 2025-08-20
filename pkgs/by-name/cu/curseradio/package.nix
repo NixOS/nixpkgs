@@ -6,23 +6,18 @@
   mpv,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   version = "0.2";
-  format = "pyproject";
   pname = "curseradio";
 
   src = fetchFromGitHub {
     owner = "chronitis";
-    repo = "curseradio";
+    repo = pname;
     rev = "1bd4bd0faeec675e0647bac9a100b526cba19f8d";
     sha256 = "11bf0jnj8h2fxhpdp498189r4s6b47vy4wripv0z4nx7lxajl88i";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     requests
     lxml
     pyxdg

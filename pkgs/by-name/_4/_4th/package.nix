@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable Forth compiler";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "4th";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

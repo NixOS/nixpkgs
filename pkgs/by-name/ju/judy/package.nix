@@ -17,11 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-  patches = [
-    ./cross.patch
-    # Fix reproducible timestamps.
-    ./fix-source-date.patch
-  ];
+  patches = [ ./cross.patch ];
 
   # Disable parallel builds as manpages lack some dependencies:
   #    ../tool/jhton ext/JudyHS_funcs_3.htm | grep -v '^[   ]*$' | sed -e 's/\.C//' > man/man3/JudyHS_funcs

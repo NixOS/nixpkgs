@@ -116,6 +116,7 @@ stdenv.mkDerivation {
     '';
     mainProgram = "urbanterror";
     maintainers = with lib.maintainers; [
+      astsmtl
       drupol
     ];
     platforms = lib.platforms.linux;

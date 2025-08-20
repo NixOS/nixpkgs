@@ -2,8 +2,9 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle_8,
+  # Gradle 8 complains about implicit task dependencies when using `installDist`.
+  # See https://github.com/marytts/marytts/issues/1112
+  gradle_7,
   makeWrapper,
   jdk,
   nixosTests,
@@ -19,19 +20,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-jGpsD6IwJ67nDLnulBn8DycXCyowssSnDCkQXBIfOH8=";
   };
 
-  patches = [
-    # Gradle 8 complains about implicit task dependencies when using `installDist`,
-    # so let's patch it.
-    # See https://github.com/marytts/marytts/issues/1112
-    ./gradle-8.patch
-  ];
-
   nativeBuildInputs = [
-    gradle_8
+    gradle_7
     makeWrapper
   ];
 
-  mitmCache = gradle_8.fetchDeps {
+  mitmCache = gradle_7.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };

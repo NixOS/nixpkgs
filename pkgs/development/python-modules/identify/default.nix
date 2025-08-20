@@ -1,17 +1,17 @@
 {
   lib,
   buildPythonPackage,
+  editdistance-s,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  cffi,
   setuptools,
   ukkonen,
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.6.13";
+  version = "2.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,24 +20,24 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = "identify";
     tag = "v${version}";
-    hash = "sha256-Du96uRQCymduvAruHSgjKv/OrDIPaMwPU+x/OTchERQ=";
+    hash = "sha256-FKF3+jN5/D0hRSvr90AY/C/5KBx0c7LvR+l12IP+zbU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    cffi
+    editdistance-s
     pytestCheckHook
     ukkonen
   ];
 
   pythonImportsCheck = [ "identify" ];
 
-  meta = {
+  meta = with lib; {
     description = "File identification library for Python";
-    homepage = "https://github.com/pre-commit/identify";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    homepage = "https://github.com/chriskuehl/identify";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "identify-cli";
   };
 }

@@ -46,7 +46,7 @@ buildNimPackage (finalAttrs: {
     '';
 
   meta = finalAttrs.src.meta // {
-    description = "Testing framework with balls";
+    description = "The testing framework with balls";
     homepage = "https://github.com/disruptek/balls";
     mainProgram = "balls";
     license = lib.licenses.mit;

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -128,6 +123,7 @@ in
 
   };
 
+
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -148,21 +144,11 @@ in
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [
-        cfg.fileTransferPort
-      ]
-      ++ (map (port: mkIf cfg.openFirewallServerQuery port) [
-        cfg.queryPort
-        cfg.querySshPort
-        cfg.queryHttpPort
-      ]);
+      allowedTCPPorts = [ cfg.fileTransferPort ] ++ (map (port:
+        mkIf cfg.openFirewallServerQuery port
+      ) [cfg.queryPort cfg.querySshPort cfg.queryHttpPort]);
       # subsequent vServers will use the incremented voice port, let's just open the next 10
-      allowedUDPPortRanges = [
-        {
-          from = cfg.defaultVoicePort;
-          to = cfg.defaultVoicePort + 10;
-        }
-      ];
+      allowedUDPPortRanges = [ { from = cfg.defaultVoicePort; to = cfg.defaultVoicePort + 10; } ];
     };
 
     systemd.services.teamspeak3-server = {

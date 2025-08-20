@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flacon";
-  version = "12.0.0";
+  version = "11.4.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "sha256-r9SdQg6JTMoGxO2xUtkkBe5F5cajnsndZEq20BjJGuU=";
+    sha256 = "sha256-guIGSKmpinDDfTDSCmcJKWysUPdG/gw5oaKmXqgf53o=";
   };
 
   nativeBuildInputs = [

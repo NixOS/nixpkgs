@@ -1,40 +1,34 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   fetchpatch,
+  darwin,
   callPackage,
   autoreconfHook,
   pkg-config,
   libtool,
-  bison,
-  flex,
-  perl,
   nixosTests,
   ...
 }@args:
 let
   plugins = callPackage ./plugins.nix args;
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "collectd";
+stdenv.mkDerivation rec {
   version = "5.12.0";
+  pname = "collectd";
 
-  src = fetchFromGitHub {
-    owner = "collectd";
-    repo = "collectd";
-    tag = "collectd-${finalAttrs.version}";
-    hash = "sha256-UTlCY1GPRpbdQFLFUDjNr1PgEdGv4WNtjr8TYbxHK5A=";
+  src = fetchurl {
+    url = "https://collectd.org/files/${pname}-${version}.tar.bz2";
+    sha256 = "1mh97afgq6qgmpvpr84zngh58m0sl1b4wimqgvvk376188q09bjv";
   };
 
-  # All of these are going to be included in the next release
   patches = [
     # fix -t never printing syntax errors
     # should be included in next release
     (fetchpatch {
-      name = "fix-broken-dash-t-option.patch";
       url = "https://github.com/collectd/collectd/commit/3f575419e7ccb37a3b10ecc82adb2e83ff2826e1.patch";
-      hash = "sha256-XkDxLITmG0FLpgf8Ut1bDqulM4DmPs8Xrec2QB1tkks=";
+      sha256 = "0jwjdlfl0dp7mlbwygp6h0rsbaqfbgfm5z07lr5l26z6hhng2h2y";
     })
     (fetchpatch {
       name = "no_include_longintrepr.patch";
@@ -46,29 +40,27 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    bison
-    flex
-    perl # for pod2man
   ];
+  buildInputs =
+    [
+      libtool
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+    ]
+    ++ plugins.buildInputs;
 
-  buildInputs = [
-    libtool
-  ]
-  ++ plugins.buildInputs;
-
-  configureFlags = [
-    "--localstatedir=/var"
-    "--disable-werror"
-  ]
-  ++ plugins.configureFlags
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
-
-  # Used in `src/virt.c`
-  env.NIX_CFLAGS_COMPILE = "-DATTRIBUTE_UNUSED=__attribute__((unused))";
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--disable-werror"
+    ]
+    ++ plugins.configureFlags
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
-    substituteInPlace Makefile --replace-fail '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+    substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
   '';
 
   postInstall = ''
@@ -83,11 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) collectd;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bjornfor ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bjornfor ];
   };
-})
+}

@@ -6,29 +6,29 @@
 
 buildGoModule rec {
   pname = "kubectl-view-secret";
-  version = "0.14.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "elsesiy";
-    repo = "kubectl-view-secret";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-l7pyS3eQDETrGCN7+Q0xhm+9Ocpk+qxTNMu4SMq+IDU=";
+    hash = "sha256-mdooeKlwoPxiAHaOuhMF+Zx1l0uZ1OYMgDADI7JbYDc=";
   };
 
-  vendorHash = "sha256-XtQkAgmnXNKHHjFtZN8Ht/C/aH2mPOeHk7azihehzsc=";
+  vendorHash = "sha256-5mSS7UWfdk28oXk/ONnnjj4OMGJAtH26xGES4NGZuTc=";
 
   subPackages = [ "./cmd/" ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/kubectl-view_secret
+    mv $out/bin/cmd $out/bin/kubectl-view-secret
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes CLI plugin to decode Kubernetes secrets";
-    mainProgram = "kubectl-view_secret";
+    mainProgram = "kubectl-view-secret";
     homepage = "https://github.com/elsesiy/kubectl-view-secret";
     changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sagikazarmark ];
+    license = licenses.mit;
+    maintainers = [ maintainers.sagikazarmark ];
   };
 }

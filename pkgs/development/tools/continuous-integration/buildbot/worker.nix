@@ -24,7 +24,6 @@
 buildPythonPackage ({
   pname = "buildbot_worker";
   inherit (buildbot) src version;
-  format = "setuptools";
 
   postPatch = ''
     cd worker
@@ -55,7 +54,7 @@ buildPythonPackage ({
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    teams = [ teams.buildbot ];
+    maintainers = teams.buildbot.members;
     license = licenses.gpl2;
   };
 })

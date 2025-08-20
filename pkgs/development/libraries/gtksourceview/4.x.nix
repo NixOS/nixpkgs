@@ -132,6 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gtksourceview-4" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
 })

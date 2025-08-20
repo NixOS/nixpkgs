@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Formatter for Fennel";
     homepage = src.meta.homepage;
     changelog = "${src.meta.homepage}/tree/${version}/changelog.md";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = lua.meta.platforms;
-    maintainers = with lib.maintainers; [ chiroptical ];
+    maintainers = with maintainers; [ chiroptical ];
     mainProgram = "fnlfmt";
   };
 }

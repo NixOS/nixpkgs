@@ -46,12 +46,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_acceptance"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Comprehensive scanner for Google Cloud";
     homepage = "https://github.com/google/gcp_scanner";
     changelog = "https://github.com/google/gcp_scanner/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "gcp-scanner";
   };
 }

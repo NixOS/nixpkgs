@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "parselmouth";
-  version = "0.4.6";
+  version = "0.4.5";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     repo = "Parselmouth";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ish9FQWdDCJ54S3s3ELZa40ttCs3opTRtFAQNg9lEIM=";
+    hash = "sha256-/Hde/DpSbmHs8WF3PAk4esYuMgOX6SxMaYJrrHYr/ZU=";
   };
 
   configurePhase = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--run-praat-tests"
     "-v"
   ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Praat in Python, the Pythonic way";
     homepage = "https://github.com/YannickJadoul/Parselmouth";
-    changelog = "https://github.com/YannickJadoul/Parselmouth/releases/tag/${src.tag}";
+    changelog = "https://github.com/YannickJadoul/Parselmouth/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

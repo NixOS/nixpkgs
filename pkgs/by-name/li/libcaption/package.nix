@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "szatmary";
     repo = "libcaption";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-OBtxoFJF0cxC+kfSK8TIKIdLkmCh5WOJlI0fejnisJo=";
     fetchSubmodules = true;
   };

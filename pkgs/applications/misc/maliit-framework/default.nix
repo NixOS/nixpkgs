@@ -26,16 +26,24 @@
   wayland-scanner,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "maliit-framework";
-  version = "2.3.0-unstable-2024-06-24";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = "ba6f7eda338a913f2c339eada3f0382e04f7dd67";
-    hash = "sha256-iwWLnstQMG8F6uE5rKF6t2X43sXQuR/rIho2RN/D9jE=";
+    tag = version;
+    sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
+
+  patches = [
+    # FIXME: backport GCC 12 build fix, remove for next release
+    (fetchpatch {
+      url = "https://github.com/maliit/framework/commit/86e55980e3025678882cb9c4c78614f86cdc1f04.diff";
+      hash = "sha256-5R+sCI05vJX5epu6hcDSWWzlZ8ns1wKEJ+u8xC6d8Xo=";
+    })
+  ];
 
   buildInputs = [
     at-spi2-atk

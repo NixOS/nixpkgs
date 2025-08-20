@@ -6,10 +6,9 @@
   SDL2,
   fftw,
   gtest,
+  darwin,
   eigen,
   libepoxy,
-  libGL,
-  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,23 +31,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    fftw
-    gtest
-    libGL
-    libX11
-  ];
+  buildInputs =
+    [
+      SDL2
+      fftw
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.OpenGL
+      darwin.libobjc
+    ];
 
   propagatedBuildInputs = [
     eigen
     libepoxy
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-framework OpenGL";
   };
 

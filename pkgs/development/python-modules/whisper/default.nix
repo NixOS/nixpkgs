@@ -2,27 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  six,
   mock,
+  six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
   version = "1.1.10";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "graphite-project";
-    repo = "whisper";
+    repo = pname;
     tag = version;
     hash = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -36,16 +33,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whisper" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/graphite-project/whisper";
     description = "Fixed size round-robin style database";
-    changelog = "https://graphite.readthedocs.io/en/latest/releases/${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }.html";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       offline
       basvandijk
     ];
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "a2ps";
-  version = "4.15.7";
+  version = "4.15.6";
 
   src = fetchurl {
     url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
-    hash = "sha256-cV84Zwr9lQtMpxwB9Gj+760mXKUtPxEpNMY8Cov7uK8=";
+    hash = "sha256-h/+dgByxGWkYHVuM+LZeZeWyS7DHahuCXoCY8pBvvfQ=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = {
+  meta = with lib; {
     description = "Anything to PostScript converter and pretty-printer";
     longDescription = ''
       GNU a2ps converts files into PostScript for printing or viewing. It uses a nice default format,
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       well as pretty printing for a wide range of programming languages.
     '';
     homepage = "https://www.gnu.org/software/a2ps/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ bennofs ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.bennofs ];
+    platforms = platforms.unix;
   };
 }

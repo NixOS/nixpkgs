@@ -4,6 +4,7 @@
   fetchgit,
   autoreconfHook,
   pkg-config,
+  darwin,
   boost,
   openssl,
   log4shib,
@@ -23,15 +24,23 @@ stdenv.mkDerivation rec {
     sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
   };
 
-  buildInputs = [
-    boost
-    openssl
-    log4shib
-    xercesc
-    xml-security-c
-    xml-tooling-c
-    zlib
-  ];
+  buildInputs =
+    [
+      boost
+      openssl
+      log4shib
+      xercesc
+      xml-security-c
+      xml-tooling-c
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        SystemConfiguration
+      ]
+    );
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

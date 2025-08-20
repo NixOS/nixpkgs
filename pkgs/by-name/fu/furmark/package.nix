@@ -55,8 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libGLU
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ libxcrypt-legacy ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ libxcrypt-legacy ];
 
   installPhase = ''
     runHook preInstall

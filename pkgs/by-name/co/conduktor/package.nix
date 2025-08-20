@@ -1,48 +1,38 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchurl,
   fetchzip,
   jdk11,
-  openjfx17,
-  gtk3,
-  glib,
-  pango,
-  cairo,
-  gdk-pixbuf,
-  xorg,
-  makeBinaryWrapper,
+  makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-let
-  openjfx_jdk = openjfx17.override { withWebKit = true; };
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "conduktor";
-  version = "2.24.9";
+  version = "2.15.1";
 
   src = fetchzip {
-    url = "https://github.com/conduktor/builds/releases/download/v${finalAttrs.version}/Conduktor-linux-${finalAttrs.version}.zip";
-    hash = "sha256-c9QjlKPZpeJi5YTq4gm+sg7my4EP0LI95AfGguF4ork=";
+    url = "https://github.com/conduktor/builds/releases/download/v${version}/Conduktor-linux-${version}.zip";
+    sha256 = "sha256-9y/7jni5zIITUWd75AxsfG/b5vCYotmeMeC9aYM2WEs=";
   };
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeWrapper
     copyDesktopItems
   ];
 
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = "conduktor";
+      name = pname;
       desktopName = "Conduktor";
-      genericName = finalAttrs.meta.description;
-      exec = "conduktor";
+      genericName = meta.description;
+      exec = pname;
       icon = fetchurl {
-        url = "https://github.com/conduktor/builds/raw/v${finalAttrs.version}/.github/resources/Conduktor.png";
-        hash = "sha256-mk4c9ecookRb7gR56cedIWfPfQy2uGF+ZbX6NI90KI0=";
+        url = "https://github.com/conduktor/builds/raw/v${version}/.github/resources/Conduktor.png";
+        sha256 = "0s7p74qclvac8xj2m22gfxx5m2c7cf0nqpk5sb049p2wvryhn2j4";
       };
       comment = "A beautiful and fully-featured desktop client for Apache Kafka";
     })
@@ -54,36 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -r . $out
-    wrapProgram $out/bin/conduktor \
-      --set JAVA_HOME ${jdk11.home} \
-      --set LD_LIBRARY_PATH ${
-        lib.makeLibraryPath [
-          openjfx_jdk
-          gtk3
-          gtk3
-          glib
-          pango
-          cairo
-          gdk-pixbuf
-          xorg.libXtst
-        ]
-      } \
-       --add-flags "--module-path ${openjfx_jdk}/lib --add-modules=javafx.controls,javafx.fxml"
+    mkdir -p $out/share/applications
+    mv * $out
+    wrapProgram "$out/bin/conduktor" --set JAVA_HOME "${jdk11.home}"
 
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Apache Kafka Desktop Client";
     longDescription = ''
       Conduktor is a GUI over the Kafka ecosystem, to make the development
       and management of Apache Kafka clusters as easy as possible.
     '';
     homepage = "https://www.conduktor.io/";
-    changelog = "https://www.conduktor.io/changelog/#${finalAttrs.version}";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ trobert ];
-    platforms = lib.platforms.linux;
+    changelog = "https://www.conduktor.io/changelog/#${version}";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ trobert ];
+    platforms = platforms.linux;
   };
-})
+}

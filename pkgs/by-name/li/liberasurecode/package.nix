@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Erasure Code API library written in C with pluggable Erasure Code backends";
     homepage = "https://github.com/openstack/liberasurecode";
     license = licenses.bsd2;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
     pkgConfigModules = [ "erasurecode-1" ];
   };
 })

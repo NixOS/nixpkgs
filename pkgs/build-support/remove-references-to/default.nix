@@ -34,11 +34,8 @@ stdenv.mkDerivation {
     substituteAll ${./darwin-sign-fixup.sh} $out/nix-support/setup-hooks.sh
   '';
 
-  env = {
-    inherit (builtins) storeDir;
-    shell = lib.getBin shell + (shell.shellPath or "");
-  }
-  // lib.optionalAttrs darwinCodeSign { inherit signingUtils; };
-
+  inherit (builtins) storeDir;
+  shell = lib.getBin shell + (shell.shellPath or "");
+  signingUtils = if darwinCodeSign then signingUtils else null;
   meta.mainProgram = "remove-references-to";
 }

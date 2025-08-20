@@ -2,48 +2,39 @@
   lib,
   stdenv,
   buildGoModule,
-  buildPackages,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "rospo";
-  version = "0.15.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ferama";
     repo = "rospo";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-xfCjRAsKJxtYeY2Mx+l1tDtqAF0SKjTCJCh1gCG+Rl8=";
+    rev = "v${version}";
+    hash = "sha256-+1xrke8dfMkuZZ/imY+1KkeJnZCDtKJpxwAg5ksErnM=";
   };
 
-  vendorHash = "sha256-6hCaguJP7XXdxYYS2KuBegwPaKP8rD9YI5727HZo7uA=";
+  vendorHash = "sha256-MTPFBrLFMQ2hEwtSDb7t3ls/Wagw7s9/w6bwWjZ62vE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ferama/rospo/cmd.Version=${finalAttrs.version}"
+    "-X github.com/ferama/rospo/cmd.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false;
 
-  postInstall =
-    let
-      rospoBin =
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          placeholder "out"
-        else
-          buildPackages.rospo;
-    in
-    ''
-      installShellCompletion --cmd rospo \
-        --bash <(${rospoBin}/bin/rospo completion bash) \
-        --fish <(${rospoBin}/bin/rospo completion fish) \
-        --zsh <(${rospoBin}/bin/rospo completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rospo \
+      --bash <($out/bin/rospo completion bash) \
+      --fish <($out/bin/rospo completion fish) \
+      --zsh <($out/bin/rospo completion zsh)
+  '';
 
   meta = {
     description = "Simple, reliable, persistent ssh tunnels with embedded ssh server";
@@ -52,4 +43,4 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "rospo";
   };
-})
+}

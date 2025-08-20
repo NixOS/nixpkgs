@@ -1,26 +1,17 @@
 {
   lib,
-  mkDerivationWith,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # nativeBuildInputs
-  wrapQtAppsHook,
-
-  # dependencies
   app-model,
   appdirs,
+  buildPythonPackage,
   cachey,
   certifi,
   dask,
   docstring-parser,
+  fetchFromGitHub,
   imageio,
   jsonschema,
   magicgui,
+  mkDerivationWith,
   napari-console,
   napari-npe2,
   napari-svg,
@@ -31,28 +22,34 @@
   psutil,
   pydantic,
   pyopengl,
+  pythonOlder,
   pyyaml,
   scikit-image,
   scipy,
+  setuptools,
+  setuptools-scm,
   superqt,
   tifffile,
   toolz,
   tqdm,
   typing-extensions,
   vispy,
+  wrapQtAppsHook,
   wrapt,
 }:
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.6.2";
+  version = "0.5.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${version}";
-    hash = "sha256-p6deNHnlvgZXV3Ym3OADC44j5bOkMDjlmM2N3yE5GxE=";
+    hash = "sha256-wJifLRrHlDzPgBU7OOPqjdzYpr9M+Klc+yAc/IpyZN8=";
   };
 
   postPatch = ''
@@ -67,7 +64,7 @@ mkDerivationWith buildPythonPackage rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     app-model
     appdirs
     cachey
@@ -97,18 +94,19 @@ mkDerivationWith buildPythonPackage rec {
     typing-extensions
     vispy
     wrapt
-  ]
-  ++ dask.optional-dependencies.array;
+  ] ++ dask.optional-dependencies.array;
+
+  dontUseSetuptoolsCheck = true;
 
   postFixup = ''
     wrapQtApp $out/bin/napari
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
-    changelog = "https://github.com/napari/napari/releases/tag/${src.tag}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/napari/napari/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ SomeoneSerge ];
   };
 }

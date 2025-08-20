@@ -2,40 +2,38 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  hatchling,
-  pyqt6,
+  pythonOlder,
+  pyqt5,
   poppler-qt5,
   pycups,
 }:
 
 buildPythonPackage rec {
   pname = "qpageview";
-  version = "1.0.1";
-  pyproject = true;
+  version = "0.6.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
-    repo = "qpageview";
-    tag = "v${version}";
-    hash = "sha256-5D+fumQVCfl9ZEHIQmbdXkAuAkiKy6P5+StMWSE+a0A=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-XFMTOD7ums8sbFHUViEI9q6/rCjUmEtXAdd3/OmLsHU=";
   };
 
-  build-system = [ hatchling ];
-
-  dependencies = [
-    pyqt6
+  propagatedBuildInputs = [
+    pyqt5
     poppler-qt5
     pycups
   ];
-
-  doCheck = false; # no tests
 
   pythonImportsCheck = [ "qpageview" ];
 
   meta = with lib; {
     description = "Page-based viewer widget for Qt5/PyQt5";
     homepage = "https://github.com/frescobaldi/qpageview";
-    changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/frescobaldi/qpageview/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ camillemndn ];
   };

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   # Python deps
   blockfrost-python,
   cachetools,
@@ -13,19 +12,16 @@
   frozendict,
   frozenlist,
   mnemonic,
-  ogmios,
   poetry-core,
   pprintpp,
   pynacl,
-  requests,
   setuptools,
   typeguard,
   websocket-client,
-  websockets,
 }:
 
 let
-  cose_0_9_dev8 = (cose.override { inherit cbor2; }).overridePythonAttrs (old: rec {
+  cose_0_9_dev8 = cose.overridePythonAttrs (old: rec {
     version = "0.9.dev8";
     src = (
       old.src.override {
@@ -38,21 +34,18 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.14.0";
-  pyproject = true;
+  version = "0.11.1";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
-    tag = "v${version}";
-    hash = "sha256-W5N254tND7mI0oR82YhMFWn4zVVs3ygYOqXOBMO3sXY=";
+    rev = "v${version}";
+    hash = "sha256-OWm6ztt3s3DUbxDZqpvwTO6XwdY/57AI6Bc6x6kxH7k=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     blockfrost-python
     cachetools
     cbor2
@@ -62,35 +55,22 @@ buildPythonPackage rec {
     frozendict
     frozenlist
     mnemonic
-    ogmios
     poetry-core
     pprintpp
     pynacl
-    requests
+    setuptools
     typeguard
     websocket-client
-    websockets
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonRelaxDeps = [
-    "ogmios"
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "typeguard" ];
 
   pythonImportsCheck = [ "pycardano" ];
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aciceri ];
-    # https://github.com/Python-Cardano/pycardano/blob/v0.13.2/Makefile#L26-L39
-    # cbor2 with C extensions fail tests due to differences in used sized vs unsized arrays
-    # more info: https://github.com/NixOS/nixpkgs/pull/402433#issuecomment-2916520286
-    broken = cbor2.withCExtensions; # consider overriding cbor2 with cbor2WithoutCExtensions
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
   };
 }

@@ -1,12 +1,11 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
-  stdenv,
 }:
-buildGoModule {
+buildGo122Module {
   pname = "honeytrap";
-  version = "0-unstable-2021-12-20";
+  version = "unstable-2021-12-20";
 
   src = fetchFromGitHub {
     owner = "honeytrap";
@@ -27,8 +26,5 @@ buildGoModule {
     homepage = "https://github.com/honeytrap/honeytrap";
     license = licenses.asl20;
     maintainers = [ ];
-    # Broken on darwin for Go toolchain > 1.22, with error:
-    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

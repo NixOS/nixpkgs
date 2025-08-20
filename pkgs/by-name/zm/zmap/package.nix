@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zmap";
-  version = "4.3.4";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = "zmap";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fHCVo8OwQUzpdDq7dMBxvK15Ojth5UmNoPTVuTGUP58=";
+    sha256 = "sha256-QNOLbIDILwCNYlYrr2mET4K6x1zn8PIoXiqs/Oaj3eY=";
   };
 
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];

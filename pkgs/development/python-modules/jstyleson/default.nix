@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "jstyleson";
   version = "0.0.2";
   format = "setuptools";

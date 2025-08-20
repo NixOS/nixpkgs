@@ -16,30 +16,29 @@
   wayland,
   xorg,
   vulkan-loader,
-  nixosTests,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.4";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-mgUSkYtc+i9pXv0n3zLHwBXFxfeWlhbsFJKa7X+mI98=";
+    rev = "epoch-${version}";
+    hash = "sha256-IAIO5TggPGzZyfET2zBKpde/aePXR4FsSg/Da1y3saA=";
   };
 
-  cargoHash = "sha256-qfPLDgGeYGSO0ZKJooXRK0NnTqzJ6zq6RhBpTTUusQY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pRp6Bi9CcHg2tMAC86CZybpfGL2BTxzst3G31tXJA5A=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-04-17";
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  env.VERGEN_GIT_COMMIT_DATE = "2024-10-31";
+  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [
@@ -80,26 +79,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-Wl,--pop-state"
   ];
 
+  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/cosmic-edit" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          vulkan-loader
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
-
-  passthru.tests = {
-    inherit (nixosTests)
-      cosmic
-      cosmic-autologin
-      cosmic-noxwayland
-      cosmic-autologin-noxwayland
-      ;
-  };
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    teams = [ teams.cosmic ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
     platforms = platforms.linux;
   };
-})
+}

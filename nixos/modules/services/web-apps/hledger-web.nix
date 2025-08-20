@@ -128,11 +128,7 @@ in
       in
       {
         description = "hledger-web - web-app for the hledger accounting tool.";
-        documentation = [
-          "info:hledger-web"
-          "man:hledger-web(1)"
-          "https://hledger.org/hledger-web.html"
-        ];
+        documentation = [ "https://hledger.org/hledger-web.html" ];
         wantedBy = [ "multi-user.target" ];
         after = [ "networking.target" ];
         serviceConfig = mkMerge [

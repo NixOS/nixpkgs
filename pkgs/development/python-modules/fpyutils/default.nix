@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "fpyutils/tests/*.py" ];
+  pytestFlagsArray = [ "fpyutils/tests/*.py" ];
 
   disabledTests = [
     # Don't run test which requires bash

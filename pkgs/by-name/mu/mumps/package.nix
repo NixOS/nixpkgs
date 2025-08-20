@@ -1,21 +1,21 @@
 {
-  lib,
-  stdenv,
-  fetchzip,
-  mpi,
-  gfortran,
-  fixDarwinDylibNames,
   blas,
+  fetchzip,
+  fetchpatch,
+  gfortran,
   lapack,
-  scalapack,
-  scotch,
+  lib,
   metis,
   parmetis,
-  mpiCheckPhaseHook,
-  static ? stdenv.hostPlatform.isStatic,
-  mpiSupport ? false,
   withParmetis ? false, # default to false due to unfree license
+  scotch,
   withPtScotch ? mpiSupport,
+  stdenv,
+  fixDarwinDylibNames,
+  mpi,
+  mpiSupport ? false,
+  mpiCheckPhaseHook,
+  scalapack,
 }:
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
@@ -48,16 +48,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
-  version = "5.8.0";
+  version = "5.7.3";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
   __structuredAttrs = true;
 
-  strictDeps = true;
-
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
-    hash = "sha256-opJW7+Z/YhyUFwYTTTuWZuykz8Z4do6/XTBThHyTVCs=";
+    hash = "sha256-ZnIfAuvOBJDYqCtKGlWs0r39nG6X2lAVRuUmeIJenZw=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -78,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
-      "ISCOTCH=-I${lib.getDev scotch}/include"
+      "ISCOTCH=-I${scotch.dev}/include"
       "LMETIS=${LMETIS}"
       "LSCOTCH=${LSCOTCH}"
       "ORDERINGSF=${ORDERINGSF}"
@@ -86,26 +84,25 @@ stdenv.mkDerivation (finalAttrs: {
       "OPTC=-O3"
       "OPTL=-O3"
       "SCALAP=-lscalapack"
-      "${if static then "all" else "allshared"}"
+      "allshared"
     ];
 
-  installPhase = ''
-    mkdir $out
-    cp -r include lib $out
-  ''
-  + lib.optionalString (!mpiSupport) ''
-    # Install mumps_seq headers
-    install -Dm 444 -t $out/include/mumps_seq libseq/*.h
+  installPhase =
+    ''
+      mkdir $out
+      cp -r include lib $out
+    ''
+    + lib.optionalString (!mpiSupport) ''
+      # Install mumps_seq headers
+      install -Dm 444 -t $out/include/mumps_seq libseq/*.h
 
-    # Add some compatibility with coin-or-mumps
-    ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
-  '';
+      # Add some compatibility with coin-or-mumps
+      ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
+    '';
 
   nativeBuildInputs = [
     gfortran
-  ]
-  ++ lib.optional mpiSupport mpi
-  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
   buildInputs =
@@ -119,12 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doInstallCheck = true;
-
   nativeInstallCheckInputs = lib.optional mpiSupport mpiCheckPhaseHook;
-
   installCheckPhase = ''
     runHook preInstallCheck
-
     ${lib.optionalString stdenv.hostPlatform.isDarwin "export DYLD_LIBRARY_PATH=$out/lib\n"}
     ${lib.optionalString mpiSupport "export MPIRUN='mpirun -n 2'\n"}
     cd examples
@@ -139,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     $MPIRUN ./csimpletest_save_restore <input_simpletest_cmplx
     $MPIRUN ./zsimpletest_save_restore <input_simpletest_cmplx
     $MPIRUN ./c_example_save_restore
-
     runHook postInstallCheck
   '';
 
@@ -149,13 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "MUltifrontal Massively Parallel sparse direct Solver";
-    homepage = "https://mumps-solver.org/";
-    changelog = "https://mumps-solver.org/index.php?page=dwnld#cl";
+    homepage = "http://mumps-solver.org/";
     license = lib.licenses.cecill-c;
     maintainers = with lib.maintainers; [
       nim65s
       qbisi
     ];
     platforms = lib.platforms.unix;
+    # Dependency of scalapack for mpiSupport is broken on darwin platform
+    broken = mpiSupport && stdenv.hostPlatform.isDarwin;
   };
 })

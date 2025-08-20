@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 
-  # credits build system has no install actions, provide our own.
+  # credis build system has no install actions, provide our own.
   installPhase = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"

@@ -1,16 +1,17 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
+  mkDerivation,
   cmake,
-  libsForQt5,
   libjpeg,
   libpng,
   libtiff,
   boost,
+  qtbase,
+  qttools,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "scantailor-advanced";
   version = "1.0.19";
 
@@ -23,15 +24,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qttools
+    qttools
   ];
   buildInputs = [
     libjpeg
     libpng
     libtiff
     boost
-    libsForQt5.qtbase
+    qtbase
   ];
 
   meta = with lib; {

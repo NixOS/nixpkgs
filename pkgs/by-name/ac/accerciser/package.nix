@@ -19,13 +19,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
-  version = "3.46.2";
+  version = "3.44.1";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/accerciser/${lib.versions.majorMinor version}/accerciser-${version}.tar.xz";
-    hash = "sha256-r/RpRR8k5YdpPE9/en+GpQU8ZrIDOndDrZ2DhHSWdw4=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-tJz7DTIY+/Vf+kPH96N9a4URn+2VahBjCYBO2+mDkAM=";
   };
 
   nativeBuildInputs = [
@@ -69,13 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
     changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    maintainers = teams.gnome.members;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

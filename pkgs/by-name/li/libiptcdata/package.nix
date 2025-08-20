@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ianw";
-    repo = "libiptcdata";
+    repo = pname;
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-ZjokepDAHiSEwXrkvM9qUAPcpIiRQoOsv7REle7roPU=";
   };

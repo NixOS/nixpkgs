@@ -17,7 +17,6 @@
   libgudev,
   libqtdbusmock,
   libqtdbustest,
-  librda,
   libsForQt5,
   lomiri,
   mate,
@@ -31,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-display";
-  version = "24.5.2";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-display";
     tag = finalAttrs.version;
-    hash = "sha256-rsZjEfAiz1HC5XMjPume1Y6miNAv1kmPFP4J/+NKlsA=";
+    hash = "sha256-ZEmJJtVK1dHIrY0C6pqVu1N5PmQtYqX0K5v5LvzNfFA=";
   };
 
   postPatch = ''
@@ -62,25 +61,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO Can we get around requiring every desktop's schemas just to avoid segfaulting on some systems?
-  buildInputs = [
-    accountsservice
-    geoclue2
-    gsettings-desktop-schemas # gnome schemas
-    glib
-    libayatana-common
-    libgudev
-    librda
-    libsForQt5.qtbase
-    systemd
-  ]
-  ++ (with lomiri; [
-    cmake-extras
-    lomiri-schemas # lomiri schema
-  ])
-  ++ (with mate; [
-    mate.marco # marco schema
-    mate.mate-settings-daemon # mate mouse schema
-  ]);
+  buildInputs =
+    [
+      accountsservice
+      geoclue2
+      gsettings-desktop-schemas # gnome schemas
+      glib
+      libayatana-common
+      libgudev
+      libsForQt5.qtbase
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-schemas # lomiri schema
+    ])
+    ++ (with mate; [
+      mate.marco # marco schema
+      mate.mate-settings-daemon # mate mouse schema
+    ]);
 
   nativeCheckInputs = [
     cppcheck
@@ -113,10 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests = {
-      startup = nixosTests.ayatana-indicators;
-      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-display;
-    };
+    tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
 

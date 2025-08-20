@@ -9,11 +9,9 @@
   wayland-scanner,
   wlr-protocols,
   libGL,
-  libgbm,
   bash,
   installExampleScripts ? true,
   makeWrapper,
-  installShellFiles,
   pipectl,
   slurp,
   rofi,
@@ -31,13 +29,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.18.3";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-xj+CZPHeMAisOMB8mYSIc2jAa5iQD5pM+Stccq4gnak=";
+    hash = "sha256-E8mbCMfmN3key1W3m8YbH1wKa56yESiXujACfKFS/+s=";
   };
 
   strictDeps = true;
@@ -48,11 +46,9 @@ stdenv.mkDerivation rec {
     wayland-scanner
     scdoc
     makeWrapper
-    installShellFiles
   ];
   buildInputs = [
     libGL
-    libgbm
     wayland
     wayland-protocols
     wlr-protocols
@@ -69,19 +65,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DINSTALL_EXAMPLE_SCRIPTS=${if installExampleScripts then "ON" else "OFF"}"
     "-DINSTALL_DOCUMENTATION=ON"
-    "-DWITH_GBM=ON"
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd wl-mirror \
-      --bash ../scripts/completions/bash-completions/_wl-mirror \
-      --zsh ../scripts/completions/zsh-completions/_wl-mirror
-
-    installShellCompletion --cmd wl-present \
-      --bash ../scripts/completions/bash-completions/_wl-present \
-      --zsh ../scripts/completions/zsh-completions/_wl-present
-  ''
-  + lib.optionalString installExampleScripts ''
+  postInstall = lib.optionalString installExampleScripts ''
     wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
   '';
 

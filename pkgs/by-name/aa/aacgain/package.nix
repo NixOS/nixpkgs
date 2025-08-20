@@ -29,12 +29,12 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
-  meta = {
+  meta = with lib; {
     description = "ReplayGain for AAC files";
     homepage = "https://github.com/dgilman/aacgain";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ robbinch ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.robbinch ];
     mainProgram = "aacgain";
   };
 }

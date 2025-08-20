@@ -5,13 +5,13 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pffft";
-  version = "0-unstable-2022-04-10";
+  version = "unstable-2022-04-10";
 
   src = fetchFromGitHub {
     owner = "marton78";
-    repo = "pffft";
+    repo = pname;
     rev = "08f5ed2618ac06d7dcc83d209d7253dc215274d5";
     sha256 = "sha256-9LfLQ17IRsbEwGQJZzhW2Av4en1KuJVicLrS2AyjUZY=";
   };

@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "darakian";
-    repo = "ddh";
+    repo = pname;
     rev = version;
     sha256 = "XFfTpX4c821pcTAJZFUjdqM940fRoBwkJC6KTknXtCw=";
   };
 
-  cargoHash = "sha256-rl9+3JSFkqZwaIWCuZBDhDF0QBr+aB2I7kB1o9LWCEw=";
+  cargoHash = "sha256-6yPDkbag81TZ4k72rbmGT6HWKdGK4yfKxjGNFKEWXPI=";
 
   meta = with lib; {
     description = "Fast duplicate file finder";

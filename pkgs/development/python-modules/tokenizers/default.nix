@@ -24,7 +24,6 @@
   pytestCheckHook,
   requests,
   tiktoken,
-  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -46,10 +45,6 @@ let
     "bert-base-uncased-vocab.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
       hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
-    };
-    "tokenizer-llama3.json" = fetchurl {
-      url = "https://huggingface.co/Narsil/llama-tokenizer/resolve/main/tokenizer.json";
-      hash = "sha256-eePlImNfMXEwCRO7QhRkqH3mIiGCoFcLmyzLoqlksrQ=";
     };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
@@ -75,24 +70,24 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.4";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-HJUycrNDpy2FOYi6aZ76orLewZCuLC1MoJ57peYJqvI=";
+    hash = "sha256-G65XiVlvJXOC9zqcVr9vWamUnpC0aa4kyYkE2v1K2iY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-0olujhOOO/BAH4JvnmXd1kE7T/sp5Vr3Z3P2X2jhZKs=";
+    hash = "sha256-5cw63ydyhpMup2tOe/hpG2W6YZ+cvT75MJBkE5Wap4s=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -120,15 +115,17 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     tiktoken
-    writableTmpDirAsHomeHook
   ];
 
-  postUnpack =
+  postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access
-    ''
-      mkdir $sourceRoot/tests/data
-      ln -s ${test-data}/* $sourceRoot/tests/data/
-    '';
+    mkdir $sourceRoot/tests/data
+    ln -s ${test-data}/* $sourceRoot/tests/data/
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   pythonImportsCheck = [ "tokenizers" ];
 

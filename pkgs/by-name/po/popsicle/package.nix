@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Multiple USB File Flasher";
     homepage = "https://github.com/pop-os/popsicle";
     changelog = "https://github.com/pop-os/popsicle/releases/tag/${version}";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       _13r0ck
       figsoda
     ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

@@ -4,18 +4,16 @@
   django,
   fetchFromGitHub,
   icalendar,
-  pytestCheckHook,
-  pytest-django,
+  python,
   python-dateutil,
   pythonOlder,
   pytz,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-scheduler";
   version = "0.10.1";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -26,22 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-dY2TPo15RRWrv7LheUNJSQl4d/HeptSMM/wQirRSI5w=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     django
     python-dateutil
     pytz
     icalendar
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-django
-  ];
-
-  preCheck = ''
-    export DJANGO_SETTINGS_MODULE=tests.settings
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m django check --settings=tests.settings
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "schedule" ];

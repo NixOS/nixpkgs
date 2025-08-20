@@ -9,7 +9,6 @@
   libpng,
   gfortran,
   perl,
-  ctestCheckHook,
   enablePython ? false,
   pythonPackages,
   enablePosixThreads ? false,
@@ -18,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.42.0";
+  version = "2.39.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    hash = "sha256-YDcbNXywEd7lRtsuq6zlt+J/D4fT6kpa3eeJE3GzwSg=";
+    hash = "sha256-DE10ZwCsxJr5yHiSXxsmvdQkQ/98LXxnbesrq7aEevs=";
   };
 
   postPatch = ''
@@ -66,12 +65,11 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ ctestCheckHook ];
-  checkFlags = [
-    "-R"
-    # Only do tests that don't require downloading 120MB of testdata
-    "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)"
-  ];
+
+  # Only do tests that don't require downloading 120MB of testdata
+  checkPhase = ''
+    ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
+  '';
 
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";

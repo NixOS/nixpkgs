@@ -16,6 +16,6 @@ buildPecl {
     description = "Binary serialization for PHP";
     homepage = "https://github.com/igbinary/igbinary/";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members;
   };
 }

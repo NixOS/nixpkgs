@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "you-get";
   version = "0.4.1700";
-  pyproject = true;
+  format = "setuptools";
 
   # Tests aren't packaged, but they all hit the real network so
   # probably aren't suitable for a build environment anyway.
@@ -31,8 +31,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3.pkgs; [ setuptools ];
-
   postInstall = ''
     installShellCompletion --cmd you-get \
       --zsh contrib/completion/_you-get \
@@ -44,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
     "you_get"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
     changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ryneeverett ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ryneeverett ];
     mainProgram = "you-get";
   };
 }

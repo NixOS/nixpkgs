@@ -7,24 +7,24 @@
   pytestCheckHook,
   pythonOlder,
   redis,
-  hatchling,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "5.2.2";
+  version = "5.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "django_stubs_ext";
     inherit version;
-    hash = "sha256-2dFRuRn+JDh2D1vZOPA+HLCMhNBlH55ZF/ExOQfkJoM=";
+    hash = "sha256-23Nk5PUK5+U2CZPb1Yo6V+pLLn5bqw+9UlzNs+eXXRw=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ setuptools ];
 
   dependencies = [
     django
@@ -36,8 +36,7 @@ buildPythonPackage rec {
     oracle = [ oracledb ];
   };
 
-  # Tests are not shipped with PyPI
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 

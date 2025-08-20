@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "holehe";
-  version = "0-unstable-2023-05-18";
-  format = "pyproject";
+  version = "unstable-2023-05-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "megadose";
@@ -19,14 +19,10 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # https://github.com/megadose/holehe/pull/178
     substituteInPlace setup.py \
-      --replace-fail "bs4" "beautifulsoup4"
+      --replace "bs4" "beautifulsoup4"
   '';
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     colorama
     httpx

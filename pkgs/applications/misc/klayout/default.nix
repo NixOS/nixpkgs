@@ -1,28 +1,17 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  python3,
-  ruby,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtxmlpatterns,
-  which,
-  perl,
-  libgit2,
-  stdenv,
+{ lib, mkDerivation, fetchFromGitHub
+, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
+, which, perl, libgit2
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.30.3";
+  version = "0.29.10";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-YsyKCSSxg0THflzPVF9yRn1X2liVT5xNafeQej/pdyI=";
+    hash = "sha256-3YRWGIfBGgN3vlBlFoVbMWgkhoxs7OQli1qtKUXf0KA=";
   };
 
   postPatch = ''
@@ -52,28 +41,12 @@ mkDerivation rec {
     runHook postBuild
   '';
 
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir $out/bin
+  postBuild = ''
+    mkdir $out/bin
+    mv $out/lib/klayout $out/bin/
 
-      install -Dm444 etc/klayout.desktop -t $out/share/applications
-      install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
-      mv $out/lib/klayout $out/bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      mv $out/lib/klayout.app $out/Applications/
-    '';
-
-  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    exec_name=$out/Applications/klayout.app/Contents/MacOS/klayout
-
-    for lib in $out/lib/libklayout_*.0.dylib; do
-      base_name=$(basename $lib)
-      install_name_tool -change "$base_name" "@rpath/$base_name" "$exec_name"
-    done
-
-    wrapQtApp "$out/Applications/klayout.app/Contents/MacOS/klayout"
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
@@ -84,13 +57,14 @@ mkDerivation rec {
   # and no format arguments [-Werror=format-security]"
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
     mainProgram = "klayout";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }
+

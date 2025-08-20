@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "justify";
   version = "unstable-2022-03-19";
 

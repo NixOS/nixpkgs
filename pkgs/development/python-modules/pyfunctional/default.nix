@@ -8,16 +8,16 @@
   tabulate,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pyfunctional";
-  version = "1.5.0";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EntilZha";
     repo = "PyFunctional";
-    rev = "6ed2e9a8a73d97141a8a7edab25e1aefadc256a3"; # missing tag
-    hash = "sha256-u7gcZEeg1exb98aVUOorVhxUHqjX50aPTpE5gR6sONI=";
+    tag = "v${version}";
+    hash = "sha256-utUmHQw7Y5pQJkwuy8CbPnCrAd/esaf0n1Exr/trcRg=";
   };
 
   build-system = [ poetry-core ];

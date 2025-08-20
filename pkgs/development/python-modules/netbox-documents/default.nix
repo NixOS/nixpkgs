@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-documents";
-  version = "0.7.3";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasonyates";
     repo = "netbox-documents";
-    tag = "v${version}";
-    hash = "sha256-lEbD+NuLyHXnXjGBdceE8RYhmoKEccRB4rKuxknjZL4=";
+    rev = "v${version}";
+    hash = "sha256-Uijdaicbx9A9fBgFx3zyhhFlokFdb9TSolnExbfkkc4=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin designed to faciliate the storage of site, circuit, device type and device specific documents within NetBox";
     homepage = "https://github.com/jasonyates/netbox-documents";
-    changelog = "https://github.com/jasonyates/netbox-documents/releases/tag/${src.tag}";
+    changelog = "https://github.com/jasonyates/netbox-documents/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };

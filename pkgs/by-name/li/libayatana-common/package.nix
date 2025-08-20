@@ -17,19 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-common";
-  version = "0.9.11";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-common";
-    tag = finalAttrs.version;
-    hash = "sha256-o5datBxGaGnvNvz8hvPY14DvjiFJdB7k93MumXuol0I=";
+    rev = finalAttrs.version;
+    hash = "sha256-qi3xsnZjqSz3I7O+xPxDnI91qDIA0XFJ3tCQQF84vIg=";
   };
 
   postPatch = ''
     # Queries via pkg_get_variable, can't override prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'set(SYSTEMD_USER_UNIT_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)'
   '';
 
   strictDeps = true;
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" true)
-    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    "-DENABLE_LOMIRI_FEATURES=ON"
+    "-DGSETTINGS_LOCALINSTALL=ON"
+    "-DGSETTINGS_COMPILE=ON"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -67,13 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Common functions for Ayatana System Indicators";
     homepage = "https://github.com/AyatanaIndicators/libayatana-common";
-    changelog = "https://github.com/AyatanaIndicators/libayatana-common/blob/${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.linux;
     pkgConfigModules = [
       "libayatana-common"
     ];

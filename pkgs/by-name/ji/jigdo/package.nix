@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "https://www.einval.com/~steve/software/jigdo/";
     changelog = "https://git.einval.com/cgi-bin/gitweb.cgi?p=jigdo.git;a=blob;f=changelog;hb=refs/tags/${version}";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ wegank ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

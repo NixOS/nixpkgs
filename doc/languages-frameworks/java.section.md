@@ -7,9 +7,7 @@ stdenv.mkDerivation {
   pname = "...";
   version = "...";
 
-  src = fetchurl {
-    # ...
-  };
+  src = fetchurl { /* ... */ };
 
   nativeBuildInputs = [
     ant
@@ -69,13 +67,9 @@ script to run it using a JRE. You can use `makeWrapper` for this:
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/foo \
       --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
-
-    runHook postInstall
   '';
 }
 ```
@@ -101,14 +95,18 @@ let
   something = (pkgs.something.override { jre = my_jre; });
   other = (pkgs.other.override { jre = my_jre; });
 in
-<...>
+  <...>
 ```
 
 You can also specify what JDK your JRE should be based on, for example
 selecting a 'headless' build to avoid including a link to GTK+:
 
 ```nix
-{ my_jre = pkgs.jre_minimal.override { jdk = jdk11_headless; }; }
+{
+  my_jre = pkgs.jre_minimal.override {
+    jdk = jdk11_headless;
+  };
+}
 ```
 
 Note all JDKs passthru `home`, so if your application requires
@@ -124,10 +122,7 @@ OpenJDK. For instance, to use the GNU Java Compiler:
 
 ```nix
 {
-  nativeBuildInputs = [
-    gcj
-    ant
-  ];
+  nativeBuildInputs = [ gcj ant ];
 }
 ```
 

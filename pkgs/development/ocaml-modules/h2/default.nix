@@ -21,7 +21,7 @@ let
   };
 in
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "h2";
 
   inherit (hpack)

@@ -22,18 +22,16 @@
   wayland,
   wayland-scanner,
   zlib,
-  nix-update-script,
 }:
-
 stdenv.mkDerivation {
   pname = "wlvncc";
-  version = "0-unstable-2025-07-07";
+  version = "unstable-2024-11-23";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "wlvncc";
-    rev = "bc6063aeacd4fbe9ac8f58f4ba3c5388b3e1f1f2";
-    hash = "sha256-Udu/CtrNBqnlgZCK2cS8VWNTfHJGXdijTnNIWnAW2Nw=";
+    rev = "0489e29fba374a08be8ba4a64d492a3c74018f41";
+    hash = "sha256-jFP4O6zo1fYULOVX9+nuTNAy4NuBKsDKOy+WUQRUjdI=";
   };
 
   nativeBuildInputs = [
@@ -62,14 +60,12 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-
-  meta = {
+  meta = with lib; {
     description = "Wayland Native VNC Client";
     homepage = "https://github.com/any1/wlvncc";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ teutat3s ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ teutat3s ];
+    platforms = platforms.linux;
     mainProgram = "wlvncc";
   };
 }

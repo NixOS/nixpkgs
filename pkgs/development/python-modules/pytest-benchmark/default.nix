@@ -57,8 +57,7 @@ buildPythonPackage rec {
     nbmake
     pytestCheckHook
     pytest-xdist
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

@@ -69,8 +69,8 @@ for user in "${!users[@]}"; do
 done
 
 if [[ "${#users[@]}" -gt 10 ]]; then
-    log "Too many reviewers (${!users[*]}), skipping review requests"
-    exit 0
+    log "Too many reviewers (${!users[@]}), skipping review requests"
+    exit 1
 fi
 
 for user in "${!users[@]}"; do

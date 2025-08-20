@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/suru-icon-theme";
     changelog = "https://gitlab.com/ubports/development/core/suru-icon-theme/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.cc-by-sa-30;
-    teams = [ lib.teams.lomiri ];
+    maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.all;
   };
 })

@@ -1,13 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchFromGitHub,
+  rocmUpdateScript,
   cmake,
-  python3,
-  rocm-merged-llvm,
+  rocm-cmake,
   rocm-device-libs,
-  zlib,
-  zstd,
   libxml2,
 }:
 
@@ -22,52 +20,43 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  version = "6.0.2";
 
-  sourceRoot = "${finalAttrs.src.name}/amd/comgr";
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "ROCm-CompilerSupport";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-9HuNU/k+kPJMlzqOTM20gm6SAOWJe9tpAZXEj4erdmI=";
+  };
 
-  patches = [
-    # [Comgr] Extend ISA compatibility
-    (fetchpatch {
-      sha256 = "sha256-dgow0kwSWM1TnkqWOZDRQrh5nuF8p5jbYyOLCpQsH4k=";
-      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/a439e4f37ce71de48d4a979594276e3be0e6278f.patch";
-      relative = "amd/comgr";
-    })
-    #[Comgr] Extend ISA compatibility for CCOB
-    (fetchpatch {
-      sha256 = "sha256-6Rwz12Lk4R2JK3olii3cr2Zd0ZLYe7VSpK1YRCOsJWY=";
-      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2d8c459a4d4c0567a7a275b4b54560d88e5c6919.patch";
-      relative = "amd/comgr";
-    })
-  ];
+  sourceRoot = "${finalAttrs.src.name}/lib/comgr";
 
   nativeBuildInputs = [
     cmake
-    python3
+    rocm-cmake
   ];
 
   buildInputs = [
     rocm-device-libs
     libxml2
-    zlib
-    zstd
-    rocm-merged-llvm
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-  ];
+  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;X86" ];
+
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/ROCm/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

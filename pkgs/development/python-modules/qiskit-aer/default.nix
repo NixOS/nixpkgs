@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.16.0.1";
+  version = "0.15.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
-    tag = version;
-    hash = "sha256-YF5X//X0fvJyALEB4gqsKRNWSoEsOrZFLVQUgHOA+0A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TrGoeyn6K5MGtkenEE9zz4S1xdOthskdRykzppfkZag=";
   };
 
   postPatch = ''
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--timeout=30"
     "--durations=10"
   ];

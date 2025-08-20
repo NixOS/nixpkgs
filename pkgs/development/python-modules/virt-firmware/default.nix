@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pkgs.systemd
   ];
 
-  enabledTestPaths = [ "tests/tests.py" ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
 

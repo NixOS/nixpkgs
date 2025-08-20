@@ -8,7 +8,7 @@ let
   inherit (swiftPackages) stdenv swift;
   arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openwith";
   version = "unstable-2022-10-28";
 

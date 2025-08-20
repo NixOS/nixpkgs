@@ -6,25 +6,32 @@
   fetchFromGitHub,
   git,
   jsonschema,
+  mkdocstrings,
   pdm-backend,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "1.8.0";
+  version = "1.5.5";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = version;
-    hash = "sha256-p+igAui0LNMj8tMBmw59K8mNdixqfxU8P9lHDZkoFaY=";
+    hash = "sha256-SyyyNBhJVVKAzPl288B7E2PoqNd9Pp9VmSJASYez6Gs=";
   };
 
   build-system = [ pdm-backend ];
 
-  dependencies = [ colorama ];
+  dependencies = [
+    colorama
+    mkdocstrings
+  ];
 
   nativeCheckInputs = [
     git
@@ -38,17 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "griffe" ];
 
-  disabledTestPaths = [
-    # Circular dependencies
-    "tests/test_api.py"
-  ];
-
-  meta = {
+  meta = with lib; {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";
-    changelog = "https://github.com/mkdocstrings/griffe/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
+    license = licenses.isc;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "griffe";
   };
 }

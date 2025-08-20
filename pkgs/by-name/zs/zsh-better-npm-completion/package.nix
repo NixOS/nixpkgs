@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zsh-better-npm-completion";
-  version = "0-unstable-2019-11-19";
+  version = "unstable-2019-11-19";
 
   src = fetchFromGitHub {
     owner = "lukechilds";

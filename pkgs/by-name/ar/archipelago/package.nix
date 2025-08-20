@@ -7,10 +7,10 @@
 }:
 let
   pname = "archipelago";
-  version = "0.6.3";
+  version = "0.5.1";
   src = fetchurl {
     url = "https://github.com/ArchipelagoMW/Archipelago/releases/download/${version}/Archipelago_${version}_linux-x86_64.AppImage";
-    hash = "sha256-PetlGYsdhyvThIFqy+7wbPLAXDcgN2Kcl2WF3rta8PA=";
+    hash = "sha256-/TwmTQtV/6bR95ZQNEcOFQ4t/0otNK8xx5N+yoYaiYk=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -40,10 +40,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/ArchipelagoMW/Archipelago/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "archipelago";
-    maintainers = with lib.maintainers; [
-      pyrox0
-      iqubic
-    ];
+    maintainers = with lib.maintainers; [ pyrox0 ];
     platforms = lib.platforms.linux;
   };
 }

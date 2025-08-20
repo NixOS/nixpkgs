@@ -2,28 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   autoreconfHook,
   pkg-config,
   expat,
-  icu74,
-  inih,
+  icu,
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblcf";
-  # When updating this package, you should probably also update
-  # easyrpg-player and libretro.easyrpg
-  version = "0.8.1";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
     rev = version;
-    hash = "sha256-jIk55+n8wSk3Z3FPR18SE7U3OuWwmp2zJgvSZQBB2l0=";
+    hash = "sha256-jJGIsNw7wplTL5FBWGL8osb9255o9ZaWgl77R+RLDMM=";
   };
 
-  strictDeps = true;
+  dtrictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,16 +28,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     expat
-    icu74
-    inih
+    icu
   ];
 
   enableParallelBuilding = true;
   enableParallelChecking = true;
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";

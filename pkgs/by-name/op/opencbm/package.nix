@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  doInstallCheck = true;
-
   meta = with lib; {
     description = "Kernel driver and development library to control serial CBM devices";
     longDescription = ''

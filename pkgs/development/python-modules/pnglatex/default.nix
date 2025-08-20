@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poppler-utils,
+  poppler_utils,
   netpbm,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    poppler-utils
+    poppler_utils
     netpbm
   ];
 

@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rslint";
-    repo = "rslint";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
-  cargoHash = "sha256-4DzQSnrUUNaeyNLKvnx4HKM4dAS10y5mu5S2NpzfFRQ=";
+  cargoHash = "sha256-bqF5v52uxbvmVmphXAmcWlCI6nbQzZemCxlTcqhRDTY=";
 
   cargoBuildFlags = [
     "-p"

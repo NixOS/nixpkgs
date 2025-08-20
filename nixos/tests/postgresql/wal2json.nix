@@ -1,7 +1,6 @@
 {
   pkgs,
   makeTest,
-  genTests,
 }:
 
 let
@@ -17,6 +16,7 @@ let
         services.postgresql = {
           inherit package;
           enable = true;
+          enableJIT = lib.hasInfix "-jit-" package.name;
           extensions = with package.pkgs; [ wal2json ];
           settings = {
             wal_level = "logical";
@@ -27,7 +27,7 @@ let
       };
 
       testScript = ''
-        machine.wait_for_unit("postgresql.target")
+        machine.wait_for_unit("postgresql")
         machine.succeed(
             "sudo -u postgres psql -qAt -f ${./wal2json/example2.sql} postgres > /tmp/example2.out"
         )
@@ -43,7 +43,11 @@ let
       '';
     };
 in
-genTests {
-  inherit makeTestFor;
-  filter = _: p: !p.pkgs.wal2json.meta.broken;
-}
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (_: p: !p.pkgs.wal2json.meta.broken) pkgs.postgresqlVersions
+  )
+  // {
+    passthru.override = p: makeTestFor p;
+  }
+)

@@ -4,20 +4,17 @@
   fetchPypi,
   pytestCheckHook,
   mock,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lml";
-  version = "0.2.0";
-  pyproject = true;
+  version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jdWvtDZ6WT0c2yFEoFh0zZk49SZr67DJ4UEyAEI8DXQ=";
+    sha256 = "57a085a29bb7991d70d41c6c3144c560a8e35b4c1030ffb36d85fa058773bcc5";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -28,9 +25,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Plugin management system for Python";
+    description = "Load me later. A lazy plugin management system for Python";
     homepage = "http://lml.readthedocs.io/";
-    changelog = "https://github.com/python-lml/lml/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

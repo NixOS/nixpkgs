@@ -32,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "Snes9X GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

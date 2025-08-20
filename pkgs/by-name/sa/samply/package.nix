@@ -2,36 +2,59 @@
   lib,
   rustPlatform,
   fetchCrate,
-  versionCheckHook,
-  nix-update-script,
+  jq,
+  moreutils,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "samply";
-  version = "0.13.1";
+  version = "0.12.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-zTwAsE6zXY3esO7x6UTCO2DbzdUSKZ6qc5Rr9qcI+Z8=";
+    hash = "sha256-7bf1lDIZGhRpvnn8rHNwzH2GBY8CwtYCjuRAUTQgbsA=";
   };
 
-  cargoHash = "sha256-mQykzO9Ldokd3PZ1fY4pK/GtLmYMVas2iHj1Pqi9WqQ=";
+  cargoHash = "sha256-QGvtKx+l6+UxdlziHnF63geAvW55RRlatK2/J8LR0Ck=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  # the dependencies linux-perf-data and linux-perf-event-reader contains both README.md and Readme.md,
+  # which causes a hash mismatch on systems with a case-insensitive filesystem
+  # this removes the readme files and updates cargo's checksum file accordingly
+  depsExtraArgs = {
+    nativeBuildInputs = [
+      jq
+      moreutils
+    ];
 
-  passthru.updateScript = nix-update-script { };
+    postBuild = ''
+      for crate in linux-perf-data linux-perf-event-reader; do
+        pushd $name/$crate
 
-  meta = {
+        rm -f README.md Readme.md
+        jq 'del(.files."README.md") | del(.files."Readme.md")' \
+          .cargo-checksum.json -c \
+          | sponge .cargo-checksum.json
+
+        popd
+      done
+    '';
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
+  meta = with lib; {
     description = "Command line profiler for macOS and Linux";
+    mainProgram = "samply";
     homepage = "https://github.com/mstange/samply";
     changelog = "https://github.com/mstange/samply/releases/tag/samply-v${version}";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
-    mainProgram = "samply";
+    maintainers = with maintainers; [ figsoda ];
   };
 }

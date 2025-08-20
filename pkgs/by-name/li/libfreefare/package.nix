@@ -6,6 +6,7 @@
   pkg-config,
   libnfc,
   openssl,
+  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -21,10 +22,15 @@ stdenv.mkDerivation {
     autoreconfHook
     pkg-config
   ];
-  buildInputs = [
-    libnfc
-    openssl
-  ];
+  buildInputs =
+    [
+      libnfc
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libobjc
+      darwin.apple_sdk
+    ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
@@ -33,7 +39,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Convenient API for MIFARE card manipulations";
+    description = "Libfreefare project aims to provide a convenient API for MIFARE card manipulations";
     license = lib.licenses.lgpl3;
     homepage = "https://github.com/nfc-tools/libfreefare";
     maintainers = with lib.maintainers; [ bobvanderlinden ];

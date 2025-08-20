@@ -18,15 +18,16 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "impacket"
-    "ldap3"
     "pyasn1"
     "rich"
     "typer"
   ];
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     impacket
     ldap3
     pyasn1
@@ -34,14 +35,16 @@ python3.pkgs.buildPythonApplication rec {
     typer
   ];
 
-  pythonImportsCheck = [ "pre2k" ];
+  pythonImportsCheck = [
+    "pre2k"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to query for the existence of pre-windows 2000 computer objects";
     homepage = "https://github.com/garrettfoster13/pre2k";
-    changelog = "https://github.com/garrettfoster13/pre2k/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/garrettfoster13/pre2k/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "pre2k";
   };
 }

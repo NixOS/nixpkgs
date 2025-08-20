@@ -1,32 +1,24 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
   lm_sensors,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "fan2go";
-  version = "0.10.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "markusressel";
-    repo = "fan2go";
-    tag = version;
-    hash = "sha256-mLypuOGjYrXFf3BGCDggEDk1+PVx2CgsxAjZQ7uiSW0=";
-    leaveDotGit = true;
-    postFetch = ''
-      cd $out
-      git rev-parse --short HEAD > $out/GIT_REV
-      find $out -name .git -print0 | xargs -0 rm -rf
-    '';
+    repo = pname;
+    rev = version;
+    hash = "sha256-eSHeHBzDvzsDAck0zexwR8drasisvlQNTeowv92E2uc=";
   };
 
-  vendorHash = "sha256-IJJTolpOtstVov8MNel6EOJqv1oCkTOTiPyW42ElQjc=";
+  vendorHash = "sha256-ad0e/cxbcU/KfPDOdD46KdCcvns83dgGDAyLLQiGyiA=";
 
   buildInputs = [ lm_sensors ];
-
-  patches = [ ./lazy-binding.patch ];
 
   postConfigure = ''
     substituteInPlace vendor/github.com/md14454/gosensors/gosensors.go \
@@ -36,24 +28,6 @@ buildGoModule rec {
     # binary without being able to confirm that it's owned by root, which isn't
     # possible under the sandbox.
     rm internal/fans/cmd_test.go
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    make build GIT_REV="$(cat GIT_REV)"
-
-    dir="$GOPATH/bin"
-    mkdir -p "$dir"
-    cp bin/fan2go "$dir"
-
-    runHook postBuild
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    make test
-    runHook postCheck
   '';
 
   meta = with lib; {

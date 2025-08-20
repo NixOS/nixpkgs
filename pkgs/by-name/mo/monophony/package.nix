@@ -12,19 +12,18 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "3.4.0";
-  pyproject = true;
+  version = "2.15.0";
+  pyproject = false;
 
+  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-EchbebFSSOBrgk9nilDgzp5jAeEa0tHlJZ5l4wYpw0g=";
+    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
   };
 
-  sourceRoot = "${src.name}/source";
-
-  dependencies = with python3Packages; [
+  pythonPath = with python3Packages; [
     mpris-server
     pygobject3
     ytmusicapi
@@ -41,22 +40,22 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-    # needed for gstreamer https
-    glib-networking
-  ]
-  ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      libadwaita
+      # needed for gstreamer https
+      glib-networking
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
-  pythonRelaxDeps = [ "mpris_server" ];
+  # Makefile only contains `install`
+  dontBuild = true;
 
-  postInstall = ''
-    make install prefix=$out
-  '';
+  installFlags = [ "prefix=$(out)" ];
 
   dontWrapGApps = true;
 
@@ -69,13 +68,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://gitlab.com/zehkira/monophony";
     description = "Linux app for streaming music from YouTube";
     longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
-    homepage = "https://gitlab.com/zehkira/monophony";
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ quadradical ];
+    license = licenses.agpl3Plus;
     mainProgram = "monophony";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ quadradical ];
   };
 }

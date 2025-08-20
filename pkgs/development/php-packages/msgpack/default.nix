@@ -11,7 +11,6 @@ buildPecl rec {
     description = "PHP extension for interfacing with MessagePack";
     homepage = "https://github.com/msgpack/msgpack-php";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ostrolucky ];
-    teams = [ lib.teams.php ];
+    maintainers = lib.teams.php.members ++ [ lib.maintainers.ostrolucky ];
   };
 }

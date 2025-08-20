@@ -4,18 +4,19 @@
   rustPlatform,
   fetchFromGitHub,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "1.0.1";
+  version = "0.21.9";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
-    repo = "xplr";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-78MHWdvWxXGcptMW3AUTYrpfdAai59x1KnW4uMaUZC8=";
+    hash = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
   };
 
-  cargoHash = "sha256-qC9KutkGLUuG7xQeO/Vg3oRqh8hCQuHisJA5diYizAg=";
+  cargoHash = "sha256-RZgdWhVBZozYxbbNslCBLhN6EnogpyVXvht6GbzLnPs=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
   env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
-    rm .cargo/config.toml
+    rm .cargo/config
   '';
 
   postInstall = ''

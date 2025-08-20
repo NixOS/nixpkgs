@@ -6,7 +6,6 @@
   SDL,
   libGLU,
   libGL,
-  libX11,
   upx,
   zlib,
 }:
@@ -37,14 +36,8 @@ stdenv.mkDerivation {
     SDL
     libGLU
     libGL
-    libX11
     upx
     zlib
-  ];
-
-  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    "-Wno-error=implicit-int"
-    "-Wno-error=incompatible-pointer-types"
   ];
 
   meta = {
@@ -52,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "http://roguecentral.org/doryen/libtcod/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

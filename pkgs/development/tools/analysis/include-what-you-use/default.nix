@@ -9,13 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
-  # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
-  version = "0.24";
+  # Also bump llvmPackages in all-packages.nix to the supported version!
+  version = "0.22";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-ojQhzv9gHT6iFej6kpK/qMo56xrCCY277fxs/mVUHBA=";
+    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
   };
 
   postPatch = ''

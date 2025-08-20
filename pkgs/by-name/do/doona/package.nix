@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "doona";
-  version = "0-unstable-2019-03-08";
+  version = "unstable-2019-03-08";
 
   src = fetchFromGitHub {
     owner = "wireghoul";
-    repo = "doona";
+    repo = pname;
     rev = "master";
     sha256 = "0x9irwrw5x2ia6ch6gshadrlqrgdi1ivkadmr7j4m75k04a7nvz1";
   };

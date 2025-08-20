@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "soldag";
-    repo = "pyflic";
+    repo = pname;
     rev = version;
     sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };
 
-  # Project thas no tests
+  # Projec thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyflic" ];

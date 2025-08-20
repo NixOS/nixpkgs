@@ -4,38 +4,23 @@
   fetchFromGitHub,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
-        dependencies = [
-          python3.pkgs.pydantic_1
-          python3.pkgs.cryptography
-          python3.pkgs.email-validator
-        ];
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.7.5";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-KcHHZPklJZ7o5cs30rL+vGaeST8LUdGfdhG7daZZzX0=";
+    hash = "sha256-+wMoHzys4iceiQvRvwsl2aSvTYZxeZlKHy7D4xx33aU=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with py.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -74,8 +59,7 @@ py.pkgs.buildPythonApplication rec {
     numpy
     pandas
     py-ocsf-models
-    pydantic_1
-    pygithub
+    pydantic
     python-dateutil
     pytz
     schema
@@ -90,7 +74,7 @@ py.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "prowler";

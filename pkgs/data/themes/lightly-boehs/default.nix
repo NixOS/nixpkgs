@@ -10,7 +10,7 @@
   qt5,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "lightly-boehs";
   version = "0.4.1";
 

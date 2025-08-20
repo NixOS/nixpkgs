@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openSUSE";
-    repo = "catatonit";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-sc/T4WjCPFfwUWxlBx07mQTmcOApblHygfVT824HcJM=";
   };
@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
     description = "Container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erosennin ];
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;
     platforms = platforms.linux;
     mainProgram = "catatonit";
   };

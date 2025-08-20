@@ -19,22 +19,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "retext";
-  version = "8.1.0";
-  pyproject = true;
+  version = "8.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
-    repo = "retext";
+    repo = pname;
     tag = version;
-    hash = "sha256-npQ1eVb2iyswbqxi262shC9u/g9oE0ofkLbisFgqQM4=";
+    hash = "sha256-BToW9rPFEbgAErvJ5gtUpNadCLtlRihE7eKKFgO5N68=";
   };
 
   toolbarIcons = fetchzip {
     url = "https://github.com/retext-project/retext/archive/icons.zip";
-    hash = "sha256-nqKAUg9nTzGPPxr80KTn6JX9JgCUJwpcwp8aOIlcxPY=";
+    hash = "sha256-LQtSFCGWcKvXis9pFDmPqAMd1m6QieHQiz2yykeTdnI=";
   };
-
-  build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -46,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     qtsvg
   ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     chardet
     docutils
     markdown
@@ -57,11 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pyqt6-webengine
   ];
 
-  # disable wheel check
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "self.root and self.root.endswith('/wheel')" "False"
-  '';
+  patches = [ ./remove-wheel-check.patch ];
 
   preConfigure = ''
     lrelease ReText/locale/*.ts
@@ -84,8 +78,8 @@ python3.pkgs.buildPythonApplication rec {
     cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
 
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
-      --replace-fail "Exec=retext-${version}.data/scripts/retext %F" "Exec=retext %F" \
-      --replace-fail "Icon=./ReText/icons/retext.svg" "Icon=retext"
+      --replace "Exec=ReText-${version}.data/scripts/retext %F" "Exec=$out/bin/retext %F" \
+      --replace "Icon=ReText/icons/retext.svg" "Icon=retext"
   '';
 
   doCheck = false;
@@ -94,12 +88,12 @@ python3.pkgs.buildPythonApplication rec {
     "ReText"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ klntsky ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ klntsky ];
+    platforms = platforms.unix;
     mainProgram = "retext";
   };
 }

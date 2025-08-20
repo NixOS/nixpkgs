@@ -12,7 +12,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
   version = "5.1";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,11 +23,7 @@ python3Packages.buildPythonApplication rec {
     echo ${version} > ./flac2all_pkg/version
   '';
 
-  build-system = [
-    python3Packages.setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     python3Packages.pyzmq
   ];
 

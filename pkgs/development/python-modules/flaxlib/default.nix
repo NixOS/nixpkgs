@@ -3,54 +3,58 @@
   buildPythonPackage,
   flax,
   tomlq,
-  python,
-
-  # build-system
-  nanobind,
-  ninja,
-  scikit-build-core,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
+  rustPlatform,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flaxlib";
-  version = "0.0.1";
+  version = "0.0.1-a1";
   pyproject = true;
 
   inherit (flax) src;
 
-  sourceRoot = "${src.name}/flaxlib_src";
+  sourceRoot = "${src.name}/flaxlib";
 
   postPatch = ''
     expected_version="$version"
-    actual_version=$(${lib.getExe tomlq} --file pyproject.toml "project.version")
+    actual_version=$(${lib.getExe tomlq} --file Cargo.toml "package.version")
 
     if [ "$actual_version" != "$expected_version" ]; then
       echo -e "\n\tERROR:"
-      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its pyproject.toml file ($actual_version)"
+      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its Cargo.toml file ($actual_version)"
       echo -e "\tPlease update the version attribute of the nix python3Packages.flaxlib package."
       exit 1
     fi
   '';
 
-  dontUseCmakeConfigure = true;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-RPbMHnRdJaWKLU9Rkz39lmfibO20dnfZmLZqehHM3w4=";
+  };
 
-  build-system = [
-    nanobind
-    ninja
-    scikit-build-core
-  ];
   nativeBuildInputs = [
-    cmake
-    pkg-config
+    rustPlatform.maturinBuildHook
+    rustPlatform.cargoSetupHook
   ];
-
-  env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
 
   pythonImportsCheck = [ "flaxlib" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  env = {
+    # https://github.com/google/flax/issues/4491
+    # Upstream should update Cargo.lock
+    # Enabling `PYO3_USE_ABI3_FORWARD_COMPATIBILITY` allows us to temporarily avoid the issue
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+  };
 
   # This package does not have tests (yet ?)
   doCheck = false;

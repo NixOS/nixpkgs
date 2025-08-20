@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "btrfs";
-  version = "15";
+  version = "14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FBmRT/FB3+nhb9BHfZVI1L6nM+zXdYjoy3JVzhetoQs=";
+    hash = "sha256-BPKPwT33i8fQYJkUZbnJ8nQNbmKw0Dq6ekb9mr7awEY=";
   };
 
   # no tests (in v12)

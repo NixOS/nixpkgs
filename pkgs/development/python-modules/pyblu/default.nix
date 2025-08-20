@@ -3,28 +3,28 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   lib,
   lxml,
+  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "2.0.4";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     tag = "v${version}";
-    hash = "sha256-nzTqakEMl9gywIQpC9OR0xiqZzawU5RxOx3NQT+CiFc=";
+    hash = "sha256-Y/9mPaOgynQock8nakjQHCs9VUs7w7EysYsGsDOM87Y=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp

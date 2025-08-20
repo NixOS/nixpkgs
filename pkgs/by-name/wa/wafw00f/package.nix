@@ -28,12 +28,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "wafw00f" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to identify and fingerprint Web Application Firewalls (WAF)";
     homepage = "https://github.com/EnableSecurity/wafw00f";
     changelog = "https://github.com/EnableSecurity/wafw00f/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "wafw00f";
   };
 }

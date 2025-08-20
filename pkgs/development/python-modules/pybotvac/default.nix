@@ -11,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pybotvac";
-  version = "0.0.28";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XIGG8HmjI3dSq42co2e05xHIYjIM39qVanMJLDqWFCg=";
+    hash = "sha256-EvGBStEYgqFO9GMtxs1qtDixb4y2Ptom8xncRUv4ur4=";
   };
+
+  postPatch = ''
+    substituteInPlace pybotvac/robot.py \
+      --replace-fail "import urllib3" "" \
+      --replace-fail "urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)" "# urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)"
+  '';
 
   build-system = [ setuptools ];
 

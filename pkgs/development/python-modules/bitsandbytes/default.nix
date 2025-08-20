@@ -11,12 +11,12 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.46.0";
+  version = "0.45.0";
 
   inherit (torch) cudaPackages cudaSupport;
-  inherit (cudaPackages) cudaMajorMinorVersion;
+  inherit (cudaPackages) cudaVersion;
 
-  cudaMajorMinorVersionString = lib.replaceStrings [ "." ] [ "" ] cudaMajorMinorVersion;
+  cudaVersionString = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor cudaVersion);
 
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
@@ -32,7 +32,7 @@ let
   ];
 
   cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaMajorMinorVersion}";
+    name = "cuda-native-redist-${cudaVersion}";
     paths =
       with cudaPackages;
       [
@@ -45,7 +45,7 @@ let
   };
 
   cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaMajorMinorVersion}";
+    name = "cuda-redist-${cudaVersion}";
     paths = cuda-common-redist;
   };
 in
@@ -54,14 +54,14 @@ buildPythonPackage {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bitsandbytes-foundation";
+    owner = "TimDettmers";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
+    hash = "sha256-HoZNEDhCPgGwFgwT4NqkbUAy0bYqvki75FBZn5aLuKM=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
-  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionally.
+  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionnally.
   # Indeed, in this case, only `libbitsandbytes_cuda124.so` is built. `libbitsandbytes_cpu.so` is not.
   # Also, hardcode the path to the previously built library instead of relying on
   # `get_cuda_bnb_library_path(cuda_specs)` which relies on `torch.cuda` too.
@@ -73,7 +73,7 @@ buildPythonPackage {
       --replace-fail "if cuda_specs:" "if True:" \
       --replace-fail \
         "cuda_binary_path = get_cuda_bnb_library_path(cuda_specs)" \
-        "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaMajorMinorVersionString}.so'"
+        "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaVersionString}.so'"
   '';
 
   nativeBuildInputs = [
@@ -112,8 +112,8 @@ buildPythonPackage {
 
   meta = {
     description = "8-bit CUDA functions for PyTorch";
-    homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
+    homepage = "https://github.com/TimDettmers/bitsandbytes";
+    changelog = "https://github.com/TimDettmers/bitsandbytes/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

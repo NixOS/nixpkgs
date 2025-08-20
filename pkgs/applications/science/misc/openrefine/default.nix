@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  curl,
-  jdk,
-  jq,
-  makeWrapper,
-  maven,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, curl
+, jdk
+, jq
+, makeWrapper
+, maven
 }:
 
 let
-  version = "3.9.3";
+  version = "3.8.7";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-wV5ur31JEGcMSLRHQq/H6GlsdpEzTH6ZxBkE9Sj6TkU=";
+    hash = "sha256-ViksKZ57DCIPShrK4PDBK0o8OttQKYt5wsnQ4+aPUDE=";
   };
 
   npmPkg = buildNpmPackage {
@@ -25,7 +24,7 @@ let
     pname = "openrefine-npm";
     sourceRoot = "${src.name}/main/webapp";
 
-    npmDepsHash = "sha256-I0iqGniXeqyCWf1DG2nMNkTScCrtJYeYF9n2Zt6Syjc=";
+    npmDepsHash = "sha256-u9qledNFqGgMmOIsm2T8w3UoaLbb7WtksUw6xLoRgU8=";
 
     # package.json doesn't supply a version, which npm doesn't like - fix this.
     # directly referencing jq because buildNpmPackage doesn't pass
@@ -43,8 +42,7 @@ let
     '';
   };
 
-in
-maven.buildMavenPackage {
+in maven.buildMavenPackage {
   inherit src version;
 
   pname = "openrefine";
@@ -55,7 +53,7 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-pAL+Zhm0qnE1vEvivlXt2cIzIoPFoge5CRrsbfIoGNs=";
+  mvnHash = "sha256-SrEsJfiZrPy2zZ0Vzl7+d+8XUHGd2DOOs+PHBOZrbIU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -104,12 +102,7 @@ maven.buildMavenPackage {
     EOF
 
     wrapProgram $out/bin/refine \
-      --prefix PATH : '${
-        lib.makeBinPath [
-          jdk
-          curl
-        ]
-      }' \
+      --prefix PATH : '${lib.makeBinPath [ jdk curl ]}' \
       --set-default REFINE_INI_PATH "$out/etc/refine.ini"
   '';
 
@@ -125,9 +118,9 @@ maven.buildMavenPackage {
     maintainers = with maintainers; [ ris ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode # maven dependencies
+      binaryBytecode  # maven dependencies
     ];
-    broken = stdenv.hostPlatform.isDarwin; # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin;  # builds, doesn't run
     mainProgram = "refine";
   };
 }

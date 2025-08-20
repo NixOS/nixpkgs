@@ -4,13 +4,13 @@
   buildGoModule,
   libwebp,
 }:
-buildGoModule {
+buildGoModule rec {
   pname = "http3-ytproxy";
-  version = "0-unstable-2022-07-03";
+  version = "unstable-2022-07-03";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
-    repo = "http3-ytproxy";
+    repo = pname;
     rev = "4059da180bb9d7b0de10c1a041bd0e134f1b6408";
     hash = "sha256-ilIOkZ9lcuSigh/mMU7IGpWlFMFb2/Y11ri3659S8+I=";
   };

@@ -6,17 +6,13 @@
 
 echo "exporting $url (rev $rev) into $out"
 
-runHook preFetch
-
-$SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" \
+$SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
-  ${fetchTags:+--fetch-tags} \
   ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
   ${nonConeMode:+--non-cone-mode} \
-  ${branchName:+--branch-name "$branchName"} \
-  ${rootDir:+--root-dir "$rootDir"}
+  ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch

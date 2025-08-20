@@ -12,7 +12,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "danburzo";
-    repo = "percollate";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-JpdSEockALXtuuMMi5mgD5AXcayojyK0qMMWF+XFfZE=";
   };

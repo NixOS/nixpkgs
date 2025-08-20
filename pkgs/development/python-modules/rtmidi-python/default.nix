@@ -5,6 +5,9 @@
   fetchPypi,
   cython_0,
   alsa-lib,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +25,13 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ cython_0 ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreAudio
+      CoreMIDI
+      CoreServices
+    ];
 
   setupPyBuildFlags = [ "--from-cython" ];
 

@@ -10,13 +10,13 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "faba-mono-icons";
   version = "2016-04-30";
 
   src = fetchFromGitHub {
     owner = "snwh";
-    repo = "faba-mono-icons";
+    repo = pname;
     rev = "2006c5281eb988c799068734f289a85443800cda";
     sha256 = "0nisfl92y6hrbakp9qxi0ygayl6avkzrhwirg6854bwqjy2dvjv9";
   };

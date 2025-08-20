@@ -26,7 +26,7 @@ buildGoModule rec {
   # test require internet access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Real-time HTTP Intrusion Detection";
     longDescription = ''
       teler is an real-time intrusion detection and threat alert
@@ -35,8 +35,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kitabisa/teler";
     changelog = "https://github.com/kitabisa/teler/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "teler.app";
   };
 }

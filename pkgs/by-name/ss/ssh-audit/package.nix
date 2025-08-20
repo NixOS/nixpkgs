@@ -37,13 +37,13 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) ssh-audit;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Tool for ssh server auditing";
     homepage = "https://github.com/jtesta/ssh-audit";
     changelog = "https://github.com/jtesta/ssh-audit/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
       tv
       SuperSandro2000
     ];

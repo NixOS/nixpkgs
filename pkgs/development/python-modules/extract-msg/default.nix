@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "extract-msg";
-  version = "0.55.0";
+  version = "0.52.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
     tag = "v${version}";
-    hash = "sha256-n/v3ubgzWlWqLXZfy1O7+FvTJoLMtgL7DFPL39SZnfM=";
+    hash = "sha256-4jvzZkGa/xI5Sl9TBIm/BD3tGl+MZvwir6m/zrvA4tQ=";
   };
 
   pythonRelaxDeps = [
@@ -51,12 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extract_msg" ];
 
-  enabledTestPaths = [ "extract_msg_tests/*.py" ];
+  pytestFlagsArray = [ "extract_msg_tests/*.py" ];
 
   meta = with lib; {
     description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files";
     homepage = "https://github.com/TeamMsgExtractor/msg-extractor";
-    changelog = "https://github.com/TeamMsgExtractor/msg-extractor/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/TeamMsgExtractor/msg-extractor/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };

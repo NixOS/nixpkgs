@@ -7,18 +7,13 @@
 python3Packages.buildPythonApplication rec {
   pname = "colorz";
   version = "1.0.3";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0ghd90lgplf051fs5n5bb42zffd3fqpgzkbv6bhjw7r8jqwgcky0";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pillow
     scipy
   ];

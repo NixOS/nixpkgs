@@ -25,8 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libusb1 ];
 
-  doInstallCheck = true;
-
   # Uses proper nix directories rather than the ones specified in the makefile
   installPhase = ''
     runHook preInstall

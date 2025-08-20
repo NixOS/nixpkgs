@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cmake,
   pkg-config,
   libjack2,
   alsa-lib,
@@ -11,22 +9,17 @@
   lv2,
   qt5,
   fftwFloat,
+  mkDerivation,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "padthv1";
-  version = "1.3.2";
+  version = "0.9.23";
 
   src = fetchurl {
-    url = "mirror://sourceforge/padthv1/padthv1-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sXpJjD79+rLrWHwpAxACjR+8KVGbQss8qKGMTN7nb9M=";
+    url = "mirror://sourceforge/padthv1/${pname}-${version}.tar.gz";
+    sha256 = "sha256-9yFfvlskOYnGraou2S3Qffl8RoYJqE0wnDlOP8mxQgg=";
   };
-
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    qt5.wrapQtAppsHook
-  ];
 
   buildInputs = [
     libjack2
@@ -39,12 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
   ];
 
-  meta = {
-    description = "Polyphonic additive synthesizer";
+  nativeBuildInputs = [ pkg-config ];
+
+  meta = with lib; {
+    description = "polyphonic additive synthesizer";
     mainProgram = "padthv1_jack";
     homepage = "http://padthv1.sourceforge.net/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.magnetophon ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.magnetophon ];
   };
-})
+}

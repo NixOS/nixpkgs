@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool checking password safety";
     homepage = "https://github.com/edoardottt/pwdsafety";
     changelog = "https://github.com/edoardottt/pwdsafety/releases/tag/v${version}";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "pwdsafety";
   };
 }

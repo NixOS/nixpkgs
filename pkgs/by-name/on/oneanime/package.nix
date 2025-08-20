@@ -1,9 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutter327,
   autoPatchelfHook,
   makeDesktopItem,
+  pkg-config,
   copyDesktopItems,
   alsa-lib,
   libepoxy,
@@ -15,13 +16,7 @@
   mpv-unwrapped,
   mpv,
   mimalloc,
-  runCommand,
-  yq,
-  oneanime,
-  _experimental-update-script-combinators,
-  gitUpdater,
 }:
-
 let
   libopencc = buildGoModule rec {
     pname = "libopencc";
@@ -55,37 +50,34 @@ let
     meta = {
       homepage = "https://github.com/Predidit/open_chinese_convert_bridge";
       license = with lib.licenses; [ gpl3Plus ];
+      maintainers = with lib.maintainers; [ aucub ];
     };
   };
 in
-flutter329.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "oneanime";
-  version = "1.4.1";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-VZdqbdKxzfGlS27WUSvSR2x7wU8uYMkWRU9QvxW22uQ=";
+    hash = "sha256-lRO5JYzzopy69lJ0/4pLf4u93NlYLaghhG4Fuf04f6A=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes =
-    let
-      media_kit-hash = "sha256-NTnEmU873mzB9YuD6hhRXKfF1WWGPjqvmvAH5ULayxI=";
-    in
-    {
-      flutter_open_chinese_convert = "sha256-uRPBBB5RUd8fiFaM8dg9Th2tvQYwnbsQrsiDSPMm5kk=";
-      media_kit = media_kit-hash;
-      media_kit_libs_android_video = media_kit-hash;
-      media_kit_libs_ios_video = media_kit-hash;
-      media_kit_libs_linux = media_kit-hash;
-      media_kit_libs_macos_video = media_kit-hash;
-      media_kit_libs_video = media_kit-hash;
-      media_kit_libs_windows_video = media_kit-hash;
-      media_kit_video = media_kit-hash;
-    };
+  gitHashes = {
+    flutter_open_chinese_convert = "sha256-uRPBBB5RUd8fiFaM8dg9Th2tvQYwnbsQrsiDSPMm5kk=";
+    media_kit = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_android_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_ios_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_linux = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_macos_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_libs_windows_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+    media_kit_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
+  };
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -144,6 +136,7 @@ flutter329.buildFlutterApplication rec {
   ];
 
   nativeBuildInputs = [
+    pkg-config
     autoPatchelfHook
     copyDesktopItems
   ];
@@ -163,32 +156,15 @@ flutter329.buildFlutterApplication rec {
   '';
 
   postInstall = ''
-    ln -snf ${mpv}/lib/libmpv.so.2 $out/app/oneanime/lib/libmpv.so.2
-    install -Dm0644 assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
+    install -Dm0644 ./assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
   '';
-
-  passthru = {
-    pubspecSource =
-      runCommand "pubspec.lock.json"
-        {
-          nativeBuildInputs = [ yq ];
-          inherit (oneanime) src;
-        }
-        ''
-          cat $src/pubspec.lock | yq > $out
-        '';
-    updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "oneanime.pubspecSource" ./pubspec.lock.json)
-    ];
-  };
 
   meta = {
     description = "Anime1 third-party client with bullet screen";
     homepage = "https://github.com/Predidit/oneAnime";
     mainProgram = "oneanime";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ aucub ];
     platforms = lib.platforms.linux;
   };
 }

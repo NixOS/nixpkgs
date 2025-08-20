@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   makeWrapper,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "2.5";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    tag = "v${version}";
-    hash = "sha256-OnlSkwPDUrpj9uEPEAxZO1iSgd5ZiQUJLneu14v9pKQ=";
+    rev = "v${version}";
+    hash = "sha256-1Rso7/S95+8KPoKa+3oFPJBWE+YGw4Qqo3Hn+crxNio=";
     fetchSubmodules = true;
   };
 
@@ -53,13 +54,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/flyinghead/flycast";
     changelog = "https://github.com/flyinghead/flycast/releases/tag/v${version}";
     description = "Multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
     mainProgram = "flycast";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = [ ];
   };
 }

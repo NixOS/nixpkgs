@@ -1,49 +1,50 @@
 {
   lib,
+  bash,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   nixosTests,
-  versionCheckHook,
   pam,
+  pandoc,
   rustPlatform,
-  tzdata,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.8";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-82qd9lVwxI9Md7NWpfauGWKtvR1MvX9VNZ9e1RvzmP4=";
+    rev = "v${version}";
+    hash = "sha256-aXKkEdg44AJTcaGyllQmyUON3Z+irIatz06/l0cbi+E=";
   };
+  cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
 
-  cargoHash = "sha256-hvXVdPs2K1FPi06NZSockNXA9QOnXOsrONiMCTiIs2I=";
-
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
 
   buildInputs = [ pam ];
 
+  # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
-    substituteInPlace build.rs \
-      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace util/generate-docs.sh \
+      --replace "/usr/bin/env bash" ${lib.getExe bash} \
+      --replace util/pandoc.sh pandoc
   '';
 
   postInstall = ''
-    for man_fn in docs/man/*.man; do
-      man_fn_fixed="$(echo "$man_fn" | sed -e 's,\.man$,,')"
-      ln -vs $(basename "$man_fn") "$man_fn_fixed"
-      installManPage "$man_fn_fixed"
-    done
+    ./util/generate-docs.sh
+    installManPage target/docs/man/*
   '';
 
   checkFlags = map (t: "--skip=${t}") [
     # Those tests make path assumptions
     "common::command::test::test_build_command_and_args"
-    "common::context::tests::test_build_run_context"
+    "common::context::tests::test_build_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
     "system::tests::kill_test"
@@ -59,45 +60,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
+    # This expects some PATH_TZINFO environment var
+    "env::environment::tests::test_tzinfo"
+
     # Unsure why those are failing
     "env::tests::test_environment_variable_filtering"
     "su::context::tests::invalid_shell"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  doInstallCheck = true;
-  # sudo binary fails because it checks if it is suid 0
-  versionCheckProgram = "${placeholder "out"}/bin/su";
-  versionCheckProgramArg = "--version";
-
-  postInstallCheck = ''
-    [ -e ${placeholder "out"}/share/man/man8/sudo.8.gz ] || \
-      ( echo "Error: Some manpages might be missing!"; exit 1 )
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
-      ];
-    };
+    updateScript = nix-update-script { };
     tests = nixosTests.sudo-rs;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
-    changelog = "${finalAttrs.meta.homepage}/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [
-      nicoo
-      rvdp
-    ];
-    mainProgram = "sudo";
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ nicoo ];
+    platforms = platforms.linux;
   };
-})
+}

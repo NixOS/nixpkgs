@@ -1,11 +1,10 @@
-{
-  lib,
-  stdenv,
-  curl,
-  fetchFromGitHub,
-  json_c,
-  nixosTests,
-  pam,
+{ lib
+, stdenv
+, curl
+, fetchFromGitHub
+, json_c
+, nixosTests
+, pam
 }:
 
 stdenv.mkDerivation rec {
@@ -26,11 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/include/compat.h --replace /bin/bash /run/current-system/sw/bin/bash
   '';
 
-  buildInputs = [
-    curl.dev
-    pam
-    json_c
-  ];
+  buildInputs = [ curl.dev pam json_c ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-I${json_c.dev}/include/json-c" ];
 

@@ -16,7 +16,7 @@ buildGoModule rec {
 
   pname = "docker-machine-kvm2";
 
-  postPatch = minikube.postPatch + ''
+  postPatch = ''
     sed -i '/GOARCH=$*/d' Makefile
   '';
 

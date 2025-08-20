@@ -31,7 +31,7 @@ in
   options.services.netbird.server.signal = {
     enable = mkEnableOption "Netbird's Signal Service";
 
-    package = mkPackageOption pkgs "netbird-signal" { };
+    package = mkPackageOption pkgs "netbird" { };
 
     enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 

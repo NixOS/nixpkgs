@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "status-im";
-    repo = "keycard-cli";
+    repo = pname;
     rev = version;
     hash = "sha256-K2XxajprpPjfIs8rrnf2coIEQjPnir9/U0fTvqV2++g=";
   };

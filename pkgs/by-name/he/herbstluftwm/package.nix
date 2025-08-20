@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     export PYTHONPATH="$PYTHONPATH:../python"
   '';
 
-  enabledTestPaths = [ "../tests" ];
+  pytestFlagsArray = [ "../tests" ];
   disabledTests = [
     "test_autostart" # $PATH problems
     "test_wmexec_to_other" # timeouts in sandbox

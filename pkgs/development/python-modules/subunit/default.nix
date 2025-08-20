@@ -50,7 +50,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "python/subunit" ];
+  pytestFlagsArray = [ "python/subunit" ];
 
   disabledTestPaths = [
     # these tests require testtools and don't work with pytest

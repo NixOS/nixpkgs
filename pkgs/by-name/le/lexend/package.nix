@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "lexend";
   version = "0.pre+date=2022-09-22";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = "lexend";
+    repo = pname;
     rev = "cd26b9c2538d758138c20c3d2f10362ed613854b";
     sha256 = "ZKogntyJ/44GBZmFwbtw5Ujw5Gnvv0tVB59ciKqR4c8=";
   };

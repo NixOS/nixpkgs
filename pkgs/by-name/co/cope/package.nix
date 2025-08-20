@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage {
   buildInputs = with perlPackages; [
     EnvPath
     FileShareDir
-    IOTty
+    IOPty
     IOStty
     ListMoreUtils
     RegexpCommon
@@ -33,7 +33,7 @@ perlPackages.buildPerlPackage {
   '';
 
   meta = {
-    description = "Colourful wrapper for terminal programs";
+    description = "A colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
     license = with lib.licenses; [
       artistic1

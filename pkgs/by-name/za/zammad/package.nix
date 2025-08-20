@@ -5,22 +5,24 @@
   fetchFromGitHub,
   applyPatches,
   bundlerEnv,
+  defaultGemConfig,
   callPackage,
   procps,
   ruby,
   postgresql,
+  imlib2,
   jq,
   moreutils,
   nodejs,
   pnpm_9,
   cacert,
-  valkey,
+  redis,
   dataDir ? "/var/lib/zammad",
 }:
 
 let
   pname = "zammad";
-  version = "6.5.1";
+  version = "6.4.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -55,6 +57,28 @@ let
       "development"
       "postgres" # database
     ];
+    gemConfig = defaultGemConfig // {
+      pg = attrs: {
+        buildFlags = [ "--with-pg-config=${lib.getDev postgresql}/bin/pg_config" ];
+      };
+      rszr = attrs: {
+        buildInputs = [
+          imlib2
+          imlib2.dev
+        ];
+        buildFlags = [ "--without-imlib2-config" ];
+      };
+      mini_racer = attrs: {
+        buildFlags = [
+          "--with-v8-dir=\"${nodejs.libv8}\""
+        ];
+        dontBuild = false;
+        postPatch = ''
+          substituteInPlace ext/mini_racer_extension/extconf.rb \
+            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
+        '';
+      };
+    };
   };
 
 in
@@ -68,7 +92,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    valkey
+    redis
     postgresql
     pnpm_9.configHook
     nodejs
@@ -81,8 +105,7 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    fetcherVersion = 1;
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
   };
 
   buildPhase = ''
@@ -128,7 +151,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Web-based, open source user support/ticketing solution";
+    description = "Zammad, a web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [

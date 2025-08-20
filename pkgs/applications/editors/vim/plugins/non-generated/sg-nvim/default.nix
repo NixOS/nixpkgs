@@ -9,19 +9,19 @@
   vimUtils,
 }:
 let
-  version = "1.1.0-unstable-2025-01-21";
+  version = "1.1.0-unstable-2024-12-15";
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "sg.nvim";
-    rev = "775f22b75a9826eabf69b0094dd1d51d619fe552";
-    hash = "sha256-i5g+pzxB8pAORLbr1wlYWUTsrJJmVj9UwlCg8pU3Suw=";
+    rev = "7c423ebeb028b3534eb20fe54972825384dbe7d6";
+    hash = "sha256-ALAYX/1MTk0fCA8THunoHz8QTlWkg+pgiSp2n3B4KrU=";
   };
 
   sg-nvim-rust = rustPlatform.buildRustPackage {
     pname = "sg-nvim-rust";
     inherit version src;
 
-    cargoHash = "sha256-yY/5w2ztmTKJAYDxBJND8itCOwRNi1negiFq3PyFaSM=";
+    cargoHash = "sha256-t0+0Zw8NjCD1VB1hTrSjOa1130IVanoTALdFoTloFe4=";
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -55,7 +55,7 @@ vimUtils.buildVimPlugin {
     ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
   '';
 
-  nvimSkipModules = [
+  nvimSkipModule = [
     # Dependent on active fuzzy search state
     "sg.cody.fuzzy"
   ];

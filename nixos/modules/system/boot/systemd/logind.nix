@@ -18,7 +18,6 @@ let
     "hibernate"
     "hybrid-sleep"
     "suspend-then-hibernate"
-    "sleep"
     "lock"
   ];
 in
@@ -30,7 +29,7 @@ in
       example = "IdleAction=lock";
       description = ''
         Extra config options for systemd-logind.
-        See {manpage}`logind.conf(5)`
+        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
         for available options.
       '';
     };
@@ -43,10 +42,10 @@ in
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
         terminated.  If false, the scope is "abandoned"
-        (see {manpage}`systemd.scope(5)`),
+        (see [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)),
         and processes are not killed.
 
-        See {manpage}`logind.conf(5)`
+        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
         for more details.
       '';
     };
@@ -167,25 +166,26 @@ in
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-logind.service"
-      "autovt@.service"
-      "systemd-user-sessions.service"
-    ]
-    ++ lib.optionals config.systemd.package.withImportd [
-      "dbus-org.freedesktop.import1.service"
-    ]
-    ++ lib.optionals config.systemd.package.withMachined [
-      "dbus-org.freedesktop.machine1.service"
-    ]
-    ++ lib.optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ]
-    ++ [
-      "dbus-org.freedesktop.login1.service"
-      "user@.service"
-      "user-runtime-dir@.service"
-    ];
+    systemd.additionalUpstreamSystemUnits =
+      [
+        "systemd-logind.service"
+        "autovt@.service"
+        "systemd-user-sessions.service"
+      ]
+      ++ lib.optionals config.systemd.package.withImportd [
+        "dbus-org.freedesktop.import1.service"
+      ]
+      ++ lib.optionals config.systemd.package.withMachined [
+        "dbus-org.freedesktop.machine1.service"
+      ]
+      ++ lib.optionals config.systemd.package.withPortabled [
+        "dbus-org.freedesktop.portable1.service"
+      ]
+      ++ [
+        "dbus-org.freedesktop.login1.service"
+        "user@.service"
+        "user-runtime-dir@.service"
+      ];
 
     environment.etc = {
       "systemd/logind.conf".text = ''

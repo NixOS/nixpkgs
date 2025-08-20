@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "go-musicfox";
-  version = "4.6.6";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = "go-musicfox";
     rev = "v${version}";
-    hash = "sha256-BLX43eWM1vMXgUThcLEHb3+OZejfUye1m/SCecfzTiE=";
+    hash = "sha256-pzB57XeDD8lfJMkP9/k1rrszYXYYzQt2UekH2Atiqjw=";
   };
 
   deleteVendor = true;
 
-  vendorHash = "sha256-RK0mBnRzh9cbqrdJHQk5eJPREFDKGbjnQyEIF23xrvU=";
+  vendorHash = "sha256-IO/UlOW6pLZp6JaU5P9vUJ0qx0Srvmb5vjpX1pSdaeM=";
 
   subPackages = [ "cmd/musicfox.go" ];
 
@@ -36,12 +36,13 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs = [
-    flac
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    [
+      flac
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   passthru.updateScript = nix-update-script { };
 

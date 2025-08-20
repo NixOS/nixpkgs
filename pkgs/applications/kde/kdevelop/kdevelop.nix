@@ -47,7 +47,7 @@
 let
   llvmPackages = llvmPackages_13;
 in
-mkDerivation {
+mkDerivation rec {
   pname = "kdevelop";
 
   nativeBuildInputs = [

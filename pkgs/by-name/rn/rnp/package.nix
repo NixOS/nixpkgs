@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rnp";
-  version = "0.18.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DixJhN4/iSgMkcJ0run4gwFZoUeMMiNSwWDGjT94cNM=";
+    hash = "sha256-jUh7BxRnB6KePCk1jIvKzXgxSmWdKlQYmxshZZY4SBQ";
   };
 
   buildInputs = [

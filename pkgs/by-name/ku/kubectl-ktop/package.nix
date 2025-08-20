@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubectl-ktop";
-  version = "0.4.1";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
-    sha256 = "sha256-5iFFYTZq5DcMYVnW90MKVDchVXzjXOPd5BeYcrqL9pQ=";
+    sha256 = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
   };
 
-  vendorHash = "sha256-qNrjyMMsFE2FmIJc46fYq08b3XFFZeLlspth5anjMm8=";
+  vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";
 
   subPackages = [ "." ];
 
@@ -30,11 +30,11 @@ buildGoModule rec {
     ln -s $out/bin/ktop $out/bin/kubectl-ktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Top-like tool for your Kubernetes clusters";
     homepage = "https://github.com/vladimirvivien/ktop";
     changelog = "https://github.com/vladimirvivien/ktop/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.ivankovnatsky ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.ivankovnatsky ];
   };
 }

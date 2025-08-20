@@ -2,8 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
+  poetry-core,
   snakemake,
   snakemake-interface-storage-plugins,
   snakemake-interface-common,
@@ -12,23 +11,20 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "0.4.1";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = "snakemake-storage-plugin-xrootd";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-vfMAgOTmT3uzUZHXeKsd8Ze3+b3nFsVHDhkPG+xvz+k=";
+    hash = "sha256-1plBss9jRzIIGQE7rXDEnAomFxNzSUKsw0VyhYA2mIc=";
   };
 
   # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
   pythonRelaxDeps = [ "xrootd" ];
 
-  build-system = [
-    hatch-vcs
-    hatchling
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     snakemake-interface-storage-plugins

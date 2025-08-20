@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pysoma";
-  version = "0.0.14";
+  version = "0.0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DlyOQmhseCIeaYlzTmkQBSlDjJlPZn7FRExil5gQjdY=";
+    hash = "sha256-1bS9zafuqxwcuqpM/AA3ZjNbFpxBNXtoHYFsQOWmLXQ=";
   };
 
   # Project has no test

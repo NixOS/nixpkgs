@@ -41,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/deepin-community/qt6mpris";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 })

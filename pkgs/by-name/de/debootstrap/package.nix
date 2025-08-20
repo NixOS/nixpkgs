@@ -16,7 +16,6 @@
   gnused,
   gzip,
   xz,
-  zstd,
   makeWrapper,
   nix-update-script,
   testers,
@@ -38,22 +37,20 @@ let
     gnutar
     gzip
     perl
-    util-linux
     wget
     xz
-    zstd
   ];
 in
 stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.140_bpo12+1";
+  version = "1.0.140";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
+    hash = "sha256-kusY42HwyMFuzwJimdVzuwx9XGjKssGAR7guB4E0TbQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -96,13 +93,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcweber ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
     mainProgram = "debootstrap";
   };
 }

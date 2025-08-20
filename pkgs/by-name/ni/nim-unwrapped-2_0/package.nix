@@ -7,10 +7,10 @@
 
 nim-unwrapped-2_2.overrideAttrs (
   finalAttrs: previousAttrs: {
-    version = "2.0.16";
+    version = "2.0.12";
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-sucMbAEbVQcJMJCoiH+iUncyCP0EfuOPhWLiVp5cN4o=";
+      hash = "sha256-xIh5ScXrjX+an1bwrrK/IUD6vwruDwWAoxnioJgVczo=";
     };
     patches = lib.lists.unique (
       builtins.filter (

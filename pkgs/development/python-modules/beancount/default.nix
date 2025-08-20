@@ -1,68 +1,66 @@
 {
   lib,
-  bison,
   buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  flex,
-  gnupg,
-  meson,
-  meson-python,
-  pytestCheckHook,
+  fetchPypi,
+  isPy3k,
+  beautifulsoup4,
+  bottle,
+  chardet,
   python-dateutil,
-  regex,
+  google-api-python-client,
+  google-auth-oauthlib,
+  lxml,
+  oauth2client,
+  ply,
+  pytest,
+  python-magic,
+  requests,
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "2.3.6";
+  format = "setuptools";
   pname = "beancount";
-  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "beancount";
-    repo = "beancount";
-    tag = version;
-    hash = "sha256-ogjBW/NGlMmhYlzcx3EWWoVi+OOEv2Wm49tzwMiNb8A=";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-gB+Tvta1fS4iQ2aIxInVob8fduIQ887RhoB1fmDTR1o=";
   };
 
-  build-system = [
-    meson
-    meson-python
-  ];
+  # Tests require files not included in the PyPI archive.
+  doCheck = false;
 
-  dependencies = [
-    click
+  propagatedBuildInputs = [
+    beautifulsoup4
+    bottle
+    chardet
     python-dateutil
-    regex
+    google-api-python-client
+    google-auth-oauthlib
+    lxml
+    oauth2client
+    ply
+    python-magic
+    requests
+    # pytest really is a runtime dependency
+    # https://github.com/beancount/beancount/blob/v2/setup.py#L81-L82
+    pytest
   ];
 
-  nativeBuildInputs = [
-    bison
-    flex
-  ];
-
-  nativeCheckInputs = [
-    gnupg
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    # avoid local paths, relative imports wont resolve correctly
-    mv beancount tests
-  '';
-
-  pythonImportsCheck = [ "beancount" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/beancount/beancount";
-    changelog = "https://github.com/beancount/beancount/releases/tag/${src.tag}";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
       A double-entry bookkeeping computer language that lets you define
       financial transaction records in a text file, read them in memory,
       generate a variety of reports from them, and provides a web interface.
     '';
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ alapshin ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      sharzy
+      polarmutex
+    ];
   };
 }

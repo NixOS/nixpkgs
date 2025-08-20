@@ -1,33 +1,28 @@
 {
+  fetchurl,
   lib,
   stdenv,
-  fetchurl,
   lzip,
   texinfo,
-  libpng,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ocrad";
-  version = "0.29";
+  version = "0.27";
 
   src = fetchurl {
-    url = "mirror://gnu/ocrad/ocrad-${finalAttrs.version}.tar.lz";
-    hash = "sha256-ESAMxrC3uhaISnLcy1jvaU96omzSsgQeVVWA8GTS2ek=";
+    url = "mirror://gnu/ocrad/${pname}-${version}.tar.lz";
+    sha256 = "0divffvcaim89g4pvqs8kslbcxi475bcl3b4ynphf284k9zfdgx9";
   };
 
   nativeBuildInputs = [
     lzip # unpack
   ];
-
-  buildInputs = [
-    texinfo
-    libpng
-  ];
+  buildInputs = [ texinfo ];
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Optical character recognition (OCR) program & library";
     longDescription = ''
       GNU Ocrad is an OCR (Optical Character Recognition) program based on
@@ -42,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
       backend to other programs.
     '';
 
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.unix;
     mainProgram = "ocrad";
   };
-})
+}

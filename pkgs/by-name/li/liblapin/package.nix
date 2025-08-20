@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  sfml_2,
+  sfml,
   libffcall,
   libusb-compat-0_1,
   libudev-zero,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    sfml_2
+    sfml
     libffcall
     libusb-compat-0_1
     libudev-zero

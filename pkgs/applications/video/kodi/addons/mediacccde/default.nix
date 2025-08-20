@@ -33,6 +33,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/voc/plugin.video.media-ccc-de/";
     description = "media.ccc.de for Kodi";
     license = licenses.mit;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

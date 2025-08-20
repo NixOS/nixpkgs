@@ -9,36 +9,34 @@
   fortune,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gtypist";
-  version = "2.10.1";
+  version = "2.9.5";
 
   src = fetchurl {
-    url = "mirror://gnu/gtypist/gtypist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ymGAVOkfHtXvBD/MQ1ALutcByVnDGETUaI/yKEmsJS0=";
+    url = "mirror://gnu/gtypist/gtypist-${version}.tar.xz";
+    sha256 = "0xzrkkmj0b1dw3yr0m9hml2y634cc4h61im6zwcq57s7285z8fn1";
   };
 
-  CFLAGS = "-std=gnu99";
+  CFLAGS = "-std=gnu89";
 
   nativeBuildInputs = [ makeWrapper ];
-
   buildInputs = [
     ncurses
     perl
     fortune
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   preFixup = ''
     wrapProgram "$out/bin/typefortune" \
       --prefix PATH : "${fortune}/bin" \
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/gtypist";
     description = "Universal typing tutor";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ pSub ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
   };
-})
+}

@@ -48,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtimageformats
     qtwebengine
     xcbutilkeysyms
-  ]
-  ++ lib.optionals isQt5 [ qtx11extras ];
+  ] ++ lib.optionals isQt5 [ qtx11extras ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
@@ -66,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
+      AndersonTorres
     ];
     mainProgram = "zeal";
     inherit (qtbase.meta) platforms;

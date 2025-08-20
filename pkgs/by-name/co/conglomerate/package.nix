@@ -12,13 +12,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "conglomerate";
   version = "unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = "conglomerate";
+    repo = pname;
     rev = "6fb26084f2871a85044e2e4afc868982702b40ed";
     hash = "sha256-Inr4b2bxguzkcRQBURObsQQ0Rb3H/Zz6hEzNRd+IX3w=";
   };
@@ -32,15 +32,16 @@ stdenv.mkDerivation {
     zlib
     bicpl
   ];
-  propagatedBuildInputs = [
-    coreutils
-    minc_tools
-  ]
-  ++ (with perlPackages; [
-    perl
-    GetoptTabular
-    MNI-Perllib
-  ]);
+  propagatedBuildInputs =
+    [
+      coreutils
+      minc_tools
+    ]
+    ++ (with perlPackages; [
+      perl
+      GetoptTabular
+      MNI-Perllib
+    ]);
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"

@@ -6,15 +6,13 @@
   wrapGAppsHook3,
   gst_all_1,
   gobject-introspection,
-  gst-python,
-  pygobject3,
+  python3Packages,
   adwaita-icon-theme,
 }:
 
 buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2020-04-21";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RaaH";
@@ -39,7 +37,7 @@ buildPythonApplication {
     gtk3
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     gst-python
     pygobject3
   ];
@@ -51,7 +49,7 @@ buildPythonApplication {
   '';
 
   meta = with lib; {
-    # Fails to build, probably incompatible with latest Python
+    # Fails to build, propably incompatible with latest Python
     # error: Multiple top-level packages discovered in a flat-layout
     # https://github.com/RaaH/gscrabble/issues/13
     broken = true;

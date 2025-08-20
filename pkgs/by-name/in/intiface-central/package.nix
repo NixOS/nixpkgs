@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutterPackages,
   corrosion,
   rustPlatform,
   cargo,
@@ -10,31 +10,27 @@
   copyDesktopItems,
   makeDesktopItem,
 }:
-
-flutter329.buildFlutterApplication rec {
+flutterPackages.stable.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.6.7";
-
+  version = "2.6.4";
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
-    tag = "v${version}";
-    hash = "sha256-ePk0I6Uf2/eaBKSZumv/kF9MJOB+MWQ4/FnQ19lE3ZQ=";
+    rev = "v${version}";
+    hash = "sha256-QBNEKhjBfKxArBykUq/fE4lftCYzGdAaWYD1F7rar5Y=";
   };
-
   patches = [
     ./corrosion.patch
   ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-EC0pdTG+BsVFbxixCeOIXCsMHi4pF3tug+YNVzaMn/A=";
+    hash = "sha256-S3Yy0IIMiRUUpFNlLvS1PGwpvxePMB1sO5M6mpm1OgY=";
   };
-
   cargoRoot = "intiface-engine-flutter-bridge";
 
   preConfigure = ''
@@ -49,14 +45,19 @@ flutter329.buildFlutterApplication rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ udev ];
+  buildInputs = [
+    udev
+  ];
 
   # without this, only the splash screen will be shown and the logs will contain the
   # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
-  extraWrapProgramArgs = "--chdir $out/app/intiface-central";
+  # Environmental variables don't quite eval outside of hooks so use pname and
+  # version directly.
+  extraWrapProgramArgs = "--chdir $out/app/${pname}";
 
   postInstall = ''
-    install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
+    mkdir -p $out/share/pixmaps
+    cp $out/app/$pname/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
   '';
 
   desktopItems = [
@@ -69,14 +70,12 @@ flutter329.buildFlutterApplication rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
-
-  meta = {
+  meta = with lib; {
     mainProgram = "intiface_central";
     description = "Intiface Central (Buttplug Frontend) Application for Desktop";
     homepage = "https://intiface.com/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ _999eagle ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ _999eagle ];
+    platforms = platforms.linux;
   };
 }

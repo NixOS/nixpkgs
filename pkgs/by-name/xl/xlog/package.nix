@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "2.0.25";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
+    url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
+    sha256 = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
   };
 
   # glib-2.62 deprecations
@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     mainProgram = "xlog";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

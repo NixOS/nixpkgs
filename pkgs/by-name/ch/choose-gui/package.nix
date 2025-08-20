@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xcbuild,
-  apple-sdk_11,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xcbuild ];
 
-  buildInputs = [ apple-sdk_11 ];
+  buildInputs = [ darwin.apple_sdk.frameworks.Cocoa ];
 
   buildPhase = ''
     runHook preBuild
-    xcodebuild -configuration Release SYMROOT="./output" HOME="$(mktemp -d)" build
+    xcodebuild -arch ${stdenv.hostPlatform.darwinArch} -configuration Release SYMROOT="./output" build
     cp ./output/Release/choose choose
     runHook postBuild
   '';

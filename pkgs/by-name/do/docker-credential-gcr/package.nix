@@ -9,20 +9,20 @@
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.1.30";
+  version = "2.1.26";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     tag = "v${version}";
-    hash = "sha256-ZHQLZLw5Qe+60POSxfUZ5nh9punLXHzlXbjrUVR9MKU=";
+    hash = "sha256-4sgUeEXBfP0qaR92ZulqAf1ObQBDbSjEHqhAqa0EV2Q=";
   };
 
   postPatch = ''
     rm -rf ./test
   '';
 
-  vendorHash = "sha256-eQ9ZsJqW+FF3XHrqaDm254/vdLxR1Mw5wt+TkWqtXBg=";
+  vendorHash = "sha256-YcBDurQjGhjds3CB63gTjsPbsvlHJnGxWbsFrx3vCy4=";
 
   env.CGO_ENABLED = 0;
 
@@ -42,7 +42,7 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
       docker-credential-gcr is Google Container Registry's Docker credential
@@ -51,11 +51,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
     changelog = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      suvash
-      anthonyroussel
-    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ suvash anthonyroussel ];
     mainProgram = "docker-credential-gcr";
   };
 }

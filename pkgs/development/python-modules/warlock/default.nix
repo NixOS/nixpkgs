@@ -7,7 +7,6 @@
   jsonpatch,
   jsonschema,
   pytestCheckHook,
-  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +18,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bcwaldon";
-    repo = "warlock";
+    repo = pname;
     tag = version;
     hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
+
+  postPatch = ''
+    sed -i '/--cov/d' pytest.ini
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -31,10 +34,7 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/bcwaldon/warlock/issues/64

@@ -19,23 +19,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.42.4";
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals installManPages [
-    "man"
-  ]
-  ++ lib.optionals withDocumentation [ "doc" ];
+  version = "1.38.0";
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals installManPages [
+      "man"
+    ]
+    ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = "just";
+    repo = pname;
     tag = version;
-    hash = "sha256-MLGtHMNCyhYq9OTquCc9zKmear1ts5vNAvlLxNQaOqk=";
+    hash = "sha256-jIc8+SFAcH2TsY12+txwlMoJmpDdDpC0H+UrjYH61Lk=";
   };
 
-  cargoHash = "sha256-udNHlPEwTb5S1ZypIqng7JLZ6Yl1vbYwASn+DT2SOLY=";
+  cargoHash = "sha256-JHLkjMy5b1spJrAqFCCzqgnlYTAKA1Z9Tx4w1WWuiAI=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -70,8 +71,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=just"
-  ]
-  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
@@ -107,15 +107,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
-    license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [
+    license = licenses.cc0;
+    maintainers = with maintainers; [
       xrelkd
       jk
-      ryan4yin
     ];
     mainProgram = "just";
   };

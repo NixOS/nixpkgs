@@ -11,6 +11,7 @@
   # libraries
   brotli,
   bzip2,
+  darwin,
   gpgme,
   libhsts,
   libidn2,
@@ -23,12 +24,11 @@
   xz,
   zlib,
   zstd,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.2.0";
+  version = "2.1.0";
 
   outputs = [
     "out"
@@ -38,19 +38,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "gnuwget";
-    repo = "wget2";
-    tag = "v${version}";
-    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
   };
-
-  patches = [
-    ./gettext-0.25.patch
-  ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
-      --replace-fail "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
+      --replace "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
   '';
 
   strictDeps = true;
@@ -63,22 +59,26 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    brotli
-    bzip2
-    gpgme
-    libhsts
-    libidn2
-    libpsl
-    nghttp2
-    pcre2
-    xz
-    zlib
-    zstd
-  ]
-  ++ lib.optionals sslSupport [
-    openssl
-  ];
+  buildInputs =
+    [
+      brotli
+      bzip2
+      gpgme
+      libhsts
+      libidn2
+      libpsl
+      nghttp2
+      pcre2
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals sslSupport [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   # TODO: include translation files
   autoreconfPhase = ''
@@ -97,14 +97,7 @@ stdenv.mkDerivation rec {
     (lib.withFeatureAs sslSupport "ssl" "openssl")
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
-
-  meta = {
+  meta = with lib; {
     description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
@@ -115,11 +108,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/gnuwget/wget2";
     # wget2 GPLv3+; libwget LGPLv3+
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };
 }

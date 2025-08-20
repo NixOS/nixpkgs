@@ -151,12 +151,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/geary";
     changelog = "https://gitlab.gnome.org/GNOME/geary/-/blob/${version}/NEWS?ref_type=tags";
     description = "Mail client for GNOME 3";
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

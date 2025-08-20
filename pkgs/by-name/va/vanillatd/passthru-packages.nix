@@ -8,9 +8,10 @@
 }:
 builtins.mapAttrs
   (
-    name: buildCommand:
+    name: buildPhase:
     stdenvNoCC.mkDerivation {
-      inherit name buildCommand;
+      inherit name buildPhase;
+      phases = [ "buildPhase" ];
       nativeBuildInputs = [ unar ];
       meta = {
         sourceProvenance = with lib.sourceTypes; [

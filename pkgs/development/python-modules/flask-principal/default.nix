@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "test_principal.py" ];
+  pytestFlagsArray = [ "test_principal.py" ];
 
   meta = with lib; {
     homepage = "http://packages.python.org/Flask-Principal/";

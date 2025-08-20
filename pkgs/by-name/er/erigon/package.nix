@@ -7,20 +7,20 @@
 
 let
   pname = "erigon";
-  version = "3.0.4";
+  version = "2.61.0";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
-    repo = "erigon";
-    tag = "v${version}";
-    hash = "sha256-MQpHRlKxWCBD2Tj9isxMKwvYBy9HtDkQPyKPse8uB3g=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-B9FDGBx5ac1v0PqVK/2LhDH2seRthZxtaGu3G9flo0A=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-ocnq97cMsiMgDTZhwZ/fiGzaHiSAiJckPwWZu2q3f58=";
+  vendorHash = "sha256-bGVHIrICYWyHPgWWgEAIT+J/IIPjcWqTHeuqbT6lung=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
@@ -51,13 +51,7 @@ buildGoModule {
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # avoid testing‐releases
-      "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)$"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
@@ -67,6 +61,7 @@ buildGoModule {
       gpl3Plus
     ];
     maintainers = with maintainers; [
+      d-xo
       happysalada
     ];
   };

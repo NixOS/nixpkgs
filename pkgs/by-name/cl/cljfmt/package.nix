@@ -4,15 +4,16 @@
   fetchurl,
   nix-update-script,
   testers,
+  cljfmt,
 }:
 
-buildGraalvmNativeImage (finalAttrs: {
+buildGraalvmNativeImage rec {
   pname = "cljfmt";
-  version = "0.13.1";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "https://github.com/weavejester/cljfmt/releases/download/${finalAttrs.version}/cljfmt-${finalAttrs.version}-standalone.jar";
-    hash = "sha256-Dj1g6hMzRhqm0pJggODVFgEkayB2Wdh3d0z6RglHbgY=";
+    url = "https://github.com/weavejester/cljfmt/releases/download/${version}/cljfmt-${version}-standalone.jar";
+    hash = "sha256-gPIDaFb8mmJyoAIOUWV7ZNNi/rSnuRkYN16Grqly0/c=";
   };
 
   extraNativeImageBuildArgs = [
@@ -27,18 +28,18 @@ buildGraalvmNativeImage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   passthru.tests.version = testers.testVersion {
-    inherit (finalAttrs) version;
-    package = finalAttrs.finalPackage;
+    inherit version;
+    package = cljfmt;
     command = "cljfmt --version";
   };
 
-  meta = {
+  meta = with lib; {
     mainProgram = "cljfmt";
     description = "Tool for formatting Clojure code";
     homepage = "https://github.com/weavejester/cljfmt";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.epl10;
-    changelog = "https://github.com/weavejester/cljfmt/blob/${finalAttrs.version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ sg-qwt ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
+    changelog = "https://github.com/weavejester/cljfmt/blob/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ sg-qwt ];
   };
-})
+}

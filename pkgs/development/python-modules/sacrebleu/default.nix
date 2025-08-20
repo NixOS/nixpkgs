@@ -3,9 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
-  setuptools-scm,
-
   # Propagated build inputs
   portalocker,
   regex,
@@ -19,22 +16,25 @@
 }:
 let
   pname = "sacrebleu";
-  version = "2.5.1";
+  version = "2.4.2";
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjpost";
-    repo = "sacrebleu";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-nLZotWQLrN9hB1fBuDJkvGr4SMvQz8Ucl8ybpNhf9Ic=";
+    hash = "sha256-evSBHvDFOJlE2f9uM+NNCQeABY5lCc3Rs9dq11n7v5c=";
   };
 
-  build-system = [ setuptools-scm ];
+  # postPatch = ''
+  #   substituteInPlace setup.py \
+  #     --replace "portalocker==" "portalocker>="
+  # '';
 
-  dependencies = [
+  propagatedBuildInputs = [
     portalocker
     regex
     tabulate
@@ -43,7 +43,7 @@ buildPythonPackage {
     lxml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # require network access
@@ -57,12 +57,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sacrebleu" ];
 
-  meta = {
+  meta = with lib; {
     description = "Hassle-free computation of shareable, comparable, and reproducible BLEU, chrF, and TER scores";
     mainProgram = "sacrebleu";
     homepage = "https://github.com/mjpost/sacrebleu";
-    changelog = "https://github.com/mjpost/sacrebleu/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    changelog = "https://github.com/mjpost/sacrebleu/blob/v{version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
   };
 }

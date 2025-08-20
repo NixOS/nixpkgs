@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  hostPkgs,
-  ...
-}:
+{ config, lib, hostPkgs, ... }:
 let
   inherit (lib) mkOption types literalMD;
 
@@ -16,9 +11,10 @@ let
     tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
   };
 
-  vlans = map (
-    m: (m.virtualisation.vlans ++ (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))
-  ) (lib.attrValues config.nodes);
+
+  vlans = map (m: (
+    m.virtualisation.vlans ++
+    (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))) (lib.attrValues config.nodes);
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
 
   nodeHostNames =
@@ -27,14 +23,13 @@ let
     in
     nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
 
-  pythonizeName =
-    name:
+  pythonizeName = name:
     let
       head = lib.substring 0 1 name;
       tail = lib.substring 1 (-1) name;
     in
-    (if builtins.match "[A-z_]" head == null then "_" else head)
-    + lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
+      (if builtins.match "[A-z_]" head == null then "_" else head) +
+      lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
 
   uniqueVlans = lib.unique (builtins.concatLists vlans);
   vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
@@ -49,8 +44,7 @@ let
         # inherit testName; TODO (roberth): need this?
         nativeBuildInputs = [
           hostPkgs.makeWrapper
-        ]
-        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
+        ] ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
         buildInputs = [ testDriver ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
@@ -91,7 +85,7 @@ let
 
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
-            cat ${lib.escapeShellArg "driver-symbols"}
+            < ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
@@ -102,12 +96,7 @@ let
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
-          ${lib.escapeShellArgs (
-            lib.concatMap (arg: [
-              "--add-flags"
-              arg
-            ]) config.extraDriverArgs
-          )}
+          ${lib.escapeShellArgs (lib.concatMap (arg: ["--add-flags" arg]) config.extraDriverArgs)}
       '';
 
 in
@@ -176,7 +165,7 @@ in
         They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
       '';
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
     };
 
     skipLint = mkOption {
@@ -202,7 +191,8 @@ in
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
-        lib.mkOverride lib.modules.defaultOverridePriority config.hostPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.defaultOverridePriority
+          config.hostPkgs.__splicedPackages;
     };
 
     driver = withChecks driver;

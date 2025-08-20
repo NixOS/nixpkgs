@@ -8,16 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hanko";
-  version = "0.5.4";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "SRv6d";
     repo = "hanko";
     tag = "v${version}";
-    hash = "sha256-9HRoXqZ3wdD6xf33tooEHiBWSZlggjUFomblwF4cFtA=";
+    hash = "sha256-gytnUta/sNa8vJMvVS/DMwRc4R/8rmOnEfBKEjRpfGs=";
   };
-
-  cargoHash = "sha256-wHvhlWi99igZ2gKAIcBYg207JrbQNCOjlcVttIy3MV0=";
+  cargoHash = "sha256-rlKFS1ppUoyZ1X2PeG8tEB44Ysqi7kCLqR+ECVIdPjs=";
 
   passthru = {
     updateScript = nix-update-script { };

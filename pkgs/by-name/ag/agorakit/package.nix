@@ -1,20 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  php82,
-  nix-update-script,
+  php,
   dataDir ? "/var/lib/agorakit",
 }:
 
-php82.buildComposerProject2 (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "agorakit";
-  version = "1.11";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    owner = "agorakit";
-    repo = "agorakit";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YCHszRi+atEkaM9bHncpRtQsuiS6P22yKSqYzXq8flk=";
+    owner = finalAttrs.pname;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    sha256 = "sha256-6T7AksvBxUpv8TkPicnlCE5KZS/ydPB5Bq1MJcWoZds=";
   };
 
   installPhase = ''
@@ -27,10 +26,8 @@ php82.buildComposerProject2 (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-tBB3Zl/N1XqPTD84at5WoGrD0G5rJbobk4E8BFOSm+M=";
+  vendorHash = "sha256-5ypBA9Qb8jHzAtvNBHkJfsLIf3Pfw1LvYmHP/hED2ig=";
   composerStrictValidation = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web-based, open-source groupware";
@@ -39,6 +36,5 @@ php82.buildComposerProject2 (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
-    teams = with lib.teams; [ ngi ];
   };
 })

@@ -5,21 +5,20 @@
   installShellFiles,
   testers,
   oras,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "oras";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-IXIw2prApg5iL3BPbOY4x09KjyhFvKofgfz2L6UXKR8=";
+    rev = "v${version}";
+    hash = "sha256-iSmoD2HhzVrWQBaZ7HaIjcPmybl4JTVeVVfbn29i91Q=";
   };
 
-  vendorHash = "sha256-PLGWPoMCsmdnsKD/FdaRHGO0X9/0Y/8DWV21GsCBR04=";
+  vendorHash = "sha256-zxcRMrr0mfSiuZpXYe7N0nJrEmiBTgw03+Yp4PYieBY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +27,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X oras.land/oras/internal/version.Version=${finalAttrs.version}"
+    "-X oras.land/oras/internal/version.Version=${version}"
     "-X oras.land/oras/internal/version.BuildMetadata="
     "-X oras.land/oras/internal/version.GitTreeState=clean"
   ];
@@ -41,18 +40,29 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-  meta = {
+    $out/bin/oras --help
+    $out/bin/oras version | grep "${version}"
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = oras;
+    command = "oras version";
+  };
+
+  meta = with lib; {
     homepage = "https://oras.land/";
-    changelog = "https://github.com/oras-project/oras/releases/tag/v${finalAttrs.version}";
-    description = "Distribute artifacts across OCI registries with ease";
+    changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
+    description = "ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
     mainProgram = "oras";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       jk
       developer-guy
     ];
   };
-})
+}

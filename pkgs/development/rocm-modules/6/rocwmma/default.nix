@@ -14,31 +14,32 @@
   buildExtendedTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? [ ], # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "6.3.3";
+  version = "6.0.2";
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals (buildTests || buildBenchmarks) [
-    "test"
-  ]
-  ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ]
-  ++ lib.optionals buildSamples [
-    "sample"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ]
+    ++ lib.optionals buildSamples [
+      "sample"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-kih3hn6QhcMmyj9n8f8eO+RIgKQgWKIuzg8fb0eoRPE=";
+    hash = "sha256-vbC4OuCmEpD38lVq0uXNw86iS4KkL6isOVq6vmlu1oM=";
   };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
@@ -51,37 +52,37 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs = [
-    openmp
-  ]
-  ++ lib.optionals (buildTests || buildBenchmarks) [
-    rocm-smi
-    gtest
-    rocblas
-  ];
+  buildInputs =
+    [
+      openmp
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      rocm-smi
+      gtest
+      rocblas
+    ];
 
-  cmakeFlags = [
-    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
-    "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
-    "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optionals (gpuTargets != [ ]) [
-    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ]
-  ++ lib.optionals buildExtendedTests [
-    "-DROCWMMA_BUILD_EXTENDED_TESTS=ON"
-  ]
-  ++ lib.optionals buildBenchmarks [
-    "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
-    "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
+      "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals buildExtendedTests [
+      "-DROCWMMA_BUILD_EXTENDED_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
+      "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
+    ];
 
   postInstall =
     lib.optionalString (buildTests || buildBenchmarks) ''
@@ -104,15 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
   };
 
   meta = with lib; {
     description = "Mixed precision matrix multiplication and accumulation";
     homepage = "https://github.com/ROCm/rocWMMA";
     license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
+    maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

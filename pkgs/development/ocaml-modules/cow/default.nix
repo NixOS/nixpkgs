@@ -10,14 +10,15 @@
 }:
 
 buildDunePackage rec {
-  version = "2.5.0";
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
+
+  version = "2.4.0";
   pname = "cow";
 
-  minimalOCamlVersion = "4.03";
-
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-${version}.tbz";
-    hash = "sha256-8rNK+5oWUbi91gXvdz/66YQu5+iXp0Co8wk0Isv6b9Y=";
+    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-v${version}.tbz";
+    sha256 = "1x77lwpskda4zyikwxh500xjn90pgdwz6jm7ca7f36pyav4vl6zx";
   };
 
   propagatedBuildInputs = [
@@ -29,14 +30,14 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Caml on the Web";
     longDescription = ''
       Writing web-applications requires a lot of skills: HTML, XML, JSON and
       Markdown, to name but a few! This library provides OCaml combinators
       for these web formats.
     '';
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

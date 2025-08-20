@@ -7,7 +7,7 @@
   numpy,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "blurhash";
   version = "1.1.4";
   format = "setuptools";

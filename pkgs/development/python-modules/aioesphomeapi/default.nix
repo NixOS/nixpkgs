@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "37.2.5";
+  version = "28.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-+l/tEdraTkNt70sjcGpS/e1uEyudEsJdlqgoHPhMNg0=";
+    hash = "sha256-vMqDxg2BV9/g5FquejnT/Rsvwjhdh01K2LxiT355p1U=";
   };
 
   build-system = [
@@ -53,8 +53,7 @@ buildPythonPackage rec {
     noiseprotocol
     protobuf
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     mock
@@ -62,19 +61,26 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # benchmarking requires pytest-codespeed
-    "tests/benchmarks"
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
+    # python3.12.4 regression
+    # https://github.com/esphome/aioesphomeapi/issues/889
+    "test_start_connection_cannot_increase_recv_buffer"
+    "test_start_connection_can_only_increase_buffer_size_to_262144"
   ];
 
-  __darwinAllowLocalNetworking = true;
+  disabledTestPaths = [
+    # benchmarking requires pytest-codespeed
+    "tests/test_bluetooth_benchmarks.py"
+  ];
 
   pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       fab

@@ -364,12 +364,10 @@ in
 
           AmbientCapabilities = [
             "CAP_NET_BIND_SERVICE"
-          ]
-          ++ xdpCapabilities;
+          ] ++ xdpCapabilities;
           CapabilityBoundingSet = [
             "CAP_NET_BIND_SERVICE"
-          ]
-          ++ xdpCapabilities;
+          ] ++ xdpCapabilities;
           DeviceAllow = "";
           DevicePolicy = "closed";
           LockPersonality = true;
@@ -390,15 +388,16 @@ in
           ProtectSystem = "strict";
           RemoveIPC = true;
           Restart = "on-abort";
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ]
-          ++ optionals (cfg.enableXDP) [
-            "AF_NETLINK"
-            "AF_XDP"
-          ];
+          RestrictAddressFamilies =
+            [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ]
+            ++ optionals (cfg.enableXDP) [
+              "AF_NETLINK"
+              "AF_XDP"
+            ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -406,14 +405,15 @@ in
           StateDirectory = "knot";
           StateDirectoryMode = "0700";
           SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged"
-            "@chown"
-          ]
-          ++ optionals (cfg.enableXDP) [
-            "bpf"
-          ];
+          SystemCallFilter =
+            [
+              "@system-service"
+              "~@privileged"
+              "@chown"
+            ]
+            ++ optionals (cfg.enableXDP) [
+              "bpf"
+            ];
           UMask = "0077";
         };
     };

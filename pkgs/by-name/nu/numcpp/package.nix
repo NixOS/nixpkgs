@@ -9,16 +9,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.14.2";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
-    tag = "Version_${finalAttrs.version}";
-    hash = "sha256-A2x7Ar/Ihk4iGb7J93hGULtfoI8xidkGtpkVWgicSFI=";
+    rev = "Version_${finalAttrs.version}";
+    hash = "sha256-1LGyDvT+PiGRXn7NorcYUjSPzNuRv/YXhQWIaOa7xdo=";
   };
-
-  patches = [ ./pytest-CMakeLists.patch ];
 
   nativeCheckInputs = [
     gtest
@@ -38,16 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/share/NumCpp/cmake/NumCppConfig.cmake \
-      --replace-fail "\''${PACKAGE_PREFIX_DIR}/" ""
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
   '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = {
+  meta = with lib; {
     description = "Templatized Header Only C++ Implementation of the Python NumPy Library";
     homepage = "https://github.com/dpilger26/NumCpp";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ spalf ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ spalf ];
+    platforms = platforms.unix;
   };
 })

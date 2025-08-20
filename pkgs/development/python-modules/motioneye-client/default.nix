@@ -6,7 +6,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest-aiohttp,
-  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -21,14 +20,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
-    repo = "motioneye-client";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"'
+      --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"' \
+      --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -37,7 +37,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-aiohttp
-    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];

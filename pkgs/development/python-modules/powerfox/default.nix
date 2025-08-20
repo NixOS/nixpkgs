@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "powerfox";
-  version = "1.3.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-powerfox";
     tag = "v${version}";
-    hash = "sha256-oGOKh+/KCR7eFi4b8TrLiBiOfauhUhKkRvPMejwelJY=";
+    hash = "sha256-VSkOCJu3HXBHkvYtSe/kYFOhJ9kMrcf/ijMqvUB9aRU=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python client for the Powerfox devices";
     homepage = "https://github.com/klaasnicolaas/python-powerfox";
-    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/${src.tag}";
+    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

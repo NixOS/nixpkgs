@@ -82,8 +82,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dawidd6 ];
-    teams = [ teams.gnome-circle ];
+    maintainers = [ maintainers.dawidd6 ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
     mainProgram = "letterpress";
   };

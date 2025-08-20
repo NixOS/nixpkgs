@@ -1,5 +1,10 @@
-{ runTest, pkgs, ... }:
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+}:
 
+with import ../lib/testing-python.nix { inherit system pkgs; };
 let
   mkSpec =
     {
@@ -58,7 +63,7 @@ let
       specs,
       testScript,
     }:
-    runTest {
+    makeTest {
       name = "certmgr-" + svcManager;
       nodes = {
         machine =

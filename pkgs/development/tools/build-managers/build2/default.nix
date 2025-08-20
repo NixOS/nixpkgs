@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
     # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
     # which ld64 does not support.
-    (lib.getBin buildPackages.llvmPackages.lld)
+    (lib.getBin buildPackages.llvmPackages_16.lld)
   ];
 
   postPatch = ''
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.build2.org/";
-    description = "Build2 build system";
+    description = "build2 build system";
     license = licenses.mit;
     longDescription = ''
       build2 is an open source (MIT), cross-platform build toolchain

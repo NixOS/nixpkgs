@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  sassc,
-  gdk-pixbuf,
-  librsvg,
-  gtk-engine-murrine,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, sassc
+, gdk-pixbuf
+, librsvg
+, gtk-engine-murrine
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
-    repo = "greybird";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-De8y+LRQ26UKrUECLCcbCg7p9Z+aRssQ/7YzegAUPw4=";
   };

@@ -1,42 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gnutls,
-  cunit,
-  ncurses,
-  knot-dns,
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config
+, gnutls
+, cunit, ncurses, knot-dns
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "1.14.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    hash = "sha256-TpfCfVhguFbTqQiY+zl6Kn7fsIQHR1tvNC4YLkxmBis=";
+    hash = "sha256-MYkrdI4hGCR7QVXksznWDWSbKJtqpd4imqtQm5BxVqo=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ gnutls ];
 
   configureFlags = [ "--with-gnutls=yes" ];
   enableParallelBuilding = true;
 
   doCheck = true;
-  nativeCheckInputs = [ cunit ] ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
+  nativeCheckInputs = [ cunit ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far
 
@@ -45,9 +34,7 @@ stdenv.mkDerivation rec {
     description = "Effort to implement RFC9000 QUIC protocol";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [
-      vcunat # for knot-dns
-    ];
+    maintainers = with maintainers; [ vcunat/* for knot-dns */ ];
   };
 }
 
@@ -63,3 +50,4 @@ stdenv.mkDerivation rec {
   on a single version might be hard sometimes.  That's why it seemed simpler
   to completely separate the nix expressions, too.
 */
+

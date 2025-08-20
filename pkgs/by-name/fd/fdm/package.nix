@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nicm";
-    repo = "fdm";
+    repo = pname;
     rev = version;
     hash = "sha256-Gqpz+N1ELU5jQpPJAG9s8J9UHWOJNhkT+s7+xuQazd0=";
   };
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install fdm-sanitize $out/bin
-    mkdir -p $out/share/doc/fdm
-    install -m644 MANUAL $out/share/doc/fdm
-    cp -R examples $out/share/doc/fdm
+    mkdir -p $out/share/doc/${pname}
+    install -m644 MANUAL $out/share/doc/${pname}
+    cp -R examples $out/share/doc/${pname}
   '';
 
   meta = with lib; {

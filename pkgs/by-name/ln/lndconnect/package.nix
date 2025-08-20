@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "LN-Zap";
-    repo = "lndconnect";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-cuZkVeFUQq7+kQo/YjXCMPANUL5QooAWgegcoWo3M0c=";
   };
@@ -25,6 +25,7 @@ buildGoModule rec {
     description = "Generate QRCode to connect apps to lnd Resources";
     license = licenses.mit;
     homepage = "https://github.com/LN-Zap/lndconnect";
+    maintainers = [ maintainers.d-xo ];
     platforms = platforms.linux;
     mainProgram = "lndconnect";
   };

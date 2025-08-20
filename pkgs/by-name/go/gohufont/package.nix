@@ -8,7 +8,7 @@
   libfaketime,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gohufont";
   version = "2.1";
 

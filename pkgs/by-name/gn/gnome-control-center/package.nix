@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   accountsservice,
   adwaita-icon-theme,
   colord,
@@ -65,7 +65,6 @@
   tzdata,
   udisks2,
   upower,
-  wayland-scanner,
   libepoxy,
   gnome-user-share,
   gnome-remote-desktop,
@@ -75,15 +74,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "48.4";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KiDu5uBcjTrdru+lJNzh7p+Ip32Djj/R7e88DC5GetI=";
+    hash = "sha256-Q0oyLcN0OFi4nYFl2J+J3AWWi2t740AJRM7UJxJQ0+k=";
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
-    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -212,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

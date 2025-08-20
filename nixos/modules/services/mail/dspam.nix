@@ -107,7 +107,7 @@ in
         systemd.services.dspam = {
           description = "dspam spam filtering daemon";
           wantedBy = [ "multi-user.target" ];
-          after = [ "postgresql.target" ];
+          after = [ "postgresql.service" ];
           restartTriggers = [ cfgfile ];
 
           serviceConfig = {

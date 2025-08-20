@@ -7,22 +7,22 @@
   makeWrapper,
   electron,
 }:
-(stdenvNoCC.mkDerivation rec {
+(stdenvNoCC.mkDerivation {
   pname = "revolt-desktop";
-  version = "1.0.8";
+  version = "1.0.6";
   dontConfigure = true;
   dontBuild = true;
-  meta = {
+  meta = with lib; {
     description = "Open source user-first chat platform";
     homepage = "https://revolt.chat/";
     changelog = "https://github.com/revoltchat/desktop/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
       heyimnova
-      magistau
+      caralice
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux ++ platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "revolt-desktop";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -30,27 +30,14 @@
   (
     final: prev:
     let
-      inherit (prev) version;
+      inherit (prev) pname version;
     in
     if stdenvNoCC.hostPlatform.isLinux then
       {
-        src =
-          {
-            x86_64-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}.AppImage";
-              hash = "sha256-L23Je5p7VmQpOLC+IfmQRk2CKKUm4rNBdsYLvqLTlRY=";
-            };
-            armv7l-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-armv7l.AppImage";
-              hash = "sha256-Qwya5tgHjMB8IJi0ueGmkzgQMQu+rlsDoWIVpl6Vj2w=";
-            };
-            aarch64-linux = fetchurl {
-              url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-arm64.AppImage";
-              hash = "sha256-VQXyXaL4Ma3peO1duAlyFwkb1CRQ/4DNZhjiAnhms6I=";
-            };
-          }
-          .${stdenvNoCC.hostPlatform.system}
-            or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+        src = fetchurl {
+          url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-linux.AppImage";
+          hash = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
+        };
 
         appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };
 
@@ -66,7 +53,7 @@
           cp -a ${final.appimageContents}/usr/share/icons $out/share/icons
 
           substituteInPlace $out/share/applications/revolt-desktop.desktop \
-            --replace-fail 'Exec=AppRun' 'Exec=revolt-desktop'
+            --replace 'Exec=AppRun' 'Exec=revolt-desktop'
 
           runHook postInstall
         '';
@@ -81,8 +68,8 @@
       assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
-          url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-universal-mac.zip";
-          hash = "sha256-CpG1LLYYHa9ho4rotDwSS+wNIJ2z0kBPqu70xKEFg+k=";
+          url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-mac.zip";
+          hash = "sha256-XxmKcIfJtHfi6SahrRHMeTAuyVqiN9Yhayjis10vD2w=";
           stripRoot = false;
         };
 

@@ -9,7 +9,6 @@
   libtool,
   python3,
   wxGTK32,
-  wrapGAppsHook3,
   llvmPackages,
 }:
 
@@ -33,15 +32,16 @@ stdenv.mkDerivation rec {
     ./missing-semicolon.patch
   ];
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "/usr" "$out" \
-      --replace-fail "mhash; ./configure" "mhash; ./configure --prefix=$out"
-  ''
-  + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile \
-      --replace-fail "-lgomp" "-lomp"
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile \
+        --replace-fail "/usr" "$out" \
+        --replace-fail "mhash; ./configure" "mhash; ./configure --prefix=$out"
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile \
+        --replace-fail "-lgomp" "-lomp"
+    '';
 
   strictDeps = true;
 
@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     libtool
     python3
     wxGTK32
-    wrapGAppsHook3
   ];
 
   buildInputs = lib.optionals stdenv.cc.isClang [

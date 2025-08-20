@@ -79,10 +79,7 @@ in
 
       serviceConfig =
         let
-          package = cfg.package.override {
-            inherit (cfg) enableOcr;
-            enableGui = false;
-          };
+          package = cfg.package.override { inherit (cfg) enableOcr; };
         in
         {
           Type = "simple";

@@ -48,8 +48,7 @@ buildPythonPackage rec {
     joblib
     pywavelets
     mock
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ tkinter ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ tkinter ];
 
   doCheck = false; # no tests
 

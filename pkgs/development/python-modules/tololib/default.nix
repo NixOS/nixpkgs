@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tololib";
-  version = "1.2.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MatthiasLohr";
     repo = "tololib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfyc96VcauERv2E5I6nOIXAHbmTHiRLqS+0XH0GB5HM=";
+    hash = "sha256-CVibq5dgjjXW4Fxs3doBmUyXMMbtGfN9fLgNtuTqqiA=";
   };
 
   build-system = [ setuptools-scm ];

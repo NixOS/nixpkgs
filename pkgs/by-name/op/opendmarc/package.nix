@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
       bsd3
       sendmail
     ];
-    teams = [ teams.helsinki-systems ];
+    maintainers = teams.helsinki-systems.members;
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "maruel";
-    repo = "panicparse";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-EBNOHI04v47sXAWrjHsU4pixP4TPOuHy8S3YmlkiLN4=";
   };

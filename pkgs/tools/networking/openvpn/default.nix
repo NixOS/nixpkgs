@@ -15,7 +15,6 @@
   pkcs11Support ? false,
   pkcs11helper,
   nixosTests,
-  unixtools,
 }:
 
 let
@@ -23,33 +22,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.14";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nramYYNS+ee3canTiuFjG17f7tbUAjPiQ+YC3fIZXno=";
+    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    unixtools.route
-    unixtools.ifconfig
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    lz4
-    lzo
-    openssl
-  ]
-  ++ optionals stdenv.hostPlatform.isLinux [
-    libcap_ng
-    libnl
-    pam
-  ]
-  ++ optional useSystemd systemd
-  ++ optional pkcs11Support pkcs11helper;
+  buildInputs =
+    [
+      lz4
+      lzo
+      openssl
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      libcap_ng
+      libnl
+      pam
+    ]
+    ++ optional useSystemd systemd
+    ++ optional pkcs11Support pkcs11helper;
 
   configureFlags =
     optional useSystemd "--enable-systemd"
@@ -60,13 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
   # but a separate package was made, that uses libexec/openvpn. Copy it
   # into libexec in case any consumers expect it to be there even though
   # they should use the update-systemd-resolved package instead.
-  postInstall = ''
-    mkdir -p $out/share/doc/openvpn/examples
-    cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
-  ''
-  + optionalString useSystemd ''
-    install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/share/doc/openvpn/examples
+      cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
+    ''
+    + optionalString useSystemd ''
+      install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
+    '';
 
   enableParallelBuilding = true;
 

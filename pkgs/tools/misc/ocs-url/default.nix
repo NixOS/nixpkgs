@@ -21,7 +21,7 @@ let
   };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ocs-url";
   inherit version;
 

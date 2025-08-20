@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paho.mqtt.cpp";
-  version = "1.5.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.cpp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vwfWcJqAWY4Em4MxZVcvOi6pzXAYYlOrKh6peMtjcXo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xP3M7d7ig19kP7MfOgI0S3UHGgzkJZyv4F+ayXqMtuE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PAHO_BUILD_SHARED" enableShared)
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Eclipse Paho MQTT C++ Client Library";
     homepage = "https://www.eclipse.org/paho/";
-    license = lib.licenses.epl10;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.unix;
+    license = licenses.epl10;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 })

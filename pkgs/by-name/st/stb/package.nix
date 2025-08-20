@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stb";
-  version = "0-unstable-2023-01-29";
+  version = "unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";

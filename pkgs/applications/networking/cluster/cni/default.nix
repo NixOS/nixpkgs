@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cni";
-  version = "1.3.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xeajsM8ZIlI6Otv9CQhPfYaVQwmJ5QcFEn1xt6e/ivQ=";
+    hash = "sha256-ocSc1fhbBB8YRxVVOvYMombOOkLMdfv9V4GYbf8kwIE=";
   };
 
-  vendorHash = "sha256-uo3ZwFdD6aJ0WDGmt51l3hs9agUnv1cIQY/KMlNe5nI=";
+  vendorHash = "sha256-/aPx8NgGkJ1irU0LGzmYTlsiX2U5or24Vl1PGHWuDyE=";
 
   subPackages = [
     "./cnitool"

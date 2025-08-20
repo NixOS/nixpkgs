@@ -2,42 +2,24 @@
 # https://www.oracle.com/java/technologies/javase/graalvm-jdk23-archive-downloads.html
 # Then run this script:
 # $ rg -No "(https://.+)\"" -r '$1' pkgs/development/compilers/graalvm/graalvm-oracle/hashes.nix | \
-#   parallel -k 'echo {}; nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
+#   parallel -k 'echo {}; nix hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
 {
-  "25-ea-32" = {
+  "22" = {
     "aarch64-linux" = {
-      hash = "sha256-JO/6VHxhd8Vetpv/iLKxNCL8wHa2VAfSIs0fiWdB4QA=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.32/graalvm-jdk-25.0.0-ea.32_linux-aarch64_bin.tar.gz";
+      hash = "sha256-skemwlgUzJzqm2XOyKkjblIwKnHDSqpzdunrMB+Dlvs=";
+      url = "https://download.oracle.com/graalvm/22/archive/graalvm-jdk-22.0.2_linux-aarch64_bin.tar.gz";
     };
     "x86_64-linux" = {
-      hash = "sha256-IevvXyhRnY/ujd3MriWULNcTYXOgt9h8bHhlJzkumjE=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.32/graalvm-jdk-25.0.0-ea.32_linux-x64_bin.tar.gz";
+      hash = "sha256-GIGqLEMbBQbssXBDmDKwU7dXNo1xCb1CIpjKI+eTnNA=";
+      url = "https://download.oracle.com/graalvm/22/archive/graalvm-jdk-22.0.2_linux-x64_bin.tar.gz";
     };
     "x86_64-darwin" = {
-      hash = "sha256-YhMGtXud6mer7UbSd6Eyl2d1rPKzEb6zF/NFtWLIG3E=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.32/graalvm-jdk-25.0.0-ea.32_macos-x64_bin.tar.gz";
+      hash = "sha256-n8vz/5bzjzHi9ZC7Yq3xngZVNcguJ7X9dC3vAFvvNSg=";
+      url = "https://download.oracle.com/graalvm/22/archive/graalvm-jdk-22.0.2_macos-x64_bin.tar.gz";
     };
     "aarch64-darwin" = {
-      hash = "sha256-alNurm5ieedOi636Mnyq8BqFAyOV0dBaeTtDk4c4cPQ=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.32/graalvm-jdk-25.0.0-ea.32_macos-aarch64_bin.tar.gz";
-    };
-  };
-  "23" = {
-    "aarch64-linux" = {
-      hash = "sha256-VlB664/l7NWFQrPE3vEJvCXkEzKEJ0ck/HNU5pGGTwU=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_linux-aarch64_bin.tar.gz";
-    };
-    "x86_64-linux" = {
-      hash = "sha256-2wmx/hi4PzOK+bMpFEN3SzFw2euhdTjOLuOcXm1gHfw=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_linux-x64_bin.tar.gz";
-    };
-    "x86_64-darwin" = {
-      hash = "sha256-tFmfv9OUMEqE6UNb98ZzBp1P4MVl0tRNcPD29YBM6jU=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_macos-x64_bin.tar.gz";
-    };
-    "aarch64-darwin" = {
-      hash = "sha256-DmRLktA9Ob30hC43i4sicT+qpO2ujv/w2pkp0eBN0Ms=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_macos-aarch64_bin.tar.gz";
+      hash = "sha256-O4IYBkBDJXRrCj3jISgSPVje85W2kd8cQmedlzfVh+c=";
+      url = "https://download.oracle.com/graalvm/22/archive/graalvm-jdk-22.0.2_macos-aarch64_bin.tar.gz";
     };
   };
   "17" = {

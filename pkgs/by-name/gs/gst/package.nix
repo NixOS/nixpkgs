@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitMinimal,
+  git,
   ghq,
 }:
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   nativeBuildInputs = [
-    gitMinimal
+    git
     ghq
   ];
 

@@ -1,49 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+  fetchPypi,
+  zope-location,
   zope-event,
   zope-interface,
-  unittestCheckHook,
-  zope-i18nmessageid,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
-  pname = "zope-schema";
+  pname = "zope.schema";
   version = "7.0.1";
-  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.schema";
-    tag = version;
-    hash = "sha256-aUjlSgMfoKQdE0ta8jxNjh+L7OKkfOVvUWnvhx+QRsI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-6tTbywM1TU5BDJo7kERR60TZAlR1Gxy97fSmGu3p+7k=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
+    zope-location
     zope-event
     zope-interface
+    zope-testing
   ];
 
-  pythonImportsCheck = [ "zope.schema" ];
+  # ImportError: No module named 'zope.event'
+  # even though zope-event has been included.
+  # Package seems to work fine.
+  doCheck = false;
 
-  nativeCheckInputs = [
-    unittestCheckHook
-    zope-i18nmessageid
-  ];
-
-  unittestFlagsArray = [ "src/zope/schema/tests" ];
-
-  pythonNamespaces = [ "zope" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.schema";
     description = "zope.interface extension for defining data schemas";
-    changelog = "https://github.com/zopefoundation/zope.schema/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.zpl21;
+    license = licenses.zpl20;
     maintainers = [ ];
   };
 }

@@ -1,39 +1,28 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonPackage,
-  setuptools,
-  websockets,
-  pytest-asyncio,
-  pytestCheckHook,
+  pythonOlder,
+  attrs,
 }:
 
 buildPythonPackage rec {
   pname = "aiorpcx";
-  version = "0.25.0";
-  pyproject = true;
+  version = "0.23.1";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "kyuupichan";
-    repo = "aiorpcX";
-    tag = version;
-    hash = "sha256-mFg9mWrlnfXiQpgZ1rxvUy9TBfwy41XEKmsCf2nvxGo=";
+  src = fetchPypi {
+    inherit version;
+    pname = "aiorpcX";
+    hash = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ attrs ];
 
-  optional-dependencies.ws = [ websockets ];
+  disabled = pythonOlder "3.6";
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  disabledTests = [
-    # network access
-    "test_create_connection_resolve_good"
-  ];
+  # Checks needs internet access
+  doCheck = false;
 
   pythonImportsCheck = [ "aiorpcx" ];
 

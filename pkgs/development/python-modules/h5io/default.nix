@@ -2,59 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  h5py,
+  pythonOlder,
+  setuptools,
   numpy,
-
-  # tests
+  h5py,
   pytestCheckHook,
-  pytest-cov-stub,
-  scipy,
-  tables,
 }:
 
 buildPythonPackage rec {
   pname = "h5io";
-  version = "0.2.5";
+  version = "0.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "h5io";
     repo = "h5io";
     tag = "h5io-${version}";
-    hash = "sha256-ZkG9e7KtDvoRq9XCExYseE+Z7tMQTWcSiwsSrN5prdI=";
+    hash = "sha256-3mrHIkfaXq06mMzUwudRO81DWTk0TO/e15IQA5fxxNc=";
   };
 
-  build-system = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml  \
+      --replace "--cov-report=" ""  \
+      --replace "--cov-branch" ""  \
+      --replace "--cov=h5io" ""
+  '';
 
-  dependencies = [
-    h5py
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     numpy
+    h5py
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    scipy
-    tables
-  ];
-
-  disabledTests = [
-    # See https://github.com/h5io/h5io/issues/86
-    "test_state_with_pathlib"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "h5io" ];
 
-  meta = {
+  meta = with lib; {
     description = "Read and write simple Python objects using HDF5";
     homepage = "https://github.com/h5io/h5io";
     changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }

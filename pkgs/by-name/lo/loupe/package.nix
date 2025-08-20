@@ -8,6 +8,8 @@
   meson,
   ninja,
   pkg-config,
+  jq,
+  moreutils,
   rustc,
   wrapGAppsHook4,
   gtk4,
@@ -17,25 +19,21 @@
   libseccomp,
   glycin-loaders,
   gnome,
-  common-updater-scripts,
-  _experimental-update-script-combinators,
-  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "48.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EHE9PpZ4nQd659M4lFKl9sOX3fQ6UMBxy/4tEnJZcN4=";
+    hash = "sha256-bgRu/k965X7idI1S0dBzVsdEnSBKPTHQtCNnqAGXShU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "loupe-deps-${finalAttrs.version}";
-    hash = "sha256-PKkyZDd4FLWGZ/kDKWkaSV8p8NDniSQGcR9Htce6uCg=";
-  };
+  patches = [
+    # Fix paths in glycin library
+    glycin-loaders.passthru.glycinPathsPatch
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -44,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    jq
+    moreutils
     rustc
-    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
@@ -57,12 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
   ];
 
-  preConfigure = ''
-    # Dirty approach to add patches after cargoSetupPostUnpackHook
-    # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
+  postPatch = ''
+    # Replace hash of file we patch in vendored glycin.
+    jq \
+      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
+      '.files."src/sandbox.rs" = $hash' \
+      vendor/glycin/.cargo-checksum.json \
+      | sponge vendor/glycin/.cargo-checksum.json
   '';
 
   preFixup = ''
@@ -73,34 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru = {
-    updateScript =
-      let
-        updateSource = gnome.updateScript {
-          packageName = "loupe";
-        };
-
-        updateLockfile = {
-          command = [
-            "sh"
-            "-c"
-            ''
-              PATH=${
-                lib.makeBinPath [
-                  common-updater-scripts
-                ]
-              }
-              update-source-version loupe --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
-            ''
-          ];
-          # Experimental feature: do not copy!
-          supportedFeatures = [ "silent" ];
-        };
-      in
-      _experimental-update-script-combinators.sequence [
-        updateSource
-        updateLockfile
-      ];
+  passthru.updateScript = gnome.updateScript {
+    packageName = "loupe";
   };
 
   meta = with lib; {
@@ -108,8 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jk ];
-    teams = [ teams.gnome ];
+    maintainers = with maintainers; [ jk ] ++ teams.gnome.members;
     platforms = platforms.unix;
     mainProgram = "loupe";
   };

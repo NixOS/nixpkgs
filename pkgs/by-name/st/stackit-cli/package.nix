@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "stackit-cli";
-  version = "0.39.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
     rev = "v${version}";
-    hash = "sha256-6Y71KglFPfecbrXwczsrEdoVECOP8C/Mt021H6nQrvE=";
+    hash = "sha256-0mFpTE/scvsFbS9VAwXw3tiMHwHgPahzNq7foW4dCUE=";
   };
 
-  vendorHash = "sha256-Vz8jcbp3HzzgfzHFeEYPeGg0lmElPbm2hpHWNVhTQa0=";
+  vendorHash = "sha256-fRJ70BTTRKrFdOOm1DAvXj4frdN0Ak71pCRZMnsjYnY=";
 
   subPackages = [ "." ];
 
@@ -68,12 +68,12 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "CLI to manage STACKIT cloud services";
     homepage = "https://github.com/stackitcloud/stackit-cli";
     changelog = "https://github.com/stackitcloud/stackit-cli/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ DerRockWolf ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ DerRockWolf ];
     mainProgram = "stackit";
   };
 }

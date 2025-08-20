@@ -21,7 +21,7 @@ let
 
   free_src = fetchFromGitHub {
     owner = "miki151";
-    repo = "keeperrl";
+    repo = pname;
     rev = version;
     sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getInclude SDL2}/include/SDL2"
+    "-I${SDL2.dev}/include/SDL2"
   ];
 
   enableParallelBuilding = true;

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "cloudlist";
-  version = "1.2.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cloudlist";
     tag = "v${version}";
-    hash = "sha256-xCGGyPfD6cQgVTowh8ZO9Ak3xH5Hct51Vm18FJWLF1E=";
+    hash = "sha256-HV4qhQgeLKwkyrRFzRQibqjWRyjLBtoWVdliJ+iyyBc=";
   };
 
-  vendorHash = "sha256-PW9Yu8d5PPIL6cc692N8e5qO73drEgfu7JrVeihggcs=";
+  vendorHash = "sha256-6J9AWONLP/FvR0dXt5Zx4n+kTpmnxF79HcWVFp9OZ0g=";
 
   subPackages = [ "cmd/cloudlist/" ];
 
@@ -29,14 +29,14 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
     changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "cloudlist";
   };
 }

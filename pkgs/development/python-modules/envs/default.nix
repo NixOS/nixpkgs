@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "envs/tests.py" ];
+  pytestFlagsArray = [ "envs/tests.py" ];
 
   disabledTests = [ "test_list_envs" ];
 

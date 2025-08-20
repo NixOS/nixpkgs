@@ -46,8 +46,7 @@ buildPythonPackage rec {
     mock
     twisted
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyutil" ];
 

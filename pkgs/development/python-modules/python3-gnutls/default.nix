@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   buildPythonPackage,
   isPy3k,
   gnutls,
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (replaceVars ./libgnutls-path.patch {
+    (substituteAll {
+      src = ./libgnutls-path.patch;
       gnutlslib = "${lib.getLib gnutls}/lib";
     })
   ];

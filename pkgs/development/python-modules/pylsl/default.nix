@@ -3,42 +3,33 @@
   liblsl,
   fetchFromGitHub,
   buildPythonPackage,
-  stdenv,
-  numpy,
   setuptools,
-  setuptools-scm,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pylsl";
-  version = "1.17.6";
+  version = "1.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labstreaminglayer";
     repo = "pylsl";
-    tag = "v${version}";
-    hash = "sha256-PEeTG+bQNEce9j0obDoaTYXMGp0MRUibbWVXM1IvGGY=";
+    rev = "v${version}";
+    hash = "sha256-rReoPirf1rdQppKEBfHMk3J2htdsnFfIdlNQIprOoUg=";
   };
 
   postPatch = ''
-    substituteInPlace src/pylsl/lib/__init__.py \
-      --replace "def find_liblsl_libraries(verbose=False):" "$(echo -e "def find_liblsl_libraries(verbose=False):\n    yield '${liblsl}/lib/liblsl.${
-        if stdenv.hostPlatform.isDarwin then "dylib" else "so"
-      }'")"
+    substituteInPlace pylsl/pylsl.py \
+      --replace "def find_liblsl_libraries(verbose=False):" "$(echo -e "def find_liblsl_libraries(verbose=False):\n    yield '${liblsl}/lib/liblsl.so'")"
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
-    setuptools-scm
     wheel
   ];
 
-  dependencies = [
-    liblsl
-    numpy
-  ];
+  buildImputs = [ liblsl ];
 
   pythonImportsCheck = [ "pylsl" ];
 
@@ -47,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/labstreaminglayer/pylsl";
     license = licenses.mit;
     maintainers = with maintainers; [ abcsds ];
+    mainProgram = "pylsl";
   };
 }

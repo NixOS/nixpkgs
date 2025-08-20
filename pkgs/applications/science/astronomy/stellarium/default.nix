@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   perl,
   wrapGAppsHook3,
@@ -23,26 +24,33 @@
   testers,
   xvfb-run,
   gitUpdater,
-  md4c,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "25.2";
+  version = "24.4";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2QK9dHflCdmDrRXEHCBpuJR73jsMz9D9lJNa1pbfrTs=";
+    hash = "sha256-/xF9hXlPKhmpvpx9t1IgSqpvvqrGnd0xaf0QMvu+9IA=";
   };
+
+  patches = [
+    # Fix indi headers from https://github.com/Stellarium/stellarium/pull/4025
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/9669d64fb4104830412c6c6c2b45811075a92300.patch";
+      hash = "sha256-CXeghxxRIV7Filveg+3pNAWymUpUuGnylvt4e8THJ8A=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
+      --replace "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
   '';
 
   nativeBuildInputs = [
@@ -53,31 +61,32 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
   ];
 
-  buildInputs = [
-    qtbase
-    qtcharts
-    qtpositioning
-    qtmultimedia
-    qtserialport
-    qtwebengine
-    calcmysky
-    qxlsx
-    indilib
-    libnova
-    exiv2
-    md4c
-    nlopt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtcharts
+      qtpositioning
+      qtmultimedia
+      qtserialport
+      qtwebengine
+      calcmysky
+      qxlsx
+      indilib
+      libnova
+      exiv2
+      nlopt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
-  preConfigure = ''
-    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major finalAttrs.version}0101 +%s)
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export LC_ALL=en_US.UTF-8
-  '';
+  preConfigure =
+    ''
+      export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major finalAttrs.version}0101 +%s)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export LC_ALL=en_US.UTF-8
+    '';
 
   # fatal error: 'QtSerialPort/QSerialPortInfo' file not found
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qtserialport}/lib";

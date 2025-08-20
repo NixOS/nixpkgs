@@ -1,14 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xapian,
-  perl,
-  pcre2,
-  zlib,
-  libmagic,
-}:
+{ lib, stdenv, fetchurl, pkg-config, xapian, perl, pcre2, zlib, libmagic }:
 
 stdenv.mkDerivation rec {
   pname = "xapian-omega";
@@ -19,13 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HRk7MoXsFQVXJXsEnuHYyUxAvN6QbOC6fxo4oamlpcE=";
   };
 
-  buildInputs = [
-    xapian
-    perl
-    pcre2
-    zlib
-    libmagic
-  ];
+  buildInputs = [ xapian perl pcre2 zlib libmagic ];
   nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''

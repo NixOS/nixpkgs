@@ -1,12 +1,12 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   libgit2,
+  darwin,
   nix-update-script,
-  zlib,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  buildInputs = [
-    libgit2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
+  buildInputs =
+    [
+      libgit2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -37,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     ./patch-libgit2.patch
   ];
 
-  cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
+  cargoHash = "sha256-GEQ4Zv14Dzo9mt1YIDmXEBHLPD6G0/O1ggmUTnSYD+k=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";

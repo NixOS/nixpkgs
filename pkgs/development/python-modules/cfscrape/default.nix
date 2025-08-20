@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cfscrape";
   version = "2.1.1";
   format = "setuptools";

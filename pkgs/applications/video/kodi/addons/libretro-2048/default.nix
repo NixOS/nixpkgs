@@ -32,7 +32,6 @@ buildKodiBinaryAddon rec {
     description = "2048 GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ kazenyuk ];
-    teams = [ teams.kodi ];
+    maintainers = with maintainers; teams.kodi.members ++ [ kazenyuk ];
   };
 }

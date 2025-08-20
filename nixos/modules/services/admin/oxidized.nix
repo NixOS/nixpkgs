@@ -11,8 +11,6 @@ in
   options.services.oxidized = {
     enable = lib.mkEnableOption "the oxidized configuration backup service";
 
-    package = lib.mkPackageOption pkgs "oxidized" { };
-
     user = lib.mkOption {
       type = lib.types.str;
       default = "oxidized";
@@ -36,7 +34,7 @@ in
     };
 
     configFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.path;
       example = lib.literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
@@ -72,8 +70,7 @@ in
     };
 
     routerDB = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
+      type = lib.types.path;
       example = lib.literalExpression ''
         pkgs.writeText "oxidized-router.db" '''
           hostname-sw1:powerconnect:username1:password2
@@ -97,58 +94,18 @@ in
       isSystemUser = true;
     };
 
-    systemd.tmpfiles.settings."10-oxidized" = {
-      "${cfg.dataDir}" = {
-        d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
-        };
-      };
-
-      "${cfg.dataDir}/.config" = {
-        d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
-        };
-      };
-
-      "${cfg.dataDir}/.config/oxidized" = {
-        d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
-        };
-      };
-
-    }
-    // lib.optionalAttrs (cfg.configFile != null) {
-      "${cfg.dataDir}/.config/oxidized/config" = {
-        "L+" = {
-          argument = "${cfg.configFile}";
-          user = cfg.user;
-          group = cfg.group;
-        };
-      };
-
-    }
-    // lib.optionalAttrs (cfg.routerDB != null) {
-      "${cfg.dataDir}/.config/oxidized/router.db" = {
-        "L+" = {
-          argument = "${cfg.routerDB}";
-          user = cfg.user;
-          group = cfg.group;
-        };
-      };
-    };
-
     systemd.services.oxidized = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      preStart = ''
+        mkdir -p ${cfg.dataDir}/.config/oxidized
+        ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
+        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
+      '';
+
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = "${pkgs.oxidized}/bin/oxidized";
         User = cfg.user;
         Group = cfg.group;
         UMask = "0077";

@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "jack_capture";
   version = "0.9.73.2023-01-04";
 

@@ -29,14 +29,14 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
     changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "chaos";
   };
 }

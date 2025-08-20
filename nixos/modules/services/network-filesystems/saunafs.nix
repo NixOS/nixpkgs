@@ -80,8 +80,7 @@ let
       ExecStart = "${pkgs.saunafs}/bin/sfs${name} -c ${configFile} start";
       ExecStop = "${pkgs.saunafs}/bin/sfs${name} -c ${configFile} stop";
       ExecReload = "${pkgs.saunafs}/bin/sfs${name} -c ${configFile} reload";
-    }
-    // extraConfig;
+    } // extraConfig;
   };
 
 in

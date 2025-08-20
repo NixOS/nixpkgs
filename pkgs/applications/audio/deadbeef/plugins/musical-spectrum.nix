@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "deadbeef-musical-spectrum-plugin";
   version = "unstable-2020-07-01";
 
@@ -28,8 +28,6 @@ stdenv.mkDerivation {
     gtk3
   ];
   makeFlags = [ "gtk3" ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   installPhase = ''
     runHook preInstall

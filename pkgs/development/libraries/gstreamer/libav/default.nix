@@ -1,35 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  gstreamer,
-  gst-plugins-base,
-  gettext,
-  ffmpeg-headless,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, gstreamer
+, gst-plugins-base
+, gettext
+, ffmpeg-headless
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.26.0";
-
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.24.10";
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cHqLaH/1/dzuWwJBXi7JtxtKxE0Leuw7R3Nkzuy/Hs8=";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-TPLi2CBOVLqK+VGai5t/+m6VGnCHr6Df6DwSXUm7tfs=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     meson
@@ -37,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     python3
-  ]
-  ++ lib.optionals enableDocumentation [
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -46,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     gstreamer
     gst-plugins-base
     ffmpeg-headless
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
   ];
 
   mesonFlags = [
@@ -60,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  passthru = {
-    updateScript = directoryListingUpdater { };
-  };
-
   meta = with lib; {
     description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
@@ -71,4 +56,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = [ ];
   };
-})
+}

@@ -19,22 +19,21 @@
   autoPatchelfHook,
   wayland-scanner,
   rust-bindgen,
-  nix-update-script,
 }:
-llvmPackages.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation rec {
   pname = "waypipe";
-  version = "0.10.4";
+  version = "0.10.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-O47b1CHCEwUSigjk0Ml3uLhRRxcPC6Phj2cnIlX1Hkg=";
+    tag = "v${version}";
+    hash = "sha256-l9gZ7FtLxGKBRlMem3VGJGTvOkVAtLBa7eF9+gA5Vfo=";
   };
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-c561GpU2XENILSzk0Zka0qrtXZm7xaq/hiJA4Iv++QI=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-DjqyKXbCQ6kzb1138wNWPnRXIgUaaE1nnCExLeLX6pw=";
   };
 
   strictDeps = true;
@@ -70,9 +69,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and
@@ -80,10 +77,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       makes application forwarding similar to ssh -X feasible.
     '';
     homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
-    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mic92 ];
+    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mic92 ];
     mainProgram = "waypipe";
   };
-})
+}

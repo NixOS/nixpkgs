@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "sha256-OjHj4h3n+/ozbrLaiH4bGppQ+2LA2RB/sZQVO9EPOEw=";
+  outputHash = "XeqHVdTQ7PTzxkjwfzS/BTR7+k/M69sfUKdRXGOTmZE=";
 
   passthru = {
     updateScript = gnome.updateScript {

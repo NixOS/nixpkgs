@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glbinding";
-  version = "3.5.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "cginternals";
-    repo = "glbinding";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oLtOsiXfl/18rY/89vl9JDDWpPmEELOFKAHuClveU0c=";
+    sha256 = "sha256-xmEXZ1ssXzrElqd6D1zooFxLEyspsF4Dau3d9+1/2yw=";
   };
 
   nativeBuildInputs = [ cmake ];

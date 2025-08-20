@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   fetchpatch,
-  capstone,
+  capstone_4,
   cmsis-pack-manager,
   colorama,
   importlib-metadata,
@@ -29,16 +29,13 @@ buildPythonPackage rec {
   version = "0.36.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pyocd";
-    repo = "pyOCD";
-    tag = "v${version}";
-    hash = "sha256-CSdVWDiSe+xd0MzD9tsKs3DklNjnhchYFuI3Udi0O20=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-k3eCrMna/wVNUPt8b3iM2UqE+A8LhfJarKuZ3Jgihkg=";
   };
 
   patches = [
     # https://github.com/pyocd/pyOCD/pull/1332
-    # merged into develop
     (fetchpatch {
       name = "libusb-package-optional.patch";
       url = "https://github.com/pyocd/pyOCD/commit/0b980cf253e3714dd2eaf0bddeb7172d14089649.patch";
@@ -46,13 +43,12 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonRelaxDeps = [ "capstone" ];
   pythonRemoveDeps = [ "libusb-package" ];
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    capstone
+    capstone_4
     cmsis-pack-manager
     colorama
     importlib-metadata
@@ -67,8 +63,7 @@ buildPythonPackage rec {
     pyusb
     pyyaml
     typing-extensions
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ hidapi ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ hidapi ];
 
   pythonImportsCheck = [ "pyocd" ];
 

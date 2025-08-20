@@ -15,8 +15,8 @@ let
         flex,
         getopt,
         git,
-        gnat14,
-        gcc14,
+        gnat,
+        gcc,
         lib,
         perl,
         stdenvNoCC,
@@ -26,12 +26,12 @@ let
 
       stdenvNoCC.mkDerivation (finalAttrs: {
         pname = "coreboot-toolchain-${arch}";
-        version = "25.03";
+        version = "24.12";
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-zyfBQKVton+2vjYd6fqrUqkHY9bci411pujRGabvTjQ=";
+          hash = "sha256-vK2kxLJZFz7QqWYRF6JIGrM2Hobmzp31HtQMpb1mx9M=";
           fetchSubmodules = false;
           leaveDotGit = true;
           postFetch = ''
@@ -50,7 +50,7 @@ let
         buildInputs = [
           flex
           zlib
-          (if withAda then gnat14 else gcc14)
+          (if withAda then gnat else gcc)
         ];
 
         enableParallelBuilding = true;
@@ -76,7 +76,7 @@ let
 
         meta = with lib; {
           homepage = "https://www.coreboot.org";
-          description = "Coreboot toolchain for ${arch} targets";
+          description = "coreboot toolchain for ${arch} targets";
           license = with licenses; [
             bsd2
             bsd3

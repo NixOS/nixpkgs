@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.10";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "warpinator";
+    repo = pname;
     rev = version;
-    hash = "sha256-OSZYjCnFIHmWCwVcWP1MLmezt5HL4Njf0WMyCRmPP58=";
+    hash = "sha256-aqqKCYlCAL/6srbyYRoVQlIFKpTmwYZsdfLibRyAUXg=";
   };
 
   nativeBuildInputs = [
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
     description = "Share files across the LAN";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

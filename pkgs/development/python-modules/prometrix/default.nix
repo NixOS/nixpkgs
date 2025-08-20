@@ -14,7 +14,7 @@
   requests,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "prometrix";
   version = "0.1.18-unstable-2024-04-30";
   pyproject = true;
@@ -60,7 +60,7 @@ buildPythonPackage {
     '';
     homepage = "https://github.com/robusta-dev/prometrix";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     # prometheus-api-client 0.5.5 is not working
     # https://github.com/robusta-dev/prometrix/issues/14
     broken = versionAtLeast prometheus-api-client.version "0.5.3";

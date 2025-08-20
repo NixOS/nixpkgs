@@ -31,9 +31,16 @@
   enableZookeeper ? true,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  version = "3.0.1";
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
+    hash = "sha256-MP7B7gVRQnspXLLNmPH8t3DYKbsQkDV9hPJYbM2rB9M=";
+  };
+in
+buildGoModule rec {
   pname = "prometheus";
-  version = "3.5.0";
+  inherit version;
 
   outputs = [
     "out"
@@ -44,25 +51,19 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-QBmtJ+qBIwQzfJ7tx0P9/3kl6UaZou7qp8jrI+Qrcck=";
+    rev = "v${version}";
+    hash = "sha256-dN6ckW451G45ZO7baY7H4qEf88ZDeISZwZ3uwWPZsW8=";
   };
 
-  vendorHash = "sha256-Svm+rH/cmS9mjiQHVucwKHy6ilw3mgySjRdC3ivw0YE=";
-
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-j+wOQ8m2joXZ3/C6bO8pxroM/hntVLP/QhoWVmdLir4=";
-  };
+  vendorHash = "sha256-c96YnWPLH/tbGRb2Zlqrl3PXSZvI+NeYTGlef6REAOw=";
 
   excludedPackages = [
     "documentation/prometheus-mixin"
-    "internal/tools"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
+    tar -C web/ui -xzf ${webUiStatic}
 
     patchShebangs scripts
 
@@ -108,7 +109,7 @@ buildGoModule (finalAttrs: {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${finalAttrs.version}"
+      "-X ${t}.Version=${version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -129,10 +130,6 @@ buildGoModule (finalAttrs: {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "-skip=TestEvaluations/testdata/aggregators.test"
-  ];
-
   passthru.tests = { inherit (nixosTests) prometheus; };
 
   meta = with lib; {
@@ -141,7 +138,8 @@ buildGoModule (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [
       fpletz
+      willibutz
       Frostman
     ];
   };
-})
+}

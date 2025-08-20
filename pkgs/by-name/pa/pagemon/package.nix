@@ -5,15 +5,15 @@
   ncurses,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pagemon";
-  version = "0.02.05";
+  version = "0.01.18";
 
   src = fetchFromGitHub {
-    owner = "ColinIanKing";
+    sha256 = "1aq1mq3k8n70h81s64w2zg4kksw1y05326bn4y8p94lpaypvxqfd";
+    rev = "V${version}";
     repo = "pagemon";
-    tag = "V${finalAttrs.version}";
-    hash = "sha256-Crr1312wZ1IIwvODAUooZ0Lr75W0qdDQrr1sszaNHa4=";
+    owner = "ColinIanKing";
   };
 
   buildInputs = [ ncurses ];
@@ -21,11 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "BINDIR=$(out)/bin"
     "MANDIR=$(out)/share/man/man8"
-    "BASHDIR=$(out)/share/bash-completion/completions"
   ];
 
-  meta = {
-    inherit (finalAttrs.src.meta) homepage;
+  meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Interactive memory/page monitor for Linux";
     mainProgram = "pagemon";
     longDescription = ''
@@ -38,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       pages of memory belonging data, code, heap, stack, anonymous mappings
       or even swapped-out pages.
     '';
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
-})
+}

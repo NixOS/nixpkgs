@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://joe-editor.sourceforge.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

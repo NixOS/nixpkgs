@@ -98,7 +98,7 @@ in
           # loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
           loadplugin Mail::SpamAssassin::Plugin::SpamCop
           loadplugin Mail::SpamAssassin::Plugin::SPF
-          loadplugin Mail::SpamAssassin::Plugin::TextCat
+          #loadplugin Mail::SpamAssassin::Plugin::TextCat
           # loadplugin Mail::SpamAssassin::Plugin::TxRep
           loadplugin Mail::SpamAssassin::Plugin::URIDetail
           loadplugin Mail::SpamAssassin::Plugin::URIDNSBL
@@ -121,7 +121,6 @@ in
 
     users.users.spamd = {
       description = "Spam Assassin Daemon";
-      home = "/var/lib/spamassassin";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
@@ -182,11 +181,6 @@ in
       after = [
         "network.target"
         "sa-update.service"
-      ];
-
-      reloadTriggers = [
-        config.environment.etc."mail/spamassassin/init.pre".source
-        config.environment.etc."mail/spamassassin/local.cf".source
       ];
 
       serviceConfig = {

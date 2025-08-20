@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.9.3";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    hash = "sha256-eRuMsUN5zRWsM5BqYHI9iSfoHHMu5ugZDjeDc1GGQL8=";
+    hash = "sha256-KQgoyxzTWoQok/sUFcvUazxrBMxVXvxqjJudyKYeZCo=";
   };
 
   postPatch = ''
@@ -21,14 +21,14 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
-  cargoHash = "sha256-9oNfXNQywvgTREa0G1UbId4ezLSCem4IBkqE5X234hE=";
+  cargoHash = "sha256-c+LOmUUt8t1x5Pp8yGHSeLcJNs/lJzq29KMX/i7Cscs=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
     description = "Upgraded ctrl-r where history results make sense for what you're working on right now";
     changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.melkor333 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.melkor333 ];
     mainProgram = "mcfly";
   };
 }

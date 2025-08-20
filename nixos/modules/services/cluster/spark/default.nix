@@ -104,7 +104,7 @@ in
           path = with pkgs; [
             procps
             openssh
-            net-tools
+            nettools
           ];
           description = "spark master service.";
           after = [ "network.target" ];
@@ -123,17 +123,15 @@ in
             ExecStart = "${cfg.package}/sbin/start-master.sh";
             ExecStop = "${cfg.package}/sbin/stop-master.sh";
             TimeoutSec = 300;
-            Restart = "always";
-          };
-          unitConfig = {
             StartLimitBurst = 10;
+            Restart = "always";
           };
         };
         spark-worker = lib.mkIf cfg.worker.enable {
           path = with pkgs; [
             procps
             openssh
-            net-tools
+            nettools
             rsync
           ];
           description = "spark master service.";
@@ -153,10 +151,8 @@ in
             ExecStart = "${cfg.package}/sbin/start-worker.sh spark://${cfg.worker.master}";
             ExecStop = "${cfg.package}/sbin/stop-worker.sh";
             TimeoutSec = 300;
-            Restart = "always";
-          };
-          unitConfig = {
             StartLimitBurst = 10;
+            Restart = "always";
           };
         };
       };

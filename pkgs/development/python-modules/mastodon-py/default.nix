@@ -9,8 +9,8 @@
   python-dateutil,
   python-magic,
   requests,
+  six,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
   requests-mock,
@@ -19,24 +19,29 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "2.0.1";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    tag = "v${version}";
-    hash = "sha256-Sqvn7IIzkGnIjMGek1QS4pLXI+LoKykJsVnr/X1QH7U=";
+    tag = version;
+    hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    sed -i '/addopts/d' setup.cfg
+  '';
 
-  dependencies = [
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     blurhash
     decorator
     python-dateutil
     python-magic
     requests
+    six
   ];
 
   optional-dependencies = {
@@ -49,12 +54,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     pytest-mock
     pytest-vcr
     requests-mock
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+    setuptools
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     "test_notifications_dismiss_pre_2_9_2"
@@ -66,7 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mastodon" ];
 
   meta = with lib; {
-    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.rev}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
     license = licenses.mit;

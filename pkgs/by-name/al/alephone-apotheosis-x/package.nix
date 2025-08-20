@@ -4,7 +4,7 @@
   requireFile,
 }:
 
-alephone.makeWrapper {
+alephone.makeWrapper rec {
   pname = "apotheosis-x";
   version = "1.1";
   desktopName = "Marathon-Apotheosis-X";

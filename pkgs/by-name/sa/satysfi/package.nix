@@ -6,18 +6,16 @@
   junicode,
   lmodern,
   lmmath,
-  which,
 }:
 let
-  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs {
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
       sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
-    nativeBuildInputs = [ which ] ++ o.nativeBuildInputs;
-  });
+  };
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";
     version = "1.4.2";
@@ -57,21 +55,22 @@ ocamlPackages.buildDunePackage {
     cppo
   ];
 
-  buildInputs = [
-    camlpdf
-    yojson-with-position
-  ]
-  ++ (with ocamlPackages; [
-    menhirLib
-    batteries
-    camlimages
-    core_kernel
-    ppx_deriving
-    uutf
-    omd
-    re
-    otfed
-  ]);
+  buildInputs =
+    [
+      camlpdf
+      yojson-with-position
+    ]
+    ++ (with ocamlPackages; [
+      menhirLib
+      batteries
+      camlimages
+      core_kernel
+      ppx_deriving
+      uutf
+      omd
+      re
+      otfed
+    ]);
 
   postInstall = ''
     mkdir -p $out/share/satysfi/dist/fonts

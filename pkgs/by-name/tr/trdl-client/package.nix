@@ -2,29 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
+  testers,
+  trdl-client,
 }:
-buildGoModule (finalAttrs: {
+
+buildGoModule rec {
   pname = "trdl-client";
-  version = "0.11.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "trdl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-QqAVcATpxfjKEaluurVN9EylEGKNKWlBkE8KepIpjfo=";
+    rev = "v${version}";
+    hash = "sha256-7qhtn64nIcZLThXYLhrs/b5Z6k2mghJ77w6SyVcHmX4=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/client";
+  sourceRoot = "${src.name}/client";
 
-  vendorHash = "sha256-veSgWyk1ytHRNHuuZJBV+1rqGDsdEb01CImm+EexFCk=";
+  vendorHash = "sha256-f7FPeR+us3WvwqzcSQLbkKv905CCIAAm+HNV2FFF8OY=";
 
   subPackages = [ "cmd/trdl" ];
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/trdl/client/pkg/trdl.Version=${finalAttrs.src.rev}"
+    "-X github.com/werf/trdl/client/pkg/trdl.Version=${src.rev}"
   ];
 
   tags = [
@@ -32,13 +36,20 @@ buildGoModule (finalAttrs: {
     "dfssh"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/trdl";
-  versionCheckProgramArg = "version";
+  # There are no tests for cmd/trdl.
+  doCheck = false;
 
-  meta = {
-    description = "Universal solution for delivering your software updates";
+  passthru.tests.version = testers.testVersion {
+    package = trdl-client;
+    command = "trdl version";
+    version = "v${version}";
+  };
+
+  meta = with lib; {
+    description = ''
+      The universal solution for delivering your software updates securely from
+      a trusted The Update Framework (TUF) repository
+    '';
     longDescription = ''
       trdl is an Open Source solution providing a secure channel for delivering
       updates from the Git repository to the end user.
@@ -52,9 +63,9 @@ buildGoModule (finalAttrs: {
       software version from the TUF repository, and uses it.
     '';
     homepage = "https://trdl.dev";
-    changelog = "https://github.com/werf/trdl/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.azahi ];
+    changelog = "https://github.com/werf/trdl/releases/tag/${src.rev}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ azahi ];
     mainProgram = "trdl";
   };
-})
+}

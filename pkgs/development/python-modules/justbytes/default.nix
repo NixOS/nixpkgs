@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mulkieran";
-    repo = "justbytes";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-+jwIK1ZU+j58VoOfZAm7GdFy7KHU28khwzxhYhcws74=";
   };
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Computing with and displaying bytes";
+    description = "computing with and displaying bytes";
     homepage = "https://github.com/mulkieran/justbytes";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ nickcao ];

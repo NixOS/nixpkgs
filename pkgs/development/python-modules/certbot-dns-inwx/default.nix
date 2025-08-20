@@ -1,50 +1,38 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonPackage,
-  setuptools,
   acme,
   certbot,
-  inwx-domrobot,
-  idna,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-inwx";
-  version = "3.0.3";
-  pyproject = true;
+  version = "2.2.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "oGGy990";
-    repo = "certbot-dns-inwx";
-    tag = "v${version}";
-    hash = "sha256-bI/CSTYy/W1AwbxnBxhMp/yFnp68G25mTkNUbdNsRZ4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-v03QBHsxhl6R8YcwWIKD+pf4APy9S2vFcQe3ZEc6AjI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     acme
     certbot
-    inwx-domrobot
   ];
-
-  optional-dependencies = {
-    idna = [ idna ];
-  };
 
   # Doesn't have any tests
   doCheck = false;
 
-  pythonImportsCheck = [ "certbot_dns_inwx" ];
+  pytestImportsCheck = [ "certbot_dns_inwx" ];
 
-  meta = {
+  meta = with lib; {
     description = "INWX DNS Authenticator plugin for Certbot";
     homepage = "https://github.com/oGGy990/certbot-dns-inwx";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers = with maintainers; [ onny ];
   };
 }

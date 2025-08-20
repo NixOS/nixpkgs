@@ -7,7 +7,6 @@
   qtbase,
   qtgraphicaleffects,
   wrapQtAppsHook,
-  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -35,10 +34,7 @@ mkDerivation rec {
     cmake
     pkg-config
     wrapQtAppsHook
-    udevCheckHook
   ];
-
-  doInstallCheck = true;
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX:PATH=${placeholder "out"}"

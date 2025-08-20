@@ -7,18 +7,13 @@
 python3Packages.buildPythonApplication rec {
   pname = "gh2md";
   version = "2.3.1";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-B7IB1TWfZ0StH2zo/tXfDAaPlgLvr4ciIv7B8EQyp8w=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     six
     requests
     python-dateutil

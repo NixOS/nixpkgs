@@ -14,7 +14,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   version = "3.10.37";
   pname = "xcircuit";
 
@@ -36,11 +36,6 @@ stdenv.mkDerivation {
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
-  ];
-
-  patches = [
-    # fix compilation with GCC 14
-    ./declare-missing-prototype.patch
   ];
 
   buildInputs = with xorg; [

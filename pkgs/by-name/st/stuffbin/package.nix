@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Compress and embed static files and assets into Go binaries and access them with a virtual file system in production";
     homepage = "https://github.com/knadh/stuffbin";
     changelog = "https://github.com/knadh/stuffbin/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ raitobezarius ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ raitobezarius ];
+    license = licenses.mit;
   };
 }

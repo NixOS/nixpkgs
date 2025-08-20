@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "ukpostcodeparser";
   version = "1.1.2";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "UkPostcodeParser";

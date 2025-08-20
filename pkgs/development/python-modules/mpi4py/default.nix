@@ -1,58 +1,46 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  buildPythonPackage,
   cython,
   setuptools,
   mpi,
-  toPythonModule,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.0.3";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
-    tag = version;
-    hash = "sha256-eN/tjlnNla6RHYOXcprVVqtec1nwCEGn+MBcV/5mHJg=";
+    rev = version;
+    hash = "sha256-pH4z+hyoFOSAUlXv9EKO54/SM5HyLxv7B+18xBidH2Q=";
   };
 
   build-system = [
     cython
     setuptools
+    mpi
   ];
-
-  nativeBuildInputs = [
+  dependencies = [
     mpi
   ];
 
-  dependencies = [
-    # Use toPythonModule so that also the mpi executables will be propagated to
-    # generated Python environment.
-    (toPythonModule mpi)
-  ];
-
-  pythonImportsCheck = [ "mpi4py" ];
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytestCheckHook
     mpiCheckPhaseHook
   ];
-  disabledTestPaths = lib.optionals (mpi.pname == "mpich") [
-    # These tests from some reason cause pytest to crash, and therefor it is
-    # hard to debug them. Upstream mentions these tests to raise issues in
-    # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
-    # there (setting MPI4PY_RC_RECV_MPROBE=0) doesn't work.
-    "test/test_util_pool.py"
-    "demo/futures/test_futures.py"
+  doCheck = true;
+  disabledTestPaths = [
+    # Almost all tests in this file fail (TODO: Report about this upstream..)
+    "test/test_spawn.py"
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   passthru = {
     inherit mpi;
@@ -61,7 +49,6 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

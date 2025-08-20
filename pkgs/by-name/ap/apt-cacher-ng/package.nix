@@ -5,6 +5,7 @@
   cmake,
   doxygen,
   fetchurl,
+  fetchpatch,
   fuse,
   libevent,
   xz,

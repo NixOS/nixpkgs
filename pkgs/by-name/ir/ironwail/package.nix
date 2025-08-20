@@ -10,7 +10,6 @@
   libopus,
   opusfile,
   libogg,
-  libGL,
   curl,
   libxmp,
   mpg123,
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vulkan-headers
     gzip
-    libGL
     libvorbis
     libmad
     flac

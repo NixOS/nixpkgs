@@ -47,12 +47,12 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "airlift"
   ];
-  meta = {
+  meta = with lib; {
     description = "Flexible, configuration driven CLI for Apache Airflow local development";
     homepage = "https://github.com/jl178/airlift";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     changelog = "https://github.com/jl178/airlift/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ jl178 ];
+    maintainers = with maintainers; [ jl178 ];
     mainProgram = "airlift";
   };
 }

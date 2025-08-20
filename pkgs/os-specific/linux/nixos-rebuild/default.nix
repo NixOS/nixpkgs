@@ -81,8 +81,10 @@ substitute {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/os-specific/linux/nixos-rebuild";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Profpatsch ];
-    teams = [ lib.teams.nixos-rebuild ];
+    maintainers = with lib.maintainers; [
+      Profpatsch
+      thiagokokada
+    ];
     mainProgram = "nixos-rebuild";
   };
 }

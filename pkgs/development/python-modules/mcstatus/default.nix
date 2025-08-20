@@ -4,29 +4,39 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
-  hatchling,
+  poetry-core,
+  poetry-dynamic-versioning,
   pytest-asyncio,
-  pytest-cov-stub,
   pytest-rerunfailures,
   pytestCheckHook,
-  typing-extensions,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "12.0.2";
+  version = "11.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-mine";
-    repo = "mcstatus";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-DWIpN7oBbb/F5aER0v0qhcQsDoa/EfizjHgy/BE2P6E=";
+    hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
+  '';
 
-  dependencies = [
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
+
+  propagatedBuildInputs = [
     asyncio-dgram
     dnspython
   ];
@@ -35,31 +45,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov-stub
     pytest-rerunfailures
-    pytest-cov-stub
     pytestCheckHook
-    typing-extensions
   ];
 
   pythonImportsCheck = [ "mcstatus" ];
 
   disabledTests = [
     # DNS features are limited in the sandbox
+    "test_query"
+    "test_query_retry"
     "test_resolve_localhost"
     "test_async_resolve_localhost"
-    "test_java_server_with_query_port"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
     mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
-    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [
-      fab
-      perchun
-    ];
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

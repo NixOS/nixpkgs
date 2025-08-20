@@ -12,24 +12,24 @@
 }:
 let
   pname = "netcoredbg";
-  build = "1054";
-  release = "3.1.2";
+  build = "1031";
+  release = "3.1.0";
   version = "${release}-${build}";
-  hash = "sha256-WORGZXbq6d3sxGqyG8oZSwcBoVaD3D56t9K6PJoKFsM=";
+  hash = "sha256-/ScV6NPGOun47D88e7BLisSOipeQWdUbYaEryrlPbHg=";
 
-  coreclr-version = "v8.0.16";
+  coreclr-version = "v8.0.7";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-/fSKCIugR3UhqxBxtQRw+Bw+UpaSjB4xj0iBiXJaiR4=";
+    hash = "sha256-vxyhZ1Z5TB/2jpF4qiXTpUj1hKeqV7xPgG1BJYOLIko=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
-    repo = "netcoredbg";
+    repo = pname;
     rev = version;
     inherit hash;
   };

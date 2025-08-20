@@ -2,28 +2,21 @@
   lib,
   fetchgit,
   php,
-  versionCheckHook,
 }:
 
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ xsl ]))).buildComposerProject2
   (finalAttrs: {
     pname = "phing";
-    version = "3.1.0";
+    version = "3.0.1";
 
     # Upstream no longer provides the composer.lock in their release artifact
     src = fetchgit {
       url = "https://github.com/phingofficial/phing";
       tag = finalAttrs.version;
-      hash = "sha256-gY6ocmkd7eJIMaBrewfxYL7gTr+1qNHTkuAp+w9ApUU=";
+      hash = "sha256-eVDHwG8UPvQPrhD3KuO4ZONsnGGbclVs4kNVG+Ac1/E=";
     };
 
-    vendorHash = "sha256-3frpoQzHtJA2/jJpZT+yIRatEwiY6LIUGzEZBa8hXbM=";
-
-    nativeInstallCheckInputs = [
-      versionCheckHook
-    ];
-    versionCheckProgramArg = "-version";
-    doInstallCheck = true;
+    vendorHash = "sha256-NqCzrVZRsyiOjxXtSE7DeiAq21S8sjFgFNMmP99KUSE=";
 
     meta = {
       description = "PHing Is Not GNU make; it's a PHP project build system or build tool based on Apache Ant";
@@ -31,6 +24,6 @@
       homepage = "https://github.com/phingofficial/phing";
       license = lib.licenses.lgpl3;
       mainProgram = "phing";
-      teams = [ lib.teams.php ];
+      maintainers = lib.teams.php.members;
     };
   })

@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Cloud bucket scanner";
     mainProgram = "cloudhunter";
     homepage = "https://github.com/belane/CloudHunter";
     changelog = "https://github.com/belane/CloudHunter/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -11,7 +11,6 @@
   git,
   cairo,
   libxcb,
-  xcb-imdkit,
   xcb-util-cursor,
   xcbutilkeysyms,
   xcbutil,
@@ -24,19 +23,18 @@
   check,
   glib,
   buildPackages,
-  pandoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.9.1";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-HZMVGlK6ig7kWf/exivoiTe9J/SLgjm7VwRm+KgKN44=";
+    hash = "sha256-2rPEn+XotijqLYo2EcoiJbgdbRk4SCQ+D4jZ1gwpCQw=";
   };
 
   preConfigure = ''
@@ -56,7 +54,6 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
     bison
-    pandoc
   ];
   buildInputs = [
     libxkbcommon
@@ -67,7 +64,6 @@ stdenv.mkDerivation rec {
     check
     libstartup_notification
     libxcb
-    xcb-imdkit
     xcb-util-cursor
     xcbutilkeysyms
     xcbutil
@@ -75,8 +71,6 @@ stdenv.mkDerivation rec {
     xcbutilxrm
     which
   ];
-
-  mesonFlags = [ "-Dimdkit=true" ];
 
   doCheck = false;
 

@@ -6,7 +6,7 @@
   nodejs,
   yarn,
   fixup-yarn-lock,
-  python3,
+  python311,
   npmHooks,
   cctools,
   sqlite,
@@ -39,15 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
   };
 
+  # Distutils was deprecated in 3.10, and removed in 3.12. This build needs it. An alternative could be adding
+  # setuptools, but testing with that and 3.12 still fails.
   nativeBuildInputs = [
     nodejs
     yarn
     fixup-yarn-lock
-    python3
-    python3.pkgs.distutils
+    python311
     npmHooks.npmInstallHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''

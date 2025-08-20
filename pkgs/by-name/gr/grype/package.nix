@@ -7,15 +7,15 @@
   openssl,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "grype";
-  version = "0.92.2";
+  version = "0.86.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OySQO/ZJvaD4mrIRqymBJDXdPC8ZWCz+ELrMXvmQPvk=";
+    tag = "v${version}";
+    hash = "sha256-k4Faw7DqN5H2bGxKEqeUA4+sMZOdbW1139GcqbU56Hk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-Dp+BVwlBqMbAZivOHQWALMrLVtAncGT/rvbbIk1BFFQ=";
+  vendorHash = "sha256-qrMgc5/ukuri8Oabgq84SCqy26vVWgzlE2UkTd67ss8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,8 +46,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${finalAttrs.version}"
-    "-X=main.gitDescription=v${finalAttrs.version}"
+    "-X=main.version=${version}"
+    "-X=main.gitDescription=v${version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -67,15 +67,13 @@ buildGoModule (finalAttrs: {
     unset ldflags
 
     # patch utility script
-    patchShebangs grype/db/v5/distribution/test-fixtures/tls/generate-x509-cert-pair.sh
+    patchShebangs grype/db/legacy/distribution/test-fixtures/tls/generate-x509-cert-pair.sh
 
     # FIXME: these tests fail when building with Nix
     substituteInPlace test/cli/config_test.go \
       --replace-fail "Test_configLoading" "Skip_configLoading"
     substituteInPlace test/cli/db_providers_test.go \
       --replace-fail "TestDBProviders" "SkipDBProviders"
-    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
-      --replace-fail "TestCycloneDxPresenterDir" "SkipCycloneDxPresenterDir"
 
     # remove tests that depend on docker
     substituteInPlace test/cli/cmd_test.go \
@@ -117,20 +115,20 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/grype completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Vulnerability scanner for container images and filesystems";
     homepage = "https://github.com/anchore/grype";
-    changelog = "https://github.com/anchore/grype/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
     longDescription = ''
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [
       fab
       jk
       kashw2
     ];
     mainProgram = "grype";
   };
-})
+}

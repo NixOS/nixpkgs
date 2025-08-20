@@ -6,26 +6,26 @@
   icontract,
   pytestCheckHook,
   pythonOlder,
-  replaceVars,
-  setuptools,
+  substituteAll,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pylddwrap";
   version = "1.2.2";
-  pyproject = true;
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
-    repo = "pylddwrap";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Gm82VRu8GP52BohQzpMUJfh6q2tiUA2GJWOcG7ymGgg=";
   };
 
   patches = [
-    (replaceVars ./replace_env_with_placeholder.patch {
+    (substituteAll {
+      src = ./replace_env_with_placeholder.patch;
       ldd_bin = "${stdenv.cc.bintools.libc_bin}/bin/ldd";
     })
   ];
@@ -35,8 +35,6 @@ buildPythonPackage rec {
   postInstall = ''
     rm -f $out/{LICENSE,README.rst,requirements.txt}
   '';
-
-  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     icontract

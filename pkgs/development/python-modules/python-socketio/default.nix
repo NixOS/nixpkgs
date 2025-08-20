@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.13.0";
+  version = "5.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     tag = "v${version}";
-    hash = "sha256-iOipxGALYOXLvUwn6OSjLCMZoUl7u4S5eCktUgcs/X0=";
+    hash = "sha256-iWe9IwUR+nq9SAmHzFZYUJpVOOEbc1ZdiMAjaBjQrVs=";
   };
 
   build-system = [ setuptools ];
@@ -56,8 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     uvicorn
     simple-websocket
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "socketio" ];
 
@@ -76,7 +75,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
-    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ mic92 ];
   };

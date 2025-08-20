@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
-  version = "1.17";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "emikulic";
-    repo = "darkhttpd";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-d5pDUY1EbVjykb4in4hhbgbjIXJtj133nRAQ84ASicQ=";
+    sha256 = "sha256-dcNoGU08tu950PlwSghoZwGSaSbP8NJ5qhWUi3bAtZY=";
   };
 
   enableParallelBuilding = true;
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm555 -t $out/bin darkhttpd
-    install -Dm444 -t $out/share/doc/darkhttpd README.md
-    head -n 18 darkhttpd.c > $out/share/doc/darkhttpd/LICENSE
+    install -Dm444 -t $out/share/doc/${pname} README.md
+    head -n 18 darkhttpd.c > $out/share/doc/${pname}/LICENSE
     runHook postInstall
   '';
 

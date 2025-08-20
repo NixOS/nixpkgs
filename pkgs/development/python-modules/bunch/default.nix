@@ -5,7 +5,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "bunch";
   version = "unstable-2017-11-21";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage {
   # Use a fork as upstream is dead
   src = fetchFromGitHub {
     owner = "olivecoder";
-    repo = "bunch";
+    repo = pname;
     rev = "71ac9d5c712becd4c502ab3099203731a0f1122e";
     hash = "sha256-XOgzJkcIqkAJFsKAyt2jSEIxcc0h2gFC15xy5kAs+7s=";
   };

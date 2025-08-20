@@ -1,44 +1,42 @@
 {
   mkDerivation,
-  HsOpenSSL,
-  QuickCheck,
-  aeson,
   async,
   base,
   bytestring,
+  connection,
   containers,
-  crypton-connection,
   directory,
   hpack,
   hspec,
   hspec-discover,
   hspec-expectations,
   http-client,
-  http-client-openssl,
   http-conduit,
-  lib,
+  lens,
+  lens-aeson,
   megaparsec,
-  network-uri,
+  mtl,
   optparse-applicative,
   parser-combinators,
-  quickcheck-instances,
   retry,
+  lib,
+  quickcheck-instances,
   text,
   unix,
   unordered-containers,
   utf8-string,
-  dotenv,
   fetchFromGitHub,
+  dotenv,
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.19.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    hash = "sha256-x3c9TKrCF3tsEFofYAXfK6DWdirEUxWWTttNqU/sJSc=";
+    sha256 = "sha256-EPu4unzXIg8naFUEZwbJ2VJXD/TeCiKzPHCXnRkdyBE=";
   };
 
   buildTools = [ hpack ];
@@ -51,21 +49,17 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    HsOpenSSL
-    aeson
     async
     base
     bytestring
+    connection
     containers
-    crypton-connection
-    directory
-    dotenv
     http-client
-    http-client-openssl
     http-conduit
+    lens
+    lens-aeson
     megaparsec
-    network-uri
-    optparse-applicative
+    mtl
     optparse-applicative
     parser-combinators
     retry
@@ -73,14 +67,32 @@ mkDerivation rec {
     unix
     unordered-containers
     utf8-string
+    dotenv
   ];
-  testHaskellDepends = executableHaskellDepends ++ [
-    QuickCheck
+  testHaskellDepends = [
+    async
+    base
+    bytestring
+    connection
+    containers
     directory
     hspec
     hspec-discover
     hspec-expectations
+    http-client
+    http-conduit
+    lens
+    lens-aeson
+    megaparsec
+    mtl
+    optparse-applicative
+    parser-combinators
+    retry
     quickcheck-instances
+    text
+    unix
+    unordered-containers
+    utf8-string
   ];
   preConfigure = "hpack";
   homepage = "https://github.com/channable/vaultenv#readme";

@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnome-games-support";
-  version = "2.0.1";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "AYbyXEiSyGx+rEOjB/wZ22lt9PGayn9U6DwiHfnZeQo=";
+    sha256 = "U4Ifb+Mu3cue7zMk9kaqrIPMbT3gk339XyZkcNRT0qQ=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
     homepage = "https://gitlab.gnome.org/GNOME/libgnome-games-support";
     license = licenses.lgpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

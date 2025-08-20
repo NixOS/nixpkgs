@@ -11,7 +11,7 @@
   gtk3,
   qtbase,
   qtwayland,
-  replaceVars,
+  substituteAll,
   gsettings-desktop-schemas,
   useQt6 ? false,
 }:
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Hardcode GSettings schema path to avoid crashes from missing schemas
-    (replaceVars ./hardcode-gsettings.patch {
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
 
     # Backport cursor fix for Qt6 apps
-    # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
+    # Ajusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
     ./qt6-cursor-fix.patch
   ];
 
@@ -43,29 +44,31 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    qtbase
-    qtwayland
-  ]
-  ++ lib.optionals (!useQt6) [
-    adwaita-qt
-  ]
-  ++ lib.optionals useQt6 [
-    adwaita-qt6
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      qtbase
+      qtwayland
+    ]
+    ++ lib.optionals (!useQt6) [
+      adwaita-qt
+    ]
+    ++ lib.optionals useQt6 [
+      adwaita-qt6
+    ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
-    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-  ]
-  ++ lib.optionals useQt6 [
-    "-DUSE_QT6=true"
-  ];
+  cmakeFlags =
+    [
+      "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
+      "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    ]
+    ++ lib.optionals useQt6 [
+      "-DUSE_QT6=true"
+    ];
 
   passthru = {
     updateScript = nix-update-script { };

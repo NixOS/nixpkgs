@@ -6,12 +6,11 @@
 
   # Native dependencies
   python3,
-  gtk4,
+  gtk3,
   gobject-introspection,
   adwaita-icon-theme,
-  gtksourceview5,
+  gtksourceview4,
   glib-networking,
-  libadwaita,
 
   # Test dependencies
   xvfb-run,
@@ -36,47 +35,44 @@
   gupnp-igd,
   enableAppIndicator ? true,
   libappindicator-gtk3,
-  enableSoundNotifications ? true,
-  gsound,
   extraPythonPackages ? ps: [ ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.3.4";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-mazQcCJXVjDZS0mrbXvvUfZN99/KvD2accJkHx5sXdM=";
+    hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
   format = "pyproject";
 
-  buildInputs = [
-    gtk4
-    adwaita-icon-theme
-    gtksourceview5
-    glib-networking
-  ]
-  ++ lib.optionals enableJingle [
-    farstream
-    gstreamer
-    gst-plugins-base
-    gst-libav
-    gst-plugins-good
-    libnice
-  ]
-  ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling gspell
-  ++ lib.optional enableUPnP gupnp-igd
-  ++ lib.optional enableAppIndicator libappindicator-gtk3
-  ++ lib.optional enableSoundNotifications gsound;
+  buildInputs =
+    [
+      gtk3
+      adwaita-icon-theme
+      gtksourceview4
+      glib-networking
+    ]
+    ++ lib.optionals enableJingle [
+      farstream
+      gstreamer
+      gst-plugins-base
+      gst-libav
+      gst-plugins-good
+      libnice
+    ]
+    ++ lib.optional enableSecrets libsecret
+    ++ lib.optional enableSpelling gspell
+    ++ lib.optional enableUPnP gupnp-igd
+    ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext
     wrapGAppsHook3
     gobject-introspection
-    libadwaita
   ];
 
   dontWrapGApps = true;
@@ -97,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       nbxmpp
+      pygobject3
       dbus-python
       pillow
       css-parser
@@ -142,7 +139,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       raskin
       abbradar
-      hlad
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;

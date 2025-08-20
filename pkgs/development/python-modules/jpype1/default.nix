@@ -1,59 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  ant,
-  openjdk,
+  fetchPypi,
+  isPy27,
   packaging,
-  pyinstaller,
-  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "jpype1";
-  version = "1.6.0";
-  pyproject = true;
+  version = "1.5.0";
+  format = "setuptools";
+  disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "originell";
-    repo = "jpype";
-    tag = "v${version}";
-    hash = "sha256-CDiVQugxLgmUwAG0e0ryamWvrjUaJxJrU0YSFIIWS1I=";
+  src = fetchPypi {
+    pname = "JPype1";
+    inherit version;
+    hash = "sha256-QlpuGWav3VhItgwmiLyut+QLpQSmhvERRYlmjgYx6Hg=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  nativeBuildInputs = [
-    ant
-    openjdk
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  preBuild = ''
-    ant -f native/build.xml jar
-  '';
-
-  dependencies = [ packaging ];
-
-  nativeCheckInputs = [
-    pyinstaller
-    pytestCheckHook
-  ];
-
-  # Cannot find various classes. If you want to fix this
-  # take a look at the opensuse packaging:
-  # https://build.opensuse.org/projects/openSUSE:Factory/packages/python-JPype1/files/python-JPype1.spec?expand=1
+  # required openjdk (easy) but then there were some class path issues
+  # when running the tests
   doCheck = false;
-
-  preCheck = ''
-    ant -f test/build.xml compile
-  '';
-
-  pythonImportsCheck = [
-    "jpype"
-    "jpype.imports"
-    "jpype.types"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/originell/jpype/";

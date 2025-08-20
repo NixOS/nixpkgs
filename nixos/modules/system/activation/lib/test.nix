@@ -31,7 +31,6 @@ let
   };
 
   runShellcheck = testers.shellcheck {
-    name = "activation-lib";
     src = runTests.src;
   };
 

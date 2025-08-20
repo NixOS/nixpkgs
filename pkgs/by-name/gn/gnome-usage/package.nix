@@ -12,22 +12,20 @@
   wrapGAppsHook4,
   glib,
   gtk4,
-  json-glib,
   libadwaita,
   libgee,
   libgtop,
-  networkmanager,
   gnome,
   tinysparql,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "48.rc";
+  version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-usage/${lib.versions.major finalAttrs.version}/gnome-usage-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LUbc2QcKkY/sMUdxaaQDI2CdCFa5XHo3wBusqULTk+w=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-GGrajgAYjIn4yrVPNZmO2XpG6rb9shiRAoNhvzhqybI=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk4
-    json-glib
     libadwaita
     libgee
     libgtop
-    networkmanager
     tinysparql
   ];
 
@@ -59,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gnome-usage";
+      packageName = pname;
     };
   };
 
@@ -69,6 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-usage";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
   };
-})
+}

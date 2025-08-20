@@ -26,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click-odoo
     manifestoo-core
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   passthru.updateScript = nix-update-script { };
 

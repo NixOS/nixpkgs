@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "FTP/TFTP server for Linux that just works";
+    description = "FTP/TFTP server for Linux that just works™";
     homepage = "https://troglobit.com/projects/uftpd/";
     license = licenses.isc;
     platforms = platforms.unix;

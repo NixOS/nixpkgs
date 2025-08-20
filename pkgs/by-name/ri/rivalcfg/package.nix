@@ -6,42 +6,37 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "rivalcfg";
-  version = "4.15.0";
-  pyproject = true;
+  version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
     tag = "v${version}";
-    sha256 = "sha256-UqVogJLv+sNhAxdMjBEvhBQw6LU+QUq1IekvWpeeMqk=";
+    sha256 = "sha256-LQpEHcKXkepfsgG7tGYsmM43FkUSBgm1Cn5C1RmTggI=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     hidapi
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = [ python3Packages.pytest ];
+  checkPhase = "pytest";
 
   # tests are broken
   doCheck = false;
 
   postInstall = ''
+    set -x
     mkdir -p $out/lib/udev/rules.d
     tmpl_udev="$out/lib/udev/rules.d/99-rivalcfg.rules"
     tmpudev="''${tmpl_udev}.in"
     finaludev="$tmpl_udev"
     "$out/bin/rivalcfg" --print-udev > "$tmpudev"
     substitute "$tmpudev" "$out/lib/udev/rules.d/99-rivalcfg.rules" \
-      --replace-fail MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
+      --replace MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
     rm "$tmpudev"
   '';
-
-  pythonImportsCheck = [ "rivalcfg" ];
 
   meta = with lib; {
     description = "Utility program that allows you to configure SteelSeries Rival gaming mice";

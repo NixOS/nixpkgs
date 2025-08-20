@@ -2,31 +2,37 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  nix-update-script,
-  qt6,
+  libsForQt5,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-sddm-corners";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2024-05-07";
 
   src = fetchFromGitHub {
     owner = "khaneliman";
     repo = "catppuccin-sddm-corners";
-    rev = "10831dea7298bd1c3262a7f48417b5af1b92ed99";
-    hash = "sha256-nQImL5eDMENNDCXEqgrL2eszWXtBpbVlzjMxNdpxZlQ=";
+    rev = "aca5af5ce0c9dff56e947938697dec40ea101e3e";
+    hash = "sha256-xtcNcjNQSG7SwlNw/EkAU93wFaku+cE1/r6c8c4FrBg=";
   };
 
   dontConfigure = true;
   dontBuild = true;
   dontWrapQtApps = true;
 
-  propagatedUserEnvPkgs = with qt6; [
-    qt5compat
-    qtwayland
-    qtquick3d
+  propagatedBuildInputs = with libsForQt5.qt5; [
+    qtgraphicaleffects
+    qtquickcontrols2
     qtsvg
   ];
+
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo ${libsForQt5.qt5.qtgraphicaleffects}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtquickcontrols2}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtsvg}  >> $out/nix-support/propagated-user-env-packages
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +43,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Soothing pastel theme for SDDM based on corners theme";

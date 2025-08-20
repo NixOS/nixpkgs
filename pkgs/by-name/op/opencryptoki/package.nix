@@ -9,25 +9,23 @@
   openssl,
   trousers,
   libcap,
-  getent,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "opencryptoki";
-  version = "3.25.0";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-JIDy5LY2rJqMM1uWDWn6Q62kJ+7pYU4G7zptkbyvf9Q=";
+    rev = "v${version}";
+    hash = "sha256-5FcvwGTzsL0lYrSYGlbSY89s6OKzg+2TRlwHlJjdzXo=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     bison
     flex
-    getent
   ];
 
   buildInputs = [
@@ -39,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace-fail "/usr/sbin/" "" \
-      --replace-fail "/bin/" "" \
       --replace-fail "usermod" "true" \
       --replace-fail "useradd" "true" \
       --replace-fail "groupadd" "true" \
@@ -57,14 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+  ];
 
-  meta = {
-    changelog = "https://github.com/opencryptoki/opencryptoki/blob/v${finalAttrs.version}/ChangeLog";
+  meta = with lib; {
+    changelog = "https://github.com/opencryptoki/opencryptoki/blob/${src.rev}/ChangeLog";
     description = "PKCS#11 implementation for Linux";
     homepage = "https://github.com/opencryptoki/opencryptoki";
-    license = lib.licenses.cpl10;
+    license = licenses.cpl10;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-})
+}

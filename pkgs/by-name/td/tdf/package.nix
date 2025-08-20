@@ -4,30 +4,35 @@
   rustPlatform,
   pkg-config,
   cairo,
+  glib,
+  poppler,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "tdf";
-  version = "0.4.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-yttuWWKIrh54eJSdKejDTswoDarNifD5DtfQHSlL3rE=";
+    rev = "a2b728fae3c5b0addfa64e8d3e44eac6fd50f1d9";
+    hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
   };
 
-  cargoHash = "sha256-UB7G5tl90CNq/aYUaUOpgGJcEL9ND3pJ29/lpIkh2iU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-krIPfi4SM4uCw7NLauudwh1tgAaB8enDWnMC5X16n48=";
 
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [
-    rustPlatform.bindgenHook
     cairo
+    glib
+    poppler
   ];
 
-  # Tests depend on cpuprofiler, which is not packaged in nixpkgs
+  strictDeps = true;
+
+  # No tests are currently present
   doCheck = false;
 
   # requires nightly features (feature(portable_simd))
@@ -36,12 +41,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       DieracDelta
     ];
     mainProgram = "tdf";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}

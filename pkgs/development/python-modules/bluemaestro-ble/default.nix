@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "bluemaestro-ble";
-  version = "0.4.1";
+  version = "0.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluemaestro-ble";
     tag = "v${version}";
-    hash = "sha256-44HUcp8CKQMcaIMKsi3AXdCJlIUGvRrVd2JxGeh1498=";
+    hash = "sha256-mJ5JNGN4F9U3WMJQDwiZwuxE0zOirwo1sWF3/bVwXhY=";
   };
 
   build-system = [ poetry-core ];

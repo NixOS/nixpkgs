@@ -5,27 +5,24 @@
   pkg-config,
   help2man,
   libjack2,
-  libsamplerate,
   dbus,
   qt6,
   meson,
   python3,
   rtaudio,
   ninja,
-  versionCheckHook,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "2.7.1";
+stdenv.mkDerivation rec {
+  version = "2.4.1";
   pname = "jacktrip";
 
   src = fetchFromGitHub {
     owner = "jacktrip";
     repo = "jacktrip";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-47CgvaNgAr3PP61vS28hU4jTljukFGbGkAYJVHNoR9U=";
+    hash = "sha256-KxpoY7g5oKN2j8rOcFcJf/29xTELxhBn5KBvKB5kL8M=";
   };
 
   preConfigure = ''
@@ -37,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtwayland
     libjack2
-    libsamplerate
     dbus
   ];
 
@@ -60,27 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   qmakeFlags = [ "jacktrip.pro" ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Multi-machine audio network performance over the Internet";
+    mainProgram = "jacktrip";
     homepage = "https://jacktrip.github.io/jacktrip/";
-    changelog = "https://github.com/jacktrip/jacktrip/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3
       lgpl3
       mit
     ];
-    maintainers = with lib.maintainers; [ iwanb ];
-    platforms = lib.platforms.linux;
-    mainProgram = "jacktrip";
+    maintainers = [ maintainers.iwanb ];
+    platforms = platforms.linux;
   };
-})
+}

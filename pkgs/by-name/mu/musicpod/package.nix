@@ -1,27 +1,21 @@
 {
   lib,
-  flutter332,
+  flutter324,
   fetchFromGitHub,
-  alsa-lib,
   mpv-unwrapped,
   libass,
   pulseaudio,
-  musicpod,
-  runCommand,
-  _experimental-update-script-combinators,
-  yq,
-  gitUpdater,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "2.13.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${version}";
-    hash = "sha256-fwESbZxin1R/xcnI321k8a60vBeU8VFvBRqGITSe92s=";
+    hash = "sha256-gsreA8ZTLcSvIAtODZ2gopZ78iyoN18gsSi9/IoY5/0=";
   };
 
   postPatch = ''
@@ -31,10 +25,14 @@ flutter332.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = {
+    audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
+    media_kit_native_event_loop = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
+    media_kit_video = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
+    phoenix_theme = "sha256-5kgPAnK61vFi/sJ1jr3c5D2UZbxItW8YOk/IJEtHkZo=";
+  };
 
   buildInputs = [
-    alsa-lib
     mpv-unwrapped
     libass
   ];
@@ -45,26 +43,6 @@ flutter332.buildFlutterApplication rec {
     install -Dm644 snap/gui/musicpod.desktop -t $out/share/applications
     install -Dm644 snap/gui/musicpod.png -t $out/share/pixmaps
   '';
-
-  passthru = {
-    pubspecSource =
-      runCommand "pubspec.lock.json"
-        {
-          nativeBuildInputs = [ yq ];
-          inherit (musicpod) src;
-        }
-        ''
-          cat $src/pubspec.lock | yq > $out
-        '';
-    updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
-      {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
-      }
-    ];
-  };
 
   meta = {
     description = "Music, radio, television and podcast player";

@@ -8,7 +8,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "zscroll";
   version = "2.0.1";
-  format = "setuptools";
 
   # don't prefix with python version
   namePrefix = "";

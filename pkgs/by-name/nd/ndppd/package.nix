@@ -1,10 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gzip,
-  nixosTests,
-}:
+{ lib, stdenv, fetchFromGitHub, gzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "ndppd";

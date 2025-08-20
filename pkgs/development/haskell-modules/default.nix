@@ -31,8 +31,12 @@ let
       ghc
       extensible-self
       all-cabal-hashes
-      buildHaskellPackages
       ;
+
+    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
+    buildHaskellPackages = buildHaskellPackages // {
+      __attrsFailEvaluation = true;
+    };
   };
 
   platformConfigurations =

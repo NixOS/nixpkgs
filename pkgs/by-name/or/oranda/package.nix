@@ -6,6 +6,7 @@
   tailwindcss,
   oniguruma,
   stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,16 +20,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FVd8NQVtzlZsDY40ZMJDdaX+6Q5jUxZHUq2v+kDFVOk=";
   };
 
-  cargoHash = "sha256-wPYgAbaoUVJoZT1nRCBsPziszkAubImZEKGrC2RAkEA=";
+  cargoHash = "sha256-48qDAgHf1tGUwhQWqEi4LQQmSi9PplTlgjVd7/yxZZc=";
 
   nativeBuildInputs = [
     pkg-config
     tailwindcss
   ];
 
-  buildInputs = [
-    oniguruma
-  ];
+  buildInputs =
+    [
+      oniguruma
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   # requires internet access
   checkFlags = [
@@ -36,14 +42,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=integration"
   ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-    ORANDA_USE_TAILWIND_BINARY = true;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # without this, tailwindcss fails with OpenSSL configuration error
-    OPENSSL_CONF = "";
-  };
+  env =
+    {
+      RUSTONIG_SYSTEM_LIBONIG = true;
+      ORANDA_USE_TAILWIND_BINARY = true;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # without this, tailwindcss fails with OpenSSL configuration error
+      OPENSSL_CONF = "";
+    };
 
   meta = with lib; {
     description = "Generate beautiful landing pages for your developer tools";

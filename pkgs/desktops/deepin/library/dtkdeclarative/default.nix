@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dtkdeclarative";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

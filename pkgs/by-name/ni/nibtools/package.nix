@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "nibtools";
-  version = "0-unstable-2024-11-30";
+  version = "0-unstable-2024-02-22";
 
   src = fetchFromGitHub {
     owner = "OpenCBM";
     repo = "nibtools";
-    rev = "91344e0ee357780a90ad7fe3a0a0721a2e11f265";
-    hash = "sha256-0skAavJe01b+4Z7LEfS2qIhqkwj8XhOwmflhYPEynw4=";
+    rev = "1d69f64eec55031c346a2ce115227479f9579a8a";
+    hash = "sha256-+hnkj0uevURkRboTH8WbSt82pZTdWL4ii2PKr6NO0Cg=";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
@@ -41,11 +41,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
-    description = "Disk transfer utility for imaging and converting commodore 64 disk images";
+  meta = with lib; {
+    description = "disk transfer utility for imaging and converting commodore 64 disk images";
     homepage = "https://github.com/OpenCBM/nibtools/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ matthewcroughan ];
+    platforms = platforms.all;
   };
 }

@@ -6,7 +6,6 @@
   desktop-file-utils,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nix-update-script,
   nodejs,
   openssl,
   pkg-config,
@@ -20,23 +19,23 @@ let
   pnpm = pnpm_9;
 in
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
-  version = "0.9.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-1+Fmc8qyU3hCZmRNgp90nuvFgaB/GOH6SNc9AyWZYn0=";
+    tag = "v${version}";
+    hash = "sha256-uDG+WHeMY/quzF8mHBn5o8xod4/G5+S4/zD2lbqdN0M=";
   };
 
-  cargoHash = "sha256-6hEnXzaL6PnME9s+T+MtmoTQmaux/0m/6xaQ99lwM2I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D9hkdliyKc8m9i2D9pG3keGmZsx+rzrgVXZws9Ot24I=";
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-Q6e942R+3+511qFe4oehxdquw1TgaWMyOGOmP3me54o=";
+    inherit pname version src;
+    hash = "sha256-nFuPFgwJw38XVxhW0QXmU31o+hqJKGJysnPg2YSg2D0=";
   };
 
   nativeBuildInputs = [
@@ -46,8 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpm.configHook
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
@@ -75,10 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         $out/share/applications/Modrinth\ App.desktop
     '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = {
     description = "Modrinth's game launcher";
     longDescription = ''
@@ -98,4 +92,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
     broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
   };
-})
+}

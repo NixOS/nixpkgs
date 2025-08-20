@@ -10,20 +10,17 @@
   autoreconfHook,
   txt2man,
   which,
-  gettext,
-  nix-update-script,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "mdbtools";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mdbtools";
     repo = "mdbtools";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
+    rev = "v${version}";
+    sha256 = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];
@@ -44,27 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  postUnpack = ''
-    cp -v ${gettext}/share/gettext/m4/lib-{link,prefix,ld}.m4 source/m4
-  '';
-
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/mdb-ver";
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
-    changelog = "https://github.com/mdbtools/mdbtools/releases/tag/v${finalAttrs.version}";
+  meta = with lib; {
     description = ".mdb (MS Access) format tools";
-    homepage = "https://mdbtools.github.io/";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       lgpl2
     ];
-    platforms = lib.platforms.unix;
+    maintainers = [ ];
+    platforms = platforms.unix;
+    inherit (src.meta) homepage;
   };
-})
+}

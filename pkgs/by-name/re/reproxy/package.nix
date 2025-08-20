@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "reproxy";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "reproxy";
-    tag = "v${version}";
-    hash = "sha256-u2hS06UOu+YYEB03Xtvxg1XJx2FO3AqxCsCnR8YfFj4=";
+    rev = "v${version}";
+    hash = "sha256-UQ20mP+7AsrkNN+tvaRb8BcpHu76bpmswtR2PL4/JsE=";
   };
 
   vendorHash = null;
@@ -34,12 +34,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Simple edge server / reverse proxy";
     homepage = "https://reproxy.io/";
     changelog = "https://github.com/umputun/reproxy/releases/tag/${src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
     mainProgram = "reproxy";
   };
 }

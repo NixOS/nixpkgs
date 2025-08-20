@@ -20,7 +20,7 @@
   util-linux,
   polkit,
   wrapGAppsHook3,
-  replaceVars,
+  substituteAll,
   mtools,
   dosfstools,
   xhost,
@@ -28,18 +28,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gparted";
-  version = "1.7.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
-    sha256 = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    sha256 = "sha256-m59Rs85JTdy1mlXhrmZ5wJQ2YE4zHb9aU21g3tbG6ls=";
   };
 
   # Tries to run `pkexec --version` to get version.
   # however the binary won't be suid so it returns
   # an error preventing the program from detection
   patches = [
-    (replaceVars ./polkit.patch {
+    (substituteAll {
+      src = ./polkit.patch;
       polkit_version = polkit.version;
     })
   ];
@@ -90,13 +91,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # Doesn't get installed automatically if PREFIX != /usr
+  # Doesn't get installed automaticallly if PREFIX != /usr
   postInstall = ''
     install -D -m0644 org.gnome.gparted.policy \
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk
@@ -104,8 +105,8 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = "https://gparted.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     mainProgram = "gparted";
   };
 }

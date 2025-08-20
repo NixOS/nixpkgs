@@ -4,33 +4,26 @@
   python3,
 }:
 
-let
-  version = "3.4.7";
-in
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "routersploit";
-  inherit version;
-  pyproject = true;
+  version = "unstable-2021-02-06";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = "routersploit";
-    tag = "v${version}";
-    hash = "sha256-10NBSY/mYjOWoz2XCJ1UvXUIYUW4csRJHHtDlWMO420=";
+    repo = pname;
+    rev = "3fd394637f5566c4cf6369eecae08c4d27f93cda";
+    hash = "sha256-IET0vL0VVP9ZNn75hKdTCiEmOZRHHYICykhzW2g3LEg=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
+    future
     paramiko
     pycryptodome
     pysnmp
     requests
     setuptools
   ];
-
-  # Tests are out-dated and support for newer pysnmp is not implemented yet
-  doCheck = false;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-xdist
@@ -42,23 +35,22 @@ python3.pkgs.buildPythonApplication {
     mv $out/bin/rsf.py $out/bin/rsf
   '';
 
-  pythonImportsCheck = [ "routersploit" ];
+  pythonImportsCheck = [
+    "routersploit"
+  ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     # Run the same tests as upstream does in the first round
     "tests/core/"
     "tests/test_exploit_scenarios.py"
     "tests/test_module_info.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fab
-      thtrf
-    ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "rsf";
   };
 }

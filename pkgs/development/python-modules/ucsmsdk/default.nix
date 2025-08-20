@@ -3,25 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "ucsmsdk";
-  version = "0.9.22";
-  pyproject = true;
+  version = "0.9.21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CiscoUcs";
     repo = "ucsmsdk";
     tag = "v${version}";
-    hash = "sha256-zpb43Id6uHBKpEORDGKNW8lXP10fQJm9lGOztxaTZSI=";
+    hash = "sha256-iqwU42Im4/YyxefkJZ8Zn5CddjUzuZk/7zjLD/0pHm4=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pyparsing
     six
   ];
@@ -34,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for Cisco UCS";
     homepage = "https://github.com/CiscoUcs/ucsmsdk";
-    changelog = "https://github.com/CiscoUcs/ucsmsdk/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/CiscoUcs/ucsmsdk/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

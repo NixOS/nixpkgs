@@ -13,33 +13,29 @@
   pam,
   perl,
   pkg-config,
-  meson,
-  ninja,
-  file,
-  cracklib,
-  cups,
-  libtirpc,
-  openldap,
-  glib,
-  dbus,
-  iniparser,
-  pandoc,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.4";
+  version = "3.1.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Twe74RipUd10DT9RqHtcr7oklr0LIucEQ49CGqZnD5k=";
+    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-p0pzHwnjNNWPsWRBflgaZB+ijMP5bF99TEdLs4mVKsI=";
   };
 
+  patches = [
+    ./000-no-suid.patch
+    ./001-omit-localstatedir-creation.patch
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
-    meson
-    ninja
-    file
+    perl
+    python3
+    python3.pkgs.wrapPython
   ];
 
   buildInputs = [
@@ -51,37 +47,28 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     openssl
     pam
-    cracklib
-    cups
-    libtirpc
-    openldap
-    glib
-    perl
-    dbus
-    iniparser
-    pandoc
   ];
 
-  mesonFlags = [
-    "-Dwith-appletalk=true"
-    "-Dwith-statedir-path=/var/lib"
-    "-Dwith-bdb-path=${db.out}"
-    "-Dwith-bdb-include-path=${db.dev}/include"
-    "-Dwith-install-hooks=false"
-    "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
-    "-Dwith-cracklib=true"
-    "-Dwith-cracklib-path=${cracklib.out}"
-    "-Dwith-statedir-creation=false"
+  configureFlags = [
+    "--with-bdb=${db.dev}"
+    "--with-ssl-dir=${openssl.dev}"
+    "--with-lockfile=/run/lock/netatalk"
+    "--localstatedir=/var/lib"
   ];
+
+  postInstall = ''
+    sed -i -e "s%/usr/bin/env python%${python3}/bin/python3%" $out/bin/afpstats
+    buildPythonPath ${python3.pkgs.dbus-python}
+    patchPythonScript $out/bin/afpstats
+  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Apple Filing Protocol Server";
-    homepage = "https://netatalk.io/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jcumming ];
+    homepage = "http://netatalk.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jcumming ];
   };
 })

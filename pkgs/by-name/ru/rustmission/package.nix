@@ -4,6 +4,8 @@
   rustPlatform,
   pkg-config,
   openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,17 +19,23 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vQ6MBbzmOBgD1kcF62NmQys737QEN9isvFN7L7mP8mk=";
   };
 
-  cargoHash = "sha256-GwSf/o90RO6LURIcm/kYA8oXmnCJ1OkM+eHkyZduOt0=";
+  cargoHash = "sha256-yelDzx/5SxZ+DT9Rvx3tuSp/yDLfVOYmexa9ZqeUT88=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   # There is no tests
   doCheck = false;
 
   meta = {
-    description = "TUI for the Transmission daemon";
+    description = "A TUI for the Transmission daemon";
     homepage = "https://github.com/intuis/rustmission";
     changelog = "https://github.com/intuis/rustmission/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

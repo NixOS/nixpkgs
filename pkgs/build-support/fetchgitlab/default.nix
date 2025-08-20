@@ -1,6 +1,5 @@
 {
   lib,
-  repoRevToNameMaybe,
   fetchgit,
   fetchzip,
 }:
@@ -12,9 +11,9 @@ lib.makeOverridable (
     repo,
     rev ? null,
     tag ? null,
-    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "gitlab",
     protocol ? "https",
     domain ? "gitlab.com",
+    name ? "source",
     group ? null,
     fetchSubmodules ? false,
     leaveDotGit ? false,

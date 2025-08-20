@@ -11,6 +11,7 @@
   fetchFromGitHub,
   isPyPy,
   libiconv,
+  libxcrypt,
   openssl,
   pkg-config,
   pretend,
@@ -18,11 +19,12 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
+  Security,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "45.0.4"; # Also update the hash in vectors.nix
+  version = "44.0.0"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,12 +33,13 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-rKgMUVj5IdeWIdLWQ4E6zhC6dwJMi+BRHCh2JG73Zgc=";
+    hash = "sha256-A+qYW8GksYk+FQG8ZJHNYrjcouE1CsVH0Lko2ahoYUI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-dKwNnWBzBM9QEcRbbvkNhFJnFxFakqZ/MS7rqE8/tNQ=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-LJIY2O8ul36JQmhiW8VhLCQ0BaX+j+HGr3e8RUkZpc8=";
   };
 
   postPatch = ''
@@ -49,15 +52,15 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     pkg-config
     setuptools
-  ]
-  ++ lib.optionals (!isPyPy) [ cffi ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      libiconv
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
@@ -69,10 +72,9 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ]
-  ++ optional-dependencies.ssh;
+  ] ++ optional-dependencies.ssh;
 
-  pytestFlags = [ "--disable-pytest-warnings" ];
+  pytestFlagsArray = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks

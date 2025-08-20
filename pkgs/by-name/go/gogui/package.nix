@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gogui";
-  version = "1.6.0";
+  version = "1.5.4a";
 
   src = fetchFromGitHub {
     owner = "Remi-Coulom";
     repo = "gogui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pJGZpSFdOvMkeetdX3+wB+8sk3LO6znJ0dUNvjOmiB8=";
+    hash = "sha256-UFhOk2mAnTtxfwEOHquN64YDCRq7nNUqZAPQf77MEEw=";
   };
 
   nativeBuildInputs = [

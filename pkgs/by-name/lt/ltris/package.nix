@@ -1,28 +1,24 @@
 {
   lib,
-  sdl2-compat,
-  SDL2_mixer,
-  SDL2_image,
-  SDL2_ttf,
+  SDL,
+  SDL_mixer,
   directoryListingUpdater,
   fetchurl,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ltris";
-  version = "2.0.3";
+  pname = "lgames-ltris";
+  version = "1.2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/ltris2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+w8WTASYj/AWcBg9W3dmZ0cyCmlZNhDZ0l/WwhRfJRk=";
+    url = "mirror://sourceforge/lgames/ltris-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2e5haaU2pqkBk82qiF/3HQgSBVPHP09UwW+TQqpGUqA=";
   };
 
   buildInputs = [
-    sdl2-compat
-    SDL2_mixer
-    SDL2_image
-    SDL2_ttf
+    SDL
+    SDL_mixer
   ];
 
   hardeningDisable = [ "format" ];
@@ -36,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://lgames.sourceforge.io/LTris/";
     description = "Tetris clone from the LGames series";
-    license = with lib.licenses; [ gpl3Plus ];
-    mainProgram = "ltris2";
-    maintainers = with lib.maintainers; [ marcin-serwin ];
-    platforms = lib.platforms.all;
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "ltris";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (SDL.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

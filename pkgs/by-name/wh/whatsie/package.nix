@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "whatsie";
+      name = finalAttrs.pname;
       desktopName = "Whatsie";
-      icon = "whatsie";
-      exec = "whatsie";
+      icon = finalAttrs.pname;
+      exec = finalAttrs.pname;
       comment = finalAttrs.meta.description;
     })
   ];

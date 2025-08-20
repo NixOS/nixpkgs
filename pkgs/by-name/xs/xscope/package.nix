@@ -1,42 +1,29 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   pkg-config,
-  autoreconfHook,
-  xorg-autoconf,
-  xorg,
+  libXt,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xscope";
-  version = "1.4.5";
+  version = "1.4.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "xorg";
-    repo = "app/xscope";
-    tag = "xscope-${finalAttrs.version}";
-    hash = "sha256-9ZmmV41PKv+WFL9I4D9NTfNVTsazCijZMMmDFSvXMlg=";
+  src = fetchurl {
+    url = "mirror://xorg/individual/app/${pname}-${version}.tar.bz2";
+    sha256 = "08zl3zghvbcqy0r5dn54dim84lp52s0ygrr87jr3a942a6ypz01k";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    xorg-autoconf
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libXt ];
 
-  buildInputs = [
-    xorg.libXt
-    xorg.xtrans
-  ];
-
-  meta = {
-    description = "Program to monitor X11/Client conversations";
+  meta = with lib; {
+    description = "program to monitor X11/Client conversations";
     homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ crertel ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ crertel ];
+    platforms = with platforms; unix;
     mainProgram = "xscope";
   };
-})
+}

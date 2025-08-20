@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gnome-multi-writer";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-multi-writer";
     license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

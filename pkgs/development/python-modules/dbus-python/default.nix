@@ -20,7 +20,7 @@ lib.fix (
   finalPackage:
   buildPythonPackage rec {
     pname = "dbus-python";
-    version = "1.4.0";
+    version = "1.3.2";
     pyproject = true;
 
     disabled = isPyPy;
@@ -32,7 +32,7 @@ lib.fix (
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-mRZm5Jj2Db8+Sbi3Z49VWbimUDT99hquYs3s232Jx3A=";
+      hash = "sha256-rWeBkwhhi1BpU3viN/jmjKHH/Mle5KEh/mhFsUGCSPg=";
     };
 
     patches = [
@@ -47,6 +47,9 @@ lib.fix (
     postPatch = ''
       # we provide patchelf natively, not through the python package
       sed -i '/patchelf/d' pyproject.toml
+
+      # dont run autotols configure phase
+      rm configure.ac configure
 
       patchShebangs test/*.sh
     '';

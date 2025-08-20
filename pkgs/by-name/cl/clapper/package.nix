@@ -1,46 +1,86 @@
 {
-  stdenvNoCC,
-  clapper-unwrapped,
-  wrapGAppsHook4,
+  lib,
+  stdenv,
+  fetchFromGitHub,
   gobject-introspection,
-  xorg,
-  clapper-enhancers,
+  pkg-config,
+  ninja,
+  desktop-file-utils,
+  makeWrapper,
+  shared-mime-info,
+  wrapGAppsHook4,
+  meson,
+  gtk4,
+  gst_all_1,
+  libGL,
+  libadwaita,
+  libsoup_3,
+  vala,
+  cmake,
+  libmicrodns,
+  gtuber,
+  glib-networking,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  inherit (clapper-unwrapped) version meta;
+  version = "0.6.1";
 
-  src = clapper-unwrapped;
-
-  dontConfigure = true;
-  dontBuild = true;
+  src = fetchFromGitHub {
+    owner = "Rafostar";
+    repo = "clapper";
+    rev = finalAttrs.version;
+    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
+  };
 
   nativeBuildInputs = [
-    wrapGAppsHook4
     gobject-introspection
-    xorg.lndir
+    meson
+    cmake
+    ninja
+    makeWrapper
+    pkg-config
+    wrapGAppsHook4 # for gsettings
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info # for update-mime-database
+    vala
   ];
 
-  buildInputs = [ clapper-unwrapped ] ++ clapper-unwrapped.buildInputs;
+  buildInputs = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gtuber
+    glib-networking # for TLS support
+    gtk4
+    libGL
+    libadwaita
+    libsoup_3
+    libmicrodns
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    lndir $src $out
-    dbusfile=share/dbus-1/services/com.github.rafostar.Clapper.service
-    rm $out/$dbusfile
-    cp $src/$dbusfile $out/$dbusfile
-    substituteInPlace $out/$dbusfile \
-      --replace-fail $src/bin/clapper $out/bin/clapper
-
-    runHook postInstall
+  postPatch = ''
+    patchShebangs --build build-aux/meson/postinstall.py
   '';
 
+  # The package uses "clappersink" provided by itself
   preFixup = ''
     gappsWrapperArgs+=(
-      --set-default CLAPPER_ENHANCERS_PATH "${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $out/lib/gstreamer-1.0
     )
   '';
-}
+
+  meta = with lib; {
+    description = "GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
+    longDescription = ''
+      Clapper is a GNOME media player built using the GTK4 toolkit.
+      The media player is using GStreamer as a media backend.
+    '';
+    homepage = "https://github.com/Rafostar/clapper";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
+  };
+})

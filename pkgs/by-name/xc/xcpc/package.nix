@@ -1,43 +1,39 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  autoconf-archive,
+  fetchurl,
   pkg-config,
-  wrapGAppsHook3,
-  libepoxy,
+  glib,
+  libXaw,
+  libX11,
+  libXext,
+  libDSKSupport ? true,
+  libdsk,
+  motifSupport ? false,
+  lesstif,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.52.1";
+  version = "20070122";
   pname = "xcpc";
 
-  src = fetchFromGitHub {
-    owner = "ponceto";
-    repo = "xcpc-emulator";
-    rev = "xcpc-${version}";
-    hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
+  src = fetchurl {
+    url = "mirror://sourceforge/xcpc/${pname}-${version}.tar.gz";
+    sha256 = "0hxsbhmyzyyrlidgg0q8izw55q0z40xrynw5a1c3frdnihj9jf7n";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
-    wrapGAppsHook3
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libepoxy ];
-
-  passthru.updateScript = nix-update-script { };
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
-      "$out/bin/" ""
-    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
-      "$out/share/pixmaps/" ""
-  '';
+  buildInputs =
+    [
+      glib
+      libdsk
+      libXaw
+      libX11
+      libXext
+    ]
+    ++ lib.optional libDSKSupport libdsk
+    ++ lib.optional motifSupport lesstif;
 
   meta = with lib; {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";

@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "impacket"
     "pefile"
-    "rich"
   ];
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -30,9 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     pefile
     rich
   ];
-
-  # Project has no unit tests
-  doCheck = false;
 
   pythonImportsCheck = [ "smbclientng" ];
 

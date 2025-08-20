@@ -17,17 +17,19 @@
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "2.1.1";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${version}";
-    hash = "sha256-zxvYvPnL99yIVHrzbRbKmTazzlefOS+s2TAWLweRSYE=";
+    hash = "sha256-v6Ok0JWhdp0oM6I87BVojJgMikdomUX/Vk2ZVje0z+w=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   dependencies = [
     numpy
@@ -43,7 +45,7 @@ buildPythonPackage rec {
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
-    changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

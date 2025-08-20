@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pyplatec";
   version = "1.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPlatec";

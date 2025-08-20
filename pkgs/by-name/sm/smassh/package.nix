@@ -2,10 +2,13 @@
   lib,
   fetchFromGitHub,
   smassh,
-  python3,
+  python311,
   testers,
 }:
 
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
   version = "3.1.6";

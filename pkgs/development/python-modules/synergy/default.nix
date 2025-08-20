@@ -1,36 +1,31 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   pythonOlder,
-  setuptools,
   numpy,
   scipy,
   matplotlib,
   plotly,
   pandas,
-  hypothesis,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "synergy";
-  version = "1.0.0";
-  pyproject = true;
-
+  version = "0.5.1";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
+  # Pypi does not contain unit tests
   src = fetchFromGitHub {
     owner = "djwooten";
     repo = "synergy";
-    tag = "v${version}";
-    hash = "sha256-df5CBEcRx55/rSMc6ygMVrHbbEcnU1ISJheO+WoBSCI=";
+    rev = "v${version}";
+    sha256 = "1c60dpvr72g4wjqg6bc601kssl5z55v9bg09xbyh9ahch58bi212";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     numpy
     scipy
     matplotlib
@@ -38,24 +33,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # flaky: hypothesis.errors.FailedHealthCheck
-    "test_asymptotic_limits"
-    "test_inverse"
-    # AssertionError: synthetic_BRAID_reference_1.csv
-    #  E3=0 not in (0.10639582639915163, 1.6900177333904622)
-    "test_BRAID_fit_bootstrap"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: np.False_ is not true
-    "test_fit_loewe_antagonism"
-  ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "synergy" ];
 
   meta = with lib; {

@@ -10,7 +10,7 @@
   gtk2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cwiid";
   version = "unstable-2010-02-21";
 

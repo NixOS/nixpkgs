@@ -10,7 +10,7 @@
   tk,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ifm";
   version = "2015-11-08";
 

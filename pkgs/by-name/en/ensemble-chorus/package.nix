@@ -14,13 +14,13 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ensemble-chorus";
   version = "0-unstable-2019-02-15";
 
   src = fetchFromGitHub {
     owner = "jpcima";
-    repo = "ensemble-chorus";
+    repo = pname;
     rev = "59baeb86b8851f521bc8162e22e3f15061662cc3";
     sha256 = "0c1y10vyhrihcjvxqpqf6b52yk5yhwh813cfp6nla5ax2w88dbhr";
     fetchSubmodules = true;

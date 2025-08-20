@@ -8,7 +8,6 @@
   mygui,
   ois,
   SDL2,
-  libX11,
   libvorbis,
   pkg-config,
   makeWrapper,
@@ -73,7 +72,6 @@ stdenv.mkDerivation rec {
     stuntrally_mygui
     ois
     SDL2
-    libX11
     libvorbis
     enet
     libXcursor

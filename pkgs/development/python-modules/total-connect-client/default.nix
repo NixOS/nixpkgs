@@ -2,18 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pycryptodome,
-  pyjwt,
   pytestCheckHook,
   pythonOlder,
-  requests-mock,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2025.1.4";
+  version = "2024.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,23 +19,14 @@ buildPythonPackage rec {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     tag = version;
-    hash = "sha256-zzSYi/qhHmugH30bnYHK9lCBVN5wuv6n9rvaZC/sIag=";
+    hash = "sha256-FcPm2Nc6pUGC86K3GLAiQRot0JXYqoZh19dXMCl99eI=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "pycryptodome" ];
+  dependencies = [ zeep ];
 
-  dependencies = [
-    pycryptodome
-    pyjwt
-    zeep
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    requests-mock
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "total_connect_client" ];
 

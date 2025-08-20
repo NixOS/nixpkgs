@@ -3,6 +3,7 @@
   lib,
   rustPlatform,
   rustc,
+  Security,
 }:
 
 rustPlatform.buildRustPackage {
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [ rustc.llvm ];
+  buildInputs = [ rustc.llvm ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;
@@ -43,8 +44,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://rust-lang.github.io/rust-clippy/";
     description = "Bunch of lints to catch common mistakes and improve your Rust code";
     mainProgram = "cargo-clippy";
-    maintainers = with maintainers; [ basvandijk ];
-    teams = [ teams.rust ];
+    maintainers = with maintainers; [ basvandijk ] ++ teams.rust.members;
     license = with licenses; [
       mit
       asl20

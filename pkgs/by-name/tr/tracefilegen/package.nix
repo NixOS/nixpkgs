@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
 
   pname = "tracefilegen";
-  version = "0-unstable-2017-05-13";
+  version = "unstable-2017-05-13";
 
   src = fetchFromGitHub {
     owner = "GarCoSim";

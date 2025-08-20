@@ -1,48 +1,32 @@
-{ lib, ... }:
-{
+import ./make-test-python.nix ({ lib, ... }: {
   name = "paperless";
-  meta.maintainers = with lib.maintainers; [
-    leona
-    SuperSandro2000
-    erikarvstedt
-  ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
 
-  nodes =
-    let
-      self = {
-        simple =
-          { pkgs, ... }:
-          {
-            environment.systemPackages = with pkgs; [
-              imagemagick
-              jq
-            ];
-            services.paperless = {
-              enable = true;
-              passwordFile = builtins.toFile "password" "admin";
+  nodes = let self = {
+    simple = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [ imagemagick jq ];
+      services.paperless = {
+        enable = true;
+        passwordFile = builtins.toFile "password" "admin";
 
-              exporter = {
-                enable = true;
+        exporter = {
+          enable = true;
 
-                settings = {
-                  "no-color" = lib.mkForce false; # override a default option
-                  "no-thumbnail" = true; # add a new option
-                };
-              };
-            };
+          settings = {
+            "no-color" = lib.mkForce false; # override a default option
+            "no-thumbnail" = true; # add a new option
           };
-        postgres =
-          { config, pkgs, ... }:
-          {
-            imports = [ self.simple ];
-            services.paperless.database.createLocally = true;
-            services.paperless.settings = {
-              PAPERLESS_OCR_LANGUAGE = "deu";
-            };
-          };
+        };
       };
-    in
-    self;
+    };
+    postgres = { config, pkgs, ... }: {
+      imports = [ self.simple ];
+      services.paperless.database.createLocally = true;
+      services.paperless.settings = {
+        PAPERLESS_OCR_LANGUAGE = "deu";
+      };
+    };
+  }; in self;
 
   testScript = ''
     import json
@@ -115,11 +99,11 @@
           # Double check that our attrset option override works as expected
           cmdline = node.succeed("grep 'paperless-manage' $(systemctl cat paperless-exporter | grep ExecStart | cut -f 2 -d=)")
           print(f"Exporter command line {cmdline!r}")
-          assert cmdline.strip() == "paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail", "Unexpected exporter command line"
+          assert cmdline.strip() == "./paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail", "Unexpected exporter command line"
 
     test_paperless(simple)
     simple.send_monitor_command("quit")
     simple.wait_for_shutdown()
     test_paperless(postgres)
   '';
-}
+})

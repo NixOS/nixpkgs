@@ -10,7 +10,7 @@
   python3,
   ruby,
   jre8,
-  net-tools,
+  nettools,
   bc,
   nixosTests,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     which
     coreutils
     rrdtool
-    net-tools
+    nettools
     perlPackages.perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
@@ -175,6 +175,6 @@ stdenv.mkDerivation rec {
     homepage = "https://munin-monitoring.org/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

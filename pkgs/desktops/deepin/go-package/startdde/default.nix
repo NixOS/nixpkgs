@@ -77,6 +77,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/startdde";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

@@ -9,7 +9,7 @@
   tcl,
   libglut,
   freetype,
-  sfml_2,
+  sfml,
   libXi,
   libXmu,
   libXext,
@@ -22,13 +22,13 @@
   intltool,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   version = "0.8.4";
   pname = "extremetuxracer";
 
   src = fetchurl {
-    url = "mirror://sourceforge/extremetuxracer/etr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+jKFzAx1Wlr/Up8/LOo1FkgRFMa0uOHsB2n+7/BHc+U=";
+    url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
+    sha256 = "sha256-+jKFzAx1Wlr/Up8/LOo1FkgRFMa0uOHsB2n+7/BHc+U=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
     libglut
     freetype
-    sfml_2
+    sfml
     libXi
     libXmu
     libXext
@@ -71,4 +71,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "etr";
     platforms = with lib.platforms; linux;
   };
-})
+}

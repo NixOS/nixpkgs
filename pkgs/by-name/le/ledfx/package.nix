@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.109";
+  version = "2.0.105";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fSb3NBl1bYCfwDkWI7/KeFIVcXTPDKBbLe0sQhneX6A=";
+    hash = "sha256-S/ZlEFgcFiLr0V7g0X0bjWU0YNVzA0JctFaJTK/QkpI=";
   };
 
   pythonRelaxDeps = true;
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     cython
-    pdm-backend
+    poetry-core
   ];
 
   dependencies = with python3.pkgs; [
@@ -64,12 +64,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.c3d2 ];
+    license = licenses.gpl3Only;
+    maintainers = teams.c3d2.members;
     mainProgram = "ledfx";
   };
 }

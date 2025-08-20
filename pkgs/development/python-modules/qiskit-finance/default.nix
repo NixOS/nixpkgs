@@ -75,7 +75,7 @@ buildPythonPackage rec {
     "test_yahoo"
     "test_wikipedia"
   ];
-  pytestFlags = [ "--durations=10" ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";

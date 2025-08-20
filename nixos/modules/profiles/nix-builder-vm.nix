@@ -48,13 +48,13 @@ in
       default = 20 * 1024;
       type = types.int;
       example = 30720;
-      description = "The maximum disk space allocated to the runner in MiB (1024×1024 bytes).";
+      description = "The maximum disk space allocated to the runner in MB";
     };
     memorySize = mkOption {
       default = 3 * 1024;
       type = types.int;
       example = 8192;
-      description = "The runner's memory in MiB (1024×1024 bytes).";
+      description = "The runner's memory in MB";
     };
     min-free = mkOption {
       default = 1024 * 1024 * 1024;
@@ -126,21 +126,9 @@ in
     # TODO system.switch.enable = false;?
     system.disableInstallerTools = true;
 
-    # Allow the system derivation to be substituted, so that
-    # users are less likely to run into a state where they need
-    # the builder running to build the builder if they just want
-    # to make a tweak that only affects the macOS side of things,
-    # like changing the QEMU args.
-    #
-    # TODO(winter): Move to qemu-vm? Trying it here for now as a
-    # low impact change that'll probably improve people's experience.
-    #
-    # (I have no clue what is going on in https://github.com/nix-darwin/nix-darwin/issues/1081
-    # though, as this fix would only apply to one person in that thread... hopefully someone
-    # comes across with a reproducer if this doesn't do it.)
-    system.systemBuilderArgs.allowSubstitutes = true;
-
     nix.settings = {
+      auto-optimise-store = true;
+
       min-free = cfg.min-free;
 
       max-free = cfg.max-free;
@@ -177,7 +165,7 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
-        add-keys = hostPkgs.writeShellScriptBin "add-keys" (
+        script = hostPkgs.writeShellScriptBin "create-builder" (
           ''
             set -euo pipefail
           ''
@@ -205,21 +193,9 @@ in
             if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
               (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
             fi
+            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
           ''
         );
-
-        run-builder = hostPkgs.writeShellScriptBin "run-builder" (''
-          set -euo pipefail
-          KEYS="''${KEYS:-./keys}"
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '');
-
-        script = hostPkgs.writeShellScriptBin "create-builder" (''
-          set -euo pipefail
-          export KEYS="''${KEYS:-./keys}"
-          ${lib.getExe add-keys}
-          ${lib.getExe run-builder}
-        '');
 
       in
       script.overrideAttrs (old: {
@@ -231,8 +207,6 @@ in
           # Let users in the repl inspect the config
           nixosConfig = config;
           nixosOptions = options;
-
-          inherit add-keys run-builder;
         };
       });
 

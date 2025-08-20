@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    mono # gmcs
   ];
   buildInputs = [ mono ];
 

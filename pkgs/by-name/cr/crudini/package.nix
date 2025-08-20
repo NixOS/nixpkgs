@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
-  version = "0.9.6";
+  version = "0.9.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "crudini";
-    tag = version;
-    hash = "sha256-XW9pdP+aie6v9h35gLYM0wVrcsh+dcEB7EueATOV4w4=";
+    rev = version;
+    hash = "sha256-BU4u7uBsNyDOwWUjOIlBWcf1AeUXXZ+johAe+bjws1U=";
   };
 
   postPatch = ''

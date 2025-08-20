@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sectools";
-  version = "1.4.4";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "p0dalirius";
     repo = "sectools";
     tag = version;
-    hash = "sha256-dI0zokmndMZ4C7aX73WOdyXvOjCQJzZU6C1uXDt97Vg=";
+    hash = "sha256-k3k1/DFmv0resnsNht/C+2Xh6qbSQmk83eN/3vtDU00=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,9 +31,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sectools" ];
 
   meta = with lib; {
-    description = "Library containing functions to write security tools";
+    description = "library containing functions to write security tools";
     homepage = "https://github.com/p0dalirius/sectools";
-    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${src.tag}";
+    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

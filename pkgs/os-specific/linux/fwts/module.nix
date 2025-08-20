@@ -3,7 +3,6 @@
   stdenv,
   fwts,
   kernel,
-  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 

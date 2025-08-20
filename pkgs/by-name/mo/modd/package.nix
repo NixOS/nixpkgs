@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "modd";
   version = "unstable-2021-12-15";
 

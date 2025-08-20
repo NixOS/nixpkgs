@@ -4,57 +4,51 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   google-auth,
   google-auth-oauthlib,
   google-cloud-storage,
   requests,
   decorator,
   fsspec,
-  fusepy,
+  ujson,
   aiohttp,
   crcmod,
   pytest-timeout,
-  pytest-asyncio,
+  pytest-vcr,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2025.3.2";
-  pyproject = true;
+  version = "2024.2.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = "gcsfs";
+    repo = pname;
     tag = version;
-    hash = "sha256-aXBlj9ej3Ya7h4x/akl/iX6dDS/SgkkEsOQ2E9KmCDU=";
+    hash = "sha256-6O09lP2cWLzeMTBathb3O/tVGZPEHSqujfUPWZIBUJI=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
+    crcmod
     decorator
     fsspec
     google-auth
     google-auth-oauthlib
     google-cloud-storage
     requests
+    ujson
   ];
 
-  optional-dependencies = {
-    gcsfuse = [ fusepy ];
-    crc = [ crcmod ];
-  };
-
   nativeCheckInputs = [
+    pytest-vcr
     pytest-timeout
-    pytest-asyncio
     pytestCheckHook
+    vcrpy
   ];
 
   disabledTests = [
@@ -71,13 +65,15 @@ buildPythonPackage rec {
     "gcsfs/tests/test_inventory_report_listing.py"
   ];
 
+  pytestFlagsArray = [ "-x" ];
+
   pythonImportsCheck = [ "gcsfs" ];
 
-  meta = {
+  meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
     changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nbren12 ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nbren12 ];
   };
 }

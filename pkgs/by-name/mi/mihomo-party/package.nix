@@ -3,41 +3,47 @@
   stdenv,
   fetchurl,
   dpkg,
+  wrapGAppsHook3,
   autoPatchelfHook,
   nss,
   nspr,
   alsa-lib,
   openssl,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   udev,
   libayatana-appindicator,
   libGL,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "mihomo-party";
-  version = "1.8.4";
-
+let
+  version = "1.5.12";
   src =
     let
-      selectSystem =
-        attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-      arch = selectSystem {
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system};
+      suffix = selectSystem {
         x86_64-linux = "amd64";
         aarch64-linux = "arm64";
       };
+      hash = selectSystem {
+        x86_64-linux = "sha256-1vJ2FcJOcpNyfSm5HyLkexsULBBPlI0AW2jXuhK8khA=";
+        aarch64-linux = "sha256-P+zCO6HxcQJAGIVxOSRga+1Bqtn31mw2v+/EyEDpgF8=";
+      };
     in
     fetchurl {
-      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${finalAttrs.version}/mihomo-party-linux-${finalAttrs.version}-${arch}.deb";
-      hash = selectSystem {
-        x86_64-linux = "sha256-bbKW4kz1v+yF0ZsH9Ew+c780LCdyJUi8tIiHV09An8s=";
-        aarch64-linux = "sha256-72NAoFCt+Uwbt1blwHNM7FePUX0D6AZoqW3XF0NkT28=";
-      };
+      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${suffix}.deb";
+      inherit hash;
     };
+in
+stdenv.mkDerivation {
+  inherit version src;
+
+  pname = "mihomo-party";
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [
     dpkg
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
@@ -46,35 +52,35 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     alsa-lib
     openssl
-    webkitgtk_4_1
+    webkitgtk_4_0
     (lib.getLib stdenv.cc.cc)
+  ];
+
+  runtimeDependencies = map lib.getLib [
+    udev
+    libayatana-appindicator
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r opt $out/opt
-    cp -r usr/share $out/share
+    mkdir $out
+    cp -r opt/mihomo-party usr/share $out
     substituteInPlace $out/share/applications/mihomo-party.desktop \
       --replace-fail "/opt/mihomo-party/mihomo-party" "mihomo-party"
-    ln -s $out/opt/mihomo-party/mihomo-party $out/bin/mihomo-party
 
     runHook postInstall
   '';
 
   preFixup = ''
-    patchelf --add-needed libGL.so.1 \
-      --add-rpath ${
+    mkdir $out/bin
+    makeWrapper $out/mihomo-party/mihomo-party $out/bin/mihomo-party \
+      --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libGL
-          udev
-          libayatana-appindicator
         ]
-      } $out/opt/mihomo-party/mihomo-party
+      }"
   '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Another Mihomo GUI";
@@ -86,6 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ aucub ];
   };
-})
+}

@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   pytestCheckHook,
+  setuptools,
   sqlalchemy,
   wtforms,
 }:
 
 buildPythonPackage rec {
   pname = "wtforms-sqlalchemy";
-  version = "0.4.2";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wtforms";
     repo = "wtforms-sqlalchemy";
-    tag = version;
-    hash = "sha256-E2F8lOcgne2yGEyn6g8j3mHr045eOyKu77DFGwWTPkc=";
+    rev = version;
+    hash = "sha256-uR09LYfcyre+AC2TTEIhpjSI7y4Yo0GJ20smkzo5PRY=";
   };
 
   build-system = [
-    hatchling
+    setuptools
   ];
 
   dependencies = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "WTForms integration for SQLAlchemy";
     homepage = "https://github.com/wtforms/wtforms-sqlalchemy";
-    changelog = "https://github.com/wtforms/wtforms-sqlalchemy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/wtforms/wtforms-sqlalchemy/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };

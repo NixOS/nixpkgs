@@ -51,8 +51,9 @@ buildPythonPackage rec {
     "it_accepts_unicode_providing_there_is_no_encoding_declaration"
   ];
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

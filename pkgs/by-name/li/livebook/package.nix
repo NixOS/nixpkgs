@@ -1,21 +1,21 @@
 {
   lib,
-  beamMinimal28Packages,
+  beamPackages,
   makeWrapper,
+  rebar3,
+  elixir,
+  erlang,
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
 }:
-let
-  beamPackages = beamMinimal28Packages;
-in
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.16.4";
+  version = "0.14.5";
 
-  inherit (beamPackages) elixir;
+  inherit elixir;
 
-  buildInputs = [ beamPackages.erlang ];
+  buildInputs = [ erlang ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -23,24 +23,24 @@ beamPackages.mixRelease rec {
     owner = "livebook-dev";
     repo = "livebook";
     tag = "v${version}";
-    hash = "sha256-Cwzcoslqjaf7z9x2Sgnzrrl4zUcH2f7DEWaFPBIi3ms=";
+    hash = "sha256-VSxW+X5zt6npV4tVVgTEvQhjA+jTramSX5h92BWWaQM=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-OEYkWh0hAl7ZXP2Cq+TgVGF4tnWlpF6W5uRSdyrswlA=";
+    hash = "sha256-FrkM82LO7GIFpKQfhlEUrAuKu33BzPBs6OrWW4C6pI0=";
   };
 
   postInstall = ''
     wrapProgram $out/bin/livebook \
       --prefix PATH : ${
         lib.makeBinPath [
-          beamPackages.elixir
-          beamPackages.erlang
+          elixir
+          erlang
         ]
       } \
-      --set MIX_REBAR3 ${beamPackages.rebar3}/bin/rebar3
+      --set MIX_REBAR3 ${rebar3}/bin/rebar3
   '';
 
   passthru = {

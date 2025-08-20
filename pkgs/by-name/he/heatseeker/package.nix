@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "heatseeker";
-  version = "1.7.3";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "rschmitt";
     repo = "heatseeker";
     rev = "v${version}";
-    sha256 = "sha256-ZKwRXtfIYEblsGjSSiVCl9XztM43rzBofQpPNGMPu+w=";
+    sha256 = "sha256-SU5HLAFA7IHnVhsmVtxskteeKKIEvvVSqHIeEk5BkfA=";
   };
 
-  cargoHash = "sha256-X4OTzgInh0D+EYCPkN2qyizzhARIOGwxJ2N9ZcrX/Ak=";
+  cargoHash = "sha256-RHD2/Uvj8NWpZ+xK16xTN5K/hDWYhwHnu2E5NslGFQI=";
 
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple

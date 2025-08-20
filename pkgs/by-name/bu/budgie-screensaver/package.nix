@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-screensaver";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-screensaver/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    teams = [ lib.teams.budgie ];
+    maintainers = lib.teams.budgie.members;
     mainProgram = "budgie-screensaver";
     platforms = lib.platforms.linux;
   };

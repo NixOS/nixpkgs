@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~zethra";
-    repo = "geticons";
+    repo = pname;
     rev = version;
     hash = "sha256-HEnUfOLeRTi2dRRqjDPVwVVHo/GN9wE28x5qv3qOpCY=";
   };
 
-  cargoHash = "sha256-V3e3boIzn76irAfn9fF9MycPRAWorUUSD/CUZhgKv0E=";
+  cargoHash = "sha256-Znwni7uMnG9cpZbztUMY1j73K+XrDLv5zyNEZDoxWg4=";
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {

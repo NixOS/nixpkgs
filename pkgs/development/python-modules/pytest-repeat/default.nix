@@ -6,20 +6,23 @@
   hatch-vcs,
   pytest,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.9.4";
+  version = "0.9.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pytest_repeat";
     inherit version;
-    hash = "sha256-2SrBTfqm/8/mkX5dFvDJvII4DBNbA8Kl9BLSY38iRIU=";
+    hash = "sha256-/9ODbfzWe7JwvsZIszDiC+N9KWZEjEFIxAktHoq6gYU=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     hatchling
     hatch-vcs
   ];

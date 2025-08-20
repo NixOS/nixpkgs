@@ -10,7 +10,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "udocker";
   version = "1.3.17";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
@@ -28,10 +27,6 @@ python3Packages.buildPythonApplication rec {
   # are download statistically linked during runtime
   buildInputs = [
     singularity
-  ];
-
-  build-system = with python3Packages; [
-    setuptools
   ];
 
   dependencies = with python3Packages; [
@@ -53,14 +48,12 @@ python3Packages.buildPythonApplication rec {
     "tests/unit/test_dockerioapi.py"
   ];
 
-  pythonImportsCheck = [ "udocker" ];
-
   passthru = {
     tests.version = testers.testVersion { package = udocker; };
   };
 
   meta = {
-    description = "Basic user tool to execute simple docker containers in user space without root privileges";
+    description = "basic user tool to execute simple docker containers in user space without root privileges";
     homepage = "https://indigo-dc.gitbooks.io/udocker";
     changelog = "https://github.com/indigo-dc/udocker/releases/tag/${version}";
     license = lib.licenses.asl20;

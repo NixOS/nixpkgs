@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";
-  version = "48.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.major version}/adwaita-icon-theme-${version}.tar.xz";
-    hash = "sha256-hHBoiIZQ2WcxFb5tvyv9wxpGrrxSimqdtEIOYOZWuNQ=";
+    hash = "sha256-rQiKIpWMuEaeQdnxu6Dvsn5YaiECITzYnMJtsuACvf4=";
   };
 
   nativeBuildInputs = [
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme";
     changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/${version}/NEWS?ref_type=tags";
-    platforms = with lib.platforms; linux ++ darwin;
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.cc-by-sa-30;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = teams.gnome.members;
+    license = licenses.cc-by-sa-30;
   };
 }

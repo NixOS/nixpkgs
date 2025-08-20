@@ -3,14 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools,
+  pythonOlder,
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
-  pname = "sqlalchemy-json";
+let
   version = "0.7.0";
-  pyproject = true;
+in
+buildPythonPackage {
+  pname = "sqlalchemy-json";
+  inherit version;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "edelooff";
@@ -19,19 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-Is3DznojvpWYFSDutzCxRLceQMIiS3ZIg0c//MIOF+s=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ sqlalchemy ];
-
-  pythonImportsCheck = [ "sqlalchemy_json" ];
+  propagatedBuildInputs = [ sqlalchemy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     description = "Full-featured JSON type with mutation tracking for SQLAlchemy";
     homepage = "https://github.com/edelooff/sqlalchemy-json";
     changelog = "https://github.com/edelooff/sqlalchemy-json/tree/v${version}#changelog";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ augustebaum ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ augustebaum ];
   };
 }

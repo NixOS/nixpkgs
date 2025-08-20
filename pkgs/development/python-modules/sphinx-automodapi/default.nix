@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  pythonOlder,
   setuptools-scm,
   git,
   sphinx,
@@ -14,22 +15,24 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.20.0";
+  version = "0.18.0";
   pyproject = true;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astropy";
-    repo = "sphinx-automodapi";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-RdJZAlHWYrDaGbip+HyCX+tns1nvLkCQa99WyLMIyxo=";
+    hash = "sha256-YTaoGBYQvuUbMYe4FKmtgxcAxeesU/ruVXPOjZXGLGU=";
     leaveDotGit = true;
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+    git
+  ];
 
-  nativeBuildInputs = [ git ];
-
-  dependencies = [ sphinx ];
+  propagatedBuildInputs = [ sphinx ];
 
   # https://github.com/astropy/sphinx-automodapi/issues/155
   testInventory = fetchurl {
@@ -55,7 +58,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx extension for generating API documentation";
     homepage = "https://github.com/astropy/sphinx-automodapi";
-    changelog = "https://github.com/astropy/sphinx-automodapi/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lovesegfault ];
   };

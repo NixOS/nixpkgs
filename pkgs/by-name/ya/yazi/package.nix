@@ -7,7 +7,7 @@
   extraPackages ? [ ],
   optionalDeps ? [
     jq
-    poppler-utils
+    poppler_utils
     _7zz
     ffmpeg
     fd
@@ -16,7 +16,6 @@
     zoxide
     imagemagick
     chafa
-    resvg
   ],
 
   # deps
@@ -25,7 +24,7 @@
 
   # optional deps
   jq,
-  poppler-utils,
+  poppler_utils,
   _7zz,
   ffmpeg,
   fd,
@@ -34,7 +33,6 @@
   zoxide,
   imagemagick,
   chafa,
-  resvg,
 
   settings ? { },
   plugins ? { },
@@ -69,20 +67,14 @@ let
         mkdir $out/plugins
         ${lib.optionalString (plugins != { }) ''
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (
-              name: value:
-              "ln -s ${value} $out/plugins/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
-            ) plugins
+            lib.mapAttrsToList (name: value: "ln -s ${value} $out/plugins/${name}") plugins
           )}
         ''}
 
         mkdir $out/flavors
         ${lib.optionalString (flavors != { }) ''
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (
-              name: value:
-              "ln -s ${value} $out/flavors/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
-            ) flavors
+            lib.mapAttrsToList (name: value: "ln -s ${value} $out/flavors/${name}") flavors
           )}
         ''}
 

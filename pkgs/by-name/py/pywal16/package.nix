@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pywal16";
-  version = "3.8.9";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
     tag = version;
-    hash = "sha256-43nKFTkIqaG9UzAjvNbZAog3NLMRKdtnZHxiiiBuD/4=";
+    hash = "sha256-aizuON8Y321i7bF2SuC5UC1iOWHY217ccfzY9WmaevQ=";
   };
 
   build-system = [ python3.pkgs.setuptools ];

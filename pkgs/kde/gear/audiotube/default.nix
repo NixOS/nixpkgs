@@ -44,8 +44,7 @@ mkKdeDerivation {
     kwindowsystem
     purpose
     qcoro
-  ]
-  ++ pythonDeps;
+  ] ++ pythonDeps;
 
   qtWrapperArgs = [
     "--prefix PYTHONPATH : ${ps.makePythonPath pythonDeps}"

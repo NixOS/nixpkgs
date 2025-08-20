@@ -30,7 +30,7 @@ let
       '';
 
       meta = {
-        description = "Dictd-db dictionary for dictd";
+        description = "dictd-db dictionary for dictd";
         platforms = lib.platforms.linux;
       };
     };

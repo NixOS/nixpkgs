@@ -8,7 +8,6 @@
   pyyaml,
   openssh,
   unittestCheckHook,
-  installShellFiles,
   bc,
   hostname,
   bash,
@@ -16,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "clustershell";
-  version = "1.9.3";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ClusterShell";
     inherit version;
-    hash = "sha256-4oTA5rP+CgzWvmffcd+/aqMhGIlz22g6BX9WN1UvvIw=";
+    hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
   };
 
   build-system = [
@@ -52,8 +51,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
   nativeCheckInputs = [
     bc
     hostname
@@ -81,10 +78,6 @@ buildPythonPackage rec {
     rm tests/TaskDistantPdshTest.py
     rm tests/TaskRLimitsTest.py
     rm tests/TreeGatewayTest.py
-  '';
-
-  postInstall = ''
-    installShellCompletion --bash bash_completion.d/*
   '';
 
   meta = with lib; {

@@ -13,7 +13,6 @@ let
 
   user = cfg.user;
   group = cfg.group;
-  php = lib.getExe cfg.phpPackage;
 
   # shell script for local administration
   artisan = pkgs.writeScriptBin "agorakit" ''
@@ -26,7 +25,7 @@ let
         exec "$@"
       fi
     }
-    sudo ${php} artisan "$@"
+    sudo ${lib.getExe pkgs.php} artisan "$@"
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -34,8 +33,6 @@ in
 {
   options.services.agorakit = {
     enable = mkEnableOption "agorakit";
-
-    phpPackage = mkPackageOption pkgs "php82" { };
 
     user = mkOption {
       default = "agorakit";
@@ -342,7 +339,6 @@ in
 
     services.phpfpm.pools.agorakit = {
       inherit user group;
-      phpPackage = cfg.phpPackage;
       phpOptions = ''
         log_errors = on
         post_max_size = ${cfg.maxUploadSize}
@@ -352,8 +348,7 @@ in
         "listen.mode" = "0660";
         "listen.owner" = user;
         "listen.group" = group;
-      }
-      // cfg.poolConfig;
+      } // cfg.poolConfig;
     };
 
     services.nginx = {
@@ -452,9 +447,9 @@ in
           fi
 
           # migrate & seed db
-          ${php} artisan key:generate --force
-          ${php} artisan migrate --force
-          ${php} artisan config:cache
+          ${pkgs.php}/bin/php artisan key:generate --force
+          ${pkgs.php}/bin/php artisan migrate --force
+          ${pkgs.php}/bin/php artisan config:cache
         '';
     };
 

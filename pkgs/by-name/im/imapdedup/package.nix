@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "imapdedup";
-  version = "1.2";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quentinsf";
     repo = "IMAPdedup";
     tag = version;
-    hash = "sha256-CmWkLz9hdmedUxcojmUVTkPjqpaMmtEeHnF7aglKR+s=";
+    hash = "sha256-s49nnMjX1beZKTrlcjzp0nESIVRb/LZDycpnzz8fG+o=";
   };
 
   build-system = with python3Packages; [ hatchling ];

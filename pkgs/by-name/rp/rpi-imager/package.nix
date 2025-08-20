@@ -7,26 +7,22 @@
   libarchive,
   nix-update-script,
   pkg-config,
-  qt6,
-  wrapGAppsHook4,
+  qt5,
   testers,
   util-linux,
   xz,
-  gnutls,
-  zstd,
-  libtasn1,
   enableTelemetry ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
+    hash = "sha256-JrotKMyAgQO3Y5RsFAar9N5/wDpWiBcy8RfvBWDiJMs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -34,58 +30,36 @@ stdenv.mkDerivation (finalAttrs: {
   # By default, the builder checks for JSON support in lsblk by running "lsblk --json",
   # but that throws an error, as /sys/dev doesn't exist in the sandbox.
   # This patch removes the check.
-  # remove-vendoring.patch from
-  # https://gitlab.archlinux.org/archlinux/packaging/packages/rpi-imager/-/raw/main/remove-vendoring.patch
-  patches = [ ./remove-vendoring-and-lsblk-check.patch ];
-
-  postPatch = ''
-    substituteInPlace ../debian/org.raspberrypi.rpi-imager.desktop \
-      --replace-fail "/usr/bin/" ""
-  '';
+  patches = [ ./lsblkCheckFix.patch ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
-    wrapGAppsHook4
+    qt5.wrapQtAppsHook
     util-linux
   ];
 
-  buildInputs = [
-    curl
-    libarchive
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtsvg
-    qt6.qttools
-    xz
-    gnutls
-    zstd
-    libtasn1
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt6.qtwayland
-  ];
-
-  cmakeFlags =
-    # Disable vendoring
+  buildInputs =
     [
-      (lib.cmakeBool "ENABLE_VENDORING" false)
+      curl
+      libarchive
+      qt5.qtbase
+      qt5.qtdeclarative
+      qt5.qtgraphicaleffects
+      qt5.qtquickcontrols2
+      qt5.qtsvg
+      qt5.qttools
+      xz
     ]
-    # Disable telemetry and update check.
-    ++ lib.optionals (!enableTelemetry) [
-      (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
-      (lib.cmakeBool "ENABLE_TELEMETRY" false)
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qt5.qtwayland
     ];
 
-  qtWrapperArgs = [
-    "--unset QT_QPA_PLATFORMTHEME"
-    "--unset QT_STYLE_OVERRIDE"
+  # Disable telemetry and update check.
+  cmakeFlags = lib.optionals (!enableTelemetry) [
+    "-DENABLE_CHECK_VERSION=OFF"
+    "-DENABLE_TELEMETRY=OFF"
   ];
-  dontWrapGApps = true;
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
 
   passthru = {
     tests.version = testers.testVersion {
@@ -95,17 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
     homepage = "https://github.com/raspberrypi/rpi-imager/";
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "rpi-imager";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ymarkus
       anthonyroussel
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     # does not build on darwin
     broken = stdenv.hostPlatform.isDarwin;
   };

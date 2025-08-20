@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   mkDerivation,
   fetchurl,
@@ -6,6 +7,10 @@
   pkg-config,
   polkit,
   glib,
+  pcre,
+  libselinux,
+  libsepol,
+  util-linux,
 }:
 
 mkDerivation rec {
@@ -13,7 +18,7 @@ mkDerivation rec {
   version = "0.114.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/polkit-qt-1/polkit-qt-1-${version}.tar.xz";
+    url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-LrDyJEWIgpX/or+8DDaThHoPlzu2sMPkzOAhi+fjkH4=";
   };
 
@@ -22,14 +27,21 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    polkit
-  ];
+  buildInputs =
+    [
+      glib
+      pcre
+      polkit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libselinux
+      libsepol
+      util-linux
+    ];
 
-  meta = {
+  meta = with lib; {
     description = "Qt wrapper around PolKit";
-    maintainers = with lib.maintainers; [ ttuegel ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms = platforms.linux;
   };
 }

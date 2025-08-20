@@ -1,26 +1,42 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
-  buildDunePackage,
+  autoreconfHook,
+  which,
+  ocaml,
+  findlib,
 }:
 
-buildDunePackage rec {
-  pname = "bitv";
-  version = "2.0";
-  minimalOCamlVersion = "4.08";
+if lib.versionOlder ocaml.version "4.02" then
+  throw "bitv is not available for OCaml ${ocaml.version}"
+else
 
-  src = fetchFromGitHub {
-    owner = "backtracking";
-    repo = "bitv";
-    tag = version;
-    hash = "sha256-llfbdrvxrz6323G2LBAtKaXOrHQriFzaz3ulvFVhH6s=";
-  };
+  stdenv.mkDerivation rec {
+    pname = "ocaml${ocaml.version}-bitv";
+    version = "1.3";
 
-  meta = {
-    description = "Bit vector library for OCaml";
-    license = lib.licenses.lgpl21;
-    homepage = "https://github.com/backtracking/bitv";
-    changelog = "https://github.com/backtracking/bitv/releases/tag/${version}";
-    maintainers = [ lib.maintainers.vbgl ];
-  };
-}
+    src = fetchFromGitHub {
+      owner = "backtracking";
+      repo = "bitv";
+      rev = version;
+      sha256 = "sha256-sZwq6c10hBBS9tGvKlWD9GE3JBrZPByfDrXE6xIPcG4=";
+    };
+
+    nativeBuildInputs = [
+      autoreconfHook
+      which
+      ocaml
+      findlib
+    ];
+
+    createFindlibDestdir = true;
+
+    meta = {
+      description = "Bit vector library for OCaml";
+      license = lib.licenses.lgpl21;
+      homepage = "https://github.com/backtracking/bitv";
+      maintainers = [ lib.maintainers.vbgl ];
+      inherit (ocaml.meta) platforms;
+    };
+  }

@@ -1,43 +1,33 @@
 {
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  plasma5Packages,
-  gnome-icon-theme,
-  hicolor-icon-theme,
-  nix-update-script,
-  folder-color ? "plasma", # Supported colors: black blue caramel citron firebrick gold green grey highland jade lavender lime olive orange pistachio plasma pumpkin purple red rust sapphire tomato violet white yellow
+  lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, plasma5Packages
+, gnome-icon-theme
+, hicolor-icon-theme
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "6.3.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4UJOiDdw5BxtOjLQjCpkQnUwQRs49GZTShpcElWjAU8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-G7F+69K2aJVBM3yOQIMTH2pDXBfLmYScKIIAza3YNw8=";
   };
-
-  patches = [ ./folder-color.patch ];
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
-    gnome-icon-theme
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ plasma5Packages.breeze-icons gnome-icon-theme hicolor-icon-theme ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/icons
     cp -r Gruvbox-Plus-Dark $out/share/icons/
-    patchShebangs scripts/folders-color-chooser
-    ./scripts/folders-color-chooser -c ${folder-color}
     gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Dark
 
     runHook postInstall
@@ -47,16 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontConfigure = true;
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Icon pack for Linux desktops based on the Gruvbox color scheme";
     homepage = "https://github.com/SylEleuth/gruvbox-plus-icon-pack";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      eureka-cpu
-      Gliczy
-    ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eureka-cpu RGBCube ];
   };
 })

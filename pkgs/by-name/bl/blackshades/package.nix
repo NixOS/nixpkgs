@@ -7,36 +7,22 @@
   libGLU,
   libsndfile,
   openal,
-  zig_0_14,
-  runCommand,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackshades";
-  version = "2.5.2-unstable-2025-03-12";
+  version = "2.5.1";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "blackshades";
-    rev = "a2fbe0e08bedbbbb1089dbb8f3e3cb4d76917bd0";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-W6ltmWCw7jfiTiNlh60YVF7mz//8s+bgu4F9gy5cDgw=";
+    hash = "sha256-qdpXpuXHr9w2XMfgOVveWv3JoqdJHVB8TCqZdyaw/DM=";
   };
 
-  postUnpack = ''
-    ln -s ${
-      zig_0_14.fetchDeps {
-        inherit (finalAttrs)
-          src
-          pname
-          version
-          ;
-        hash = "sha256-wBIfLeaKtTow2Z7gjEgIFmqcTGWgpRWI+k0t294BslM=";
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
-
-  nativeBuildInputs = [ zig_0_14.hook ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
   buildInputs = [
     glfw

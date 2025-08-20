@@ -6,25 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsass";
-  version = "0.29.0";
+  version = "0.28.10";
 
   src = fetchCrate {
     pname = "rsass-cli";
     inherit version;
-    hash = "sha256-3Xi+8TKmlZJYsZogzezce0KvasqTRfh04SmeC1UbJQ0=";
+    hash = "sha256-/2U1+kCRpM36r2fHB6Hditnm2dSVHh08M0RIi3AIe44=";
   };
 
-  cargoHash = "sha256-TZZweDTF5sGdrCBXh42yaBMTI9ehjHGSFQu9HzVQEdA=";
+  cargoHash = "sha256-pCQOFBs+lNdjcyOqZ/GjJyOthepnaWAM1feEpegdrDo=";
 
-  meta = {
+  meta = with lib; {
     description = "Sass reimplemented in rust with nom";
     mainProgram = "rsass";
     homepage = "https://github.com/kaj/rsass";
     changelog = "https://github.com/kaj/rsass/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

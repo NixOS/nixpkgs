@@ -25,10 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
 
-  # opsdroid still depends on webexteamssdk but package was renamed
-  # to webexpythonsdk
-  passthru.skipBulkUpdate = true;
-
   postPatch = ''
     # Remove vendorized versioneer
     rm versioneer.py

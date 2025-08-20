@@ -4,10 +4,9 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "accelergy";
   version = "unstable-2022-05-03";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Accelergy-Project";
@@ -16,20 +15,17 @@ python3Packages.buildPythonApplication {
     hash = "sha256-SRtt1EocHy5fKszpoumC+mOK/qhreoA2/Ff1wcu5WKo=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pyyaml
     yamlordereddictloader
     pyfiglet
+    setuptools
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Architecture-level energy/area estimator for accelerator designs";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://accelergy.mit.edu/";
-    maintainers = with lib.maintainers; [ gdinh ];
+    maintainers = with maintainers; [ gdinh ];
   };
 }

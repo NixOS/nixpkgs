@@ -8,13 +8,11 @@
   ical,
   mashumaro,
   poetry-core,
-  poetry-dynamic-versioning,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  python-dateutil,
   syrupy,
   time-machine,
   tzlocal,
@@ -22,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2.1.2";
+  version = "2025.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    tag = "v${version}";
-    hash = "sha256-NQCkJLVOqqKodSclx941HCEEBLS6gJuNS1uZysuXf8A=";
+    tag = version;
+    hash = "sha256-MEZdYOpBAHmWidzq+7SpEFsHNYlSaIQ4utnGK9Y3/NE=";
   };
 
   postPatch = ''
@@ -40,17 +38,13 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     ical
     mashumaro
     pyjwt
-    python-dateutil
     tzlocal
   ];
 
@@ -74,15 +68,12 @@ buildPythonPackage rec {
     # Timezone mismatches
     "test_full_planner_event"
     "test_sinlge_planner_event"
-    "test_set_datetime"
-    "test_message_event"
-    "test_async_get_messages"
   ];
 
   meta = with lib; {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
-    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
+    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

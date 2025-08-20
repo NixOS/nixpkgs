@@ -4,23 +4,20 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dlx";
-  version = "0-unstable-2012-07-08";
+  version = "2012-07-08";
 
   src = fetchzip {
     url = "https://www.davidviner.com/zip/dlx/dlx.zip";
-    hash = "sha256-r4FlMbfsGH50V502EfqzRwAqVv4vpdyH3zFlZW2kCBQ=";
+    sha256 = "0508linnar9ivy3xr99gzrb2l027ngx12dlxaxs7w67cnwqnb0dg";
   };
 
-  preBuild = ''
-    makeFlagsArray+=(
-      CC="${stdenv.cc.targetPrefix}cc"
-      LINK="${stdenv.cc.targetPrefix}cc"
-      CFLAGS="-O2 -Wno-implicit-function-declaration"
-    )
-  '';
-
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LINK=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS=-O2"
+  ];
   hardeningDisable = [ "format" ];
 
   installPhase = ''
@@ -31,10 +28,10 @@ stdenv.mkDerivation {
     mv README.txt MANUAL.TXT $out/share/dlx/doc/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.davidviner.com/dlx.html?name=DLX+Simulator";
     description = "DLX simulator written in C";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
   };
 }

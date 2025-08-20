@@ -14,19 +14,19 @@
 
 let
   pname = "matrix-appservice-irc";
-  version = "3.0.5";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = "matrix-appservice-irc";
+    repo = pname;
     tag = version;
-    hash = "sha256-R/Up4SNWl2AAaeyPJe6OOKFrwIOIvDw/guJxgBuZNC4=";
+    hash = "sha256-Uq1sd1ZXv1JGjvCXHxBsNKvmdjMf4y4MVlOnCas4u/w=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     name = "${pname}-${version}-offline-cache";
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-EJJyGVM4WMVQFWcTjgKHvRFWn40sXNi/vg/bypJ1hMU=";
+    hash = "sha256-PObpXC8VIdsqhOZLLeHdS9mvXnjNQOrs2vlTeK5keRw=";
   };
 
 in
@@ -89,13 +89,13 @@ stdenv.mkDerivation {
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/matrix-org/matrix-appservice-irc/releases/tag/${version}";
     description = "Node.js IRC bridge for Matrix";
     mainProgram = "matrix-appservice-irc";
-    maintainers = with lib.maintainers; [ rhysmdnz ];
+    maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

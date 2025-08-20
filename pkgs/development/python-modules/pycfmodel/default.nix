@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "1.1.3";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    tag = "v${version}";
-    hash = "sha256-ITgha0gZxGPCE+7HVQyDNiPI5uAYZo9Rz8fZVgCYgeM=";
+    tag = version;
+    hash = "sha256-iCjOSwW6rdG3H4e/B/um+QioP45nOr9OcPAwXxZs3mU=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Model for Cloud Formation scripts";
     homepage = "https://github.com/Skyscanner/pycfmodel";
-    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${src.tag}";
+    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

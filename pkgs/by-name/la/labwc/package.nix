@@ -22,20 +22,20 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_18,
   xcbutilwm,
   xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-8SKSITFwbagJhuTXVHpPmQoaooktIXc1CeO9ZOUuh1w=";
+    hash = "sha256-dveV+3Rw9BMzevyIKzde98TsHsAJrQGAcvmc74nZTsg=";
   };
 
   outputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots_0_18
     xcbutilwm
     xwayland
   ];

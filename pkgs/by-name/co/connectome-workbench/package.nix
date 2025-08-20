@@ -48,13 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libGL
-    libGLU
-  ]
-  ++ (with libsForQt5; [
-    qtbase
-  ]);
+  buildInputs =
+    [
+      libGL
+      libGLU
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+    ]);
   # note: we should be able to unvendor a few libs (ftgl, quazip, qwt) but they aren't detected properly
 
   meta = {

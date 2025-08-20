@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libogg";
-  version = "1.3.6";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/ogg/libogg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XIJTQo4YGEDNINQfPKFlV6nMBLrUo9BMzoSAhnf6EGE=";
+    sha256 = "01b7050bghdvbxvw0gzv588fn4a27zh42ljpwzm4vrf8dziipnf4";
   };
 
   outputs = [

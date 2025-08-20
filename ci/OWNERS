@@ -15,9 +15,11 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/nixpkgs-ci
-/.github/workflows                      @NixOS/nixpkgs-ci
-/ci                                     @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
+/.github/workflows/check-nix-format.yml @infinisil
+/.github/workflows/codeowners-v2.yml    @infinisil
+/.github/workflows/nixpkgs-vet.yml      @infinisil @philiptaron
+/ci                                     @infinisil @philiptaron @NixOS/Security
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
@@ -25,26 +27,20 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil @hsjobeki
-/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
-/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
-/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
-/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
-/lib/path/*                 @infinisil @hsjobeki
-/lib/fileset                @infinisil @hsjobeki
-## Standard environment–related libraries
-/lib/customisation.nix      @alyssais @NixOS/stdenv
-/lib/derivations.nix        @alyssais @NixOS/stdenv
-/lib/fetchers.nix           @alyssais @NixOS/stdenv
-/lib/meta.nix               @alyssais @NixOS/stdenv
-/lib/source-types.nix       @alyssais @NixOS/stdenv
-/lib/systems                @alyssais @NixOS/stdenv
+/lib                        @infinisil
+/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
+/lib/generators.nix         @infinisil @Profpatsch
+/lib/cli.nix                @infinisil @Profpatsch
+/lib/debug.nix              @infinisil @Profpatsch
+/lib/asserts.nix            @infinisil @Profpatsch
+/lib/path/*                 @infinisil
+/lib/fileset                @infinisil
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth @hsjobeki
-/lib/types.nix              @infinisil @roberth @hsjobeki
-/lib/options.nix            @infinisil @roberth @hsjobeki
-/lib/tests/modules.sh       @infinisil @roberth @hsjobeki
-/lib/tests/modules          @infinisil @roberth @hsjobeki
+/lib/modules.nix            @infinisil @roberth
+/lib/types.nix              @infinisil @roberth
+/lib/options.nix            @infinisil @roberth
+/lib/tests/modules.sh       @infinisil @roberth
+/lib/tests/modules          @infinisil @roberth
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -62,12 +58,12 @@
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
-/pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
-
+/pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
+/pkgs/pkgs-lib/formats/libconfig                 @h7x4
+/pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
@@ -134,10 +130,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
-# Limine
-/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
-/nixos/tests/limine                             @johnrtitor
-
 # Images and installer media
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco
@@ -155,12 +147,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
 /nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
 
-# Monitoring
-/nixos/modules/services/monitoring/fluent-bit.nix @arianvp
-/nixos/tests/fluent-bit.nix                       @arianvp
-
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
+
 
 # Updaters
 ## update.nix
@@ -168,13 +157,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /maintainers/scripts/update.py    @jtojnar
 ## common-updater-scripts
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
-
-# Android tools, libraries, and environments
-/pkgs/development/android*                    @NixOS/android
-/pkgs/development/mobile/android*             @NixOS/android
-/pkgs/applications/editors/android-studio*    @NixOS/android
-/doc/languages-frameworks/android*            @NixOS/android
-/pkgs/by-name/an/android*                     @NixOS/android
 
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md   @mweinelt @natsukium
@@ -184,19 +166,14 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/python-packages.nix                     @natsukium
 /pkgs/top-level/release-python.nix                      @natsukium
 
-# CUDA
-/pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
-/pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
-/pkgs/development/cuda-modules                @NixOS/cuda-maintainers
-
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
-/maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
-/pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
-/pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @sternenseemann @maralorn
+/pkgs/test/haskell                            @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
@@ -224,7 +201,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/compilers/gcc
 /pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
-/doc/toolchains/llvm.chapter.md @alyssais @RossComputerGuy @NixOS/llvm
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
@@ -234,16 +210,12 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
-/pkgs/build-support/build-mozilla-mach @mweinelt
-/pkgs/applications/networking/browsers/firefox/update.nix
-/pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
-/pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
-/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
+/pkgs/applications/networking/browsers/firefox @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
-pkgs/by-name/ca/cacert @ajs124 @lukegb @mweinelt
+pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
 pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
@@ -258,7 +230,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy
+/lib/licenses.nix @alyssais
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
@@ -274,8 +246,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
-/pkgs/by-name/po/postgresqlTestHook @NixOS/postgres
-/pkgs/by-name/ps/psqlodbc @NixOS/postgres
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
@@ -283,7 +253,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/postgresql @NixOS/postgres
 
 # MySQL/MariaDB and related stuff
-/nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
 # Hardened profile & related modules
@@ -299,11 +268,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/home-assistant.nix @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
-/pkgs/by-name/es/esphome @mweinelt
-
-# Linux kernel
-/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
-/pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+/pkgs/tools/misc/esphome @mweinelt
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -327,12 +292,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
-# D
-/pkgs/build-support/dlang @jtbx @TomaSajt
-
 # Dhall
-/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
-/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
@@ -356,9 +318,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Kakoune
 /pkgs/applications/editors/kakoune     @philiptaron
-
-# LuaPackages
-/pkgs/development/lua-modules         @NixOS/lua
 
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
@@ -406,6 +365,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Xfce
 /doc/hooks/xfce4-dev-tools.section.md @NixOS/xfce
 
+# nim
+/doc/languages-frameworks/nim.section.md  @ehmry
+/pkgs/build-support/build-nim-package.nix @ehmry
+/pkgs/build-support/build-nim-sbom.nix    @ehmry
+/pkgs/top-level/nim-overrides.nix         @ehmry
+
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
@@ -430,14 +395,9 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/development/compilers/ocaml   @ulrikstrid
 /pkgs/development/ocaml-modules     @ulrikstrid
 
-# ZFS
-/nixos/modules/tasks/filesystems/zfs.nix @adamcstephens @amarshall
-/nixos/tests/zfs.nix                     @adamcstephens @amarshall
-/pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
-
 # Zig
-/pkgs/development/compilers/zig @figsoda @RossComputerGuy
-/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
+/pkgs/development/compilers/zig @figsoda
+/doc/hooks/zig.section.md       @figsoda
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
@@ -482,21 +442,3 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
 /pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
-
-# BEAM
-pkgs/development/beam-modules/          @NixOS/beam
-pkgs/development/interpreters/erlang/   @NixOS/beam
-pkgs/development/interpreters/elixir/   @NixOS/beam
-pkgs/development/interpreters/lfe/      @NixOS/beam
-
-# Authelia
-pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
-
-# OctoDNS
-pkgs/by-name/oc/octodns/ @anthonyroussel
-
-# Teleport
-pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
-
-# Warp-terminal
-pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @donteatoreo @johnrtitor

@@ -22,9 +22,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
   };
 
-  # FIXME: remove when gettext is fixed
-  patches = [ ./gettext-0.25.patch ];
-
   configureFlags = [
     "--enable-icon-browser"
     "--with-gtk=gtk3"

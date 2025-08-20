@@ -87,11 +87,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = offlineimap; };
 
-  meta = {
+  meta = with lib; {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ stephen-huan ];
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
     mainProgram = "offlineimap";
   };
 }

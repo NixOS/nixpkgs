@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AlisterH";
-    repo = "gwc";
+    repo = pname;
     rev = version;
     sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
   };
@@ -37,20 +37,14 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=int-conversion"
-    "-Wno-error=incompatible-pointer-types"
-  ];
-
   enableParallelBuilding = false; # Fails to generate machine.h in time.
 
-  meta = {
+  meta = with lib; {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
     changelog = "https://github.com/AlisterH/gwc/blob/${version}/Changelog";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
   };
 }

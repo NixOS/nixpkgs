@@ -12,7 +12,6 @@
   makeFontsConf,
   liberation_ttf_v2,
   exiftool,
-  pdfcpu,
   nixosTests,
   nix-update-script,
 }:
@@ -24,16 +23,16 @@ let
 in
 buildGoModule rec {
   pname = "gotenberg";
-  version = "8.21.1";
+  version = "8.9.1";
 
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${version}";
-    hash = "sha256-2uILOK5u+HrdjqN+ZQjGv48QxSCrzSvnF+Ae6iCKCbU=";
+    hash = "sha256-y54DtOYIzFAk05TvXFcLdStfAXim3sVHBkW+R8CrtMM=";
   };
 
-  vendorHash = "sha256-sTcP/tyrCtvgYeOnsbqRFdBC1bbMAbA978t6LOTKFio=";
+  vendorHash = "sha256-BYcdqZ8TNEG6popRt+Dg5xW5Q7RmYvdlV+niUNenRG0=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
@@ -53,7 +52,6 @@ buildGoModule rec {
     pdftk
     qpdf
     unoconv
-    pdfcpu
     mktemp
     jre'
   ];
@@ -64,7 +62,6 @@ buildGoModule rec {
     export QPDF_BIN_PATH=${getExe qpdf}
     export UNOCONVERTER_BIN_PATH=${getExe unoconv}
     export EXIFTOOL_BIN_PATH=${getExe exiftool}
-    export PDFCPU_BIN_PATH=${getExe pdfcpu}
     # LibreOffice needs all of these set to work properly
     export LIBREOFFICE_BIN_PATH=${libreoffice'}
     export FONTCONFIG_FILE=${fontsConf}
@@ -73,14 +70,7 @@ buildGoModule rec {
   '';
 
   # These tests fail with a panic, so disable them.
-  checkFlags =
-    let
-      skippedTests = [
-        "TestChromiumBrowser_(screenshot|pdf)"
-        "TestNewContext"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags = [ "-skip=^TestChromiumBrowser_(screenshot|pdf)$" ];
 
   preFixup = ''
     wrapProgram $out/bin/gotenberg \
@@ -88,7 +78,6 @@ buildGoModule rec {
       --set QPDF_BIN_PATH "${getExe qpdf}" \
       --set UNOCONVERTER_BIN_PATH "${getExe unoconv}" \
       --set EXIFTOOL_BIN_PATH "${getExe exiftool}" \
-      --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
       --set JAVA_HOME "${jre'}"
   '';
 

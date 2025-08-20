@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "8.2.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-dginzwQrzcgnVdRO54cGPVh6+yVx0zLsFeeAVhxWFnE=";
+    hash = "sha256-1YZ7vtPPTYI4w9zTxXVzmcdDJNOLqFlSRfnxy5aBZTo=";
   };
 
   nativeBuildInputs = [
@@ -65,14 +65,6 @@ stdenv.mkDerivation rec {
     "-Dcurated=false"
   ];
 
-  postPatch = ''
-    # Since we do not build libxml2 with legacy support,
-    # we cannot use compressed appstream metadata.
-    # https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7f14537727bf6845d0eea08cd1fdc30accc2a53
-    substituteInPlace src/Core/FlatpakBackend.vala \
-      --replace-fail ".xml.gz" ".xml"
-  '';
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -82,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "Open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.appcenter";
   };
 }

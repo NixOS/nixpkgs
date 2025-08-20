@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Allow building tools separately from the library.
-    # This is needed to break the dependency cycle.
-    (replaceVars ./standalone-tools.patch {
+    # This is needed to break the depenency cycle.
+    (substituteAll {
+      src = ./standalone-tools.patch;
       inherit version;
     })
   ];
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gssdp-device-sniffer";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
-    teams = gssdp_1_6.meta.teams;
+    maintainers = gssdp_1_6.meta.maintainers;
     platforms = platforms.all;
   };
 }

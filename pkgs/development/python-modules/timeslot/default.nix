@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "timeslot";
   version = "0.1.2";
 
   # pypi distribution doesn't include tests, so build from source instead
   src = fetchFromGitHub {
     owner = "ErikBjare";
-    repo = "timeslot";
+    repo = pname;
     rev = "af35445e96cbb2f3fb671a75aac6aa93e4e7e7a6";
     sha256 = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
   };
@@ -27,11 +27,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # The pyproject.toml specifies the flag `--cov=timeslot`,
     # This causes an error when running without pytest-cov,
     # so use this flag to override that option, as we don't need coverage.
-    "--override-ini=addopts="
+    "--override-ini addopts=''"
   ];
 
   pythonImportsCheck = [ "timeslot" ];

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   cups,
   ninja,
@@ -55,30 +56,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
+  sourceRoot = "pyside-setup-everywhere-src-6.8.0/sources/pyside6";
 
-  # Qt Designer plugin moved to a separate output to reduce closure size
-  # for downstream things
-  outputs = [
-    "out"
-    "devtools"
+  patches = [
+    # Manual backport of https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=cacc9c5803a6dec820dd46211a836453183c8dab
+    # to fit our structure.
+    # FIXME: remove for 6.8.1
+    ./fix-installing-docs.patch
   ];
 
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   # We therefore symLink all required and optional Qt modules in one directory tree ("qt_linked").
-  postPatch = ''
-    # Don't ignore optional Qt modules
-    substituteInPlace cmake/PySideHelpers.cmake \
-      --replace-fail \
-        'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
-        'set (found_basepath 0)'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/PySideHelpers.cmake \
-      --replace-fail \
-        "Designer" ""
-  '';
+  postPatch =
+    ''
+      # Don't ignore optional Qt modules
+      substituteInPlace cmake/PySideHelpers.cmake \
+        --replace-fail \
+          'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
+          'set (found_basepath 0)'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/PySideHelpers.cmake \
+        --replace-fail \
+          "Designer" ""
+    '';
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -90,8 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python
     pythonImportsCheckHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   buildInputs = (
     if stdenv.hostPlatform.isLinux then
@@ -116,9 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../../..
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
-
-    mkdir -p "$devtools"
-    moveToOutput "${python.pkgs.qt6.qtbase.qtPluginPrefix}/designer" "$devtools"
   '';
 
   pythonImportsCheck = [ "PySide6" ];
@@ -132,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ gebner ];
     platforms = lib.platforms.all;
   };
 })

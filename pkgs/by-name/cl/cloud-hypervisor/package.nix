@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   pkg-config,
   dtc,
@@ -10,16 +11,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "47.0";
+  version = "43.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
-    repo = "cloud-hypervisor";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-NzvK6gKu7pWwTqLaeDKyYedIjzRa85k9PGUGfeA2Y4c=";
+    hash = "sha256-drxJtlvBpkK3I7Ob3+pH4KLUq53GWXe1pmv7CI3bbP4=";
   };
 
-  cargoHash = "sha256-s3lBlYbE9xoLov8JWeX89A7J00tCISoCDHHBoEcILus=";
+  cargoPatches = [
+    (fetchpatch {
+      name = "kvm-ioctls-0.19.1.patch";
+      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/eaa21946993276434403d41419a34e564935c8e9.patch";
+      hash = "sha256-G7B0uGl/RAkwub8x1jNNgBrC0dwq/Gv46XpbtTZWD5M=";
+    })
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-F6ukvSwMHRHXoZKgXEFnTAN1B80GsQDW8iqZAvsREr4=";
 
   separateDebugInfo = true;
 
@@ -41,22 +51,21 @@ rustPlatform.buildRustPackage rec {
     "vmm" # /dev/kvm
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
     changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20
       bsd3
     ];
     mainProgram = "cloud-hypervisor";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       offline
       qyliss
     ];
     platforms = [
       "aarch64-linux"
-      "riscv64-linux"
       "x86_64-linux"
     ];
   };

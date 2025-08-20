@@ -4,17 +4,15 @@
   fetchPypi,
   pytest-asyncio,
   pytest-trio,
-  pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "siosocks";
   version = "0.3.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -23,13 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-uja79vWhPYOhhTUBIh+XpS4GnrYJy0/XpDXXQjnyHWM=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ trio ];
+  propagatedBuildInputs = [ trio ];
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-mock
     pytestCheckHook
     pytest-trio
   ];

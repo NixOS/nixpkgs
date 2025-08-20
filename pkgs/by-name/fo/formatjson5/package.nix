@@ -2,11 +2,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  darwin,
   nix-update-script,
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "formatjson5";
   version = "0.2.6";
 
@@ -25,7 +27,9 @@ rustPlatform.buildRustPackage {
     })
   ];
 
-  cargoHash = "sha256-1CSt9dPVHdOqfQXio7/eXiDLWt+iOe6Qj+VtWblwSDE=";
+  cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoBuildFlags = [ "--example formatjson5" ];
 

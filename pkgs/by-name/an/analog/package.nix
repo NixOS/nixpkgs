@@ -2,10 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  bzip2,
-  gd,
-  libjpeg,
-  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,21 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
   };
 
-  buildInputs = [
-    bzip2
-    gd
-    libjpeg
-    libpng
-  ];
-
   postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
       -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/${pname}/lang/\"|g"
-    substituteInPlace src/Makefile \
-      --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc" \
-      --replace-fail "LIBS = -lm" "LIBS = -lm -lpng -lgd -ljpeg -lz -lbz2" \
-      --replace-fail "DEFS =" "DEFS = -DHAVE_GD -DHAVE_ZLIB -DHAVE_BZLIB"
+    substituteInPlace src/Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''

@@ -11,26 +11,24 @@
   desktop-file-utils,
   libadwaita,
   file,
-  _7zz,
+  p7zip,
   which,
   appimage-run,
   gtk4,
   bintools,
   libnotify,
-  dwarfs,
-  squashfsTools,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "3.4.0";
+  version = "2.3.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
     tag = version;
-    hash = "sha256-3kTgYlsVumTVH5X6h3YvS0tdex/OGQyn5MzevQ+GuH4=";
+    hash = "sha256-w+tCOMDNm99cAtA9AmADBc6dP4y5KDDP8iiRZS+5upQ=";
   };
 
   postPatch =
@@ -78,15 +76,13 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${
       lib.makeBinPath [
         file
-        _7zz # 7zz
+        p7zip
         which
         appimage-run
         desktop-file-utils # update-desktop-database
         gtk4.dev # gtk4-launch
         bintools # readelf
         libnotify # notify-send
-        dwarfs # dwarfsextract, dwarfsck
-        squashfsTools # unsquashfs
       ]
     }"
   ];

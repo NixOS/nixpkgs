@@ -104,7 +104,7 @@ in
     systemd.services.sogo = {
       description = "SOGo groupware";
       after = [
-        "postgresql.target"
+        "postgresql.service"
         "mysql.service"
         "memcached.service"
         "openldap.service"
@@ -113,7 +113,7 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
 
-      environment.LDAPTLS_CACERT = config.security.pki.caBundle;
+      environment.LDAPTLS_CACERT = "/etc/ssl/certs/ca-certificates.crt";
 
       serviceConfig = {
         Type = "forking";
@@ -191,7 +191,7 @@ in
       description = "SOGo email alarms";
 
       after = [
-        "postgresql.target"
+        "postgresql.service"
         "mysqld.service"
         "memcached.service"
         "openldap.service"

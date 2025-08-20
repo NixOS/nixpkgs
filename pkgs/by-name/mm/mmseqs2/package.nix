@@ -26,37 +26,39 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
-  version = "18-8cc5c";
+  version = "16-747c6";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "mmseqs2";
     tag = finalAttrs.version;
-    hash = "sha256-xOdtAE6qpEOH13ubs7KEFAEwsYbB3a5t+QXTC+QxgLs=";
+    hash = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    xxd
-    perl
-    installShellFiles
-    zstd
-  ]
-  ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      xxd
+      perl
+      installShellFiles
+      zstd
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "HAVE_AVX2" enableAvx2)
-    (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
-    (lib.cmakeBool "HAVE_MPI" enableMpi)
-    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
-    (lib.cmakeBool "HAVE_ARM8" stdenv.hostPlatform.isAarch64)
-  ]
-  ++ lib.optionals cudaSupport [
-    (lib.cmakeBool "ENABLE_CUDA" true)
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "HAVE_AVX2" enableAvx2)
+      (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
+      (lib.cmakeBool "HAVE_MPI" enableMpi)
+      (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+      (lib.cmakeBool "HAVE_ARM8" stdenv.hostPlatform.isAarch64)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeBool "ENABLE_CUDA" true)
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+    ];
 
   buildInputs =
     lib.optionals stdenv.cc.isClang [
@@ -83,13 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Ultra fast and sensitive sequence search and clustering suite";
     mainProgram = "mmseqs";
     homepage = "https://mmseqs.com/";
-    changelog = "https://github.com/soedinglab/MMseqs2/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
   };
 })

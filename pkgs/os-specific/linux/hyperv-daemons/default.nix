@@ -19,7 +19,7 @@ let
       # The fcopy program is explicitly left out in the Makefile on aarch64
       (if stdenv.hostPlatform.isAarch64 then null else "fcopy_uio");
 
-  daemons = stdenv.mkDerivation {
+  daemons = stdenv.mkDerivation rec {
     pname = "hyperv-daemons-bin";
     inherit (kernel) src version;
 

@@ -13,13 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "flatt-security";
-    repo = "shisho";
-    tag = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-G7sHaDq+F5lXNaF1sSLUecdjZbCejJE79P4AQifKdFY=";
     fetchSubmodules = true;
   };
-
-  cargoHash = "sha256-gv3qvDzqwuuAVpbaOpMI7DuapSALMr/qzyhor3avYQI=";
+  cargoHash = "sha256-xd4andytmDMOIT+3DkmUC9fkxxGJ6yRY2WSdnGB6ZwY=";
 
   nativeBuildInputs = [
     installShellFiles

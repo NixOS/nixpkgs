@@ -28,13 +28,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "WebSecProbe" ];
 
-  meta = {
+  meta = with lib; {
     description = "Web Security Assessment Tool";
     homepage = "https://github.com/spyboy-productions/WebSecProbe/";
     changelog = "https://github.com/spyboy-productions/WebSecProbe/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "websecprobe";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

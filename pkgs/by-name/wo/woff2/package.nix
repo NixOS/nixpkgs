@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ]
-  ++ lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
+  ] ++ lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
 
   propagatedBuildInputs = [ brotli ];
 

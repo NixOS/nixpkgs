@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigal";
-  version = "2.5";
+  version = "2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-IOAQ6lMudYH+Ukx27VKbPNKmQKBaX3j0p750nC5Y1Hg=";
+    hash = "sha256-pDTaqtqfuk7tACkyaKClTJotuVcTKli5yx1wbEM93TM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,12 +36,13 @@ python3.pkgs.buildPythonApplication rec {
     cryptography
   ];
 
-  nativeCheckInputs = [
-    ffmpeg
-  ]
-  ++ (with python3.pkgs; [
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      ffmpeg
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+    ]);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_nonmedia_files"
@@ -57,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;
     maintainers = with maintainers; [
+      domenkozar
       matthiasbeyer
     ];
   };

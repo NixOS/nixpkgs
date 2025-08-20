@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     # disable tests depending on network connection
     "test_develop"
     "test_install"
-    # Avoid unmaintained "mocker" fixture library, and calls to dependent "build" module
+    # Avoid unmainted "mocker" fixture library, and calls to dependent "build" module
     "test_build"
     "test_npm_build"
     "test_create_cmdclass"

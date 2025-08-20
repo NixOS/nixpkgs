@@ -3,28 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
-  hatchling,
-  hatch-vcs,
   hypothesis,
+  poetry-core,
+  setuptools,
   pylama,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "6.0.1";
+  version = "5.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-+O6bIbIpEMRUhzGUOQtBlHB//DaXaaOTjqMBTFvYnLk=";
+    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
   };
 
-  build-system = [
-    hatchling
-    hatch-vcs
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -49,10 +49,10 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  disabledTestPaths = [
-    "tests/benchmark/" # requires pytest-benchmark
-    "tests/integration/" # pulls in 10 other packages
-    "tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+  pytestFlagsArray = [
+    "--ignore=tests/benchmark/" # requires pytest-benchmark
+    "--ignore=tests/integration/" # pulls in 10 other packages
+    "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
   ];
 
   disabledTests = [

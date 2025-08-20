@@ -5,7 +5,6 @@
   cpptrace,
   src,
   checkOutput,
-  static,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,9 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit src;
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    (cpptrace.override { inherit static; })
-  ];
+  buildInputs = [ cpptrace ];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = lib.strings.concatLines (
     [ "$out/bin/main" ]
     # Check that the backtrace contains the path to the executable.
-    ++ lib.optionals checkOutput [
+    ++ lib.optionals (checkOutput) [
       ''
         if [[ !(`$out/bin/main 2>&1` =~ "${finalAttrs.name}") ]]; then
           echo "ERROR: $out/bin/main does not output '${finalAttrs.name}'"

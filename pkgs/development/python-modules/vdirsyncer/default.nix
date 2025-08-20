@@ -11,7 +11,6 @@
   atomicwrites,
   hypothesis,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-subtesthack,
   setuptools,
   setuptools-scm,
@@ -38,6 +37,10 @@ buildPythonPackage rec {
     hash = "sha256-5DeFH+uYXew1RGVPj5z23RCbCwP34ZlWCGYDCS/+so8=";
   };
 
+  postPatch = ''
+    sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -61,7 +64,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-    pytest-cov-stub
     pytest-subtesthack
     pytest-asyncio
     trustme
@@ -80,12 +82,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
-  meta = {
+  meta = with lib; {
     description = "Synchronize calendars and contacts";
     homepage = "https://github.com/pimutils/vdirsyncer";
     changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ stephen-huan ];
+    license = licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "vdirsyncer";
   };
 }

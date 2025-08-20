@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "4.0.0";
+  version = "3.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stephrdev";
-    repo = "pytest-isort";
+    repo = pname;
     tag = version;
-    hash = "sha256-fMt2tYc+Ngb57T/VJYxI2UN25qvIrgIsEoImVIitDK4=";
+    hash = "sha256-1oCVIi0sXwac4AufScJJRsfvBwaBAwlMBRNqLcUXEh4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

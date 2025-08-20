@@ -7,11 +7,10 @@
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
   version = "0.3.7";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pseewald";
-    repo = "fprettify";
+    repo = pname;
     rev = "v${version}";
     sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
   };
@@ -20,11 +19,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs fprettify.py
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     configargparse
   ];
 

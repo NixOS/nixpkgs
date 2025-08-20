@@ -11,32 +11,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ptcollab";
-  version = "0.6.4.9";
+  version = "0.6.4.8";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1fVhimwBAYtC+HnuxA7ywfEnVlqHnlzwfKT9+H/ZG0k=";
+    hash = "sha256-9u2K79QJRfYKL66e1lsRrQMEqmKTWbK+ucal3/u4rP4=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ (with libsForQt5; [
-    qmake
-    qttools
-    wrapQtAppsHook
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with libsForQt5; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
-  buildInputs = [
-    libvorbis
-    rtmidi
-  ]
-  ++ (with libsForQt5; [
-    qtbase
-    qtmultimedia
-  ]);
+  buildInputs =
+    [
+      libvorbis
+      rtmidi
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qtmultimedia
+    ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Move appbundles to Applications before wrapping happens

@@ -6,6 +6,7 @@
   openssl,
   stdenv,
   libiconv,
+  darwin,
   nix,
   testers,
   nixtract,
@@ -22,16 +23,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-36ciPNSlB1LU+UXP8MLakrBRRqbyiVFN8Jp/JbCe1OY=";
   };
 
-  cargoHash = "sha256-vG661ZXL87FiMy8yLOI7cagvunhzJhAsBR+VF6RfBxU=";
+  cargoHash = "sha256-fawBRIVcOhtDxxRYCf+HWYadoSB/ENKguTbS0M4odVU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeCheckInputs = [ nix ];
 

@@ -12,7 +12,7 @@ let
   cfg = config.services.displayManager.ly;
   xEnv = config.systemd.services.display-manager.environment;
 
-  ly = cfg.package.override { x11Support = cfg.x11Support; };
+  ly = cfg.package;
 
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
@@ -36,15 +36,18 @@ let
   defaultConfig = {
     shutdown_cmd = "/run/current-system/systemd/bin/systemctl poweroff";
     restart_cmd = "/run/current-system/systemd/bin/systemctl reboot";
+    tty = 2;
     service_name = "ly";
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
+    mcookie_cmd = "/run/current-system/sw/bin/mcookie";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+    wayland_cmd = dmcfg.sessionData.wrapper;
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    setup_cmd = dmcfg.sessionData.wrapper;
+    x_cmd_setup = dmcfg.sessionData.wrapper;
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -56,11 +59,6 @@ in
   options = {
     services.displayManager.ly = {
       enable = mkEnableOption "ly as the display manager";
-      x11Support = mkOption {
-        description = "Whether to enable support for X11";
-        type = lib.types.bool;
-        default = true;
-      };
 
       package = mkPackageOption pkgs [ "ly" ] { };
 
@@ -114,14 +112,11 @@ in
       displayManager = {
         enable = true;
         execCmd = "exec /run/current-system/sw/bin/ly";
-
-        # Set this here instead of 'defaultConfig' so users get eval
-        # errors when they change it.
-        ly.settings.tty = 1;
       };
 
       xserver = {
-        # To enable user switching, allow ly to allocate displays dynamically.
+        # To enable user switching, allow ly to allocate TTYs/displays dynamically.
+        tty = null;
         display = null;
       };
     };
@@ -133,7 +128,10 @@ in
         after = [
           "systemd-user-sessions.service"
           "plymouth-quit-wait.service"
+          "getty@tty${toString finalConfig.tty}.service"
         ];
+
+        conflicts = [ "getty@tty7.service" ];
 
         serviceConfig = {
           Type = "idle";

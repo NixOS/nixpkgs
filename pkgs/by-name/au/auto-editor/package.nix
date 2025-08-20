@@ -2,30 +2,45 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  replaceVars,
+  ffmpeg,
   yt-dlp,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "28.0.2";
+  version = "24w29a";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-ozw5ZPvKP7aTBBItQKNx85hZ1T4IxX9NYCcNHC5UuuM=";
+    hash = "sha256-2/6IqwMlaWobOlDr/h2WV2OqkxqVmUI65XsyBphTbpA=";
   };
 
+  patches = [
+    (replaceVars ./set-exe-paths.patch {
+      ffmpeg = lib.getExe ffmpeg;
+      yt_dlp = lib.getExe yt-dlp;
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace auto_editor/__main__.py \
-      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+    # pyav is a fork of av, but has since mostly been un-forked
+    substituteInPlace pyproject.toml \
+        --replace-fail '"pyav==12.2.*"' '"av"'
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  # our patch file also removes the dependency on ae-ffmpeg
+  pythonRemoveDeps = [ "ae-ffmpeg" ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   dependencies = with python3Packages; [
-    basswood-av
+    av
     numpy
   ];
 
@@ -40,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "auto_editor" ];
 
   meta = {
-    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${src.tag}";
+    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${version}";
     description = "Command line application for automatically editing video and audio by analyzing a variety of methods, most notably audio loudness";
     homepage = "https://auto-editor.com/";
     license = lib.licenses.unlicense;

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  wrapGAppsHook3,
   wxGTK,
   python3,
   zlib,
@@ -11,13 +10,13 @@
   libX11,
   SDL2,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "golly";
   version = "4.3";
 
   src = fetchurl {
     hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
-    url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
+    url = "mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
   buildInputs = [
@@ -32,25 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     (python3.withPackages (ps: [ ps.setuptools ]))
-    wrapGAppsHook3
   ];
-
-  # fails nondeterministically on darwin
-  enableParallelBuilding = false;
 
   setSourceRoot = ''
     sourceRoot=$(echo */gui-wx)
   '';
 
   postPatch = ''
-    substituteInPlace wxprefs.cpp \
-      --replace-fail 'PYTHON_SHLIB' '${python3}/lib/libpython3.so'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace makefile-gtk \
-      --replace-fail '-Wl,--as-needed' "" \
-      --replace-fail '-lGL ' "" \
-      --replace-fail '-lGLU' ""
+    sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
+    ! grep _SHLIB *.cpp
+
+    grep /lib/libpython wxprefs.cpp
   '';
 
   makeFlags = [
@@ -58,16 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     "makefile-gtk"
     "ENABLE_SOUND=1"
     "GOLLYDIR=${placeholder "out"}/share/golly"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "CXX=${stdenv.cc.targetPrefix}c++"
-    "CXXC=${stdenv.cc.targetPrefix}c++"
-    "LD=${stdenv.cc.targetPrefix}c++"
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK) "wx-config"}"
   ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out/bin"
     cp ../golly ../bgolly "$out/bin"
 
@@ -76,19 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/share/golly"
     cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
-
-    runHook postInstall
   '';
 
   meta = {
     description = "Cellular automata simulation program";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      siraben
-    ];
-    platforms = lib.platforms.unix;
-    homepage = "https://golly.sourceforge.io/";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
-})
+}

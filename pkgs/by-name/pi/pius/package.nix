@@ -13,7 +13,6 @@ python3Packages.buildPythonApplication {
   pname = "pius";
   namePrefix = "";
   inherit version;
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jaymzh";

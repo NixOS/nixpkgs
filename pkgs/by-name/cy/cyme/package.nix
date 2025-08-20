@@ -3,58 +3,55 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  installShellFiles,
   stdenv,
   darwin,
-  versionCheckHook,
+  libusb1,
   nix-update-script,
+  testers,
+  cyme,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "2.2.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-zwte2YzjEMW1wVti02tOa2IZMd2Z8amYUB9RHevx5bg=";
+    hash = "sha256-4lnW6p7MaAZdvyXddIoB8TuEQSCmBYOwyvOA1r2ZKxk=";
   };
 
-  cargoHash = "sha256-wOOcIkEgyR5Af78uMuCksalVH8VPFXptg232It/ilXE=";
+  cargoHash = "sha256-sg6nIIiHUXHLnvn25kKWqqa8WV86D/arl4t3EUByQBQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.DarwinTools
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+    ];
+
+  buildInputs = [
+    libusb1
   ];
 
-  checkFlags = [
-    # doctest that requires access outside sandbox
-    "--skip=udev::hwdb::get"
-    # - system_profiler is not available in the sandbox
-    # - workaround for "Io Error: No such file or directory"
-    "--skip=test_run"
-  ];
+  checkFlags =
+    [
+      # doctest that requires access outside sandbox
+      "--skip=udev::hwdb::get"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # system_profiler is not available in the sandbox
+      "--skip=test_run"
+    ];
 
-  postInstall = ''
-    installManPage doc/cyme.1
-    installShellCompletion --cmd cyme \
-      --bash doc/cyme.bash \
-      --fish doc/cyme.fish \
-      --zsh doc/_cyme
-  '';
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = cyme;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";

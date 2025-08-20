@@ -13,7 +13,6 @@
   core_kernel,
   ezjsonm,
   fileutils,
-  jane_rope ? null,
   mmap,
   lwt,
   ocamlgraph,
@@ -28,7 +27,7 @@
   frontc,
   ounit,
   ppx_jane,
-  parsexp ? null,
+  parsexp,
   utop,
   libxml2,
   ncurses,
@@ -48,12 +47,12 @@ else
 
   stdenv.mkDerivation rec {
     pname = "ocaml${ocaml.version}-bap";
-    version = "2.5.0+pr1621";
+    version = "2.5.0";
     src = fetchFromGitHub {
       owner = "BinaryAnalysisPlatform";
       repo = "bap";
-      rev = "65c282d94e8b7028e8a986c637db3a2378a753f6";
-      hash = "sha256-LUZZOgG1T8xa5jLA/fDft8ofYb/Yf6QjTrl6AlLY7H0=";
+      rev = "v${version}";
+      sha256 = "1c30zxn0zyi0wypvjmik3fd6n6a8xjcb102qfnccn1af052bvsrd";
     };
 
     sigs = fetchurl {
@@ -96,7 +95,6 @@ else
       core_kernel
       ezjsonm
       fileutils
-      jane_rope
       mmap
       lwt
       ocamlgraph
@@ -134,7 +132,7 @@ else
     ];
 
     preConfigure = ''
-      substituteInPlace oasis/monads --replace-warn core_kernel.rope jane_rope
+      substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
     '';
 
     configureFlags = [

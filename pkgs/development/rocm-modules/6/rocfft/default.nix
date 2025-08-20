@@ -1,4 +1,5 @@
 {
+  rocfft,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -14,18 +15,18 @@
   gtest,
   openmp,
   rocrand,
-  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
+  gpuTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocfft${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  pname = "rocfft";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-RrxdwZ64uC7lQzyJI1eGHX2dmRnW8TfNThnuvuz5XWo=";
+    hash = "sha256-6Gjsy14GeR08VqnNmFhu8EyYDnQ+VZRlg+u9MAAWfHc=";
   };
 
   nativeBuildInputs = [
@@ -35,23 +36,22 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  # FIXME: rocfft_aot_helper runs at the end of the build and has a risk of timing it out
-  # due to a long period with no terminal output
   buildInputs = [ sqlite ];
 
-  cmakeFlags = [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_C_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ];
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -156,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
+      owner = finalAttrs.src.owner;
+      repo = finalAttrs.src.repo;
     };
   };
 
@@ -167,7 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocFFT";
     license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
+    maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

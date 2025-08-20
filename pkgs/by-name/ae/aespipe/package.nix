@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aespipe";
-  version = "2.4i";
+  version = "2.4h";
 
   src = fetchurl {
     url = "mirror://sourceforge/loop-aes/aespipe/aespipe-v${version}.tar.bz2";
-    sha256 = "sha256-tBx6qsJULlnY/1jB/52HtS1KjBhHt5nIr+yR2UUXx14=";
+    sha256 = "sha256-6rMR/CbqQyibw632YNYnBJJJSWByXSAm7EkXKUoaukk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
      --prefix PATH : $out/bin:${lib.makeBinPath [ sharutils ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "AES encrypting or decrypting pipe";
     homepage = "https://loop-aes.sourceforge.net/aespipe.README";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 }

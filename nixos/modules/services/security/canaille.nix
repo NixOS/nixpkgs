@@ -33,12 +33,9 @@ let
       old.dependencies
       ++ old.optional-dependencies.front
       ++ old.optional-dependencies.oidc
-      ++ old.optional-dependencies.scim
       ++ old.optional-dependencies.ldap
       ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql
-      ++ old.optional-dependencies.otp
-      ++ old.optional-dependencies.sms;
+      ++ old.optional-dependencies.postgresql;
     makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
       "--set CONFIG /etc/canaille/config.toml"
       "--set SECRETS_DIR \"${secretsDir}\""
@@ -264,25 +261,26 @@ in
     #
     # See this for how Pydantic maps file names/env vars to config settings:
     # https://docs.pydantic.dev/latest/concepts/pydantic_settings/#parsing-environment-variable-values
-    systemd.tmpfiles.rules = [
-      "Z  ${secretsDir} 700 canaille canaille - -"
-      "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
-    ]
-    ++ optional (
-      cfg.smtpPasswordFile != null
-    ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
-    ++ optional (
-      cfg.jwtPrivateKeyFile != null
-    ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
-    ++ optional (
-      cfg.ldapBindPasswordFile != null
-    ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
+    systemd.tmpfiles.rules =
+      [
+        "Z  ${secretsDir} 700 canaille canaille - -"
+        "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+      ]
+      ++ optional (
+        cfg.smtpPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
+      ++ optional (
+        cfg.jwtPrivateKeyFile != null
+      ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
+      ++ optional (
+        cfg.ldapBindPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
       # We want this on boot, not on socket activation
       wantedBy = [ "multi-user.target" ];
-      after = optional createLocalPostgresqlDb "postgresql.target";
+      after = optional createLocalPostgresqlDb "postgresql.service";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
         ExecStart = "${getExe finalPackage} install";
@@ -295,8 +293,7 @@ in
       after = [
         "network.target"
         "canaille-install.service"
-      ]
-      ++ optional createLocalPostgresqlDb "postgresql.target";
+      ] ++ optional createLocalPostgresqlDb "postgresql.service";
       requires = [
         "canaille-install.service"
         "canaille.socket"

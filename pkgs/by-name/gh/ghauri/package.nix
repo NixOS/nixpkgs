@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
     "ghauri"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for detecting and exploiting SQL injection security flaws";
     homepage = "https://github.com/r0oth3x49/ghauri";
     changelog = "https://github.com/r0oth3x49/ghauri/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "ghauri";
   };
 }

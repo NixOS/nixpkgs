@@ -22,6 +22,10 @@ buildPythonPackage rec {
     pygame
   ];
 
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
+
   pythonImportsCheck = [ "pyrect" ];
 
   meta = with lib; {

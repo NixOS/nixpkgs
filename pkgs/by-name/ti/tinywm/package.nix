@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.publicDomain;
     mainProgram = "tinywm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (libX11.meta) platforms;
   };
 })

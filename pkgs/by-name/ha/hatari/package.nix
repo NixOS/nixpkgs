@@ -1,32 +1,28 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  cmake,
+  fetchurl,
   zlib,
-  SDL2,
+  SDL,
+  cmake,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "hatari";
-  version = "2.6.0";
+  version = "2.3.1";
 
-  src = fetchFromGitLab {
-    domain = "framagit.org";
-    owner = "hatari";
-    repo = "hatari";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0KXnLsDmvLPzXsRE1QSymzcx/aX7kNxXSWYcZ2qZ0pw=";
+  src = fetchurl {
+    url = "https://download.tuxfamily.org/hatari/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-RKL2LKmV442eCHSAaVbwucPMhOqJ4BaaY4SbY807ZL0=";
   };
 
   # For pthread_cancel
   cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s" ];
 
   nativeBuildInputs = [ cmake ];
-
   buildInputs = [
     zlib
-    SDL2
+    SDL
   ];
 
   meta = {
@@ -36,4 +32,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-})
+}

@@ -2,24 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
   llama-index-core,
   llama-index-llms-openai,
   llama-index-program-openai,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-question-gen-openai";
-  version = "0.3.1";
+  version = "0.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_question_gen_openai";
     inherit version;
-    hash = "sha256-XpMRtDPMJYH/ilMfoZ+zqiGBW6/3WqrN7xF2CslSKqk=";
+    hash = "sha256-79O0aCMoCOnTR0ZwquqwDkG5D3X1LQyb+/ESB+CWPWI=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core

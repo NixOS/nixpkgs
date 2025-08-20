@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  raylib,
-}:
+{ lib, stdenv, fetchFromGitHub, raylib, darwin }:
 
-stdenv.mkDerivation {
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
+stdenv.mkDerivation rec {
   pname = "raylib-games";
   version = "2022-10-24";
 
   src = fetchFromGitHub {
     owner = "raysan5";
-    repo = "raylib-games";
+    repo = pname;
     rev = "e00d77cf96ba63472e8316ae95a23c624045dcbe";
     hash = "sha256-N9ip8yFUqXmNMKcvQuOyxDI4yF/w1YaoIh0prvS4Xr4=";
   };
 
-  buildInputs = [ raylib ];
+  buildInputs = [ raylib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   configurePhase = ''
     runHook preConfigure
@@ -41,7 +40,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preInstall
+    runHook preBuild
     mkdir -p $out/bin $out/resources
     find . -type f -executable -exec cp {} $out/bin \;
     for d in *; do
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
         cp -ar "$d/src/resources" "$out/resources/$d"
       fi
     done
-    runHook postInstall
+    runHook postBuild
   '';
 
   meta = with lib; {

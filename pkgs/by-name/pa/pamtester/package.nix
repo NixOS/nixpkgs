@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mainProgram = "pamtester";
     homepage = "https://pamtester.sourceforge.net/";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
 }

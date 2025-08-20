@@ -21,7 +21,7 @@ let
   metadata = lib.importJSON ./meta.json;
 in
 rec {
-  replay-recordreplay = stdenv.mkDerivation {
+  replay-recordreplay = stdenv.mkDerivation rec {
     pname = "replay-recordreplay";
     version = builtins.head (builtins.match ".*/linux-recordreplay-(.*).tgz" metadata.recordreplay.url);
     nativeBuildInputs = [ autoPatchelfHook ];

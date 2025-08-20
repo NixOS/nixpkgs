@@ -1,21 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  makeBinaryWrapper,
-  rustfmt,
-}:
+{ lib, rustPlatform, fetchCrate, makeBinaryWrapper, rustfmt }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zbus_xmlgen";
-  version = "5.1.0";
+  version = "5.0.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-LHY4E2YemGksK8xJx0r3iTHnk3CqMl5abM08VSBPIfo=";
+    hash = "sha256-of+/HA8u+/hRnzXZqlQzL+6A4Hkka7pN+Wl2YdrACQY=";
   };
 
-  cargoHash = "sha256-g5GLyloeyVXcJgMVx21ePYlcYUj+NGFtVarpYeQN9rw=";
+  cargoHash = "sha256-+nTXAyBelqP0HQnJ6aGFiX2NobJ/MwEav/3gDry9y2U=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
   nativeCheckInputs = [ rustfmt ];

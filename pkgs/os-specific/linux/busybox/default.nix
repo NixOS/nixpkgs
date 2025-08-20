@@ -1,18 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  fetchpatch,
-  fetchFromGitLab,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableMinimal ? false,
-  enableAppletSymlinks ? true,
-  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-  useMusl ? stdenv.hostPlatform.libc == "musl",
-  musl,
-  extraConfig ? "",
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch, fetchFromGitLab
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableMinimal ? false
+, enableAppletSymlinks ? true
+# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl
+, extraConfig ? ""
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -67,11 +60,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
-  hardeningDisable = [
-    "format"
-    "pie"
-  ]
-  ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [ "format" "pie" ]
+    ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
     ./busybox-in-store.patch
@@ -106,12 +96,7 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2023-42364-CVE-2023-42365.patch?id=8a4bf5971168bf48201c05afda7bee0fbb188e13";
       hash = "sha256-nQPgT9eA1asCo38Z9X7LR9My0+Vz5YBPba3ARV3fWcc=";
     })
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-tar-fix-TOCTOU-symlink-race-condition.patch?id=9e42dea5fba84a8afad1f1910b7d3884128a567e";
-      hash = "sha256-GmXQhwB1/IPVjXXpGi5RjRvuGJgIMIb7lQKB63m306g=";
-    })
-  ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;
 
@@ -193,10 +178,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
-    stdenv.cc.libc
-    stdenv.cc.libc.static
-  ];
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   enableParallelBuilding = true;
 
@@ -208,11 +190,7 @@ stdenv.mkDerivation rec {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
-    mainProgram = "busybox";
-    maintainers = with maintainers; [
-      TethysSvensson
-      qyliss
-    ];
+    maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };

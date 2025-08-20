@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "zram-generator";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };
@@ -51,9 +51,6 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/systemd/zram-generator/blob/v1.2.0/Makefile#LL11-L11C56
     export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
   '';
-
-  # error[E0432]: unresolved import `self::consts`
-  doCheck = !stdenv.hostPlatform.isLoongArch64;
 
   dontCargoInstall = true;
 

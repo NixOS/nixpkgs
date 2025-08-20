@@ -22,27 +22,28 @@ lib.throwIf (buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.versi
   stdenv.mkDerivation
   rec {
     pname = "libnbd";
-    version = "1.22.1";
+    version = "1.20.2";
 
     src = fetchurl {
       url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-      hash = "sha256-9oVJrU2YcXGnKaDf8SoHKGtG7vpH5355/DKIiYrchHI=";
+      hash = "sha256-7DgviwGPPLccTPvomyH+0CMknXmR2wENsxpXD97OP84=";
     };
 
-    nativeBuildInputs = [
-      bash-completion
-      pkg-config
-      perl
-      autoreconfHook
-    ]
-    ++ lib.optionals buildPythonBindings [ python3 ]
-    ++ lib.optionals buildOcamlBindings (
-      with ocamlPackages;
+    nativeBuildInputs =
       [
-        findlib
-        ocaml
+        bash-completion
+        pkg-config
+        perl
+        autoreconfHook
       ]
-    );
+      ++ lib.optionals buildPythonBindings [ python3 ]
+      ++ lib.optionals buildOcamlBindings (
+        with ocamlPackages;
+        [
+          findlib
+          ocaml
+        ]
+      );
 
     buildInputs = [
       fuse

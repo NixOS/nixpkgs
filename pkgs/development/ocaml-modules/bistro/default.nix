@@ -13,7 +13,6 @@
   rresult,
   sexplib,
   tyxml,
-  ppxlib,
 }:
 
 buildDunePackage rec {
@@ -48,6 +47,5 @@ buildDunePackage rec {
     description = "Build and execute typed scientific workflows";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.gpl2;
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

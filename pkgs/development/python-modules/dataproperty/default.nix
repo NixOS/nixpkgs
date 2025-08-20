@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
   loguru,
   mbstrdecoder,
   pytestCheckHook,
@@ -14,26 +13,23 @@
 
 buildPythonPackage rec {
   pname = "dataproperty";
-  version = "1.1.0";
-  pyproject = true;
+  version = "1.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = "dataproperty";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-IEEwdOcC9nKwVumWnjpZlqYKCFGwZebMh7nGdGVjibE=";
+    hash = "sha256-adUxUU9eASkC9n5ppZYNN0MP19u4xcL8XziBWSCp2L8=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     mbstrdecoder
     typepy
     tcolorpy
-  ]
-  ++ typepy.optional-dependencies.datetime;
+  ] ++ typepy.optional-dependencies.datetime;
 
   optional-dependencies = {
     logging = [ loguru ];
@@ -46,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataproperty" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for extracting properties from data";
-    homepage = "https://github.com/thombashi/DataProperty";
-    changelog = "https://github.com/thombashi/DataProperty/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    homepage = "https://github.com/thombashi/dataproperty";
+    changelog = "https://github.com/thombashi/DataProperty/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ genericnerdyusername ];
   };
 }

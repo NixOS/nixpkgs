@@ -6,83 +6,69 @@ import ../make-test-python.nix (
     ...
   }:
   let
-    throwSystem = throw "RKE2: Unsupported system: ${pkgs.stdenv.hostPlatform.system}";
-    coreImages =
-      {
-        aarch64-linux = rke2.images-core-linux-arm64-tar-zst;
-        x86_64-linux = rke2.images-core-linux-amd64-tar-zst;
-      }
-      .${pkgs.stdenv.hostPlatform.system} or throwSystem;
-    canalImages =
-      {
-        aarch64-linux = rke2.images-canal-linux-arm64-tar-zst;
-        x86_64-linux = rke2.images-canal-linux-amd64-tar-zst;
-      }
-      .${pkgs.stdenv.hostPlatform.system} or throwSystem;
-    helloImage = pkgs.dockerTools.buildImage {
-      name = "test.local/hello";
+    pauseImage = pkgs.dockerTools.streamLayeredImage {
+      name = "test.local/pause";
       tag = "local";
-      compressor = "zstd";
-      copyToRoot = pkgs.hello;
-      config.Entrypoint = [ "${pkgs.hello}/bin/hello" ];
+      contents = pkgs.buildEnv {
+        name = "rke2-pause-image-env";
+        paths = with pkgs; [
+          tini
+          (hiPrio coreutils)
+          busybox
+        ];
+      };
+      config.Entrypoint = [
+        "/bin/tini"
+        "--"
+        "/bin/sleep"
+        "inf"
+      ];
     };
-    testJobYaml = pkgs.writeText "test.yaml" ''
-      apiVersion: batch/v1
-      kind: Job
+    testPodYaml = pkgs.writeText "test.yaml" ''
+      apiVersion: v1
+      kind: Pod
       metadata:
         name: test
       spec:
-        template:
-          spec:
-            containers:
-            - name: test
-              image: "test.local/hello:local"
-            restartPolicy: Never
+        containers:
+        - name: test
+          image: test.local/pause:local
+          imagePullPolicy: Never
+          command: ["sh", "-c", "sleep inf"]
     '';
   in
   {
     name = "${rke2.name}-single-node";
     meta.maintainers = rke2.meta.maintainers;
-    nodes.machine =
-      {
-        config,
-        nodes,
-        pkgs,
-        ...
-      }:
-      {
-        # Setup image archives to be imported by rke2
-        systemd.tmpfiles.settings."10-rke2" = {
-          "/var/lib/rancher/rke2/agent/images/rke2-images-core.tar.zst" = {
-            "L+".argument = "${coreImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/rke2-images-canal.tar.zst" = {
-            "L+".argument = "${canalImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
-            "L+".argument = "${helloImage}";
-          };
-        };
 
-        # RKE2 needs more resources than the default
-        virtualisation.cores = 4;
-        virtualisation.memorySize = 4096;
-        virtualisation.diskSize = 8092;
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        networking.firewall.enable = false;
+        networking.useDHCP = false;
+        networking.defaultGateway = "192.168.1.1";
+        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
+          {
+            address = "192.168.1.1";
+            prefixLength = 24;
+          }
+        ];
+
+        virtualisation.memorySize = 1536;
+        virtualisation.diskSize = 4096;
 
         services.rke2 = {
           enable = true;
           role = "server";
           package = rke2;
-          # Without nodeIP the apiserver starts with the wrong service IP family
-          nodeIP = config.networking.primaryIPAddress;
-          # Slightly reduce resource consumption
+          nodeIP = "192.168.1.1";
           disable = [
             "rke2-coredns"
             "rke2-metrics-server"
             "rke2-ingress-nginx"
-            "rke2-snapshot-controller"
-            "rke2-snapshot-controller-crd"
-            "rke2-snapshot-validation-webhook"
+          ];
+          extraFlags = [
+            "--cluster-reset"
           ];
         };
       };
@@ -90,19 +76,23 @@ import ../make-test-python.nix (
     testScript =
       let
         kubectl = "${pkgs.kubectl}/bin/kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml";
+        ctr = "${pkgs.containerd}/bin/ctr -a /run/k3s/containerd/containerd.sock";
       in
-      # python
       ''
         start_all()
 
-        machine.wait_for_unit("rke2-server")
+        machine.wait_for_unit("rke2")
         machine.succeed("${kubectl} cluster-info")
+        machine.wait_until_succeeds(
+          "${pauseImage} | ${ctr} -n k8s.io image import -"
+        )
 
         machine.wait_until_succeeds("${kubectl} get serviceaccount default")
-        machine.succeed("${kubectl} apply -f ${testJobYaml}")
-        machine.wait_until_succeeds("${kubectl} wait --for 'condition=complete' job/test")
-        output = machine.succeed("${kubectl} logs -l batch.kubernetes.io/job-name=test")
-        assert output.rstrip() == "Hello, world!", f"unexpected output of test job: {output}"
+        machine.succeed("${kubectl} apply -f ${testPodYaml}")
+        machine.succeed("${kubectl} wait --for 'condition=Ready' pod/test")
+        machine.succeed("${kubectl} delete -f ${testPodYaml}")
+
+        machine.shutdown()
       '';
   }
 )

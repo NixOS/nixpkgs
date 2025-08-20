@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
     maintainers = with maintainers; [
+      gebner
       linsui
     ];
   };

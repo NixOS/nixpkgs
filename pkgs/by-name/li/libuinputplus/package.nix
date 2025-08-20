@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Easy-to-use uinput library in C++";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ willibutz ];
     platforms = with platforms; linux;
   };
 }

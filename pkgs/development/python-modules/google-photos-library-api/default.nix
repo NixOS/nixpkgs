@@ -39,8 +39,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
     changelog = "https://github.com/allenporter/python-google-photos-library-api/releases/tag/${version}";
     description = "Python client library for Google Photos Library API";

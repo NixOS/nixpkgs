@@ -6,12 +6,10 @@ manually as follows:
 
 ```nix
 {
-  networking.interfaces.eth0.ipv4.addresses = [
-    {
-      address = "192.168.1.2";
-      prefixLength = 24;
-    }
-  ];
+  networking.interfaces.eth0.ipv4.addresses = [ {
+    address = "192.168.1.2";
+    prefixLength = 24;
+  } ];
 }
 ```
 
@@ -34,7 +32,9 @@ configuration is performed by `network-setup.service`.
 The host name is set using [](#opt-networking.hostName):
 
 ```nix
-{ networking.hostName = "cartman"; }
+{
+  networking.hostName = "cartman";
+}
 ```
 
 The default host name is `nixos`. Set it to the empty string (`""`) to

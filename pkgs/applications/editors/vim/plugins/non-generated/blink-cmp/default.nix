@@ -5,23 +5,25 @@
   stdenv,
   vimUtils,
   nix-update-script,
-  gitMinimal,
+  git,
+  replaceVars,
 }:
 let
-  version = "1.6.0";
+  version = "0.10.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-IHRYgKcYP+JDGu8Vtawgzlhq25vpROFqb8KmpfVMwCk=";
+    hash = "sha256-MfHI4efAdaoCU8si6YFdznZmSTprthDq3YKuF91z7ss=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
-    cargoHash = "sha256-QsVCugYWRri4qu64wHnbJQZBhy4tQrr+gCYbXtRBlqE=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-ISCrUaIWNn+SfNzrAXKqeBbQyEnuqs3F8GAEl90kK7I=";
 
-    nativeBuildInputs = [ gitMinimal ];
+    nativeBuildInputs = [ git ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
@@ -41,6 +43,10 @@ vimUtils.buildVimPlugin {
       ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
     '';
 
+  patches = [
+    (replaceVars ./force-version.patch { inherit (src) tag; })
+  ];
+
   passthru = {
     updateScript = nix-update-script {
       attrPath = "vimPlugins.blink-cmp.blink-fuzzy-lib";
@@ -53,15 +59,13 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
-    changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       balssh
       redxtech
-      llakala
     ];
   };
 
-  nvimSkipModules = [
+  nvimSkipModule = [
     # Module for reproducing issues
     "repro"
   ];

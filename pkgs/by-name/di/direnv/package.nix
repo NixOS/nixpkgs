@@ -6,21 +6,20 @@
   bash,
   fish,
   zsh,
-  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.37.1";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    hash = "sha256-92xjoCjH5O7wx8U7OFG8Lw9eDOAdeVKNvxBHW+TiniM=";
+    hash = "sha256-C4FkBS+2MZGGlpWb7ng4Aa9IvqEuY716M5h2W3b8N1E=";
   };
 
-  vendorHash = "sha256-SAIGFQGACTB3Q0KnIdiKKNYY6fVjf/09wGqNr0Hkg+M=";
+  vendorHash = "sha256-O2NZgWn00uKLstYPIj9LwyF4kmitJ1FXltazv8RrmZg=";
 
   # we have no bash at the moment for windows
   BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
@@ -37,15 +36,11 @@ buildGoModule rec {
   nativeCheckInputs = [
     fish
     zsh
-    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
-    runHook preCheck
-
+    export HOME=$(mktemp -d)
     make test-go test-bash test-fish test-zsh
-
-    runHook postCheck
   '';
 
   meta = with lib; {

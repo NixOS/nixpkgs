@@ -2,26 +2,21 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
   numpy,
   python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "pycollada";
-  version = "0.9.2";
-  pyproject = true;
+  version = "0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fKEiZ74KK5PkldYDbmsnQCOpRX3tZBlU6wxHDv4VPW4=";
+    hash = "sha256-86N1nMTOwdWekyqtdDmdvPVB0YhiqtkDx3AEDaQq8g4=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     numpy
     python-dateutil
   ];
@@ -29,10 +24,6 @@ buildPythonPackage rec {
   # Some tests fail because they refer to test data files that don't exist
   # (upstream packaging issue)
   doCheck = false;
-
-  pythonImportsCheck = [
-    "collada"
-  ];
 
   meta = with lib; {
     description = "Python library for reading and writing collada documents";

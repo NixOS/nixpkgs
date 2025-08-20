@@ -3,7 +3,6 @@
   mkCoqDerivation,
   coq,
   coq-elpi,
-  stdlib,
   version ? null,
 }:
 
@@ -37,10 +36,7 @@ mkCoqDerivation {
       ]
       null;
 
-  propagatedBuildInputs = [
-    coq-elpi
-    stdlib
-  ];
+  propagatedBuildInputs = [ coq-elpi ];
 
   meta = with lib; {
     description = "Generic goal preprocessing tool for proof automation tactics in Coq";

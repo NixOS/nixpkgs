@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "25.1";
+  version = "24.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carltongibson";
     repo = "django-filter";
     tag = version;
-    hash = "sha256-ODbBlaJo6sgXkFxLNhqwGTXSHs2d6R6wGKyDz5qA7bs=";
+    hash = "sha256-4q/x9FO9ErKnGeJDEXDMcvUKA4nlA7nkwwM2xj3WGWs=";
   };
 
   build-system = [ flit-core ];

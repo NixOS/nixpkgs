@@ -8,7 +8,7 @@
   pytest-asyncio,
   pytest-benchmark,
   pytest-mock,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonOlder,
   typing-extensions,
   python-dateutil,
@@ -38,13 +38,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-mock
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphene" ];
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "bitseater";
-    repo = "meteo";
+    repo = pname;
     rev = version;
     hash = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
   };

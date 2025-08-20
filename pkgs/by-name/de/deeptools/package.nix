@@ -1,42 +1,45 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
-  addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "deeptools";
-  version = "3.5.6";
+  version = "3.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
     tag = version;
-    hash = "sha256-dxXlOvOjF4KSc5YO+1A5hlp95sfeyPSbmp93tihm7Vo=";
+    hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
   };
 
-  build-system = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     numpy
-    scipy
-    matplotlib
-    pysam
     numpydoc
-    pybigwig
+    scipy
     py2bit
+    pybigwig
+    pysam
+    matplotlib
     plotly
     deeptoolsintervals
+    importlib-metadata
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-    addBinToPathHook
   ];
+
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   disabledTestPaths = [
     # tests trip on `len(sys.argv) == 1`
@@ -46,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     "deeptools/test/test_multiBamSummary.py"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";
     description = "Tools for exploring deep DNA sequencing data";
     longDescription = ''
@@ -57,10 +60,10 @@ python3Packages.buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       bsd3
     ];
-    maintainers = with lib.maintainers; [ scalavision ];
+    maintainers = with maintainers; [ scalavision ];
   };
 }

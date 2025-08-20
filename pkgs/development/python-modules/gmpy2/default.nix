@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
+  pythonOlder,
   setuptools,
   gmp,
   mpfr,
@@ -18,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "gmpy2";
-  version = "2.2.1";
+  version = "2.2.0a2";
   pyproject = true;
 
-  disabled = isPyPy;
+  disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "v${version}";
-    hash = "sha256-wrMN3kqLnjItoybKYeo4Pp2M0uma7Kg0JEQM8lr6OI0=";
+    tag = "gmpy2-${version}";
+    hash = "sha256-luLEDEY1cezhzZo4fXmM/MUg2YyAaz7n0HwSpbNayP8=";
   };
 
   build-system = [ setuptools ];

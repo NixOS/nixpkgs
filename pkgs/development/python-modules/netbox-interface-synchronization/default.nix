@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  attrs,
   django,
   netaddr,
   netbox,
@@ -9,19 +10,20 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-interface-synchronization";
-  version = "4.1.7";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetTech2001";
     repo = "netbox-interface-synchronization";
     tag = version;
-    hash = "sha256-02fdfE1BwpWsh21M0oP65kMAbFxDxYHsAEWA64rUl18=";
+    hash = "sha256-ikorJa5kCaVfxXsr8PSzuBME3PUc+UM+VDcq82WtDVs=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    attrs
     django
     netaddr
   ];

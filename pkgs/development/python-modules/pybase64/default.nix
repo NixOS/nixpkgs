@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.4.2";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,15 +20,14 @@ buildPythonPackage rec {
     repo = "pybase64";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VSCMBKyDgNjwRUvT29z3KdN/dReqbmaaNeWomnyFJFg=";
+    hash = "sha256-Yl0P9Ygy6IirjSFrutl+fmn4BnUL1nXzbQgADNQFg3I=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   pythonImportsCheck = [ "pybase64" ];
 
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     description = "Fast Base64 encoding/decoding";
     mainProgram = "pybase64";
     homepage = "https://github.com/mayeut/pybase64";
-    changelog = "https://github.com/mayeut/pybase64/releases/tag/${src.tag}";
+    changelog = "https://github.com/mayeut/pybase64/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

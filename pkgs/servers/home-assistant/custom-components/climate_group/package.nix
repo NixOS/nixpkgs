@@ -15,6 +15,8 @@ buildHomeAssistantComponent rec {
     hash = "sha256-f/VQUNzRSxmKGNgijaafQ5NbngUUKmcdkafYC3Ol9qM=";
   };
 
+  dontBuild = true;
+
   meta = {
     changelog = "https://github.com/bjrnptrsn/climate_group/blob/${src.rev}/README.md#changelog";
     description = "Group multiple climate devices to a single entity";

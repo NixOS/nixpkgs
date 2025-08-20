@@ -4,18 +4,18 @@
   ffmpeg,
   lib,
   versionCheckHook,
+  nix-update-script,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.07.24";
+  version = "2025.01.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-yeF4Lt1IzMbkIXXzVMJjZb3D0UTiv4d5fSoN8uJBlBM=";
+    hash = "sha256-UjCs71nXi77yvB9BhYxT+2G9I+qHEB5Jnhe+GJuppdY=";
   };
 
   postPatch = ''
@@ -42,30 +42,10 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
-  nativeCheckInputs = [
-    versionCheckHook
-    python3Packages.pytestCheckHook
-  ];
+  nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  env = {
-    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
-    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
-  };
-
-  disabledTests = [
-    "test_logger_can_be_cleaned_during_execution"
-    "test_presets_run"
-    "test_thumbnail"
-  ];
-
-  disabledTestPaths = [
-    # According to documentation, e2e tests can be flaky:
-    # "This checksum can be inaccurate for end-to-end tests"
-    "tests/e2e"
-  ];
-
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";

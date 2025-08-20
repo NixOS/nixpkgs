@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "comfortaa";
   version = "unstable-2021-07-29";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = "comfortaa";
+    repo = pname;
     rev = "2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b";
     postFetch = ''
       # Remove the OTF fonts as they are not needed and cause a hash mismatch

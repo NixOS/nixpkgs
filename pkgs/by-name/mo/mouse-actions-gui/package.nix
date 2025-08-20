@@ -13,7 +13,6 @@
   wrapGAppsHook3,
   libXtst,
   libevdev,
-  udevCheckHook,
   gtk3,
   libsoup_2_4,
   webkitgtk_4_0,
@@ -38,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     cargo-tauri_1.hook
     pkg-config
     wrapGAppsHook3
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -60,9 +58,7 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
 
-  cargoHash = "sha256-G5PQWPcPOVhq11BQIplbB3mLAGFCVm+vQ4eM4/5MFwI=";
-
-  doInstallCheck = true;
+  cargoHash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
 
   postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules

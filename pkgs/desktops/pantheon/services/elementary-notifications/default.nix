@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk3,
-  glib,
-  granite,
-  libgee,
-  libhandy,
-  libcanberra-gtk3,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, glib
+, granite
+, libgee
+, libhandy
+, libcanberra-gtk3
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "8.1.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     rev = version;
-    sha256 = "sha256-2+LV3O2V42gI+ysVoeO9KpLqmAj/Zk5F8LzO2RNZ1ZY=";
+    sha256 = "sha256-40STrDpMx1WFaTriJNrvkkbzAM0DeBaPdc8o8URItQI=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "GTK notification server for Pantheon";
     homepage = "https://github.com/elementary/notifications";
     license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.elementary.notifications";
   };

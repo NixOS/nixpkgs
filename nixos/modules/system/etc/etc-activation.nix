@@ -46,17 +46,13 @@
         "overlay"
       ];
 
-      system.requiredKernelConfig = with config.lib.kernelConfig; [
-        (isEnabled "EROFS_FS")
-      ];
-
       boot.initrd.systemd = {
         mounts = [
           {
             where = "/run/nixos-etc-metadata";
             what = "/etc-metadata-image";
             type = "erofs";
-            options = "loop,ro,nodev,nosuid";
+            options = "loop,ro";
             unitConfig = {
               # Since this unit depends on the nix store being mounted, it cannot
               # be a dependency of local-fs.target, because if it did, we'd have
@@ -85,8 +81,6 @@
             type = "overlay";
             options = lib.concatStringsSep "," (
               [
-                "nodev"
-                "nosuid"
                 "relatime"
                 "redirect_dir=on"
                 "metacopy=on"
@@ -103,18 +97,20 @@
             );
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ]
-            ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
-            after = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ]
-            ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
+            requires =
+              [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
+            after =
+              [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"

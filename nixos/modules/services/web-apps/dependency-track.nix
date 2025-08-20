@@ -76,12 +76,8 @@ in
 
     javaArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
-      example = lib.literalExpression ''[ "-Xmx16G" ] '';
-      description = ''
-        Java options passed to JVM. Configuring this is usually not necessary, but for small systems
-        it can be useful to tweak the JVM heap size.
-      '';
+      default = [ "-Xmx4G" ];
+      description = "Java options passed to JVM";
     };
 
     database = {
@@ -198,7 +194,7 @@ in
         default = "openid profile email";
         description = ''
           Defines the scopes to request for OpenID Connect.
-          See also: <https://openid.net/specs/openid-connect-basic-1_0.html#Scopes>
+          See also: https://openid.net/specs/openid-connect-basic-1_0.html#Scopes
         '';
       };
       flow = lib.mkOption {
@@ -213,8 +209,8 @@ in
           Usage of the implicit flow is strongly discouraged, but may be necessary when
           the IdP of choice does not support the Code+PKCE flow.
           See also:
-            - <https://oauth.net/2/grant-types/implicit/>
-            - <https://oauth.net/2/pkce/>
+            - https://oauth.net/2/grant-types/implicit/
+            - https://oauth.net/2/pkce/
         '';
       };
       loginButtonText = lib.mkOption {
@@ -222,7 +218,7 @@ in
         default = "Login with OpenID Connect";
         description = ''
           Defines the scopes to request for OpenID Connect.
-          See also: <https://openid.net/specs/openid-connect-basic-1_0.html#Scopes>
+          See also: https://openid.net/specs/openid-connect-basic-1_0.html#Scopes
         '';
       };
       usernameClaim = lib.mkOption {
@@ -232,7 +228,7 @@ in
         description = ''
           Defines the name of the claim that contains the username in the provider's userinfo endpoint.
           Common claims are "name", "username", "preferred_username" or "nickname".
-          See also: <https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse>
+          See also: https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse
         '';
       };
       userProvisioning = lib.mkOption {
@@ -430,8 +426,8 @@ in
               Defines the issuer URL to be used for OpenID Connect.
               This issuer MUST support provider configuration via the /.well-known/openid-configuration endpoint.
               See also:
-              - <https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata>
-              - <https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig>
+              - https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+              - https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig
             '';
           };
           "alpine.oidc.username.claim" = lib.mkOption {
@@ -441,7 +437,7 @@ in
             description = ''
               Defines the name of the claim that contains the username in the provider's userinfo endpoint.
               Common claims are "name", "username", "preferred_username" or "nickname".
-              See also: <https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse>
+              See also: https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse
             '';
           };
           "alpine.oidc.user.provisioning" = lib.mkOption {
@@ -499,7 +495,7 @@ in
         };
       };
       default = { };
-      description = "See <https://docs.dependencytrack.org/getting-started/configuration/#default-configuration> for possible options";
+      description = "See https://docs.dependencytrack.org/getting-started/configuration/#default-configuration for possible options";
     };
   };
 
@@ -513,35 +509,16 @@ in
       upstreams.dependency-track.servers."localhost:${toString cfg.port}" = { };
       virtualHosts.${cfg.nginx.domain} = {
         locations = {
-          "/" = {
-            alias = "${cfg.package.frontend}/dist/";
-            index = "index.html";
-            tryFiles = "$uri $uri/ /index.html";
-            extraConfig = ''
-              location ~ (index\.html)$ {
-                add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
-                add_header Pragma "no-cache";
-                add_header Expires 0;
-              }
-            '';
-          };
-          "/api".proxyPass = "http://dependency-track";
-          "= /static/config.json" = {
-            alias = frontendConfigFile;
-            extraConfig = ''
-              add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
-              add_header Pragma "no-cache";
-              add_header Expires 0;
-            '';
-          };
+          "/".proxyPass = "http://dependency-track";
+          "= /static/config.json".alias = frontendConfigFile;
         };
       };
     };
 
     systemd.services.dependency-track-postgresql-init = lib.mkIf cfg.database.createLocally {
-      after = [ "postgresql.target" ];
+      after = [ "postgresql.service" ];
       before = [ "dependency-track.service" ];
-      bindsTo = [ "postgresql.target" ];
+      bindsTo = [ "postgresql.service" ];
       path = [ config.services.postgresql.package ];
       serviceConfig = {
         Type = "oneshot";
@@ -576,7 +553,7 @@ in
           if cfg.database.createLocally then
             [
               "dependency-track-postgresql-init.service"
-              "postgresql.target"
+              "postgresql.service"
             ]
           else
             [ ];
@@ -589,18 +566,15 @@ in
         # provide settings via env vars to allow overriding default settings.
         environment = {
           HOME = "%S/dependency-track";
-        }
-        // renderSettings cfg.settings;
+        } // renderSettings cfg.settings;
         serviceConfig = {
           User = "dependency-track";
           Group = "dependency-track";
           DynamicUser = true;
           StateDirectory = "dependency-track";
-          LoadCredential = [
-            "db_password:${cfg.database.passwordFile}"
-          ]
-          ++
-            lib.optional cfg.settings."alpine.ldap.enabled"
+          LoadCredential =
+            [ "db_password:${cfg.database.passwordFile}" ]
+            ++ lib.optional cfg.settings."alpine.ldap.enabled"
               "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
         };
         script = ''

@@ -2,45 +2,68 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rustPlatform,
-  libcosmicAppHook,
-  pkg-config,
-  just,
-  glib,
-  flatpak,
-  openssl,
   nix-update-script,
-  nixosTests,
+  rustPlatform,
+  appstream,
+  makeBinaryWrapper,
+  cosmic-icons,
+  glib,
+  just,
+  pkg-config,
+  libglvnd,
+  libxkbcommon,
+  libinput,
+  fontconfig,
+  flatpak,
+  freetype,
+  openssl,
+  wayland,
+  xorg,
+  vulkan-loader,
+  vulkan-validation-layers,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-alpha.5.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-skNzkpcdGJkve7enlnnZxYxnScHFmyaCAy0xaMEEsE0=";
+    tag = "epoch-${version}";
+    hash = "sha256-FK7faWiRNuQT8lIuRciP37U01csvtRGC9LyOXQCTjYk=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-2iWJFPSvNQ6JwQwzowKYbgjog2gsjOUlReai/j0d3Do=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8m9zEkaaM0bnA1cOVMyIFE1EdztWqkpGEuHd1fRaass=";
+
+  postPatch = ''
+    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
   nativeBuildInputs = [
     just
     pkg-config
-    libcosmicAppHook
+    makeBinaryWrapper
   ];
-
   buildInputs = [
+    appstream
     glib
+    libxkbcommon
+    libinput
+    libglvnd
+    fontconfig
     flatpak
+    freetype
     openssl
+    xorg.libX11
+    wayland
+    vulkan-loader
+    vulkan-validation-layers
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -51,30 +74,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-store"
   ];
 
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client, which is always dlopen()ed except by the
+  # obscure winit backend.
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-Wl,--pop-state"
+  ];
+
+  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
+  postInstall = ''
+    wrapProgram "$out/bin/cosmic-store" \
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+          libxkbcommon
+          vulkan-loader
+        ]
+      }
+  '';
+
+  env.VERGEN_GIT_COMMIT_DATE = "2025-01-13";
+  env.VERGEN_GIT_SHA = src.rev;
+
   passthru = {
-    tests = {
-      inherit (nixosTests)
-        cosmic
-        cosmic-autologin
-        cosmic-noxwayland
-        cosmic-autologin-noxwayland
-        ;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version"
-        "unstable"
-        "--version-regex"
-        "epoch-(.*)"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-store";
     description = "App Store for the COSMIC Desktop Environment";
-    license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.cosmic ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
+    platforms = platforms.linux;
   };
-})
+}

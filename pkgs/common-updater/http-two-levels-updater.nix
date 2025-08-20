@@ -11,7 +11,6 @@
   allowedVersions ? "",
   ignoredVersions ? "",
   rev-prefix ? "",
-  rev-suffix ? "",
   odd-unstable ? false,
   patchlevel-unstable ? false,
   url ? null,
@@ -25,7 +24,6 @@ genericUpdater {
     allowedVersions
     ignoredVersions
     rev-prefix
-    rev-suffix
     odd-unstable
     patchlevel-unstable
     ;

@@ -8,7 +8,6 @@
   pkg-config,
   gnome,
   gtk3,
-  gtk4,
   atk,
   gobject-introspection,
   spidermonkey_128,
@@ -31,7 +30,6 @@
 let
   testDeps = [
     gtk3
-    gtk4
     atk
     pango.out
     gdk-pixbuf
@@ -41,7 +39,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.84.2";
+  version = "1.82.1";
 
   outputs = [
     "out"
@@ -51,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NRQu3zRXBWNjACkew6fVg/FJaf8/rg/zD0qVseZ0AWY=";
+    hash = "sha256-+zmqVjZXbeDloRcfVqGlgl4r0aaZcvsSC6eL0Qm1aTw=";
   };
 
   patches = [
@@ -66,19 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-introspection-test.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    makeWrapper
-    which # for locale detection
-    libxml2 # for xml-stripblanks
-    dbus # for dbus-run-session
-    gobject-introspection
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      makeWrapper
+      which # for locale detection
+      libxml2 # for xml-stripblanks
+      dbus # for dbus-run-session
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     cairo
@@ -89,30 +88,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ]
-  ++ testDeps;
+  ] ++ testDeps;
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = [
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
-    "-Dprofiler=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
+      "-Dprofiler=disabled"
+    ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postPatch = ''
-    patchShebangs build/choose-tests-locale.sh
-    substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
-  ''
-  + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace installed-tests/js/meson.build \
-      --replace "'Encoding'," "#'Encoding',"
-  '';
+  postPatch =
+    ''
+      patchShebangs build/choose-tests-locale.sh
+      substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace installed-tests/js/meson.build \
+        --replace "'Encoding'," "#'Encoding',"
+    '';
 
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute
@@ -123,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
     ln -s $PWD/subprojects/gobject-introspection-tests/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
     ln -s $PWD/subprojects/gobject-introspection-tests/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
-    ln -s $PWD/subprojects/gobject-introspection-tests/libutility.so $installedTests/libexec/installed-tests/gjs/libutility.so
     ln -s $PWD/subprojects/gobject-introspection-tests/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
     ln -s $PWD/installed-tests/js/libgjstesttools/libgjstesttools.so $installedTests/libexec/installed-tests/gjs/libgjstesttools.so
   '';
@@ -143,8 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase = ''
     runHook preCheck
-    GTK_A11Y=none \
-    HOME=$(mktemp -d) \
     xvfb-run -s '-screen 0 800x600x24' \
       meson test --print-errorlogs
     runHook postCheck
@@ -168,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     mainProgram = "gjs";
-    teams = [ teams.gnome ];
-    inherit (gobject-introspection.meta) platforms badPlatforms;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 })

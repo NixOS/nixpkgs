@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "enum";
   version = "0.4.7";
-  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {

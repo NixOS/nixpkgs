@@ -4,21 +4,18 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "cum";
   version = "0.9.1";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "15qc6agka2g3kcnpnz0hbjic1s3260cr9bda0rlcyninxs1vndq0";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = [
     alembic
     beautifulsoup4
     click
@@ -39,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Comic updater, mangafied";
+    description = "comic updater, mangafied";
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
     license = licenses.asl20;

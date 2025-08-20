@@ -20,12 +20,12 @@ buildGoModule rec {
   # don't run tests as they require secret access keys that only travis has
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "User friendly command line tool to access Alibaba Cloud OSS";
     homepage = "https://github.com/aliyun/ossutil";
     changelog = "https://github.com/aliyun/ossutil/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jpetrucciani ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
     mainProgram = "ossutil";
   };
 }

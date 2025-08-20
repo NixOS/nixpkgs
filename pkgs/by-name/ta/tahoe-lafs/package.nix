@@ -1,32 +1,38 @@
 {
   lib,
-  python3,
-  fetchFromGitHub,
+  nettools,
+  python311,
   texinfo,
-  versionCheckHook,
+  fetchFromGitHub,
 }:
 
+# FAILURES: The "running build_ext" phase fails to compile Twisted
+# plugins, because it tries to write them into Twisted's (immutable)
+# store path. The problem appears to be non-fatal, but there's probably
+# some loss of functionality because of it.
+
 let
-  python = python3.override {
+  # Tahoe-LAFS unstable-2021-07-09 is incompatible with Python 3.12, and
+  # uses eliot in a way incompatible after version 1.14.0.
+  # These versions should be unpinned, when updating Tahoe-LAFS to a more recent version.
+  python = python311.override {
     self = python;
     packageOverrides = self: super: {
-      # tahoe-lafs is incompatible with magic-wormhole >= 0.19.0
-      # TODO: unpin, when https://tahoe-lafs.org/trac/tahoe-lafs/ticket/4180 is fixed
-      magic-wormhole = super.magic-wormhole.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.0";
+      eliot = super.eliot.overridePythonAttrs (oldAttrs: rec {
+        version = "1.14.0";
 
         src = fetchFromGitHub {
-          owner = "magic-wormhole";
-          repo = "magic-wormhole";
-          tag = version;
-          hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
+          owner = "itamarst";
+          repo = "eliot";
+          rev = "refs/tags/${version}";
+          hash = "sha256-1QE/s8P2g7DGIcuT+/AikAaWMTafNWn4BRZqpBn5ghk=";
         };
 
-        nativeCheckInputs = lib.filter (
-          input: (input.pname or null) != "pytest-twisted"
-        ) oldAttrs.nativeCheckInputs;
-
-        doCheck = false;
+        disabledTests = [
+          "test_default"
+          "test_large_numpy_array"
+          "test_numpy"
+        ];
       });
     };
   };
@@ -34,14 +40,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "1.20.0";
-  pyproject = true;
+  version = "unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
     repo = "tahoe-lafs";
-    tag = "tahoe-lafs-${version}";
-    hash = "sha256-9qaL4GmdjClviKTnwAxaTywvJChQ5cVVgWs1IkFxhIY=";
+    rev = "8e28a9d0e02fde2388aca549da2b5c452ac4337f";
+    sha256 = "sha256-MuD/ZY+die7RCsuVdcePSD0DdwatXRi7CxW2iFt22L0=";
   };
 
   outputs = [
@@ -50,64 +55,85 @@ python3Packages.buildPythonApplication rec {
     "info"
   ];
 
+  postPatch = ''
+    sed -i "src/allmydata/util/iputil.py" \
+        -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
+
+    # Chroots don't have /etc/hosts and /etc/resolv.conf, so work around
+    # that.
+    for i in $(find src/allmydata/test -type f)
+    do
+      sed -i "$i" -e"s/localhost/127.0.0.1/g"
+    done
+
+    sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
+    sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
+
+    # incompatible with latest autobahn
+    rm src/allmydata/test/web/test_logs.py
+  '';
+
   # Remove broken and expensive tests.
   preConfigure = ''
     (
       cd src/allmydata/test
 
       # Buggy?
-      rm cli/test_create.py
+      rm cli/test_create.py test_client.py
 
       # These require Tor and I2P.
       rm test_connections.py test_iputil.py test_hung_server.py test_i2p_provider.py test_tor_provider.py
+
+      # Fails due to the above tests missing
+      rm test_python3.py
+
+      # Expensive
+      rm test_system.py
     )
   '';
 
-  build-system = with python3Packages; [
-    hatch-vcs
-    hatchling
-  ];
-
   nativeBuildInputs = with python3Packages; [
-    # docs
-    recommonmark
     sphinx
-    sphinx-rtd-theme
     texinfo
   ];
 
-  dependencies =
+  # The `backup' command requires `sqlite3'.
+  propagatedBuildInputs =
     with python3Packages;
     [
-      attrs
-      autobahn
-      cbor2
-      click
-      collections-extended
-      cryptography
+      appdirs
+      beautifulsoup4
+      characteristic
       distro
       eliot
-      filelock
+      fixtures
       foolscap
       future
-      klein
+      html5lib
       magic-wormhole
       netifaces
-      psutil
-      pycddl
-      pyopenssl
-      pyrsistent
+      pyasn1
+      pycrypto
       pyutil
       pyyaml
-      six
+      recommonmark
+      service-identity
+      simplejson
+      sphinx-rtd-theme
+      testtools
       treq
       twisted
-      werkzeug
       zfec
       zope-interface
     ]
     ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
+
+  nativeCheckInputs = with python3Packages; [
+    mock
+    hypothesis
+    twisted
+  ];
 
   # Install the documentation.
   postInstall = ''
@@ -124,34 +150,11 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      beautifulsoup4
-      fixtures
-      html5lib
-      hypothesis
-      mock
-      prometheus-client
-      testtools
-      twisted
-    ]
-    ++ [
-      versionCheckHook
-    ];
-  versionCheckProgram = "${placeholder "out"}/bin/tahoe";
-  versionCheckProgramArg = "--version";
-
   checkPhase = ''
-    runHook preCheck
-
-    runHook versionCheckHook
     trial --rterrors allmydata
-
-    runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
     mainProgram = "tahoe";
     longDescription = ''
@@ -162,10 +165,10 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://tahoe-lafs.org/";
     license = [
-      lib.licenses.gpl2Plus # or
+      licenses.gpl2Plus # or
       "TGPPLv1+"
     ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -24,17 +24,17 @@
 let
   colobot-data = callPackage ./data.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "colobot";
   # Maybe require an update to package colobot-data as well
   # in file data.nix next to this one
-  version = "0.2.2-alpha";
+  version = "0.2.1-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
-    repo = "colobot";
-    tag = "colobot-gold-${finalAttrs.version}";
-    hash = "sha256-QhNHtAG+hKq7qJhKWCJcP4ejm5YDOU8pyYtitJppVlU=";
+    repo = pname;
+    rev = "colobot-gold-${version}";
+    hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     openal
   ];
 
-  # The binary ends in games directory
+  enableParallelBuilding = false;
+
+  # The binary ends in games directoy
   postInstall = ''
     mv $out/games $out/bin
     for contents in ${colobot-data}/share/games/colobot/*; do
@@ -66,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://colobot.info/";
-    description = "Real-time strategy game with programmable bots";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ freezeboy ];
-    platforms = lib.platforms.linux;
+    description = "Colobot: Gold Edition is a real-time strategy game, where you can program your bots";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ freezeboy ];
+    platforms = platforms.linux;
   };
-})
+}

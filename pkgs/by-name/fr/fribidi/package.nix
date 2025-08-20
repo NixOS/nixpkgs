@@ -37,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

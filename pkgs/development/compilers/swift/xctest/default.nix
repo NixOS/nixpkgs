@@ -24,8 +24,7 @@ stdenv.mkDerivation {
     cmake
     ninja
     swift
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -56,6 +55,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-xctest";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    teams = [ lib.teams.swift ];
+    maintainers = lib.teams.swift.members;
   };
 }

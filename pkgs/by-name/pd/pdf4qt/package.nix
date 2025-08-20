@@ -8,19 +8,19 @@
   qt6,
   wrapGAppsHook3,
   openjpeg,
-  tbb_2021,
+  tbb_2021_11,
   blend2d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdf4qt";
-  version = "1.5.1.0";
+  version = "1.4.0.0";
 
   src = fetchFromGitHub {
     owner = "JakubMelka";
     repo = "PDF4QT";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Ysrz/uCSTFK5wGNdTXhpq6QVf7Ju1xWisNVUtBtdEjc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NlIy/C4uHRG5wwXPuqCShe113qhhsQ5jp50zrOLLA2c=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtspeech
     lcms
     openjpeg
-    tbb_2021
+    tbb_2021_11
     blend2d
   ];
 
@@ -70,9 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
       functionality based on PDF Reference 2.0.
     '';
     homepage = "https://jakubmelka.github.io";
-    changelog = "https://github.com/JakubMelka/PDF4QT/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    mainProgram = "Pdf4QtViewer";
+    license = lib.licenses.lgpl3Only;
+    mainProgram = "Pdf4QtViewerLite";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };

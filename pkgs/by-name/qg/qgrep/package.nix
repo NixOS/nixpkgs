@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "qgrep";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-TeXOzfb1Nu6hz9l6dXGZY+xboscPapKm0Z264hv1Aww=";
   };
@@ -23,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/zeux/qgrep/commit/8810ab153ec59717a5d7537b3e7812c01cd80848.patch";
       hash = "sha256-lCMvpuLZluT6Rw8RFZ2uY9bffPBoq6sRVWYLUmeXfOg=";
     })
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (

@@ -8,11 +8,11 @@ let
   inherit (lib)
     getExe
     isBool
-    listToAttrs
     literalExpression
     maintainers
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     mkPackageOption
     optionalString
@@ -44,7 +44,7 @@ let
         ''
           mkdir -p $out/bin
           makeWrapper ${getExe cfg.package} $out/bin/${cfg.package.meta.mainProgram} \
-            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"} \
+            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"}
             ${optionalString (cfg.aiIntegration != false) ''
               --set _PR_AI_URL ${cfg.aiIntegration.url} \
               --set _PR_AI_MODEL ${cfg.aiIntegration.model} \
@@ -59,7 +59,7 @@ let
     shell:
     if (shell != "fish") then
       ''
-        eval "$(${getExe finalPackage} ${shell} --alias ${cfg.alias})"
+        eval $(${getExe finalPackage} ${shell} --alias ${cfg.alias})
       ''
     else
       ''
@@ -169,19 +169,16 @@ in
           "url"
           "model"
         ];
-
-    environment = {
-      etc = listToAttrs (
-        map (rule: {
-          name = "xdg/pay-respects/rules/${rule.command}.toml";
-          value = {
-            source = generate "${rule.command}.toml" rule;
-          };
-        }) cfg.runtimeRules
-      );
-
-      systemPackages = [ finalPackage ];
-    };
+    environment = mkMerge (
+      [
+        {
+          systemPackages = [ finalPackage ];
+        }
+      ]
+      ++ map (rule: {
+        etc."xdg/pay-respects/rules/${rule.command}.toml".source = generate "${rule.command}.toml" rule;
+      }) cfg.runtimeRules
+    );
 
     programs = {
       bash.interactiveShellInit = initScript "bash";

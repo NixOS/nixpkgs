@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/ember-cli/ember-cli";
-    description = "Ember.js command line utility";
+    description = "The Ember.js command line utility";
     license = licenses.mit;
     maintainers = with maintainers; [ jfvillablanca ];
     platforms = platforms.all;

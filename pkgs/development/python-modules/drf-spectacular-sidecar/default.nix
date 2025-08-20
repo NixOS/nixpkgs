@@ -3,24 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "drf-spectacular-sidecar";
-  version = "2025.4.1";
-  pyproject = true;
+  version = "2023.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
     rev = version;
-    hash = "sha256-YzSUwShj7QGCVKlTRM2Gro38Y+jGYQsMGBMAH0radmA=";
+    hash = "sha256-EoQKbxzXEuKC50/W1/tBB2wASJZmNNwg9r1qhIB4Ws8=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ django ];
+  propagatedBuildInputs = [ django ];
 
   # no tests
   doCheck = false;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fortinet-solutions-cse";
-    repo = "fortiosapi";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-M71vleEhRYnlf+RSGT1GbCy5NEZaG0hWmJo01n9s6Rg=";
   };

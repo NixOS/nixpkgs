@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Compression/decompression utility";
+    description = "MozLz4a compression/decompression utility";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       kira-bruneau

@@ -33,8 +33,7 @@ stdenv.mkDerivation {
     meson
     pkg-config
     ninja
-  ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) wayland-scanner;
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) wayland-scanner;
 
   buildInputs = [
     expat

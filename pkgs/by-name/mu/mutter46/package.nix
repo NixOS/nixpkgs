@@ -34,7 +34,6 @@
   libXau,
   libinput,
   libdrm,
-  libgbm,
   libei,
   libdisplay-info,
   gsettings-desktop-schemas,
@@ -49,7 +48,7 @@
   libwacom,
   libSM,
   xwayland,
-  mesa-gl-headers,
+  mesa,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -62,7 +61,6 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
-  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
@@ -99,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
-    mesa-gl-headers
+    mesa  # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
@@ -116,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     xorgserver
     gobject-introspection
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -131,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
-    libgbm
     libei
     libdisplay-info
     libgudev
@@ -188,8 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  doInstallCheck = true;
-
   passthru = {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
 
@@ -209,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
 })

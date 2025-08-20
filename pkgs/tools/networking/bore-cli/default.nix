@@ -1,21 +1,27 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bore-cli";
-  version = "0.6.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "bore";
     rev = "v${version}";
-    hash = "sha256-Jr6jZKsMhSpWVNpmhozI5DLONbwfIpcXwSlcbC9lLRM=";
+    hash = "sha256-Wkhcv8q/dGRJqG7ArsnsPsRBnXdScGedwxunbOzAjyY=";
   };
 
-  cargoHash = "sha256-CLnwzgDbHy6nTfVathycObArtEsF8tpMNoh19/uQqGA=";
+  cargoHash = "sha256-vwvDtzShlQQO/oAnjbqDIP3fUdcH1kEmFR7fyV+uYbY=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ];
 
   # tests do not find grcov path correctly
   meta = with lib; {

@@ -21,12 +21,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
   version = "2.5.6";
-  pyproject = false;
+
+  format = "other";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-J+nwgLbAFoh1gq3J4cqQEShZJCSZesyCjT9DfkCWIHs=";
   };
 
@@ -60,15 +61,15 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python GTK application to view and clean metadata in files, using mat2";
     mainProgram = "metadata-cleaner";
     homepage = "https://gitlab.com/rmnvgr/metadata-cleaner";
-    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
+    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
       gpl3Plus
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
   };
 }

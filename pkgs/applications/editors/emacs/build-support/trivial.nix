@@ -2,43 +2,40 @@
 
 { callPackage, lib, ... }@envargs:
 
-lib.extendMkDerivation {
-  constructDrv = callPackage ./generic.nix envargs;
-  extendDrvArgs =
-    finalAttrs:
+let
+  libBuildHelper = import ./lib-build-helper.nix;
+in
 
-    args:
+libBuildHelper.extendMkDerivation' (callPackage ./generic.nix envargs) (
+  finalAttrs:
 
-    {
-      buildPhase =
-        args.buildPhase or ''
-          runHook preBuild
+  args:
 
-          # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
-          if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
-            foundMakefile=1
-          fi
+  {
+    buildPhase =
+      args.buildPhase or ''
+        runHook preBuild
 
-          emacs -l package -f package-initialize \
-            --eval "(setq byte-compile-debug ${if finalAttrs.ignoreCompilationError then "nil" else "t"})" \
-            --eval "(setq byte-compile-error-on-warn ${
-              if finalAttrs.turnCompilationWarningToError then "t" else "nil"
-            })" \
-            -L . --batch -f batch-byte-compile *.el
+        # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+        if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+          foundMakefile=1
+        fi
 
-          runHook postBuild
-        '';
+        emacs -l package -f package-initialize -L . --batch -f batch-byte-compile *.el
 
-      installPhase =
-        args.installPhase or ''
-          runHook preInstall
+        runHook postBuild
+      '';
 
-          LISPDIR=$out/share/emacs/site-lisp
-          install -d $LISPDIR
-          install *.el *.elc $LISPDIR
+    installPhase =
+      args.installPhase or ''
+        runHook preInstall
 
-          runHook postInstall
-        '';
-    };
+        LISPDIR=$out/share/emacs/site-lisp
+        install -d $LISPDIR
+        install *.el *.elc $LISPDIR
 
-}
+        runHook postInstall
+      '';
+  }
+
+)

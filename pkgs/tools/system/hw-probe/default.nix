@@ -17,6 +17,7 @@
   coreutils,
   curl, # Preferred to using the Perl HTTP libs - according to hw-probe.
   dmidecode,
+  edid-decode,
   gnugrep,
   gnutar,
   hwinfo,
@@ -26,7 +27,6 @@
   perl,
   smartmontools,
   usbutils,
-  v4l-utils,
   xz,
 
   # Conditionally recommended
@@ -60,13 +60,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hw-probe";
-  version = "1.6.6";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8dLfk2k7xG2CXMHfMPrpgq43j3ttj5a0bgNPEahl2rQ=";
+    sha256 = "sha256-WlLSgjVLqGGtwCyyUn9X3XbE2Yhz6LD245+U2JgGd+k=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
@@ -83,33 +83,34 @@ stdenv.mkDerivation rec {
         smartmontools
         pciutils
         usbutils
+        edid-decode
         iproute2 # (ip)
         coreutils # (sort)
         gnugrep
         curl
         gnutar
-        v4l-utils
         xz
         kmod # (lsmod)
       ];
-      recommendedPrograms = [
-        mcelog
-        hdparm
-        acpica-tools
-        drm_info
-        mesa-demos
-        memtester
-        sysstat # (iostat)
-        util-linuxMinimal # (rfkill)
-        xinput
-        libva-utils # (vainfo)
-        inxi
-        vulkan-tools
-        i2c-tools
-        opensc
-      ]
-      # cpuid is only compatible with i686 and x86_64
-      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
+      recommendedPrograms =
+        [
+          mcelog
+          hdparm
+          acpica-tools
+          drm_info
+          mesa-demos
+          memtester
+          sysstat # (iostat)
+          util-linuxMinimal # (rfkill)
+          xinput
+          libva-utils # (vainfo)
+          inxi
+          vulkan-tools
+          i2c-tools
+          opensc
+        ]
+        # cpuid is only compatible with i686 and x86_64
+        ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)

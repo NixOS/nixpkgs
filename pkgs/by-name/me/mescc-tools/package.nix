@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://savannah.nongnu.org/projects/mescc-tools";
     license = licenses.gpl3Only;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     inherit (m2libc.meta) platforms;
   };
 })

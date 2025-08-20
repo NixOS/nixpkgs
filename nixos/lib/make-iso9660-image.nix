@@ -82,8 +82,7 @@ stdenv.mkDerivation {
     syslinux
     zstd
     libossp_uuid
-  ]
-  ++ lib.optionals needSquashfs makeSquashfsDrv.nativeBuildInputs;
+  ] ++ lib.optionals needSquashfs makeSquashfsDrv.nativeBuildInputs;
 
   inherit
     isoName

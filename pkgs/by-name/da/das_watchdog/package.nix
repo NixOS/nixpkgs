@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "das_watchdog";
-  version = "0-unstable-2015-09-12";
+  version = "unstable-2015-09-12";
 
   src = fetchFromGitHub {
     owner = "kmatheussen";

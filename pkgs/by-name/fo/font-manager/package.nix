@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   gettext,
@@ -17,7 +16,6 @@
   gsettings-desktop-schemas,
   gtk4,
   adwaita-icon-theme,
-  libarchive,
   desktop-file-utils,
   nix-update-script,
   wrapGAppsHook4,
@@ -29,25 +27,16 @@
   webkitgtk_6_0,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.9.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
-    tag = finalAttrs.version;
-    hash = "sha256-hggRvwMy/D2jc98CQPc7GChTV9+zYbYHPMENf/8Uq9s=";
+    rev = version;
+    hash = "sha256-nUFxjqUiL8zLfPJrLM1aQ/SZ2x6CYFKFJI1W/eXlrV8=";
   };
-
-  patches = [
-    # TODO: drop this patch when updating beyond version 0.9.4
-    (fetchpatch {
-      name = "fix-reproducible-build-issue.patch";
-      url = "https://github.com/FontManager/font-manager/commit/cc0c148d90741e39615e3380d283f684a052dd94.patch";
-      hash = "sha256-bRn+jVjBu6ZqmQCErgcqxv6OyFa4hkPYB5bvK7rEibA=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -64,20 +53,20 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libxml2
-    json-glib
-    sqlite
-    gsettings-desktop-schemas # for font settings
-    gtk4
-    adwaita-icon-theme
-    libarchive
-  ]
-  ++ lib.optionals withWebkit [
-    glib-networking # for SSL so that Google Fonts can load
-    libsoup_3
-    webkitgtk_6_0
-  ];
+  buildInputs =
+    [
+      libxml2
+      json-glib
+      sqlite
+      gsettings-desktop-schemas # for font settings
+      gtk4
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals withWebkit [
+      glib-networking # for SSL so that Google Fonts can load
+      libsoup_3
+      webkitgtk_6_0
+    ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…
@@ -88,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://fontmanager.github.io/";
-    changelog = "https://github.com/FontManager/font-manager/raw/refs/tags/${finalAttrs.version}/CHANGELOG";
     description = "Simple font management for GTK desktop environments";
     mainProgram = "font-manager";
     longDescription = ''
@@ -104,4 +92,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };
-})
+}

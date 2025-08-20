@@ -5,7 +5,7 @@
   lib,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "dnschef";
   version = "0.4";
 

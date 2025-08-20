@@ -7,8 +7,9 @@
   zlib,
   libxml2,
   eigen,
-  python3,
+  python,
   cairo,
+  pcre,
   pkg-config,
   swig,
   rapidjson,
@@ -37,8 +38,10 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     eigen
-    python3
+    python
     cairo
+    pcre
+    swig
     rapidjson
     boost
     maeparser
@@ -47,7 +50,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    swig
     pkg-config
   ];
 
@@ -55,14 +57,14 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray+=(
       "-DRUN_SWIG=ON"
       "-DPYTHON_BINDINGS=ON"
-      "-DPYTHON_INSTDIR=$out/${python3.sitePackages}"
+      "-DPYTHON_INSTDIR=$out/${python.sitePackages}"
     )
   '';
 
   # Setuptools only accepts PEP 440 version strings. The "unstable" identifier
   # can not be used. Instead we pretend to be the 3.2 beta release.
   postFixup = ''
-    cat << EOF > $out/${python3.sitePackages}/setup.py
+    cat << EOF > $out/${python.sitePackages}/setup.py
     from setuptools import setup
 
     setup(

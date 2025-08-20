@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dcbaker";
-    repo = "jsonstreams";
+    repo = pname;
     rev = version;
     sha256 = "0qw74wz9ngz9wiv89vmilbifsbvgs457yn1bxnzhrh7g4vs2wcav";
   };
@@ -22,13 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlags = [ "--doctest-modules" ];
-
-  enabledTestPaths = [
-    "tests"
-    "jsonstreams"
-  ];
+  pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

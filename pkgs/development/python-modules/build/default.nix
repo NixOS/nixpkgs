@@ -43,8 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     pyproject-hooks
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
@@ -71,29 +70,31 @@ buildPythonPackage rec {
         wheel
       ];
 
-      pytestFlags = [
-        "-Wignore::DeprecationWarning"
+      pytestFlagsArray = [
+        "-W"
+        "ignore::DeprecationWarning"
       ];
 
       __darwinAllowLocalNetworking = true;
 
-      disabledTests = [
-        # Tests often fail with StopIteration
-        "test_isolat"
-        "test_default_pip_is_never_too_old"
-        "test_build"
-        "test_with_get_requires"
-        "test_init"
-        "test_output"
-        "test_wheel_metadata"
-        # Tests require network access to run pip install
-        "test_verbose_output"
-        "test_requirement_installation"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # Expects Apple's Python and its quirks
-        "test_can_get_venv_paths_with_conflicting_default_scheme"
-      ];
+      disabledTests =
+        [
+          # Tests often fail with StopIteration
+          "test_isolat"
+          "test_default_pip_is_never_too_old"
+          "test_build"
+          "test_with_get_requires"
+          "test_init"
+          "test_output"
+          "test_wheel_metadata"
+          # Tests require network access to run pip install
+          "test_verbose_output"
+          "test_requirement_installation"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # Expects Apple's Python and its quirks
+          "test_can_get_venv_paths_with_conflicting_default_scheme"
+        ];
     };
   };
 
@@ -109,7 +110,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = [ maintainers.fab ];
-    teams = [ teams.python ];
+    maintainers = teams.python.members ++ [ maintainers.fab ];
   };
 }

@@ -29,7 +29,6 @@ in
       "nvidia"
       "nvidiafb"
       "nvidia-drm"
-      "nvidia-uvm"
       "nvidia-modeset"
     ];
     boot.kernelModules = [ "bbswitch" ];

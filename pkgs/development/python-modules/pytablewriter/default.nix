@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  setuptools-scm,
+  setuptools,
   simplejson,
   tabledata,
   tcolorpy,
@@ -24,21 +24,21 @@
 
 buildPythonPackage rec {
   pname = "pytablewriter";
-  version = "1.2.1";
-  pyproject = true;
+  version = "1.2.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = "pytablewriter";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
+    hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     dataproperty
     mbstrdecoder
     pathvalidate
@@ -84,8 +84,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pathvalidate" ];
 
@@ -104,11 +103,11 @@ buildPythonPackage rec {
     "test/writer/test_elasticsearch_writer.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
-    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ genericnerdyusername ];
   };
 }

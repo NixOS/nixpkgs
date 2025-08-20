@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gomplate";
-  version = "4.3.3";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = "gomplate";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-LhCOpXptsZLoVXYH2u+YIXPlqNTMQ3tQt+KY8c54oA0=";
+    tag = "v${version}";
+    hash = "sha256-PupwL0VzZiWz+96Mv1o6QSmj7iLyvVIQMcdRlGqmpRs=";
   };
 
-  vendorHash = "sha256-lesPZAnN7K6hWYqAB69pGo4fVQAQH0VTh4DBtl2yhg8=";
+  vendorHash = "sha256-1BOrffMtYz/cEsVaMseZQJlGsAdax+c1CvebwP8jaL4=";
 
   ldflags = [
     "-s"
-    "-X github.com/${finalAttrs.src.owner}/${finalAttrs.pname}/v4/version.Version=${finalAttrs.version}"
+    "-X github.com/${src.owner}/${pname}/v4/version.Version=${version}"
   ];
 
   preCheck = ''
@@ -27,7 +27,6 @@ buildGoModule (finalAttrs: {
     rm net/net_test.go \
       internal/tests/integration/datasources_blob_test.go \
       internal/tests/integration/datasources_git_test.go \
-      internal/tests/integration/test_ec2_utils_test.go \
       render_test.go
     # some tests rely on external tools we'd rather not depend on
     rm internal/tests/integration/datasources_consul_test.go \
@@ -38,15 +37,15 @@ buildGoModule (finalAttrs: {
     rm $out/bin/gen
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Flexible commandline tool for template rendering";
     mainProgram = "gomplate";
     homepage = "https://gomplate.ca/";
-    changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       ris
       jlesquembre
     ];
   };
-})
+}

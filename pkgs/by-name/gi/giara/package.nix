@@ -9,7 +9,7 @@
   wrapGAppsHook4,
   gtk4,
   gdk-pixbuf,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   gtksourceview5,
   glib-networking,
   libadwaita,
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "giara";
+    repo = pname;
     rev = version;
     hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
   };
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     gdk-pixbuf
-    webkitgtk_4_1
+    webkitgtk_4_0
     gtksourceview5
     glib-networking
     libadwaita

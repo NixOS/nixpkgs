@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bgpq3";
-  version = "0.1.38";
+  version = "0.1.36.1";
 
   src = fetchFromGitHub {
     owner = "snar";
-    repo = "bgpq3";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-rqZI7yqlVHfdRTOsA5V6kzJ2TGCy8mp6yP+rzsQX9Yc=";
+    hash = "sha256-rOpggVlXKaf3KBhfZ2lVooDaQA0iRjSbsLXF02GEyBw=";
   };
 
   meta = with lib; {

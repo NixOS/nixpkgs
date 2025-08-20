@@ -7,6 +7,7 @@
   liblxqt,
   libqtxdg,
   lxqt-build-tools,
+  pcre,
   pkg-config,
   polkit,
   polkit-qt-1,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "2.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-TVgrr+Qakkk0rr7qwQPQNO7p5Wx6eVW8lK2gJ/HysZY=";
+    hash = "sha256-wj9i09F9If5JZO6W358XcZ/rawt9Oj3QwDvLLRvS2Bc=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
+    pcre
     polkit
     polkit-qt-1
     qtbase
@@ -56,6 +58,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lxqt-policykit-agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

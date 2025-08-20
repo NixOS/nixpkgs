@@ -1,49 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
+  fetchPypi,
   hatchling,
-
-  # dependencies
   numpy,
-
-  # tests
-  pytest-cov,
-  pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autograd";
-  version = "1.8.0";
+  version = "1.7.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "HIPS";
-    repo = "autograd";
-    tag = "v${version}";
-    hash = "sha256-k4rcalwznKS2QvmyTLra+ciWFifnILW/DDdB8D+clxQ=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-3nQ/02jW31I803MF3NFxhhqXUqFESTZ30sn1pWmD/y8=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [ numpy ];
 
-  nativeCheckInputs = [
-    pytest-cov
-    pytest-xdist
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "autograd" ];
 
-  meta = {
+  meta = with lib; {
     description = "Compute derivatives of NumPy code efficiently";
     homepage = "https://github.com/HIPS/autograd";
     changelog = "https://github.com/HIPS/autograd/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

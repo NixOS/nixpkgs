@@ -1,59 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  nodejs,
-  yarn-berry_3,
+  fetchPypi,
   hatch-jupyter-builder,
   hatchling,
   async-lru,
   httpx,
-  importlib-metadata,
+  packaging,
+  tornado,
   ipykernel,
-  jinja2,
   jupyter-core,
   jupyter-lsp,
-  jupyter-server,
   jupyterlab-server,
+  jupyter-server,
   notebook-shim,
-  packaging,
-  setuptools,
+  jinja2,
   tomli,
-  tornado,
-  traitlets,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.4.3";
+  version = "4.2.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = "jupyterlab";
-    tag = "v${version}";
-    hash = "sha256-ZenPoUnUlNLiOVI6tkF/Lq6l3tMA8WXKg9ENwOgS720=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-rn86G4y4i09VAJznn6fAb5nXDNY2Ae5KqRgV0FT0b3U=";
   };
-
-  nativeBuildInputs = [
-    nodejs
-    yarn-berry_3.yarnBerryConfigHook
-  ];
-
-  preConfigure = ''
-    pushd jupyterlab/staging
-  '';
-
-  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    inherit src;
-    sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-qW0SiISQhwVPk0wwnEtxB4fJMyVS3wzp/4pS8bPleM4=";
-  };
-
-  preBuild = ''
-    popd
-  '';
 
   build-system = [
     hatch-jupyter-builder
@@ -63,20 +39,16 @@ buildPythonPackage rec {
   dependencies = [
     async-lru
     httpx
+    packaging
+    tornado
     ipykernel
-    jinja2
     jupyter-core
     jupyter-lsp
-    jupyter-server
     jupyterlab-server
+    jupyter-server
     notebook-shim
-    packaging
-    setuptools
-    tornado
-    traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   makeWrapperArgs = [
     "--set"
@@ -90,11 +62,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyterlab" ];
 
   meta = with lib; {
-    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    teams = [ lib.teams.jupyter ];
+    maintainers = lib.teams.jupyter.members;
     mainProgram = "jupyter-lab";
   };
 }

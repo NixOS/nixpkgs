@@ -1,18 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "credhub-cli";
-  version = "2.9.48";
+  version = "2.9.41";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry-incubator";
     repo = "credhub-cli";
     rev = version;
-    sha256 = "sha256-jZmnun7EkCWiWq8i+9cgn/2ffxt9VbVf0DxYHKgwNqg=";
+    sha256 = "sha256-BALeQbc4RCIh4b7kLZYEWe+dtSvP0WkkbRqoRbGSGZE=";
   };
 
   # these tests require network access that we're not going to give them

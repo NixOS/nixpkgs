@@ -9,13 +9,13 @@
   libimobiledevice,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ifuse";
   version = "1.1.4+date=2022-04-04";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = "ifuse";
+    repo = pname;
     rev = "6f5b8e410f9615b3369ca5eb5367745e13d83b92";
     hash = "sha256-KbuJLS2BWua9DnhLv2KtsQObin0PQwXQwEdgi3lSAPk=";
   };

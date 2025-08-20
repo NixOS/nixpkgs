@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
-    repo = "stanza";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-0uqEyiY+gX9P2r2H+qF4t8OUUumjikBZjk4psFf9l30=";
   };

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   srcOnly,
   kernel,
-  kernelModuleMakeFlags,
   nix-update-script,
 }:
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags =
-    kernelModuleMakeFlags
+    kernel.makeFlags
     ++ [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ]
     ++ lib.optional (lib.versionAtLeast kernel.version "5.6") "KERNEL_SOURCE_DIR=${srcOnly kernel}";
 

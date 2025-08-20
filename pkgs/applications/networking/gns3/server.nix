@@ -19,7 +19,6 @@
 python3Packages.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
-  format = "setuptools";
 
   src = fetchFromGitHub {
     inherit hash;
@@ -79,14 +78,11 @@ python3Packages.buildPythonApplication {
     pytestCheckHook
   ];
 
-  pytestFlags = [
-    # Rerun failed tests up to three times (flaky tests)
-    "--reruns=3"
-  ];
-
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # fails on ofborg because of lack of cpu vendor information
-    "tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    "--deselect=tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    # Rerun failed tests up to three times (flaky tests)
+    "--reruns 3"
   ];
 
   passthru.tests = {

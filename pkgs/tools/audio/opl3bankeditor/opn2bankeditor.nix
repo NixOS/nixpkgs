@@ -1,4 +1,4 @@
-import ./common.nix {
+import ./common.nix rec {
   pname = "opn2bankeditor";
   chip = "OPN2";
   version = "1.3";

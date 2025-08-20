@@ -1,32 +1,24 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.39.1";
+  version = "2.32.2";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     rev = "v${version}";
-    hash = "sha256-eEXBOlxqaOvpXp8jPbtI6qFLiiS1VZDts7DFXGJtfCA=";
+    hash = "sha256-i4wpM7Rc4pFUUzPFvoPxUlifIvk4GJzBhCLpUndFnjE=";
   };
 
   postPatch = ''
     # entirely separate package that breaks the build
-    rm -rf pkg/e2e/
+    rm -rf e2e/
   '';
 
-  vendorHash = "sha256-191jlpjDBdusb4Zk+GateNjZa38bDrKjtonnZ4UnzFA=";
+  vendorHash = "sha256-UP1SDAaoGD1iYqb0RKCZgB22CuE2OU8FW7YFPxiY42w=";
 
-  ldflags = [
-    "-X github.com/docker/compose/v2/internal.Version=${version}"
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
 
   doCheck = false;
   installPhase = ''

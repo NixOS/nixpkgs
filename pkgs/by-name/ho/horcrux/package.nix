@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "horcrux";
   version = "0.3-unstable-2023-09-19";
 

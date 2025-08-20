@@ -6,23 +6,22 @@
 
 buildGoModule rec {
   pname = "irccat";
-  version = "0.4.12";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "irccloud";
     repo = "irccat";
     rev = "v${version}";
-    hash = "sha256-W6Qj+zg6jC304bEIQeFB8unSFgjV60zXV+I8hpw3AFA=";
+    hash = "sha256-fr5x1usviJPbc4t5SpIVgV9Q6071XG8eYtyeyraddts=";
   };
 
-  vendorHash = "sha256-SUE868jVJywqE0A5yjMWohrMw58OUnxGGxvcR8UzPfE=";
+  vendorHash = "sha256-IRXyM000ZDiLPHX20lXlx00tkCzBe5PqvdgXAvm0EAw=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/irccloud/irccat";
-    changelog = "https://github.com/irccloud/irccat/releases/tag/v${version}0.4.11";
     description = "Send events to IRC channels from scripts and other applications";
     mainProgram = "irccat";
-    maintainers = with lib.maintainers; [ qyliss ];
-    license = lib.licenses.gpl3Only;
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.gpl3Only;
   };
 }

@@ -9,7 +9,6 @@
 buildPythonApplication rec {
   pname = "s3cmd";
   version = "2.4.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "s3tools";
@@ -22,6 +21,8 @@ buildPythonApplication rec {
     python-magic
     python-dateutil
   ];
+
+  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     homepage = "https://s3tools.org/s3cmd";

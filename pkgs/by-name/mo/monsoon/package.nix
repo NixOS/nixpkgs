@@ -7,21 +7,21 @@
 
 buildGoModule rec {
   pname = "monsoon";
-  version = "0.10.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
     tag = "v${version}";
-    hash = "sha256-vgwoW7jrcLVHDm1cYrIpFcfrgKImCAVOtHg8lMQ6aic=";
+    hash = "sha256-efVwOon499DUJ17g6aQveMd2g544Ck+/P7VttYnR+No=";
   };
 
-  vendorHash = "sha256-hGEUO1sl8IKXo4rkS81Wlf7187lu2PrSujNlGNTLwmE=";
+  vendorHash = "sha256-i96VDKNRNrkrkg2yBd+muXIQK0vZCGIoQrZsq+kBMsk=";
 
   # Tests fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = {
+  meta = with lib; {
     description = "Fast HTTP enumerator";
     mainProgram = "monsoon";
     longDescription = ''
@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
     changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

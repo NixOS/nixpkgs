@@ -8,20 +8,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-privacy";
   version = "2.3.0";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";
-    repo = "git-privacy";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-b2RkRL8/mZwqc3xCs+oltzualhQtp/7F9POlLlT3UUU=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     git-filter-repo
     gitpython

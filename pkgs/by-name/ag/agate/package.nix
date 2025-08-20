@@ -1,38 +1,40 @@
 {
   lib,
+  stdenv,
+  nixosTests,
   fetchFromGitHub,
   rustPlatform,
-
-  pkg-config,
   openssl,
-
-  versionCheckHook,
-
+  pkg-config,
   nix-update-script,
-  nixosTests,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.18";
-
-  __darwinAllowLocalNetworking = true;
+  version = "3.3.11";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Q4+0haPvhUfIAmexYkxsKObQtounbybQG/36cJImL9A=";
+    rev = "v${version}";
+    hash = "sha256-w02vc89U0a1NmEqneHq0M5u+OKaFbTAVqJDFZgRp7l0=";
   };
 
-  cargoHash = "sha256-LdnLLCUFa8wpsA5Pi0HtiyLw5dkLLxtAoOnqSUx9HVI=";
+  cargoHash = "sha256-CUEjumDmRf3uUejE5pg1aS1CbVByPSeb9HWRyXzC2YY=";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ openssl ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/agate --help
+    $out/bin/agate --version 2>&1 | grep "agate ${version}"
+    runHook postInstallCheck
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {
@@ -43,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mbrubeck/agate";
-    changelog = "https://github.com/mbrubeck/agate/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/mbrubeck/agate/releases/tag/v${version}";
     description = "Very simple server for the Gemini hypertext protocol";
     mainProgram = "agate";
     longDescription = ''
@@ -54,9 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     license = with lib.licenses; [
       asl20
-      # or
       mit
     ];
     maintainers = with lib.maintainers; [ jk ];
   };
-})
+}

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "meshlabxml";
   version = "2018.3";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "MeshLabXML";

@@ -5,6 +5,7 @@
   stdenv,
   emacs,
   texinfo,
+  writeText,
 }:
 
 let
@@ -14,46 +15,43 @@ let
       stdenv
       emacs
       texinfo
+      writeText
       ;
   };
+  libBuildHelper = import ./lib-build-helper.nix;
 
 in
 
-lib.extendMkDerivation {
-  constructDrv = genericBuild;
-  extendDrvArgs =
-    finalAttrs:
+libBuildHelper.extendMkDerivation' genericBuild (
+  finalAttrs:
 
-    {
-      pname,
-      dontUnpack ? true,
-      meta ? { },
-      ...
-    }@args:
+  {
+    pname,
+    dontUnpack ? true,
+    meta ? { },
+    ...
+  }@args:
 
-    {
+  {
 
-      elpa2nix = args.elpa2nix or ./elpa2nix.el;
+    elpa2nix = args.elpa2nix or ./elpa2nix.el;
 
-      inherit dontUnpack;
+    inherit dontUnpack;
 
-      installPhase =
-        args.installPhase or ''
-          runHook preInstall
+    installPhase =
+      args.installPhase or ''
+        runHook preInstall
 
-          emacs --batch -Q -l "$elpa2nix" \
-              -f elpa2nix-install-package \
-              "$src" "$out/share/emacs/site-lisp/elpa" \
-              ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"} \
-              ${if finalAttrs.ignoreCompilationError then "t" else "nil"}
+        emacs --batch -Q -l "$elpa2nix" \
+            -f elpa2nix-install-package \
+            "$src" "$out/share/emacs/site-lisp/elpa"
 
-          runHook postInstall
-        '';
+        runHook postInstall
+      '';
 
-      meta = {
-        homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
-      }
-      // meta;
-    };
+    meta = {
+      homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
+    } // meta;
+  }
 
-}
+)

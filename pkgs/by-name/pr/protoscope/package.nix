@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "protoscope";
-  version = "0-unstable-2022-11-09";
+  version = "unstable-2022-11-09";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";

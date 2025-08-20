@@ -1,113 +1,78 @@
 {
   lib,
-  astal,
-  blueprint-compiler,
-  buildGoModule,
-  callPackage,
-  dart-sass,
-  symlinkJoin,
+  buildNpmPackage,
   fetchFromGitHub,
-  gjs,
-  glib,
+  meson,
+  ninja,
+  pkg-config,
   gobject-introspection,
-  gtk4-layer-shell,
-  installShellFiles,
-  nix-update-script,
-  nodejs,
-  stdenv,
+  gjs,
+  glib-networking,
+  gnome-bluetooth,
+  gtk-layer-shell,
+  libpulseaudio,
+  libsoup_3,
+  networkmanager,
+  upower,
+  typescript,
   wrapGAppsHook3,
-
-  extraPackages ? [ ],
+  linux-pam,
+  nix-update-script,
 }:
-buildGoModule rec {
+
+buildNpmPackage rec {
   pname = "ags";
-  version = "2.3.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
-    tag = "v${version}";
-    hash = "sha256-GLyNtU9A2VN22jNRHZ2OXuFfTJLh8uEVVt+ftsKUX0c=";
+    rev = "v${version}";
+    hash = "sha256-ebnkUaee/pnfmw1KmOZj+MP1g5wA+8BT/TPKmn4Dkwc=";
+    fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-Pw6UNT5YkDVz4HcH7b5LfOg+K3ohrBGPGB9wYGAQ9F4=";
-  proxyVendor = true;
+  npmDepsHash = "sha256-ucWdADdMqAdLXQYKGOXHNRNM9bhjKX4vkMcQ8q/GZ20=";
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.astalGjs=${astal.gjs}/share/astal/gjs"
-    "-X main.gtk4LayerShell=${gtk4-layer-shell}/lib/libgtk4-layer-shell.so"
-  ];
+  mesonFlags = [ (lib.mesonBool "build_types" true) ];
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    meson
+    ninja
+    pkg-config
+    gjs
     gobject-introspection
-    installShellFiles
+    typescript
+    wrapGAppsHook3
   ];
 
-  buildInputs = extraPackages ++ [
-    glib
-    astal.io
-    astal.astal3
-    astal.astal4
-    gobject-introspection # needed for type generation
+  # Most of the build inputs here are basically needed for their typelibs.
+  buildInputs = [
+    gjs
+    glib-networking
+    gnome-bluetooth
+    gtk-layer-shell
+    libpulseaudio
+    libsoup_3
+    linux-pam
+    networkmanager
+    upower
   ];
 
-  preFixup =
-    let
-      # git files are usually in `dev` output.
-      # `propagatedBuildInputs` are also available in the gjs runtime
-      # so we also want to generate types for these.
-      depsOf = pkg: [ (pkg.dev or pkg) ] ++ (map depsOf (pkg.propagatedBuildInputs or [ ]));
-      girDirs = symlinkJoin {
-        name = "gir-dirs";
-        paths = lib.flatten (map depsOf buildInputs);
-      };
-    in
-    ''
-      gappsWrapperArgs+=(
-        --prefix EXTRA_GIR_DIRS : "${girDirs}/share/gir-1.0"
-        --prefix PATH : "${
-          lib.makeBinPath (
-            [
-              gjs
-              nodejs
-              dart-sass
-              blueprint-compiler
-              astal.io
-            ]
-            ++ extraPackages
-          )
-        }"
-      )
-    '';
+  postPatch = ''
+    chmod u+x ./post_install.sh && patchShebangs ./post_install.sh
+  '';
 
-  postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      # bash
-      ''
-        installShellCompletion \
-          --cmd ags \
-          --bash <($out/bin/ags completion bash) \
-          --fish <($out/bin/ags completion fish) \
-          --zsh <($out/bin/ags completion zsh)
-      '';
-
-  passthru = {
-    bundle = callPackage ./bundle.nix { };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Scaffolding CLI for Astal widget system";
     homepage = "https://github.com/Aylur/ags";
+    description = "EWW-inspired widget system as a GJS library";
     changelog = "https://github.com/Aylur/ags/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       foo-dogsquared
       johnrtitor
-      perchun
     ];
     mainProgram = "ags";
     platforms = lib.platforms.linux;

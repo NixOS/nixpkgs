@@ -10,13 +10,25 @@
   h2,
   onecache,
   # test dependencies
+  asgiref,
+  black,
+  django,
+  click,
   httpx,
+  proxy-py,
   pytest-aiohttp,
-  pytest-cov-stub,
+  pytest-asyncio,
+  pytest-django,
   pytest-mock,
+  pytest-sugar,
+  pytest-timeout,
   uvicorn,
+  httptools,
+  typed-ast,
+  uvloop,
   requests,
   aiohttp,
+  aiodns,
   pytestCheckHook,
   stdenv,
 }:
@@ -39,8 +51,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini --replace-fail \
-      "addopts = --black " \
-      "addopts = "
+      "addopts = --black --cov=aiosonic --cov-report term --cov-report html --doctest-modules" \
+      "addopts = --doctest-modules"
   '';
 
   build-system = [ poetry-core ];
@@ -53,13 +65,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
+    aiodns
+    asgiref
+    black
+    django
+    click
     httpx
+    proxy-py
     pytest-aiohttp
-    pytest-cov-stub
+    pytest-asyncio
+    pytest-django
     pytest-mock
+    pytest-sugar
+    pytest-timeout
     uvicorn
+    httptools
+    typed-ast
+    uvloop
     requests
     pytestCheckHook
+    nodejs
   ];
 
   pythonImportsCheck = [ "aiosonic" ];

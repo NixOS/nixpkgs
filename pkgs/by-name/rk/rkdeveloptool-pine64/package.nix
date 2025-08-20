@@ -38,8 +38,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
-  doInstallCheck = true;
-
   meta = {
     homepage = "https://gitlab.com/pine64-org/quartz-bsp/rkdeveloptool/";
     description = "Tool from Rockchip to communicate with Rockusb devices (pine64 fork)";

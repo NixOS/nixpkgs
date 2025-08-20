@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fishtape,
 }:
-buildFishPlugin {
+buildFishPlugin rec {
   pname = "humantime-fish";
   version = "1.0.0-unstable-2022-04-08";
 

@@ -25,6 +25,7 @@
   enableDbus ? false,
   libintl,
   libiconv,
+  Foundation,
   bash,
   python3,
   argp-standalone,
@@ -32,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.93";
+  version = "0.23.92";
 
   outputs = [
     "out"
@@ -46,54 +47,56 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
+    sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
 
   patches = [
-    # Fix build, remove these two patches on a release beyond 0.23.93.
     (fetchpatch {
-      name = "variable-pkg-config-path.patch";
-      url = "https://github.com/mchehab/zbar/commit/368571ffa1a0f6cc41f708dd0d27f9b6e9409df8.patch";
-      hash = "sha256-4VEuGAyR7rcIijPLlh4pzL82ESm99Wb35PV/FbY9H6Y=";
+      name = "CVE-2023-40889.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0003-CVE-2023-40889-qrdec.c-Fix-array-out-of-bounds-acces.patch";
+      hash = "sha256-z0IADJwUt9PBoox5xJJN//5vrcRbIrWB9H7wtxNVUZU=";
     })
     (fetchpatch {
-      name = "qt5-detection-fix.patch";
-      url = "https://github.com/mchehab/zbar/commit/a549566ea11eb03622bd4458a1728ffe3f589163.patch";
-      hash = "sha256-NY3bAElwNvGP9IR6JxUf62vbjx3hONrqu9pMSqaZcLY=";
+      name = "CVE-2023-40890.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0004-Add-bounds-check-for-CVE-2023-40890.patch";
+      hash = "sha256-YgiptwXpRpz0qIcXBpARfIzSB8KYmksZR58o5yFPahs=";
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    xmlto
-    autoreconfHook
-    docbook_xsl
-  ]
-  ++ lib.optionals enableVideo [
-    wrapGAppsHook3
-    wrapQtAppsHook
-    qtbase
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      xmlto
+      autoreconfHook
+      docbook_xsl
+    ]
+    ++ lib.optionals enableVideo [
+      wrapGAppsHook3
+      wrapQtAppsHook
+      qtbase
+    ];
 
-  buildInputs = [
-    imagemagickBig
-    libintl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ]
-  ++ lib.optionals enableDbus [
-    dbus
-  ]
-  ++ lib.optionals withXorg [
-    libX11
-  ]
-  ++ lib.optionals enableVideo [
-    libv4l
-    gtk3
-    qtbase
-    qtx11extras
-  ];
+  buildInputs =
+    [
+      imagemagickBig
+      libintl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Foundation
+    ]
+    ++ lib.optionals enableDbus [
+      dbus
+    ]
+    ++ lib.optionals withXorg [
+      libX11
+    ]
+    ++ lib.optionals enableVideo [
+      libv4l
+      gtk3
+      qtbase
+      qtx11extras
+    ];
 
   nativeCheckInputs = [
     bash
@@ -103,11 +106,6 @@ stdenv.mkDerivation rec {
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
   ];
-
-  # fix iconv linking on macOS
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export LDFLAGS="-liconv"
-  '';
 
   # Note: postConfigure instead of postPatch in order to include some
   # autoconf-generated files. The template files for the autogen'd scripts are
@@ -119,31 +117,32 @@ stdenv.mkDerivation rec {
   # Disable assertions which include -dev QtBase file paths.
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
-  configureFlags = [
-    "--without-python"
-  ]
-  ++ (
-    if enableDbus then
-      [
-        "--with-dbusconfdir=${placeholder "out"}/share"
-      ]
-    else
-      [
-        "--without-dbus"
-      ]
-  )
-  ++ (
-    if enableVideo then
-      [
-        "--with-gtk=gtk3"
-      ]
-    else
-      [
-        "--disable-video"
-        "--without-gtk"
-        "--without-qt"
-      ]
-  );
+  configureFlags =
+    [
+      "--without-python"
+    ]
+    ++ (
+      if enableDbus then
+        [
+          "--with-dbusconfdir=${placeholder "out"}/share"
+        ]
+      else
+        [
+          "--without-dbus"
+        ]
+    )
+    ++ (
+      if enableVideo then
+        [
+          "--with-gtk=gtk3"
+        ]
+      else
+        [
+          "--disable-video"
+          "--without-gtk"
+          "--without-qt"
+        ]
+    );
 
   doCheck = true;
 

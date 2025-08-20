@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests/test.py" ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   pythonImportsCheck = [ "itanium_demangler" ];
 

@@ -6,7 +6,9 @@
   libgit2,
   oniguruma,
   zlib,
-  gitMinimal,
+  stdenv,
+  darwin,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,20 +22,24 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
-  cargoHash = "sha256-qRF111ofiM8SNUjQfpDg75OPpJnP7fOqM8Ih3NQUdGY=";
+  cargoHash = "sha256-Z3TgVunC/qNzUe0X9xIg3fTFXFk2w9yDA+EskSCg0Qo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    oniguruma
-    zlib
-  ];
+  buildInputs =
+    [
+      libgit2
+      oniguruma
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [
-    gitMinimal
+    git
   ];
 
   # don't use vendored libgit2

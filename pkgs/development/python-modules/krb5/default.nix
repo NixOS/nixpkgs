@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "krb5";
-  version = "0.7.1";
+  version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7V8T1QMUibENhlXAraKKgcI5Gz7LigjG1znh5YNbxFA=";
+    hash = "sha256-ajCPLhfRUcOVsk5q7Hvf9qVv42J6MgQvyG1BI5ipLd0=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Kerberos API bindings for Python";
     homepage = "https://github.com/jborean93/pykrb5";
     license = licenses.mit;
-    teams = [ teams.deshaw ];
+    maintainers = teams.deshaw.members;
     broken = stdenv.hostPlatform.isDarwin; # TODO: figure out how to build on Darwin
   };
 }

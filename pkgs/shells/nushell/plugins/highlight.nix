@@ -5,34 +5,43 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
+  IOKit,
+  Foundation,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nu_plugin_highlight";
-  version = "1.4.8+0.106.0";
+rustPlatform.buildRustPackage rec {
+  pname = "nushell_plugin_highlight";
+  version = "1.4.2+0.101.0";
 
   src = fetchFromGitHub {
-    owner = "cptpiepmatz";
     repo = "nu-plugin-highlight";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-H7bCX13miQECEPCOT2eF+TBkUU3qff+LhOiA008GLdI=";
+    owner = "cptpiepmatz";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YE8O3KL0SSu6FYFyMCNpyd4WLefVQP7FSNr82D+Jwqs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Qf6qEY6imcI0rfktGl5ErsbT+HCDgTohl+NKFsrQbzA=";
+  cargoHash = "sha256-LDVKZLktP4+W04O8EDkMs8dgViHyzA/b7k+/oJS2pro=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    IOKit
+    Foundation
+  ];
+  cargoBuildFlags = [ "--package nu_plugin_highlight" ];
 
-  # there are no tests
-  doCheck = false;
+  checkPhase = ''
+    cargo test
+  '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
-    description = "`nushell` plugin for syntax highlighting";
+  meta = with lib; {
+    description = "A nushell plugin for syntax highlighting.";
     mainProgram = "nu_plugin_highlight";
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mgttlinger ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mgttlinger ];
+    platforms = with platforms; all;
   };
-})
+}

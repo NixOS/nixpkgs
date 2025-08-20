@@ -11,7 +11,7 @@ let
   inherit (testers) testEqualContents testBuildFailure;
 
   mkTests =
-    callReplaceVars: mkExpectation:
+    callReplaceVars:
     lib.recurseIntoAttrs {
       succeeds = testEqualContents {
         assertion = "replaceVars-succeeds";
@@ -21,15 +21,13 @@ let
           brotherhood = "shared humanity";
         };
 
-        expected = mkExpectation (
-          builtins.toFile "source.txt" ''
-            All human beings are born free and are the same in dignity and rights.
-            They are endowed with reason and conscience and should act towards
-            one another in a spirit of shared humanity.
+        expected = builtins.toFile "expected" ''
+          All human beings are born free and are the same in dignity and rights.
+          They are endowed with reason and conscience and should act towards
+          one another in a spirit of shared humanity.
 
-              -- eroosevelt@humanrights.un.org
-          ''
-        );
+            -- eroosevelt@humanrights.un.org
+        '';
       };
 
       # There might eventually be a usecase for this, but it's not supported at the moment.
@@ -85,15 +83,13 @@ let
           brotherhood = null;
         };
 
-        expected = mkExpectation (
-          builtins.toFile "source.txt" ''
-            All human beings are born free and are the same in dignity and rights.
-            They are endowed with reason and conscience and should act towards
-            one another in a spirit of @brotherhood@.
+        expected = builtins.toFile "expected" ''
+          All human beings are born free and are the same in dignity and rights.
+          They are endowed with reason and conscience and should act towards
+          one another in a spirit of @brotherhood@.
 
-              -- eroosevelt@humanrights.un.org
-          ''
-        );
+            -- eroosevelt@humanrights.un.org
+        '';
       };
 
       fails-in-check-phase-with-exemption =
@@ -121,48 +117,16 @@ let
 
             touch $out
           '';
-
-      fails-in-check-phase-with-bad-exemption =
-        runCommand "replaceVars-fails"
-          {
-            failed =
-              let
-                src = builtins.toFile "source.txt" ''
-                  @a@
-                  @b@
-                '';
-              in
-              testBuildFailure (
-                callReplaceVars src {
-                  a = "a";
-                  b = null;
-                  c = null;
-                }
-              );
-          }
-          ''
-            grep -e "ERROR: pattern @c@ doesn't match anything in file.*source.txt" $failed/testBuildFailure.log
-
-            touch $out
-          '';
     };
 in
 {
-  replaceVars = mkTests replaceVars lib.id;
-  replaceVarsWith =
-    mkTests
-      (
-        src: replacements:
-        replaceVarsWith {
-          inherit src replacements;
-          dir = "bin";
-          isExecutable = true;
-        }
-      )
-      (
-        file:
-        runCommand "expected" { inherit file; } ''
-          install -Dm755 "$file" "$out/bin/$(stripHash "$file")"
-        ''
-      );
+  replaceVars = mkTests replaceVars;
+  replaceVarsWith = mkTests (
+    src: replacements:
+    replaceVarsWith {
+      inherit src replacements;
+      dir = "bin";
+      isExecutable = true;
+    }
+  );
 }

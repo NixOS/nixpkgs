@@ -6,14 +6,13 @@ shall be a container named `database` running PostgreSQL:
 
 ```nix
 {
-  containers.database = {
-    config =
-      { config, pkgs, ... }:
-      {
-        services.postgresql.enable = true;
+  containers.database =
+    { config =
+        { config, pkgs, ... }:
+        { services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql_14;
-      };
-  };
+        };
+    };
 }
 ```
 

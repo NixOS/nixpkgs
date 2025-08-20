@@ -23,7 +23,7 @@ buildPythonPackage rec {
     tinydb
   ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "tinyrecord" ];
 

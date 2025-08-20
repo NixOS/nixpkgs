@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = "into-dbus-python";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-Ld/DyhVaDiWUXgqmvSmEHqFW2dcoRNM0O4X5DXE3UtM=";
   };

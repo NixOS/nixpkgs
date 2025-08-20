@@ -6,12 +6,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "Skim";
-  version = "1.7.9";
+  version = "1.7.3";
 
   src = fetchurl {
     name = "Skim-${version}.dmg";
     url = "mirror://sourceforge/project/skim-app/Skim/Skim-${version}/Skim-${version}.dmg";
-    hash = "sha256-0IfdLeH6RPxf4OZWnNltN7tvvZWbWDQaMCmazd4UUi4=";
+    hash = "sha256-AMHEzlipL0Bv68Gnyq040t4DQhPkQcmDixZ6Oo0Vobc=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PDF reader and note-taker for macOS";
+    description = "Skim is a PDF reader and note-taker for OS X";
     homepage = "https://skim-app.sourceforge.io/";
     license = licenses.bsd0;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

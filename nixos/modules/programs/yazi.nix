@@ -76,7 +76,7 @@ in
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          inherit (pkgs.yaziPlugins) bar;
+          bar = pkgs.bar;
         }
       '';
     };
@@ -97,7 +97,7 @@ in
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          inherit (pkgs.yaziPlugins) bar;
+          bar = pkgs.bar;
         }
       '';
     };
@@ -118,9 +118,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [
-      linsui
-      ryan4yin
-    ];
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

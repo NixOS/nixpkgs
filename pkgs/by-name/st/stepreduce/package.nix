@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "stepreduce";
   version = "unstable-2020-04-30";
 

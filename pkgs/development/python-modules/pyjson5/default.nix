@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "1.6.9";
+  version = "1.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Kijewski";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-3uxuJvxTn6C3MWShXQlILPApgtumgGOeaaMlBvRaHiU=";
+    hash = "sha256-QggO1go9iQIy235I9CYOeC6JCoOT2sfDsrbSySN3mMw=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "JSON5 serializer and parser library";
     homepage = "https://github.com/Kijewski/pyjson5";
-    changelog = "https://github.com/Kijewski/pyjson5/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Kijewski/pyjson5/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -10,20 +10,24 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
-  ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "varia";
-  version = "2025.7.19";
+  version = "2024.11.7-1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
     tag = "v${version}";
-    hash = "sha256-/u6Eb9Se/Lt8Hisv24zfOgNE9ZxC3AJXbZHmukVLSRA=";
+    hash = "sha256-Xx3rd+FwelE7yjW4dXTAEzCMVa25ojXuhOLjqc6H57c=";
   };
+
+  postPatch = ''
+    substituteInPlace src/varia-py.in \
+      --replace-fail 'aria2cexec = sys.argv[1]' 'aria2cexec = "${lib.getExe aria2}"'
+  '';
 
   nativeBuildInputs = [
     meson
@@ -38,10 +42,9 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pygobject3
     aria2p
-    yt-dlp
   ];
 
   postInstall = ''
@@ -51,22 +54,16 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  # This replaces original varia wrapper
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-      --add-flag "${lib.getExe aria2}"
-      --add-flag "${lib.getExe ffmpeg}"
-      --add-flag "NOSNAP"
-    )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple download manager based on aria2 and libadwaita";
     homepage = "https://giantpinkrobots.github.io/varia";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "varia";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
   };
 }

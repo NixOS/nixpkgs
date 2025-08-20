@@ -7,7 +7,7 @@
   ghostscript,
   imagemagick,
   perl,
-  poppler-utils,
+  poppler_utils,
   tesseract,
   unpaper,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       lib.makeBinPath [
         imagemagick
         ghostscript
-        poppler-utils
+        poppler_utils
         unpaper
         tesseract
       ]

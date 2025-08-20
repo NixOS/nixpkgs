@@ -1,13 +1,10 @@
 {
   lib,
-  stdenv,
-  darwin,
-  fetchurl,
+  fetchFromGitHub,
   buildDunePackage,
   base64,
   omd,
   menhir,
-  menhirLib,
   ott,
   linenoise,
   dune-site,
@@ -16,16 +13,17 @@
   lem,
   linksem,
   yojson,
-  version ? "0.19.1",
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "sail";
-  inherit version;
+  version = "0.16";
 
-  src = fetchurl {
-    url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-Xplpi2NnwBgTPJCq7Szv8XPeINtuYcM+KxlZSh1IKjI=";
+  src = fetchFromGitHub {
+    owner = "rems-project";
+    repo = "sail";
+    rev = version;
+    hash = "sha256-HY/rgWi0S7ZiAWZF0fVIRK6fpoJ7Xp5EQcxoPRCPJ5Y=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -35,9 +33,6 @@ buildDunePackage {
     ott
     menhir
     lem
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    darwin.sigtool
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +40,6 @@ buildDunePackage {
     omd
     dune-site
     linenoise
-    menhirLib
     pprint
     linksem
     yojson

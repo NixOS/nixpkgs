@@ -12,12 +12,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = "intermodal";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
   };
 
-  cargoHash = "sha256-NqbsDi47AhYw4hNcoWfXNUnc7WjC1en7mbyCJvhYdR4=";
+  cargoHash = "sha256-k34psGOs6G+B/msmLSDHLNxnjO1yyE4OY6aQU8bt+is=";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/imdl completions zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
     changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
-    license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [
+    license = licenses.cc0;
+    maintainers = with maintainers; [
       Br1ght0ne
       xrelkd
     ];

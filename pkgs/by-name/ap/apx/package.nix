@@ -5,30 +5,25 @@
   installShellFiles,
   distrobox,
   podman,
-  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.4.5";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
-    tag = "v${version}";
-    hash = "sha256-0Rfj7hrH26R9GHOPPVdCaeb1bfAw9KnPpJYXyiei90U=";
+    rev = "v${version}";
+    hash = "sha256-60z6wbbXQp7MA5l7LP/mToZftX+nbcs2Mewg5jCFwFk=";
   };
 
-  vendorHash = "sha256-RoZ6sXbvIHfQcup9Ba/PpzS0eytKdX4WjDUlgB3UjfE=";
+  vendorHash = "sha256-YHnPLjZWUYoARHF4V1Pm1LYdCJGubPCve0wQ5FpeXUg=";
 
   # podman needed for apx to not error when building shell completions
   nativeBuildInputs = [
     installShellFiles
     podman
-  ];
-
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
   ];
 
   ldflags = [
@@ -51,6 +46,8 @@ buildGoModule rec {
     install -Dm444 README.md -t $out/share/docs/apx
     install -Dm444 COPYING.md $out/share/licenses/apx/LICENSE
 
+    # Create a temp writable home-dir so apx outputs completions without error
+    export HOME=$(mktemp -d)
     # apx command now works (for completions)
     # though complains "Error: no such file or directory"
     installShellCompletion --cmd apx \
@@ -59,12 +56,12 @@ buildGoModule rec {
       --zsh <($out/bin/apx completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       dit7ya
       chewblacka
     ];

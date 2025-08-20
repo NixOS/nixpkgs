@@ -2,49 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest,
+  future,
   pyparsing,
-  pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "kinparse";
-  version = "1.2.3";
-  pyproject = true;
+  version = "unstable-2019-12-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";
     repo = "kinparse";
-    tag = version;
-    hash = "sha256-170e2uhqpk6u/hahivWYubr3Ptb8ijymJSxhxrAfuyI=";
+    rev = "eeb3f346d57a67a471bdf111f39bef8932644481";
+    sha256 = "1nrjnybwzy93c79yylcwmb4lvkx7hixavnjwffslz0zwn32l0kx3";
   };
-
-  # Remove python2 build support as it breaks python >= 3.13
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "universal = 1" "universal = 0"
-  '';
-
-  build-system = [ setuptools ];
-
-  dependencies = [ pyparsing ];
-
-  pythonRemoveDeps = [ "future" ];
-
-  preCheck = ''
-    substituteInPlace tests/test_kinparse.py \
-      --replace-fail "data/" "$src/tests/data/"
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "kinparse" ];
 
-  meta = {
+  nativeCheckInputs = [ pytest ];
+
+  propagatedBuildInputs = [
+    future
+    pyparsing
+  ];
+
+  meta = with lib; {
     description = "Parser for KiCad EESCHEMA netlists";
     mainProgram = "kinparse";
     homepage = "https://github.com/xesscorp/kinparse";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthuszagh ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthuszagh ];
   };
 }

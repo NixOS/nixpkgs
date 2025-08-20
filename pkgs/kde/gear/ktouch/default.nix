@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  kqtquickcharts,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "ktouch";
-
-  extraBuildInputs = [ kqtquickcharts ];
+  # FIXME(qt5)
+  meta.broken = true;
 }

@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
     gawk
     git
     gnused
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
   makeFlags = [
     "PREFIX=$(out)"
   ];

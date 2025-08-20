@@ -1,6 +1,5 @@
 {
   mkKdeDerivation,
-  qtmultimedia,
   qtsvg,
   qtwayland,
   qtimageformats,
@@ -17,10 +16,8 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    qtmultimedia
     qtsvg
     qtwayland
-
     # adds support for webp and other image formats
     qtimageformats
 

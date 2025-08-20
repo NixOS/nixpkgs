@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   meson,
   ninja,
   pkg-config,
@@ -24,13 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.10.0";
+  version = "1.7.0";
 
-  src = fetchFromGitHub {
-    owner = "xkbcommon";
-    repo = "libxkbcommon";
-    tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-rLh5BD9a0bI0nHtWX+n0LqmdIO5ykd98rNc5hAN3ndE=";
+  src = fetchurl {
+    url = with finalAttrs; "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
+    hash = "sha256-ZXgvChCktFWvnGuqtwQOL1N1IMqi7CCSgFzf02hjskc=";
   };
 
   patches = [
@@ -51,19 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bison
     doxygen
-  ]
-  ++ lib.optional stdenv.isLinux xorg.xvfb
-  ++ lib.optional withWaylandTools wayland-scanner;
-
-  buildInputs = [
-    xkeyboard_config
-    libxcb
-    libxml2
-  ]
-  ++ lib.optionals withWaylandTools [
-    wayland
-    wayland-protocols
-  ];
+    xorg.xvfb
+  ] ++ lib.optional withWaylandTools wayland-scanner;
+  buildInputs =
+    [
+      xkeyboard_config
+      libxcb
+      libxml2
+    ]
+    ++ lib.optionals withWaylandTools [
+      wayland
+      wayland-protocols
+    ];
   nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
@@ -74,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
+  doCheck = true;
   preCheck = ''
     patchShebangs ../test/
   '';
@@ -94,9 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [
+      primeos
       ttuegel
     ];
     mainProgram = "xkbcli";

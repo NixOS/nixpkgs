@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "1.34.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

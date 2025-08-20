@@ -8,7 +8,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "PotreeConverter";
   version = "unstable-2023-02-27";
 

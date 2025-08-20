@@ -4,8 +4,6 @@
   autoAddCudaCompatRunpath,
   autoPatchelfHook,
   backendStdenv,
-  callPackage,
-  _cuda,
   fetchurl,
   lib,
   markForCudatoolkitRootHook,
@@ -32,6 +30,7 @@ let
   inherit (lib)
     attrsets
     lists
+    meta
     strings
     trivial
     licenses
@@ -41,23 +40,17 @@ let
 
   inherit (stdenv) hostPlatform;
 
-  # Last step before returning control to `callPackage` (adds the `.override` method)
-  # we'll apply (`overrideAttrs`) necessary package-specific "fixup" functions.
-  # Order is significant.
-  maybeFixup = _cuda.fixups.${pname} or null;
-  fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
-
-  # Get the redist systems for which package provides distributables.
+  # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
-  supportedRedistSystems = builtins.attrNames featureRelease;
-  # redistSystem :: String
-  # The redistSystem is the name of the system for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the target system.
-  redistSystem = _cuda.lib.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
+  supportedRedistArchs = builtins.attrNames featureRelease;
+  # redistArch :: String
+  # The redistArch is the name of the architecture for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the target platform.
+  redistArch = flags.getRedistArch hostPlatform.system;
 
-  sourceMatchesHost = lib.elem hostPlatform.system (_cuda.lib.getNixSystems redistSystem);
+  sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
 in
-(backendStdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
   # redistributables are sensitive to the compiler flags provided to stdenv. The patchelf package
   # is sensitive to the compiler flags provided to stdenv, and we depend on it. As such, we are
@@ -81,7 +74,7 @@ in
       hasOutput =
         output:
         attrsets.attrByPath [
-          redistSystem
+          redistArch
           "outputs"
           output
         ] false featureRelease;
@@ -99,21 +92,18 @@ in
       # NOTE: In the case the redistributable isn't supported on the target platform,
       # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
       # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
-      # The alternative would be to have `outputs = [ "out" ]` when`redistSystem = "unsupported"`, but that would
+      # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
       # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
       # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
       # `cudaSupport = false`!
       additionalOutputs =
-        if redistSystem == "unsupported" then
-          possibleOutputs
-        else
-          builtins.filter hasOutput possibleOutputs;
+        if redistArch == "unsupported" then possibleOutputs else builtins.filter hasOutput possibleOutputs;
       # The out output is special -- it's the default output and we always include it.
       outputs = [ "out" ] ++ additionalOutputs;
     in
     outputs;
 
-  # Traversed in the order of the outputs specified in outputs;
+  # Traversed in the order of the outputs speficied in outputs;
   # entries are skipped if they don't exist in outputs.
   outputToPatterns = {
     bin = [ "bin" ];
@@ -158,14 +148,14 @@ in
   };
 
   # src :: Optional Derivation
-  # If redistSystem doesn't exist in redistribRelease, return null.
+  # If redistArch doesn't exist in redistribRelease, return null.
   src = trivial.mapNullable (
     { relative_path, sha256, ... }:
     fetchurl {
       url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
       inherit sha256;
     }
-  ) (redistribRelease.${redistSystem} or null);
+  ) (redistribRelease.${redistArch} or null);
 
   postPatch =
     # Pkg-config's setup hook expects configuration files in $out/share/pkgconfig
@@ -201,23 +191,24 @@ in
   # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
   dontBuild = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    # This hook will make sure libcuda can be found
-    # in typically /lib/opengl-driver by adding that
-    # directory to the rpath of all ELF binaries.
-    # Check e.g. with `patchelf --print-rpath path/to/my/binary
-    autoAddDriverRunpath
-    markForCudatoolkitRootHook
-  ]
-  # autoAddCudaCompatRunpath depends on cuda_compat and would cause
-  # infinite recursion if applied to `cuda_compat` itself (beside the fact
-  # that it doesn't make sense in the first place)
-  ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-    # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
-    # See its documentation in ./setup-hooks/extension.nix.
-    autoAddCudaCompatRunpath
-  ];
+  nativeBuildInputs =
+    [
+      autoPatchelfHook
+      # This hook will make sure libcuda can be found
+      # in typically /lib/opengl-driver by adding that
+      # directory to the rpath of all ELF binaries.
+      # Check e.g. with `patchelf --print-rpath path/to/my/binary
+      autoAddDriverRunpath
+      markForCudatoolkitRootHook
+    ]
+    # autoAddCudaCompatRunpath depends on cuda_compat and would cause
+    # infinite recursion if applied to `cuda_compat` itself (beside the fact
+    # that it doesn't make sense in the first place)
+    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+      # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
+      # See its documentation in ./setup-hooks/extension.nix.
+      autoAddCudaCompatRunpath
+    ];
 
   buildInputs = [
     # autoPatchelfHook will search for a libstdc++ and we're giving it
@@ -312,45 +303,25 @@ in
     true
   '';
 
-  passthru = {
-    # Provide access to the release information for fixup functions.
-    inherit redistribRelease featureRelease;
-    # Make the CUDA-patched stdenv available
-    stdenv = backendStdenv;
-  };
+  # Make the CUDA-patched stdenv available
+  passthru.stdenv = backendStdenv;
 
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = trivial.pipe supportedRedistSystems [
-      # Map each redist system to the equivalent nix systems.
-      (lib.concatMap _cuda.lib.getNixSystems)
-      # Take all the unique values.
-      lib.unique
-      # Sort the list.
-      lib.naturalSort
+    platforms = trivial.pipe supportedRedistArchs [
+      # Map each redist arch to the equivalent nix system or null if there is no equivalent.
+      (builtins.map flags.getNixSystem)
+      # Filter out unsupported systems
+      (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
     ];
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license =
-      if redistName == "cuda" then
-        # Add the package-specific license.
-        let
-          licensePath =
-            if redistribRelease.license_path != null then
-              redistribRelease.license_path
-            else
-              "${pname}/LICENSE.txt";
-          url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-        in
-        lib.licenses.nvidiaCudaRedist // { inherit url; }
-      else
-        licenses.unfree;
-    teams = [ teams.cuda ];
+    license = licenses.unfree;
+    maintainers = teams.cuda.members;
   };
-})).overrideAttrs
-  fixup
+})

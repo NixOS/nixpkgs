@@ -13,7 +13,6 @@
 buildPythonApplication rec {
   pname = "asn2quickder";
   version = "1.7.1";
-  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "arpa2";

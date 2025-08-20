@@ -17,13 +17,27 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "2.1.3";
+        version = "2.0.0";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           tag = version;
-          hash = "sha256-CgaWlqjvBTN7GuerzmO5IiEdXxYH6pmTDj9IsNJlCBE=";
+          hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
         };
+        patches = [ ];
+        nativeCheckInputs =
+          old.nativeCheckInputs
+          ++ (with self; [
+            trove-classifiers
+          ]);
+        disabledTests = old.disabledTests ++ [
+          # relies on git
+          "test_package_with_include"
+          # Nix changes timestamp
+          "test_dist_info_date_time_default_value"
+          "test_sdist_members_mtime_default"
+          "test_sdist_mtime_zero"
+        ];
       });
     }
     // (plugins self);

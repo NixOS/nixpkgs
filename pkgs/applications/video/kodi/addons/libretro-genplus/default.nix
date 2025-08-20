@@ -32,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "Genesis Plus GX GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

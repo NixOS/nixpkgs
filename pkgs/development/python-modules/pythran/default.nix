@@ -3,7 +3,8 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  fetchpatch2,
+  substituteAll,
 
   # build-system
   setuptools,
@@ -24,19 +25,25 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.18.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     tag = version;
-    hash = "sha256-GZSVcB4JIx02eiUb9d7o5cUAyICIoH6m0mz4TL7a9PY=";
+    hash = "sha256-wiQmShniYZmB8hk/MC5FWFf1s5vqEHiYBkXTo4OeZ+E=";
   };
 
   patches = [
+    (fetchpatch2 {
+      name = "bump-gast-to-0.6.0.patch";
+      url = "https://github.com/serge-sans-paille/pythran/commit/840a0e706ec39963aec6bcd1f118bf33177c20b4.patch";
+      hash = "sha256-FHGXWuAX/Nmn6uEfQgAXfUxIdApDwSfHHtOStxyme/0=";
+    })
     # Hardcode path to mp library
-    (replaceVars ./0001-hardcode-path-to-libgomp.patch {
+    (substituteAll {
+      src = ./0001-hardcode-path-to-libgomp.patch;
       gomp = "${
         if stdenv.cc.isClang then openmp else (lib.getLib stdenv.cc.cc)
       }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.20.0";
+  version = "1.19.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tav9fStZzdpZ+Tf7IiEKxGSa0NLgnh+Hv+dKVOI60Yo=";
+    hash = "sha256-qU+HG9qHBmjlxl64QpbpOWADYt8swDa5HFyjgVvSktc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

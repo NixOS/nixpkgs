@@ -4,7 +4,7 @@
   menhirLib,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "menhirSdk";
 
   inherit (menhirLib) version src;

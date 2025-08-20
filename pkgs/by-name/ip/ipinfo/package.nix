@@ -20,11 +20,11 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Command Line Interface for the IPinfo API";
     homepage = "https://github.com/ipinfo/cli";
     changelog = "https://github.com/ipinfo/cli/releases/tag/ipinfo-${version}";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -20,8 +20,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-e89/x66S+MpJFtqat1hYEyRVUYFjef62LDN2hQPjNVw=";
   };
 
-  cargoHash = "sha256-C1eD974cEGbo0vHJqdnCPUopDPDDa6hAFJdzSm8t618=";
-
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "stardust-xr-0.14.1" = "sha256-fmRb46s0Ec8wnoerBh4JCv1WKz2of1YW+YGwy0Gr/yQ=";
+      "stardust-xr-molecules-0.29.0" = "sha256-sXwzrh052DCo7Jj1waebqKVmX8J9VRj5DpeUcGq3W2k=";
+    };
+  };
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   passthru = {
@@ -46,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "360-degree app shell / DE for Stardust XR using Niri";
+    description = "A 360-degree app shell / DE for Stardust XR using Niri";
     homepage = "https://stardustxr.org/";
     license = lib.licenses.mit;
     mainProgram = "kiara";

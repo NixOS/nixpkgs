@@ -56,25 +56,26 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.2.8";
+  version = "32.3.1";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-rHkIvfS20A0cvFBcLfFLAvcVVF5BgbtMdDxMvwH0B+I=";
+    hash = "sha256-WoRBDLCqLglTXeXtC8ZVELgDOv18dsCDvToUq3iPoDU=";
   };
 
-  npmDepsHash = "sha256-PYzNg5gduwtwc99GyatXnmHCh9mpAulz43Ehdle0rAM=";
+  npmDepsHash = "sha256-gmaFzcTbocx3RYW4G4Lw/08f3c71draxRwzV0BA2/KY=";
 
-  nativeBuildInputs = [
-    remarshal
-    ttfautohint-nox
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # libtool
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      remarshal
+      ttfautohint-nox
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # libtool
+      cctools
+    ];
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -83,12 +84,11 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [
-    "extraParameters"
-  ]
-  ++ lib.optionals (
-    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-  ) [ "buildPlan" ];
+  passAsFile =
+    [ "extraParameters" ]
+    ++ lib.optionals (
+      !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
+    ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
@@ -133,7 +133,6 @@ buildNpmPackage rec {
   '';
 
   enableParallelBuilding = true;
-  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "https://typeof.net/Iosevka/";

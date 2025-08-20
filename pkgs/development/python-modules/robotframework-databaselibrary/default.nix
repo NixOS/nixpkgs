@@ -4,20 +4,20 @@
   fetchFromGitHub,
   setuptools,
   robotframework,
-  robotframework-assertion-engine,
+  robotframework-excellib,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "robotframework-databaselibrary";
-  version = "2.1.4";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "Robotframework-Database-Library";
-    tag = "v.${version}";
-    hash = "sha256-ZZOhGZTJGWYCHyvJXDYGn9BMuPioCVIu0KONGkXsRmk=";
+    tag = "v${version}";
+    hash = "sha256-WTcB1jEfBm8tOuQgsGUhYD4FDqpEEKA4UOmbHS/hac0=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     robotframework
-    robotframework-assertion-engine
+    robotframework-excellib
   ];
 
   pythonImportsCheck = [ "DatabaseLibrary" ];

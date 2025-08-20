@@ -8,6 +8,7 @@
   libsodium,
   openssl,
   xxHash,
+  darwin,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
@@ -21,19 +22,28 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
   };
 
-  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
+  cargoHash = "sha256-iXGvb4qmZK7Sjbf/Jkyzj+nhpZFV3ngjtJfz6x/8z2s=";
 
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
-  buildInputs = [
-    openssl
-    libsodium
-    xxHash
-  ]
-  ++ (lib.optionals gitImportSupport [ libgit2 ]);
+  buildInputs =
+    [
+      openssl
+      libsodium
+      xxHash
+    ]
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        Security
+        SystemConfiguration
+      ]
+    ));
 
   buildFeatures = lib.optional gitImportSupport "git";
 

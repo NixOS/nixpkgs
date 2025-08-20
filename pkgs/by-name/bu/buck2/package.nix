@@ -44,7 +44,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  version = "2025-05-06";
+  version = "2025-01-02";
 
   # map our platform name to the rust toolchain suffix
   # NOTE (aseipp): must be synchronized with update.sh!
@@ -82,7 +82,7 @@ let
   # tooling
   prelude-src =
     let
-      prelude-hash = "48c249f8c7b99ff501d6e857754760315072b306";
+      prelude-hash = "d11a72de049a37b9b218a3ab8db33d3f97b9413c";
       name = "buck2-prelude-${version}.tar.gz";
       hash = buildHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
@@ -108,28 +108,13 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontStrip = true;
 
-  unpackPhase = ''
-    runHook preUnpack
-    unzstd ${buck2-src} -o ./buck2
-    unzstd ${rust-project-src} -o ./rust-project
-    runHook postUnpack
-  '';
-  buildPhase = ''
-    runHook preBuild
-    chmod +x ./buck2 && chmod +x ./rust-project
-    runHook postBuild
-  '';
-  checkPhase = ''
-    runHook preCheck
-    ./buck2 --version && ./rust-project --version
-    runHook postCheck
-  '';
+  unpackPhase = "unzstd ${buck2-src} -o ./buck2 && unzstd ${rust-project-src} -o ./rust-project";
+  buildPhase = "chmod +x ./buck2 && chmod +x ./rust-project";
+  checkPhase = "./buck2 --version && ./rust-project --version";
   installPhase = ''
-    runHook preInstall
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
     install -D rust-project $out/bin/rust-project
-    runHook postInstall
   '';
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd buck2 \
@@ -155,20 +140,16 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
     changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "buck2";
-    maintainers = with lib.maintainers; [
-      thoughtpolice
-      lf-
-      _9999years
-    ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

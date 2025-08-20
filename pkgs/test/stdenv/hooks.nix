@@ -7,9 +7,6 @@
 # ordering should match defaultNativeBuildInputs
 
 {
-  no-broken-symlinks = lib.recurseIntoAttrs (
-    import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; }
-  );
   # TODO: add audit-tmpdir
   compress-man-pages =
     let

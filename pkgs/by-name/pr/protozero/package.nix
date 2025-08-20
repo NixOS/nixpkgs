@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "protozero";
-  version = "1.8.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "protozero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-69GEAz6wSGMGozsWS9xmoTgyH8mTuDM9mUTCXfVI6f8=";
+    hash = "sha256-kqR0YLxkRu8WclxaoR/zx+2sRTEZus7dUTbqjBkv12U=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mapbox/protozero/releases/tag/v${finalAttrs.version}"
       "https://github.com/mapbox/protozero/blob/v${finalAttrs.version}/CHANGELOG.md"
     ];
-    maintainers = with lib.maintainers; [ das-g ];
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
   };
 })

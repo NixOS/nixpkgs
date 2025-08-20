@@ -1,33 +1,24 @@
 {
   lib,
-  attrs,
   buildPythonPackage,
   fetchPypi,
-  pydantic,
   pythonOlder,
-  scrapy,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.11.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ow8n9MXi6K5BXYPj1g0zrbe6CbmMMGOLxgb7Hf8uzdI=";
+    hash = "sha256-JlXIxQ8ahAXJ+nS4zcTaf+xUHKIXvIIbkKzIRRyYqdI=";
   };
 
   build-system = [ setuptools ];
-
-  optional-dependencies = {
-    attrs = [ attrs ];
-    pydantic = [ pydantic ];
-    scrapy = [ scrapy ];
-  };
 
   # Infinite recursion with Scrapy
   doCheck = false;

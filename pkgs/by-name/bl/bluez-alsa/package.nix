@@ -15,43 +15,38 @@
   pkg-config,
   readline,
   sbc,
-  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-alsa";
-  version = "4.3.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Vebxyku7xl/ReU025iThEbvfHsi4kCbvFqlBGDWrHxc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
   };
-
-  postPatch = ''
-    patchShebangs src/dbus-codegen.py
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    python3
   ];
 
-  buildInputs = [
-    alsa-lib
-    bluez
-    glib
-    sbc
-    dbus
-    readline
-    libbsd
-    ncurses
-  ]
-  ++ lib.optionals aacSupport [
-    fdk_aac
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      bluez
+      glib
+      sbc
+      dbus
+      readline
+      libbsd
+      ncurses
+    ]
+    ++ lib.optionals aacSupport [
+      fdk_aac
+    ];
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")

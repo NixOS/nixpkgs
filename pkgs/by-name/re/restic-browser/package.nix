@@ -11,6 +11,7 @@
   wrapGAppsHook3,
   webkitgtk_4_0,
   dbus,
+  darwin,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-5wSxa8jgto+v+tJHbenc2nvGlLaOBYyRrCqFyCPnncc=";
 
   npmDeps = fetchNpmDeps {
@@ -32,21 +34,29 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U82hVPfVd12vBeDT3PHexwmc9OitkuxTugYRe4Z/3eo=";
   };
 
-  nativeBuildInputs = [
-    cargo-tauri_1.hook
+  nativeBuildInputs =
+    [
+      cargo-tauri_1.hook
 
-    nodejs
-    npmHooks.npmConfigHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-    wrapGAppsHook3
-  ];
+      nodejs
+      npmHooks.npmConfigHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      wrapGAppsHook3
+    ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    webkitgtk_4_0
-    dbus
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_0
+      dbus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        WebKit
+      ]
+    );
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
@@ -59,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "GUI to browse and restore restic backup repositories";
+    description = "A GUI to browse and restore restic backup repositories";
     homepage = "https://github.com/emuell/restic-browser";
     changelog = "https://github.com/emuell/restic-browser/releases/tag/v${version}";
     license = lib.licenses.mit;

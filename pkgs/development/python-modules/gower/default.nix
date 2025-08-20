@@ -8,7 +8,7 @@
   pandas,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
 
   pname = "gower";
   version = "0.1.2";

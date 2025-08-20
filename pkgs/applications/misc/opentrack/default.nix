@@ -20,7 +20,6 @@
   fetchurl,
   fetchpatch,
   wineWowPackages,
-  onnxruntime,
 }:
 let
   version = "2023.3.0";
@@ -67,9 +66,7 @@ mkDerivation {
     libXdmcp
     libevdev
     aruco
-    onnxruntime
-  ]
-  ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
+  ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
   dontWrapQtApps = true;
@@ -79,8 +76,7 @@ mkDerivation {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
     "-DSDK_XPLANE=${xplaneSdk}"
-  ]
-  ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ "-DSDK_WINE=ON" ];
+  ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ "-DSDK_WINE=ON" ];
 
   postInstall = ''
     wrapQtApp $out/bin/opentrack
@@ -100,12 +96,12 @@ mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/opentrack/opentrack";
     description = "Head tracking software for MS Windows, Linux, and Apple OSX";
     mainProgram = "opentrack";
     changelog = "https://github.com/opentrack/opentrack/releases/tag/${version}";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ zaninime ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ zaninime ];
   };
 }

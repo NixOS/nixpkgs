@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    tag = "v${version}";
+    rev = "v${version}";
     sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
@@ -68,11 +68,13 @@ stdenv.mkDerivation rec {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      Br1ght0ne
-      neonfuz
-    ];
-    teams = [ teams.pantheon ];
+    maintainers =
+      with maintainers;
+      [
+        Br1ght0ne
+        neonfuz
+      ]
+      ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.akiraux.akira";
   };

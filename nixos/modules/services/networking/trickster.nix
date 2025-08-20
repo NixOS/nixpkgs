@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -60,10 +55,7 @@ in
       };
 
       origin-type = mkOption {
-        type = types.enum [
-          "prometheus"
-          "influxdb"
-        ];
+        type = types.enum [ "prometheus" "influxdb" ];
         default = "prometheus";
         description = ''
           Type of origin (prometheus, influxdb)

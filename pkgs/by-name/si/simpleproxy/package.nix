@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +15,6 @@ stdenv.mkDerivation rec {
     repo = "simpleproxy";
     sha256 = "1my9g4vp19dikx3fsbii4ichid1bs9b9in46bkg05gbljhj340f6";
   };
-
-  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://github.com/vzaliva/simpleproxy";

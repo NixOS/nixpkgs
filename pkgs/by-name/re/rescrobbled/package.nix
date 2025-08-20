@@ -1,41 +1,37 @@
-{
-  lib,
-  dash,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  dbus,
+{ lib
+, bash
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, dbus
 }:
 
 rustPlatform.buildRustPackage rec {
 
   pname = "rescrobbled";
-  version = "0.8.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "InputUsername";
     repo = "rescrobbled";
     rev = "v${version}";
-    hash = "sha256-+5BkM4L2eB54idZ6X2ESw6ERMhG5CM4AF4BMEJm3xLU=";
+    hash = "sha256-1E+SeKjHCah+IFn2QLAyyv7jgEcZ1gtkh8iHgiVBuz4=";
   };
 
-  cargoHash = "sha256-ZawdZdP87X7xMdSdZ1VJDJxz7dBGVYo+8jR8qb2Jgq8=";
+  cargoHash = "sha256-ZJbyYFvGTuXt1aqhGOATcDRrkTk7SorWXkN81sUoDdo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    dbus
-  ];
+  buildInputs = [ openssl dbus ];
 
   postPatch = ''
     # Required for tests
-    substituteInPlace src/filter.rs --replace-fail '#!/usr/bin/env sh' '#!${dash}/bin/dash'
+    substituteInPlace src/filter.rs --replace '#!/usr/bin/bash' '#!${bash}/bin/bash'
   '';
 
   postInstall = ''
-    substituteInPlace rescrobbled.service --replace-fail '%h/.cargo/bin/rescrobbled' "$out/bin/rescrobbled"
+    substituteInPlace rescrobbled.service --replace '%h/.cargo/bin/rescrobbled' "$out/bin/rescrobbled"
     install -Dm644 rescrobbled.service -t "$out/share/systemd/user"
   '';
 

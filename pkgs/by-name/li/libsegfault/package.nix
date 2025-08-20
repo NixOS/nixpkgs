@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libsegfault";
   version = "0-unstable-2022-11-13";
 

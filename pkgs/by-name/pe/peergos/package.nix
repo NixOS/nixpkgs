@@ -1,103 +1,55 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk,
-  openjdk8-bootstrap,
+  fetchurl,
   jre,
-  stripJavaArchivesHook,
   makeWrapper,
   nix-update-script,
 }:
 
-let
-  tweetnacl = stdenv.mkDerivation {
-    pname = "tweetnacl";
-    version = "0-unstable-2020-02-12";
-
-    src = fetchFromGitHub {
-      owner = "ianopolous";
-      repo = "tweetnacl-java";
-      rev = "6d1bde81ea63051750cda40422b62e478b85d2b0";
-      hash = "sha256-BDWzDpUBi4UuvxFwA9ton+RtHOzDcWql1ti+cdvhzks=";
-    };
-
-    postPatch = ''
-      substituteInPlace Makefile \
-        --replace-fail gcc cc
-    '';
-
-    makeFlags = [ "jni" ];
-
-    nativeBuildInputs = [
-      openjdk8-bootstrap # javah
-    ];
-
-    installPhase = ''
-      install -Dvm644 libtweetnacl.so $out/lib/libtweetnacl.so
-    '';
-  };
-in
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "1.9.0";
-  src = fetchFromGitHub {
-    owner = "Peergos";
-    repo = "web-ui";
-    rev = "v${version}";
-    hash = "sha256-KQyy1O8daex1nuKbO891kkJ+lETovUrHKF+D+1iHjXA=";
-    fetchSubmodules = true;
+  version = "0.22.0";
+  src = fetchurl {
+    url = "https://github.com/Peergos/web-ui/releases/download/v${version}/Peergos.jar";
+    hash = "sha256-JjJBHL2wdAt+V9wAujvBIdAw/OAe89sHsYsv+cXEjTY=";
   };
 
-  nativeBuildInputs = [
-    ant
-    jdk
-    stripJavaArchivesHook
-    makeWrapper
-  ];
+  dontUnpack = true;
+  dontBuild = true;
 
-  postPatch = ''
-    substituteInPlace build.xml \
-      --replace-fail '${"\${repository.version}"}' '${version}'
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    ant dist
-    runHook postBuild
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dvm644 server/Peergos.jar $out/share/java/peergos.jar
-    install -Dvm644 ${tweetnacl}/lib/libtweetnacl.so $out/native-lib/libtweetnacl.so
-
-    # --chdir as peergos expects to find `libtweetnacl.so` in `native-lib/`
+    install -D ${src} $out/share/java/peergos.jar
     makeWrapper ${lib.getExe jre} $out/bin/peergos \
-      --chdir $out \
-      --add-flags "-Djava.library.path=native-lib -jar $out/share/java/peergos.jar"
+      --add-flags "-jar -Djava.library.path=native-lib $out/share/java/peergos.jar"
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(v[0-9.]+)$"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/Peergos/web-ui/releases/tag/v${version}";
-    description = "P2P, secure file storage, social network and application protocol";
+    description = "P2p, secure file storage, social network and application protocol";
     downloadPage = "https://github.com/Peergos/web-ui";
     homepage = "https://peergos.org/";
+    # peergos have agpt3 license, peergos-web-ui have gpl3, both are used
     license = [
-      lib.licenses.agpl3Only # server
-      lib.licenses.gpl3Only # web-ui
+      lib.licenses.agpl3Only
+      lib.licenses.gpl3Only
     ];
     mainProgram = "peergos";
-    maintainers = with lib.maintainers; [
-      raspher
-      christoph-heiss
-    ];
+    maintainers = with lib.maintainers; [ raspher ];
     platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

@@ -18,10 +18,10 @@ buildOctavePackage rec {
     control
   ];
 
-  meta = {
-    homepage = "https://gnu-octave.github.io/packages/signal/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+  meta = with lib; {
+    homepage = "https://octave.sourceforge.io/signal/index.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ KarlJoad ];
     description = "Signal processing tools, including filtering, windowing and display functions";
   };
 }

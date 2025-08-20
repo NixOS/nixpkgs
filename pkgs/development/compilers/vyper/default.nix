@@ -1,12 +1,10 @@
 {
   lib,
-  lark,
   asttokens,
   buildPythonPackage,
   cbor2,
   fetchPypi,
   git,
-  immutables,
   importlib-metadata,
   packaging,
   pycryptodome,
@@ -30,20 +28,21 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.4.3";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IqdXNldAHYo7xpDWXWt3QWgABxgJeMOgX5iS2zHV3PU=";
+    hash = "sha256-locUXGoL9C3lLpIgLOmpE2SNPGV6yOXPubNaEA3EfjQ=";
   };
 
   postPatch = ''
     # pythonRelaxDeps doesn't work
     substituteInPlace setup.py \
-      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
+      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0" \
+      --replace-fail '"pytest-runner",' ""
   '';
 
   nativeBuildInputs = [
@@ -60,10 +59,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    lark
     asttokens
     cbor2
-    immutables
     importlib-metadata
     packaging
     pycryptodome

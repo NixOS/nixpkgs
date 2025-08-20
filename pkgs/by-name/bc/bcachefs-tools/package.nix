@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -24,19 +25,26 @@
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.25.3";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nij4mOJPVA03u6mpyKsFR7vgQ9wihiNfnlSlh6MNXP0=";
+    hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
   };
+
+  patches = [
+    # backport patch to fix build with latest liburcu
+    (fetchpatch {
+      url = "https://github.com/koverstreet/bcachefs-tools/commit/634c812a1ed05de8e3d1dc146eed95b942e1e38d.patch";
+      hash = "sha256-AL+nflQHKIwzI35NXZG2rniNjUfgLmv3osHHdpB1cGs=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -46,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
     installShellFiles
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -61,24 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     attr
     udev
-  ]
-  ++ lib.optional fuseSupport fuse3;
+  ] ++ lib.optional fuseSupport fuse3;
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-QkpsAQSoCmAihrE5YGzp9DalEQr+2djiPhLTXRn0u6U=";
+    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
   };
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
-
-    # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
-    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
-    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
-  ]
-  ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -87,8 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
-
-  doInstallCheck = true;
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -100,16 +99,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
-  postInstall = ''
-    substituteInPlace $out/libexec/bcachefsck_all \
-      --replace-fail "/usr/bin/python3" "${python3.interpreter}"
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd bcachefs \
-      --bash <($out/sbin/bcachefs completions bash) \
-      --zsh  <($out/sbin/bcachefs completions zsh) \
-      --fish <($out/sbin/bcachefs completions fish)
-  '';
+  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+  installFlags = [
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  ];
+
+  postInstall =
+    ''
+      substituteInPlace $out/libexec/bcachefsck_all \
+        --replace-fail "/usr/bin/python3" "${python3.interpreter}"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd bcachefs \
+        --bash <($out/sbin/bcachefs completions bash) \
+        --zsh  <($out/sbin/bcachefs completions zsh) \
+        --fish <($out/sbin/bcachefs completions fish)
+    '';
 
   passthru = {
     tests = {
@@ -133,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
-      johnrtitor
       Madouura
     ];
     platforms = lib.platforms.linux;

@@ -12,7 +12,6 @@
   xorgserver,
   openbox,
   xmodmap,
-  libselinux,
 }:
 
 # this is python3 only as it depends on selinux-python
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     openbox
     xmodmap
     dbus
-    libselinux
   ];
   propagatedBuildInputs = [
     pygobject3

@@ -7,20 +7,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "uddup";
   version = "0.9.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rotemreiss";
-    repo = "uddup";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1f5dm3772hiik9irnyvbs7wygcafbwi7czw3b47cwhb90b8fi5hg";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     colorama
   ];
 

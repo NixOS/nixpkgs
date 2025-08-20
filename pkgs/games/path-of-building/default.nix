@@ -17,13 +17,13 @@
 let
   data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
-    version = "2.56.0";
+    version = "2.49.2";
 
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-vzTMkrZgXtsCtEyxaDkea/MRj8tZDzDV3JAc440xrM8=";
+      hash = "sha256-rxvReL2ofdaQdKmIg2lMDT0thN1IkeJMf1B7+HWlQaI=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -64,14 +64,12 @@ stdenv.mkDerivation {
     qttools
     wrapQtAppsHook
     icoutils
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     qtbase
     luajit
     luajit.pkgs.lua-curl
-    luajit.pkgs.luautf8
   ];
 
   installPhase = ''

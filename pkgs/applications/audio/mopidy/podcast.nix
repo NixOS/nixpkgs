@@ -1,14 +1,13 @@
 {
   lib,
-  pythonPackages,
+  python3Packages,
   fetchPypi,
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mopidy-podcast";
   version = "3.0.1";
-  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,21 +15,15 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
   };
 
-  build-system = [
-    pythonPackages.setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     mopidy
-    pythonPackages.cachetools
-    pythonPackages.uritools
+    python3Packages.cachetools
+    python3Packages.uritools
   ];
 
-  nativeCheckInputs = [
-    pythonPackages.pytestCheckHook
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
   ];
-
-  pythonImportsCheck = [ "mopidy_podcast" ];
 
   meta = with lib; {
     homepage = "https://github.com/tkem/mopidy-podcast";

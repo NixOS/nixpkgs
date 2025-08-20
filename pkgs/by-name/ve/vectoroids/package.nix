@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Clone of the classic arcade game Asteroids by Atari";
     mainProgram = "vectoroids";
     license = lib.licenses.gpl2Plus;
-    inherit (SDL.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

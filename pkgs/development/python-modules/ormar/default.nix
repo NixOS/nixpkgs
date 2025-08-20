@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.20.2";
+  version = "0.20.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "collerek";
-    repo = "ormar";
+    repo = pname;
     tag = version;
-    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
+    hash = "sha256-DzvmJpWJANIoc5lvWAD0b2bhbKdDEpNL2l3TqXSZSnc=";
   };
 
   pythonRelaxDeps = [
@@ -49,17 +49,18 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    databases
-    psycopg2
-    pydantic
-    sqlalchemy
-    psycopg2
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      databases
+      psycopg2
+      pydantic
+      sqlalchemy
+      psycopg2
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
   optional-dependencies = {
     postgresql = [ asyncpg ];
@@ -88,8 +89,7 @@ buildPythonPackage rec {
     httpx
     nest-asyncio
     pytest-asyncio
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
@@ -142,7 +142,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
-    changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
     broken = true;

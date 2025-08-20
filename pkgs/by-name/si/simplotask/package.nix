@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "simplotask";
-  version = "1.18.0";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "spot";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0XAxjh9TWMqMkeSEhdgXX9DflHnT40f7VkHgp1QjQUg=";
+    rev = "v${version}";
+    hash = "sha256-Se2Gq3GnQsAKIzRslt2zEkqeE8lwda96EcglhqfC5NA=";
   };
 
   vendorHash = null;
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s -w"
-    "-X main.revision=v${finalAttrs.version}"
+    "-X main.revision=v${version}"
   ];
 
   doCheck = false;
@@ -32,11 +32,11 @@ buildGoModule (finalAttrs: {
     installManPage *.1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool for effortless deployment and configuration management";
     homepage = "https://spot.umputun.dev/";
-    maintainers = with lib.maintainers; [ sikmir ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+    license = licenses.mit;
     mainProgram = "spot";
   };
-})
+}

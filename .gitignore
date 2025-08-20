@@ -37,6 +37,3 @@ update-git-commits.txt
 
 # JetBrains IDEA module declaration file
 /nixpkgs.iml
-
-# Usually used for manual backports
-.worktree/

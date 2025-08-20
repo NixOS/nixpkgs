@@ -6,7 +6,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "siji";
   version = "2016-05-13";
 

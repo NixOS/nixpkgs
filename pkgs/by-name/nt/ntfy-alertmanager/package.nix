@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "ntfy-alertmanager";
-  version = "0.5.0";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://git.xenrox.net/~xenrox/ntfy-alertmanager/refs/download/v${version}/ntfy-alertmanager-${version}.tar.gz";
-    hash = "sha256-Sn2hPt03o4Pi1WY/3d5oWhWUt8x+3P8hoNPS58tj0Kw=";
+    hash = "sha256-5rQzJZ0BaLtfj2MfyZZJ3PEiWnaTjWOMlsJYeYENW7U=";
   };
 
-  vendorHash = "sha256-NHaLv+Ulzl4ev3a6OjZiacCSmYAtvqFFmbYzAp+4AFU=";
+  vendorHash = "sha256-8a6dvBERegpFYFHQGJppz5tlQioQAudCe3/Q7vro+ZI=";
 
   meta = with lib; {
-    description = "Bridge between ntfy and Alertmanager";
+    description = "A bridge between ntfy and Alertmanager";
     homepage = "https://git.xenrox.net/~xenrox/ntfy-alertmanager";
     license = licenses.agpl3Only;
     mainProgram = "ntfy-alertmanager";

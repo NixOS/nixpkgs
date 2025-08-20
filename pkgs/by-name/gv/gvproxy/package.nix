@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gvproxy";
-  version = "0.8.7";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
     rev = "v${version}";
-    hash = "sha256-ofxU4lUfBLGspe4N8Tr+U92fyLa+gFPm4LhPDYLMX2E=";
+    hash = "sha256-f48dcXzzmWZ3ELswENMTmnK98eUqOtGt5GGxDU9WYmM=";
   };
 
   vendorHash = null;
@@ -34,6 +34,6 @@ buildGoModule rec {
     description = "Network stack based on gVisor";
     homepage = "https://github.com/containers/gvisor-tap-vsock";
     license = licenses.asl20;
-    teams = [ teams.podman ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

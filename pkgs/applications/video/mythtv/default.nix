@@ -43,13 +43,13 @@
 
 mkDerivation rec {
   pname = "mythtv";
-  version = "35.0";
+  version = "34.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
-    tag = "v${version}";
-    hash = "sha256-4mWtPJi2CBoek8LWEfdFxe1ybomAOCTWBTKExMm7nLU=";
+    rev = "v${version}";
+    hash = "sha256-6/TEoyYIRq6pufYzGOmO5DB05JuDo9lqRAYT5N5M/L4=";
   };
 
   patches = [
@@ -88,8 +88,7 @@ mkDerivation rec {
     soundtouch
     libzip
     libhdhomerun
-  ]
-  ++ lib.optional withWebKit qtwebkit;
+  ] ++ lib.optional withWebKit qtwebkit;
   nativeBuildInputs = [
     pkg-config
     which

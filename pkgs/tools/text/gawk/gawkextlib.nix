@@ -20,7 +20,7 @@
   glibcLocales,
   mpfr,
   more,
-  libpq,
+  postgresql,
   hiredis,
   expat,
   tre,
@@ -34,9 +34,6 @@ let
       extraBuildInputs ? [ ],
       doCheck ? true,
       patches ? [ ],
-      extraPostPatch ? "",
-      env ? { },
-      broken ? null,
     }:
     let
       is_extension = gawkextlib != null;
@@ -55,8 +52,7 @@ let
 
       postPatch = ''
         cd ${name}
-      ''
-      + extraPostPatch;
+      '';
 
       nativeBuildInputs = [
         autoconf
@@ -74,12 +70,10 @@ let
       setupHook = if is_extension then ./setup-hook.sh else null;
       inherit gawk;
 
-      inherit env;
-
       inherit doCheck;
       nativeCheckInputs = [ more ];
 
-      meta = {
+      meta = with lib; {
         homepage = "https://sourceforge.net/projects/gawkextlib/";
         description = "Dynamically loaded extension libraries for GNU AWK";
         mainProgram = "xmlgawk";
@@ -91,11 +85,10 @@ let
           database, use the GD graphics library, and perform unlimited
           precision MPFR calculations.
         '';
-        license = lib.licenses.gpl3Plus;
-        platforms = lib.platforms.unix;
-        maintainers = with lib.maintainers; [ tomberek ];
-      }
-      // lib.optionalAttrs (broken != null) { inherit broken; };
+        license = licenses.gpl3Plus;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ tomberek ];
+      };
     }
   );
   gawkextlib = buildExtension {
@@ -119,16 +112,11 @@ let
     errno = buildExtension {
       inherit gawkextlib;
       name = "errno";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
     };
     gd = buildExtension {
       inherit gawkextlib;
       name = "gd";
       extraBuildInputs = [ gd ];
-      # GCC 14 makes this an error by default, remove when fixed upstream
-      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
     };
     haru = buildExtension {
       inherit gawkextlib;
@@ -139,8 +127,6 @@ let
         # https://github.com/libharu/libharu/commit/88271b73c68c521a49a15e3555ef00395aa40810
         ./fix-typos-corrected-in-libharu-2.4.4.patch
       ];
-      # GCC 14 makes this an error by default, remove when fixed upstream
-      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
     };
     json = buildExtension {
       inherit gawkextlib;
@@ -150,9 +136,6 @@ let
     lmdb = buildExtension {
       inherit gawkextlib;
       name = "lmdb";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
       extraBuildInputs = [ lmdb ];
       #  mdb_env_open(env, /dev/null)
       #! No such device
@@ -182,7 +165,7 @@ let
     pgsql = buildExtension {
       inherit gawkextlib;
       name = "pgsql";
-      extraBuildInputs = [ libpq ];
+      extraBuildInputs = [ postgresql ];
     };
     redis = buildExtension {
       inherit gawkextlib;
@@ -192,9 +175,6 @@ let
     select = buildExtension {
       inherit gawkextlib;
       name = "select";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
     };
     timex = buildExtension {
       inherit gawkextlib;
@@ -207,8 +187,6 @@ let
         expat
         libiconv
       ];
-      # gawk: xmlbase:14: fatal: load_ext: cannot open library `../.libs/xml.so`
-      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 in

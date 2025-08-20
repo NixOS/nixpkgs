@@ -24,12 +24,12 @@ buildGoModule rec {
     "-X=github.com/activecm/rita/config.ExactVersion=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Framework for detecting command and control communication through network traffic analysis";
     homepage = "https://github.com/activecm/rita";
     changelog = "https://github.com/activecm/rita/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "rita";
   };
 }

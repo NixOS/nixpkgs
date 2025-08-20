@@ -8,16 +8,16 @@
   fetchFromGitHub,
   bundlerEnv,
   callPackage,
-  nixosTests,
 
-  ruby_3_3,
+  ruby_3_2,
+  replace,
   gzip,
   gnutar,
   git,
   cacert,
   util-linux,
   gawk,
-  net-tools,
+  nettools,
   imagemagick,
   optipng,
   pngquant,
@@ -34,28 +34,30 @@
   procps,
   rsync,
   icu,
-  pnpm_9,
+  fetchYarnDeps,
+  yarn,
+  fixup-yarn-lock,
   nodePackages,
-  nodejs,
+  nodejs_18,
   jq,
   moreutils,
   terser,
   uglify-js,
 
   plugins ? [ ],
-}:
+}@args:
 
 let
-  version = "3.4.7";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-vidv5aa2r1YOcnvkqrk7ttuIk1bN5Ct7kMANl8kpEm0=";
+    sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
   };
 
-  ruby = ruby_3_3;
+  ruby = ruby_3_2;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -65,14 +67,14 @@ let
     gnutar
     git
     brotli
-    nodejs
+    nodejs_18
 
     # Misc required system utils
     which
     procps # For ps and kill
     util-linux # For renice
     gawk
-    net-tools # For hostname
+    nettools # For hostname
 
     # Image optimization
     imagemagick
@@ -122,29 +124,30 @@ let
         pluginName = if name != null then name else "${pname}-${version}";
         dontConfigure = true;
         dontBuild = true;
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out
-          cp -r * $out/
-        ''
-        + lib.optionalString (bundlerEnvArgs != { }) (
-          if preserveGemsDir then
-            ''
-              cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
-            ''
-          else
-            ''
-              if [[ -e $out/gems ]]; then
-                echo "Warning: The repo contains a 'gems' directory which will be removed!"
-                echo "         If you need to preserve it, set 'preserveGemsDir = true'."
-                rm -r $out/gems
-              fi
-              ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-            ''
-            + ''
-              runHook postInstall
-            ''
-        );
+        installPhase =
+          ''
+            runHook preInstall
+            mkdir -p $out
+            cp -r * $out/
+          ''
+          + lib.optionalString (bundlerEnvArgs != { }) (
+            if preserveGemsDir then
+              ''
+                cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+              ''
+            else
+              ''
+                if [[ -e $out/gems ]]; then
+                  echo "Warning: The repo contains a 'gems' directory which will be removed!"
+                  echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+                  rm -r $out/gems
+                fi
+                ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+              ''
+              + ''
+                runHook postInstall
+              ''
+          );
       }
     );
 
@@ -186,9 +189,9 @@ let
               cd ../..
 
               mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-              ln -s "${nodejs.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+              ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-              ln -s ${nodejs.libv8}/include vendor/v8/include
+              ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
               mkdir -p ext/libv8-node
               echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -229,11 +232,9 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
-      pname = "discourse-assets";
-      inherit version src;
-      fetcherVersion = 1;
-      hash = "sha256-WyRBnuKCl5NJLtqy3HK/sJcrpMkh0PjbasGPNDV6+7Y=";
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-cSQofaULCmPuWGxS+hK4KlRq9lSkCPiYvhax9X6Dor8=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -241,10 +242,10 @@ let
       redis
       uglify-js
       terser
+      yarn
       jq
       moreutils
-      nodejs
-      pnpm_9.configHook
+      fixup-yarn-lock
     ];
 
     outputs = [
@@ -280,9 +281,31 @@ let
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
+      # Yarn wants a real home directory to write cache, config, etc to
+      export HOME=$NIX_BUILD_TOP/fake_home
+
+      yarn_install() {
+        local offlineCache=$1 yarnLock=$2
+
+        # Make yarn install packages from our offline cache, not the registry
+        yarn config --offline set yarn-offline-mirror $offlineCache
+
+        # Fixup "resolved"-entries in yarn.lock to match our offline cache
+        fixup-yarn-lock $yarnLock
+
+        # Install while ignoring hook scripts
+        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
+      }
+
+      # Install runtime and devDependencies.
+      # The dev deps are necessary for generating the theme-transpiler executed as dependent task
+      # assets:precompile:theme_transpiler before db:migrate and unfortunately also in the runtime
+      yarn_install $yarnOfflineCache yarn.lock
+
       # Patch before running postinstall hook script
       patchShebangs node_modules/
       patchShebangs --build app/assets/javascripts
+      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
@@ -328,10 +351,6 @@ let
 
       runHook postInstall
     '';
-
-    # The node_modules output by design has broken symlinks, as it refers to the source code.
-    # They are resolved in the primary discourse derivation.
-    dontCheckForBrokenSymlinks = true;
   };
 
   discourse = stdenv.mkDerivation {
@@ -406,17 +425,26 @@ let
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
-      ln -sf ${assets.node_modules} $out/share/discourse/node_modules
+      # This needs to be copied because of symlinks in node_modules
+      # Also this needs to be full node_modules (including dev deps) because without loader.js it just throws 500
+      cp -r ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       rm -r $out/share/discourse/app/assets/javascripts
-      # This needs to be copied because it contains symlinks to node_modules
-      cp -r ${assets.javascripts} $out/share/discourse/app/assets/javascripts
+      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
 
       runHook postInstall
     '';
+
+    meta = with lib; {
+      homepage = "https://www.discourse.org/";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ talyz ];
+      license = licenses.gpl2Plus;
+      description = "Discourse is an open source discussion platform";
+    };
 
     passthru = {
       inherit
@@ -433,19 +461,11 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = {
-        inherit (nixosTests)
-          discourse
-          discourseAllPlugins
-          ;
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
       };
-    };
-    meta = with lib; {
-      homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
-      description = "Open source discussion platform";
     };
   };
 in

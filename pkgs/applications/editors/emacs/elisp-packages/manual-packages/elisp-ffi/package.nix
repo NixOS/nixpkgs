@@ -4,6 +4,7 @@
   libffi,
   melpaBuild,
   pkg-config,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -28,6 +29,8 @@ melpaBuild {
     make CXX=$CXX
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     homepage = "https://github.com/skeeto/elisp-ffi";
     description = "Emacs Lisp Foreign Function Interface";
@@ -38,6 +41,6 @@ melpaBuild {
       values on to Emacs.
     '';
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

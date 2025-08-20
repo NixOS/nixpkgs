@@ -29,7 +29,7 @@ buildNpmPackage {
 
   meta = {
     description = "Embedded JavaScript templates";
-    homepage = "https://ejs.co";
+    homepage = "http://ejs.co";
     license = lib.licenses.asl20;
     mainProgram = "ejs";
     maintainers = with lib.maintainers; [ momeemt ];

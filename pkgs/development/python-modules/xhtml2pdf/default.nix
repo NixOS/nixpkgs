@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.17";
+  version = "0.2.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";
     tag = "v${version}";
-    hash = "sha256-qp0JVp5efIrI98YT0rwFAMSEW+0aIhedfYGND4V7Mto=";
+    hash = "sha256-sva1Oqz4FsLz/www8IPVxol3D0hx5F5hQ0I/rSRP9sE=";
   };
 
   build-system = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/${src.tag}";
+    changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     description = "PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;

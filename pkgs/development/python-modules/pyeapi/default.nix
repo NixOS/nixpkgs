@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "test/unit" ];
+  pytestFlagsArray = [ "test/unit" ];
 
   pythonImportsCheck = [ "pyeapi" ];
 

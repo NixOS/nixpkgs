@@ -2,20 +2,21 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  fetchpatch,
 }:
 
 buildGoModule rec {
   pname = "goat-cli";
-  version = "1.4.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     repo = "goat";
     owner = "studio-b12";
     rev = "v${version}";
-    hash = "sha256-7inoRBVR7zmt0jUFAGYjoYT2cdda0qgzyXLL+GiBFMg=";
+    hash = "sha256-g5iS0XCRv97uX45BMqyFNodjjZ3Q9OeMJXAdsPwLCEg=";
   };
 
-  vendorHash = "sha256-b/v27pHA9LcFe4TC/EpelJVSkAg4sq7b8p2gk0bWsQc=";
+  vendorHash = "sha256-MOsxM8CSjK5j/guEwRFWHZ4+gdAHa5txVXw67jzwyLQ=";
 
   ldflags = [
     "-s"

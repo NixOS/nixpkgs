@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonPackage rec {
   pname = "dict.cc.py";
   version = "3.1.0";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rbaron";
@@ -16,11 +16,7 @@ python3.pkgs.buildPythonPackage {
     hash = "sha256-wc0WY1pETBdOT3QUaVGsX8YdcnhxLIHrZ2vt2t5LYKU=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     colorama
     requests

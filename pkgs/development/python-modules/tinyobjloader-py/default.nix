@@ -5,7 +5,7 @@
   tinyobjloader,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tinyobjloader-py";
   format = "setuptools";
   inherit (tinyobjloader) version src;

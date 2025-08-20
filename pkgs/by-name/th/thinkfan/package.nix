@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
     "-DUSE_NVML=OFF"
     # force install unit files
     "-DSYSTEMD_FOUND=ON"
-  ]
-  ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
+  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   nativeBuildInputs = [
     cmake
@@ -60,6 +59,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/vmatare/thinkfan";
     maintainers = with lib.maintainers; [
+      domenkozar
       rnhmjoj
     ];
     platforms = lib.platforms.linux;

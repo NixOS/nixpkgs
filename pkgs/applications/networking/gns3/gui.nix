@@ -17,7 +17,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "gns3-gui";
   inherit version;
-  format = "setuptools";
 
   src = fetchFromGitHub {
     inherit hash;

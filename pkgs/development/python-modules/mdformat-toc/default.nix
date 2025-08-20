@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = "mdformat-toc";
+    repo = pname;
     tag = version;
     hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
   };
@@ -38,6 +38,5 @@ buildPythonPackage rec {
       aldoborrero
       polarmutex
     ];
-    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }

@@ -36,7 +36,6 @@
         libmad
         SDL2
         SDL2_mixer
-        libGL
         libpng
         alsa-lib
         gnutls
@@ -46,7 +45,6 @@
         libopus
         xorg.libXrandr
         xorg.libXcursor
-        xorg.libXScrnSaver
       ];
 
       postFixup = ''

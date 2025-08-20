@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.04.21.00";
+  version = "2025.01.06.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZRrG7bgmh7hW7ihQISQP5pnWAVGhDLL93rCP7ZtUnA=";
+    hash = "sha256-W37+xs+Fj2yL9KzR9CugfgbFl+g3f+2Dx+xL9MpQEQ4=";
   };
 
   patches = [
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Watches files and takes action when they change";
@@ -113,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
       emily
       techknowlogick
     ];
-    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };

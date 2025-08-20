@@ -5,7 +5,7 @@
   gnome-shell,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-window-corner-preview";
   version = "unstable-2019-04-03";
 

@@ -7,18 +7,16 @@
 python3Packages.buildPythonApplication rec {
   pname = "xpaste";
   version = "1.6";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ossobv";
-    repo = "xpaste";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-eVnoLG+06UTOkvGhzL/XS4JBrEwbXYZ1fuNTIW7YAfE=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     xlib
   ];
 

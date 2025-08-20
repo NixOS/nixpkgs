@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "icecream";
-  version = "2.1.4";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WHVeWDl9U1CnbyWXbe57YH9f67PG4c3f5rGVGJbpFXM=";
+    hash = "sha256-CqSnwzdOw2FTodCPgeMIDoPYrB7v2X0vT+lUTo+bSd4=";
   };
 
   postPatch = ''

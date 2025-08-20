@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  nodejs_20,
+  nodejs_18,
   electron,
   python3,
   nix-update-script,
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_18;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -97,7 +97,5 @@ buildNpmPackage rec {
     maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "open-stage-control";
-    # Depends on nodejs_18 that has been removed.
-    broken = true;
   };
 }

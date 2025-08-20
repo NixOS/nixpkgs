@@ -13,7 +13,6 @@
   pydantic,
   requests,
   requests-toolbelt,
-  zstandard,
 
   # tests
   anthropic,
@@ -21,9 +20,7 @@
   fastapi,
   freezegun,
   instructor,
-  opentelemetry-sdk,
   pytest-asyncio,
-  pytest-vcr,
   pytestCheckHook,
   uvicorn,
   attr,
@@ -31,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.4.9";
+  version = "0.1.147";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-7XV85/IN1hG9hYBSg73pymIwIWYAay/18NAsV6Jz4Ik=";
+    hash = "sha256-d0PJaC1MhVS3i4AtXUjSkkq/Yj2Pi42H/cW/XML/94o=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -53,7 +50,6 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
-    zstandard
   ];
 
   nativeCheckInputs = [
@@ -62,13 +58,10 @@ buildPythonPackage rec {
     fastapi
     freezegun
     instructor
-    opentelemetry-sdk
     pytest-asyncio
-    pytest-vcr
     pytestCheckHook
     uvicorn
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -88,16 +81,13 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Circular import
-    "tests/integration_tests/"
+    # due to circular import
+    "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
-    "tests/unit_tests/evaluation/test_runner.py"
-    "tests/unit_tests/evaluation/test_runner.py"
-    # Require a Langsmith API key
+    # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
-    # Marked as flaky in source
-    "tests/unit_tests/test_run_helpers.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
@@ -107,12 +97,9 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      natsukium
-      sarahec
-    ];
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langsmith";
   };
 }

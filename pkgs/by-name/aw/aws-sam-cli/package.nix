@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.135.0";
+  version = "1.132.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-ccYpEznuU6d7gDyrDiuUmvdCJutXI7SAH2PH9Vdq8Fs=";
+    hash = "sha256-5h+uACzc4bAIgHoaZw2U/FCPA1ls8JTLqJd608J2uTU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -105,13 +105,11 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlags = [
-    # Disable warnings
-    "-Wignore::DeprecationWarning"
-  ];
-
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests"
+    # Disable warnings
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -153,13 +151,13 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/aws/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "sam";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       lo1tuma
       anthonyroussel
     ];

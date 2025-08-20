@@ -10,7 +10,7 @@ let
   settingsFormat = pkgs.formats.toml { };
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
     enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";

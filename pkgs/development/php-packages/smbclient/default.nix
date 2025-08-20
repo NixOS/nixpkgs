@@ -19,6 +19,6 @@ buildPecl {
     description = "PHP wrapper for libsmbclient";
     license = licenses.bsd2;
     homepage = "https://github.com/eduardok/libsmbclient-php";
-    teams = [ teams.php ];
+    maintainers = teams.php.members;
   };
 }

@@ -25,6 +25,7 @@
   libSM,
   libICE,
   libXext,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,25 +62,32 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
-    curl
-    glew
-    icu
-    libpng
-    lua
-    python3
-    zlib
-    minizip
-    asio
-    libSM # XXX: these should be propagated by SDL2?
-    libICE
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libXext;
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_net
+      SDL2_ttf
+      curl
+      glew
+      icu
+      libpng
+      lua
+      python3
+      zlib
+      minizip
+      asio
+      libSM # XXX: these should be propagated by SDL2?
+      libICE
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libXext
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Cocoa
+      ]
+    );
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -93,7 +101,7 @@ stdenv.mkDerivation rec {
       installManPage ../xdg/widelands.6
     '';
 
-  meta = {
+  meta = with lib; {
     description = "RTS with multiple-goods economy";
     homepage = "https://widelands.org/";
     longDescription = ''
@@ -103,12 +111,12 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/widelands/widelands/releases/tag/v${version}";
     mainProgram = "widelands";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
       raskin
       jcumming
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     hydraPlatforms = [ ];
   };
 }

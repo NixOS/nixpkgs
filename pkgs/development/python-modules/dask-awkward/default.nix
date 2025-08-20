@@ -16,7 +16,8 @@
   # optional-dependencies
   pyarrow,
 
-  # tests
+  # checks
+  dask-histogram,
   distributed,
   hist,
   pandas,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.5.0";
+  version = "2024.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
+    hash = "sha256-pL1LDW/q78V/c3Bha38k40018MFO+i8X6htYNdcsy7s=";
   };
 
   build-system = [
@@ -52,15 +53,14 @@ buildPythonPackage rec {
     io = [ pyarrow ];
   };
 
-  nativeCheckInputs = [
-    # dask-histogram (circular dependency)
+  checkInputs = [
+    dask-histogram
     distributed
     hist
     pandas
     pytestCheckHook
     uproot
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dask_awkward" ];
 
@@ -73,11 +73,12 @@ buildPythonPackage rec {
     "test_basic_root_works"
     # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
     "test_distance_behavior"
+  ];
 
-    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
-    # https://github.com/dask-contrib/dask-awkward/issues/573
-    "test_persist"
-    "test_ravel_fail"
+  disabledTestPaths = [
+    # TypeError: Blockwise.__init__() got an unexpected keyword argument 'dsk'
+    # https://github.com/dask-contrib/dask-awkward/issues/557
+    "tests/test_str.py"
   ];
 
   __darwinAllowLocalNetworking = true;

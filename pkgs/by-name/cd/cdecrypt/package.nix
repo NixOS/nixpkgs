@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     install -Dm755 cdecrypt $out/bin/cdecrypt
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Utility that decrypts Wii U NUS content files";
     mainProgram = "cdecrypt";
     homepage = "https://github.com/VitaSmith/cdecrypt";
     changelog = "https://github.com/VitaSmith/cdecrypt/releases/tag/v${version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hughobrien ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hughobrien ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

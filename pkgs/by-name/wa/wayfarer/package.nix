@@ -17,14 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfarer";
-  version = "1.2.4-unstable-2025-04-12";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "stronnag";
     repo = "wayfarer";
-    # branch development - has new gtk4 code
-    rev = "2517004bb3c48653100f0c6a6da16fde7927755e";
-    hash = "sha256-ULmkjyBuqVwsFbLOdvqxvsAH1EF7zXFEBhU//nsV5sU=";
+    rev = finalAttrs.version;
+    hash = "sha256-Vuiy2SjpK2T1ekbwa/KyIFa1V4BJsnJRIj4b+Yx0VEw=";
   };
 
   postPatch = ''

@@ -6,7 +6,7 @@
   libnotify,
 }:
 
-buildLua {
+buildLua rec {
   pname = "mpv-notify-send";
   version = "0-unstable-2024-07-11";
 

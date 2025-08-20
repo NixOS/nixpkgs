@@ -32,26 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yUMiy5DaCPfCmBIGCXpqtvSSmQl5wo6vsLdW7Tt/Wfo=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-ePgEAVYXLOHWQXG92Grb9nmenyGj0JkgVy1UDsQF0xw=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-FfjSttXf6WF2w59CP6L/+BIuuXp2yKPTku7FMvdIHg0=";
   };
 
-  nativeBuildInputs = [
-    appstream-glib
-    cargo
-    desktop-file-utils
-    git
-    meson
-    ninja
-    pkg-config
-    python3
-    rustc
-    wrapGAppsHook4
-  ]
-  ++ (with rustPlatform; [
-    cargoSetupHook
-  ]);
+  nativeBuildInputs =
+    [
+      appstream-glib
+      cargo
+      desktop-file-utils
+      git
+      meson
+      ninja
+      pkg-config
+      python3
+      rustc
+      wrapGAppsHook4
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+    ]);
 
   buildInputs = [
     glib
@@ -72,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/AudioSharing";
     description = "Automatically share the current audio playback in the form of an RTSP stream";
     mainProgram = "audio-sharing";
-    maintainers = with maintainers; [ benediktbroich ];
-    teams = [ teams.gnome-circle ];
+    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

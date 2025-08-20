@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -12,7 +13,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rtkit";
   version = "0.13";
 

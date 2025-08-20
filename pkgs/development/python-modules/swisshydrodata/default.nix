@@ -3,17 +3,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   requests-mock,
   requests,
-  aiohttp,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "swisshydrodata";
-  version = "0.3.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,19 +20,15 @@ buildPythonPackage rec {
     owner = "Bouni";
     repo = "swisshydrodata";
     tag = version;
-    hash = "sha256-Yy/sc/SKKftIsZLyIJabrgcgYwbBxZMXbhTaWSIKpM8=";
+    hash = "sha256-e3h/FStzhyaI//bRvT57lA6+06hVqhL2aztI115bsvU=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    requests
-    aiohttp
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
     requests-mock
   ];
 
@@ -43,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client to get data from the Swiss federal Office for Environment FEON";
     homepage = "https://github.com/bouni/swisshydrodata";
-    changelog = "https://github.com/Bouni/swisshydrodata/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bouni/swisshydrodata/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

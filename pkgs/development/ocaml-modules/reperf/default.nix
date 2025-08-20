@@ -6,7 +6,7 @@
   reason,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "reperf";
   version = "1.5.1";
 

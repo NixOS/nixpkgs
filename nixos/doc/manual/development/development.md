@@ -12,5 +12,4 @@ writing-documentation.chapter.md
 nixos-tests.chapter.md
 developing-the-test-driver.chapter.md
 testing-installer.chapter.md
-modular-services.md
 ```

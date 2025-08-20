@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "25.6.0";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-txGz6v9hkvnrmVmBHsi1B2eC/iNT1tg4dU5AcMsSCic=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KblVDlE8EglMMAclGFZm81obipm6/JLUvsn5sLrpKqc=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })
-# TODO [ ]: create a wrapper including mplayer/mpv
+# TODO [ AndersonTorres ]: create a wrapper including mplayer/mpv

@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
   meta = {
     description = "Lambda calculus interpreter";
-    homepage = "https://www.chatzi.org/lci/";
     mainProgram = "lci";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;

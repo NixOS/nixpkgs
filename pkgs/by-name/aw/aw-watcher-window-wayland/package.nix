@@ -7,7 +7,7 @@
   unstableGitUpdater,
   wayland,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "aw-watcher-window-wayland";
   version = "0-unstable-2024-10-08";
 
@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-WWT8tOrHPf5x3bXsVPt32VKut4qK+K8gickBfEc0zmk=";
+  useFetchCargoVendor = true;
 
   passthru.updateScript = unstableGitUpdater { };
 

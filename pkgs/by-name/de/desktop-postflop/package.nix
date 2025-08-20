@@ -36,7 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-pMvh2Rr+rMe0nMB9yRDrGatrS36+VM7os0eeBR31oCM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "postflop-solver-0.1.0" = "sha256-coEl09eMbQqSos1sqWLnfXfhujSTsnVnOlOQ+JbdFWY=";
+    };
+  };
 
   postPatch = ''
     substituteInPlace tauri.conf.json \

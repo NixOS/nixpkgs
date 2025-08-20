@@ -43,16 +43,17 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libadwaita
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-good
-    gst-plugins-ugly
-    gst-plugins-base
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-plugins-base
+      gst-plugins-bad
+    ]);
 
   propagatedBuildInputs = with python3Packages; [
     distro

@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
     description = "Software for rapid LiDAR processing";
     homepage = "http://lastools.org/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ stephenwithph ];
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ stephenwithph ];
     platforms = platforms.unix;
   };
 }

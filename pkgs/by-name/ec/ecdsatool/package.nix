@@ -16,12 +16,8 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
-    runHook preConfigure
-
     ./autogen.sh
     ./configure --prefix=$out
-
-    runHook postConfigure
   '';
 
   patches = [

@@ -3,31 +3,30 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  btrfs-progs,
-  writableTmpDirAsHomeHook,
   installShellFiles,
-  versionCheckHook,
+  btrfs-progs,
+  testers,
+  werf,
 }:
-buildGoModule (finalAttrs: {
+
+buildGoModule rec {
   pname = "werf";
-  version = "2.47.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-FrFo/RJuwNQps6Fqr/B+xwgYvL9wbVyEkvh91ujf3gU=";
+    rev = "v${version}";
+    hash = "sha256-EVFNUOvczsgU0t2hOfl4e5bFH4ByxmRsIk2idI+uquQ=";
   };
 
+  vendorHash = "sha256-eJT3ROX/cAslWMNUdlFU6eQE8o2GlAFKrBaT//Pde1o=";
+
   proxyVendor = true;
-  vendorHash = "sha256-/0snKYzNJMbXGikMq81XIwn7ip53bV7MT31VmeA668g=";
 
   subPackages = [ "cmd/werf" ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
@@ -35,74 +34,72 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
-  ]
-  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-    "-extldflags=-static"
-    "-linkmode external"
-  ];
+  ldflags =
+    [
+      "-s"
+      "-w"
+      "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
+    ]
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
+      "-extldflags=-static"
+      "-linkmode external"
+    ];
 
-  tags = [
-    "containers_image_openpgp"
-    "dfrunmount"
-    "dfrunnetwork"
-    "dfrunsecurity"
-    "dfssh"
-  ]
-  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-    "cni"
-    "exclude_graphdriver_devicemapper"
-    "netgo"
-    "no_devmapper"
-    "osusergo"
-    "static_build"
-  ];
+  tags =
+    [
+      "containers_image_openpgp"
+      "dfrunmount"
+      "dfrunnetwork"
+      "dfrunsecurity"
+      "dfssh"
+    ]
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
+      "cni"
+      "exclude_graphdriver_devicemapper"
+      "netgo"
+      "no_devmapper"
+      "osusergo"
+      "static_build"
+    ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  preCheck =
+    ''
+      # Test all targets.
+      unset subPackages
 
-  preCheck = ''
-    # Test all packages.
-    unset subPackages
-
-    # Remove tests that fail or require external services.
-    rm -rf \
-      integration/suites \
-      pkg/true_git/*_test.go \
-      pkg/werf/exec/*_test.go \
-      test/e2e
-  ''
-  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-    # A workaround for osusergo.
-    export USER=nixbld
-  '';
-
-  doInstallCheck = true;
-
-  versionCheckProgramArg = "version";
+      # Remove tests that require external services.
+      rm -rf \
+        integration/suites \
+        pkg/true_git/*test.go \
+        test/e2e
+    ''
+    + lib.optionalString (env.CGO_ENABLED == 0) ''
+      # A workaround for osusergo.
+      export USER=nixbld
+    '';
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      installShellCompletion \
-        --cmd werf \
-        --$shell <($out/bin/werf completion --shell=$shell)
-    done
+    installShellCompletion --cmd werf \
+      --bash <($out/bin/werf completion --shell=bash) \
+      --zsh <($out/bin/werf completion --shell=zsh)
   '';
 
-  meta = {
+  passthru.tests.version = testers.testVersion {
+    package = werf;
+    command = "werf version";
+    version = src.rev;
+  };
+
+  meta = with lib; {
     description = "GitOps delivery tool";
+    mainProgram = "werf";
     longDescription = ''
-      werf is a CNCF Sandbox CLI tool to implement full-cycle CI/CD to
-      Kubernetes easily. werf integrates into your CI system and leverages
-      familiar and reliable technologies, such as Git, Dockerfile, Helm, and
-      Buildah.
+      The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
+      implement CI/CD and Giterminism.
     '';
     homepage = "https://werf.io";
-    changelog = "https://github.com/werf/werf/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.azahi ];
-    mainProgram = "werf";
+    changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ azahi ];
   };
-})
+}

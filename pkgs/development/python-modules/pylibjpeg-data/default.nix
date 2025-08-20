@@ -6,7 +6,7 @@
   flit-core,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pylibjpeg-data";
   version = "unstable-2024-03-28";
   pyproject = true;

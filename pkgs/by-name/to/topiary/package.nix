@@ -11,19 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "0.6.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
     tag = "v${version}";
-    hash = "sha256-nRVxjdEtYvgF8Vpw0w64hUd1scZh7f+NjFtbTg8L5Qc=";
+    hash = "sha256-Vsyl4tZ9AWTydpXw9IyvrD2tYiG8ySAD39lPwxRflSc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  cargoHash = "sha256-EqalIF1wx3F/5CiD21IaYsPdks6Mv1VfwL8OTRWsWaU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bk5993v0wn/emzJKvxaPBYjqCmP0BpOuFMga7ZOyqXg=";
 
   # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
   depsExtraArgs.postBuild = ''
@@ -40,35 +41,34 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoTestFlags = cargoBuildFlags;
 
-  # Skip tests that cannot be executed in sandbox (operation not permitted)
+  # Skip tests that cannot be executed in sandbox (operation not permited)
   checkFlags = [
     "--skip=test_fmt_dir"
     "--skip=test_fmt_files"
     "--skip=test_fmt_files_query_fallback"
-    "--skip=test_fmt_invalid"
     "--skip=test_fmt_stdin"
     "--skip=test_fmt_stdin_query"
     "--skip=test_fmt_stdin_query_fallback"
     "--skip=test_vis"
     "--skip=formatted_query_tester"
     "--skip=input_output_tester"
-    "--skip=coverage_tester"
   ];
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
-  postInstall = ''
-    install -Dm444 topiary-queries/queries/* -t $out/share/queries
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd topiary \
-      --bash <($out/bin/topiary completion bash) \
-      --fish <($out/bin/topiary completion fish) \
-      --zsh <($out/bin/topiary completion zsh)
-  '';
+  postInstall =
+    ''
+      install -Dm444 topiary-queries/queries/* -t $out/share/queries
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd topiary \
+        --bash <($out/bin/topiary completion bash) \
+        --fish <($out/bin/topiary completion fish) \
+        --zsh <($out/bin/topiary completion zsh)
+    '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 

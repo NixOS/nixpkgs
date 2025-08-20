@@ -7,7 +7,6 @@
   libiconv,
   openssl,
   pcre,
-  pcre2,
   zlib,
 }:
 
@@ -15,6 +14,7 @@ import ./versions.nix (
   {
     version,
     hash,
+    vendorHash ? throw "unsupported version ${version} for zabbix-agent2",
     ...
   }:
   buildGoModule {
@@ -28,7 +28,7 @@ import ./versions.nix (
 
     modRoot = "src/go";
 
-    vendorHash = null;
+    inherit vendorHash;
 
     nativeBuildInputs = [
       autoreconfHook
@@ -37,7 +37,7 @@ import ./versions.nix (
     buildInputs = [
       libiconv
       openssl
-      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
+      pcre
       zlib
     ];
 
@@ -83,10 +83,7 @@ import ./versions.nix (
       homepage = "https://www.zabbix.com/";
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [
-        aanderse
-        bstanderline
-      ];
+      maintainers = with lib.maintainers; [ aanderse ];
       platforms = lib.platforms.unix;
     };
   }

@@ -86,6 +86,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dtkwidget";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    teams = [ teams.deepin ];
+    maintainers = teams.deepin.members;
   };
 }

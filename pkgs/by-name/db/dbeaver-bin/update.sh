@@ -1,9 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts
-BASEDIR="$(dirname "$0")/../../../.."
 
 latestVersion=$(curl "https://api.github.com/repos/dbeaver/dbeaver/tags" | jq -r '.[0].name')
-currentVersion=$(nix-instantiate --eval -E "with import ${BASEDIR} {}; lib.getVersion dbeaver-bin" | tr -d '"')
+currentVersion=$(nix-instantiate --eval -E "with import ./. {}; dbeaver-bin.version" | tr -d '"')
 
 echo "latest  version: $latestVersion"
 echo "current version: $currentVersion"
@@ -23,5 +22,5 @@ do
     prefetch=$(nix-prefetch-url "https://github.com/dbeaver/dbeaver/releases/download/$latestVersion/dbeaver-ce-$latestVersion-$2")
     hash=$(nix-hash --type sha256 --to-sri $prefetch)
 
-    (cd "$BASEDIR" && update-source-version dbeaver-bin $latestVersion $hash --system=$1 --ignore-same-version)
+    update-source-version dbeaver-bin $latestVersion $hash --system=$1 --ignore-same-version
 done

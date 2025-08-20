@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Package of 18 text-based modern games";
+    description = "A package of 18 text-based modern games";
     homepage = "https://github.com/abakh/nbsdgames";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ sarcasticadmin ];

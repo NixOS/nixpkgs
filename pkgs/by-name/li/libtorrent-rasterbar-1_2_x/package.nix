@@ -1,16 +1,6 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  zlib,
-  boost186,
-  openssl,
-  python311,
-  libiconv,
-  ncurses,
-  boost-build,
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
+, zlib, boost, openssl, python311, libiconv, ncurses, darwin
+, boost-build
 }:
 
 let
@@ -18,7 +8,7 @@ let
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost186.override (_: {
+  boostPython = boost.override (_: {
     enablePython = true;
     python = python311;
     enableStatic = true;
@@ -30,12 +20,9 @@ let
     taggedLayout = false;
   });
 
-  opensslStatic = openssl.override (_: {
-    static = true;
-  });
+  opensslStatic = openssl.override (_: { static = true; });
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 
@@ -55,14 +42,8 @@ stdenv.mkDerivation {
     python311.pkgs.setuptools
   ];
 
-  buildInputs = [
-    boostPython
-    opensslStatic
-    zlib
-    python311
-    libiconv
-    ncurses
-  ];
+  buildInputs = [ boostPython opensslStatic zlib python311 libiconv ncurses ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preAutoreconf = ''
     mkdir -p build-aux
@@ -78,11 +59,7 @@ stdenv.mkDerivation {
     moveToOutput "lib/${python311.libPrefix}" "$python"
   '';
 
-  outputs = [
-    "out"
-    "dev"
-    "python"
-  ];
+  outputs = [ "out" "dev" "python" ];
 
   configureFlags = [
     "--enable-python-binding"

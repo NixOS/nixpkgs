@@ -11,18 +11,23 @@
   perl, # For building web manuals
   which,
   ed,
+  Carbon,
+  Cocoa,
+  IOKit,
+  Metal,
+  QuartzCore,
   DarwinTools, # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2025-01-29";
+  version = "2024-10-22";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
-    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
+    rev = "61e362add9e1485bec1ab8261d729016850ec270";
+    hash = "sha256-Hpz9yuBktgJEOQ4ZD03c37pO9wgbvtYjIreYusr0Dzw=";
   };
 
   postPatch = ''
@@ -44,25 +49,31 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [
-    perl
-    which
-  ]
-  ++ (
-    if !stdenv.hostPlatform.isDarwin then
-      [
-        fontconfig
-        freetype # fontsrv uses these
-        libX11
-        libXext
-        libXt
-        xorgproto
-      ]
-    else
-      [
-        DarwinTools
-      ]
-  );
+  buildInputs =
+    [
+      perl
+      which
+    ]
+    ++ (
+      if !stdenv.hostPlatform.isDarwin then
+        [
+          fontconfig
+          freetype # fontsrv uses these
+          libX11
+          libXext
+          libXt
+          xorgproto
+        ]
+      else
+        [
+          Carbon
+          Cocoa
+          IOKit
+          Metal
+          QuartzCore
+          DarwinTools
+        ]
+    );
 
   configurePhase = ''
     runHook preConfigure

@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  async-upnp-client,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "devialet";
-  version = "1.5.7";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,15 +18,12 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = "devialet";
     tag = "v${version}";
-    hash = "sha256-HmTiHa7DEmjARaYn7/OoGotnTirE7S7zXLK/TfHdEAg=";
+    hash = "sha256-oGa5tRCJAWBg/877UmmXnX7fkFLoxhyuG6gpXmyhRKo=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-    async-upnp-client
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
@@ -37,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interact with the Devialet API";
     homepage = "https://github.com/fwestenberg/devialet";
-    changelog = "https://github.com/fwestenberg/devialet/releases/tag/${src.tag}";
+    changelog = "https://github.com/fwestenberg/devialet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

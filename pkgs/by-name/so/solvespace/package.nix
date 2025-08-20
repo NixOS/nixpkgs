@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchFromGitHub {
-    owner = "solvespace";
-    repo = "solvespace";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-sSDht8pBrOG1YpsWfC/CLTTWh2cI5pn2PXGH900Z0yA=";
     fetchSubmodules = true;
@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
-  meta = {
+  meta = with lib; {
     description = "Parametric 3d CAD program";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.edef ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.edef ];
+    platforms = platforms.linux;
     homepage = "https://solvespace.com";
     changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python311,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "encukou";
-    repo = "py3c";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    python3
-    python3.pkgs.distutils
+    python311
   ];
 
   checkTarget = "test-python";

@@ -1,34 +1,22 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  installShellFiles,
-  nix-update-script,
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script }:
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.5.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
-    repo = "globalping-cli";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-UB2vYdyJ2+H8rFyJn1KBNnWoGUlRjwYorWXqoB9WDu0=";
+    hash = "sha256-pViqoycOh1RfSqaAEST6m1v3mEcTX76dbL80bCp5aKo=";
   };
 
-  vendorHash = "sha256-dJAuN5srL5EvMaRg8rHaTsurjYrdH45p965DeubpB0E=";
+  vendorHash = "sha256-V6DwV2KukFfFK0PK9MacoHH0sB5qNV315jn0T+4rhfA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   env.CGO_ENABLED = 0;
-  subPackages = [ "." ];
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   preCheck = ''
     export HOME="$TMPDIR"
@@ -50,9 +38,7 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
   postInstall = ''
-    mv $out/bin/globalping-cli $out/bin/globalping
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mv $out/bin/${pname} $out/bin/globalping
     installShellCompletion --cmd globalping \
       --bash <($out/bin/globalping completion bash) \
       --fish <($out/bin/globalping completion fish) \

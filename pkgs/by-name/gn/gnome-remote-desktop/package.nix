@@ -13,9 +13,6 @@
   libei,
   libepoxy,
   libdrm,
-  libva,
-  vulkan-loader,
-  shaderc,
   nv-codec-headers-11,
   pipewire,
   systemd,
@@ -24,7 +21,7 @@
   libopus,
   libxkbcommon,
   gdk-pixbuf,
-  freerdp,
+  freerdp3,
   fdk_aac,
   tpm2-tss,
   fuse3,
@@ -34,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "48.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-vPN3D8oPrtovrjsaP/by6QoCd492pC6P0QPK4YYo9PI=";
+    hash = "sha256-k1HdjDns5wUMlny9zr4WYrwmuP2pJPioCpsqMS0H9HE=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +44,12 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     asciidoc
-    shaderc # for glslc
     wrapGAppsHook3
   ];
 
   buildInputs = [
     cairo
-    freerdp
+    freerdp3
     fdk_aac
     tpm2-tss
     fuse3
@@ -62,8 +58,6 @@ stdenv.mkDerivation rec {
     libei
     libepoxy
     libdrm
-    libva
-    vulkan-loader
     nv-codec-headers-11
     libnotify
     libopus
@@ -82,20 +76,20 @@ stdenv.mkDerivation rec {
     "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
     "-Dtests=false" # Too deep of a rabbit hole.
     # TODO: investigate who should be fixed here.
-    "-Dc_args=-I${freerdp}/include/winpr3"
+    "-Dc_args=-I${freerdp3}/include/winpr3"
   ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-remote-desktop"; };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop/-/blob/${version}/NEWS?ref_type=tags";
     description = "GNOME Remote Desktop server";
     mainProgram = "grdctl";
-    teams = [ lib.teams.gnome ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

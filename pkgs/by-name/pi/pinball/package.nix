@@ -1,26 +1,23 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   pkg-config,
   libglvnd,
-  libtool,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
+  SDL,
+  SDL_image,
+  SDL_mixer,
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pinball";
-  version = "0.3.20201218-unstable-2024-11-14";
+  version = "0.3.20201218";
 
-  src = fetchFromGitHub {
-    owner = "adoptware";
-    repo = "pinball";
-    rev = "7f6887d8912340c0eee7f96b4c4bb84c8d889246";
-    hash = "sha256-8wuux7eC0OkgL/m20eyRGRrAF1lBGAbd7Gmid9cNPto=";
+  src = fetchurl {
+    url = "mirror://sourceforge/pinball/pinball-${version}.tar.gz";
+    sha256 = "0vacypp3ksq1hs6hxpypx7nrfkprbl4ksfywcncckwrh4qcir631";
   };
 
   postPatch = ''
@@ -33,23 +30,26 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libglvnd
-    libtool
-    SDL2
-    SDL2_image
-    SDL2_mixer
+    SDL
+    SDL_image
+    SDL_mixer
     xorg.libSM
   ];
   strictDeps = true;
 
+  configureFlags = [
+    "--with-sdl-prefix=${lib.getDev SDL}"
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev SDL2_image}/include/SDL2"
-    "-I${lib.getDev SDL2_mixer}/include/SDL2"
+    "-I${lib.getDev SDL_image}/include/SDL"
+    "-I${lib.getDev SDL_mixer}/include/SDL"
   ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://github.com/adoptware/pinball";
+    homepage = "https://purl.org/rzr/pinball";
     description = "Emilia Pinball simulator";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ qyliss ];

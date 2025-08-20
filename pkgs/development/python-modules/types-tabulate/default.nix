@@ -7,16 +7,15 @@
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.9.0.20241207";
+  version = "0.9.0.20240106";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types_tabulate";
-    inherit version;
-    hash = "sha256-rBrBdHUMCjhd/SSO3GJ5+jKKr06jF5FauHmi7EeDMjA=";
+    inherit pname version;
+    hash = "sha256-ybbbEN1/z1W9FxLdNTf4bdznKgj9Yrsa9DOMcJbOlH4=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;

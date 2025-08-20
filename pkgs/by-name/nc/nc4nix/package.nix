@@ -26,6 +26,6 @@ buildGoModule {
     homepage = "https://github.com/helsinki-systems/nc4nix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 }

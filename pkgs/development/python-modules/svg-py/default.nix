@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.8.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
     owner = "orsinium-labs";
     repo = "svg.py";
     tag = version;
-    hash = "sha256-wHbAsmFkJ3VGBuaKElB+qT8OaKleJ2DgGKr0LvojWws=";
+    hash = "sha256-Lxzk3IVCD4PG36Pozz2crccwxCAAAM2QfS4rgwbjs6g=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type-safe Python library to generate SVG files";
     homepage = "https://github.com/orsinium-labs/svg.py";
-    changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

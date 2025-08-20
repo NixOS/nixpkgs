@@ -22,15 +22,15 @@
   libgee,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "elementary-mail";
   version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
-    tag = finalAttrs.version;
-    hash = "sha256-6T/OTiuDVAPBqp8BPawf/MVEuWTPrLa3/N1Blvt/7Q8=";
+    rev = version;
+    sha256 = "sha256-6T/OTiuDVAPBqp8BPawf/MVEuWTPrLa3/N1Blvt/7Q8=";
   };
 
   nativeBuildInputs = [
@@ -64,16 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Mail app designed for elementary OS";
     homepage = "https://github.com/elementary/mail";
-    changelog = "https://github.com/elementary/mail/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
-    teams = [ lib.teams.pantheon ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
     mainProgram = "io.elementary.mail";
   };
-})
+}

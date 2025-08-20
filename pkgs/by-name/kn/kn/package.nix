@@ -2,30 +2,31 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  getent,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "kn";
-  version = "1.19.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
-    tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-VfVqNzU/FLnFqDBwU4gM4RlJO1IkJZX53hQnw+mwQJA=";
+    rev = "knative-v${version}";
+    sha256 = "sha256-bXICU1UBNPVIumzRPSOWa1I5hUYWEvo6orBpUvbPEvg=";
   };
 
-  vendorHash = "sha256-jQjG13nYwTbDp5SXgjsNtQeuqhiqyvn3pUzsbdIazsw=";
-
-  env.GOWORK = "off";
+  vendorHash = null;
 
   subPackages = [ "cmd/kn" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-X knative.dev/client/pkg/commands/version.Version=v${finalAttrs.version}" ];
+  ldflags = [
+    "-X knative.dev/client/pkg/kn/commands/version.Version=v${version}"
+    "-X knative.dev/client/pkg/kn/commands/version.VersionEventing=v${version}"
+    "-X knative.dev/client/pkg/kn/commands/version.VersionServing=v${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd kn \
@@ -34,21 +35,16 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-
   installCheckPhase = ''
-    runHook preInstallCheck
-
-    PATH=$PATH:${getent}/bin $out/bin/kn version | grep ${finalAttrs.version} > /dev/null
-
-    runHook postInstallCheck
+    $out/bin/kn version | grep ${version} > /dev/null
   '';
 
-  meta = {
-    description = "Create Knative resources interactively from the command line or from within scripts";
+  meta = with lib; {
+    description = "Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
-    changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    changelog = "https://github.com/knative/client/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bryanasdev000 ];
   };
-})
+}

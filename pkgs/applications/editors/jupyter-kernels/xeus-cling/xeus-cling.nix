@@ -34,21 +34,6 @@ let
     };
   });
 
-  # Nixpkgs moved to xeus 5.2.0, but we need 3.2.0
-  # https://github.com/jupyter-xeus/xeus-cling/issues/523
-  xeus_3_2_0 = xeus.overrideAttrs (oldAttrs: {
-    version = "3.2.0";
-
-    src = fetchFromGitHub {
-      owner = "jupyter-xeus";
-      repo = "xeus";
-      tag = "3.2.0";
-      sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
-    };
-
-    buildInputs = oldAttrs.buildInputs ++ lib.singleton xtl;
-  });
-
 in
 
 clangStdenv.mkDerivation rec {
@@ -77,7 +62,7 @@ clangStdenv.mkDerivation rec {
     ncurses
     openssl
     pugixml
-    xeus_3_2_0
+    xeus
     xeus-zmq
     xtl
     zeromq
@@ -88,11 +73,11 @@ clangStdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/xmagics/executable.cpp \
-      --replace-fail "getDataLayout" "getDataLayoutString"
+      --replace "getDataLayout" "getDataLayoutString"
     substituteInPlace src/xmagics/execution.cpp \
-      --replace-fail "simplisticCastAs" "castAs"
+      --replace "simplisticCastAs" "castAs"
     substituteInPlace src/xmime_internal.hpp \
-      --replace-fail "code.str()" "code.str().str()"
+      --replace "code.str()" "code.str().str()"
   '';
 
   dontStrip = debug;

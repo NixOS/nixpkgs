@@ -1,6 +1,5 @@
 {
   extraLibs ? [ ],
-  firefoxRuntime ? firefox-unwrapped,
 
   lib,
   fetchFromGitHub,
@@ -29,24 +28,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.15.0";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-UqgPAGDekM9bKx4kNH+IuB31ML/Jn4E6g86suVESRRU=";
+    hash = "sha256-0VHuS507uQXaRRYjaJ9uPh1bhPrxA6PQa/x5o4IE78U=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoHash = "sha256-7v+Ohll8k3YHKYoQZIWvV+YLHT62ygFb0kPEIXh0jP4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UxUXXF13YyS+ViEsjjfuNinq7n4W28J+fZsy/WeV6Dc=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
     sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${version}";' Cargo.lock
-    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
+    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.jsm
   '';
 
   nativeBuildInputs = [
@@ -85,12 +85,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     # Runtime
     mkdir -p $out/share/firefoxpwa
-    cp -Lr ${firefoxRuntime}/lib/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime
+    cp -Lr ${firefox-unwrapped}/lib/firefox $out/share/firefoxpwa/runtime
     chmod -R +w $out/share/firefoxpwa
-
-    if [ "${firefoxRuntime.binaryName}" != "firefox" ]; then
-      ln $out/share/firefoxpwa/runtime/${firefoxRuntime.binaryName} $out/share/firefoxpwa/runtime/firefox
-    fi
 
     # UserChrome
     cp -r userchrome $out/share/firefoxpwa
@@ -155,7 +151,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       camillemndn
       pasqui23

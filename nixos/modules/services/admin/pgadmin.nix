@@ -157,23 +157,24 @@ in
   config = lib.mkIf (cfg.enable) {
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
 
-    services.pgadmin.settings = {
-      DEFAULT_SERVER_PORT = cfg.port;
-      PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
-      SERVER_MODE = true;
-      UPGRADE_CHECK_ENABLED = false;
-    }
-    // (lib.optionalAttrs cfg.openFirewall {
-      DEFAULT_SERVER = lib.mkDefault "::";
-    })
-    // (lib.optionalAttrs cfg.emailServer.enable {
-      MAIL_SERVER = cfg.emailServer.address;
-      MAIL_PORT = cfg.emailServer.port;
-      MAIL_USE_SSL = cfg.emailServer.useSSL;
-      MAIL_USE_TLS = cfg.emailServer.useTLS;
-      MAIL_USERNAME = cfg.emailServer.username;
-      SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
-    });
+    services.pgadmin.settings =
+      {
+        DEFAULT_SERVER_PORT = cfg.port;
+        PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
+        SERVER_MODE = true;
+        UPGRADE_CHECK_ENABLED = false;
+      }
+      // (lib.optionalAttrs cfg.openFirewall {
+        DEFAULT_SERVER = lib.mkDefault "::";
+      })
+      // (lib.optionalAttrs cfg.emailServer.enable {
+        MAIL_SERVER = cfg.emailServer.address;
+        MAIL_PORT = cfg.emailServer.port;
+        MAIL_USE_SSL = cfg.emailServer.useSSL;
+        MAIL_USE_TLS = cfg.emailServer.useTLS;
+        MAIL_USERNAME = cfg.emailServer.username;
+        SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
+      });
 
     systemd.services.pgadmin = {
       wantedBy = [ "multi-user.target" ];
@@ -181,7 +182,7 @@ in
       requires = [ "network.target" ];
       # we're adding this optionally so just in case there's any race it'll be caught
       # in case postgres doesn't start, pgadmin will just start normally
-      wants = [ "postgresql.target" ];
+      wants = [ "postgresql.service" ];
 
       path = [
         config.services.postgresql.package
@@ -226,8 +227,7 @@ in
         ExecStart = "${cfg.package}/bin/pgadmin4";
         LoadCredential = [
           "initial_password:${cfg.initialPasswordFile}"
-        ]
-        ++ lib.optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
+        ] ++ lib.optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
       };
     };
 

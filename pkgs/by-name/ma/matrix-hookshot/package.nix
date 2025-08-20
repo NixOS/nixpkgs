@@ -37,8 +37,9 @@ mkYarnPackage rec {
     sha256 = data.yarnHash;
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
     hash = data.cargoHash;
   };
 

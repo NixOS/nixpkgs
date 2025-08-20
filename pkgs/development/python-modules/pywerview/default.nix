@@ -3,6 +3,7 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  gssapi,
   impacket,
   ldap3-bleeding-edge,
   lxml,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.7.3";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,23 +24,20 @@ buildPythonPackage rec {
     owner = "the-useless-one";
     repo = "pywerview";
     tag = "v${version}";
-    hash = "sha256-ZIv0IW7oruMBwinXvH/n1YEtbBFyLb8h/Qlh4JxvV4k=";
+    hash = "sha256-1JDohgEowOlbLsqzX5aAmMSfS6LffXwz1t3361IYq60=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     beautifulsoup4
+    gssapi
     impacket
     ldap3-bleeding-edge
     lxml
     pycryptodome
     pyasn1
   ];
-
-  optional-dependencies = {
-    kerberos = [ ldap3-bleeding-edge ] ++ ldap3-bleeding-edge.optional-dependencies.kerberos;
-  };
 
   # Module has no tests
   doCheck = false;

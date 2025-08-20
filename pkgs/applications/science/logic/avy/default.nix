@@ -7,7 +7,7 @@
   boost,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avy";
   version = "2019.05.01"; # date of cav19 tag
 

@@ -1,10 +1,10 @@
-{ newScope }:
+{ newScope, python3Packages }:
 
 let
   callPackage = newScope self;
 
   self = {
-    platformio-core = callPackage ./core.nix { };
+    platformio-core = python3Packages.callPackage ./core.nix { };
 
     platformio-chrootenv = callPackage ./chrootenv.nix { };
   };

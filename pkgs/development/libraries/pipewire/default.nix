@@ -1,18 +1,13 @@
 {
   stdenv,
   lib,
-  testers,
-  buildPackages,
   fetchFromGitLab,
   python3,
   meson,
   ninja,
-  freebsd,
   elogind,
-  libinotify-kqueue,
-  epoll-shim,
   systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
+  enableSystemd ? true, # enableSystemd=false maintained by maintainers.qyliss.
   pkg-config,
   docutils,
   doxygen,
@@ -28,6 +23,7 @@
   vulkan-headers,
   vulkan-loader,
   webrtc-audio-processing,
+  webrtc-audio-processing_1,
   ncurses,
   readline, # meson can't find <7 as those versions don't have a .pc file
   lilv,
@@ -38,8 +34,6 @@
   libdrm,
   gst_all_1,
   ffmpeg,
-  fftwFloat,
-  bluezSupport ? stdenv.hostPlatform.isLinux,
   bluez,
   sbc,
   libfreeaptx,
@@ -59,25 +53,21 @@
   libcanberra,
   xorg,
   libmysofa,
-  ffadoSupport ?
-    x11Support
-    && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
-    && lib.meta.availableOn stdenv.hostPlatform ffado,
+  ffadoSupport ? x11Support && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform,
   ffado,
   libselinux,
-  libebur128,
 }:
 
 let
-  modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
-  libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
-  ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
-  webrtcAudioProcessingSupport = lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing;
+  webrtc-audio-processings = lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    webrtc-audio-processing_1
+    webrtc-audio-processing
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.6";
+  version = "1.2.7";
 
   outputs = [
     "out"
@@ -93,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-Hk43rKrKCJA6njQ9ap/Pje9AQKygrDc+GTlimaMh/pg=";
+    sha256 = "sha256-TV+2nz44a742bUfGnWt7zJAnO15eED5kAwyAgE5CQZ0=";
   };
 
   patches = [
@@ -104,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     docutils
     doxygen
@@ -116,81 +105,69 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  buildInputs = [
-    dbus
-    ffmpeg
-    fftwFloat
-    glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    libebur128
-    libjack2
-    libmysofa
-    libopus
-    libpulseaudio
-    libusb1
-    libsndfile
-    lilv
-    ncurses
-    readline
-  ]
-  ++ (
-    if enableSystemd then
-      [ systemd ]
-    else if stdenv.hostPlatform.isLinux then
-      [
-        elogind
-        udev
-      ]
-    else
-      [ ]
-  )
-  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    libinotify-kqueue
-    epoll-shim
-    freebsd.libstdthreads
-  ]
-  ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optional ldacbtSupport ldacbt
-  ++ lib.optional libcameraSupport libcamera
-  ++ lib.optional zeroconfSupport avahi
-  ++ lib.optional raopSupport openssl
-  ++ lib.optional rocSupport roc-toolkit
-  ++ lib.optionals vulkanSupport [
-    libdrm
-    vulkan-headers
-    vulkan-loader
-  ]
-  ++ lib.optionals x11Support [
-    libcanberra
-    xorg.libX11
-    xorg.libXfixes
-  ]
-  ++ lib.optionals bluezSupport [
-    bluez
-    libfreeaptx
-    liblc3
-    sbc
-    fdk_aac
-  ]
-  ++ lib.optional ffadoSupport ffado
-  ++ lib.optional stdenv.hostPlatform.isLinux libselinux
-  ++ lib.optional modemmanagerSupport modemmanager;
+  buildInputs =
+    [
+      alsa-lib
+      bluez
+      dbus
+      fdk_aac
+      ffmpeg
+      glib
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      libcamera
+      libjack2
+      libfreeaptx
+      liblc3
+      libmysofa
+      libopus
+      libpulseaudio
+      libusb1
+      libselinux
+      libsndfile
+      lilv
+      modemmanager
+      ncurses
+      readline
+      sbc
+    ]
+    ++ (
+      if enableSystemd then
+        [ systemd ]
+      else
+        [
+          elogind
+          udev
+        ]
+    )
+    ++ lib.take 1 webrtc-audio-processings
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
+    ++ lib.optional zeroconfSupport avahi
+    ++ lib.optional raopSupport openssl
+    ++ lib.optional rocSupport roc-toolkit
+    ++ lib.optionals vulkanSupport [
+      libdrm
+      vulkan-headers
+      vulkan-loader
+    ]
+    ++ lib.optionals x11Support [
+      libcanberra
+      xorg.libX11
+      xorg.libXfixes
+    ]
+    ++ lib.optional ffadoSupport ffado;
 
   # Valgrind binary is required for running one optional test.
   nativeCheckInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform valgrind) valgrind;
 
   mesonFlags = [
-    (lib.mesonEnable "pipewire-alsa" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "alsa" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "docs" true)
     (lib.mesonOption "udevrulesdir" "lib/udev/rules.d")
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
-    (lib.mesonEnable "echo-cancel-webrtc" webrtcAudioProcessingSupport)
-    (lib.mesonEnable "libcamera" (lib.meta.availableOn stdenv.hostPlatform libcamera))
+    (lib.mesonEnable "echo-cancel-webrtc" (webrtc-audio-processings != [ ]))
+    (lib.mesonEnable "libcamera" true)
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)
     (lib.mesonEnable "libpulse" true)
@@ -198,26 +175,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gstreamer" true)
     (lib.mesonEnable "gstreamer-device-provider" true)
     (lib.mesonOption "logind-provider" (if enableSystemd then "libsystemd" else "libelogind"))
-    (lib.mesonEnable "logind" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "selinux" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "avb" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "v4l2" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "systemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
-    (lib.mesonEnable "udev" (!enableSystemd && stdenv.hostPlatform.isLinux))
+    (lib.mesonEnable "udev" (!enableSystemd))
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)
-    (lib.mesonEnable "bluez5" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-hsp-native" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-hfp-native" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-native-mm" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-ofono" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-hsphfpd" bluezSupport)
+    (lib.mesonEnable "bluez5" true)
+    (lib.mesonEnable "bluez5-backend-hsp-native" true)
+    (lib.mesonEnable "bluez5-backend-hfp-native" true)
+    (lib.mesonEnable "bluez5-backend-native-mm" true)
+    (lib.mesonEnable "bluez5-backend-ofono" true)
+    (lib.mesonEnable "bluez5-backend-hsphfpd" true)
     # source code is not easily obtainable
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
-    (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
-    (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
+    (lib.mesonEnable "bluez5-codec-lc3" true)
+    (lib.mesonEnable "bluez5-codec-ldac" (lib.meta.availableOn stdenv.hostPlatform ldacbt))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
@@ -238,37 +210,27 @@ stdenv.mkDerivation (finalAttrs: {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
-  doInstallCheck = true;
 
   postUnpack = ''
-    patchShebangs ${finalAttrs.src.name}/doc/*.py
-    patchShebangs ${finalAttrs.src.name}/doc/input-filter-h.sh
+    patchShebangs source/doc/*.py
+    patchShebangs source/doc/input-filter-h.sh
   '';
 
   postInstall = ''
     moveToOutput "bin/pw-jack" "$jack"
   '';
 
-  passthru.tests = {
-    installed-tests = nixosTests.installed-tests.pipewire;
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
     changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.linux;
     maintainers = with maintainers; [
       kranzes
       k900
-    ];
-    pkgConfigModules = [
-      "libpipewire-0.3"
-      "libspa-0.2"
     ];
   };
 })

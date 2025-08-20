@@ -13,18 +13,18 @@
   exaAlias ? true,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.23.0";
+  version = "0.20.17";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Lr4FLSYtyr4beiFaTo4/HN8hHClcZOdhCLpQXaDqqgc=";
+    rev = "v${version}";
+    hash = "sha256-X3/qW8BFa6Muk4XzTO6z6SDP07NHh7MOkngHNgw/sUA=";
   };
 
-  cargoHash = "sha256-MsPwA+y4e/CSuP1SZzhq4eutAy/Gmq2aU/+FqJ9B0es=";
+  cargoHash = "sha256-q48LhGwi6WnzV2JLYhwbr7GtHNH6kMglntZK+sFf5zo=";
 
   nativeBuildInputs = [
     cmake
@@ -42,22 +42,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "man"
   ];
 
-  postInstall = ''
-    for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
-      sed "s/\$version/v${finalAttrs.version}/g" "man/$page.md" |
-        pandoc --standalone -f markdown -t man >"man/$page"
-    done
-    installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
-    installShellCompletion \
-      --bash completions/bash/eza \
-      --fish completions/fish/eza.fish \
-      --zsh completions/zsh/_eza
-  ''
-  + lib.optionalString exaAlias ''
-    ln -s eza $out/bin/exa
-  '';
+  postInstall =
+    ''
+      for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
+        sed "s/\$version/v${version}/g" "man/$page.md" |
+          pandoc --standalone -f markdown -t man >"man/$page"
+      done
+      installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
+      installShellCompletion \
+        --bash completions/bash/eza \
+        --fish completions/fish/eza.fish \
+        --zsh completions/zsh/_eza
+    ''
+    + lib.optionalString exaAlias ''
+      ln -s eza $out/bin/exa
+    '';
 
-  meta = {
+  meta = with lib; {
     description = "Modern, maintained replacement for ls";
     longDescription = ''
       eza is a modern replacement for ls. It uses colours for information by
@@ -68,14 +69,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       written in Rust, so it’s small, fast, and portable.
     '';
     homepage = "https://github.com/eza-community/eza";
-    changelog = "https://github.com/eza-community/eza/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.eupl12;
+    changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
+    license = licenses.eupl12;
     mainProgram = "eza";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       cafkafk
       _9glenda
       sigmasquadron
     ];
-    platforms = with lib.platforms; unix ++ windows;
+    platforms = platforms.unix ++ platforms.windows;
   };
-})
+}

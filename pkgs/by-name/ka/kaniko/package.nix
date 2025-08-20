@@ -6,18 +6,17 @@
   installShellFiles,
   testers,
   kaniko,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "kaniko";
-  version = "1.25.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
-    owner = "chainguard-dev";
+    owner = "GoogleContainerTools";
     repo = "kaniko";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-yI7JwZ7ez7LdO7THq0OzyLCVSaoHy//7EoKQbWT0W7Q=";
+    rev = "v${version}";
+    hash = "sha256-8SLE9s+P6Xh4PzrvTwUtIAtkG9Gor/fGBwrqq/fz0UM=";
   };
 
   vendorHash = null;
@@ -25,34 +24,29 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/chainguard-dev/kaniko/pkg/version.version=${finalAttrs.version}"
+    "-X github.com/GoogleContainerTools/kaniko/pkg/version.version=${version}"
   ];
-
-  excludedPackages = [ "hack/release_notes" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false; # requires docker, container-diff (unpackaged yet)
 
-  postInstall =
-    let
-      inherit (finalAttrs.meta) mainProgram;
-    in
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        $out/bin/${mainProgram} completion $shell > ${mainProgram}.$shell
-        installShellCompletion ${mainProgram}.$shell
-      done
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      $out/bin/executor completion $shell > executor.$shell
+      installShellCompletion executor.$shell
+    done
+  '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "version";
+  passthru.tests.version = testers.testVersion {
+    package = kaniko;
+    version = version;
+    command = "${kaniko}/bin/executor version";
+  };
 
   meta = {
     description = "Tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
-    homepage = "https://github.com/chainguard-dev/kaniko";
+    homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -61,4 +55,4 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "executor";
   };
-})
+}

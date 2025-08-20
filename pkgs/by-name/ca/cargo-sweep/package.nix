@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "holmgr";
-    repo = "cargo-sweep";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-L9tWTgW8PIjxeby+wa71NPp3kWMYH5D7PNtpk8Bmeyc=";
   };
 
-  cargoHash = "sha256-FCpCGp2WUTKTjvUewcOqLoNPlZDnOa4TsamSQNU1xxU=";
+  cargoHash = "sha256-aalB7gHLc3YIgSOg68wc2fyzXFGfHO5x5YdzhuRmyro=";
 
   checkFlags = [
     # Requires a rustup toolchain to be installed.

@@ -7,6 +7,7 @@
   libiconv,
   openssl,
   pkg-config,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,24 +16,24 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "convco";
-    repo = "convco";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-s0rcSekJLe99oxi6JD8VL1S6nqQTUFTn5pdgxnknbaY=";
   };
 
-  cargoHash = "sha256-ClkpGHN2me+R3jX7S5hFR1FlsXGhHZ/y6iIGK08Mdfc=";
+  cargoHash = "sha256-oQBCPfwlMJ0hLZskv+KUNVBHH550yAUI1jY40Eah3Bc=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   checkFlags = [
     # disable test requiring networking

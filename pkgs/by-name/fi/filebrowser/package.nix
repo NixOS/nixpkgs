@@ -1,64 +1,45 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   buildGo123Module,
-  nodejs_22,
-  pnpm_9,
-
-  nixosTests,
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
 }:
 
 let
-  version = "2.40.1";
-
-  pnpm = pnpm_9;
-  nodejs = nodejs_22;
+  version = "2.31.0";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-UsY5pJU0eVeYQVi7Wqf4RrBfPLQv78zHi96mTLJJS1o=";
+    hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
   };
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
+  frontend = buildNpmPackage rec {
     pname = "filebrowser-frontend";
     inherit version src;
 
-    nativeBuildInputs = [
-      nodejs
-      pnpm.configHook
-    ];
+    sourceRoot = "${src.name}/frontend";
 
-    pnpmRoot = "frontend";
+    npmDepsHash = "sha256-5/yEMWkNPAS8/PkaHlPBGFLiJu7xK2GHYo5dYqHAfCE=";
 
-    pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      sourceRoot = "${src.name}/frontend";
-      hash = "sha256-AwjMQ9LDJ72x5JYdtLF4V3nxJTYiCb8e/RVyK3IwPY4=";
-    };
+    NODE_OPTIONS = "--openssl-legacy-provider";
 
     installPhase = ''
       runHook preInstall
 
-      pnpm install -C frontend --frozen-lockfile
-      pnpm run -C frontend build
-
       mkdir $out
-      mv frontend/dist $out
+      mv dist $out
 
       runHook postInstall
     '';
-  });
-
+  };
 in
 buildGo123Module {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-FY5rPzWAzkrDaFktTM7VxO/hMk17/x21PL1sKq0zlxg=";
+  vendorHash = "sha256-N5aUs8rgTYXeb0qJhPQBCa6lUDkT6lH1bh+1u4bixos=";
 
   excludedPackages = [ "tools" ];
 
@@ -66,19 +47,12 @@ buildGo123Module {
     cp -r ${frontend}/dist frontend/
   '';
 
-  ldflags = [
-    "-X github.com/filebrowser/filebrowser/v2/version.Version=v${version}"
-  ];
-
   passthru = {
     inherit frontend;
-    tests = {
-      inherit (nixosTests) filebrowser;
-    };
   };
 
   meta = with lib; {
-    description = "Web application for managing files and directories";
+    description = "Filebrowser is a web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ oakenshield ];

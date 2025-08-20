@@ -1,5 +1,6 @@
 {
   lib,
+  darwin,
   fetchFromGitHub,
   stdenv,
   rustPlatform,
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twm";
-  version = "0.12.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
     tag = "v${version}";
-    hash = "sha256-Hta9IvPViZFEiR+RXRmlPRwIu10D9B5dbXzhflxzBhY=";
+    hash = "sha256-SiwLqUq/gC8Tr31jjblLc9YP4yBi9HL38W83kgh7eJI=";
   };
 
-  cargoHash = "sha256-buiU+umHqyZ/3YoW2+5QpmF9AGEuNUihro5PFuWFSH4=";
+  cargoHash = "sha256-BjQ7dDXHzX+O/V328TTwl9wGtpOq+NjOMRiZwb9O7ZU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \

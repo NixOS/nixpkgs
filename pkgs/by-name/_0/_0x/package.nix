@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "0x";
-  version = "0-unstable-2022-07-11";
+  version = "unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "mcy";
@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mcy/0x";
     description = "Colorful, configurable xxd";
     mainProgram = "0x";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

@@ -60,12 +60,13 @@ stdenv.mkDerivation {
   pname = "segger-jlink";
   inherit src version;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ]
-  ++ lib.optionals (!headless) [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      autoPatchelfHook
+    ]
+    ++ lib.optionals (!headless) [
+      copyDesktopItems
+    ];
 
   buildInputs = lib.optionals (!headless) [
     qt4-bundled
@@ -114,16 +115,16 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt/SEGGER/JLink
+    mkdir -p $out/opt
 
     ${lib.optionalString (!headless) ''
-      # Install binaries and runtime files into /opt/SEGGER/JLink
-      mv J* ETC GDBServer Firmwares $out/opt/SEGGER/JLink
+      # Install binaries and runtime files into /opt/
+      mv J* ETC GDBServer Firmwares $out/opt
 
       # Link executables into /bin/
       mkdir -p $out/bin
-      for binr in $out/opt/SEGGER/JLink/*Exe; do
-        binrlink=''${binr#"$out/opt/SEGGER/JLink/"}
+      for binr in $out/opt/*Exe; do
+        binrlink=''${binr#"$out/opt/"}
         ln -s $binr $out/bin/$binrlink
         # Create additional symlinks without "Exe" suffix
         binrlink=''${binrlink/%Exe}
@@ -131,7 +132,7 @@ stdenv.mkDerivation {
       done
 
       # Copy special alias symlinks
-      for slink in $(find $out/opt/SEGGER/JLink/. -type l); do
+      for slink in $(find $out/opt/. -type l); do
         cp -P -n $slink $out/bin || true
         rm $slink
       done
@@ -140,7 +141,7 @@ stdenv.mkDerivation {
     # Install libraries
     install -Dm444 libjlinkarm.so* -t $out/lib
     for libr in $out/lib/libjlinkarm.*; do
-      ln -s $libr $out/opt/SEGGER/JLink
+      ln -s $libr $out/opt
     done
 
     # Install docs and examples

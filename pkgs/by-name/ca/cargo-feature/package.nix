@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Riey";
-    repo = "cargo-feature";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-UPpqkz/PwoMaJan9itfldjyTmZmiMb6PzCyu9Vtjj1s=";
   };
 
-  cargoHash = "sha256-leciPTXFQ/O/KISBz4BV5KYIdld4UmiFE2yR8MoUVu0=";
+  cargoHash = "sha256-8qrpW/gU7BvxN3nSbFWhbgu5bwsdzYZTS3w3kcwsGbU=";
 
   checkFlags = [
     # The following tests require empty CARGO_BUILD_TARGET env variable, but we

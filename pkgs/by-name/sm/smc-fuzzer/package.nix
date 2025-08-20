@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     hash = "sha256-FyiFSVeO46UnBrpC8AhSuGe7alo37pT8J1qQWGPqV2U=";
   };
 
+  buildInputs = [ swiftPackages.apple_sdk.frameworks.AppKit ];
+
   installPhase = ''
     runHook preInstall
 

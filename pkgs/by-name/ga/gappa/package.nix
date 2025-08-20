@@ -5,16 +5,15 @@
   gmp,
   mpfr,
   boost,
-  version ? "1.6.0",
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gappa";
-  inherit version;
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${version}.tar.gz";
-    hash = "sha256-aNht0Ttv+gzS9eLzu4PQitRK/zQN9QQ4YOEjQ2d9xIM=";
+    url = "https://gforge.inria.fr/frs/download.php/file/38436/gappa-${version}.tar.gz";
+    sha256 = "12x42z901pr05ldmparqdi8sq9s7fxbavhzk2dbq3l6hy247dwbb";
   };
 
   buildInputs = [
@@ -27,12 +26,12 @@ stdenv.mkDerivation {
   installPhase = "./remake install";
 
   meta = {
-    homepage = "https://gappa.gitlabpages.inria.fr/";
+    homepage = "http://gappa.gforge.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
     mainProgram = "gappa";
     license = with lib.licenses; [
-      cecill21
-      gpl3
+      cecill20
+      gpl2
     ];
     maintainers = with lib.maintainers; [ vbgl ];
     platforms = lib.platforms.all;

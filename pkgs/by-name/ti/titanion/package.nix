@@ -5,8 +5,6 @@
   fetchurl,
   unzip,
   gdc,
-  libGL,
-  libGLU,
   SDL,
   SDL_mixer,
   bulletml,
@@ -18,7 +16,7 @@ let
     fetchpatch {
       name = "${patchname}.patch";
       url = "https://sources.debian.org/data/main/t/titanion/0.3.dfsg1-7/debian/patches/${patchname}";
-      inherit hash;
+      sha256 = hash;
     };
 
 in
@@ -30,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://abagames.sakura.ne.jp/windows/ttn${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
-    hash = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
+    sha256 = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
   };
 
   patches = [
@@ -60,27 +58,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libGL
-    libGLU
     SDL
     SDL_mixer
     bulletml
   ];
 
   installPhase = ''
-    runHook preInstall
     install -Dm755 titanion $out/bin/titanion
     mkdir -p $out/share/games/titanion
     cp -r sounds images $out/share/games/titanion/
-    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/ttn_e.html";
     description = "Strike down super high-velocity swooping insects";
     mainProgram = "titanion";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
 })

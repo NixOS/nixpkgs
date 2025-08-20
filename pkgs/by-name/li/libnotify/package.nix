@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.8.6";
+  version = "0.8.3";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-xVQKrvtg4dY7HFh8BfIoTr5y7OfQwOXkp3jP1YRLa1g=";
+    hash = "sha256-7o8++UYVatNAb99F/u29zZMtvSEatPFvdeuk82+y9sA=";
   };
 
   mesonFlags = [
@@ -42,17 +42,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    libxslt
-    docbook-xsl-ns
-    glib # for glib-mkenums needed during the build
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      libxslt
+      docbook-xsl-ns
+      glib # for glib-mkenums needed during the build
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   propagatedBuildInputs = [
     gdk-pixbuf
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Library that sends desktop notifications to a notification daemon";
     homepage = "https://gitlab.gnome.org/GNOME/libnotify";
     license = licenses.lgpl21;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     mainProgram = "notify-send";
     platforms = platforms.unix;
   };

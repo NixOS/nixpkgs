@@ -5,25 +5,24 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  poetry-core,
 
   # dependencies
   langchain-core,
   langgraph-checkpoint,
-  langgraph-prebuilt,
   langgraph-sdk,
-  pydantic,
-  xxhash,
 
   # tests
   aiosqlite,
   dataclasses-json,
   grandalf,
   httpx,
+  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
   psycopg,
+  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
@@ -32,40 +31,33 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
-
-  # passthru
-  nix-update-script,
 }:
+
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.6.1";
+  version = "0.2.56";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = version;
-    hash = "sha256-8mubZSV1CDgYzykKaaWqn04yJldAgdGmgZDm54towWc=";
+    hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
   };
 
   postgresqlTestSetupPost = ''
-    substituteInPlace tests/conftest_store.py \
-      --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
-    substituteInPlace tests/conftest_checkpointer.py \
+    substituteInPlace tests/conftest.py \
       --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
   '';
 
   sourceRoot = "${src.name}/libs/langgraph";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
-    langgraph-prebuilt
     langgraph-sdk
-    pydantic
-    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -75,16 +67,11 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    postgresql
-    postgresqlTestHook
-  ];
-
-  checkInputs = [
     aiosqlite
     dataclasses-json
     grandalf
     httpx
+    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
@@ -95,10 +82,17 @@ buildPythonPackage rec {
     pytest-mock
     pytest-repeat
     pytest-xdist
+    pytestCheckHook
     syrupy
+    postgresql
+    postgresqlTestHook
   ];
 
   disabledTests = [
+    # test is flaky due to pydantic error on the exception
+    "test_doesnt_warn_valid_schema"
+    "test_tool_node_inject_store"
+
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
     "test_cancel_graph_astream_events_v2"
@@ -112,33 +106,20 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
-
-    # Requires `langgraph dev` to be running
-    "test_remote_graph_basic_invoke"
-    "test_remote_graph_stream_messages_tuple"
   ];
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_checkpoint_migration.py"
-    "tests/test_large_cases.py"
-    "tests/test_large_cases_async.py"
-    "tests/test_pregel.py"
     "tests/test_pregel_async.py"
+    "tests/test_pregel.py"
   ];
 
-  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "([0-9.]+)"
-    ];
-  };
+  passthru.updateScript = langgraph-sdk.updateScript;
 
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

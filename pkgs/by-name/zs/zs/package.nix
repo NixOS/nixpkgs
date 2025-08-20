@@ -35,12 +35,12 @@ buildGoModule rec {
       --zsh <($out/bin/zs completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extremely minimal static site generator written in Go";
     homepage = "https://git.mills.io/prologic/zs";
     changelog = "https://git.mills.io/prologic/zs/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adtya ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ adtya ];
     mainProgram = "zs";
   };
 }

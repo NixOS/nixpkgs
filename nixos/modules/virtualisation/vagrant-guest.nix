@@ -23,7 +23,7 @@ in
   environment.systemPackages = with pkgs; [
     findutils
     iputils
-    net-tools
+    nettools
     netcat
     nfs-utils
     rsync

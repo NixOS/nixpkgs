@@ -7,7 +7,7 @@
   pyaudio,
   numpy,
   libsndfile,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,8 @@ buildPythonPackage rec {
   patches = [
     # Fix check error
     # OSError: libsndfile.so.1: cannot open shared object file: No such file or directory
-    (replaceVars ./libsndfile.py.patch {
+    (substituteAll {
+      src = ./libsndfile.py.patch;
       libsndfile = "${lib.getLib libsndfile}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

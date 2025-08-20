@@ -2,27 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  testers,
+  crc,
   coreutils,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 let
-  openShiftVersion = "4.19.0";
-  okdVersion = "4.19.0-okd-scos.1";
-  microshiftVersion = "4.19.0";
+  openShiftVersion = "4.15.12";
+  okdVersion = "4.15.0-0.okd-2024-02-23-163410";
+  microshiftVersion = "4.15.12";
+  podmanVersion = "4.4.4";
   writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitCommit = "47be8d03134694b9580c96dfd319594f8ce1e1c4";
-  gitHash = "sha256-KhUP4BHuQPv0vc5o5ujEK37gWYpnMMJ0DsMx1RwTtqI=";
+  gitCommit = "27c493c19b7f396931c3b94cc3367f572e6af04a";
+  gitHash = "sha256-uxp3DVYbbjKf1Cjj7GCf9QBxFq3K136k51eymD0U018=";
 in
-buildGoModule (finalAttrs: {
+buildGoModule rec {
+  version = "2.36.0";
   pname = "crc";
-  version = "2.52.0";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "crc";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = gitHash;
   };
 
@@ -30,42 +31,48 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pkg/crc/oc/oc_linux_test.go \
-      --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+      --replace "/bin/echo" "${coreutils}/bin/echo"
   '';
 
-  subPackages = [ "cmd/crc" ];
+  subPackages = [
+    "cmd/crc"
+  ];
 
   tags = [ "containers_image_openpgp" ];
 
   ldflags = [
-    "-X github.com/crc-org/crc/v2/pkg/crc/version.crcVersion=${finalAttrs.version}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.crcVersion=${version}"
     "-X github.com/crc-org/crc/v2/pkg/crc/version.ocpVersion=${openShiftVersion}"
     "-X github.com/crc-org/crc/v2/pkg/crc/version.okdVersion=${okdVersion}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.podmanVersion=${podmanVersion}"
     "-X github.com/crc-org/crc/v2/pkg/crc/version.microshiftVersion=${microshiftVersion}"
     "-X github.com/crc-org/crc/v2/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
     "-X github.com/crc-org/crc/v2/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
-  versionCheckProgramArg = "version";
-  versionCheckKeepEnvironment = [ "HOME" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
+  passthru.tests.version = testers.testVersion {
+    package = crc;
+    command = ''
+      export HOME=$(mktemp -d)
+      crc version
+    '';
+  };
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Manage a local OpenShift 4.x cluster, Microshift or a Podman VM optimized for testing and development purposes";
     homepage = "https://crc.dev/crc/getting_started/getting_started/introducing/";
-    changelog = "https://github.com/crc-org/crc/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    changelog = "https://github.com/crc-org/crc/releases/tag/v${version}";
+    license = licenses.asl20;
     mainProgram = "crc";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       matthewpi
       shikanime
       tricktron
     ];
   };
-})
+}

@@ -9,7 +9,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  freezegun,
   poetry-core,
   pytest-asyncio,
   pytest-codspeed,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "4.0.2";
+  version = "3.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     tag = "v${version}";
-    hash = "sha256-82eV76oY/exkHbhZt3OaifOoKxN2D6npstvfBDVgszw=";
+    hash = "sha256-wOWQaM1hfWaqLFIzwB7O1yOS/CJPvZ+aGbKzvAE2DAE=";
   };
 
   build-system = [
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    freezegun
     pytest-asyncio
     pytest-codspeed
     pytest-cov-stub
@@ -61,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
-    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

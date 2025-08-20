@@ -6,7 +6,7 @@
   libcxxCmakeModule ? false,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cpptoml";
   version = "0.4.0";
 

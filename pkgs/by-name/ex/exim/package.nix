@@ -17,7 +17,7 @@
   libmysqlclient,
   zlib,
   enablePgSQL ? false,
-  libpq,
+  postgresql,
   enableSqlite ? false,
   sqlite,
   enableAuthDovecot ? false,
@@ -39,41 +39,42 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.98.2";
+  version = "4.98";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-iLjopnwdtswLHRSBYao25mL0yi/vJdW282lNSQ5C3K4=";
+    hash = "sha256-DrwQinefkpO6S0I8IIGPmj23m2AobZarxrprhaFYUvc=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    coreutils
-    db
-    openssl
-    perl'
-    pcre2
-    libxcrypt
-  ]
-  ++ lib.optional enableLDAP openldap
-  ++ lib.optionals enableMySQL [
-    libmysqlclient
-    zlib
-  ]
-  ++ lib.optional enablePgSQL libpq
-  ++ lib.optionals enableSqlite [
-    sqlite
-    sqlite.dev
-    zlib
-  ]
-  ++ lib.optional enableAuthDovecot dovecot
-  ++ lib.optional enablePAM pam
-  ++ lib.optional enableSPF libspf2
-  ++ lib.optional enableDMARC opendmarc
-  ++ lib.optional enableRedis hiredis
-  ++ lib.optional enableJSON jansson;
+  buildInputs =
+    [
+      coreutils
+      db
+      openssl
+      perl'
+      pcre2
+      libxcrypt
+    ]
+    ++ lib.optional enableLDAP openldap
+    ++ lib.optionals enableMySQL [
+      libmysqlclient
+      zlib
+    ]
+    ++ lib.optional enablePgSQL postgresql
+    ++ lib.optionals enableSqlite [
+      sqlite
+      sqlite.dev
+      zlib
+    ]
+    ++ lib.optional enableAuthDovecot dovecot
+    ++ lib.optional enablePAM pam
+    ++ lib.optional enableSPF libspf2
+    ++ lib.optional enableDMARC opendmarc
+    ++ lib.optional enableRedis hiredis
+    ++ lib.optional enableJSON jansson;
 
   configurePhase = ''
     runHook preConfigure
@@ -116,8 +117,8 @@ stdenv.mkDerivation rec {
       ''}
       ${lib.optionalString enablePgSQL ''
         s:^# \(LOOKUP_PGSQL=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${libpq}/lib:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${libpq}/lib:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${postgresql.lib}/lib:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${postgresql.lib}/lib:
       ''}
       ${lib.optionalString enableSqlite ''
         s:^# \(LOOKUP_SQLITE=yes\)$:\1:
@@ -191,17 +192,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://exim.org/";
     description = "Mail transfer agent (MTA)";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2Plus
       bsd3
     ];
     mainProgram = "exim";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tv ];
-    teams = [ lib.teams.helsinki-systems ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

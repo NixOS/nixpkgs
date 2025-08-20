@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
-    repo = "ripe-atlas-sagan";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
   };
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests/*.py" ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   disabledTests = [
     # This test fail for unknown reason, I suspect it to be flaky.

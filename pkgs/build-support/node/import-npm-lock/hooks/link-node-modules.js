@@ -69,17 +69,19 @@ async function main() {
       // Don't unlink this file, we just wrote it.
       managed.delete(file);
 
-      // Link file
+      // Link to a temporary dummy path and rename.
+      // This is to get some degree of atomicity.
       try {
-        await fs.promises.symlink(sourcePath, targetPath);
+        await fs.promises.symlink(sourcePath, targetPath + "-nix-hook-temp");
       } catch (err) {
-        // If the target file already exists remove it and try again
         if (err.code !== "EEXIST") {
           throw err;
         }
-        await fs.promises.unlink(targetPath);
-        await fs.promises.symlink(sourcePath, targetPath);
+
+        await fs.promises.unlink(targetPath + "-nix-hook-temp");
+        await fs.promises.symlink(sourcePath, targetPath + "-nix-hook-temp");
       }
+      await fs.promises.rename(targetPath + "-nix-hook-temp", targetPath);
     })
   );
 

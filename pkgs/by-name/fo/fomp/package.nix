@@ -1,45 +1,30 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
+  fetchurl,
   lv2,
-  lv2lint,
   pkg-config,
-  meson,
-  ninja,
+  python3,
+  wafHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fomp";
-  version = "1.2.4";
+  version = "1.2.2";
 
-  src = fetchFromGitLab {
-    owner = "drobilla";
-    repo = "fomp";
-    tag = "v${version}";
-    hash = "sha256-8rkAV+RJS9vQV+9+swclAP0QBjBDT2tKeLWHxwpUrlk=";
+  src = fetchurl {
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-xnGijydiO3B7BjSlryFuH1j/OPio9hCYbniq2IXp2W8=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://gitlab.com/drobilla/fomp/-/commit/f8e4e1e0b1abe3afd2ea17b13795bbe871fccece.patch";
-      hash = "sha256-uJpUwTEBOp0Zo7zKT9jekhtkg9okUvGTavLIQmNKutU=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
-    meson
-    ninja
-    lv2lint
+    wafHook
   ];
-
   buildInputs = [
     lv2
+    python3
   ];
-
-  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://drobilla.net/software/fomp.html";

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "andrewshadura";
-    repo = "tnat64";
-    rev = "tnat64-${version}";
+    repo = pname;
+    rev = "${pname}-${version}";
     sha256 = "191j1fpr3bw6fk48npl99z7iq6m1g33f15xk5cay1gnk5f46i2j6";
   };
 

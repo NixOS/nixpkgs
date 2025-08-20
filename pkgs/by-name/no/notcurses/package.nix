@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.16";
+  version = "3.0.12";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-qAc9jKFpYgI0SdzKHhzmrPkWg4uSXDetD/oNEmHob2o=";
+    sha256 = "sha256-x7utMjXel5ax3mN7/QmSwFXCUVrkAx4exRHDTNIEETM=";
   };
 
   outputs = [
@@ -37,14 +37,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libdeflate
-    libunistring
-    ncurses
-    zlib
-  ]
-  ++ lib.optional qrcodegenSupport qrcodegen
-  ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs =
+    [
+      libdeflate
+      libunistring
+      ncurses
+      zlib
+    ]
+    ++ lib.optional qrcodegenSupport qrcodegen
+    ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
     lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (ncurses.meta) platforms;
   };
 }

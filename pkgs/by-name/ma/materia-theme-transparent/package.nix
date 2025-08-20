@@ -3,7 +3,7 @@
   fetchFromGitHub,
   materia-theme,
 }:
-materia-theme.overrideAttrs (oldAttrs: {
+materia-theme.overrideAttrs (oldAttrs: rec {
   pname = "materia-theme-transparent";
   version = "0-unstable-2021-03-22";
 

@@ -9,8 +9,9 @@
   duration,
   randomconv,
   lwt,
-  mirage-ptime,
-  mirage-crypto-rng,
+  mirage-time,
+  mirage-clock,
+  mirage-crypto-rng-mirage,
   tcpip,
   metrics,
 }:
@@ -30,8 +31,9 @@ buildDunePackage {
     duration
     randomconv
     lwt
-    mirage-ptime
-    mirage-crypto-rng
+    mirage-time
+    mirage-clock
+    mirage-crypto-rng-mirage
     tcpip
     metrics
   ];

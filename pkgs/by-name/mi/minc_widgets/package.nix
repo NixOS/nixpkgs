@@ -11,13 +11,13 @@
   minc_tools,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minc-widgets";
   version = "unstable-2016-04-20";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = "minc-widgets";
+    repo = pname;
     rev = "f08b643894c81a1a2e0fbfe595a17a42ba8906db";
     sha256 = "1b9g6lf37wpp211ikaji4rf74rl9xcmrlyqcw1zq3z12ji9y33bm";
   };
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/BIC-MNI/minc-widgets";
+    homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

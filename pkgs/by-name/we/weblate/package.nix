@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchFromGitHub,
-  gettext,
   pango,
   harfbuzz,
   librsvg,
@@ -16,8 +15,8 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      # https://github.com/django-crispy-forms/crispy-bootstrap3/issues/12
-      django = prev.django_5_1;
+      django = prev.django_5;
+      sentry-sdk = prev.sentry-sdk_2;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
@@ -27,7 +26,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.12.2";
+  version = "5.9.2";
 
   pyproject = true;
 
@@ -40,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-YaP0lhL7E0pv3ZyfpQ47CjhrzjJPDwGpSTcgXDaMZdA=";
+    hash = "sha256-/fsNQvIIgcTPZHHIwr8sruEJpPJTmXbevoxy1GPmOOU=";
   };
 
   patches = [
@@ -49,8 +48,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [ setuptools ];
-
-  nativeBuildInputs = [ gettext ];
 
   # Build static files into a separate output
   postBuild =
@@ -67,7 +64,6 @@ python.pkgs.buildPythonApplication rec {
       mkdir $static
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
       export DJANGO_SETTINGS_MODULE="weblate.settings_static"
-      ${python.pythonOnBuildForHost.interpreter} manage.py compilemessages
       ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
@@ -82,14 +78,13 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
-      crispy-bootstrap3
+      django-crispy-bootstrap3
       cryptography
       cssselect
       cython
       cyrtranslit
       dateparser
       diff-match-patch
-      disposable-email-domains
       django-appconf
       django-celery-beat
       django-compressor
@@ -100,16 +95,14 @@ python.pkgs.buildPythonApplication rec {
       django-otp
       django-otp-webauthn
       django
-      djangorestframework-csv
       djangorestframework
-      docutils
       drf-spectacular
-      drf-standardized-errors
       filelock
       fluent-syntax
       gitpython
       hiredis
       html2text
+      httpx
       iniparse
       jsonschema
       lxml
@@ -135,7 +128,6 @@ python.pkgs.buildPythonApplication rec {
       siphashc
       social-auth-app-django
       social-auth-core
-      standardwebhooks
       tesserocr
       translate-toolkit
       translation-finder
@@ -147,10 +139,7 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
-    ++ drf-spectacular.optional-dependencies.sidecar
-    ++ drf-standardized-errors.optional-dependencies.openapi;
-
-  pythonRelaxDeps = [ "certifi" ];
+    ++ drf-spectacular.optional-dependencies.sidecar;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
@@ -175,15 +164,14 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${src.tag}";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       mit
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ erictapen ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ erictapen ];
   };
 }

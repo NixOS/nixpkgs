@@ -4,37 +4,31 @@
   fetchFromGitLab,
   pkg-config,
   systemd,
-  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "supergfxctl";
-  version = "5.2.7";
+  version = "5.2.4";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
     rev = version;
-    hash = "sha256-d3jN4i4oHRFDgr5f6y42gahrCfXBPB61T72x6IeiskM=";
+    hash = "sha256-ie5JPHBvypUtPStwA/aO4GeQ/qbHTzUJF3T4QuW6JNc=";
   };
 
-  cargoHash = "sha256-BM/fcXWyEWjAkqOdj2MItOzKknNUe9HMns30H1n5/xo=";
+  cargoHash = "sha256-qZC4axeRnKgUNGDFzmdvN/mwkcqsh8KwLlM6oGT19e8=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd
     substituteInPlace data/99-nvidia-ac.rules --replace /usr/bin/systemctl ${systemd}/bin/systemctl
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    udevCheckHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
   # upstream doesn't have tests, don't build twice just to find that out
   doCheck = false;
-
-  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d/ data/*.rules

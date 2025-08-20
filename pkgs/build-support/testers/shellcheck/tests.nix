@@ -4,33 +4,39 @@
 {
   lib,
   testers,
+  runCommand,
 }:
 lib.recurseIntoAttrs {
-  example-dir = testers.testBuildFailure' {
-    drv = testers.shellcheck {
-      name = "example-dir";
-      src = ./src;
-    };
-    expectedBuilderExitCode = 123;
-    expectedBuilderLogEntries = [
-      ''
-        echo $@
-             ^-- SC2068 (error): Double quote array expansions to avoid re-splitting elements.
-      ''
-    ];
-  };
 
-  example-file = testers.testBuildFailure' {
-    drv = testers.shellcheck {
-      name = "example-file";
-      src = ./src/example.sh;
-    };
-    expectedBuilderExitCode = 123;
-    expectedBuilderLogEntries = [
+  example-dir =
+    runCommand "test-testers-shellcheck-example-dir"
+      {
+        failure = testers.testBuildFailure (
+          testers.shellcheck {
+            src = ./src;
+          }
+        );
+      }
       ''
-        echo $@
-             ^-- SC2068 (error): Double quote array expansions to avoid re-splitting elements.
+        log="$failure/testBuildFailure.log"
+        echo "Checking $log"
+        grep SC2068 "$log"
+        touch $out
+      '';
+
+  example-file =
+    runCommand "test-testers-shellcheck-example-file"
+      {
+        failure = testers.testBuildFailure (
+          testers.shellcheck {
+            src = ./src/example.sh;
+          }
+        );
+      }
       ''
-    ];
-  };
+        log="$failure/testBuildFailure.log"
+        echo "Checking $log"
+        grep SC2068 "$log"
+        touch $out
+      '';
 }

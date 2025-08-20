@@ -1,110 +1,71 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libuuid,
-  sane-backends,
-  podofo_0_10,
-  libjpeg,
-  djvulibre,
-  libxmlxx3,
-  libzip,
-  tesseract,
-  intltool,
-  poppler,
-  json-glib,
-  ninja,
-  python3,
-  doxygen,
-  enchant,
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
+, sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
+, intltool, poppler, json-glib
+, ninja
+, python3
 
-  # Gtk deps
-  # upstream gImagereader supports Qt too
-  gobject-introspection,
-  wrapGAppsHook3,
-  gtkmm3,
-  gtksourceview3,
-  gtksourceviewmm,
-  gtkspell3,
-  gtkspellmm,
-  cairomm,
-  kdePackages,
-  qt6Packages,
-  withQt6 ? false,
-  wrapQtAppsHook ? null,
+# Gtk deps
+# upstream gImagereader supports Qt too
+, gobject-introspection, wrapGAppsHook3
+, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
+  variant = "gtk";
+  pythonEnv = python3.withPackages( ps: with ps;[ pygobject3 ] );
 in
 stdenv.mkDerivation rec {
   pname = "gImageReader";
-  version = "5aff249fdc119caa1464af9405259799b4f69d8b";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
-    owner = "manisandro";
+    owner= "manisandro";
     repo = "gImageReader";
-    rev = "${version}";
-    sha256 = "sha256-xS63iGY1yf0NEnGuss0sme1vSYd2L3sOUd/g8yyPn1k=";
+    rev = "v${version}";
+    sha256 = "sha256-yBkVeufRRoSAc20/8mV39widBPloHFz12K7B4Y9xiWg=";
   };
 
   nativeBuildInputs = [
-    cmake
-    ninja
+    cmake ninja
     intltool
     pkg-config
     pythonEnv
-    enchant
-    gobject-introspection
+
+    # Gtk specific
     wrapGAppsHook3
-  ]
-  ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
+    gobject-introspection
+  ];
 
   buildInputs = [
     libxmlxx3
     libzip
     libuuid
     sane-backends
-    podofo_0_10
+    podofo
     libjpeg
     djvulibre
     tesseract
     poppler
-    doxygen
-    cairomm
+
+    # Gtk specific
     gtkmm3
-    gtksourceview3
-    gtksourceviewmm
     gtkspell3
     gtkspellmm
+    gtksourceview3
+    gtksourceviewmm
+    cairomm
     json-glib
-  ]
-  ++ lib.optionals withQt6 (
-    with qt6Packages;
-    [
-      kdePackages.poppler
-      qtbase
-      qtspell
-      qttools
-      quazip
-    ]
-  );
+  ];
 
-  # interface type can be where <type> is either gtk, qt6
-  cmakeFlags = [
-    "-DINTERFACE_TYPE=gtk"
-  ]
-  ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ];
+  # interface type can be where <type> is either gtk, qt5, qt4
+  cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
   meta = with lib; {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";
-    mainProgram = if withQt6 then "gImageReader-qt6" else "gImageReader";
+    mainProgram = "gimagereader-gtk";
     homepage = "https://github.com/manisandro/gImageReader";
-    changelog = "https://github.com/manisandro/gImageReader/blob/${version}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [teto];
     platforms = platforms.linux;
   };
 }

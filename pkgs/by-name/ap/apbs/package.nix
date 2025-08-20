@@ -76,15 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
-    fetk
-    suitesparse
-    blas
-    python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libintl
-  ];
+  buildInputs =
+    [
+      fetk
+      suitesparse
+      blas
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libintl
+    ];
 
   cmakeFlags = [
     "-DPYTHON_VERSION=${python3.version}"

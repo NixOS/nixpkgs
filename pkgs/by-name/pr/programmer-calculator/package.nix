@@ -11,7 +11,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "alt-romes";
-    repo = "programmer-calculator";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
   };
@@ -24,7 +24,7 @@ gccStdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Terminal calculator for programmers";
     mainProgram = "pcalc";
     longDescription = ''
@@ -33,8 +33,8 @@ gccStdenv.mkDerivation rec {
     '';
     homepage = "https://alt-romes.github.io/programmer-calculator";
     changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cjab ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -3,16 +3,16 @@
   stdenvNoCC,
   fetchurl,
   undmg,
-  nix-update-script,
+  gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "rectangle";
-  version = "0.89";
+  version = "0.85";
 
   src = fetchurl {
-    url = "https://github.com/rxhanson/Rectangle/releases/download/v${finalAttrs.version}/Rectangle${finalAttrs.version}.dmg";
-    hash = "sha256-eI3C+nDJhxKwbCLRKepoGmbyWKGCxEuMSK3D0sZbDU0=";
+    url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
+    hash = "sha256-TBUC5z2BZMt0eb9NAD3/y9y23iRzs7YRJSfyb3QN1Mc=";
   };
 
   sourceRoot = ".";
@@ -22,23 +22,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications"
-    mv Rectangle.app "$out/Applications"
+    mkdir -p $out/Applications
+    mv Rectangle.app $out/Applications
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/rxhanson/Rectangle";
+    rev-prefix = "v";
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Move and resize windows in macOS using keyboard shortcuts or snap areas";
     homepage = "https://rectangleapp.com/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [
       Intuinewin
       wegank
     ];
-    platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
   };
-})
+}

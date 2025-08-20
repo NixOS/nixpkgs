@@ -2,7 +2,9 @@
   lib,
   aioquic,
   buildPythonPackage,
+  cacert,
   cryptography,
+  curio,
   fetchPypi,
   h2,
   httpcore,
@@ -10,34 +12,48 @@
   idna,
   hatchling,
   pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  sniffio,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
   version = "2.7.0";
-  pyproject = true;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-zpxDLtoNyRz2GKXO3xpOFCZRGWu80sgOie1akH5c+vE=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ hatchling ];
 
   optional-dependencies = {
-    doh = [
+    DOH = [
       httpx
       h2
+      requests
+      requests-toolbelt
       httpcore
     ];
-    idna = [ idna ];
-    dnssec = [ cryptography ];
+    IDNA = [ idna ];
+    DNSSEC = [ cryptography ];
     trio = [ trio ];
-    doq = [ aioquic ];
+    curio = [
+      curio
+      sniffio
+    ];
+    DOQ = [ aioquic ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
@@ -52,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dns" ];
 
-  meta = {
+  meta = with lib; {
     description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
     changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
-    license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ gador ];
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ gador ];
   };
 }

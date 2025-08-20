@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: rec {
   pname = "has";
-  version = "1.5.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kdabir";
     repo = "has";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sqpKI9RHo0VlGUNU71mIzw4LzExji2FN2FBOAIVo4jI=";
+    hash = "sha256-TL8VwFx2tf+GkBwz0ILQg0pwcLJSTky57Wx9OW5+lS4=";
   };
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    install -Dm0555 has -t $out/bin
+    install -Dm0555 ${pname} -t $out/bin
     runHook postInstall
   '';
 

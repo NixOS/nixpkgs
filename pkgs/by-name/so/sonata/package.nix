@@ -24,14 +24,13 @@ let
 in
 buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7.1";
-  pyproject = true;
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
-    tag = "v${version}";
-    sha256 = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+    rev = "v${version}";
+    sha256 = "0rl8w7s2asff626clzfvyz987l2k4ml5dg417mqp9v8a962q0v2x";
   };
 
   disabled = !isPy3k;
@@ -50,15 +49,13 @@ buildPythonApplication rec {
     gdk-pixbuf
   ];
 
-  build-system = [ setuptools ];
-
   # The optional tagpy dependency (for editing metadata) is not yet
   # included because it's difficult to build.
   pythonPath = [
     dbus-python
     mpd2
     pygobject3
-    setuptools # pkg_resources is imported during runtime
+    setuptools
   ];
 
   postPatch = ''

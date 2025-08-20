@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  paho-mqtt,
+  paho-mqtt_2,
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
@@ -39,11 +39,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    paho-mqtt
+    paho-mqtt_2
     python-dateutil
     weconnect
-  ]
-  ++ weconnect.optional-dependencies.Images;
+  ] ++ weconnect.optional-dependencies.Images;
 
   nativeCheckInputs = [
     pytest-cov-stub

@@ -17,11 +17,11 @@ let
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.flags) cudaCapabilities dropDots isJetsonBuild;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot isJetsonBuild;
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "0-unstable-2024-04-09";
+  version = "unstable-2024-04-09";
 
   strictDeps = true;
 
@@ -53,7 +53,7 @@ backendStdenv.mkDerivation {
 
   makeFlags = [
     "CUDAPATH=${getBin cuda_nvcc}"
-    "COMPUTE=${last (map dropDots cudaCapabilities)}"
+    "COMPUTE=${last (map dropDot cudaCapabilities)}"
     "IS_JETSON=${boolToString isJetsonBuild}"
   ];
 

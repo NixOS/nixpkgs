@@ -24,17 +24,5 @@ symlinkJoin {
       --prefix LD_LIBRARY_PATH : ${vte}/lib
   '';
 
-  meta = {
-    # can't just "inherit (geany) meta;" because:
-    # error: derivation '/nix/store/...-geany-with-vte-2.0.drv' does not have wanted outputs 'man'
-    inherit (geany.meta)
-      description
-      longDescription
-      homepage
-      license
-      maintainers
-      platforms
-      mainProgram
-      ;
-  };
+  inherit (geany.meta) ;
 }

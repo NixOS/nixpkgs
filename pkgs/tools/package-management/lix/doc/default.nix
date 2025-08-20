@@ -2,7 +2,8 @@
   src,
   rustPlatform,
   version,
-  cargoDeps,
+  cargoHash ? null,
+  cargoLock ? null,
 }:
 
 rustPlatform.buildRustPackage {
@@ -11,6 +12,7 @@ rustPlatform.buildRustPackage {
   inherit
     version
     src
-    cargoDeps
+    cargoHash
+    cargoLock
     ;
 }

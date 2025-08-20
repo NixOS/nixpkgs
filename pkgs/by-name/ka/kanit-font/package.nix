@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "kanit";
-  version = "0-unstable-2020-06-16";
+  version = "unstable-2020-06-16";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";
-    repo = "kanit";
+    repo = pname;
     rev = "467dfe842185681d8042cd608b8291199dd37cda";
     sha256 = "0p0klb0376r8ki4ap2j99j7jcsq6wgb7m1hf3j1dkncwm7ikmg3h";
   };

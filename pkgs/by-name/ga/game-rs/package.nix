@@ -2,30 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  umu-launcher,
+  steam-run,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "game-rs";
-  version = "5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "amanse";
     repo = "game-rs";
-    rev = "z${version}";
-    hash = "sha256-+LQxU4jWBAOk+qHNvGxYXudX5dG6szQt3PiPI41Zxlo=";
+    rev = "v${version}";
+    hash = "sha256-FuZl2yNre5jNSfHqF3tjiGwg5mRKbYer2FOPpLy0OrA=";
   };
 
-  cargoHash = "sha256-X9dWIeDKy3qLmFwUevN8ZUcwNVtt7Wnecbg7M6zUXFU=";
+  cargoHash = "sha256-fNC8Aff09nTSbtxZg5qEKtvFyKFLRVjaokWiZihZCgM=";
 
-  propagatedBuildInputs = [ umu-launcher ];
+  buildFeatures = [ "nixos" ];
 
-  meta = {
+  propagatedBuildInputs = [ steam-run ];
+
+  meta = with lib; {
     description = "Minimal CLI game launcher for linux";
     homepage = "https://github.com/amanse/game-rs";
     changelog = "https://github.com/Amanse/game-rs/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ amanse ];
-    platforms = lib.platforms.linux;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ amanse ];
+    platforms = platforms.linux;
   };
 }

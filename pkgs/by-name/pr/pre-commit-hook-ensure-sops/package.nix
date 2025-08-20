@@ -8,11 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit-hook-ensure-sops";
   version = "1.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yuvipanda";
-    repo = "pre-commit-hook-ensure-sops";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-8sMmHNzmYwOmHYSWoZ4rKb/2lKziFmT6ux+s+chd/Do=";
   };
@@ -26,12 +26,8 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    ruamel-yaml
+  propagatedBuildInputs = [
+    python3Packages.ruamel-yaml
   ];
 
   pythonImportsCheck = [
@@ -46,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Pre-commit hook to ensure that files that should be encrypted with sops are";
+    description = "pre-commit hook to ensure that files that should be encrypted with sops are";
     homepage = "https://github.com/yuvipanda/pre-commit-hook-ensure-sops";
     maintainers = with maintainers; [ nialov ];
     license = licenses.bsd3;

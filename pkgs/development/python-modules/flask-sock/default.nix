@@ -30,7 +30,7 @@ buildPythonPackage rec {
     simple-websocket
   ];
 
-  enabledTestPaths = [ "tests/test_flask_sock.py" ];
+  pytestFlagsArray = [ "tests/test_flask_sock.py" ];
 
   pythonImportsCheck = [ "flask_sock" ];
 

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   buildNpmPackage,
 }:
@@ -33,7 +33,7 @@ let
   };
 in
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "zincsearch";
   inherit src version;
 

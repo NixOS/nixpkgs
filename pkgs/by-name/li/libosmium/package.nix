@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libosmium";
-  version = "2.22.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b4jdPh6lJ/ALPVblDt16Nabx9ZL8MW8/roI+NqTZshU=";
+    hash = "sha256-IGZQBziXKYVG+uKLjHr6LsIF5H8klq6LGF5j1KrfHZU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/osmcode/libosmium/releases/tag/v${finalAttrs.version}"
       "https://github.com/osmcode/libosmium/blob/v${finalAttrs.version}/CHANGELOG.md"
     ];
-    maintainers = with lib.maintainers; [ das-g ];
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
   };
 })

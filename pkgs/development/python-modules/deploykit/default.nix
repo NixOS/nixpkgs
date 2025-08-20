@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "numtide";
-    repo = "deploykit";
+    repo = pname;
     rev = version;
     hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
   };
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_ssh" ];
 
   # don't swallow stdout/stderr
-  pytestFlags = [ "-s" ];
+  pytestFlagsArray = [ "-s" ];
 
   pythonImportsCheck = [ "deploykit" ];
 

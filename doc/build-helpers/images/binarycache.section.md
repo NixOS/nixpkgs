@@ -11,14 +11,6 @@ It can also be a convenient way to make some Nix packages available inside a con
 `rootPaths` must be a list of derivations.
 The transitive closure of these derivations' outputs will be copied into the cache.
 
-## Optional arguments {#sec-pkgs-binary-cache-arguments}
-
-`compression` (`"none"` or `"xz"` or `"zstd"`; _optional_)
-
-: The compression algorithm to use.
-
-  _Default value:_ `zstd`.
-
 ::: {.note}
 This function is meant for advanced use cases.
 The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nixos.org/manual/nix/stable/command-ref/nix-copy-closure.html) command.
@@ -33,7 +25,10 @@ You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your cont
 The following derivation will construct a flat-file binary cache containing the closure of `hello`.
 
 ```nix
-{ mkBinaryCache, hello }: mkBinaryCache { rootPaths = [ hello ]; }
+{ mkBinaryCache, hello }:
+mkBinaryCache {
+  rootPaths = [hello];
+}
 ```
 
 Build the cache on a machine.

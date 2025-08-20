@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MatMaul";
-    repo = "pynetgear";
+    repo = pname;
     tag = version;
     hash = "sha256-5Lj2cK/SOGgaPu8dI9X3Leg4dPAY7tdIHCzFnNaube8=";
   };

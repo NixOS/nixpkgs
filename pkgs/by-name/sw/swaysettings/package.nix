@@ -24,23 +24,17 @@
   stdenv,
   vala,
   wrapGAppsHook3,
-  blueprint-compiler,
-  gtk4,
-  libadwaita,
-  udisks,
-  libgtop,
-  gtk4-layer-shell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaysettings";
-  version = "0.5.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwaySettings";
-    tag = "v${version}";
-    hash = "sha256-XP0Q3Q40cvAl3MEqShY+VMWjlCtqs9e91nkxocVNQQQ=";
+    rev = "v${version}";
+    hash = "sha256-dn3n5DOAsw0FeXBkh19A2qB/5O+RyA2/Fj5PVtMOyL0=";
   };
 
   nativeBuildInputs = [
@@ -54,10 +48,6 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook3
     gobject-introspection
-    blueprint-compiler
-    udisks
-    libgtop
-    gtk4-layer-shell
   ];
 
   buildInputs = [
@@ -72,24 +62,22 @@ stdenv.mkDerivation rec {
     libhandy
     libpulseaudio
     libxml2
-    pantheon.granite7
-    gtk4
-    libadwaita
+    pantheon.granite
   ];
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI for configuring your sway desktop";
     longDescription = ''
       Sway settings enables easy configuration of a sway desktop environment
       such as selection of application or icon themes.
     '';
     homepage = "https://github.com/ErikReider/SwaySettings";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.aacebedo ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.aacebedo ];
   };
 }

@@ -7,19 +7,26 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "multimarkdown";
-  version = "6.7.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "fletcher";
     repo = "MultiMarkdown-6";
-    tag = finalAttrs.version;
-    hash = "sha256-b6yCn0NFpONI7WwfjDOc0d2nCKMIiUXi+rsnytiNc0Q=";
+    rev = version;
+    hash = "sha256-emJbY0wucoc/GdjlILoeqjwuwuPpTjXTqZN0gUKOyLg=";
   };
 
   postPatch = ''
     patchShebangs tools/enumsToPerl.pl
+  '';
+
+  postInstall = ''
+    # Move files from $out/ to sub directories to prevent conflicts
+    # with other packages:
+    mkdir -p $out/share/doc/multimarkdown/
+    mv $out/LICENSE.txt $out/README.txt $out/share/doc/multimarkdown/
   '';
 
   nativeBuildInputs = [
@@ -28,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fletcher.github.io/MultiMarkdown-6/introduction.html";
     description = "Derivative of Markdown that adds new syntax features";
     longDescription = ''
@@ -52,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       - glossary entries (LaTeX only)
       - document metadata (e.g. title, author, date, etc.)
     '';
-    license = with lib.licenses; [ mit ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    license = with licenses; [ mit ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
-})
+}

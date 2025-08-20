@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "can-utils";
-  version = "2025.01";
+  version = "2023.03";
 
   src = fetchFromGitHub {
     owner = "linux-can";
     repo = "can-utils";
     rev = "v${version}";
-    hash = "sha256-wum0hqPj3rCHHubNsOnj89tvrRQxoXrGQvZFcMKAGME=";
+    hash = "sha256-FaopviBJOmO0lXoJcdKNdtsoaJ8JrFEJGyO1aNBv+Pg=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

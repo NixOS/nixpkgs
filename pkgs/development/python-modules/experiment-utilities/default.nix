@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "experiment-utilities";
-  version = "0.3.9";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ChrisReinke";
     repo = "exputils";
     tag = "v${version}";
-    hash = "sha256-LQ1RjDcOL1SroNzWSfSS2OUSqsGgWOly7bLcbZ7e8LY=";
+    hash = "sha256-fo8kwxm5/oEuLXVKhBrvKg18S0Yh6SkkNRaHUGJfdw4=";
   };
 
   pythonRelaxDeps = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     # Not available anymore in nixpkgs
-    "jupyter_contrib_nbextensions"
+    "jupyter-contrib-nbextensions"
   ];
 
   dependencies = [

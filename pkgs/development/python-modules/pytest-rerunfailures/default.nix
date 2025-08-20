@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   packaging,
   pytest,
@@ -11,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "15.1";
-  pyproject = true;
+  version = "15.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "pytest-dev";
-    repo = "pytest-rerunfailures";
-    tag = version;
-    hash = "sha256-ab3n61zCf9ok2PWvKTwmaeoeGuMxl0sYE25djk/NDLk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LZrHuvWfTBOscwtH9vqA51XRugWB2kXOMLcvs1QrRHQ=";
   };
 
   build-system = [ setuptools ];

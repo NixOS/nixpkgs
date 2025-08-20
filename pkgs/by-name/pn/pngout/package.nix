@@ -7,9 +7,6 @@
 
 let
   platforms = {
-    aarch64-darwin = {
-      folder = ".";
-    };
     aarch64-linux = {
       folder = "aarch64";
       ld-linux = "ld-linux-aarch64.so.1";
@@ -36,22 +33,22 @@ let
   download =
     if stdenv.hostPlatform.isDarwin then
       {
-        suffix = "20230322-mac.zip";
-        hash = "sha256-Lj63k0UgYECuOg0NDs/prQHZL+UAK4oWdqZWMqVoQOE=";
+        extension = "macos.zip";
+        hash = "sha256-MnL6lH7q/BrACG4fFJNfnvoh0JClVeaJIlX+XIj2aG4=";
       }
     else
       {
-        suffix = "20200115-linux.tar.gz";
+        extension = "linux.tar.gz";
         hash = "sha256-rDi7pvDeKQM96GZTjDr6ZDQTGbaVu+OI77xf2egw6Sg=";
       };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pngout";
-  version = "20230322";
+  version = "20200115";
 
   src = fetchurl {
     inherit (download) hash;
-    url = "https://www.jonof.id.au/files/kenutils/pngout-${download.suffix}";
+    url = "http://static.jonof.id.au/dl/kenutils/pngout-${version}-${download.extension}";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
@@ -59,13 +56,14 @@ stdenv.mkDerivation {
   # pngout is code-signed on Darwin, so don’t alter the binary to avoid breaking the signature.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${platform.folder}/pngout $out/bin
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
-  '';
+  installPhase =
+    ''
+      mkdir -p $out/bin
+      cp ${platform.folder}/pngout $out/bin
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
+    '';
 
   meta = {
     description = "Tool that aggressively optimizes the sizes of PNG images";

@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "asciidoctorj";
   version = "3.0.0";
 
   src = fetchzip {
-    url = "mirror://maven/org/asciidoctor/asciidoctorj/${finalAttrs.version}/asciidoctorj-${finalAttrs.version}-bin.zip";
-    hash = "sha256-F4tmpdNS0PIoLpqV9gifJf2iQ/kX+cp3EssRyhzyOUw=";
+    url = "mirror://maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
+    sha256 = "sha256-F4tmpdNS0PIoLpqV9gifJf2iQ/kX+cp3EssRyhzyOUw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix JAVA_HOME : ${jdk}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Official library for running Asciidoctor on the JVM";
     longDescription = ''
       AsciidoctorJ is the official library for running Asciidoctor on the JVM.
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
       languages.
     '';
     homepage = "https://asciidoctor.org/docs/asciidoctorj/";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ moaxcp ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moaxcp ];
     mainProgram = "asciidoctorj";
   };
-})
+}

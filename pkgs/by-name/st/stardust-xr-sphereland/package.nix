@@ -19,8 +19,13 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  cargoHash = "sha256-4mESTxfogMQxfDMQRVML752fkinOIqkddW3PHmvxekc=";
-
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "stardust-xr-0.14.1" = "sha256-aJYovCKcR6zoqsVenCBnL5a/ccvXxNku+mAKRf0pp1Q=";
+      "stardust-xr-molecules-0.29.0" = "sha256-rzbLqx+X8KEjut6Cq4x/qiSN9OfbMemrDUP0F+hXy4U=";
+    };
+  };
   buildInputs = [
     libxkbcommon
   ];

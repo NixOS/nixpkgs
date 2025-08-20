@@ -1,30 +1,33 @@
 {
-  curl,
-  fetchFromGitHub,
   lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
   postgresql,
-  postgresqlBuildExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "pg_net";
-  version = "0.19.5";
-
-  src = fetchFromGitHub {
-    owner = "supabase";
-    repo = "pg_net";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Cpi2iASi1QJoED0Qs1dANqg/BNZTsz5S+pw8iYyW03Y=";
-  };
+  version = "0.14.0";
 
   buildInputs = [ curl ];
 
-  meta = {
+  src = fetchFromGitHub {
+    owner = "supabase";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-c1pxhTyrE5j6dY+M5eKAboQNofIORS+Dccz+7HKEKQI=";
+  };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  meta = with lib; {
     description = "Async networking for Postgres";
     homepage = "https://github.com/supabase/pg_net";
-    changelog = "https://github.com/supabase/pg_net/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    changelog = "https://github.com/supabase/pg_net/releases/tag/v${version}";
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.postgresql;
+    license = licenses.postgresql;
   };
-})
+}

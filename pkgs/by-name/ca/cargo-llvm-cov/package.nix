@@ -16,45 +16,53 @@
 {
   stdenv,
   lib,
+  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   llvmPackages_19,
-  gitMinimal,
+  git,
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.17";
+  version = "0.6.14";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
   inherit (llvmPackages_19) llvm;
+
+  # Download `Cargo.lock` from crates.io so we don't clutter up Nixpkgs
+  cargoLock = fetchurl {
+    name = "Cargo.lock";
+    url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
+    sha256 = "sha256-f0xO+UxB9f6q6q8QyjtP+z+U146+8GLmLKgGmAs/YYA=";
+    downloadToTemp = true;
+    postFetch = ''
+      tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
+      mv ${pname}-${version}/Cargo.lock $out
+    '';
+  };
 in
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   inherit pname version;
 
   # Use `fetchFromGitHub` instead of `fetchCrate` because the latter does not
   # pull in fixtures needed for the test suite
   src = fetchFromGitHub {
     inherit owner;
-    repo = "cargo-llvm-cov";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0Dgcl1r+j86WVhkyJNJxUnk85vrtD1fBBxfJkV0mcAI=";
+    sha256 = "sha256-iJrnNDSMich5OzEbPgnQWLVz6Zj/MUIzEsaBzqVdoDg=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+  postUnpack = ''
+    cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "test-helper-0.0.0" = "sha256-MjylM9agdGIGMp1Iip/jolHCzErST2XiEl5PIqt+ykg=";
-    };
-  };
+  cargoHash = "sha256-kYKQ7ddgoSvarF0HG/yESu5cU87DUgYm9tDkem5a/gw=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -62,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
 
   nativeCheckInputs = [
-    gitMinimal
+    git
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.
@@ -94,4 +102,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The profiler runtime is (currently) disabled on non-Linux platforms
     broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
   };
-})
+}

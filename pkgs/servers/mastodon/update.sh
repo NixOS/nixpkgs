@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq yarn-berry_4.yarn-berry-fetcher
+#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq prefetch-yarn-deps
 set -e
 
 OWNER=mastodon
@@ -90,19 +90,18 @@ cat > source.nix << EOF
 let
   version = "$VERSION";
 in
-applyPatches {
+(applyPatches {
   src = fetchFromGitHub {
     owner = "$OWNER";
     repo = "$REPO";
     rev = "v\${version}";
     hash = "$HASH";
-    passthru = {
-      inherit version;
-      yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      yarnMissingHashes = ./missing-hashes.json;
-    };
   };
-  patches = patches ++ [ $PATCHES];
+  patches = patches ++ [$PATCHES];
+})
+// {
+  inherit version;
+  yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 }
 EOF
 SOURCE_DIR="$(nix-build --no-out-link -E '(import <nixpkgs> {}).callPackage ./source.nix {}')"
@@ -111,8 +110,5 @@ echo "Creating gemset.nix"
 bundix --lockfile="$SOURCE_DIR/Gemfile.lock" --gemfile="$SOURCE_DIR/Gemfile"
 echo "" >> gemset.nix  # Create trailing newline to please EditorConfig checks
 
-echo "Updating yarnHash"
-yarn-berry-fetcher missing-hashes "$SOURCE_DIR/yarn.lock" > missing-hashes.json
-YARN_HASH="$(yarn-berry-fetcher prefetch "$SOURCE_DIR/yarn.lock" 2>/dev/null)"
-sed -i "s;sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=;$YARN_HASH;g" source.nix
-
+echo "Required manual update of yarn-hash"
+exit 1

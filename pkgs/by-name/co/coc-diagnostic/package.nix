@@ -9,7 +9,7 @@
   npmHooks,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "coc-diagnostic";
   version = "0.24.1";
 
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+    yarnLock = "${src}/yarn.lock";
     hash = "sha256-/WBOZKIIE2ERKuGwG+unXyam2JavPOuUeSIwZQ9RiHY=";
   };
 
@@ -33,17 +33,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmHooks.npmInstallHook
   ];
 
-  # ERROR: noBrokenSymlinks: found 1 dangling symlinks and 0 reflexive symlinks
-  postFixup = ''
-    unlink $out/lib/node_modules/coc-diagnostic/node_modules/.bin/node-which
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Diagnostic-languageserver extension for coc.nvim";
+    description = "diagnostic-languageserver extension for coc.nvim";
     homepage = "https://github.com/iamcco/coc-diagnostic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
-})
+}

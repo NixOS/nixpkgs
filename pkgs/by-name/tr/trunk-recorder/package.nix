@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "trunk-recorder";
-  version = "5.0.2";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "robotastic";
     repo = "trunk-recorder";
     rev = "v${version}";
-    hash = "sha256-UTowlW2xKJllYlEvfEVQEyjNmFX3oafKJThIYDx7dkc=";
+    hash = "sha256-d2iBCSLR3kr6rnLXO3MeGVdi6+8pqXZqW/yhxAvA1cY=";
   };
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
@@ -40,25 +40,20 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    boost
-    curl
-    gmp
-    gnuradio
-    gnuradioPackages.osmosdr
-    openssl
-    spdlog
-    uhd
-    volk
-  ]
-  ++ lib.optionals hackrfSupport [ hackrf ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
-
-  postPatch = ''
-    # fix broken symlink
-    rm -v trunk-recorder/git.h
-    cp -v git.h trunk-recorder/git.h
-  '';
+  buildInputs =
+    [
+      boost
+      curl
+      gmp
+      gnuradio
+      gnuradioPackages.osmosdr
+      openssl
+      spdlog
+      uhd
+      volk
+    ]
+    ++ lib.optionals hackrfSupport [ hackrf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
 
   postFixup = ''
     wrapProgram $out/bin/trunk-recorder --prefix PATH : ${

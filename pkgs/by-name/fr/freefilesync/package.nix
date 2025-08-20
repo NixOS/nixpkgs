@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  replaceVars,
+  fetchpatch,
   fetchDebianPatch,
-  fetchFromGitHub,
   copyDesktopItems,
   pkg-config,
   wrapGAppsHook3,
@@ -12,37 +11,15 @@
   curl,
   glib,
   gtk3,
-  libidn2,
   libssh2,
   openssl,
   wxGTK32,
   makeDesktopItem,
 }:
 
-let
-  wxwidgets_3_3 = wxGTK32.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "3.3.0-unstable-2025-02-02";
-      src = fetchFromGitHub {
-        owner = "wxWidgets";
-        repo = "wxWidgets";
-        rev = "969c5a46b5c1da57836f721a4ce5df9feaa437f9";
-        fetchSubmodules = true;
-        hash = "sha256-ODPE896xc5RxdyfIzdPB5fsTeBm3O+asYJd99fuW6AY=";
-      };
-      patches = [
-        ./wxcolorhook.patch
-      ];
-      configureFlags = lib.subtractLists [
-        "--disable-compat28"
-        "--enable-unicode"
-      ] previousAttrs.configureFlags;
-    }
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.4";
+  version = "13.9";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -51,22 +28,31 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-Jx/Q/RsCTy06kJfJeatqrEoTMz7wLZvPQ3bzFClvKWc=";
+    hash = "sha256-53UPGg02JZr15r99ntkpZKqB/DgPjkGTQyuMt703t6s=";
   };
 
   sourceRoot = ".";
 
+  # Patches from Debian
   patches = [
     # Disable loading of the missing Animal.dat
-    ./skip-missing-Animal.dat.patch
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/f/freefilesync/13.3-1/debian/patches/ffs_devuan.patch";
+      excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
+      hash = "sha256-cW0Y9+ByQWGzMU4NFRSkW46KkxQB4jRZotHlCFniv5o=";
+    })
     # Fix build with GTK 3
-    (replaceVars ./Makefile.patch {
-      gtk3-dev = lib.getDev gtk3;
+    (fetchDebianPatch {
+      pname = "freefilesync";
+      version = "13.3";
+      debianRevision = "1";
+      patch = "ffs_devuan_gtk3.patch";
+      hash = "sha256-0n58Np4JI3hYK/CRBytkPHl9Jp4xK+IRjgUvoYti/f4=";
     })
     # Fix build with vanilla wxWidgets
     (fetchDebianPatch {
       pname = "freefilesync";
-      version = "13.7";
+      version = "13.3";
       debianRevision = "1";
       patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
@@ -84,10 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     glib
     gtk3
-    libidn2
     libssh2
     openssl
-    wxwidgets_3_3
+    wxGTK32
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
-    repo = "pyld";
+    repo = pname;
     rev = version;
     sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
   };

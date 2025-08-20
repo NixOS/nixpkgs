@@ -19,7 +19,7 @@ let
   };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "jumpnbump";
   version = "1.70-dev";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "LibreGames";
-    repo = "jumpnbump";
+    repo = pname;
     rev = "5744738211ca691444f779aafee3537fb3562516";
     sha256 = "0f1k26jicmb95bx19wgcdpwsbbl343i7mqqqc2z9lkb8drlsyqcy";
   };
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Cute, true multiplayer platform game with bunnies";
+    description = "cute, true multiplayer platform game with bunnies";
     homepage = "https://libregames.gitlab.io/jumpnbump/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ iblech ];

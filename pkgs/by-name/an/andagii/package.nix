@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "andagii";
   version = "1.0.2";
 
@@ -23,11 +23,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  # There are multiple claims that the font is GPL, so I include the
+  # package; but I cannot find the original source, so use it on your
+  # own risk Debian claims it is GPL - good enough for me.
+  meta = with lib; {
     homepage = "http://www.i18nguy.com/unicode/unicode-font.html";
     description = "Unicode Plane 1 Osmanya script font";
-    maintainers = [ lib.maintainers.raskin ];
-    license = lib.licenses.unfreeRedistributable; # upstream uses the term copyleft only
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ raskin ];
+    license = "unknown";
+    platforms = platforms.all;
   };
 }

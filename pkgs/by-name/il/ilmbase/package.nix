@@ -3,17 +3,16 @@
   lib,
   buildPackages,
   cmake,
-  # explicitly depending on openexr_2 because ilmbase doesn't exist for v3
-  openexr_2,
+  openexr,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ilmbase";
-  version = lib.getVersion openexr_2;
+  version = lib.getVersion openexr;
 
   # the project no longer provides separate tarballs. We may even want to merge
   # the ilmbase package into openexr in the future.
-  inherit (openexr_2) src patches;
+  inherit (openexr) src patches;
 
   outputs = [
     "out"
@@ -34,10 +33,9 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Library for 2D/3D vectors and matrices and other mathematical objects, functions and data types for computer graphics";
+    description = " A library for 2D/3D vectors and matrices and other mathematical objects, functions and data types for computer graphics";
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    insecure = true;
   };
 }

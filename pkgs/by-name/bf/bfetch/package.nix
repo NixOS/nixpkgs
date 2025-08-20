@@ -5,13 +5,13 @@
   bash,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "bfetch";
   version = "unstable-2021-05-21";
 
   src = fetchFromGitHub {
     owner = "NNBnh";
-    repo = "bfetch";
+    repo = pname;
     rev = "ef88e9d3f815e5074efc8ef4b7f32be6818130f2";
     sha256 = "sha256-jS9zI8b+z3KbI+LeHFwIMJfEmAKSzO8HRZ2rk35hJCk=";
   };

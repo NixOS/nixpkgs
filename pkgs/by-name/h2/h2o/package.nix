@@ -4,32 +4,21 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  makeWrapper,
   ninja,
-  perl,
-  brotli,
   openssl,
-  libcap,
   libuv,
-  wslay,
   zlib,
-  withMruby ? true,
-  bison,
-  ruby,
-  withUring ? stdenv.hostPlatform.isLinux,
-  liburing,
-  nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "h2o";
-  version = "2.3.0-untagged-2025-08-14";
+  version = "2.3.0-beta2";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "ffab9c49c33b1f0e9aec9804028156aae9db8ef0";
-    hash = "sha256-kdU2p9oUhxGnw8JU9qGjV4mn2jMeSUL0rLgveMs6NiI=";
+    tag = "v${version}";
+    sha256 = "0lwg5sfsr7fw7cfy0hrhadgixm35b5cgcvlhwhbk89j72y1bqi6n";
   };
 
   outputs = [
@@ -42,51 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
     ninja
-  ]
-  ++ lib.optionals withMruby [
-    bison
-    ruby
-  ]
-  ++ lib.optional withUring liburing;
-
+  ];
   buildInputs = [
-    brotli
     openssl
-    libcap
     libuv
-    perl
     zlib
-    wslay
   ];
-
-  cmakeFlags = [
-    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
-  ];
-
-  postInstall = ''
-    EXES="$(find "$out/share/h2o" -type f -executable)"
-    for exe in $EXES; do
-      wrapProgram "$exe" \
-        --set "H2O_PERL" "${lib.getExe perl}" \
-        --prefix "PATH" : "${lib.getBin openssl}/bin"
-    done
-  '';
-
-  passthru = {
-    tests = { inherit (nixosTests) h2o; };
-  };
 
   meta = with lib; {
-    description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
+    description = "Optimized HTTP/1 and HTTP/2 server";
     homepage = "https://h2o.examp1e.net";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      toastal
-      thoughtpolice
-    ];
-    mainProgram = "h2o";
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = platforms.linux;
   };
-})
+}

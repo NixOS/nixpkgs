@@ -13,6 +13,7 @@ buildPythonPackage {
   format = "setuptools";
   inherit version;
 
+  dontUseSetuptoolsCheck = true;
   propagatedBuildInputs = [
     pillow
     numpy

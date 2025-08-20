@@ -1,99 +1,98 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
 
-  # build time
-  autoreconfHook,
-  flex,
-  bison,
-  perl,
-  pkg-config,
-  texinfo,
-  buildPackages,
-  grpc,
-  protobuf,
-  which,
+# build time
+, autoreconfHook
+, flex
+, bison
+, perl
+, pkg-config
+, texinfo
+, buildPackages
 
-  # runtime
-  c-ares,
-  json_c,
-  libcap,
-  elfutils,
-  libunwind,
-  libyang,
-  net-snmp,
-  openssl,
-  pam,
-  pcre2,
-  python3,
-  readline,
-  rtrlib,
-  protobufc,
-  zeromq,
+# runtime
+, c-ares
+, json_c
+, libcap
+, elfutils
+, libunwind
+, libyang
+, net-snmp
+, openssl
+, pam
+, pcre2
+, python3
+, readline
+, rtrlib
+, protobufc
+, zeromq
 
-  # tests
-  net-tools,
-  nixosTests,
+# tests
+, nettools
+, nixosTests
 
-  # general options
-  snmpSupport ? true,
-  rpkiSupport ? true,
-  numMultipath ? 64,
-  watchfrrSupport ? true,
-  cumulusSupport ? false,
-  rtadvSupport ? true,
-  irdpSupport ? true,
-  routeReplacementSupport ? true,
-  mgmtdSupport ? true,
-  # Experimental as of 10.1, reconsider if upstream changes defaults
-  grpcSupport ? false,
 
-  # routing daemon options
-  bgpdSupport ? true,
-  ripdSupport ? true,
-  ripngdSupport ? true,
-  ospfdSupport ? true,
-  ospf6dSupport ? true,
-  ldpdSupport ? true,
-  nhrpdSupport ? true,
-  eigrpdSupport ? true,
-  babeldSupport ? true,
-  isisdSupport ? true,
-  pimdSupport ? true,
-  pim6dSupport ? true,
-  sharpdSupport ? true,
-  fabricdSupport ? true,
-  vrrpdSupport ? true,
-  pathdSupport ? true,
-  bfddSupport ? true,
-  pbrdSupport ? true,
-  staticdSupport ? true,
+# general options
+, snmpSupport ? true
+, rpkiSupport ? true
+, numMultipath ? 64
+, watchfrrSupport ? true
+, cumulusSupport ? false
+, rtadvSupport ? true
+, irdpSupport ? true
+, routeReplacementSupport ? true
+, mgmtdSupport ? true
 
-  # BGP options
-  bgpAnnounce ? true,
-  bgpBmp ? true,
-  bgpVnc ? true,
+# routing daemon options
+, bgpdSupport ? true
+, ripdSupport ? true
+, ripngdSupport ? true
+, ospfdSupport ? true
+, ospf6dSupport ? true
+, ldpdSupport ? true
+, nhrpdSupport ? true
+, eigrpdSupport ? true
+, babeldSupport ? true
+, isisdSupport ? true
+, pimdSupport ? true
+, pim6dSupport ? true
+, sharpdSupport ? true
+, fabricdSupport ? true
+, vrrpdSupport ? true
+, pathdSupport ? true
+, bfddSupport ? true
+, pbrdSupport ? true
+, staticdSupport ? true
 
-  # OSPF options
-  ospfApi ? true,
+# BGP options
+, bgpAnnounce ? true
+, bgpBmp ? true
+, bgpVnc ? true
+
+# OSPF options
+, ospfApi ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.4.1";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = "frr";
-    rev = "frr-${finalAttrs.version}";
-    hash = "sha256-pEnMOy1/gIs8a/XCGixF3ZkSwUZ1PPuaSFBminY86DA=";
+    repo = finalAttrs.pname;
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-pmFdxL8QpyXvpX2YiSOZ+KIoNaj1OOH6/qnVAWZLE9s=";
   };
 
-  # Without the std explicitly set, we may run into abseil-cpp
-  # compilation errors.
-  CXXFLAGS = "-std=gnu++23";
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-44070.patch";
+      url = "https://github.com/FRRouting/frr/commit/fea4ed5043b4a523921f970a39a565d2c1ca381f.patch";
+      hash = "sha256-X9FjQeOvo92+mL1z3u5W0LBhhePDAyhFAqh8sAtNNm8=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -101,12 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     perl
     pkg-config
-    protobufc
     python3.pkgs.sphinx
     texinfo
-  ]
-  ++ lib.optionals grpcSupport [
-    which
+    protobufc
   ];
 
   buildInputs = [
@@ -122,19 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     rtrlib
     zeromq
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-  ]
-  ++ lib.optionals snmpSupport [
+  ] ++ lib.optionals snmpSupport [
     net-snmp
-  ]
-  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ]
-  ++ lib.optionals grpcSupport [
-    grpc
-    protobuf
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
@@ -144,10 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
   # navigation in dependency hell
-  clippy-helper = buildPackages.callPackage ./clippy-helper.nix {
-    frrVersion = finalAttrs.version;
-    frrSource = finalAttrs.src;
-  };
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = finalAttrs.version; frrSource = finalAttrs.src; };
 
   configureFlags = [
     "--disable-silent-rules"
@@ -170,7 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature irdpSupport "irdp")
     (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
-    (lib.strings.enableFeature grpcSupport "grpc")
 
     # routing protocols
     (lib.strings.enableFeature bgpdSupport "bgpd")
@@ -200,8 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature ospfApi "ospfapi")
     # Cumulus options
     (lib.strings.enableFeature cumulusSupport "cumulus")
-  ]
-  ++ lib.optionals snmpSupport [
+  ] ++ lib.optionals snmpSupport [
     # Used during build for paths, `dev` has build shebangs so can be run during build.
     "NETSNMP_CONFIG=${lib.getDev net-snmp}/bin/net-snmp-config"
   ];
@@ -215,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
-    net-tools
+    nettools
     python3.pkgs.pytest
   ];
 
@@ -246,14 +230,8 @@ stdenv.mkDerivation (finalAttrs: {
       infrastructure, web 2.0 businesses, hyperscale services, and Fortune 500
       private clouds.
     '';
-    license = with licenses; [
-      gpl2Plus
-      lgpl21Plus
-    ];
-    maintainers = with maintainers; [
-      woffs
-      thillux
-    ];
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ woffs thillux ];
     # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
     platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
   };

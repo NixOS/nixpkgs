@@ -2,23 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  six,
+  future,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textfsm";
-  version = "2.1.0";
-  pyproject = true;
+  version = "1.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    tag = "v${version}";
-    hash = "sha256-ygVcDdT85mRN+qYfTZqraRVyp2JlLwwujBW1e/pPJNc=";
+    rev = "v${version}";
+    hash = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
   };
 
-  build-system = [ setuptools ];
+  # upstream forgot to update the release version
+  postPatch = ''
+    substituteInPlace textfsm/__init__.py \
+      --replace "1.1.2" "1.1.3"
+  '';
+
+  propagatedBuildInputs = [
+    six
+    future
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  replaceVars,
+  substituteAll,
   nixosTests,
 
   docbook_xml_dtd_45,
@@ -34,6 +34,7 @@
   gnutar,
   json-glib,
   libcap,
+  libsoup_2_4,
   libyaml,
   ostree,
   patch,
@@ -64,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./respect-xml-catalog-files-var.patch
 
     # Hardcode paths
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
@@ -79,7 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
 
-    (replaceVars ./fix-test-paths.patch {
+    (substituteAll {
+      src = ./fix-test-paths.patch;
       inherit glibcLocales;
     })
     ./fix-test-prefix.patch
@@ -108,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json-glib
     libcap
+    libsoup_2_4
     libxml2
     libyaml
     ostree

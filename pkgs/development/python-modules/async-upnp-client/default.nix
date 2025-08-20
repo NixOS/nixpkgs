@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   setuptools,
@@ -22,20 +23,19 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.45.0";
+  version = "0.42.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     tag = version;
-    hash = "sha256-bRUEnedPDFBgpJeDPRG6e6fQUJ/R2RaasVKHZX7COp8=";
+    hash = "sha256-xIa7QeflS7JxkPoV8KqFfuLfHPpnrBGLeOFSa17IHyk=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
-    "defusedxml"
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
 
   build-system = [ setuptools ];
 
@@ -54,13 +54,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_decode_ssdp_packet"
-    "test_microsoft_butchers_ssdp"
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_deferred_callback_url" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_deferred_callback_url" ];
 
   disabledTestPaths = [
     # Tries to bind to multicast socket and fails to find proper interface
@@ -69,12 +66,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_upnp_client" ];
 
-  meta = {
+  meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
-    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
     mainProgram = "upnp-client";
   };
 }

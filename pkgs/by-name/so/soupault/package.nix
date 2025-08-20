@@ -3,8 +3,6 @@
   darwin,
   fetchzip,
   ocamlPackages,
-  ocaml,
-  removeReferencesTo,
   soupault,
   stdenv,
   testers,
@@ -12,7 +10,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "5.1.0";
+  version = "4.11.0";
 
   minimalOCamlVersion = "4.13";
 
@@ -21,20 +19,16 @@ ocamlPackages.buildDunePackage rec {
       "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
       "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
     ];
-    hash = "sha256-yAkJgNwF763b2DFGA+4Ve+jafFxZbFDm3QxisDD6gYo=";
+    hash = "sha256-UABbrNNcNaN9NgtAjCs4HUoNXMaK4QvCuWERuEnMG6I=";
   };
 
-  nativeBuildInputs = [
-    removeReferencesTo
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.sigtool
   ];
 
   buildInputs = with ocamlPackages; [
     base64
     camomile
-    cmarkit
     containers
     csv
     digestif
@@ -53,10 +47,6 @@ ocamlPackages.buildDunePackage rec {
     tsort
     yaml
   ];
-
-  postFixup = ''
-    find "$out" -type f -exec remove-references-to -t ${ocaml} '{}' +
-  '';
 
   passthru.tests.version = testers.testVersion {
     package = soupault;

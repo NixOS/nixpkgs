@@ -12,26 +12,7 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.1.12";
-  virtualboxSubVersion = "";
-  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
-
-  platform =
-    if stdenv.hostPlatform.isAarch64 then
-      "arm64"
-    else if stdenv.hostPlatform.is32bit then
-      "x86"
-    else
-      "amd64";
-
-  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
-    inherit
-      virtualboxVersion
-      virtualboxSubVersion
-      virtualboxSha256
-      platform
-      ;
-  };
+  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -65,9 +46,11 @@ let
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
-  version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
+  version = "${virtualBoxNixGuestAdditionsBuilder.version}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
+    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
+  }.tar.bz2";
   sourceRoot = ".";
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -81,14 +64,13 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ]
-  ++ kernel.moduleBuildDependencies;
+  ] ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
 
     # Build kernel modules.
-    cd src/vboxguest-${virtualboxVersion}_NixOS
+    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
     make
     cd ../..
@@ -120,7 +102,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     # Install kernel modules.
-    cd src/vboxguest-${virtualboxVersion}_NixOS
+    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
     make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
@@ -162,7 +144,7 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl2;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.friedrichaltheide
@@ -170,7 +152,6 @@ stdenv.mkDerivation {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

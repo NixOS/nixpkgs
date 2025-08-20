@@ -41,20 +41,25 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 <!-- TODO: figure out how to pull this externally? -->
 
 ```nix
-{
-  bash,
-  coreutils,
-  gnused,
-  goss,
-  lib,
-  resholve,
-  which,
+{ lib
+, fetchFromGitHub
+, resholve
+, bash
+, coreutils
+, goss
+, which
 }:
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = goss.version;
-  src = goss.src;
+  version = "0.4.2";
+
+  src = fetchFromGitHub {
+    owner = "goss-org";
+    repo = "goss";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
+  };
 
   dontConfigure = true;
   dontBuild = true;
@@ -68,27 +73,20 @@ resholve.mkDerivation rec {
     default = {
       scripts = [ "bin/dgoss" ];
       interpreter = "${bash}/bin/bash";
-      inputs = [
-        coreutils
-        gnused
-        which
-      ];
+      inputs = [ coreutils which ];
       keep = {
         "$CONTAINER_RUNTIME" = true;
       };
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
     changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      hyzual
-      anthonyroussel
-    ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hyzual anthonyroussel ];
     mainProgram = "dgoss";
   };
 }
@@ -103,26 +101,20 @@ trivial, so I'll also link to some real-world examples:
 
 ```nix
 {
-  resholvedScript =
-    resholve.writeScript "name"
-      {
-        inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
-      }
-      ''
-        echo "Hello"
-        file .
-      '';
-  resholvedScriptBin =
-    resholve.writeScriptBin "name"
-      {
-        inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
-      }
-      ''
-        echo "Hello"
-        file .
-      '';
+  resholvedScript = resholve.writeScript "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+  resholvedScriptBin = resholve.writeScriptBin "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
 }
 ```
 
@@ -133,11 +125,7 @@ This function has a similar API to `writeScript` and `writeScriptBin`, except it
 trivial for now. If you have a real usage that you find helpful, please PR it.
 
 ```nix
-{
-  stdenv,
-  resholve,
-  module1,
-}:
+{ stdenv, resholve, module1 }:
 
 stdenv.mkDerivation {
   # pname = "testmod3";
@@ -152,10 +140,7 @@ stdenv.mkDerivation {
       interpreter = "${bash}/bin/bash";
       inputs = [ module1 ];
       fake = {
-        external = [
-          "jq"
-          "openssl"
-        ];
+        external = [ "jq" "openssl" ];
       };
     }}
   '';
@@ -235,10 +220,7 @@ from the manpage, and the Nix equivalents:
   fake = {
     # fake accepts the initial of valid identifier types as a CLI convenience.
     # Use full names in the Nix API.
-    function = [
-      "setUp"
-      "tearDown"
-    ];
+    function = [ "setUp" "tearDown" ];
     builtin = [ "setopt" ];
     source = [ "/etc/bashrc" ];
   };

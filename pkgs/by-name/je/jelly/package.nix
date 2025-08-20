@@ -7,7 +7,6 @@
 python3Packages.buildPythonApplication {
   pname = "jelly";
   version = "0.1.31";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "DennisMitchell";
@@ -16,9 +15,7 @@ python3Packages.buildPythonApplication {
     sha256 = "1rpclqagvigp5qhvgnjavvy463f1drshnc1mfxm6z7ygzs0l0yz6";
   };
 
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = [ python3Packages.sympy ];
+  propagatedBuildInputs = [ python3Packages.sympy ];
 
   # checks are disabled because jelly has no tests, and the default is to run
   # the output binary with no arguments, which exits with status 1 and causes

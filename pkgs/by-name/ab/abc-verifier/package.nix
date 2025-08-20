@@ -29,15 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   # needed by yosys
   passthru.rev = finalAttrs.src.rev;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for squential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    license = licenses.mit;
+    maintainers = with maintainers; [
       thoughtpolice
       Luflosi
     ];
     mainProgram = "abc";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

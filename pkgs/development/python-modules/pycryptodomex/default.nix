@@ -1,6 +1,6 @@
 { pycryptodome }:
 
-(pycryptodome.overrideAttrs (oldAttrs: {
+(pycryptodome.overrideAttrs (oldAttrs: rec {
   pname = "pycryptodomex";
 
   postPatch = ''

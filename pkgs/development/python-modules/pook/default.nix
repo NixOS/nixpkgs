@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   furl,
@@ -7,15 +8,15 @@
   jsonschema,
   pytest-asyncio,
   pytest-httpbin,
-  pytest-pook,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonOlder,
+  requests,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "2.1.3";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,30 +25,26 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = "pook";
     tag = "v${version}";
-    hash = "sha256-DDHaKsye28gxyorILulrLRBy/B9zV673jeVZ85uPZAo=";
+    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
+    aiohttp
     furl
     jsonschema
+    requests
     xmltodict
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpbin
-    pytest-pook
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "pook" ];
-
-  disabledTests = [
-    # furl compat issue
-    "test_headers_not_matching"
-  ];
 
   disabledTestPaths = [
     # Don't test integrations
@@ -55,9 +52,6 @@ buildPythonPackage rec {
     # Tests require network access
     "tests/unit/interceptors/"
   ];
-
-  # Tests use sockets
-  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "HTTP traffic mocking and testing";

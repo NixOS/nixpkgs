@@ -9,7 +9,6 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -38,7 +37,6 @@
   limesuite,
   pkg-config,
   zeromq,
-  udevCheckHook,
 }:
 
 let
@@ -47,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-zd88QHYhqxAQlzozXZMKXCFWKYqvGsPHhNxmkdexOOE=";
+    hash = "sha256-J9WPoaULH6UXL1q1O76+IDW97ydQWkHIID6n7wvOdE4=";
   };
 
   buildIndi3rdParty =
@@ -69,27 +67,26 @@ let
         pname = "indi-3rdparty-${pname}";
         inherit src version;
 
-        sourceRoot = "${src.name}/${pname}";
+        sourceRoot = "source/${pname}";
 
-        cmakeFlags = [
-          "-DCMAKE_INSTALL_LIBDIR=lib"
-          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-          "-DINDI_DATA_DIR=share/indi/"
-        ]
-        ++ lib.optional doCheck [
-          "-DINDI_BUILD_UNITTESTS=ON"
-          "-DINDI_BUILD_INTEGTESTS=ON"
-        ]
-        ++ cmakeFlags;
+        cmakeFlags =
+          [
+            "-DCMAKE_INSTALL_LIBDIR=lib"
+            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+            "-DINDI_DATA_DIR=share/indi/"
+          ]
+          ++ lib.optional doCheck [
+            "-DINDI_BUILD_UNITTESTS=ON"
+            "-DINDI_BUILD_INTEGTESTS=ON"
+          ]
+          ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
-          udevCheckHook
-        ]
-        ++ nativeBuildInputs;
+        ] ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 
@@ -105,8 +102,6 @@ let
           done
           ${postInstall}
         '';
-
-        doInstallCheck = true;
 
         meta =
           with lib;
@@ -125,6 +120,29 @@ let
           // meta;
       }
     );
+
+  libahp-gt = buildIndi3rdParty {
+    pname = "libahp-gt";
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+    };
+  };
+
+  # broken: needs libdfu
+  libahp-xc = buildIndi3rdParty {
+    pname = "libahp-xc";
+    buildInputs = [
+      libusb-compat-0_1
+      urjtag
+      libftdi1
+    ];
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      broken = true;
+      platforms = [ ];
+    };
+  };
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
@@ -154,9 +172,8 @@ let
 
     postPatch = ''
       substituteInPlace 99-asi.rules \
-        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${lib.getExe bash}" \
-        --replace-fail "/bin/chmod" "${lib.getBin coreutils}/bin/chmod"
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
     '';
 
     buildInputs = [
@@ -333,8 +350,8 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${lib.getExe bash}"
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
     '';
 
     buildInputs = [
@@ -359,7 +376,7 @@ let
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware" \
-        --replace-fail "/bin/sleep" "${lib.getBin coreutils}/bin/sleep"
+        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -447,15 +464,6 @@ let
     };
   };
 
-  libsvbonycam = buildIndi3rdParty {
-    pname = "libsvbonycam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
-      license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
-    };
-  };
-
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -482,20 +490,12 @@ in
     buildInputs = [ indilib ];
   };
 
-  indi-ahp-xc = buildIndi3rdParty {
-    pname = "indi-ahp-xc";
-    buildInputs = [
-      cfitsio
-      indilib
-      libnova
-      zlib
-    ];
-    meta = {
-      platforms = [ ];
-      # libahc-xc not packaged
-      broken = true;
-    };
-  };
+  # libahc-xc needs libdfu, which is not packaged
+  # indi-ahp-xc = buildIndi3rdParty {
+  #   pname = "indi-ahp-xc";
+  #   buildInputs = [ cfitsio indilib libahp-xc libnova zlib ];
+  #   meta.platforms = libahp-xc.meta.platforms;
+  # };
 
   indi-aok = buildIndi3rdParty {
     pname = "indi-aok";
@@ -658,9 +658,11 @@ in
       indilib
       gsl
       gtest
+      libahp-gt
       libnova
       zlib
     ];
+    meta.platforms = libahp-gt.meta.platforms;
   };
 
   indi-ffmv = buildIndi3rdParty {
@@ -760,6 +762,7 @@ in
     meta.platforms = libinovasdk.meta.platforms;
   };
 
+  # broken, wants rpicam-apps
   indi-libcamera = buildIndi3rdParty {
     pname = "indi-libcamera";
     buildInputs = [
@@ -775,7 +778,6 @@ in
       zlib
     ];
     meta.platforms = [ ];
-    # broken, wants rpicam-apps
     meta.broken = true;
   };
 
@@ -877,7 +879,6 @@ in
       cfitsio
       indilib
       libraw
-      libjpeg
       zlib
     ];
     propagatedBuildInputs = [
@@ -972,14 +973,6 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/db8106a9a03e0cfb700e02841d46f8b97b5513e0.patch";
-        hash = "sha256-JJatmu/dxFEni6CdR6QUn7+EiPe18EwE7OmrCT8Nk2c=";
-        stripLen = 1;
-      })
-    ];
   };
 
   indi-starbook = buildIndi3rdParty {
@@ -1048,7 +1041,6 @@ in
       libogmacam
       libomegonprocam
       libstarshootg
-      libsvbonycam
       libtoupcam
       libtscam
     ];

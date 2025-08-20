@@ -23,8 +23,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "cryptography" ];
-
   dependencies = [ cryptography ];
 
   optional-dependencies = {

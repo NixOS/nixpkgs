@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ckolivas";
-    repo = "lrzip";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ]
-  ++ lib.optionals isx86 [ nasm ];
+  ] ++ lib.optionals isx86 [ nasm ];
 
   buildInputs = [
     zlib

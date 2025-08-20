@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsdOriginal
     ];
     mainProgram = "xosview2";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (libX11.meta) platforms;
   };
 })

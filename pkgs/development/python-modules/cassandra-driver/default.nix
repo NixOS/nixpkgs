@@ -21,7 +21,6 @@
   twisted,
   setuptools,
   distutils,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -56,8 +55,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -88,7 +86,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl
@@ -116,8 +114,6 @@ buildPythonPackage rec {
   };
 
   meta = {
-    # cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ []
-    broken = pythonAtLeast "3.13";
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";

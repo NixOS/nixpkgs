@@ -42,8 +42,7 @@ buildGhidraExtension {
     bison
     texinfo
     perl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [ zlib ];
   gradleBuildTask = "assemble";

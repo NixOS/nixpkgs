@@ -28,12 +28,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "twspace_dl" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python module to download twitter spaces";
     homepage = "https://github.com/HoloArchivists/twspace-dl";
     changelog = "https://github.com/HoloArchivists/twspace-dl/releases/tag/${version}";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Only;
+    maintainers = [ ];
     mainProgram = "twspace_dl";
   };
 }

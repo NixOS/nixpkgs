@@ -1,11 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  inkcut,
-  callPackage,
-  texlive,
+{ lib, stdenv
+, fetchFromGitHub
+, runCommand
+, inkcut
+, callPackage
+, texlive
 }:
 
 {
@@ -42,12 +40,10 @@
       platforms = platforms.all;
     };
   };
-  inkcut = (
-    runCommand "inkcut-inkscape-plugin" { } ''
-      mkdir -p $out/share/inkscape/extensions
-      cp ${inkcut}/share/inkscape/extensions/* $out/share/inkscape/extensions
-    ''
-  );
+  inkcut = (runCommand "inkcut-inkscape-plugin" {} ''
+    mkdir -p $out/share/inkscape/extensions
+    cp ${inkcut}/share/inkscape/extensions/* $out/share/inkscape/extensions
+  '');
   inkstitch = callPackage ./extensions/inkstitch { };
   silhouette = callPackage ./extensions/silhouette { };
   textext = callPackage ./extensions/textext {

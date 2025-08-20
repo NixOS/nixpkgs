@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jketterl/pycsdr";
-    description = "Bindings for the csdr library";
+    description = "bindings for the csdr library";
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.c3d2 ];
+    maintainers = lib.teams.c3d2.members;
   };
 }

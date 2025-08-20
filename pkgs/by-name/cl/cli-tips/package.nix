@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "cli-tips";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2024-12-26";
 
   src = fetchFromGitHub {
     owner = "cli-stuff";
     repo = "cli-tips";
-    rev = "34e37224b51362003d1c5af2b0b6bc2a02b668d9";
-    hash = "sha256-ZJQGa7gaR76zsdZOVoIf87h2wraFFOuonJEDy6J8ygQ=";
+    rev = "ddb654baa8ffda13e325e2d48f1089c64025153a";
+    hash = "sha256-eRQcYoqDxhsfbOdWGcYABQMcwjwmYQXfAUzTKeKPW8I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

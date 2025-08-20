@@ -7,6 +7,7 @@
   fftw,
   fftwSinglePrec,
   hdf5,
+  ilmbase,
   libjpeg,
   libpng,
   libtiff,
@@ -17,22 +18,18 @@
 let
   python = python3.withPackages (py: with py; [ numpy ]);
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "vigra";
-  version = "1.12.1";
+  version = "unstable-2022-01-11";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
-    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-ZmHj1BSyoMBCuxI5hrRiBEb5pDUsGzis+T5FSX27UN8=";
+    rev = "093d57d15c8c237adf1704d96daa6393158ce299";
+    sha256 = "sha256-pFANoT00Wkh1/Dyd2x75IVTfyaoVA7S86tafUSr29Og=";
   };
 
-  patches = [
-    # Patches to fix compiling on LLVM 19 from https://github.com/ukoethe/vigra/pull/592
-    ./fix-llvm-19-1.patch
-    ./fix-llvm-19-2.patch
-  ];
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -40,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
     fftwSinglePrec
     hdf5
+    ilmbase
     libjpeg
     libpng
     libtiff
@@ -47,36 +45,22 @@ stdenv.mkDerivation (finalAttrs: {
     python
   ];
 
-  postPatch = ''
-    chmod +x config/run_test.sh.in
-    patchShebangs --build config/run_test.sh.in
-  '';
-
-  cmakeFlags = [
-    "-DWITH_OPENEXR=1"
-    "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-    "-DCMAKE_CXX_FLAGS=-fPIC"
-    "-DCMAKE_C_FLAGS=-fPIC"
-  ];
-
-  enableParallelBuilding = true;
-
-  passthru = {
-    tests = {
-      check = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-        doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-      });
-    };
-  };
+  cmakeFlags =
+    [
+      "-DWITH_OPENEXR=1"
+      "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      "-DCMAKE_CXX_FLAGS=-fPIC"
+      "-DCMAKE_C_FLAGS=-fPIC"
+    ];
 
   meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = licenses.mit;
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
-})
+}

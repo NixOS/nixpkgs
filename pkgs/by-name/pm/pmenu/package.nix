@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       stdin, shows a menu for the user to select one of the options, and outputs
       the option selected to stdout.
     '';
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.azahi ];
     platforms = lib.platforms.unix;
     mainProgram = "pmenu";
   };

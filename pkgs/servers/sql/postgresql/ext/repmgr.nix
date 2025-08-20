@@ -1,22 +1,23 @@
 {
-  curl,
-  fetchFromGitHub,
-  flex,
-  json_c,
   lib,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
+  flex,
+  curl,
+  json_c,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "repmgr";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "repmgr";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
+    rev = "v${version}";
+    sha256 = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
   };
 
   nativeBuildInputs = [ flex ];
@@ -26,11 +27,11 @@ postgresqlBuildExtension (finalAttrs: {
     json_c
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
-    license = lib.licenses.postgresql;
+    license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ zimbatm ];
   };
-})
+}

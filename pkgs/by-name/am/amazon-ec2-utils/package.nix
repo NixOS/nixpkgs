@@ -12,7 +12,6 @@
   nix-update-script,
   python3,
   stdenv,
-  udevCheckHook,
   util-linux,
 }:
 
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -94,11 +92,7 @@ stdenv.mkDerivation rec {
 
   # We can't run `ec2-metadata` since it calls IMDS even with `--help`.
   installCheckPhase = ''
-    runHook preInstallCheck
-
     $out/bin/ebsnvme-id --help
-
-    runHook postInstallCheck
   '';
 
   passthru = {

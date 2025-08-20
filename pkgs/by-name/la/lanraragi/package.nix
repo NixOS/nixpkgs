@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  perl,
-  ghostscript,
-  nixosTests,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, perl
+, ghostscript
+, nixosTests
 }:
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.41";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
-    tag = "v.${version}";
-    hash = "sha256-HF2g8rrcV6f6ZTKmveS/yjil/mBxpvRUFyauv5f+qQ8=";
+    rev = "v.${version}";
+    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
   };
 
   patches = [
@@ -28,50 +27,41 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-RAjZGuK0C6R22fVFq82GPQoD1HpRs3MYMluUAV5ZEc8=";
 
-  nativeBuildInputs = [
-    perl
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ perl makeBinaryWrapper ];
 
-  buildInputs =
-    with perl.pkgs;
-    [
-      perl
-      ImageMagick
-      locallib
-      Redis
-      Encode
-      ArchiveLibarchiveExtract
-      ArchiveLibarchivePeek
-      ListMoreUtils
-      NetDNSNative
-      SortNaturally
-      AuthenPassphrase
-      FileReadBackwards
-      URI
-      LogfileRotate
-      Mojolicious
-      MojoliciousPluginTemplateToolkit
-      MojoliciousPluginRenderFile
-      MojoliciousPluginStatus
-      IOSocketSocks
-      IOSocketSSL
-      CpanelJSONXS
-      Minion
-      MinionBackendRedis
-      ProcSimple
-      ParallelLoops
-      SysCpuAffinity
-      FileChangeNotify
-      ModulePluggable
-      TimeLocal
-      YAMLPP
-      StringSimilarity
-      CHI
-      CacheFastMmap
-      LocaleMaketextLexicon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
+  buildInputs = with perl.pkgs; [
+    perl
+    ImageMagick
+    locallib
+    Redis
+    Encode
+    ArchiveLibarchiveExtract
+    ArchiveLibarchivePeek
+    ListMoreUtils
+    NetDNSNative
+    SortNaturally
+    AuthenPassphrase
+    FileReadBackwards
+    URI
+    LogfileRotate
+    Mojolicious
+    MojoliciousPluginTemplateToolkit
+    MojoliciousPluginRenderFile
+    MojoliciousPluginStatus
+    IOSocketSocks
+    IOSocketSSL
+    CpanelJSONXS
+    Minion
+    MinionBackendRedis
+    ProcSimple
+    ParallelLoops
+    SysCpuAffinity
+    FileChangeNotify
+    ModulePluggable
+    TimeLocal
+    YAMLPP
+    StringSimilarity
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
 
   buildPhase = ''
     runHook preBuild
@@ -126,7 +116,7 @@ buildNpmPackage rec {
   passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
-    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.rev}";
     description = "Web application for archival and reading of manga/doujinshi";
     homepage = "https://github.com/Difegue/LANraragi";
     license = lib.licenses.mit;

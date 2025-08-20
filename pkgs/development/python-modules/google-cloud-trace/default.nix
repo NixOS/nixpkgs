@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.16.2";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_trace";
     inherit version;
-    hash = "sha256-ib7yI6USRllR60kzW+bWC+4DltV2YC2/VjaEOdMDyrQ=";
+    hash = "sha256-wgy+9eUr6MpiiiL+vmW49F/dpoW7Rv/KNvTs6keOxKM=";
   };
 
   build-system = [ setuptools ];
@@ -32,8 +32,7 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils

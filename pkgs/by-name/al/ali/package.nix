@@ -1,11 +1,10 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
-  stdenv,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "ali";
   version = "0.7.5";
 
@@ -18,16 +17,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-YWx9K04kTMaI0FXebwRQVCt0nxIwZ6xlbtI2lk3qp0M=";
 
-  meta = {
+  meta = with lib; {
     description = "Generate HTTP load and plot the results in real-time";
     homepage = "https://github.com/nakabonne/ali";
     changelog = "https://github.com/nakabonne/ali/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ farcaller ];
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ farcaller ];
     mainProgram = "ali";
-    # Broken on darwin for Go toolchain > 1.22, with error:
-    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

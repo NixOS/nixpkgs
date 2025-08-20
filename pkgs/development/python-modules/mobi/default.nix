@@ -6,7 +6,6 @@
   poetry-core,
   pythonOlder,
   setuptools,
-  standard-imghdr,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [ "loguru" ];
-
-  dependencies = [ standard-imghdr ];
 
   nativeBuildInputs = [
     poetry-core

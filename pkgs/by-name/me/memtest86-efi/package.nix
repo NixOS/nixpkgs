@@ -7,7 +7,7 @@
   mtools,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "memtest86-efi";
   version = "9.3.1000";
 

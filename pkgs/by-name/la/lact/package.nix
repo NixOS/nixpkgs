@@ -3,125 +3,70 @@
   rustPlatform,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   pkg-config,
   wrapGAppsHook4,
-  bashNonInteractive,
   gdk-pixbuf,
   gtk4,
   libdrm,
-  ocl-icd,
   vulkan-loader,
-  vulkan-tools,
   coreutils,
-  systemdMinimal,
-  nix-update-script,
-  nixosTests,
-  hwdata,
-  fuse3,
-  autoAddDriverRunpath,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.8.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bgMQTiNeJR6zPTy/YpQ0oI1oGBzCf+VtBUn6pgADZAY=";
+    rev = "v${version}";
+    hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
   };
 
-  cargoHash = "sha256-VxyYnX6AW+AS4NOB1XZXi2Dyrf4rtJzKHXMYwgLY6pQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rgpBmoGCNMU5nFVxzNtqsPaOn93mHW5P2isKgbP9UN4=";
 
   nativeBuildInputs = [
+    blueprint-compiler
     pkg-config
     wrapGAppsHook4
-    rustPlatform.bindgenHook
-    autoAddDriverRunpath
   ];
 
   buildInputs = [
     gdk-pixbuf
     gtk4
     libdrm
-    ocl-icd
     vulkan-loader
-    vulkan-tools
-    hwdata
-    fuse3
   ];
 
-  # we do this here so that the binary is usable during integration tests
-  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
-    lib.concatStringsSep " " [
-      "-C link-arg=-Wl,-rpath,${
-        lib.makeLibraryPath [
-          vulkan-loader
-          libdrm
-          ocl-icd
-        ]
-      }"
-      "-C link-arg=-Wl,--add-needed,${vulkan-loader}/lib/libvulkan.so"
-      "-C link-arg=-Wl,--add-needed,${libdrm}/lib/libdrm.so"
-      "-C link-arg=-Wl,--add-needed,${ocl-icd}/lib/libOpenCL.so"
-    ]
-  );
+  checkFlags = [
+    # tries and fails to initialize gtk
+    "--skip=app::pages::thermals_page::fan_curve_frame::tests::set_get_curve"
+  ];
 
   postPatch = ''
-    substituteInPlace lact-daemon/src/system.rs \
+    substituteInPlace lact-daemon/src/server/system.rs \
       --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
-
-    substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'run_command("journalctl",'  'run_command("${systemdMinimal}/bin/journalctl",'
-
-    substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'Command::new("sh")' 'Command::new("${bashNonInteractive}/bin/bash")'
-
-    substituteInPlace lact-daemon/src/server/vulkan.rs \
-      --replace-fail 'Command::new("vulkaninfo")' 'Command::new("${vulkan-tools}/bin/vulkaninfo")'
-
-    substituteInPlace lact-daemon/src/socket.rs \
-      --replace-fail 'run_command("chown"' 'run_command("${coreutils}/bin/chown"'
 
     substituteInPlace res/lactd.service \
       --replace-fail ExecStart={lact,$out/bin/lact}
 
-    # read() looks for the database in /usr/share so we use read_from_file() instead
-    substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
+    substituteInPlace res/io.github.lact-linux.desktop \
+      --replace-fail Exec={lact,$out/bin/lact}
   '';
 
   postInstall = ''
     install -Dm444 res/lactd.service -t $out/lib/systemd/system
-    install -Dm444 res/io.github.ilya_zlobintsev.LACT.desktop -t $out/share/applications
-    install -Dm444 res/io.github.ilya_zlobintsev.LACT.svg -t $out/share/pixmaps
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ vulkan-tools ]}"
-    )
+    install -Dm444 res/io.github.lact-linux.desktop -t $out/share/applications
+    install -Dm444 res/io.github.lact-linux.png -t $out/share/pixmaps
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/.lact-wrapped \
-    --add-needed libvulkan.so \
-    --add-needed libdrm.so \
-    --add-needed libOpenCL.so \
-    --add-rpath ${
-      lib.makeLibraryPath [
-        vulkan-loader
-        libdrm
-        ocl-icd
-      ]
+    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${
+      lib.makeLibraryPath [ vulkan-loader ]
     }
   '';
-
-  passthru.updateScript = nix-update-script { };
-  passthru.tests = {
-    inherit (nixosTests) lact;
-  };
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
@@ -130,10 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       figsoda
       atemu
-      cything
-      johnrtitor
     ];
     platforms = lib.platforms.linux;
     mainProgram = "lact";
   };
-})
+}

@@ -14,14 +14,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1M3p5QHMOBgmdEyr31Bhv7X8UdUmoeL0o1hWaw2tahQ=";
   };
 
-  cargoHash = "sha256-BSXbFKR4AOKhssj+m5PIfgaoeRVDK+KRkApi8FUa8jg=";
+  cargoHash = "sha256-zcU0xdVDFNfUZR+t/HdwRXEw4/5hmKgUX20gFm7lVhk=";
 
-  meta = {
+  meta = with lib; {
     description = "Rust implementation of the Starlark language";
     homepage = "https://github.com/facebook/starlark-rust";
     changelog = "https://github.com/facebook/starlark-rust/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "starlark";
   };
 }

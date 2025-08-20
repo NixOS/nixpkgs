@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  net-tools,
+  nettools,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-GN8yFnS7HVgIP73/nVtYnwwhCBI9doGHLGSOaFiWIdw=";
   };
 
-  propagatedBuildInputs = [ net-tools ];
+  propagatedBuildInputs = [ nettools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

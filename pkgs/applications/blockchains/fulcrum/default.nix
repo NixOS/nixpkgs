@@ -8,24 +8,25 @@
   qtbase,
   rocksdb_7_10,
   zeromq,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "fulcrum";
-  version = "1.12.0.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/RlvbZ6/f0Jxj6oCeHjGWqlktvtNUNczOXi2/wYw2LQ=";
+    rev = "v${version}";
+    sha256 = "sha256-+hBc7jW1MVLVjYXNOV7QvFJJpZ5RzW5/c9NdqOXrsj0=";
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
   ];
+
+  dontWrapQtApps = true; # no GUI
 
   buildInputs = [
     python3
@@ -34,15 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     zeromq
   ];
 
-  dontWrapQtApps = true; # no GUI
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";
     homepage = "https://github.com/cculianu/Fulcrum";
-    maintainers = with lib.maintainers; [ prusnak ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ prusnak ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
-})
+}

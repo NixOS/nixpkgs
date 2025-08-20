@@ -51,16 +51,16 @@ stdenv.mkDerivation rec {
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Angry IP Scanner - fast and friendly network scanner";
     mainProgram = "ipscan";
     homepage = "https://angryip.org";
     downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
     changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl2Only;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       kylesferrazza
       totoroot
     ];

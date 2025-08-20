@@ -7,7 +7,7 @@
   pidgin,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "purple-plugin-pack";
   version = "2.8.0";
 

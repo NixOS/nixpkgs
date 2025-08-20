@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "slok";
-    repo = "grafterm";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-0pM36rAmwx/P1KAlmVaGoSj8eb9JucYycNC2R867dVo=";
   };

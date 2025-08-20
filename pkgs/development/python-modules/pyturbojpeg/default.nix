@@ -7,23 +7,24 @@
   setuptools,
   numpy,
   python,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.8.0";
+  version = "1.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
     tag = "v${version}";
-    hash = "sha256-4DPkzHjEsVjioRNLZii/5gZIEbj8A8rNkL8UXUQsgdY=";
+    hash = "sha256-JPjGZGVMZH6sDNRdV6kWsCpEjLT2aMrTy+bI4mRbdpw=";
   };
 
   patches = [
-    (replaceVars ./lib-path.patch {
+    (substituteAll {
+      src = ./lib-path.patch;
       libturbojpeg = "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

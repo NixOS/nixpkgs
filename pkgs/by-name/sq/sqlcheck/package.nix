@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jarulraj";
     repo = "sqlcheck";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
     fetchSubmodules = true;
   };

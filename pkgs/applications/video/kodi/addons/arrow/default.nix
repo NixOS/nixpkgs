@@ -33,6 +33,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/razzeee/script.module.arrow";
     description = "Better dates & times for Python";
     license = licenses.asl20;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

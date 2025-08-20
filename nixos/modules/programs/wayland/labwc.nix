@@ -9,7 +9,7 @@ let
   cfg = config.programs.labwc;
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = with lib.maintainers; [ AndersonTorres ];
 
   options.programs.labwc = {
     enable = lib.mkEnableOption "labwc";

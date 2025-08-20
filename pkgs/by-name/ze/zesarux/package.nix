@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ZX Second-Emulator And Released for UniX";
     mainProgram = "zesarux";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

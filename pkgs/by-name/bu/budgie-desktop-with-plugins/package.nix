@@ -2,7 +2,6 @@
   lib,
   stdenv,
   glib,
-  gobject-introspection,
   xorg,
   wrapGAppsHook3,
   budgie-desktop,
@@ -21,7 +20,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
-    gobject-introspection.setupHook
     wrapGAppsHook3
   ];
 
@@ -56,7 +54,7 @@ stdenv.mkDerivation {
       homepage
       changelog
       license
-      teams
+      maintainers
       platforms
       ;
   };

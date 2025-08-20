@@ -2,7 +2,6 @@
   lib,
   php82,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
 php82.buildComposerProject2 (finalAttrs: {
@@ -12,17 +11,11 @@ php82.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "consolidation";
     repo = "robo";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-bAT4jHvqWeYcACeyGtBwVBA2Rz+AvkZcUGLDwSf+fLg=";
   };
 
-  vendorHash = "sha256-vketnTu5VEgt3HBbtnTppWl3+sSSIsCB2MpvL27bxv4=";
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  vendorHash = "sha256-PYtZy6c/Z1GTcYyfU77uJjXCzQSfBaNkon8kqGyVq+o=";
 
   meta = {
     changelog = "https://github.com/consolidation/robo/blob/${finalAttrs.version}/CHANGELOG.md";

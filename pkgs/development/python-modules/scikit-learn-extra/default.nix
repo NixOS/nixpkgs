@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
-    repo = "scikit-learn-extra";
+    repo = pname;
     tag = "v${version}";
     sha256 = "sha256-dHOwo6NIuhcvIehpuJQ621JEg5O3mnXycAhpTZKaxns=";
   };
@@ -42,10 +42,7 @@ buildPythonPackage rec {
     rm -r sklearn_extra
   '';
 
-  pytestFlags = [
-    "--pyargs"
-    "sklearn_extra"
-  ];
+  pytestFlagsArray = [ "--pyargs sklearn_extra" ];
   disabledTestPaths = [
     "benchmarks"
     "examples"

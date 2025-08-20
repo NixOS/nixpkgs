@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  libusb1,
-  libtool,
-  libexif,
-  libgphoto2,
-  libjpeg,
-  curl,
-  libxml2,
-  gd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, autoreconfHook
+, pkg-config
+, gettext
+, libusb1
+, libtool
+, libexif
+, libgphoto2
+, libjpeg
+, curl
+, libxml2
+, gd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.32";
+  version = "2.5.31";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-gUw3D/bHnKoiTInJVAzMCs5urWz4UHWywTLZUuRROqw=";
+    sha256 = "sha256-UmyDKEaPP9VJqi8f+y6JZcTlQomhMTN+/C//ODYx6/w=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -45,8 +44,6 @@ stdenv.mkDerivation rec {
     gd
   ];
 
-  doInstallCheck = true;
-
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
@@ -59,7 +56,10 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       executablePrefix =
-        if stdenv.buildPlatform == stdenv.hostPlatform then "$out" else buildPackages.libgphoto2;
+        if stdenv.buildPlatform == stdenv.hostPlatform then
+          "$out"
+        else
+          buildPackages.libgphoto2;
     in
     ''
       mkdir -p $out/lib/udev/{rules.d,hwdb.d}

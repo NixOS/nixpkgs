@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
-    repo = "pyclip";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-0nOkNgT8XCwtXI9JZntkhoMspKQU602rTKBFajVKBoM=";
   };
@@ -28,13 +28,12 @@ buildPythonPackage rec {
       --replace docs/README.md README.md
   '';
 
-  nativeCheckInputs = [
-    pytest
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xclip
-    xvfb-run
-  ];
+  nativeCheckInputs =
+    [ pytest ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xclip
+      xvfb-run
+    ];
 
   checkPhase = ''
     runHook preCheck

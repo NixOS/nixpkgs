@@ -1,14 +1,14 @@
 # Shims to mimic the shape of ../modules/generic/manifests/{feature,redistrib}/release.nix
 {
+  lib,
   package,
-  # redistSystem :: String
+  # redistArch :: String
   # String is `"unsupported"` if the given architecture is unsupported.
-  redistSystem,
+  redistArch,
 }:
 {
-  featureRelease = {
-    inherit (package) cudnnVersion minCudaVersion maxCudaVersion;
-    ${redistSystem}.outputs = {
+  featureRelease = lib.optionalAttrs (redistArch != "unsupported") {
+    ${redistArch}.outputs = {
       bin = true;
       lib = true;
       static = true;
@@ -19,6 +19,6 @@
   };
   redistribRelease = {
     name = "TensorRT: a high-performance deep learning interface";
-    inherit (package) hash filename version;
+    inherit (package) version;
   };
 }

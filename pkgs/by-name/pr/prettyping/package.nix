@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "prettyping";
-  version = "1.1.0";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "denilsonsa";
-    repo = "prettyping";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GhsoWnhX9xBnupmmHuKW9DA2KFgIzVbSO0CyR2FpJ74=";
+    sha256 = "05vfaq9y52z40245j47yjk1xaiwrazv15sgjq64w91dfyahjffxf";
   };
 
   installPhase = ''

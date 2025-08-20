@@ -1,50 +1,45 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, darwin
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.30.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
-    tag = "v${version}";
-    hash = "sha256-xgTGii1xGtCc1OLoC53HAtQ+KVZNO1plB2GVtVBBlqs=";
+    rev = "v${version}";
+    hash = "sha256-Hqrwko/HZTHlKzXuqm835fpygOO9wsQx1XkJddH/EUc=";
   };
 
-  cargoHash = "sha256-u2JBPm03qvuLEUOEt4YL9O750V2QPgZbxvsvlTQe2nk=";
+  cargoHash = "sha256-4CcwzaPIO+upISizpXHGYfKh9YD4foJAqx7TGgLCHZI=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Security
+  ];
+
   postInstall = ''
     installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mwdomino ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ mwdomino ];
     mainProgram = "aichat";
   };
 }

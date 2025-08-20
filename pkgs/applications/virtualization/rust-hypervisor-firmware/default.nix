@@ -12,14 +12,14 @@ let
 
 in
 
+assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
+
 let
   cross = import ../../../.. {
     system = stdenv.hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
       rust.rustcTarget = "${arch}-unknown-none";
-      rust.platform =
-        assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
-        lib.importJSON target;
+      rust.platform = lib.importJSON target;
     };
   };
 
@@ -29,16 +29,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-hypervisor-firmware";
-  version = "0.5.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
-    repo = "rust-hypervisor-firmware";
-    tag = version;
-    sha256 = "sha256-iLYmPBJH7I6EJ8VTUbR0+lZaebvbZlRv2KglbjKX76Q=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-hKk5pcop8rb5Q+IVchcl+XhMc3DCBBPn5P+AkAb9XxI=";
   };
 
-  cargoHash = "sha256-iqsU4t8Zz9UTtAu+a6kqwnPZ6qdGAriQ7hcU58KDQ8M=";
+  cargoHash = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
 
   # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249

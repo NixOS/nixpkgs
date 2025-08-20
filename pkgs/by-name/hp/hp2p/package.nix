@@ -2,22 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  mpi,
   python3Packages,
   autoconf,
   automake,
-  mpi,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "hp2p";
-  version = "4.2";
+  version = "unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "cea-hpc";
     repo = "hp2p";
-    tag = finalAttrs.version;
-    hash = "sha256-KuDf1VhLQRDDY3NZaNaHDVGipLmB8+1K36/W1fKnno0=";
+    rev = "711f6cc5b4e552d969c2436ad77afd35d31bfd05";
+    sha256 = "sha256-mBTJZb3DPmIlL7N+PfjlWmBw0WfFF2DesImVZlbDQKc=";
   };
 
   enableParallelBuilding = true;
@@ -26,13 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     python3Packages.wrapPython
   ];
-  buildInputs = [
-    mpi
-  ]
-  ++ (with python3Packages; [
-    python
-    plotly
-  ]);
+  buildInputs =
+    [ mpi ]
+    ++ (with python3Packages; [
+      python
+      plotly
+    ]);
   pythonPath = (with python3Packages; [ plotly ]);
 
   preConfigure = ''
@@ -46,21 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapPythonPrograms
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "MPI based benchmark for network diagnostics";
     homepage = "https://github.com/cea-hpc/hp2p";
-    changelog = "https://github.com/cea-hpc/hp2p/releases/tag/${finalAttrs.version}";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.cecill-c;
-    maintainers = [ lib.maintainers.bzizou ];
-    mainProgram = "hp2p.exe";
-    badPlatforms = [
-      # hp2p_algo_cpp.cpp:38:10: error: no member named 'random_shuffle' in namespace 'std'
-      lib.systems.inspect.patterns.isDarwin
-    ];
+    platforms = platforms.unix;
+    license = licenses.cecill-c;
+    maintainers = [ maintainers.bzizou ];
   };
-})
+}

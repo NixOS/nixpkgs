@@ -6,30 +6,38 @@
   installShellFiles,
   dbus,
   stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.16.3";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-oAA9EG06MTd88oiW93qIpnzjTWV2SoIDec/SLzI0ouQ=";
+    hash = "sha256-LSQ3ZM7BWXiwBqlw6usImpt+w+wC2EvkoAMblTb0pvg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-TtK8qGlioJ0yOrLhe2kQ/DrQmnz9wDJjRMS1r24HLE4=";
+  cargoHash = "sha256-w7mB0cAN5aRO1pw21BDIFUtnYUJUoYjW+7nXFCBfYgM=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [
-    dbus
-  ];
+  buildInputs =
+    [
+      dbus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd veryl \
@@ -54,25 +62,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=analyzer::test_68_std"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
-    "--skip=filelist::test"
-    "--skip=path::directory_directory"
-    "--skip=path::directory_target"
-    "--skip=path::source_directory"
-    "--skip=path::source_target"
-    "--skip=path::rootdir_directory_directory"
-    "--skip=path::rootdir_directory_target"
-    "--skip=path::rootdir_source_directory"
-    "--skip=path::rootdir_source_target"
-    "--skip=path::subdir_directory_directory"
-    "--skip=path::subdir_directory_target"
-    "--skip=path::subdir_source_directory"
-    "--skip=path::subdir_source_target"
   ];
 
   meta = {
     description = "Modern Hardware Description Language";
     homepage = "https://veryl-lang.org/";
-    changelog = "https://github.com/veryl-lang/veryl/releases/tag/v${version}";
+    changelog = "https://github.com/veryl-lang/veryl/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20

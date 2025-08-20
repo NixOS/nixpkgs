@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "pystemmer";
   version = "2.2.0.1";
-  format = "setuptools";
   pyproejct = true;
 
   src = fetchFromGitHub {

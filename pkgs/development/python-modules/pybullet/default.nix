@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "3.2.7";
+  version = "3.2.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BCh5240QGsdZDe5HX8at7VCLhf4Sc/27/eHYi9IA4U8=";
+    hash = "sha256-2idSVDPIhpjcn9i8IPpK5NB3OLRlZjNlnr2CwtKITgg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,10 +28,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ numpy ];
-
-  # Fix GCC 14 build.
-  # from incompatible pointer type [-Wincompatible-pointer-types
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   patches = [
     # make sure X11 and OpenGL can be found at runtime

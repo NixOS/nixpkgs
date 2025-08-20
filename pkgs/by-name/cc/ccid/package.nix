@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   flex,
+  gitUpdater,
   libusb1,
   meson,
   ninja,
-  nix-update-script,
   pcsclite,
   perl,
   pkg-config,
@@ -15,13 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.6.2";
+  version = "1.6.1";
 
-  src = fetchFromGitHub {
-    owner = "LudovicRousseau";
-    repo = "CCID";
-    tag = version;
-    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
+  src = fetchurl {
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
+    hash = "sha256-LsqPsH6P58DTna6sp7l81zxA7Ztyc4okrT3L38kY4eo=";
   };
 
   postPatch = ''
@@ -55,8 +53,6 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  doInstallCheck = true;
-
   postInstall = ''
     install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
@@ -67,23 +63,17 @@ stdenv.mkDerivation rec {
   # usually getting stripped.
   stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    url = "https://salsa.debian.org/rousseau/CCID.git";
+  };
 
-  installCheckPhase =
-    let
-      platform = if stdenv.hostPlatform.isLinux then "Linux" else "MacOS";
-    in
-    lib.optionalString (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) ''
-      runHook preInstallCheck
-
-      [ -f $out/etc/reader.conf.d/libccidtwin ]
-      [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
-      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
-      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/${platform}/libccid${stdenv.hostPlatform.extensions.sharedLibrary} ]
-      [ -f $out/pcsc/drivers/serial/libccidtwin${stdenv.hostPlatform.extensions.sharedLibrary} ]
-
-      runHook postInstallCheck
-    '';
+  installCheckPhase = ''
+    [ -f $out/etc/reader.conf.d/libccidtwin ]
+    [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
+    [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
+  '';
 
   meta = with lib; {
     description = "PC/SC driver for USB CCID smart card readers";

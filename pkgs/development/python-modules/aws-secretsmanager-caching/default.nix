@@ -3,7 +3,6 @@
   botocore,
   buildPythonPackage,
   fetchPypi,
-  pytest-cov-stub,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -24,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-9tbsnUPg2+T21d6982tMtpHRWpZ7NYsldfXZGXSmwP8=";
   };
 
+  patches = [
+    # Remove coverage tests from the pytest invocation in setup.cfg.
+    ./remove-coverage-tests.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "'pytest-runner'," ""
@@ -36,10 +40,7 @@ buildPythonPackage rec {
     setuptools # Needs pkg_resources at runtime.
   ];
 
-  nativeCheckInputs = [
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Integration tests require networking.

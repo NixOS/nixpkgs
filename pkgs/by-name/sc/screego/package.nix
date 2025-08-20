@@ -10,13 +10,13 @@
 }:
 let
 
-  version = "1.12.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-xWy7aqpUznIYeBPqdpYdRMJxxfiPNa4JmjS3o5i3xxY=";
+    hash = "sha256-wFLoReqzLx6PEW/u9oz7VIYKtJkmwGTneeB6Ysgse7Q=";
   };
 
   ui = stdenv.mkDerivation {
@@ -27,7 +27,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      hash = "sha256-JPSbBUny5unUHVkaVGlHyA90IpT9ahcSmt9R1hxERRk=";
+      hash = "sha256-yjHxyKEqXMxYsm+KroPB9KulfqYSOU/7ghbKnlSFrd0=";
     };
 
     nativeBuildInputs = [
@@ -53,7 +53,7 @@ buildGo123Module rec {
 
   pname = "screego-server";
 
-  vendorHash = "sha256-vx7CpHUPQlLEQGxdswQJI1SrfSUwPlpNcb7Cq81ZOBQ=";
+  vendorHash = "sha256-zMb8MLS0KhwYNpfVeNMD9huEcpyyrZD0QAPmBNxMcQU=";
 
   ldflags = [
     "-s"

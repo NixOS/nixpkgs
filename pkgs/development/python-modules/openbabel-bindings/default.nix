@@ -5,8 +5,7 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage {
-  format = "setuptools";
+buildPythonPackage rec {
   inherit (openbabel) pname version;
 
   src = "${openbabel}/${python.sitePackages}";

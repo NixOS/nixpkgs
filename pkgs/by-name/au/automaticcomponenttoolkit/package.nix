@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Autodesk";
-    repo = "AutomaticComponentToolkit";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1r0sbw82cf9dbcj3vgnbd4sc1lklzvijic2z5wgkvs21azcm0yzh";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mainProgram = "act";
     homepage = "https://github.com/Autodesk/AutomaticComponentToolkit";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };
 }

@@ -43,8 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "VERSION=${finalAttrs.version}"
     "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optional withManpage "MANDIR=${placeholder "man"}/share/man";
+  ] ++ lib.optional withManpage "MANDIR=${placeholder "man"}/share/man";
 
   passthru.tests = {
     inherit (nixosTests) earlyoom;

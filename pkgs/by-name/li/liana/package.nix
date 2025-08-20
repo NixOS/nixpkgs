@@ -39,16 +39,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "12.0"; # keep in sync with lianad
+  version = "8.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
-    tag = "v${version}";
-    hash = "sha256-TZUNYr7p4P/++eX9ZNU/d1IurPrkZn/PJmJOsB01VMY=";
+    rev = "v${version}";
+    hash = "sha256-2aIaRZNIRgFdA+NVnzOkEE3kYA15CoNBrsNGBhIz0nU=";
   };
 
-  cargoHash = "sha256-Hb5icOKgQiDzFLWwUfkwXcr1vn80QcAr+fKwG37PkYc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pjvJ+UNM/2g2BDLptjEs6XVukScBB5miDx55zwHJ/C4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,10 +63,10 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  buildAndTestSubdir = "liana-gui";
+  sourceRoot = "${src.name}/gui";
 
   postInstall = ''
-    install -Dm0644 ./liana-ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
+    install -Dm0644 ./ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
     wrapProgram $out/bin/liana-gui --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "liana-gui";
-    description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
+    description = "A Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
     changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
     license = licenses.bsd3;

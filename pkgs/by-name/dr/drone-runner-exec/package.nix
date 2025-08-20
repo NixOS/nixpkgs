@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "drone-runner-exec";
   version = "unstable-2020-04-19";
 

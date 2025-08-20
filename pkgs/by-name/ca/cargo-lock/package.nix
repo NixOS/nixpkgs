@@ -13,20 +13,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Ui/Z4syhSxemV1R815R+yytDwN2YJBcHGscUYUp/0zE=";
   };
 
-  cargoHash = "sha256-WdIKTTP5Z+rSq97BSdsx9Hqc46jEF0XjgeZ23BDSeRk=";
+  cargoHash = "sha256-5Hg0y723wjV13rdEExK2II7EPpzAR29ZCqVgOeuJpO0=";
 
   buildFeatures = [ "cli" ];
 
-  meta = {
+  meta = with lib; {
     description = "Self-contained Cargo.lock parser with graph analysis";
     mainProgram = "cargo-lock";
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${version}/cargo-lock/CHANGELOG.md";
-    license = with lib.licenses; [
+    license = with licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       figsoda
       matthiasbeyer
     ];

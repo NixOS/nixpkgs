@@ -13,9 +13,8 @@
   coreutils,
   installShellFiles,
   xterm,
-  bashNonInteractive,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "xvfb-run";
   version = "1+g87f6705";
 
@@ -30,12 +29,6 @@ stdenvNoCC.mkDerivation {
     makeWrapper
     installShellFiles
   ];
-
-  buildInputs = [
-    bashNonInteractive
-  ];
-
-  strictDeps = true;
 
   dontUnpack = true;
   dontBuild = true;

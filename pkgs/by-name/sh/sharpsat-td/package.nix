@@ -24,13 +24,13 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sharpsat-td";
-  version = "0-unstable-2021-09-05";
+  version = "unstable-2021-09-05";
 
   src = fetchFromGitHub {
     owner = "Laakeri";
-    repo = "sharpsat-td";
+    repo = pname;
     rev = "b9bb015305ea5d4e1ac7141691d0fe55ca983d31";
     sha256 = "sha256-FE+DUd58eRr5w9RFw0fMHfjIiNDWIcG7XbyWJ/pI28U=";
   };

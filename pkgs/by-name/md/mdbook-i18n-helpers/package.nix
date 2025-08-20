@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FdguzuYpMl6i1dvoPNE1Bk+GTmeTrqLUY/sVRsbETtU=";
   };
 
-  cargoHash = "sha256-ZBGMfJA2diPvvoIXPosUs4ngXU9/GMGa4GAlKIjwm8s=";
+  cargoHash = "sha256-sPRylKXTSkVkhDvpAvHuYIr9TSi1ustIs1HTwEIbk/w=";
 
-  meta = {
+  meta = with lib; {
     description = "Helpers for a mdbook i18n workflow based on Gettext";
     homepage = "https://github.com/google/mdbook-i18n-helpers";
     changelog = "https://github.com/google/mdbook-i18n-helpers/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       teutat3s
       matthiasbeyer
     ];

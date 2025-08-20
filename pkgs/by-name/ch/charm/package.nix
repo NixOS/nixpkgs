@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Manage your charm account on the CLI";
     homepage = "https://github.com/charmbracelet/charm";
     changelog = "https://github.com/charmbracelet/charm/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ penguwin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ penguwin ];
     mainProgram = "charm";
   };
 }

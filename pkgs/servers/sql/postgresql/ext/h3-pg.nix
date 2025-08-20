@@ -1,33 +1,37 @@
 {
+  lib,
+  stdenv,
   cmake,
   fetchFromGitHub,
   h3_4,
-  lib,
   postgresql,
-  postgresqlBuildExtension,
   postgresqlTestExtension,
-  stdenv,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "h3-pg";
-  version = "4.2.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "zachasme";
     repo = "h3-pg";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kTh0Y0C2pNB5Ul1rp77ets/5VeU1zw1WasGHkOaDMh8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uZ4XI/VXRr636CI1r24D6ykPQqO5qZNxNQLUQKmoPtg=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/AddPostgreSQLExtension.cmake \
-      --replace-fail "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
-  '';
+  postPatch =
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/AddPostgreSQLExtension.cmake \
+        --replace-fail "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
+      # Commented upstream: https://github.com/zachasme/h3-pg/pull/141/files#r1844970927
+      substituteInPlace cmake/FindPostgreSQL.cmake \
+        --replace-fail 'list(APPEND PostgreSQL_INCLUDE_DIRS "/usr/local/include")' ""
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -49,10 +53,10 @@ postgresqlBuildExtension (finalAttrs: {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };

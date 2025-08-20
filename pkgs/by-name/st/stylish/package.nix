@@ -12,7 +12,7 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "stylish";
-  version = "0-unstable-2022-12-05";
+  version = "unstable-2022-12-05";
 
   nativeBuildInputs = [ makeWrapper ];
 

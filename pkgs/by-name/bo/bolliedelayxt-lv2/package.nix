@@ -5,13 +5,13 @@
   lv2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bolliedelayxt.lv2";
-  version = "0-unstable-2017-11-02";
+  version = "unstable-2017-11-02";
 
   src = fetchFromGitHub {
     owner = "MrBollie";
-    repo = "bolliedelayxt.lv2";
+    repo = pname;
     rev = "49c488523c8fb71cb2222d41f9f66ee0cb6b6d82";
     sha256 = "sha256-7GM3YccN22JQdQ5ng9HFs9R6Ex/d+XP/khTQsgbGcAw=";
   };

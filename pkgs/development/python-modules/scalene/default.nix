@@ -11,6 +11,7 @@
   nvidia-ml-py,
   psutil,
   pydantic,
+  pynvml,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -31,22 +32,22 @@ let
     owner = "mpaland";
     repo = "printf";
     name = "printf";
-    tag = "v4.0.0";
+    rev = "v4.0.0";
     sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
 in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.52";
+  version = "1.5.49";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
-    tag = "v${version}";
-    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
+    rev = "v${version}";
+    hash = "sha256-Ivce90+W9NBMQjebj3zCB5eqDJydT8OTPYy4fjbybgI=";
   };
 
   patches = [
@@ -74,14 +75,13 @@ buildPythonPackage rec {
     numpy
     psutil
     pydantic
+    pynvml
     rich
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
   pythonRemoveDeps = [
     "nvidia-ml-py3"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -111,15 +111,5 @@ buildPythonPackage rec {
     mainProgram = "scalene";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarahec ];
-    badPlatforms = [
-      # The scalene doesn't seem to account for arm64 linux
-      "aarch64-linux"
-
-      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
-      # x86 and the other as arm64 then tries to link them into a single binary
-      # which fails.
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
   };
 }

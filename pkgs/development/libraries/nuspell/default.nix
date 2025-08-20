@@ -3,11 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  buildPackages,
+  pandoc,
   pkg-config,
   icu,
   catch2_3,
-  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,23 +22,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    pandoc
     pkg-config
-  ]
-  ++ lib.optionals enableManpages [
-    buildPackages.pandoc
   ];
-
   buildInputs = [ catch2_3 ];
-
   propagatedBuildInputs = [ icu ];
 
-  cmakeFlags = [
-    "-DBUILD_TESTING=YES"
-  ]
-  ++ lib.optionals (!enableManpages) [
-    "-DBUILD_DOCS=OFF"
-  ];
-
+  cmakeFlags = [ "-DBUILD_TESTING=YES" ];
   doCheck = true;
 
   outputs = [

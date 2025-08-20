@@ -20,12 +20,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Embed static files in Go binaries (replacement for gobuffalo/packr)";
     mainProgram = "pkger";
     homepage = "https://github.com/markbates/pkger";
     changelog = "https://github.com/markbates/pkger/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ flokli ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ flokli ];
   };
 }

@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hypre";
-  version = "2.33.0";
+  name = "hypre";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "hypre-space";
     repo = "hypre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OrpClN9xd+8DdELVnI4xBg3Ih/BaoBiO0w/QrFjUclw=";
+    hash = "sha256-h16+nZ6+GfddfBJDF6sphuZ9Sff++PxW2R58XgJsnsI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Parallel solvers for sparse linear systems featuring multigrid methods";
+    description = "Parallel solvers for sparse linear systems featuring multigrid methods.";
     homepage = "https://computing.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods";
     platforms = platforms.unix;
     license = licenses.mit;

@@ -309,16 +309,17 @@ in
           "man:smb.conf(5)"
         ];
 
-        after = [
-          "network.target"
-          "network-online.target"
-        ]
-        ++ lib.optionals (cfg.nmbd.enable) [
-          "samba-nmbd.service"
-        ]
-        ++ lib.optionals (cfg.winbindd.enable) [
-          "samba-winbindd.service"
-        ];
+        after =
+          [
+            "network.target"
+            "network-online.target"
+          ]
+          ++ lib.optionals (cfg.nmbd.enable) [
+            "samba-nmbd.service"
+          ]
+          ++ lib.optionals (cfg.winbindd.enable) [
+            "samba-winbindd.service"
+          ];
 
         partOf = [ "samba.target" ];
         wantedBy = [ "samba.target" ];
@@ -351,12 +352,13 @@ in
           "man:smb.conf(5)"
         ];
 
-        after = [
-          "network.target"
-        ]
-        ++ lib.optionals (cfg.nmbd.enable) [
-          "samba-nmbd.service"
-        ];
+        after =
+          [
+            "network.target"
+          ]
+          ++ lib.optionals (cfg.nmbd.enable) [
+            "samba-nmbd.service"
+          ];
 
         partOf = [ "samba.target" ];
         wantedBy = [ "samba.target" ];

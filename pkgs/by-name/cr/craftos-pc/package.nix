@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  patchelf,
-  unzip,
-  poco,
-  openssl,
-  SDL2,
-  SDL2_mixer,
-  ncurses,
-  libpng,
-  pngpp,
-  libwebp,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, patchelf
+, unzip
+, poco
+, openssl
+, SDL2
+, SDL2_mixer
+, ncurses
+, libpng
+, pngpp
+, libwebp
 }:
 
 let
@@ -43,21 +41,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-DbxAsXxpsa42dF6DaLmgIa+Hs/PPqJ4dE97PoKxG2Ig=";
   };
 
-  nativeBuildInputs = [
-    patchelf
-    unzip
-  ];
-  buildInputs = [
-    poco
-    openssl
-    SDL2
-    SDL2_mixer
-    ncurses
-    libpng
-    pngpp
-    libwebp
-    libX11
-  ];
+  nativeBuildInputs = [ patchelf unzip ];
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
   strictDeps = true;
 
   preBuild = ''
@@ -71,12 +56,6 @@ stdenv.mkDerivation rec {
     make
     runHook postBuild
   '';
-
-  patches = [
-    # fix includes of poco headers
-    # https://github.com/MCJack123/craftos2/issues/391
-    ./fix-poco-header-includes.patch
-  ];
 
   dontStrip = true;
 
@@ -108,16 +87,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
-    license = with licenses; [
-      mit
-      free
-    ];
+    license = with licenses; [ mit free ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      siraben
-      tomodachi94
-      viluon
-    ];
+    maintainers = with maintainers; [ siraben tomodachi94 ];
     mainProgram = "craftos";
   };
 }

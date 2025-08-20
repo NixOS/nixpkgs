@@ -22,11 +22,10 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gSpeech";
   version = "0.11.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mothsart";
-    repo = "gSpeech";
+    repo = pname;
     rev = version;
     sha256 = "0z11yxvgi8m2xjmmf56zla91jpmf0a4imwi9qqz6bp51pw4sk8gp";
   };

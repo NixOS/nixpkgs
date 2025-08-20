@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  wheel,
   aiohttp,
   pytest,
   pytest-asyncio,
@@ -12,8 +13,9 @@
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
-  version = "1.1.0";
-  pyproject = true;
+  version = "1.0.5";
+
+  format = "pyproject";
 
   __darwinAllowLocalNetworking = true;
 
@@ -21,17 +23,18 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "pytest-aiohttp";
     tag = "v${version}";
-    hash = "sha256-5xUY3SVaoZzCZE/qfAP4R49HbtBMYj5jMN5viLEzEkM=";
+    hash = "sha256-UACf0frMTOAgSsXQ0oqROHKR1zn4OfLPhd9MwBK002Y=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
+    wheel
   ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     pytest-asyncio
   ];

@@ -1,12 +1,12 @@
 {
+  lib,
+  stdenv,
   bison,
   fetchFromGitHub,
   flex,
-  lib,
   perl,
   postgresql,
-  postgresqlBuildExtension,
-  stdenv,
+  buildPostgresqlExtension,
 }:
 
 let
@@ -17,17 +17,18 @@ let
     "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
     "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
     "13" = "sha256-HR6nnWt/V2a0rD5eHHUsFIZ1y7lmvLz36URt9pPJnCw=";
+    "12" = "sha256-JFNk17ESsIt20dwXrfBkQ5E6DbZzN/Q9eS6+WjCXGd4=";
   };
 in
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension rec {
   pname = "age";
   version = "1.5.0-rc0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "age";
-    tag = "PG${lib.versions.major postgresql.version}/v${
-      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    rev = "PG${lib.versions.major postgresql.version}/v${
+      builtins.replaceStrings [ "." ] [ "_" ] version
     }";
     hash =
       hashes.${lib.versions.major postgresql.version}
@@ -42,7 +43,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   enableUpdateScript = false;
   passthru.tests = stdenv.mkDerivation {
-    inherit (finalAttrs) version src;
+    inherit version src;
 
     pname = "age-regression";
 
@@ -50,7 +51,7 @@ postgresqlBuildExtension (finalAttrs: {
 
     buildPhase =
       let
-        postgresqlAge = postgresql.withPackages (_: [ finalAttrs.finalPackage ]);
+        postgresqlAge = postgresql.withPackages (ps: [ ps.age ]);
       in
       ''
         # The regression tests need to be run in the order specified in the Makefile.
@@ -72,13 +73,13 @@ postgresqlBuildExtension (finalAttrs: {
     '';
   };
 
-  meta = {
-    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames hashes);
+  meta = with lib; {
+    broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/age/raw/v${finalAttrs.src.rev}/RELEASE";
+    changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
-})
+}

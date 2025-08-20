@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "katef";
-    repo = "libfsm";
+    repo = pname;
     rev = "087e3389ad2cd5e5c40caeb40387e632567d7258";
     hash = "sha256-XWrZxnRbMB609l+sYFf8VsXy3NxqBsBPUrHgKLIyu/I=";
     fetchSubmodules = true;

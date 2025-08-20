@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "evolutionhttp";
-  version = "0.0.19";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VhWYhkrZVUDu1I6ZZTZlTUhNfpma29tEYBLoT7xBd1M=";
+    hash = "sha256-LZ9IQJ2qVdCbhOECbPOjikeJA0aGKLdZURG6tjIrkT4=";
   };
 
   build-system = [ hatchling ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "evolutionhttp" ];
 
   meta = with lib; {
-    description = "HTTP client for controlling a Bryant Evolution HVAC system";
+    description = "An HTTP client for controlling a Bryant Evolution HVAC system";
     homepage = "https://github.com/danielsmyers/evolutionhttp";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

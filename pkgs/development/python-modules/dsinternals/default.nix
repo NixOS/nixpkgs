@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsinternals" ];
 
-  enabledTestPaths = [ "tests/*.py" ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   meta = with lib; {
     description = "Module to interact with Windows Active Directory";

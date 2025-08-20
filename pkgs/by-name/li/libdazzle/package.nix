@@ -35,25 +35,26 @@ stdenv.mkDerivation rec {
     sha256 = "PNPkXrbiaAywXVLh6A3Y+dWdR2UhLw4o945sF4PRjq4=";
   };
 
-  nativeBuildInputs = [
-    ninja
-    meson
-    pkg-config
-    vala
-    gobject-introspection
-    libxml2
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
-    dbus
-    glib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xvfb-run
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      ninja
+      meson
+      pkg-config
+      vala
+      gobject-introspection
+      libxml2
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_43
+      dbus
+      glib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xvfb-run
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.gnome.org/GNOME/libdazzle";
     license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

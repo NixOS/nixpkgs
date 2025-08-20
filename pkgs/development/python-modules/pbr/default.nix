@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "6.1.1";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k+pyzmmJ6y7tmdD3VyFHT2mtiBKK/e9aw3freXxL92s=";
+    hash = "sha256-eIGD44Lj0ddwfbCJeCOZZei55OXtQmab9HWBhnNNXyQ=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     mainProgram = "pbr";
     homepage = "https://github.com/openstack/pbr";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

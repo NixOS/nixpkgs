@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, fetchFromGitHub
 
-  cmake,
-  boost,
-  eigen,
-  opencv,
-  tbb,
+, cmake
+, boost179
+, eigen
+, opencv
+, tbb
 
-  avx2Support ? stdenv.hostPlatform.avx2Support,
+, avx2Support ? stdenv.hostPlatform.avx2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "cctag";
-  version = "1.0.4";
+  version = "1.0.3";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
+  outputs = [ "lib" "dev" "out" ];
 
   src = fetchFromGitHub {
     owner = "alicevision";
     repo = "CCTag";
     rev = "v${version}";
-    hash = "sha256-M35KGTTmwGwXefsFWB2UKAKveUQyZBW7V8ejgOAJpXk=";
+    hash = "sha256-foB+e7BCuUucyhN8FsI6BIT3/fsNLTjY6QmjkMWZu6A=";
   };
 
   cmakeFlags = [
@@ -40,14 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cmake-install-include-dir.patch
-    ./cmake-no-apple-rpath.patch
   ];
-
-  # darwin boost doesn't have math_c99 libraries
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace CMakeLists.txt --replace-warn ";math_c99" ""
-    substituteInPlace src/CMakeLists.txt --replace-warn "Boost::math_c99" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -58,12 +47,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost179
     eigen
     opencv.cxxdev
   ];
 
-  doCheck = true;
+  # Tests are broken on Darwin (linking issue)
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Detection of CCTag markers made up of concentric circles";

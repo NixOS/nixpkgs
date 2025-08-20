@@ -10,7 +10,7 @@
   flex,
   ...
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qtspim";
   version = "9.1.23";
 

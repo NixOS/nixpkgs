@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.rsyncd;
-  settingsFormat = pkgs.formats.iniWithGlobalSection { };
+  settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "rsyncd.conf" cfg.settings;
 in
 {
@@ -25,27 +25,24 @@ in
         inherit (settingsFormat) type;
         default = { };
         example = {
-          globalSection = {
+          global = {
             uid = "nobody";
             gid = "nobody";
             "use chroot" = true;
             "max connections" = 4;
-            address = "0.0.0.0";
           };
-          sections = {
-            ftp = {
-              path = "/var/ftp/./pub";
-              comment = "whole ftp area";
-            };
-            cvs = {
-              path = "/data/cvs";
-              comment = "CVS repository (requires authentication)";
-              "auth users" = [
-                "tridge"
-                "susan"
-              ];
-              "secrets file" = "/etc/rsyncd.secrets";
-            };
+          ftp = {
+            path = "/var/ftp/./pub";
+            comment = "whole ftp area";
+          };
+          cvs = {
+            path = "/data/cvs";
+            comment = "CVS repository (requires authentication)";
+            "auth users" = [
+              "tridge"
+              "susan"
+            ];
+            "secrets file" = "/etc/rsyncd.secrets";
           };
         };
         description = ''
@@ -84,7 +81,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.rsyncd.settings.globalSection.port = toString cfg.port;
+    services.rsyncd.settings.global.port = toString cfg.port;
 
     systemd =
       let

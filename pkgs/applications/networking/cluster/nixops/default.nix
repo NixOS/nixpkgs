@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   python3,
   emptyFile,
 }:
@@ -29,28 +28,23 @@ let
     };
 
     plugins =
-      ps: _super:
-      with ps;
-      (
-        rec {
-          nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
-          nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
-          nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
-          nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
-          nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
+      ps: _super: with ps; rec {
+        nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
+        nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
+        nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
+        nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
+        nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
 
-          # aliases for backwards compatibility
-          nixopsvbox = nixops-vbox;
-        }
-        // lib.optionalAttrs config.allowAliases rec {
-          nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
-          nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
-          nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
-          nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
-          nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
-          nixops-virtd = nixops-libvirtd;
-        }
-      );
+        nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
+        nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
+        nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
+        nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
+        nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
+
+        # aliases for backwards compatibility
+        nixops-virtd = nixops-libvirtd;
+        nixopsvbox = nixops-vbox;
+      };
 
     # We should not reapply the overlay, but it tends to work out. (It's been this way since poetry2nix was dropped.)
     availablePlugins = this.plugins this.python.pkgs this.python.pkgs;

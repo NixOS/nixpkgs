@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     mainProgram = "compton-conf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    maintainers = teams.lxqt.members;
   };
 }

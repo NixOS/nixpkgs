@@ -1,73 +1,34 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
-  nix-update-script,
-  makeBinaryWrapper,
+  buildNpmPackage,
+  fetchurl,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+buildNpmPackage rec {
   pname = "vue-language-server";
-  version = "3.0.4";
+  version = "2.2.0";
 
-  src = fetchFromGitHub {
-    owner = "vuejs";
-    repo = "language-tools";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-vWnJ3Qaa1dcXmQ+PTvbuK6lpgqR7J/Z0UrsPr2pD8Q4=";
+  src = fetchurl {
+    url = "https://registry.npmjs.org/@vue/language-server/-/language-server-${version}.tgz";
+    hash = "sha256-foWKEhK8YE4ZsbejJUKKPNR+G7ZrJWIPEk/1PVe6YRo=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-UlIAW0m8Y3he8uDd73pXufk4r4PAXWFPDYFvRa2Fw4Y=";
-  };
+  npmDepsHash = "sha256-4wpVJt6C4Yt53NWWq3MZLtzX+Spf3by4bM6hjmF2y6A=";
 
-  nativeBuildInputs = [
-    nodejs
-    pnpm.configHook
-    makeBinaryWrapper
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-    pnpm run build packages/language-server
-    runHook postBuild
+  postPatch = ''
+    ln -s ${./package-lock.json} package-lock.json
   '';
 
-  preInstall = ''
-    pnpm prune --prod
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+  dontNpmBuild = true;
 
-    # https://github.com/pnpm/pnpm/issues/3645
-    find node_modules packages/language-server/node_modules -xtype l -delete
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml node_modules/.pnpm-workspace-state-v1.json
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,lib/language-tools}
-    cp -r {node_modules,packages,extensions} $out/lib/language-tools/
-
-    makeWrapper ${lib.getExe nodejs} $out/bin/vue-language-server \
-      --inherit-argv0 \
-      --add-flags $out/lib/language-tools/packages/language-server/bin/vue-language-server.js
-
-    runHook postInstall
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Official Vue.js language server";
     homepage = "https://github.com/vuejs/language-tools#readme";
-    changelog = "https://github.com/vuejs/language-tools/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/vuejs/language-tools/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ friedow ];
     mainProgram = "vue-language-server";
   };
-})
+}

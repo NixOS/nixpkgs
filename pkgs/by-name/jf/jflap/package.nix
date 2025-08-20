@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/java
     cp -s $src $out/share/java/jflap.jar
     makeWrapper ${jre8}/bin/java $out/bin/jflap \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
+      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-jar $out/share/java/jflap.jar"
     runHook postInstall
   '';

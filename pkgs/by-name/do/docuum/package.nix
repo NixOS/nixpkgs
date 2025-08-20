@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,11 +17,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nWd6h39jU1eZWPFMxhxActsmrs9k0TDMlealuzTa+o0=";
   };
 
-  cargoHash = "sha256-ce8mthEWvZ+U2+lU3gGrq1YBzbkiqUGJV5JUsZ+HhBg=";
+  cargoHash = "sha256-uoQ1qUII6TSZsosAdNfs2CREVuN2kuT9Bmi5vuDT/rY=";
 
   checkFlags = [
     # fails, no idea why
     "--skip=format::tests::code_str_display"
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.IOKit
   ];
 
   meta = with lib; {

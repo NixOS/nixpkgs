@@ -1,18 +1,12 @@
-{
-  lib,
-  buildEnv,
-  writeShellScriptBin,
-  fetchurl,
-  jre,
-}:
+{ lib, buildEnv, writeShellScriptBin, fetchurl, jre }:
 
 let
   name = "legends-browser-${version}";
-  version = "1.19.2";
+  version = "1.17.1";
 
   jar = fetchurl {
     url = "https://github.com/robertjanetzko/LegendsBrowser/releases/download/${version}/legendsbrowser-${version}.jar";
-    hash = "sha256-jkv7InwaRn0K3VAa0LqkYpH6TnrT/tGYBtbvNGM6t98=";
+    sha256 = "05b4ksbl4481rh3ykfirbp6wvxhppcd5mvclhn9995gsrcaj8gx9";
   };
 
   script = writeShellScriptBin "legends-browser" ''
@@ -24,7 +18,7 @@ let
       echo 'Creating initial configuration for legends-browser'
       echo "last=$(cd ..; pwd)" > legendsbrowser.properties
     fi
-    exec ${jre}/bin/java -jar ${jar}
+    ${jre}/bin/java -jar ${jar}
   '';
 in
 
@@ -34,10 +28,7 @@ buildEnv {
 
   meta = with lib; {
     description = "Multi-platform, open source, java-based legends viewer for dwarf fortress";
-    maintainers = with maintainers; [
-      Baughn
-      numinit
-    ];
+    maintainers = with maintainers; [ Baughn ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     platforms = platforms.all;

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "rencode";
   version = "unstable-2021-08-10";
 

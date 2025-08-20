@@ -1,14 +1,7 @@
 {
-  stdenv,
+  mkXfceDerivation,
   lib,
-  fetchFromGitLab,
   docbook_xsl,
-  glib,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
   exo,
   gst_all_1,
   gtk3,
@@ -16,37 +9,24 @@
   libgudev,
   libisofs,
   libxfce4ui,
-  libxfce4util,
-  gitUpdater,
+  libxslt,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "apps";
   pname = "xfburn";
-  version = "0.8.0";
+  version = "0.7.2";
+  odd-unstable = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "apps";
-    repo = "xfburn";
-    tag = "xfburn-${finalAttrs.version}";
-    hash = "sha256-10MjUxy1Ul6CVLdEWFnjppgsI4fAUWqkT2azJBzp0/Q=";
-  };
-
-  strictDeps = true;
+  sha256 = "sha256-eJ+MxNdJiDTLW4GhrwgQIyFuOSTWsF34Oet9HJAtIqI=";
 
   nativeBuildInputs = [
+    libxslt
     docbook_xsl
-    glib # glib-genmarshal
-    libxslt # xsltproc
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook3
   ];
 
   buildInputs = [
     exo
-    glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
@@ -54,17 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libisofs
     libxfce4ui
-    libxfce4util
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "xfburn-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Disc burner and project creator for Xfce";
-    homepage = "https://gitlab.xfce.org/apps/xfburn";
-    license = lib.licenses.gpl2Plus;
     mainProgram = "xfburn";
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

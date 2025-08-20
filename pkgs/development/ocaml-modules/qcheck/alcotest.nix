@@ -9,6 +9,8 @@ buildDunePackage {
 
   inherit (qcheck-core) version src patches;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     qcheck-core
     alcotest

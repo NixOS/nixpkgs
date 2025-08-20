@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  dontUseSetuptoolsCheck = true;
+
   # Disable tests depending on online services
   disabledTests = [
     "ServicesTest"

@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
   pytest,
   pytest-asyncio,
   pytestCheckHook,
@@ -11,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.14.1";
+  version = "3.14.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pytest-dev";
-    repo = "pytest-mock";
-    tag = "v${version}";
-    hash = "sha256-aOa/MQAgQePX/NivQ6G37r70sZnqBA+y+GXvPVBxmvs=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-JxklWh7+zq28BW1r8989HFAVUw+0DPNHwPmvrIhBC9A=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +35,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # Regression in 3.11.7 and 3.12.1; https://github.com/pytest-dev/pytest-mock/issues/401
+    "test_failure_message_with_name"
+    "test_failure_message_with_no_name"
+  ];
+
   pythonImportsCheck = [ "pytest_mock" ];
 
   meta = with lib; {
     description = "Thin wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
-    changelog = "https://github.com/pytest-dev/pytest-mock/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/pytest-mock/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

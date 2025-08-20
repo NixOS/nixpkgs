@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "asn1editor";
   version = "0.8.0";
-  format = "pyproject";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Futsch1";
@@ -16,11 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-mgluhC2DMS4OyS/BoWqBdVf7GcxquOtOKTHZ/hbiHQM=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     asn1tools
     coverage
     wxpython

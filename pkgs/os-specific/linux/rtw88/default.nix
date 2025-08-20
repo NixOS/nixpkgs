@@ -3,8 +3,6 @@
   lib,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
-  unstableGitUpdater,
 }:
 
 let
@@ -12,19 +10,17 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "0-unstable-2025-08-09";
+  version = "0-unstable-2024-08-22";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "52072d874840f28c247b27f5d799f2c5c88a7e61";
-    hash = "sha256-Lu3ol0iKfM9/SJ5lieh4A28h02Stc971ZypfiB2BWJ0=";
+    rev = "764a1ee307d7e5720a93b8139c94d76737eced91";
+    hash = "sha256-xHo9Qww3w36/UFhMhoLjSzZKpC2VKywJZlCPL30XirA=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags ++ [
-    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 
@@ -37,8 +33,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = with lib; {
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";

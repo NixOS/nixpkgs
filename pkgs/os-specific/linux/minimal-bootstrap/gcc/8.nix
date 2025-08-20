@@ -99,7 +99,7 @@ bash.runCommand "${pname}-${version}"
       description = "GNU Compiler Collection, version ${version}";
       homepage = "https://gcc.gnu.org";
       license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = platforms.unix;
     };
   }

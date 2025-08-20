@@ -14,7 +14,7 @@
   git,
   jsoncpp,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pingus";
   version = "unstable-0.7.6.0.20191104";
 

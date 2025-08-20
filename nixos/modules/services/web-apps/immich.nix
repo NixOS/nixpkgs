@@ -20,8 +20,7 @@ let
     NoNewPrivileges = true;
     PrivateUsers = true;
     PrivateTmp = true;
-    PrivateDevices = cfg.accelerationDevices == [ ];
-    DeviceAllow = mkIf (cfg.accelerationDevices != null) cfg.accelerationDevices;
+    PrivateDevices = true;
     PrivateMounts = true;
     ProtectClock = true;
     ProtectControlGroups = true;
@@ -46,9 +45,6 @@ let
     mkOption
     mkEnableOption
     ;
-
-  postgresqlPackage =
-    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
   options.services.immich = {
@@ -165,17 +161,6 @@ in
       };
     };
 
-    accelerationDevices = mkOption {
-      type = types.nullOr (types.listOf types.str);
-      default = [ ];
-      example = [ "/dev/dri/renderD128" ];
-      description = ''
-        A list of device paths to hardware acceleration devices that immich should
-        have access to. This is useful when transcoding media files.
-        The special value `[ ]` will disallow all devices using `PrivateDevices`. `null` will give access to all devices.
-      '';
-    };
-
     database = {
       enable =
         mkEnableOption "the postgresql database for use with immich. See {option}`services.postgresql`"
@@ -231,11 +216,6 @@ in
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
       }
-      {
-        # When removing this assertion, please adjust the nixosTests accordingly.
-        assertion = cfg.database.enable -> lib.versionOlder config.services.postgresql.package.version "17";
-        message = "Immich doesn't support PostgreSQL 17+, yet.";
-      }
     ];
 
     services.postgresql = mkIf cfg.database.enable {
@@ -254,7 +234,7 @@ in
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
+    systemd.services.postgresql.serviceConfig.ExecStartPost =
       let
         sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
           CREATE EXTENSION IF NOT EXISTS unaccent;
@@ -273,7 +253,7 @@ in
       in
       [
         ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' config.services.postgresql.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
@@ -341,7 +321,7 @@ in
       path = [
         # gzip and pg_dumpall are used by the backup service
         pkgs.gzip
-        postgresqlPackage
+        config.services.postgresql.package
       ];
 
       serviceConfig = commonServiceConfig // {
@@ -397,6 +377,7 @@ in
       };
     };
     users.groups = mkIf (cfg.group == "immich") { immich = { }; };
+
+    meta.maintainers = with lib.maintainers; [ jvanbruegge ];
   };
-  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
 }

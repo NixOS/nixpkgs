@@ -1,43 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-deprecation";
-  version = "5.1";
+  version = "5.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.deprecation";
-    tag = version;
-    hash = "sha256-5gqZuO3fGXkQl493QrvK7gl77mDteUp7tpo4DhSRI+o=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    pname = "zope.deprecation";
+    inherit version;
+    hash = "sha256-t8MtM5IDayFFxAsxA+cyLbaGYqsJtyZ6/hUyqdk/ZA8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" "setuptools"
-  '';
-
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "src/zope/deprecation/tests.py" ];
+  pytestFlagsArray = [ "src/zope/deprecation/tests.py" ];
 
   pythonImportsCheck = [ "zope.deprecation" ];
 
-  pythonNamespaces = [ "zope" ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.deprecation";
     description = "Zope Deprecation Infrastructure";
     changelog = "https://github.com/zopefoundation/zope.deprecation/blob/${version}/CHANGES.rst";
-    license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.zpl21;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

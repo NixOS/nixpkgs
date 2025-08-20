@@ -3,7 +3,6 @@
   buildDunePackage,
   opam-format,
   curl,
-  patch,
 }:
 
 buildDunePackage {
@@ -11,10 +10,13 @@ buildDunePackage {
 
   inherit (opam-format) src version;
 
-  propagatedBuildInputs = [
-    opam-format
-    patch
-  ];
+  patches = [ ./download-tool.patch ];
+  postPatch = ''
+    substituteInPlace src/repository/opamRepositoryConfig.ml \
+      --replace-fail "SUBSTITUTE_NIXOS_CURL_PATH" "\"${curl}/bin/curl\""
+  '';
+
+  propagatedBuildInputs = [ opam-format ];
 
   configureFlags = [ "--disable-checks" ];
 

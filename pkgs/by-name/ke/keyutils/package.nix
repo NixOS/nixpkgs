@@ -53,10 +53,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.useLLVM) {
-    NIX_LDFLAGS = "--undefined-version";
-  };
-
   installFlags = [
     "ETCDIR=$(out)/etc"
     "BINDIR=$(out)/bin"

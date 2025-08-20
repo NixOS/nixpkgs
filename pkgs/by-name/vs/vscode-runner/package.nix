@@ -3,16 +3,17 @@
   fetchFromGitHub,
   buildDartApplication,
   kdePackages,
+  nix-update-script,
 }:
 
 let
-  version = "1.8.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "Merrit";
     repo = "vscode-runner";
     rev = "v${version}";
-    hash = "sha256-ZzAQeSUFbHp2Bwiwsq8kgQqqNlr6hfXuz7PNAOSiBhU=";
+    hash = "sha256-mDhwydAFlDcpbpmh+I2zjjuC+/5hmygFkpHSZGEpuLs=";
   };
 in
 buildDartApplication {
@@ -39,7 +40,7 @@ buildDartApplication {
       $out/share/krunner/dbusplugins/plasma-runner-vscode_runner.desktop
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "KRunner plugin for quickly opening recent VSCode workspaces";

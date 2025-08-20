@@ -2,9 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  replaceVars,
+  substituteAll,
   meson,
   pkg-config,
+  qttools,
   ninja,
   qtbase,
   qtwayland,
@@ -13,18 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayqt";
-  version = "0.3.0";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "desktop-frameworks";
     repo = "wayqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FPyHm96LYCTqMZlPrZoSPMeyocDjaCnaYJETH/nazBU=";
+    hash = "sha256-qlRRkqhKlcsd9lzlqfE0V0gjudELyENu4IH1NfO/+pI=";
   };
 
   patches = [
     # qmake get qtbase's path, but wayqt need qtwayland
-    (replaceVars ./fix-qtwayland-header-path.diff {
+    (substituteAll {
+      src = ./fix-qtwayland-header-path.diff;
       qtWaylandPath = "${qtwayland}/include";
     })
   ];
@@ -32,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     pkg-config
+    qttools
     ninja
   ];
 
@@ -39,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtwayland
     wayland
+  ];
+
+  mesonFlags = [
+    "-Duse_qt_version=qt6"
   ];
 
   dontWrapQtApps = true;

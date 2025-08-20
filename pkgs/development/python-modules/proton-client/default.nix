@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  replaceVars,
+  substituteAll,
   bcrypt,
   pyopenssl,
   python-gnupg,
@@ -37,7 +37,8 @@ buildPythonPackage rec {
 
   patches = [
     # Patches library by fixing the openssl path
-    (replaceVars ./0001-OpenSSL-path-fix.patch {
+    (substituteAll {
+      src = ./0001-OpenSSL-path-fix.patch;
       openssl = openssl.out;
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     })

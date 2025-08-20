@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitMinimal,
+  git,
 }:
 buildGoModule rec {
   pname = "git-bug-migration";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-X main.GitExactTag=${version}"
@@ -34,10 +34,7 @@ buildGoModule rec {
     description = "Tool for upgrading repositories using git-bug to new versions";
     homepage = "https://github.com/MichaelMure/git-bug-migration";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      DeeUnderscore
-      sudoforge
-    ];
+    maintainers = with maintainers; [ DeeUnderscore ];
     mainProgram = "git-bug-migration";
   };
 }

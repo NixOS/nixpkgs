@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.6";
+  version = "2.5";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
+    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
   };
 
   outputs = [
@@ -50,17 +50,16 @@ stdenv.mkDerivation rec {
       export HELP2MAN=true
     '';
 
-  configureFlags = [
-    "--with-ncurses-include-dir=${ncurses.dev}/include"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Musl doesn't define rcmd
-    "--disable-rcp"
-    "--disable-rsh"
-    "--disable-rlogin"
-    "--disable-rexec"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
+  configureFlags =
+    [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # Musl doesn't define rcmd
+      "--disable-rcp"
+      "--disable-rsh"
+      "--disable-rlogin"
+      "--disable-rexec"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
 
   doCheck = true;
 

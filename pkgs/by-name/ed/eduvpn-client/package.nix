@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchurl,
   gdk-pixbuf,
   gobject-introspection,
   gtk3,
@@ -13,15 +13,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.5.1";
+  version = "4.4.0";
   format = "pyproject";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "eduVPN";
-    repo = "linux-app";
-    rev = version;
-    hash = "sha256-lDmPDM3BEiZ97m8jEtYrpmVrk0D7x01iKxOe/09T0zY=";
+  src = fetchurl {
+    url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";
+    hash = "sha256-IHRIjryAIeGcFqz5BMWsE0/gClaSmnwWhjc1f1c69vk=";
   };
 
   nativeBuildInputs = [
@@ -43,24 +40,20 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  postInstall = ''
-    ln -s $out/${python3Packages.python.sitePackages}/eduvpn/data/share/ $out/share
-  '';
-
   checkInputs = with python3Packages; [
     pytestCheckHook
   ];
 
-  meta = {
-    changelog = "https://codeberg.org/eduVPN/linux-app/raw/tag/${version}/CHANGES.md";
+  meta = with lib; {
+    changelog = "https://raw.githubusercontent.com/eduvpn/python-eduvpn-client/${version}/CHANGES.md";
     description = "Linux client for eduVPN";
-    homepage = "https://codeberg.org/eduVPN/linux-app";
-    license = lib.licenses.gpl3Plus;
+    homepage = "https://github.com/eduvpn/python-eduvpn-client";
+    license = licenses.gpl3Plus;
     mainProgram = "eduvpn-gui";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       benneti
       jwijenbergh
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

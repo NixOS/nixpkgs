@@ -27,7 +27,6 @@
   libchardet,
   libical,
   libmysqlclient,
-  libpq,
   libsrs2,
   libuuid,
   libxml2,
@@ -35,6 +34,7 @@
   openssl,
   pcre2,
   perl,
+  postgresql,
   rsync,
   shapelib,
   sqlite,
@@ -66,13 +66,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-imapd";
-  version = "3.12.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "cyrusimap";
     repo = "cyrus-imapd";
     tag = "cyrus-imapd-${finalAttrs.version}";
-    hash = "sha256-fwt8ierxM4bMp+ZfYINXUIcKNMnkTIWJTNWyv8GyX0c=";
+    hash = "sha256-dyybRqmrVX+ERGpToS5JjGC6S/B0t967dLCWfeUrLKA=";
   };
 
   nativeBuildInputs = [
@@ -80,54 +80,56 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
   ];
-  buildInputs = [
-    unixtools.xxd
-    pcre2
-    flex
-    valgrind
-    fig2dev
-    perl
-    cyrus_sasl.dev
-    icu
-    jansson
-    libbsd
-    libuuid
-    openssl
-    zlib
-    bison
-    libsrs2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ]
-  ++ lib.optionals (enableHttp || enableCalalarmd || enableJMAP) [
-    brotli.dev
-    libical.dev
-    libxml2.dev
-    nghttp2.dev
-    shapelib
-  ]
-  ++ lib.optionals enableJMAP [
-    libchardet
-    wslay
-  ]
-  ++ lib.optionals enableXapian [
-    rsync
-    xapian
-  ]
-  ++ lib.optionals withMySQL [ libmysqlclient ]
-  ++ lib.optionals withPgSQL [ libpq ]
-  ++ lib.optionals withSQLite [ sqlite ];
+  buildInputs =
+    [
+      unixtools.xxd
+      pcre2
+      flex
+      valgrind
+      fig2dev
+      perl
+      cyrus_sasl.dev
+      icu
+      jansson
+      libbsd
+      libuuid
+      openssl
+      zlib
+      bison
+      libsrs2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ]
+    ++ lib.optionals (enableHttp || enableCalalarmd || enableJMAP) [
+      brotli.dev
+      libical.dev
+      libxml2.dev
+      nghttp2.dev
+      shapelib
+    ]
+    ++ lib.optionals enableJMAP [
+      libchardet
+      wslay
+    ]
+    ++ lib.optionals enableXapian [
+      rsync
+      xapian
+    ]
+    ++ lib.optionals withMySQL [ libmysqlclient ]
+    ++ lib.optionals withPgSQL [ postgresql ]
+    ++ lib.optionals withSQLite [ sqlite ];
 
   enableParallelBuilding = true;
 
   postPatch =
     let
-      managesieveLibs = [
-        zlib
-        cyrus_sasl
-        sqlite
-      ]
-      # Darwin doesn't have libuuid, try to build without it
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
+      managesieveLibs =
+        [
+          zlib
+          cyrus_sasl
+          sqlite
+        ]
+        # Darwin doesn't have libuuid, try to build without it
+        ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
       imapLibs = managesieveLibs ++ [ pcre2 ];
       mkLibsString = lib.strings.concatMapStringsSep " " (l: "-L${lib.getLib l}/lib");
     in

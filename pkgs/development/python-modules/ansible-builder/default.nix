@@ -3,12 +3,12 @@
   setuptools,
   setuptools-scm,
   jsonschema,
+  requirements-parser,
   pyyaml,
   podman,
   fetchPypi,
   bindep,
   buildPythonPackage,
-  packaging,
 }:
 
 buildPythonPackage rec {
@@ -33,12 +33,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  buildInputs = [ bindep ];
+
   dependencies = [
     podman
-    bindep
     jsonschema
+    requirements-parser
     pyyaml
-    packaging
   ];
 
   meta = with lib; {

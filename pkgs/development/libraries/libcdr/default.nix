@@ -1,17 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libwpg,
-  libwpd,
-  lcms,
-  pkg-config,
-  librevenge,
-  icu,
-  boost,
-  cppunit,
-  zlib,
-}:
+{ lib, stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libcdr";
@@ -24,18 +11,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    libwpg
-    libwpd
-    lcms
-    librevenge
-    icu
-    boost
-    cppunit
-    zlib
-  ];
+  buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit zlib ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 
   enableParallelBuilding = true;
 

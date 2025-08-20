@@ -2,8 +2,7 @@
   lib,
   fetchgit,
   fetchzip,
-  fetchpatch2,
-  python311,
+  python310,
   rtlcss,
   wkhtmltopdf,
   nixosTests,
@@ -11,8 +10,8 @@
 
 let
   odoo_version = "17.0";
-  odoo_release = "20250506";
-  python = python311.override {
+  odoo_release = "20241010";
+  python = python310.override {
     self = python;
     packageOverrides = final: prev: {
       # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
@@ -38,14 +37,8 @@ python.pkgs.buildPythonApplication rec {
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-V15Oe3AOBJ1agt5WmpFZnC7EkyoKyxTH8Iqdf2/9aec="; # odoo
+    hash = "sha256-s4Fvzjwl2oM0V9G1WQdSoqo7kE7b8tJdluk9f7A06e8="; # odoo
   };
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/odoo/odoo/commit/ade3200e8138a9c28eb9b294a4efd2753a8e5591.patch?full_index=1";
-      hash = "sha256-EFKjrR38eg9bxlNmRNoLSXem+MjQKqPcR3/mSgs0cDs=";
-    })
-  ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -112,15 +105,15 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo17;
+      inherit (nixosTests) odoo;
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
       mkg20001
       siriobalmelli
     ];

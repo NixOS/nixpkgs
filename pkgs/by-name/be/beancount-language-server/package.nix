@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "beancount-language-server";
-  version = "1.4.1";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
     rev = "v${version}";
-    hash = "sha256-cx/Y0jBpnNN+QVEovpbhCG70VwOqwDE+8lBcRAJtlF4=";
+    hash = "sha256-U23e32Xfa0j+U/CrCZzKjipaA0Yv5szbtTHJWWL52K4=";
   };
 
-  cargoHash = "sha256-P3Oug9YNsTmsOz68rGUcYJwq9NsKErHt/fOCvqXixNU=";
+  cargoHash = "sha256-OvhG+O+uHHf7e9p3vibrPt9fuGzEqG+l3GGfNwoqXBU=";
 
   doInstallCheck = true;
   postInstallCheck = ''

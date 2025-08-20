@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnuchess";
-  version = "6.2.11";
+  version = "6.2.9";
 
   src = fetchurl {
     url = "mirror://gnu/chess/gnuchess-${version}.tar.gz";
-    sha256 = "sha256-2BFA7qXGnRSwz7Y4FtS0yeGPulH1Jn3lsVOfRok56b0=";
+    sha256 = "sha256-3fzCC911aQCpq2xCx9r5CiiTv38ZzjR0IM42uuvEGJA=";
   };
 
   buildInputs = [

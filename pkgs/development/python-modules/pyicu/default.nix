@@ -2,9 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
-  pkg-config,
-  setuptools,
+  fetchPypi,
   pytestCheckHook,
   six,
   icu,
@@ -12,37 +10,26 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.15.2";
-  pyproject = true;
+  version = "2.13.1";
+  format = "setuptools";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.pyicu.org";
-    owner = "main";
-    repo = "pyicu";
-    tag = "v${version}";
-    hash = "sha256-Div3c4Lk9VTV1HrmvYKDn1a7moDNjG4OHA9Kv3+niKs=";
+  src = fetchPypi {
+    pname = "PyICU";
+    inherit version;
+    hash = "sha256-1JGQheqgfaErrejuch57v3reAVHKD4KUaibI9LmM3Os=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace-fail "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
-  '';
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails testExemplarSet2 test due to sjd locale not having an auxiliary
+    # esType. icuReal doesn't have an sjd locale
+    ./skip-sjd-local.diff
+  ];
 
-  build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pkg-config ];
-
+  nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
   buildInputs = [ icu ];
-
   nativeCheckInputs = [
     pytestCheckHook
     six
-  ];
-
-  disabledTestPaths = [
-    # AssertionError: '$' != 'US Dollar'
-    "test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
-    # AssertionError: Lists differ: ['a', 'b', 'c', 'd'] != ['a', 'b', 'c', 'd', ...
-    "test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
   ];
 
   pythonImportsCheck = [ "icu" ];

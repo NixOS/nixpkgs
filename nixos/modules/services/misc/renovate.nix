@@ -61,27 +61,6 @@ in
       };
       default = { };
     };
-    environment = mkOption {
-      type =
-        with types;
-        attrsOf (
-          nullOr (oneOf [
-            str
-            path
-            package
-          ])
-        );
-      description = ''
-        Extra environment variables to export to the Renovate process
-        from the systemd unit configuration.
-
-        See https://docs.renovatebot.com/config-overview for available environment variables.
-      '';
-      example = {
-        LOG_LEVEL = "debug";
-      };
-      default = { };
-    };
     runtimePackages = mkOption {
       type = with types; listOf package;
       description = "Packages available to renovate.";
@@ -90,7 +69,7 @@ in
     validateSettings = mkOption {
       type = types.bool;
       default = true;
-      description = "Whether to run renovate's config validator on the built configuration.";
+      description = "Weither to run renovate's config validator on the built configuration.";
     };
     settings = mkOption {
       type = json.type;
@@ -103,22 +82,14 @@ in
       description = ''
         Renovate's global configuration.
         If you want to pass secrets to renovate, please use {option}`services.renovate.credentials` for that.
-
-        See https://docs.renovatebot.com/config-overview for available settings.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.renovate = {
-      settings = {
-        cacheDir = "/var/cache/renovate";
-        baseDir = "/var/lib/renovate";
-      };
-      environment = {
-        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
-        HOME = "/var/lib/renovate";
-      };
+    services.renovate.settings = {
+      cacheDir = "/var/cache/renovate";
+      baseDir = "/var/lib/renovate";
     };
 
     systemd.services.renovate = {
@@ -129,9 +100,7 @@ in
       path = [
         config.systemd.package
         pkgs.git
-      ]
-      ++ cfg.runtimePackages;
-      inherit (cfg) environment;
+      ] ++ cfg.runtimePackages;
 
       serviceConfig = {
         User = "renovate";
@@ -176,6 +145,11 @@ in
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';
+
+      environment = {
+        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
+        HOME = "/var/lib/renovate";
+      };
     };
   };
 }

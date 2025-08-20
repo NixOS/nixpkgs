@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "2.0.3";
+  version = "2.0.1";
 
   pyproject = true;
 
@@ -20,24 +20,22 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-grammar";
     tag = version;
-    hash = "sha256-d7U4AAUikYcz26ZSXQwkTobSKN1PpaL20enfggHSKRM=";
+    hash = "sha256-xex+7rCXqRegnws470VtVltM49fx7fSHzWDZawRmOdM=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    overrides
-    pydantic
-  ];
+  dependencies = [ overrides ];
 
   pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
+    pydantic
     pytestCheckHook
     pyyaml
   ];
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   # Temp fix for test incompatibility with Python 3.13
   disabledTests = [

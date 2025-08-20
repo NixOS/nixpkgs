@@ -10,7 +10,6 @@
   pyusb,
   pytestCheckHook,
   pythonOlder,
-  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,10 +32,6 @@ buildPythonPackage rec {
     numpy
     pyserial
     pyusb
-  ];
-
-  nativeBuildInputs = [
-    udevCheckHook
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''

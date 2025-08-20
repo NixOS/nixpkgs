@@ -9,6 +9,8 @@
   pythonOlder,
   setuptools,
   unittestCheckHook,
+  wheel,
+  darwin,
 }:
 
 buildPythonPackage rec {
@@ -25,14 +27,19 @@ buildPythonPackage rec {
     hash = "sha256-0FDhkIK8jy3/SFmCzrl9l4RTeIKDjO0o5UoODx6Wnfs=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    wheel
+  ];
 
   nativeBuildInputs = [
     cython
     pkg-config
   ];
 
-  buildInputs = [ libstatgrab ];
+  buildInputs = [
+    libstatgrab
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit ]);
 
   nativeCheckInputs = [ unittestCheckHook ];
 

@@ -7,23 +7,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "8.2.0";
+  version = "6.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
     tag = version;
-    hash = "sha256-K1MUf9QDDBuIuVovyXYkHPK4eoth4wdFnzjuFpZFBLc=";
+    hash = "sha256-2QV8fYfqi+UvPL1WiGtVZWwjHEs4r8siy3TLwy9uHH0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--random-order-bucket=global" "" \
-      --replace-fail "--random-order"               "" \
-      --replace-fail "--force-sugar"                "" \
-      --replace-fail "--old-summary"                ""
-  '';
 
   build-system = with python3Packages; [
     setuptools
@@ -33,7 +25,6 @@ python3Packages.buildPythonApplication rec {
     anytree
     argcomplete
     colorama
-    oelint-data
     oelint-parser
     urllib3
   ];
@@ -59,12 +50,20 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--random-order-bucket=global" "" \
+      --replace-fail "--random-order"               "" \
+      --replace-fail "--force-sugar"                "" \
+      --replace-fail "--old-summary"                ""
+  '';
+
+  meta = with lib; {
     description = "Advanced bitbake-recipe linter";
     mainProgram = "oelint-adv";
     homepage = "https://github.com/priv-kweihmann/oelint-adv";
     changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/${version}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ otavio ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ otavio ];
   };
 }

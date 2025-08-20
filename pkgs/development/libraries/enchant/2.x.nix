@@ -19,6 +19,7 @@
   withVoikko ? true,
   withAppleSpell ? stdenv.hostPlatform.isDarwin,
 
+  Cocoa,
 }:
 
 assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
@@ -44,18 +45,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-  ]
-  ++ lib.optionals withHunspell [
-    hunspell
-  ]
-  ++ lib.optionals withNuspell [
-    nuspell
-  ]
-  ++ lib.optionals withVoikko [
-    libvoikko
-  ];
+  buildInputs =
+    [
+      glib
+    ]
+    ++ lib.optionals withHunspell [
+      hunspell
+    ]
+    ++ lib.optionals withNuspell [
+      nuspell
+    ]
+    ++ lib.optionals withVoikko [
+      libvoikko
+    ]
+    ++ lib.optionals withAppleSpell [
+      Cocoa
+    ];
 
   checkInputs = [
     unittest-cpp

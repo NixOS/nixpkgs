@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0";
+  version = "4.3";
   pname = "messer-slim";
 
   src = fetchFromGitHub {
     owner = "MesserLab";
     repo = "SLiM";
     rev = "v${version}";
-    hash = "sha256-fouZI5Uc8pY7eXD9Tm1C66j3reu7kijTEGA402bOJwc=";
+    hash = "sha256-Hgh1ianEdITRUIDKLiLW32kQlPlXKIfN4PSv3cOXTGI=";
   };
 
   nativeBuildInputs = [

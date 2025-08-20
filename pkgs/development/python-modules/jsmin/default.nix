@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "jsmin/test.py" ];
+  pytestFlagsArray = [ "jsmin/test.py" ];
 
   pythonImportsCheck = [ "jsmin" ];
 

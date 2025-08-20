@@ -9,6 +9,10 @@
   yarnBuildHook,
   yarnInstallHook,
   nodePackages,
+  python3,
+  pkg-config,
+  libsass,
+  stdenv,
   fetchzip,
 }:
 let
@@ -20,24 +24,20 @@ let
     hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
   };
 in
-php.buildComposerProject2 (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
-    tag = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
-  patches = [
-    # Node-sass is deprecated and fails to cross-compile
-    # See: https://github.com/InvoicePlane/InvoicePlane/issues/1275
-    ./node_switch_to_sass.patch
-  ];
+  vendorHash = "sha256-k7YBs6x/ABNTHPx9/EZXa4W9kcLQqpruV7YFGAADZq0=";
 
-  vendorHash = "sha256-eq3YKIZZzZihDYgFH3YTETHvNG6hAE/oJ5Ul2XRMn4U=";
+  buildInputs = [ libsass ];
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -45,23 +45,36 @@ php.buildComposerProject2 (finalAttrs: {
     yarnInstallHook
     # Needed for executing package.json scripts
     nodePackages.grunt-cli
+    pkg-config
+    (python3.withPackages (ps: with ps; [ distutils ]))
+    stdenv.cc
   ];
 
   offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src patches;
-    hash = "sha256-qAm4HnZwfwfjv7LqG+skmFLTHCSJKWH8iRDWFFebXEs=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
   };
 
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
 
   postBuild = ''
+    # Building node-sass dependency
+    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
+    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
+    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
+    export npm_config_nodedir=${nodejs}
+
+    pushd node_modules/node-sass
+    LIBSASS_EXT=auto yarn run build --offline
+    popd
+
+    # Running package.json scripts
     grunt build
   '';
 
   # Cleanup and language files
   postInstall = ''
-    chmod -R u+w $out/share
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
     rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}

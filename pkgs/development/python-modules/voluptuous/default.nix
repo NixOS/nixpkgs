@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "voluptuous" ];
 
-  enabledTestPaths = [ "voluptuous/tests/" ];
+  pytestFlagsArray = [ "voluptuous/tests/" ];
 
   meta = with lib; {
     description = "Python data validation library";

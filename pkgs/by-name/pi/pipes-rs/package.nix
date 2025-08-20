@@ -10,20 +10,20 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "lhvy";
-    repo = "pipes-rs";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-NrBmkA7sV1RhfG9KEqQNMR5s0l2u66b7KK0toDjQIps=";
   };
 
-  cargoHash = "sha256-0up9S3+NjBV8zsvsyVANvITisMSBXsab6jFwt19gnQk=";
+  cargoHash = "sha256-cOLPkmUwNdaexgauULraBVVx6mznI9GXhHV3mSEhL0g=";
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/pipes-rs" --version)" == "pipes-rs ${version}" ]]; then
-      echo 'pipes-rs smoke check passed'
+    if [[ "$("$out/bin/${pname}" --version)" == "${pname} ${version}" ]]; then
+      echo '${pname} smoke check passed'
     else
-      echo 'pipes-rs smoke check failed'
+      echo '${pname} smoke check failed'
       return 1
     fi
   '';

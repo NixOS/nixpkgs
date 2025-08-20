@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   ruff,
   click,
   click-default-group,
@@ -18,18 +19,21 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "25.7";
+  version = "24.12";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
     tag = "v${version}";
-    hash = "sha256-npwJlyUYjoYzvwaZZK4PIqhJmTeYGDDfc4T4/ODcx4c=";
+    hash = "sha256-ARq7QNwEtnXo0Q04CNWf3bAwyjl92YnFUp/Y51sgsLU=";
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       ruff = lib.getExe ruff;
     })
   ];
@@ -55,12 +59,13 @@ buildPythonPackage rec {
     soap = [ requests ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ optional-dependencies.cli
-  ++ optional-dependencies.lxml
-  ++ optional-dependencies.soap;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.cli
+    ++ optional-dependencies.lxml
+    ++ optional-dependencies.soap;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 
@@ -83,7 +88,7 @@ buildPythonPackage rec {
     description = "Naive XML & JSON bindings for Python";
     mainProgram = "xsdata";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "imantics";
   version = "0.1.12";
   pyproject = true;

@@ -25,12 +25,12 @@ buildGoModule rec {
   # Some tests are failing because of wrong filename/path
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Tool for situational awareness of cloud penetration tests";
     homepage = "https://github.com/BishopFox/cloudfox";
     changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "cloudfox";
   };
 }

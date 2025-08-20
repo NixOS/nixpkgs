@@ -5,7 +5,6 @@
   cmake,
   pkg-config,
   libxml2,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    udevCheckHook
   ];
   buildInputs = [ libxml2 ];
 
@@ -46,8 +44,6 @@ stdenv.mkDerivation rec {
       "-DCMAKE_INSTALL_PREFIX=$out"
     )
   '';
-
-  doInstallCheck = true;
 
   meta = with lib; {
     description = "Webcam-tools package";

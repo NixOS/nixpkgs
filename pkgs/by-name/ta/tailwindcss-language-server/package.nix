@@ -2,20 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nodejs,
+  nodejs_22,
   pnpm_9,
-  nix-update-script,
 }:
 
+let
+  version = "0.0.27";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  version = "0.14.26";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XXRWxN+1fOuVULh+ZE+XRRBaoRzhCpw7n8SkBIorG9A=";
+    rev = "@tailwindcss/language-server@v${finalAttrs.version}";
+    hash = "sha256-FphKiGMTMQj/tBmrwkPVlb+dEGjf+N4EgZtOVg7iL2M=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -24,28 +26,30 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
+      prePnpmInstall
       ;
-    fetcherVersion = 1;
-    hash = "sha256-SUEq20gZCiTDkFuNgMc5McHBPgW++8P9Q1MJb7a7pY8=";
+    hash = "sha256-kLB84P2Zb3gXpNlXCnQFIxz8xibACB39URIhy6Na9p8=";
   };
 
   nativeBuildInputs = [
+    nodejs_22
     pnpm_9.configHook
   ];
 
-  buildInputs = [
-    nodejs
-  ];
+  buildInputs = [ nodejs_22 ];
 
-  pnpmWorkspaces = [
-    "@tailwindcss/language-server..."
-  ];
+  pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
+  prePnpmInstall = ''
+    # Warning section for "pnpm@v8"
+    # https://pnpm.io/cli/install#--filter-package_selector
+    pnpm config set dedupe-peer-dependents false
+  '';
 
-  # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
-  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.14.24/pnpm-lock.yaml#L71
   buildPhase = ''
     runHook preBuild
 
+    # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
+    # (https://github.com/tailwindlabs/tailwindcss-intellisense/blob/%40tailwindcss/language-server%40v0.0.27/pnpm-lock.yaml#L47)
     pnpm --filter "@tailwindcss/language-server..." build
 
     runHook postBuild
@@ -62,15 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Tailwind CSS Language Server";
     homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
-    changelog = "https://github.com/tailwindlabs/tailwindcss-intellisense/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
     mainProgram = "tailwindcss-language-server";
-    platforms = nodejs.meta.platforms;
+    platforms = platforms.all;
   };
 })

@@ -1,37 +1,26 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib;
+{ config, lib, pkgs, ... }: with lib;
 let
   cfg = config.services.promtail;
 
-  format = pkgs.formats.json { };
-  prettyJSON =
-    conf:
-    with lib;
-    pipe conf [
-      (flip removeAttrs [ "_module" ])
-      (format.generate "promtail-config.json")
-    ];
+  prettyJSON = conf: pkgs.runCommandLocal "promtail-config.json" {} ''
+    echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq 'del(._module)' > $out
+  '';
 
-  allowSystemdJournal =
-    cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
+  allowSystemdJournal = cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
 
   allowPositionsFile = !lib.hasPrefix "/var/cache/promtail" positionsFile;
   positionsFile = cfg.configuration.positions.filename;
 
-  configFile = if cfg.configFile != null then cfg.configFile else prettyJSON cfg.configuration;
+  configFile = if cfg.configFile != null
+                   then cfg.configFile
+                   else prettyJSON cfg.configuration;
 
-in
-{
+in {
   options.services.promtail = with types; {
     enable = mkEnableOption "the Promtail ingresser";
 
     configuration = mkOption {
-      type = format.type;
+      type = (pkgs.formats.json {}).type;
       description = ''
         Specify the configuration for Promtail in Nix.
         This option will be ignored if `services.promtail.configFile` is defined.
@@ -49,7 +38,7 @@ in
 
     extraFlags = mkOption {
       type = listOf str;
-      default = [ ];
+      default = [];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
         Specify a list of additional command line flags,
@@ -105,14 +94,12 @@ in
         PrivateUsers = true;
 
         SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
-      }
-      // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) {
-        # FIXME: figure out why this breaks on aarch64
+      } // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) { # FIXME: figure out why this breaks on aarch64
         SystemCallFilter = "@system-service";
       });
     };
 
-    users.groups.promtail = { };
+    users.groups.promtail = {};
     users.users.promtail = {
       description = "Promtail service user";
       isSystemUser = true;

@@ -1,48 +1,44 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt5,
+  mkDerivation,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+mkDerivation rec {
   pname = "qtbitcointrader";
-  version = "1.42.21";
+  version = "1.40.43";
 
   src = fetchFromGitHub {
     owner = "JulyIGHOR";
     repo = "QtBitcoinTrader";
-    tag = "v${finalAttr.version}";
-    hash = "sha256-u3+Kwn8KunYUpWCd55TQuVVfoSp8hdti93d6hk7Uqx8=";
+    rev = "v${version}";
+    sha256 = "sha256-u3+Kwn8KunYUpWCd55TQuVVfoSp8hdti93d6hk7Uqx8=";
   };
 
-  nativeBuildInputs = [ libsForQt5.wrapQtAppsHook ];
-
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
-    libsForQt5.qtscript
+    qt5.qtbase
+    qt5.qtmultimedia
+    qt5.qtscript
   ];
 
-  sourceRoot = "${finalAttr.src.name}/src";
+  postUnpack = "sourceRoot=\${sourceRoot}/src";
 
   configurePhase = ''
     runHook preConfigure
-
     qmake $qmakeFlags \
       PREFIX=$out \
       DESKTOPDIR=$out/share/applications \
       ICONDIR=$out/share/pixmaps \
       QtBitcoinTrader_Desktop.pro
-
     runHook postConfigure
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bitcoin trading client";
     mainProgram = "QtBitcoinTrader";
     homepage = "https://centrabit.com/";
-    license = lib.licenses.gpl3;
-    platforms = libsForQt5.qtbase.meta.platforms;
+    license = licenses.gpl3;
+    platforms = qt5.qtbase.meta.platforms;
   };
-})
+}

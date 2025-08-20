@@ -4,36 +4,28 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "gowall";
-  version = "0.2.1";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
     rev = "v${version}";
-    hash = "sha256-fgO4AoyHR51zD86h75b06BXV0ONlFfHdBvxfJvcD7J8=";
+    hash = "sha256-BBalJADhQ7D7p5PeafddkqQmHGhLsq1DlF1FUoazJGg=";
   };
 
-  vendorHash = "sha256-V/VkbJZIzy4KlEPtlTTqdUIPG6lKD+XidNM0NWpATbk=";
+  vendorHash = "sha256-H2Io1K2LEFmEPJYVcEaVAK2ieBrkV6u+uX82XOvNXj4=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    # using writableTmpDirAsHomeHook to prevent issues when creating config dir for shell completions
-    writableTmpDirAsHomeHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gowall \
       --bash <($out/bin/gowall completion bash) \
       --fish <($out/bin/gowall completion fish) \
       --zsh <($out/bin/gowall completion zsh)
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Achno/gowall/releases/tag/v${version}";
@@ -44,7 +36,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       crem
       emilytrau
-      FKouhai
     ];
   };
 }

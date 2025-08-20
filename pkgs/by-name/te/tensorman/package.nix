@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "tensorman";
-  version = "0.1.0-unstable-2024-06-24";
+  version = "unstable-2023-03-13";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "tensorman";
-    rev = "24fa3b2bb06a29708162ee474a733e9a227b1778";
-    hash = "sha256-kI/dOw9JnhXmLqIgaljhRMc/SX35m7WQ9b6bQa6diZ0=";
+    rev = "b1125f71b55a8d9a4d674a62fa1e8868d40d0f0d";
+    hash = "sha256-WMX+nzNQTGeSUxOfMHo+U0ICYx8rttXpQrQClwU2zX8=";
   };
 
-  cargoHash = "sha256-/Ul8+5MmTntQ0OprfG4QhUNjc3PktCandzTTWn4FD0Y=";
+  cargoHash = "sha256-y/AE2jTVetqBBExBlPEB0LwIVk+LjB2i0ZjijLPs9js=";
 
   meta = with lib; {
     description = "Utility for easy management of Tensorflow containers";

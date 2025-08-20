@@ -9,6 +9,7 @@
   cairo,
   fontconfig,
   libsigcxx30,
+  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,10 +32,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    boost # for tests
-    fontconfig
-  ];
+  buildInputs =
+    [
+      boost # for tests
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ApplicationServices
+    ];
 
   propagatedBuildInputs = [
     cairo
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       mpl10
     ];
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

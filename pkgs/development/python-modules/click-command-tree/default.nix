@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "whwright";
-    repo = "click-command-tree";
+    repo = pname;
     tag = version;
     hash = "sha256-oshAHCGe8p5BQ0W21bXSxrTCEFgIxZ6BmUEiWB1xAoI=";
   };
@@ -22,12 +22,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "click_command_tree" ];
 
   meta = with lib; {
-    description = "Click plugin to show the command tree of your CLI";
+    description = "click plugin to show the command tree of your CLI";
     homepage = "https://github.com/whwright/click-command-tree";
     license = licenses.mit;
     maintainers = with maintainers; [ tjni ];

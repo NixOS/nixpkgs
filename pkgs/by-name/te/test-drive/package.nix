@@ -14,19 +14,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
-    repo = "test-drive";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
   };
 
-  nativeBuildInputs = [
-    gfortran
-    meson
-    ninja
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      gfortran
+      meson
+      ninja
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   mesonAutoFeatures = "auto";
 

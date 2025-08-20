@@ -6,9 +6,9 @@
   addDriverRunpath,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "vulkan-helper";
-  version = "0-unstable-2023-12-22";
+  version = "unstable-2023-12-22";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-2pLHnTn0gJKz4gfrR6h85LHOaZPrhIGYzQeci4Dzz2E=";
   };
 
-  cargoHash = "sha256-9Zc949redmYLCgDR9pabR4ZTtcvOjrXvviRdsb8AiBU=";
+  cargoHash = "sha256-OXMz1qu4/LDeQbwe7shhn2Eee15xKmBpWSsP0IbjoGM=";
 
   nativeBuildInputs = [
     addDriverRunpath

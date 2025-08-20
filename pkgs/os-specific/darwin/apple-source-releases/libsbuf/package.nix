@@ -81,6 +81,5 @@ bootstrapStdenv.mkDerivation (finalAttrs: {
       lib.licenses.bsd2
       lib.licenses.bsd3
     ];
-    platforms = lib.platforms.darwin;
   };
 })

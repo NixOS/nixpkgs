@@ -6,9 +6,9 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "focus";
-  version = "0-unstable-2021-02-23";
+  version = "unstable-2021-02-23";
 
   src = fetchFromGitHub {
     owner = "phillbush";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/phillbush/focus";
     license = licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
   };
 }

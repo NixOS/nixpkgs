@@ -5,14 +5,13 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aiosteamist";
-  version = "1.0.1";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,8 +20,13 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiosteamist";
     tag = "v${version}";
-    hash = "sha256-e7Nt/o2A1qn2nSpWv6ZsZHn/WpcXKzol+f+JNJaSb4w=";
+    hash = "sha256-vqCcQDUMFFhIOoiER5TMOxJPY7HYFS4K1fuu/1IqP44=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=aiosteamist" ""
+  '';
 
   build-system = [ poetry-core ];
 
@@ -33,7 +37,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "aiosteamist" ];

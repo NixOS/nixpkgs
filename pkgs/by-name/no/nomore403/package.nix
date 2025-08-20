@@ -24,12 +24,12 @@ buildGoModule rec {
     "-X=main.BuildDate=1970-01-01T00:00:00Z"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to bypass 403/40X response codes";
     homepage = "https://github.com/devploit/nomore403";
     changelog = "https://github.com/devploit/nomore403/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "nomore403";
   };
 }

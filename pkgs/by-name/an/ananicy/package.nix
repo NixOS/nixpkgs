@@ -10,7 +10,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ananicy";
   version = "unstable-2023-03-21";
 

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openhomedevice" ];
 
-  enabledTestPaths = [ "tests/*.py" ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   meta = with lib; {
     description = "Python module to access Linn Ds and Openhome devices";

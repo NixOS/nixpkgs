@@ -1,6 +1,11 @@
-{ runTest }:
 {
-  remote-write = runTest ./remote-write.nix;
-  vmalert = runTest ./vmalert.nix;
-  external-promscrape-config = runTest ./external-promscrape-config.nix;
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../../.. { inherit system config; },
+}:
+
+{
+  remote-write = import ./remote-write.nix { inherit system pkgs; };
+  vmalert = import ./vmalert.nix { inherit system pkgs; };
+  external-promscrape-config = import ./external-promscrape-config.nix { inherit system pkgs; };
 }

@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Reflexive polytopes database";
     license = licenses.gpl2;
     platforms = platforms.all;
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
   };
 }

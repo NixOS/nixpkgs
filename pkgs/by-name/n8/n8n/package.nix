@@ -4,50 +4,44 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_10,
+  pnpm_9,
   python3,
   node-gyp,
-  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
-  libpq,
+  postgresql,
   makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.105.3";
+  version = "1.73.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-IsAazA4DCkcOE5lNbxNMYgWAZycwjLYneSFBLAhltac=";
+    hash = "sha256-gPdJKVOZlizdS0o+2nBgCImnIhtHzRjE2xk0zJA52go=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-maKD03Gr1gGUQwvTk35kv89a9TvzsIeKqI9NjjTO1TQ=";
+    hash = "sha256-Am9R2rfQiw1IPd22/UraqzEqvVeB5XuSrrLSYXWsWfU=";
   };
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpm_9.configHook
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    cctools
-    xcbuild
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs
     libkrb5
     libmongocrypt
-    libpq
+    postgresql
   ];
 
   buildPhase = ''
@@ -73,9 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
-    shopt -s globstar
-    # https://github.com/pnpm/pnpm/issues/3645
-    find node_modules packages/**/node_modules -xtype l -delete
 
     echo "Removed non-deterministic and unnecessary files"
   '';
@@ -112,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
-      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

@@ -27,12 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "LDFLAGS+=-static" "LDFLAGS+="
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
+    ];
 
   doCheck = true;
 
@@ -42,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "scdoc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      primeos
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
   };
 })

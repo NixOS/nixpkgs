@@ -1,33 +1,37 @@
 {
   lib,
   stdenv,
-  fetchgit,
-  gitUpdater,
-  sparse,
+  fetchzip,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "mmc-utils";
-  version = "1.0";
+  version = "unstable-2024-03-07";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-iWLA1psNPUBCPOP393/xnYJ6BEuOcPCEYgymqE06F3Q=";
+  src = fetchzip rec {
+    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";
+    passthru.rev = "e1281d4de9166b7254ba30bb58f9191fc2c9e7fb";
+    sha256 = "/lkcZ/ArdBAStV9usavrbfjULXenqb+h2rbDJzxZjJk=";
   };
-
-  nativeBuildInputs = [ sparse ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "prefix=$(out)"
-    "mandir=$(out)/share/man"
   ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp man/mmc.1 $out/share/man/man1/
+  '';
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
   };
 
   meta = with lib; {
@@ -38,4 +42,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
   };
-})
+}

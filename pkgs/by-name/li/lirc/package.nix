@@ -112,9 +112,6 @@ stdenv.mkDerivation rec {
     "localstatedir=$TMPDIR"
   ];
 
-  # Upstream ships broken symlinks in docs
-  dontCheckForBrokenSymlinks = true;
-
   meta = with lib; {
     description = "Allows to receive and send infrared signals";
     homepage = "https://www.lirc.org/";

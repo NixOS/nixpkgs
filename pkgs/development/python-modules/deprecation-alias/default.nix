@@ -2,30 +2,34 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  hatch-requirements-txt,
+  setuptools,
   deprecation,
   packaging,
 }:
 buildPythonPackage rec {
   pname = "deprecation-alias";
-  version = "0.4.0";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "deprecation_alias";
-    inherit version;
-    hash = "sha256-pY0udEkceDTp0xh4jaYCcvovga64FLQFWkupCgpBdA8=";
+    inherit pname version;
+    hash = "sha256-5zJm1MhmwEAHnXoEf5KsLNRotGCAMkht8f/X7xR+ZRU=";
   };
 
-  build-system = [ hatch-requirements-txt ];
+  build-system = [ setuptools ];
 
   dependencies = [
     deprecation
     packaging
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
+  '';
+
   meta = {
-    description = "Wrapper around ‘deprecation’ providing support for deprecated aliases";
+    description = "A wrapper around ‘deprecation’ providing support for deprecated aliases.";
     homepage = "https://github.com/domdfcoding/deprecation-alias";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

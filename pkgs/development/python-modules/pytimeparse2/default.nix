@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "onegreyonewhite";
-    repo = "pytimeparse2";
+    repo = pname;
     tag = version;
     hash = "sha256-zWRbSohTvbVd3GcRRoxH/UReVGYHC0YmbNgbt8N0X48=";
   };

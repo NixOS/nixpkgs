@@ -5,12 +5,13 @@
   buildPackages,
   runCommand,
   lib,
-  replaceVars,
+  substituteAll,
   writeClosure,
 }:
 
 let
-  builder = replaceVars ./builder.pl {
+  builder = substituteAll {
+    src = ./builder.pl;
     inherit (builtins) storeDir;
   };
 in

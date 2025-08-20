@@ -10,7 +10,6 @@
   pillow,
   pyjwt,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   requests,
   requests-futures,
@@ -24,24 +23,24 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.10.5";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
-    repo = "jira";
+    repo = pname;
     tag = version;
-    hash = "sha256-Gj9RmNJwmYQviXeNLL6WWFIO91jy6zY/s29Gy18lzyA=";
+    hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     defusedxml
     packaging
     requests
@@ -68,9 +67,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flaky
     pytestCheckHook
-    pytest-cov-stub
     requests-mock
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report=xml --cov jira" ""
+  '';
 
   pythonImportsCheck = [ "jira" ];
 
@@ -80,7 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
-    changelog = "https://github.com/pycontribs/jira/releases/tag/${src.tag}";
+    changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = [ ];
     mainProgram = "jirashell";

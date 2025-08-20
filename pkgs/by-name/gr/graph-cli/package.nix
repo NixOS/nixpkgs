@@ -8,7 +8,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
   version = "0.1.19";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
@@ -24,11 +23,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     numpy
     pandas
     (matplotlib.override { enableQt = true; })

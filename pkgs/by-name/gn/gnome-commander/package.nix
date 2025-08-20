@@ -7,7 +7,10 @@
   pkg-config,
   flex,
   itstool,
-  wrapGAppsHook3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
   desktop-file-utils,
   exiv2,
   libgsf,
@@ -19,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-commander";
-  version = "1.18.3";
+  version = "1.18.1-unstable-2024-10-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-commander";
-    tag = finalAttrs.version;
-    hash = "sha256-rSaj1Fg2seZKlzlERZZmz80kxJT1vZ+INiJlWfZ9m6g=";
+    rev = "28dadb1ef9342bb1a5f9a65b1a5bf3bd80e3d30a";
+    hash = "sha256-DxsZJht+PD3vY5vc1vzpRD8FHBPKcjK4qfke5nhvHS0=";
   };
 
   # hard-coded schema paths
@@ -37,13 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
         '/share/gsettings-schemas/${finalAttrs.finalPackage.name}/glib-2.0/schemas'
   '';
 
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Nx/e2H9NxCTj62xVDlKTpPdjlxAx2YAcQJh1kHByrd4=";
+  };
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     flex
     itstool
-    wrapGAppsHook3
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
@@ -53,13 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     poppler
     samba
+    gtest
   ];
-
-  mesonFlags = [ (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck) ];
-
-  checkInputs = [ gtest ];
-
-  doCheck = false; # gtest requires C/C++17 but the project is written in C/C++11
 
   meta = {
     description = "Fast and powerful twin-panel file manager for the Linux desktop";

@@ -19,16 +19,14 @@
   pybars3,
   versioneer,
   shapely,
-  setuptools,
-  nix-update-script,
 }:
 let
   solidpython = callPackage ./solidpython { };
 in
 buildPythonApplication rec {
   pname = "kikit";
-  version = "1.7.2";
-  pyproject = true;
+  version = "1.6.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -36,20 +34,10 @@ buildPythonApplication rec {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${version}";
-    hash = "sha256-HSAQJJqJMVh44wgOQm+0gteShLogklBFuIzWtoVTf9I=";
-    # Upstream uses versioneer, which relies on gitattributes substitution.
-    # This leads to non-reproducible archives on GitHub.
-    # See https://github.com/NixOS/nixpkgs/issues/84312
-    postFetch = ''
-      rm "$out/kikit/_version.py"
-    '';
+    hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     kicad
     numpy
     click
@@ -82,11 +70,6 @@ buildPythonApplication rec {
     "kikit"
   ];
 
-  postPatch = ''
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > kikit/_version.py
-  '';
-
   preCheck = ''
     export PATH=$PATH:$out/bin
 
@@ -96,17 +79,14 @@ buildPythonApplication rec {
     cd test/units
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
-    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/v${version}";
+    maintainers = with maintainers; [
       jfly
       matusf
     ];
-    teams = with lib.teams; [ ngi ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

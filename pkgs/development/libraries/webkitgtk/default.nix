@@ -37,7 +37,6 @@
   libxslt,
   harfbuzz,
   hyphen,
-  icu,
   libsysprof-capture,
   libpthreadstubs,
   nettle,
@@ -66,7 +65,7 @@
   libbacktrace,
   systemd,
   xdg-dbus-proxy,
-  replaceVars,
+  substituteAll,
   glib,
   unifdef,
   addDriverRunpath,
@@ -80,7 +79,7 @@
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.48.5";
+  version = "2.46.5";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -100,102 +99,103 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-u2TtnRz9WOi16JzK1x3TGt/tVjNrrXaVAxrQtmjhmHw=";
+    hash = "sha256-utQCC7DPs+dA3zCCwtnL9nz0CVWWWIpWrs3eZwITeAU=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
-    (replaceVars ./fix-bubblewrap-paths.patch {
+    (substituteAll {
+      src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })
   ];
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    gettext
-    gobject-introspection
-    gperf
-    ninja
-    perl
-    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-    pkg-config
-    python3
-    ruby
-    gi-docgen
-    glib # for gdbus-codegen
-    unifdef
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-    wayland-scanner
-  ];
+  nativeBuildInputs =
+    [
+      bison
+      cmake
+      gettext
+      gobject-introspection
+      gperf
+      ninja
+      perl
+      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+      pkg-config
+      python3
+      ruby
+      gi-docgen
+      glib # for gdbus-codegen
+      unifdef
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+      wayland-scanner
+    ];
 
-  buildInputs = [
-    at-spi2-core
-    cairo # required even when using skia
-    enchant2
-    flite
-    libavif
-    libepoxy
-    libjxl
-    gnutls
-    gst-plugins-bad
-    gst-plugins-base
-    harfbuzz
-    hyphen
-    icu
-    libGL
-    libGLU
-    libgbm
-    libgcrypt
-    libgpg-error
-    libidn
-    libintl
-    lcms2
-    libpthreadstubs
-    libsysprof-capture
-    libtasn1
-    libwebp
-    libxkbcommon
-    libxml2
-    libxslt
-    libbacktrace
-    nettle
-    p11-kit
-    sqlite
-    woff2
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-    # https://bugs.webkit.org/show_bug.cgi?id=274032
-    fontconfig
-    freetype
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-    libedit
-    readline
-  ]
-  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-    libseccomp
-    libmanette
-    wayland
-    xorg.libX11
-  ]
-  ++ lib.optionals systemdSupport [
-    systemd
-  ]
-  ++ lib.optionals enableGeoLocation [
-    geoclue2
-  ]
-  ++ lib.optionals enableExperimental [
-    # For ENABLE_WEB_RTC
-    openssl
-  ]
-  ++ lib.optionals withLibsecret [
-    libsecret
-  ]
-  ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    wayland-protocols
-  ];
+  buildInputs =
+    [
+      at-spi2-core
+      cairo # required even when using skia
+      enchant2
+      libavif
+      libepoxy
+      libjxl
+      gnutls
+      gst-plugins-bad
+      gst-plugins-base
+      harfbuzz
+      hyphen
+      libGL
+      libGLU
+      libgbm
+      libgcrypt
+      libgpg-error
+      libidn
+      libintl
+      lcms2
+      libpthreadstubs
+      libsysprof-capture
+      libtasn1
+      libwebp
+      libxkbcommon
+      libxml2
+      libxslt
+      libbacktrace
+      nettle
+      p11-kit
+      sqlite
+      woff2
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+      # https://bugs.webkit.org/show_bug.cgi?id=274032
+      fontconfig
+      freetype
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+      libedit
+      readline
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+      libseccomp
+      libmanette
+      wayland
+      xorg.libX11
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ]
+    ++ lib.optionals enableGeoLocation [
+      geoclue2
+    ]
+    ++ lib.optionals enableExperimental [
+      flite
+      openssl
+    ]
+    ++ lib.optionals withLibsecret [
+      libsecret
+    ]
+    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+      wayland-protocols
+    ];
 
   propagatedBuildInputs = [
     gtk3
@@ -259,7 +259,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "webkit2gtk-web-extension-4.0"
     ];
     platforms = platforms.linux ++ platforms.darwin;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

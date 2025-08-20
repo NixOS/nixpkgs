@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = "bravado-core";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
@@ -47,8 +47,7 @@ buildPythonPackage rec {
     swagger-spec-validator
     pytz
     msgpack
-  ]
-  ++ jsonschema.optional-dependencies.format-nongpl;
+  ] ++ jsonschema.optional-dependencies.format-nongpl;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

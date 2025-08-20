@@ -12,18 +12,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "rattler-build";
-  version = "0.45.0";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "rattler-build";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nk4orzkmgKQ6UfRpA9suh7FxiPh4P+F4NagY22if5Iw=";
+    tag = "v${version}";
+    hash = "sha256-HDRQveWOJKGBWxN7ZyIECo1HBfz+vSaLW7ueSok+d64=";
   };
 
-  cargoHash = "sha256-LvdFKguUMplNbJLh6CTy6enfg1PGqjawku/tBjwf30o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b44bL/xVUwBdqwr/jawZbyV+yHsGR3hREm4nvHDMCWA=";
 
   doCheck = false; # test requires network access
 
@@ -54,14 +55,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Universal package builder for Windows, macOS and Linux";
     homepage = "https://rattler.build/";
-    changelog = "https://github.com/prefix-dev/rattler-build/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/prefix-dev/rattler-build/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       genga898
@@ -69,4 +70,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "rattler-build";
   };
-})
+}

@@ -2,41 +2,36 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  cython,
+  cython_0,
   pkg-config,
   libgbinder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gbinder-python";
-  version = "1.1.2";
-  pyproject = true;
+  version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";
-    repo = "gbinder-python";
-    tag = version;
-    hash = "sha256-up1EDuR05a7TlCErd2BXkp01oqi6hEskt7xVxsJqquM=";
+    repo = pname;
+    rev = version;
+    sha256 = "1X9gAux9w/mCEVmE3Yqvvq3kU7hu4iAFaZWNZZZxt3E=";
   };
-
-  build-system = [
-    cython
-    setuptools
-  ];
 
   buildInputs = [ libgbinder ];
 
   nativeBuildInputs = [
+    cython_0
     pkg-config
   ];
 
   postPatch = ''
     # Fix pkg-config name for cross-compilation
-    substituteInPlace setup.py \
-      --replace-fail "pkg-config" "$PKG_CONFIG" \
-      --replace-fail "USE_CYTHON = False" "USE_CYTHON = True"
+    substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
   '';
+
+  setupPyGlobalFlags = [ "--cython" ];
 
   meta = {
     description = "Python bindings for libgbinder";

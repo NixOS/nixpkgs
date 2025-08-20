@@ -12,7 +12,7 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "purple-matrix-unstable";
   version = "2019-06-06";
 

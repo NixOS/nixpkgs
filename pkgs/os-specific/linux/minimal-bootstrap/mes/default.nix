@@ -42,7 +42,7 @@ let
     description = "Scheme interpreter and C compiler for bootstrapping";
     homepage = "https://www.gnu.org/software/mes";
     license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 

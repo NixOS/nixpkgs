@@ -1,65 +1,67 @@
 {
   stdenv,
   lib,
+  python3Packages,
   fetchFromGitHub,
   ffmpeg,
-  python3Packages,
-  qt6Packages,
+  libsForQt5,
   testers,
   corrscope,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.11.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     tag = version;
-    hash = "sha256-76qa4jOSncK1eDly/uXJzpWWdsEz7Hg3DyFb7rmrQBc=";
+    hash = "sha256-WSv65jEu/w6iNrL/f5PN147FBjmR0j30H1D39dd+KN8=";
   };
 
-  nativeBuildInputs = with qt6Packages; [
-    wrapQtAppsHook
+  pythonRelaxDeps = [
+    "attrs"
+    "ruamel.yaml"
   ];
 
-  build-system = with python3Packages; [
-    hatchling
+  nativeBuildInputs =
+    (with libsForQt5; [
+      wrapQtAppsHook
+    ])
+    ++ (with python3Packages; [
+      poetry-core
+    ]);
+
+  buildInputs =
+    [
+      ffmpeg
+    ]
+    ++ (
+      with libsForQt5;
+      [
+        qtbase
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        qtwayland
+      ]
+    );
+
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    appnope
+    atomicwrites
+    attrs
+    click
+    matplotlib
+    numpy
+    packaging
+    qtpy
+    pyqt5
+    ruamel-yaml
+    colorspacious
   ];
-
-  buildInputs = [
-    ffmpeg
-  ]
-  ++ (
-    with qt6Packages;
-    [
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-  );
-
-  dependencies = (
-    with python3Packages;
-    [
-      appdirs
-      atomicwrites
-      attrs
-      click
-      colorspacious
-      matplotlib
-      numpy
-      qtpy
-      pyqt6
-      ruamel-yaml
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      appnope
-    ]
-  );
 
   dontWrapQtApps = true;
 
@@ -78,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";
     longDescription = ''
       Corrscope renders oscilloscope views of WAV files recorded from chiptune (game music from
@@ -88,10 +90,9 @@ python3Packages.buildPythonApplication rec {
       Genesis/FM synthesis) which jump around on other oscilloscope programs.
     '';
     homepage = "https://github.com/corrscope/corrscope";
-    changelog = "https://github.com/corrscope/corrscope/releases/tag/${version}";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
     mainProgram = "corr";
   };
 }

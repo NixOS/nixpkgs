@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  darwin,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -16,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lnTTutOc829COwfNhBkSK8UpiNnGsm7Da53b+eSBt1Q=";
   };
 
-  cargoHash = "sha256-/gVJJegPIUe0Mv7+0tCP/vWrMbImtY3tb+lELnn1ur0=";
+  cargoHash = "sha256-NffNQXKJ+b1w7Ar2M6UDev/AxruDEf8IGQ+mNdvU6e4=";
 
   cargoPatches = [
     ./Cargo.lock.patch
@@ -28,18 +30,20 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '.version("0.1")' '.version("${version}")'
   '';
 
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
 
-  meta = {
+  meta = with lib; {
     description = "NetBIOS scanner written in Rust";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
     changelog = "https://github.com/jonkgrimes/nbtscanner/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "nbtscanner";
   };
 }

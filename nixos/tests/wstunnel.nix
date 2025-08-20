@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -5,6 +7,8 @@ in
 
 {
   name = "wstunnel";
+
+  meta.platforms = lib.platforms.linux;
 
   nodes = {
     server = {
@@ -30,10 +34,8 @@ in
             host = "10.0.0.1";
             port = 443;
           };
-          settings = {
-            tls-certificate = "${certs.${domain}.cert}";
-            tls-private-key = "${certs.${domain}.key}";
-          };
+          tlsCertificate = certs.${domain}.cert;
+          tlsKey = certs.${domain}.key;
         };
       };
     };
@@ -47,9 +49,9 @@ in
         useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
-        hosts = {
-          "10.0.0.1" = [ domain ];
-        };
+        extraHosts = ''
+          10.0.0.1 ${domain}
+        '';
       };
 
       systemd.network.networks."01-eth1" = {
@@ -62,10 +64,8 @@ in
         clients.my-client = {
           autoStart = false;
           connectTo = "wss://${domain}:443";
-          settings = {
-            local-to-remote = [ "tcp://8080:localhost:2080" ];
-            remote-to-local = [ "tcp://2081:localhost:8081" ];
-          };
+          localToRemote = [ "tcp://8080:localhost:2080" ];
+          remoteToLocal = [ "tcp://2081:localhost:8081" ];
         };
       };
     };

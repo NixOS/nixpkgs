@@ -39,18 +39,19 @@ stdenvNoCC.mkDerivation {
 
   dontWrapQtApps = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p "$out/share/sddm/themes"
-    cp -r Elegant/ "$out/share/sddm/themes/Elegant"
-  ''
-  + (lib.optionalString (lib.isAttrs themeConfig) ''
-    ln -sf ${user-cfg} $out/share/sddm/themes/Elegant/theme.conf.user
-  '')
-  + ''
-    runHook postInstall
-  '';
+      mkdir -p "$out/share/sddm/themes"
+      cp -r Elegant/ "$out/share/sddm/themes/Elegant"
+    ''
+    + (lib.optionalString (lib.isAttrs themeConfig) ''
+      ln -sf ${user-cfg} $out/share/sddm/themes/Elegant/theme.conf.user
+    '')
+    + ''
+      runHook postInstall
+    '';
 
   postFixup = ''
     mkdir -p $out/nix-support

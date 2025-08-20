@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "Python bindings for the Nemo extension library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

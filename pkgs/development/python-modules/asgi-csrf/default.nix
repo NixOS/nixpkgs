@@ -1,17 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  isPy27,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   itsdangerous,
   python-multipart,
-
-  # tests
-  asgi-lifespan,
   pytestCheckHook,
   starlette,
   httpx,
@@ -19,32 +12,32 @@
 }:
 
 buildPythonPackage rec {
+  version = "0.10";
+  format = "setuptools";
   pname = "asgi-csrf";
-  version = "0.11";
-  pyproject = true;
+  disabled = isPy27;
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = "asgi-csrf";
+    repo = pname;
     tag = version;
-    hash = "sha256-STitMWabAPz61AU+5gFJSHBBqf67Q8UtS6ks8Q/ZybY=";
+    hash = "sha256-VclgePMQh60xXofrquI3sCyPUPlkV4maZ5yybt+4HCs=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     itsdangerous
     python-multipart
   ];
 
   nativeCheckInputs = [
-    asgi-lifespan
     httpx
     pytest-asyncio
     pytestCheckHook
     starlette
   ];
+
+  doCheck = false; # asgi-lifespan missing
 
   pythonImportsCheck = [ "asgi_csrf" ];
 

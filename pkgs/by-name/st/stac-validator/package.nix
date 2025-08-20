@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "stac-validator";
-  version = "3.10.1";
+  version = "3.4.0";
   pyproject = true;
   disabled = python3Packages.pythonOlder "3.8";
 
@@ -14,19 +14,14 @@ python3Packages.buildPythonPackage rec {
     owner = "stac-utils";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-tqguaptVRo6k6QALOOOL8dysMGDZx07eRJoHG24JirQ=";
+    hash = "sha256-e3v8WvVbZcxN91w+YNUmSILZ1nZ9Vy1UbEpCQkTMQpQ=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
-  pythonRelaxDeps = [
-    "click"
-  ];
-
   dependencies = with python3Packages; [
     click
     jsonschema
-    pyyaml
     requests
   ];
 
@@ -36,6 +31,6 @@ python3Packages.buildPythonPackage rec {
     description = "Validator for the SpatioTemporal Asset Catalog (STAC) specification";
     homepage = "https://github.com/stac-utils/stac-validator";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.geospatial ];
+    maintainers = lib.teams.geospatial.members;
   };
 }

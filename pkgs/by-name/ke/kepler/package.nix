@@ -1,14 +1,16 @@
 {
   lib,
+  stdenv,
+  darwin,
   fetchFromGitHub,
-  libpq,
   openssl,
   pkg-config,
+  postgresql,
   rustPlatform,
   zstd,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "kepler";
   version = "unstable-2023-07-19";
 
@@ -19,17 +21,21 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jmQ88flSMrS0CB7GNj1Ee60HZgroDKTwLk0i/kg6gVM=";
   };
 
-  cargoHash = "sha256-5ORjyzCkX3j62pL4S8CqSXExZUjTIO0db99oIuczEY0=";
+  cargoHash = "sha256-+WLb4DsAW6tnO0KdtD9zMnYCEb1t0onZqFhnqhbIStU=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libpq
-    openssl
-    zstd
-  ];
+  buildInputs =
+    [
+      openssl
+      postgresql
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

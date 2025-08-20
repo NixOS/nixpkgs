@@ -8,19 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.35.1";
-  pyproject = true;
+  version = "0.33.6";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
     tag = "v${version}";
-    hash = "sha256-y4BhU2kSn+RWqc5+pJQFhbwfat9cMWD0ED0EXJp25cY=";
+    hash = "sha256-CkdO/63IgUOf8AC2fUDKPyax0CHWVs8AkoTaperWxFk=";
   };
-
-  build-system = with python3Packages; [ setuptools ];
-
-  pythonRelaxDeps = [ "radicale" ];
 
   dependencies = with python3Packages; [
     appdirs
@@ -29,8 +24,10 @@ python3Packages.buildPythonApplication rec {
     flask
     flask-wtf
     msgpack
+    setuptools
     (python3Packages.toPythonModule (radicale.override { python3 = python; }))
     requests
+    types-setuptools
     requests.optional-dependencies.socks
   ];
 

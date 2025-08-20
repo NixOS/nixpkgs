@@ -6,20 +6,20 @@
   pkg-config,
   python3,
   boost,
-  fuse3,
+  fuse,
   libtorrent-rasterbar,
   curl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "btfs";
-  version = "3.1";
+  version = "2.24";
 
   src = fetchFromGitHub {
     owner = "johang";
-    repo = "btfs";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
+    sha256 = "sha256-fkS0U/MqFRQNi+n7NE4e1cnNICvfST2IQ9FMoJUyj6w=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     boost
-    fuse3
+    fuse
     libtorrent-rasterbar
     curl
     python3

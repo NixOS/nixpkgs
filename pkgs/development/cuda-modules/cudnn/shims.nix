@@ -1,14 +1,14 @@
 # Shims to mimic the shape of ../modules/generic/manifests/{feature,redistrib}/release.nix
 {
+  lib,
   package,
-  # redistSystem :: String
+  # redistArch :: String
   # String is "unsupported" if the given architecture is unsupported.
-  redistSystem,
+  redistArch,
 }:
 {
-  featureRelease = {
-    inherit (package) minCudaVersion maxCudaVersion;
-    ${redistSystem}.outputs = {
+  featureRelease = lib.optionalAttrs (redistArch != "unsupported") {
+    ${redistArch}.outputs = {
       lib = true;
       static = true;
       dev = true;
@@ -16,6 +16,6 @@
   };
   redistribRelease = {
     name = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
-    inherit (package) hash url version;
+    inherit (package) version;
   };
 }

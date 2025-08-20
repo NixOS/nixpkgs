@@ -28,8 +28,6 @@ let
         "-DWITH_RPC=ON"
       ];
 
-      doInstallCheck = true;
-
       postPatch = ''
         substituteInPlace CMakeLists.txt \
           --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d" \

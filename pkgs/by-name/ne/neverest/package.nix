@@ -1,9 +1,10 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   stdenv,
   pkg-config,
+  darwin,
   installShellFiles,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -21,21 +22,30 @@ rustPlatform.buildRustPackage rec {
   pname = "neverest";
   version = "1.0.0-beta";
 
-  src = fetchFromGitHub {
-    owner = "pimalaya";
-    repo = "neverest";
+  src = fetchFromSourcehut {
+    owner = "~soywod";
+    repo = "neverest-cli";
     rev = "v${version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
 
-  cargoHash = "sha256-K+LKRokfE8i4Huti0aQm4UrpConTcxVwJ2DyeOLjNKA=";
+  cargoHash = "sha256-i5or8oBtjGqOfTfwB7dYXn/OPgr5WEWNEvC0WdCCG+c=";
 
   nativeBuildInputs = [
     pkg-config
-  ]
-  ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
+  ] ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs = lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        Cocoa
+        Security
+      ]
+    )
+    ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
 
   # TODO: unit tests temporarily broken, remove this line for the next
   # beta.2 release
@@ -54,12 +64,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/neverest completion zsh)
     '';
 
-  meta = {
+  meta = with lib; {
     description = "CLI to synchronize, backup and restore emails";
     mainProgram = "neverest";
     homepage = "https://pimalaya.org/neverest/cli/v${version}/";
     changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${version}/item/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soywod ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ soywod ];
   };
 }

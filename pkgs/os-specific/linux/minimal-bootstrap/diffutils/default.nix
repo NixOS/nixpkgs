@@ -47,7 +47,7 @@ bash.runCommand "${pname}-${version}"
       description = "Commands for showing the differences between files (diff, cmp, etc.)";
       homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
       license = licenses.gpl3Only;
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = platforms.unix;
     };
   }

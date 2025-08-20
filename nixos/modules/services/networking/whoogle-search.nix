@@ -45,8 +45,7 @@ in
 
       environment = {
         CONFIG_VOLUME = "/var/lib/whoogle-search";
-      }
-      // cfg.extraEnv;
+      } // cfg.extraEnv;
 
       serviceConfig = {
         Type = "simple";
@@ -65,7 +64,7 @@ in
         RestartSec = "5s";
       };
     };
-  };
 
-  meta.maintainers = with lib.maintainers; [ malte-v ];
+    meta.maintainers = with lib.maintainers; [ malte-v ];
+  };
 }

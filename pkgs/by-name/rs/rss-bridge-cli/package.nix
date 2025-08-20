@@ -26,7 +26,7 @@ in
 (writeShellScriptBin "rss-bridge-cli" ''
   ${phpBin} ${rss-bridge}/index.php "$@"
 '').overrideAttrs
-  (oldAttrs: {
+  (oldAttrs: rec {
     version = rss-bridge.version;
 
     meta = with lib; {

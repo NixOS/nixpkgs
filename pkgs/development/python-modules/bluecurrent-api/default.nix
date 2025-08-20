@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   pytz,
   websockets,
@@ -13,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bluecurrent-api";
-  version = "1.2.4";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  src = fetchFromGitHub {
-    owner = "bluecurrent";
-    repo = "HomeAssistantAPI";
-    tag = "v${version}";
-    hash = "sha256-NirWs06CkiSE3HPomQwBmX+XFhBxsM6ffE72mvlfxoY=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-mWRTSMS68+J1Z4PYOFF/UvofSqV1wv0gjiTACEWDfNg=";
   };
 
   build-system = [ setuptools ];

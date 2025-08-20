@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "swarm";
-  version = "0-unstable-2019-03-11";
+  version = "unstable-2019-03-11";
 
   src = fetchFromGitHub {
     owner = "nimble-code";

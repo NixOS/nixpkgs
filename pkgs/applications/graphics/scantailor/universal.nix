@@ -1,9 +1,12 @@
 {
   lib,
   stdenv,
+  mkDerivation,
   fetchFromGitHub,
   cmake,
-  libsForQt5,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
   zlib,
   openjpeg,
   libjpeg_turbo,
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libsForQt5.qtbase
+    qtbase
     zlib
     libjpeg_turbo
     libpng
@@ -37,8 +40,8 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qttools
+    wrapQtAppsHook
+    qttools
   ];
 
   meta = with lib; {

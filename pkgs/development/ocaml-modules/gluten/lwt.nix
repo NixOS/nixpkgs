@@ -4,7 +4,7 @@
   lwt,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "gluten-lwt";
   inherit (gluten)
     doCheck

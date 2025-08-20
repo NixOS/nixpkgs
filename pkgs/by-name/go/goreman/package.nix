@@ -3,16 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
+  goreman,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "goreman";
   version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-hOFnLxHsrauOrsbJYKNrwFFT5yYX/rdZUVjscBIGDLo=";
   };
 
@@ -24,15 +25,15 @@ buildGoModule (finalAttrs: {
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = goreman;
     command = "goreman version";
   };
 
-  meta = {
-    description = "Foreman clone written in go language";
+  meta = with lib; {
+    description = "foreman clone written in go language";
     mainProgram = "goreman";
     homepage = "https://github.com/mattn/goreman";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ zimbatm ];
   };
-})
+}

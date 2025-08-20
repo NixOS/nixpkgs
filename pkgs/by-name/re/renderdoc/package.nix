@@ -13,8 +13,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  # python3Packages.shiboken2 is currently broken
-  python312Packages,
+  python311Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -33,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.39";
+  version = "1.36";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UFaZtSA3oYOYKuV2loh5tX1rLnoKgRypaJe6H+j/uHU=";
+    hash = "sha256-a7jUWjNrpy3FnLRccljV7obAlnQwyMJrAaGf9iZa0UY=";
   };
 
   outputs = [
@@ -48,19 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  buildInputs = [
-    libXdmcp
-    libpthreadstubs
-    python312Packages.pyside2
-    python312Packages.pyside2-tools
-    python312Packages.shiboken2
-    qt5.qtbase
-    qt5.qtsvg
-    vulkan-loader
-  ]
-  ++ lib.optionals waylandSupport [
-    wayland
-  ];
+  buildInputs =
+    [
+      libXdmcp
+      libpthreadstubs
+      python311Packages.pyside2
+      python311Packages.pyside2-tools
+      python311Packages.shiboken2
+      qt5.qtbase
+      qt5.qtsvg
+      vulkan-loader
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+    ];
 
   nativeBuildInputs = [
     addDriverRunpath
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python312Packages.python
+    python311Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_VER" finalAttrs.version)
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
-    (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
   ];
 
   dontWrapQtApps = true;
@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapQtApp $out/bin/qrenderdoc \
-        --set QT_QPA_PLATFORM "wayland;xcb" \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
       wrapProgram $out/bin/renderdoccmd \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
@@ -138,10 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [
-      pbsds
-      ShyAssassin
-    ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

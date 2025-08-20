@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-update curl coreutils jq common-updater-scripts gawk
+#!nix-shell -i bash -p bash nix-update curl coreutils jq common-updater-scripts nix-prefetch
 
 set -eux
 
@@ -26,27 +26,16 @@ if [[ "$oldVersion" == "$latestVersion" ]]; then
     exit 0
 fi
 
-echo "Updating code sources"
+echo "Updating Yazi"
 
-update-source-version yazi-unwrapped "${latestVersion}" --source-key=passthru.srcs.code_src
+# Version
+update-source-version yazi-unwrapped "${latestVersion}"
 
 pushd "$SCRIPT_DIR"
-echo "Updating build date"
-
+# Build date
 sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' package.nix
 
-echo "Updating cargoHash"
-
-# Set cargoHash to an empty string
-sed -i -E 's/cargoHash = ".*?"/cargoHash = ""/' package.nix
-
-# Build and get new hash
-cargoHash=$( (nix-build "$NIXPKGS_DIR" -A yazi-unwrapped 2>&1 || true) | awk '/got/{print $2}')
-
-if [ "$cargoHash" == "" ]; then
-    echo "Failed to get cargoHash, please update it manually"
-    exit 0
-fi
-
-sed -i -E 's/cargoHash = ".*?"/cargoHash = "'"$cargoHash"'"/' package.nix
+# Hashes
+cargoHash=$(nix-prefetch "{ sha256 }: (import $NIXPKGS_DIR {}).yazi-unwrapped.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
+sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' package.nix
 popd

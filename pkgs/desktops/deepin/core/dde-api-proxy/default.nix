@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-api-proxy";
-  version = "1.0.20";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-api-proxy";
     rev = version;
-    hash = "sha256-QE31BOh2LFlY6te+2+nSHGbhLsikSX8V7xSvcLzCWRA=";
+    hash = "sha256-kWodNftOPLIiQNPHAIC9p3VHFAis8FAI7vLJTqahAtU=";
   };
 
   postPatch = ''
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     libsForQt5.wrapQtAppsHook
-    libsForQt5.polkit-qt
   ];
 
   buildInputs = [
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-api-proxy";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.deepin ];
+    maintainers = lib.teams.deepin.members;
   };
 }

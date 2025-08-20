@@ -14,7 +14,7 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
-    repo = "oq";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-W0iGE1yVOphooiab689AFT3rhGGdXqEFyYIhrx11RTE=";
   };

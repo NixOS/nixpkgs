@@ -9,11 +9,11 @@
 
   # dependencies
   jax,
+  jaxlib,
   jaxtyping,
   typing-extensions,
-  wadler-lindig,
 
-  # tests
+  # checks
   beartype,
   optax,
   pytest-xdist,
@@ -22,31 +22,23 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.13.0";
+  version = "0.11.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-zXgAuFGWKHShKodi9swnWIry4VU9s4pBhBRoK5KzaL0=";
+    hash = "sha256-xCAk9qac2ZmevUMMRgBokLKuGWyrF4fGpN03li49cR8=";
   };
-
-  # Relax speed constraints on tests that can fail on busy builders
-  postPatch = ''
-    substituteInPlace tests/test_while_loop.py \
-      --replace-fail "speed < 0.1" "speed < 0.5" \
-      --replace-fail "speed < 0.5" "speed < 1" \
-      --replace-fail "speed < 1" "speed < 4" \
-  '';
 
   build-system = [ hatchling ];
 
   dependencies = [
     jax
+    jaxlib
     jaxtyping
     typing-extensions
-    wadler-lindig
   ];
 
   nativeCheckInputs = [

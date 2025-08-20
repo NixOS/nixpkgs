@@ -8,6 +8,9 @@
   libpulseaudio,
   alsa-lib,
   libcap,
+  CoreAudio,
+  CoreServices,
+  AudioUnit,
   usePulseAudio,
 }:
 
@@ -50,6 +53,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreAudio
+      CoreServices
+      AudioUnit
     ];
 
   nativeBuildInputs = [

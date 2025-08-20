@@ -9,7 +9,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  typing-extensions,
   voluptuous,
 }:
 
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     aiohttp
     bitstruct
     cryptography
-    typing-extensions
     voluptuous
   ];
 

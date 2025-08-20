@@ -1,10 +1,9 @@
-from typing import Final
-
 # Build-time flags
 # Use strings to avoid breaking standalone (e.g.: `python -m nixos_rebuild`)
 # usage
-EXECUTABLE: Final[str] = "@executable@"
-# Use either `== "true"` if the default (e.g.: `python -m nixos_rebuild`) is
+EXECUTABLE = "@executable@"
+# Use either `== "true"` if the default (e.g.: `python -m nixos_rebuld`) is
 # `False` or `!= "false"` if the default is `True`
-WITH_REEXEC: Final[bool] = "@withReexec@" == "true"
-WITH_SHELL_FILES: Final[bool] = "@withShellFiles@" == "true"
+WITH_NIX_2_18 = "@withNix218@" != "false"  # type: ignore
+WITH_REEXEC = "@withReexec@" == "true"  # type: ignore
+WITH_SHELL_FILES = "@withShellFiles@" == "true"  # type: ignore

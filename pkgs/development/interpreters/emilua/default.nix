@@ -3,6 +3,7 @@
   stdenv,
   meson,
   ninja,
+  fetchFromGitHub,
   fetchFromGitLab,
   re2c,
   gperf,
@@ -21,21 +22,42 @@
   cmake,
   asciidoctor,
   makeWrapper,
-  versionCheckHook,
   gitUpdater,
-  enableIoUring ? false,
-  emilua, # this package
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  trial-protocol-wrap = fetchFromGitHub {
+    owner = "breese";
+    repo = "trial.protocol";
+    rev = "79149f604a49b8dfec57857ca28aaf508069b669";
+    sparseCheckout = [
+      "include"
+    ];
+    hash = "sha256-QpQ70KDcJyR67PtOowAF6w48GitMJ700B8HiEwDA5sU=";
+    postFetch = ''
+      rm $out/*.*
+      mkdir -p $out/lib/pkgconfig
+      cat > $out/lib/pkgconfig/trial-protocol.pc << EOF
+        Name: trial.protocol
+        Version: 0-unstable-2023-02-10
+        Description:  C++ header-only library with parsers and generators for network wire protocols
+        Requires:
+        Libs:
+        Cflags:
+      EOF
+    '';
+  };
+in
+
+stdenv.mkDerivation (self: {
   pname = "emilua";
-  version = "0.11.7";
+  version = "0.10.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-c+X8HD/G75XD54Fs89DSkebLDd7h12Bk45+w7VBUXPY=";
+    rev = "v${self.version}";
+    hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     liburing
     openssl
     cereal
+    trial-protocol-wrap
   ];
 
   nativeBuildInputs = [
@@ -66,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   mesonFlags = [
-    (lib.mesonBool "enable_io_uring" enableIoUring)
-    (lib.mesonBool "enable_file_io" enableIoUring)
+    (lib.mesonBool "enable_file_io" true)
+    (lib.mesonBool "enable_io_uring" true)
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
@@ -77,8 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
-  # io_uring is not allowed in Nix sandbox, that breaks the tests
-  doCheck = !enableIoUring;
+  doCheck = true;
 
   mesonCheckFlags = [
     # Skipped test: libpsx
@@ -91,31 +113,24 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/nix-support
     cp ${./setup-hook.sh} $out/nix-support/setup-hook
     substituteInPlace $out/nix-support/setup-hook \
-      --replace-fail @sitePackages@ "${finalAttrs.passthru.sitePackages}"
+      --replace @sitePackages@ "${self.passthru.sitePackages}"
   '';
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     inherit boost;
-    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version)))}";
-    tests.with-io-uring = emilua.override { enableIoUring = true; };
+    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Lua execution engine";
     mainProgram = "emilua";
     homepage = "https://emilua.org/";
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
+    license = licenses.boost;
+    maintainers = with maintainers; [
       manipuladordedados
       lucasew
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 })

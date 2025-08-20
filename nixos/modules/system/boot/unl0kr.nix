@@ -75,7 +75,6 @@ in
 
         "usbtouchscreen"
         "evdev"
-        "psmouse"
       ]
       ++ lib.optionals cfg.allowVendorDrivers [
         "intel_lpss_pci"

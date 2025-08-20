@@ -34,7 +34,7 @@ in
       mode = "0600";
     };
 
-    environment.systemPackages = with pkgs; [ targetcli-fb ];
+    environment.systemPackages = with pkgs; [ targetcli ];
 
     boot.kernelModules = [
       "configfs"
@@ -52,8 +52,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${lib.getExe pkgs.python3Packages.rtslib-fb} restore";
-        ExecStop = "${lib.getExe pkgs.python3Packages.rtslib-fb} clear";
+        ExecStart = "${pkgs.python3.pkgs.rtslib}/bin/targetctl restore";
+        ExecStop = "${pkgs.python3.pkgs.rtslib}/bin/targetctl clear";
         RemainAfterExit = "yes";
       };
     };

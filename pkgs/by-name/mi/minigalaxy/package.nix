@@ -6,33 +6,37 @@
   gobject-introspection,
   gtk3,
   libnotify,
-  nix-update-script,
   python3Packages,
   steam-run,
-  replaceVars,
+  substituteAll,
   unzip,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   wrapGAppsHook3,
-  xdg-utils,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.4.0";
-  pyproject = true;
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
     tag = version;
-    hash = "sha256-ZHTjppdLxKDURceonbH7dJz+krBhu3lr2P7QPVDxRZw=";
+    hash = "sha256-nxWJm+CkxZqRMUYQA0ZJKOb2fD1tPYXnYhy+DOnDbkQ=";
   };
 
   patches = [
-    (replaceVars ./inject-launcher-steam-run.diff {
+    (substituteAll {
+      src = ./inject-launcher-steam-run.diff;
       steamrun = lib.getExe steam-run;
     })
   ];
+
+  postPatch = ''
+    substituteInPlace minigalaxy/installer.py \
+      --replace-fail '"unzip"' "\"${lib.getExe unzip}\"" \
+      --replace-fail "'unzip'" "\"${lib.getExe unzip}\""
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -43,16 +47,6 @@ python3Packages.buildPythonApplication rec {
     glib-networking
     gtk3
     libnotify
-    webkitgtk_4_1
-  ];
-
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    pygobject3
-    requests
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -65,29 +59,25 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+  pythonPath = [
+    python3Packages.pygobject3
+    python3Packages.requests
+    webkitgtk_4_0
+  ];
+
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-      --suffix PATH : "${
-        lib.makeBinPath [
-          unzip
-          xdg-utils
-        ]
-      }"
-    )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://sharkwouter.github.io/minigalaxy/";
     changelog = "https://github.com/sharkwouter/minigalaxy/blob/${version}/CHANGELOG.md";
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "Simple GOG client for Linux";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ RoGreat ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
   };
 }

@@ -1,31 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchPypi,
+
+  pbr,
+
   requests,
   poetry-core,
+
   pytestCheckHook,
-  urllib3,
   waitress,
 }:
 
 buildPythonPackage rec {
   pname = "requests-unixsocket2";
-  version = "1.0.0";
+  version = "0.4.2";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "thelabnyc";
-    repo = "requests-unixsocket2";
-    tag = "v${version}";
-    hash = "sha256-HD68YczUy7bexm3Rrh0OfgOux3ItSYQB9lj68p7WtnU=";
+  src = fetchPypi {
+    inherit version;
+    pname = "requests_unixsocket2";
+    hash = "sha256-kpxY7MWYHz0SdmHOueyMduDwjTHFLkSrFGKsDc1VtfU=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ pbr ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     requests
-    urllib3
+    poetry-core
   ];
 
   nativeCheckInputs = [
@@ -35,11 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_unixsocket" ];
 
-  meta = {
-    changelog = "https://gitlab.com/thelabnyc/requests-unixsocket2/-/blob/${src.tag}/CHANGELOG.md";
+  meta = with lib; {
     description = "Use requests to talk HTTP via a UNIX domain socket";
     homepage = "https://gitlab.com/thelabnyc/requests-unixsocket2";
-    license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ mikut ];
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ mikut ];
   };
 }

@@ -35,12 +35,12 @@ buildGoModule rec {
       --zsh <($out/bin/ipam completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cli based IPAM written in Go with PowerDNS support";
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
     mainProgram = "ipam";
   };
 }

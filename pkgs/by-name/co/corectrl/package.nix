@@ -1,12 +1,11 @@
 {
   botan3,
+  extra-cmake-modules,
   fetchFromGitLab,
-  cmake,
-  pkg-config,
   hwdata,
   lib,
   libdrm,
-  kdePackages,
+  libsForQt5,
   mesa-demos,
   polkit,
   procps,
@@ -19,32 +18,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corectrl";
-  version = "1.5.1";
+  version = "1.4.3";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-NwGrvDqImiyPc3AsL7rMwNG9na+AzZS6NvXQOc6VWHg=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-rQibIjLmSnkA8jk6GOo68JIeb4wZq0wxXpLs3zsB7GI=";
   };
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    kdePackages.extra-cmake-modules
-    kdePackages.wrapQtAppsHook
+    extra-cmake-modules
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     botan3
     libdrm # TODO: report upstream that libdrm is not detected at configure time
-    kdePackages.karchive
-    kdePackages.kauth
-    kdePackages.qtbase
-    kdePackages.qtcharts
-    kdePackages.qtsvg
-    kdePackages.qttools
-    kdePackages.quazip
+    libsForQt5.karchive
+    libsForQt5.kauth
+    libsForQt5.qtbase
+    libsForQt5.qtcharts
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtsvg
+    libsForQt5.qttools
+    libsForQt5.qtxmlpatterns
+    libsForQt5.quazip
     mesa-demos
     polkit
     procps
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./Always-locate-polkit-with-pkg-config.diff
+    ./polkit-dir.patch
   ];
 
   cmakeFlags = [
@@ -72,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-tools
   ];
 
-  qtWrapperArgs = [
+  qrWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
   ];
 

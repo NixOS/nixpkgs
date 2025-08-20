@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.20";
+  version = "0.4.18";
 in
 buildPecl {
   inherit version;
@@ -16,13 +16,15 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-2MOl9waWY3zK5NzQ19TJKK8kE7xC4K+e9AwV+wyAHZc=";
+    hash = "sha256-Dcv8ncYPIug7e24mvL1gn0x0CeLNAck8djm/r/yiPe8=";
   };
 
-  configureFlags = [
-    "--with-zlib-dir=${zlib.dev}"
-    "--with-spx-assets-dir=${placeholder "out"}/share/misc/php-spx/assets/"
-  ];
+  configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
+
+  preConfigure = ''
+    substituteInPlace Makefile.frag \
+      --replace '$(INSTALL_ROOT)$(prefix)/share/misc/php-spx/assets/web-ui' '${placeholder "out"}/share/misc/php-spx/assets/web-ui'
+  '';
 
   meta = {
     changelog = "https://github.com/NoiseByNorthwest/php-spx/releases/tag/${version}";

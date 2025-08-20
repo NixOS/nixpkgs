@@ -9,16 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "syndicate-server";
-  version = "0.50.1";
+  version = "0.48.0";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
     rev = "${pname}-v${version}";
-    hash = "sha256-orQN83DE+ZNgdx2PVcYrte/rVDFFtuQuRDKzeumpsLo=";
+    hash = "sha256-DVgFlJCqaTmQ7eL2LQ8rkIbvaEfwx+NDeXRA8qB+/Qo=";
   };
-
-  cargoHash = "sha256-lR36UAMedPdfvX613adxxRzJe+Ri09hiZYanyu7xbLU=";
+  cargoHash = "sha256-eSzRKTUDkx0i2z5y5rm1A799CfLPqd+txpmbolqe+PQ=";
   nativeBuildInputs = [
     pkg-config
     versionCheckHook
@@ -27,7 +26,6 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  doCheck = false;
   doInstallCheck = true;
 
   meta = {

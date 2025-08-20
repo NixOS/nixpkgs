@@ -33,7 +33,7 @@ kaem.runCommand "${pname}-${version}"
       description = "Mes C Library";
       homepage = "https://www.gnu.org/software/mes";
       license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       platforms = [ "i686-linux" ];
     };
   }

@@ -13,7 +13,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mictray";
   version = "0.2.5";
 

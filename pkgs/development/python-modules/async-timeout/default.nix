@@ -1,35 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonPackage,
   pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "async-timeout";
-  version = "5.0.1";
-  pyproject = true;
+  version = "4.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "aio-libs";
-    repo = "async-timeout";
-    tag = "v${version}";
-    hash = "sha256-lsSoIv2SnAJbv7V1eRognjv0cCQONwJMlb6fum9wQ/s=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RkDZa+hNgtAu1Z6itxBaD3szq+hwNwPNCrC/h8QnUi8=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-cov-stub
-  ];
+  # Circular dependency on aiohttp
+  doCheck = false;
 
   meta = {
     description = "Timeout context manager for asyncio programs";

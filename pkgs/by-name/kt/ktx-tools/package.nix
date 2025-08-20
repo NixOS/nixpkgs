@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ktx-tools";
-  version = "4.4.0";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "KTX-Software";
     rev = "v${version}";
-    hash = "sha256-bDdRdVFbVmN8fEGRLnPLOXsV6lfYU9Lg4nW0GuCj6AU=";
+    hash = "sha256-zjiJ8B8FEZUJ3iFTYXRmuIEtcaCWtBIbYwz0DwjTDFo";
   };
 
   nativeBuildInputs = [

@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   pname = "mod-arpeggiator-lv2";
-  version = "0-unstable-2021-11-09";
+  version = "unstable-2021-11-09";
 
   src = fetchFromGitHub {
     owner = "moddevices";
-    repo = "mod-arpeggiator-lv2";
+    repo = pname;
     rev = "82f3d9f159ce216454656a8782362c3d5ed48bed";
     sha256 = "sha256-1KiWMTVTTf1/iR4AzJ1Oe0mOrWN5edsZN0tQMidgnRA=";
   };

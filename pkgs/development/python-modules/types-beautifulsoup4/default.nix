@@ -8,13 +8,12 @@
 
 buildPythonPackage rec {
   pname = "types-beautifulsoup4";
-  version = "4.12.0.20250516";
+  version = "4.12.0.20241020";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types_beautifulsoup4";
-    inherit version;
-    hash = "sha256-qhndc7M7cNYpat+S2oq4oMlFxQfm+31dtVNBXMd7QX4=";
+    inherit pname version;
+    hash = "sha256-FYNw0I0M1Ei9EbEypQ/1J5I3pdS1g3vroHTeFSpRMFk=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Typing stubs for beautifulsoup4";
     homepage = "https://pypi.org/project/types-beautifulsoup4/";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_interface_common" ];
 
-  enabledTestPaths = [ "tests/tests.py" ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Common functions and classes for Snakemake and its plugins";

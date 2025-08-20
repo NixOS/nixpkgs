@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "flasgger";
-  version = "0.9.7.1";
+  version = "0.9.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "flasgger";
     repo = "flasgger";
-    rev = "v${version}";
+    rev = version;
     hash = "sha256-cYFMKZxpi69gVWqyZUltCL0ZwcfIABNsJKqAhN2TTSg=";
   };
 

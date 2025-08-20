@@ -5,23 +5,26 @@
   installShellFiles,
   pkg-config,
   openssl,
+  xz,
   nix-update-script,
   versionCheckHook,
-  callPackage,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.13.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
+    tag = "v${version}";
+    hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
   };
 
-  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-dphMJ1KkZARSntvyEayAtlYw8lL39K7Iw0X4n8nz3z8=";
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,17 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    xz
   ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
-    # to not have "unknown hash" in help output
-    TYPST_VERSION = finalAttrs.version;
   };
 
-  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
+    # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
     substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
     substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
   '';
@@ -54,18 +56,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--workspace" ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  passthru = {
-    updateScript = nix-update-script { };
-    packages = callPackage ./typst-packages.nix { };
-    withPackages = callPackage ./with-packages.nix { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
@@ -74,7 +74,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       drupol
       figsoda
       kanashimia
-      RossSmyth
     ];
   };
-})
+}

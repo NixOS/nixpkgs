@@ -85,11 +85,14 @@ rec {
     pkg: predicate:
     pkg.overrideAttrs (
       finalAttrs: previousAttrs: {
-        nativeBuildInputs =
+        preInstall =
           if predicate finalAttrs previousAttrs then
-            previousAttrs.nativeBuildInputs or [ ] ++ [ pkgs.writableTmpDirAsHomeHook ]
+            ''
+              HOME=$(mktemp -d)
+            ''
+            + previousAttrs.preInstall or ""
           else
-            previousAttrs.nativeBuildInputs or null;
+            previousAttrs.preInstall or null;
       }
     );
 }

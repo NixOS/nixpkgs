@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   systemd,
-  coreutils,
-  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "pkg-config" "$PKG_CONFIG"
-
-    substituteInPlace 90-brightnessctl.rules \
-      --replace-fail /bin/ ${coreutils}/bin/
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
 
   makeFlags = [
@@ -33,18 +28,8 @@ stdenv.mkDerivation rec {
     "ENABLE_SYSTEMD=1"
   ];
 
-  installTargets = [
-    "install"
-    "install_udev_rules"
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-    udevCheckHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
-
-  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";

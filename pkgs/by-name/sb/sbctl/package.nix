@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.17";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "sbctl";
     tag = version;
-    hash = "sha256-7dCaWemkus2GHxILBEx5YvzdAmv89JfcPbqZZ6QwriI";
+    hash = "sha256-BLSvjo6GCqpECJPJtQ6C2zEz1p03uyvxTYa+DoxZ78s=";
   };
 
-  vendorHash = "sha256-gpHEJIbLnB0OiYB00rHK6OwrnHTHCj/tTVlUzuFjFKY=";
+  vendorHash = "sha256-srfZ+TD93szabegwtzLTjB+uo8aj8mB4ecQ9m8er00A=";
 
   ldflags = [
     "-s"
@@ -44,30 +44,30 @@ buildGoModule rec {
     "github.com/google/go-tpm-tools/.*"
   ];
 
-  postInstall = ''
-    installManPage docs/sbctl.conf.5 docs/sbctl.8
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd sbctl \
-      --bash <($out/bin/sbctl completion bash) \
-      --fish <($out/bin/sbctl completion fish) \
-      --zsh <($out/bin/sbctl completion zsh)
-  '';
+  postInstall =
+    ''
+      installManPage docs/sbctl.conf.5 docs/sbctl.8
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd sbctl \
+        --bash <($out/bin/sbctl completion bash) \
+        --fish <($out/bin/sbctl completion fish) \
+        --zsh <($out/bin/sbctl completion zsh)
+    '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Secure Boot key manager";
     mainProgram = "sbctl";
     homepage = "https://github.com/Foxboron/sbctl";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Pokeylooted
+    license = licenses.mit;
+    maintainers = with maintainers; [
       raitobezarius
       Scrumplex
     ];
-    # go-uefi does not support darwin at the moment:
+    # go-uefi do not support darwin at the moment:
     # see upstream on https://github.com/Foxboron/go-uefi/issues/13
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

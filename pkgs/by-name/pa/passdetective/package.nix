@@ -25,12 +25,12 @@ buildGoModule rec {
     "-X=main.build=${version}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Scans command history to detect mistakenly written passwords, API keys, and secrets";
     homepage = "https://github.com/aydinnyunus/PassDetective";
     changelog = "https://github.com/aydinnyunus/PassDetective/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ octodi ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ octodi ];
     mainProgram = "PassDetective";
   };
 }

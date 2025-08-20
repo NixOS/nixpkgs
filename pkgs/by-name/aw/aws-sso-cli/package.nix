@@ -2,7 +2,6 @@
   buildGoModule,
   fetchFromGitHub,
   getent,
-  installShellFiles,
   lib,
   makeWrapper,
   stdenv,
@@ -10,20 +9,17 @@
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
-  version = "2.0.3";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
-    repo = "aws-sso-cli";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-GoLSdQb6snViYD9QY6NTypKquFsoX3jgClyrgTGoRq8=";
+    hash = "sha256-VEI+vCNeNoFOE+2j/OUjRszXsUQP2E1iUdPUW9X3tHk=";
   };
-  vendorHash = "sha256-SNMU7qDfLRGUSLjzrJHtIMgbcRc2DxXwWEUaUEY6PME=";
+  vendorHash = "sha256-a57RtK8PxwaRrSA6W6R//GacZ+pK8mBi4ZASS5NvShE=";
 
-  nativeBuildInputs = [
-    makeWrapper
-    installShellFiles
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-X main.Version=${version}"
@@ -33,12 +29,6 @@ buildGoModule rec {
   postInstall = ''
     wrapProgram $out/bin/aws-sso \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd aws-sso \
-      --bash <($out/bin/aws-sso setup completions --source --shell=bash) \
-      --fish <($out/bin/aws-sso setup completions --source --shell=fish) \
-      --zsh <($out/bin/aws-sso setup completions --source --shell=zsh)
   '';
 
   nativeCheckInputs = [ getent ];
@@ -49,8 +39,7 @@ buildGoModule rec {
         "TestAWSConsoleUrl"
         "TestAWSFederatedUrl"
         "TestServerWithSSL" # https://github.com/synfinatic/aws-sso-cli/issues/1030 -- remove when version >= 2.x
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 

@@ -1,43 +1,42 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
+  qtbase,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "corerenamer";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "corerenamer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9e8Gm7h0zWVQeb7eFcUmp8uTdSboenLa7baZpKc3HEQ=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-jN1keyo2tDlgUu243173zgChw2nhvbsLPH9af6jDhKs=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Batch file renamer from the C Suite";
     mainProgram = "corerenamer";
     homepage = "https://gitlab.com/cubocore/coreapps/corerenamer";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

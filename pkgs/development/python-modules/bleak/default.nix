@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "1.0.1";
+  version = "0.22.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hbldh";
-    repo = "bleak";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-JHTyTHMMZDD75baQK3nf4R+8eW0Tt62CMTXb8eRKp94=";
+    hash = "sha256-kPeKQcJETZE6+btQsmCgb37yRI2Klg0lZ1ZIrm8ODow=";
   };
 
   postPatch = ''

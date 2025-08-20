@@ -1,5 +1,5 @@
 {
-  buildGo124Module,
+  buildGo123Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -16,25 +16,25 @@
   ffmpegSupport ? true,
 }:
 
-buildGo124Module rec {
+buildGo123Module rec {
   pname = "navidrome";
-  version = "0.58.0";
+  version = "0.54.3";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-MwFACp2RKXz6zTzjknC5nKzaTEG1NWtvYggRZRiX5t0=";
+    hash = "sha256-mOJSgX+1id8tZU8KVjWbf2LycrzdudhUV/9pxKa4yHw=";
   };
 
-  vendorHash = "sha256-CrZqVhvDYemnaCuveOXySqHZhW+nrgzdxaiJRuZfSaI=";
+  vendorHash = "sha256-LpSmSbReQ3yHFvHhN/LERWQjf72/ELTjk4qhO4lyzW0=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/ui";
-    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
+    hash = "sha256-PaE1xcZX9wZRcKeqQCXbdhi4cIBWBL8ZQdww6AOB7sQ=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +84,7 @@ buildGo124Module rec {
   };
 
   meta = {
-    description = "Music Server and Streamer compatible with Subsonic/Airsonic";
+    description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     mainProgram = "navidrome";
     homepage = "https://www.navidrome.org/";
     license = lib.licenses.gpl3Only;
@@ -92,7 +92,6 @@ buildGo124Module rec {
     maintainers = with lib.maintainers; [
       aciceri
       squalus
-      tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

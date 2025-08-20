@@ -5,7 +5,7 @@
   lwt,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "faraday-lwt-unix";
   inherit (faraday) version src;
   duneVersion = "3";

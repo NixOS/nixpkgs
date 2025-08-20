@@ -40,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Advanced Github OSINT framework";
     mainProgram = "octosuite";
     homepage = "https://github.com/bellingcat/octosuite";
     changelog = "https://github.com/bellingcat/octosuite/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

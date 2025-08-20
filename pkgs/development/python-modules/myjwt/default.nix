@@ -12,6 +12,7 @@
   pyperclip,
   pytest-mock,
   pytestCheckHook,
+  pythonOlder,
   questionary,
   requests,
   requests-mock,
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   pname = "myjwt";
   version = "2.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
@@ -35,7 +38,9 @@ buildPythonPackage rec {
     "questionary"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    poetry-core
+  ];
 
   dependencies = [
     click
@@ -56,13 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myjwt" ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
-    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "myjwt";
+    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
     # Build failures
     broken = stdenv.hostPlatform.isDarwin;
   };

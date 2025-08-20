@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cliff,
   dogpile-cache,
   jsonschema,
@@ -25,14 +25,12 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.12.0";
+  version = "5.10.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "openstack";
-    repo = "python-ironicclient";
-    tag = version;
-    hash = "sha256-qw0d5tfglEjyiulwbu6hLl5B4rFOaWY5HR1bUt1AGTQ=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Eg2eakri5+1hPuKyq9+f4dL33il6G4LYLZvoWYfU4LY=";
   };
 
   build-system = [
@@ -65,20 +63,9 @@ buildPythonPackage rec {
     oslotest
   ];
 
-  env.PBR_VERSION = version;
-
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_no_options
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_description
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_extra
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_uuid
-      ironicclient.tests.unit.osc.v1.test_baremetal_conductor.TestBaremetalConductorShow.test_conductor_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalCreate
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalShow.test_baremetal_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestNodeHistoryEventGet.test_baremetal_node_history_list
-    ")
+    stestr run
     runHook postCheck
   '';
 
@@ -89,6 +76,6 @@ buildPythonPackage rec {
     mainProgram = "baremetal";
     homepage = "https://github.com/openstack/python-ironicclient";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members;
   };
 }

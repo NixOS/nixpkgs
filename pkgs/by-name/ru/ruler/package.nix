@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to abuse Exchange services";
     homepage = "https://github.com/sensepost/ruler";
     changelog = "https://github.com/sensepost/ruler/releases/tag/${version}";
-    license = with lib.licenses; [ cc-by-nc-40 ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ cc-by-nc-40 ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "ruler";
   };
 }

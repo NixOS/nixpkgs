@@ -1,24 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  zlib,
-  readline,
-  ncurses,
+{ lib, stdenv, fetchurl, unzip, zlib, readline, ncurses
+, updateAutotoolsGnuConfigScriptsHook
 
-  # for tests
-  python3Packages,
-  sqldiff,
-  sqlite-analyzer,
-  sqlite-rsync,
-  tinysparql,
+# for tests
+, python3Packages, sqldiff, sqlite-analyzer, sqlite-rsync, tinysparql
 
-  # uses readline & ncurses for a better interactive experience if set to true
-  interactive ? false,
+# uses readline & ncurses for a better interactive experience if set to true
+, interactive ? false
 
-  gitUpdater,
-  buildPackages,
+, gitUpdater
 }:
 
 let
@@ -27,64 +16,33 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.2";
+  version = "3.47.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-hKYW/9MXOORZC2W6uzqeHvk3DzY4422yIO4Oc/itIVY=";
+    url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    hash = "sha256-8bLuQSwo10cryVupljaNbwzc8ANir/2tsn7ShsF5VAs=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-n4uitTo6oskWbUagLZEbhdO4sLhAxJHTIdX8YhUONBk=";
+    url = "https://sqlite.org/2024/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-bcyommdJAp+6gbwPQYjL1PeKy0jWo+rcbVSK+RF8P0E=";
   };
 
-  outputs = [
-    "bin"
-    "dev"
-    "man"
-    "doc"
-    "out"
-  ];
+  outputs = [ "bin" "dev" "man" "doc" "out" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
-
-  nativeBuildInputs = [
-    unzip
-  ];
-  buildInputs = [
-    zlib
-  ]
-  ++ lib.optionals interactive [
-    readline
-    ncurses
-  ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook unzip ];
+  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  # sqlite relies on autosetup now; so many of the
-  # previously-understood flags are gone. They should instead be set
-  # on a per-output basis.
-  setOutputFlags = false;
+  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
-  configureFlags = [
-    "--bindir=${placeholder "bin"}/bin"
-    "--includedir=${placeholder "dev"}/include"
-    "--libdir=${placeholder "out"}/lib"
-  ]
-  ++ lib.optional (!interactive) "--disable-readline"
-  # autosetup only looks up readline.h in predefined set of directories.
-  ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
-  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
-
-  env.NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -93,10 +51,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
     "-DSQLITE_ENABLE_FTS5"
-    "-DSQLITE_ENABLE_GEOPOLY"
-    "-DSQLITE_ENABLE_MATH_FUNCTIONS"
     "-DSQLITE_ENABLE_PREUPDATE_HOOK"
-    "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
     "-DSQLITE_ENABLE_SESSION"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"
@@ -105,7 +60,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ];
+  ]);
 
   # Test for features which may not be available at compile time
   preBuild = ''
@@ -131,6 +86,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
+    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
+
     mkdir -p $doc/share/doc
     unzip $docsrc
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
@@ -141,16 +99,11 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
-      inherit
-        sqldiff
-        sqlite-analyzer
-        sqlite-rsync
-        tinysparql
-        ;
+      inherit sqldiff sqlite-analyzer sqlite-rsync tinysparql;
     };
 
     updateScript = gitUpdater {
-      # No nicer place to look for latest version.
+      # No nicer place to look for patest version.
       url = "https://github.com/sqlite/sqlite.git";
       # Expect tags like "version-3.43.0".
       rev-prefix = "version-";

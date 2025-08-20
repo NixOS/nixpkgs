@@ -12,13 +12,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-shadertoy";
   namespace = "visualization.shadertoy";
-  version = "21.0.2";
+  version = "20.3.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-M70WQL4BqFI4LMFLBXlupuXxRkbTqA0OocYlCbY28VQ=";
+    hash = "sha256-PaHbEcB4gCC8gUzc7T49msI8f0xa2iXqSaYW/eqD8yw=";
   };
 
   extraBuildInputs = [
@@ -33,6 +33,6 @@ buildKodiBinaryAddon rec {
     description = "Shadertoy visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

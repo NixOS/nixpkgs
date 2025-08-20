@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       whose keywords are LOLspeak.
     '';
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [ maintainers.AndersonTorres ];
     mainProgram = "lolcode-lci";
     platforms = lib.platforms.unix;
   };

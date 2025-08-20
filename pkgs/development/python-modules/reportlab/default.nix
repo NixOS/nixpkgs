@@ -6,6 +6,7 @@
   freetype,
   pillow,
   setuptools,
+  glibcLocales,
   python,
   isPyPy,
 }:
@@ -17,7 +18,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.4.1";
+  version = "4.2.5";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X5ufwLekjokSwlzPadJrgpgKsNpxjk9YP6cg6Pj1Bz8=";
+    hash = "sha256-XPNbj9YJtoCArHu7CuHjdhBPfV97LTkUx63GPyWTlB8=";
   };
 
   postPatch = ''
@@ -48,16 +49,17 @@ buildPythonPackage rec {
     pillow
   ];
 
+  nativeCheckInputs = [ glibcLocales ];
+
   checkPhase = ''
     runHook preCheck
     pushd tests
-    ${python.interpreter} runAll.py
+    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
     popd
     runHook postCheck
   '';
 
   meta = with lib; {
-    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;

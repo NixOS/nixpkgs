@@ -1,18 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "grmon";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = "grmon";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-0J7f4DMADUut3Da0F1eTDsT1Hlk0rfInwzbcVcQNzg8=";
   };
 
@@ -35,4 +34,4 @@ buildGoModule (finalAttrs: {
     mainProgram = "grmon";
     maintainers = with maintainers; [ katexochen ];
   };
-})
+}

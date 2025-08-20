@@ -19,7 +19,6 @@
   srcOverride ? callPackage ./source.nix { inherit patches; },
   gemset ? ./. + "/gemset.nix",
   yarnHash ? srcOverride.yarnHash,
-  yarnMissingHashes ? srcOverride.yarnMissingHashes,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,21 +32,18 @@ stdenv.mkDerivation rec {
     gemdir = src;
   };
 
-  mastodonModules = stdenv.mkDerivation (finalAttrs: {
+  mastodonModules = stdenv.mkDerivation {
     pname = "${pname}-modules";
     inherit src version;
 
-    missingHashes = yarnMissingHashes;
-    yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-      inherit src;
+    yarnOfflineCache = callPackage ./yarn.nix {
+      inherit version src;
       hash = yarnHash;
-      missingHashes = yarnMissingHashes;
     };
 
     nativeBuildInputs = [
       nodejs-slim
       yarn-berry
-      yarn-berry.yarnBerryConfigHook
       mastodonGems
       mastodonGems.wrappedRuby
       brotli
@@ -60,29 +56,34 @@ stdenv.mkDerivation rec {
     buildPhase = ''
       runHook preBuild
 
+      export HOME=$PWD
+      export YARN_ENABLE_TELEMETRY=0
+      export npm_config_nodedir=${nodejs-slim}
       export SECRET_KEY_BASE_DUMMY=1
 
-      patchShebangs bin
+      mkdir -p ~/.yarn/berry
+      ln -s $yarnOfflineCache ~/.yarn/berry/cache
+
+      yarn install --immutable --immutable-cache
+
+      patchShebangs ~/bin
+      patchShebangs ~/node_modules
 
       bundle exec rails assets:precompile
 
-      rm -rf node_modules/.cache
-
-      # Remove workspace "package" as it contains broken symlinks
-      # See https://github.com/NixOS/nixpkgs/issues/380366
-      rm -rf node_modules/@mastodon
+      yarn cache clean --all
+      rm -rf ~/node_modules/.cache
 
       # Remove execute permissions
-      find public/assets -type f ! -perm 0555 \
+      find ~/public/assets -type f ! -perm 0555 \
         -exec chmod 0444 {} ';'
 
       # Create missing static gzip and brotli files
-      find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
+      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
         -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
-
-      gzip --best --keep public/packs/sw.js
-      brotli --best --keep public/packs/sw.js
+      gzip --best --keep ~/public/packs/report.html
+      brotli --best --keep ~/public/packs/report.html
 
       runHook postBuild
     '';
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
-  });
+  };
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
@@ -136,6 +137,8 @@ stdenv.mkDerivation rec {
     ln -s assets/500.html.br public/500.html.br
     ln -s packs/sw.js.gz public/sw.js.gz
     ln -s packs/sw.js.br public/sw.js.br
+    ln -s packs/sw.js.map.gz public/sw.js.map.gz
+    ln -s packs/sw.js.map.br public/sw.js.map.br
 
     rm -rf log
     ln -s /var/log/mastodon log

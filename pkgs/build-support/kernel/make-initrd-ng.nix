@@ -20,6 +20,8 @@ in
   # Name of the derivation (not of the resulting file!)
   name ? "initrd",
 
+  strip ? true,
+
   # Program used to compress the cpio archive; use "cat" for no compression.
   # This can also be a function which takes a package set and returns the path to the compressor,
   # such as `pkgs: "${pkgs.lzop}/bin/lzop"`.
@@ -93,11 +95,15 @@ runCommand name
     passAsFile = [ "contents" ];
     contents = builtins.toJSON contents;
 
-    nativeBuildInputs = [
-      makeInitrdNGTool
-      cpio
-    ]
-    ++ lib.optional makeUInitrd ubootTools;
+    nativeBuildInputs =
+      [
+        makeInitrdNGTool
+        cpio
+      ]
+      ++ lib.optional makeUInitrd ubootTools
+      ++ lib.optional strip binutils;
+
+    STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
   })
   ''
     mkdir -p ./root/var/empty

@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromBitbucket,
   autoreconfHook,
-  pkg-config,
   m4ri,
 }:
 
 stdenv.mkDerivation rec {
-  version = "20250128";
+  version = "20250103";
   pname = "m4rie";
 
-  src = fetchFromGitHub {
+  src = fetchFromBitbucket {
     owner = "malb";
     repo = "m4rie";
-    rev = version;
-    hash = "sha256-tw6ZX8hKfr9wQLF2nuO1dSkkTYZX6pzNWMlWfzLqQNE=";
+    rev = "release-${version}";
+    hash = "sha256-CbzDLSqdtQ+CLKoKycznKzD3VCa+gfuh8TLvRC1fVz0=";
   };
 
   doCheck = true;
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-O0" ];
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
   ];
 
   meta = with lib; {
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
       It uses the M4RI library, implementing the same operations over the finite field F2.
     '';
     license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

@@ -15,14 +15,14 @@
 let
   packaging = buildPythonPackage rec {
     pname = "packaging";
-    version = "25.0";
+    version = "24.2";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-1EOHLJjWd79g9qHy+MHLdI6P52LSv50xSLVZkpWw/E8=";
+      hash = "sha256-wiim3F6TLTRrxXOTeRCdSeiFPdgiNXHHxbVSYO3AuX8=";
     };
 
     nativeBuildInputs = [ flit-core ];
@@ -57,8 +57,7 @@ let
         bsd2
         asl20
       ];
-      maintainers = with maintainers; [ bennofs ];
-      teams = [ teams.python ];
+      maintainers = teams.python.members ++ (with maintainers; [ bennofs ]);
     };
   };
 in

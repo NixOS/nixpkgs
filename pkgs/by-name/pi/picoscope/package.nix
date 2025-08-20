@@ -30,8 +30,7 @@
 let
   shared_meta = lib: {
     homepage = "https://www.picotech.com/downloads/linux";
-    maintainers = with lib.maintainers; [ wirew0rm ];
-    teams = [ lib.teams.lumiguide ];
+    maintainers = with lib.maintainers; [ wirew0rm ] ++ lib.teams.lumiguide.members;
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
   };
@@ -44,7 +43,7 @@ let
       autoPatchelfHook,
       dpkg,
     }:
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       pname = "libpicoipp";
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
@@ -63,7 +62,7 @@ let
       '';
       meta = shared_meta lib // {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        description = "Library for picotech oscilloscope software";
+        description = "library for picotech oscilloscope software";
       };
     }
   ) { };
@@ -80,7 +79,7 @@ let
       version,
       sha256,
     }:
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       pname = "lib${name}";
       inherit version;
       src = fetchurl { inherit url sha256; };
@@ -96,7 +95,7 @@ let
         with lib;
         shared_meta lib
         // {
-          description = "Library for picotech oscilloscope ${name} series";
+          description = "library for picotech oscilloscope ${name} series";
         };
     };
 

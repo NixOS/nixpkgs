@@ -10,7 +10,7 @@
   license ? lib.licenses.lgpl3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit pname;
   version = "2019-08-10";
 
@@ -43,7 +43,6 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = description;
-    homepage = "https://github.com/Attempto/APE";
     license = license;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yrashk ];

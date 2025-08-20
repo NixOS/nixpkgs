@@ -1,26 +1,23 @@
 {
   lib,
-  stdenv,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
+  mkYarnPackage,
   fetchFromGitHub,
   fetchYarnDeps,
   matrix-sdk-crypto-nodejs,
   makeWrapper,
+  nodejs,
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkYarnPackage rec {
   pname = "mjolnir";
-  version = "1.9.2";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OxHnCMP6IP0EaAs4YQgmV04tq6IdAYmKQX8O9Q48CPk=";
+    tag = "v${version}";
+    hash = "sha256-LK2CgMLDJHfr1+ejHYeJNw2ekCnUA8GHufZ6vbifzGQ=";
   };
 
   patches = [
@@ -28,27 +25,33 @@ stdenv.mkDerivation (finalAttrs: {
     ./001-disable-nsfwprotection.patch
   ];
 
+  packageJSON = ./package.json;
+
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+    yarnLock = src + "/yarn.lock";
     hash = "sha256-1V7ooONt9j+4hk/3w6Dsv/SdWwa1xsLk97EwhuPegNo=";
   };
 
-  nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
-    nodejs
-    makeWrapper
-  ];
+  packageResolutions = {
+    "@matrix-org/matrix-sdk-crypto-nodejs" =
+      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pushd deps/${pname}
+    yarn run build
+    popd
+
+    runHook postBuild
+  '';
 
   postInstall = ''
-    cp -r lib/* $out/lib/node_modules/mjolnir/lib/
-
-    rm -rf $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-
     makeWrapper ${nodejs}/bin/node "$out/bin/mjolnir" \
-      --add-flags "$out/lib/node_modules/mjolnir/lib/index.js"
+      --add-flags "$out/libexec/mjolnir/deps/mjolnir/lib/index.js"
   '';
 
   passthru = {
@@ -57,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Moderation tool for Matrix";
     homepage = "https://github.com/matrix-org/mjolnir";
     longDescription = ''
@@ -74,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       A Synapse module is also available to apply the same rulesets the bot
       uses across an entire homeserver.
     '';
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jojosch ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jojosch ];
     mainProgram = "mjolnir";
   };
-})
+}

@@ -29,12 +29,12 @@ buildGoModule rec {
     package = plow;
   };
 
-  meta = {
+  meta = with lib; {
     description = "High-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";
     homepage = "https://github.com/six-ddc/plow";
     changelog = "https://github.com/six-ddc/plow/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ecklf ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ecklf ];
     mainProgram = "plow";
   };
 }

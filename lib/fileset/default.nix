@@ -703,7 +703,7 @@ in
     # Type
 
     ```
-    difference :: FileSet -> FileSet -> FileSet
+    union :: FileSet -> FileSet -> FileSet
     ```
 
     # Examples

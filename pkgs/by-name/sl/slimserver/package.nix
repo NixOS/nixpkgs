@@ -33,13 +33,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.0.2";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-rwaHlNM5KGqvk8SAdinvCGT5+UUAU8I2jiN5Ine/eds=";
+    hash = "sha256-Sd39J8YOywOOtVHxO3OPABULwRI5VGovS33tAj4TFkw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,7 +51,6 @@ perlPackages.buildPerlPackage rec {
       ArchiveZip
       AsyncUtil
       AudioScan
-      CarpAssert
       CarpClan
       CGI
       ClassAccessor

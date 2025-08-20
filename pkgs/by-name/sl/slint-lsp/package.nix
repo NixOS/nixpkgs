@@ -10,61 +10,75 @@
   xorg,
   libxkbcommon,
   wayland,
-  versionCheckHook,
-  nix-update-script,
+  # Darwin Frameworks
+  AppKit,
+  CoreGraphics,
+  CoreServices,
+  CoreText,
+  Foundation,
+  libiconv,
+  OpenGL,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+
+let
+  rpathLibs =
+    [
+      fontconfig
+      libGL
+      xorg.libxcb
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libxkbcommon
+      wayland
+    ];
+in
+rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
-  version = "1.12.1";
+  version = "1.9.1";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-adYd/PJ2c+SmJm7CNjCueaqHiHDC2KzFd4tS88wEMS4=";
+    inherit pname version;
+    hash = "sha256-/Upnl3VcR5ynT70gWMGAs/xvolMKsZeaGd+TWgxl/Pg=";
   };
 
-  cargoHash = "sha256-Wa07LLcMQ1PxA8CJhaLDu5OllfJYKmJ8uWDfXOu8rus=";
-
-  rpathLibs = [
-    fontconfig
-    libGL
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libxkbcommon
-    wayland
-  ];
+  cargoHash = "sha256-JgKK+NyRF3mIRarHmwCk2b1HsBUXZX/l2e843exZk2g=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     fontconfig
   ];
-  buildInputs = finalAttrs.rpathLibs ++ [ xorg.libxcb.dev ];
+  buildInputs =
+    rpathLibs
+    ++ [ xorg.libxcb.dev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      CoreGraphics
+      CoreServices
+      CoreText
+      Foundation
+      libiconv
+      OpenGL
+    ];
 
   # Tests requires `i_slint_backend_testing` which is only a dev dependency
   doCheck = false;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.rpathLibs} $out/bin/slint-lsp
+    patchelf --set-rpath ${lib.makeLibraryPath rpathLibs} $out/bin/slint-lsp
   '';
 
   dontPatchELF = true;
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Language Server Protocol (LSP) for Slint UI language";
     mainProgram = "slint-lsp";
     homepage = "https://slint-ui.com/";
-    downloadPage = "https://github.com/slint-ui/slint/";
-    changelog = "https://github.com/slint-ui/slint/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ xgroleau ];
+    changelog = "https://github.com/slint-ui/slint/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ xgroleau ];
   };
-})
+}

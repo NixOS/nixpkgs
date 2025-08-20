@@ -1,11 +1,11 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGoModule,
   fetchFromGitHub,
   replaceVars,
 }:
 
-buildGoLatestModule rec {
+buildGoModule rec {
   pname = "govulncheck";
   version = "1.1.4";
 
@@ -37,7 +37,7 @@ buildGoLatestModule rec {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
     downloadPage = "https://github.com/golang/vuln";
     changelog = "https://github.com/golang/vuln/releases/tag/v${version}";
@@ -64,8 +64,8 @@ buildGoLatestModule rec {
       example, a dependency with a Windows-specific vulnerability will not be
       reported for a Linux build.
     '';
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [
       jk
       SuperSandro2000
     ];

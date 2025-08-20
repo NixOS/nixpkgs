@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.10.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
-    repo = "gcfflasher";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-ayPo8FHxlH/xaoIwjbATSYLtGJUJkSj0oS16QoMxsbc=";
+    hash = "sha256-jBKYKjsog0vfyrPoixqTifej5Kb+qYS11Tn+il3J0w0=";
   };
 
   nativeBuildInputs = [

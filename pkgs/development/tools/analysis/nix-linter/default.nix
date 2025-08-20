@@ -20,7 +20,7 @@
   bytestring,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "nix-linter";
   version = "0.2.0.4";
 

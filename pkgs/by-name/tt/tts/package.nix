@@ -4,27 +4,34 @@
   fetchFromGitHub,
   espeak-ng,
   tts,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      torch = super.torch-bin;
+      torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "coqui-tts";
-  version = "0.26.2";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
     tag = "v${version}";
-    hash = "sha256-U/U3aXFvqnaV/Msy5wyzAKCUw9XUNplugig6nv5nfZY=";
+    hash = "sha256-5w1Y9wdoJ+EV/WBwK3nqyY60NEsMjQsfE4g+sJB7VwQ=";
   };
 
   postPatch =
     let
       relaxedConstraints = [
         "bnunicodenormalizer"
-        "coqpit-config"
         "cython"
         "gruut"
         "inflect"
@@ -46,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
       pyproject.toml
     '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     cython
     numpy
     packaging
@@ -54,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     anyascii
     bangla
     bnnumerizer
@@ -83,8 +90,8 @@ python3.pkgs.buildPythonApplication rec {
     scipy
     soundfile
     tensorflow
-    torch
-    torchaudio
+    torch-bin
+    torchaudio-bin
     tqdm
     trainer
     transformers
@@ -95,7 +102,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
+    cp -r TTS/server/templates/ $out/${python.sitePackages}/TTS/server
   '';
 
   # tests get stuck when run in nixpkgs-review, tested in passthru
@@ -104,29 +111,27 @@ python3.pkgs.buildPythonApplication rec {
     doCheck = true;
   });
 
-  nativeCheckInputs =
-    with python3.pkgs;
-    [
-      espeak-ng
-      pytestCheckHook
-    ]
-    ++ [
-      addBinToPathHook
-      writableTmpDirAsHomeHook
-    ];
+  nativeCheckInputs = with python.pkgs; [
+    espeak-ng
+    pytestCheckHook
+  ];
 
   preCheck = ''
     # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
     mv TTS{,.old}
+    export PATH=$out/bin:$PATH
+
+    # numba tries to write to HOME directory
+    export HOME=$TMPDIR
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
-        --replace "python TTS/bin" "${python3.interpreter} $out/${python3.sitePackages}/TTS/bin"
+        --replace "python TTS/bin" "${python.interpreter} $out/${python.sitePackages}/TTS/bin"
     done
   '';
 
   disabledTests = [
-    # Requires network access to download models
+    # Requires network acccess to download models
     "test_korean_text_to_phonemes"
     "test_models_offset_0_step_3"
     "test_models_offset_1_step_3"
@@ -180,14 +185,15 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    inherit python3;
+    inherit python;
   };
 
   meta = with lib; {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
-    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
+    broken = false;
   };
 }

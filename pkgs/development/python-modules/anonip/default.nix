@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  enabledTestPaths = [ "tests.py" ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "anonip" ];
 

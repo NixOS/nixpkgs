@@ -7,7 +7,6 @@
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   inherit (remctl-c)
     meta
     pname

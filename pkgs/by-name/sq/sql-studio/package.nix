@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
 }:
 let
   pname = "sql-studio";
-  version = "0.1.35";
+  version = "0.1.32";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
     rev = version;
-    hash = "sha256-ZWGV4DYf+85LIGVDc8hcWSEJsM6UisuCB2Wd2kiw/sk=";
+    hash = "sha256-PDNTOzzoJ3a/OljnZux9ttts/ntwep2rC01IxIfMU1k=";
   };
 
   ui = buildNpmPackage {
@@ -28,18 +29,19 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-rWG5iPXiG7kCf0yLAqcQi8AM3qv/WTUiY4cVrjpUc/Y=";
+  cargoHash = "sha256-Hw7VbcU/Y8wl4KObHvQfUXRORlbsuLHTQDMzk3Qel20=";
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
 
   meta = {
-    description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, ClickHouse, Microsoft SQL Server]";
+    description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, DuckDB, ClickHouse]";
     homepage = "https://github.com/frectonz/sql-studio";
     mainProgram = "sql-studio";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.frectonz ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

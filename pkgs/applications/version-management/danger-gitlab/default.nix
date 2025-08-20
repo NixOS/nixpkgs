@@ -9,7 +9,7 @@ bundlerApp {
     description = "Gem that exists to ensure all dependencies are set up for Danger with GitLab";
     homepage = "https://github.com/danger/danger-gitlab-gem";
     license = licenses.mit;
-    teams = [ teams.serokell ];
+    maintainers = teams.serokell.members;
     mainProgram = "danger";
   };
 }

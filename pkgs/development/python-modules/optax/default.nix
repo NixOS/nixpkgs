@@ -12,6 +12,7 @@
   jax,
   jaxlib,
   numpy,
+  etils,
 
   # tests
   callPackage,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.2.5";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "optax";
     tag = "v${version}";
-    hash = "sha256-EGQeRYSxHdENqB3QPZFsjqwh4LYT5CF8E1K3fKFedPg=";
+    hash = "sha256-7UPWeo/Q9/tjewaM7HN8/e7U1U1QzAliuk95+9GOi0E=";
   };
 
   outputs = [
@@ -39,10 +40,11 @@ buildPythonPackage rec {
   dependencies = [
     absl-py
     chex
+    etils
     jax
     jaxlib
     numpy
-  ];
+  ] ++ etils.optional-dependencies.epy;
 
   postInstall = ''
     mkdir $testsout

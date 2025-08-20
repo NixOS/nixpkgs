@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "coreth";
-  version = "0.15.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
-    repo = "coreth";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-YPL/CJIAB/hkUrvyY0jcHWNKry6ddeO2mpxBiutNNMU=";
+    hash = "sha256-YUqrbTjye0eNNuf9hGQXtMidRq6y3m3pSKzIRVECy9E=";
   };
 
   # go mod vendor has a bug, see: golang/go#57529
   proxyVendor = true;
 
-  vendorHash = "sha256-SGOg2xHWcwJc4j6RcR2KaicXrBkwY2PtknVEvQtatGs=";
+  vendorHash = "sha256-T6HvvvD4potKdcVUnUo2cfTwJkMCggbroTwpBToUE30=";
 
   ldflags = [
     "-s"
@@ -35,11 +35,11 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/{plugin,evm}";
 
-  meta = {
+  meta = with lib; {
     description = "Code and wrapper to extract Ethereum blockchain functionalities without network/consensus, for building custom blockchain services";
     homepage = "https://github.com/ava-labs/coreth";
     changelog = "https://github.com/ava-labs/coreth/releases/tag/v${version}";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ urandom ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ urandom ];
   };
 }

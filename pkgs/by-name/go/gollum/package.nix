@@ -7,7 +7,7 @@
   nixosTests,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "gollum";
   exes = [ "gollum" ];
 

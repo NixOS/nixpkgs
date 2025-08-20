@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     inherit owner;
-    repo = "HybridReverb2";
+    repo = pname;
     rev = rev;
     hash = "sha256-+uwTKHQ3nIWKbBCPtf/axvyW6MU0gemVtd2ZqqiT/w0=";
     fetchSubmodules = true;
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $out/share/HybridReverb2/
-    cp  -r ${impulseDB}/* $out/share/HybridReverb2/
+    mkdir -p $out/share/${pname}/
+    cp  -r ${impulseDB}/* $out/share/${pname}/
   '';
 
   meta = with lib; {

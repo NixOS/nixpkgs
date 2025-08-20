@@ -3,11 +3,9 @@ self:
   lib,
   stdenv,
   makeSetupHook,
+  fetchurl,
   cmake,
-  ninja,
   qt6,
-  python3,
-  python3Packages,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -56,7 +54,6 @@ let
 
       # FIXME: typo lol
       "ICS" = lib.licenses.isc;
-      "BSD-2-Clauses" = lib.licenses.bsd2;
       "BSD-3-clause" = lib.licenses.bsd3;
       "BSD-3-Clauses" = lib.licenses.bsd3;
 
@@ -76,7 +73,7 @@ let
       None = null;
     };
 
-  moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
+  moveDevHook = makeSetupHook { name = "kf6-move-dev-hook"; } ./move-dev-hook.sh;
 in
 {
   pname,
@@ -87,7 +84,6 @@ in
   extraPropagatedBuildInputs ? [ ],
   extraCmakeFlags ? [ ],
   excludeDependencies ? [ ],
-  hasPythonBindings ? false,
   ...
 }@args:
 let
@@ -102,9 +98,7 @@ let
     attrName: attrValue:
     let
       pretty = lib.generators.toPretty { };
-      duplicates = builtins.filter (
-        dep: dep != null && builtins.elem (lib.getName dep) filteredDepNames
-      ) attrValue;
+      duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
     in
     if duplicates != [ ] then
       lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"
@@ -123,31 +117,14 @@ let
       "out"
       "dev"
       "devtools"
-    ]
-    ++ lib.optionals hasPythonBindings [ "python" ];
+    ];
 
     nativeBuildInputs = [
       cmake
-      ninja
       qt6.wrapQtAppsHook
-      moveOutputsHook
-    ]
-    ++ lib.optionals hasPythonBindings [
-      python3Packages.shiboken6
-      (python3.withPackages (ps: [
-        ps.build
-        ps.setuptools
-      ]))
-    ]
-    ++ extraNativeBuildInputs;
-
-    buildInputs = [
-      qt6.qtbase
-    ]
-    ++ lib.optionals hasPythonBindings [
-      python3Packages.pyside6
-    ]
-    ++ extraBuildInputs;
+      moveDevHook
+    ] ++ extraNativeBuildInputs;
+    buildInputs = [ qt6.qtbase ] ++ extraBuildInputs;
 
     # FIXME: figure out what to propagate here
     propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
@@ -167,7 +144,6 @@ let
     "extraPropagatedBuildInputs"
     "extraCmakeFlags"
     "excludeDependencies"
-    "hasPythonBindings"
     "meta"
   ];
 
@@ -175,11 +151,10 @@ let
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-    teams = [ lib.teams.qt-kde ];
+    maintainers = lib.teams.qt-kde.members;
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-  }
-  // (args.meta or { });
+  } // (args.meta or { });
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 in

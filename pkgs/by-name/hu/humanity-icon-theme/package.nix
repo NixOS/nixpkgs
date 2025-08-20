@@ -27,9 +27,6 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  # Upstream ships a bunch of those, and is very dead
-  dontCheckForBrokenSymlinks = true;
-
   installPhase = ''
     runHook preInstall
 

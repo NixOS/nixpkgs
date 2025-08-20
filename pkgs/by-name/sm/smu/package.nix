@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Simple markup - markdown like syntax";
+    description = "simple markup - markdown like syntax";
     mainProgram = "smu";
     homepage = "https://github.com/Gottox/smu";
     license = licenses.mit;

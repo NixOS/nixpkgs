@@ -2,10 +2,11 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "parquet-tools";
   version = "0.2.16";
 
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tests/test_inspect.py \
-      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${python3Packages.pyarrow.version}" \
+      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${pyarrow.version}" \
       --replace "serialized_size: 2222" "serialized_size: 2221" \
       --replace "format_version: 1.0" "format_version: 2.6"
   '';
@@ -37,11 +38,11 @@ python3Packages.buildPythonApplication rec {
     "thrift"
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     boto3
     colorama
     halo
@@ -51,16 +52,16 @@ python3Packages.buildPythonApplication rec {
     thrift
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      moto
-      pytest-mock
-      pytestCheckHook
-    ]
-    ++ [
-      addBinToPathHook
-    ];
+  # TestGetMetaData.test_inspect shells out to `parquet-tools` CLI entrypoint
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  nativeCheckInputs = [
+    moto
+    pytest-mock
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # test file is 2 bytes bigger than expected
@@ -71,12 +72,12 @@ python3Packages.buildPythonApplication rec {
     "parquet_tools"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for parquet files";
     homepage = "https://github.com/ktrueda/parquet-tools";
     changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
     mainProgram = "parquet-tools";
   };
 }

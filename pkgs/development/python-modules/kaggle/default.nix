@@ -16,17 +16,16 @@
   tqdm,
   urllib3,
   webencodings,
-  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.7.4.5";
+  version = "1.6.17";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HZghvWpqFHB0HHbSZJWhhHW1p7/gyAsZGRJUsnNdQd0=";
+    hash = "sha256-Q5p96h1QOfMg/WrV7CG2iNz6cNQFy0IJW4H0HtxAG4E=";
   };
 
   build-system = [ hatchling ];
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     tqdm
     urllib3
     webencodings
-    protobuf
   ];
 
   # Tests try to access the network.

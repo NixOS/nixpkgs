@@ -2,43 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build system
-  setuptools,
-
-  # dependencies
-  numpy,
-  nunavut,
-
-  # optional dependencies
+  pythonOlder,
+  python-can,
   cobs,
   libpcap,
+  nunavut,
+  numpy,
   pyserial,
-  python-can,
-
-  # tests
-  pytest-asyncio,
   pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pycyphal";
   version = "1.18.0";
-  pyproject = true;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
-    repo = "pycyphal";
+    repo = pname;
     tag = version;
     hash = "sha256-XkH0wss8ueh/Wwz0lhvQShOp3a4X9lNdosT/sMe7p4Q=";
     fetchSubmodules = true;
   };
 
-  build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "numpy" ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     numpy
     nunavut
   ];
@@ -55,8 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ]
-  ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
+  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -78,17 +67,13 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "pycyphal/application/__init__.py"
     "pycyphal/application/_transport_factory.py"
-    "pycyphal/application/register/backend/dynamic.py"
-    "pycyphal/application/register/backend/static.py"
-    "pycyphal/transport/udp"
+    "pycyphal/transport/udp/_ip/_link_layer.py"
+    "pycyphal/transport/udp/_ip/_v4.py"
     "tests/application"
     "tests/demo"
     "tests/dsdl"
     "tests/presentation"
     "tests/transport"
-    # These are flaky -- test against string representations of values
-    "pycyphal/application/register/_registry.py"
-    "pycyphal/application/register/_value.py"
   ];
 
   pythonImportsCheck = [ "pycyphal" ];
@@ -101,6 +86,6 @@ buildPythonPackage rec {
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    teams = [ teams.ororatech ];
+    maintainers = teams.ororatech.members;
   };
 }

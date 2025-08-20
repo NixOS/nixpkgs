@@ -2,24 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  pythonOlder,
   hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hpack";
-  version = "4.1.0";
-  pyproject = true;
+  version = "4.0.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "hpack";
     rev = "v${version}";
-    hash = "sha256-vbxfDlRDwMXuzkPO0oceCpSz1ekLNxLSj4iocdHo680=";
+    hash = "sha256-2CehGy3K5fKbkB1J8+8x1D4XvnBn1Mbapx+p8rdXDYc=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hpack" ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-hyper/hpack/blob/${src.rev}/CHANGELOG.rst";
     description = "Pure-Python HPACK header compression";
     homepage = "https://github.com/python-hyper/hpack";
     license = licenses.mit;

@@ -2,20 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "durus";
-  version = "4.3";
-  pyproject = true;
+  version = "4.2";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aQM0I26juo2WbjrszgJUd5CdayQNCzID0zJ/YkNyYAc=";
+    pname = "Durus";
+    inherit version;
+    hash = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
   };
-
-  build-system = [ setuptools ];
 
   # Checks disabled due to missing python unittest framework 'sancho' in nixpkgs
   doCheck = false;

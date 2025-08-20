@@ -8,7 +8,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "CANToolz";
@@ -30,11 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     flask
     pyserial
     mido

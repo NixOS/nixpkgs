@@ -6,9 +6,9 @@
   txt2tags,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libixp";
-  version = "0-unstable-2022-04-04";
+  version = "unstable-2022-04-04";
 
   src = fetchFromGitHub {
     owner = "0intro";

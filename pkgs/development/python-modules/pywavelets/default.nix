@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pywavelets";
-  version = "1.8.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PyWavelets";
     repo = "pywt";
     tag = "v${version}";
-    hash = "sha256-v5NkzgIztREYz2Idg0E3grejWhZ/5BX0nCexUX8XcTQ=";
+    hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Wavelet transform module";
     homepage = "https://github.com/PyWavelets/pywt";
-    changelog = "https://github.com/PyWavelets/pywt/releases/tag/${src.tag}";
+    changelog = "https://github.com/PyWavelets/pywt/releases/tag/v${version}";
     license = licenses.mit;
   };
 }

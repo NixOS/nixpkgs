@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "mod-distortion";
-  version = "0-unstable-2016-08-19";
+  version = "unstable-2016-08-19";
 
   src = fetchFromGitHub {
     owner = "portalmod";

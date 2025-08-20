@@ -26,6 +26,7 @@
   vulkan-loader,
   glslang,
   spirv-tools,
+  gtest,
   glew,
 }:
 let
@@ -33,18 +34,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.4.0";
+  version = "10.0.3";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-SSf9W+1yl7ExHsifbVM5IN4OfZvMdz62xMfdb++38II=";
+    hash = "sha256-RhOZuPsjyXq5UcM+5dawDi1BfjMMQ3K9O3PHkCg5sDI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
+    hash = "sha256-NDeHpf1iYApP/Y/DE7FGBu67ld6A0+8227oTVlOMe1M=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     glslang # for glslangValidator
     python3
   ];
+
+  nativeCheckInputs = [ gtest ];
+  checkInputs = [ gtest ];
 
   buildInputs = [
     curl
@@ -76,8 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   strictDeps = true;
 
@@ -95,11 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
-  # Since we are not building the server executable, the `run_tests` Makefile target
-  # will not be generated.
-  #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.4.0/CMakeLists.txt#L3088
-  doCheck = false;
+  doCheck = true;
+  checkTarget = "run_tests";
+
+  __darwinAllowLocalNetworking = true; # for tests
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet

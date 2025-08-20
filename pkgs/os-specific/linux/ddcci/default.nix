@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
   kernel,
-  kernelModuleMakeFlags,
   fetchpatch,
 }:
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = kernel.makeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.modDirVersion}"
     "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"

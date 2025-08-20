@@ -12,7 +12,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-requests";
   pyproject = true;

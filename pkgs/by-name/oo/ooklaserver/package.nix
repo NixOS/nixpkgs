@@ -18,7 +18,7 @@ let
     # OoklaServer-freebsd13_64.zip
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   version = "2.11.1.2";
   pname = "ooklaserver";
 

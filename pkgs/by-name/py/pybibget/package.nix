@@ -4,19 +4,19 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
   pname = "pybibget";
   version = "0.1.0";
-  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-M6CIctTOVn7kIPmsoHQmYl2wQaUzfel7ryw/3ebQitg=";
   };
 
-  build-system = [
-    python3.pkgs.setuptools
-  ];
+in
+python3.pkgs.buildPythonApplication {
+  inherit pname version src;
+  pyproject = true;
 
   propagatedBuildInputs = with python3.pkgs; [
     lxml
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  # Tests for this application do not run on NixOS, and binaries were
+  # Tests for this applicaiton do not run on NixOS, and binaries were
   # manually tested instead
   doCheck = false;
 

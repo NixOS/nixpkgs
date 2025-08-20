@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "segmentio";
-    repo = "golines";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-D0gI9BA0vgM1DBqwolNTfPsTCWuOGrcu5gAVFEdyVGg=";
   };
@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/segmentio/golines";
     license = licenses.mit;
     maintainers = with maintainers; [ meain ];
-    mainProgram = "golines";
   };
 }

@@ -34,20 +34,21 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    click
-    distro
-    gevent
-    jinja2
-    packaging
-    paramiko
-    python-dateutil
-    pywinrm
-    setuptools
-    typeguard
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies =
+    [
+      click
+      distro
+      gevent
+      jinja2
+      packaging
+      paramiko
+      python-dateutil
+      pywinrm
+      setuptools
+      typeguard
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

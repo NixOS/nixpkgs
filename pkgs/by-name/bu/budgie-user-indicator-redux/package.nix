@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.budgie ];
+    maintainers = lib.teams.budgie.members;
   };
 })

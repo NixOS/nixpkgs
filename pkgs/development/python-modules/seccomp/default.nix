@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "libseccomp";
   version = libseccomp.version;
-  format = "setuptools";
   src = libseccomp.pythonsrc;
 
   VERSION_RELEASE = version; # used by build system
@@ -24,8 +23,6 @@ buildPythonPackage rec {
       --replace 'extra_objects=["../.libs/libseccomp.a"]' \
                 'libraries=["seccomp"]'
   '';
-
-  pythonImportsCheck = [ "seccomp" ];
 
   meta = with lib; {
     description = "Python bindings for libseccomp";

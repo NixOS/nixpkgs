@@ -2,28 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "ddosify";
-  version = "2.6.0";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "ddosify";
     repo = "ddosify";
-    tag = "selfhosted-${finalAttrs.version}";
-    hash = "sha256-EPbpBCSaUVVhxGlj7gRqwHLuj5p6563iiARqkEjA6Rk=";
+    tag = "v${version}";
+    hash = "sha256-5K/qXtdlDC09dEjRwYvoh9SapGLNmvywDMiNdwZDDTQ=";
   };
 
   vendorHash = "sha256-Wg4JzA2aEwNBsDrkauFUb9AS38ITLBGex9QHzDcdpoM=";
 
-  sourceRoot = "${finalAttrs.src.name}/ddosify_engine";
-
   ldflags = [
     "-s"
     "-w"
-    "-X=main.GitVersion=${finalAttrs.version}"
+    "-X=main.GitVersion=${version}"
     "-X=main.GitCommit=unknown"
     "-X=main.BuildDate=unknown"
   ];
@@ -33,16 +30,16 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  installCheckPhase = ''
+    $out/bin/ddosify -version | grep ${version} > /dev/null
+  '';
 
-  versionCheckProgramArg = "-version";
-
-  meta = {
+  meta = with lib; {
     description = "High-performance load testing tool, written in Golang";
     mainProgram = "ddosify";
     homepage = "https://ddosify.com/";
-    changelog = "https://github.com/ddosify/ddosify/releases/tag/selfhosted-${finalAttrs.version}";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    changelog = "https://github.com/ddosify/ddosify/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ bryanasdev000 ];
   };
-})
+}

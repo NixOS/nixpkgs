@@ -4,10 +4,9 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "mdslides";
-  version = "0-unstable-2022-12-15";
-  pyproject = true;
+  version = "unstable-2022-12-15";
 
   src = fetchFromGitHub {
     owner = "dadoomer";
@@ -16,11 +15,7 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-31ALsy1P/vfI+H6Onmg4TXLeKbVAQ1FlnFs4k6ZOgHQ=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
   doCheck = false;
-
-  pythonImportsCheck = [ "mdslides" ];
 
   meta = with lib; {
     longDescription = "Using markdown, write simple but beautiful presentations with math, animations and media, which can be visualized in a web browser or exported to PDF.";

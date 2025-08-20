@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "setuptools_scm";
   version = "5.0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

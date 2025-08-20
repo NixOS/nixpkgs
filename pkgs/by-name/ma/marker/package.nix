@@ -21,15 +21,10 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
-
-  patches = [
-    # https://github.com/fabiocolacio/Marker/pull/427
-    ./fix_incompatible_pointer_in_marker_window_init.patch
-  ];
 
   nativeBuildInputs = [
     itstool
@@ -51,15 +46,15 @@ stdenv.mkDerivation rec {
     meson rewrite kwargs set project / version '${version}'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       trepetti
       aleksana
     ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
     mainProgram = "marker";
   };

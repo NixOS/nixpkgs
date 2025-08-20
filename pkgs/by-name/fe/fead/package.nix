@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   # The package has no tests.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Advert generator from web feeds";
     homepage = "https://trong.loang.net/~cnx/fead";
-    license = lib.licenses.agpl3Plus;
+    license = licenses.agpl3Plus;
     changelog = "https://trong.loang.net/~cnx/fead/tag?h=${version}";
-    maintainers = with lib.maintainers; [ McSinyx ];
+    maintainers = with maintainers; [ McSinyx ];
     mainProgram = "fead";
   };
 }

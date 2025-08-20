@@ -29,15 +29,16 @@ stdenv.mkDerivation rec {
     gprbuild
   ];
 
-  makeFlags = [
-    "prefix=$(out)"
-    "PROCESSORS=$(NIX_BUILD_CORES)"
-    "ENABLE_SHARED=${if enableShared then "yes" else "no"}"
-    "GPR2_BUILD=release"
-  ]
-  ++ lib.optionals (gpr2kbdir != null) [
-    "GPR2KBDIR=${gpr2kbdir}"
-  ];
+  makeFlags =
+    [
+      "prefix=$(out)"
+      "PROCESSORS=$(NIX_BUILD_CORES)"
+      "ENABLE_SHARED=${if enableShared then "yes" else "no"}"
+      "GPR2_BUILD=release"
+    ]
+    ++ lib.optionals (gpr2kbdir != null) [
+      "GPR2KBDIR=${gpr2kbdir}"
+    ];
 
   configurePhase = ''
     runHook preConfigure
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Framework for analyzing the GNAT Project (GPR) files";
+    description = "The framework for analyzing the GNAT Project (GPR) files";
     homepage = "https://github.com/AdaCore/gpr";
     license = with licenses; [
       asl20

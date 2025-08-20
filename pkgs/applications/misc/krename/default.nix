@@ -11,7 +11,7 @@
   kjsembed,
   taglib,
   exiv2,
-  podofo_0_9,
+  podofo,
   kcrash,
 }:
 
@@ -39,7 +39,7 @@ mkDerivation rec {
   buildInputs = [
     taglib
     exiv2
-    podofo_0_9
+    podofo
   ];
 
   nativeBuildInputs = [

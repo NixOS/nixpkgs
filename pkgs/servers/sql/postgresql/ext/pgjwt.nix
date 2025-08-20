@@ -1,14 +1,15 @@
 {
-  fetchFromGitHub,
   lib,
-  nixosTests,
+  stdenv,
+  fetchFromGitHub,
   postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
   unstableGitUpdater,
+  nixosTests,
+  postgresqlTestExtension,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pgjwt";
   version = "0-unstable-2023-03-02";
 
@@ -16,7 +17,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "michelp";
     repo = "pgjwt";
     rev = "f3d82fd30151e754e19ce5d6a06c71c20689ce3d";
-    hash = "sha256-nDZEDf5+sFc1HDcG2eBNQj+kGcdAYRXJseKi9oww+JU=";
+    sha256 = "sha256-nDZEDf5+sFc1HDcG2eBNQj+kGcdAYRXJseKi9oww+JU=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -33,13 +34,13 @@ postgresqlBuildExtension (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
     longDescription = ''
       sign() and verify() functions to create and verify JSON Web Tokens.
     '';
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = postgresql.meta.platforms;
-    maintainers = with lib.maintainers; [ spinus ];
+    maintainers = with maintainers; [ spinus ];
   };
 })

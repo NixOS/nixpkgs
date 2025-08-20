@@ -23,12 +23,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Strong, neutral, principles-driven, open source typeface for text or display";
     homepage = "https://public-sans.digital.gov/";
     changelog = "https://github.com/uswds/public-sans/raw/v${version}/FONTLOG.txt";
-    license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

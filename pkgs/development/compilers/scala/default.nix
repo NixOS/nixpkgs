@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   '';
 
   inherit (bare) meta;
-
-  passthru = { inherit bare; };
+}
+// {
+  inherit bare;
 }

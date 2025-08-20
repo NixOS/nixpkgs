@@ -6,20 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
-  version = "3.6.1";
-  pyproject = true;
+  version = "3.5.1";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";
-    repo = "pg_activity";
+    repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-TzY+3RE06TxIrhl75wol9CvZDIz25GfgOx11vkREw2c=";
+    sha256 = "sha256-fqRECReeXjdoCieCYIsIumIjcMGN7UUbWHxxAfzm9co=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     attrs
     blessed
     humanize

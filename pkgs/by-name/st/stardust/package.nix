@@ -5,7 +5,8 @@
   zlib,
   libtiff,
   libxml2,
-  SDL_compat,
+  SDL,
+  xorgproto,
   libX11,
   libXi,
   libXmu,
@@ -14,27 +15,21 @@
   libGL,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "stardust";
   version = "0.1.13";
 
   src = fetchurl {
-    url = "http://iwar.free.fr/spip/IMG/gz/stardust-${finalAttrs.version}.tar.gz";
-    hash = "sha256-t5cykB5zHYYj4tlk9QDhL7YQVgEScBZw9OIVXz5NOqc=";
+    url = "http://iwar.free.fr/IMG/gz/${pname}-${version}.tar.gz";
+    sha256 = "19rs9lz5y5g2yiq1cw0j05b11digw40gar6rw8iqc7bk3s8355xp";
   };
 
-  strictDeps = true;
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [
-    SDL_compat
-    libxml2
-  ];
   buildInputs = [
     zlib
     libtiff
     libxml2
-    SDL_compat
+    SDL
+    xorgproto
     libX11
     libXi
     libXmu
@@ -43,26 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ];
 
-  patches = [ ./pointer-fix.patch ];
-
-  installFlags = [ "bindir=${placeholder "out"}/bin" ];
+  installFlags = [ "bindir=\${out}/bin" ];
 
   hardeningDisable = [ "format" ];
 
   postConfigure = ''
     substituteInPlace config.h \
-      --replace-fail '#define PACKAGE ""' '#define PACKAGE "stardust"'
+      --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Space flight simulator";
-    homepage = "http://iwar.free.fr/spip/rubrique2.html";
     mainProgram = "stardust";
-    maintainers = with lib.maintainers; [
-      raskin
-      marcin-serwin
-    ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
-})
+}

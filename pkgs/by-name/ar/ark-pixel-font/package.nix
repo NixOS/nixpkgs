@@ -3,37 +3,52 @@
   python312Packages,
   fetchFromGitHub,
   nix-update-script,
+  fetchPypi,
 }:
 
+let
+  pixel-font-builder-compat = python312Packages.pixel-font-builder.overrideAttrs rec {
+    version = "0.0.26";
+    src = fetchPypi {
+      inherit version;
+      pname = "pixel_font_builder";
+      hash = "sha256-bgs2FbOA5tcUXe5+KuVztWGAv5yFxQNBaiZMeZ+ic+8=";
+    };
+  };
+in
 python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2025.07.21";
-  pyproject = false;
+  version = "2024.05.12";
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "ark-pixel-font";
     tag = version;
-    hash = "sha256-NnkXKe4qlWl4lDHNcO5aVJWwyeSrHoHxqlla+RMgtQw=";
+    hash = "sha256-PGhhKWHDpvOqa3vaI40wuIsAEdWGb62cN7QJeHQqiss=";
   };
 
-  dependencies = with python312Packages; [
-    pixel-font-builder
-    pixel-font-knife
+  format = "other";
+
+  nativeBuildInputs = with python312Packages; [
+    pixel-font-builder-compat
     unidata-blocks
     character-encoding-utils
-    pyyaml
+    pypng
     pillow
     beautifulsoup4
     jinja2
-    loguru
-    cyclopts
+    gitpython
   ];
+
+  # By default build.py builds a LOT of extraneous artifacts we don't need.
+  patches = [ ./limit-builds.patch ];
 
   buildPhase = ''
     runHook preBuild
 
-    python -m tools.cli --cleanup
+    # Too much debug output would break Hydra, so this jankness has to be here for it to build at all.
+    # I wish there's a builtin way to set the log level without modifying the script itself...
+    python3 build.py 2>&1 >/dev/null | grep -E '^(INFO|WARN|ERROR)'
 
     runHook postBuild
   '';

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme-legacy";
     changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme-legacy/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.cc-by-sa-30;
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     platforms = platforms.all;
   };
 })

@@ -1,21 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-
-  # optional dependencies
-  azure-storage-blob,
-  boto3,
   dulwich,
-  google-cloud-storage,
-  pymongo,
-  redis,
-
-  # testing
+  fetchFromGitHub,
   mock,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
   six,
 }:
 
@@ -35,12 +26,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
+  dependencies = [
+    dulwich
     mock
     pytestCheckHook
     six
-  ]
-  ++ optional-dependencies.git;
+  ];
 
   pythonImportsCheck = [ "simplekv" ];
 
@@ -49,28 +40,11 @@ buildPythonPackage rec {
     "test_concurrent_mkdir"
   ];
 
-  optional-dependencies = {
-    amazon = [ boto3 ];
-    azure = [ azure-storage-blob ];
-    google = [ google-cloud-storage ];
-    redis = [ redis ];
-    mongodb = [ pymongo ];
-    git = [ dulwich ];
-    /*
-      Additional potential dependencies not exposed here:
-        sqlalchemy: Our version is too new for simplekv
-        appengine-python-standard: Not packaged in nixpkgs
-    */
-  };
-
   meta = with lib; {
     description = "Simple key-value store for binary data";
     homepage = "https://github.com/mbr/simplekv";
     changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      fab
-      bbenne10
-    ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -52,30 +52,31 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    (curl.override { inherit openssl; })
-    cyrus_sasl
-    libaio
-    libedit
-    libevent
-    libev
-    libgcrypt
-    libgpg-error
-    lz4
-    ncurses
-    numactl
-    openssl
-    procps
-    protobuf
-    valgrind
-    xxd
-    zlib
-  ]
-  ++ (with perlPackages; [
-    perl
-    DBI
-    DBDmysql
-  ]);
+  buildInputs =
+    [
+      (curl.override { inherit openssl; })
+      cyrus_sasl
+      libaio
+      libedit
+      libevent
+      libev
+      libgcrypt
+      libgpg-error
+      lz4
+      ncurses
+      numactl
+      openssl
+      procps
+      protobuf
+      valgrind
+      xxd
+      zlib
+    ]
+    ++ (with perlPackages; [
+      perl
+      DBI
+      DBDmysql
+    ]);
 
   patches = extraPatches;
 
@@ -96,11 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_MAN_PAGES=OFF"
   ];
 
-  postInstall = ''
-    wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
-    rm -r "$out"/lib/plugin/debug
-  ''
-  + extraPostInstall;
+  postInstall =
+    ''
+      wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
+      rm -r "$out"/lib/plugin/debug
+    ''
+    + extraPostInstall;
 
   passthru.mysqlVersion = lib.versions.majorMinor finalAttrs.version;
 
@@ -109,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.izorkin ];
-    teams = [ teams.flyingcircus ];
+    maintainers = teams.flyingcircus.members ++ [ maintainers.izorkin ];
   };
 })

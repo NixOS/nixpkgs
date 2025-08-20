@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
-  enabledTestPaths = [ "test" ];
+  pytestFlagsArray = [ "test" ];
   pythonImportsCheck = [ "robottools" ];
 
   meta = with lib; {

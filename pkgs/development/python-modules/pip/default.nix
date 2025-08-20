@@ -10,7 +10,6 @@
 
   # docs
   sphinx,
-  sphinx-issues,
 
   # checks
   freezegun,
@@ -24,21 +23,21 @@
   tomli-w,
   werkzeug,
 
-  # coupled downstream dependencies
+  # coupled downsteam dependencies
   pip-tools,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.0.1";
+    version = "24.0";
     format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "pypa";
-      repo = "pip";
+      repo = pname;
       tag = version;
-      hash = "sha256-V069rAL6U5KBnSc09LRCu0M7qQCH5NbMghVttlmIoRY=";
+      hash = "sha256-yojk2T5wuPkS1OKusilj253AT+xyKwXCWKBNUEH2Mgo=";
     };
 
     postPatch = ''
@@ -54,7 +53,6 @@ let
 
       # docs
       sphinx
-      sphinx-issues
     ];
 
     outputs = [
@@ -71,7 +69,7 @@ let
       # sphinx.ext.intersphinx requires network connection or packaged object.inv files for python and pypug
       # sphinxcontrib.towncrier is not currently packaged
       for ext in sphinx.ext.intersphinx sphinx_copybutton sphinx_inline_tabs sphinxcontrib.towncrier myst_parser; do
-        substituteInPlace html/conf.py --replace-fail '"'$ext'",' ""
+        substituteInPlace html/conf.py --replace '"'$ext'",' ""
       done
 
       PYTHONPATH=$src/src:$PYTHONPATH sphinx-build -v \

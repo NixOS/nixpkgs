@@ -5,16 +5,8 @@
   callPackage,
 }:
 let
-  extVersion = "1.62.0";
-  rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { };
-
-  # Ensure the versions match
-  version =
-    if rescript-editor-analysis.version == extVersion then
-      rescript-editor-analysis.version
-    else
-      throw "analysis and extension versions must match";
-
+  version = "1.60.0";
+  rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
   arch =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -24,19 +16,13 @@ let
       throw "Unsupported system: ${stdenv.system}";
   analysisDir = "server/analysis_binaries/${arch}";
 in
-
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    hash = "sha256-yUAhysTM9FXo9ZAzrto+tnjnofIUEQAGBg3tjIainrY=";
+    hash = "sha256-1jdjSxho7TRADAxs4ccLw7Ea430f+L5aBlLDlUwvXHk=";
   };
-
-  # For rescript-language-server
-  passthru.rescript-editor-analysis = rescript-editor-analysis;
-
-  strictDeps = true;
   postPatch = ''
     rm -r ${analysisDir}
     ln -s ${rescript-editor-analysis}/bin ${analysisDir}
@@ -49,7 +35,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       lib.maintainers.dlip
       lib.maintainers.jayesh-bhoot
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mit;
   };
 }

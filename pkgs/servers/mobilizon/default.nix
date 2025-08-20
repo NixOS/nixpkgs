@@ -8,7 +8,6 @@
   git,
   cmake,
   nixosTests,
-  nixfmt,
   mobilizon-frontend,
   ...
 }:
@@ -19,6 +18,11 @@ let
 in
 mixRelease rec {
   inherit (common) pname version src;
+
+  # Version 5.1.1 failed to bump their internal package version,
+  # which causes issues with static file serving in the NixOS module.
+  # See https://github.com/NixOS/nixpkgs/pull/370277
+  patches = [ ./0001-fix-version.patch ];
 
   nativeBuildInputs = [
     git
@@ -46,7 +50,7 @@ mixRelease rec {
             owner = "elixir-cldr";
             repo = "cldr";
             rev = "v${old.version}";
-            hash =
+            sha256 =
               assert old.version == "2.37.5";
               "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
           };
@@ -60,14 +64,14 @@ mixRelease rec {
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.
-        web_push_encryption = buildMix {
+        web_push_encryption = buildMix rec {
           name = "web_push_encryption";
           version = "0.3.1";
           src = fetchFromGitHub {
             owner = "danhper";
             repo = "elixir-web-push-encryption";
             rev = "6e143dcde0a2854c4f0d72816b7ecab696432779";
-            hash = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
+            sha256 = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
           };
           beamDeps = with final; [
             httpoison
@@ -81,7 +85,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "1033d922c82a7223db0ec138e2316557b70ff49f";
-            hash = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
+            sha256 = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
           };
           beamDeps = with final; [
             mix_test_watch
@@ -96,7 +100,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "0c036448e261e8be6a512581c592fadf48982d84";
-            hash = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
+            sha256 = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
           };
           beamDeps = with final; [
             ex_doc
@@ -114,7 +118,7 @@ mixRelease rec {
             owner = "tcitworld";
             repo = name;
             rev = "8b5485fde00fafbde20f315bec387a77f7358334";
-            hash = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
+            sha256 = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
           };
           beamDeps = with final; [
             httpoison
@@ -140,12 +144,11 @@ mixRelease rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) mobilizon; };
+    tests.smoke-test = nixosTests.mobilizon;
     updateScript = writeShellScriptBin "update.sh" ''
       set -eou pipefail
 
-      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
-      ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
+      ${mix2nix}/bin/mix2nix '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
   };
@@ -153,7 +156,6 @@ mixRelease rec {
   meta = with lib; {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
-    changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
       minijackson

@@ -1,11 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  python3,
-  unbound,
-  cctools,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, python3
+, unbound
+, cctools
 }:
 
 buildNpmPackage rec {
@@ -23,8 +22,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 
@@ -39,5 +37,6 @@ buildNpmPackage rec {
     description = "Implementation of the Handshake protocol";
     homepage = "https://github.com/handshake-org/hsd";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ d-xo ];
   };
 }

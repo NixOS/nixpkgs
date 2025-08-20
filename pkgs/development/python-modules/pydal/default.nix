@@ -1,54 +1,40 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
-  legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250607.2";
-  pyproject = true;
+  version = "20240713.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zr1d6kCwAyhjeV2tQ+n9y9x80yD/Atb6TJq7AnRz+PQ=";
+    hash = "sha256-KW44LUGgCE+KB3tE9ecYqOansjFN6F4A7TRCoKwOsRs=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
-
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests/*.py"
-  ];
-
-  disabledTestPaths = [
     # these tests already seem to be broken on the upstream
-    "tests/nosql.py::TestFields::testRun"
-    "tests/nosql.py::TestSelect::testGroupByAndDistinct"
-    "tests/nosql.py::TestExpressions::testOps"
-    "tests/nosql.py::TestExpressions::testRun"
-    "tests/nosql.py::TestImportExportUuidFields::testRun"
-    "tests/nosql.py::TestConnection::testRun"
-    "tests/restapi.py::TestRestAPI::test_search"
-    "tests/validation.py::TestValidateAndInsert::testRun"
-    "tests/validation.py::TestValidateUpdateInsert::testRun"
-    "tests/validators.py::TestValidators::test_IS_IN_DB"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-    "test_scheduler"
+    "--deselect=tests/nosql.py::TestFields::testRun"
+    "--deselect=tests/nosql.py::TestSelect::testGroupByAndDistinct"
+    "--deselect=tests/nosql.py::TestExpressions::testOps"
+    "--deselect=tests/nosql.py::TestExpressions::testRun"
+    "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
+    "--deselect=tests/nosql.py::TestConnection::testRun"
+    "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
+    "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
+    "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
   ];
 
   pythonImportsCheck = [ "pydal" ];

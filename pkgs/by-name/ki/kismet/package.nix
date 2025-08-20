@@ -4,7 +4,7 @@
   autoreconfHook,
   binutils,
   elfutils,
-  fetchFromGitHub,
+  fetchurl,
   glib,
   libcap,
   libmicrohttpd,
@@ -14,9 +14,7 @@
   libwebsockets,
   lm_sensors,
   networkmanager,
-  nix-update-script,
-  nixosTests,
-  pcre2,
+  pcre,
   pkg-config,
   openssl,
   protobuf,
@@ -29,22 +27,20 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalPackage: {
+stdenv.mkDerivation rec {
   pname = "kismet";
-  version = "2023-07-R2";
+  version = "2023-07-R1";
 
-  src = fetchFromGitHub {
-    owner = "kismetwireless";
-    repo = "kismet";
-    tag = "kismet-${finalPackage.version}";
-    hash = "sha256-QwTjjZHnrlATFvHK9PLDTt76UjfZdzCmV6uXVgIMIYg=";
+  src = fetchurl {
+    url = "https://www.kismetwireless.net/code/${pname}-${version}.tar.xz";
+    hash = "sha256-8IVI4mymX6HlZ7Heu+ocpNDnIGvduWpPY5yQFxhz6Pc=";
   };
 
   postPatch = ''
     substituteInPlace Makefile.in \
-      --replace-fail "-m 4550" ""
+      --replace "-m 4550" ""
     substituteInPlace configure.ac \
-      --replace-fail "pkg-config" "$PKG_CONFIG"
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
 
   postConfigure = ''
@@ -57,76 +53,68 @@ stdenv.mkDerivation (finalPackage: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    protobuf
-    protobufc
-  ]
-  ++ lib.optionals withPython [
-    (python3.withPackages (ps: [
-      ps.numpy
-      ps.protobuf
-      ps.pyserial
-      ps.setuptools
-      ps.websockets
-    ]))
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+      protobuf
+      protobufc
+    ]
+    ++ lib.optionals withPython [
+      (python3.withPackages (ps: [
+        ps.numpy
+        ps.protobuf
+        ps.pyserial
+        ps.setuptools
+        ps.websockets
+      ]))
+    ];
 
-  buildInputs = [
-    binutils
-    elfutils
-    libcap
-    libmicrohttpd
-    libnl
-    libpcap
-    openssl
-    libusb1
-    libwebsockets
-    pcre2
-    protobuf
-    protobufc
-    sqlite
-    zlib
-  ]
-  ++ lib.optionals withNetworkManager [
-    networkmanager
-    glib
-  ]
-  ++ lib.optionals withSensors [
-    lm_sensors
-  ];
+  buildInputs =
+    [
+      binutils
+      elfutils
+      libcap
+      libmicrohttpd
+      libnl
+      libpcap
+      openssl
+      libusb1
+      libwebsockets
+      pcre
+      protobuf
+      protobufc
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals withNetworkManager [
+      networkmanager
+      glib
+    ]
+    ++ lib.optionals withSensors [
+      lm_sensors
+    ];
 
-  configureFlags = [
-    "--disable-wifi-coconut" # Until https://github.com/kismetwireless/kismet/issues/478
-  ]
-  ++ lib.optionals (!withNetworkManager) [
-    "--disable-libnm"
-  ]
-  ++ lib.optionals (!withPython) [
-    "--disable-python-tools"
-  ]
-  ++ lib.optionals (!withSensors) [
-    "--disable-lmsensors"
-  ];
+  configureFlags =
+    [
+      "--disable-wifi-coconut" # Until https://github.com/kismetwireless/kismet/issues/478
+    ]
+    ++ lib.optionals (!withNetworkManager) [
+      "--disable-libnm"
+    ]
+    ++ lib.optionals (!withPython) [
+      "--disable-python-tools"
+    ]
+    ++ lib.optionals (!withSensors) [
+      "--disable-lmsensors"
+    ];
 
   enableParallelBuilding = true;
 
-  passthru = {
-    tests.kismet = nixosTests.kismet;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^kismet-(\\d+-\\d+-.+)$"
-      ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Wireless network sniffer";
     homepage = "https://www.kismetwireless.net/";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ numinit ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
-})
+}

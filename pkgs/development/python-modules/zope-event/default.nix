@@ -1,38 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
-  pname = "zope-event";
-  version = "5.0";
-  pyproject = true;
+  pname = "zope.event";
+  version = "4.6";
 
-  src = fetchFromGitHub {
-    owner = "zopefoundation";
-    repo = "zope.event";
-    tag = version;
-    hash = "sha256-85jXSrploTcskdOBI84KGGf9Bno41ZTtT/TrbgmTxiA=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-gdmIEwRvyGzEE242mP7mKKMoL5wyDbGGWMIXSSNfzoA=";
   };
 
-  build-system = [ setuptools ];
-
-  pythonImportsCheck = [ "zope.event" ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  enabledTestPaths = [ "src/zope/event/tests.py" ];
-
-  pythonNamespaces = [ "zope" ];
-
-  meta = {
+  meta = with lib; {
     description = "Event publishing system";
-    homepage = "https://github.com/zopefoundation/zope.event";
-    changelog = "https://github.com/zopefoundation/zope.event/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.zpl21;
+    homepage = "https://pypi.org/project/zope.event/";
+    license = licenses.zpl20;
     maintainers = [ ];
   };
 }

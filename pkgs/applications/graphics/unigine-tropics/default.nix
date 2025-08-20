@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  libX11,
-  libXext,
-  libXrandr,
-  libXinerama,
-  libglvnd,
-  openal,
-  glibc,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, libX11
+, libXext
+, libXrandr
+, libXinerama
+, libglvnd
+, openal
+, glibc
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
 }:
 let
   version = "1.3";
@@ -92,10 +91,7 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
     mainProgram = "Tropics";
   };
 }

@@ -11,7 +11,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openzwave";
   version = "1.6-unstable-2022-11-17";
 

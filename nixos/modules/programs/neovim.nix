@@ -73,10 +73,7 @@ in
       example = lib.literalExpression ''
         {
           customRC = '''
-            " here your custom VimScript configuration goes!
-          ''';
-          customLuaRC = '''
-            -- here your custom Lua configuration goes!
+            " here your custom configuration goes!
           ''';
           packages.myVimPackage = with pkgs.vimPlugins; {
             # loaded on launch

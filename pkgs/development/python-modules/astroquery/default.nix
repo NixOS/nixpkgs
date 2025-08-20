@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.4.10";
+  version = "0.4.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6s2R6do3jmQXQPvDEjhQ2qg7oJJqb/9MQMy/XcbVpAY=";
+    hash = "sha256-BH+6ywpPrsTNtiZ16RnCRMHDXmYQRPy7bJqTMzF0fsk=";
   };
 
   disabled = !isPy3k;
@@ -62,9 +62,10 @@ buildPythonPackage rec {
     pytest-rerunfailures
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-    "-Wignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   # Tests must be run in the build directory. The tests create files

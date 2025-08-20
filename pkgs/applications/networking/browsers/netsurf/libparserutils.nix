@@ -16,13 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MX7VxxjxeSe1chl0uuXeMsP9bQVdsTGtMbQxKgMu0Tk=";
   };
 
-  buildInputs = [
-    perl
-    buildsystem
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      perl
+      buildsystem
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   makeFlags = [
     "PREFIX=$(out)"

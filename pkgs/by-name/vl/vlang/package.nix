@@ -10,24 +10,25 @@
   boehmgc,
   xorg,
   binaryen,
+  darwin,
 }:
 
 let
-  version = "0.4.11";
+  version = "0.4.8";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
   '';
-  # vc is the V compiler's source translated to C (needed for bootstrap).
+  # vc is the V compiler's source translated to C (needed for boostrap).
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.4.11";
+    version = "0.4.8";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "a17f1105aa18b604ed8dac8fa5ca9424362c6e15";
-      hash = "sha256-DAsVr1wtRfGbKO74Vfq7ejci+zQabSWeir8njbHYV3o=";
+      rev = "54beb1f416b404a06b894e6883a0e2368d80bc3e";
+      hash = "sha256-hofganRnWPRCjjsItwF2BKam4dCqzMCrjgWSjZLSrlo=";
     };
 
     # patch the ptrace reference for darwin
@@ -45,8 +46,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "5a1c9d82669e765493abe19488eaef0252c97dac";
-    hash = "sha256-d/HGVYbbMv7cmF3I4LzD6N0gXSd8CJlPp0la3nPe1dw=";
+    rev = "0c280130cb7ec410b7d21810d1247956c15b72fc";
+    hash = "sha256-Fmhkrg9DBiWxInostNp+WfA3V5GgEIs5+KIYrqZosqY=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -60,27 +61,30 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-K5B/fjdCYLE14LPg3ccS+sGC8CS7jZiuuxYkHvljGFA=";
+    hash = "sha256-V4f14TcuKW8unzlo6i/tE6MzSb3HAll478OU2LxiTPQ=";
   };
 
   propagatedBuildInputs = [
     glfw
     freetype
     openssl
-  ]
-  ++ lib.optional stdenv.hostPlatform.isUnix upx;
+  ] ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    binaryen
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xorgproto
-  ];
+  buildInputs =
+    [
+      binaryen
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libX11
+      xorg.libXau
+      xorg.libXdmcp
+      xorg.xorgproto
+    ];
 
   makeFlags = [
     "local=1"

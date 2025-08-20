@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tlsa/libcyaml";
     description = "C library for reading and writing YAML";
     changelog = "https://github.com/tlsa/libcyaml/raw/v${version}/CHANGES.md";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.unix;
+    license = licenses.isc;
+    platforms = platforms.unix;
   };
 }

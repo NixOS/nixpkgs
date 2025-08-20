@@ -3,7 +3,7 @@
   qtsvg,
   qtmultimedia,
   pkg-config,
-  taglib_1,
+  taglib,
   libvlc,
 }:
 mkKdeDerivation {
@@ -13,7 +13,7 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsvg
     qtmultimedia
-    taglib_1
+    taglib
     libvlc
   ];
   meta.mainProgram = "kasts";

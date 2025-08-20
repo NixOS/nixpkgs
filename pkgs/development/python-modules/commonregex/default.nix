@@ -18,7 +18,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   meta = with lib; {
-    description = "Collection of common regular expressions bundled with an easy to use interface";
+    description = "A collection of common regular expressions bundled with an easy to use interface";
     homepage = "https://github.com/madisonmay/CommonRegex";
     maintainers = with maintainers; [ k900 ];
     license = licenses.mit;

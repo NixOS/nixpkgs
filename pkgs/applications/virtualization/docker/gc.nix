@@ -10,7 +10,7 @@
   findutils,
   gnugrep,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "docker-gc";
   version = "unstable-2015-10-5";
 

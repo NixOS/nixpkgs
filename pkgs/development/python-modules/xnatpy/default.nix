@@ -3,51 +3,35 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  hatchling,
-  versioningit,
+  setuptools,
   click,
-  click-option-group,
-  importlib-metadata,
   isodate,
   progressbar2,
   pydicom,
-  python-dateutil,
-  pyyaml,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "xnatpy";
-  version = "0.7.2";
-  pyproject = true;
+  version = "0.5.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "xnat";
     inherit version;
-    hash = "sha256-YbZJl6lvhuhpmeC+0LikZghIEsR2OYe0Om6IRxZcBwg=";
+    hash = "sha256-iOw9cVWP5Am4S9JQ0NTmtew38KZiKmau+19K2KG2aKQ=";
   };
 
-  build-system = [
-    hatchling
-    versioningit
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     click
-    click-option-group
-    importlib-metadata
     isodate
     progressbar2
     pydicom
-    python-dateutil
-    pyyaml
     requests
-  ];
-
-  pythonRelaxDeps = [
-    "importlib-metadata"
-    "python-dateutil"
-    "pydicom"
   ];
 
   # tests missing in PyPI dist and require network access and Docker container
@@ -55,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xnat" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xnat.readthedocs.io";
     description = "New XNAT client (distinct from pyxnat) that exposes XNAT objects/functions as Python objects/functions";
     changelog = "https://gitlab.com/radiology/infrastructure/xnatpy/-/blob/${version}/CHANGELOG?ref_type=tags";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bcdarwin ];
     mainProgram = "xnat";
   };
 }

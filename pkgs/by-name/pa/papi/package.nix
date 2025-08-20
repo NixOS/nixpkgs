@@ -4,13 +4,15 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "7.2.0";
+stdenv.mkDerivation rec {
+  version = "7.0.1";
   pname = "papi";
 
   src = fetchurl {
-    url = "http://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-qb/4nM85kV1yngiuCgxqcc4Ou+mEEemi6zyDyNsK85w=";
+    url = "https://bitbucket.org/icl/papi/get/papi-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }-t.tar.gz";
+    sha256 = "sha256-VajhmPW8sEJksfhLjBVlpBH7+AZr4fwKZPAtZxRF1Bk=";
   };
 
   setSourceRoot = ''
@@ -30,4 +32,4 @@ stdenv.mkDerivation (finalAttrs: {
       zhaofengli
     ];
   };
-})
+}

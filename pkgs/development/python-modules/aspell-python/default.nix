@@ -35,7 +35,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  enabledTestPaths = [ "test/unittests.py" ];
+  pytestFlagsArray = [ "test/unittests.py" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     # https://github.com/WojciechMula/aspell-python/issues/22

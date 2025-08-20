@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "6.3.3";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIP";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-eKDbuG57KCg/nZpy+RcDsjyw0pP68qO9K/3ZpSPuMNw=";
+    hash = "sha256-51u3By0R4LKoWiklNacFP6HILL845jxpN6FD7rQB+zQ=";
   };
 
   dontConfigure = true;
@@ -30,16 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
   };
 
   meta = with lib; {
     description = "C++ Heterogeneous-Compute Interface for Portability";
     homepage = "https://github.com/ROCm/HIP";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

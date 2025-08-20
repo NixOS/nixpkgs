@@ -36,8 +36,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Yet another keyboard configurator";
     homepage = "https://caniusevia.com/";
-    # Upstream claims to be GPL-3 but doesn't release source code
-    license = licenses.unfreeRedistributable;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "via";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~steef";
-    repo = "snixembed";
+    repo = pname;
     rev = version;
     sha256 = "sha256-co32Xlklg6KVyi+xEoDJ6TeN28V+wCSx73phwnl/05E=";
   };
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";
     homepage = "https://git.sr.ht/~steef/snixembed";
     changelog = "https://git.sr.ht/~steef/snixembed/refs/${version}";
-    license = lib.licenses.isc;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "snixembed";
   };
 }

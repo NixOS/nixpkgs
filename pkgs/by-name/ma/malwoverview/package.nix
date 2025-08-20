@@ -43,12 +43,12 @@ python3.pkgs.buildPythonApplication rec {
     "malwoverview"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool for threat hunting and gathering intel information from various sources";
     homepage = "https://github.com/alexandreborges/malwoverview";
     changelog = "https://github.com/alexandreborges/malwoverview/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "malwoverview.py";
   };
 }

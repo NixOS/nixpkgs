@@ -8,7 +8,6 @@
   sha,
   swhid_core,
   uutf,
-  patch,
 }:
 
 buildDunePackage {
@@ -23,7 +22,6 @@ buildDunePackage {
     re
     sha
     swhid_core
-    patch
   ];
 
   # get rid of check for curl at configure time

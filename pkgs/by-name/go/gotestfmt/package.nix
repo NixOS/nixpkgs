@@ -10,18 +10,18 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gotesttools";
-    repo = "gotestfmt";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-7mLn2axlHoXau9JtLhk1zwzhxkFGHgYPo7igI+IAsP4=";
   };
 
   vendorHash = null;
 
-  meta = {
+  meta = with lib; {
     description = "Go test output for humans";
     homepage = "https://github.com/gotesttools/gotestfmt";
     changelog = "https://github.com/GoTestTools/gotestfmt/releases/tag/v${version}";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ urandom ];
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ urandom ];
   };
 }

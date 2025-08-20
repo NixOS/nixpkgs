@@ -2,11 +2,10 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mbp2018-bridge-drv";
   version = "2020-01-31";
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernel.makeFlags;
 
   buildPhase = ''
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \

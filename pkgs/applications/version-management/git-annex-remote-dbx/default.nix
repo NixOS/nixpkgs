@@ -10,7 +10,6 @@
 buildPythonApplication rec {
   pname = "git-annex-remote-dbx";
   version = "1.0.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,26 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  unzip,
-}:
+{ lib, stdenv, fetchurl, makeWrapper, jre, unzip }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kotlin";
-  version = "2.2.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${finalAttrs.version}/kotlin-compiler-${finalAttrs.version}.zip";
-    sha256 = "sha256-GttvGlhFugqlpZ5BLkTI5AUja5V94aloNhnx3KOxaTI=";
+    sha256 = "sha256-tmmNVyitj57c3QFhfWOAcxkdigMTnMU4o5G043Wa0pc=";
   };
 
-  propagatedBuildInputs = [ jre ];
-  nativeBuildInputs = [
-    makeWrapper
-    unzip
-  ];
+  propagatedBuildInputs = [ jre ] ;
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     mkdir -p $out

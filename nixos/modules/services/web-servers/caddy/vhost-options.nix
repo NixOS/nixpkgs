@@ -56,7 +56,7 @@ in
     };
 
     logFormat = mkOption {
-      type = types.nullOr types.lines;
+      type = types.lines;
       default = ''
         output file ${cfg.logDir}/access-${lib.replaceStrings [ "/" " " ] [ "_" "_" ] config.hostName}.log
       '';

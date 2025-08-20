@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libGL,
   SDL,
   SDL_image,
   libjack2,
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libGL
     SDL
     SDL_image
     libjack2

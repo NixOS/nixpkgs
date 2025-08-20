@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Postal package tracking application";
     mainProgram = "shipments";
     homepage = "https://sr.ht/~martijnbraam/shipments/";
     changelog = "https://git.sr.ht/~martijnbraam/shipments/refs/${version}";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ michaelgrahamevans ];
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ michaelgrahamevans ];
   };
 }

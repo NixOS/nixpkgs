@@ -8,7 +8,6 @@
 buildPythonApplication rec {
   pname = "pyznap";
   version = "1.6.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

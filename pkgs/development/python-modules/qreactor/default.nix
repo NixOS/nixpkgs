@@ -7,10 +7,9 @@
   pyqt5,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "qreactor-unstable";
   version = "2018-09-29";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";

@@ -7,13 +7,13 @@
   check,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wwcd";
   version = "unstable-2022-02-05";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
-    repo = "wwcd";
+    repo = pname;
     rev = "cdf70bb18dc60c66c074d4810cb37b9e697811e5";
     sha256 = "sha256-laf1DEtdEs7q+rtp5Y5rb+7AGsKUv5T413CFWJiURWw=";
   };

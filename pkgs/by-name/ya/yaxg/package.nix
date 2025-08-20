@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "yaxg";
-  version = "0-unstable-2018-05-03";
+  version = "unstable-2018-05-03";
 
   src = fetchFromGitHub {
     owner = "DanielFGray";

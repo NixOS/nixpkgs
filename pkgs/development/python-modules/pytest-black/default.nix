@@ -10,27 +10,25 @@
 
 buildPythonPackage rec {
   pname = "pytest-black";
-  version = "0.6.0";
+  version = "0.3.12";
   format = "setuptools";
 
   src = fetchPypi {
-    pname = "pytest_black";
-    inherit version;
-    sha256 = "sha256-7Ld0VfN5gFy0vY9FqBOjdUw7vuMZmt8bNmXA39CGtRE=";
+    inherit pname version;
+    sha256 = "1d339b004f764d6cd0f06e690f6dd748df3d62e6fe1a692d6a5500ac2c5b75a5";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     black
     toml
   ];
 
   # does not contain tests
   doCheck = false;
-
   pythonImportsCheck = [ "pytest_black" ];
 
   meta = with lib; {

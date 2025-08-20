@@ -7,7 +7,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "q-text-as-data";
   version = "2.0.19";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "harelba";
@@ -16,11 +15,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "18cwyfjgxxavclyd08bmb943c8bvzp1gnqp4klkq5xlgqwivr4sv";
   };
 
-  build-system = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
-  ];
-
-  dependencies = with python3Packages; [
     six
   ];
 
@@ -31,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     rm bin/qtextasdata.py
 
     # not considered good practice pinning in install_requires
-    substituteInPlace setup.py --replace-fail 'six==' 'six>='
+    substituteInPlace setup.py --replace 'six==' 'six>='
   '';
 
   meta = with lib; {

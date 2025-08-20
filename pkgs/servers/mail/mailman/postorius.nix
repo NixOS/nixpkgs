@@ -10,7 +10,6 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "postorius";
   version = "1.3.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,8 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django-mailman3
     readme-renderer
-  ]
-  ++ readme-renderer.optional-dependencies.md;
+  ] ++ readme-renderer.optional-dependencies.md;
   nativeCheckInputs = [
     beautifulsoup4
     vcrpy

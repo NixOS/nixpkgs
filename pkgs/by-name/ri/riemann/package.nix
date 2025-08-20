@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann";
-  version = "0.3.12";
+  version = "0.3.11";
 
   src = fetchurl {
     url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-gsJMfLo7zpaVfyVmHznGFiomK6dq7yTphuc9vyp5t6Y=";
+    sha256 = "sha256-B09QBOVRHxwPR7oBZaurXMglx5cR/oN7eEKVhs3ZUyc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ crimeminister ];
+    maintainers = [ ];
   };
 }

@@ -5,26 +5,24 @@
   cmake,
   pkg-config,
   ispc,
-  tbb_2020,
+  tbb,
   glfw,
   openimageio,
   libjpeg,
   libpng,
   libpthreadstubs,
   libX11,
-  python3Packages,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "embree";
-  version = "2.17.7";
+  version = "2.17.4";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-FD/ITZBJnYy1F+x4jLTVTsGsNKy/mS7OYWP06NoHZqc=";
+    rev = "v2.17.4";
+    sha256 = "0q3r724r58j4b6cbyy657fsb78z7a2c7d5mwdp7552skynsn2mn9";
   };
 
   cmakeFlags = [ "-DEMBREE_TUTORIALS=OFF" ];
@@ -35,8 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ispc
-    # tbb_2021 is not backward compatible
-    tbb_2020
+    tbb
     glfw
     openimageio
     libjpeg
@@ -44,28 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libpthreadstubs
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v(2.*)"
-      ];
-    };
-    tbb = tbb_2020;
-    tests = {
-      inherit (python3Packages) embreex;
-    };
-  };
-
   meta = with lib; {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [
-      hodapp
-      pbsds
-    ];
+    maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
   };
-})
+}

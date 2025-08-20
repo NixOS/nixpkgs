@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "17.0";
+  version = "16.0";
 
   fetchData =
     { suffix, hash }:
@@ -35,15 +35,15 @@ let
   srcs = {
     emoji-sequences = fetchData {
       suffix = "sequences";
-      hash = "sha256-M1txywy3BISmMxoXYzGmg+LOafAdZOtAPu5mnE1XA5g=";
+      hash = "sha256-P+PHfnLo8m3zAtx9mbEGxdCP2Ajvckb7XUUC1ln+ZZw=";
     };
     emoji-test = fetchData {
       suffix = "test";
-      hash = "sha256-EYHEVX845REBhFBFD51CV02qiA0TQ9WsYfE0h34+veU=";
+      hash = "sha256-JPDFNOhs8ULiSWlT6PDkaj5wI5KRHt3NKcbM7YUTlpc=";
     };
     emoji-zwj-sequences = fetchData {
       suffix = "zwj-sequences";
-      hash = "sha256-WyVEHa7SMisGjF5wzaUilGpPAnTfhkRFoZZakuX8XK0=";
+      hash = "sha256-lCPsI1R0NW+XCmllBnN+LV1lRTpn9F32a4u+kgw/q4M=";
     };
   };
 in
@@ -55,10 +55,10 @@ symlinkJoin {
 
   passthru = srcs;
 
-  meta = {
+  meta = with lib; {
     description = "Unicode Emoji Data Files";
     homepage = "https://home.unicode.org/emoji/";
-    license = lib.licenses.unicode-dfs-2016;
-    platforms = lib.platforms.all;
+    license = licenses.unicode-dfs-2016;
+    platforms = platforms.all;
   };
 }

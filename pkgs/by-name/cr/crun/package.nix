@@ -1,17 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  go-md2man,
-  pkg-config,
-  libcap,
-  libseccomp,
-  python3,
-  systemd,
-  yajl,
-  nixosTests,
-  criu,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, go-md2man
+, pkg-config
+, libcap
+, libseccomp
+, python3
+, systemd
+, yajl
+, nixosTests
+, criu
 }:
 
 let
@@ -40,30 +39,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.23.1";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "crun";
+    repo = pname;
     rev = version;
-    hash = "sha256-jGRL/P4pR3nNikTYZxxqFvOK63pepClVhwBmeCF/dNU=";
+    hash = "sha256-st8zap9WiM5+aX3spga19Ty4a4297rR3SjAY9Hrv4qg=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    go-md2man
-    pkg-config
-    python3
-  ];
+  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [
-    criu
-    libcap
-    libseccomp
-    systemd
-    yajl
-  ];
+  buildInputs = [ criu libcap libseccomp systemd yajl ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -76,8 +64,8 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
     echo '#define GIT_VERSION "${src.rev}"' > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (
-      e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+    ${lib.concatMapStringsSep "\n" (e:
+      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
     ) disabledTests}
   '';
 
@@ -85,13 +73,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/containers/crun/releases/tag/${version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    teams = [ lib.teams.podman ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     mainProgram = "crun";
   };
 }

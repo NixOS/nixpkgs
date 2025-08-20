@@ -16,16 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ciel";
-  version = "3.9.6";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
     tag = "v${version}";
-    hash = "sha256-J6mXNJuLkKVNzE5lRRQEOt0yb2ow5EctXkr22eqOfII=";
+    hash = "sha256-vV1qZLVVVc6KFZrpF4blKmbfQjf/Ltn+IhmM5Zqb2zU=";
   };
 
-  cargoHash = "sha256-n9VCy3nlZ+WDm9krlc3XO/YgdrbEMJuODBvYRkznUgU=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libmount-0.1.15" = "sha256-JObYz6AUWhvz8q+9DdsbMWm7zNQmMW73WAt+LjY5TV0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config

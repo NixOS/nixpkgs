@@ -5,7 +5,6 @@
   SDL2,
   libpng,
   libjpeg,
-  libX11,
   glew,
   openal,
   scons,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.10.12";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
-    tag = "v${version}";
-    hash = "sha256-cT/bklRGQnS9Nm8J0oH1mG20JQOe58FAAHToNDpvPpQ=";
+    rev = "v${version}";
+    sha256 = "sha256-FjQluOFU+fPr4/3WveScRRabDjD/bq8YmXvCU9w9yo8=";
   };
 
   patches = [
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     SDL2
     libpng
     libjpeg
-    libX11
     glew
     openal
     libmad

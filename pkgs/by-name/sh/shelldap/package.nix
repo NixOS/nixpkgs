@@ -50,16 +50,16 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/mahlonsmith/shelldap/";
     description = "Handy shell-like interface for browsing LDAP servers and editing their content";
     changelog = "https://github.com/mahlonsmith/shelldap/blob/v${version}/CHANGELOG";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [
       clerie
       tobiasBora
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "shelldap";
   };
 }

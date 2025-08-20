@@ -19,7 +19,7 @@ let
   providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
     builtins.attrNames sourcePerArch
   );
-  result = stdenv.mkDerivation (finalAttrs: {
+  result = stdenv.mkDerivation {
     pname =
       if sourcePerArch.packageType == "jdk" then
         "${name-prefix}-bin"
@@ -40,19 +40,16 @@ let
     installPhase = ''
       cd ..
 
-      mkdir -p $out/Library/Java/JavaVirtualMachines
-
-      bundle=$out/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk
-      mv $sourceRoot $bundle
+      mv $sourceRoot $out
 
       # jni.h expects jni_md.h to be in the header search path.
-      ln -s $bundle/Contents/Home/include/darwin/*_md.h $bundle/Contents/Home/include/
+      ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
 
       # Remove some broken manpages.
       # Only for 11 and earlier.
-      [ -e "$bundle/Contents/Home/man/ja" ] && rm -r $bundle/Contents/Home/man/ja
+      [ -e "$out/Contents/Home/man/ja" ] && rm -r $out/Contents/Home/man/ja
 
-      ln -s $bundle/Contents/Home/* $out/
+      ln -s $out/Contents/Home/* $out/
 
       # Propagate the setJavaClassPath setup hook from the JDK so that
       # any package that depends on the JDK has $CLASSPATH set up
@@ -68,9 +65,8 @@ let
 
     # FIXME: use multiple outputs or return actual JRE package
     passthru = {
-      jre = finalAttrs.finalPackage;
-      home = finalAttrs.finalPackage;
-      bundle = "${finalAttrs.finalPackage}/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk";
+      jre = result;
+      home = result;
     };
 
     meta = with lib; {
@@ -81,11 +77,10 @@ let
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
-      teams = [ teams.java ];
+      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
-  });
+  };
 in
 result

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.10.0";
 
   src = fetchurl {
-    url = "mirror://savannah/skribilo/skribilo-${finalAttrs.version}.tar.gz";
+    url = "http://download.savannah.nongnu.org/releases/skribilo/skribilo-${finalAttrs.version}.tar.gz";
     hash = "sha256-jP9I7hds7f1QMmSaNJpGlSvqUOwGcg+CnBzMopIS9Q4=";
   };
 
@@ -38,19 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    fig2dev
-    gettext
-    ghostscript
-    guile
-    guile-lib
-    guile-reader
-    imagemagick
-  ]
-  ++ optional enableEmacs emacs
-  ++ optional enableLout lout
-  ++ optional enablePloticus ploticus
-  ++ optional enableTex texliveSmall;
+  buildInputs =
+    [
+      fig2dev
+      gettext
+      ghostscript
+      guile
+      guile-lib
+      guile-reader
+      imagemagick
+    ]
+    ++ optional enableEmacs emacs
+    ++ optional enableLout lout
+    ++ optional enablePloticus ploticus
+    ++ optional enableTex texliveSmall;
 
   postInstall = ''
     wrapProgram $out/bin/skribilo \
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       conventions used in emails, Usenet and text.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

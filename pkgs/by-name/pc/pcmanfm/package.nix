@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
+  fetchurl,
+  fetchpatch,
   glib,
   intltool,
   libfm,
@@ -14,8 +14,6 @@
   withGtk3 ? true,
   gtk2,
   gtk3,
-  gettext,
-  nix-update-script,
 }:
 
 let
@@ -23,22 +21,21 @@ let
   gtk = if withGtk3 then gtk3 else gtk2;
   inherit (lib) optional;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pcmanfm";
-  version = "1.4.0";
+  version = "1.3.2";
 
-  src = fetchFromGitHub {
-    owner = "lxde";
-    repo = "pcmanfm";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-4kJDCnld//Vbe2KbrLoYZJ/dutagY/GImoOnbpQIdDY=";
+  src = fetchurl {
+    url = "mirror://sourceforge/pcmanfm/pcmanfm-${version}.tar.xz";
+    sha256 = "sha256-FMt7JHSTxMzmX7tZAmEeOtAKeocPvB5QrcUEKMUUDPc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-    intltool
-    autoreconfHook
+  patches = [
+    # Fix build with gcc14 -Werror=incompatible-pointer-types
+    (fetchpatch {
+      url = "https://github.com/lxde/pcmanfm/commit/12abd7e179adb9e31d999824048a5f40f90218fd.patch";
+      hash = "sha256-iuNejg211VOiaIVSNkIV64VIrs6oOp+qwjqz3JFxOTI=";
+    })
   ];
 
   buildInputs = [
@@ -49,19 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     adwaita-icon-theme
   ];
-
-  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    intltool
+  ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "File manager with GTK interface";
-    maintainers = [ lib.maintainers.ttuegel ];
-    platforms = lib.platforms.linux;
+    maintainers = [ maintainers.ttuegel ];
+    platforms = platforms.linux;
     mainProgram = "pcmanfm";
   };
-})
+}

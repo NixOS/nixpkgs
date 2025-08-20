@@ -6,10 +6,10 @@
   libuuid,
   xorg,
   curlMinimal,
-  openssl_3,
+  openssl,
   libsecret,
-  webkitgtk_4_1,
-  libsoup_3,
+  webkitgtk_4_0,
+  libsoup_2_4,
   gtk3,
   atk,
   pango,
@@ -19,22 +19,16 @@
   systemd,
   msalsdk-dbusclient,
   pam,
-  p11-kit,
   dbus,
   nixosTests,
 }:
-let
-  curlMinimal_openssl_3 = curlMinimal.override {
-    openssl = openssl_3;
-  };
-in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2503.10-noble";
+  version = "1.2405.17-jammy";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-NlJ8m7V1yLErOntprHs3EagPtwSzYWd7NBH0jc72+i4=";
+    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
+    hash = "sha256-WpVPWzh8jN092MaY2rMXhLfpVXsflMl9hOY9nNGJlLk=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -46,16 +40,15 @@ stdenv.mkDerivation rec {
           stdenv.cc.cc
           libuuid
           xorg.libX11
-          curlMinimal_openssl_3
-          openssl_3
+          curlMinimal
+          openssl
           libsecret
-          webkitgtk_4_1
-          libsoup_3
+          webkitgtk_4_0
+          libsoup_2_4
           gtk3
           atk
           glib
           pango
-          p11-kit
           sqlite
           zlib
           systemd

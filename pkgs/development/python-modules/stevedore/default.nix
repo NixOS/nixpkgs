@@ -4,24 +4,30 @@
   callPackage,
   fetchPypi,
   pythonOlder,
+  importlib-metadata,
   pbr,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "5.4.1";
+  version = "5.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MTW1rlD+EoFu8pG6/0IKy3J/zTVhBuPpy/qeWYXNb0s=";
+    hash = "sha256-eekiNey4KP6VK2uLDGyHhjJIYxkiyOjg+lsXsjLEUU0=";
   };
 
   build-system = [
     pbr
+    setuptools
+  ];
+
+  dependencies = [
+    importlib-metadata
     setuptools
   ];
 
@@ -36,8 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Manage dynamic plugins for Python applications";
-    homepage = "https://github.com/openstack/stevedore";
+    homepage = "https://docs.openstack.org/stevedore/";
     license = licenses.asl20;
-    teams = [ teams.openstack ];
+    maintainers = teams.openstack.members ++ (with maintainers; [ fab ]);
   };
 }

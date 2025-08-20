@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the rsync remote-delta algorithm";
     homepage = "https://librsync.sourceforge.net/";
     changelog = "https://github.com/librsync/librsync/releases/tag/v${version}";
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
     mainProgram = "rdiff";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

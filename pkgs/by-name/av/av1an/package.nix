@@ -1,21 +1,19 @@
 {
   lib,
-  av1an,
+  symlinkJoin,
+  makeBinaryWrapper,
   av1an-unwrapped,
   ffmpeg,
-  libaom,
-  libvmaf,
-  libvpx,
-  makeBinaryWrapper,
-  mkvtoolnix-cli,
   python3,
-  rav1e,
+  libaom,
   svt-av1,
-  symlinkJoin,
-  testers,
-  vapoursynth,
+  rav1e,
+  libvpx,
   x264,
   x265,
+  libvmaf,
+  vapoursynth,
+  mkvtoolnix-cli,
   withAom ? true, # AV1 reference encoder
   withSvtav1 ? false, # AV1 encoder/decoder (focused on speed and correctness)
   withRav1e ? false, # AV1 encoder (focused on speed and safety)
@@ -29,16 +27,15 @@
 # av1an requires at least one encoder
 assert lib.assertMsg (lib.elem true [
   withAom
-  withRav1e
   withSvtav1
+  withRav1e
   withVpx
   withX264
   withX265
 ]) "At least one encoder is required!";
 
 symlinkJoin {
-  pname = "av1an";
-  inherit (av1an-unwrapped) version;
+  name = "av1an-${av1an-unwrapped.version}";
 
   paths = [ av1an-unwrapped ];
 
@@ -46,18 +43,19 @@ symlinkJoin {
 
   postBuild =
     let
-      runtimePrograms = [
-        vapoursynth
-        (ffmpeg.override { inherit withVmaf; })
-      ]
-      ++ lib.optional withAom libaom
-      ++ lib.optional withMkvtoolnix mkvtoolnix-cli
-      ++ lib.optional withRav1e rav1e
-      ++ lib.optional withSvtav1 svt-av1
-      ++ lib.optional withVmaf libvmaf
-      ++ lib.optional withVpx libvpx
-      ++ lib.optional withX264 x264
-      ++ lib.optional withX265 x265;
+      runtimePrograms =
+        [
+          vapoursynth
+          (ffmpeg.override { inherit withVmaf; })
+        ]
+        ++ lib.optional withAom libaom
+        ++ lib.optional withSvtav1 svt-av1
+        ++ lib.optional withRav1e rav1e
+        ++ lib.optional withVpx libvpx
+        ++ lib.optional withX264 x264
+        ++ lib.optional withX265 x265
+        ++ lib.optional withVmaf libvmaf
+        ++ lib.optional withMkvtoolnix mkvtoolnix-cli;
     in
     ''
       wrapProgram $out/bin/av1an \
@@ -67,10 +65,11 @@ symlinkJoin {
     '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = av1an;
-      inherit (av1an-unwrapped) version;
-    };
+    # TODO: uncomment when upstream actually bumps CARGO_PKG_VERSION
+    #tests.version = testers.testVersion {
+    #  package = av1an;
+    #  inherit (av1an-unwrapped) version;
+    #};
   };
 
   meta = {
@@ -82,7 +81,6 @@ symlinkJoin {
       license
       maintainers
       mainProgram
-      broken
       ;
   };
 }

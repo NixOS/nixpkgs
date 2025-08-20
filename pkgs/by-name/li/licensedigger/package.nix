@@ -3,7 +3,7 @@
   fetchFromGitLab,
   stdenv,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   libsForQt5,
 }:
 stdenv.mkDerivation {
@@ -18,12 +18,10 @@ stdenv.mkDerivation {
     hash = "sha256-/ZEja+iDx0lVkJaLshPd1tZD4ZUspVeFHY1TNXjr4qg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     libsForQt5.qtbase
   ];
 

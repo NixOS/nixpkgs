@@ -1,21 +1,22 @@
 {
+  lib,
+  stdenv,
   fetchFromGitHub,
   gitUpdater,
-  lib,
-  libversion,
   pkg-config,
   postgresql,
-  postgresqlBuildExtension,
+  libversion,
+  buildPostgresqlExtension,
 }:
 
-postgresqlBuildExtension (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_libversion";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "repology";
     repo = "postgresql-libversion";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-3nqXaBwPRUSo6wUY5YMjJ/nFFKmhgP1zFKapD+RqSDw=";
   };
 
@@ -29,11 +30,11 @@ postgresqlBuildExtension (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     description = "PostgreSQL extension with support for version string comparison";
     homepage = "https://github.com/repology/postgresql-libversion";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.jopejoe1 ];
     platforms = postgresql.meta.platforms;
   };
 })

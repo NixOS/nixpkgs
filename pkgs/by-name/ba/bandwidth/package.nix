@@ -1,20 +1,20 @@
 {
   lib,
   stdenv,
-  requireFile,
+  fetchurl,
   nasm,
 }:
 
 let
-  arch = "bandwidth${toString stdenv.hostPlatform.parsed.cpu.bits}";
+  inherit (stdenv.hostPlatform.parsed.cpu) bits;
+  arch = "bandwidth${toString bits}";
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "bandwidth";
   version = "1.11.2d";
 
-  src = requireFile {
-    message = "This file does not have a valid url.";
-    name = "bandwidth-${finalAttrs.version}.tar.gz";
+  src = fetchurl {
+    url = "https://zsmith.co/archives/bandwidth-${version}.tar.gz";
     hash = "sha256-7IrNiCXKf1vyRGl73Ccu3aYMqPVc4PpEr6lnSqIa4Q8=";
   };
 
@@ -48,18 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ${arch} $out/bin/bandwidth
-
-    runHook postInstall
+    mkdir -p $out/bin
+    cp ${arch} $out/bin/bandwidth
   '';
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://zsmith.co/bandwidth.html";
     description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
-    maintainers = with lib.maintainers; [ r-burns ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
+    maintainers = with maintainers; [ r-burns ];
     mainProgram = "bandwidth";
   };
-})
+}

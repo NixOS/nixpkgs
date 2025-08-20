@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
@@ -19,23 +18,25 @@ buildPythonPackage rec {
     owner = "Pylons";
     repo = "pastedeploy";
     tag = version;
-    hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
+    hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail " --cov" ""
+  '';
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "paste.deploy" ];
 
-  meta = {
+  meta = with lib; {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
-    changelog = "https://github.com/Pylons/pastedeploy/blob/${src.tag}/docs/news.rst";
-    license = lib.licenses.mit;
-    teams = [ lib.teams.openstack ];
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
+    license = licenses.mit;
+    maintainers = teams.openstack.members;
   };
 }

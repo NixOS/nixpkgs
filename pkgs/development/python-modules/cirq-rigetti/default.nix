@@ -1,10 +1,13 @@
 {
+  lib,
   buildPythonPackage,
   cirq-core,
-  setuptools,
+  fetchpatch2,
   pyquil,
-  qcs-sdk-python,
   pytestCheckHook,
+  pythonOlder,
+  qcs-sdk-python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -12,12 +15,21 @@ buildPythonPackage rec {
   pyproject = true;
   inherit (cirq-core) version src;
 
+  disabled = pythonOlder "3.10";
+
+  patches = [
+    # https://github.com/quantumlib/Cirq/pull/6734
+    (fetchpatch2 {
+      name = "fix-rigetti-check-for-aspen-family-device-kind.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/dd395fb71fb7f92cfd34f008bf2a98fc70b57fae.patch";
+      stripLen = 1;
+      hash = "sha256-EWB2CfMS2+M3zNFX5PwFNtEBdgJkNVUVNd+I/E6n9kI=";
+    })
+  ];
+
   sourceRoot = "${src.name}/${pname}";
 
-  pythonRelaxDeps = [
-    "pyquil"
-    "qcs-sdk-python"
-  ];
+  pythonRelaxDeps = [ "pyquil" ];
 
   postPatch = ''
     # Remove outdated test

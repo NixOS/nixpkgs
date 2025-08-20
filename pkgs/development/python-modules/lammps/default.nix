@@ -9,7 +9,6 @@ let
   LAMMPS_SHARED_LIB = "${lib.getLib lammps}/lib/liblammps${stdenv.hostPlatform.extensions.library}";
 in
 buildPythonPackage {
-  format = "setuptools";
   inherit (lammps) pname version src;
 
   env = {

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Illumina";
     repo = "DRAGMAP";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-f1jsOErriS1I/iUS4CzJ3+Dz8SMUve/ccb3KaE+L7U8=";
   };
@@ -33,10 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Add missing include cstdint.  Upstream does not accept PR. Issue opened at
     # https://github.com/Illumina/DRAGMAP/issues/63
     ./cstdint.patch
-
-    # Missing import in Mapper.cpp
-    # Issue opened upstream https://github.com/Illumina/DRAGMAP/pull/66
-    ./boost-iterator-range.patch
   ];
 
   env = {
@@ -57,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests are launched by default from makefile
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Open Source version of Dragen mapper for genomics";
     mainProgram = "dragen-os";
     longDescription = ''
@@ -65,10 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       which the Illumina team created to procude the same results as their
       proprietary DRAGEN hardware.
     '';
-    homepage = "https://github.com/Illumina/DRAGMAP";
-    changelog = "https://github.com/Illumina/DRAGMAP/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ apraga ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ apraga ];
   };
 })

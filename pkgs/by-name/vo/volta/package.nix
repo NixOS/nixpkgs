@@ -1,56 +1,48 @@
 {
   lib,
-  stdenv,
   rustPlatform,
-  fetchFromGitHub,
+  libiconv,
+  stdenv,
   installShellFiles,
-  buildPackages,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  nix-update-script,
+  darwin,
+  fetchFromGitHub,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "volta";
-  version = "2.0.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "volta-cli";
     repo = "volta";
-    tag = "v${version}";
-    hash = "sha256-ZI+3/Xbkg/JaZMLhrJEjaSwjs44fOaiRReM2DUTnkkc=";
+    rev = "v${version}";
+    hash = "sha256-+j3WRpunV+3YfZnyuKA/CsiKr+gOaP2NbmnyoGMN+Mg=";
   };
 
-  cargoHash = "sha256-xlqsubkaX2A6d5MIcGf9E0b11Gzneksgku0jvW+UdbE=";
-
-  buildInputs = [ installShellFiles ];
-
-  postInstall =
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd volta \
-        --bash <(${emulator} $out/bin/volta completions bash) \
-        --fish <(${emulator} $out/bin/volta completions fish) \
-        --zsh <(${emulator} $out/bin/volta completions zsh)
-    '';
-
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ];
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
-  # Tries to create /var/empty/.volta as $HOME is not writable
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
-
-  passthru = {
-    updateScript = nix-update-script { };
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "detect-indent-0.1.0" = "sha256-qtPkPaBiyuT8GhpEFdU7IkAgKnCbTES0FB2CvNKWqic=";
+      "semver-0.9.0" = "sha256-nw1somkZe9Qi36vjfWlTcDqHAIbaJj72KBTfmucVxXs=";
+      "semver-parser-0.10.0" = "sha256-iTGnKSddsriF6JS6lvJNjp9aDzGtfjrHEiCijeie3uE=";
+    };
   };
 
-  meta = {
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      libiconv
+    ];
+
+  HOME = "$TMPDIR";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd volta \
+      --bash <($out/bin/volta completions bash) \
+      --fish <($out/bin/volta completions fish) \
+      --zsh <($out/bin/volta completions zsh)
+  '';
+  meta = with lib; {
     description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
@@ -64,8 +56,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://volta.sh/";
     changelog = "https://github.com/volta-cli/volta/blob/main/RELEASES.md";
-    license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ fbrs ];
-    mainProgram = "volta";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ fbrs ];
   };
 }

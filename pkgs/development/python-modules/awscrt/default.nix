@@ -2,26 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   cmake,
   perl,
   stdenv,
+  CoreFoundation,
+  Security,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.27.6";
-  pyproject = true;
+  version = "0.23.6";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RfPdCz+xPfvqhW3ZbJrP53vrpXubAZRE7pYu0rdidt0=";
+    hash = "sha256-FMT4E0TseXccmqk4AFlClu5+qknbD7n9FatmKiH634o=";
   };
 
-  build-system = [ setuptools ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreFoundation
+    Security
+  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
 

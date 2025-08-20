@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "python-didl-lite";
   version = "1.4.1";
-  format = "setuptools";
   pyroject = true;
 
   disabled = pythonOlder "3.8";

@@ -9,21 +9,23 @@
   uchar,
   result,
   gg,
+  uutf,
   otfm,
-  brr,
-  pdfBackend ? true, # depends on otfm
-  htmlcBackend ? true, # depends on brr
+  js_of_ocaml,
+  js_of_ocaml-ppx,
+  pdfBackend ? true, # depends on uutf and otfm
+  htmlcBackend ? true, # depends on js_of_ocaml
 }:
 
 let
   inherit (lib) optionals versionOlder;
 
   pname = "vg";
-  version = "0.9.5";
+  version = "0.9.4";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if versionOlder ocaml.version "4.14" then
+if versionOlder ocaml.version "4.03" then
   throw "vg is not available for OCaml ${ocaml.version}"
 else
 
@@ -33,7 +35,7 @@ else
 
     src = fetchurl {
       url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-qcTtvIfSUwzpUZDspL+54UTNvWY6u3BTvfGWF6c0Jvw=";
+      sha256 = "181sz6l5xrj5jvwg4m2yqsjzwp2s5h8v0mwhjcwbam90kdfx2nak";
     };
 
     nativeBuildInputs = [
@@ -43,24 +45,28 @@ else
     ];
     buildInputs = [ topkg ];
 
-    propagatedBuildInputs = [
-      uchar
-      result
-      gg
-    ]
-    ++ optionals pdfBackend [
-      otfm
-    ]
-    ++ optionals htmlcBackend [
-      brr
-    ];
+    propagatedBuildInputs =
+      [
+        uchar
+        result
+        gg
+      ]
+      ++ optionals pdfBackend [
+        uutf
+        otfm
+      ]
+      ++ optionals htmlcBackend [
+        js_of_ocaml
+        js_of_ocaml-ppx
+      ];
 
     strictDeps = true;
 
     buildPhase =
       topkg.buildPhase
+      + " --with-uutf ${lib.boolToString pdfBackend}"
       + " --with-otfm ${lib.boolToString pdfBackend}"
-      + " --with-brr ${lib.boolToString htmlcBackend}"
+      + " --with-js_of_ocaml ${lib.boolToString htmlcBackend}"
       + " --with-cairo2 false";
 
     inherit (topkg) installPhase;

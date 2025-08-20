@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.publicDomain;
     platforms = platforms.all;
-    teams = [ teams.sage ];
+    maintainers = teams.sage.members;
   };
 }

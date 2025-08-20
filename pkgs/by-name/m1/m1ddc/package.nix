@@ -1,5 +1,6 @@
 {
   stdenv,
+  darwin,
   fetchFromGitHub,
   lib,
 }:
@@ -19,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace sources/ioregistry.m \
         --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
+
+  buildInputs = with darwin.apple_sdk_11_0.frameworks; [
+    CoreDisplay
+    Foundation
+  ];
 
   installPhase = ''
     runHook preInstall

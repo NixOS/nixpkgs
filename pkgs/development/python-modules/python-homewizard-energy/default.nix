@@ -3,13 +3,10 @@
   aiohttp,
   aresponses,
   async-timeout,
-  awesomeversion,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  mashumaro,
   multidict,
-  orjson,
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
@@ -20,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "9.2.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +26,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${version}";
-    hash = "sha256-I+yAFHwrJ98BJFX2oyD5WPulDpp/PbD2XzkIXIIQKyo=";
+    hash = "sha256-ugTdqo3XIqOtjPVj8X5shoy+/z7VKk2H0kFHJVZxkUQ=";
   };
 
   postPatch = ''
@@ -42,11 +39,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     async-timeout
-    awesomeversion
     backoff
-    mashumaro
     multidict
-    orjson
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -64,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/homewizard/python-homewizard-energy";
-    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

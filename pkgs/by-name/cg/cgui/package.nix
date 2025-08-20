@@ -25,11 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     sh fix.sh unix
-
-    runHook postConfigure
   '';
 
   hardeningDisable = [ "format" ];

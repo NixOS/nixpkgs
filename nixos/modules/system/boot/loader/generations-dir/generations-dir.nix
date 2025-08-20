@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -14,11 +9,7 @@ let
     isExecutable = true;
     replacements = {
       inherit (pkgs) bash;
-      path = lib.makeBinPath [
-        pkgs.coreutils
-        pkgs.gnused
-        pkgs.gnugrep
-      ];
+      path = lib.makeBinPath [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
       inherit (config.boot.loader.generationsDir) copyKernels;
     };
   };
@@ -61,6 +52,7 @@ in
     };
 
   };
+
 
   config = mkIf config.boot.loader.generationsDir.enable {
 

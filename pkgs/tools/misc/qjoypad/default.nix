@@ -53,6 +53,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/panzi/qjoypad/";
     license = lib.licenses.gpl2Only;
+    maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
     mainProgram = "qjoypad";
   };

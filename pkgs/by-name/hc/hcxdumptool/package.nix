@@ -1,35 +1,31 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
   openssl,
-  libpcap,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "hcxdumptool";
-  version = "7.0.0";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxdumptool";
-    tag = finalAttrs.version;
-    hash = "sha256-emSIUSE8r0PX1qhkuIQcyh9+rBB+jBA6pmt+n4WugWk=";
+    rev = version;
+    sha256 = "sha256-InMyDUEH135Y1RYJ3z1+RQxPMi7+QMf670S/S2ZL9vg=";
   };
 
-  buildInputs = [
-    openssl
-    libpcap
-  ];
+  buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ZerBea/hcxdumptool";
     description = "Small tool to capture packets from wlan devices";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ danielfullmer ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ danielfullmer ];
     mainProgram = "hcxdumptool";
   };
-})
+}

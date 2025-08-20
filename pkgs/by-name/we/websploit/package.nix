@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     "websploit"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "High level MITM framework";
     homepage = "https://github.com/f4rih/websploit";
     changelog = "https://github.com/f4rih/websploit/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilytrau ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
     mainProgram = "websploit";
   };
 }

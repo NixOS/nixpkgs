@@ -27,8 +27,6 @@ stdenv.mkDerivation {
       --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-int" ];
-
   preInstall = ''
     mkdir -p $out/bin
   '';

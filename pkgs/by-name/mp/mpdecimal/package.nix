@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
-  version = "4.0.1";
+  version = "4.0.0";
   outputs = [
     "out"
     "cxx"
@@ -17,12 +17,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-${version}.tar.gz";
-    hash = "sha256-ltM6u0uwBwx74P7UJGzThBYYgyX4IEaCFEcZOFRbGsg=";
+    hash = "sha256-lCRFwyRbInMP1Bpnp8XCMdEcsbmTa5wPdjNPt9C0Row=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  enableParallelBuilding = true;
+  configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
+
+  postPatch = ''
+    # Use absolute library install names on Darwin.
+    substituteInPlace configure.ac \
+      --replace-fail '-install_name @rpath/' "-install_name $out/lib/"
+  '';
 
   postInstall = ''
     mkdir -p $cxx/lib

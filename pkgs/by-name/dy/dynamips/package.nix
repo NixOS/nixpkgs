@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Cisco router emulator";
     longDescription = ''
       Dynamips is an emulator computer program that was written to emulate Cisco
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/GNS3/dynamips";
     changelog = "https://github.com/GNS3/dynamips/releases/tag/v${version}";
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     mainProgram = "dynamips";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
+      primeos
       anthonyroussel
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

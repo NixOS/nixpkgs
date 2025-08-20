@@ -20,7 +20,6 @@ let
   };
 
   pandoc-drawio-filter = buildPythonApplication {
-    format = "setuptools";
     pname = "pandoc-drawio-filter";
 
     inherit src version;

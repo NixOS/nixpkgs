@@ -2,7 +2,7 @@
   lib,
   buildNimPackage,
   fetchFromSourcehut,
-  gentium-plus,
+  gentium,
   makeDesktopItem,
 }:
 
@@ -19,14 +19,14 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
+  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   desktopItem = makeDesktopItem {
     categories = [ "Utility" ];
     comment = finalAttrs.meta.description;
-    desktopName = "hottext";
-    exec = "hottext";
-    name = "hottext";
+    desktopName = finalAttrs.pname;
+    exec = finalAttrs.pname;
+    name = finalAttrs.pname;
   };
 
   postInstall = ''

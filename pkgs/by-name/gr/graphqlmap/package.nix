@@ -4,10 +4,10 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "graphqlmap";
-  version = "0-unstable-2022-01-17";
-  format = "pyproject";
+  version = "unstable-2022-01-17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "swisskyrepo";
@@ -16,11 +16,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-lGnhNwtDc8KoPlwJ1p2FYq0NQ8PhSR3HgtluU7uxa/c=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
-
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     requests
   ];
 

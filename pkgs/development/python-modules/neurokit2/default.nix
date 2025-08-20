@@ -1,26 +1,22 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
+  buildPythonPackage,
   setuptools,
-
-  # dependencies
-  matplotlib,
-  numpy,
-  pandas,
-  requests,
-  scikit-learn,
+  pytest,
   scipy,
-
-  # tests
-  astropy,
-  coverage,
+  scikit-learn,
+  pandas,
+  matplotlib,
+  requests,
+  cvxopt,
+  biosppy,
+  pytest-cov-stub,
   mock,
   plotly,
-  pytest-cov-stub,
+  astropy,
+  coverage,
   pytestCheckHook,
 }:
 
@@ -38,20 +34,22 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail '"pytest-runner", ' ""
+      --replace-fail '"pytest-runner"' '"pytest"'
   '';
 
   build-system = [
     setuptools
+    pytest
   ];
 
   dependencies = [
-    matplotlib
-    numpy
-    pandas
-    requests
-    scikit-learn
     scipy
+    scikit-learn
+    pandas
+    matplotlib
+    requests
+    cvxopt
+    biosppy
   ];
 
   nativeCheckInputs = [
@@ -70,31 +68,23 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Required dependencies not available in nixpkgs
-    "tests/tests_bio.py"
     "tests/tests_complexity.py"
-    "tests/tests_data.py"
+    "tests/tests_eeg.py"
+    "tests/tests_eog.py"
     "tests/tests_ecg.py"
-    "tests/tests_ecg_delineate.py"
+    "tests/tests_bio.py"
+    "tests/tests_data.py"
+    "tests/tests_epochs.py"
     "tests/tests_ecg_findpeaks.py"
     "tests/tests_eda.py"
-    "tests/tests_eeg.py"
     "tests/tests_emg.py"
-    "tests/tests_eog.py"
-    "tests/tests_epochs.py"
     "tests/tests_hrv.py"
-    "tests/tests_ppg.py"
     "tests/tests_rsp.py"
+    "tests/tests_ppg.py"
     "tests/tests_signal.py"
 
     # Dependency is broken `mne-python`
     "tests/tests_microstates.py"
-  ];
-
-  pytestFlags = [
-    # Otherwise, test collection fails with:
-    # AttributeError: module 'scipy.ndimage._delegators' has no attribute '@py_builtins_signature'. Did you mean: 'grey_dilation_signature'?
-    # https://github.com/scipy/scipy/issues/22236
-    "--assert=plain"
   ];
 
   pythonImportsCheck = [

@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "ismartgate";
-  version = "5.0.2";
+  version = "5.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = "ismartgate";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-8c05zzDav87gTL2CI7Aoi6ALwLw76H9xj+90xH31hdE=";
+    hash = "sha256-mfiHoli0ldw/E1SrtOBpDO8ZTC0wTeaoSZ2nPnx5EaQ=";
   };
 
   postPatch = ''

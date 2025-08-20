@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "4.0.1";
+  version = "3.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${version}";
-    hash = "sha256-DHZyed94XgixMTeKQ7Lj4oykL42HMmEMSdNGRHCiRvM=";
+    hash = "sha256-1GuxlgNvzVv6hEQY1Mkv7NxAoOik9gpIS90a6flfC+k=";
   };
 
   build-system = [ hatchling ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
     changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

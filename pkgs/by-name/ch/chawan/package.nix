@@ -1,39 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  makeBinaryWrapper,
-  curlMinimal,
-  mandoc,
-  ncurses,
-  nim,
-  pandoc,
-  pkg-config,
-  brotli,
-  zlib,
-  gitUpdater,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, makeBinaryWrapper
+, curlMinimal
+, mandoc
+, ncurses
+, nim
+, pandoc
+, pkg-config
+, zlib
+, unstableGitUpdater
+, libseccomp
+, replaceVars
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "chawan";
-  version = "0.2.2";
+  version = "0-unstable-2024-12-27";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-pUwwqFvTtLAGFQG62W90hEH+yPN+ifa5BDRYNh/Jupg=";
+    rev = "93033c2c382aaff01b1aba6f5db7652c35708bf3";
+    hash = "sha256-MEOIu1CI/VTvd2cixa57Tv1xtBMXiMdD37ZYjAlg5S4=";
+    fetchSubmodules = true;
   };
 
-  patches = [ ./mancha-augment-path.diff ];
-
-  # Include chawan's man pages in mancha's search path
-  postPatch = ''
-    # As we need the $out reference, we can't use `replaceVars` here.
-    substituteInPlace adapter/protocol/man.nim \
-      --replace-fail '@out@' "$out"
-  '';
+  patches = [
+    # Include chawan's man pages in mancha's search path
+    (replaceVars ./mancha-augment-path.diff {
+      out = placeholder "out";
+    })
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
@@ -44,51 +42,42 @@ stdenv.mkDerivation (finalAttrs: {
     nim
     pandoc
     pkg-config
-    brotli
   ];
 
   buildInputs = [
     curlMinimal
+    libseccomp
     ncurses
     zlib
   ];
 
-  buildFlags = [
-    "all"
-    "manpage"
-  ];
+  buildFlags = [ "all" "manpage" ];
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX=/"
   ];
 
   postInstall =
-    let
-      makeWrapperArgs = ''
-        --set MANCHA_CHA $out/bin/cha \
-        --set MANCHA_MAN ${mandoc}/bin/man
-      '';
-    in
-    ''
-      wrapProgram $out/bin/cha ${makeWrapperArgs}
-      wrapProgram $out/bin/mancha ${makeWrapperArgs}
+  let
+    makeWrapperArgs = ''
+      --set MANCHA_CHA $out/bin/cha \
+      --set MANCHA_MAN ${mandoc}/bin/man
     '';
+  in
+  ''
+    wrapProgram $out/bin/cha ${makeWrapperArgs}
+    wrapProgram $out/bin/mancha ${makeWrapperArgs}
+  '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
-    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
-    license = lib.licenses.unlicense;
+    license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
+    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
-})
+}

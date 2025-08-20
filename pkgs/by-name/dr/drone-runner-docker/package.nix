@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "drone-runner-docker";
-  version = "1.8.4";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
-    repo = "drone-runner-docker";
+    repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-xJbmxoyL4Sb6YkkwgysGte44ZBKYHjc5QdYa+b62C/M=";
+    sha256 = "sha256-ZoQeCuT5FRhxp/ikB0gkp3QVOQ6OS7ukkz4QanWT9G0=";
   };
 
   vendorHash = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";

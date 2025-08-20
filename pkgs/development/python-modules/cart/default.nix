@@ -9,23 +9,23 @@
 
 buildPythonPackage rec {
   pname = "cart";
-  version = "1.2.3";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
-    repo = "cart";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-oeWeay1Pr9T4oR3XSrwv9hRr/sLTel1Bt6BG6jHXxIA=";
+    hash = "sha256-0dHdXb4v92681xL21FsrIkNgNQ9R5ULV1lnSCITZzP8=";
   };
 
   propagatedBuildInputs = [ pycryptodome ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "unittests" ];
+  pytestFlagsArray = [ "unittests" ];
 
   pythonImportsCheck = [ "cart" ];
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "Python module for the CaRT Neutering format";
     mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
-    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${src.tag}";
+    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

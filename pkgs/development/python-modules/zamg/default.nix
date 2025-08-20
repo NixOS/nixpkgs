@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -26,14 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
   };
 
-  pythonRelaxDeps = [ "async-timeout" ];
-
   build-system = [ poetry-core ];
 
-  dependencies = [
-    aiohttp
-    async-timeout
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses

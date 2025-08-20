@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "restructuredtext_lint/test/test.py" ];
+  pytestFlagsArray = [ "restructuredtext_lint/test/test.py" ];
 
   pythonImportsCheck = [ "restructuredtext_lint" ];
 

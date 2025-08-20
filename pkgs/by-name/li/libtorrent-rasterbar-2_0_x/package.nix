@@ -8,10 +8,11 @@
   openssl,
   python3,
   ncurses,
+  darwin,
 }:
 
 let
-  version = "2.0.11";
+  version = "2.0.10";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override {
@@ -27,22 +28,20 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    tag = "v${version}";
-    hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
+    rev = "v${version}";
+    hash = "sha256-JrAYtoS8wNmmhbgnprD7vNz1N64ekIryjK77rAKTyaQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    python3
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boostPython
     openssl
-  ];
-
-  strictDeps = true;
+    zlib
+    python3
+    ncurses
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   patches = [
     # provide distutils alternative for python 3.12
@@ -52,11 +51,11 @@ stdenv.mkDerivation {
   # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
-      --replace-fail 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
-                     'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
-                      set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
-      --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''
@@ -66,7 +65,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
-      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
   '';
 
   outputs = [

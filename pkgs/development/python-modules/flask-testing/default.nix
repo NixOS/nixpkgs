@@ -29,7 +29,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  __darwinAllowLocalNetworking = true;
+  # Some of the tests use localhost networking on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # RuntimeError and NotImplementedError

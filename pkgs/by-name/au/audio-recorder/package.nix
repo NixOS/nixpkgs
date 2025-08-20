@@ -15,14 +15,14 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "audio-recorder";
-  version = "3.3.4";
+  version = "2.1.3";
 
   src = fetchurl {
-    name = "audio-recorder-${finalAttrs.version}.tar.gz";
-    url = "https://launchpad.net/~audio-recorder/+archive/ubuntu/ppa/+files/audio-recorder_${finalAttrs.version}%7Ejammy.tar.gz";
-    hash = "sha256-RQ8zAT98EdVgdHENX0WDDYGvu7XjoB7f2FPv2JYJqug=";
+    name = "${pname}-${version}.tar.gz";
+    url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ebionic.tar.gz";
+    sha256 = "160pnmnmc9zwzyclsci3w1qwlgxkfx1y3x5ck6i587w78570an1r";
   };
 
   # https://bugs.launchpad.net/audio-recorder/+bug/1784622
@@ -34,24 +34,25 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    dbus
-    gtk3
-    librsvg
-    libappindicator-gtk3
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ])
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs =
+    [
+      glib
+      dbus
+      gtk3
+      librsvg
+      libappindicator-gtk3
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ])
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  meta = {
+  meta = with lib; {
     description = "Audio recorder for GNOME and Unity Desktops";
     mainProgram = "audio-recorder";
     longDescription = ''
@@ -64,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       formats such as OGG audio, Flac, MP3 and WAV.
     '';
     homepage = "https://launchpad.net/~audio-recorder";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.msteen ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.msteen ];
   };
-})
+}

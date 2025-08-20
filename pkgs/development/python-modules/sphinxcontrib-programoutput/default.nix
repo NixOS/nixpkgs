@@ -1,29 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+  fetchPypi,
   sphinx,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-programoutput";
-  version = "0.18";
-  pyproject = true;
+  version = "0.17";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "NextThought";
-    repo = "sphinxcontrib-programoutput";
-    tag = version;
-    hash = "sha256-WI4R96G4cYYTxTwW4dKAayUNQyhVSrjhdWJyy8nZBUk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-MA7puMrug1XSXMdLTRx+/RLmCNKtFl4xQdMeb7wVK38=";
   };
-
-  build-system = [ setuptools ];
 
   buildInputs = [ sphinx ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # fails to import sphinxcontrib.serializinghtml
+  doCheck = false;
 
   pythonImportsCheck = [ "sphinxcontrib.programoutput" ];
 

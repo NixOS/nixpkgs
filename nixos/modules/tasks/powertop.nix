@@ -51,7 +51,6 @@ in
   config = mkIf (cfg.enable) {
     systemd.services = {
       powertop = {
-        documentation = [ "man:powertop(8)" ];
         wantedBy = [ "multi-user.target" ];
         after = [ "multi-user.target" ];
         description = "Powertop tunings";

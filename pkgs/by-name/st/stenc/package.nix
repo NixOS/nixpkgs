@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   autoreconfHook,
   pkg-config,
   pandoc,
@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stenc";
-  version = "2.0.1";
+  version = "2.0.0";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "scsitape";
     repo = "stenc";
     tag = version;
-    sha256 = "sha256-M7b+T0mm2QTP1LqqjdKV/NWZ60DrueFEnN1unwCOeH4=";
+    sha256 = "sha256-L0g285H8bf3g+HDYUDRWBZMOBCnWz3Vm38Ijttu404U=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash bash-completion/stenc
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "SCSI Tape Encryption Manager";

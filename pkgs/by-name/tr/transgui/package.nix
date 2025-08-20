@@ -55,9 +55,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
-
-    # Fix build with lazarus 4.0, https://github.com/transmission-remote-gui/transgui/issues/1486
-    substituteInPlace main.pas --replace-warn "h <> INVALID_HANDLE_VALUE" "h >= 0"
   '';
 
   preBuild = ''
@@ -108,7 +105,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Cross platform front-end for the Transmission BitTorrent client";
+    description = "A cross platform front-end for the Transmission BitTorrent client";
     homepage = "https://sourceforge.net/p/transgui";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ramkromberg ];

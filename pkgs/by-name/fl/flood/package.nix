@@ -1,30 +1,27 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nixosTests,
-  pnpm_9,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nixosTests
+, pnpm_9
+, nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.9.5";
+  version = "4.8.5";
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = "flood";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-UXapL26PsSJvWX4Vjj/JJC/FsUBLuGEoqv2dSRSQqNg=";
+    hash = "sha256-lm+vPo7V99OSUAVEvdiTNMlD/+iHGPIyPLc1WzO1aTU=";
   };
 
   npmConfigHook = pnpm_9.configHook;
   npmDeps = pnpmDeps;
-  dontNpmPrune = true;
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-xoCRZUJkdR4X5hszM5gaOyWXLNCbzG5CzF+6OXGEy1k=";
+    hash = "sha256-NuU9O3bEboxmuEuk1WSUeZRNgVK5cwFiUAN3+7vACGw=";
   };
 
   passthru = {
@@ -38,11 +35,7 @@ buildNpmPackage rec {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      thiagokokada
-      winter
-      ners
-    ];
+    maintainers = with maintainers; [ thiagokokada winter ners ];
     mainProgram = "flood";
   };
 }

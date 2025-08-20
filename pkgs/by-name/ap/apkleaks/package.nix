@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apkleaks" ];
 
-  meta = {
+  meta = with lib; {
     description = "Scanning APK file for URIs, endpoints and secrets";
     homepage = "https://github.com/dwisiswant0/apkleaks";
     changelog = "https://github.com/dwisiswant0/apkleaks/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "apkleaks";
   };
 }

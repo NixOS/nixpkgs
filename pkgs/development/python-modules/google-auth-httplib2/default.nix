@@ -1,31 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+  fetchPypi,
   flask,
   google-auth,
   httplib2,
   mock,
   pytest-localserver,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
   version = "0.2.0";
-  pyproject = true;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "googleapis";
-    repo = "google-auth-library-python-httplib2";
-    tag = "v${version}";
-    sha256 = "sha256-qY00u1srwAw68VXewZDOsWZrtHpi5UoRZfesSY7mTk8=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-OKp7rfSPl08euYYXlOnAyyoFEaTsBnmx+IbRCPVkDgU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     google-auth
     httplib2
   ];
@@ -39,11 +37,11 @@ buildPythonPackage rec {
     pytest-localserver
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Google Authentication Library: httplib2 transport";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     changelog = "https://github.com/googleapis/google-auth-library-python-httplib2/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sarahec ];
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

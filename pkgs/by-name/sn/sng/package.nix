@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sng";
     maintainers = with lib.maintainers; [
       dezgeg
+      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };

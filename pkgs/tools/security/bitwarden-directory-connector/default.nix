@@ -7,7 +7,7 @@
   python3,
   pkg-config,
   libsecret,
-  nodejs_22,
+  nodejs_18,
 }:
 
 let
@@ -19,14 +19,14 @@ let
     }:
     buildNpmPackage rec {
       pname = name;
-      version = "2025.7.0";
-      nodejs = nodejs_22;
+      version = "2024.10.0";
+      nodejs = nodejs_18;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
         rev = "v${version}";
-        hash = "sha256-ExsOPSU7JT9Q8BCmREJHJSDFx8sGeL8iUKs8F8SZMeQ=";
+        hash = "sha256-jisMEuIpTWCy+N1QeERf+05tsugY0f+H2ntcRcFKkgo=";
       };
 
       postPatch = ''
@@ -38,7 +38,7 @@ let
           --replace-fail "AppImage" "dir"
       '';
 
-      npmDepsHash = "sha256-BV1MvqXOJmnTMHf7mQ1U1vz38b5w1IH9whS3IOD5TqQ=";
+      npmDepsHash = "sha256-Zi7EHzQSSrZ6XGGV1DOASuddYA4svXQc1eGmchcLFBc=";
 
       env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

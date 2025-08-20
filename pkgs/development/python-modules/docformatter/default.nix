@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.7.7";
+  version = "1.7.5";
 
   disabled = pythonOlder "3.7";
 
@@ -21,9 +21,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = "docformatter";
+    repo = pname;
     tag = "v${version}";
-    hash = "sha256-eLjaHso1p/nD9K0E+HkeBbnCnvjZ1sdpfww9tzBh0TI=";
+    hash = "sha256-QUjeG84KwI5Y3MU1wrmjHBXU2tEJ0CuiR3Y/S+dX7Gs=";
   };
 
   patches = [ ./test-path.patch ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "docformatter" ];
 
   meta = {
-    changelog = "https://github.com/PyCQA/docformatter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PyCQA/docformatter/blob/${src.rev}/CHANGELOG.md";
     description = "Formats docstrings to follow PEP 257";
     mainProgram = "docformatter";
     homepage = "https://github.com/myint/docformatter";

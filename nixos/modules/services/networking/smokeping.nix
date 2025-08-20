@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -12,7 +7,8 @@ let
   smokepingHome = "/var/lib/smokeping";
   smokepingPidDir = "/run";
   configFile =
-    if cfg.config == null then
+    if cfg.config == null
+    then
       ''
         *** General ***
         cgiurl   = ${cfg.cgiUrl}
@@ -153,11 +149,7 @@ in
         '';
       };
       linkStyle = mkOption {
-        type = types.enum [
-          "original"
-          "absolute"
-          "relative"
-        ];
+        type = types.enum [ "original" "absolute" "relative" ];
         default = "relative";
         example = "absolute";
         description = "DNS name for the urls generated in the cgi.";
@@ -306,12 +298,13 @@ in
       }
     ];
     security.wrappers = {
-      fping = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.fping}/bin/fping";
-      };
+      fping =
+        {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
     environment.etc."smokeping.conf".source = configPath;
     environment.systemPackages = [ pkgs.fping ];
@@ -325,7 +318,7 @@ in
 
     users.users.${config.services.nginx.user} = mkIf cfg.webService {
       extraGroups = [
-        cfg.user # # user == group in this module
+        cfg.user ## user == group in this module
       ];
     };
 

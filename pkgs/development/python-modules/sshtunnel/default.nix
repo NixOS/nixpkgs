@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ paramiko ];
+  dependencies = [ paramiko ] ++ paramiko.optional-dependencies.ed25519;
 
   nativeCheckInputs = [
     pytestCheckHook

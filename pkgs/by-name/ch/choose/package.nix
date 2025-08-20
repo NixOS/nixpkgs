@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "theryangeary";
-    repo = "choose";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-ojmib9yri/Yj1VSwwssbXv+ThnZjUXLTmOpfPGdGFaU=";
   };
 
-  cargoHash = "sha256-SecWDujJu68K1LMQJQ55LeW51Ag/aCt1YKcdWeRp22c=";
+  cargoHash = "sha256-PnY1yk9SvAvpsQ/QzTQuuBmvbEfd3yKcNcTU8LZVhsE=";
 
   meta = with lib; {
     description = "Human-friendly and fast alternative to cut and (sometimes) awk";

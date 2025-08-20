@@ -1,6 +1,8 @@
 {
-  runTest,
-  php,
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../../.. { inherit system config; },
+  php ? pkgs.php,
 }:
 
 let
@@ -9,20 +11,16 @@ let
   };
 in
 {
-  fpm = runTest {
-    imports = [ ./fpm.nix ];
-    _module.args.php = php';
+  fpm = import ./fpm.nix {
+    inherit system pkgs;
+    php = php';
   };
-  fpm-modular = runTest {
-    imports = [ ./fpm-modular.nix ];
-    _module.args.php = php';
+  httpd = import ./httpd.nix {
+    inherit system pkgs;
+    php = php';
   };
-  httpd = runTest {
-    imports = [ ./httpd.nix ];
-    _module.args.php = php';
-  };
-  pcre = runTest {
-    imports = [ ./pcre.nix ];
-    _module.args.php = php';
+  pcre = import ./pcre.nix {
+    inherit system pkgs;
+    php = php';
   };
 }

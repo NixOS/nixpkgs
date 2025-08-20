@@ -5,18 +5,18 @@
   llvmPackages,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
-  version = "0.4.3-unstable-2024-05-07";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "parinfer-rust";
-    rev = "d84828b453e158d06406f6b5e9056f6b54ff76c9";
-    sha256 = "sha256-Q2fYogfn5QcNDEie4sUaVydAmDmcFXnsvz35cxPCf+M=";
+    rev = "v${version}";
+    sha256 = "0hj5in5h7pj72m4ag80ing513fh65q8xlsf341qzm3vmxm3y3jgd";
   };
 
-  cargoHash = "sha256-w/GMjNtKiMGYOfzSl5IZTeHBSp4C9Mu6+oogCqHxdb4=";
+  cargoHash = "sha256-PW9LIQamQfusaijyJ2R9xe29LhM0GNf9BdxI9vkjVdE=";
 
   nativeBuildInputs = [
     llvmPackages.clang

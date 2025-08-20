@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pymicro-vad";
-  version = "1.0.2";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pymicro-vad";
     tag = version;
-    hash = "sha256-yKy/oD6nl2qZW64+aAHZRAEFextCXT6RpMfPThB8DXE=";
+    hash = "sha256-wpsUy+f4eSGlq6L2FOtnA0qJgMh5ZdfiH31aaU61cVw=";
   };
 
   build-system = [

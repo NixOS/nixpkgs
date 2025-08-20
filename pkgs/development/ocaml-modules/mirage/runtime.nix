@@ -8,7 +8,7 @@
   alcotest,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-runtime";
   inherit (functoria-runtime) src version;
 

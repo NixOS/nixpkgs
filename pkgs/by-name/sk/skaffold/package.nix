@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "2.16.1";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    hash = "sha256-pQyudlU/nn9ZcX4RLp3RvXntxgra3Vs4+HOjvBOKrow=";
+    hash = "sha256-7hYxSLZxTIu3DmIV7GIdGfEJQ2rWVGkm9/cTmpugI+A=";
   };
 
   vendorHash = null;
@@ -51,7 +51,7 @@ buildGoModule rec {
       --zsh <($out/bin/skaffold completion zsh)
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://skaffold.dev/";
     changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
     description = "Easy and Repeatable Kubernetes Development";
@@ -62,8 +62,8 @@ buildGoModule rec {
       Skaffold handles the workflow for building, pushing and deploying your application.
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       vdemeester
       bryanasdev000
     ];

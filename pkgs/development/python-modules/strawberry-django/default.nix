@@ -2,27 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   poetry-core,
   setuptools,
-
-  # dependencies
   asgiref,
   django,
   strawberry-graphql,
-
-  # optional-dependencies
   django-debug-toolbar,
   django-choices-field,
 
   # check inputs
   pytestCheckHook,
   django-guardian,
-  django-model-utils,
   django-mptt,
   django-polymorphic,
-  django-tree-queries,
   factory-boy,
   pillow,
   psycopg2,
@@ -34,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.60.0";
+  version = "0.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
-    tag = "v${version}";
-    hash = "sha256-mMI/tPdt9XK6Lz7VmI3uDxcCjIuidUeGHjG+6AQLoeQ=";
+    rev = "v${version}";
+    hash = "sha256-N7/EJ1AQ2xUJCEX6/xtyH1o/CuDzlvrUtpoDLq+H1WU=";
   };
 
   build-system = [
@@ -50,24 +42,17 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    django
     asgiref
+    django
     strawberry-graphql
   ];
-
-  optional-dependencies = {
-    debug-toolbar = [ django-debug-toolbar ];
-    enum = [ django-choices-field ];
-  };
 
   nativeCheckInputs = [
     pytestCheckHook
 
     django-guardian
-    django-model-utils
     django-mptt
     django-polymorphic
-    django-tree-queries
     factory-boy
     pillow
     psycopg2
@@ -75,16 +60,19 @@ buildPythonPackage rec {
     pytest-django
     pytest-mock
     pytest-snapshot
-  ]
-  ++ optional-dependencies.debug-toolbar
-  ++ optional-dependencies.enum;
+  ] ++ optional-dependencies.debug-toolbar ++ optional-dependencies.enum;
 
   pythonImportsCheck = [ "strawberry_django" ];
+
+  optional-dependencies = {
+    debug-toolbar = [ django-debug-toolbar ];
+    enum = [ django-choices-field ];
+  };
 
   meta = {
     description = "Strawberry GraphQL Django extension";
     homepage = "https://github.com/strawberry-graphql/strawberry-django";
-    changelog = "https://github.com/strawberry-graphql/strawberry-django/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/strawberry-graphql/strawberry-django/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
   };

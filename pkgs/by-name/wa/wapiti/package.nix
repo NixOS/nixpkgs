@@ -1,83 +1,67 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  python3Packages,
-  fetchpatch,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+  python3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.4";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = version;
-    hash = "sha256-97RYJKCk3oY715mgkFNstrrhWc1Q7jZqktqt7l8uzGs=";
+    hash = "sha256-sa4bXZiY5yd0wynUjdLnuuX7Ee0w4APd1G/oGy5AUDk=";
   };
-
-  patches = [
-    # Fixes:
-    # TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
-    (fetchpatch {
-      name = "fix-wappalyzer-warnings";
-      url = "https://github.com/wapiti-scanner/wapiti/commit/77fe140f8ad4d2fb266f1b49285479f6af25d6b7.patch";
-      hash = "sha256-Htkpr+67V0bp4u8HbMP+yTZ4rlIWDadLZxLDSruDbZY=";
-    })
-  ];
 
   pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3Packages; [
-    aiocache
-    aiohttp
-    aiosqlite
-    beautifulsoup4
-    browser-cookie3
-    dnspython
-    h11
-    httpcore
-    httpx
-    httpx-ntlm
-    humanize
-    loguru
-    mako
-    markupsafe
-    mitmproxy
-    msgpack
-    packaging
-    pyasn1
-    sqlalchemy
-    tld
-    typing-extensions
-    urwid
-    yaswfp
-    wapiti-arsenic
-    wapiti-swagger
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      aiocache
+      aiohttp
+      aiosqlite
+      arsenic
+      beautifulsoup4
+      browser-cookie3
+      dnspython
+      h11
+      httpcore
+      httpx
+      httpx-ntlm
+      humanize
+      loguru
+      mako
+      markupsafe
+      mitmproxy
+      prance
+      pyasn1
+      six
+      sqlalchemy
+      tld
+      yaswfp
+    ]
+    ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.socks
+    ++ prance.optional-dependencies.osv;
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      respx
-      pytest-asyncio
-      pytest-cov-stub
-      pytestCheckHook
-    ]
-    ++ [
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ];
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs = with python3.pkgs; [
+    respx
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   disabledTests = [
     # Tests requires network access
@@ -152,19 +136,11 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # Requires sslyze which is obsolete and was removed
     "tests/attack/test_mod_ssl.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
-    "tests/web/test_persister.py"
   ];
 
   pythonImportsCheck = [ "wapitiCore" ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Web application vulnerability scanner";
     longDescription = ''
       Wapiti allows you to audit the security of your websites or web applications.
@@ -176,8 +152,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "wapiti";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
   };
 }

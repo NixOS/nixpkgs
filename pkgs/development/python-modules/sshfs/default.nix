@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2025.2.0";
+  version = "2024.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
     tag = version;
-    hash = "sha256-O9Va3dLfTko9AfyK4iJa8U6xrtJsNNEeBn9UeRAgmVc=";
+    hash = "sha256-rRcXimthyFLBqt0nMEv7bisL+JNLLZuRH7BopSLM7QQ=";
   };
 
   build-system = [
@@ -54,21 +54,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Test requires network access
-    "test_config_expansions"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test fails with sandbox enabled
-    "test_checksum"
-  ];
+  disabledTests =
+    [
+      # Test requires network access
+      "test_config_expansions"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Test fails with sandbox enabled
+      "test_checksum"
+    ];
 
   pythonImportsCheck = [ "sshfs" ];
 
   meta = with lib; {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://github.com/fsspec/sshfs/";
-    changelog = "https://github.com/fsspec/sshfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fsspec/sshfs/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
   };

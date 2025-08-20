@@ -1,20 +1,22 @@
 {
   lib,
-  pkgs,
   buildPythonPackage,
+  isPy27,
   fetchFromGitea,
-  replaceVars,
+  substituteAll,
+  fetchpatch,
   colord,
   setuptools,
   pikepdf,
   pillow,
   stdenv,
   exiftool,
+  ghostscript,
   imagemagick,
   mupdf-headless,
   netpbm,
   numpy,
-  poppler-utils,
+  poppler_utils,
   pytestCheckHook,
   runCommand,
   scipy,
@@ -22,19 +24,22 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.1";
+  version = "0.5.1";
+  disabled = isPy27;
+
   pyproject = true;
 
   src = fetchFromGitea {
     domain = "gitlab.mister-muffin.de";
     owner = "josch";
     repo = "img2pdf";
-    tag = version;
-    hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
+    rev = version;
+    hash = "sha256-mrNTc37GrHTc7NW0sYI1FlAOlnvXum02867enqHsAEQ=";
   };
 
   patches = [
-    (replaceVars ./default-icc-profile.patch {
+    (substituteAll {
+      src = ./default-icc-profile.patch;
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
@@ -44,11 +49,16 @@ buildPythonPackage rec {
             cp ${colord}/share/color/icc/colord/sRGB.icc $out
           '';
     })
+    (fetchpatch {
+      # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
+      url = "https://salsa.debian.org/debian/img2pdf/-/raw/4a7dbda0f473f7c5ffcaaf68ea4ad3f435e0920d/debian/patches/fix_tests.patch";
+      hash = "sha256-A1zK6yINhS+dvyckZjqoSO1XJRTaf4OXFdq5ufUrBs8=";
+    })
   ];
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     pikepdf
     pillow
   ];
@@ -61,12 +71,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    pkgs.ghostscript
+    ghostscript
     imagemagick
     mupdf-headless
     netpbm
     numpy
-    poppler-utils
+    poppler_utils
     pytestCheckHook
     scipy
   ];
@@ -77,26 +87,40 @@ buildPythonPackage rec {
 
   disabledTests = [
     # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
-    "test_jpg_cmyk"
-    "test_miff_cmyk8"
-    "test_tiff_cmyk8"
     "test_miff_cmyk16"
-    "test_png_gray16"
-    "test_png_rgb16"
-    # these only fail on aarch64
-    "test_png_rgba8"
-    "test_png_gray8a"
+    # https://gitlab.mister-muffin.de/josch/img2pdf/issues/205
+    "test_miff_cmyk8"
+    "test_miff_rgb8"
+    "test_tiff_ccitt_lsb_m2l_white"
+    "test_tiff_ccitt_msb_l2m_white"
+    "test_tiff_ccitt_msb_m2l_white"
+    "test_tiff_ccitt_nometa1"
+    "test_tiff_ccitt_nometa2"
+    "test_tiff_cmyk8"
+    "test_tiff_cmyk16"
+    "test_tiff_float"
+    "test_tiff_gray1"
+    "test_tiff_gray2"
+    "test_tiff_gray4"
+    "test_tiff_gray8"
+    "test_tiff_gray16"
+    "test_tiff_multipage"
+    "test_tiff_palette8"
+    "test_tiff_rgb8"
+    "test_tiff_rgb12"
+    "test_tiff_rgb14"
+    "test_tiff_rgb16"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];
 
-  meta = {
-    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.tag}/CHANGES.rst";
+  meta = with lib; {
+    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.rev}/CHANGES.rst";
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
-    license = lib.licenses.lgpl3Plus;
+    license = licenses.lgpl3Plus;
     mainProgram = "img2pdf";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       veprbl
       dotlambda
     ];

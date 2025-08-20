@@ -50,8 +50,7 @@ stdenv.mkDerivation (
 
     meta = {
       inherit (chicken.meta) platforms;
-    }
-    // args.meta or { };
+    } // args.meta or { };
   }
   // (builtins.removeAttrs args [
     "name"

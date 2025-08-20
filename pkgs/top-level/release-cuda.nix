@@ -14,7 +14,19 @@
 
 let
   lib = import ../../lib;
-  cudaLib = (import ../development/cuda-modules/_cuda).lib;
+  ensureList = x: if builtins.isList x then x else [ x ];
+  allowUnfreePredicate =
+    p:
+    builtins.all (
+      license:
+      license.free
+      || builtins.elem license.shortName [
+        "CUDA EULA"
+        "cuDNN EULA"
+        "cuTENSOR EULA"
+        "NVidia OptiX EULA"
+      ]
+    ) (ensureList p.meta.license);
 in
 
 {
@@ -27,12 +39,9 @@ in
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
-      allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
+      inherit allowUnfreePredicate;
       "${variant}Support" = true;
       inHydra = true;
-
-      # Don't evaluate duplicate and/or deprecated attributes
-      allowAliases = false;
     };
 
     __allowFileset = false;
@@ -60,16 +69,11 @@ let
     ;
 
   # Package sets to evaluate whole
-  # Derivations from these package sets are selected based on the value
-  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
-  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
+  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
+  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
 
-  # Explicitly select additional packages to also evaluate
-  # The desired platforms must be set explicitly here
-  explicitPackagePlatforms =
-    # This comment prevents nixfmt from changing the indentation level, lol
-    {
+  jobs =
+    mapTestOn {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -87,19 +91,14 @@ let
       ctranslate2 = linux;
       ffmpeg-full = linux;
       gimp = linux;
-      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
-      jellyfin-ffmpeg = linux;
-      kdePackages.kdenlive = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
-      mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
-      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -111,7 +110,6 @@ let
       rtabmap = linux;
       saga = linux;
       suitesparse = linux;
-      sunshine = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
@@ -119,17 +117,18 @@ let
       xgboost = linux;
 
       python3Packages = {
+        boxx = linux;
+        bpycv = linux;
         catboost = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
-        flashinfer = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;
         jaxlib = linux;
         jax = linux;
-        keras = linux;
+        Keras = linux;
         kornia = linux;
         mmcv = linux;
         mxnet = linux;
@@ -143,13 +142,15 @@ let
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        scikit-image = linux;
+        pytorch = linux;
+        scikitimage = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
         spacy-transformers = linux;
         tensorflow = linux;
         tensorflow-probability = linux;
         tesserocr = linux;
+        Theano = linux;
         tiny-cuda-nn = linux;
         torchaudio = linux;
         torch = linux;
@@ -157,13 +158,8 @@ let
         transformers = linux;
         ttstokenizer = linux;
         vidstab = linux;
-        vllm = linux;
       };
-    };
-
-  # Explicitly specified platforms take precedence over the platforms
-  # automatically inferred in autoPackagePlatforms
-  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
-  jobs = mapTestOn allPackagePlatforms;
+    }
+    // (lib.genAttrs packageSets evalPackageSet);
 in
 jobs

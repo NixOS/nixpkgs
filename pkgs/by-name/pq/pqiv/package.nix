@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pberndt.com/Programme/Linux/pqiv";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ donovanglover ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "pqiv";
   };
 })

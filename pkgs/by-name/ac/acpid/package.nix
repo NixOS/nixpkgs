@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";
     description = "Daemon for delivering ACPI events to userspace programs";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

@@ -56,22 +56,23 @@ stdenv.mkDerivation rec {
     xmlto
     zip
   ];
-  buildInputs = [
-    cdrtools
-    dvdauthor
-    dvdplusrwtools
-    ffmpeg
-    fontconfig
-    glib
-    libexif
-    libjpeg
-    wxSVG
-    wxGTK32
-    xine-ui
-  ]
-  ++ optionals dvdisasterSupport [ dvdisaster ]
-  ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ];
+  buildInputs =
+    [
+      cdrtools
+      dvdauthor
+      dvdplusrwtools
+      ffmpeg
+      fontconfig
+      glib
+      libexif
+      libjpeg
+      wxSVG
+      wxGTK32
+      xine-ui
+    ]
+    ++ optionals dvdisasterSupport [ dvdisaster ]
+    ++ optionals udevSupport [ udev ]
+    ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
       - customize navigation using DVD scripting
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
     mainProgram = "dvdstyler";
   };

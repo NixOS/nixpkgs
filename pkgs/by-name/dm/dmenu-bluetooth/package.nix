@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu-bluetooth";
-  version = "0-unstable-2023-07-16";
+  version = "unstable-2023-07-16";
 
   src = fetchFromGitHub {
     owner = "Layerex";

@@ -12,6 +12,7 @@
   desktop-file-utils,
   libadwaita,
   gst_all_1,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Sn2Ua/XxPnJjcQvWeOPkphl+BE7/BdOrUIpf+tLt20U=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "metronome-${version}";
-    hash = "sha256-T/x5LpODpKWGA40W1je6jw1DS9attVUK4ZjAnRAyf6k=";
+    hash = "sha256-HYO/IY5yGW8JLBxD/SZz16GFnwvv77kFl/x+QXhV+V0=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +44,16 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-  ];
+  buildInputs =
+    [
+      libadwaita
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114

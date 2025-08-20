@@ -47,7 +47,6 @@ let
       TemplateToolkit
       URI
       UnicodeLineBreak
-      UnicodeUTF8
       XMLLibXML
 
       ### Features
@@ -71,13 +70,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.76";
+  version = "6.2.74";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
-    repo = "sympa";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
+    sha256 = "sha256-Z5V4LqogIobs8pT+ED6iZGjnC+J+GQBHq2opu1yv/7k=";
   };
 
   configureFlags = [
@@ -124,6 +123,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       sorki
+      mmilata
     ];
     platforms = platforms.all;
   };

@@ -1,45 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  exo,
-  gtk3,
-  libcanberra,
-  libpulseaudio,
-  libnotify,
-  libxfce4ui,
-  libxfce4util,
-  libxfce4windowing,
-  meson,
-  ninja,
-  pkg-config,
-  xfce4-panel,
-  xfconf,
-  keybinder3,
-  glib,
-  gitUpdater,
+{ lib
+, mkXfceDerivation
+, exo
+, gtk3
+, libcanberra
+, libpulseaudio
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxfce4windowing
+, xfce4-panel
+, xfconf
+, keybinder3
+, glib
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkXfceDerivation {
+  category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.5.1";
-
-  src = fetchFromGitLab {
-    domain = "gitlab.xfce.org";
-    owner = "panel-plugins";
-    repo = "xfce4-pulseaudio-plugin";
-    tag = "xfce4-pulseaudio-plugin-${finalAttrs.version}";
-    hash = "sha256-068+lp1X2W201zWN15dklsfEy4Hdy3aOEqC/ic5fMNs=";
-  };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    glib # glib-compile-resources
-    meson
-    ninja
-    pkg-config
-  ];
+  version = "0.4.9";
+  sha256 = "sha256-bJp4HicAFPuRATDHus0DfJFy1c6gw6Tkpd2UN7SXqsI=";
 
   buildInputs = [
     exo
@@ -56,13 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     xfconf
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-pulseaudio-plugin-"; };
-
-  meta = {
+  meta = with lib; {
     description = "Adjust the audio volume of the PulseAudio sound system";
-    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-pulseaudio-plugin";
-    license = lib.licenses.gpl2Plus;
-    teams = [ lib.teams.xfce ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
-})
+}

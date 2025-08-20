@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "2.3.1";
+  version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XIrAKjAnV2F0wrYeuaIXC6Gxl8rnZwgHcbbx/r2iSaQ=";
+    hash = "sha256-dW/y2Uxk5ByNfAxZ/qEqXQvFXjOlMceYi0oWPeubB90=";
   };
 
   build-system = [ setuptools ];

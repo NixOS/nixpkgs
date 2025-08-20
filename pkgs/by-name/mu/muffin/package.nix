@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   cairo,
   cinnamon-desktop,
   dbus,
@@ -15,7 +15,6 @@
   json-glib,
   libcanberra,
   libdrm,
-  libgbm,
   libgnomekbd,
   libgudev,
   libinput,
@@ -25,7 +24,7 @@
   libXdamage,
   libxkbcommon,
   libXtst,
-  mesa-gl-headers,
+  mesa,
   meson,
   ninja,
   pipewire,
@@ -53,13 +52,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = "muffin";
+    repo = pname;
     rev = version;
     hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit zenity;
     })
   ];
@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
-    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -106,7 +105,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
-    mesa-gl-headers
+    mesa # actually uses eglmesaext
   ];
 
   mesonFlags = [
@@ -126,6 +125,6 @@ stdenv.mkDerivation rec {
     mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    maintainers = teams.cinnamon.members;
   };
 }

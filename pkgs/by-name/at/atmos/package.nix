@@ -2,29 +2,26 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  terraform,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "atmos";
-  version = "1.183.1";
+  version = "1.95.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
-    repo = "atmos";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fQdUS7JE17r2ecw8285b05qMQTx1lLv/YrxtV82O6Cg=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-shhkaPYU1N3Q7eu8CyZXYrR11kxb+r9II4lpfRWTOas=";
   };
 
-  vendorHash = "sha256-HZU35KyG3pllQdOta8BrzopASWmCl/HD988zs9RGuFE=";
+  vendorHash = "sha256-4pUx8qzptzuGeIrT7m67iidMSUNbDSGV8p+KkHqX3lo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudposse/atmos/cmd.Version=v${finalAttrs.version}"
+    "-X github.com/cloudposse/atmos/cmd.Version=v${version}"
   ];
-
-  nativeCheckInputs = [ terraform ];
 
   preCheck = ''
     # Remove tests that depend on a network connection.
@@ -34,26 +31,21 @@ buildGoModule (finalAttrs: {
       pkg/describe/describe_affected_test.go
   '';
 
-  # depend on a network connection.
-  doCheck = false;
+  doCheck = true;
 
-  # depend on a network connection.
-  doInstallCheck = false;
-
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-
-    $out/bin/atmos version | grep "v${finalAttrs.version}"
-
+    $out/bin/atmos version | grep "v${version}"
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://atmos.tools";
-    changelog = "https://github.com/cloudposse/atmos/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/cloudposse/atmos/releases/tag/v${version}";
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
     mainProgram = "atmos";
-    license = lib.licenses.asl20;
-    teams = [ lib.teams.cloudposse ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ] ++ teams.cloudposse.members;
   };
-})
+}

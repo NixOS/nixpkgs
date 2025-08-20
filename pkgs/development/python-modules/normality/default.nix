@@ -2,37 +2,41 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  hatchling,
+  setuptools,
+  setuptools-scm,
+  text-unidecode,
   charset-normalizer,
   chardet,
   banal,
   pyicu,
   pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "normality";
-  version = "3.0.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
-    tag = version;
-    hash = "sha256-AAxFsdh2pv317hn9vr8Xpz9QPLYEa3KMDcObwR51NWo=";
+    rev = version;
+    hash = "sha256-cGQpNhUqlT2B9wKDoDeDmyCNQLwWR7rTCLxnPHhMR0w=";
   };
 
-  build-system = [ hatchling ];
+  buildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     charset-normalizer
+    text-unidecode
     chardet
     banal
     pyicu
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "normality" ];
 
   meta = {

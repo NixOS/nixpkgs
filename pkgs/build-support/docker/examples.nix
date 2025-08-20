@@ -110,16 +110,6 @@ rec {
 
     runAsRoot = ''
       mkdir -p /data
-      cat >/bin/healthcheck <<-'EOF'
-      set -x
-      probe="$(/bin/redis-cli ping)"
-      echo "$probe"
-      if [ "$probe" = 'PONG' ]; then
-        exit 0
-      fi
-      exit 1
-      EOF
-      chmod +x /bin/healthcheck
     '';
 
     config = {
@@ -127,15 +117,6 @@ rec {
       WorkingDir = "/data";
       Volumes = {
         "/data" = { };
-      };
-      Healthcheck = {
-        Test = [
-          "CMD-SHELL"
-          "/bin/healthcheck"
-        ];
-        Interval = 30000000000;
-        Timeout = 10000000000;
-        Retries = 3;
       };
     };
   };
@@ -619,14 +600,15 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents = [
-        pkgs.bash
-        pkgs.coreutils
-      ]
-      ++ nonRootShadowSetup {
-        uid = 999;
-        user = "somebody";
-      };
+      contents =
+        [
+          pkgs.bash
+          pkgs.coreutils
+        ]
+        ++ nonRootShadowSetup {
+          uid = 999;
+          user = "somebody";
+        };
     };
 
   # basic example, with cross compilation

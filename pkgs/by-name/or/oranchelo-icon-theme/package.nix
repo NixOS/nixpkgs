@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
-    repo = "oranchelo-icon-theme";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
@@ -42,7 +42,6 @@ stdenvNoCC.mkDerivation rec {
       gtk-update-icon-cache "$theme"
     done
   '';
-  dontCheckForBrokenSymlinks = true;
 
   meta = with lib; {
     description = "Oranchelo icon theme";

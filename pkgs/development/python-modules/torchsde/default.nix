@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Differentiable SDE solvers with GPU support and efficient sensitivity analysis";
     homepage = "https://github.com/google-research/torchsde";
     license = licenses.asl20;
-    teams = [ teams.tts ];
+    maintainers = teams.tts.members;
   };
 }

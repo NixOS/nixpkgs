@@ -24,17 +24,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-robots";
-  version = "41.2";
+  version = "41.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${lib.versions.major finalAttrs.version}/gnome-robots-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kSHC+DaBIEP+7yumYc1dD9SOPWMZxDlBuf3RWLmw65E=";
+    hash = "sha256-K4BQcFrIPpOL56iREyYB62XHk/IJzX6RDGzWQphzBHg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "gnome-robots-${finalAttrs.version}";
-    hash = "sha256-1h9+XPmkapzdYsI6qtPPHtlwEEmyIzaAogLiYvIHJak=";
+    hash = "sha256-rn/rs0D2qKDYf8oxpegQalPQIVuT8rSrHTzeZqWGn44=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
   ];
 
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gnome-robots/-/merge_requests/38
+    substituteInPlace data/icons/meson.build \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  '';
+
   preFixup = ''
     # Seal GStreamer plug-ins so that we can notice when they are missing.
     gappsWrapperArgs+=(--set "GST_PLUGIN_SYSTEM_PATH_1_0" "$GST_PLUGIN_SYSTEM_PATH_1_0")
@@ -85,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
                   common-updater-scripts
                 ]
               }
-              update-source-version gnome-robots --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+              update-source-version gnome-robots --ignore-same-version --source-key=cargoDeps > /dev/null
             ''
           ];
           # Experimental feature: do not copy!
@@ -103,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
-    teams = [ teams.gnome ];
+    maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

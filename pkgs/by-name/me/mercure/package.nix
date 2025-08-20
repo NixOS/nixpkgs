@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "mercure";
-  version = "0.20.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
     rev = "v${version}";
-    hash = "sha256-JBvfNzsOP4ggJ7D2+5yW8837QsN15wO6EbFrTKVensU=";
+    hash = "sha256-BJVCVvz8AdkQwLD37oQc7YPaZ7l74o9Dik9u/ZBSRro=";
   };
 
   sourceRoot = "${src.name}/caddy";
 
-  vendorHash = "sha256-ZCvIgyGw4F4VGbnuan5O+to5n969ThRZNFezu+byKWg=";
+  vendorHash = "sha256-QqG8rxGQW+Lmd2L+wKiKUV+GXcxoO04yhJhDvMqwTVc=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
@@ -42,13 +42,13 @@ buildGoModule rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open, easy, fast, reliable and battery-efficient solution for real-time communications";
     homepage = "https://github.com/dunglas/mercure";
     changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
-    platforms = lib.platforms.unix;
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ gaelreyrol ];
+    platforms = platforms.unix;
     mainProgram = "mercure";
   };
 }

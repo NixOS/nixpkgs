@@ -5,25 +5,25 @@
   jsoncpp,
   lib,
   libGL,
-  nix-update-script,
-  openxr-loader,
   python3,
   stdenv,
+  unstableGitUpdater,
   vulkan-headers,
   vulkan-loader,
   xorg,
+  openxr-loader,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "1.0.1521";
+  version = "0-unstable-2024-12-26";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    tag = finalAttrs.version;
+    rev = "effe0a8783937c5a3cfe7a72cf6f81152150b6cb";
     fetchSubmodules = true;
-    hash = "sha256-qi1iqlsr0P+Hw63O3ayCBIEGdNtkhl8FCPcs/m0WIzs=";
+    hash = "sha256-SV8E+4qu5J7MueHmdsdTDKNx4CH085fidgIJyewj8RQ=";
   };
 
   nativeBuildInputs = [
@@ -51,11 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/lib/opencomposite
     cp -r bin/ $out/lib/opencomposite
-    touch $out/lib/opencomposite/bin/version.txt
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+    branch = "openxr";
+  };
 
   meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
@@ -65,4 +67,4 @@ stdenv.mkDerivation (finalAttrs: {
     # This can realistically only work on systems that support OpenXR Loader
     inherit (openxr-loader.meta) platforms;
   };
-})
+}

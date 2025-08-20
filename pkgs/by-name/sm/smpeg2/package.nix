@@ -3,13 +3,14 @@
   stdenv,
   autoconf,
   automake,
+  darwin,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
   SDL2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "smpeg2";
   version = "unstable-2022-05-26";
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
 
   outputs = [
     "out"
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
     moveToOutput bin/smpeg2-config "$dev"
     wrapProgram $dev/bin/smpeg2-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL2}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${SDL2.dev}/lib/pkgconfig"
   '';
 
   enableParallelBuilding = true;

@@ -10,7 +10,7 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   # pypinput is marked as broken for darwin
   pynputSupport ? stdenv.hostPlatform.isLinux,
-  # Experimental Drag & Drop support requires x11 & pyinput support
+  # Experimental Drag & Drop support requires x11 & pyinput suport
   hasDndSupport ? x11Support && pynputSupport,
   enableDragAndDrop ? false,
 }:
@@ -21,7 +21,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
   python3.pkgs.buildPythonApplication
   rec {
     pname = "tuifimanager";
-    version = "5.1.5";
+    version = "5.0.9";
 
     pyproject = true;
 
@@ -29,7 +29,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
       owner = "GiorgosXou";
       repo = "TUIFIManager";
       tag = "v.${version}";
-      hash = "sha256-5ShrmjEFKGdmaGBFjMnIfcM6p8AZd13uIEFwDVAkU/8=";
+      hash = "sha256-15PXua3kLf3Mpgft2msFBn+fS2bzfTAIC9bmOkNKqlU=";
     };
 
     build-system = with python3.pkgs; [
@@ -44,18 +44,19 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
         makeWrapper
       ]);
 
-    propagatedBuildInputs = [
-      python3.pkgs.send2trash
-      python3.pkgs.unicurses
-    ]
-    ++ (lib.optionals enableDragAndDrop [
-      python3.pkgs.pynput
-      python3.pkgs.pyside6
-      python3.pkgs.requests
-      python3.pkgs.xlib
-      kdePackages.qtbase
-      kdePackages.qt6gtk2
-    ]);
+    propagatedBuildInputs =
+      [
+        python3.pkgs.send2trash
+        python3.pkgs.unicurses
+      ]
+      ++ (lib.optionals enableDragAndDrop [
+        python3.pkgs.pynput
+        python3.pkgs.pyside6
+        python3.pkgs.requests
+        python3.pkgs.xlib
+        kdePackages.qtbase
+        kdePackages.qt6gtk2
+      ]);
 
     postFixup =
       let

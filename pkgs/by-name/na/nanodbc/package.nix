@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     else
       [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nanodbc/nanodbc";
     changelog = "https://github.com/nanodbc/nanodbc/raw/v${version}/CHANGELOG.md";
     description = "Small C++ wrapper for the native C ODBC API";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.bzizou ];
+    license = licenses.mit;
+    maintainers = [ maintainers.bzizou ];
   };
 }

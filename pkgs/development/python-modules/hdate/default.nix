@@ -3,25 +3,24 @@
   astral,
   buildPythonPackage,
   fetchFromGitHub,
-  hypothesis,
-  num2words,
   pdm-backend,
-  pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
-  syrupy,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "1.1.2";
+  version = "0.11.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     tag = "v${version}";
-    hash = "sha256-nM9LHcXuDpQ2j4ACF6W5H3iTJcKdbcY4bkbumIkKyeE=";
+    hash = "sha256-Il20aKOPQi4J4hWQEMEQOnLdBSHCOu214YE6pxeYbfI=";
   };
 
   pythonRelaxDeps = [
@@ -33,29 +32,20 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    num2words
+    astral
+    pytz
   ];
 
-  optional-dependencies = {
-    astral = [ astral ];
-  };
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-timeout
-    pytest-xdist
-    pytestCheckHook
-    syrupy
-  ];
-
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];
 
   meta = with lib; {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
-    changelog = "https://github.com/py-libhdate/py-libhdate/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/py-libhdate/py-libhdate/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };

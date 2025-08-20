@@ -4,7 +4,6 @@
   fetchFromGitHub,
   testers,
   pgweb,
-  nixosTests,
 }:
 
 buildGoModule rec {
@@ -13,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sosedoff";
-    repo = "pgweb";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-gZK8+H3dBMzSVyE96E7byihKMR4+1YlVFZJtCTGUZwI=";
   };
@@ -42,16 +41,13 @@ buildGoModule rec {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      version = "v${version}";
-      package = pgweb;
-      command = "pgweb --version";
-    };
-    integration_test = nixosTests.pgweb;
+  passthru.tests.version = testers.testVersion {
+    version = "v${version}";
+    package = pgweb;
+    command = "pgweb --version";
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
     description = "Web-based database browser for PostgreSQL";
     longDescription = ''
@@ -59,9 +55,9 @@ buildGoModule rec {
       run queries and examine tables and indexes.
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "pgweb";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       zupo
       luisnquin
     ];

@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     nettle
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple RADIUS client library";
     homepage = "https://github.com/radcli/radcli";
     changelog = "https://github.com/radcli/radcli/blob/${version}/NEWS";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fab ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
     mainProgram = "radcli";
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

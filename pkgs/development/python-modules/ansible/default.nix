@@ -3,8 +3,6 @@
   pythonOlder,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  jmespath,
   jsonschema,
   jxmlease,
   ncclient,
@@ -16,7 +14,6 @@
   textfsm,
   ttp,
   xmltodict,
-  passlib,
 
   # optionals
   withJunos ? false,
@@ -25,31 +22,28 @@
 
 let
   pname = "ansible";
-  version = "11.8.0";
+  version = "11.1.0";
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KOoDLHfzRLuOpNfTn5pdTpNebItgg2yMiii5z2ya2xo=";
+    hash = "sha256-0BtCWZDZYNKjP8N44bc9vKHA4ovCL0BWq2s8jprnT7o=";
   };
 
-  # we make ansible-core depend on ansible, not the other way around,
-  # since when you install ansible-core you will not have ansible
-  # executables installed in the PATH variable
-  pythonRemoveDeps = [ "ansible-core" ];
+  postPatch = ''
+    # we make ansible-core depend on ansible, not the other way around
+    sed -Ei '/ansible-core/d' setup.py
+  '';
 
-  build-system = [ setuptools ];
-
-  dependencies = lib.unique (
+  propagatedBuildInputs = lib.unique (
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
-      passlib
       jxmlease
       ncclient
       netaddr
@@ -64,15 +58,11 @@ buildPythonPackage {
       xmltodict
       # ansible.windows
 
-      # Default ansible collections dependencies
-      # community.general
-      jmespath
-
       # lots of collections with dedicated requirements.txt and pyproject.toml files,
       # add the dependencies for the collections you need conditionally and install
       # ansible using overrides to enable the collections you need.
     ]
-    ++ lib.optionals withJunos [
+    ++ lib.optionals (withJunos) [
       # ansible_collections/junipernetworks/junos/requirements.txt
       jxmlease
       ncclient
@@ -81,7 +71,7 @@ buildPythonPackage {
       scp
       xmltodict
     ]
-    ++ lib.optionals withNetbox [
+    ++ lib.optionals (withNetbox) [
       # ansible_collections/netbox/netbox/pyproject.toml
       pynetbox
     ]
@@ -99,9 +89,6 @@ buildPythonPackage {
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      HarisDotParis
-      robsliwi
-    ];
+    maintainers = [ ];
   };
 }

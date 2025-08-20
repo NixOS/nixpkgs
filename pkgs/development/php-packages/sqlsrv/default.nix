@@ -18,6 +18,6 @@ buildPecl {
     description = "Microsoft Drivers for PHP for SQL Server";
     license = licenses.mit;
     homepage = "https://github.com/Microsoft/msphpsql";
-    teams = [ teams.php ];
+    maintainers = teams.php.members;
   };
 }

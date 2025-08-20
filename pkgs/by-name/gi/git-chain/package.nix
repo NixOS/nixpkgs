@@ -6,24 +6,33 @@
   openssl,
   git,
   nix-update-script,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "git-chain";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2024-11-16";
 
   src = fetchFromGitHub {
     owner = "dashed";
     repo = "git-chain";
-    rev = "f6a6d365e6e3cce15e74649a421044a01fb4f68f";
-    hash = "sha256-lOAURUhR2Ts1DF8yW0WnovSWeZFC8UwR6j4cxoreonY=";
+    rev = "90165393a9e78b1e0837b8ad0c6acd8b1253731a";
+    hash = "sha256-hRBymc4wmmniD4IwmgxSw1EIkT6omoqdrnwr+Eaa/yg=";
   };
 
-  cargoHash = "sha256-0Ur80eIKQIsM5vyIt+9YpFufHTk97+T+KXoAkJE90Ag=";
+  cargoHash = "sha256-nx7HRQd9HD9OcK41XiaC4m52atTWTPeGFVX7df2wv+0=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+      ]
+    );
 
   nativeCheckInputs = [ git ];
 

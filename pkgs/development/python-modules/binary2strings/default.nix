@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binary2strings" ];
 
-  enabledTestPaths = [ "tests/test.py" ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Module to extract Ascii, Utf8, and Unicode strings from binary data";

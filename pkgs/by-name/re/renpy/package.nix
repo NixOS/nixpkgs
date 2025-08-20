@@ -1,100 +1,102 @@
 {
+  lib,
+  stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  python311,
+  pkg-config,
+  SDL2,
+  libpng,
   ffmpeg,
   freetype,
-  fribidi,
   glew,
-  harfbuzz,
-  lib,
   libGL,
   libGLU,
-  libpng,
-  makeWrapper,
-  nix-update-script,
-  pkg-config,
-  python3,
-  SDL2,
-  stdenv,
-  versionCheckHook,
-  withoutSteam ? true,
+  fribidi,
   zlib,
+  harfbuzz,
+  makeWrapper,
 }:
 
 let
-  python = python3;
+  # https://renpy.org/doc/html/changelog.html#versioning
+  # base_version is of the form major.minor.patch
+  # vc_version is of the form YYMMDDCC
+  # version corresponds to the tag on GitHub
+  base_version = "8.3.1";
+  vc_version = "24090601";
+  version = "${base_version}.${vc_version}";
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "renpy";
-  version = "8.3.7.25031702";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
-    tag = finalAttrs.version;
-    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
+    rev = version;
+    hash = "sha256-k8mcDzaFngRF3Xl9cinUFU0T9sjxNIVrECUguARJVZ4=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     pkg-config
-    python.pkgs.cython
-    python.pkgs.setuptools
+    makeWrapper
+    # Ren'Py currently does not compile on Cython 3.x.
+    # See https://github.com/renpy/renpy/issues/5359
+    python311.pkgs.cython_0
+    python311.pkgs.setuptools
   ];
 
-  buildInputs = [
-    ffmpeg
-    freetype
-    fribidi
-    glew
-    harfbuzz
-    libGL
-    libGLU
-    libpng
-    SDL2
-    zlib
-  ]
-  ++ (with python.pkgs; [
-    ecdsa
-    future
-    pefile
-    pygame-sdl2
-    python
-    requests
-    six
-    tkinter
-  ]);
-
-  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (
+  buildInputs =
     [
-      ffmpeg.lib
-      freetype
-      fribidi
-      glew.dev
-      harfbuzz.dev
-      libpng
       SDL2
-      (lib.getDev SDL2)
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
+      libpng
+      ffmpeg
+      freetype
+      glew
       libGLU
+      libGL
+      fribidi
+      zlib
+      harfbuzz
     ]
-  );
+    ++ (with python311.pkgs; [
+      python
+      pygame-sdl2
+      tkinter
+      future
+      six
+      pefile
+      requests
+      ecdsa
+    ]);
+
+  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" [
+    SDL2
+    SDL2.dev
+    libpng
+    ffmpeg.lib
+    freetype
+    glew.dev
+    libGLU
+    libGL
+    fribidi
+    zlib
+    harfbuzz.dev
+  ];
 
   enableParallelBuilding = true;
 
   patches = [
     ./shutup-erofs-errors.patch
     ./5687.patch
-  ]
-  ++ lib.optional withoutSteam ./noSteam.patch;
+  ];
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
-    version = '${finalAttrs.version}'
+    version = '${version}'
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
@@ -102,13 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
-  buildPhase = ''
+  buildPhase = with python311.pkgs; ''
     runHook preBuild
     ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = with python311.pkgs; ''
     runHook preInstall
 
     ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
@@ -122,15 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include";
-  };
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
+  env.NIX_CFLAGS_COMPILE = with python311.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
 
   meta = {
     description = "Visual Novel Engine";
@@ -138,7 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://renpy.org/";
     changelog = "https://renpy.org/doc/html/changelog.html";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ shadowrz ];
   };
-})
+
+  passthru = {
+    inherit base_version vc_version;
+  };
+}

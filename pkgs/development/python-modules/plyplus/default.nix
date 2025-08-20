@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "plyplus";
   version = "0.7.5";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "PlyPlus";

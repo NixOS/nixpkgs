@@ -10,12 +10,17 @@
   pythonOlder,
   pyyaml,
   requests,
+  pandas,
   setuptools,
   tqdm,
   typing-extensions,
   pinecone-plugin-interface,
   pinecone-plugin-inference,
   urllib3,
+  googleapis-common-protos,
+  lz4,
+  protobuf,
+  grpcio,
 }:
 
 buildPythonPackage rec {

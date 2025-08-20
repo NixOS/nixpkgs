@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "coverage";
   version = "5.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -75,12 +75,9 @@ in
         );
 
         # Hardening
-        AmbientCapabilities = "";
         CapabilityBoundingSet = [ "" ];
-        DevicePolicy = "closed";
+        DeviceAllow = [ "" ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
@@ -94,19 +91,15 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET AF_INET6 AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
-          "setrlimit"
-        ];
-        UMask = "0077";
       };
     };
 

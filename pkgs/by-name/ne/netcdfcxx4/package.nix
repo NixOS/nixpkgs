@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   patches = [
     # This fix is included upstream, remove with next upgrade
     ./cmake-h5free.patch
-    ./netcdf.patch
   ];
 
   preConfigure = ''

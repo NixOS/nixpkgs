@@ -5,9 +5,7 @@
       nixosOk = lib.mkOption {
         type = lib.types.submoduleWith {
           class = "nixos";
-          modules = [
-            ./assert-module-class-is-nixos.nix
-          ];
+          modules = [ ];
         };
       };
       # Same but will have bad definition
@@ -47,7 +45,6 @@
       class = "nixos";
       modules = [
         ./module-class-is-nixos.nix
-        ./assert-module-class-is-nixos.nix
       ];
     };
 

@@ -33,8 +33,7 @@ stdenv.mkDerivation (
       akku
       chez
       chibi
-    ]
-    ++ nativeBuildInputs;
+    ] ++ nativeBuildInputs;
     buildPhase = ''
       runHook preBuild
 
@@ -115,8 +114,7 @@ stdenv.mkDerivation (
     '';
     meta = {
       inherit (akku.meta) platforms;
-    }
-    // args.meta or { };
+    } // args.meta or { };
     setupHook = ./setup-hook.sh;
   }
   // builtins.removeAttrs args [

@@ -1,21 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  writeText,
-  runCommand,
-  jj,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, testers
+, writeText
+, runCommand
+, jj
 }:
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "jj";
   version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "jj";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-Yijap5ZghTBe1ahkQgjjxuo++SriJWXgRqrNXIVQ0os=";
   };
 
@@ -28,7 +27,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X main.version=${version}"
   ];
 
   passthru = {
@@ -57,7 +56,7 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "JSON Stream Editor (command line utility)";
     longDescription = ''
       JJ is a command line utility that provides a fast and simple way to retrieve
@@ -66,9 +65,9 @@ buildGoModule (finalAttrs: {
       that do not apply, and aborts as soon as the target value has been found or updated.
     '';
     homepage = "https://github.com/tidwall/jj";
-    changelog = "https://github.com/tidwall/jj/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/tidwall/jj/releases/tag/v${version}";
+    license = licenses.mit;
     mainProgram = "jj";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with maintainers; [ katexochen ];
   };
-})
+}

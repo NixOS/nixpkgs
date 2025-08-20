@@ -25,18 +25,17 @@
   sqlite,
   libtiff,
   curl,
-  catch2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "therion";
-  version = "6.3.4";
+  version = "6.1.8";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
-    tag = "v${version}";
-    hash = "sha256-kus5MoiUrLadpzq0wPB+J85F0RVva7NAYM6E6HX4eJ8=";
+    rev = "v${version}";
+    hash = "sha256-bmp0IZ4uAqDpe2e8UeIDUdFaaocx4OBIYuhnaHirqGc=";
   };
 
   nativeBuildInputs = [
@@ -76,12 +75,10 @@ stdenv.mkDerivation rec {
     tcl
     tclPackages.tcllib
     tclPackages.bwidget
-    catch2
   ];
 
   fixupPhase = ''
     runHook preFixup
-
     wrapProgram $out/bin/therion \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -91,15 +88,14 @@ stdenv.mkDerivation rec {
       }
     wrapProgram $out/bin/xtherion \
       --prefix PATH : ${lib.makeBinPath [ tk ]}
-
     runHook postFixup
   '';
 
-  meta = {
-    description = "Cave surveying software";
+  meta = with lib; {
+    description = "Therion – cave surveying software";
     homepage = "https://therion.speleo.sk/";
     changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ matthewcroughan ];
   };
 }

@@ -17,14 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
-  nativeBuildInputs = [
-    gradle
-    makeWrapper
-  ];
+  nativeBuildInputs = [ gradle ];
 
   # if the package has dependencies, mitmCache must be set
   mitmCache = gradle.fetchDeps {
@@ -47,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/pdftk}
     cp build/libs/pdftk-all.jar $out/share/pdftk
 
-    makeWrapper ${lib.getExe jre} $out/bin/pdftk \
+    makeWrapper ${jre}/bin/java $out/bin/pdftk \
       --add-flags "-jar $out/share/pdftk/pdftk-all.jar"
 
     cp ${finalAttrs.src}/pdftk.1 $out/share/man/man1
@@ -75,12 +72,10 @@ The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:
 
 ```nix
-{
-  lib,
-  stdenv,
-  gradle,
-  # ...
-  pdftk,
+{ lib
+, stdenv
+# ...
+, pdftk
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -92,22 +87,30 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-This allows you to `override` any arguments of the `pkg` used for the update script (for example, `pkg = pdftk.override { enableSomeFlag = true };)`.
+This allows you to `override` any arguments of the `pkg` used for
+the update script (for example, `pkg = pdftk.override { enableSomeFlag =
+true };`), so this is the preferred way.
 
-The second is to use `finalAttrs.finalPackage` like this:
+The second is to create a `let` binding for the package, like this:
 
 ```nix
-stdenv.mkDerivation (finalAttrs: {
+let self = stdenv.mkDerivation {
   # ...
   mitmCache = gradle.fetchDeps {
-    pkg = finalAttrs.finalPackage;
+    pkg = self;
     data = ./deps.json;
   };
-})
+}; in self
 ```
-The limitation of this method is that you cannot override the `pkg` derivations's arguments.
 
-In the former case, the update script will stay the same even if the derivation is called with different arguments. In the latter case, the update script will change depending on the derivation arguments. It's up to you to decide which one would work best for your derivation.
+This is useful if you can't easily pass the derivation as its own
+argument, or if your `mkDerivation` call is responsible for building
+multiple packages.
+
+In the former case, the update script will stay the same even if the
+derivation is called with different arguments. In the latter case, the
+update script will change depending on the derivation arguments. It's up
+to you to decide which one would work best for your derivation.
 
 ## Update Script {#gradle-update-script}
 

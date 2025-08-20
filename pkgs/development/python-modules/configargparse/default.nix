@@ -5,7 +5,6 @@
   mock,
   pytestCheckHook,
   pyyaml,
-  pythonAtLeast,
   pythonOlder,
 }:
 
@@ -23,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 
-  patches = [
-    # https://github.com/bw2/ConfigArgParse/pull/295
-    ./python3.13-compat.patch
-  ];
-
   optional-dependencies = {
     yaml = [ pyyaml ];
   };
@@ -35,13 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # regex mismatch
-    "testMutuallyExclusiveArgs"
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "configargparse" ];
 
@@ -50,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bw2/ConfigArgParse";
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ willibutz ];
   };
 }

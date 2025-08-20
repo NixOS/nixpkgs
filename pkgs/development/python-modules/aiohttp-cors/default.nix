@@ -1,52 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  pythonOlder,
+  typing ? null,
   aiohttp,
-  pytestCheckHook,
-  pytest-aiohttp,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
-  version = "0.8.1";
-  pyproject = true;
+  version = "0.7.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "aio-libs";
-    repo = "aiohttp-cors";
-    tag = "v${version}";
-    hash = "sha256-AbMuUeCNM8+oZj/hutG3zxHOwYN8uZlLFBeYTlu1fh4=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0pczn54bqd32v8zhfbjfybiza6xh1szwxy6as577dn8g23bwcfad";
   };
 
-  build-system = [ setuptools ];
+  disabled = pythonOlder "3.5";
 
-  dependencies = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp ] ++ lib.optional (pythonOlder "3.5") typing;
 
-  pythonImportsCheck = [ "aiohttp_cors" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-aiohttp
-  ];
-
-  disabledTests = [
-    # async def functions are not natively supported and have been skipped.
-    "test_main"
-    "test_defaults"
-    "test_raises_forbidden_when_config_not_found"
-    "test_raises_when_handler_not_extend"
-  ];
-
-  # interactive browser tests using selenium
-  disabledTestPaths = [ "tests/integration" ];
+  # Requires network access
+  doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

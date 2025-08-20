@@ -1,43 +1,42 @@
 {
+  mkDerivation,
   lib,
-  stdenv,
   fetchFromGitLab,
-  qt6,
+  qtbase,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "corepaint";
-  version = "5.0.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = "corepaint";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ARFyBtkGYFMKnUD1h93GcQiKV6mFXxJvLEVeSXlaHZI=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-ndknVT/gl2P0s3ADW0txiVtAyI/l/ZFWEgufFleS0A4=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
+    qtbase
     libcprime
     libcsys
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Paint app from the C Suite";
     mainProgram = "corepaint";
     homepage = "https://gitlab.com/cubocore/coreapps/corepaint";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dan4ik605743 ];
+    platforms = platforms.linux;
   };
-})
+}

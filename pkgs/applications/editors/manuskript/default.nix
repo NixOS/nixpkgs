@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.17.0";
+  version = "0.16.1";
 
   format = "other";
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     repo = pname;
     owner = "olivierkes";
     tag = version;
-    hash = "sha256-jOhbN6lMx04q60S0VOABmSNE/x9Er9exFYvWJe2INlE=";
+    hash = "sha256-/Ryvv5mHdZ3iwMpZjOa62h8D2B00pzknJ70DfjDTPPA=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];

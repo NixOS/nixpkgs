@@ -1,13 +1,11 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
   fetchpatch,
-  versionCheckHook,
-  nix-update-script,
+  python3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "rich-cli";
   version = "1.8.0";
   pyproject = true;
@@ -34,15 +32,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "rich"
     "textual"
   ];
 
-  build-system = with python3Packages; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  dependencies = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     requests
     rich
@@ -50,23 +50,15 @@ python3Packages.buildPythonApplication rec {
     textual
   ];
 
-  pythonImportsCheck = [ "rich_cli" ];
-
-  nativeCheckInputs = [
-    versionCheckHook
+  pythonImportsCheck = [
+    "rich_cli"
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/rich";
-  versionCheckProgramArg = "--version";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Command Line Interface to Rich";
     homepage = "https://github.com/Textualize/rich-cli";
     changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
     mainProgram = "rich";
   };

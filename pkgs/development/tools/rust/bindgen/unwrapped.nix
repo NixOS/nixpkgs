@@ -1,25 +1,19 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  clang,
-  rustfmt,
+{ lib, fetchCrate, rustPlatform, clang, rustfmt
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features
   rustfmt-nightly = rustfmt.override { asNightly = true; };
-in
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.72.0";
+  version = "0.71.1";
 
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    hash = "sha256-0hIxXKq7zu/gq0QAs2Ffuq584a9w1RWctPs9SBfc0/I=";
+    hash = "sha256-RL9P0dPYWLlEGgGWZuIvyULJfH+c/B+3sySVadJQS3w=";
   };
 
-  cargoHash = "sha256-K/iM79RfNU+3f2ae6wy/FMFAD68vfqzSUebqALPJpJY=";
+  cargoHash = "sha256-i92f9grVqVqWmOKkLcBxB1Brk5KztJpPi9zSxVcgXfY=";
 
   buildInputs = [ (lib.getLib clang.cc) ];
 

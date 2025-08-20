@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-pyyaml";
-  version = "6.0.12.20250402";
-  pyproject = true;
+  version = "6.0.12.20240917";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "types_pyyaml";
+    pname = "types-PyYAML";
     inherit version;
-    hash = "sha256-18E8Pm0zW2r0sBIqAf8dJwq6hKuW0aGhBj7Lo+E+wHU=";
+    hash = "sha256-0UBahvlXZoIjTvg7y05v/3yTBcix+61eC81Pfb3JxYc=";
   };
-
-  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;

@@ -1,7 +1,6 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
+{ lib
+, rustPlatform
+, fetchFromGitLab
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -10,12 +9,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "hyask";
-    repo = "swaysome";
+    repo = pname;
     rev = version;
     hash = "sha256-2Q88/XgPN+byEo3e1yvwcwSQxPgPTtgy/rNc/Yduo3U=";
   };
 
-  cargoHash = "sha256-/TW1rPg/1t3n4XPBOEhgr1hd5PJMLwghLvQGBbZPZ34=";
+  cargoHash = "sha256-rGmQihmVGKOXgX2oEQiIagdyUwzOteJfh5jxfoeD5bs=";
 
   meta = with lib; {
     description = "Helper to make sway behave more like awesomewm";

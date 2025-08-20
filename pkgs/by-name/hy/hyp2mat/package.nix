@@ -12,7 +12,6 @@
   pkg-config,
   libpng,
   zlib,
-  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,24 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "03ibk51swxfl7pfrhcrfiffdi4mnf8kla0g1xj1lsrvrjwapfx03";
   };
 
-  postPatch = ''
-    substituteInPlace doc/Makefile.am --replace-fail \
-      '$(HELP2MAN) --output=$@ --no-info --include=$< $(PROGNAME)' \
-      '$(HELP2MAN) --output=$@ --no-info --include=$< ${
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          (placeholder "out")
-        else
-          buildPackages.hyp2mat
-      }/bin/`basename $(PROGNAME)`'
-  '';
-
   nativeBuildInputs = [
     autoreconfHook
-    bison
-    flex
-    gengetopt
-    groff
-    help2man
     pkg-config
   ];
 
@@ -51,6 +34,11 @@ stdenv.mkDerivation rec {
     libharu
     libpng
     zlib
+    bison
+    flex
+    gengetopt
+    help2man
+    groff
   ];
 
   configureFlags = [ "--enable-library" ];

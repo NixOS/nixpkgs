@@ -87,8 +87,9 @@ with lib;
 
         ppp-pptpd-wrapped = pkgs.stdenv.mkDerivation {
           name = "ppp-pptpd-wrapped";
+          phases = [ "installPhase" ];
           nativeBuildInputs = with pkgs; [ makeWrapper ];
-          buildCommand = ''
+          installPhase = ''
             mkdir -p $out/bin
             makeWrapper ${pkgs.ppp}/bin/pppd $out/bin/pppd \
               --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \

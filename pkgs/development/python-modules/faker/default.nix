@@ -7,28 +7,27 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  typing-extensions,
-  tzdata,
+  text-unidecode,
   ukpostcodeparser,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "37.3.0";
+  version = "25.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d7eeeiIo1XF1Ezrwu83SbcYj34HbOQ7lL1EE1GwBDy8=";
+    pname = "Faker";
+    inherit version;
+    hash = "sha256-ypSENgCkCJqROUAj/vAUu0H+5Qn4xL7vFTABg3PncPs=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     python-dateutil
-    typing-extensions
-    tzdata
+    text-unidecode
   ];
 
   nativeCheckInputs = [
@@ -40,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   # avoid tests which import random2, an abandoned library
-  disabledTestPaths = [ "tests/providers/test_ssn.py" ];
+  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {

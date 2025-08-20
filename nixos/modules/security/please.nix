@@ -121,5 +121,7 @@ in
       sshAgentAuth = true;
       usshAuth = true;
     };
+
+    meta.maintainers = with lib.maintainers; [ azahi ];
   };
 }

@@ -12,19 +12,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.44";
+  version = "0.2.43";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-knc9PejugU6K4EQflfz91keZr3ZJqZu2TKFQFFJrxiI=";
+    hash = "sha256-Pj37lJSa1spjC/xrf+yu/ecFCuajb8ingszp6ib2WC8=";
   };
 
-  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  # https://github.com/zapping-vbi/zvbi/pull/54
+  patches = [ ./musl-x86_64.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "man"
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

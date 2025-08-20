@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wayland integration library to the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-wayland";
     license = lib.licenses.lgpl3Plus;
-    teams = [ lib.teams.pantheon ];
+    maintainers = lib.teams.pantheon.members;
     platforms = lib.platforms.linux;
   };
 })

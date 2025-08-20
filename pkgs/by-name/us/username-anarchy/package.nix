@@ -5,7 +5,7 @@
   ruby,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "username-anarchy";
   version = "0.5";
 

@@ -34,16 +34,17 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    ncurses
-    libtermkey
-    luaEnv
-    tre
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    acl
-    libselinux
-  ];
+  buildInputs =
+    [
+      ncurses
+      libtermkey
+      luaEnv
+      tre
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+      libselinux
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/vis \
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Vim like editor";
+    description = "A vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = licenses.isc;
     maintainers = with maintainers; [ ramkromberg ];

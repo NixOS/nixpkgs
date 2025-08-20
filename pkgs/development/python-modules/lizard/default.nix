@@ -6,13 +6,11 @@
   pytestCheckHook,
   mock,
   jinja2,
-  pygments, # for Erlang support
-  pathspec, # for .gitignore support
 }:
 
 buildPythonPackage rec {
   pname = "lizard";
-  version = "1.17.31";
+  version = "1.17.10";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -20,14 +18,10 @@ buildPythonPackage rec {
     owner = "terryyin";
     repo = "lizard";
     rev = version;
-    hash = "sha256-8lu4EknyAI+gn7GOSo13RRHNogpZdgxJ9fTvy7NyIsM=";
+    hash = "sha256-4jq6gXpI1hFtX7ka2c/qQ+S6vZCThKOGhQwJ2FOYItY=";
   };
 
-  propagatedBuildInputs = [
-    jinja2
-    pygments
-    pathspec
-  ];
+  propagatedBuildInputs = [ jinja2 ];
 
   nativeCheckInputs = [
     pytestCheckHook

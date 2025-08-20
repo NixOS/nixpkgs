@@ -44,11 +44,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patches = [
-    ./eps_raster_print-cast.patch
-    ./include-raster-helper.patch
-  ];
-
   preConfigure = ''
     chmod u+x configure
   '';

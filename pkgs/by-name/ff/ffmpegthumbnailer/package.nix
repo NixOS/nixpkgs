@@ -9,7 +9,7 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
   version = "unstable-2024-01-04";
 

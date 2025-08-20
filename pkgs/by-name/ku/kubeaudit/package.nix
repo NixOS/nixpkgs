@@ -24,12 +24,12 @@ buildGoModule rec {
   # Tests require a running Kubernetes instance
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Audit tool for Kubernetes";
     homepage = "https://github.com/Shopify/kubeaudit";
     changelog = "https://github.com/Shopify/kubeaudit/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "kubeaudit";
   };
 }

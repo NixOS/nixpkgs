@@ -4,14 +4,13 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
-  bibtexparser_2,
   git,
   lxml,
   markdown,
   markupsafe,
+  mock,
   postgresql,
   pylatexenc,
-  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -22,21 +21,26 @@
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.24.2";
+  version = "3.21.0";
   pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "clld";
-    repo = "clldutils";
-    tag = "v${version}";
-    hash = "sha256-xIs6Lq9iDdcM3j51F27x408oUldvy5nlvVdbrAS5Jz0=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-OD+WJ9JuYZb/oXDgVqL4i5YlcVEt0+swq0SB3cutyRo=";
   };
 
-  build-system = [ setuptools ];
+  patchPhase = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov" ""
+  '';
 
-  dependencies = [
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     attrs
-    bibtexparser_2
     colorlog
     lxml
     markdown
@@ -47,18 +51,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    mock
     postgresql
-    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     git
   ];
 
-  meta = {
-    changelog = "https://github.com/clld/clldutils/blob/${src.tag}/CHANGES.md";
+  meta = with lib; {
+    changelog = "https://github.com/clld/clldutils/blob/${src.rev}/CHANGES.md";
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melling ];
   };
 }

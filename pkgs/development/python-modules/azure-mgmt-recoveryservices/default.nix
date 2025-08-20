@@ -6,29 +6,26 @@
   fetchPypi,
   isodate,
   pythonOlder,
-  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
-  version = "3.1.0";
-  pyproject = true;
+  version = "3.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "azure_mgmt_recoveryservices";
-    inherit version;
-    hash = "sha256-fy25hAFwjPFFMi9QvEkcr3lnvsSvO/ewmEufB9MJJoc=";
+    inherit pname version;
+    hash = "sha256-3yEt+t+8xlnDEjHD4XCqt8IRRNFysPiCaKsPWtjpWII=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
     isodate
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   # Module has no tests
   doCheck = false;

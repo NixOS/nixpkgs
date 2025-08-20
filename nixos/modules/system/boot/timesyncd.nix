@@ -28,7 +28,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
 
-          See {manpage}`timesyncd.conf(5)` for details.
+          See man:timesyncd.conf(5) for details.
         '';
       };
       fallbackServers = mkOption {
@@ -42,7 +42,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `FallbackNTP=` entirely.
 
-          See {manpage}`timesyncd.conf(5)` for details.
+          See man:timesyncd.conf(5) for details.
         '';
       };
       extraConfig = mkOption {
@@ -53,7 +53,8 @@ in
         '';
         description = ''
           Extra config options for systemd-timesyncd. See
-          {manpage}`timesyncd.conf(5)` for available options.
+          [
+          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
         '';
       };
     };
@@ -99,16 +100,17 @@ in
       );
     };
 
-    environment.etc."systemd/timesyncd.conf".text = ''
-      [Time]
-    ''
-    + optionalString (cfg.servers != null) ''
-      NTP=${concatStringsSep " " cfg.servers}
-    ''
-    + optionalString (cfg.fallbackServers != null) ''
-      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-    ''
-    + cfg.extraConfig;
+    environment.etc."systemd/timesyncd.conf".text =
+      ''
+        [Time]
+      ''
+      + optionalString (cfg.servers != null) ''
+        NTP=${concatStringsSep " " cfg.servers}
+      ''
+      + optionalString (cfg.fallbackServers != null) ''
+        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+      ''
+      + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

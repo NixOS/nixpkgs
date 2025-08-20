@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  replaceVars,
+  substituteAll,
   openssl,
   setuptools,
   six,
@@ -19,7 +19,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./openssl-path.patch {
+    (substituteAll {
+      src = ./openssl-path.patch;
       openssl = lib.getExe openssl;
     })
   ];

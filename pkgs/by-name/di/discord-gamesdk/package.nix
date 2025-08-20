@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      processor = stdenv.hostPlatform.parsed.cpu.name;
+      processor = stdenv.hostPlatform.uname.processor;
       sharedLibrary = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''

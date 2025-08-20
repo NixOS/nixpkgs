@@ -6,23 +6,28 @@
   rustPlatform,
   nixosTests,
   nix-update-script,
+
   autoPatchelfHook,
   cmake,
   ncurses,
   pkg-config,
+
   gcc-unwrapped,
   fontconfig,
   libGL,
   vulkan-loader,
   libxkbcommon,
+
   withX11 ? !stdenv.hostPlatform.isDarwin,
   libX11,
   libXcursor,
   libXi,
   libXrandr,
   libxcb,
+
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
+
   testers,
   rio,
 }:
@@ -46,28 +51,28 @@ let
       wayland
     ];
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.2.28";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bQ6Kj8kKDdcvRX5084KRjsuctp22Zi7375GWjOBznhw=";
+    rev = "v${version}";
+    hash = "sha256-dH/r6Bumis8WOM/c/FAvFD2QYuMeHWOMQuU6zLWrlaM=";
   };
 
-  cargoHash = "sha256-LJLexxczsqtIZuLil7sB3aAt1S2RBOmuvOQTBeuSUP4";
+  cargoHash = "sha256-ERB8l5WCgk6oLLWcI99mfGrWIQvsHH4bhaaCS3VqQTs=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-    ncurses
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    cmake
-    pkg-config
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      cmake
+      pkg-config
+      autoPatchelfHook
+    ];
 
   runtimeDependencies = rlinkLibs;
 
@@ -90,22 +95,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sys::unix::eventedfd::EventedFd"
   ];
 
-  postInstall = ''
-    install -D -m 644 misc/rio.desktop -t $out/share/applications
-    install -D -m 644 misc/logo.svg \
-                      $out/share/icons/hicolor/scalable/apps/rio.svg
+  postInstall =
+    ''
+      install -D -m 644 misc/rio.desktop -t $out/share/applications
+      install -D -m 644 misc/logo.svg \
+                        $out/share/icons/hicolor/scalable/apps/rio.svg
 
-    install -dm 755 "$terminfo/share/terminfo/r/"
-    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
-    mkdir -p $out/nix-support
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications/
-    mv misc/osx/Rio.app/ $out/Applications/
-    mkdir $out/Applications/Rio.app/Contents/MacOS/
-    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
-  '';
+      install -dm 755 "$terminfo/share/terminfo/r/"
+      tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+      mkdir -p $out/nix-support
+      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/Applications/
+      mv misc/osx/Rio.app/ $out/Applications/
+      mkdir $out/Applications/Rio.app/Contents/MacOS/
+      ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
+    '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -115,16 +121,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     };
 
-    tests = {
-      version = testers.testVersion { package = rio; };
-    }
-    // lib.optionalAttrs stdenv.buildPlatform.isLinux {
-      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
-      # 'passthru.tests' nixosTests are failing on Darwin architectures.
-      #
-      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
-      test = nixosTests.terminal-emulators.rio;
-    };
+    tests =
+      {
+        version = testers.testVersion { package = rio; };
+      }
+      // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+        # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+        # 'passthru.tests' nixosTests are failing on Darwin architectures.
+        #
+        # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+        test = nixosTests.terminal-emulators.rio;
+      };
   };
 
   meta = {
@@ -137,7 +144,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${finalAttrs.version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
     mainProgram = "rio";
   };
-})
+}

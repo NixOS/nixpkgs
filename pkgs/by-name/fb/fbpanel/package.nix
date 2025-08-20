@@ -16,7 +16,7 @@
   pypy2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fbpanel";
   version = "7.0";
   src = fetchFromGitHub {
@@ -49,10 +49,8 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [ "V=1" ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = [
     "-Wno-error"
-    "-Wno-error=incompatible-pointer-types" # not implied by -Wno-error
     "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
   ];
 

@@ -6,31 +6,45 @@
 }:
 
 let
+  inherit (lib)
+    mkBefore
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    mkRemovedOptionModule
+    types
+    ;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList;
+  inherit (lib) optional optionalAttrs optionalString;
+
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseSettings = {
-    production = {
-      adapter = cfg.database.type;
-      database =
-        if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
-    }
-    // lib.optionalAttrs (cfg.database.type != "sqlite3") {
-      host =
-        if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
-          cfg.database.socket
-        else
-          cfg.database.host;
-      port = cfg.database.port;
-      username = cfg.database.user;
-    }
-    // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
-      password = "#dbpass#";
-    }
-    // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
-      socket = cfg.database.socket;
-    };
+    production =
+      {
+        adapter = cfg.database.type;
+        database =
+          if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
+      }
+      // optionalAttrs (cfg.database.type != "sqlite3") {
+        host =
+          if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
+            cfg.database.socket
+          else
+            cfg.database.host;
+        port = cfg.database.port;
+        username = cfg.database.user;
+      }
+      // optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+        password = "#dbpass#";
+      }
+      // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+        socket = cfg.database.socket;
+      };
   };
 
   databaseYml = format.generate "database.yml" databaseSettings;
@@ -61,12 +75,12 @@ let
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [
+    (mkRemovedOptionModule [
       "services"
       "redmine"
       "extraConfig"
     ] "Use services.redmine.settings instead.")
-    (lib.mkRemovedOptionModule [
+    (mkRemovedOptionModule [
       "services"
       "redmine"
       "database"
@@ -77,43 +91,43 @@ in
   # interface
   options = {
     services.redmine = {
-      enable = lib.mkEnableOption "Redmine, a project management web application";
+      enable = mkEnableOption "Redmine, a project management web application";
 
-      package = lib.mkPackageOption pkgs "redmine" {
+      package = mkPackageOption pkgs "redmine" {
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";
       };
 
-      user = lib.mkOption {
-        type = lib.types.str;
+      user = mkOption {
+        type = types.str;
         default = "redmine";
         description = "User under which Redmine is ran.";
       };
 
-      group = lib.mkOption {
-        type = lib.types.str;
+      group = mkOption {
+        type = types.str;
         default = "redmine";
         description = "Group under which Redmine is ran.";
       };
 
-      address = lib.mkOption {
-        type = lib.types.str;
+      address = mkOption {
+        type = types.str;
         default = "0.0.0.0";
         description = "IP address Redmine should bind to.";
       };
 
-      port = lib.mkOption {
-        type = lib.types.port;
+      port = mkOption {
+        type = types.port;
         default = 3000;
         description = "Port on which Redmine is ran.";
       };
 
-      stateDir = lib.mkOption {
-        type = lib.types.path;
+      stateDir = mkOption {
+        type = types.path;
         default = "/var/lib/redmine";
         description = "The state directory, logs and plugins are stored here.";
       };
 
-      settings = lib.mkOption {
+      settings = mkOption {
         type = format.type;
         default = { };
         description = ''
@@ -121,7 +135,7 @@ in
           <https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration>
           for details.
         '';
-        example = lib.literalExpression ''
+        example = literalExpression ''
           {
             email_delivery = {
               delivery_method = "smtp";
@@ -134,8 +148,8 @@ in
         '';
       };
 
-      extraEnv = lib.mkOption {
-        type = lib.types.lines;
+      extraEnv = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration in additional_environment.rb.
@@ -148,11 +162,11 @@ in
         '';
       };
 
-      themes = lib.mkOption {
-        type = lib.types.attrsOf lib.types.path;
+      themes = mkOption {
+        type = types.attrsOf types.path;
         default = { };
         description = "Set of themes.";
-        example = lib.literalExpression ''
+        example = literalExpression ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
               url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
@@ -162,11 +176,11 @@ in
         '';
       };
 
-      plugins = lib.mkOption {
-        type = lib.types.attrsOf lib.types.path;
+      plugins = mkOption {
+        type = types.attrsOf types.path;
         default = { };
         description = "Set of plugins.";
-        example = lib.literalExpression ''
+        example = literalExpression ''
           {
             redmine_env_auth = builtins.fetchurl {
               url = "https://github.com/Intera/redmine_env_auth/archive/0.6.zip";
@@ -177,8 +191,8 @@ in
       };
 
       database = {
-        type = lib.mkOption {
-          type = lib.types.enum [
+        type = mkOption {
+          type = types.enum [
             "mysql2"
             "postgresql"
             "sqlite3"
@@ -188,33 +202,33 @@ in
           description = "Database engine to use.";
         };
 
-        host = lib.mkOption {
-          type = lib.types.str;
+        host = mkOption {
+          type = types.str;
           default = "localhost";
           description = "Database host address.";
         };
 
-        port = lib.mkOption {
-          type = lib.types.port;
+        port = mkOption {
+          type = types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
-          defaultText = lib.literalExpression "3306";
+          defaultText = literalExpression "3306";
           description = "Database host port.";
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "redmine";
           description = "Database name.";
         };
 
-        user = lib.mkOption {
-          type = lib.types.str;
+        user = mkOption {
+          type = types.str;
           default = "redmine";
           description = "Database user.";
         };
 
-        passwordFile = lib.mkOption {
-          type = lib.types.nullOr lib.types.path;
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
           default = null;
           example = "/run/keys/redmine-dbpassword";
           description = ''
@@ -223,8 +237,8 @@ in
           '';
         };
 
-        socket = lib.mkOption {
-          type = lib.types.nullOr lib.types.path;
+        socket = mkOption {
+          type = types.nullOr types.path;
           default =
             if mysqlLocal then
               "/run/mysqld/mysqld.sock"
@@ -232,35 +246,63 @@ in
               "/run/postgresql"
             else
               null;
-          defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
+          defaultText = literalExpression "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        createLocally = lib.mkOption {
-          type = lib.types.bool;
+        createLocally = mkOption {
+          type = types.bool;
           default = true;
           description = "Create the database and database user locally.";
         };
       };
 
       components = {
-        subversion = lib.mkEnableOption "Subversion integration.";
+        subversion = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Subversion integration.";
+        };
 
-        mercurial = lib.mkEnableOption "Mercurial integration.";
+        mercurial = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Mercurial integration.";
+        };
 
-        git = lib.mkEnableOption "git integration.";
+        git = mkOption {
+          type = types.bool;
+          default = false;
+          description = "git integration.";
+        };
 
-        cvs = lib.mkEnableOption "cvs integration.";
+        cvs = mkOption {
+          type = types.bool;
+          default = false;
+          description = "cvs integration.";
+        };
 
-        breezy = lib.mkEnableOption "bazaar integration.";
+        breezy = mkOption {
+          type = types.bool;
+          default = false;
+          description = "bazaar integration.";
+        };
 
-        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG.";
+        imagemagick = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allows exporting Gant diagrams as PNG.";
+        };
 
-        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
+        ghostscript = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allows exporting Gant diagrams as PDF.";
+        };
 
-        minimagick_font_path = lib.mkOption {
-          type = lib.types.str;
+        minimagick_font_path = mkOption {
+          type = types.str;
           default = "";
           description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
@@ -270,7 +312,8 @@ in
   };
 
   # implementation
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
+
     assertions = [
       {
         assertion =
@@ -302,25 +345,25 @@ in
 
     services.redmine.settings = {
       production = {
-        scm_subversion_command = lib.optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
-        scm_mercurial_command = lib.optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
-        scm_git_command = lib.optionalString cfg.components.git "${pkgs.git}/bin/git";
-        scm_cvs_command = lib.optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
-        scm_bazaar_command = lib.optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
-        imagemagick_convert_command = lib.optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
-        gs_command = lib.optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
+        scm_subversion_command = optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
+        scm_mercurial_command = optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
+        scm_git_command = optionalString cfg.components.git "${pkgs.git}/bin/git";
+        scm_cvs_command = optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
+        scm_bazaar_command = optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
+        imagemagick_convert_command = optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
+        gs_command = optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
       };
     };
 
-    services.redmine.extraEnv = lib.mkBefore ''
+    services.redmine.extraEnv = mkBefore ''
       config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
       config.logger.level = Logger::INFO
     '';
 
-    services.mysql = lib.mkIf mysqlLocal {
+    services.mysql = mkIf mysqlLocal {
       enable = true;
-      package = lib.mkDefault pkgs.mariadb;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
@@ -332,7 +375,7 @@ in
       ];
     };
 
-    services.postgresql = lib.mkIf pgsqlLocal {
+    services.postgresql = mkIf pgsqlLocal {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -352,9 +395,8 @@ in
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/plugins' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/public/assets' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/public/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
 
       "d /run/redmine - - - - -"
@@ -363,18 +405,16 @@ in
       "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
       "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
       "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
-      "L+ /run/redmine/public/assets - - - - ${cfg.stateDir}/public/assets"
       "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
-      "L+ /run/redmine/themes - - - - ${cfg.stateDir}/themes"
+      "L+ /run/redmine/public/themes - - - - ${cfg.stateDir}/public/themes"
       "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
     ];
 
     systemd.services.redmine = {
-      after = [
-        "network.target"
-      ]
-      ++ lib.optional mysqlLocal "mysql.service"
-      ++ lib.optional pgsqlLocal "postgresql.target";
+      after =
+        [ "network.target" ]
+        ++ optional mysqlLocal "mysql.service"
+        ++ optional pgsqlLocal "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
@@ -384,17 +424,17 @@ in
         with pkgs;
         [
         ]
-        ++ lib.optional cfg.components.subversion subversion
-        ++ lib.optional cfg.components.mercurial mercurial
-        ++ lib.optional cfg.components.git git
-        ++ lib.optional cfg.components.cvs cvs
-        ++ lib.optional cfg.components.breezy breezy
-        ++ lib.optional cfg.components.imagemagick imagemagick
-        ++ lib.optional cfg.components.ghostscript ghostscript;
+        ++ optional cfg.components.subversion subversion
+        ++ optional cfg.components.mercurial mercurial
+        ++ optional cfg.components.git git
+        ++ optional cfg.components.cvs cvs
+        ++ optional cfg.components.breezy breezy
+        ++ optional cfg.components.imagemagick imagemagick
+        ++ optional cfg.components.ghostscript ghostscript;
 
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
-        rm -rf "${cfg.stateDir}/themes/"*
+        rm -rf "${cfg.stateDir}/public/themes/"*
 
         # start with a fresh config directory
         # the config directory is copied instead of linked as some mutable data is stored in there
@@ -411,16 +451,16 @@ in
 
 
         # link in all user specified themes
-        for theme in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackTheme cfg.themes)}; do
-          ln -fs $theme/* "${cfg.stateDir}/themes"
+        for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
+          ln -fs $theme/* "${cfg.stateDir}/public/themes"
         done
 
         # link in redmine provided themes
-        ln -sf ${cfg.package}/share/redmine/themes.dist/* "${cfg.stateDir}/themes/"
+        ln -sf ${cfg.package}/share/redmine/public/themes.dist/* "${cfg.stateDir}/public/themes/"
 
 
         # link in all user specified plugins
-        for plugin in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackPlugin cfg.plugins)}; do
+        for plugin in ${concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
           ln -fs $plugin/* "${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}"
         done
 
@@ -428,7 +468,7 @@ in
         # handle database.passwordFile & permissions
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
 
-        ${lib.optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
+        ${optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
           DBPASS="$(head -n1 ${cfg.database.passwordFile})"
           sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
         ''}
@@ -446,7 +486,6 @@ in
         ${bundle} exec rake db:migrate
         ${bundle} exec rake redmine:plugins:migrate
         ${bundle} exec rake redmine:load_default_data
-        ${bundle} exec rake assets:precompile
       '';
 
       serviceConfig = {
@@ -485,9 +524,10 @@ in
         SystemCallArchitectures = "native";
         UMask = 27;
       };
+
     };
 
-    users.users = lib.optionalAttrs (cfg.user == "redmine") {
+    users.users = optionalAttrs (cfg.user == "redmine") {
       redmine = {
         group = cfg.group;
         home = cfg.stateDir;
@@ -495,9 +535,10 @@ in
       };
     };
 
-    users.groups = lib.optionalAttrs (cfg.group == "redmine") {
+    users.groups = optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
+
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];

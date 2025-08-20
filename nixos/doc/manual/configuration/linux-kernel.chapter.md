@@ -5,7 +5,9 @@ option `boot.kernelPackages`. For instance, this selects the Linux 3.10
 kernel:
 
 ```nix
-{ boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10; }
+{
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
+}
 ```
 
 Note that this not only replaces the kernel, but also packages that are
@@ -41,15 +43,13 @@ instance, to enable support for the kernel debugger KGDB:
 
 ```nix
 {
-  nixpkgs.config.packageOverrides =
-    pkgs:
-    pkgs.lib.recursiveUpdate pkgs {
-      linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
-        extraConfig = ''
-          KGDB y
-        '';
-      };
+  nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
+    linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+      extraConfig = ''
+        KGDB y
+      '';
     };
+  };
 }
 ```
 
@@ -64,11 +64,7 @@ by `udev`. You can force a module to be loaded via
 
 ```nix
 {
-  boot.kernelModules = [
-    "fuse"
-    "kvm-intel"
-    "coretemp"
-  ];
+  boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
 }
 ```
 
@@ -76,7 +72,9 @@ If the module is required early during the boot (e.g. to mount the root
 file system), you can use [](#opt-boot.initrd.kernelModules):
 
 ```nix
-{ boot.initrd.kernelModules = [ "cifs" ]; }
+{
+  boot.initrd.kernelModules = [ "cifs" ];
+}
 ```
 
 This causes the specified modules and their dependencies to be added to
@@ -86,7 +84,9 @@ Kernel runtime parameters can be set through
 [](#opt-boot.kernel.sysctl), e.g.
 
 ```nix
-{ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120; }
+{
+  boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
+}
 ```
 
 sets the kernel's TCP keepalive time to 120 seconds. To see the
@@ -99,7 +99,9 @@ Please refer to the Nixpkgs manual for the various ways of [building a custom ke
 To use your custom kernel package in your NixOS configuration, set
 
 ```nix
-{ boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel; }
+{
+  boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
+}
 ```
 
 ## Rust {#sec-linux-rust}

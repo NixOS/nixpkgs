@@ -9,7 +9,6 @@
   flit-core,
 
   # dependencies
-  aiofiles,
   etils,
   humanize,
   importlib-resources,
@@ -28,35 +27,28 @@
   google-cloud-logging,
   mock,
   optax,
-  portpicker,
   pytest-xdist,
   pytestCheckHook,
-  safetensors,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.23";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-bP6gkHxbWraXCjnSPntYKFCU0qjT9trXwnrP9pI/93k=";
+    hash = "sha256-pVRXWJfiiqV2ZFM0CgXdwD6/lnRa1HFFPrfS5975mVA=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
 
-  pythonRelaxDeps = [
-    "jax"
-  ];
-
   dependencies = [
     absl-py
-    aiofiles
     etils
     humanize
     importlib-resources
@@ -76,10 +68,8 @@ buildPythonPackage rec {
     google-cloud-logging
     mock
     optax
-    portpicker
     pytest-xdist
     pytestCheckHook
-    safetensors
   ];
 
   pythonImportsCheck = [
@@ -87,13 +77,7 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = [
-    # Flaky
-    # AssertionError: 2 not greater than 2.0046136379241943
-    "test_async_mkdir_parallel"
-    "test_async_mkdir_sequential"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
@@ -101,19 +85,11 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
-    # First from multiprocess_test, Second from orbax.checkpoint._src.testing.multiprocess_test.
-    # Description from first occurrence: Number of processes to use.
-    # https://github.com/google/orbax/issues/1580
-    "orbax/checkpoint/experimental/emergency/"
-
     # Circular dependency flax
     "orbax/checkpoint/_src/metadata/empty_values_test.py"
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
     "orbax/checkpoint/_src/testing/test_tree_utils.py"
-    "orbax/checkpoint/_src/tree/parts_of_test.py"
-    "orbax/checkpoint/_src/tree/structure_utils_test.py"
     "orbax/checkpoint/_src/tree/utils_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"

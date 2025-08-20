@@ -14,7 +14,7 @@
   file,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gem-unstable";
   version = "2023-07-28";
 

@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Mange";
-    repo = "tydra";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 
-  cargoHash = "sha256-sFNrpddhsqxy7HtCXV78oacyNzrTeM0rUcL7qgeJTcM=";
+  cargoHash = "sha256-emZWQHOgYUQzCa/SmztSLa19bB1aJpPUiBg2C7w6W8M=";
 
   nativeBuildInputs = [ installShellFiles ];
 

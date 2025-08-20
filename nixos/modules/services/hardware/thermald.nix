@@ -49,7 +49,6 @@ in
 
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
-      documentation = [ "man:thermald(8)" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         PrivateNetwork = true;

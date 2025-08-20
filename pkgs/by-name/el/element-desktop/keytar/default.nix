@@ -10,18 +10,18 @@
   xcbuild,
   fetchNpmDeps,
   npmHooks,
-  electron,
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
+
 in
 stdenv.mkDerivation rec {
-  pname = "keytar-forked";
+  pname = "keytar";
   inherit (pinData) version;
 
   src = fetchFromGitHub {
-    owner = "shiftkey";
+    owner = "atom";
     repo = "node-keytar";
     rev = "v${version}";
     hash = pinData.srcHash;
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     npmHooks.npmConfigHook
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
@@ -49,10 +48,8 @@ stdenv.mkDerivation rec {
     export -f pkg-config
   '';
 
+  # https://nodejs.org/api/os.html#osarch
   npmFlags = [
-    # Make sure the native modules are built against electron's ABI
-    "--nodedir=${electron.headers}"
-    # https://nodejs.org/api/os.html#osarch
     "--arch=${
       if stdenv.hostPlatform.parsed.cpu.name == "i686" then
         "ia32"

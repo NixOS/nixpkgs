@@ -1,38 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  rocm-core,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "6.3.3";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-cmake";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-U4vGkH2iUlNJkqiNmVuFianD4WR9yuGvZsYG58smg0k=";
+    hash = "sha256-qSjWT0KOQ5oDV06tfnKN+H/JzdoOnR9KY0c+SjvDepM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ rocm-core ];
-
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
   };
 
   meta = with lib; {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/ROCm/rocm-cmake";
     license = licenses.mit;
-    teams = [ teams.rocm ];
+    maintainers = teams.rocm.members;
     platforms = platforms.unix;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

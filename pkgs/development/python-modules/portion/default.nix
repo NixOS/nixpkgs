@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  setuptools,
   sortedcontainers,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "portion";
-  version = "2.6.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AlexandreDecan";
     repo = "portion";
     tag = version;
-    hash = "sha256-K4mZn8Fm96ZBBdLTMfM9f1GKDdIrRwDRzk6ObaXSFG4=";
+    hash = "sha256-TBCnlkGZZ/3tWEojxDGNYcXtYHhrooJkaWBsRkadXEE=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ setuptools ];
 
   dependencies = [ sortedcontainers ];
 

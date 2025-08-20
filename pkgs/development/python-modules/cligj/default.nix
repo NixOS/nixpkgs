@@ -4,6 +4,7 @@
   fetchFromGitHub,
   click,
   pytest,
+  glibcLocales,
 }:
 
 buildPythonPackage rec {
@@ -22,10 +23,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
+    glibcLocales
   ];
 
   checkPhase = ''
-    pytest tests
+    LC_ALL=en_US.utf-8 pytest tests
   '';
 
   meta = with lib; {

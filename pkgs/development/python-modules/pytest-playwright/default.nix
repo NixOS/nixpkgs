@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.7.0";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,14 +23,8 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-pytest";
     tag = "v${version}";
-    hash = "sha256-GcvasyCVNUWieIYj7Da5dWdXtxVAhP2lR+ogBzrBu4M=";
+    hash = "sha256-F5tbqm1k4SdTHIUgwSunLIL2W5mhJoMI4x4UZBLidlA=";
   };
-
-  postPatch = ''
-    pushd pytest-playwright
-
-    substituteInPlace pyproject.toml --replace-fail "==" ">="
-  '';
 
   build-system = [
     setuptools
@@ -50,7 +44,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   preCheck = ''
-    popd
     export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
@@ -59,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to write end-to-end browser tests with Playwright";
     homepage = "https://github.com/microsoft/playwright-pytest";
-    changelog = "https://github.com/microsoft/playwright-pytest/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/playwright-pytest/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sephi ];
   };

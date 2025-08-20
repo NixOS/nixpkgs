@@ -1,4 +1,12 @@
-{ lib, pkgs, ... }:
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
+
 let
   # Hostname can also be set through "hostname" in user-data.
   # This is how proxmox configures hostname through cloud-init.
@@ -19,13 +27,16 @@ let
       ${pkgs.cdrkit}/bin/genisoimage -volid cidata -joliet -rock -o $out/metadata.iso $out/iso
     '';
   };
+
 in
-{
+makeTest {
   name = "cloud-init-hostname";
-  meta.maintainers = with lib.maintainers; [
-    lewo
-    illustris
-  ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [
+      lewo
+      illustris
+    ];
+  };
 
   nodes.machine2 =
     { ... }:

@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "padbuster";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "AonCyberLabs";
-    repo = "padbuster";
+    repo = pname;
     rev = "50e4a3e2bf5dfff5699440b3ebc61ed1b5c49bbe";
     sha256 = "VIvZ28MVnTSQru6l8flLVVqIIpxxXD8lCqzH81sPe/U=";
   };

@@ -11,25 +11,19 @@
   libiberty_static,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "oprofile";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/oprofile/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/oprofile/${pname}-${version}.tar.gz";
     sha256 = "04m46ni0ryk4sqmzd6mahwzp7iwhwqzfbmfi42fki261sycnz83v";
   };
 
-  patches = [
-    # fix configurePhase with gcc14:
-    # https://sourceforge.net/p/oprofile/oprofile/ci/b0acf9f0c0aac93bf6f3e196d7a52c9632ff4475/
-    ./fix-autoconf-detection-of-perf_events.patch
-  ];
-
   postPatch = ''
     substituteInPlace opjitconv/opjitconv.c \
-      --replace-fail "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
-      --replace-fail "/bin/cp" "${buildPackages.coreutils}/bin/cp"
+      --replace "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
+      --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -66,4 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-})
+}

@@ -8,7 +8,6 @@
   pycryptodomex,
   busypie,
   pytest-asyncio,
-  pytest-cov-stub,
   pytest-vcr,
   pytestCheckHook,
   requests,
@@ -29,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-UkW/7KUQ4uCu3cxDSL+kw0gjKjs4KnmxRIOLVP4hwyA=";
   };
 
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -41,7 +44,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     busypie
     pytest-asyncio
-    pytest-cov-stub
     pytest-vcr
     pytestCheckHook
   ];

@@ -4,11 +4,12 @@
   fetchFromGitHub,
   cmake,
   gettext,
+  msgpack-c,
   libuv,
   lua,
   pkg-config,
   unibilium,
-  utf8proc,
+  libvterm-neovim,
   tree-sitter,
   fetchurl,
   buildPackages,
@@ -95,7 +96,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.3";
+    version = "0.10.3";
 
     __structuredAttrs = true;
 
@@ -103,7 +104,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-B/An+SiRWC3Ea0T/sEk8aNBS1Ab9OENx/l4Z3nn8xE4=";
+      hash = "sha256-nmnEyHE/HcrwK+CyJHNoLG0BqjnWleiBy0UYcJL7Ecc=";
     };
 
     patches = [
@@ -130,22 +131,24 @@ stdenv.mkDerivation (
         };
       };
 
-    buildInputs = [
-      libuv
-      # This is actually a c library, hence it's not included in neovimLuaEnv,
-      # see:
-      # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
-      # and it's definition at: pkgs/development/lua-modules/overrides.nix
-      lua.pkgs.libluv
-      neovimLuaEnv
-      tree-sitter
-      unibilium
-      utf8proc
-    ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      glibcLocales
-      procps
-    ];
+    buildInputs =
+      [
+        libuv
+        libvterm-neovim
+        # This is actually a c library, hence it's not included in neovimLuaEnv,
+        # see:
+        # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
+        # and it's definition at: pkgs/development/lua-modules/overrides.nix
+        lua.pkgs.libluv
+        msgpack-c
+        neovimLuaEnv
+        tree-sitter
+        unibilium
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        glibcLocales
+        procps
+      ];
 
     doCheck = false;
 
@@ -189,44 +192,39 @@ stdenv.mkDerivation (
     # check that the above patching actually works
     disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
-    cmakeFlags = [
-      # Don't use downloaded dependencies. At the end of the configurePhase one
-      # can spot that cmake says this option was "not used by the project".
-      # That's because all dependencies were found and
-      # third-party/CMakeLists.txt is not read at all.
-      (lib.cmakeBool "USE_BUNDLED" false)
-      (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
-    ]
-    ++ (
-      if lua.pkgs.isLuaJIT then
-        [
-          (lib.cmakeFeature "LUAC_PRG" "${lib.getExe' codegenLua "luajit"} -b -s %s -")
-          (lib.cmakeFeature "LUA_GEN_PRG" (lib.getExe' codegenLua "luajit"))
-          (lib.cmakeFeature "LUA_PRG" (lib.getExe' neovimLuaEnvOnBuild "luajit"))
-        ]
-      else
-        [
-          (lib.cmakeBool "PREFER_LUA" true)
-        ]
-    );
+    cmakeFlags =
+      [
+        # Don't use downloaded dependencies. At the end of the configurePhase one
+        # can spot that cmake says this option was "not used by the project".
+        # That's because all dependencies were found and
+        # third-party/CMakeLists.txt is not read at all.
+        "-DUSE_BUNDLED=OFF"
+      ]
+      ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
+      ++ lib.optionals lua.pkgs.isLuaJIT [
+        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
+        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
+      ];
 
-    preConfigure = ''
-      mkdir -p $out/lib/nvim/parser
-    ''
-    + lib.concatStrings (
-      lib.mapAttrsToList (language: grammar: ''
-        ln -s \
-          ${
-            tree-sitter.buildGrammar {
-              inherit (grammar) src;
-              version = "neovim-${finalAttrs.version}";
-              language = grammar.language or language;
-              location = grammar.location or null;
-            }
-          }/parser \
-          $out/lib/nvim/parser/${language}.so
-      '') finalAttrs.treesitter-parsers
-    );
+    preConfigure =
+      ''
+        mkdir -p $out/lib/nvim/parser
+      ''
+      + lib.concatStrings (
+        lib.mapAttrsToList (language: grammar: ''
+          ln -s \
+            ${
+              tree-sitter.buildGrammar {
+                inherit (grammar) src;
+                version = "neovim-${finalAttrs.version}";
+                language = grammar.language or language;
+                location = grammar.location or null;
+              }
+            }/parser \
+            $out/lib/nvim/parser/${language}.so
+        '') finalAttrs.treesitter-parsers
+      );
 
     shellHook = ''
       export VIMRUNTIME=$PWD/runtime
@@ -238,7 +236,7 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = "--version";
+    versionCheckProgramArg = [ "--version" ];
     doInstallCheck = true;
 
     passthru = {
@@ -267,7 +265,7 @@ stdenv.mkDerivation (
         asl20
         vim
       ];
-      teams = [ lib.teams.neovim ];
+      maintainers = lib.teams.neovim.members;
       platforms = lib.platforms.unix;
     };
   }

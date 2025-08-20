@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-YkDPgN7jBvYveiyU8N+3Ia52SEmlzC0TGBQjUuIAaw0=";
 
   meta = {
-    description = "df-like utility for persistent volumes on Kubernetes";
+    description = "df (disk free)-like utility for persistent volumes on kubernetes";
     mainProgram = "df-pv";
     homepage = "https://github.com/yashbhutwala/kubectl-df-pv";
     changelog = "https://github.com/yashbhutwala/kubectl-df-pv/releases/tag/v${version}";

@@ -10,7 +10,6 @@
   # propagates
   distutils,
   pyyaml,
-  standard-pipes,
 
   # optionals
   boto3,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pyyaml
-    standard-pipes
   ];
 
   optional-dependencies = {
@@ -71,8 +69,7 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   unittestFlagsArray = [ "-v" ];
 

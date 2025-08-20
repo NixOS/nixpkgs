@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  graphviz,
-  makeWrapper,
-  boost,
-  SDL2,
-  python3,
-  freetype,
-  openal,
-  libogg,
-  libvorbis,
-  zlib,
-  libpng,
-  libtiff,
-  libjpeg,
-  libGLU,
-  libGL,
-  glew,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, graphviz
+, makeWrapper
+, boost
+, SDL2
+, python3
+, freetype
+, openal
+, libogg
+, libvorbis
+, zlib
+, libpng
+, libtiff
+, libjpeg
+, libGLU
+, libGL
+, glew
+, libxslt
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "freeorion";
   version = "0.5.0.1-unstable-2024-07-28";
 
@@ -37,10 +36,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    (boost.override {
-      enablePython = true;
-      python = python3;
-    })
+    (boost.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype
@@ -86,10 +82,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "https://www.freeorion.org/";
-    license = with licenses; [
-      gpl2Only
-      cc-by-sa-30
-    ];
+    license = with licenses; [ gpl2Only cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];
   };

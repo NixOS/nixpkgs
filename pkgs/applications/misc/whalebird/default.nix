@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "6.2.2-unstable-2025-06-12";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "whalebird-desktop";
-    rev = "506a1ff00188f04bffeaede0110719512c621b02";
-    hash = "sha256-jkdGwdNcF4Rbivi0TziW/ZOficbXIrxqaB+kQrNcdsc=";
+    rev = "v${version}";
+    hash = "sha256-Jf+vhsfVjNrxdBkwwh3D3d2AlsGHfmEn90dq2QrKi2k=";
   };
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
   offlineCache = stdenv.mkDerivation {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-Lru6utVP1uHpHvL8Jg/JzEnIErsxVo7njJhsqkThktk=";
+    outputHash = "sha256-SJCJq1vkO/jH9YgB3rV/pK4wV5Prm3sNjOj9YwL6XTw=";
   };
 
   nativeBuildInputs = [
@@ -102,13 +102,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Single-column Fediverse client for desktop";
     mainProgram = "whalebird";
     homepage = "https://whalebird.social";
     changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ weathercold ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ weathercold ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "character-encoding-utils";
-  version = "0.0.9";
+  version = "0.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "character_encoding_utils";
     inherit version;
-    hash = "sha256-QxnXNerl7qncoBxhfC3G0ar+YprfBpn6pWnUKakNR+c=";
+    hash = "sha256-UXX4L/x7fP37ZEFDCPc0KRNyx47xvwY0Jz+lfxzUulg=";
   };
 
   build-system = [ hatchling ];

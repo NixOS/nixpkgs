@@ -12,27 +12,18 @@
   kmod,
   udev,
   util-linux,
-  libtracefs,
-  libtraceevent,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "82";
+  version = "79";
 
   src = fetchFromGitHub {
     owner = "pmem";
     repo = "ndctl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zTIYGKUVIINeSisSCghImfjtJLdecQGL2i6ftxf8QXc=";
+    rev = "v${version}";
+    sha256 = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
   };
-
-  patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
-    # Use POSIX basename on non-glib.
-    # Remove when https://github.com/pmem/ndctl/pull/263
-    # or equivalent fix is merged and released.
-    ./musl-compat.patch
-  ];
 
   outputs = [
     "out"
@@ -54,13 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     kmod
     udev
     util-linux
-    libtracefs
-    libtraceevent
   ];
 
   mesonFlags = [
     (lib.mesonOption "rootprefix" "${placeholder "out"}")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc/ndctl.conf.d")
+    (lib.mesonEnable "libtracefs" false)
     # Use asciidoctor due to xmlto errors
     (lib.mesonEnable "asciidoctor" true)
     (lib.mesonEnable "systemd" false)
@@ -73,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace git-version --replace-fail /bin/bash ${stdenv.shell}
     substituteInPlace git-version-gen --replace-fail /bin/sh ${stdenv.shell}
 
-    echo "m4_define([GIT_VERSION], [${finalAttrs.version}])" > version.m4;
+    echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';
 
   meta = {
@@ -83,4 +73,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.linux;
   };
-})
+}

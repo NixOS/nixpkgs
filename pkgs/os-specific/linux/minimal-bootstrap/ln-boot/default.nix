@@ -16,7 +16,7 @@ kaem.runCommand "${pname}-${version}"
     meta = with lib; {
       description = "Basic tool for creating symbolic links";
       license = licenses.mit;
-      teams = [ teams.minimal-bootstrap ];
+      maintainers = teams.minimal-bootstrap.members;
       mainProgram = "ln";
       platforms = platforms.unix;
     };

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ffts";
   version = "0-unstable-2019-03-19";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DENABLE_SHARED=ON" ];
 
   meta = {
-    description = "Fastest Fourier Transform in the South";
+    description = "The Fastest Fourier Transform in the South";
     homepage = "https://github.com/linkotec/ffts";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bgamari ];

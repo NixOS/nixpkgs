@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
-  hatch-vcs,
+  pbr,
+  setuptools,
   testtools,
   mock,
   pytestCheckHook,
@@ -11,18 +11,20 @@
 
 buildPythonPackage rec {
   pname = "fixtures";
-  version = "4.2.4.post1";
-  pyproject = true;
+  version = "4.1.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A0xL0d6qYKW/y2CM5T2Z6Dkr9HyRplNgWuvdagUkjy4=";
+    hash = "sha256-grHF5p9hVSbvbAZxiKHmxgZ99/iDMlCcmfi4/buXdvM=";
   };
 
-  build-system = [
-    hatchling
-    hatch-vcs
+  nativeBuildInputs = [
+    pbr
+    setuptools
   ];
+
+  propagatedBuildInputs = [ pbr ];
 
   optional-dependencies = {
     streams = [ testtools ];
@@ -31,12 +33,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ]
-  ++ optional-dependencies.streams;
+  ] ++ optional-dependencies.streams;
 
   meta = {
     description = "Reusable state for writing clean tests and more";
-    homepage = "https://github.com/testing-cabal/fixtures";
+    homepage = "https://pypi.org/project/fixtures/";
     changelog = "https://github.com/testing-cabal/fixtures/blob/${version}/NEWS";
     license = lib.licenses.asl20;
   };

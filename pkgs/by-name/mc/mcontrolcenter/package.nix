@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  qt6,
+  libsForQt5,
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcontrolcenter";
-  version = "0.5.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "dmitry-s93";
     repo = "MControlCenter";
     rev = finalAttrs.version;
-    hash = "sha256-uWxEWLb2QOZlJ1d3LbORCc81kILB9N+0bzr+xzHAa7Y=";
+    hash = "sha256-SV78OVRGzy2zFLT3xqeUtbjlh81Z97PVao18P3h/8dI=";
   };
 
   postPatch = ''
@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    qt6.wrapQtAppsHook
-    qt6.qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
     copyDesktopItems
     cmake
   ];
 
   buildInputs = [
-    qt6.qtbase
+    libsForQt5.qtbase
     kmod
   ];
 

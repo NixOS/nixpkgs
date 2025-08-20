@@ -3,27 +3,28 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  versionCheckHook,
+  testers,
+  gofumpt,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "gofumpt";
-  version = "0.8.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
-    repo = "gofumpt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-37wYYB0k8mhQq30y1oo77qW3bIqqN/K/NG1RgxK6dyI=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-mJM0uKztX0OUQvynnxeKL9yft7X/Eh28ERg8SbZC5Ws=";
   };
 
-  vendorHash = "sha256-T6/xEXv8+io3XwQ2keacpYYIdTnYhTTUCojf62tTwbA=";
+  vendorHash = "sha256-kJysyxROvB0eMAHbvNF+VXatEicn4ln2Vqkzp7GDWAQ=";
 
   env.CGO_ENABLED = "0";
 
   ldflags = [
     "-s"
-    "-X main.version=v${finalAttrs.version}"
+    "-X main.version=v${version}"
   ];
 
   checkFlags = [
@@ -31,20 +32,23 @@ buildGoModule (finalAttrs: {
     "-skip=^TestScript/diagnose$"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = gofumpt;
+      version = "v${version}";
+    };
+  };
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Stricter gofmt";
     homepage = "https://github.com/mvdan/gofumpt";
-    changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
       rvolosatovs
       katexochen
     ];
     mainProgram = "gofumpt";
   };
-})
+}

@@ -14,33 +14,28 @@
   git,
   numactl,
   coreutils,
-  gdb,
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.038";
+  version = "5.028";
 
   # Verilator gets the version from this environment variable
   # if it can't do git describe while building.
   VERILATOR_SRC_VERSION = "v${version}";
 
   src = fetchFromGitHub {
-    owner = "verilator";
-    repo = "verilator";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-uPGVE7y3zm+5ZydGjd1+/kIjW+a5u6d+YzjUSE4KnCY=";
+    hash = "sha256-YgK60fAYG5575uiWmbCODqNZMbRfFdOVcJXz5h5TLuE=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [
     perl
+    python3
     systemc
-    (python3.withPackages (
-      pp: with pp; [
-        distro
-      ]
-    ))
     # ccache
   ];
   nativeBuildInputs = [
@@ -50,42 +45,28 @@ stdenv.mkDerivation rec {
     autoconf
     help2man
     git
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gdb
   ];
-
   nativeCheckInputs = [
     which
+    numactl
     coreutils
     # cmake
-    python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    numactl
   ];
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
   preConfigure = "autoconf";
 
   postPatch = ''
     patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
-    test_regress/{driver.py,t/*.{pl,pf}} \
-    test_regress/t/t_a1_first_cc.py \
-    test_regress/t/t_a2_first_sc.py \
+    test_regress/{driver.pl,t/*.{pl,pf}} \
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
     # verilator --gdbbt uses /bin/echo to test if gdb works.
-    substituteInPlace bin/verilator --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+    sed -i 's|/bin/echo|${coreutils}\/bin\/echo|' bin/verilator
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
-
-  # This is needed to ensure that the check phase can find the verilator_bin_dbg.
-  preCheck = ''
-    export PATH=$PWD/bin:$PATH
-  '';
 
   env = {
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";

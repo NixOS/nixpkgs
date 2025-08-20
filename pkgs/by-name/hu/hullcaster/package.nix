@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hullcaster";
-  version = "0.1.2";
+  version = "v0.1.2";
 
   src = fetchFromGitHub {
     owner = "gilcu3";
     repo = "hullcaster";
-    tag = "v${version}";
+    rev = version;
     hash = "sha256-TaELX/xMxm7OTmVnvkgEmdhnVrIlxSNqlE73+I5qxCc=";
   };
 
-  cargoHash = "sha256-jso9ofchUjpsck0qJN3rfFVM1Y6C8APmhwNzapU7Mug=";
+  cargoHash = "sha256-FeIZu/9yEk8U4a1AhqHyJBhpTP453km33FemwfhZckc=";
 
   # work around error: Could not create filepath: /homeless-shelter/.local/share
   checkFlags = [

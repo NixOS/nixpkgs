@@ -3,20 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitiles,
-  setuptools,
   six,
   python,
 }:
 
 buildPythonPackage {
   pname = "gyp";
-  version = "unstable-2024-02-07";
-  pyproject = true;
+  version = "unstable-2022-04-01";
+  format = "setuptools";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/external/gyp";
-    rev = "1615ec326858f8c2bd8f30b3a86ea71830409ce4";
-    hash = "sha256-E+JF4uJBRka6vtjxyoMGE4IT5kSrl7Vs6WNkMQ+vNgs=";
+    rev = "9ecf45e37677743503342ee4c6a76eaee80e4a7f";
+    hash = "sha256-LUlF2VhRnuDwJLdITgmXIQV/IuKdx1KXQkiPVHKrl4Q=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -24,9 +23,7 @@ buildPythonPackage {
     ./no-xcode.patch
   ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
+  propagatedBuildInputs = [ six ];
 
   pythonImportsCheck = [
     "gyp"
@@ -44,6 +41,6 @@ buildPythonPackage {
     mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

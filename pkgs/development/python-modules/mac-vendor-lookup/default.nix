@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "mac-vendor-lookup";
   version = "0.1.12";
   format = "setuptools";

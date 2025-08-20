@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nixVersions,
+  nix,
   cmake,
   pkg-config,
   boost,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    nixVersions.nix_2_24
+    nix
     boost
   ];
 

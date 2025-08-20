@@ -1,57 +1,34 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nixosTests,
-  nix-update-script,
-}:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "galene";
-  version = "1.0";
+  version = "0.96";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
-    tag = "galene-${finalAttrs.version}";
-    hash = "sha256-+ERoH2DsEMJNs3eGTBr4I+2+EdEKBfWnVRFKZ8igA6g=";
+    rev = "galene-${version}";
+    hash = "sha256-E/xFh60Fzy/bRX414N1Juc7j4D8fN8CEDYPOUrNp5/4=";
   };
 
-  vendorHash = "sha256-r9W/2Uead/EHKWnnJLL9bdA/MazLbe1UsgVXkPNFnxM=";
+  vendorHash = "sha256-LDLKjD4qYn/Aae6GUX6gZ57+MUfKc058H+YHM0bNZV0=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
   preCheck = "export TZ=UTC";
 
-  outputs = [
-    "out"
-    "static"
-  ];
+  outputs = [ "out" "static" ];
 
   postInstall = ''
     mkdir $static
     cp -r ./static $static
   '';
 
-  passthru = {
-    tests.vm = nixosTests.galene.basic;
-    updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=galene-(.*)" ];
-    };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
-    changelog = "https://github.com/jech/galene/raw/${finalAttrs.src.tag}/CHANGES";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    teams = [ lib.teams.ngi ];
-    maintainers = with lib.maintainers; [
-      rgrunbla
-      erdnaxe
-    ];
+    changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rgrunbla erdnaxe ];
   };
-})
+}

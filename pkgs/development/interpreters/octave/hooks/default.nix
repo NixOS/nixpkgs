@@ -1,10 +1,16 @@
 # Hooks for building Octave packages.
 {
+  octave,
+  lib,
+  callPackage,
   makeSetupHook,
 }:
 
-{
-  writeRequiredOctavePackagesHook = makeSetupHook {
-    name = "write-required-octave-packages-hook";
-  } ./write-required-octave-packages-hook.sh;
+rec {
+  writeRequiredOctavePackagesHook = callPackage (
+    { }:
+    makeSetupHook {
+      name = "write-required-octave-packages-hook";
+    } ./write-required-octave-packages-hook.sh
+  ) { };
 }

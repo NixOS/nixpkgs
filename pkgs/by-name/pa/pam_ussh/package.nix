@@ -6,9 +6,9 @@
   nixosTests,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "pam_ussh";
-  version = "0-unstable-2021-06-15";
+  version = "unstable-20210615";
 
   src = fetchFromGitHub {
     owner = "uber";

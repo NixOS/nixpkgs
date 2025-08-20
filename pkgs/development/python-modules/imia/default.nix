@@ -33,6 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/alex-oleshkevich/imia/releases/tag/v${version}";
     homepage = "https://github.com/alex-oleshkevich/imia";
     license = licenses.mit;
-    teams = [ teams.wdz ];
+    maintainers = teams.wdz.members;
   };
 }

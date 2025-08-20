@@ -1,33 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "tinyssh";
-  version = "20250201";
+  version = "20241201";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "tinyssh";
-    tag = finalAttrs.version;
-    hash = "sha256-HX531QjRrDG4dshqzR03naZptUYnoZLEdv/CGpKOaD0=";
+    tag = version;
+    hash = "sha256-bcQDKDpd7HFnmJAyqcO+BQMGV1pCHuS+OhFPJSOMInI=";
   };
+
+  preConfigure = ''
+    echo /bin       > conf-bin
+    echo /share/man > conf-man
+  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  DESTDIR = placeholder "out";
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Minimalistic SSH server";
     homepage = "https://tinyssh.org";
-    changelog = "https://github.com/janmojzis/tinyssh/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.cc0;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kaction ];
+    changelog = "https://github.com/janmojzis/tinyssh/releases/tag/${version}";
+    license = licenses.cc0;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ kaction ];
   };
-})
+}

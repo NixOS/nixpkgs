@@ -21,6 +21,6 @@ buildKodiAddon rec {
     homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
     description = "Comic book reader";
     license = licenses.gpl2Plus;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

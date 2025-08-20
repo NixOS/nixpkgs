@@ -4,17 +4,17 @@ import subprocess
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, Self, TypedDict, override
+from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = list[str]
+type ImageVariants = dict[str, str]
 
 
-class NixOSRebuildError(Exception):
+class NRError(Exception):
     "nixos-rebuild general error."
 
-    def __init__(self, message: str) -> None:
+    def __init__(self, message: str):
         self.message = message
 
     @override
@@ -61,20 +61,6 @@ class BuildAttr:
         return cls(Path(file or "default.nix"), attr)
 
 
-def _get_hostname(target_host: Remote | None) -> str | None:
-    if target_host:
-        try:
-            return run_wrapper(
-                ["uname", "-n"],
-                capture_output=True,
-                remote=target_host,
-            ).stdout.strip()
-        except (AttributeError, subprocess.CalledProcessError):
-            return None
-    else:
-        return platform.node()
-
-
 @dataclass(frozen=True)
 class Flake:
     path: Path | str
@@ -86,20 +72,18 @@ class Flake:
 
     @override
     def __str__(self) -> str:
-        if isinstance(self.path, Path):
-            # https://github.com/NixOS/nixpkgs/issues/433726
-            return f"{self.path.absolute()}#{self.attr}"
-        else:
-            return f"{self.path}#{self.attr}"
+        return f"{self.path}#{self.attr}"
 
     @classmethod
-    def parse(cls, flake_str: str, target_host: Remote | None = None) -> Self:
+    def parse(
+        cls,
+        flake_str: str,
+        hostname_fn: Callable[[], str | None] = lambda: None,
+    ) -> Self:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = (
-            f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
-        )
+        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
         path = m.group("path")
         if ":" in path:
             return cls(path, nixos_attr)
@@ -107,12 +91,25 @@ class Flake:
             return cls(Path(path), nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
+    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
+        def get_hostname() -> str | None:
+            if target_host:
+                try:
+                    return run_wrapper(
+                        ["uname", "-n"],
+                        stdout=subprocess.PIPE,
+                        remote=target_host,
+                    ).stdout.strip()
+                except (AttributeError, subprocess.CalledProcessError):
+                    return None
+            else:
+                return platform.node()
+
         match flake_arg:
             case str(s):
-                return cls.parse(s, target_host)
+                return cls.parse(s, get_hostname)
             case True:
-                return cls.parse(".", target_host)
+                return cls.parse(".", get_hostname)
             case False:
                 return None
             case _:
@@ -120,8 +117,9 @@ class Flake:
                 default_path = Path("/etc/nixos/flake.nix")
                 if default_path.exists():
                     # It can be a symlink to the actual flake.
-                    default_path = default_path.resolve()
-                    return cls.parse(str(default_path.parent), target_host)
+                    if default_path.is_symlink():
+                        default_path = default_path.readlink()
+                    return cls.parse(str(default_path.parent), get_hostname)
                 else:
                     return None
 

@@ -1,6 +1,5 @@
 {
   lib,
-  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -8,7 +7,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +32,8 @@ buildPythonPackage rec {
       hash = "sha256-3OIzvTgGK3r4/s5y7izHvouB4uJEmjO6cgKvegtTf7A=";
     })
     # Fix paths to ffmpeg, ffplay and ffprobe
-    (replaceVars ./ffmpeg-fix-path.patch {
+    (substituteAll {
+      src = ./ffmpeg-fix-path.patch;
       ffmpeg = lib.getExe ffmpeg-full;
       ffplay = lib.getExe' ffmpeg-full "ffplay";
       ffprobe = lib.getExe' ffmpeg-full "ffprobe";
@@ -41,8 +41,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ setuptools ];
-
-  dependencies = [ audioop-lts ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -54,7 +52,7 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  enabledTestPaths = [ "test/test.py" ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface";

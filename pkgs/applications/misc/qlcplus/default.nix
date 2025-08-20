@@ -14,7 +14,6 @@
   libusb-compat-0_1,
   libsndfile,
   libmad,
-  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -31,7 +30,6 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
-    udevCheckHook
   ];
   buildInputs = [
     udev
@@ -61,8 +59,6 @@ mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  doInstallCheck = true;
 
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib

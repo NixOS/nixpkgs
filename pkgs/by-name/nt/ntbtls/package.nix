@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
     libgpg-error
     libksba
     zlib
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev

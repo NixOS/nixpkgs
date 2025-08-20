@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  coreutils,
   patsh,
 }:
 
@@ -26,9 +25,6 @@ stdenv.mkDerivation rec {
     patsh
   ];
 
-  # needed for cross
-  buildInputs = [ coreutils ];
-
   makeFlags = [
     "BINDIR=$(out)/bin"
   ];
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteAllInPlace $out/bin/csvheader
-    patsh $out/bin/csvheader -fs ${builtins.storeDir} --path "$HOST_PATH"
+    patsh $out/bin/csvheader -fs ${builtins.storeDir}
   '';
 
   meta = with lib; {

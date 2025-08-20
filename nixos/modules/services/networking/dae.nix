@@ -152,8 +152,7 @@ in
               ExecStartPre = [
                 ""
                 "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae"
-              ]
-              ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
+              ] ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
               ExecStart = [
                 ""
                 "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae"

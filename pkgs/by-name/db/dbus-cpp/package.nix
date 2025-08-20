@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   boost186,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.4";
+  version = "5.0.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
-    tag = finalAttrs.version;
-    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
+    rev = finalAttrs.version;
+    hash = "sha256-t8SzPRUuKeEchT8vAsITf8MwbgHA+mR5C9CnkdVyX7s=";
   };
 
   outputs = [
@@ -35,22 +36,40 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
-  postPatch = ''
-    substituteInPlace doc/CMakeLists.txt \
-      --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+  patches = [
+    # Handle already-stolen dbus call better
+    # Remove when version > 5.0.3
+    (fetchpatch {
+      name = "0001-dbus-cpp-src-Dont-steal-a-pending-dbus-call-more-then-once.patch";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/9f3d1ff2b1c6c732285949c3dbb35e40cf55ea92.patch";
+      hash = "sha256-xzOCIJVsK2J+X9RsV930R9uw6h4UxqwSaNOgv8v4qQU=";
+    })
 
-    # Warning on aarch64-linux breaks build due to -Werror
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '-Werror' ""
+    # Fix GCC13 compilation
+    # Remove when version > 5.0.3
+    (fetchpatch {
+      name = "0002-dbus-cpp-Add-missing-headers-for-GCC13.patch";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/c761b1eec084962dbe64d35d7f7b86dcbe57a3f7.patch";
+      hash = "sha256-/tKe3iHWxP9jWtpdgwwRynj8565u9LxCt4WXJDXzgX4=";
+    })
+  ];
 
-    # pkg-config output patching hook expects prefix variable here
-    substituteInPlace data/dbus-cpp.pc.in \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
-  '';
+  postPatch =
+    ''
+      substituteInPlace doc/CMakeLists.txt \
+        --replace 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+
+      # Warning on aarch64-linux breaks build due to -Werror
+      substituteInPlace CMakeLists.txt \
+        --replace '-Werror' ""
+
+      # pkg-config output patching hook expects prefix variable here
+      substituteInPlace data/dbus-cpp.pc.in \
+        --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+    '';
 
   strictDeps = true;
 
@@ -79,10 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "DBUS_CPP_ENABLE_DOC_GENERATION" true)
+    "-DDBUS_CPP_ENABLE_DOC_GENERATION=ON"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Too flaky on ARM CI & for some amd64 users
+  doCheck = false;
 
   # DBus, parallelism messes with communication
   enableParallelChecking = false;
@@ -92,21 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      versionCheck = true;
-    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Dbus-binding leveraging C++-11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
-    changelog = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/blob/${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = "dbus-cppc";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     pkgConfigModules = [
       "dbus-cpp"
     ];

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typeshed_client" ];
 
-  enabledTestPaths = [ "tests/test.py" ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Retrieve information from typeshed and other typing stubs";

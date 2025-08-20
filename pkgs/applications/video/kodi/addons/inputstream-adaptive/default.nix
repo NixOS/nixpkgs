@@ -16,20 +16,20 @@ let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
     repo = "Bento4";
-    tag = "1.6.0-641-3-${rel}";
-    hash = "sha256-ycWQvXgr1DQ3Wng73S8i6y6XmcUD/iN8OKfO1czgsnY=";
+    rev = "1.6.0-641-${rel}";
+    sha256 = "sha256-vsFMDzH8JJecYw0qWKGCxnd/m5wn62mCKE2g2HwQhwI=";
   };
 in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "21.5.13";
+  version = "21.4.6";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
-    tag = "${version}-${rel}";
-    hash = "sha256-XcRg0FtoN7SXRVEBWM9gIlLOMGT3x64s9WD12UJdblw=";
+    rev = "${version}-${rel}";
+    sha256 = "sha256-ub4ep89datfr8aZLZAfoz7zhOizGFpzgp2PVON6Ptj8=";
   };
 
   extraCMakeFlags = [
@@ -64,6 +64,6 @@ buildKodiBinaryAddon rec {
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

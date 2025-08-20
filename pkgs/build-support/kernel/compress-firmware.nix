@@ -26,8 +26,7 @@ let
   args = {
     allowedRequisites = [ ];
     inherit (compressor) nativeBuildInputs;
-  }
-  // lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
+  } // lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
 in
 
 runCommand "${firmware.name}-${type}" args ''

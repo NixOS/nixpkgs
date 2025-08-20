@@ -6,26 +6,25 @@
   django,
   python,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
-  version = "1.5.1";
-  pyproject = true;
+  version = "1.5.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = "django-widget-tweaks";
+    repo = pname;
     tag = version;
-    hash = "sha256-ymjBuNGfndUwQdBU2xnc9CA51oOaEPA+RaAspJMKQ04=";
+    hash = "sha256-/3UIsg75X3R9YGv9cEcoPw3IN2vkhUb+HCy68813d2E=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [ django ];
+  propagatedBuildInputs = [ django ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings=tests.settings
@@ -34,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tweak the form field rendering in templates, not in python-level form definitions";
     homepage = "https://github.com/jazzband/django-widget-tweaks";
-    changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ maxxk ];
   };

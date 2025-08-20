@@ -5,8 +5,9 @@
   fetchPypi,
   lxml,
   pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
   requests,
-  setuptools,
   webob,
   webtest,
 }:
@@ -14,16 +15,22 @@
 buildPythonPackage rec {
   pname = "pyquery";
   version = "2.0.1";
-  pyproject = true;
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
   };
 
-  build-system = [ setuptools ];
+  # https://github.com/gawel/pyquery/issues/248
+  postPatch = ''
+    substituteInPlace tests/test_pyquery.py \
+      --replace test_selector_html skip_test_selector_html
+  '';
 
-  dependencies = [
+  propagatedBuildInputs = [
     cssselect
     lxml
   ];
@@ -32,7 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquery" ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     pytestCheckHook
     requests
     webob
@@ -42,26 +49,20 @@ buildPythonPackage rec {
     }))
   ];
 
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # requires network
-    "tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+    "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
   ];
 
-  disabledTests = [
-    # broken in libxml 2.14 update
-    # https://github.com/gawel/pyquery/issues/257
-    "test_val_for_textarea"
-    "test_replaceWith"
-    "test_replaceWith_with_function"
-    "test_get"
-    "test_post"
-    "test_session"
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/gawel/pyquery/issues/249
+    "pyquery.pyquery.PyQuery.serialize_dict"
   ];
 
   meta = with lib; {
     description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = licenses.bsd0;
   };
 }

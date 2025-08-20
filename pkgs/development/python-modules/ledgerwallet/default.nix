@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   cryptography,
@@ -15,6 +16,7 @@
   setuptools-scm,
   tabulate,
   toml,
+  AppKit,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +34,7 @@ buildPythonPackage rec {
   buildInputs = [
     setuptools
     setuptools-scm
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
   propagatedBuildInputs = [
     cryptography
     click
@@ -66,6 +68,7 @@ buildPythonPackage rec {
     mainProgram = "ledgerctl";
     license = licenses.mit;
     maintainers = with maintainers; [
+      d-xo
       erdnaxe
     ];
   };

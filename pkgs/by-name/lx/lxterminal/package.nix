@@ -18,15 +18,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lxterminal";
-  version = "0.4.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxterminal";
-    tag = finalAttrs.version;
-    sha256 = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
+    rev = version;
+    sha256 = "sha256-bCF/V6yFe4vKqVMOtNlwYyw/ickj1LFuFn4IyypwIg0=";
   };
 
   configureFlags = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    ./fix-gcc14-pr122.patch # manual port of https://github.com/lxde/lxterminal/pull/122
     ./respect-xml-catalog-files-var.patch
   ];
 
@@ -72,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
       desktop-independent VTE-based terminal emulator for LXDE without any
       unnecessary dependencies.
     '';
-    homepage = "https://www.lxde.org/";
-    license = lib.licenses.gpl2Only;
+    homepage = "https://wiki.lxde.org/en/LXTerminal";
+    license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.linux;
     mainProgram = "lxterminal";
   };
-})
+}

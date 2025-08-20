@@ -1,7 +1,6 @@
 {
   lib,
   babel,
-  backrefs,
   buildPythonPackage,
   cairosvg,
   colorama,
@@ -21,6 +20,7 @@
   pillow,
   pygments,
   pymdown-extensions,
+  pythonOlder,
   regex,
   requests,
   trove-classifiers,
@@ -28,14 +28,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.6.16";
+  version = "9.5.49";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = version;
-    hash = "sha256-wGzrlDf6bJFIfJXlCMlOQvRlpOcDXeMVY2/GRjOG1H4=";
+    hash = "sha256-jX1Y24FSXZwtuI80GB+BbDbkKvO6uk0dVEmfYjBZOrc=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +49,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     babel
-    backrefs
     colorama
     jinja2
     markdown
@@ -82,7 +83,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
-    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.rev}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";

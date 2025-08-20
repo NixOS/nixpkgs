@@ -10,16 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libtpms";
-  version = "0.10.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
     rev = "v${version}";
-    sha256 = "sha256-uj06cAhepTOFxSeiBY/UVP/rtBQHLvrODe4ljU6ALOE=";
+    sha256 = "sha256-YKs/XYJ8UItOtSinl28/G9XFVzobFd4ZDKtClQDLXFk=";
   };
-
-  hardeningDisable = [ "strictflexarrays3" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Library for software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
+    description = "Libtpms library provides software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
     homepage = "https://github.com/stefanberger/libtpms";
     license = licenses.bsd3;
     maintainers = [ maintainers.baloo ];

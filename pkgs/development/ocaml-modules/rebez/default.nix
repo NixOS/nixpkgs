@@ -5,7 +5,7 @@
   reason,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "rebez";
   version = "unstable-2019-06-20";
 

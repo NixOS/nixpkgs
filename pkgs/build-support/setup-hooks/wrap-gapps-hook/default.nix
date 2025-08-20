@@ -8,7 +8,6 @@
   gtk3,
   librsvg,
   dconf,
-  withDconf ? !stdenv.targetPlatform.isDarwin && lib.meta.availableOn stdenv.targetPlatform dconf,
   callPackage,
   wrapGAppsHook3,
   targetPackages,
@@ -16,16 +15,17 @@
 
 makeSetupHook {
   name = "wrap-gapps-hook";
-  propagatedBuildInputs = [
-    # We use the wrapProgram function.
-    makeWrapper
-  ]
-  ++ lib.optionals isGraphical [
-    # TODO: remove this, packages should depend on GTK explicitly.
-    gtk3
+  propagatedBuildInputs =
+    [
+      # We use the wrapProgram function.
+      makeWrapper
+    ]
+    ++ lib.optionals isGraphical [
+      # TODO: remove this, packages should depend on GTK explicitly.
+      gtk3
 
-    librsvg
-  ];
+      librsvg
+    ];
 
   # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook3 is placed into nativeBuildInputs
   # the librsvg and gtk3 above should be removed but kept to not break anything that implicitly depended on its binaries
@@ -41,7 +41,7 @@ makeSetupHook {
       # TODO: remove this, packages should depend on GTK explicitly.
       gtk3
     ]
-    ++ lib.optionals withDconf [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # It is highly probable that a program will use GSettings,
       # at minimum through GTK file chooser dialogue.
       # Let’s add a GIO module for “dconf” GSettings backend

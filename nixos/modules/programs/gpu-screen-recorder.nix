@@ -34,12 +34,6 @@ in
       capabilities = "cap_sys_admin+ep";
       source = "${package}/bin/gsr-kms-server";
     };
-    security.wrappers."gpu-screen-recorder" = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_nice+ep";
-      source = "${package}/bin/gpu-screen-recorder";
-    };
   };
 
   meta.maintainers = with lib.maintainers; [ timschumi ];

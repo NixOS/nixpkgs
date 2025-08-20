@@ -119,17 +119,18 @@ in
               group = "vboxusers";
               setuid = true;
             };
-            executables = [
-              "VBoxHeadless"
-              "VBoxNetAdpCtl"
-              "VBoxNetDHCP"
-              "VBoxNetNAT"
-              "VBoxVolInfo"
-            ]
-            ++ (lib.optionals (!cfg.headless) [
-              "VBoxSDL"
-              "VirtualBoxVM"
-            ]);
+            executables =
+              [
+                "VBoxHeadless"
+                "VBoxNetAdpCtl"
+                "VBoxNetDHCP"
+                "VBoxNetNAT"
+                "VBoxVolInfo"
+              ]
+              ++ (lib.optionals (!cfg.headless) [
+                "VBoxSDL"
+                "VirtualBoxVM"
+              ]);
           in
           lib.mkIf cfg.enableHardening (
             builtins.listToAttrs (

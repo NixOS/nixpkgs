@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.10";
+  version = "0.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
     tag = version;
-    hash = "sha256-DRA4NTAHg2iB/D1CU9pJEpsZwX9GW3X5gpxbIwP54Ko=";
+    hash = "sha256-wWM8eKTehWCIbRxxWkZ4YrYyeIJuzQaBOUMrW9a5MVo=";
   };
 
   build-system = [ setuptools ];
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
   };
 }

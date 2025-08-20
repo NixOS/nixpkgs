@@ -5,7 +5,6 @@
   arcan,
   audit,
   dbus,
-  dri-pkgconfig-stub,
   libepoxy,
   fontutil,
   libGL,
@@ -22,7 +21,7 @@
   libxkbfile,
   libxshmfence,
   libgbm,
-  mesa-gl-headers,
+  mesa,
   meson,
   nettle,
   ninja,
@@ -61,7 +60,6 @@ stdenv.mkDerivation (finalPackages: {
     arcan
     audit
     dbus
-    dri-pkgconfig-stub
     libepoxy
     fontutil
     libGL
@@ -78,7 +76,7 @@ stdenv.mkDerivation (finalPackages: {
     libxkbfile
     libxshmfence
     libgbm
-    mesa-gl-headers
+    mesa
     nettle
     openssl
     pixman
@@ -123,7 +121,7 @@ stdenv.mkDerivation (finalPackages: {
       allows running an X session as a window under Arcan.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

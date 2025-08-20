@@ -1,50 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   pbr,
   fixtures,
   testtools,
-  pytestCheckHook,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "testresources";
-  version = "2.0.2";
+  version = "2.0.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "testing-cabal";
-    repo = "testresources";
-    tag = version;
-    hash = "sha256-cdZObOgBOUxYg4IGUUMb6arlpb6NTU7w+EW700LKH4Y=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ee9d1982154a1e212d4e4bac6b610800bfb558e4fb853572a827bc14a96e4417";
   };
 
-  build-system = [
-    setuptools
-    pbr
-  ];
+  postPatch = ''
+    substituteInPlace testresources/tests/test_resourced_test_case.py \
+      --replace "failIf" "assertFalse"
+  '';
 
-  dependencies = [
-    pbr
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ pbr ];
 
   nativeCheckInputs = [
     fixtures
     testtools
-    pytestCheckHook
+    unittestCheckHook
   ];
 
-  env.PBR_VERSION = version;
-
-  meta = {
+  meta = with lib; {
     description = "Pyunit extension for managing expensive test resources";
     homepage = "https://launchpad.net/testresources";
-    license = with lib.licenses; [
-      asl20 # or
-      bsd3
-    ];
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.bsd2;
   };
 }

@@ -8,26 +8,23 @@
   matplotlib,
   numpy,
   pandas,
-  setuptools,
   ujson,
   xarray,
 }:
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.3.6";
-  pyproject = true;
+  version = "0.3.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
-    tag = "v${version}";
-    hash = "sha256-ajZJSuMbku08vHvn4fqsLqCS/E2XR3uVqiH7R1GHH5o=";
+    rev = "v${version}";
+    hash = "sha256-lTDA1Rad9aYI/ymU/0xzdJHmebUGcpVJ0GW7D0Ujdko=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     beautifulsoup4
     geojson
     lxml
@@ -50,7 +47,7 @@ buildPythonPackage rec {
     "OSMPythonTools.overpass"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to access OpenStreetMap-related services";
     longDescription = ''
       The python package OSMPythonTools provides easy access to
@@ -58,9 +55,8 @@ buildPythonPackage rec {
       Nominatim, and the OpenStreetMap editing API.
     '';
     homepage = "https://github.com/mocnik-science/osm-python-tools";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
-    maintainers = with lib.maintainers; [ das-g ];
-    teams = [ lib.teams.geospatial ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
   };
 }

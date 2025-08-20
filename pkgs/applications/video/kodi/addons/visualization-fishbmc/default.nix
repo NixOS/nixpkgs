@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-fishbmc";
   namespace = "visualization.fishbmc";
-  version = "21.0.2";
+  version = "20.2.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-4cU5g50ZRnkKSfT/V2hHw1l0PTFkvV4hrxAgPDpfCiw=";
+    hash = "sha256-MgeSIKAy0N2NMGsU/15tKtDb34CROjcMaKjGyySl9Z0=";
   };
 
   extraBuildInputs = [
@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "FishBMC visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    maintainers = teams.kodi.members;
   };
 }

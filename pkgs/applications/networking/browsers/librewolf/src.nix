@@ -8,19 +8,15 @@ let
 in
 {
   inherit (src) packageVersion;
-  source = fetchFromGitea (
-    src.source
-    // {
-      domain = "codeberg.org";
-      owner = "librewolf";
-      repo = "source";
-      fetchSubmodules = true;
-    }
-  );
-  firefox = fetchurl (
-    src.firefox
-    // {
-      url = "mirror://mozilla/firefox/releases/${src.firefox.version}/source/firefox-${src.firefox.version}.source.tar.xz";
-    }
-  );
+  source = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "librewolf";
+    repo = "source";
+    fetchSubmodules = true;
+    inherit (src.source) rev sha256;
+  };
+  firefox = fetchurl {
+    url = "mirror://mozilla/firefox/releases/${src.firefox.version}/source/firefox-${src.firefox.version}.source.tar.xz";
+    inherit (src.firefox) sha512;
+  };
 }

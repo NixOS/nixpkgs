@@ -28,7 +28,7 @@ in
       };
       description = ''
         Environment variables for the stirling-pdf app.
-        See <https://github.com/Stirling-Tools/Stirling-PDF#customisation> for available options.
+        See https://github.com/Stirling-Tools/Stirling-PDF#customisation for available options.
       '';
     };
 
@@ -46,27 +46,19 @@ in
     systemd.services.stirling-pdf = {
       environment = lib.mapAttrs (_: toString) cfg.environment;
 
-      # following https://docs.stirlingpdf.com/Installation/Unix%20Installation
+      # following https://github.com/Stirling-Tools/Stirling-PDF#locally
       path =
         with pkgs;
         [
-          # `which` is used to test command availability
-          # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
-          which
           unpaper
           libreoffice
-          qpdf
           ocrmypdf
-          poppler-utils
+          poppler_utils
           unoconv
+          opencv
           pngquant
           tesseract
-          (python3.withPackages (
-            p: with p; [
-              weasyprint
-              opencv-python-headless
-            ]
-          ))
+          python3Packages.weasyprint
           ghostscript_headless
         ]
         ++ lib.optional (cfg.environment.INSTALL_BOOK_AND_ADVANCED_HTML_OPS or "false" == "true") calibre;
@@ -110,7 +102,7 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @clock @setuid @chown"
+          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources @clock @setuid @chown"
         ];
         UMask = "0077";
       };

@@ -24,12 +24,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoPatches = [
-    # https://github.com/WorksApplications/sudachi.rs/issues/299
-    ./update-outdated-lockfile.patch
-  ];
-
-  cargoHash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
+  cargoHash = "sha256-fFvuxLOerqdjYogfTH3JiSlNPw2t7QT09lxp7prIpA8=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''

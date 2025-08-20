@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "ipp-usb";
-  version = "0.9.30";
+  version = "0.9.28";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
     rev = version;
-    sha256 = "sha256-LcThjiN/MRk4ISWWRT4g/eLvuhzM8pIDAcSlM5us3nQ=";
+    sha256 = "sha256-fjhiOftiZmc9/mA/0yQuIF4/OsBuGUIpf7DLrJB3GRk=";
   };
 
   postPatch = ''
@@ -39,8 +39,6 @@ buildGoModule rec {
   ];
 
   vendorHash = null;
-
-  doInstallCheck = true;
 
   postInstall = ''
     # to accomodate the makefile
