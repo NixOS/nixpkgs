@@ -22,12 +22,9 @@
   tailscale-nginx-auth,
 }:
 
-let
-  version = "1.82.5";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "tailscale";
-  inherit version;
+  version = "1.82.5";
 
   outputs = [
     "out"
@@ -37,7 +34,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BFitj8A+TfNKTyXBB1YhsEs5NvLUfgJ2IbjB2ipf4xU=";
   };
 
@@ -71,8 +68,8 @@ buildGoModule {
   ldflags = [
     "-w"
     "-s"
-    "-X tailscale.com/version.longStamp=${version}"
-    "-X tailscale.com/version.shortStamp=${version}"
+    "-X tailscale.com/version.longStamp=${finalAttrs.version}"
+    "-X tailscale.com/version.shortStamp=${finalAttrs.version}"
   ];
 
   tags = [
@@ -214,7 +211,7 @@ buildGoModule {
   meta = {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
-    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
+    changelog = "https://tailscale.com/changelog#client";
     license = lib.licenses.bsd3;
     mainProgram = "tailscale";
     maintainers = with lib.maintainers; [
@@ -225,4 +222,4 @@ buildGoModule {
       ryan4yin
     ];
   };
-}
+})
