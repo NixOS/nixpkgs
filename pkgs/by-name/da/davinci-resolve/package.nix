@@ -32,9 +32,13 @@
   writeShellApplication,
 
   # overriding pythonPackage allows customizing python in the FHS environment
-  pythonPackage ? (python3.withPackages (python-pkgs: with python-pkgs; [
-    numpy
-  ])),
+  pythonPackage ? (
+    python3.withPackages (
+      python-pkgs: with python-pkgs; [
+        numpy
+      ]
+    )
+  ),
 
 }:
 
@@ -186,174 +190,196 @@ let
     }
   );
 
-fhs = buildFHSEnv {
-  pname = "${davinci.pname}-fhs";
-  inherit (davinci) version;
+  fhs = buildFHSEnv {
+    pname = "${davinci.pname}-fhs";
+    inherit (davinci) version;
 
-  targetPkgs =
-    pkgs: with pkgs; [
-      alsa-lib
-      aprutil
-      bzip2
-      davinci
-      dbus
-      expat
-      fontconfig
-      freetype
-      glib
-      krb5  # for DaVinci Control Panels Setup
-      libGL
-      libGLU
-      libarchive
-      libcap
-      libdrm
-      libpng12
-      librsvg
-      libtool
-      libusb1
-      libuuid
-      libxcrypt  # provides libcrypt.so.1
-      libxkbcommon
-      nspr
-      nss
-      ocl-icd
-      opencl-headers
-      pythonPackage
-      udev
-      xcb-util-cursor
-      xdg-utils  # xdg-open needed to open URLs
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libxkbfile
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.libXxf86vm
-      xorg.libxcb
-      xorg.xcbutil
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xkeyboardconfig
-      zlib
+    targetPkgs =
+      pkgs: with pkgs; [
+        alsa-lib
+        aprutil
+        bzip2
+        davinci
+        dbus
+        expat
+        fontconfig
+        freetype
+        glib
+        krb5 # for DaVinci Control Panels Setup
+        libGL
+        libGLU
+        libarchive
+        libcap
+        libdrm
+        libpng12
+        librsvg
+        libtool
+        libusb1
+        libuuid
+        libxcrypt # provides libcrypt.so.1
+        libxkbcommon
+        nspr
+        nss
+        ocl-icd
+        opencl-headers
+        pythonPackage
+        udev
+        xcb-util-cursor
+        xdg-utils # xdg-open needed to open URLs
+        xorg.libICE
+        xorg.libSM
+        xorg.libX11
+        xorg.libXcomposite
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libXi
+        xorg.libXinerama
+        xorg.libxkbfile
+        xorg.libXrandr
+        xorg.libXrender
+        xorg.libXt
+        xorg.libXtst
+        xorg.libXxf86vm
+        xorg.libxcb
+        xorg.xcbutil
+        xorg.xcbutilimage
+        xorg.xcbutilkeysyms
+        xorg.xcbutilrenderutil
+        xorg.xcbutilwm
+        xorg.xkeyboardconfig
+        zlib
+      ];
+
+    extraPreBwrapCmds = lib.optionalString studioVariant ''
+      mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+      mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
+    '';
+
+    extraBwrapArgs = lib.optionals studioVariant [
+      ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
+      ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
     ];
 
-  extraPreBwrapCmds = lib.optionalString studioVariant ''
-    mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
-    mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
+    runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
+      exec "$@"
+    ''}";
+
+    extraInstallCommands = ''
+      mkdir -p $out/share/applications
+      ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
+    '';
+  };
+
+  resolveUdev = runCommandLocal "${davinci.pname}-udev" { } ''
+    mkdir -p $out/etc/udev/rules.d
+    # follows the resolve install script, see scripts/post_install.sh
+    DVP_RULES=$out/etc/udev/rules.d/75-davincipanel.rules
+    DVK_RULES=$out/etc/udev/rules.d/75-davincikb.rules
+    SDX_RULES=$out/etc/udev/rules.d/75-sdx.rules
+    cat ${davinci}/share/etc/udev/rules.d/99-BlackmagicDevices.rules > $DVP_RULES
+    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0777", GROUP="resolve"' >> $DVP_RULES
+    cat ${davinci}/share/etc/udev/rules.d/99-ResolveKeyboardHID.rules > $DVK_RULES
+    echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
   '';
 
-  extraBwrapArgs = lib.optionals studioVariant [
-    ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
-    ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
+  resolveXdg = runCommandLocal "${davinci.pname}-xdg" { } ''
+    # icons for applications
+    mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/apps
+    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}.png
+    ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-panels.png
+    ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-monitor.png
+    ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-speed-test.png
+    ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-speed-test.png
+    ln -s ${davinci}/graphics/blackmagicraw-player_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-player.png
+    ln -s ${davinci}/graphics/blackmagicraw-player_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-player.png
+
+    # icons for mime types
+    mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/mimetypes
+
+    ln -s ${davinci}/graphics/application-x-braw-clip_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-clip.png
+    ln -s ${davinci}/graphics/application-x-braw-sidecar_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-sidecar.png
+    ln -s ${davinci}/graphics/application-x-braw-clip_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-clip.png
+    ln -s ${davinci}/graphics/application-x-braw-sidecar_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-sidecar.png
+    ln -s ${davinci}/graphics/DV_ResolveBin.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvebin.png
+    ln -s ${davinci}/graphics/DV_ResolveProj.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolveproj.png
+    ln -s ${davinci}/graphics/DV_ResolveTimeline.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetimeline.png
+    ln -s ${davinci}/graphics/DV_TemplateBundle.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetemplatebundle.png
+
+    # mime types
+    mkdir -p $out/share/mime/packages
+    # without these patches, GNOME displays blank icons
+    cat ${davinci}/share/blackmagicraw.xml \
+      | sed '/<mime-type type="application\/x-braw-clip">/a <generic-icon name="application-x-braw-clip"/>' \
+      | sed '/<mime-type type="application\/x-braw-sidecar">/a <generic-icon name="application-x-braw-sidecar"/>' \
+      > $out/share/mime/packages/${davinci.pname}-raw.xml
+    cat ${davinci}/share/resolve.xml \
+      | sed '/<mime-type type="application\/x-resolveproj">/a <generic-icon name="application-x-resolveproj"/>' \
+      | sed '/<mime-type type="application\/x-resolvedbkey">/a <generic-icon name="application-x-resolvedbkey"/>' \
+      | sed '/<mime-type type="application\/x-resolvebin">/a <generic-icon name="application-x-resolvebin"/>' \
+      | sed '/<mime-type type="application\/x-resolvetimeline">/a <generic-icon name="application-x-resolvetimeline"/>' \
+      | sed '/<mime-type type="application\/x-resolvetemplatebundle">/a <generic-icon name="application-x-resolvetemplatebundle"/>' \
+      > $out/share/mime/packages/${davinci.pname}.xml
+  '';
+
+  wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
+
+  # creates a derivation that wraps the "path" command with arguments in "args" list to run inside the FHS
+  # the directories in "libs" and "plugins" are put into LD_LIBRARY_PATH and QT_PLUGIN_PATH
+  mkWrapper =
+    path: libs: plugins: args:
+    writeShellScriptBin path ''
+      export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
+      export QT_PLUGIN_PATH="${plugins}:$QT_PLUGIN_PATH"
+      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${libs}"
+
+      # this allows Python to find the modules, see Developer/Scripting/README.txt
+      export RESOLVE_SCRIPT_API="${davinci}/Developer/Scripting"
+      export RESOLVE_SCRIPT_LIB="${davinci}/libs/Fusion/fusionscript.so"
+      export PYTHONPATH="$PYTHONPATH:${davinci}/Developer/Scripting/Modules"
+
+      exec ${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([ wrapper ] ++ args)} "$@"
+    '';
+
+  # wrap main executable
+  resolveWrapper = mkWrapper "${davinci.pname}" "${davinci}/libs" "${davinci}/libs/plugins" [
+    "${davinci}/bin/resolve"
   ];
 
-  runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
-    exec "$@"
-  ''}";
+  # This provides the "davinci-resolve-shell"/"davinci-resolve-studio-shell" command to open a shell in the correct FHS
+  # in order to simplify running Resolve and related tools from the command line.
+  resolveShellWrapper =
+    mkWrapper "${davinci.pname}-shell" "${davinci}/libs" "${davinci}/libs/plugins"
+      [
+        "/usr/bin/env"
+        "bash"
+      ];
 
-  extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
-  '';
-};
+  panelSetupWrapper =
+    mkWrapper "${davinci.pname}-panels" "${davinci}/DaVinci Control Panels Setup"
+      "${davinci}/DaVinci Control Panels Setup/plugins"
+      [ "${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup" ];
 
-resolveUdev = runCommandLocal "${davinci.pname}-udev" {} ''
-  mkdir -p $out/etc/udev/rules.d
-  # follows the resolve install script, see scripts/post_install.sh
-  DVP_RULES=$out/etc/udev/rules.d/75-davincipanel.rules
-  DVK_RULES=$out/etc/udev/rules.d/75-davincikb.rules
-  SDX_RULES=$out/etc/udev/rules.d/75-sdx.rules
-  cat ${davinci}/share/etc/udev/rules.d/99-BlackmagicDevices.rules > $DVP_RULES
-  echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0777", GROUP="resolve"' >> $DVP_RULES
-  cat ${davinci}/share/etc/udev/rules.d/99-ResolveKeyboardHID.rules > $DVK_RULES
-  echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' > $SDX_RULES
-'';
+  rawSpeedTestWrapper =
+    mkWrapper "${davinci.pname}-raw-speed-test" "${davinci}/BlackmagicRAWSpeedTest/lib"
+      "${davinci}/BlackmagicRAWSpeedTest/plugins"
+      [ "${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest" ];
 
-resolveXdg = runCommandLocal "${davinci.pname}-xdg" {} ''
-  # icons for applications
-  mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/apps
-  ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}.png
-  ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-panels.png
-  ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/${davinci.pname}-monitor.png
-  ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-speed-test.png
-  ln -s ${davinci}/graphics/blackmagicraw-speedtest_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-speed-test.png
-  ln -s ${davinci}/graphics/blackmagicraw-player_256x256_apps.png $out/share/icons/hicolor/256x256/apps/${davinci.pname}-raw-player.png
-  ln -s ${davinci}/graphics/blackmagicraw-player_48x48_apps.png $out/share/icons/hicolor/48x48/apps/${davinci.pname}-raw-player.png
+  rawPlayerWrapper =
+    mkWrapper "${davinci.pname}-raw-player" "${davinci}/BlackmagicRAWPlayer/lib"
+      "${davinci}/BlackmagicRAWPlayer/plugins"
+      [ "${davinci}/BlackmagicRAWPlayer/BlackmagicRAWPlayer" ];
 
-  # icons for mime types
-  mkdir -p $out/share/icons/hicolor/{48x48,128x128,256x256}/mimetypes
+  remoteMonitorWrapper =
+    mkWrapper "${davinci.pname}-monitor" "${davinci}/libs" "${davinci}/libs/plugins"
+      [ "${davinci}/bin/DaVinci Remote Monitor" ];
 
-  ln -s ${davinci}/graphics/application-x-braw-clip_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-clip.png
-  ln -s ${davinci}/graphics/application-x-braw-sidecar_48x48_mimetypes.png $out/share/icons/hicolor/48x48/mimetypes/application-x-braw-sidecar.png
-  ln -s ${davinci}/graphics/application-x-braw-clip_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-clip.png
-  ln -s ${davinci}/graphics/application-x-braw-sidecar_256x256_mimetypes.png $out/share/icons/hicolor/256x256/mimetypes/application-x-braw-sidecar.png
-  ln -s ${davinci}/graphics/DV_ResolveBin.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvebin.png
-  ln -s ${davinci}/graphics/DV_ResolveProj.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolveproj.png
-  ln -s ${davinci}/graphics/DV_ResolveTimeline.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetimeline.png
-  ln -s ${davinci}/graphics/DV_TemplateBundle.png $out/share/icons/hicolor/128x128/mimetypes/application-x-resolvetemplatebundle.png
+  pythonWrapper = mkWrapper "${davinci.pname}-python" "${davinci}/libs" "${davinci}/libs/plugins" [
+    "${pythonPackage}/bin/python"
+  ];
 
-  # mime types
-  mkdir -p $out/share/mime/packages
-  # without these patches, GNOME displays blank icons
-  cat ${davinci}/share/blackmagicraw.xml \
-    | sed '/<mime-type type="application\/x-braw-clip">/a <generic-icon name="application-x-braw-clip"/>' \
-    | sed '/<mime-type type="application\/x-braw-sidecar">/a <generic-icon name="application-x-braw-sidecar"/>' \
-    > $out/share/mime/packages/${davinci.pname}-raw.xml
-  cat ${davinci}/share/resolve.xml \
-    | sed '/<mime-type type="application\/x-resolveproj">/a <generic-icon name="application-x-resolveproj"/>' \
-    | sed '/<mime-type type="application\/x-resolvedbkey">/a <generic-icon name="application-x-resolvedbkey"/>' \
-    | sed '/<mime-type type="application\/x-resolvebin">/a <generic-icon name="application-x-resolvebin"/>' \
-    | sed '/<mime-type type="application\/x-resolvetimeline">/a <generic-icon name="application-x-resolvetimeline"/>' \
-    | sed '/<mime-type type="application\/x-resolvetemplatebundle">/a <generic-icon name="application-x-resolvetemplatebundle"/>' \
-    > $out/share/mime/packages/${davinci.pname}.xml
-'';
-
-wrapper = ''${fhs}/bin/${davinci.pname}-fhs'';
-
-# creates a derivation that wraps the "path" command with arguments in "args" list to run inside the FHS
-# the directories in "libs" and "plugins" are put into LD_LIBRARY_PATH and QT_PLUGIN_PATH
-mkWrapper = path: libs: plugins: args: writeShellScriptBin path ''
-    export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
-    export QT_PLUGIN_PATH="${plugins}:$QT_PLUGIN_PATH"
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${libs}"
-
-    # this allows Python to find the modules, see Developer/Scripting/README.txt
-    export RESOLVE_SCRIPT_API="${davinci}/Developer/Scripting"
-    export RESOLVE_SCRIPT_LIB="${davinci}/libs/Fusion/fusionscript.so"
-    export PYTHONPATH="$PYTHONPATH:${davinci}/Developer/Scripting/Modules"
-
-    exec ${lib.strings.concatMapStringsSep " " lib.escapeShellArg ([wrapper] ++ args)} "$@"
-'';
-
-# wrap main executable
-resolveWrapper = mkWrapper "${davinci.pname}" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/resolve"];
-
-# This provides the "davinci-resolve-shell"/"davinci-resolve-studio-shell" command to open a shell in the correct FHS
-# in order to simplify running Resolve and related tools from the command line.
-resolveShellWrapper = mkWrapper "${davinci.pname}-shell" "${davinci}/libs" "${davinci}/libs/plugins" ["/usr/bin/env" "bash"];
-
-panelSetupWrapper = mkWrapper "${davinci.pname}-panels" "${davinci}/DaVinci Control Panels Setup" "${davinci}/DaVinci Control Panels Setup/plugins" ["${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"];
-
-rawSpeedTestWrapper = mkWrapper "${davinci.pname}-raw-speed-test" "${davinci}/BlackmagicRAWSpeedTest/lib" "${davinci}/BlackmagicRAWSpeedTest/plugins" ["${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest"];
-
-rawPlayerWrapper = mkWrapper "${davinci.pname}-raw-player" "${davinci}/BlackmagicRAWPlayer/lib" "${davinci}/BlackmagicRAWPlayer/plugins" ["${davinci}/BlackmagicRAWPlayer/BlackmagicRAWPlayer"];
-
-remoteMonitorWrapper = mkWrapper "${davinci.pname}-monitor" "${davinci}/libs" "${davinci}/libs/plugins" ["${davinci}/bin/DaVinci Remote Monitor"];
-
-pythonWrapper = mkWrapper "${davinci.pname}-python" "${davinci}/libs" "${davinci}/libs/plugins" [ "${pythonPackage}/bin/python" ];
-
-product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
+  product = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
 
 in
 symlinkJoin {
@@ -380,7 +406,7 @@ symlinkJoin {
       exec = "${resolveWrapper}/bin/${davinci.pname}";
       icon = "${davinci.pname}";
       comment = "Professional video editing, color, effects and audio post-processing";
-      mimeTypes = ["application/x-resolveproj"];
+      mimeTypes = [ "application/x-resolveproj" ];
       startupNotify = true;
       terminal = false;
       categories = [
@@ -423,7 +449,10 @@ symlinkJoin {
       desktopName = "${product} Blackmagic RAW Player";
       exec = "${rawPlayerWrapper}/bin/${davinci.pname}-raw-player %f";
       icon = "${davinci.pname}-raw-player";
-      mimeTypes = ["application/x-braw-clip" "application/x-braw-sidecar"];
+      mimeTypes = [
+        "application/x-braw-clip"
+        "application/x-braw-sidecar"
+      ];
       terminal = false;
       categories = [
         "AudioVideo"
@@ -433,7 +462,8 @@ symlinkJoin {
       ];
     })
 
-  ] ++ lib.lists.optionals studioVariant [
+  ]
+  ++ lib.lists.optionals studioVariant [
 
     # remote monitor is not available in the non-studio version
 
@@ -513,7 +543,8 @@ symlinkJoin {
       ];
       ```
       Use `${davinci.pname}-python` to run Python inside the FHS environment.
-    '' + (lib.optionalString studioVariant ''
+    ''
+    + (lib.optionalString studioVariant ''
 
       DaVinci Resolve Studio additionally support remote scripting. Example:
       ```
