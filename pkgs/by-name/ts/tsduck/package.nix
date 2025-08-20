@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./tests.patch ];
   checkTarget = "test";
   doCheck = true;
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   installTargets = [
     "install-tools"
