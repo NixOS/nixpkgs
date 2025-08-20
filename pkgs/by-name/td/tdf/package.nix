@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tdf";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yttuWWKIrh54eJSdKejDTswoDarNifD5DtfQHSlL3rE=";
+    hash = "sha256-le2xlSVnYbWMDV9+SbrTFHSFZn/H6N7CEaKr5Zzo/c4=";
   };
 
   cargoHash = "sha256-UB7G5tl90CNq/aYUaUOpgGJcEL9ND3pJ29/lpIkh2iU=";
