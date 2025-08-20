@@ -6,6 +6,7 @@
   # nativeBuildInputs
   binaryen,
   lld,
+  llvmPackages,
   pkg-config,
   protobuf,
   rustfmt,
@@ -31,7 +32,6 @@
     "map_view"
   ],
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
   version = "0.24.0";
@@ -98,6 +98,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustfmt
     nasm
   ];
+
+  # NOTE: Without setting these environment variables the web-viewer
+  # preBuild step uses the nix wrapped CC which doesn't support
+  # multiple targets including wasm32-unknown-unknown. These are taken
+  # from the following issue discussion in the rust ring crate:
+  # https://github.com/briansmith/ring/discussions/2581#discussioncomment-14096969
+  env =
+    let
+      inherit (llvmPackages) clang-unwrapped;
+      major-version = builtins.head (builtins.splitVersion clang-unwrapped.version);
+      # resource dir + builtins from the unwrapped clang
+      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${major-version}";
+      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${major-version}/include";
+    in
+    {
+      CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
+      CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
+    };
 
   buildInputs = [
     freetype
