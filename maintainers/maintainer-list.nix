@@ -23228,6 +23228,14 @@
     githubId = 1588288;
     name = "Shahrukh Khan";
   };
+  shakhzodkudratov = {
+    github = "shakhzodkudratov";
+    githubId = 37299109;
+    name = "Shakhzod Kudratov";
+    keys = [
+      { fingerprint = "5A1E 1590 CA20 1638 ECCF  834F D98C 2DC5 9CFA 95D4"; }
+    ];
+  };
   shamilton = {
     email = "sgn.hamilton@protonmail.com";
     github = "SCOTT-HAMILTON";
