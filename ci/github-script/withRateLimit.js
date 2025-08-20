@@ -1,4 +1,4 @@
-module.exports = async function ({ github, core }, callback) {
+module.exports = async ({ github, core }, callback) => {
   const Bottleneck = require('bottleneck')
 
   const stats = {

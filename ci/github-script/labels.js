@@ -1,4 +1,4 @@
-module.exports = async function ({ github, context, core, dry }) {
+module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
@@ -297,7 +297,9 @@ module.exports = async function ({ github, context, core, dry }) {
           // Go back as far as the last successful run of this workflow to make sure
           // we are not leaving anyone behind on GHA failures.
           // Defaults to go back 1 hour on the first run.
-          new Date(lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000).getTime(),
+          new Date(
+            lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000,
+          ).getTime(),
           // Go back max. 1 day to prevent hitting all API rate limits immediately,
           // when GH API returns a wrong workflow by accident.
           new Date().getTime() - 24 * 60 * 60 * 1000,

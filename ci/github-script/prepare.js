@@ -1,4 +1,4 @@
-module.exports = async function ({ github, context, core }) {
+module.exports = async ({ github, context, core }) => {
   const pull_number = context.payload.pull_request.number
 
   for (const retryInterval of [5, 10, 20, 40, 80]) {
