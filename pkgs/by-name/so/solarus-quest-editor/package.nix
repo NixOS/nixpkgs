@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchFromGitHub,
   replaceVars,
+  qlementine,
   cmake,
   ninja,
   luajit,
@@ -16,24 +16,9 @@
   libvorbis,
   solarus,
   glm,
-  qt6Packages,
-  kdePackages,
+  qt6,
 }:
 
-let
-  qlementine-src = fetchFromGitHub {
-    owner = "oclero";
-    repo = "qlementine";
-    tag = "v1.2.0";
-    hash = "sha256-25PKOpQl3IkBXX14gt8KKYXXJKeutQ75O7BftEqCAxk=";
-  };
-
-  inherit (qt6Packages)
-    qtbase
-    qttools
-    wrapQtAppsHook
-    ;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-quest-editor";
   version = "2.0.0";
@@ -46,15 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (replaceVars ./qlementine-src.patch { inherit qlementine-src; })
+    (replaceVars ./qlementine-src.patch { qlementine-src = qlementine.src; })
   ];
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -67,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libmodplug
     libvorbis
     solarus
-    qtbase
-    kdePackages.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     glm
   ];
 
