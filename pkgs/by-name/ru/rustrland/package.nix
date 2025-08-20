@@ -1,5 +1,12 @@
-{ pkgs ? import <nixpkgs> {} }:
-pkgs.rustPlatform.buildRustPackage rec {
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustrland";
   version = "0.3.2";
 
