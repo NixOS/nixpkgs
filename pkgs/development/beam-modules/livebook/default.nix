@@ -57,5 +57,6 @@ beamPackages.mixRelease rec {
       scvalex
     ];
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.beam ];
   };
 }
