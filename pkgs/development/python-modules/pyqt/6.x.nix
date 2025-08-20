@@ -15,6 +15,7 @@
   mesa,
   withMultimedia ? true,
   withWebSockets ? true,
+  withWebChannel ? true,
   withLocation ? true,
   # Not currently part of PyQt6
   #, withConnectivity ? true
@@ -119,6 +120,7 @@ buildPythonPackage rec {
     ]
     # ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withWebChannel qtwebchannel
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport;
 
@@ -146,6 +148,7 @@ buildPythonPackage rec {
     "PyQt6.QtQuick"
   ]
   ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+  ++ lib.optional withWebChannel "PyQt6.QtWebChannel"
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
