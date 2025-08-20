@@ -1,0 +1,31 @@
+From 1a2ea62a86e2ba34e8404fd2a2e3a38b073bd9db Mon Sep 17 00:00:00 2001
+From: MultisampledNight <contact@multisamplednight.com>
+Date: Wed, 20 Aug 2025 18:30:23 +0200
+Subject: [PATCH] hack: never build std
+
+native appears to really only check for native,
+however, we need *baseline*.
+actually, since in nixpkgs, we do not have access to nightly rust anyway, the whole condition is useless for us -- throw it out
+---
+ pkg/zement/build.zig | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/pkg/zement/build.zig b/pkg/zement/build.zig
+index 2576d74b..90017810 100644
+--- a/pkg/zement/build.zig
++++ b/pkg/zement/build.zig
+@@ -27,11 +27,6 @@ pub fn build(b: *std.Build) void {
+     if (optimize != .Debug) {
+         cargo_args.append(b.allocator, "--release") catch @panic("OOM");
+     }
+-    if (!target.query.isNative()) {
+-        // Required for cross-compilation, most targets won't be installed.
+-        // -Z requires nightly so we don't enforce this for native builds.
+-        cargo_args.appendSlice(b.allocator, &.{ "-Z", "build-std=std,panic_abort" }) catch @panic("OOM");
+-    }
+ 
+     const build_dir = build_crab.addCargoBuild(
+         b,
+-- 
+2.50.1
+
