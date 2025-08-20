@@ -26,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "KDAB's helper class for single-instance policy applications";
     homepage = "https://www.kdab.com/";
-    maintainers = [ lib.maintainers.hellwolf lib.maintainers.timoteuszelle ];
+    maintainers = [
+      lib.maintainers.hellwolf
+      lib.maintainers.timoteuszelle
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${finalAttrs.version}";

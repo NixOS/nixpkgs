@@ -26,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ Qt API for Libre Graph, a free API for cloud collaboration inspired by the MS Graph API";
     homepage = "https://owncloud.org";
-    maintainers = [ lib.maintainers.hellwolf lib.maintainers.timoteuszelle ];
+    maintainers = [
+      lib.maintainers.hellwolf
+      lib.maintainers.timoteuszelle
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     changelog = "https://github.com/owncloud/libre-graph-api-cpp-qt-client/releases/tag/v${finalAttrs.version}";
