@@ -35,7 +35,10 @@ buildPythonPackage rec {
     description = "GRACE models and gracemaker (as implemented in TensorPotential package)";
     homepage = "https://github.com/ICAMS/grace-tensorpotential";
     changelog = "https://github.com/ICAMS/grace-tensorpotential/releases/tag/${version}";
-    license = with lib.licenses; [ asl ];
+    license = {
+      fullName = "Academic Software License";
+      url = "https://github.com/ACEsuit/ACE.jl/blob/main/ASL.md";
+    };
     maintainers = with lib.maintainers; [ sh4k0 ];
   };
 }
