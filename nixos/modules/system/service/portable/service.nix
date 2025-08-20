@@ -1,7 +1,5 @@
 {
   lib,
-  config,
-  options,
   ...
 }:
 let
@@ -13,6 +11,7 @@ in
   _class = "service";
   imports = [
     ../../../misc/assertions.nix
+    ./config-data.nix
   ];
   options = {
     services = mkOption {
