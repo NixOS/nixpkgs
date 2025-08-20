@@ -165,6 +165,14 @@ in
         '';
       };
 
+      vacuumDB = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Vacuum /nix/var/nix/db/db.sqlite before starting the Nix daemon.
+        '';
+      };
+
       # Environment variables for running Nix.
       envVars = lib.mkOption {
         type = lib.types.attrs;
@@ -215,7 +223,8 @@ in
         pkgs.util-linux
         config.programs.ssh.package
       ]
-      ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ];
+      ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ]
+      ++ lib.optionals cfg.vacuumDB [ pkgs.sqlite ];
 
       environment =
         cfg.envVars
@@ -233,6 +242,9 @@ in
         LimitNOFILE = 1048576;
         Delegate = "yes";
         DelegateSubgroup = "supervisor";
+      }
+      // lib.optionalAttrs cfg.vacuumDB {
+        ExecStartPre = "-${lib.getBin pkgs.sqlite}/bin/sqlite3 /nix/var/nix/db/db.sqlite VACUUM";
       };
 
       restartTriggers = [ config.environment.etc."nix/nix.conf".source ];
