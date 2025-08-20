@@ -7,7 +7,7 @@
   urllib3,
   dnspython,
   pytestCheckHook,
-  etcd_3_4,
+  etcd,
   mock,
   pyopenssl,
 }:
@@ -33,7 +33,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    etcd_3_4
+    etcd
     mock
     pyopenssl
   ];
@@ -63,5 +63,6 @@ buildPythonPackage {
     description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
     license = lib.licenses.mit;
+    broken = true; # At 2025-09-17
   };
 }
