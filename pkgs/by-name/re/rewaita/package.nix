@@ -71,6 +71,9 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     mainProgram = "rewaita";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = with lib.maintainers; [
+      awwpotato
+      getchoo
+    ];
   };
 }
