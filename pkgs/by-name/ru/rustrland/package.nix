@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustrland";
   version = "0.3.2";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "mattdef";
     repo = "rustrland";
     tag = "v${finalAttrs.version}";
