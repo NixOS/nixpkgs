@@ -6782,6 +6782,13 @@
     name = "Nico Jensch";
     keys = [ { fingerprint = "D245 D484 F357 8CB1 7FD6  DA6B 67DB 29BF F3C9 6757"; } ];
   };
+  drafolin = {
+    email = "derg@drafolin.ch";
+    github = "drafolin";
+    githubId = 66629792;
+    name = "Dråfølin";
+    keys = [ { fingerprint = "CAE2 9E73 0691 0AE9 1BD1  3D72 91A9 5557 C50B 4D3E"; } ];
+  };
   dragonginger = {
     email = "dragonginger10@gmail.com";
     github = "dragonginger10";
