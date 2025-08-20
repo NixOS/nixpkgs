@@ -54,6 +54,8 @@
 
   # command line arguments which are always set e.g "--password-store=kwallet6"
   commandLineArgs,
+
+  withAppleEmojis,
 }:
 
 {
@@ -111,14 +113,12 @@ stdenv.mkDerivation rec {
   # (Alternatively we could try to patch the asar archive, but that requires a
   # few additional steps and might not be the best idea.)
 
-  src = fetchurl {
-    inherit url hash;
-    recursiveHash = true;
-    downloadToTemp = true;
-    nativeBuildInputs = [
-      (if ARCH == "x64" then dpkg else libarchive)
-      asar
-    ];
+  src =
+    fetchurl {
+      inherit url hash;
+      recursiveHash = true;
+      downloadToTemp = true;
+    }
     # Signal ships the Apple emoji set without a licence via an npm
     # package and upstream does not seem terribly interested in fixing
     # this; see:
@@ -132,15 +132,20 @@ stdenv.mkDerivation rec {
     # during `fetchurl` to ensure that the build doesn’t cache the
     # unlicensed emoji files, but the rest of the work is done in the
     # main derivation.
-    postFetch = ''
-      ${extractPkg}
-      asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
-      rm -r \
-        "$out/${libdir}/resources/app.asar"{,.unpacked} \
-        $out/asar-contents/images/emoji-sheet-32.webp \
-        $out/asar-contents/images/emoji-sheet-64.webp
-    '';
-  };
+    // lib.optionalAttrs (!withAppleEmojis) {
+      nativeBuildInputs = lib.optionals (!withAppleEmojis) [
+        (if ARCH == "x64" then dpkg else libarchive)
+        asar
+      ];
+      postFetch = lib.optionalString (!withAppleEmojis) ''
+        ${extractPkg}
+        asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
+        rm -r \
+          "$out/${libdir}/resources/app.asar"{,.unpacked} \
+          $out/asar-contents/images/emoji-sheet-32.webp \
+          $out/asar-contents/images/emoji-sheet-64.webp
+      '';
+    };
 
   nativeBuildInputs = [
     rsync
@@ -150,8 +155,8 @@ stdenv.mkDerivation rec {
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
     # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
     (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-    libwebp
-  ];
+  ]
+  ++ lib.optionals (!withAppleEmojis) [ libwebp ];
 
   buildInputs = [
     alsa-lib
@@ -222,7 +227,8 @@ stdenv.mkDerivation rec {
 
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/signal-desktop/libGLESv2.so.2"
-
+  ''
+  + (lib.optionalString (!withAppleEmojis) ''
     # Compress the emoji sheets to webp, as signal expects webp images. The flags used are the same as those used upstream.
     cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-32} -o asar-contents/images/emoji-sheet-32.webp
     cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-64} -o asar-contents/images/emoji-sheet-64.webp
@@ -241,7 +247,8 @@ stdenv.mkDerivation rec {
       --replace-fail \
         'emoji://jumbo?emoji=' \
         "file://$out/lib/signal-desktop/resources/app.asar/$emojiPrefix/"
-
+  '')
+  + ''
     # `asar(1)` copies files from the corresponding `.unpacked`
     # directory when extracting, and will put them back in the modified
     # archive if you don’t specify them again when repacking. Signal
@@ -295,7 +302,8 @@ stdenv.mkDerivation rec {
 
       lib.licenses.asl20 # noto-emoji
       lib.licenses.mit # emoji-data
-    ];
+    ]
+    ++ lib.optional withAppleEmojis lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mic92
       equirosa

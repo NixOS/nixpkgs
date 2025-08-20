@@ -1,5 +1,9 @@
-{ callPackage, commandLineArgs }:
-callPackage ./generic.nix { inherit commandLineArgs; } rec {
+{
+  callPackage,
+  commandLineArgs,
+  withAppleEmojis,
+}:
+callPackage ./generic.nix { inherit commandLineArgs withAppleEmojis; } rec {
   pname = "signal-desktop-bin";
   version = "7.64.0";
 
