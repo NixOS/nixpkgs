@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/native
     mkdir -p $out/bin
     cp -r lib/* $out/lib
-    ls -la
     cp -r native/* $out/native
     chmod +x kotlin-lsp.sh
     cp "kotlin-lsp.sh" "$out/kotlin-lsp.sh"
