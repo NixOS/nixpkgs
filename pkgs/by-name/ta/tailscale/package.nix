@@ -227,6 +227,7 @@ buildGoModule (finalAttrs: {
       mbaillie
       jk
       mfrw
+      philiptaron
       pyrox0
       ryan4yin
     ];
