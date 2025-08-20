@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.9.2";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-AADU89Nxy7dpmamRdvCSe5ItwoVsRvgQocoMKs7qUZo=";
+    hash = "sha256-LdMuAQ7eTPiEZRxxjGdycrI53JwJQ3grK5QORPhfo50=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-+eSEOcmrY+3LpOssJzXHFQYKkvdacl5K6FPfcf7LTUQ=";
+  cargoHash = "sha256-0wWU9Tf5NlYXrflIDghEwyjeR8j96CK0TATU1tWO418=";
 
   nativeBuildInputs = [
     jq

@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hopper";
-  version = "5.18.0";
+  version = "5.19.4";
   rev = "v4";
 
   src = fetchurl {
-    url = "https://www.hopperapp.com/downloader/hopperv4/Hopper-${finalAttrs.rev}-${finalAttrs.version}-Linux-demo.pkg.tar.xz";
+    url = "https://www.hopperapp.com/downloader/public/Hopper-${finalAttrs.rev}-${finalAttrs.version}-Linux-demo.pkg.tar.xz";
     curlOptsList = [
       "--user-agent"
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
       "--referer"
       "https://www.hopperapp.com"
     ];
-    hash = "sha256-Z/Y+il5DTdssa2T0RDkDyco098o4JHKeLuwFUpJjgZ0=";
+    hash = "sha256-NYnMJK9F3YxspjriyiLM+vV1HpEunGvznOesQ/FpTl4=";
   };
 
   sourceRoot = ".";

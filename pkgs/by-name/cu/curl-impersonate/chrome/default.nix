@@ -13,6 +13,7 @@
   python3,
   ninja,
   perl,
+  pkg-config,
   autoconf,
   automake,
   libtool,
@@ -24,7 +25,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate-chrome";
-  version = "0.8.0";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -32,13 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    owner = "yifeikong";
+    owner = "lexiforest";
     repo = "curl-impersonate";
     rev = "v${version}";
-    hash = "sha256-m6zeQUL+yBh3ixS+crbJWHX5TLa61A/3oqMz5UVELso=";
+    hash = "sha256-tAQdTRGAOD2rpLZvoLQ2YL0wrohXEcmChMZBvYjsMhE=";
   };
-
-  patches = [ ./disable-building-docs.patch ];
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor
   # warnings on `boringssl`.
@@ -62,6 +61,7 @@ stdenv.mkDerivation rec {
       python3.pythonOnBuildForHost.pkgs.gyp
       ninja
       perl
+      pkg-config
       autoconf
       automake
       libtool
@@ -82,9 +82,9 @@ stdenv.mkDerivation rec {
     "--with-ca-path=${cacert}/etc/ssl/certs"
   ];
 
-  buildFlags = [ "chrome-build" ];
-  checkTarget = "chrome-checkbuild";
-  installTargets = [ "chrome-install" ];
+  buildFlags = [ "build" ];
+  checkTarget = "checkbuild";
+  installTargets = [ "install" ];
 
   doCheck = true;
 
@@ -117,6 +117,11 @@ stdenv.mkDerivation rec {
       popd
     '';
 
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace-fail "-lc++" "-lstdc++"
+  '';
+
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH=$TMPDIR/go
@@ -129,7 +134,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Remove vestigial *-config script
-    rm $out/bin/curl-impersonate-chrome-config
+    rm $out/bin/curl-impersonate-config
 
     # Patch all shebangs of installed scripts
     patchShebangs $out/bin
@@ -138,23 +143,13 @@ stdenv.mkDerivation rec {
     make -C curl-*/include install
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # Build and install completions for each curl binary
+    # Patch completion names
+    substituteInPlace curl-*/scripts/Makefile \
+      --replace-fail "_curl" "_curl-impersonate" \
+      --replace-fail "curl.fish" "curl-impersonate.fish"
 
-    # Patch in correct binary name and alias it to all scripts
-    perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell zsh >$TMPDIR/curl-impersonate-chrome.zsh
-    substituteInPlace $TMPDIR/curl-impersonate-chrome.zsh \
-      --replace-fail \
-        '#compdef curl' \
-        "#compdef curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' %f=curl-impersonate-chrome')"
-
-    perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-chrome --shell fish >$TMPDIR/curl-impersonate-chrome.fish
-    substituteInPlace $TMPDIR/curl-impersonate-chrome.fish \
-      --replace-fail \
-        '--command curl' \
-        "--command curl-impersonate-chrome$(find $out/bin -name 'curl_*' -printf ' --command %f')"
-
-    # Install zsh and fish completions
-    installShellCompletion $TMPDIR/curl-impersonate-chrome.{zsh,fish}
+    # Install completions
+    make -C curl-*/scripts install
   '';
 
   preFixup =
@@ -163,10 +158,10 @@ stdenv.mkDerivation rec {
     in
     ''
       # If libnssckbi.so is needed, link libnssckbi.so without needing nss in closure
-      if grep -F nssckbi $out/lib/libcurl-impersonate-*${libext} &>/dev/null; then
+      if grep -F nssckbi $out/lib/libcurl-impersonate${libext} &>/dev/null; then
         ln -s ${p11-kit}/lib/pkcs11/p11-kit-trust${libext} $out/lib/libnssckbi${libext}
         ${lib.optionalString stdenv.hostPlatform.isElf ''
-          patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate-*${libext}
+          patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate${libext}
         ''}
       fi
     '';
@@ -178,12 +173,18 @@ stdenv.mkDerivation rec {
 
     updateScript = ./update.sh;
 
+    # Find the correct boringssl source file
+    boringssl-source = builtins.head (
+      lib.mapAttrsToList (_: file: file) (
+        lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps
+      )
+    );
     boringssl-go-modules =
       (buildGoModule {
-        inherit (passthru.deps."boringssl.zip") name;
+        inherit (passthru.boringssl-source) name;
 
-        src = passthru.deps."boringssl.zip";
-        vendorHash = "sha256-oKlwh+Oup3lVgqgq42vY3iLg62VboF9N565yK2W0XxI=";
+        src = passthru.boringssl-source;
+        vendorHash = "sha256-HepiJhj7OsV7iQHlM2yi5BITyAM04QqWRX28Rj7sRKk=";
 
         nativeBuildInputs = [ unzip ];
 
@@ -193,13 +194,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Special build of curl that can impersonate Chrome & Firefox";
-    homepage = "https://github.com/yifeikong/curl-impersonate";
+    homepage = "https://github.com/lexiforest/curl-impersonate";
     license = with lib.licenses; [
       curl
       mit
     ];
     maintainers = with lib.maintainers; [ ggg ];
     platforms = lib.platforms.unix;
-    mainProgram = "curl-impersonate-chrome";
+    mainProgram = "curl-impersonate";
   };
 }

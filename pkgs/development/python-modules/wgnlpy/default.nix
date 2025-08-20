@@ -35,6 +35,7 @@ buildPythonPackage rec {
     description = "Netlink connector to WireGuard";
     homepage = "https://github.com/ArgosyLabs/wgnlpy";
     license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ marcel ];
   };
 }

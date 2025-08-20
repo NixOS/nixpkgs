@@ -9,6 +9,7 @@
   python3Packages,
   sqlite,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -17,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MaLmdG98WewnNJt7z6OP9xv6zlNwwu/+YnPM0Iebxj4=";
+    hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
@@ -78,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set NODE_ENV production
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (nixosTests) jellyseerr;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fork of overseerr for jellyfin support";

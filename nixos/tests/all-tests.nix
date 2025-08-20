@@ -276,6 +276,7 @@ in
   blint = runTest ./blint.nix;
   blockbook-frontend = runTest ./blockbook-frontend.nix;
   blocky = runTest ./blocky.nix;
+  bluesky-pds = runTest ./bluesky-pds.nix;
   bookstack = runTest ./bookstack.nix;
   boot = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./boot.nix { };
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
@@ -741,6 +742,7 @@ in
   ifm = runTest ./ifm.nix;
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
+  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   incron = runTest ./incron.nix;
   incus = pkgs.recurseIntoAttrs (
@@ -771,6 +773,7 @@ in
   isso = runTest ./isso.nix;
   jackett = runTest ./jackett.nix;
   jellyfin = runTest ./jellyfin.nix;
+  jellyseerr = runTest ./jellyseerr.nix;
   jenkins = runTest ./jenkins.nix;
   jenkins-cli = runTest ./jenkins-cli.nix;
   jibri = runTest ./jibri.nix;
@@ -1150,7 +1153,6 @@ in
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   pdns-recursor = runTest ./pdns-recursor.nix;
-  pds = runTest ./pds.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };

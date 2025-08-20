@@ -973,7 +973,8 @@
       ];
     "concord232" =
       ps: with ps; [
-      ]; # missing inputs: concord232
+        concord232
+      ];
     "coned" =
       ps: with ps; [
       ];
@@ -3488,12 +3489,13 @@
         hassil
         home-assistant-intents
         ifaddr
+        medcom-ble
         mutagen
         pymicro-vad
         pyserial
         pyspeex-noise
         zeroconf
-      ]; # missing inputs: medcom-ble
+      ];
     "media_extractor" =
       ps:
       with ps;
@@ -4290,7 +4292,8 @@
       ];
     "oru" =
       ps: with ps; [
-      ]; # missing inputs: oru
+        oru
+      ];
     "oru_opower" =
       ps: with ps; [
       ];
@@ -5304,7 +5307,8 @@
       ];
     "sesame" =
       ps: with ps; [
-      ]; # missing inputs: pysesame2
+        pysesame2
+      ];
     "seven_segments" =
       ps: with ps; [
         pillow
@@ -6030,7 +6034,8 @@
       ];
     "tikteck" =
       ps: with ps; [
-      ]; # missing inputs: tikteck
+        tikteck
+      ];
     "tile" =
       ps: with ps; [
         pytile
@@ -7365,6 +7370,7 @@
     "mcp_server"
     "mealie"
     "meater"
+    "medcom_ble"
     "media_extractor"
     "media_player"
     "media_source"
