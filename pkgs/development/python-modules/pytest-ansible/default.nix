@@ -97,6 +97,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ tjni ];
+    maintainers = with maintainers; [
+      tjni
+      robsliwi
+    ];
   };
 }
