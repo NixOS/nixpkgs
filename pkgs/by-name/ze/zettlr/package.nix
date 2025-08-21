@@ -1,7 +1,4 @@
 {
-  pname,
-  version,
-  hash,
   appimageTools,
   lib,
   fetchurl,
@@ -10,9 +7,12 @@
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
 let
+  pname = "zettlr";
+  version = "3.4.4";
+
   src = fetchurl {
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
-    inherit hash;
+    hash = "sha256-ApgmHl9WoAmWl03tqv01D0W8orja25f7KZUFLhlZloQ=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
