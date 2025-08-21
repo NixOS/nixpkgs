@@ -43,6 +43,10 @@ python3Packages.buildPythonApplication rec {
     hsm = [ python-pkcs11 ];
   };
 
+  postInstall = ''
+    rm -v $out/bin/*.py
+  '';
+
   nativeCheckInputs =
     with python3Packages;
     [
@@ -60,6 +64,15 @@ python3Packages.buildPythonApplication rec {
   pytestFlags = [
     "-m"
     "host_test"
+  ];
+
+  disabledTests = [
+    # remove the deprecated .py entrypoints, because our wrapper tries to
+    # import esptool and finds esptool.py in $out/bin, which breaks.
+    "test_esptool_py"
+    "test_espefuse_py"
+    "test_espsecure_py"
+    "test_esp_rfc2217_server_py"
   ];
 
   postCheck = ''
