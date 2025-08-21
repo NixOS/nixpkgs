@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   pciutils,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "PATH" ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Neofetch with LGBTQ+ pride flags";
