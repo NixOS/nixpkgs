@@ -13991,6 +13991,16 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  dashcore = libsForQt5.callPackage ../applications/blockchains/dashcore {
+    withGui = true;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  dashcore = callPackage ../applications/blockchains/dashcore {
+    withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
   elements = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
