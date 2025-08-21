@@ -53,6 +53,7 @@
   xrandr,
   xrefresh,
   xtrans,
+  xvinfo,
   xwininfo,
   xwud,
 }:
@@ -91,6 +92,7 @@ self: with self; {
     xrandr
     xrefresh
     xtrans
+    xvinfo
     xwininfo
     xwud
     ;
@@ -6793,44 +6795,6 @@ self: with self; {
         libX11
         libXt
         libXTrap
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xvinfo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      libXv,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xvinfo";
-      version = "1.1.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xvinfo-1.1.5.tar.xz";
-        sha256 = "0164qpbjmxxa1rbvh6ay1iz2qnp9hl1745k9pk6195kdnbn73piy";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-        libXv
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

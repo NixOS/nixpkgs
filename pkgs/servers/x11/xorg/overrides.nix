@@ -685,13 +685,6 @@ self: super:
 
   xeyes = addMainProgram super.xeyes { };
 
-  xvinfo = super.xvinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.libXext ];
-    meta = attrs.meta // {
-      mainProgram = "xvinfo";
-    };
-  });
-
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
     configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
     meta = attrs.meta // {
