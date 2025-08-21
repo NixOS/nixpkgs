@@ -25,7 +25,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LIwav9ZvNRn4tGh+MGEhimSIKROU3H+R1pc3oyGDb18=";
+    hash = "sha256-4bV8KI1NgyxNIt/BIQLcnnuzKmAqpru6l8LAAB2hBnA=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
