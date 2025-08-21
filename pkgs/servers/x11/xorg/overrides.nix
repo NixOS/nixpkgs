@@ -1112,7 +1112,6 @@ self: super:
   xfd = addMainProgram super.xfd { };
   xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
-  xfsinfo = addMainProgram super.xfsinfo { };
   xgamma = addMainProgram super.xgamma { };
   xgc = addMainProgram super.xgc { };
   xhost = addMainProgram super.xhost { };

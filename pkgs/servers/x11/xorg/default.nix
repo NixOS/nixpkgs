@@ -39,6 +39,7 @@
   xcursor-themes,
   xdriinfo,
   xev,
+  xfsinfo,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -79,6 +80,7 @@ self: with self; {
     xcursorgen
     xdriinfo
     xev
+    xfsinfo
     xlsatoms
     xlsclients
     xlsfonts
@@ -5879,42 +5881,6 @@ self: with self; {
         libXfont2
         xorgproto
         xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfsinfo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libFS,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xfsinfo";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xfsinfo-1.0.7.tar.xz";
-        sha256 = "0x48p4hk0lds2s8nwzgfl616r99s28ydx02zs7p1fxxs3i2wmwwj";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libFS
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
