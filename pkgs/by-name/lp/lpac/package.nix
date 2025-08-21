@@ -17,13 +17,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "lpac";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "estkme-group";
     repo = "lpac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dxoYuX3dNj4piXQBqU4w1ICeyOGid35c+6ZITQiN6wA=";
+    hash = "sha256-ALne5sHB6ff7cHAWe0rFwpP/Yz4EhZBiOrgdM2B8+OE=";
   };
 
   env.LPAC_VERSION = finalAttrs.version;
