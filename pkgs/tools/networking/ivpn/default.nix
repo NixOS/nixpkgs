@@ -55,7 +55,10 @@ builtins.mapAttrs
           homepage = "https://www.ivpn.net/apps";
           changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
           license = lib.licenses.gpl3Only;
-          maintainers = with lib.maintainers; [ urandom ];
+          maintainers = with lib.maintainers; [
+            urandom
+            blenderfreaky
+          ];
           mainProgram = "ivpn";
         };
       }
