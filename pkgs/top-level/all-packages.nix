@@ -16006,9 +16006,7 @@ with pkgs;
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
-  newlib = callPackage ../development/misc/newlib { };
-
-  newlib-nano = callPackage ../development/misc/newlib {
+  newlib-nano = newlib.override {
     nanoizeNewlib = true;
   };
 
