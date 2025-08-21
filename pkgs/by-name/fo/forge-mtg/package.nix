@@ -9,6 +9,7 @@
   libGL,
   makeDesktopItem,
   imagemagick,
+  nix-update-script,
 }:
 
 let
@@ -120,6 +121,10 @@ maven.buildMavenPackage rec {
         $PREFIX_CMD
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=forge-(.*)" ];
+  };
 
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";
