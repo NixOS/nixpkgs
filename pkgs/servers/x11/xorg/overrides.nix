@@ -543,7 +543,6 @@ self: super:
     };
   });
 
-  xev = addMainProgram super.xev { };
   xeyes = addMainProgram super.xeyes { };
 
   xvinfo = super.xvinfo.overrideAttrs (attrs: {

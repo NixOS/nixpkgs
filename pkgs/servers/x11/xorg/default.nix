@@ -54,6 +54,7 @@
   xcursorgen,
   xcursor-themes,
   xdriinfo,
+  xev,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -93,6 +94,7 @@ self: with self; {
     xcmsdb
     xcursorgen
     xdriinfo
+    xev
     xlsatoms
     xlsclients
     xlsfonts
@@ -3120,44 +3122,6 @@ self: with self; {
         libXxf86dga
         libXxf86misc
         libXxf86vm
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xev = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      libXrandr,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xev";
-      version = "1.2.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xev-1.2.6.tar.xz";
-        sha256 = "1mq7332kgisd9yq0w0rv11vhwhgpkmpg7pfdlyn776dc13hcbqb1";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-        libXrandr
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
