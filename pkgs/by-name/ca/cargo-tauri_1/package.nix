@@ -47,7 +47,10 @@ cargo-tauri.overrideAttrs (
       webkitgtk_4_0
     ];
 
-    passthru = { inherit (oldAttrs.passthru) hook; };
+    passthru = {
+      inherit (oldAttrs.passthru) hook;
+      tests = { inherit (oldAttrs.passthru.tests) version; };
+    };
 
     meta = {
       inherit (oldAttrs.meta)
