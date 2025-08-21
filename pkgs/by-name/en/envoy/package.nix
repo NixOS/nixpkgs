@@ -23,6 +23,7 @@
   gnutar,
   gnugrep,
   envoy,
+  git,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
@@ -120,6 +121,7 @@ buildBazelPackage rec {
     ninja
     patchelf
     cacert
+    git
   ];
 
   buildInputs = [ linuxHeaders ];
