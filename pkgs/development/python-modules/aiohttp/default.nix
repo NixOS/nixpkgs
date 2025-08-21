@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   isPy310,
   isPyPy,
@@ -56,6 +57,11 @@ buildPythonPackage rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2025-53643.patch";
+      url = "https://github.com/aio-libs/aiohttp/commit/e8d774f635dc6d1cd3174d0e38891da5de0e2b6a.patch";
+      hash = "sha256-fhts9FYWPOOQn71rbK8KX1cEtit65i0Nr3mIPr6/Btg=";
+    })
     (replaceVars ./unvendor-llhttp.patch {
       llhttpDev = lib.getDev llhttp;
       llhttpLib = lib.getLib llhttp;
