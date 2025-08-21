@@ -15,6 +15,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Visual Studio Code extension to help developers and AI engineers build AI apps";
     homepage = "https://github.com/Microsoft/windows-ai-studio";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
