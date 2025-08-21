@@ -15240,9 +15240,7 @@ with pkgs;
 
   ### SCIENCE / MISC
 
-  boinc = callPackage ../applications/science/misc/boinc { };
-
-  boinc-headless = callPackage ../applications/science/misc/boinc { headless = true; };
+  boinc-headless = boinc.override { headless = true; };
 
   celestia = callPackage ../applications/science/astronomy/celestia {
     inherit (gnome2) gtkglext;
