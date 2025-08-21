@@ -2,7 +2,6 @@
   lib,
   stdenv,
   bzip2,
-  fetchFromGitHub,
   pkg-config,
   rustPlatform,
   xz,
@@ -11,28 +10,25 @@
 }:
 
 cargo-tauri.overrideAttrs (
-  newAttrs: oldAttrs: {
-    version = "1.8.1";
+  finalAttrs: oldAttrs: {
+    version = "1.6.6";
 
-    src = fetchFromGitHub {
-      owner = "tauri-apps";
-      repo = "tauri";
-      rev = "tauri-v${newAttrs.version}";
-      hash = "sha256-z8dfiLghN6m95PLCMDgpBMNo+YEvvsGN9F101fAcVF4=";
+    src = oldAttrs.src.override {
+      hash = "sha256-UE/mJ0WdbVT4E1YuUCtu80UB+1WR+KRWs+4Emy3Nclc=";
     };
 
     # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
     # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
-    sourceRoot = "${newAttrs.src.name}/tooling/cli";
+    sourceRoot = "${finalAttrs.src.name}/tooling/cli";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit (newAttrs)
+      inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
-      hash = "sha256-t5sR02qC06H7A2vukwyZYKA2XMVUzJrgIOYuNSf42mE=";
+      hash = "sha256-kAaq6Kam3e5n8569Y4zdFEiClI8q97XFX1hBD7NkUqw=";
     };
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ pkg-config ];
