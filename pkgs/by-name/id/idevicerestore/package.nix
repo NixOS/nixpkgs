@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  libimobiledevice,
-  libirecovery,
-  libzip,
-  libusbmuxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, curl
+, libimobiledevice
+, libirecovery
+, libzip
+, libusbmuxd
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "idevicerestore";
-    rev = "609f7f058487596597e8e742088119fdd46729df";
-    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
+    rev = "2914bf66cfb28c6d0fde43655dac05ea044d2907";
+    hash = "sha256-K0vzJskQIWlr5vxvi2Qkz9SQk8yiQYd4edMcIVpbm5A=";
   };
 
   nativeBuildInputs = [
