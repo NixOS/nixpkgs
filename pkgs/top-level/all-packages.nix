@@ -15099,10 +15099,6 @@ with pkgs;
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
-  veriT = callPackage ../applications/science/logic/verit {
-    stdenv = gccStdenv;
-  };
-
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   autoreconfHook,
   gmp,
@@ -8,7 +8,7 @@
   bison,
 }:
 
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   pname = "veriT";
   version = "2021.06.2";
 
