@@ -35,6 +35,7 @@
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xcursorgen,
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
@@ -73,6 +74,7 @@ self: with self; {
     transset
     xbitmaps
     xcmsdb
+    xcursorgen
     xdriinfo
     xlsatoms
     xlsclients
@@ -3637,46 +3639,6 @@ self: with self; {
         libXmu
         xorgproto
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcursorgen = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libpng,
-      libX11,
-      libXcursor,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcursorgen";
-      version = "1.0.9";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xcursorgen-1.0.9.tar.xz";
-        sha256 = "1g1v96yprk5nnkip2w3r2cfsbzzsw0ssy417j3m1djl4mibf3j8c";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libpng
-        libX11
-        libXcursor
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

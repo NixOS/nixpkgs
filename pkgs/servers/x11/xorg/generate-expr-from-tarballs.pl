@@ -328,6 +328,7 @@ print OUT <<EOF;
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xcursorgen,
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
@@ -366,6 +367,7 @@ self: with self; {
     transset
     xbitmaps
     xcmsdb
+    xcursorgen
     xdriinfo
     xlsatoms
     xlsclients

@@ -1026,7 +1026,6 @@ self: super:
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
-  xcursorgen = addMainProgram super.xcursorgen { };
 
   xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ xorg.xcursorgen ];
