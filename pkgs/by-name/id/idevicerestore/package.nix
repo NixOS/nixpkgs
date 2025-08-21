@@ -8,6 +8,7 @@
 , libirecovery
 , libzip
 , libusbmuxd
+, libtatsu
 ,
 }:
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     libirecovery
     libzip
     libusbmuxd
+    libtatsu
     # Not listing other dependencies specified in
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
