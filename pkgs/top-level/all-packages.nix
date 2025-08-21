@@ -5889,10 +5889,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
   };
 
-  thrust = callPackage ../development/tools/thrust {
-    gconf = gnome2.GConf;
-  };
-
   urweb = callPackage ../development/compilers/urweb {
     icu = icu67;
   };
