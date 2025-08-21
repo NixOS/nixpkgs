@@ -15777,10 +15777,6 @@ with pkgs;
     llvmPackages = llvmPackages_12;
   };
 
-  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {
-    webkitgtk = webkitgtk_4_0;
-  };
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor =

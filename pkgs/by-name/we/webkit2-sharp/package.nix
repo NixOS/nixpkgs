@@ -7,7 +7,7 @@
   libxslt,
   mono,
   pkg-config,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk-sharp-3_0
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
   passthru = {
-    inherit webkitgtk;
+    webkitgtk = webkitgtk_4_0;
   };
 
   meta = {
