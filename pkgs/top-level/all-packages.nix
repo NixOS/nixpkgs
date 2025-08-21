@@ -16020,8 +16020,6 @@ with pkgs;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
-  gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
-
   inherit (callPackage ../applications/misc/zettlr { }) zettlr;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
