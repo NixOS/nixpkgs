@@ -382,6 +382,7 @@ print OUT <<EOF;
   xorgproto,
   xorg-sgml-doctools,
   xprop,
+  xrandr,
   xrefresh,
   xtrans,
   xwininfo,
@@ -419,6 +420,7 @@ self: with self; {
     xmodmap
     xorgproto
     xprop
+    xrandr
     xrefresh
     xtrans
     xwininfo
