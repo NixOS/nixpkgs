@@ -15225,8 +15225,6 @@ with pkgs;
   pari = callPackage ../applications/science/math/pari { };
   gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
 
-  raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
-
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
   yacas-gui = yacas.override {
