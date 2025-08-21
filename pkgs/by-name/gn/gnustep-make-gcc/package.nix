@@ -7,7 +7,7 @@
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
-  pname = "gnustep-make";
+  pname = "gnustep-make-gcc";
   version = "2.9.3";
 
   src = fetchurl {
@@ -32,8 +32,8 @@ gobjcStdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ which ];
 
-  patches = [ ./fixup-paths.patch ];
-  setupHook = ./setup-hook.sh;
+  patches = [ ../gnustep-make/fixup-paths.patch ];
+  setupHook = ../gnustep-make/setup-hook.sh;
 
   meta = {
     changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
