@@ -11,15 +11,15 @@
   usage: (sorry, its still impure but works!)
 
   impure directory:
-  mkdir /opt/gutenprint; sudo cp -r $(nix-build -A gutenprintBin -f $NIXPGS_ALL) /opt/gutenprint
+  mkdir /opt/gutenprint; sudo cp -r $(nix-build -A gutenprint-bin -f $NIXPGS_ALL) /opt/gutenprint
 
   add the following lines to bindirCmds property of  printing/cupsd.nix:
 
-    ln -s ${pkgs.gutenprintBin}/lib/cups/backend/* $out/lib/cups/backend/
-    ln -s ${pkgs.gutenprintBin}/lib/cups/filter/* $out/lib/cups/filter/
+    ln -s ${pkgs.gutenprint-bin}/lib/cups/backend/* $out/lib/cups/backend/
+    ln -s ${pkgs.gutenprint-bin}/lib/cups/filter/* $out/lib/cups/filter/
     mkdir -p $out/lib/cups/model
-    cat ${pkgs.gutenprintBin}/ppds/Canon/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd.gz |gunzip > $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
-    sed -i 's@/opt/gutenprint/cups@${pkgs.gutenprintBin}/cups@' $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
+    cat ${pkgs.gutenprint-bin}/ppds/Canon/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd.gz |gunzip > $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
+    sed -i 's@/opt/gutenprint/cups@${pkgs.gutenprint-bin}/cups@' $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
 
   Then rebuild your system and add your printer using the the localhost:603 cups web interface
   select the extracted .ppd file which can be found in the model directory of

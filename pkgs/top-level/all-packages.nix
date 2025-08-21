@@ -15322,8 +15322,6 @@ with pkgs;
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
-  gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
-
   dcp375cwlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcp375cw { }).driver;
 
   dcp375cw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp375cw { }).cupswrapper;

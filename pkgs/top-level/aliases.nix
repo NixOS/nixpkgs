@@ -918,6 +918,7 @@ mapAliases {
   gtkperf = throw "'gtkperf' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   guardian-agent = throw "'guardian-agent' has been removed, as it hasn't been maintained upstream in years and accumulated many vulnerabilities"; # Added 2024-06-09
   guile-disarchive = disarchive; # Added 2023-10-27
+  gutenprintBin = gutenprint-bin; # Added 2025-08-21
 
   ### H ###
 
