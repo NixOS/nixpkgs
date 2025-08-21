@@ -9000,7 +9000,11 @@ with pkgs;
     ];
     autoloadProviders = true;
 
-    conf = ../development/libraries/openssl/quantum_safe.cnf;
+    extraINIConfig = {
+      tls_system_default = {
+        Groups = "X25519MLKEM768:X25519:P-256:X448:P-521:ffdhe2048:ffdhe3072";
+      };
+    };
   };
 
   openssl_legacy = openssl.override {
