@@ -1,0 +1,115 @@
+{
+  lib,
+  autoPatchelfHook,
+  bzip2,
+  fetchurl,
+  glibc,
+  kdePackages,
+  qt6,
+  runtimeShell,
+  stdenv,
+  unzip,
+}:
+let
+  pname = "bcompare";
+  version = "5.2.0.31950";
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
+      sha256 = "sha256-CCSRNGWIYVKAoQVVJ8McDUtc45nK0S4CdamcT5uVlQM=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
+      sha256 = "sha256-R+G2Zlr074i2W4GaEDweK0c0q8tnzjs6M0N106WVAlg=";
+    };
+
+    aarch64-darwin = srcs.x86_64-darwin;
+  };
+
+  src = srcs.${stdenv.hostPlatform.system} or throwSystem;
+
+  linux = stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+    unpackPhase = ''
+      ar x $src
+      tar xfz data.tar.gz
+    '';
+
+    installPhase = ''
+      mkdir -p $out/{bin,lib,share}
+
+      cp -R usr/{bin,lib,share} $out/
+
+      # Remove non Qt5 libs
+      rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
+      rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
+
+      substituteInPlace $out/bin/${pname} \
+        --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
+        --replace "ldd" "${glibc.bin}/bin/ldd" \
+        --replace "/bin/bash" "${runtimeShell}"
+    '';
+
+    nativeBuildInputs = [ autoPatchelfHook ];
+
+    buildInputs = [
+      (lib.getLib stdenv.cc.cc)
+      bzip2
+      kdePackages.kconfig
+      kdePackages.kconfigwidgets
+      kdePackages.kcoreaddons
+      kdePackages.ki18n
+      kdePackages.kio
+      kdePackages.kservice
+      qt6.qtbase
+      qt6.qtsvg
+    ];
+
+    dontBuild = true;
+    dontConfigure = true;
+    dontWrapQtApps = true;
+  };
+
+  darwin = stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+    nativeBuildInputs = [ unzip ];
+
+    installPhase = ''
+      mkdir -p $out/Applications/BCompare.app
+      cp -R . $out/Applications/BCompare.app
+    '';
+  };
+
+  meta = with lib; {
+    description = "GUI application that allows to quickly and easily compare files and folders";
+    longDescription = ''
+      Beyond Compare is focused. Beyond Compare allows you to quickly and easily compare your files and folders.
+      By using simple, powerful commands you can focus on the differences you're interested in and ignore those you're not.
+      You can then merge the changes, synchronize your files, and generate reports for your records.
+    '';
+    homepage = "https://www.scootersoftware.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      ktor
+      arkivm
+    ];
+    platforms = builtins.attrNames srcs;
+    mainProgram = "bcompare";
+  };
+in
+if stdenv.hostPlatform.isDarwin then darwin else linux
