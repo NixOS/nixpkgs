@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.26.0";
+  version = "1.26.3";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Vzkx1FX1qW9j23yNNdUTIrjSh4FujGp32Ez7ufoTUfE=";
+    hash = "sha256-LWQ/vRQgKX2lpNaUXRHwpbT4L+6lTqauyTaNQpldiwM=";
   };
 
   nativeBuildInputs = [
