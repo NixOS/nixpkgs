@@ -10,13 +10,13 @@
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "libgeneral";
-  version = "84";
+  version = "85";
 
   src = fetchFromGitHub {
     owner = "tihmstar";
     repo = "libgeneral";
     tag = finalAttrs.version;
-    hash = "sha256-D6S7Ha7SQvWDGwiJuKh2Y9YOsw2ytxn70ia3llKC034=";
+    hash = "sha256-bCaAx1PVqT7Fl8IoefupIb6UuHD43clmdtnomF5Vycs=";
   };
 
   # Do not depend on git to calculate version, instead
