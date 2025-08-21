@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
         # access-time-related tests flakey on some systems
         "cpio/test/test_option_a.c"
         "cpio/test/test_option_t.c"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-        # only on some aarch64-linux systems?
+        # fails tests on filesystems with 64-bit inode values:
+        # FAIL: bsdcpio_test
+        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
       ];
