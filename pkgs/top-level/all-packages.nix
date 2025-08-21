@@ -15351,8 +15351,6 @@ with pkgs;
 
   flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
-  fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
-
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
