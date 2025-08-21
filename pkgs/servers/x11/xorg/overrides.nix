@@ -1133,15 +1133,6 @@ self: super:
     };
   });
 
-  xrandr = super.xrandr.overrideAttrs (attrs: {
-    postInstall = ''
-      rm $out/bin/xkeystone
-    '';
-    meta = attrs.meta // {
-      mainProgram = "xrandr";
-    };
-  });
-
   xset = addMainProgram super.xset { };
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };

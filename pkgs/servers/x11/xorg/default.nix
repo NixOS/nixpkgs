@@ -50,6 +50,7 @@
   xorgproto,
   xorg-sgml-doctools,
   xprop,
+  xrandr,
   xrefresh,
   xtrans,
   xwininfo,
@@ -87,6 +88,7 @@ self: with self; {
     xmodmap
     xorgproto
     xprop
+    xrandr
     xrefresh
     xtrans
     xwininfo
@@ -6545,46 +6547,6 @@ self: with self; {
         libX11
         libXmu
         xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xrandr = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      libXrandr,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xrandr";
-      version = "1.5.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xrandr-1.5.3.tar.xz";
-        sha256 = "0744kfafd98q2zswyzva837qgvmdpfv80ilnp7x4fhdpmmk7bpgq";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-        libXrandr
-        libXrender
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
