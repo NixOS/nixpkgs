@@ -6,20 +6,20 @@
   cargo-tauri,
   cargo-tauri_1,
   gtk3,
-  libsoup_2_4,
+  libsoup_3,
   openssl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 
 cargo-tauri.overrideAttrs (
   newAttrs: oldAttrs: {
-    version = "1.8.1";
+    version = "1.8.3";
 
     src = fetchFromGitHub {
       owner = "tauri-apps";
       repo = "tauri";
       rev = "tauri-v${newAttrs.version}";
-      hash = "sha256-z8dfiLghN6m95PLCMDgpBMNo+YEvvsGN9F101fAcVF4=";
+      hash = "sha256-2GRiMptdztii0+F566LTHFaIh4SuHdOcIFZbNI7WI8w=";
     };
 
     # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
@@ -33,7 +33,7 @@ cargo-tauri.overrideAttrs (
         src
         sourceRoot
         ;
-      hash = "sha256-t5sR02qC06H7A2vukwyZYKA2XMVUzJrgIOYuNSf42mE=";
+      hash = "sha256-AIcfR4ROj0MXh5Yj6z+bvqou7aOnyNugUw3Pr1vuErQ=";
     };
 
     buildInputs = [
@@ -41,8 +41,8 @@ cargo-tauri.overrideAttrs (
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       gtk3
-      libsoup_2_4
-      webkitgtk_4_0
+      libsoup_3
+      webkitgtk_4_1
     ];
 
     passthru = {
