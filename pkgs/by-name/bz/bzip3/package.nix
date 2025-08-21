@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.5.2";
+  version = "1.5.3";
 
   outputs = [
     "bin"
@@ -18,10 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "kspalaiologos";
+    owner = "iczelia";
     repo = "bzip3";
-    rev = finalAttrs.version;
-    hash = "sha256-mu95ZYkD0isDuHdHcU4zhWxCTlaYXoM85j76IGwVAak=";
+    tag = finalAttrs.version;
+    hash = "sha256-SOouMUctxsAJdkt84rJBaCbK23GKmXRH9nVgGdDodsk=";
   };
 
   postPatch = ''
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Better and stronger spiritual successor to BZip2";
-    homepage = "https://github.com/kspalaiologos/bzip3";
-    changelog = "https://github.com/kspalaiologos/bzip3/blob/${finalAttrs.src.rev}/NEWS";
+    homepage = "https://github.com/iczelia/bzip3";
+    changelog = "https://github.com/iczelia/bzip3/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     pkgConfigModules = [ "bzip3" ];
