@@ -48,6 +48,9 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/walles/moor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2WithViews;
     mainProgram = "moor";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [
+      foo-dogsquared
+      getchoo
+    ];
   };
 })
