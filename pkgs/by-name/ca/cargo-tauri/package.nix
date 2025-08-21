@@ -11,14 +11,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
   version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
-    tag = "tauri-cli-v${version}";
+    tag = "tauri-cli-v${finalAttrs.version}";
     hash = "sha256-0J55AvAvvqTVls4474GcgLPBtSC+rh8cXVKluMjAVBE=";
   };
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -47,10 +47,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # See ./doc/hooks/tauri.section.md
-    hook = callPackage ./hook.nix { };
+    hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
 
     tests = {
-      hook = callPackage ./test-app.nix { };
+      hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
     };
 
     updateScript = nix-update-script {
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
-    changelog = "https://github.com/tauri-apps/tauri/releases/tag/${src.tag}";
+    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-cli-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-tauri";
   };
-}
+})

@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   cargo-tauri,
-  cargo-tauri_1,
   gtk3,
   libsoup_2_4,
   openssl,
@@ -48,9 +47,7 @@ cargo-tauri.overrideAttrs (
       webkitgtk_4_0
     ];
 
-    passthru = {
-      hook = cargo-tauri.hook.override { cargo-tauri = cargo-tauri_1; };
-    };
+    passthru = { inherit (oldAttrs.passthru) hook; };
 
     meta = {
       inherit (oldAttrs.meta)
