@@ -4,6 +4,7 @@
   fetchzip,
   installShellFiles,
   bintools,
+  versionCheckHook,
   writeShellScript,
   nix-update,
 }:
@@ -43,6 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "version";
 
   passthru.updateScript = writeShellScript "update-zrok" ''
     ${lib.getExe nix-update} pkgsCross.gnu64.zrok
