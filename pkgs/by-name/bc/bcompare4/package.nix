@@ -15,7 +15,7 @@
 }:
 
 let
-  pname = "bcompare";
+  pname = "bcompare4";
   version = "4.4.7.28397";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -83,6 +83,9 @@ let
     dontBuild = true;
     dontConfigure = true;
     dontWrapQtApps = true;
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = stdenv.mkDerivation {
@@ -98,6 +101,9 @@ let
       mkdir -p $out/Applications/BCompare.app
       cp -R . $out/Applications/BCompare.app
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   meta = {
