@@ -15783,10 +15783,6 @@ with pkgs;
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
-  wikicurses = callPackage ../applications/misc/wikicurses {
-    pythonPackages = python3Packages;
-  };
-
   winePackagesFor =
     wineBuild:
     lib.makeExtensible (

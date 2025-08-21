@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  pythonPackages,
+  python3Packages,
   installShellFiles,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "1.4";
   format = "setuptools";
   pname = "wikicurses";
@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     urwid
     beautifulsoup4
     lxml
