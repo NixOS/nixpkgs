@@ -52,6 +52,7 @@
   xcb-proto,
   xcmsdb,
   xcursorgen,
+  xcursor-themes,
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
@@ -136,6 +137,7 @@ self: with self; {
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
+  xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;
@@ -3001,38 +3003,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcursorthemes = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXcursor,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcursor-themes";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/data/xcursor-themes-1.0.7.tar.xz";
-        sha256 = "1j3qfga5llp8g702n7mivvdvfjk7agsgnbglbfh99n13i3sfiflm";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ libXcursor ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];

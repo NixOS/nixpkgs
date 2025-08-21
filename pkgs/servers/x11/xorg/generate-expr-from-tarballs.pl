@@ -368,6 +368,7 @@ print OUT <<EOF;
   xcb-proto,
   xcmsdb,
   xcursorgen,
+  xcursor-themes,
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
@@ -452,6 +453,7 @@ self: with self; {
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
+  xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;
