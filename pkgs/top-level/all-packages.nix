@@ -15887,8 +15887,6 @@ with pkgs;
 
   dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
 
-  httrack = callPackage ../tools/backup/httrack { };
-
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
   # Overriding does not work when using callPackage on discord using import instead. (https://github.com/NixOS/nixpkgs/pull/179906)
