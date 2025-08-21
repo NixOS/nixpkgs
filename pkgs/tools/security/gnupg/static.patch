@@ -52,59 +52,69 @@ index f5d8bef90..e7f4fb175 100755
  
  Use these variables to override the choices made by `configure' or to help
  it to find libraries and programs with nonstandard names/locations.
-@@ -16616,67 +16621,77 @@ else $as_nop
+@@ -15579,62 +15579,71 @@ else
  fi
  
    elif test "$with_tss" = intel; then
--    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing Esys_Initialize" >&5
--printf %s "checking for library containing Esys_Initialize... " >&6; }
--if test ${ac_cv_search_Esys_Initialize+y}
--then :
--  printf %s "(cached) " >&6
--else $as_nop
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing Esys_Initialize" >&5
+-$as_echo_n "checking for library containing Esys_Initialize... " >&6; }
+-if ${ac_cv_search_Esys_Initialize+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
 -  ac_func_search_save_LIBS=$LIBS
 -cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 -/* end confdefs.h.  */
- 
+-
 -/* Override any GCC internal prototype to avoid an error.
 -   Use char because int might match the return type of a GCC
 -   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
 -char Esys_Initialize ();
 -int
--main (void)
+-main ()
 -{
 -return Esys_Initialize ();
 -  ;
 -  return 0;
 -}
 -_ACEOF
--for ac_lib in '' tss2-esys
--do
+-for ac_lib in '' tss2-esys; do
 -  if test -z "$ac_lib"; then
 -    ac_res="none required"
 -  else
 -    ac_res=-l$ac_lib
 -    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
 -  fi
--  if ac_fn_c_try_link "$LINENO"
--then :
+-  if ac_fn_c_try_link "$LINENO"; then :
 -  ac_cv_search_Esys_Initialize=$ac_res
 -fi
--rm -f core conftest.err conftest.$ac_objext conftest.beam \
+-rm -f core conftest.err conftest.$ac_objext \
 -    conftest$ac_exeext
--  if test ${ac_cv_search_Esys_Initialize+y}
--then :
+-  if ${ac_cv_search_Esys_Initialize+:} false; then :
 -  break
 -fi
 -done
--if test ${ac_cv_search_Esys_Initialize+y}
--then :
-+pkg_failed=no
+-if ${ac_cv_search_Esys_Initialize+:} false; then :
+-
+-else
+-  ac_cv_search_Esys_Initialize=no
+-fi
+-rm conftest.$ac_ext
+-LIBS=$ac_func_search_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_Esys_Initialize" >&5
+-$as_echo "$ac_cv_search_Esys_Initialize" >&6; }
+-ac_res=$ac_cv_search_Esys_Initialize
+-if test "$ac_res" != no; then :
+-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+-  have_libtss=Intel
+-else
+-  as_fn_error $? "Intel TPM Software Stack requested but not found" "$LINENO" 5
++  pkg_failed=no
 +{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for LIBTSS" >&5
 +printf %s "checking for LIBTSS... " >&6; }
- 
--else $as_nop
--  ac_cv_search_Esys_Initialize=no
 +if test -n "$LIBTSS_CFLAGS"; then
 +    pkg_cv_LIBTSS_CFLAGS="$LIBTSS_CFLAGS"
 + elif test -n "$PKG_CONFIG"; then
@@ -118,21 +128,10 @@ index f5d8bef90..e7f4fb175 100755
 +		      test "x$?" != "x0" && pkg_failed=yes
 +else
 +  pkg_failed=yes
- fi
--rm conftest.$ac_ext
--LIBS=$ac_func_search_save_LIBS
++fi
 + else
 +    pkg_failed=untried
- fi
--{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_Esys_Initialize" >&5
--printf "%s\n" "$ac_cv_search_Esys_Initialize" >&6; }
--ac_res=$ac_cv_search_Esys_Initialize
--if test "$ac_res" != no
--then :
--  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
--  have_libtss=Intel
--else $as_nop
--  as_fn_error $? "Intel TPM Software Stack requested but not found" "$LINENO" 5
++fi
 +if test -n "$LIBTSS_LIBS"; then
 +    pkg_cv_LIBTSS_LIBS="$LIBTSS_LIBS"
 + elif test -n "$PKG_CONFIG"; then
@@ -149,10 +148,7 @@ index f5d8bef90..e7f4fb175 100755
 +fi
 + else
 +    pkg_failed=untried
- fi
- 
-+
-+
++fi
 +if test $pkg_failed = yes; then
 +        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 +printf "%s\n" "no" >&6; }
@@ -181,10 +177,9 @@ index f5d8bef90..e7f4fb175 100755
 +        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 +printf "%s\n" "yes" >&6; }
 +	have_libtss=Intel
-+fi
+ fi
+ 
    else
-     as_fn_error $? "Invalid TPM Software Stack requested: $with_tss" "$LINENO" 5
-   fi
 @@ -16768,7 +16783,6 @@ printf "%s\n" "$as_me: WARNING: Need Esys_TR_GetTpmHandle API (usually requires
  
  fi
@@ -218,4 +213,3 @@ index 94bc80583..e88d0f650 100644
    LIBS="$_save_libs"
 -- 
 2.51.0
-
