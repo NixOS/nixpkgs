@@ -1,12 +1,22 @@
-# Experimental flake interface to Nixpkgs.
-# See https://github.com/NixOS/rfcs/pull/49 for details.
+/*
+  The Nixpkgs flake interface. Flakes are experimental—see
+  https://github.com/NixOS/rfcs/pull/49 for details.
 
-# In lieu of performance considerations, the implementation in this file would
-# likely have been more concise and expressive. Unfortunately, an implication
-# of that would be that in order for some attributes to evaluate, some files
-# that are in essence unnecessary for that evaluation would be nonetheless
-# evaluated to some extent. So in the trade-off between expressivity and
-# performance, performance was chosen and therefore this file is quite literal.
+  This file and the other `flake-support.nix` files involved compose together
+  to create the flake interface. This composition logic could be implemented
+  in various different ways. For example, the logic could be more abstract,
+  making use of `lib.recursiveUpdate` and overall fewer lines of code in this
+  file. Another example is usage of the Nixpkgs module system, benefiting from
+  its option value merging feature and arguably some type checking.
+
+  But the ability to understand this highly visible implementation without the
+  need for Nix expertise was determined to be important. Also, any
+  implementation in which the output data structure is not a hard-coded literal
+  would unfortunately mean that in order for some attributes to evaluate, some
+  files that are in essence unnecessary for that evaluation would be nonetheless
+  evaluated to some extent—a performance penalty that is deemed highly
+  undesirable considering the pervasive use of this interface.
+*/
 {
   description = "A collection of packages for the Nix package manager";
 
