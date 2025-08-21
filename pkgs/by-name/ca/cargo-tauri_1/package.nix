@@ -8,6 +8,7 @@
   gtk3,
   libsoup_2_4,
   openssl,
+  pkg-config,
   webkitgtk_4_0,
 }:
 
@@ -35,6 +36,8 @@ cargo-tauri.overrideAttrs (
         ;
       hash = "sha256-t5sR02qC06H7A2vukwyZYKA2XMVUzJrgIOYuNSf42mE=";
     };
+
+    nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ pkg-config ];
 
     buildInputs = [
       openssl
