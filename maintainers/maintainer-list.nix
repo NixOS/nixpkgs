@@ -18995,6 +18995,12 @@
     githubId = 1348;
     name = "Nate Smith";
   };
+  nxm = {
+    email = "szturomski@jakub.app";
+    name = "Jakub Szturomski";
+    github = "nxm";
+    githubId = 22380073;
+  };
   nyabinary = {
     name = "Niko Cantero";
     email = "nyanbinary@keemail.me";
