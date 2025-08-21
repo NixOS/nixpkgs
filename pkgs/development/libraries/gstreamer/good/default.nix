@@ -74,7 +74,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.26.0";
+  version = "1.26.3";
 
   outputs = [
     "out"
@@ -83,20 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nhjxOe9prQhnwt+7j+HRc2123xGqyD9g6NOtseLq8Ds=";
+    hash = "sha256-/k7JZw7f5rseXycWmuFFtawt0hismL2CUcj7pBrTPFM=";
   };
 
   patches = [
     # dlopen libsoup_3 with an absolute path
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
-    })
-
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/dd1fc2b7931f5789815e17dda2ef7c31b9fba563.patch";
-      stripLen = 2;
-      hash = "sha256-m2h1F6M2hzw3HxizmCyEEqkUQe0ccLWFBvgT2f+GjNE=";
     })
   ];
 

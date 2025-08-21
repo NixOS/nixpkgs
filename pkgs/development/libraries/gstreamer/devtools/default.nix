@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.0";
+  version = "1.26.3";
 
   outputs = [
     "out"
@@ -37,24 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7/M9fcKSuwdKJ4jqiHtigzmP/e+vpJ+30I7+ZlimVkg=";
+    hash = "sha256-T94Zw8FEg0+MsFwso/FLOlDTlbrSA9F/mKbnDBZy8ro=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-p26jeKRDSPTgQzf4ckhLPSFa8RKsgkjUEXJG8IlPPZo=";
+    hash = "sha256-UHUBmbhm7uvHsYMOs3RYY1rG5uvGqj8ewiu+ByAYKEA=";
   };
-
-  patches = [
-    # Fix Requires in gstreamer-validate-1.0.pc
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/13c0f44dd546cd058c39f32101a361b3a7746f73.patch";
-      stripLen = 2;
-      hash = "sha256-CpBFTmdn+VO6ZeNe6NZR6ELvakZqQdaF3o3G5TSDuUU=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config

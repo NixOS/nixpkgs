@@ -8,7 +8,7 @@ Subject: [PATCH] meson: Don't link ssh dropins
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index 90860be99a..f021f76031 100644
+index b5aaecd669..91b23f2d72 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -207,13 +207,13 @@ sshconfdir = get_option('sshconfdir')
