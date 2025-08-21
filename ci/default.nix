@@ -62,7 +62,10 @@ let
 
         # This uses nixfmt underneath, the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
-        programs.nixfmt.enable = true;
+        programs.nixfmt = {
+          enable = true;
+          package = pkgs.nixfmt;
+        };
 
         programs.yamlfmt = {
           enable = true;
