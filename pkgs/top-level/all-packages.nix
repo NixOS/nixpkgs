@@ -15381,25 +15381,9 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
-  epkowa = callPackage ../misc/drivers/epkowa { };
-
-  utsushi = callPackage ../misc/drivers/utsushi { };
-
-  utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
-  # using the new configuration style proposal which is unstable
-  jack1 = callPackage ../misc/jackaudio/jack1.nix { };
-
-  jack2 = callPackage ../misc/jackaudio { };
-
   libjack2 = jack2.override { prefix = "lib"; };
-
-  jack-example-tools = callPackage ../misc/jackaudio/tools.nix {
-    libopus = libopus.override { withCustomModes = true; };
-    jack = jack2;
-  };
 
   jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
   jack_autoconnect = jack-autoconnect;
@@ -15407,10 +15391,6 @@ with pkgs;
   j2cli = with python311Packages; toPythonApplication j2cli;
 
   kmonad = haskellPackages.kmonad.bin;
-
-  kompute = callPackage ../development/libraries/kompute {
-    fmt = fmt_10;
-  };
 
   # In general we only want keep the last three minor versions around that
   # correspond to the last three supported kubernetes versions:
@@ -15441,8 +15421,6 @@ with pkgs;
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
-
-  mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
@@ -15596,9 +15574,6 @@ with pkgs;
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
 
-  nix-index-unwrapped = callPackage ../tools/package-management/nix-index { };
-  nix-index = callPackage ../tools/package-management/nix-index/wrapper.nix { };
-
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
   nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
@@ -15611,8 +15586,6 @@ with pkgs;
     nix-prefetch-svn
     nix-prefetch-scripts
     ;
-
-  nix-update-source = callPackage ../tools/package-management/nix-update-source { };
 
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
@@ -15631,8 +15604,6 @@ with pkgs;
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
-  nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
-  nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
@@ -15664,9 +15635,7 @@ with pkgs;
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
-  pgadmin4 = callPackage ../tools/admin/pgadmin { };
-
-  pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
+  pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
   philipstv = with python3Packages; toPythonApplication philipstv;
 
@@ -15688,10 +15657,6 @@ with pkgs;
   qmake2cmake = python3Packages.callPackage ../tools/misc/qmake2cmake { };
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
-
-  romdirfs = callPackage ../tools/filesystems/romdirfs {
-    stdenv = gccStdenv;
-  };
 
   sail-riscv = callPackage ../applications/virtualization/sail-riscv {
     inherit (ocamlPackages) sail;
@@ -15741,10 +15706,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/terraform-providers { }
   );
 
-  terraforming = callPackage ../applications/networking/cluster/terraforming { };
-
-  terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
-
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vaultwarden-sqlite = vaultwarden;
@@ -15767,23 +15728,7 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
-  wasmer = callPackage ../development/interpreters/wasmer {
-    llvmPackages = llvmPackages_18;
-  };
-
-  wavm = callPackage ../development/interpreters/wavm {
-    llvmPackages = llvmPackages_12;
-  };
-
-  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {
-    webkitgtk = webkitgtk_4_0;
-  };
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
-
-  wikicurses = callPackage ../applications/misc/wikicurses {
-    pythonPackages = python3Packages;
-  };
 
   winePackagesFor =
     wineBuild:
@@ -15845,12 +15790,6 @@ with pkgs;
     }
   );
 
-  wraith = callPackage ../applications/networking/irc/wraith {
-    openssl = openssl_1_1;
-  };
-
-  xsane = callPackage ../applications/graphics/sane/xsane.nix { };
-
   xsw = callPackage ../applications/misc/xsw {
     # Enable the next line to use this in terminal.
     # Note that it requires sixel capable terminals such as mlterm
@@ -15873,10 +15812,6 @@ with pkgs;
 
   zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
 
-  bullet = callPackage ../development/libraries/bullet { };
-
-  bullet-roboschool = callPackage ../development/libraries/bullet/roboschool-fork.nix { };
-
   dart = callPackage ../development/compilers/dart { };
 
   pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
@@ -15884,8 +15819,6 @@ with pkgs;
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
   dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
-
-  httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
@@ -15955,10 +15888,6 @@ with pkgs;
 
   compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };
 
-  dnstracer = callPackage ../tools/networking/dnstracer {
-    inherit (darwin) libresolv;
-  };
-
   diceware = with python3Packages; toPythonApplication diceware;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
@@ -16004,33 +15933,19 @@ with pkgs;
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
-  newlib = callPackage ../development/misc/newlib { };
-
-  newlib-nano = callPackage ../development/misc/newlib {
+  newlib-nano = newlib.override {
     nanoizeNewlib = true;
   };
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
-  kodelife = callPackage ../applications/graphics/kodelife {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
-
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
-  gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
-
-  inherit (callPackage ../applications/misc/zettlr { }) zettlr;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
-
-  tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
-
-  tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
