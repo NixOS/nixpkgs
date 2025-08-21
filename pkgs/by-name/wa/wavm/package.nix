@@ -1,11 +1,11 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_12,
   fetchFromGitHub,
   cmake,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: {
+llvmPackages_12.stdenv.mkDerivation (finalAttrs: {
   pname = "wavm";
   version = "2022-05-14";
 
@@ -18,7 +18,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm
+    llvmPackages_12.llvm
   ];
 
   meta = with lib; {

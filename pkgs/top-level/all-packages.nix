@@ -15773,10 +15773,6 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
-  wavm = callPackage ../development/interpreters/wavm {
-    llvmPackages = llvmPackages_12;
-  };
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor =
