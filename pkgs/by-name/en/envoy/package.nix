@@ -27,6 +27,10 @@
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
+
+  # Allows overriding the deps hash used for building - you will likely need to
+  # set this if you have changed the 'wasmRuntime' setting.
+  depsHash ? null,
 }:
 
 let
@@ -41,12 +45,15 @@ let
   };
 
   # these need to be updated for any changes to fetchAttrs
-  depsHash =
-    {
-      x86_64-linux = "sha256-E6yUSd00ngmjaMds+9UVZLtcYhzeS8F9eSIkC1mZSps=";
-      aarch64-linux = "sha256-ivboOrV/uORKVHRL3685aopcElGvzsxgVcUmYsBwzXY=";
-    }
-    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+  depsHash' =
+    if depsHash != null then
+      depsHash
+    else
+      {
+        x86_64-linux = "sha256-E6yUSd00ngmjaMds+9UVZLtcYhzeS8F9eSIkC1mZSps=";
+        aarch64-linux = "sha256-ivboOrV/uORKVHRL3685aopcElGvzsxgVcUmYsBwzXY=";
+      }
+      .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
 
@@ -127,7 +134,7 @@ buildBazelPackage rec {
   buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
-    sha256 = depsHash;
+    sha256 = depsHash';
     env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
