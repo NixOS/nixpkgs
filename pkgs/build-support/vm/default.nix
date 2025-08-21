@@ -1093,6 +1093,28 @@ rec {
       urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
       packages = commonDebianPackages;
     };
+
+    debian13i386 = {
+      name = "debian-13.0-trixie-i386";
+      fullName = "Debian 13.0 Trixie (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-i386/Packages.xz";
+        hash = "sha256-fXjhaG1Y+kn6iMEtqVZLwYN7lZ0cEQKVfMS3hSHJipY=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      packages = commonDebianPackages;
+    };
+
+    debian13x86_64 = {
+      name = "debian-13.0-trixie-amd64";
+      fullName = "Debian 13.0 Trixie (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-amd64/Packages.xz";
+        hash = "sha256-15cDoCcTv3m5fiZqP1hqWWnSG1BVUZSrm5YszTSKQs4=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      packages = commonDebianPackages;
+    };
   };
 
   # Common packages for Fedora images.
