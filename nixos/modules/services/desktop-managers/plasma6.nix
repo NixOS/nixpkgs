@@ -68,13 +68,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
-        message = "Cannot enable plasma5 and plasma6 at the same time!";
-      }
-    ];
-
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =

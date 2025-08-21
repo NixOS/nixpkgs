@@ -153,11 +153,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-YbnWigxznOZtY/lElLo/SEXnF3LPm6QKflnBoJ1B1Wo=",
+    "hash": "sha256-gwodjIFYg6BTIz3ORzWD6tUn2QXwXMN1KC5mMvxyjdE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.39.0",
+    "rev": "v4.40.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -171,11 +171,11 @@
     "vendorHash": null
   },
   "baiducloud": {
-    "hash": "sha256-sF+S14e6o66iJj/X0jm8sVRmuEJv9UsmJvcLFTFTpVY=",
+    "hash": "sha256-zKkXfSIVVW0QxQB/fJNowy1mQPfXlv6HFcNaNlBSIvY=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.10",
+    "rev": "v1.22.11",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -931,11 +931,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-Fh3GSSO+MBumdx5BxmINKhci8x0zHZ1jzMcGLyT0DIQ=",
+    "hash": "sha256-LoaFc5Ro7l2DOzWIUtcx+ycKwoRORkbBJtF8fu6kMBA=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.13.0",
+    "rev": "v7.14.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1427,13 +1427,13 @@
     "vendorHash": "sha256-giqZi1CmuyANNwzW+y9BUUUEfBhFZKkVGAvIPVvZnzE="
   },
   "vault": {
-    "hash": "sha256-tRKMu9mFyZkVjTMeXccUviWHiW9hPLj5heErRDK9eBw=",
+    "hash": "sha256-nY8NOE3VJCHkDeisWgxIHG6T1fQ8Jt6Nom2ELexuld0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
     "repo": "terraform-provider-vault",
-    "rev": "v5.1.0",
+    "rev": "v5.2.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GRrU/ARa88EX9kp6UBBhkYrTeX3i94eEQalz5QBHwGc="
+    "vendorHash": "sha256-mfageWMx8YM4eipnf7u3CMgMYcY7l2e69vECD3o91rg="
   },
   "vcd": {
     "hash": "sha256-W+ffIT70IaePg3xfOaQgCjPTWTN3iSAYwkf+s+zkB84=",
