@@ -97,13 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
-  # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
-  # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
-  # these four arch+platform combinations.
-  doCheck =
-    stdenv.hostPlatform.isDarwin
-    || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
-
   preCheck =
     # Provide placeholder file for esbuild.
     # The version of esbuild needs to exactly match the version deno requires
