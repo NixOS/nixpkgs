@@ -228,7 +228,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] { };
+      package = mkPackageOption pkgs [ "libsForQt5" "sddm" ] { };
 
       enableHidpi = mkOption {
         type = types.bool;
