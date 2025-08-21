@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  openssl,
+  openssl_1_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,16 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
   };
   hardeningDisable = [ "format" ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl_1_1 ];
   patches = [
     ./configure.patch
     ./dlopen.patch
   ];
   postPatch = ''
-    substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
-                                       --subst-var-by openssl-lib ${lib.getLib openssl}
-    substituteInPlace src/libssl.cc    --subst-var-by openssl ${lib.getLib openssl}
-    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl}
+    substituteInPlace configure        --subst-var-by openssl.dev ${openssl_1_1.dev} \
+                                       --subst-var-by openssl-lib ${lib.getLib openssl_1_1}
+    substituteInPlace src/libssl.cc    --subst-var-by openssl ${lib.getLib openssl_1_1}
+    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl_1_1}
   '';
   installPhase = ''
     mkdir -p $out/bin
