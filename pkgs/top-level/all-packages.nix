@@ -15320,8 +15320,6 @@ with pkgs;
     withNonfreeDb = true;
   };
 
-  gutenprint = callPackage ../misc/drivers/gutenprint { };
-
   dcp375cwlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcp375cw { }).driver;
 
   dcp375cw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp375cw { }).cupswrapper;
