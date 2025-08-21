@@ -17,7 +17,12 @@ let
     else
       nixpkgs;
 
-  pkgs = import nixpkgs' { inherit system; };
+  pkgs = import nixpkgs' {
+    inherit system;
+    # Nixpkgs generally — and CI specifically — do not use aliases,
+    # because we want to ensure they are not load-bearing.
+    allowAliases = false;
+  };
 
   fmt =
     let
