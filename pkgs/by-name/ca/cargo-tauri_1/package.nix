@@ -1,14 +1,13 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  bzip2,
   fetchFromGitHub,
-  cargo-tauri,
-  gtk3,
-  libsoup_2_4,
-  openssl,
   pkg-config,
-  webkitgtk_4_0,
+  rustPlatform,
+  xz,
+  zstd,
+  cargo-tauri,
 }:
 
 cargo-tauri.overrideAttrs (
@@ -39,13 +38,16 @@ cargo-tauri.overrideAttrs (
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ pkg-config ];
 
     buildInputs = [
-      openssl
+      # Required by `zip` in `tauri-bundler`
+      bzip2
+      zstd
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      libsoup_2_4
-      webkitgtk_4_0
-    ];
+    # Required by `rpm` in `tauri-bundler`
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ xz ];
+
+    env = {
+      ZSTD_SYS_USE_PKG_CONFIG = true;
+    };
 
     passthru = {
       inherit (oldAttrs.passthru) hook;
