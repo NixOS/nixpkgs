@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    rm -r cypari
-    ${python.interpreter} -m cypari.test
+    ${python.interpreter} -P -m cypari.test
     runHook postCheck
   '';
 
