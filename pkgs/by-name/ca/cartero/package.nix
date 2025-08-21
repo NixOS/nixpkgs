@@ -21,9 +21,6 @@
   glib,
   hicolor-icon-theme,
   pango,
-  gdk-pixbuf,
-  openssl_3,
-  graphene,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartero";
@@ -71,9 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     openssl
     pango
-    gdk-pixbuf
-    openssl_3
-    graphene
     libadwaita
   ];
 
