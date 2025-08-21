@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  jre,
+  openjdk17,
   makeWrapper,
   replaceVars,
   coreutils,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ openjdk17 ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     ln -s $out/share/cytoscape.sh $out/bin/cytoscape
 
     wrapProgram $out/share/cytoscape.sh \
-      --set JAVA_HOME "${jre}" \
-      --set JAVA  "${jre}/bin/java"
+      --set JAVA_HOME "${openjdk17}" \
+      --set JAVA  "${openjdk17}/bin/java"
 
     chmod +x $out/bin/cytoscape
   '';

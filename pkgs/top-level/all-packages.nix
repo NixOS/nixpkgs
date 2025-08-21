@@ -15250,10 +15250,6 @@ with pkgs;
 
   convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
-  cytoscape = callPackage ../applications/science/misc/cytoscape {
-    jre = openjdk17;
-  };
-
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
