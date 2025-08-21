@@ -4892,6 +4892,15 @@ with pkgs;
   gcc14Stdenv = overrideCC gccStdenv buildPackages.gcc14;
   gcc15Stdenv = overrideCC gccStdenv buildPackages.gcc15;
 
+  gobjcStdenv = overrideCC gccStdenv buildPackages.gobjc;
+  gobjc9Stdenv = overrideCC gccStdenv buildPackages.gobjc9;
+  gobjc10Stdenv = overrideCC gccStdenv buildPackages.gobjc10;
+  gobjc11Stdenv = overrideCC gccStdenv buildPackages.gobjc11;
+  gobjc12Stdenv = overrideCC gccStdenv buildPackages.gobjc12;
+  gobjc13Stdenv = overrideCC gccStdenv buildPackages.gobjc13;
+  gobjc14Stdenv = overrideCC gccStdenv buildPackages.gobjc14;
+  gobjc15Stdenv = overrideCC gccStdenv buildPackages.gobjc15;
+
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
   # profile-guided optimizations
