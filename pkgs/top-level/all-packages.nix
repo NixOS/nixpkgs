@@ -15260,10 +15260,6 @@ with pkgs;
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
 
-  golly = callPackage ../applications/science/misc/golly {
-    wxGTK = wxGTK32;
-  };
-
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };

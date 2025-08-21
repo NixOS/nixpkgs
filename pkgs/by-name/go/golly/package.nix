@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   wrapGAppsHook3,
-  wxGTK,
+  wxGTK32,
   python3,
   zlib,
   libGLU,
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    wxGTK
+    wxGTK32
     python3
     zlib
     libGLU
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CXX=${stdenv.cc.targetPrefix}c++"
     "CXXC=${stdenv.cc.targetPrefix}c++"
     "LD=${stdenv.cc.targetPrefix}c++"
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
   ];
 
   installPhase = ''
