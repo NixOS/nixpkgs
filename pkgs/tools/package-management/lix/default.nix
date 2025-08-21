@@ -94,6 +94,10 @@ let
             stdenv = lixStdenv;
           };
 
+          perl-bindings = self.callPackage (callPackage ./common-perl-bindings.nix lix-args) {
+            stdenv = lixStdenv;
+          };
+
           nixpkgs-review = nixpkgs-review.override {
             nix = self.lix;
           };
