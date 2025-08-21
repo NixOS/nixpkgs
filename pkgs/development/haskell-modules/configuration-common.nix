@@ -2679,32 +2679,6 @@ with haskellLib;
   tailwind = doJailbreak super.tailwind; # base <=4.17.0.0
   commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
 
-  # 2024-03-02: Apply unreleased changes necessary for compatibility
-  # with commonmark-extensions-0.2.5.3.
-  commonmark-simple = warnAfterVersion "0.1.0.0" (
-    appendPatches (map
-      (
-        { rev, hash }:
-        fetchpatch {
-          name = "commonmark-simple-${lib.substring 0 7 rev}.patch";
-          url = "https://github.com/srid/commonmark-simple/commit/${rev}.patch";
-          includes = [ "src/Commonmark/Simple.hs" ];
-          inherit hash;
-        }
-      )
-      [
-        {
-          rev = "71f5807ed4cbd8da915bf5ba04cd115b49980bcb";
-          hash = "sha256-ibDQbyTd2BoA0V+ldMOr4XYurnqk1nWzbJ15tKizHrM=";
-        }
-        {
-          rev = "fc106c94f781f6a35ef66900880edc08cbe3b034";
-          hash = "sha256-9cpgRNFWhpSuSttAvnwPiLmi1sIoDSYbp0sMwcKWgDQ=";
-        }
-      ]
-    ) (doJailbreak super.commonmark-simple)
-  );
-
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
