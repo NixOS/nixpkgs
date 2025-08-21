@@ -15614,8 +15614,6 @@ with pkgs;
     nix-prefetch-scripts
     ;
 
-  nix-update-source = callPackage ../tools/package-management/nix-update-source { };
-
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
   nix-serve-ng =
