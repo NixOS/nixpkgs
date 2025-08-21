@@ -1,3 +1,5 @@
+const { classify } = require('../supportedBranches.js')
+
 module.exports = async ({ github, context, core }) => {
   const pull_number = context.payload.pull_request.number
 
@@ -20,6 +22,8 @@ module.exports = async ({ github, context, core }) => {
       continue
     }
 
+    const { base, head } = prInfo
+
     let mergedSha, targetSha
 
     if (prInfo.mergeable) {
@@ -39,7 +43,7 @@ module.exports = async ({ github, context, core }) => {
       targetSha = (
         await github.rest.repos.compareCommitsWithBasehead({
           ...context.repo,
-          basehead: `${prInfo.base.sha}...${prInfo.head.sha}`,
+          basehead: `${base.sha}...${head.sha}`,
         })
       ).data.merge_base_commit.sha
     }
@@ -49,6 +53,32 @@ module.exports = async ({ github, context, core }) => {
     )
     core.setOutput('mergedSha', mergedSha)
     core.setOutput('targetSha', targetSha)
+
+    core.setOutput('systems', require('../supportedSystems.json'))
+
+    const baseClassification = classify(base.ref)
+    core.setOutput('base', baseClassification)
+    console.log('base classification:', baseClassification)
+
+    const headClassification =
+      base.repo.full_name === head.repo.full_name
+        ? classify(head.ref)
+        : // PRs from forks are always considered WIP.
+          { type: ['wip'] }
+    core.setOutput('head', headClassification)
+    console.log('head classification:', headClassification)
+
+    const files = (
+      await github.paginate(github.rest.pulls.listFiles, {
+        ...context.repo,
+        pull_number: context.payload.pull_request.number,
+        per_page: 100,
+      })
+    ).map((file) => file.filename)
+
+    if (files.includes('ci/pinned.json')) core.setOutput('touched', ['pinned'])
+    else core.setOutput('touched', [])
+
     return
   }
   throw new Error(
