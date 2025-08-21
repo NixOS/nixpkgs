@@ -14780,9 +14780,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  nest = callPackage ../applications/science/biology/nest { };
-
-  nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
+  nest-mpi = nest.override { withMpi = true; };
 
   neuron-mpi = neuron.override { useMpi = true; };
 
