@@ -4,22 +4,22 @@
 # $ rg -No "(https://.+)\"" -r '$1' pkgs/development/compilers/graalvm/graalvm-oracle/hashes.nix | \
 #   parallel -k 'echo {}; nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
 {
-  "25-ea-33" = {
+  "25-ea-34" = {
     "aarch64-linux" = {
-      hash = "sha256-VUwXu1zjjWY0K6aEpU0LhBvrz+y+H5lcspNON4Qaw6k=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.33/graalvm-jdk-25.0.0-ea.33_linux-aarch64_bin.tar.gz";
+      hash = "sha256-QS3AgGG0++k3B7ollL9X2AOcjeH468fJID+mTl+eVEo=";
+      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.34/graalvm-jdk-25.0.0-ea.34_linux-aarch64_bin.tar.gz";
     };
     "x86_64-linux" = {
-      hash = "sha256-NU+tdKR9OlyE8RTVlS2w+a95ZUHBD2LDpXkqTnOL7No=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.33/graalvm-jdk-25.0.0-ea.33_linux-x64_bin.tar.gz";
+      hash = "sha256-cBFyLiFaTX8MepRhfO/dvvqx8M6lto+JMdCdy8X6YBI=";
+      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.34/graalvm-jdk-25.0.0-ea.34_linux-x64_bin.tar.gz";
     };
     "x86_64-darwin" = {
-      hash = "sha256-TIKRKrYFjAG2BpQVp8mtbMkUlqYUpTy7R2pDH3D5Hag=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.33/graalvm-jdk-25.0.0-ea.33_macos-x64_bin.tar.gz";
+      hash = "sha256-E4N8UnE74oGzpsUGYINuSZjjgZCYn43uwv4/eDtdZ+s=";
+      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.34/graalvm-jdk-25.0.0-ea.34_macos-x64_bin.tar.gz";
     };
     "aarch64-darwin" = {
-      hash = "sha256-hquwVXWFcGMOdmMbZHNtkYyojDKRosIi40jXOmkNlmE=";
-      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.33/graalvm-jdk-25.0.0-ea.33_macos-aarch64_bin.tar.gz";
+      hash = "sha256-C0TnIFmhDLzI9QYqHJbZAQWvJNb1zX4PEOXp3JXV1hk=";
+      url = "https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-25.0.0-ea.34/graalvm-jdk-25.0.0-ea.34_macos-aarch64_bin.tar.gz";
     };
   };
   "23" = {
