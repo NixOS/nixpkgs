@@ -7275,6 +7275,12 @@
     github = "eigengrau";
     githubId = 4939947;
   };
+  eihqnh = {
+    email = "eihqnh@outlook.com";
+    github = "eihqnh";
+    githubId = 40905037;
+    name = "eihqnh";
+  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
@@ -20957,12 +20963,6 @@
     github = "Qusic";
     githubId = 2141853;
     name = "Bang Lee";
-  };
-  qwqawawow = {
-    email = "eihqnh@outlook.com";
-    github = "qwqawawow";
-    githubId = 40905037;
-    name = "qwqawawow";
   };
   qxrein = {
     email = "mnv07@proton.me";
