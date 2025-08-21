@@ -60,8 +60,7 @@ let
 
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt underneath,
-        # the default formatter for Nix code.
+        # This uses nixfmt underneath, the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
 
