@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   azure-core,
   azure-identity,
   opencensus,
@@ -15,10 +15,14 @@ buildPythonPackage rec {
   version = "1.1.15";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jRCK8Vh16jxSI4ZG+6kkw7qfv6rx/Q01BwfcW3iArec=";
+  src = fetchFromGitHub {
+    owner = "census-instrumentation";
+    repo = "opencensus-python";
+    tag = "opencensus-ext-azure@${version}";
+    hash = "sha256-fnqflSyNnkEy9XYoirk4iDZI1zYTRMbrYMyQ/4ge3Rs=";
   };
+
+  sourceRoot = "${src.name}/contrib/opencensus-ext-azure";
 
   build-system = [ setuptools ];
 
