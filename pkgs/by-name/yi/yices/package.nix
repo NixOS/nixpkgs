@@ -3,12 +3,15 @@
   stdenv,
   fetchFromGitHub,
   cudd,
-  gmp-static,
+  gmp,
   gperf,
   autoreconfHook,
   libpoly,
 }:
 
+let
+  gmp-static = gmp.override { withStatic = true; };
+in
 stdenv.mkDerivation rec {
   pname = "yices";
   version = "2.6.5";

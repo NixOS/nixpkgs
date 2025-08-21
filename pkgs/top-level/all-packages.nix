@@ -15105,10 +15105,6 @@ with pkgs;
 
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
-  yices = callPackage ../applications/science/logic/yices {
-    gmp-static = gmp.override { withStatic = true; };
-  };
-
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
