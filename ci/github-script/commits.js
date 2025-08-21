@@ -2,6 +2,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { execFileSync } = require('node:child_process')
   const { classify } = require('../supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
+  const { dismissReviews, postReview } = require('./reviews.js')
 
   await withRateLimit({ github, core }, async (stats) => {
     stats.prs = 1
@@ -192,37 +193,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      if (!dry) {
-        await Promise.all(
-          (
-            await github.paginate(github.rest.pulls.listReviews, {
-              ...context.repo,
-              pull_number,
-            })
-          )
-            .filter((review) => review.user.login === 'github-actions[bot]')
-            .map(async (review) => {
-              if (review.state === 'CHANGES_REQUESTED') {
-                await github.rest.pulls.dismissReview({
-                  ...context.repo,
-                  pull_number,
-                  review_id: review.id,
-                  message: 'All good now, thank you!',
-                })
-              }
-              await github.graphql(
-                `mutation($node_id:ID!) {
-                  minimizeComment(input: {
-                    classifier: RESOLVED,
-                    subjectId: $node_id
-                  })
-                  { clientMutationId }
-                }`,
-                { node_id: review.node_id },
-              )
-            }),
-        )
-      }
+      await dismissReviews({ github, context, dry })
       return
     }
 
@@ -342,45 +313,9 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     const body = core.summary.stringify()
     core.summary.write()
 
-    const pendingReview = (
-      await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number,
-      })
-    ).find(
-      (review) =>
-        review.user.login === 'github-actions[bot]' &&
-        // If a review is still pending, we can just update this instead
-        // of posting a new one.
-        (review.state === 'CHANGES_REQUESTED' ||
-          // No need to post a new review, if an older one with the exact
-          // same content had already been dismissed.
-          review.body === body),
-    )
-
-    if (dry) {
-      if (pendingReview)
-        core.info(`pending review found: ${pendingReview.html_url}`)
-      else core.info('no pending review found')
-    } else {
-      // Either of those two requests could fail for very long comments. This can only happen
-      // with multiple commits all hitting the truncation limit for the diff. If you ever hit
-      // this case, consider just splitting up those commits into multiple PRs.
-      if (pendingReview) {
-        await github.rest.pulls.updateReview({
-          ...context.repo,
-          pull_number,
-          review_id: pendingReview.id,
-          body,
-        })
-      } else {
-        await github.rest.pulls.createReview({
-          ...context.repo,
-          pull_number,
-          event: 'REQUEST_CHANGES',
-          body,
-        })
-      }
-    }
+    // Posting a review could fail for very long comments. This can only happen with
+    // multiple commits all hitting the truncation limit for the diff. If you ever hit
+    // this case, consider just splitting up those commits into multiple PRs.
+    await postReview({ github, context, core, dry, body })
   })
 }
