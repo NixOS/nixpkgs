@@ -15365,8 +15365,6 @@ with pkgs;
 
   gotrue = callPackage ../tools/security/gotrue { };
 
-  gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix { };
-
   helmfile-wrapped = helmfile.override {
     inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
   };
