@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     pcsclite
   ];
 
+  postInstall = ''
+    mkdir -p $out/share/doc/lpac
+    cp -vr $src/docs/* $out/share/doc/lpac
+  '';
+
   passthru = {
     updateScript = nix-update-script { attrPath = finalAttrs.pname; };
   };
