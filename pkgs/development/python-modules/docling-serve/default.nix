@@ -103,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/docling-project/docling-serve";
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

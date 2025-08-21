@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ioquake3";
     maintainers = with lib.maintainers; [
       abbradar
-      drupol
       rvolosatovs
     ];
     platforms = lib.platforms.unix;

@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/facelessuser/backrefs";
     changelog = "https://github.com/facelessuser/backrefs/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

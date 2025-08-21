@@ -1023,7 +1023,6 @@ with lib.maintainers;
   php = {
     members = [
       aanderse
-      drupol
       ma27
       piotrkwiecinski
       talyz
