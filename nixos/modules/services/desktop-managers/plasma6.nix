@@ -183,7 +183,7 @@ in
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
-        pkgs.plasma5Packages.kwayland-integration
+        kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
