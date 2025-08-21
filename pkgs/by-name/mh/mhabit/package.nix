@@ -28,6 +28,11 @@ flutter.buildFlutterApplication rec {
     libsecret
   ];
 
+  postInstall = ''
+    install -Dm644 flatpak/io.github.friesi23.mhabit.desktop --target-directory=$out/share/applications
+    install --mode 644 assets/logo/icon.svg --target-directory=$out/share/applications
+  '';
+
   meta = {
     description = "Track micro habits with easy-to-use charts and tools";
     longDescription = ''
