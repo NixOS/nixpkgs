@@ -371,6 +371,7 @@ print OUT <<EOF;
   xcursor-themes,
   xdriinfo,
   xev,
+  xfsinfo,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -411,6 +412,7 @@ self: with self; {
     xcursorgen
     xdriinfo
     xev
+    xfsinfo
     xlsatoms
     xlsclients
     xlsfonts
