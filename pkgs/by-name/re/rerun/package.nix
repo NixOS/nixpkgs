@@ -107,10 +107,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env =
     let
       inherit (llvmPackages) clang-unwrapped;
-      major-version = builtins.head (builtins.splitVersion clang-unwrapped.version);
+      majorVersion = lib.versions.major clang-unwrapped.version;
+
       # resource dir + builtins from the unwrapped clang
-      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${major-version}";
-      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${major-version}/include";
+      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${majorVersion}";
+      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${majorVersion}/include";
     in
     {
       CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
