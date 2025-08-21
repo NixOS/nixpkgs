@@ -44,132 +44,284 @@ let
   deprecatedPlasma5Packages = {
     inherit (plasma5Packages)
       akonadi
+      akonadi-calendar
+      akonadi-calendar-tools
+      akonadi-contacts
+      akonadi-import-wizard
+      akonadi-mime
+      akonadi-notes
+      akonadi-search
+      akonadiconsole
       akregator
+      alkimia
+      alligator
+      analitza
+      angelfish
+      applet-window-appmenu
+      applet-window-buttons
       arianna
       ark
+      audiotube
+      aura-browser
+      baloo-widgets
+      bismuth
       bluedevil
       bomber
+      booth
       bovo
       breeze-grub
       breeze-gtk
-      breeze-icons
       breeze-plymouth
       breeze-qt5
+      buho
+      calendarsupport
+      calindori
+      cantor
+      clip
       colord-kde
-      discover
+      communicator
       dolphin
+      dolphin-plugins
       dragon
       elisa
+      eventviews
       falkon
       ffmpegthumbs
       filelight
+      flatpak-kcm
+      ghostwriter
       granatier
+      grantleetheme
       gwenview
-      k3b
+      incidenceeditor
+      index
+      juk
+      kaccounts-integration
+      kaccounts-providers
       kactivitymanagerd
       kaddressbook
+      kalarm
+      kalgebra
+      kalk
       kalzium
+      kamoso
       kapman
       kapptemplate
+      kasts
       kate
       katomic
       kblackbox
       kblocks
       kbounce
+      kbreakout
       kcachegrind
       kcalc
+      kcalutils
       kcharselect
+      kclock
       kcolorchooser
       kde-cli-tools
       kde-gtk-config
+      kde-inotify-survey
+      kde2-decoration
+      kdebugsettings
+      kdeconnect-kde
+      kdecoration
+      kdegraphics-mobipocket
+      kdegraphics-thumbnailers
+      kdenetwork-filesharing
       kdenlive
+      kdepim-runtime
       kdeplasma-addons
-      kdevelop-pg-qt
-      kdevelop-unwrapped
       kdev-php
       kdev-python
       kdevelop
+      kdevelop-pg-qt
+      kdevelop-unwrapped
       kdf
       kdialog
       kdiamond
       keditbookmarks
+      keysmith
       kfind
       kgamma5
+      kgeography
       kget
       kgpg
       khelpcenter
+      khotkeys
+      kidentitymanagement
       kig
       kigo
       killbots
+      kimap
       kinfocenter
-      kitinerary
+      kio-admin
+      kio-extras
+      kio-gdrive
+      kipi-plugins
+      kirigami-gallery
+      kldap
       kleopatra
       klettres
       klines
       kmag
-      kmail
+      kmahjongg
+      kmail-account-wizard
+      kmailtransport
+      kmbox
       kmenuedit
+      kmime
       kmines
       kmix
+      kmousetool
       kmplot
       knavalbattle
       knetwalk
       knights
+      knotes
+      koko
+      kolf
       kollision
       kolourpaint
       kompare
+      kongress
+      konqueror
+      konquest
       konsole
-      kontact
+      kontactinterface
       konversation
+      kopeninghours
       korganizer
+      kosmindoormap
+      kpat
+      kpimtextedit
+      kpipewire
       kpkpass
+      kpmcore
+      kpublictransport
+      kqtquickcharts
       krdc
+      krecorder
+      kreport
       kreversi
       krfb
+      kruler
+      ksanecore
       kscreen
       kscreenlocker
       kshisen
+      ksmtp
+      kspaceduel
       ksquares
       ksshaskpass
+      ksudoku
       ksystemlog
+      ksystemstats
       kteatime
       ktimer
+      ktnef
       ktorrent
-      ktouch
+      ktrip
       kturtle
       kwallet-pam
       kwalletmanager
       kwave
       kwayland-integration
+      kweather
       kwin
       kwrited
+      kzones
+      layer-shell-qt
+      libgravatar
+      libkcddb
+      libkdcraw
+      libkdegames
+      libkdepim
+      libkexiv2
+      libkgapi
+      libkipi
+      libkleo
+      libkmahjongg
+      libkomparediff2
+      libksane
+      libkscreen
+      libksieve
+      libksysguard
+      libktorrent
+      lightly
+      mailcommon
+      mailimporter
       marble
+      mauikit
+      mauikit-accounts
+      mauikit-calendar
+      mauikit-documents
+      mauikit-filebrowsing
+      mauikit-imagetools
+      mauikit-terminal
+      mauikit-texteditor
+      mauiman
+      mbox-importer
       merkuro
+      messagelib
       milou
       minuet
+      nota
       okular
       oxygen
+      oxygen-sounds
+      palapeli
+      parachute
+      partitionmanager
       picmi
+      pim-data-exporter
+      pim-sieve-editor
+      pimcommon
+      plank-player
+      plasma-bigscreen
       plasma-browser-integration
       plasma-desktop
+      plasma-dialer
+      plasma-disks
+      plasma-firewall
       plasma-integration
+      plasma-mobile
       plasma-nano
       plasma-nm
       plasma-pa
-      plasma-mobile
+      plasma-phonebook
+      plasma-remotecontrollers
+      plasma-sdk
+      plasma-settings
       plasma-systemmonitor
       plasma-thunderbolt
       plasma-vault
+      plasma-welcome
       plasma-workspace
       plasma-workspace-wallpapers
+      plasmatube
+      polkit-kde-agent
       powerdevil
+      print-manager
+      qmlkonsole
       qqc2-breeze-style
+      rocs
       sddm-kcm
+      shelf
+      sierra-breeze-enhanced
       skanlite
       skanpage
+      soundkonverter
       spectacle
+      station
       systemsettings
+      telly-skout
+      tokodon
+      umbrello
+      vvave
       xdg-desktop-portal-kde
+      xwaylandvideobridge
       yakuake
       zanshin
       ;
