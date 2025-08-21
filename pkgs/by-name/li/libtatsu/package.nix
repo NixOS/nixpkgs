@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libtatsu";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libtatsu";
-    rev = "091edd6182bd7d90064d0eabd0e98fd53c6b3429";
+    rev = version;
     hash = "sha256-RrMqxqEuncPmJvX7D2L1zcKc/PU5TpjWMu7EyxmomjQ=";
   };
 
@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     libimobiledevice-glue
     curl
   ];
+
+  preAutoreconf = ''
+    echo ${version} > .tarball-version
+    export PACKAGE_VERSION=${version}
+  '';
 
   meta = with lib; {
     description = "Library handling the communication with Apple's Tatsu Signing Server (TSS)";
