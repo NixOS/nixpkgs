@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  llvmPackages,
+  llvmPackages_18,
   libffi,
   libxml2,
   withLLVM ? true,
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals withLLVM [
-    llvmPackages.llvm
+    llvmPackages_18.llvm
     libffi
     libxml2
   ];
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     "wasmer"
   ];
 
-  env.LLVM_SYS_180_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+  env.LLVM_SYS_180_PREFIX = lib.optionalString withLLVM llvmPackages_18.llvm.dev;
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;

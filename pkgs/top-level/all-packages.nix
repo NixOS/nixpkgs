@@ -15769,10 +15769,6 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
-  wasmer = callPackage ../development/interpreters/wasmer {
-    llvmPackages = llvmPackages_18;
-  };
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor =
