@@ -15385,8 +15385,6 @@ with pkgs;
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
-  utsushi = callPackage ../misc/drivers/utsushi { };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   libjack2 = jack2.override { prefix = "lib"; };
