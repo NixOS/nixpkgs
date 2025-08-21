@@ -30,9 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./lpac-version.patch ];
 
-  cmakeFlags =
-    optional withDrivers "-DLPAC_DYNAMIC_DRIVERS=on"
-    ++ optional withLibeuicc "-DLPAC_DYNAMIC_LIBEUICC=on";
+  cmakeFlags = [
+    (lib.cmakeBool "LPAC_DYNAMIC_DRIVERS" withDrivers)
+    (lib.cmakeBool "LPAC_DYNAMIC_LIBEUICC" withLibeuicc)
+  ];
 
   nativeBuildInputs = [
     cmake
