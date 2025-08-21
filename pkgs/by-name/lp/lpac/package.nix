@@ -6,8 +6,12 @@
   pkg-config,
   pcsclite,
   curl,
+  libmbim,
+  libqmi,
   withDrivers ? true,
   withLibeuicc ? true,
+  withMbim ? true,
+  withQmi ? true,
   nix-update-script,
 }:
 
@@ -33,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "LPAC_DYNAMIC_DRIVERS" withDrivers)
     (lib.cmakeBool "LPAC_DYNAMIC_LIBEUICC" withLibeuicc)
+    (lib.cmakeBool "LPAC_WITH_APDU_MBIM" withMbim)
+    (lib.cmakeBool "LPAC_WITH_APDU_QMI" withQmi)
   ];
 
   nativeBuildInputs = [
@@ -43,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     pcsclite
-  ];
+  ]
+  ++ optional withMbim libmbim
+  ++ optional withQmi libqmi;
 
   postInstall = ''
     mkdir -p $out/share/doc/lpac
