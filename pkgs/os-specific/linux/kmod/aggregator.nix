@@ -1,53 +1,16 @@
 {
   stdenvNoCC,
-  lib,
   kmod,
   modules,
   buildEnv,
-  writeTextFile,
+  callPackage,
   kernelVersion,
   name ? "kernel-modules",
   depmodConfig ? null,
 }:
 let
-  getRelativeOverridePath =
-    entry:
-    let
-      # check if the modulePath is inside the aggregator environmnet. If not, throw an error
-      checkModuleExists =
-        x:
-        lib.throwIf
-          (
-            (lib.lists.findFirst (
-              a:
-              lib.path.hasPrefix (/. + builtins.unsafeDiscardStringContext a.outPath) (
-                /. + builtins.unsafeDiscardStringContext x.modulePackage
-              )
-            ) null modules) == null
-          )
-          "The modulePath for your ${x.moduleName} depmod override is not available. Add ${x.modulePackage} to `boot.extraModulePackages`."
-          (checkModuleRelativePathIsInStore x);
-
-      checkModuleRelativePathIsInStore =
-        x:
-        let
-          moduleStorePath = "${x.modulePackage}" + "/lib/modules/${kernelVersion}" + "/${x.modulePath}";
-        in
-        lib.throwIfNot (builtins.pathExists moduleStorePath) "${moduleStorePath} does not exist in store" x;
-    in
-    (checkModuleExists entry).modulePath;
-
-  genDepmodConfOverridesList = builtins.map (
-    x: "override ${x.moduleName} * ${getRelativeOverridePath x}"
-  ) depmodConfig.overrides;
-
-  depmodConfFile = writeTextFile {
-    name = "depmod.conf";
-    text = lib.optionalString (!(builtins.isNull depmodConfig)) (
-      builtins.concatStringsSep "\n" genDepmodConfOverridesList
-    );
-
-    preferLocalBuild = true;
+  depmodConfFile = callPackage ./depmod-config-generator.nix {
+    inherit modules kernelVersion depmodConfig;
   };
 in
 buildEnv {
