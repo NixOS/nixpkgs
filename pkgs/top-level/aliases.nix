@@ -918,6 +918,7 @@ mapAliases {
   gtkperf = throw "'gtkperf' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   guardian-agent = throw "'guardian-agent' has been removed, as it hasn't been maintained upstream in years and accumulated many vulnerabilities"; # Added 2024-06-09
   guile-disarchive = disarchive; # Added 2023-10-27
+  gutenprintBin = gutenprint-bin; # Added 2025-08-21
 
   ### H ###
 
@@ -2031,6 +2032,7 @@ mapAliases {
   tkcvs = tkrev; # Added 2022-03-07
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = tclPackages.tkimg; # Added 2024-10-02
+  tlaplusToolbox = tlaplus-toolbox; # Added 2025-08-21
   todiff = throw "'todiff' was removed due to lack of known users"; # Added 2025-01-25
   toil = throw "toil was removed as it was broken and requires obsolete versions of libraries"; # Added 2024-09-22
   tokodon = plasma5Packages.tokodon;
@@ -2131,6 +2133,7 @@ mapAliases {
   ventoy-bin = ventoy; # Added 2023-04-12
   ventoy-bin-full = ventoy-full; # Added 2023-04-12
   verilog = iverilog; # Added 2024-07-12
+  veriT = verit; # Added 2025-08-21
   vieb = throw "'vieb' has been removed as it doesn't satisfy our security criteria for browsers."; # Added 2025-06-25
   ViennaRNA = viennarna; # Added 2023-08-23
   vimHugeX = vim-full; # Added 2022-12-04

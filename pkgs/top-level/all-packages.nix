@@ -14757,16 +14757,9 @@ with pkgs;
 
   ### SCIENCE/GEOMETRY
 
-  tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
-  tetgen_1_4 = callPackage ../applications/science/geometry/tetgen/1.4.nix { }; # MIT
-
   ### SCIENCE/BENCHMARK
 
   ### SCIENCE/BIOLOGY
-
-  blast = callPackage ../applications/science/biology/blast { };
-
-  blast-bin = callPackage ../applications/science/biology/blast/bin.nix { };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
     inherit (llvmPackages) openmp;
@@ -14780,9 +14773,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  nest = callPackage ../applications/science/biology/nest { };
-
-  nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
+  nest-mpi = nest.override { withMpi = true; };
 
   neuron-mpi = neuron.override { useMpi = true; };
 
@@ -14794,8 +14785,6 @@ with pkgs;
   minc_tools = callPackage ../applications/science/biology/minc-tools {
     inherit (perlPackages) perl TextFormat;
   };
-
-  obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
 
   raxml-mpi = raxml.override { useMpi = true; };
 
@@ -14812,8 +14801,6 @@ with pkgs;
   };
 
   ### SCIENCE/MACHINE LEARNING
-
-  sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
 
   streamlit = with python3Packages; toPythonApplication streamlit;
 
@@ -14855,17 +14842,15 @@ with pkgs;
     rocmSupport = true;
   };
 
-  mathematica = callPackage ../applications/science/math/mathematica { };
-
-  mathematica-webdoc = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc = mathematica.override {
     webdoc = true;
   };
 
-  mathematica-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-cuda = mathematica.override {
     cudaSupport = true;
   };
 
-  mathematica-webdoc-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc-cuda = mathematica.override {
     webdoc = true;
     cudaSupport = true;
   };
@@ -14883,15 +14868,11 @@ with pkgs;
   };
   suitesparse = suitesparse_5_3;
 
-  trilinos = callPackage ../development/libraries/science/math/trilinos { };
-
-  trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
+  trilinos-mpi = trilinos.override { withMPI = true; };
 
   wolfram-engine = libsForQt5.callPackage ../applications/science/math/wolfram-engine { };
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
-
-  wolfram-notebook = callPackage ../applications/science/math/wolfram-engine/notebook.nix { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
@@ -15045,14 +15026,11 @@ with pkgs;
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
-  eprover = callPackage ../applications/science/logic/eprover { };
-
-  eprover-ho = callPackage ../applications/science/logic/eprover { enableHO = true; };
+  eprover-ho = eprover.override { enableHO = true; };
 
   giac-with-xcas = giac.override { enableGUI = true; };
 
-  glucose = callPackage ../applications/science/logic/glucose { };
-  glucose-syrup = callPackage ../applications/science/logic/glucose {
+  glucose-syrup = glucose.override {
     enableUnfree = true;
   };
 
@@ -15081,8 +15059,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
   };
 
-  leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix { };
-
   prooftree = callPackage ../applications/science/logic/prooftree {
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
@@ -15091,34 +15067,15 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  spass = callPackage ../applications/science/logic/spass {
-    stdenv = gccStdenv;
-  };
-
   statverif = callPackage ../applications/science/logic/statverif {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
-  veriT = callPackage ../applications/science/logic/verit {
-    stdenv = gccStdenv;
-  };
-
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
-  yices = callPackage ../applications/science/logic/yices {
-    gmp-static = gmp.override { withStatic = true; };
-  };
-
-  tlaplus = callPackage ../applications/science/logic/tlaplus {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  tlaplus18 = callPackage ../applications/science/logic/tlaplus/tlaplus18.nix { };
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
-  tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix { };
-
-  avy = callPackage ../applications/science/logic/avy { };
 
   ### SCIENCE / ENGINEERING
 
@@ -15206,9 +15163,6 @@ with pkgs;
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
-  geogebra = callPackage ../applications/science/math/geogebra { };
-  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
-
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
   };
@@ -15222,13 +15176,6 @@ with pkgs;
     };
   };
 
-  pari = callPackage ../applications/science/math/pari { };
-  gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
-
-  raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
-
-  raspa-data = callPackage ../applications/science/molecular-dynamics/raspa/data.nix { };
-
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
   yacas-gui = yacas.override {
@@ -15240,9 +15187,7 @@ with pkgs;
 
   ### SCIENCE / MISC
 
-  boinc = callPackage ../applications/science/misc/boinc { };
-
-  boinc-headless = callPackage ../applications/science/misc/boinc { headless = true; };
+  boinc-headless = boinc.override { headless = true; };
 
   celestia = callPackage ../applications/science/astronomy/celestia {
     inherit (gnome2) gtkglext;
@@ -15250,19 +15195,11 @@ with pkgs;
 
   convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
-  cytoscape = callPackage ../applications/science/misc/cytoscape {
-    jre = openjdk17;
-  };
-
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
-
-  golly = callPackage ../applications/science/misc/golly {
-    wxGTK = wxGTK32;
-  };
 
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
@@ -15304,25 +15241,11 @@ with pkgs;
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
-  avell-unofficial-control-center =
-    callPackage ../applications/misc/avell-unofficial-control-center
-      { };
-
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
-
-  cups = callPackage ../misc/cups { };
-
-  cups-filters = callPackage ../misc/cups/filters.nix { };
-
-  cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
   foomatic-db-ppds-withNonfreeDb = callPackage ../by-name/fo/foomatic-db-ppds/package.nix {
     withNonfreeDb = true;
   };
-
-  gutenprint = callPackage ../misc/drivers/gutenprint { };
-
-  gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
 
   dcp375cwlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcp375cw { }).driver;
 
@@ -15351,8 +15274,6 @@ with pkgs;
 
   flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
 
-  fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
-
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
@@ -15363,17 +15284,7 @@ with pkgs;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
-  gotrue = callPackage ../tools/security/gotrue { };
-
-  gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix { };
-
-  gowitness = callPackage ../tools/security/gowitness {
-    buildGoModule = buildGo123Module;
-  };
-
-  helmfile = callPackage ../applications/networking/cluster/helmfile { };
-
-  helmfile-wrapped = callPackage ../applications/networking/cluster/helmfile {
+  helmfile-wrapped = helmfile.override {
     inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
   };
 
