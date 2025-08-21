@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libresolv,
+  darwin,
   perl,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libresolv ];
+  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libresolv ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lresolv";
 
