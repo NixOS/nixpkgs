@@ -14757,8 +14757,6 @@ with pkgs;
 
   ### SCIENCE/GEOMETRY
 
-  tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
-
   ### SCIENCE/BENCHMARK
 
   ### SCIENCE/BIOLOGY
