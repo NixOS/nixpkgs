@@ -14,14 +14,14 @@
   zeromq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p2pool";
   version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jjY/+ZS7UYecHTQT93WAUZYYc+CZpG4Vbotmsq65un0=";
     fetchSubmodules = true;
   };
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
