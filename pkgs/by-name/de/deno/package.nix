@@ -234,7 +234,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = ./update/update.ts;
   passthru.tests = callPackage ./tests { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
@@ -247,9 +247,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Among other things, Deno is a great replacement for utility scripts that may have been historically written with
       bash or python.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       ofalvai
     ];
