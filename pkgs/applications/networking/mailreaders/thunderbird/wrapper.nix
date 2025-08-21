@@ -23,11 +23,9 @@ browser: args:
     # https://anweshadas.in/how-to-use-yubikey-or-any-gpg-smartcard-in-thunderbird-78/
     # For that to work out of the box, it requires `gnupg` on PATH and
     # `gpgme` in `LD_LIBRARY_PATH`; we do this below.
-    buildCommand =
-      old.buildCommand
-      + ''
-        wrapProgram "$executablePath" \
-          --prefix LD_LIBRARY_PATH ':' "${lib.makeLibraryPath [ gpgme ]}" \
-          --prefix PATH ':' "${lib.makeBinPath [ gnupg ]}"
-      '';
+    buildCommand = old.buildCommand + ''
+      wrapProgram "$executablePath" \
+        --prefix LD_LIBRARY_PATH ':' "${lib.makeLibraryPath [ gpgme ]}" \
+        --prefix PATH ':' "${lib.makeBinPath [ gnupg ]}"
+    '';
   })

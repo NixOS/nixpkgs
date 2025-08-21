@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PFpc9z45k0nlWEyjDDKG/U8V7EwR5b8rHPV4CmkRers=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3.";
+    description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3";
     mainProgram = "gptcommit";
     homepage = "https://github.com/zurawiki/gptcommit";
     license = with licenses; [ asl20 ];

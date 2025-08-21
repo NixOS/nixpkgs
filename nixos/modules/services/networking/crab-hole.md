@@ -103,7 +103,7 @@ Additionally you can set an optional timeout value.
       certificate = ./dns.example.com.crt;
       key = "/dns.example.com.key";
       # optional (default = 3000)
-      timeout_ms = 3000
+      timeout_ms = 3000;
     }
   ];
 }
@@ -209,7 +209,5 @@ For ACME for example this would be `acme:acme`.
 To give the crab-hole service access to these files, the group which owns the certificate can be added as a supplementary group to the service.
 For ACME for example:
 ```nix
-{
-  services.crab-hole.supplementaryGroups = [ "acme" ];
-}
+{ services.crab-hole.supplementaryGroups = [ "acme" ]; }
 ```

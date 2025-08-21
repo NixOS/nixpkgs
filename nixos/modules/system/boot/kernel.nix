@@ -102,7 +102,7 @@ in
           {
             name = "foo";
             patch = ./foo.patch;
-            extraStructuredConfig.FOO = lib.kernel.yes;
+            structuredExtraConfig.FOO = lib.kernel.yes;
             features.foo = true;
           }
           {
@@ -127,7 +127,7 @@ in
                                         # (required, but can be null if only config changes
                                         # are needed)
 
-          extraStructuredConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
+          structuredExtraConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
             FOO = lib.kernel.yes;       # (optional)
           };                            # values should generally be lib.kernel.yes,
                                         # lib.kernel.no or lib.kernel.module
@@ -138,7 +138,7 @@ in
 
           extraConfig = "FOO y";        # extra configuration options in string form without the CONFIG_ prefix
                                         # (optional, multiple lines allowed to specify multiple options)
-                                        # (deprecated, use extraStructuredConfig instead)
+                                        # (deprecated, use structuredExtraConfig instead)
         }
         ```
 
@@ -387,7 +387,7 @@ in
     (mkIf config.boot.kernel.enable {
       system.build = { inherit kernel; };
 
-      system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+      system.modulesTree = [ (lib.getOutput "modules" kernel) ] ++ config.boot.extraModulePackages;
 
       # Not required for, e.g., containers as they don't have their own kernel or initrd.
       # They boot directly into stage 2.
@@ -414,19 +414,22 @@ in
 
           ln -s ${initrdPath} $out/initrd
 
-          ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ${optionalString (config.boot.initrd.secrets != { }) ''
+            ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ''}
 
           ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
         '';
 
       # Implement consoleLogLevel both in early boot and using sysctl
       # (so you don't need to reboot to have changes take effect).
-      boot.kernelParams =
-        [ "loglevel=${toString config.boot.consoleLogLevel}" ]
-        ++ optionals config.boot.vesa [
-          "vga=0x317"
-          "nomodeset"
-        ];
+      boot.kernelParams = [
+        "loglevel=${toString config.boot.consoleLogLevel}"
+      ]
+      ++ optionals config.boot.vesa [
+        "vga=0x317"
+        "nomodeset"
+      ];
 
       boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
@@ -493,7 +496,6 @@ in
         with config.lib.kernelConfig;
         [
           # !!! Should this really be needed?
-          (isYes "MODULES")
           (isYes "BINFMT_ELF")
         ]
         ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));

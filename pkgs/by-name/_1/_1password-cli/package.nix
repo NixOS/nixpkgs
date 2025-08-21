@@ -18,7 +18,8 @@ let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
         inherit hash;
-      } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
+      }
+      // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
@@ -45,16 +46,15 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      versionCheckHook
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      xar
-      cpio
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    xar
+    cpio
+  ];
 
   unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src

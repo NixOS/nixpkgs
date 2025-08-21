@@ -44,7 +44,8 @@ stdenv.mkDerivation {
     libxml2
     icu
     lzfse
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   CXXFLAGS = [
     "-DCOMPILE_WITH_LZFSE=1"

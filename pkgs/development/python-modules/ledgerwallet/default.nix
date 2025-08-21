@@ -66,7 +66,6 @@ buildPythonPackage rec {
     mainProgram = "ledgerctl";
     license = licenses.mit;
     maintainers = with maintainers; [
-      d-xo
       erdnaxe
     ];
   };

@@ -30,7 +30,8 @@ stdenv.mkDerivation {
   buildInputs = [
     sqlite
     systemd
-  ] ++ lib.optional tlsSupport openssl;
+  ]
+  ++ lib.optional tlsSupport openssl;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

@@ -29,7 +29,7 @@
 let
   importer = stdenv.mkDerivation {
     pname = "openboard-importer";
-    version = "unstable-2016-10-08";
+    version = "0-unstable-2016-10-08";
 
     src = fetchFromGitHub {
       owner = "OpenBoard-org";

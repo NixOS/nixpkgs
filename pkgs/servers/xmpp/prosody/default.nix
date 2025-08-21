@@ -35,38 +35,40 @@ let
     ++ withExtraLuaPackages p
   );
 in
-stdenv.mkDerivation rec {
-  version = "0.12.4"; # also update communityModules
+stdenv.mkDerivation (finalAttrs: {
   pname = "prosody";
+  version = "13.0.2"; # also update communityModules
+
+  src = fetchurl {
+    url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
+    hash = "sha256-PmG9OW83ylJF3r/WvkmkemGRMy8Pqi1O5fAPuwQK3bA=";
+  };
+
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
   # default setup.
   nixosModuleDeps = [
     "cloud_notify"
-    "vcard_muc"
-    "http_upload"
   ];
-  src = fetchurl {
-    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "R9cSJzwvKVWMQS9s2uwHMmC7wmt92iQ9tYAzAYPWWFY=";
-  };
 
   # A note to all those merging automated updates: Please also update this
   # attribute as some modules might not be compatible with a newer prosody
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "d3a72777f149";
-    hash = "sha256-qLuhEdvtOMfu78oxLUZKWZDb/AME1+IRnk0jkQNxTU8=";
+    rev = "a4d7fefa4a8b";
+    hash = "sha256-lPxKZlIVyAt1Nx+PQ0ru0qihJ1ecBbvO0fMk+5D+NzE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
     luaEnv
     libidn
     openssl
     icu
-  ] ++ withExtraLibs;
+  ]
+  ++ withExtraLibs;
 
   configureFlags = [
     "--ostype=linux"
@@ -76,6 +78,7 @@ stdenv.mkDerivation rec {
     "--c-compiler=${stdenv.cc.targetPrefix}cc"
     "--linker=${stdenv.cc.targetPrefix}cc"
   ];
+
   configurePlatforms = [ ];
 
   postBuild = ''
@@ -92,9 +95,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${lib.concatMapStringsSep "\n"
       (module: ''
-        cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
+        cp -r ${finalAttrs.communityModules}/mod_${module} $out/lib/prosody/modules/
       '')
-      (lib.lists.unique (nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))
+      (
+        lib.lists.unique (
+          finalAttrs.nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules
+        )
+      )
     }
     make -C tools/migration install
   '';
@@ -109,6 +116,11 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    mainProgram = "prosody";
+    maintainers = with maintainers; [
+      toastal
+      mirror230469
+    ];
+    teams = with lib.teams; [ c3d2 ];
   };
-}
+})

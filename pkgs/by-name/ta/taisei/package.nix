@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rThLz8o6IYhIBUc0b1sAQi2aF28btajcM1ScTv+qn6c=";
     fetchSubmodules = true;
   };
@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     openssl
     spirv-cross
-  ] ++ lib.optional gamemodeSupport gamemode;
+  ]
+  ++ lib.optional gamemodeSupport gamemode;
 
   mesonFlags = [
     (lib.mesonBool "b_lto" false)

@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gumbo";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gumbo-parser";
     repo = "gumbo-parser";
     rev = version;
-    hash = "sha256-QpGOBKNPBryCXZKKEQMv9TXJiNyXESBFiR4wM0lmjiI=";
+    hash = "sha256-QNzllJI0ZHRl8o3ktJq+rI8v4SUUJ3MJ6uIubqf1heI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

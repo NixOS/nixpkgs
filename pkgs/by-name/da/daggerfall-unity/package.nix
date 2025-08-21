@@ -22,22 +22,21 @@
   includeUnfree ? false,
 }:
 let
-  docFiles =
-    [
-      (fetchurl {
-        url = "https://www.dfworkshop.net/static_files/daggerfallunity/Daggerfall%20Unity%20Manual.pdf";
-        hash = "sha256-FywlD0K5b4vUWzyzANlF9575XTDLivbsym7F+qe0Dm8=";
-        name = "Daggerfall Unity Manual.pdf";
-        meta.license = lib.licenses.mit;
-      })
-    ]
-    ++ lib.optionals includeUnfree [
-      (fetchurl {
-        url = "https://cdn.bethsoft.com/bethsoft.com/manuals/Daggerfall/daggerfall-en.pdf";
-        hash = "sha256-24KSP/E7+KvSRTMDq63NVlVWTFZnQj1yya8wc36yrC0=";
-        meta.license = lib.licenses.unfree;
-      })
-    ];
+  docFiles = [
+    (fetchurl {
+      url = "https://www.dfworkshop.net/static_files/daggerfallunity/Daggerfall%20Unity%20Manual.pdf";
+      hash = "sha256-FywlD0K5b4vUWzyzANlF9575XTDLivbsym7F+qe0Dm8=";
+      name = "Daggerfall Unity Manual.pdf";
+      meta.license = lib.licenses.mit;
+    })
+  ]
+  ++ lib.optionals includeUnfree [
+    (fetchurl {
+      url = "https://cdn.bethsoft.com/bethsoft.com/manuals/Daggerfall/daggerfall-en.pdf";
+      hash = "sha256-24KSP/E7+KvSRTMDq63NVlVWTFZnQj1yya8wc36yrC0=";
+      meta.license = lib.licenses.unfree;
+    })
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;

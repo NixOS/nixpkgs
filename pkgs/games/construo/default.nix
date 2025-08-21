@@ -19,15 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
   };
 
-  buildInputs =
-    [
-      libX11
-      zlib
-      xorgproto
-    ]
-    ++ lib.optional (libGL != null) libGL
-    ++ lib.optional (libGLU != null) libGLU
-    ++ lib.optional (libglut != null) libglut;
+  buildInputs = [
+    libX11
+    zlib
+    xorgproto
+  ]
+  ++ lib.optional (libGL != null) libGL
+  ++ lib.optional (libGLU != null) libGLU
+  ++ lib.optional (libglut != null) libglut;
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \

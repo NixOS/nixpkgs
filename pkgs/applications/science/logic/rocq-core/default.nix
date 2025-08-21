@@ -162,7 +162,7 @@ let
     '';
 
     meta = with lib; {
-      description = "The Rocq Prover";
+      description = "Rocq Prover";
       longDescription = ''
         The Rocq Prover is an interactive theorem prover, or proof assistant. It provides
         a formal language to write mathematical definitions, executable

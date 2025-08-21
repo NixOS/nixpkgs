@@ -35,7 +35,8 @@ buildPythonPackage rec {
     colorama
     pyperclip
     wcwidth
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
   doCheck = true;
 

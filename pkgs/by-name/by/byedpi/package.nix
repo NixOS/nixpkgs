@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "byedpi";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "hufrea";
     repo = "byedpi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-an0UmsAZw5DJMuM4WpAWBVVN0ZVBpXhn0cbZ0ZbfBjo=";
+    hash = "sha256-XeUcf8w6b0vZQwttopRnmg5320oF/Z+gHWcWMQ6kAkc=";
   };
 
   installPhase = ''

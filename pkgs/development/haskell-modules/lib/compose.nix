@@ -459,13 +459,11 @@ rec {
     enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
-    postFixup =
-      drv.postFixup or ""
-      + ''
+    postFixup = drv.postFixup or "" + ''
 
-        # Remove every directory which could have links to other store paths.
-        rm -rf $out/lib $out/nix-support $out/share/doc
-      '';
+      # Remove every directory which could have links to other store paths.
+      rm -rf $out/lib $out/nix-support $out/share/doc
+    '';
     disallowGhcReference = true;
   });
 
@@ -540,12 +538,10 @@ rec {
   triggerRebuild =
     i:
     overrideCabal (drv: {
-      postUnpack =
-        drv.postUnpack or ""
-        + ''
+      postUnpack = drv.postUnpack or "" + ''
 
-          # trigger rebuild ${toString i}
-        '';
+        # trigger rebuild ${toString i}
+      '';
     });
 
   /*
@@ -633,23 +629,21 @@ rec {
   __generateOptparseApplicativeCompletion =
     exeName:
     overrideCabal (drv: {
-      postInstall =
-        (drv.postInstall or "")
-        + ''
-          bashCompDir="''${!outputBin}/share/bash-completion/completions"
-          zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
-          fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
-          mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
-          "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
-          "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
-          "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
+      postInstall = (drv.postInstall or "") + ''
+        bashCompDir="''${!outputBin}/share/bash-completion/completions"
+        zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
+        fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
+        mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
+        "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
+        "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
+        "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
 
-          # Sanity check
-          grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
-            echo 'Could not find ${exeName} in completion script.'
-            exit 1
-          }
-        '';
+        # Sanity check
+        grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
+          echo 'Could not find ${exeName} in completion script.'
+          exit 1
+        }
+      '';
     });
 
   /*

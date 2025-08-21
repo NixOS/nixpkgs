@@ -136,7 +136,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Tool for filling forms for the Hungarian government,";
+    description = "Tool for filling forms for the Hungarian government";
     longDescription = ''
       Official tool for filling Hungarian government forms.
 

@@ -42,7 +42,7 @@ buildPythonPackage {
     pytest-benchmark
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   # Python source files interfere with testing
   preCheck = ''

@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./remove-default-commit-hash.patch
     ./remove-vendored-libraries.patch
-  ] ++ finalAttrs.cargoDeps.vendorStaging.patches;
+  ]
+  ++ finalAttrs.cargoDeps.vendorStaging.patches;
 
   cmakeDir = "../src";
 
@@ -65,38 +66,36 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      gpac
-      protobufc
-      libpng
-      zlib
-      utf8proc
-      freetype
-      ffmpeg
-      libarchive
-      curl
-      libiconv
-    ]
-    ++ lib.optionals enableOcr [
-      leptonica
-      tesseract
-    ];
+  buildInputs = [
+    gpac
+    protobufc
+    libpng
+    zlib
+    utf8proc
+    freetype
+    ffmpeg
+    libarchive
+    curl
+    libiconv
+  ]
+  ++ lib.optionals enableOcr [
+    leptonica
+    tesseract
+  ];
 
-  cmakeFlags =
-    [
-      # The tests are all part of one `cargo test` invocation, so let’s
-      # get the output from it.
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--verbose")
+  cmakeFlags = [
+    # The tests are all part of one `cargo test` invocation, so let’s
+    # get the output from it.
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--verbose")
 
-      # TODO: This (and the corresponding patch) should probably be
-      # removed for the next stable release.
-      (lib.cmakeFeature "GIT_COMMIT_HASH" finalAttrs.src.rev)
-    ]
-    ++ lib.optionals enableOcr [
-      (lib.cmakeBool "WITH_OCR" true)
-      (lib.cmakeBool "WITH_HARDSUBX" true)
-    ];
+    # TODO: This (and the corresponding patch) should probably be
+    # removed for the next stable release.
+    (lib.cmakeFeature "GIT_COMMIT_HASH" finalAttrs.src.rev)
+  ]
+  ++ lib.optionals enableOcr [
+    (lib.cmakeBool "WITH_OCR" true)
+    (lib.cmakeBool "WITH_HARDSUBX" true)
+  ];
 
   env = {
     FFMPEG_INCLUDE_DIR = "${lib.getDev ffmpeg}/include";

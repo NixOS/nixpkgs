@@ -11,7 +11,7 @@
 # Fixes build issues, see https://github.com/NixOS/nixpkgs/pull/296082 and https://github.com/NixOS/nixpkgs/issues/295322
 swiftPackages.stdenv.mkDerivation (final: {
   pname = "dark-mode-notify";
-  version = "unstable-2022-07-18";
+  version = "0-unstable-2022-07-18";
 
   src = fetchFromGitHub {
     owner = "bouk";

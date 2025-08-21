@@ -1,13 +1,13 @@
-diff --color -ur a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt	2022-06-02 02:57:01.503340155 +0300
-+++ b/CMakeLists.txt	2022-06-02 02:54:33.726941188 +0300
-@@ -378,7 +378,7 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d5313c50..0ef102bf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -408,7 +408,7 @@ if (WITH_XML_BACKEND)
  	# So, try first to find the CMake module provided by libxml2 package, then fallback
  	# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
  	# in static build case).
--	find_package(LibXml2 QUIET NO_MODULE)
+-	find_package(LibXml2 QUIET NO_MODULE NO_SYSTEM_ENVIRONMENT_PATH)
 +	find_package(LibXml2 QUIET MODULE)
  	if(DEFINED LIBXML2_VERSION_STRING)
  		set(LIBXML2_FOUND ON)
  		set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
-Seulement dans b: good.patch

@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.1.2";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-+vIq//pDLaaTmRGW+oytho3TfMmLCtuIoHeFenLVcek=";
+    hash = "sha256-s+kWJy/dOqlNqRD/Ytxy/SSRsFJvp13jSvPMd0LQliQ=";
   };
 
   postPatch = ''
@@ -89,7 +89,8 @@ buildPythonPackage rec {
     statsmodels
     which
     xarray
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -105,7 +106,13 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # Broken imports
+    "plotly/matplotlylib/mplexporter/tests"
+    # Fails to catch error when serializing document
+    "tests/test_optional/test_kaleido/test_kaleido.py::test_defaults"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to launch kaleido subprocess
     "tests/test_optional/test_kaleido"
     # numpy2 related error, RecursionError
@@ -135,6 +142,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/plotly/plotly.py";
     changelog = "https://github.com/plotly/plotly.py/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      pandapip1
+      sarahec
+    ];
   };
 }

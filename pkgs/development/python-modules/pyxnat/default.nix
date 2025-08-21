@@ -50,7 +50,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PYXNAT_SKIP_NETWORK_TESTS=1
   '';
-  pytestFlagsArray = [ "pyxnat" ];
+  enabledTestPaths = [ "pyxnat" ];
   disabledTestPaths = [
     # require a running local XNAT instance e.g. in a docker container:
     "pyxnat/tests/attributes_test.py"

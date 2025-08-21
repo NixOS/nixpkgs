@@ -119,6 +119,10 @@ in
               "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}"
             ];
           SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
+
+          # Ensure that hashtable can be locked into memory
+          LimitMEMLOCK = "${toString fs.hashTableSizeMB}M";
+          MemoryMin = "${toString fs.hashTableSizeMB}M";
         };
         unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];

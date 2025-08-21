@@ -57,18 +57,19 @@ stdenv.mkDerivation rec {
     (mesonEnable "x11" withX11)
   ];
 
-  buildInputs =
-    [ lv2 ]
-    ++ lib.optionals withGtk2 [ gtk2 ]
-    ++ lib.optionals withGtk3 [ gtk3 ]
-    ++ lib.optionals withQt5 (
-      with qt5;
-      [
-        qtbase
-        qttools
-      ]
-      ++ lib.optionals withX11 [ qtx11extras ]
-    );
+  buildInputs = [
+    lv2
+  ]
+  ++ lib.optionals withGtk2 [ gtk2 ]
+  ++ lib.optionals withGtk3 [ gtk3 ]
+  ++ lib.optionals withQt5 (
+    with qt5;
+    [
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals withX11 [ qtx11extras ]
+  );
 
   dontWrapQtApps = true;
 

@@ -131,41 +131,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ] ++ lib.optional enableWX wrapGAppsHook3;
 
-  buildInputs =
-    [
-      qhull
-      readline
-      ncurses
-      zlib
-      gsl
-      openmp
-      graphicsmagick
-      fftw
-      fftwFloat
-      fftwLongDouble
-      proj
-      shapelib
-      expat
-      mpi
-      udunits
-      eigen
-      pslib
-      libpng
-      libtiff
-      libgeotiff
-      libjpeg
-      hdf4-custom
-      hdf5-custom
-      netcdf-custom
-      plplot-with-drivers
-    ]
-    ++ lib.optional enableXWin plplot-with-drivers.libX11
-    ++ lib.optional enableGRIB eccodes
-    ++ lib.optional enableGLPK glpk
-    ++ lib.optional enableWX wxGTK32
-    ++ lib.optional enableMPI mpi
-    ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-    ++ lib.optional enableSzip szip;
+  buildInputs = [
+    qhull
+    readline
+    ncurses
+    zlib
+    gsl
+    openmp
+    graphicsmagick
+    fftw
+    fftwFloat
+    fftwLongDouble
+    proj
+    shapelib
+    expat
+    mpi
+    udunits
+    eigen
+    pslib
+    libpng
+    libtiff
+    libgeotiff
+    libjpeg
+    hdf4-custom
+    hdf5-custom
+    netcdf-custom
+    plplot-with-drivers
+  ]
+  ++ lib.optional enableXWin plplot-with-drivers.libX11
+  ++ lib.optional enableGRIB eccodes
+  ++ lib.optional enableGLPK glpk
+  ++ lib.optional enableWX wxGTK32
+  ++ lib.optional enableMPI mpi
+  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
+  ++ lib.optional enableSzip szip;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))

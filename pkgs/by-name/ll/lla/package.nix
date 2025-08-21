@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YvxzuOUowr5tcKZaZwgpeskfMJcOKJyHci43CfQWhOY=";
 
   cargoBuildFlags = [ "--workspace" ];

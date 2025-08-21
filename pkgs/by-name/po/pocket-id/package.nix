@@ -2,25 +2,27 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  buildNpmPackage,
+  stdenvNoCC,
+  nodejs,
+  pnpm_10,
   nixosTests,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fg9iT4JGB3CvmPiRaQwfyKxZ5T0mweDQAQYYU/fdb/g=";
+    hash = "sha256-u4H1wC5RL3p7GNL7WQkmK8DNgwKQvgxHd8TIug+Be+o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-LutjhewhizxGc/YlNHpK81HrX+wSAAJLWtA+skTjn1w=";
+  vendorHash = "sha256-guG/JnwUi2WeClSfAX9pRG3kLJMTvTDiJ7L54TGeSd0=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -36,22 +38,35 @@ buildGoModule (finalAttrs: {
     mv $out/bin/cmd $out/bin/pocket-id
   '';
 
-  frontend = buildNpmPackage {
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
 
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-AZ8je9uaJ1h9wxfs2RtPr2Ki0QNYD0nDd2BZDj6/sl8=";
-    npmFlags = [ "--legacy-peer-deps" ];
+    nativeBuildInputs = [
+      nodejs
+      pnpm_10.configHook
+    ];
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-UgbclnoOqsWY5fYAGoDJON9MDtN5edw65JRleghdReE=";
+    };
 
     env.BUILD_OUTPUT_PATH = "dist";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter pocket-id-frontend build
+
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/lib/pocket-id-frontend
-      cp -r dist $out/lib/pocket-id-frontend/dist
+      cp -r frontend/dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';

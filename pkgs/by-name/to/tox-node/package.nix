@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "tox_node";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UNvhls6qY1u9STr8PsgcUfFYRDTlqvxB3M57j/fdkH8=";
 
   passthru.updateScript = nix-update-script { };

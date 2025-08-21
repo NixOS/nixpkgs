@@ -32,13 +32,12 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      flask
-      sqlalchemy
-    ]
-    ++ flask.optional-dependencies.async
-    ++ sqlalchemy.optional-dependencies.asyncio;
+  dependencies = [
+    flask
+    sqlalchemy
+  ]
+  ++ flask.optional-dependencies.async
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   pythonImportsCheck = [ "flask_sqlalchemy_lite" ];
 

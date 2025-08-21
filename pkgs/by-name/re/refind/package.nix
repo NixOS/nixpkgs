@@ -58,20 +58,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  makeFlags =
-    [
-      "prefix="
-      "EFIINC=${gnu-efi_3}/include/efi"
-      "EFILIB=${gnu-efi_3}/lib"
-      "GNUEFILIB=${gnu-efi_3}/lib"
-      "EFICRT0=${gnu-efi_3}/lib"
-      "HOSTARCH=${hostarch}"
-      "ARCH=${hostarch}"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isAarch64 [
-      # aarch64 is special for GNU-EFI, see BUILDING.txt
-      "GNUEFI_ARM64_TARGET_SUPPORT=y"
-    ];
+  makeFlags = [
+    "prefix="
+    "EFIINC=${gnu-efi_3}/include/efi"
+    "EFILIB=${gnu-efi_3}/lib"
+    "GNUEFILIB=${gnu-efi_3}/lib"
+    "EFICRT0=${gnu-efi_3}/lib"
+    "HOSTARCH=${hostarch}"
+    "ARCH=${hostarch}"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 [
+    # aarch64 is special for GNU-EFI, see BUILDING.txt
+    "GNUEFI_ARM64_TARGET_SUPPORT=y"
+  ];
 
   buildFlags = [
     "gnuefi"

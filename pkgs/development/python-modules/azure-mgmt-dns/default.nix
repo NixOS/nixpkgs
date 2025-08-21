@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
-  version = "8.2.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_dns";
     inherit version;
-    hash = "sha256-Ynueo98L94qJWsrcUUjeyEwomAY7+qv/+LFLqpg7WW4=";
+    hash = "sha256-ifjE5GepQiS5e/Ft121b1ha/Ec7+cn93ZhilfMVIbjc=";
   };
 
   build-system = [ setuptools ];

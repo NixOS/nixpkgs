@@ -165,20 +165,19 @@ buildPythonPackage rec {
     "test/offline"
   ];
 
-  disabledTests =
-    [
-      # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
-      "test_attr_unwrapped"
-      # Failed: DID NOT RAISE <class 'TypeError'>
-      "test_batch"
-      # Failed: Raised AssertionError
-      "test_vecenv"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # pettingzoo/classic/tictactoe/tictactoe.py", line 254 in reset
-      "test_tic_tac_toe"
-    ];
+  disabledTests = [
+    # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
+    "test_attr_unwrapped"
+    # Failed: DID NOT RAISE <class 'TypeError'>
+    "test_batch"
+    # Failed: Raised AssertionError
+    "test_vecenv"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # pettingzoo/classic/tictactoe/tictactoe.py", line 254 in reset
+    "test_tic_tac_toe"
+  ];
 
   meta = {
     description = "Elegant PyTorch deep reinforcement learning library";

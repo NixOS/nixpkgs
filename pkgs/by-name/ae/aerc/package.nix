@@ -59,7 +59,8 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     python3Packages.python
     gawk
-  ] ++ lib.optional withNotmuch notmuch;
+  ]
+  ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall

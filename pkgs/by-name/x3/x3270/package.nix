@@ -51,29 +51,28 @@ stdenv.mkDerivation rec {
   pathsToLink = [ "/share/man" ];
 
   nativeBuildInputs = [ m4 ];
-  buildInputs =
-    [
-      expat
-      libX11
-      libXt
-      libXaw
-      libXmu
-      bdftopcf
-      mkfontdir
-      fontadobe100dpi
-      fontadobeutopia100dpi
-      fontbh100dpi
-      fontbhlucidatypewriter100dpi
-      fontbitstream100dpi
-      tcl
-      ncurses
-      expat
-      openssl
-      readline
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    expat
+    libX11
+    libXt
+    libXaw
+    libXmu
+    bdftopcf
+    mkfontdir
+    fontadobe100dpi
+    fontadobeutopia100dpi
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbitstream100dpi
+    tcl
+    ncurses
+    expat
+    openssl
+    readline
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";

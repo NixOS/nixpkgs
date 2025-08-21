@@ -8,16 +8,20 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-musicbox-webclient";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimusicbox";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mopidy-musicbox-webclient";
+    tag = "v${version}";
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
   ];
 

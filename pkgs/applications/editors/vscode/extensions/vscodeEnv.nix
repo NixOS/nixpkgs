@@ -53,7 +53,8 @@ let
       "extensions.autoCheckUpdates" = false;
       "extensions.autoUpdate" = false;
       "update.mode" = "none";
-    } // settings;
+    }
+    // settings;
     inherit userSettingsFolder;
     createIfDoesNotExists = createSettingsIfDoesNotExists;
     symlinkFromUserSetting = (user-data-dir != "");

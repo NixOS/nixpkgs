@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "vkbasalt-cli";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "TheEvilSkeleton";
@@ -19,8 +19,10 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace vkbasalt/lib.py \
-      --replace /usr ${vkbasalt}
+      --replace-fail /usr ${vkbasalt}
   '';
+
+  build-system = with python3Packages; [ setuptools ];
 
   pythonImportsCheck = [ "vkbasalt.lib" ];
 

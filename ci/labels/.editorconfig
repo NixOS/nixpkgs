@@ -1,4 +1,0 @@
-# TODO: Move to <top-level>/.editorconfig, once ci/.editorconfig has made its way through staging.
-[*.cjs]
-indent_style = space
-indent_size = 2

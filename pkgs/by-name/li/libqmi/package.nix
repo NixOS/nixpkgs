@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -41,42 +42,39 @@ stdenv.mkDerivation rec {
     hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals withMan [
-      help2man
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals withMan [
+    help2man
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-      libmbim
-    ]
-    ++ lib.optionals withIntrospection [
-      libgudev
-    ];
+  buildInputs = [
+    bash-completion
+    libmbim
+  ]
+  ++ lib.optionals withIntrospection [
+    libgudev
+  ];
 
-  propagatedBuildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      libqrtr-glib
-    ];
+  propagatedBuildInputs = [
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    libqrtr-glib
+  ];
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"

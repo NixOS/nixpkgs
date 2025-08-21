@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = " molecular point group symmetry lib";
+    description = "Molecular point group symmetry lib";
     homepage = "https://github.com/mcodev31/libmsym";
     license = licenses.mit;
     platforms = platforms.linux;

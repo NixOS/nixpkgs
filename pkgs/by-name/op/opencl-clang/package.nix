@@ -14,13 +14,11 @@ let
   addPatches =
     component: pkg:
     pkg.overrideAttrs (oldAttrs: {
-      postPatch =
-        oldAttrs.postPatch or ""
-        + ''
-          for p in ${passthru.patchesOut}/${component}/*; do
-            patch -p1 -i "$p"
-          done
-        '';
+      postPatch = oldAttrs.postPatch or "" + ''
+        for p in ${passthru.patchesOut}/${component}/*; do
+          patch -p1 -i "$p"
+        done
+      '';
     });
 
   llvmPkgs = llvmPackages_15;
@@ -73,18 +71,17 @@ let
       ./opencl-headers-dir.patch
     ];
 
-    postPatch =
-      ''
-        # fix not be able to find clang from PATH
-        substituteInPlace cl_headers/CMakeLists.txt \
-          --replace-fail " NO_DEFAULT_PATH" ""
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # Uses linker flags that are not supported on Darwin.
-        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
-        substituteInPlace CMakeLists.txt \
-          --replace-fail '-Wl,--no-undefined' ""
-      '';
+    postPatch = ''
+      # fix not be able to find clang from PATH
+      substituteInPlace cl_headers/CMakeLists.txt \
+        --replace-fail " NO_DEFAULT_PATH" ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Uses linker flags that are not supported on Darwin.
+      sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+      substituteInPlace CMakeLists.txt \
+        --replace-fail '-Wl,--no-undefined' ""
+    '';
   };
 in
 

@@ -60,7 +60,7 @@ let
           # We only include the out output here to avoid needing to include all
           # other outputs in the installer tests as well
           # We only need the udevadm command anyway
-          pkgs.systemdMinimal.out
+          pkgs.buildPackages.systemdMinimal.out
         ];
       }
       ''
@@ -463,7 +463,8 @@ in
       "${config.boot.initrd.systemd.package}/lib/udev/cdrom_id"
       "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
       "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
-    ] ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
+    ]
+    ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
 
     # Generate the udev rules for the initrd
     boot.initrd.systemd.contents = {
@@ -491,22 +492,21 @@ in
       ))
     ];
 
-    environment.etc =
-      {
-        "udev/rules.d".source = udevRulesFor {
-          name = "udev-rules";
-          udevPackages = cfg.packages;
-          systemd = config.systemd.package;
-          binPackages = cfg.packages;
-          inherit udevPath udev;
-        };
-        "udev/hwdb.bin".source = hwdbBin;
-      }
-      // lib.optionalAttrs config.boot.modprobeConfig.enable {
-        # We don't place this into `extraModprobeConfig` so that stage-1 ramdisk doesn't bloat.
-        "modprobe.d/firmware.conf".text =
-          "options firmware_class path=${config.hardware.firmware}/lib/firmware";
+    environment.etc = {
+      "udev/rules.d".source = udevRulesFor {
+        name = "udev-rules";
+        udevPackages = cfg.packages;
+        systemd = config.systemd.package;
+        binPackages = cfg.packages;
+        inherit udevPath udev;
       };
+      "udev/hwdb.bin".source = hwdbBin;
+    }
+    // lib.optionalAttrs config.boot.modprobeConfig.enable {
+      # We don't place this into `extraModprobeConfig` so that stage-1 ramdisk doesn't bloat.
+      "modprobe.d/firmware.conf".text =
+        "options firmware_class path=${config.hardware.firmware}/lib/firmware";
+    };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")

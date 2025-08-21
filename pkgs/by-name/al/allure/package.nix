@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://allurereport.org/";
-    description = "Allure Report is a flexible, lightweight multi-language test reporting tool";
+    description = "Flexible, lightweight multi-language test reporting tool";
     longDescription = ''
       Allure Report is a flexible, lightweight multi-language test reporting
       tool providing clear graphical reports and allowing everyone involved

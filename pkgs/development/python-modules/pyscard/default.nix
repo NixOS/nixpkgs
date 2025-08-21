@@ -30,17 +30,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch =
-    ''
-      substituteInPlace pyproject.toml \
-        --replace-fail 'requires = ["setuptools","swig"]' 'requires = ["setuptools"]'
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      substituteInPlace setup.py --replace-fail "pkg-config" "$PKG_CONFIG"
-      substituteInPlace src/smartcard/scard/winscarddll.c \
-        --replace-fail "libpcsclite.so.1" \
-                  "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["setuptools","swig"]' 'requires = ["setuptools"]'
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace setup.py --replace-fail "pkg-config" "$PKG_CONFIG"
+    substituteInPlace src/smartcard/scard/winscarddll.c \
+      --replace-fail "libpcsclite.so.1" \
+                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+  '';
 
   meta = {
     description = "Smartcard library for python";

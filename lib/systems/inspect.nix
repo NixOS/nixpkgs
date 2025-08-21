@@ -260,16 +260,16 @@ rec {
         bits = 64;
       };
     };
-    isILP32 =
-      [
-        {
-          cpu = {
-            family = "wasm";
-            bits = 32;
-          };
-        }
-      ]
-      ++ map
+    isILP32 = [
+      {
+        cpu = {
+          family = "wasm";
+          bits = 32;
+        };
+      }
+    ]
+    ++
+      map
         (a: {
           abi = {
             abi = a;
@@ -343,6 +343,10 @@ rec {
     isMinGW = {
       kernel = kernels.windows;
       abi = abis.gnu;
+    };
+    isMsvc = {
+      kernel = kernels.windows;
+      abi = abis.msvc;
     };
     isWasi = {
       kernel = kernels.wasi;

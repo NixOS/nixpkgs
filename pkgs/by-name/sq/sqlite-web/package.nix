@@ -7,14 +7,16 @@
 python3Packages.buildPythonApplication rec {
   pname = "sqlite-web";
   version = "0.6.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-5Bdd1C9M3HjvfDKdVvGSQ+/I0Iimvf1MZwPonRiqwqU=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     flask
     peewee
     pygments
@@ -22,6 +24,8 @@ python3Packages.buildPythonApplication rec {
 
   # no tests in repository
   doCheck = false;
+
+  pythonImportsCheck = [ "sqlite_web" ];
 
   meta = with lib; {
     description = "Web-based SQLite database browser";

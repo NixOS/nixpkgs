@@ -35,7 +35,7 @@ buildGoModule {
   doCheck = false;
 
   meta = with lib; {
-    description = "Agola: CI/CD Redefined";
+    description = "CI/CD Redefined";
     homepage = "https://agola.io";
     maintainers = with maintainers; [ happysalada ];
     license = licenses.mit;

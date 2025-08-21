@@ -26,17 +26,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch =
-    ''
-      # Fix compiler error that wants a string literal as format string for `wprintw`
-      substituteInPlace sel_file.c \
-        --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix compiler error on Darwin: conflicting types for 'strdup'
-      substituteInPlace sel_file.c \
-        --replace-fail 'char *strdup(char *);' ' '
-    '';
+  postPatch = ''
+    # Fix compiler error that wants a string literal as format string for `wprintw`
+    substituteInPlace sel_file.c \
+      --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix compiler error on Darwin: conflicting types for 'strdup'
+    substituteInPlace sel_file.c \
+      --replace-fail 'char *strdup(char *);' ' '
+  '';
 
   buildInputs = [ ncurses ];
 

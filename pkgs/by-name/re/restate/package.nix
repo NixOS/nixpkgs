@@ -25,17 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4hNutU9WpzxOjQe+0t5teSjMhuoprR0INQo6H/wOygc=";
+    hash = "sha256-OtDVYGYoUpocy3c9ZDKbE5ZqGRLewJMvABj2QQxJQ80=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/ng8ONIszRgmfgRBKn65kcJFaTp1T0lNdZQb3t9Gol0=";
+  cargoHash = "sha256-OWSFnVqyI2qV0IEXKOAp2QMs2qmjzS0UINVo+nu296g=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -52,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             "-C force-unwind-tables"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
+            "--cfg tokio_taskdump"
           ];
 
           "aarch64-unknown-linux-gnu" = self.build ++ [
@@ -132,7 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Platform for developing distributed fault-tolerant applications.";
+    description = "Platform for developing distributed fault-tolerant applications";
     homepage = "https://restate.dev";
     changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";

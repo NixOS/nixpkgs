@@ -286,17 +286,16 @@ in
           "pulse/default.pa".source = myConfigFile;
         };
         systemd.user = {
-          services.pulseaudio =
-            {
-              restartIfChanged = true;
-              serviceConfig = {
-                RestartSec = "500ms";
-                PassEnvironment = "DISPLAY";
-              };
-            }
-            // lib.optionalAttrs config.services.jack.jackd.enable {
-              environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
+          services.pulseaudio = {
+            restartIfChanged = true;
+            serviceConfig = {
+              RestartSec = "500ms";
+              PassEnvironment = "DISPLAY";
             };
+          }
+          // lib.optionalAttrs config.services.jack.jackd.enable {
+            environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
+          };
           sockets.pulseaudio = {
             wantedBy = [ "sockets.target" ];
           };

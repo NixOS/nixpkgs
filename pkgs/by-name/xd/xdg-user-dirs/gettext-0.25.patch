@@ -1,0 +1,20 @@
+diff --git a/configure.ac b/configure.ac
+index dc389db..45a35df 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,6 +2,7 @@ AC_INIT(xdg-user-dirs-update.c)
+ 
+ AM_INIT_AUTOMAKE(xdg-user-dirs, 0.18)
+ AM_CONFIG_HEADER(config.h)
++AC_CONFIG_MACRO_DIRS([m4])
+ 
+ AM_SANITY_CHECK
+ AM_MAINTAINER_MODE
+@@ -20,6 +21,7 @@ GETTEXT_PACKAGE=xdg-user-dirs
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext domain name])
+ AC_SUBST(GETTEXT_PACKAGE)
+ 
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.14.4])
+ AM_GNU_GETTEXT([external])
+ 
+ dnl ==========================================================================

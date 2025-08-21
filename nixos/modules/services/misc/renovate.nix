@@ -129,7 +129,8 @@ in
       path = [
         config.systemd.package
         pkgs.git
-      ] ++ cfg.runtimePackages;
+      ]
+      ++ cfg.runtimePackages;
       inherit (cfg) environment;
 
       serviceConfig = {

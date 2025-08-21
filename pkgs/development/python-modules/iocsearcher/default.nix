@@ -52,7 +52,8 @@ buildPythonPackage rec {
     phonenumbers
     python-magic
     readabilipy
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   # Module has no tests
   doCheck = false;

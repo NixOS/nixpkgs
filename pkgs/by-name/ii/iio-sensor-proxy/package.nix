@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   glib,
   cmake,
   libxml2,
@@ -16,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "iio-sensor-proxy";
     rev = version;
-    hash = "sha256-MAfh6bgh39J5J3rlyPjyCkk5KcfWHMZLytZcBRPHaJE=";
+    hash = "sha256-ZVaV4Aj4alr5eP3uz6SunpeRsMOo8YcZMqCcB0DUYGY=";
   };
 
   postPatch = ''

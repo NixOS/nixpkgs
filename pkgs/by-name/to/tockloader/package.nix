@@ -7,14 +7,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tockloader";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7W55jugVtamFUL8N3dD1LFLJP2UDQb74V6o96rd/tEg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     argcomplete
     colorama
     crcmod
@@ -31,6 +33,8 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/tockloader --version | grep -q ${version}
     runHook postCheck
   '';
+
+  pythonImportsCheck = [ "tockloader" ];
 
   meta = {
     description = "Tool for programming Tock onto hardware boards";

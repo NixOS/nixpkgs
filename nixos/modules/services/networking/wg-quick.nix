@@ -330,36 +330,35 @@ let
         name = "config-${name}";
         executable = false;
         destination = "/${name}.conf";
-        text =
-          ''
-            [interface]
-            ${concatMapStringsSep "\n" (address: "Address = ${address}") values.address}
-            ${concatMapStringsSep "\n" (dns: "DNS = ${dns}") values.dns}
-          ''
-          + optionalString (values.table != null) "Table = ${values.table}\n"
-          + optionalString (values.mtu != null) "MTU = ${toString values.mtu}\n"
-          + optionalString (values.privateKey != null) "PrivateKey = ${values.privateKey}\n"
-          + optionalString (values.listenPort != null) "ListenPort = ${toString values.listenPort}\n"
-          + optionalString (generateKeyScriptFile != null) "PreUp = ${generateKeyScriptFile}\n"
-          + optionalString (preUpFile != null) "PreUp = ${preUpFile}\n"
-          + optionalString (postUpFile != null) "PostUp = ${postUpFile}\n"
-          + optionalString (preDownFile != null) "PreDown = ${preDownFile}\n"
-          + optionalString (postDownFile != null) "PostDown = ${postDownFile}\n"
-          + concatLines (mapAttrsToList (n: v: "${n} = ${toString v}") values.extraOptions)
-          + concatMapStringsSep "\n" (
-            peer:
-            assert assertMsg (
-              !((peer.presharedKeyFile != null) && (peer.presharedKey != null))
-            ) "Only one of presharedKey or presharedKeyFile may be set";
-            "[Peer]\n"
-            + "PublicKey = ${peer.publicKey}\n"
-            + optionalString (peer.presharedKey != null) "PresharedKey = ${peer.presharedKey}\n"
-            + optionalString (peer.endpoint != null) "Endpoint = ${peer.endpoint}\n"
-            + optionalString (
-              peer.persistentKeepalive != null
-            ) "PersistentKeepalive = ${toString peer.persistentKeepalive}\n"
-            + optionalString (peer.allowedIPs != [ ]) "AllowedIPs = ${concatStringsSep "," peer.allowedIPs}\n"
-          ) values.peers;
+        text = ''
+          [interface]
+          ${concatMapStringsSep "\n" (address: "Address = ${address}") values.address}
+          ${concatMapStringsSep "\n" (dns: "DNS = ${dns}") values.dns}
+        ''
+        + optionalString (values.table != null) "Table = ${values.table}\n"
+        + optionalString (values.mtu != null) "MTU = ${toString values.mtu}\n"
+        + optionalString (values.privateKey != null) "PrivateKey = ${values.privateKey}\n"
+        + optionalString (values.listenPort != null) "ListenPort = ${toString values.listenPort}\n"
+        + optionalString (generateKeyScriptFile != null) "PreUp = ${generateKeyScriptFile}\n"
+        + optionalString (preUpFile != null) "PreUp = ${preUpFile}\n"
+        + optionalString (postUpFile != null) "PostUp = ${postUpFile}\n"
+        + optionalString (preDownFile != null) "PreDown = ${preDownFile}\n"
+        + optionalString (postDownFile != null) "PostDown = ${postDownFile}\n"
+        + concatLines (mapAttrsToList (n: v: "${n} = ${toString v}") values.extraOptions)
+        + concatMapStringsSep "\n" (
+          peer:
+          assert assertMsg (
+            !((peer.presharedKeyFile != null) && (peer.presharedKey != null))
+          ) "Only one of presharedKey or presharedKeyFile may be set";
+          "[Peer]\n"
+          + "PublicKey = ${peer.publicKey}\n"
+          + optionalString (peer.presharedKey != null) "PresharedKey = ${peer.presharedKey}\n"
+          + optionalString (peer.endpoint != null) "Endpoint = ${peer.endpoint}\n"
+          + optionalString (
+            peer.persistentKeepalive != null
+          ) "PersistentKeepalive = ${toString peer.persistentKeepalive}\n"
+          + optionalString (peer.allowedIPs != [ ]) "AllowedIPs = ${concatStringsSep "," peer.allowedIPs}\n"
+        ) values.peers;
       };
       configPath =
         if values.configFile != null then

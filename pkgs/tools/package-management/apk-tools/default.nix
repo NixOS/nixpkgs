@@ -22,19 +22,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9TSkcJe7FVdTtfcCmwp+IWMYa/OL9OXJwPcKLyj5AAA=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      scdoc
-    ]
-    ++ lib.optionals luaSupport [
-      lua
-      lua.pkgs.lua-zlib
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ]
+  ++ lib.optionals luaSupport [
+    lua
+    lua.pkgs.lua-zlib
+  ];
   buildInputs = [
     openssl
     zlib
-  ] ++ lib.optional luaSupport lua;
+  ]
+  ++ lib.optional luaSupport lua;
   strictDeps = true;
 
   makeFlags = [

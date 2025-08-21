@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
   };
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "AM_GNU_GETTEXT_VERSION([0.11.1])" "AM_GNU_GETTEXT_VERSION([0.12])"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

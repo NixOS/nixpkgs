@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "1.0.0";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     tag = "v${version}";
-    hash = "sha256-HrYO7Fz9aLabx7nsilo/b/xe6OOzIq0P2PzVFtAPNEU=";
+    hash = "sha256-zaC33dlwjMNvvXnxqrEJvk3Umh+4hYsbDWoW6n6KmCk=";
   };
 
   pythonRelaxDeps = [

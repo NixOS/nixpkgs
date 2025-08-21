@@ -70,22 +70,21 @@ let
 
         buildInputs = [ openssl ];
 
-        makeFlags =
-          [
-            "HOSTCC=$(CC_FOR_BUILD)"
-            "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
-            "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-            # Make the new toolchain guessing (from 2.11+) happy
-            "CC=${stdenv.cc.targetPrefix}cc"
-            "LD=${stdenv.cc.targetPrefix}cc"
-            "AS=${stdenv.cc.targetPrefix}cc"
-            "OC=${stdenv.cc.targetPrefix}objcopy"
-            "OD=${stdenv.cc.targetPrefix}objdump"
-            # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
-            "OPENSSL_DIR=${openssl}"
-          ]
-          ++ (lib.optional (platform != null) "PLAT=${platform}")
-          ++ extraMakeFlags;
+        makeFlags = [
+          "HOSTCC=$(CC_FOR_BUILD)"
+          "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+          "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+          # Make the new toolchain guessing (from 2.11+) happy
+          "CC=${stdenv.cc.targetPrefix}cc"
+          "LD=${stdenv.cc.targetPrefix}cc"
+          "AS=${stdenv.cc.targetPrefix}cc"
+          "OC=${stdenv.cc.targetPrefix}objcopy"
+          "OD=${stdenv.cc.targetPrefix}objdump"
+          # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
+          "OPENSSL_DIR=${openssl}"
+        ]
+        ++ (lib.optional (platform != null) "PLAT=${platform}")
+        ++ extraMakeFlags;
 
         installPhase = ''
           runHook preInstall
@@ -109,7 +108,8 @@ let
             description = "Reference implementation of secure world software for ARMv8-A";
             license = [
               licenses.bsd3
-            ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
+            ]
+            ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
             maintainers = with maintainers; [ lopsided98 ];
           }
           // extraMeta;

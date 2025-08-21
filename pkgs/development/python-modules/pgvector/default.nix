@@ -42,6 +42,10 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+
   nativeCheckInputs = [
     asyncpg
     django

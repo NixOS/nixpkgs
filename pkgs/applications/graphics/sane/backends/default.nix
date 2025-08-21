@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   runtimeShell,
   buildPackages,
   gettext,
@@ -52,6 +53,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
+  # Fix hangs in tests, hopefully
+  # FIXME: remove in next release
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/sane-project/backends/-/commit/8acc267d5f4049d8438456821137ae56e91baea9.patch";
+      hash = "sha256-IyupDeH1MPvEBnGaUzBbCu106Gp7zXxlPGFAaiiINQI=";
+    })
+  ];
+
   postPatch = ''
     # Do not create lock dir in install phase
     sed -i '/^install-lockpath:/!b;n;c\       # pass' backend/Makefile.am
@@ -95,34 +105,34 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      avahi
-      libgphoto2
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-      curl
-      libxml2
-      poppler
-      gawk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libieee1284
-      libv4l
-      net-snmp
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    avahi
+    libgphoto2
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+    curl
+    libxml2
+    poppler
+    gawk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libieee1284
+    libv4l
+    net-snmp
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-lockdir=/var/lock/sane" ]
-    ++ lib.optional (avahi != null) "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb";
+  configureFlags = [
+    "--with-lockdir=/var/lock/sane"
+  ]
+  ++ lib.optional (avahi != null) "--with-avahi"
+  ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.

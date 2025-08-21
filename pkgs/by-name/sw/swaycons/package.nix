@@ -15,11 +15,10 @@ rustPlatform.buildRustPackage {
     hash = "sha256-vyZcfBH2mry8Yd41QPX4+yLv0nS9J1yrgg7lpslJs7M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LE+YEFmkB4EBQcuxbExN9Td5LWpI4AZgyVHXdTyq7gU=";
 
   meta = with lib; {
-    description = "Window Icons in Sway with Nerd Fonts!";
+    description = "Window Icons in Sway with Nerd Fonts";
     mainProgram = "swaycons";
     homepage = "https://github.com/allie-wake-up/swaycons";
     license = licenses.asl20;

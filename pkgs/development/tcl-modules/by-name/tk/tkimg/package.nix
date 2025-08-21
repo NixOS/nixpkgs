@@ -34,5 +34,6 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
 }

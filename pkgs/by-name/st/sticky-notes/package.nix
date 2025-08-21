@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "sticky";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-82Yxw8NSw82rxhuAgsdN2lCiQ/hli4tQiU6jCgGyp4U=";
     fetchSubmodules = true;
   };

@@ -84,44 +84,42 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      crossTools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    crossTools
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libpng
-      xz
-      zlib
-      freetype
-      fontconfig
-      curl
-      icu
-      harfbuzz
-      expat
-      glib
-      pcre2
-    ]
-    ++ lib.optionals withFluidSynth [
-      fluidsynth
-      soundfont-fluid
-      libsndfile
-      flac
-      libogg
-      libvorbis
-      libopus
-      libmpg123
-      pulseaudio
-      alsa-lib
-      libjack2
-    ];
+  buildInputs = [
+    SDL2
+    libpng
+    xz
+    zlib
+    freetype
+    fontconfig
+    curl
+    icu
+    harfbuzz
+    expat
+    glib
+    pcre2
+  ]
+  ++ lib.optionals withFluidSynth [
+    fluidsynth
+    soundfont-fluid
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    libmpg123
+    pulseaudio
+    alsa-lib
+    libjack2
+  ];
 
   strictDeps = true;
 

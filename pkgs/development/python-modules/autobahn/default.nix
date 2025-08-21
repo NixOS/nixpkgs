@@ -61,23 +61,25 @@ buildPythonPackage rec {
     txaio
   ];
 
-  nativeCheckInputs =
-    [
-      mock
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.scram
-    ++ optional-dependencies.serialization;
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.scram
+  ++ optional-dependencies.serialization;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [
-    "--ignore=./autobahn/twisted"
+  enabledTestPaths = [
     "./autobahn"
+  ];
+
+  disabledTestPaths = [
+    "./autobahn/twisted"
   ];
 
   pythonImportsCheck = [ "autobahn" ];

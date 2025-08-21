@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "semiphemeral";
   version = "0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "semiphemeral" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     click
     sqlalchemy
     flask

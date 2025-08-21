@@ -42,18 +42,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      python3
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      zlib
-      bzip2
-      glib
-      libxml2
-      sqlite
-    ];
+  buildInputs = [
+    python3
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    zlib
+    bzip2
+    glib
+    libxml2
+    sqlite
+  ];
 
   installPhase = ''
     runHook preInstall

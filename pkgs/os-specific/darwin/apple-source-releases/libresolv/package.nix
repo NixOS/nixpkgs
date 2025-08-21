@@ -36,7 +36,7 @@ mkAppleDerivation {
   '';
 
   meta = {
-    description = "libresolv implementation for Darwin";
+    description = "Libresolv implementation for Darwin";
     license = lib.licenses.apple-psl10;
   };
 }

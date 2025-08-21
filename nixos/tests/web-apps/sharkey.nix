@@ -19,9 +19,7 @@ in
         };
       };
 
-      services.meilisearch.masterKeyEnvironmentFile = pkgs.writeText "meilisearch-key" ''
-        MEILI_MASTER_KEY=${meilisearchKey}
-      '';
+      services.meilisearch.masterKeyFile = pkgs.writeText "meilisearch-key" meilisearchKey;
     };
 
   testScript =

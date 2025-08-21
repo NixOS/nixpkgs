@@ -13,9 +13,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    redisTestHook
-  ];
+  nativeCheckInputs = [ redisTestHook ];
 }
 ```
 
@@ -56,9 +54,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    redisTestHook
-  ];
+  nativeCheckInputs = [ redisTestHook ];
 
   preCheck = ''
     redisTestPort=6390;

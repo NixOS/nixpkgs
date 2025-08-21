@@ -41,24 +41,23 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      SDL2
-      flac
-      gzip
-      libmpg123
-      libopus
-      libvorbis
-      libX11
-      opusfile
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-      vulkan-headers
-    ];
+  buildInputs = [
+    SDL2
+    flac
+    gzip
+    libmpg123
+    libopus
+    libvorbis
+    libX11
+    opusfile
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+    vulkan-headers
+  ];
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  mesonFlags = [ "-Ddo_userdirs=enabled" ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
@@ -113,5 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       ylh
     ];
     mainProgram = "vkquake";
+    license = lib.licenses.gpl2Plus;
   };
 })

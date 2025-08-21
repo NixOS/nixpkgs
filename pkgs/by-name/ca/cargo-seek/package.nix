@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tareqimbasher/cargo-seek";
     changelog = "https://github.com/tareqimbasher/cargo-seek/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qwqawawow ];
+    maintainers = with lib.maintainers; [ eihqnh ];
     mainProgram = "cargo-seek";
   };
 })

@@ -109,64 +109,62 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build-aux/*.pl
   '';
 
-  buildInputs =
-    [
-      readline
-      ncurses
-      flex
-      qhull
-      graphicsmagick
-      pcre2
-      fltk
-      zlib
-      curl
-      rapidjson
-      blas'
-      lapack'
-      libsndfile
-      fftw
-      fftwSinglePrec
-      portaudio
-      qrupdate'
-      arpack'
-      libwebp
-      gl2ps
-      ghostscript
-      hdf5
-      glpk
-      suitesparse'
-      sundials
-      gnuplot
-      python3
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      libsForQt5.qscintilla
-    ]
-    ++ lib.optionals (enableJava) [
-      jdk
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-      gfortran
-      texinfo
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.wrapQtAppsHook
-      libsForQt5.qtscript
-      libsForQt5.qttools
-    ];
+  buildInputs = [
+    readline
+    ncurses
+    flex
+    qhull
+    graphicsmagick
+    pcre2
+    fltk
+    zlib
+    curl
+    rapidjson
+    blas'
+    lapack'
+    libsndfile
+    fftw
+    fftwSinglePrec
+    portaudio
+    qrupdate'
+    arpack'
+    libwebp
+    gl2ps
+    ghostscript
+    hdf5
+    glpk
+    suitesparse'
+    sundials
+    gnuplot
+    python3
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qscintilla
+  ]
+  ++ lib.optionals (enableJava) [
+    jdk
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libX11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    gfortran
+    texinfo
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qtscript
+    libsForQt5.qttools
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -178,15 +176,14 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://savannah.gnu.org/bugs/?50339
   F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
 
-  configureFlags =
-    [
-      "--with-blas=blas"
-      "--with-lapack=lapack"
-      (if use64BitIdx then "--enable-64" else "--disable-64")
-    ]
-    ++ lib.optionals enableReadline [ "--enable-readline" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-    ++ lib.optionals enableQt [ "--with-qt=5" ];
+  configureFlags = [
+    "--with-blas=blas"
+    "--with-lapack=lapack"
+    (if use64BitIdx then "--enable-64" else "--disable-64")
+  ]
+  ++ lib.optionals enableReadline [ "--enable-readline" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
+  ++ lib.optionals enableQt [ "--with-qt=5" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care

@@ -54,7 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-R2S0gbT3DD/Dtx8edqhD0fpDqe8AJgyLmlPoNEKm4BA=";
 
   passthru.updateScript = nix-update-script { };
@@ -68,7 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
-      drupol
       NotAShelf
       viperML
     ];

@@ -131,6 +131,21 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgfortran}/lib/"
+        ];
+      };
+
+      gfortranNoLibgfortran = wrapCCWith rec {
+        cc = gccPackages.gfortran-unwrapped;
+        libcxx = targetGccPackages.libstdcxx;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        nixSupport.cc-cflags = [
+          "-B${targetGccPackages.libgcc}/lib"
+          "-B${targetGccPackages.libssp}/lib"
+          "-B${targetGccPackages.libatomic}/lib"
         ];
       };
 
@@ -211,7 +226,7 @@ makeScopeWithSplicing' {
 
       libgfortran = callPackage ./libgfortran {
         stdenv = overrideCC stdenv buildGccPackages.gcc;
-        inherit (buildGccPackages) gfortran;
+        gfortran = buildGccPackages.gfortranNoLibgfortran;
       };
 
       libstdcxx = callPackage ./libstdcxx {

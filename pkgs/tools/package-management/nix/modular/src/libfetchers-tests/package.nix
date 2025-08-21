@@ -25,19 +25,18 @@ mkMesonExecutable (finalAttrs: {
 
   workDir = ./.;
 
-  buildInputs =
-    [
-      nix-fetchers
-      nix-store-test-support
-      rapidcheck
-      gtest
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
-      nix-fetchers-c
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.27") [
-      libgit2
-    ];
+  buildInputs = [
+    nix-fetchers
+    nix-store-test-support
+    rapidcheck
+    gtest
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+    nix-fetchers-c
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.27") [
+    libgit2
+  ];
 
   mesonFlags = [
   ];

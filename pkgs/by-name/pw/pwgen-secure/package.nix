@@ -11,7 +11,7 @@ in
 buildPythonApplication rec {
   pname = "pwgen-secure";
   version = "0.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   # it needs `secrets` which was introduced in 3.6
   disabled = pythonOlder "3.6";
@@ -35,7 +35,9 @@ buildPythonApplication rec {
       --replace-fail "os.path.join(path, 'words.txt')" "os.path.join('$shareDir', 'words.txt')"
   '';
 
-  propagatedBuildInputs = with python3Packages; [ docopt ];
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [ docopt ];
 
   postInstall = ''
     install -Dm555 spwgen.py $out/bin/spwgen
@@ -44,6 +46,8 @@ buildPythonApplication rec {
 
   # there are no checks
   doCheck = false;
+
+  pythonImportsCheck = [ "pwgen_secure" ];
 
   meta = with lib; {
     description = "Secure password generation library to replace pwgen";

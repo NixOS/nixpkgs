@@ -55,11 +55,7 @@ supported through the rocmPackages.clr.icd package. Adding this package to
 enables OpenCL support:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    rocmPackages.clr.icd
-  ];
-}
+{ hardware.graphics.extraPackages = [ rocmPackages.clr.icd ]; }
 ```
 
 ### Intel {#sec-gpu-accel-opencl-intel}
@@ -75,11 +71,7 @@ to enable OpenCL support. For example, for Gen12 and later GPUs, the following
 configuration can be used:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-compute-runtime
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-compute-runtime ]; }
 ```
 
 ## Vulkan {#sec-gpu-accel-vulkan}
@@ -145,20 +137,15 @@ A specific driver can be forced as follows:
 
 ```nix
 {
-  hardware.graphics.extraPackages = [
-    pkgs.amdvlk
-  ];
+  hardware.graphics.extraPackages = [ pkgs.amdvlk ];
 
   # To enable Vulkan support for 32-bit applications, also add:
-  hardware.graphics.extraPackages32 = [
-    pkgs.driversi686Linux.amdvlk
-  ];
+  hardware.graphics.extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
 
   # Force radv
   environment.variables.AMD_VULKAN_ICD = "RADV";
   # Or
-  environment.variables.VK_ICD_FILENAMES =
-    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 }
 ```
 
@@ -183,21 +170,13 @@ $ nix-shell -p libva-utils --run vainfo
 Modern Intel GPUs use the iHD driver, which can be installed with:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-media-driver
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-media-driver ]; }
 ```
 
 Older Intel GPUs use the i965 driver, which can be installed with:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-vaapi-driver
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-vaapi-driver ]; }
 ```
 
 ## Common issues {#sec-gpu-accel-common-issues}

@@ -192,7 +192,8 @@ buildPythonPackage rec {
     # but it's required for some of the tests.
     openpyxl
     xlrd
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)

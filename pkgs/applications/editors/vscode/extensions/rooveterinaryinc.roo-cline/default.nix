@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "RooVeterinaryInc";
     name = "roo-cline";
-    version = "3.22.6";
-    hash = "sha256-Gu1QcGLJVSiFCO7C6q1fVbi5MOztdKyFFyEhxxCpfUE=";
+    version = "3.25.13";
+    hash = "sha256-n9QJjcRd1958uJdf7X7rV/6nBdFX6VPiA8N03t8rzHQ=";
   };
 
   passthru.updateScript = vscode-extension-update-script { };
@@ -19,6 +19,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=RooVeterinaryInc.roo-cline";
     homepage = "https://github.com/RooVetGit/Roo-Code";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

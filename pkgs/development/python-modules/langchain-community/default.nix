@@ -104,7 +104,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit_tests"
   ];
 

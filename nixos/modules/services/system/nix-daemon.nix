@@ -191,7 +191,8 @@ in
     environment.systemPackages = [
       nixPackage
       pkgs.nix-info
-    ] ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
+    ]
+    ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
@@ -213,7 +214,8 @@ in
         nixPackage
         pkgs.util-linux
         config.programs.ssh.package
-      ] ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ];
+      ]
+      ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ];
 
       environment =
         cfg.envVars

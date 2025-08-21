@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DMESHOPT_BUILD_GLTFPACK=ON"
     "-DMESHOPT_BASISU_PATH=${basis_universal}"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
 
   passthru.updateScript = nix-update-script { };
 

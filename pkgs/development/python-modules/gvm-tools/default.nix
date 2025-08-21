@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "25.3.0";
+  version = "25.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "gvm-tools";
     tag = "v${version}";
-    hash = "sha256-DDs08VnyUB32n3JuVNmt9uMTssmbHOb351pla4zdE54=";
+    hash = "sha256-C0LWO9oQ5TgTgSFcxzm5YNhis24uxpenBalwqns2VL0=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't test sending
     "SendTargetTestCase"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
 
   pythonImportsCheck = [ "gvmtools" ];
 

@@ -7,31 +7,30 @@
 let
   cfg = config.services.datadog-agent;
 
-  ddConf =
-    {
-      skip_ssl_validation = false;
-      confd_path = "/etc/datadog-agent/conf.d";
-      additional_checksd = "/etc/datadog-agent/checks.d";
-      use_dogstatsd = true;
-    }
-    // lib.optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
-    // lib.optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
-    // lib.optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
-    // lib.optionalAttrs (cfg.site != null) { site = cfg.site; }
-    // lib.optionalAttrs (cfg.tags != null) { tags = lib.concatStringsSep ", " cfg.tags; }
-    // lib.optionalAttrs (cfg.enableLiveProcessCollection) {
-      process_config = {
-        dd_agent_bin = "${datadogPkg}/bin/agent";
-        process_collection.enabled = "true";
-        container_collection.enabled = "true";
-      };
-    }
-    // lib.optionalAttrs (cfg.enableTraceAgent) {
-      apm_config = {
-        enabled = true;
-      };
-    }
-    // cfg.extraConfig;
+  ddConf = {
+    skip_ssl_validation = false;
+    confd_path = "/etc/datadog-agent/conf.d";
+    additional_checksd = "/etc/datadog-agent/checks.d";
+    use_dogstatsd = true;
+  }
+  // lib.optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
+  // lib.optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
+  // lib.optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
+  // lib.optionalAttrs (cfg.site != null) { site = cfg.site; }
+  // lib.optionalAttrs (cfg.tags != null) { tags = lib.concatStringsSep ", " cfg.tags; }
+  // lib.optionalAttrs (cfg.enableLiveProcessCollection) {
+    process_config = {
+      dd_agent_bin = "${datadogPkg}/bin/agent";
+      process_collection.enabled = "true";
+      container_collection.enabled = "true";
+    };
+  }
+  // lib.optionalAttrs (cfg.enableTraceAgent) {
+    apm_config = {
+      enabled = true;
+    };
+  }
+  // cfg.extraConfig;
 
   # Generate Datadog configuration files for each configured checks.
   # This works because check configurations have predictable paths,

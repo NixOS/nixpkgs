@@ -95,7 +95,7 @@ buildPythonPackage rec {
     "test_timing"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   meta = with lib; {
     description = "Embedded control & testing library";

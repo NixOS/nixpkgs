@@ -384,44 +384,43 @@ in
       })
     ];
 
-    security.apparmor.policies."bin.mumble-server".profile =
-      ''
-        include <tunables/global>
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
 
-        ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
-          include <abstractions/base>
-          include <abstractions/nameservice>
-          include <abstractions/ssl_certs>
-          include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
-          pix ${cfg.package}/bin/.mumble-server-wrapped,
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
 
-          r ${config.environment.etc."os-release".source},
-          r ${config.environment.etc."lsb-release".source},
-          owner rwk ${cfg.stateDir}/murmur.sqlite,
-          owner rw ${cfg.stateDir}/murmur.sqlite-journal,
-          owner r ${cfg.stateDir}/,
-          r /run/murmur/murmurd.pid,
-          r /run/murmur/murmurd.ini,
-          r ${configFile},
-      ''
-      + lib.optionalString (cfg.logFile != null) ''
-        rw ${cfg.logFile},
-      ''
-      + lib.optionalString (cfg.sslCert != "") ''
-        r ${cfg.sslCert},
-      ''
-      + lib.optionalString (cfg.sslKey != "") ''
-        r ${cfg.sslKey},
-      ''
-      + lib.optionalString (cfg.sslCa != "") ''
-        r ${cfg.sslCa},
-      ''
-      + lib.optionalString (cfg.dbus != null) ''
-        dbus bus=${cfg.dbus}
-      ''
-      + ''
-        }
-      '';
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk ${cfg.stateDir}/murmur.sqlite,
+        owner rw ${cfg.stateDir}/murmur.sqlite-journal,
+        owner r ${cfg.stateDir}/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+    ''
+    + lib.optionalString (cfg.logFile != null) ''
+      rw ${cfg.logFile},
+    ''
+    + lib.optionalString (cfg.sslCert != "") ''
+      r ${cfg.sslCert},
+    ''
+    + lib.optionalString (cfg.sslKey != "") ''
+      r ${cfg.sslKey},
+    ''
+    + lib.optionalString (cfg.sslCa != "") ''
+      r ${cfg.sslCa},
+    ''
+    + lib.optionalString (cfg.dbus != null) ''
+      dbus bus=${cfg.dbus}
+    ''
+    + ''
+      }
+    '';
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];

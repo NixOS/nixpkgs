@@ -85,31 +85,22 @@ in
       ca_domain = "${nodes.acme.test-support.acme.caDomain}"
       fqdn = "${nodes.caddy.networking.fqdn}"
 
+      with subtest("Boot and start with selfsigned certificates"):
+          caddy.start()
+          caddy.wait_for_unit("caddy.service")
+          check_issuer(caddy, fqdn, "minica")
+          # Check that the web server has picked up the selfsigned cert
+          check_connection(caddy, fqdn, minica=True)
+
       acme.start()
       wait_for_running(acme)
       acme.wait_for_open_port(443)
 
-      with subtest("Boot and acquire a new cert"):
-          caddy.start()
-          wait_for_running(caddy)
-
+      with subtest("Acquire a new cert"):
+          caddy.succeed(f"systemctl restart acme-{fqdn}.service")
           check_issuer(caddy, fqdn, "pebble")
           check_domain(caddy, fqdn, fqdn)
-
           download_ca_certs(caddy, ca_domain)
-          check_connection(caddy, fqdn)
-
-      with subtest("Can run on selfsigned certificates"):
-          # Switch to selfsigned first
-          caddy.succeed(f"systemctl clean acme-{fqdn}.service --what=state")
-          caddy.succeed(f"systemctl start acme-selfsigned-{fqdn}.service")
-          check_issuer(caddy, fqdn, "minica")
-          caddy.succeed("systemctl restart caddy.service")
-          # Check that the web server has picked up the selfsigned cert
-          check_connection(caddy, fqdn, minica=True)
-          caddy.succeed(f"systemctl start acme-{fqdn}.service")
-          # This may fail a couple of times before caddy is restarted
-          check_issuer(caddy, fqdn, "pebble")
           check_connection(caddy, fqdn)
 
       with subtest("security.acme changes reflect on caddy"):

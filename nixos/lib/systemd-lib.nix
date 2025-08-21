@@ -526,9 +526,6 @@ rec {
           ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
           ln -s rescue.target $out/kbrequest.target
 
-          mkdir -p $out/getty.target.wants/
-          ln -s ../autovt@tty1.service $out/getty.target.wants/
-
           ln -s ../remote-fs.target $out/multi-user.target.wants/
         ''}
       ''; # */
@@ -701,17 +698,16 @@ rec {
     {
       config = {
         name = "${utils.escapeSystemdPath config.where}.mount";
-        mountConfig =
-          {
-            What = config.what;
-            Where = config.where;
-          }
-          // optionalAttrs (config.type != "") {
-            Type = config.type;
-          }
-          // optionalAttrs (config.options != "") {
-            Options = config.options;
-          };
+        mountConfig = {
+          What = config.what;
+          Where = config.where;
+        }
+        // optionalAttrs (config.type != "") {
+          Type = config.type;
+        }
+        // optionalAttrs (config.options != "") {
+          Options = config.options;
+        };
       };
     };
 

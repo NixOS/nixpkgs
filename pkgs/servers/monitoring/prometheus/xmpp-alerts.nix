@@ -24,19 +24,18 @@ python3Packages.buildPythonApplication rec {
       --replace "bs4" "beautifulsoup4"
   '';
 
-  propagatedBuildInputs =
-    [
-      prometheus-alertmanager
-    ]
-    ++ (with python3Packages; [
-      aiohttp
-      aiohttp-openmetrics
-      beautifulsoup4
-      jinja2
-      slixmpp
-      prometheus-client
-      pyyaml
-    ]);
+  propagatedBuildInputs = [
+    prometheus-alertmanager
+  ]
+  ++ (with python3Packages; [
+    aiohttp
+    aiohttp-openmetrics
+    beautifulsoup4
+    jinja2
+    slixmpp
+    prometheus-client
+    pyyaml
+  ]);
 
   nativeCheckInputs = with python3Packages; [
     setuptools

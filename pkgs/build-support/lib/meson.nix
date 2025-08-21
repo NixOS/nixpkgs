@@ -11,6 +11,10 @@ let
       "arm"
     else if isx86_32 then
       "x86"
+    else if isPower64 then
+      "ppc64"
+    else if isPower then
+      "ppc"
     else
       platform.uname.processor;
 

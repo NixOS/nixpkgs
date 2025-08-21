@@ -39,14 +39,14 @@ let
 in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
-  version = "0.3.9";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-iw9teWZ612gUNM2Zm5WGdFTq7aNo8QRRIGeHoFpXdfQ=";
+    hash = "sha256-tovyBWknHI3SleGwvdzu2KNK4QXdpwWa2lxt5sxoy+o=";
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
@@ -118,7 +118,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llama_cpp" ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      allowedVersions = "^[.0-9]+$";
+    };
     tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
       withCuda = llama-cpp-python.override {
         cudaSupport = true;

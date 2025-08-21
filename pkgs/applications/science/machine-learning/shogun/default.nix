@@ -111,48 +111,47 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compile errors with Eigen 3.4
     ./eigen-3.4.patch
 
-  ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
+  ]
+  ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    swig
+    ctags
+  ]
+  ++ (with python3Packages; [
+    python
+    jinja2
+    ply
+  ]);
+
+  buildInputs = [
+    eigen
+    blas
+    lapack
+    glpk
+    protobuf
+    json_c
+    libxml2
+    hdf5
+    curl
+    libarchive
+    bzip2
+    xz
+    snappy
+    lzo
+    nlopt
+    lp_solve
+    colpack
+  ]
+  ++ lib.optionals pythonSupport (
+    with python3Packages;
     [
-      cmake
-      swig
-      ctags
-    ]
-    ++ (with python3Packages; [
       python
-      jinja2
-      ply
-    ]);
-
-  buildInputs =
-    [
-      eigen
-      blas
-      lapack
-      glpk
-      protobuf
-      json_c
-      libxml2
-      hdf5
-      curl
-      libarchive
-      bzip2
-      xz
-      snappy
-      lzo
-      nlopt
-      lp_solve
-      colpack
+      numpy
     ]
-    ++ lib.optionals pythonSupport (
-      with python3Packages;
-      [
-        python
-        numpy
-      ]
-    )
-    ++ lib.optional opencvSupport opencv;
+  )
+  ++ lib.optional opencvSupport opencv;
 
   cmakeFlags =
     let
@@ -202,23 +201,22 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${srcs.gtest} $sourceRoot/third_party/GoogleMock/release-${gtestVersion}.tar.gz
   '';
 
-  postPatch =
-    ''
-      # Fix preprocessing SVMlight code
-      sed -i \
-          -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
-          -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
-          src/shogun/kernel/string/CommUlongStringKernel.cpp
-      sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
-      sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
-      sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
-    ''
-    + lib.optionalString (!withSvmLight) ''
-      # Run SVMlight scrubber
-      patchShebangs scripts/light-scrubber.sh
-      echo "removing SVMlight code"
-      ./scripts/light-scrubber.sh
-    '';
+  postPatch = ''
+    # Fix preprocessing SVMlight code
+    sed -i \
+        -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
+        -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
+        src/shogun/kernel/string/CommUlongStringKernel.cpp
+    sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
+    sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
+    sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
+  ''
+  + lib.optionalString (!withSvmLight) ''
+    # Run SVMlight scrubber
+    patchShebangs scripts/light-scrubber.sh
+    echo "removing SVMlight code"
+    ./scripts/light-scrubber.sh
+  '';
 
   postInstall = ''
     mkdir -p $doc/share/doc/shogun/examples

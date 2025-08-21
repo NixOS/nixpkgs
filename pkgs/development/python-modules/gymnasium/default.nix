@@ -15,6 +15,10 @@
   pythonOlder,
   importlib-metadata,
 
+  # optional-dependencies
+  # atari
+  ale-py,
+
   # tests
   array-api-compat,
   dill,
@@ -52,7 +56,14 @@ buildPythonPackage rec {
     farama-notifications
     numpy
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+
+  optional-dependencies = {
+    atari = [
+      ale-py
+    ];
+  };
 
   pythonImportsCheck = [ "gymnasium" ];
 

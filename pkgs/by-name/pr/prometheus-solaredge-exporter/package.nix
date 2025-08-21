@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-solaredge-exporter";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "solaredge_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vo0WaiigwjSEA+wEUs8Wdko+UHq5OXXcVcfgna/QVHE=";
+    hash = "sha256-vk2e9OeTt1T0f8H3uLHbd2fBO2KVse0IYrSFCu68Wgk=";
   };
 
   ldflags = [
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-ltCjuihbm0/bj2SPkiITTHzYmcQsX12xvt+OpYROivU=";
+  vendorHash = "sha256-Utydte6V07BN5Lz3Js54DqPV+cdnH2p1J5gYliFQYlU=";
 
   passthru.updateScript = nix-update-script { };
 

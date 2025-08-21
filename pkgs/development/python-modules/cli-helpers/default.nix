@@ -26,7 +26,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     configobj
     tabulate
-  ] ++ tabulate.optional-dependencies.widechars;
+  ]
+  ++ tabulate.optional-dependencies.widechars;
 
   optional-dependencies = {
     styles = [ pygments ];
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

@@ -4,28 +4,29 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  version = "3.4.7";
+in
+python3.pkgs.buildPythonApplication {
   pname = "routersploit";
-  version = "3.4.1-unstable-2025-04-24";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "routersploit";
-    rev = "0bf837f67ed2131077c4192c21909104aab9f13d";
-    hash = "sha256-IET0vL0VVP9ZNn75hKdTCiEmOZRHHYICykhzW2g3LEg=";
+    tag = "v${version}";
+    hash = "sha256-10NBSY/mYjOWoz2XCJ1UvXUIYUW4csRJHHtDlWMO420=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    future
     paramiko
     pycryptodome
     pysnmp
     requests
     setuptools
-    standard-telnetlib
   ];
 
   # Tests are out-dated and support for newer pysnmp is not implemented yet
@@ -43,18 +44,21 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "routersploit" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Run the same tests as upstream does in the first round
     "tests/core/"
     "tests/test_exploit_scenarios.py"
     "tests/test_module_info.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      fab
+      thtrf
+    ];
     mainProgram = "rsf";
   };
 }

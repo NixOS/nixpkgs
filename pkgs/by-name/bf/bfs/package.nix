@@ -20,14 +20,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-yZoyDa8um3UA8K9Ty17xaGUvQmJA/agZPBsNo+/6weI=";
   };
 
-  buildInputs =
-    [ oniguruma ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      libcap
-      liburing
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+    libcap
+    liburing
+  ];
 
   configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];

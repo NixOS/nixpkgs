@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jq";
-  version = "1.8.0";
+  version = "1.8.1";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${finalAttrs.version}/jq-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kYEVd/kdmmGV/1DCv/7JtyyEKdwF7D6gIv2VwG0rMZw=";
+    hash = "sha256-K+ZOcSnOyxHVkGKQ66EK9pT7nj5/n8IIoxHcM8qDfrA=";
   };
 
   outputs = [
@@ -30,12 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  # tortured syntax to avoid rebuilds
-  # needed because epoch conversion test here is right at the end of 32 bit integer space
-  # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
-  # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferrable, but breaks with dynamic linking,
-  # unless done globally in stdenv for all of 32 bit.
-  ${if stdenv.hostPlatform.is32bit then "patches" else null} = [
+  patches = [
+    ./musl.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # needed because epoch conversion test here is right at the end of 32 bit integer space
+    # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
+    # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferrable, but breaks with dynamic linking,
+    # unless done globally in stdenv for all of 32 bit.
     ./disable-end-of-epoch-conversion-test.patch
   ];
 
@@ -69,16 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  configureFlags =
-    [
-      "--bindir=\${bin}/bin"
-      "--sbindir=\${bin}/bin"
-      "--datadir=\${doc}/share"
-      "--mandir=\${man}/share/man"
-    ]
-    ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
-    # jq is linked to libjq:
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  configureFlags = [
+    "--bindir=\${bin}/bin"
+    "--sbindir=\${bin}/bin"
+    "--datadir=\${doc}/share"
+    "--mandir=\${man}/share/man"
+  ]
+  ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
+  # jq is linked to libjq:
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
@@ -123,14 +124,15 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jqlang/jq/releases/tag/jq-${finalAttrs.version}";
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
+    downloadPage = "https://jqlang.github.io/jq/download/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
       artturin
       ncfavier
+      jk
     ];
     platforms = lib.platforms.unix;
-    downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";
   };
 })

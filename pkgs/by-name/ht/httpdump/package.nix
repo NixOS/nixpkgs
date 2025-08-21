@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "httpdump";
-  version = "unstable-2023-05-07";
+  version = "0-unstable-2023-05-07";
 
   src = fetchFromGitHub {
     owner = "hsiafan";

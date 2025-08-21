@@ -130,48 +130,47 @@ stdenv.mkDerivation (
       DOC_TARGETS = "man chunks";
     };
 
-    buildInputs =
-      [
-        ncurses
-        opensslPackage
-        zlib
-      ]
-      ++ optionals wxSupport wxPackages2
-      ++ optionals odbcSupport odbcPackages
-      ++ optionals javacSupport javacPackages
-      ++ optional systemdSupport systemd;
+    buildInputs = [
+      ncurses
+      opensslPackage
+      zlib
+    ]
+    ++ optionals wxSupport wxPackages2
+    ++ optionals odbcSupport odbcPackages
+    ++ optionals javacSupport javacPackages
+    ++ optional systemdSupport systemd;
 
     debugInfo = enableDebugInfo;
 
     # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
     enableParallelBuilding = parallelBuild;
 
-    postPatch =
-      ''
-        patchShebangs make
+    postPatch = ''
+      patchShebangs make
 
-        ${postPatch}
-      ''
-      + optionalString (lib.versionOlder "25" version) ''
-        substituteInPlace lib/os_mon/src/disksup.erl \
-          --replace-fail '"sh ' '"${runtimeShell} '
-      '';
+      ${postPatch}
+    ''
+    + optionalString (lib.versionOlder "25" version) ''
+      substituteInPlace lib/os_mon/src/disksup.erl \
+        --replace-fail '"sh ' '"${runtimeShell} '
+    '';
 
-    configureFlags =
-      [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
-      ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
-      ++ optional enableThreads "--enable-threads"
-      ++ optional enableSmpSupport "--enable-smp-support"
-      ++ optional enableKernelPoll "--enable-kernel-poll"
-      ++ optional enableHipe "--enable-hipe"
-      ++ optional javacSupport "--with-javac"
-      ++ optional odbcSupport "--with-odbc=${unixODBC}"
-      ++ optional wxSupport "--enable-wx"
-      ++ optional systemdSupport "--enable-systemd"
-      ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
-      # make[3]: *** [yecc.beam] Segmentation fault: 11
-      ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
-      ++ configureFlags;
+    configureFlags = [
+      "--with-ssl=${lib.getOutput "out" opensslPackage}"
+    ]
+    ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
+    ++ optional enableThreads "--enable-threads"
+    ++ optional enableSmpSupport "--enable-smp-support"
+    ++ optional enableKernelPoll "--enable-kernel-poll"
+    ++ optional enableHipe "--enable-hipe"
+    ++ optional javacSupport "--with-javac"
+    ++ optional odbcSupport "--with-odbc=${unixODBC}"
+    ++ optional wxSupport "--enable-wx"
+    ++ optional systemdSupport "--enable-systemd"
+    ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
+    # make[3]: *** [yecc.beam] Segmentation fault: 11
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
+    ++ configureFlags;
 
     # install-docs will generate and install manpages and html docs
     # (PDFs are generated only when fop is available).

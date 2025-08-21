@@ -43,14 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      libsndfile
-      qt6Packages.qscintilla
-    ]
-    ++ lib.optional (audioBackend == "pulse") libpulseaudio
-    ++ lib.optional (audioBackend == "jack") libjack2;
+  buildInputs = [
+    alsa-lib
+    libsndfile
+    qt6Packages.qscintilla
+  ]
+  ++ lib.optional (audioBackend == "pulse") libpulseaudio
+  ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 

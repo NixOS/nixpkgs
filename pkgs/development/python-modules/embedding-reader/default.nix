@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "embedding-reader";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = "embedding-reader";
     tag = version;
-    hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
+    hash = "sha256-D7yrvV6hDqzHaIMhCQ16DhY/8FEr3P4gcT5vV371whs=";
   };
 
   pythonRelaxDeps = [ "pyarrow" ];

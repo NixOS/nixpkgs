@@ -72,13 +72,12 @@ stdenv.mkDerivation rec {
       substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
     '';
 
-  patches =
-    [
-      ./debug-info-from-env.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./darwin-target-match.patch
-    ];
+  patches = [
+    ./debug-info-from-env.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin-target-match.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -87,24 +86,23 @@ stdenv.mkDerivation rec {
     setupDebugInfoDirs
   ];
 
-  buildInputs =
-    [
-      ncurses
-      readline
-      gmp
-      mpfr
-      expat
-      libipt
-      zlib
-      zstd
-      xz
-      guile
-      sourceHighlight
-    ]
-    ++ lib.optional pythonSupport python3
-    ++ lib.optional doCheck dejagnu
-    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  buildInputs = [
+    ncurses
+    readline
+    gmp
+    mpfr
+    expat
+    libipt
+    zlib
+    zstd
+    xz
+    guile
+    sourceHighlight
+  ]
+  ++ lib.optional pythonSupport python3
+  ++ lib.optional doCheck dejagnu
+  ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -140,44 +138,43 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags =
-    [
-      # Set the program prefix to the current targetPrefix.
-      # This ensures that the prefix always conforms to
-      # nixpkgs' expectations instead of relying on the build
-      # system which only receives `config` which is merely a
-      # subset of the platform description.
-      "--program-prefix=${targetPrefix}"
+  configureFlags = [
+    # Set the program prefix to the current targetPrefix.
+    # This ensures that the prefix always conforms to
+    # nixpkgs' expectations instead of relying on the build
+    # system which only receives `config` which is merely a
+    # subset of the platform description.
+    "--program-prefix=${targetPrefix}"
 
-      "--disable-werror"
-    ]
-    ++ lib.optional (!hostCpuOnly) "--enable-targets=all"
-    ++ [
-      "--enable-64-bit-bfd"
-      "--disable-install-libbfd"
-      "--disable-shared"
-      "--enable-static"
-      "--with-system-zlib"
-      "--with-system-readline"
+    "--disable-werror"
+  ]
+  ++ lib.optional (!hostCpuOnly) "--enable-targets=all"
+  ++ [
+    "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared"
+    "--enable-static"
+    "--with-system-zlib"
+    "--with-system-readline"
 
-      "--with-system-gdbinit=/etc/gdb/gdbinit"
-      "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
+    "--with-system-gdbinit=/etc/gdb/gdbinit"
+    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
-      "--with-gmp=${gmp.dev}"
-      "--with-mpfr=${mpfr.dev}"
-      "--with-expat"
-      "--with-libexpat-prefix=${expat.dev}"
-      "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-    ]
-    ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
-    ++ lib.optional (!enableSim) "--disable-sim"
-    # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "--target=x86_64-apple-darwin";
+    "--with-gmp=${gmp.dev}"
+    "--with-mpfr=${mpfr.dev}"
+    "--with-expat"
+    "--with-libexpat-prefix=${expat.dev}"
+    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
+  ]
+  ++ lib.optional (!pythonSupport) "--without-python"
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+  ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
+  ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
+  ++ lib.optional (!enableSim) "--disable-sim"
+  # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
+  ++ lib.optional (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  ) "--target=x86_64-apple-darwin";
 
   postInstall = ''
     # Remove Info files already provided by Binutils and other packages.

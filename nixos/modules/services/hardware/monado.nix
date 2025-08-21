@@ -50,8 +50,7 @@ in
     };
 
     highPriority =
-      mkEnableOption "high priority capability for monado-service"
-      // mkOption { default = true; };
+      mkEnableOption "high priority capability for monado-service" // mkOption { default = true; };
   };
 
   config = mkIf cfg.enable {

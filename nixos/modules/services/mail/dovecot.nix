@@ -80,15 +80,14 @@ let
 
   # Those settings are automatically set based on other parts
   # of this module.
-  automaticallySetPluginSettings =
-    [
-      "sieve_plugins"
-      "sieve_extensions"
-      "sieve_global_extensions"
-      "sieve_pipe_bin_dir"
-    ]
-    ++ (builtins.attrNames sieveScriptSettings)
-    ++ (builtins.attrNames imapSieveMailboxSettings);
+  automaticallySetPluginSettings = [
+    "sieve_plugins"
+    "sieve_extensions"
+    "sieve_global_extensions"
+    "sieve_pipe_bin_dir"
+  ]
+  ++ (builtins.attrNames sieveScriptSettings)
+  ++ (builtins.attrNames imapSieveMailboxSettings);
 
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
@@ -671,38 +670,37 @@ in
       );
     };
 
-    users.users =
-      {
-        dovenull = {
-          uid = config.ids.uids.dovenull2;
-          description = "Dovecot user for untrusted logins";
-          group = "dovenull";
-        };
-      }
-      // optionalAttrs (cfg.user == "dovecot2") {
-        dovecot2 = {
-          uid = config.ids.uids.dovecot2;
-          description = "Dovecot user";
-          group = cfg.group;
-        };
-      }
-      // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
-        ${cfg.mailUser} = {
-          description = "Virtual Mail User";
-          isSystemUser = true;
-        } // optionalAttrs (cfg.mailGroup != null) { group = cfg.mailGroup; };
+    users.users = {
+      dovenull = {
+        uid = config.ids.uids.dovenull2;
+        description = "Dovecot user for untrusted logins";
+        group = "dovenull";
       };
+    }
+    // optionalAttrs (cfg.user == "dovecot2") {
+      dovecot2 = {
+        uid = config.ids.uids.dovecot2;
+        description = "Dovecot user";
+        group = cfg.group;
+      };
+    }
+    // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
+      ${cfg.mailUser} = {
+        description = "Virtual Mail User";
+        isSystemUser = true;
+      }
+      // optionalAttrs (cfg.mailGroup != null) { group = cfg.mailGroup; };
+    };
 
-    users.groups =
-      {
-        dovenull.gid = config.ids.gids.dovenull2;
-      }
-      // optionalAttrs (cfg.group == "dovecot2") {
-        dovecot2.gid = config.ids.gids.dovecot2;
-      }
-      // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
-        ${cfg.mailGroup} = { };
-      };
+    users.groups = {
+      dovenull.gid = config.ids.gids.dovenull2;
+    }
+    // optionalAttrs (cfg.group == "dovecot2") {
+      dovecot2.gid = config.ids.gids.dovecot2;
+    }
+    // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
+      ${cfg.mailGroup} = { };
+    };
 
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
@@ -774,44 +772,43 @@ in
       # When copying sieve scripts preserve the original time stamp
       # (should be 0) so that the compiled sieve script is newer than
       # the source file and Dovecot won't try to compile it.
-      preStart =
-        ''
-          rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
-        ''
-        + optionalString (cfg.sieve.scripts != { }) ''
-          mkdir -p ${stateDir}/sieve
-          ${concatStringsSep "\n" (
-            mapAttrsToList (to: from: ''
-              if [ -d '${from}' ]; then
-                mkdir '${stateDir}/sieve/${to}'
-                cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
-              else
-                cp -p '${from}' '${stateDir}/sieve/${to}'
-              fi
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
-            '') cfg.sieve.scripts
-          )}
-          chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
-        ''
-        + optionalString (cfg.imapsieve.mailbox != [ ]) ''
-          mkdir -p ${stateDir}/imapsieve/{before,after}
+      preStart = ''
+        rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
+      ''
+      + optionalString (cfg.sieve.scripts != { }) ''
+        mkdir -p ${stateDir}/sieve
+        ${concatStringsSep "\n" (
+          mapAttrsToList (to: from: ''
+            if [ -d '${from}' ]; then
+              mkdir '${stateDir}/sieve/${to}'
+              cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
+            else
+              cp -p '${from}' '${stateDir}/sieve/${to}'
+            fi
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+          '') cfg.sieve.scripts
+        )}
+        chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
+      ''
+      + optionalString (cfg.imapsieve.mailbox != [ ]) ''
+        mkdir -p ${stateDir}/imapsieve/{before,after}
 
-          ${concatMapStringsSep "\n" (
-            el:
-            optionalString (el.before != null) ''
-              cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
-            ''
-            + optionalString (el.after != null) ''
-              cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
-              ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
-            ''
-          ) cfg.imapsieve.mailbox}
+        ${concatMapStringsSep "\n" (
+          el:
+          optionalString (el.before != null) ''
+            cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
+          ''
+          + optionalString (el.after != null) ''
+            cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
+            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
+          ''
+        ) cfg.imapsieve.mailbox}
 
-          ${optionalString (
-            cfg.mailUser != null && cfg.mailGroup != null
-          ) "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"}
-        '';
+        ${optionalString (
+          cfg.mailUser != null && cfg.mailGroup != null
+        ) "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"}
+      '';
     };
 
     environment.systemPackages = [ dovecotPkg ];

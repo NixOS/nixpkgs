@@ -16,7 +16,8 @@ let
     file
     unzip
     gzip
-  ] ++ extraBackends;
+  ]
+  ++ extraBackends;
 
 in
 stdenv.mkDerivation {

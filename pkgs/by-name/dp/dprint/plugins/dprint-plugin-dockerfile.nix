@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "Dockerfile code formatter.";
+  description = "Dockerfile code formatter";
   hash = "sha256-gsfMLa4zw8AblOS459ZS9OZrkGCQi5gBN+a3hvOsspk=";
   initConfig = {
     configExcludes = [ ];

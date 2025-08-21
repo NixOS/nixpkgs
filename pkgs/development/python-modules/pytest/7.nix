@@ -48,16 +48,15 @@ let
       setuptools-scm
     ];
 
-    propagatedBuildInputs =
-      [
-        iniconfig
-        packaging
-        pluggy
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [
-        exceptiongroup
-        tomli
-      ];
+    propagatedBuildInputs = [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
     optional-dependencies = {
       testing = [

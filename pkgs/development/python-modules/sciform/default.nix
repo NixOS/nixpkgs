@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A package for formatting numbers into scientific formatted strings";
+    description = "Package for formatting numbers into scientific formatted strings";
     homepage = "https://sciform.readthedocs.io/en/stable/";
     downloadPage = "https://github.com/jagerber48/sciform";
     changelog = "https://github.com/jagerber48/sciform/blob/${src.tag}/CHANGELOG.rst";

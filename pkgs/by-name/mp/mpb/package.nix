@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "--with-libctl=${libctl}"
     "--enable-maintainer-mode"
     "--disable-dependency-tracking"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   doCheck = true;
 

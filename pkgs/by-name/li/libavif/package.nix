@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
   pname = "libavif";
   version = "1.3.0";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
@@ -88,19 +93,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall =
-    ''
-      GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
-      GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
-      gdk-pixbuf-query-loaders --update-cache
+  postInstall = ''
+    GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
+    GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
+    gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
+      --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
+  '';
 
-    ''
-    # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p "$out/bin"
-      makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
-        --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
-    '';
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/libavif/libavif-config.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  '';
 
   meta = {
     description = "C implementation of the AV1 Image File Format";

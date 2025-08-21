@@ -41,19 +41,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # backend_cache relies on pytest-cache, which is a stale package from 2013
-      "backend_cache"
-      # optional backends
-      "Redis"
-      "Memcache"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ignore flaky test
-      "test_cache_timeout_dynamic"
-      "test_cached_view_class"
-    ];
+  disabledTests = [
+    # backend_cache relies on pytest-cache, which is a stale package from 2013
+    "backend_cache"
+    # optional backends
+    "Redis"
+    "Memcache"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ignore flaky test
+    "test_cache_timeout_dynamic"
+    "test_cached_view_class"
+  ];
 
   meta = with lib; {
     description = "Caching extension for Flask";

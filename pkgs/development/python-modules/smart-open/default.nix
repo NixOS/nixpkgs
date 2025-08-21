@@ -56,9 +56,10 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "smart_open" ];
+  enabledTestPaths = [ "smart_open" ];
 
   disabledTests = [
     # https://github.com/RaRe-Technologies/smart_open/issues/784
@@ -73,6 +74,5 @@ buildPythonPackage rec {
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
   };
 }

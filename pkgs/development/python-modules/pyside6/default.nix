@@ -67,19 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   # We therefore symLink all required and optional Qt modules in one directory tree ("qt_linked").
-  postPatch =
-    ''
-      # Don't ignore optional Qt modules
-      substituteInPlace cmake/PySideHelpers.cmake \
-        --replace-fail \
-          'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
-          'set (found_basepath 0)'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cmake/PySideHelpers.cmake \
-        --replace-fail \
-          "Designer" ""
-    '';
+  postPatch = ''
+    # Don't ignore optional Qt modules
+    substituteInPlace cmake/PySideHelpers.cmake \
+      --replace-fail \
+        'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
+        'set (found_basepath 0)'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/PySideHelpers.cmake \
+      --replace-fail \
+        "Designer" ""
+  '';
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -91,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python
     pythonImportsCheckHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   buildInputs = (
     if stdenv.hostPlatform.isLinux then

@@ -38,7 +38,8 @@ buildPythonPackage rec {
     gunicorn
     pyopenssl
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

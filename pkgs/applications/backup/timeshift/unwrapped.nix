@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "24.06.6";
+  version = "25.07.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    hash = "sha256-umMekxP9bvV01KzfIh2Zxa9Xb+tR5x+tG9dOnBIOkjY=";
+    hash = "sha256-AXtHs19DeSF2v5v4aBchGlsO59Z7h5OfmAaDb9SjwSc=";
   };
 
   postPatch = ''
@@ -37,10 +37,8 @@ stdenv.mkDerivation rec {
       --replace-fail "/usr/share" "$out/share"
 
     # Substitute app_command to look for the `timeshift-gtk` in $out.
-    # Substitute the `pkexec ...` as a hack to run a GUI application like Timeshift as root without setting up the corresponding pkexec policy.
     substituteInPlace ./src/timeshift-launcher \
-      --replace-fail "app_command='timeshift-gtk'" "app_command=$out/bin/timeshift-gtk" \
-      --replace-fail ${lib.escapeShellArg ''pkexec ''${app_command}''} ${lib.escapeShellArg ''pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "''${app_command}"''}
+      --replace-fail "app_command='timeshift-gtk'" "app_command=$out/bin/timeshift-gtk"
   '';
 
   nativeBuildInputs = [

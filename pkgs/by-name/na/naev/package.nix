@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "naev";
-  version = "0.12.5";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "naev";
     repo = "naev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I+OU3sr+C8HPnJTQ+Cc/EvshzawqikoMg3cp9uQ5dSQ=";
+    hash = "sha256-Phes5d7q1PgviwKFcvDvm9xregcbj2NTTPdmbaXJ19Y=";
     fetchSubmodules = true;
   };
 

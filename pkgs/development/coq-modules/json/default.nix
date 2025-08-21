@@ -37,7 +37,7 @@
   useDuneifVersion = v: lib.versions.isGe "0.2.0" v || v == "dev";
 
   meta = {
-    description = "From JSON to Coq, and vice versa.";
+    description = "From JSON to Coq, and vice versa";
     license = lib.licenses.bsd3;
   };
 }).overrideAttrs

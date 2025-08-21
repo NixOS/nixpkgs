@@ -36,7 +36,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  pytestFlagsArray = [ "test_socketio.py" ];
+  enabledTestPaths = [ "test_socketio.py" ];
 
   pythonImportsCheck = [ "flask_socketio" ];
 

@@ -62,16 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
       | xargs cp -t "$out"/bin
   '';
 
-  postInstall =
-    ''
-      # don't install static library
-      rm $out/lib/libquirc.a
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Set absolute install name to avoid the need for DYLD_LIBRARY_PATH
-      dylib=$out/lib/libquirc.${finalAttrs.version}.dylib
-      ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"
-    '';
+  postInstall = ''
+    # don't install static library
+    rm $out/lib/libquirc.a
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Set absolute install name to avoid the need for DYLD_LIBRARY_PATH
+    dylib=$out/lib/libquirc.${finalAttrs.version}.dylib
+    ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"
+  '';
 
   meta = {
     description = "Small QR code decoding library";

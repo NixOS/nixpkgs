@@ -30,14 +30,14 @@
 }:
 
 let
-  version = "6.0.5231";
+  version = "6.0.5414";
 
   subsurfaceSrc = (
     fetchFromGitHub {
       owner = "Subsurface";
       repo = "subsurface";
-      rev = "38a0050ac33566dfd34bf94cf1d7ac66034e4118";
-      hash = "sha256-6fNcBF/Ep2xs2z83ZQ09XNb/ZkhK1nUNLChV1x8qh0Y=";
+      rev = "528bc9785d53a485bf38270687abfe239060a8af";
+      hash = "sha256-TtqT+H/kvyP7LXrDv/pwPxmZcTCsmzuqS3/IJmBAdRY=";
       fetchSubmodules = true;
     }
   );
@@ -167,6 +167,7 @@ stdenv.mkDerivation {
       pushd $tmpdir
       git clone -b current https://github.com/subsurface/subsurface.git
       cd subsurface
+      sed -i '1s/#!\/bin\/bash/#!\/usr\/bin\/env bash/' ./scripts/get-version.sh
       # this returns 6.0.????-local
       new_version=$(./scripts/get-version.sh | cut -d '-' -f 1)
       new_rev=$(git rev-list -1 HEAD)

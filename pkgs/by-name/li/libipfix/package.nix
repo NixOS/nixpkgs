@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://libipfix.sourceforge.net/";
-    description = "Libipfix C-library implements the IPFIX protocol defined by the IP Flow Information Export working group of the IETF";
+    description = "C library that implements the IPFIX protocol defined by the IP Flow Information Export working group of the IETF";
     mainProgram = "ipfix_collector";
     license = licenses.lgpl3;
     platforms = platforms.linux;

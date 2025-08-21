@@ -5,8 +5,7 @@
 */
 {
   lib,
-  #, stdenv
-  gcc12Stdenv,
+  stdenv,
   fetchpatch,
   fetchurl,
   runCommand,
@@ -43,11 +42,8 @@
   makeFontsConf,
   useFixedHashes ? true,
   recurseIntoAttrs,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
-let
-  stdenv = gcc12Stdenv;
-in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
@@ -151,7 +147,7 @@ let
         tl2nix = ./tl2nix.sed;
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt-rfc-style} > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt} > "$out"
       '';
 
   # map: name -> fixed-output hash

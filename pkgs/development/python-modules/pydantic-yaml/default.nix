@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pydantic,
   ruamel-yaml,
   typing-extensions,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic-yaml";
-  version = "1.5.1";
+  version = "1.6.0";
 
   pyproject = true;
 
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
     tag = "v${version}";
-    hash = "sha256-UOehghNjPymuZtGp1yM5T15M6/XmK1rgTN9uVCVOst4=";
+    hash = "sha256-n5QWVHgYAg+Ad7Iv6CBSRQcl8lv4ZtcFMiC2ZHyi414=";
   };
 
   postPatch = ''
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    importlib-metadata
     pydantic
     ruamel-yaml
     typing-extensions

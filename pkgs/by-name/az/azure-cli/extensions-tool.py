@@ -174,12 +174,12 @@ def _get_latest_version(versions: dict) -> dict:
     return max(versions, key=lambda e: parse(e["metadata"]["version"]), default=None)
 
 
-def processExtension(
+def find_extension_version(
     extVersions: dict,
     cli_version: Version,
     ext_name: Optional[str] = None,
     requirements: bool = False,
-) -> Optional[Ext]:
+) -> Optional[Dict[str, Any]]:
     versions = filter(_filter_invalid, extVersions)
     versions = filter(lambda v: _filter_compatible(v, cli_version), versions)
     latest = _get_latest_version(versions)
@@ -188,6 +188,18 @@ def processExtension(
     if ext_name and latest["metadata"]["name"] != ext_name:
         return None
     if not requirements and "run_requires" in latest["metadata"]:
+        return None
+    return latest
+
+
+def find_and_transform_extension_version(
+    extVersions: dict,
+    cli_version: Version,
+    ext_name: Optional[str] = None,
+    requirements: bool = False,
+) -> Optional[Ext]:
+    latest = find_extension_version(extVersions, cli_version, ext_name, requirements)
+    if not latest:
         return None
 
     return _transform_dict_to_obj(latest)
@@ -335,6 +347,11 @@ def main() -> None:
         action=argparse.BooleanOptionalAction,
         help="whether to commit changes to git",
     )
+    parser.add_argument(
+        "--init",
+        action=argparse.BooleanOptionalAction,
+        help="whether you want to init a new extension",
+    )
     args = parser.parse_args()
     cli_version = parse(args.cli_version)
 
@@ -348,12 +365,44 @@ def main() -> None:
     assert index["formatVersion"] == "1"  # only support formatVersion 1
     extensions_remote = index["extensions"]
 
+    # init just prints the json of the extension version that matches the cli version.
+    if args.init:
+        if not args.extension:
+            logger.error("extension name is required for --init")
+            exit(1)
+
+        for ext_name, ext_versions in extensions_remote.items():
+            if ext_name != args.extension:
+                continue
+            ext = find_extension_version(
+                ext_versions,
+                cli_version,
+                args.extension,
+                requirements=True,
+            )
+            break
+        if not ext:
+            logger.error(f"Extension {args.extension} not found in index")
+            exit(1)
+
+        ext_translated = {
+            "pname": ext["metadata"]["name"],
+            "version": ext["metadata"]["version"],
+            "url": ext["downloadUrl"],
+            "hash": _convert_hash_digest_from_hex_to_b64_sri(ext["sha256Digest"]),
+            "description": ext["metadata"]["summary"].rstrip("."),
+            "license": ext["metadata"]["license"],
+            "requirements": ext["metadata"]["run_requires"][0]["requires"],
+        }
+        print(json.dumps(ext_translated, indent=2))
+        return
+
     if args.extension:
         logger.info(f"updating extension: {args.extension}")
 
         ext = Optional[Ext]
         for _ext_name, extension in extensions_remote.items():
-            extension = processExtension(
+            extension = find_and_transform_extension_version(
                 extension, cli_version, args.extension, requirements=True
             )
             if extension:
@@ -402,7 +451,9 @@ def main() -> None:
 
     extensions_remote_filtered = set()
     for _ext_name, extension in extensions_remote.items():
-        extension = processExtension(extension, cli_version, args.extension)
+        extension = find_and_transform_extension_version(
+            extension, cli_version, args.extension
+        )
         if extension:
             extensions_remote_filtered.add(extension)
 

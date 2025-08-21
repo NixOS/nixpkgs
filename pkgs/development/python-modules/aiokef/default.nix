@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];
 
   meta = with lib; {

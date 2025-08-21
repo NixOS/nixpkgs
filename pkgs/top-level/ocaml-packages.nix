@@ -89,7 +89,7 @@ let
         backoff = callPackage ../development/ocaml-modules/backoff { };
 
         bap = callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages_14) llvm;
+          inherit (pkgs.llvmPackages) llvm;
         };
 
         base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -164,6 +164,8 @@ let
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
+
+        camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
 
         camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -260,6 +262,8 @@ let
 
         coin = callPackage ../development/ocaml-modules/coin { };
 
+        colombe = callPackage ../development/ocaml-modules/colombe { };
+
         color = callPackage ../development/ocaml-modules/color { };
 
         colors = callPackage ../development/ocaml-modules/colors { };
@@ -323,10 +327,6 @@ let
         ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
-
-        ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
-          inherit (pkgs) nodejs;
-        };
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
@@ -536,15 +536,17 @@ let
 
         elpi = callPackage ../development/ocaml-modules/elpi (
           let
-            ppxlib_0_15 =
-              if lib.versionAtLeast ppxlib.version "0.15" then
-                ppxlib.override { version = "0.15.0"; }
-              else
-                ppxlib;
+            ppx_deriving_ =
+              cap:
+              ppx_deriving.override {
+                ppxlib = ppxlib.override {
+                  version = if lib.versionAtLeast ppxlib.version cap then cap else ppxlib.version;
+                };
+              };
           in
           {
-            ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-            inherit ppxlib_0_15;
+            ppx_deriving_0_15 = ppx_deriving_ "0.15";
+            ppx_deriving = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -1044,6 +1046,8 @@ let
 
         letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
 
+        letters = callPackage ../development/ocaml-modules/letters { };
+
         libc = callPackage ../development/ocaml-modules/libc { };
 
         lilv = callPackage ../development/ocaml-modules/lilv {
@@ -1067,6 +1071,8 @@ let
         lo = callPackage ../development/ocaml-modules/lo { };
 
         logs = callPackage ../development/ocaml-modules/logs { };
+
+        logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 
@@ -1144,6 +1150,7 @@ let
         melange = callPackage ../development/tools/ocaml/melange { };
 
         melange-json = callPackage ../development/ocaml-modules/melange-json { };
+        melange-json-native = callPackage ../development/ocaml-modules/melange-json/native.nix { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1348,6 +1355,8 @@ let
 
         nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
 
+        nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
+
         notty = callPackage ../development/ocaml-modules/notty { };
 
         npy = callPackage ../development/ocaml-modules/npy {
@@ -1514,7 +1523,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
@@ -1680,7 +1697,9 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
-        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml { };
+        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
+          mdx = mdx.override { inherit logs; };
+        };
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
@@ -1799,7 +1818,6 @@ let
         reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
         reason-react = callPackage ../development/ocaml-modules/reason-react { };
-
         reason-react-ppx = callPackage ../development/ocaml-modules/reason-react/ppx.nix { };
 
         rebez = callPackage ../development/ocaml-modules/rebez { };
@@ -1885,6 +1903,8 @@ let
 
         semver = callPackage ../development/ocaml-modules/semver { };
 
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
+
         seq = callPackage ../development/ocaml-modules/seq { };
 
         seqes = callPackage ../development/ocaml-modules/seqes { };
@@ -1935,6 +1955,8 @@ let
 
         stdint = callPackage ../development/ocaml-modules/stdint { };
 
+        stdlib-random = callPackage ../development/ocaml-modules/stdlib-random { };
+
         stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
         stdune = callPackage ../development/ocaml-modules/stdune { };
@@ -1964,6 +1986,10 @@ let
         tar = callPackage ../development/ocaml-modules/tar { };
 
         tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
+          inherit (pkgs) git;
+        };
+
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
           inherit (pkgs) git;
         };
 

@@ -15,14 +15,18 @@ const typeConfig = {
 }
 
 function split(branch) {
-  return { ...branch.match(/(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/).groups }
+  return {
+    ...branch.match(
+      /(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/,
+    ).groups,
+  }
 }
 
 function classify(branch) {
   const { prefix, version } = split(branch)
   return {
     stable: (version ?? 'unstable') !== 'unstable',
-    type: typeConfig[prefix] ?? [ 'wip' ]
+    type: typeConfig[prefix] ?? ['wip'],
   }
 }
 

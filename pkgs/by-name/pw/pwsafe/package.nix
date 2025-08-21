@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.21.0fp"; # do NOT update to 3.x Windows releases
+  version = "1.22.0fp"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
     rev = version;
-    hash = "sha256-pPKUFX6NNGtGGjHL3g0Y6xzj+bHU2KDNMhYCnpP9wgM=";
+    hash = "sha256-oVhpdJPpGNMqL1y67Kv3osa1Cx5YM8SyaNuRWeMfd9g=";
   };
 
   strictDeps = true;
@@ -45,56 +45,53 @@ stdenv.mkDerivation rec {
     zip
   ];
 
-  buildInputs =
-    [
-      wxGTK32
-      curl
-      qrencode
-      openssl
-      xercesc
-      file
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libXext
-      libXi
-      libXt
-      libXtst
-      libuuid
-      libyubikey
-      yubikey-personalization
-    ];
+  buildInputs = [
+    wxGTK32
+    curl
+    qrencode
+    openssl
+    xercesc
+    file
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libXext
+    libXi
+    libXt
+    libXtst
+    libuuid
+    libyubikey
+    yubikey-personalization
+  ];
 
-  cmakeFlags =
-    [
-      "-DNO_GTEST=ON"
-      "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DNO_YUBI=ON"
-    ];
+  cmakeFlags = [
+    "-DNO_GTEST=ON"
+    "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DNO_YUBI=ON"
+  ];
 
-  postPatch =
-    ''
-      # Fix perl scripts used during the build.
-      for f in $(find . -type f -name '*.pl') ; do
-        patchShebangs $f
-      done
+  postPatch = ''
+    # Fix perl scripts used during the build.
+    for f in $(find . -type f -name '*.pl') ; do
+      patchShebangs $f
+    done
 
-      # Fix hard coded paths.
-      for f in $(grep -Rl /usr/share/ src install/desktop) ; do
-        substituteInPlace $f --replace /usr/share/ $out/share/
-      done
+    # Fix hard coded paths.
+    for f in $(grep -Rl /usr/share/ src install/desktop) ; do
+      substituteInPlace $f --replace /usr/share/ $out/share/
+    done
 
-      # Fix hard coded zip path.
-      substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
+    # Fix hard coded zip path.
+    substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
 
-      for f in $(grep -Rl /usr/bin/ .) ; do
-        substituteInPlace $f --replace /usr/bin/ ""
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
-    '';
+    for f in $(grep -Rl /usr/bin/ .) ; do
+      substituteInPlace $f --replace /usr/bin/ ""
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
+  '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

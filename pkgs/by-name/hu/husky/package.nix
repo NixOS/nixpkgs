@@ -18,7 +18,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-u1dndTKvInobva+71yI2vPiwrW9vqzAJ2sDAqT9YJsg=";
 
   meta = {
-    description = "Git hooks made easy 🐶 woof!";
+    description = "Git hooks made easy";
     mainProgram = "husky";
     homepage = "https://github.com/typicode/husky";
     changelog = "https://github.com/typicode/husky/releases/tag/v${version}";

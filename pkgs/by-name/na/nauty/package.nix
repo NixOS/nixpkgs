@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "2.8.9";
+  version = "2.9.0";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.tar.gz";
-    sha256 = "sha256-yXq0K/SHlqhqWYvOPpJpBHyisywU/CPgcgiiRP5SxO4=";
+    sha256 = "sha256-eziDTHzv4X0l4F7vHvOIL6nNGTP1grnrnedHdBGVYFM=";
   };
 
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  # HACK: starting from 2.8.9, the makefile tries to copy .libs/*.a files unconditionally
+  # HACK: starting from 2.9.0, the makefile tries to copy .libs/*.a files unconditionally
   dontDisableStatic = true;
 
   configureFlags = [

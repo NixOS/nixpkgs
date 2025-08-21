@@ -83,42 +83,41 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
-  ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
+  ]
+  ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optional enableDpdk dpdk'
-    ++ lib.optional enableRdma rdma-core'.dev;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optional enableDpdk dpdk'
+  ++ lib.optional enableRdma rdma-core'.dev;
 
-  buildInputs =
-    [
-      check
-      openssl
-      (python3.withPackages (ps: [ ps.ply ]))
+  buildInputs = [
+    check
+    openssl
+    (python3.withPackages (ps: [ ps.ply ]))
 
-      subunit # vapi tests
-      mbedtls_2 # tlsmbed plugin
-      libpcap # bpf_trace_filter plugin
+    subunit # vapi tests
+    mbedtls_2 # tlsmbed plugin
+    libpcap # bpf_trace_filter plugin
 
-      # linux-cp plugin
-      libnl
-      libmnl
-    ]
-    ++ lib.optionals enableDpdk [
-      # dpdk plugin
-      libelf
-      jansson
-      zlib
-    ]
-    ++ lib.optionals enableAfXdp [
-      # af_xdp plugin
-      libelf
-      libbpf
-      xdp-tools'
-    ];
+    # linux-cp plugin
+    libnl
+    libmnl
+  ]
+  ++ lib.optionals enableDpdk [
+    # dpdk plugin
+    libelf
+    jansson
+    zlib
+  ]
+  ++ lib.optionals enableAfXdp [
+    # af_xdp plugin
+    libelf
+    libbpf
+    xdp-tools'
+  ];
 
   passthru.updateScript = nix-update-script { };
 

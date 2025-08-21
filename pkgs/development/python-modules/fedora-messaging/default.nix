@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   meta = {
     description = "Library for sending AMQP messages with JSON schema in Fedora infrastructure";

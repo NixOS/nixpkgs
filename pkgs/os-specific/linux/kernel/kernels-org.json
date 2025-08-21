@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.16-rc5",
-        "hash": "sha256:0will8rmmdlcxyrflr778264h9pfv67cpqqnas112r248vicnkny"
+        "version": "6.17-rc2",
+        "hash": "sha256:1ax2gjbs4l8pgkwp3qwy3mxyfxdvbv02943yj4iw5df7h3x50wcz"
     },
     "6.1": {
-        "version": "6.1.144",
-        "hash": "sha256:1kvskw600nm6ybd5yr940cx3fz0l9myyqzsk7l30cxdx5yjbsj8g"
+        "version": "6.1.148",
+        "hash": "sha256:18c024bqqc3srzv2gva55p95yghjc6x3p3f54v3hziki4wx3v86r"
     },
     "5.15": {
-        "version": "5.15.187",
-        "hash": "sha256:057zmzq364483gc5n9aab8mi0bxbk3nyc2nnziwq4hc197l6wy11"
+        "version": "5.15.189",
+        "hash": "sha256:1hshd26ahn6dbw6jnqi0v5afpk672w7p09mk7iri93i7hxdh5l73"
     },
     "5.10": {
-        "version": "5.10.239",
-        "hash": "sha256:1nzhl1y6avfl77fyqwjwy3qc6679gp92k0d3aarscrdydcml5yid"
+        "version": "5.10.240",
+        "hash": "sha256:04sdcf4aqsqchii38anzmk9f9x65wv8q1x3m9dandmi6fabw724d"
     },
     "5.4": {
-        "version": "5.4.295",
-        "hash": "sha256:1adn0pbk8y1zp1yrz83ch6h4wypm2qvbnx4xig3sls2nfgvmi0f4"
+        "version": "5.4.296",
+        "hash": "sha256:0fm73yqzbzclh2achcj8arpg428d412k2wgmlfmyy6xzb1762qrx"
     },
     "6.6": {
-        "version": "6.6.97",
-        "hash": "sha256:0fzfp46czdk3v8mnphiv9n68xf434igjkhx9nxbdlhl1cdqc2rrv"
+        "version": "6.6.102",
+        "hash": "sha256:0p6yjifwyrqlppn40isgxb0b5vqmljggmnp7w75vlc2c6fvzxll0"
     },
     "6.12": {
-        "version": "6.12.37",
-        "hash": "sha256:15gzcbkjkycvghjvpx3qshnc4416fw3ln2afip1hlpjv839dyvwk"
+        "version": "6.12.43",
+        "hash": "sha256:1vmxywg11z946i806sg7rk7jr9px87spmwwbzjxpps2nsjybpjqg"
     },
     "6.15": {
-        "version": "6.15.6",
-        "hash": "sha256:1z5l0b59q56qj6s56cxzv43lhfx9z9sp4vfziw60fz97ak4qdd9b"
+        "version": "6.15.11",
+        "hash": "sha256:14sxwrvw9p4ybizb8ky1rgahc62q0aw5qkmzqp3cpnavqfgldaw9"
+    },
+    "6.16": {
+        "version": "6.16.2",
+        "hash": "sha256:0vghyk7ggmgnsldyz67v9llzbi6mxyivx83z7fylyxrxg7xacq5p"
     }
 }

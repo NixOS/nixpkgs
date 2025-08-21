@@ -42,7 +42,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sismic" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     # Time related tests, might lead to flaky tests on slow/busy machines
@@ -54,6 +54,6 @@ buildPythonPackage {
     description = "Sismic Interactive Statechart Model Interpreter and Checker";
     homepage = "https://github.com/AlexandreDecan/sismic";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

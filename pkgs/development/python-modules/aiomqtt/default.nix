@@ -34,9 +34,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomqtt" ];
 
-  pytestFlagsArray = [
-    "-m"
-    "'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   meta = with lib; {

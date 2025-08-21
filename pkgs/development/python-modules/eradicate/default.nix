@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eradicate" ];
 
-  pytestFlagsArray = [ "test_eradicate.py" ];
+  enabledTestPaths = [ "test_eradicate.py" ];
 
   meta = with lib; {
     description = "Library to remove commented-out code from Python files";

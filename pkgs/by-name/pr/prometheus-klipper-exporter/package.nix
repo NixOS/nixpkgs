@@ -29,7 +29,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = " Prometheus Exporter for Klipper ";
+    description = "Prometheus Exporter for Klipper";
     homepage = "https://github.com/scross01/prometheus-klipper-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ wulfsta ];

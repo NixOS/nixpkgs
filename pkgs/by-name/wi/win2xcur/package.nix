@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "win2xcur";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantum5";
@@ -16,9 +16,16 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-OjLj+QYg8YOJzDq3Y6/uyEXlNWbPm8VA/b1yP9jT6Jo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     numpy
     wand
+  ];
+
+  pythonImportsCheck = [
+    "win2xcur.main.win2xcur"
+    "win2xcur.main.x2wincur"
   ];
 
   meta = {

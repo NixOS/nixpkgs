@@ -7,6 +7,7 @@
   libmicrohttpd,
   openssl,
   hwloc,
+  kmod,
   donateLevel ? 0,
 }:
 
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     substituteAllInPlace src/donate.h
     substituteInPlace cmake/OpenSSL.cmake \
       --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/hw/msr/Msr_linux.cpp \
+      --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
   '';
 
   nativeBuildInputs = [

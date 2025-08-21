@@ -24,14 +24,13 @@ stdenv.mkDerivation rec {
     flex
     bison
   ];
-  buildInputs =
-    [
-      perl
-      libnsl
-    ]
-    ++ lib.optionals withLibWrap [
-      tcp_wrappers
-    ];
+  buildInputs = [
+    perl
+    libnsl
+  ]
+  ++ lib.optionals withLibWrap [
+    tcp_wrappers
+  ];
 
   configureFlags = lib.optionals (!withLibWrap) [
     "--with-libwrap=no"

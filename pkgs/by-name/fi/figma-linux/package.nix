@@ -1,97 +1,89 @@
 {
-  pkgs,
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  wrapGAppsHook3,
-  ...
+  buildNpmPackage,
+  fetchFromGitHub,
+
+  electron,
+  p7zip,
+  # there's a setting "use zenity for dialogs"
+  zenity,
+
+  copyDesktopItems,
+  makeBinaryWrapper,
+  makeDesktopItem,
 }:
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "figma-linux";
   version = "0.11.5";
 
-  src = fetchurl {
-    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-6lFeiecliyuTdnUCCbLpoQWiu5k3OPHxb+VF17GtERo=";
+  src = fetchFromGitHub {
+    owner = "Figma-Linux";
+    repo = "figma-linux";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pa0GgAmi9Os4EtZpbo0hSgr4s+WX95zLUrZR8a33TeI=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    makeWrapper
-    wrapGAppsHook3
+    copyDesktopItems
+    makeBinaryWrapper
   ];
 
-  buildInputs =
-    with pkgs;
-    [
-      alsa-lib
-      at-spi2-atk
-      cairo
-      cups.lib
-      dbus.lib
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      libdrm
-      libxkbcommon
-      libgbm
-      nspr
-      nss
-      pango
-    ]
-    ++ (with pkgs.xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
-      libxcb
-      libxshmfence
-    ]);
+  npmDepsHash = "sha256-FqgcG52Nkj0wlwsHwIWTXNuIeAs7b+TPkHcg7m5D2og=";
 
-  runtimeDependencies = with pkgs; [ eudev ];
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  };
 
-  unpackCmd = "dpkg -x $src .";
-
-  sourceRoot = ".";
-
-  # Instead of double wrapping the binary, simply pass the `gappsWrapperArgs`
-  # to `makeWrapper` directly
-  dontWrapGApps = true;
+  desktopItems = [
+    (makeDesktopItem {
+      name = "figma-linux";
+      desktopName = "Figma Linux";
+      comment = "Unofficial Figma desktop application for Linux";
+      exec = "figma-linux %U";
+      icon = "figma-linux";
+      terminal = false;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib && cp -r opt/figma-linux/* $_
-    mkdir -p $out/bin && ln -s $out/lib/figma-linux $_/figma-linux
+    mkdir -p $out/share/figma-linux/resources
 
-    cp -r usr/* $out
+    rm -rf node_modules/7zip-bin
 
-    wrapProgramShell $out/bin/figma-linux \
-      "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+    cp -r node_modules $out/share/figma-linux/resources
+
+    # transpose [name][size] into [size][name]
+    for icon in resources/icons/*.png; do
+      basename="$(basename "$icon")"
+      size="''${basename%.png}"
+
+      install -Dm444 "$icon" -T "$out/share/icons/hicolor/$size/figma-linux.png"
+    done
+
+    cp -r dist $out/share/figma-linux/resources/app
+
+    makeWrapper ${lib.getExe electron} $out/bin/figma-linux \
+      --add-flag $out/share/figma-linux/resources/app \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          p7zip
+          zenity
+        ]
+      }" \
+      --inherit-argv0
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    substituteInPlace $out/share/applications/figma-linux.desktop \
-          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/figma-linux"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      ercao
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
     mainProgram = "figma-linux";

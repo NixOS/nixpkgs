@@ -29,17 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uPb7vgJpKquZVmSMxeWDVMiNkUdYv3oVVKu7t4+zkbs=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ]
-    ++ lib.optionals fortranSupport [
-      gfortran
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ]
+  ++ lib.optionals fortranSupport [
+    gfortran
+  ];
 
   propagatedBuildInputs =
     # create meta package providing dist-info for python3Pacakges.catalyst that common cmake build does not do

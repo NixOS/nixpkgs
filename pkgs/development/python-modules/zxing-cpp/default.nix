@@ -7,7 +7,7 @@
   pybind11,
   libzxing-cpp,
   pytestCheckHook,
-  zint,
+  libzint,
 }:
 
 buildPythonPackage rec {
@@ -41,14 +41,14 @@ buildPythonPackage rec {
     cmake
   ];
 
-  buildInputs = [ zint ];
+  buildInputs = [ libzint ];
 
   nativeCheckInputs = [
     pillow
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "zxingcpp" ];
 }

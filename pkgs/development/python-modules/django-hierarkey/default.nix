@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-hierarkey";
-  version = "1.2.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-hierarkey";
     tag = version;
-    hash = "sha256-GkCNVovo2bDCp6m2GBvusXsaBhcmJkPNu97OdtsYROY=";
+    hash = "sha256-vXc31tUQrukdXeiMHZYP12o0C3R28CsC5fHjhMgRdU0=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   meta = with lib; {
     description = "Flexible and powerful hierarchical key-value store for your Django models";

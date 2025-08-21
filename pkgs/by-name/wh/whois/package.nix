@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.6.2";
+  version = "5.6.4";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    hash = "sha256-SUpbPxEAFXNlncUgmbMt7ZjaX45hzffca8keBRpcXcM=";
+    hash = "sha256-9c67LrpJu3cW/j1hfNhatB4nkCxMTCfHpszawGtU7ko=";
   };
 
   patches = [

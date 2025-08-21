@@ -44,7 +44,8 @@ buildPythonPackage {
     requests
     tomlkit
     librouteros
-  ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 
@@ -55,7 +56,7 @@ buildPythonPackage {
   versionCheckProgram = "${placeholder "out"}/bin/bw";
   versionCheckProgramArg = "--version";
 
-  pytestFlags = [
+  enabledTestPaths = [
     # only unit tests as integration tests need a OpenSSH client/server setup
     "tests/unit"
   ];

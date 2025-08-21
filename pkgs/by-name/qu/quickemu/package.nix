@@ -31,30 +31,29 @@
   installShellFiles,
 }:
 let
-  runtimePaths =
-    [
-      cdrtools
-      curl
-      gawk
-      gnugrep
-      gnused
-      jq
-      pciutils
-      procps
-      python3
-      (qemu.override { smbdSupport = true; })
-      socat
-      swtpm
-      util-linux
-      unzip
-      xrandr
-      zsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa-demos
-      usbutils
-      xdg-user-dirs
-    ];
+  runtimePaths = [
+    cdrtools
+    curl
+    gawk
+    gnugrep
+    gnused
+    jq
+    pciutils
+    procps
+    python3
+    (qemu.override { smbdSupport = true; })
+    socat
+    swtpm
+    util-linux
+    unzip
+    xrandr
+    zsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mesa-demos
+    usbutils
+    xdg-user-dirs
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {

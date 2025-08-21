@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mlrose" ];
 
   # Fix random seed during tests
-  pytestFlagsArray = [ "--randomly-seed 0" ];
+  pytestFlags = [ "--randomly-seed=0" ];
 
   meta = with lib; {
     description = "Machine Learning, Randomized Optimization and SEarch";

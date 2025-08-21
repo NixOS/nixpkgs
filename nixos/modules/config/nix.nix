@@ -50,20 +50,19 @@ let
 
   isNixAtLeast = versionAtLeast (getVersion nixPackage);
 
-  defaultSystemFeatures =
-    [
-      "nixos-test"
-      "benchmark"
-      "big-parallel"
-      "kvm"
-    ]
-    ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
-      # a builder can run code for `gcc.arch` and inferior architectures
-      [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
-      ++ map (x: "gccarch-${x}") (
-        systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
-      )
-    );
+  defaultSystemFeatures = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+  ]
+  ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
+    # a builder can run code for `gcc.arch` and inferior architectures
+    [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
+    ++ map (x: "gccarch-${x}") (
+      systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
+    )
+  );
 
   legacyConfMappings = {
     useSandbox = "sandbox";
@@ -170,46 +169,45 @@ let
 
 in
 {
-  imports =
-    [
-      (mkRenamedOptionModuleWith {
-        sinceRelease = 2003;
-        from = [
-          "nix"
-          "useChroot"
-        ];
-        to = [
-          "nix"
-          "useSandbox"
-        ];
-      })
-      (mkRenamedOptionModuleWith {
-        sinceRelease = 2003;
-        from = [
-          "nix"
-          "chrootDirs"
-        ];
-        to = [
-          "nix"
-          "sandboxPaths"
-        ];
-      })
-    ]
-    ++ mapAttrsToList (
-      oldConf: newConf:
-      mkRenamedOptionModuleWith {
-        sinceRelease = 2205;
-        from = [
-          "nix"
-          oldConf
-        ];
-        to = [
-          "nix"
-          "settings"
-          newConf
-        ];
-      }
-    ) legacyConfMappings;
+  imports = [
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2003;
+      from = [
+        "nix"
+        "useChroot"
+      ];
+      to = [
+        "nix"
+        "useSandbox"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2003;
+      from = [
+        "nix"
+        "chrootDirs"
+      ];
+      to = [
+        "nix"
+        "sandboxPaths"
+      ];
+    })
+  ]
+  ++ mapAttrsToList (
+    oldConf: newConf:
+    mkRenamedOptionModuleWith {
+      sinceRelease = 2205;
+      from = [
+        "nix"
+        oldConf
+      ];
+      to = [
+        "nix"
+        "settings"
+        newConf
+      ];
+    }
+  ) legacyConfMappings;
 
   options = {
     nix = {

@@ -62,10 +62,9 @@ buildPythonPackage rec {
     pytest-rerunfailures
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   # Tests must be run in the build directory. The tests create files

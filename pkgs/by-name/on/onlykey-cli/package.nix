@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,10 +16,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   build-system = with python3Packages; [
-    cython
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonRemoveDeps = [
+    "Cython" # don't know why cython is listed as a runtime dependency, let's just remove it
+  ];
+
+  dependencies = with python3Packages; [
     aenum
     ecdsa
     hidapi

@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_DOCS=OFF"
     "-DBUILD_TESTING=OFF"
     "-DENABLE_CBLAS=OFF"
-  ] ++ lib.optionals (!enableOpenMP) [ "-DENABLE_OPENMP=OFF" ];
+  ]
+  ++ lib.optionals (!enableOpenMP) [ "-DENABLE_OPENMP=OFF" ];
   buildInputs = [
     boost
     openssl

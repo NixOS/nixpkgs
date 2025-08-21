@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 6f2e706f..6307dd59 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -195,6 +195,8 @@ dnl Internationalization
+ dnl ###########################################################################
+ 
+ IT_PROG_INTLTOOL(0.35.0)
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.21])
+ AC_SUBST(GETTEXT_PACKAGE, lightdm)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", Gettext package)
+ 

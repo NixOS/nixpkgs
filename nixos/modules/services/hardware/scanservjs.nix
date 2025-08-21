@@ -13,7 +13,8 @@ let
     tesseract = lib.getExe pkgs.tesseract;
     # it defaults to config/devices.json, but "config" dir doesn't exist by default and scanservjs doesn't create it
     devicesPath = "devices.json";
-  } // cfg.settings;
+  }
+  // cfg.settings;
   settingsFormat = pkgs.formats.json { };
 
   leafs =

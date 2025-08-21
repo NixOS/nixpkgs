@@ -4,17 +4,15 @@
 
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   makeDesktopItem,
 
   cmake,
   copyDesktopItems,
   ninja,
 
-  libcpr,
   protobuf,
   qt6Packages,
-  yaml-cpp,
-  zxing-cpp,
 
   sing-geoip,
   sing-geosite,
@@ -22,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nekoray";
-  version = "4.3.5";
+  version = "4.3.7";
 
   src = fetchFromGitHub {
     owner = "Mahdi-zarei";
     repo = "nekoray";
     tag = finalAttrs.version;
-    hash = "sha256-dq3rBvCFEs+4+UadFObMnHhIiYeFlpvvLjTo0lcG8rE=";
+    hash = "sha256-oRoHu9mt4LiGJFe2OEATbPQ8buYT/6o9395BxYg1qKI=";
   };
 
   strictDeps = true;
@@ -41,12 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libcpr
     protobuf
     qt6Packages.qtbase
     qt6Packages.qttools
-    yaml-cpp
-    zxing-cpp
   ];
 
   cmakeFlags = [
@@ -106,9 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
     patches = [
       # also check cap_net_admin so we don't have to set suid
       ./core-also-check-capabilities.patch
+
+      # adds missing entries to the lockfile
+      # can be removed next update
+      (fetchpatch {
+        name = "fix-lockfile.patch";
+        url = "https://github.com/Mahdi-zarei/nekoray/commit/6f9b2c69e21b0b86242fcc5731f21561373d0963.patch";
+        stripLen = 2;
+        hash = "sha256-LDLgCQUXOqaV++6Z4/8r2IaBM+Kz/LckjVsvZn/0lLM=";
+      })
     ];
 
-    vendorHash = "sha256-hZiEIJ4/TcLUfT+pkqs6WfzjqppSTjKXEtQC+DS26Ug=";
+    vendorHash = "sha256-6Q6Qi3QQOmuLBaV4t/CEER6s1MUvL7ER6Hfm44sQk4M=";
 
     # ldflags and tags are taken from script/build_go.sh
     ldflags = [

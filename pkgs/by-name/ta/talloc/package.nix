@@ -23,17 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3
-      wafHook
-      docbook-xsl-nons
-      docbook_xml_dtd_42
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    wafHook
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     python3
@@ -51,16 +50,15 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--enable-talloc-compat1"
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ];
+  wafConfigureFlags = [
+    "--enable-talloc-compat1"
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig

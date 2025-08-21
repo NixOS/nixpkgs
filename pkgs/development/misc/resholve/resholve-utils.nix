@@ -189,22 +189,21 @@ rec {
     writeTextFile {
       inherit name text;
       executable = true;
-      checkPhase =
-        ''
-          ${
-            (phraseContextForPWD (
-              phraseInvocation name (
-                partialSolution
-                // {
-                  scripts = [ "${placeholder "out"}" ];
-                }
-              )
-            ))
-          }
-        ''
-        + lib.optionalString (partialSolution.interpreter != "none") ''
-          ${partialSolution.interpreter} -n $out
-        '';
+      checkPhase = ''
+        ${
+          (phraseContextForPWD (
+            phraseInvocation name (
+              partialSolution
+              // {
+                scripts = [ "${placeholder "out"}" ];
+              }
+            )
+          ))
+        }
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out
+      '';
     };
   writeScriptBin =
     name: partialSolution: text:
@@ -212,20 +211,19 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
-      checkPhase =
-        ''
-          ${phraseContextForOut (
-            phraseInvocation name (
-              partialSolution
-              // {
-                scripts = [ "bin/${name}" ];
-              }
-            )
-          )}
-        ''
-        + lib.optionalString (partialSolution.interpreter != "none") ''
-          ${partialSolution.interpreter} -n $out/bin/${name}
-        '';
+      checkPhase = ''
+        ${phraseContextForOut (
+          phraseInvocation name (
+            partialSolution
+            // {
+              scripts = [ "bin/${name}" ];
+            }
+          )
+        )}
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out/bin/${name}
+      '';
     };
   mkDerivation =
     {

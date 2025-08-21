@@ -8,6 +8,7 @@
 let
   inherit (lib)
     hasPrefix
+    literalExpression
     mkEnableOption
     mkIf
     mkMerge
@@ -23,6 +24,8 @@ let
 in
 
 {
+  meta.maintainers = pkgs.postfix-tlspol.meta.maintainers;
+
   options.services.postfix-tlspol = {
     enable = mkEnableOption "postfix-tlspol";
 
@@ -92,7 +95,13 @@ in
           dns = {
             address = mkOption {
               type = types.str;
-              default = "127.0.0.1:53";
+              default = if config.networking.resolvconf.useLocalResolver then "127.0.0.1:53" else null;
+              defaultText = literalExpression ''
+                if config.networking.resolvconf.useLocalResolver then
+                  "127.0.0.1:53"
+                else
+                  null
+              '';
               description = ''
                 IP and port to your DNS resolver
 
@@ -126,7 +135,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
       # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-      services.postfix.config = {
+      services.postfix.settings.main = {
         smtp_dns_support_level = "dnssec";
         smtp_tls_security_level = "dane";
         smtp_tls_policy_maps =
@@ -209,14 +218,13 @@ in
           ProtectSystem = "strict";
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-            ]
-            ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-              "AF_UNIX"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ]
+          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
+            "AF_UNIX"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

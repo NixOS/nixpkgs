@@ -37,16 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputDoc = "devdoc";
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isArmv7 [
-      # Needed to run lib/arm/arm2gnu.pl for ARM assembly optimizations
-      perl
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isArmv7 [
+    # Needed to run lib/arm/arm2gnu.pl for ARM assembly optimizations
+    perl
+  ];
 
   propagatedBuildInputs = [
     libogg

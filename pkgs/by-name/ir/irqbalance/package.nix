@@ -26,15 +26,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-  buildInputs =
-    [
-      glib
-      ncurses
-      libcap_ng
-    ]
-    ++ (lib.optionals enableSystemd [
-      systemdMinimal
-    ]);
+  buildInputs = [
+    glib
+    ncurses
+    libcap_ng
+  ]
+  ++ (lib.optionals enableSystemd [
+    systemdMinimal
+  ]);
 
   configureFlags = lib.optionals enableSystemd [
     "--with-systemd"

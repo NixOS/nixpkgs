@@ -65,21 +65,21 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
   ];
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals finalAttrs.doCheck [
-      gtest
-    ]
-    ++ lib.optional nvidia addDriverRunpath;
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
+    gtest
+  ]
+  ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
-    ++ lib.optional nvidia cudatoolkit
-    ++ lib.optional needDrm libdrm;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
+  ++ lib.optional nvidia cudatoolkit
+  ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "(h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
+    description = "htop-like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
       It can handle multiple GPUs and print information about them in a htop familiar way.

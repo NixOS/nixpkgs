@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.32.3.1";
+  version = "3.32.3.4";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    hash = "sha256-YK5x0TbmJYOvciDZGj4rHN4bo89oS1t2Zulk9kJscj8=";
+    hash = "sha256-6incOmg4AilVfoPu+crbvm/SFek3yptxrfHn7RGFF4o=";
   };
 
   patches = [
@@ -51,19 +51,18 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      libGLU
-      muparser
-      qtbase
-      qtscript
-      qtsvg
-      qtxmlpatterns
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      qtmacextras
-    ];
+  buildInputs = [
+    boost
+    libGLU
+    muparser
+    qtbase
+    qtscript
+    qtsvg
+    qtxmlpatterns
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    qtmacextras
+  ];
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
@@ -80,56 +79,55 @@ stdenv.mkDerivation rec {
       "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
     ];
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm555 release/qcad-bin $out/bin/qcad
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
-      mkdir -p $out/lib
-    ''
-    + ''
-      install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadgrid${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadsnap${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadoperations${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadstemmer${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadspatialindex${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadgui${stdenv.hostPlatform.extensions.sharedLibrary}
-      install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm555 release/qcad-bin $out/bin/qcad
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
+    mkdir -p $out/lib
+  ''
+  + ''
+    install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgrid${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadsnap${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadoperations${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadstemmer${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadspatialindex${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgui${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
 
-      install -Dm444 -t $out/share/applications qcad.desktop
-      install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
+    install -Dm444 -t $out/share/applications qcad.desktop
+    install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
 
-      cp -r scripts $out/lib
-      cp -r plugins $out/lib/plugins
-      cp -r patterns $out/lib/patterns
-      cp -r fonts $out/lib/fonts
-      cp -r libraries $out/lib/libraries
-      cp -r linetypes $out/lib/linetypes
-      cp -r ts $out/lib/ts
+    cp -r scripts $out/lib
+    cp -r plugins $out/lib/plugins
+    cp -r patterns $out/lib/patterns
+    cp -r fonts $out/lib/fonts
+    cp -r libraries $out/lib/libraries
+    cp -r linetypes $out/lib/linetypes
+    cp -r ts $out/lib/ts
 
-      # workaround to fix the library browser:
-      rm -r $out/lib/plugins/sqldrivers
-      ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
 
-      rm -r $out/lib/plugins/printsupport
-      ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+    rm -r $out/lib/plugins/printsupport
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
 
-      rm -r $out/lib/plugins/imageformats
-      ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
+    rm -r $out/lib/plugins/imageformats
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
 
-      install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
+    install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
-      installManPage qcad.1
+    installManPage qcad.1
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     description = "2D CAD package based on Qt";

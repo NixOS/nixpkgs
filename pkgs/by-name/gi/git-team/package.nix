@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  go-mockery,
+  go-mockery_2,
   installShellFiles,
 }:
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   vendorHash = "sha256-NTOUL1oE2IhgLyYYHwRCMW5yCxIRxUwqkfuhSSBXf6A=";
 
   nativeBuildInputs = [
-    go-mockery
+    go-mockery_2
     installShellFiles
   ];
 

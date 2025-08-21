@@ -53,31 +53,30 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pruneLibtoolFiles
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      openssl
-      db
-      gettext
-      libkrb5
-      libxcrypt
-    ]
-    ++ lib.optional enableLdap openldap
-    ++ lib.optional stdenv.hostPlatform.isLinux pam;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    openssl
+    db
+    gettext
+    libkrb5
+    libxcrypt
+  ]
+  ++ lib.optional enableLdap openldap
+  ++ lib.optional stdenv.hostPlatform.isLinux pam;
 
-  configureFlags =
-    [
-      "--with-openssl=${openssl.dev}"
-      "--with-plugindir=${placeholder "out"}/lib/sasl2"
-      "--with-saslauthd=/run/saslauthd"
-      "--enable-login"
-      "--enable-shared"
-    ]
-    ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
-    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
-      "--disable-sample"
-      "CFLAGS=-DTIME_WITH_SYS_TIME"
-    ];
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+    "--with-plugindir=${placeholder "out"}/lib/sasl2"
+    "--with-saslauthd=/run/saslauthd"
+    "--enable-login"
+    "--enable-shared"
+  ]
+  ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
+  ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    "--disable-sample"
+    "CFLAGS=-DTIME_WITH_SYS_TIME"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

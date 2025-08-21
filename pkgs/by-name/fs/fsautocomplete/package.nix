@@ -9,13 +9,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.78.3";
+  version = "0.78.5";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZY0sRRGTazaesHyqUe5C/l8xmo+teTS34KVXd0DnO84=";
+    hash = "sha256-4Y3QUq5oa01a1S5+h3ccdeqjPfkUe8GaqxHjh9VFhXE=";
   };
 
   nugetDeps = ./deps.json;
@@ -41,7 +41,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   meta = {
-    description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
+    description = "Backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";

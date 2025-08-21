@@ -4,24 +4,22 @@
   fetchPypi,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "1.20";
+  version = "2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
+    pname = "python_stdnum";
+    inherit version;
+    hash = "sha256-awFkWWnrPf1VBhoBFNWTdTzZ5lPOqQgxmLfuoSZEOXo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook

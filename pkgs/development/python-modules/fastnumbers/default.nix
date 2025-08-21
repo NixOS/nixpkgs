@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--hypothesis-profile=standard" ];
+  pytestFlags = [ "--hypothesis-profile=standard" ];
 
   pythonImportsCheck = [ "fastnumbers" ];
 

@@ -40,6 +40,17 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5_1;
 
+      # TODO remove when paperless-ngx is updated past 2.17.1
+      imap-tools = prev.imap-tools.overridePythonAttrs {
+        version = "1.10.0";
+        src = fetchFromGitHub {
+          owner = "ikvk";
+          repo = "imap_tools";
+          tag = "v1.10.0";
+          hash = "sha256-lan12cHkoxCKadgyFey4ShcnwFg3Gl/VqKWlYAkvF3Y=";
+        };
+      };
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
     };
@@ -69,28 +80,27 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
+        fetcherVersion = 1;
         hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
-      nativeBuildInputs =
-        [
-          node-gyp
-          nodejs_20
-          pkg-config
-          pnpm.configHook
-          python3
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          xcbuild
-        ];
+      nativeBuildInputs = [
+        node-gyp
+        nodejs_20
+        pkg-config
+        pnpm.configHook
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-      buildInputs =
-        [
-          pango
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          giflib
-        ];
+      buildInputs = [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+      ];
 
       CYPRESS_INSTALL_BINARY = "0";
       NG_CLI_ANALYTICS = "false";
@@ -150,6 +160,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "pathvalidate"
     "redis"
   ];
 
@@ -162,7 +173,17 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
-      django-allauth
+      # django-allauth version 65.9.X not yet supported
+      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
+      (django-allauth.overrideAttrs (
+        new: prev: rec {
+          version = "65.7.0";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+          };
+        }
+      ))
       django-auditlog
       django-celery-results
       django-compression-middleware
@@ -268,7 +289,7 @@ python.pkgs.buildPythonApplication rec {
   # manually managed in postPatch
   dontUsePytestXdist = false;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "src"
   ];
 

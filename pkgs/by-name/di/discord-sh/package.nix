@@ -36,9 +36,11 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
+
     $out/bin/discord.sh --help
-    runHook postCheck
+
+    runHook postInstallCheck
   '';
 
   installPhase = ''

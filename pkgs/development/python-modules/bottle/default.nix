@@ -25,21 +25,20 @@ buildPythonPackage rec {
     cd test
   '';
 
-  disabledTests =
-    [
-      "test_delete_cookie"
-      "test_error"
-      "test_error_in_generator_callback"
-      # timing sensitive
-      "test_ims"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # https://github.com/bottlepy/bottle/issues/1422
-      # ModuleNotFoundError: No module named 'bottle.ext'
-      "test_data_import"
-      "test_direkt_import"
-      "test_from_import"
-    ];
+  disabledTests = [
+    "test_delete_cookie"
+    "test_error"
+    "test_error_in_generator_callback"
+    # timing sensitive
+    "test_ims"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/bottlepy/bottle/issues/1422
+    # ModuleNotFoundError: No module named 'bottle.ext'
+    "test_data_import"
+    "test_direkt_import"
+    "test_from_import"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

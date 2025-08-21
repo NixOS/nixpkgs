@@ -33,19 +33,17 @@ in
         services.getty.autologinUser = "alice";
       };
 
-      testScript =
-        asUser
-        + ''
-          start_all()
+      testScript = asUser + ''
+        start_all()
 
-          machine.wait_for_unit("multi-user.target")
-          machine.wait_for_text("alice")
-          machine.succeed(as_user("ydotool type 'echo ${textInput} > /tmp/output'")) # text input
-          machine.succeed(as_user("ydotool key 28:1 28:0")) # text input
-          machine.screenshot("headless_input")
-          machine.wait_for_file("/tmp/output")
-          machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
-        '';
+        machine.wait_for_unit("multi-user.target")
+        machine.wait_for_text("alice")
+        machine.succeed(as_user("ydotool type 'echo ${textInput} > /tmp/output'")) # text input
+        machine.succeed(as_user("ydotool key 28:1 28:0")) # text input
+        machine.screenshot("headless_input")
+        machine.wait_for_file("/tmp/output")
+        machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
+      '';
 
       meta.maintainers = with lib.maintainers; [
         OPNA2608
@@ -83,21 +81,19 @@ in
           services.displayManager.defaultSession = lib.mkForce "none+dwm";
         };
 
-      testScript =
-        asUser
-        + ''
-          start_all()
+      testScript = asUser + ''
+        start_all()
 
-          machine.wait_for_x()
-          machine.execute(as_user("${inputBox config.node.pkgs}"))
-          machine.wait_for_text("${inputBoxText}")
-          machine.succeed(as_user("ydotool type '${textInput}'")) # text input
-          machine.screenshot("x11_input")
-          machine.succeed(as_user("ydotool mousemove -a 400 110")) # mouse input
-          machine.succeed(as_user("ydotool click 0xC0")) # mouse input
-          machine.wait_for_file("/tmp/output")
-          machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
-        '';
+        machine.wait_for_x()
+        machine.execute(as_user("${inputBox config.node.pkgs}"))
+        machine.wait_for_text("${inputBoxText}")
+        machine.succeed(as_user("ydotool type '${textInput}'")) # text input
+        machine.screenshot("x11_input")
+        machine.succeed(as_user("ydotool mousemove -a 400 110")) # mouse input
+        machine.succeed(as_user("ydotool click 0xC0")) # mouse input
+        machine.wait_for_file("/tmp/output")
+        machine.wait_until_succeeds("grep '${textInput}' /tmp/output") # text input
+      '';
 
       meta.maintainers = with lib.maintainers; [
         OPNA2608

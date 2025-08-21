@@ -42,24 +42,23 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  buildInputs =
-    [
-      glslang
-      robin-hood-hashing
-      spirv-headers
-      spirv-tools
-      vulkan-headers
-      vulkan-utility-libraries
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-      libXrandr
-      libffi
-      libxcb
-      wayland
-    ];
+  buildInputs = [
+    glslang
+    robin-hood-hashing
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+    vulkan-utility-libraries
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+    libXrandr
+    libffi
+    libxcb
+    wayland
+  ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"

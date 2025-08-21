@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -21,6 +22,7 @@
   glslang,
   harfbuzz,
   kdePackages,
+  libarchive,
   libdrm,
   libGL,
   libnotify,
@@ -51,13 +53,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.6.1";
+  version = "25.8";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DqgayLXI+RPIb8tLzJoHi+Z12px4pdzU50C0UBSa2u4=";
+    hash = "sha256-x9nZyLk0A9eiZ9V700lc4To1cVJ875ZYR0GeqQ7qNpg=";
   };
 
   monado = applyPatches {
@@ -65,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "bb9bcee2a3be75592de819d9e3fb2c8ed27bb7dc";
-      hash = "sha256-+PiWxnvMXaSFc+67r17GBRXo7kbjikSElawNMJCydrk=";
+      rev = "5c137fe28b232fe460f9b03defa7749adc32ee48";
+      hash = "sha256-4P/ejRAitrYn8hXZPaDOcx27utfm+aVLjtqL6JxZYAg=";
     };
 
     postPatch = ''
@@ -88,84 +90,92 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      glib
-      glslang
-      librsvg
-      pkg-config
-      python3
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-    ];
+  patches = [
+    # Needed to allow WiVRn in-stream GUI to launch Steam games
+    (fetchpatch {
+      name = "wivrn-allow-launching-steam-games.patch";
+      url = "https://github.com/WiVRn/WiVRn/commit/30ceab5b3082cbc545acf8bc8ca4a24279e6f738.diff";
+      hash = "sha256-BD6MhCET7hdjog8rkl7G2l7/zGfVATpNAhNie0efOlA=";
+    })
+  ];
 
-  buildInputs =
-    [
-      avahi
-      boost
-      cli11
-      eigen
-      ffmpeg
-      freetype
-      glm
-      harfbuzz
-      kdePackages.kcoreaddons
-      kdePackages.ki18n
-      kdePackages.kiconthemes
-      kdePackages.kirigami
-      kdePackages.qcoro
-      kdePackages.qqc2-desktop-style
-      libdrm
-      libGL
-      libnotify
-      libpulseaudio
-      libva
-      libX11
-      libXrandr
-      nlohmann_json
-      openxr-loader
-      onnxruntime
-      pipewire
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      shaderc
-      spdlog
-      systemd
-      udev
-      vulkan-headers
-      vulkan-loader
-      x264
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cudatoolkit
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    glib
+    glslang
+    librsvg
+    pkg-config
+    python3
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
-      (lib.cmakeBool "WIVRN_USE_VAAPI" true)
-      (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
-      (lib.cmakeBool "WIVRN_USE_X264" true)
-      (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
-      (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
-      (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
-      (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-      (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-      (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
-      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-      (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
-      (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
-      (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
-    ];
+  buildInputs = [
+    avahi
+    boost
+    cli11
+    eigen
+    ffmpeg
+    freetype
+    glm
+    harfbuzz
+    kdePackages.kcoreaddons
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kirigami
+    kdePackages.qcoro
+    kdePackages.qqc2-desktop-style
+    libarchive
+    libdrm
+    libGL
+    libnotify
+    libpulseaudio
+    librsvg
+    libva
+    libX11
+    libXrandr
+    nlohmann_json
+    openxr-loader
+    onnxruntime
+    pipewire
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    shaderc
+    spdlog
+    systemd
+    udev
+    vulkan-headers
+    vulkan-loader
+    x264
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cudatoolkit
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
+    (lib.cmakeBool "WIVRN_USE_VAAPI" true)
+    (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
+    (lib.cmakeBool "WIVRN_USE_X264" true)
+    (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
+    (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
+    (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
+    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
+    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
+    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+    (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
+    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
+  ];
 
   dontWrapQtApps = true;
 

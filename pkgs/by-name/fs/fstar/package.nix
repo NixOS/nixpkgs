@@ -51,8 +51,11 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   buildInputs = with ocamlPackages; [
+    memtrace
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     batteries
-    menhir
     menhirLib
     pprint
     ppx_deriving
@@ -63,7 +66,6 @@ ocamlPackages.buildDunePackage rec {
     stdint
     yojson
     zarith
-    memtrace
     mtime
   ];
 
@@ -84,6 +86,10 @@ ocamlPackages.buildDunePackage rec {
     runHook preInstall
 
     make install
+
+    # Ensure ocamlfind can locate fstar OCaml libraries
+    mkdir -p $OCAMLFIND_DESTDIR
+    ln -s -t $OCAMLFIND_DESTDIR/ $out/lib/fstar
 
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 

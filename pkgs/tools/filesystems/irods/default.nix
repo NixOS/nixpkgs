@@ -112,18 +112,16 @@ rec {
         "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
       ];
 
-      postPatch =
-        common.postPatch
-        + ''
-          patchShebangs ./test
-          substituteInPlace plugins/database/CMakeLists.txt --replace-fail "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
-          for file in unit_tests/cmake/test_config/*.cmake
-          do
-            substituteInPlace $file --replace-quiet "CATCH2}/include" "CATCH2}/include/catch2"
-          done
+      postPatch = common.postPatch + ''
+        patchShebangs ./test
+        substituteInPlace plugins/database/CMakeLists.txt --replace-fail "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
+        for file in unit_tests/cmake/test_config/*.cmake
+        do
+          substituteInPlace $file --replace-quiet "CATCH2}/include" "CATCH2}/include/catch2"
+        done
 
-          substituteInPlace server/auth/CMakeLists.txt --replace-fail SETUID ""
-        '';
+        substituteInPlace server/auth/CMakeLists.txt --replace-fail SETUID ""
+      '';
 
       meta = common.meta // {
         longDescription = common.meta.longDescription + "This package provides the servers and libraries.";
@@ -149,11 +147,9 @@ rec {
 
       buildInputs = common.buildInputs ++ [ irods ];
 
-      postPatch =
-        common.postPatch
-        + ''
-          patchShebangs ./bin
-        '';
+      postPatch = common.postPatch + ''
+        patchShebangs ./bin
+      '';
 
       cmakeFlags = common.cmakeFlags ++ [
         "-DCMAKE_INSTALL_PREFIX=${stdenv.out}"

@@ -150,7 +150,8 @@ in
             WEB_ASSET_CORE_PATH = "${cfg.webPackage}";
             IDP_ASSET_PATH = "${cfg.idpWebPackage}/assets";
             OC_CONFIG_DIR = "/etc/opencloud";
-          } // cfg.environment;
+          }
+          // cfg.environment;
           commonServiceConfig = {
             EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
             MemoryDenyWriteExecute = true;
@@ -186,7 +187,8 @@ in
             serviceConfig = {
               Type = "oneshot";
               ReadWritePaths = [ "/etc/opencloud" ];
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
 
             path = [ cfg.package ];
             script = ''
@@ -215,7 +217,8 @@ in
               Group = cfg.group;
               Restart = "always";
               ReadWritePaths = [ cfg.stateDir ];
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
 
             restartTriggers = lib.mapAttrsToList (
               name: _: config.environment.etc."opencloud/${name}.yaml".source

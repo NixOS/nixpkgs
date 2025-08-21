@@ -17,7 +17,7 @@ let
   vim-markdown-composer-bin = rustPlatform.buildRustPackage {
     pname = "vim-markdown-composer-bin";
     inherit src version;
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-xzlEIaDEYDbxJ6YqzF+lSHcB9O+brClw026YI1YeNUc=";
     # tests require network access
     doCheck = false;

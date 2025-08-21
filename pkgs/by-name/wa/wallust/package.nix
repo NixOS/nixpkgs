@@ -9,18 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "explosion-mental";
     repo = "wallust";
     rev = finalAttrs.version;
-    hash = "sha256-n3FXPlm8nructXh+Wc7BgJvxas6OFHEPbTe2QWjEpsg=";
+    hash = "sha256-tNlSRdldzAXpM3x4XGVZeidwhplYu7xR7h7qPELaasE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LIHSnRPrx4gHZkpKEEZ1Um609i3vv0JGXLpbiSD08P4=";
+  cargoHash = "sha256-7x217i1htwHoIc+uvYNwpefIRnPRV7RI0f4c4R2k8tU=";
 
   nativeBuildInputs = [
     makeWrapper

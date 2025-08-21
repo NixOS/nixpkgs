@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = {
-    description = "ircdog is a simple wrapper over the raw IRC protocol that can respond to pings, and interprets formatting codes";
+    description = "Simple wrapper over the raw IRC protocol that can respond to pings, and interprets formatting codes";
     mainProgram = "ircdog";
     homepage = "https://github.com/ergochat/ircdog";
     changelog = "https://github.com/ergochat/ircdog/releases/tag/v${version}";

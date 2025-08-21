@@ -53,7 +53,6 @@ mkDerivation rec {
     mainProgram = "projecteur";
     maintainers = with lib.maintainers; [
       benneti
-      drupol
     ];
     platforms = lib.platforms.linux;
   };

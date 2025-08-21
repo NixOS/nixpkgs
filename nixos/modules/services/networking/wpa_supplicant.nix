@@ -80,21 +80,20 @@ let
 
       pskString = if opts.psk != null then quote opts.psk else opts.pskRaw;
 
-      options =
-        [
-          "ssid=${quote opts.ssid}"
-          (
-            if pskString != null || opts.auth != null then
-              "key_mgmt=${concatStringsSep " " opts.authProtocols}"
-            else
-              "key_mgmt=NONE"
-          )
-        ]
-        ++ optional opts.hidden "scan_ssid=1"
-        ++ optional (pskString != null) "psk=${pskString}"
-        ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
-        ++ optional (opts.priority != null) "priority=${toString opts.priority}"
-        ++ filter (x: x != "") (splitString "\n" opts.extraConfig);
+      options = [
+        "ssid=${quote opts.ssid}"
+        (
+          if pskString != null || opts.auth != null then
+            "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+          else
+            "key_mgmt=NONE"
+        )
+      ]
+      ++ optional opts.hidden "scan_ssid=1"
+      ++ optional (pskString != null) "psk=${pskString}"
+      ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
+      ++ optional (opts.priority != null) "priority=${toString opts.priority}"
+      ++ filter (x: x != "") (splitString "\n" opts.extraConfig);
     in
     ''
       network={

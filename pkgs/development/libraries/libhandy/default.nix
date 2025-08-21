@@ -29,15 +29,14 @@ stdenv.mkDerivation rec {
   pname = "libhandy";
   version = "1.8.3";
 
-  outputs =
-    [
-      "out"
-      "dev"
-      "devdoc"
-    ]
-    ++ lib.optionals enableGlade [
-      "glade"
-    ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ]
+  ++ lib.optionals enableGlade [
+    "glade"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -49,27 +48,25 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      gobject-introspection
-      gi-docgen
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals enableGlade [
-      libxml2 # for xmllint
-    ];
+  nativeBuildInputs = [
+    gobject-introspection
+    gi-docgen
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
+  ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      gtk3
-    ]
-    ++ lib.optionals enableGlade [
-      glade
-    ];
+  buildInputs = [
+    gdk-pixbuf
+    gtk3
+  ]
+  ++ lib.optionals enableGlade [
+    glade
+  ];
 
   nativeCheckInputs = [
     xvfb-run
@@ -120,26 +117,25 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  passthru =
-    {
-      updateScript = gnome.updateScript {
-        packageName = pname;
-        versionPolicy = "odd-unstable";
-      };
-    }
-    // lib.optionalAttrs (!enableGlade) {
-      glade =
-        let
-          libhandyWithGlade = libhandy.override {
-            enableGlade = true;
-          };
-        in
-        runCommand "${libhandy.name}-glade" { } ''
-          cp -r "${libhandyWithGlade.glade}" "$out"
-          chmod -R +w "$out"
-          sed -e "s#${libhandyWithGlade.out}#${libhandy.out}#g" -e "s#${libhandyWithGlade.glade}#$out#g" -i $(find "$out" -type f)
-        '';
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
     };
+  }
+  // lib.optionalAttrs (!enableGlade) {
+    glade =
+      let
+        libhandyWithGlade = libhandy.override {
+          enableGlade = true;
+        };
+      in
+      runCommand "${libhandy.name}-glade" { } ''
+        cp -r "${libhandyWithGlade.glade}" "$out"
+        chmod -R +w "$out"
+        sed -e "s#${libhandyWithGlade.out}#${libhandy.out}#g" -e "s#${libhandyWithGlade.glade}#$out#g" -i $(find "$out" -type f)
+      '';
+  };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";

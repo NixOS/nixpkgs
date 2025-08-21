@@ -40,19 +40,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      hamlib
-      liquid-dsp
-      soapysdr-with-plugins
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      libGL
-      libX11
-    ];
+  buildInputs = [
+    fftw
+    hamlib
+    liquid-dsp
+    soapysdr-with-plugins
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    libGL
+    libX11
+  ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 

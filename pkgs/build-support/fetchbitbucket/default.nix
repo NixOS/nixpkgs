@@ -15,7 +15,7 @@ lib.makeOverridable (
   fetchzip (
     {
       inherit name;
-      url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
+      url = "https://bitbucket.org/${owner}/${repo}/get/${lib.strings.escapeURL rev}.tar.gz";
       meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
     }
     // removeAttrs args [

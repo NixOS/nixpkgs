@@ -61,21 +61,20 @@ with lib;
     services.getty.autologinUser = "nixos";
 
     # Some more help text.
-    services.getty.helpLine =
-      ''
-        The "nixos" and "root" accounts have empty passwords.
+    services.getty.helpLine = ''
+      The "nixos" and "root" accounts have empty passwords.
 
-        To log in over ssh you must set a password for either "nixos" or "root"
-        with `passwd` (prefix with `sudo` for "root"), or add your public key to
-        /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
+      To log in over ssh you must set a password for either "nixos" or "root"
+      with `passwd` (prefix with `sudo` for "root"), or add your public key to
+      /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
 
-        To set up a wireless connection, run `nmtui`.
-      ''
-      + optionalString config.services.xserver.enable ''
+      To set up a wireless connection, run `nmtui`.
+    ''
+    + optionalString config.services.xserver.enable ''
 
-        Type `sudo systemctl start display-manager' to
-        start the graphical user interface.
-      '';
+      Type `sudo systemctl start display-manager' to
+      start the graphical user interface.
+    '';
 
     # We run sshd by default. Login is only possible after adding a
     # password via "passwd" or by adding a ssh key to ~/.ssh/authorized_keys.
@@ -103,11 +102,10 @@ with lib;
     boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
     # To speed up installation a little bit, include the complete
-    # stdenv in the Nix store on the CD.
+    # stdenvNoCC in the Nix store on the CD.
     system.extraDependencies =
       with pkgs;
       [
-        stdenv
         stdenvNoCC # for runCommand
         busybox
         # For boot.initrd.systemd

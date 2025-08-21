@@ -33,7 +33,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-Wno-dev"
-  ] ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
+  ]
+  ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 
   meta = {
     description = "Modern re-implementation of the classic DOS game Duke Nukem II";

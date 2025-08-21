@@ -4,6 +4,7 @@
   lib,
   acl,
   nix-update-script,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,8 +18,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-TI9lveFJsb/OgGQRiPW5iuatB8dsc7yxBs1rb148nEY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   checkInputs = [ acl ];
 
@@ -32,6 +34,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "test_no_xattr"
     "test_no_perms"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd xcp \
+      --bash completions/xcp.bash \
+      --fish completions/xcp.fish \
+      --zsh completions/xcp.zsh
+  '';
 
   passthru.updateScript = nix-update-script { };
 

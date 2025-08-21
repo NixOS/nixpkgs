@@ -95,6 +95,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
     license = licenses.gpl2Only;
+    mainProgram = "solaar";
     maintainers = with maintainers; [
       spinus
       ysndr

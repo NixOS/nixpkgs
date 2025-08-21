@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.2.4";
+  version = "6.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = "rstcheck";
     tag = "v${version}";
-    hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
+    hash = "sha256-ajevEHCsPvr5e4K8I5AfxFZ+Vo1quaGUKFIEB9Wlobc=";
   };
 
   build-system = [

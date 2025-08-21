@@ -1,7 +1,7 @@
 {
   buildPgrxExtension,
   cargo-pgrx_0_12_0_alpha_1,
-  clang_16,
+  clang,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -10,20 +10,9 @@
   postgresql,
   postgresqlTestExtension,
   replaceVars,
-  rustPlatform,
 }:
 
-let
-  # Upstream only works with clang 16, so we're pinning it here to
-  # avoid future incompatibility.
-  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 2
-  clang = clang_16;
-  rustPlatform' = rustPlatform // {
-    bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
-  };
-
-in
-(buildPgrxExtension.override { rustPlatform = rustPlatform'; }) (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
 
@@ -47,7 +36,6 @@ in
     hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8otJ1uqGrCmlxAqvfAL3OjhBI4I6dAu6EoajstO46Sw=";
 
   # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL

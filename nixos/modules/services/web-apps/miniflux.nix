@@ -123,12 +123,13 @@ in
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
       requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
-      after =
-        [ "network.target" ]
-        ++ lib.optionals cfg.createDatabaseLocally [
-          "postgresql.target"
-          "miniflux-dbsetup.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optionals cfg.createDatabaseLocally [
+        "postgresql.target"
+        "miniflux-dbsetup.service"
+      ];
 
       serviceConfig = {
         Type = "notify";

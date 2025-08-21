@@ -9,18 +9,22 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pirate-get";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-VtnVyJqrdGXTqcyzpHCOMUI9G7/BkXzihDrBrsxl7Eg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     colorama
     veryprettytable
     pyperclip
   ];
+
+  pythonImportsCheck = [ "pirate" ];
 
   meta = with lib; {
     description = "Command line interface for The Pirate Bay";

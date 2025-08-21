@@ -41,21 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mr79FV/LHkoY3vX9B5yv95IQIJQ9akwfslKndKYmwCo=";
   };
 
-  nativeBuildInputs =
-    [
-      yarn
-      fixup-yarn-lock
-      makeShellWrapper
-      yarnBuildHook
-      (python3.withPackages (ps: with ps; [ packaging ]))
-      pkg-config
-      nodejs
-      nodePackages.node-gyp-build
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      libtool
-    ];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+    makeShellWrapper
+    yarnBuildHook
+    (python3.withPackages (ps: with ps; [ packaging ]))
+    pkg-config
+    nodejs
+    nodePackages.node-gyp-build
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    libtool
+  ];
 
   buildInputs = [
     libsecret

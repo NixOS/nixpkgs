@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2

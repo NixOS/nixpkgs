@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mpi-pytest";
-  version = "2025.6.0";
+  version = "2025.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "mpi-pytest";
     tag = "v${version}";
-    hash = "sha256-hZPTVqVaCd75UMoUQTZXrmnFM6cpMp9ejKqct3lN0Bo=";
+    hash = "sha256-TZj1hObMVzYfAUC0UjXMvUThbKCNdiB1FMSA0AHjZ9s=";
   };
 
   build-system = [

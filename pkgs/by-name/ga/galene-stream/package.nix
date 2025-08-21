@@ -43,16 +43,15 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  buildInputs =
-    [
-      libnice # libgstnice.so
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly # libgstx264.so
-    ]);
+  buildInputs = [
+    libnice # libgstnice.so
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly # libgstx264.so
+  ]);
 
   dependencies = with python3Packages; [
     pygobject3

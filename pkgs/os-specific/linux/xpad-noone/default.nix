@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttr: {
   src = fetchFromGitHub {
     owner = "medusalix";
     repo = finalAttr.pname;
-    rev = "c3d1610";
+    tag = "c3d1610";
     hash = "sha256-jDRyvbU9GsnM1ARTuwnoD7ZXlfBxne13UpSKRo7HHSY=";
   };
 

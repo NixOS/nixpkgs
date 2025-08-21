@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "15.8.0";
+  version = "15.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "hhursev";
     repo = "recipe-scrapers";
     tag = version;
-    hash = "sha256-G2FKv4HZ6Kf4u/EDflkYqiY1uelWBuIE+UrqeCp2XL8=";
+    hash = "sha256-pbcIAr0yKGSWfuVMsOfriUUW1dhlvjX2JfDPJ8akldg=";
   };
 
   build-system = [ setuptools ];

@@ -117,9 +117,7 @@ top-level while luarocks installs them in various subfolders by default.
 For instance:
 ```nix
 {
-  rtp-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.rtp-nvim;
-  };
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rtp-nvim; };
 }
 ```
 To update these packages, you should use the lua updater rather than vim's.

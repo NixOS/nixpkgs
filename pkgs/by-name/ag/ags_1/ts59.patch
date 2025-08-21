@@ -1,0 +1,19 @@
+diff --git a/src/service/greetd.ts b/src/service/greetd.ts
+index 10a475e..621a427 100644
+--- a/src/service/greetd.ts
++++ b/src/service/greetd.ts
+@@ -101,8 +101,12 @@ export class Greetd extends Service {
+             ostream.put_int32(json.length, null);
+             ostream.put_string(json, null);
+ 
+-            const data = await istream.read_bytes_async(4, GLib.PRIORITY_DEFAULT, null);
+-            const length = new Uint32Array(data.get_data()?.buffer || [0])[0];
++            const data = (
++                await istream.read_bytes_async(4, GLib.PRIORITY_DEFAULT, null)
++            ).get_data();
++            const length = data
++                ? new DataView(data.buffer, data.byteOffset, data.byteLength).getUint32(0, true)
++                : 0;
+             const res = await istream.read_bytes_async(length, GLib.PRIORITY_DEFAULT, null);
+             return JSON.parse(this._decoder.decode(res.get_data()!)) as Response;
+         } finally {

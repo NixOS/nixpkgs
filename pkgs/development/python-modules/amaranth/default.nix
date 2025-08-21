@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  version = "0.5.6";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth";
     tag = "v${version}";
-    hash = "sha256-fc9mCq7AgxjlR/+KKebV1GGlF5NXN/1Vee5ZLwkNjow=";
+    hash = "sha256-E/PJrvBmlS39KgzDz9sArq4BXwk/JmIMtdxL7MdrWlc=";
   };
 
   postPatch = ''
@@ -41,14 +41,13 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      jschon
-      jinja2
-      pyvcd
-    ]
-    ++ lib.optional (pythonOlder "3.9") importlib-resources
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  dependencies = [
+    jschon
+    jinja2
+    pyvcd
+  ]
+  ++ lib.optional (pythonOlder "3.9") importlib-resources
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook

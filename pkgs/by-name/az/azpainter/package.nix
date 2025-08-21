@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     shared-mime-info # for update-mime-info
     ninja
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     libX11
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preBuild = ''
     cd build

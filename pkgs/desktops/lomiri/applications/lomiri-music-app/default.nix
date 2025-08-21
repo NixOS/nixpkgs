@@ -47,27 +47,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtdeclarative
+  buildInputs = [
+    qtbase
+    qtdeclarative
 
-      # QML
-      libusermetrics
-      lomiri-content-hub
-      lomiri-thumbnailer
-      lomiri-ui-toolkit
-      mediascanner2
-      qtmultimedia
-      qtsystems
-    ]
-    # QtMultimedia playback support
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # QML
+    libusermetrics
+    lomiri-content-hub
+    lomiri-thumbnailer
+    lomiri-ui-toolkit
+    mediascanner2
+    qtmultimedia
+    qtsystems
+  ]
+  # QtMultimedia playback support
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   dontWrapGApps = true;
 

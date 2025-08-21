@@ -1,13 +1,13 @@
 {
   buildFHSEnv,
-  electron_33,
+  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
   fetchurl,
   git,
   lib,
   makeDesktopItem,
-  nodejs_20,
+  nodejs,
   stdenvNoCC,
   util-linux,
   yarnBuildHook,
@@ -17,16 +17,16 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.36.5";
-  electron = electron_33;
-  nodejs = nodejs_20;
+  version = "0.36.5-unstable-2025-07-17";
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
-    tag = "v${version}";
-    hash = "sha256-Fo7rXnufJ26WijnplWswdeCGJitkvTDboOggUfrz1Hw=";
+    rev = "0f3cd3007a336562a3c49ce95469022e6a729121"; # a revision that uses electron_36 instead of electron_33
+    hash = "sha256-1q8bDpEPrQNbngrGZj6/AQFFo06ED6uJ4Z/XVg6KNXw=";
   };
+
+  electron = electron_36;
 
   # As of https://github.com/electron/fiddle/pull/1316 this is fetched
   # from the network and has no stable hash.  Grab an old version from
@@ -42,7 +42,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-eZ/g2cP6M0zWhF14go0sIC+UuzTo9Gl4KsPBGzJU3FQ=";
+      hash = "sha256-n6rzi4VohVaX+IIE1NITDsxXGyw0Z6Fx1WJb15YT9Sg=";
     };
 
     nativeBuildInputs = [

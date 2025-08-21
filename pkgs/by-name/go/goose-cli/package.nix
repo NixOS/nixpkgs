@@ -27,17 +27,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.30";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mhscs7yv3/FmJ/v1W0xcHya82ztrYGVULrtMyq4W4BY=";
+    hash = "sha256-xXQFhGwI5aZfRzJ17WXcpOHnaE1MW2S6uje8qSC3NU4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TNmeu0nQHTFnbe7CY5b58ysN6+iMD6yFTktr4gjKNY0=";
+  cargoHash = "sha256-b8u226CSW/85HoVuDYGc0cbCA61ZOsrngenZKMgY4us=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,34 +57,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  checkFlags =
-    [
-      # need dbus-daemon
-      "--skip=config::base::tests::test_multiple_secrets"
-      "--skip=config::base::tests::test_secret_management"
-      "--skip=config::base::tests::test_concurrent_extension_writes"
-      # Observer should be Some with both init project keys set
-      "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
-      "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-      # Lazy instance has previously been poisoned
-      "--skip=jetbrains::tests::test_capabilities"
-      "--skip=jetbrains::tests::test_router_creation"
-      "--skip=logging::tests::test_log_file_name::with_session_name_and_error_capture"
-      "--skip=logging::tests::test_log_file_name::with_session_name_without_error_capture"
-      "--skip=logging::tests::test_log_file_name::without_session_name"
-      "--skip=developer::tests::test_text_editor_str_replace"
-      # need API keys
-      "--skip=providers::factory::tests::test_create_lead_worker_provider"
-      "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
-      "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--skip=providers::gcpauth::tests::test_load_from_metadata_server"
-      "--skip=providers::oauth::tests::test_get_workspace_endpoints"
-      "--skip=tracing::langfuse_layer::tests::test_batch_manager_spawn_sender"
-      "--skip=tracing::langfuse_layer::tests::test_batch_send_partial_failure"
-      "--skip=tracing::langfuse_layer::tests::test_batch_send_success"
-    ];
+  checkFlags = [
+    # need dbus-daemon
+    "--skip=config::base::tests::test_multiple_secrets"
+    "--skip=config::base::tests::test_secret_management"
+    "--skip=config::base::tests::test_concurrent_extension_writes"
+    # Observer should be Some with both init project keys set
+    "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
+    "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
+    # Lazy instance has previously been poisoned
+    "--skip=jetbrains::tests::test_capabilities"
+    "--skip=jetbrains::tests::test_router_creation"
+    "--skip=logging::tests::test_log_file_name::with_session_name_and_error_capture"
+    "--skip=logging::tests::test_log_file_name::with_session_name_without_error_capture"
+    "--skip=logging::tests::test_log_file_name::without_session_name"
+    "--skip=developer::tests::test_text_editor_str_replace"
+    # need API keys
+    "--skip=providers::factory::tests::test_create_lead_worker_provider"
+    "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
+    "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
+    # need network access
+    "--skip=test_concurrent_access"
+    "--skip=test_model_not_in_openrouter"
+    "--skip=test_pricing_cache_performance"
+    "--skip=test_pricing_refresh"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_http_error"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_invalid_json"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_notification"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_id_handling"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_not_found"
+    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_successful_request"
+    "--skip=context_mgmt::auto_compact::tests::test_auto_compact_respects_config"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=providers::gcpauth::tests::test_load_from_metadata_server"
+    "--skip=providers::oauth::tests::test_get_workspace_endpoints"
+    "--skip=tracing::langfuse_layer::tests::test_batch_manager_spawn_sender"
+    "--skip=tracing::langfuse_layer::tests::test_batch_send_partial_failure"
+    "--skip=tracing::langfuse_layer::tests::test_batch_send_success"
+    "--skip=logging::tests::test_log_file_name_session_without_error_capture"
+    "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
+    "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
+    "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

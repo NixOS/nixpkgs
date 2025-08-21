@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     makeWrapper $out/share/workcraft $out/bin/workcraft \
       --set JAVA_HOME "${jre}" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp";
   '';
 
   meta = {

@@ -189,43 +189,42 @@ in
       # RuntimeError: Could not determine home directory.
       environment.HOME = dataDir;
 
-      preStart =
-        ''
-          # substitute the settings file by environment variables
-          # in this case read from EnvironmentFile
-          test -f '${settingsFile}' && rm -f '${settingsFile}'
-          old_umask=$(umask)
-          umask 0177
-          ${pkgs.envsubst}/bin/envsubst \
-            -o '${settingsFile}' \
-            -i '${settingsFileUnsubstituted}'
-          umask $old_umask
+      preStart = ''
+        # substitute the settings file by environment variables
+        # in this case read from EnvironmentFile
+        test -f '${settingsFile}' && rm -f '${settingsFile}'
+        old_umask=$(umask)
+        umask 0177
+        ${pkgs.envsubst}/bin/envsubst \
+          -o '${settingsFile}' \
+          -i '${settingsFileUnsubstituted}'
+        umask $old_umask
 
-          # generate the appservice's registration file if absent
-          if [ ! -f '${registrationFile}' ]; then
-            ${cfg.package}/bin/mautrix-telegram \
-              --generate-registration \
-              --config='${settingsFile}' \
-              --registration='${registrationFile}'
-          fi
+        # generate the appservice's registration file if absent
+        if [ ! -f '${registrationFile}' ]; then
+          ${cfg.package}/bin/mautrix-telegram \
+            --generate-registration \
+            --config='${settingsFile}' \
+            --registration='${registrationFile}'
+        fi
 
-          old_umask=$(umask)
-          umask 0177
-          # 1. Overwrite registration tokens in config
-          #    is set, set it as the login shared secret value for the configured
-          #    homeserver domain.
-          ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
-            | .[0].appservice.hs_token = .[1].hs_token
-            | .[0]' \
-            '${settingsFile}' '${registrationFile}' > '${settingsFile}.tmp'
-          mv '${settingsFile}.tmp' '${settingsFile}'
+        old_umask=$(umask)
+        umask 0177
+        # 1. Overwrite registration tokens in config
+        #    is set, set it as the login shared secret value for the configured
+        #    homeserver domain.
+        ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
+          | .[0].appservice.hs_token = .[1].hs_token
+          | .[0]' \
+          '${settingsFile}' '${registrationFile}' > '${settingsFile}.tmp'
+        mv '${settingsFile}.tmp' '${settingsFile}'
 
-          umask $old_umask
-        ''
-        + lib.optionalString (cfg.package ? alembic) ''
-          # run automatic database init and migration scripts
-          ${cfg.package.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
-        '';
+        umask $old_umask
+      ''
+      + lib.optionalString (cfg.package ? alembic) ''
+        # run automatic database init and migration scripts
+        ${cfg.package.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+      '';
 
       serviceConfig = {
         User = "mautrix-telegram";

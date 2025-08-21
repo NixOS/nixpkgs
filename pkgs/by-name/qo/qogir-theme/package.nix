@@ -32,13 +32,13 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
   stdenv.mkDerivation
   rec {
     inherit pname;
-    version = "2024-05-22";
+    version = "2025-08-17";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "qogir-theme";
       rev = version;
-      sha256 = "Q9DWBzaLZjwXsYRa/oDIrccypO3TCbSRXTkbXWRmm70=";
+      hash = "sha256-LS1BE2jR08/JW2+rixYhTmctAfK2yZVWIE4QnAX9PDQ=";
     };
 
     nativeBuildInputs = [

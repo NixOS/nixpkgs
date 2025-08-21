@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
   version = "1.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CSV9HOqVMHI/L+jyMTdaDyc6ACyGIkG/mmcyRza6EjQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     click
     click-default-group
     playwright

@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
@@ -44,24 +42,27 @@ buildPythonPackage rec {
     pytest-cov-stub
     streamlit
   ];
-  pytestFlagsArray = [ "skops" ];
+  enabledTestPaths = [ "skops" ];
   disabledTests = [
     # flaky
     "test_base_case_works_as_expected"
   ];
-  disabledTestPaths =
-    [
-      # try to download data from Huggingface Hub:
-      "skops/hub_utils/tests"
-      "skops/card/tests"
-      # minor output formatting issue
-      "skops/card/_model_card.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Segfaults on darwin
-      "skops/io/tests/test_persist.py"
-    ];
-
+  disabledTestPaths = [
+    # try to download data from Huggingface Hub:
+    "skops/hub_utils/tests"
+    "skops/card/tests"
+    # minor output formatting issue
+    "skops/card/_model_card.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Segfaults on darwin
+    "skops/io/tests/test_persist.py"
+  ];
+  pytestFlags = [
+    # Warning from scipy.optimize in skops/io/tests/test_persist.py::test_dump_and_load_with_file_wrapper
+    # https://github.com/skops-dev/skops/issues/479
+    "-Wignore::DeprecationWarning"
+  ];
   pythonImportsCheck = [ "skops" ];
 
   meta = {

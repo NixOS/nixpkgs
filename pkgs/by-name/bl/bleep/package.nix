@@ -36,7 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ zlib ];
 

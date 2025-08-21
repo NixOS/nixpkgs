@@ -145,8 +145,10 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
         entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
 
     if bootspec.initrdSecrets:
-        initrd_secrets_path = str(limine_install_dir) + '/kernels/' + os.path.basename(bootspec.toplevel) + '-secrets'
-        os.makedirs(initrd_secrets_path)
+        base_path = str(limine_install_dir) + '/kernels/'
+        initrd_secrets_path = base_path + os.path.basename(bootspec.toplevel) + '-secrets'
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
 
         old_umask = os.umask(0o137)
         initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(bootspec.toplevel) + '-secrets')
@@ -274,7 +276,7 @@ def install_bootloader() -> None:
     profiles = [('system', get_gens())]
 
     for profile in get_profiles():
-        profiles += (profile, get_gens(profile))
+        profiles += [(profile, get_gens(profile))]
 
     timeout = config('timeout')
     editor_enabled = 'yes' if config('enableEditor') else 'no'

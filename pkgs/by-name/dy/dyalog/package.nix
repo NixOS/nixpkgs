@@ -76,86 +76,83 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc) # Used by Conga and .NET Bridge
-      ncurses5 # Used by the dyalog binary to correctly display in the terminal
-    ]
-    ++ lib.optionals htmlRendererSupport [
-      alsa-lib
-      gtk3
-      libdrm
-      libGL
-      libgbm
-      nss
-    ]
-    ++ lib.optional sqaplSupport unixODBC;
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc) # Used by Conga and .NET Bridge
+    ncurses5 # Used by the dyalog binary to correctly display in the terminal
+  ]
+  ++ lib.optionals htmlRendererSupport [
+    alsa-lib
+    gtk3
+    libdrm
+    libGL
+    libgbm
+    nss
+  ]
+  ++ lib.optional sqaplSupport unixODBC;
 
   # See which files are not really important: `https://github.com/Dyalog/DyalogDocker/blob/master/rmfiles.sh`
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p ${dyalogHome}
-      cp -r aplfmt aplkeys apltrans Experimental fonts Library PublicCACerts SALT StartupSession ${dyalogHome}
-      cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
+    mkdir -p ${dyalogHome}
+    cp -r aplfmt aplkeys apltrans Experimental fonts Library PublicCACerts SALT StartupSession ${dyalogHome}
+    cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
-      mkdir ${dyalogHome}/lib
-      cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
+    mkdir ${dyalogHome}/lib
+    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
 
-      # Only keep the most useful workspaces
-      mkdir ${dyalogHome}/ws
-      cp ws/{conga,dfns,isolate,loaddata,salt,sharpplot,util}.dws ${dyalogHome}/ws
-    ''
-    + lib.optionalString dotnetSupport ''
-      cp libnethost.so Dyalog.Net.Bridge.* Lokad.ILPack.dll ${dyalogHome}
-    ''
-    + lib.optionalString htmlRendererSupport ''
-      cp -r locales ${dyalogHome}
-      cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
-      cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
-      cp lib/htmlrenderer.so ${dyalogHome}/lib
-    ''
-    + lib.optionalString sqaplSupport ''
-      cp lib/cxdya65u64u.so ${dyalogHome}/lib
-      cp ws/sqapl.dws ${dyalogHome}/ws
-      cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
-    ''
-    + lib.optionalString zeroFootprintRideSupport ''
-      cp -r RIDEapp ${dyalogHome}
-    ''
-    + lib.optionalString enableDocs ''
-      mkdir -p $doc/share/doc/dyalog
-      cp -r help/* $doc/share/doc/dyalog
-      ln -s $doc/share/doc/dyalog ${dyalogHome}/help
-    ''
-    + ''
-      install -Dm644 dyalog.svg -t $out/share/icons/hicolor/scalable/apps
-      install -Dm644 dyalog.desktop -t $out/share/applications
+    # Only keep the most useful workspaces
+    mkdir ${dyalogHome}/ws
+    cp ws/{conga,dfns,isolate,loaddata,salt,sharpplot,util}.dws ${dyalogHome}/ws
+  ''
+  + lib.optionalString dotnetSupport ''
+    cp libnethost.so Dyalog.Net.Bridge.* Lokad.ILPack.dll ${dyalogHome}
+  ''
+  + lib.optionalString htmlRendererSupport ''
+    cp -r locales ${dyalogHome}
+    cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
+    cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp lib/htmlrenderer.so ${dyalogHome}/lib
+  ''
+  + lib.optionalString sqaplSupport ''
+    cp lib/cxdya65u64u.so ${dyalogHome}/lib
+    cp ws/sqapl.dws ${dyalogHome}/ws
+    cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
+  ''
+  + lib.optionalString zeroFootprintRideSupport ''
+    cp -r RIDEapp ${dyalogHome}
+  ''
+  + lib.optionalString enableDocs ''
+    mkdir -p $doc/share/doc/dyalog
+    cp -r help/* $doc/share/doc/dyalog
+    ln -s $doc/share/doc/dyalog ${dyalogHome}/help
+  ''
+  + ''
+    install -Dm644 dyalog.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm644 dyalog.desktop -t $out/share/applications
 
-      for exec in "dyalog" "mapl"; do
-          makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
-      done
+    for exec in "dyalog" "mapl"; do
+        makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
+    done
 
-      install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
-      substituteInPlace $out/bin/dyalogscript \
-          --subst-var-by installdir ${dyalogHome} \
-          --subst-var-by scriptdir $out/bin
+    install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
+    substituteInPlace $out/bin/dyalogscript \
+        --subst-var-by installdir ${dyalogHome} \
+        --subst-var-by scriptdir $out/bin
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   # Register some undeclared runtime dependencies to be patched in by autoPatchelfHook
   # Note: dyalog.rt is used internally to run child APL processes in
-  preFixup =
-    ''
-      for exec in "dyalog" "dyalog.rt"; do
-          patchelf ${dyalogHome}/$exec --add-needed libncurses.so
-      done
-    ''
-    + lib.optionalString htmlRendererSupport ''
-      patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
-    '';
+  preFixup = ''
+    for exec in "dyalog" "dyalog.rt"; do
+        patchelf ${dyalogHome}/$exec --add-needed libncurses.so
+    done
+  ''
+  + lib.optionalString htmlRendererSupport ''
+    patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
+  '';
 
   meta = {
     changelog = "https://dyalog.com/dyalog/dyalog-versions/${

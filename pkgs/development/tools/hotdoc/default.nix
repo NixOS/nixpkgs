@@ -89,26 +89,28 @@ buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
-  pytestFlagsArray = [
-    # Executing hotdoc exits with code 1
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  pytestFlags = [
     # Run the tests by package instead of current dir
     "--pyargs"
     "hotdoc"
   ];
 
-  disabledTests =
-    [
-      # Test does not correctly handle path normalization for test comparison
-      "test_cli_overrides"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
-      "test_index"
-    ];
+  disabledTestPaths = [
+    # Executing hotdoc exits with code 1
+    "tests/test_hotdoc.py::TestHotdoc::test_basic"
+    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  ];
+
+  disabledTests = [
+    # Test does not correctly handle path normalization for test comparison
+    "test_cli_overrides"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+    "test_index"
+  ];
 
   # Hardcode libclang paths
   postPatch = ''

@@ -57,7 +57,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "fnllm" ];
 
@@ -79,7 +80,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A function-based LLM protocol and wrapper";
+    description = "Function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

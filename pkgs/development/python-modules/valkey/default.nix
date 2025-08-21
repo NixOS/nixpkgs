@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "valkey";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
     tag = "v${version}";
-    hash = "sha256-TaAkifgasirA72OSO+up0+1EUhCENKba7vPIJxhTkh8=";
+    hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
 
   build-system = [ setuptools ];
@@ -73,23 +73,26 @@ buildPythonPackage rec {
     redisTestHook
     ujson
     uvloop
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
+  disabledTestMarks = [
+    "onlycluster"
+    "ssl"
+  ];
 
-  disabledTests =
-    [
-      # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
-      "test_get_from_cache"
-      "test_cache_decode_response"
-      # Expects another valkey instance on port 6380 *shrug*
-      "test_psync"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      #  OSError: AF_UNIX path too long
-      "test_uds_connect"
-      "test_network_connection_failure"
-    ];
+  disabledTests = [
+    # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
+    "test_get_from_cache"
+    "test_cache_decode_response"
+    # Expects another valkey instance on port 6380 *shrug*
+    "test_psync"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    #  OSError: AF_UNIX path too long
+    "test_uds_connect"
+    "test_network_connection_failure"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: Can't get local object 'TestMultiprocessing.test_valkey_client.<locals>.target'

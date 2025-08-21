@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teensy-cmake-macros";
-  version = "unstable-2023-04-15";
+  version = "0-unstable-2023-04-15";
 
   src = fetchFromGitHub {
     owner = "newdigate";

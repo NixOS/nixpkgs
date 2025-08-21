@@ -11,14 +11,12 @@
   re,
   perl,
   ncurses,
-  ppxlib,
   ppx_deriving,
-  ppxlib_0_15,
   ppx_deriving_0_15,
   coqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
-      "2.0.7"
+      "3.0.1"
     else if lib.versionAtLeast ocaml.version "4.08" then
       "1.20.0"
     else
@@ -34,6 +32,7 @@ in
 
 let
   fetched = coqPackages.metaFetch ({
+    release."3.0.1".sha256 = "sha256-r4B0xn6UCVslVW4dHiqq8NBMGfNz44kZy48KDWeGquc=";
     release."2.0.7".sha256 = "sha256-gCM+vZK6vWlhSO1VMjiWHse23mvxVwRarhxwkIQK7e0=";
     release."2.0.6".sha256 = "sha256-tRUYXQZ0VXrjIZBZ1skdzieUsww4rSNEe5ik+iKpk3U=";
     release."2.0.5".sha256 = "sha256-cHgERFqrfSg5WtUX3UxR6L+QkzS7+t6n4V+wweiEacc=";
@@ -69,32 +68,31 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.07";
 
-  nativeBuildInputs =
-    [ perl ]
-    ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
-    ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  nativeBuildInputs = [
+    perl
+  ]
+  ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
   buildInputs = [
     ncurses
-  ] ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
 
-  propagatedBuildInputs =
-    [
-      re
-      stdlib-shims
-    ]
-    ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
-    ++ (
-      if lib.versionAtLeast version "1.13" || version == "dev" then
-        [
-          ppxlib
-          ppx_deriving
-        ]
-      else
-        [
-          ppxlib_0_15
-          ppx_deriving_0_15
-        ]
-    );
+  propagatedBuildInputs = [
+    re
+    stdlib-shims
+  ]
+  ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
+  ++ (
+    if lib.versionAtLeast version "1.13" || version == "dev" then
+      [
+        ppx_deriving
+      ]
+    else
+      [
+        ppx_deriving_0_15
+      ]
+  );
 
   meta = with lib; {
     description = "Embeddable λProlog Interpreter";
@@ -103,11 +101,10 @@ buildDunePackage {
     homepage = "https://github.com/LPCIC/elpi";
   };
 
-  postPatch =
-    ''
-      substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
-    ''
-    + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
-      substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
-    '';
+  postPatch = ''
+    substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
+  ''
+  + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
+    substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
+  '';
 }
