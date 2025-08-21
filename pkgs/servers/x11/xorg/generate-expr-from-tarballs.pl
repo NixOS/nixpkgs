@@ -329,6 +329,7 @@ print OUT <<EOF;
   xcb-proto,
   xcmsdb,
   xcursorgen,
+  xcursor-themes,
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
@@ -397,6 +398,7 @@ self: with self; {
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
+  xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;

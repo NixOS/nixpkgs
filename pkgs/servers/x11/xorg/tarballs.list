@@ -54,7 +54,6 @@ mirror://xorg/individual/app/xstdcmap-1.0.5.tar.xz
 mirror://xorg/individual/app/xtrap-1.0.3.tar.bz2
 mirror://xorg/individual/app/xvinfo-1.1.5.tar.xz
 mirror://xorg/individual/app/xwd-1.0.9.tar.xz
-mirror://xorg/individual/data/xcursor-themes-1.0.7.tar.xz
 mirror://xorg/individual/driver/xf86-input-evdev-2.11.0.tar.xz
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.4.tar.xz
 mirror://xorg/individual/driver/xf86-input-keyboard-2.1.0.tar.xz

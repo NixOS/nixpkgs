@@ -1027,12 +1027,6 @@ self: super:
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
 
-  xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ xorg.xcursorgen ];
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-    configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
-  });
-
   xinit =
     (super.xinit.override {
       stdenv = if isDarwin then clangStdenv else stdenv;
