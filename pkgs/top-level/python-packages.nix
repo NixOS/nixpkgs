@@ -16131,6 +16131,8 @@ self: super: with self; {
 
   sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
 
+  saiph = callPackage ../development/python-modules/saiph { };
+
   salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
