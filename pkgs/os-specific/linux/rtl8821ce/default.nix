@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
-  version = "0-unstable-2025-05-31";
+  version = "0-unstable-2025-08-20";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "66c015af7738039a2045b6da755875e126d3fe73";
-    hash = "sha256-JU8ge2QpoR6nJe5G93iTEP7WOU6tLb4NJ1QrkEYUXRA=";
+    rev = "5df613d114d1ca6072aeaf9f64666029896eed61";
+    hash = "sha256-JEaMfpu2F9Pcg7aLwKEUnRMMqC0Y0r1WRmHMCRba280=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ defelo ];
     broken =
       stdenv.hostPlatform.isAarch64
-      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened)
-      || kernel.kernelAtLeast "6.16";
+      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 })
