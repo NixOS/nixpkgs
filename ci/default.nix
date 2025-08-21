@@ -134,7 +134,9 @@ rec {
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { inherit pkgs; });
   manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
-  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix { };
+  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
+    nix = pkgs.nixVersions.latest;
+  };
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
