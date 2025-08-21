@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -27,6 +28,9 @@ buildGoModule (finalAttrs: {
     "-X"
     "main.versionString=v${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     installManPage ./moor.1
