@@ -7,6 +7,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  testers,
   xz,
   zstd,
 }:
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     tests = {
       hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
 
     updateScript = nix-update-script {
