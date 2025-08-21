@@ -14795,8 +14795,6 @@ with pkgs;
     inherit (perlPackages) perl TextFormat;
   };
 
-  obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
-
   raxml-mpi = raxml.override { useMpi = true; };
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
