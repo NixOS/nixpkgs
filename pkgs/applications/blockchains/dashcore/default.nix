@@ -6,7 +6,7 @@
 , boost
 , libevent
 , db48
-, autoSignDarwinBinariesHook,
+, autoSignDarwinBinariesHook
 , sqlite
 , zeromq
 , zlib
