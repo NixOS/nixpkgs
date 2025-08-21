@@ -385,6 +385,7 @@ print OUT <<EOF;
   xrandr,
   xrefresh,
   xtrans,
+  xvinfo,
   xwininfo,
   xwud,
 }:
@@ -423,6 +424,7 @@ self: with self; {
     xrandr
     xrefresh
     xtrans
+    xvinfo
     xwininfo
     xwud
     ;
