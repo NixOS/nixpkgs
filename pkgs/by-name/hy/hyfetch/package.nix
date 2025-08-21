@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       yisuidenghua
       isabelroses
       nullcube
+      defelo
     ];
   };
 })
