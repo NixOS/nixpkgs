@@ -12,6 +12,7 @@
   iptables,
   gawk,
   util-linux,
+  nix-update-script,
 }:
 
 builtins.mapAttrs
@@ -46,6 +47,8 @@ builtins.mapAttrs
         postInstall = ''
           mv $out/bin/{${attrs.modRoot},${pname}}
         '';
+
+        passthru.updateScript = nix-update-script { };
 
         meta = {
           description = "Official IVPN Desktop app";
