@@ -14813,8 +14813,6 @@ with pkgs;
 
   ### SCIENCE/MACHINE LEARNING
 
-  sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
-
   streamlit = with python3Packages; toPythonApplication streamlit;
 
   ### SCIENCE/MATH
