@@ -5,6 +5,7 @@
   installShellFiles,
   makeBinaryWrapper,
   pciutils,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,6 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "out"
     "man"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "PATH" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Neofetch with LGBTQ+ pride flags";
