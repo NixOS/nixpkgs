@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libtatsu";
-    rev = version;
-    hash = "sha256-RrMqxqEuncPmJvX7D2L1zcKc/PU5TpjWMu7EyxmomjQ=";
+    rev = "ec295dd6585a900207125d41fab8535ce0c8d3dc";
+    hash = "sha256-vf4xBTTGDJCTj4TMLOhojjAfzSbkx+ogGBnf+UeumG0=";
   };
 
   nativeBuildInputs = [
