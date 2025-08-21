@@ -2,11 +2,12 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   ncurses,
   bashNonInteractive,
   python3,
   rustpython,
+  ps,
   nix-update-script,
 }:
 
@@ -49,14 +50,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  propagatedUserEnvPkgs = [
+    bashNonInteractive
+    rustpython
+    ncurses
+    ps
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir --parents $out/lib
     cp --recursive {*.py,apply-colors.sh,installs,themes} $out/lib
-    install -Dm755 gogh.sh $out/bin/${finalAttrs.meta.mainProgram}
+    install -D gogh.sh $out/bin/${finalAttrs.meta.mainProgram}
 
     runHook postInstall
   '';
@@ -64,9 +72,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --set SCRIPT_PATH "$out/lib" \
-      --prefix PATH : "${lib.getBin bashNonInteractive}/bin" \
-      --prefix PATH : "${lib.getBin rustpython}/bin" \
-      --prefix PATH : "${lib.getBin ncurses}/bin" \
+      --suffix PATH : "${lib.makeBinPath finalAttrs.propagatedUserEnvPkgs}" \
       --prefix PATH : "${pythonEnv}/bin" \
       --prefix PYTHONPATH : "${pythonEnv}/${pythonEnv.sitePackages}"
   '';

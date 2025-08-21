@@ -18,6 +18,7 @@
   # tests
   aiosqlite,
   dataclasses-json,
+  fakeredis,
   grandalf,
   httpx,
   langgraph-checkpoint-postgres,
@@ -32,6 +33,7 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
+  redisTestHook,
 
   # passthru
   nix-update-script,
@@ -78,6 +80,9 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
     postgresqlTestHook
+    redisTestHook
+    fakeredis
+    langgraph-checkpoint
   ];
 
   checkInputs = [
@@ -99,6 +104,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Requires `langgraph dev` to be running
+    "test_remote_graph_basic_invoke"
+    "test_remote_graph_stream_messages_tuple"
+
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
     "test_cancel_graph_astream_events_v2"
@@ -112,10 +121,6 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
-
-    # Requires `langgraph dev` to be running
-    "test_remote_graph_basic_invoke"
-    "test_remote_graph_stream_messages_tuple"
   ];
 
   disabledTestPaths = [

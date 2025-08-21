@@ -29,6 +29,16 @@ let
         # https://github.com/django-extensions/django-extensions/issues/1885
         doCheck = false;
       };
+
+      django-hierarkey = prev.django-hierarkey.overridePythonAttrs rec {
+        version = "1.2.1";
+        src = fetchFromGitHub {
+          owner = "raphaelm";
+          repo = "django-hierarkey";
+          tag = version;
+          hash = "sha256-GkCNVovo2bDCp6m2GBvusXsaBhcmJkPNu97OdtsYROY=";
+        };
+      };
     };
   };
 
@@ -99,7 +109,6 @@ python.pkgs.buildPythonApplication rec {
     "django-compressor"
     "django-csp"
     "django-filter"
-    "django-hierarkey"
     "django-i18nfield"
     "djangorestframework"
     "markdown"

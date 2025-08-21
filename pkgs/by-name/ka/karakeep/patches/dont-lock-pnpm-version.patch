@@ -1,6 +1,6 @@
-The Hoarder project uses a very specific version of pnpm (9.0.0-alpha.8) and
-will fail to build with other pnpm versions. Instead of adding this pnpm
-version to nixpkgs, we override this requirement and use the latest v9 release.
+Karakeep uses a specific version of pnpm and will fail to build with other pnpm
+versions. Instead of adding this pnpm version to nixpkgs, we override this
+requirement.
 
 ---
 --- a/package.json
@@ -9,16 +9,8 @@ version to nixpkgs, we override this requirement and use the latest v9 release.
      "turbo": "^2.1.2"
    },
    "prettier": "@karakeep/prettier-config",
--  "packageManager": "pnpm@9.0.0-alpha.8+sha256.a433a59569b00389a951352956faf25d1fdf43b568213fbde591c36274d4bc30",
+-  "packageManager": "pnpm@9.15.9",
 +  "packageManager": "pnpm",
    "pnpm": {
      "patchedDependencies": {
        "xcode@3.0.1": "patches/xcode@3.0.1.patch"
---- a/pnpm-lock.yaml
-+++ b/pnpm-lock.yaml
-@@ -1,4 +1,4 @@
--lockfileVersion: '7.0'
-+lockfileVersion: '9.0'
- 
- settings:
-   autoInstallPeers: true
