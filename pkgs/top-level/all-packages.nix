@@ -16026,10 +16026,6 @@ with pkgs;
 
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
-  tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
-
-  tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
-
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
