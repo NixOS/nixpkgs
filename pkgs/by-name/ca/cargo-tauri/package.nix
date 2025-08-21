@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
+  bzip2,
   callPackage,
   rustPlatform,
   fetchFromGitHub,
-  gtk4,
   nix-update-script,
-  openssl,
   pkg-config,
-  webkitgtk_4_1,
+  xz,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,18 +24,26 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nkY1ydc2VewRwY+B5nR68mz8Ff3FK1KoHE4dLzNtPkY=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gtk4
-    webkitgtk_4_1
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+    pkg-config
   ];
+
+  buildInputs =
+    # Required for tauri-macos-sign and RPM support in tauri-bundler
+    lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+      bzip2
+      xz
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      zstd
+    ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
   cargoTestFlags = cargoBuildFlags;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   passthru = {
     # See ./doc/hooks/tauri.section.md
