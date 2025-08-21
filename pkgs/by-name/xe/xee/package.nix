@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xee";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "Paligo";
     repo = "xee";
     tag = "xee-v${finalAttrs.version}";
-    hash = "sha256-l5g2YZ4lNu+CLyya0FavDEqbJayaTXGrB8fYCr3fj0s=";
+    hash = "sha256-AU1x2Y2oDaUi4XliOf3GxJCwPv/OMTTUE2p/SOJtM2k=";
   };
 
-  cargoHash = "sha256-Ora6VwYLDyFI4iA4FkygGsup8I4OvK0kkLvHs4F/YhY=";
+  cargoHash = "sha256-30OXowgIVSXMFEZVM74kwU8mdDuXVngsISyVQ0MB+VQ=";
 
   cargoBuildFlags = [
     "--package"
