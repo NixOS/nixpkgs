@@ -6,12 +6,12 @@
 }:
 
 buildGoModule rec {
-  pname = "moar";
+  pname = "moor";
   version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "walles";
-    repo = "moar";
+    repo = "moor";
     rev = "v${version}";
     hash = "sha256-+06cup9iG+iMyluQPzUQ7vrnFHoeU4KNHGra3AsRRw0=";
   };
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Nice-to-use pager for humans";
-    homepage = "https://github.com/walles/moar";
+    homepage = "https://github.com/walles/moor";
     license = licenses.bsd2WithViews;
     mainProgram = "moar";
     maintainers = with maintainers; [ foo-dogsquared ];
