@@ -1,23 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pysnooper";
   version = "1.2.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "PySnooper";
-    hash = "sha256-H6FCVESnr0UQiq7YYLXKi2KyW7olsLA3wFm6NT2PHnQ=";
+  src = fetchFromGitHub {
+    owner = "cool-RR";
+    repo = "PySnooper";
+    tag = version;
+    hash = "sha256-+Cjqi0xkWO4QVAZymmcper4dal9pNWbpPgPY4UzbXfA=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
