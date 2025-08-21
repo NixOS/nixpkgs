@@ -54,16 +54,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized pool for Monero mining";
     homepage = "https://github.com/SChernykh/p2pool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       ratsclub
       JacoMalan1
     ];
     mainProgram = "p2pool";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
