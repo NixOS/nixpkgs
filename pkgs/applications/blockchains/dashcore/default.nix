@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, boost
-, libevent
-, db48
-, autoSignDarwinBinariesHook
-, sqlite
-, zeromq
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
-, protobuf
-, qrencode
-, python3
-, gmp
-, libbacktrace
-, copyDesktopItems
-, makeDesktopItem
-, util-linux
-, gitUpdater
-, withGui ? true
-, withWallet ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  libevent,
+  db48,
+  autoSignDarwinBinariesHook,
+  sqlite,
+  zeromq,
+  zlib,
+  miniupnpc,
+  qtbase ? null,
+  qttools ? null,
+  wrapQtAppsHook ? null,
+  protobuf,
+  qrencode,
+  python3,
+  gmp,
+  libbacktrace,
+  copyDesktopItems,
+  makeDesktopItem,
+  util-linux,
+  gitUpdater,
+  withGui ? true,
+  withWallet ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,11 +44,11 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     util-linux
-  ] 
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     wrapQtAppsHook
     copyDesktopItems
     qttools
@@ -61,10 +62,12 @@ stdenv.mkDerivation rec {
     protobuf
     gmp
     libbacktrace
-  ] ++ lib.optionals withWallet [
+  ]
+  ++ lib.optionals withWallet [
     db48
     sqlite
-  ] ++ lib.optionals withGui [
+  ]
+  ++ lib.optionals withGui [
     qtbase
     qttools
     qrencode
@@ -77,14 +80,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
-  ] ++ lib.optionals (!withWallet) [
+  ]
+  ++ lib.optionals (!withWallet) [
     "--disable-wallet"
-  ] ++ lib.optionals (!withGui) [
+  ]
+  ++ lib.optionals (!withGui) [
     "--without-gui"
   ];
 
   enableParallelBuilding = true;
-  
+
   # Qt tests require a display and fail in sandboxed builds
   doCheck = !withGui;
 
@@ -101,7 +106,10 @@ stdenv.mkDerivation rec {
       desktopName = "Dash Core";
       genericName = "Dash Core QT";
       comment = "Dash Core QT - Digital Cash";
-      categories = [ "Finance" "Network" ];
+      categories = [
+        "Finance"
+        "Network"
+      ];
       mimeTypes = [ "x-scheme-handler/dash" ];
     })
   ];
