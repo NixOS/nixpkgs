@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   bison,
   flex,
@@ -15,7 +15,7 @@ let
     + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
 in
 
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   pname = "spass";
   version = "${baseVersion}.${minorVersion}";
 
