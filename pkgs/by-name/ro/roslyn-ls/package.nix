@@ -8,6 +8,8 @@
   roslyn-ls,
   jq,
   writeText,
+  runCommand,
+  expect,
 }:
 let
   pname = "roslyn-ls";
@@ -48,7 +50,7 @@ let
   '';
 
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
   vsVersion = "2.87.26";
@@ -121,7 +123,43 @@ buildDotnetModule rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = roslyn-ls; };
+    tests =
+      let
+        with-sdk =
+          sdk:
+          runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+            {
+              nativeBuildInputs = [
+                finalAttrs.finalPackage
+                sdk
+                expect
+              ];
+              meta.timeout = 60;
+            }
+            ''
+              HOME=$TMPDIR
+              expect <<"EOF"
+                spawn ${meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
+                expect_before timeout {
+                  send_error "timeout!\n"
+                  exit 1
+                }
+                expect "Language server initialized"
+                send \x04
+                expect eof
+                catch wait result
+                exit [lindex $result 3]
+              EOF
+              touch $out
+            '';
+      in
+      {
+        # Make sure we can run with any supported SDK version, as well as without
+        with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
+        with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
+        no-sdk = with-sdk null;
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      };
     updateScript = ./update.sh;
   };
 
@@ -133,4 +171,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "Microsoft.CodeAnalysis.LanguageServer";
   };
-}
+})
