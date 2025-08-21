@@ -26,6 +26,7 @@ function classify(branch) {
   return {
     stable: (version ?? 'unstable') !== 'unstable',
     type: typeConfig[prefix] ?? ['wip'],
+    version: version ?? 'unstable',
   }
 }
 
