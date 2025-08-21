@@ -6973,7 +6973,7 @@ with pkgs;
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_16) llvm libclang;
+    inherit (llvmPackages_18) llvm libclang;
   };
 
   inherit (nodePackages) csslint;
