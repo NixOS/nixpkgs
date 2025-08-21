@@ -15223,7 +15223,6 @@ with pkgs;
   };
 
   pari = callPackage ../applications/science/math/pari { };
-  gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
 
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
