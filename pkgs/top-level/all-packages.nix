@@ -15118,8 +15118,6 @@ with pkgs;
   };
   tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix { };
 
-  avy = callPackage ../applications/science/logic/avy { };
-
   ### SCIENCE / ENGINEERING
 
   ### SCIENCE / ELECTRONICS
