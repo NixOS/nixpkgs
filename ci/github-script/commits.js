@@ -1,4 +1,4 @@
-module.exports = async ({ github, context, core, dry }) => {
+module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { execFileSync } = require('node:child_process')
   const { classify } = require('../supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
@@ -16,7 +16,7 @@ module.exports = async ({ github, context, core, dry }) => {
           run_id: context.runId,
           per_page: 100,
         })
-      ).find(({ name }) => name.endsWith('Check / cherry-pick')).html_url +
+      ).find(({ name }) => name.endsWith('Check / commits')).html_url +
         '?pr=' +
         pull_number
 
@@ -137,10 +137,14 @@ module.exports = async ({ github, context, core, dry }) => {
       }
     }
 
-    const commits = await github.paginate(github.rest.pulls.listCommits, {
-      ...context.repo,
-      pull_number,
-    })
+    // For now we short-circuit the list of commits when cherryPicks should not be checked.
+    // This will not run any checks, but still trigger the "dismiss reviews" part below.
+    const commits = !cherryPicks
+      ? []
+      : await github.paginate(github.rest.pulls.listCommits, {
+          ...context.repo,
+          pull_number,
+        })
 
     const extracted = await Promise.all(commits.map(extract))
 
@@ -185,6 +189,8 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // Only create step summary below in case of warnings or errors.
     // Also clean up older reviews, when all checks are good now.
+    // An empty results array will always trigger this condition, which is helpful
+    // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
       if (!dry) {
         await Promise.all(
@@ -201,7 +207,7 @@ module.exports = async ({ github, context, core, dry }) => {
                   ...context.repo,
                   pull_number,
                   review_id: review.id,
-                  message: 'All cherry-picks are good now, thank you!',
+                  message: 'All good now, thank you!',
                 })
               }
               await github.graphql(
