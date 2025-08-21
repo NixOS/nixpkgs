@@ -16,13 +16,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.30";
+  version = "1.0.39";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     rev = "v${version}";
-    hash = "sha256-f1wYoBC0EbkvYNJHkVuoMukJZMY7eNjCIzJra7/hpLs=";
+    hash = "sha256-p9+8KlqADCq3WtFAvKpemhJCVnk3r4MRAQxjJEtI9bU=";
     fetchSubmodules = true;
   };
 
