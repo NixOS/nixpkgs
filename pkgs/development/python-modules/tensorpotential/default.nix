@@ -38,6 +38,7 @@ buildPythonPackage rec {
     license = {
       fullName = "Academic Software License";
       url = "https://github.com/ACEsuit/ACE.jl/blob/main/ASL.md";
+      free = false;
     };
     maintainers = with lib.maintainers; [ sh4k0 ];
   };
