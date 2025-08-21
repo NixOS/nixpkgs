@@ -20,5 +20,5 @@
     machine.succeed("curl -k --fail http://localhost:4444", timeout=10)
   '';
 
-  meta.maintainers = [ lib.maintainers.drupol ];
+  meta.maintainers = [ ];
 }

@@ -7095,10 +7095,12 @@ with pkgs;
 
   gradle_7-unwrapped = callPackage gradle-packages.gradle_7 { };
   gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
+  gradle_9-unwrapped = callPackage gradle-packages.gradle_9 { };
   gradle-unwrapped = gradle_8-unwrapped;
 
   gradle_7 = wrapGradle gradle_7-unwrapped null;
   gradle_8 = wrapGradle gradle_8-unwrapped null;
+  gradle_9 = wrapGradle gradle_9-unwrapped null;
   gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
   griffe = with python3Packages; toPythonApplication griffe;
