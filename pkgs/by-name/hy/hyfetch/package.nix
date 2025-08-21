@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  stdenv,
   makeBinaryWrapper,
   pciutils,
   versionCheckHook,
@@ -36,6 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage ./docs/hyfetch.1 ./docs/neowofetch.1
 
     install -m 755 neofetch $out/bin/neowofetch
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd hyfetch \
+      --bash <($out/bin/hyfetch --bpaf-complete-style-bash) \
+      --fish <($out/bin/hyfetch --bpaf-complete-style-fish) \
+      --zsh <($out/bin/hyfetch --bpaf-complete-style-zsh)
   '';
 
   postFixup = ''
