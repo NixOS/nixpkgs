@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ratsclub
       JacoMalan1
+      jk
     ];
     mainProgram = "p2pool";
     platforms = lib.platforms.all;
