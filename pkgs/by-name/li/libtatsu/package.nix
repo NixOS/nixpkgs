@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libtatsu";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nxm ];
   };
 }
 
