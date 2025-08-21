@@ -8,7 +8,7 @@
   meson,
   ninja,
 
-  jack,
+  jack2,
   alsa-lib,
   libopus,
   libsamplerate,
@@ -41,8 +41,8 @@ stdenv.mkDerivation (final: {
     ninja
   ];
   buildInputs = [
-    jack
-    libopus
+    jack2
+    (libopus.override { withCustomModes = true; })
     libsamplerate
     libsndfile
     readline
