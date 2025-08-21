@@ -346,11 +346,14 @@ let
 
   makePlasma5Throw =
     name:
-    throw ''
-      The libsForQt5.${name} package and the corresponding top-level ${name} alias have been removed.
-
-      Please explicitly use kdePackages.${name} for the latest Qt 6-based version.
-    '';
+    throw (
+      ''
+        The libsForQt5.${name} package and the corresponding top-level ${name} alias have been removed, as KDE Gear 5 and Plasma 5 have reached end of life.
+      ''
+      + lib.optionalString (kdePackages ? ${name}) ''
+        Please explicitly use kdePackages.${name} for the latest Qt 6-based version.
+      ''
+    );
 
   plasma5Throws = lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages;
 
