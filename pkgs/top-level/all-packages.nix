@@ -15371,9 +15371,7 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  helmfile = callPackage ../applications/networking/cluster/helmfile { };
-
-  helmfile-wrapped = callPackage ../applications/networking/cluster/helmfile {
+  helmfile-wrapped = helmfile.override {
     inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
   };
 
