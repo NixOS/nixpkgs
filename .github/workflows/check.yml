@@ -28,20 +28,6 @@ defaults:
     shell: bash
 
 jobs:
-  no-channel-base:
-    name: no channel base
-    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - run: |
-          cat <<EOF
-          The nixos-* and nixpkgs-* branches are pushed to by the channel
-          release script and should not be merged into directly.
-
-          Please target the equivalent release-* branch or master instead.
-          EOF
-          exit 1
-
   commits:
     permissions:
       pull-requests: write

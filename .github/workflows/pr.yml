@@ -23,6 +23,9 @@ permissions: {}
 jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      # wrong branch review comment
+      pull-requests: write
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       headBranch: ${{ steps.prepare.outputs.head }}
@@ -44,6 +47,7 @@ jobs:
               github,
               context,
               core,
+              dry: context.eventName == 'pull_request',
             })
 
   check:
