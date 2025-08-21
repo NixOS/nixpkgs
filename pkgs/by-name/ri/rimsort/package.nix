@@ -164,6 +164,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Open source mod manager for the video game RimWorld";
     homepage = "https://github.com/RimSort/RimSort";
