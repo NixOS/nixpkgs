@@ -14855,17 +14855,15 @@ with pkgs;
     rocmSupport = true;
   };
 
-  mathematica = callPackage ../applications/science/math/mathematica { };
-
-  mathematica-webdoc = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc = mathematica.override {
     webdoc = true;
   };
 
-  mathematica-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-cuda = mathematica.override {
     cudaSupport = true;
   };
 
-  mathematica-webdoc-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc-cuda = mathematica.override {
     webdoc = true;
     cudaSupport = true;
   };
