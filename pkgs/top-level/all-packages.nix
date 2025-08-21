@@ -15877,8 +15877,6 @@ with pkgs;
 
   bullet = callPackage ../development/libraries/bullet { };
 
-  bullet-roboschool = callPackage ../development/libraries/bullet/roboschool-fork.nix { };
-
   dart = callPackage ../development/compilers/dart { };
 
   pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
