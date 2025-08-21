@@ -35,11 +35,11 @@ assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.8";
+  version = "2.5.11";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-tYyA15sE0yQ/9JwcP8a1+DE46zeEaJVjvN0GBZUxhhY=";
+    hash = "sha256-X3ZewetgXc6enEhnnNQ7WBjU1LhMjqTAxg613KE8QFw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "freepg";
     repo = "gnupg";
-    rev = "361c223eb00ca372fbf9506f5150ddbec193936f";
-    hash = "sha256-hRuwrB6G2vjp7Md6m+cwoi7g4GtW0sazAEN5RC+AKdg=";
+    rev = "e32df9bd4961f4306c8baca6608755c1c896ac52";
+    hash = "sha256-7Cswx8am+Y8qC275kryCt7ymyksEw377fYSEU03Qfco=";
   };
 
   patches = [
@@ -92,24 +92,19 @@ stdenv.mkDerivation rec {
     "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
     "0004-tests-add-test-cases-for-import-without-uid.patch"
     "0005-gpg-drop-import-clean-from-default-keyserver-import-.patch"
-    "0008-avoid-systemd-deprecation-warning.patch"
     "0009-Add-systemd-support-for-keyboxd.patch"
     "0010-Ship-sample-systemd-unit-files.patch"
     "0011-el-gamal-default-to-3072-bits.patch"
     "0012-gpg-default-digest-algorithm-SHA512.patch"
     "0013-gpg-Prefer-SHA-512-and-SHA-384-in-personal-digest.patch"
     "0018-Avoid-simple-memory-dumps-via-ptrace.patch"
-    "0019-Disallow-compressed-signatures-and-certificates.patch"
     "0020-ssh-agent-emulation-under-systemd-inject-SSH_AUTH_SO.patch"
-    "0021-gpg-Sync-compliance-mode-cleanup-with-master.patch"
     "0022-gpg-emit-RSA-pubkey-algorithm-when-in-compatibility-.patch"
     "0023-gpg-Reintroduce-openpgp-as-distinct-from-rfc4880.patch"
     "0024-gpg-Emit-LibrePGP-material-only-in-compliance-gnupg.patch"
     "0025-gpg-gpgconf-list-report-actual-compliance-mode.patch"
-    "0026-gpg-Default-to-compliance-openpgp.patch"
     "0027-gpg-Fix-newlines-in-Cleartext-Signature-Framework-CS.patch"
     "0029-Add-keyboxd-systemd-support.patch"
-    "0033-Support-large-RSA-keygen-in-non-batch-mode.patch"
     "0034-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch"
   ];
 
