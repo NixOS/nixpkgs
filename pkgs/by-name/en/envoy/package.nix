@@ -94,7 +94,7 @@ buildBazelPackage rec {
     ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
     ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
-    ln -sf "${rustPlatform.rustLibSrc}" bazel/nix/ruststd
+    ln -sf "${rustc.unwrapped}" bazel/nix/rustcroot
     substituteInPlace bazel/dependency_imports.bzl \
       --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
       --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
@@ -239,6 +239,7 @@ buildBazelPackage rec {
     "--linkopt=-Wl,-z,noexecstack"
     "--config=gcc"
     "--verbose_failures"
+    "--incompatible_enable_cc_toolchain_resolution=true"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"
