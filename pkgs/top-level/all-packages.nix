@@ -15227,8 +15227,6 @@ with pkgs;
 
   raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
 
-  raspa-data = callPackage ../applications/science/molecular-dynamics/raspa/data.nix { };
-
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
   yacas-gui = yacas.override {
