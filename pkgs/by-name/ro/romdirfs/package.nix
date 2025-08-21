@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "romdirfs";
   version = "1.2";
 
