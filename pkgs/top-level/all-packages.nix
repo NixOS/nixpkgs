@@ -15222,8 +15222,6 @@ with pkgs;
     };
   };
 
-  pari = callPackage ../applications/science/math/pari { };
-
   yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
 
   yacas-gui = yacas.override {
