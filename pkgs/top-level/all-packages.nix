@@ -15666,9 +15666,7 @@ with pkgs;
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
-  pgadmin4 = callPackage ../tools/admin/pgadmin { };
-
-  pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
+  pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
   philipstv = with python3Packages; toPythonApplication philipstv;
 

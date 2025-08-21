@@ -52,12 +52,12 @@ fi
 printf "Done\n"
 
 if [[ -f missing-hashes.json ]]; then
-  if [[ ! -f "$nixpkgs/pkgs/tools/admin/pgadmin/missing-hashes.json" ]]; then
+  if [[ ! -f "$nixpkgs/pkgs/by-name/pg/pgadmin4/missing-hashes.json" ]]; then
     printf "PLEASE NOTE: FIRST TIME OF FINDING MISSING HASHES!"
     printf "Please add \"missingHashes = ./missing-hashes.json\" to pgadmin derivation"
   fi
   printf "Copy files to nixpkgs\n"
-  cp missing-hashes.json "$nixpkgs/pkgs/tools/admin/pgadmin/"
+  cp missing-hashes.json "$nixpkgs/pkgs/by-name/pg/pgadmin4"
 fi
 
 printf "Done\n"
