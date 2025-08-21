@@ -14764,8 +14764,6 @@ with pkgs;
 
   ### SCIENCE/BIOLOGY
 
-  blast = callPackage ../applications/science/biology/blast { };
-
   cd-hit = callPackage ../applications/science/biology/cd-hit {
     inherit (llvmPackages) openmp;
   };
