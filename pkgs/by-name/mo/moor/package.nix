@@ -3,16 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "moor";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "moor";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5MiTxspdNTFfLnif5C3gcQ0suxRrjerlZl2+kPAjiBM=";
   };
 
@@ -20,22 +21,27 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    installManPage ./moor.1
-  '';
-
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "main.versionString=v${version}"
+    "main.versionString=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    installManPage ./moor.1
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Nice-to-use pager for humans";
     homepage = "https://github.com/walles/moor";
-    license = licenses.bsd2WithViews;
+    changelog = "https://github.com/walles/moor/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2WithViews;
     mainProgram = "moor";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
-}
+})
