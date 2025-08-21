@@ -14891,8 +14891,6 @@ with pkgs;
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
-  wolfram-notebook = callPackage ../applications/science/math/wolfram-engine/notebook.nix { };
-
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
