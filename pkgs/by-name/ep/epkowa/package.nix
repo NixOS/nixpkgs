@@ -474,7 +474,7 @@ in
 let
   fwdir = symlinkJoin {
     name = "esci-firmware-dir";
-    paths = lib.mapAttrsToList (name: value: value + /share/esci) plugins;
+    paths = lib.mapAttrsToList (name: value: value + "/share/esci") plugins;
   };
 in
 let
