@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "1.0.0+date=2023-05-23";
+  version = "1.0.0+date=2025-08-21";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
