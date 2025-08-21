@@ -15312,8 +15312,6 @@ with pkgs;
 
   cups = callPackage ../misc/cups { };
 
-  cups-filters = callPackage ../misc/cups/filters.nix { };
-
   foomatic-db-ppds-withNonfreeDb = callPackage ../by-name/fo/foomatic-db-ppds/package.nix {
     withNonfreeDb = true;
   };
