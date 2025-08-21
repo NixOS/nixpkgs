@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dashpay";
     repo = "dash";
-    rev = "v${version}";
-    sha256 = "15chd802km38jv1g4pdbqvydynqc6iqig3d8bxfmazaxjbkcrfgb";
+    tag = "v${version}";
+    hash = "sha256-67nM5pJdfVVdX6iNF3E0DFvf/MarXfLClmjUKQBqkJU=";
   };
 
   nativeBuildInputs = [
@@ -118,8 +118,8 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
-    description = "Dash Core - Digital Cash cryptocurrency wallet and node";
+  meta = {
+    description = "Digital Cash cryptocurrency wallet and node";
     longDescription = ''
       Dash is an open source peer-to-peer cryptocurrency with a strong focus on the
       payments industry. Dash offers a form of money that is portable, inexpensive,
@@ -128,9 +128,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.dash.org/";
     changelog = "https://github.com/dashpay/dash/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ktechmidas ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ktechmidas ];
+    platforms = lib.platforms.unix;
     mainProgram = if withGui then "dash-qt" else "dashd";
   };
 }
