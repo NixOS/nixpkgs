@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  pkgsCross,
   versionCheckHook,
 }:
 
@@ -37,6 +38,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    tests.cross-aarch64 = pkgsCross.aarch64-multiplatform.moor;
     updateScript = nix-update-script { };
   };
 
