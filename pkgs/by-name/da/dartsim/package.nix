@@ -56,19 +56,22 @@ stdenv.mkDerivation (finalAttrs: {
     # disable failing tests. CMAKE_CTEST_ARGUMENTS does not work.
     ./disable-failing-tests.patch
     # Fix use of system gbenchmark, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/1904
     (fetchpatch {
-      url = "https://github.com/dartsim/dart/pull/1904.patch";
+      url = "https://github.com/dartsim/dart/commit/c18c48a1b0beff6660b9923e8a6f8f09a86a6039.patch";
       hash = "sha256-i8Ga0FGVQ3OMprEoGEwVy0j139wjnmR6ABxr/3syhzw=";
     })
     # Fix use of system pybind11, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/1907
     (fetchpatch {
-      url = "https://github.com/dartsim/dart/pull/1907.patch";
+      url = "https://github.com/dartsim/dart/commit/940c425c19e50a9ded2629422db54785802143af.patch";
       hash = "sha256-T3992uD0Z36tTxlcFaikVaLt08N9EP4gOHP0Y2AFBzQ=";
     })
     # fix use of absolute CMake paths in .pc, merged upstream
+    # ref. https://github.com/dartsim/dart/pull/2006
     (fetchpatch {
-      url = "https://github.com/dartsim/dart/pull/2006.patch";
-      hash = "sha256-csWh0261nbnLWRPqq6QHlG54ANABFmOOrJqOtpGr5dQ=";
+      url = "https://github.com/dartsim/dart/commit/6f3d6086780a311ef6e1928697f56a4d845ae028.patch";
+      hash = "sha256-sfbTm9C74fl7lVnGPZ1h3cvKXILHhkeNYxd/BpSQvg8=";
     })
   ];
 
