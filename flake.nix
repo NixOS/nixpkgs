@@ -25,9 +25,9 @@
     let
       lib = import ./lib;
 
-      args = { inherit imports lib self; };
+      args = { inherit directories lib self; };
 
-      imports = {
+      directories = {
         lib = import ./lib/flake-support.nix args;
         pkgs = import ./pkgs/top-level/flake-support.nix args;
         nixos = import ./nixos/flake-support.nix args;
@@ -37,18 +37,18 @@
       };
     in
     {
-      inherit (imports.lib.outputs) lib;
-      inherit (imports.pkgs.outputs) legacyPackages;
+      inherit (directories.lib.outputs) lib;
+      inherit (directories.pkgs.outputs) legacyPackages;
       checks = lib.zipAttrsWith (name: lib.foldl lib.mergeAttrs { }) [
-        imports.pkgs.outputs.checks
-        imports.nixos.outputs.checks
+        directories.pkgs.outputs.checks
+        directories.nixos.outputs.checks
       ];
       htmlDocs = {
-        inherit (imports.nixos.outputs.htmlDocs) nixosManual;
-        inherit (imports.doc.outputs.htmlDocs) nixpkgsManual;
+        inherit (directories.nixos.outputs.htmlDocs) nixosManual;
+        inherit (directories.doc.outputs.htmlDocs) nixpkgsManual;
       };
-      inherit (imports.nixos.outputs) nixosModules;
-      inherit (imports.devShell.outputs) devShells;
-      inherit (imports.formatter.outputs) formatter;
+      inherit (directories.nixos.outputs) nixosModules;
+      inherit (directories.devShell.outputs) devShells;
+      inherit (directories.formatter.outputs) formatter;
     };
 }
