@@ -15391,9 +15391,6 @@ with pkgs;
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
-  # using the new configuration style proposal which is unstable
-  jack1 = callPackage ../misc/jackaudio/jack1.nix { };
-
   libjack2 = jack2.override { prefix = "lib"; };
 
   jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
