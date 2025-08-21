@@ -16014,10 +16014,6 @@ with pkgs;
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
-  kodelife = callPackage ../applications/graphics/kodelife {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
-
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
