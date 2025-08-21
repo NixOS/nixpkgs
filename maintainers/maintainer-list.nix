@@ -9068,6 +9068,12 @@
     githubId = 65962770;
     name = "Gaurav Ghodinde";
   };
+  gauthsvenkat = {
+    email = "gauthsvenkat+nixpkgs@gmail.com";
+    github = "gauthsvenkat";
+    githubId = 26820345;
+    name = "Gautham Venkataraman";
+  };
   gavin = {
     email = "gavin.rogers@holo.host";
     github = "gavinrogers";
