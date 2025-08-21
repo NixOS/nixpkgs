@@ -7,6 +7,7 @@
   makeBinaryWrapper,
 
   makeDesktopItem,
+  copyDesktopItems,
   replaceVars,
 
   todds,
@@ -24,6 +25,7 @@ let
     hash = "sha256-1wn3WIflrhH3IMBeGFwcHi0zOREakuk/5gqwPY720eA=";
     fetchSubmodules = true;
   };
+
   steamworksSrc = fetchzip {
     url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip"; # Steam sometimes requires auth to download.
     hash = "sha256-yDA92nGj3AKTNI4vnoLaa+7mDqupQv0E4YKRRUWqyZw=";
@@ -70,6 +72,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -134,7 +137,7 @@ stdenv.mkDerivation {
       name = "RimSort";
       desktopName = "RimSort";
       exec = "rimsort";
-      icon = "io.github.rimsort.rimsort";
+      icon = "rimsort.png";
       comment = "RimWorld Mod Manager";
       categories = [ "Game" ];
     })
@@ -156,7 +159,7 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --set RIMSORT_DISABLE_UPDATER 1
 
-    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/io.github.rimsort.rimsort
+    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
 
     runHook postInstall
   '';
