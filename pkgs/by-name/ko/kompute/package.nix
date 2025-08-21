@@ -6,7 +6,7 @@
   cmake,
   vulkan-headers,
   vulkan-loader,
-  fmt,
+  fmt_10,
   spdlog,
   glslang,
   ninja,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
   buildInputs = [
-    fmt
+    fmt_10
     spdlog
   ];
   propagatedBuildInputs = [
