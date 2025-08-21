@@ -15745,8 +15745,6 @@ with pkgs;
 
   terraforming = callPackage ../applications/networking/cluster/terraforming { };
 
-  terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
-
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vaultwarden-sqlite = vaultwarden;
