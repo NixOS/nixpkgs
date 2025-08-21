@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
       moveToOutput lib/libdevmapper.so $lib
     '';
 
-  outputChecks = lib.optionalString (!enableVDO) {
+  outputChecks = lib.optionalAttrs (!stdenv.hostPlatform.isStatic && !enableVDO) {
     out.disallowedRequisites = [
       bash
       bashNonInteractive
