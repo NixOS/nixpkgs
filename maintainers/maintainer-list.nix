@@ -12847,6 +12847,11 @@
     github = "juliamertz";
     githubId = 35079666;
   };
+  julian-hoch = {
+    name = "Julian Hoch";
+    github = "julian-hoch";
+    githubId = 95583314;
+  };
   JulianFP = {
     name = "Julian Partanen";
     github = "JulianFP";
