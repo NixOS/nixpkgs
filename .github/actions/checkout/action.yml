@@ -79,22 +79,20 @@ runs:
           // This would fail without --refetch, because the we had a partial clone before, but changed it above.
           await run('git', 'fetch', '--depth=1', '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
 
+          // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
+          await run('mkdir', 'nixpkgs')
+          switch (process.env.RUNNER_OS) {
+            case 'macOS':
+              await run('sudo', 'mount_tmpfs', 'nixpkgs')
+              break
+            case 'Linux':
+              await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
+              break
+          }
+
           // Create all worktrees in parallel.
           await Promise.all(commits.map(async ({ sha, path }) => {
-            // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
-            await run('mkdir', path)
-            switch (process.env.RUNNER_OS) {
-              case 'macOS':
-                await run('sudo', 'mount_tmpfs', path)
-                // macOS creates this hidden folder to log file system activity.
-                // This trips up git when adding a worktree below, because the target folder is not empty.
-                await run('sudo', 'rm', '-rf', join(path, '.fseventsd'))
-                break
-              case 'Linux':
-                await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', path)
-                break
-            }
-            await run('git', 'worktree', 'add', path, sha, '--no-checkout', '--force')
-            await run('git', '-C', path, 'sparse-checkout', 'disable')
-            await run('git', '-C', path, 'checkout', '--progress')
+            await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
+            await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
+            await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
           }))
