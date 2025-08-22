@@ -1,29 +1,25 @@
 diff --git a/Documentation/git-send-email.adoc b/Documentation/git-send-email.adoc
-index 7f223db42d..7e46a07d31 100644
+index 5d13a856a7..5c9978c1e4 100644
 --- a/Documentation/git-send-email.adoc
 +++ b/Documentation/git-send-email.adoc
-@@ -177,7 +177,7 @@ Sending
+@@ -190,7 +190,7 @@ Sending
  	The command will be executed in the shell if necessary.  Default
  	is the value of `sendemail.sendmailCmd`.  If unspecified, and if
- 	--smtp-server is also unspecified, git-send-email will search
--	for `sendmail` in `/usr/sbin`, `/usr/lib` and $PATH.
-+	for `sendmail` in $PATH.
+ 	`--smtp-server` is also unspecified, `git send-email` will search
+-	for `sendmail` in `/usr/sbin`, `/usr/lib` and `$PATH`.
++	for `sendmail` in `$PATH`.
  
  --smtp-encryption=<encryption>::
  	Specify in what way encrypting begins for the SMTP connection.
-@@ -233,9 +233,9 @@ a password is obtained using 'git-credential'.
- --smtp-server=<host>::
+@@ -247,7 +247,7 @@ a password is obtained using linkgit:git-credential[1].
  	If set, specifies the outgoing SMTP server to use (e.g.
  	`smtp.example.com` or a raw IP address).  If unspecified, and if
--	`--sendmail-cmd` is also unspecified, the default is to search
--	for `sendmail` in `/usr/sbin`, `/usr/lib` and $PATH if such a
--	program is available, falling back to `localhost` otherwise.
-+	`--sendmail-cmd` is also unspecified, the default is to search for
-+	`sendmail` in $PATH if such a program is available, falling back to
-+	`localhost` otherwise.
+ 	`--sendmail-cmd` is also unspecified, the default is to search
+-	for `sendmail` in `/usr/sbin`, `/usr/lib` and `$PATH` if such a
++	for `sendmail` in `$PATH` if such a
+ 	program is available, falling back to `localhost` otherwise.
  +
  For backward compatibility, this option can also specify a full pathname
- of a sendmail-like program instead; the program must support the `-i`
 diff --git a/git-send-email.perl b/git-send-email.perl
 index 798d59b84f..69c9cc2a7d 100755
 --- a/git-send-email.perl
