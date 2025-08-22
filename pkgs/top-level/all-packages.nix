@@ -4547,7 +4547,6 @@ with pkgs;
   xdot = with python3Packages; toPythonApplication xdot;
 
   xflux = callPackage ../tools/misc/xflux { };
-  xflux-gui = python3Packages.callPackage ../tools/misc/xflux/gui.nix { };
 
   libxfs = xfsprogs.dev;
 
