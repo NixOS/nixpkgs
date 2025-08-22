@@ -234,8 +234,8 @@ rec {
       "sha256-vuRBMVk6gQ+mfNLG/QV/EjvwfX3mM3ttgK/zUsi0ghA=";
 
   mypy-boto3-cloudhsm =
-    buildMypyBoto3Package "cloudhsm" "1.40.0"
-      "sha256-GqcCTcfrPGdt1F2e2kFBZVJuK30sFiP+JSXYXV/sH7g=";
+    buildMypyBoto3Package "cloudhsm" "1.40.15"
+      "sha256-qr7Okanc/7cgrb31a6mxb23S8nvw3iztCcbGNHcMIhk=";
 
   mypy-boto3-cloudhsmv2 =
     buildMypyBoto3Package "cloudhsmv2" "1.40.0"
