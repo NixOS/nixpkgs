@@ -10,15 +10,15 @@ mkYaziPlugin {
   src = fetchFromGitHub {
     owner = "uhs-robert";
     repo = "recycle-bin.yazi";
-    rev = "3f36069567b4602f841f2377c5f182f9a2480dea";
-    hash = "sha256-1z92wbadcnljj019b1r89l38zyd0nnpm22m269502drbj65grlkz";
+    rev = "52f6fe08f5f42cbae56d8c46abc368560e1e2d6e";
+    hash = "sha256-krZAbL7JRRvJbT+23C6fw8Zbav+8I+bvIFAYrpeNuhw=";
   };
 
   meta = {
-    description = "A Recycle Bin for Yazi with browse, restore, and cleanup capabilities";
+    description = "Recycle Bin for Yazi with browse, restore, and cleanup capabilities";
     homepage = "https://github.com/uhs-robert/recycle-bin.yazi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ guttermonk ];
     platforms = lib.platforms.linux;
   };
 }
