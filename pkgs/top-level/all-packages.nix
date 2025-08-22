@@ -2643,10 +2643,6 @@ with pkgs;
     websocketSupport = true;
   };
 
-  curlHTTP3 = curl.override {
-    http3Support = true;
-  };
-
   curl = curlMinimal.override (
     {
       idnSupport = true;

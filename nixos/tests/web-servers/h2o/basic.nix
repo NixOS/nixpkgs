@@ -44,7 +44,7 @@ in
       { pkgs, ... }:
       {
         environment.systemPackages = [
-          pkgs.curlHTTP3
+          pkgs.curl
         ];
 
         services.h2o = {
