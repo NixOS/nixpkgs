@@ -320,6 +320,8 @@ with pkgs;
 
   cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
 
+  cgal_5 = callPackage ../by-name/cg/cgal/5.nix { };
+
   checkpointBuildTools = callPackage ../build-support/checkpoint-build.nix { };
 
   celeste-classic-pm = pkgs.celeste-classic.override {
@@ -4546,9 +4548,6 @@ with pkgs;
 
   xdot = with python3Packages; toPythonApplication xdot;
 
-  xflux = callPackage ../tools/misc/xflux { };
-  xflux-gui = python3Packages.callPackage ../tools/misc/xflux/gui.nix { };
-
   libxfs = xfsprogs.dev;
 
   xmlto = callPackage ../tools/typesetting/xmlto {
@@ -5890,10 +5889,6 @@ with pkgs;
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
-  };
-
-  thrust = callPackage ../development/tools/thrust {
-    gconf = gnome2.GConf;
   };
 
   urweb = callPackage ../development/compilers/urweb {
@@ -15655,16 +15650,6 @@ with pkgs;
       languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
     }
   );
-
-  xsw = callPackage ../applications/misc/xsw {
-    # Enable the next line to use this in terminal.
-    # Note that it requires sixel capable terminals such as mlterm
-    # or xterm -ti 340
-    SDL = SDL_sixel;
-    SDL_gfx = SDL_gfx.override { SDL = SDL_sixel; };
-    SDL_image = SDL_image.override { SDL = SDL_sixel; };
-    SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
-  };
 
   yamale = with python3Packages; toPythonApplication yamale;
 

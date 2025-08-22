@@ -47,7 +47,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/pychromecast";
     changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

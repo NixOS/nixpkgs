@@ -1801,6 +1801,8 @@ self: super: with self; {
 
   bech32 = callPackage ../development/python-modules/bech32 { };
 
+  beetcamp = callPackage ../development/python-modules/beetcamp { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -2800,6 +2802,8 @@ self: super: with self; {
   color-operations = callPackage ../development/python-modules/color-operations { };
 
   color-parser-py = callPackage ../development/python-modules/color-parser-py { };
+
+  coloraide = callPackage ../development/python-modules/coloraide { };
 
   colorama = callPackage ../development/python-modules/colorama { };
 
@@ -6893,7 +6897,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) cgal libxml2;
+    inherit (pkgs) cgal_5 libxml2;
   };
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
@@ -15822,6 +15826,8 @@ self: super: with self; {
   rich-pixels = callPackage ../development/python-modules/rich-pixels { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
+
+  rich-tables = callPackage ../development/python-modules/rich-tables { };
 
   rich-theme-manager = callPackage ../development/python-modules/rich-theme-manager { };
 

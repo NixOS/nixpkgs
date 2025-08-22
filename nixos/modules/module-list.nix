@@ -1154,7 +1154,6 @@
   ./services/networking/frp.nix
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
-  ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix

@@ -209,7 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maintainers = with lib.maintainers; [
-      abbradar
       pierreis
       emily
       techknowlogick

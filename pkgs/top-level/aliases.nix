@@ -432,6 +432,7 @@ mapAliases {
   alsaUtils = throw "'alsaUtils' has been renamed to/replaced by 'alsa-utils'"; # Converted to throw 2024-10-17
   amazon-qldb-shell = throw "'amazon-qldb-shell' has been removed due to being unmaintained upstream"; # Added 2025-07-30
   angelfish = throw "'angelfish' has been renamed to/replaced by 'libsForQt5.kdeGear.angelfish'"; # Converted to throw 2024-10-17
+  animeko = throw "'animeko' has been removed since it is unmaintained"; # Added 2025-08-20
   ansible_2_14 = throw "Ansible 2.14 goes end of life in 2024/05 and can't be supported throughout the 24.05 release cycle"; # Added 2024-04-11
   ansible_2_15 = throw "Ansible 2.15 goes end of life in 2024/11 and can't be supported throughout the 24.11 release cycle"; # Added 2024-11-08
   antennas = throw "antennas has been removed as it only works with tvheadend, which nobody was willing to maintain and was stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version"; # Added 2024-08-21
@@ -582,7 +583,7 @@ mapAliases {
   centerim = throw "centerim has been removed due to upstream disappearing"; # Added 2025-04-18
   certmgr-selfsigned = certmgr; # Added 2023-11-30
   cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
-  cgal_5 = cgal; # Added 2024-12-30
+
   challenger = taler-challenger; # Added 2024-09-04
   check_smartmon = nagiosPlugins.check_smartmon; # Added 2024-05-03
   check_systemd = nagiosPlugins.check_systemd; # Added 2024-05-03
@@ -1082,6 +1083,7 @@ mapAliases {
   haven-cli = throw "'haven-cli' has been removed due to the official announcement of the project closure. Read more at https://havenprotocol.org/2024/12/12/project-closure-announcement"; # Added 2025-02-25
   hawknl = throw "'hawknl' has been removed as it was unmaintained and the upstream unavailable"; # Added 2025-05-07
   HentaiAtHome = hentai-at-home; # Added 2024-06-12
+  hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # added 2025-08-20
   hll2390dw-cups = throw "The hll2390dw-cups package was dropped since it was unmaintained."; # Added 2024-06-21
   hoarder = throw "'hoarder' has been renamed to 'karakeep'"; # Added 2025-04-21
   hmetis = throw "'hmetis' has been removed as it was unmaintained and the upstream was unavailable"; # Added 2025-05-05
@@ -1483,6 +1485,7 @@ mapAliases {
   minetestserver = luanti-server; # Added 2024-11-11
   minetest-touch = luanti-client; # Added 2024-08-12
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
+  miru = throw "'miru' has been removed due to lack maintenance"; # Added 2025-08-21
   mmsd = throw "'mmsd' has been removed due to being unmaintained upstream. Consider using 'mmsd-tng' instead"; # Added 2025-06-07
   mod_dnssd = throw "'mod_dnssd' has been renamed to/replaced by 'apacheHttpdPackages.mod_dnssd'"; # Converted to throw 2024-10-17
   mod_fastcgi = throw "'mod_fastcgi' has been renamed to/replaced by 'apacheHttpdPackages.mod_fastcgi'"; # Converted to throw 2024-10-17
@@ -1805,6 +1808,7 @@ mapAliases {
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
   texinfo5 = throw "'texinfo5' has been removed from nixpkgs"; # Added 2024-09-10
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
+  thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   tsearch_extras = throw "'tsearch_extras' has been removed from nixpkgs"; # Added 2024-12-15
 
   postgresql_12 = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14
@@ -2382,6 +2386,8 @@ mapAliases {
   xen_4_18 = throw "Due to technical challenges involving building older versions of Xen with newer dependencies, the Xen Project Hypervisor Maintenance Team decided to switch to a latest-only support cycle. As Xen 4.18 would have been the 'n-1' version, it was removed"; # Added 2024-10-05
   xen_4_19 = throw "Use 'xen' instead"; # Added 2024-10-05
   xenPackages = throw "The attributes in the xenPackages set have been promoted to the top-level. (xenPackages.xen_4_19 -> xen)";
+  xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
+  xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xineLib = throw "'xineLib' has been renamed to/replaced by 'xine-lib'"; # Converted to throw 2024-10-17
   xineUI = throw "'xineUI' has been renamed to/replaced by 'xine-ui'"; # Converted to throw 2024-10-17
   xlsxgrep = throw "'xlsxgrep' has been dropped due to lack of maintenance."; # Added 2024-11-01
@@ -2395,6 +2401,7 @@ mapAliases {
   xprite-editor = throw "'xprite-editor' has been removed due to lack of maintenance upstream. Consider using 'pablodraw' or 'aseprite' instead"; # Added 2024-09-14
   xsd = throw "'xsd' has been removed."; # Added 2025-04-02
   xsv = throw "'xsv' has been removed due to lack of upstream maintenance. Please see 'xan' for a maintained alternative";
+  xsw = throw "'xsw' has been removed due to lack of upstream maintenance"; # Added 2025-08-22
   xtrlock-pam = throw "xtrlock-pam has been removed because it is unmaintained for 10 years and doesn't support Python 3.10 or newer"; # Added 2025-01-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17

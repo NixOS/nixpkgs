@@ -432,12 +432,6 @@
     name = "Ashish SHUKLA";
     keys = [ { fingerprint = "F682 CDCC 39DC 0FEA E116  20B6 C746 CFA9 E74F A4B0"; } ];
   };
-  abbradar = {
-    email = "ab@fmap.me";
-    github = "abbradar";
-    githubId = 1174810;
-    name = "Nikolay Amiantov";
-  };
   abcsds = {
     email = "abcsds@gmail.com";
     github = "abcsds";
@@ -6831,6 +6825,12 @@
     github = "dretyuiop";
     githubId = 81854406;
     name = "Chew Cheng Hong";
+  };
+  drew-dirac = {
+    email = "drew@diracinc.com";
+    github = "drew-dirac";
+    githubId = 187309685;
+    name = "Drew Council";
   };
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
@@ -28109,6 +28109,12 @@
     github = "yl3dy";
     githubId = 1311192;
     name = "Alexander Kiselyov";
+  };
+  ylannl = {
+    email = "ravi@ylan.nl";
+    github = "ylannl";
+    githubId = 1742643;
+    name = "Ravi Peters";
   };
   ylecornec = {
     email = "yves.stan.lecornec@tweag.io";
