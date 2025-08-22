@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "asciinema-automation";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PierreMarchand20";
     repo = "asciinema_automation";
     rev = "v${version}";
-    hash = "sha256-SjUsPrhoNz2NTPAkmUH0Csv6hbDc6nyKdckGqV5S3GY=";
+    hash = "sha256-VfIr7w/5hQwr6XYuC3f8h71uScr0lBdx6PyO1hpiZhA=";
   };
 
   nativeBuildInputs = [
