@@ -686,8 +686,8 @@ rec {
       "sha256-BXLPMwfbqcpaRnAuxrmG4pWUsVFHUW+foMvB1gh5Ye4=";
 
   mypy-boto3-iotthingsgraph =
-    buildMypyBoto3Package "iotthingsgraph" "1.40.0"
-      "sha256-0uHWqsERVDW0RYP0fO3TGN/TRGVjf2ShprnuPmpuhUc=";
+    buildMypyBoto3Package "iotthingsgraph" "1.40.15"
+      "sha256-ZBh/vd5cNWOv0kk30gFXNnDrfCmlSUr8mKypEYucUgc=";
 
   mypy-boto3-iottwinmaker =
     buildMypyBoto3Package "iottwinmaker" "1.40.0"
