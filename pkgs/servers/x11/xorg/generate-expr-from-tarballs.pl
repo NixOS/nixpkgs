@@ -372,6 +372,7 @@ print OUT <<EOF;
   transset,
   util-macros,
   viewres,
+  xauth,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -420,6 +421,7 @@ self: with self; {
     smproxy
     transset
     viewres
+    xauth
     xbitmaps
     xcmsdb
     xcursorgen
