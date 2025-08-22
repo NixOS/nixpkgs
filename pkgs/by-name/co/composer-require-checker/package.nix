@@ -3,6 +3,7 @@
   fetchgit,
   php,
   versionCheckHook,
+  installShellFiles,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -18,6 +19,15 @@ php.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-bNeQEfwXly3LFuEKeSK6J6pRfQF6TNwUqu3SdTswmFI=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd composer-require-checker \
+      --bash <($out/bin/composer-require-checker completion bash) \
+      --fish <($out/bin/composer-require-checker completion fish) \
+      --zsh <($out/bin/composer-require-checker completion zsh)
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -27,7 +37,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/maglnet/ComposerRequireChecker/";
     changelog = "https://github.com/maglnet/ComposerRequireChecker/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ patka ];
     mainProgram = "composer-require-checker";
   };
 })
