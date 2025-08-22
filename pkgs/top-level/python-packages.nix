@@ -6179,6 +6179,8 @@ self: super: with self; {
 
   google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
 
+  google-play-scraper = callPackage ../development/python-modules/google-play-scraper { };
+
   google-re2 = callPackage ../development/python-modules/google-re2 { };
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
