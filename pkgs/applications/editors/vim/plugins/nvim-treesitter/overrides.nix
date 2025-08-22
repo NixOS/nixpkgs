@@ -66,8 +66,10 @@ in
 
 {
   postPatch = ''
-    rm -r parser
+    mv runtime/queries queries
   '';
+
+  nvimSkipModules = [ "nvim-treesitter._meta.parsers" ];
 
   passthru = (super.nvim-treesitter.passthru or { }) // {
     inherit
