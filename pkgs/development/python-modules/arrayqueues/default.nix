@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   numpy,
   setuptools,
 }:
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7I+5BQO/gsvTREDkBfxrMblw3JPfY48S4KI4PCGPtFY=";
+  src = fetchFromGitHub {
+    owner = "portugueslab";
+    repo = "arrayqueues";
+    tag = "v${version}";
+    hash = "sha256-tqIfpkwbJNd9jMe0YvAWz9Z8rOO80qxVM2ZcJFeAmwo=";
   };
 
   build-system = [ setuptools ];
