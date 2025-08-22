@@ -3,6 +3,7 @@
   hash,
   cargoHash,
   unsupported ? false,
+  patches ? [ ],
 }:
 
 {
@@ -34,14 +35,8 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 
-  versionUnderscored = builtins.replaceStrings [ "." ] [ "_" ] (
-    lib.versions.majorMinor kanidm.version
-  );
-
-  provisionPatches = [
-    (./. + "/provision-patches/${versionUnderscored}/oauth2-basic-secret-modify.patch")
-    (./. + "/provision-patches/${versionUnderscored}/recover-account.patch")
-  ];
+  versionUnderscored =
+    version: builtins.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
@@ -50,15 +45,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = finalAttrs.pname;
+    repo = finalAttrs.pname;
     rev = "refs/tags/v${version}";
     inherit hash;
   };
 
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
-  patches = lib.optionals enableSecretProvisioning provisionPatches;
+  patches =
+    patches
+    ++ lib.optionals enableSecretProvisioning [
+      (
+        ./. + "/provision-patches/${versionUnderscored finalAttrs.version}/oauth2-basic-secret-modify.patch"
+      )
+      (./. + "/provision-patches/${versionUnderscored finalAttrs.version}/recover-account.patch")
+    ];
 
   postPatch =
     let
@@ -137,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-vr"
         "v([0-9\\.]*)"
         "--override-filename"
-        "pkgs/by-name/ka/kanidm/${versionUnderscored}.nix"
+        "pkgs/by-name/ka/kanidm/${versionUnderscored finalAttrs.version}.nix"
       ];
     });
 
