@@ -1403,8 +1403,15 @@ rec {
   */
   escapeNixIdentifier =
     s:
-    # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null then s else escapeNixString s;
+    if
+      # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
+      match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
+      # Keywords from https://github.com/NixOS/nix/blob/d7612f350fc3201635f64a2398c1ef99cc3d0244/src/libexpr/lexer.l#L113-L122
+      && match "if|then|else|assert|with|let|in|rec|inherit|or" s == null
+    then
+      s
+    else
+      escapeNixString s;
 
   /**
     Escapes a string `s` such that it is safe to include verbatim in an XML
