@@ -367,6 +367,9 @@ in
     (mkRemovedOptionModule [ "services" "private-gpt" ] ''
       The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
     '')
+    (mkRemovedOptionModule [ "services" "gateone" ] ''
+      The gateone module was removed since the package was removed alongside much other obsolete python 2.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
