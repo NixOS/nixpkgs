@@ -18,7 +18,6 @@
   enableHttp3 ? false,
   ngtcp2,
   nghttp3,
-  quictls,
   enableJemalloc ? false,
   jemalloc,
   enablePython ? false,
@@ -68,15 +67,14 @@ stdenv.mkDerivation rec {
       c-aresMinimal
       libev
       zlib
+      openssl
     ]
-    ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
     ++ lib.optionals (enableGetAssets) [ libxml2 ]
     ++ lib.optionals (enableHpack) [ jansson ]
     ++ lib.optionals (enableJemalloc) [ jemalloc ]
     ++ lib.optionals (enableHttp3) [
       ngtcp2
       nghttp3
-      quictls
     ]
     ++ lib.optionals (enablePython) [ python3 ];
 

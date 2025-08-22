@@ -6,7 +6,7 @@
   brotli,
   libev,
   nghttp3,
-  quictls,
+  openssl,
   withJemalloc ? false,
   jemalloc,
   curlHTTP3,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     brotli
     libev
     nghttp3
-    quictls
+    openssl
   ]
   ++ lib.optional withJemalloc jemalloc;
 
