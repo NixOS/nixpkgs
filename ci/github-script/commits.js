@@ -22,7 +22,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
     async function extract({ sha, commit }) {
       const noCherryPick = Array.from(
-        commit.message.matchAll(/^Not-cherry-picked-because: (.*)$/g),
+        commit.message.matchAll(/^Not-cherry-picked-because: (.*)$/gm),
       ).at(0)
 
       if (noCherryPick)
