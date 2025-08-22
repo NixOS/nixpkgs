@@ -19,6 +19,7 @@
 /.github/workflows                      @NixOS/nixpkgs-ci
 /ci                                     @NixOS/nixpkgs-ci
 /ci/OWNERS                              @infinisil @philiptaron
+/maintainers                            @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
