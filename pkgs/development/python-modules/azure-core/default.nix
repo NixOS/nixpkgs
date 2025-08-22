@@ -17,10 +17,13 @@
   six,
   trio,
   typing-extensions,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-instrumentation-requests,
 }:
 
 buildPythonPackage rec {
-  version = "1.32.0";
+  version = "1.35.0";
   pname = "azure-core";
   pyproject = true;
 
@@ -31,7 +34,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-IrPDXWstrhSZD2wb4pEr8j/+ULIg5wiiirG7krHHMOU=";
+    hash = "sha256-wL5ShIlIXp7eWbaXHrY8HqrPg+9TABv+OQTkdelyvlw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -44,6 +47,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     aio = [ aiohttp ];
+    tracing = [ opentelemetry-api ];
   };
 
   nativeCheckInputs = [
@@ -55,6 +59,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
+    opentelemetry-sdk
+    opentelemetry-instrumentation-requests
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
@@ -83,6 +89,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
+    "tests/test_serialization.py"
     # wants network
     "tests/async_tests/test_streaming_async.py"
     "tests/test_streaming.py"
@@ -95,6 +102,9 @@ buildPythonPackage rec {
     "tests/test_polling.py"
     "tests/async_tests/test_base_polling_async.py"
     "tests/async_tests/test_polling_async.py"
+    # azure-core needs azure-storage-blog which needs azure-core
+    "tests/test_tracing_live.py"
+    "tests/async_tests/test_tracing_live_async.py"
   ];
 
   meta = with lib; {
