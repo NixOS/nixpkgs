@@ -364,6 +364,7 @@ print OUT <<EOF;
   sessreg,
   transset,
   util-macros,
+  viewres,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -403,6 +404,7 @@ self: with self; {
     pixman
     sessreg
     transset
+    viewres
     xbitmaps
     xcmsdb
     xdriinfo
