@@ -217,6 +217,7 @@ jobs:
       - name: Check out the PR at the target commit
         uses: ./.github/actions/checkout
         with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
           pinned-from: trusted
 
@@ -240,7 +241,6 @@ jobs:
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C trusted fetch --depth 1 origin ${{ inputs.mergedSha }}
           git -C trusted diff --name-only ${{ inputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
@@ -392,7 +392,7 @@ jobs:
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Ensure flake outputs on all systems still evaluate
-        run: nix flake check --all-systems --no-build ./untrusted
+        run: nix flake check --all-systems --no-build './untrusted?shallow=1'
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |

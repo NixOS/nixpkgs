@@ -18369,6 +18369,11 @@
     githubId = 4728903;
     name = "Owen Lynch";
   };
+  omarjatoi = {
+    github = "omarjatoi";
+    githubId = 9091609;
+    name = "Omar Jatoi";
+  };
   omasanori = {
     github = "omasanori";
     githubId = 167209;
