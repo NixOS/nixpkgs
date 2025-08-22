@@ -360,6 +360,7 @@ print OUT <<EOF;
   libxxf86dga,
   libxxf86misc,
   libxxf86vm,
+  listres,
   lndir,
   luit,
   makedepend,
@@ -407,6 +408,7 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    listres
     lndir
     luit
     makedepend
