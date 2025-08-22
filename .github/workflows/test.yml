@@ -13,9 +13,27 @@ jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
     outputs:
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       pr: ${{ steps.files.outputs.pr }}
       push: ${{ steps.files.outputs.push }}
     steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout-cone-mode: true # default, for clarity
+          sparse-checkout: |
+            ci/github-script
+      - id: prepare
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            require('./ci/github-script/prepare.js')({
+              github,
+              context,
+              core,
+              // Review comments will be posted by the main PR workflow on the pull_request_target event.
+              dry: false,
+            })
+
       - name: Determine changed files
         id: files
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -70,3 +88,5 @@ jobs:
       statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
