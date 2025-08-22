@@ -103,8 +103,6 @@ makeScopeWithSplicing' {
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
-        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
-
         ldutils = callPackage ../development/libraries/ldutils { };
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
