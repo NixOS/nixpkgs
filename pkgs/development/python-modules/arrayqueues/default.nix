@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   numpy,
   setuptools,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "arrayqueues";
   version = "1.4.1";
   pyproject = true;
-  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
