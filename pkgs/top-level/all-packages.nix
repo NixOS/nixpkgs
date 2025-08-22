@@ -2107,10 +2107,6 @@ with pkgs;
     inherit (darwin) libresolv;
   };
 
-  greg = callPackage ../applications/audio/greg {
-    pythonPackages = python3Packages;
-  };
-
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
