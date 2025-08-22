@@ -74,11 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv pack/mac*/YouTube\ Music.app $out/Applications
-    makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
+    ln -s "$out/Applications/YouTube Music.app/Contents/MacOS/YouTube Music" $out/bin/youtube-music
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p "$out/share/lib/youtube-music"
-    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
+    mkdir -p "$out/share/youtube-music"
+    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/youtube-music"
 
     pushd assets/generated/icons/png
     for file in *.png; do
@@ -93,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
-      --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags $out/share/youtube-music/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
