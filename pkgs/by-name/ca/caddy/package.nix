@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   callPackage,
   fetchFromGitHub,
   nixosTests,
@@ -10,15 +10,15 @@
   stdenv,
 }:
 let
-  version = "2.10.0";
+  version = "2.10.1";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-us1TnszA/10OMVSDsNvzRb6mcM4eMR3pQ5EF4ggA958=";
+    hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGoModule {
+buildGo125Module {
   pname = "caddy";
   inherit version;
 
@@ -26,10 +26,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${version}";
-    hash = "sha256-hzDd2BNTZzjwqhc/STbSAHnNlP7g1cFuMehqU1LumQE=";
+    hash = "sha256-6E4l84UKLz3OxAj5M5CGj1elp9A7jyaoin5Gi/O0y0A=";
   };
 
-  vendorHash = "sha256-9Iu4qmBVkGeSAywLgQuDR7y+TwCBqwhVxhfaXhCDnUc=";
+  vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
 
   subPackages = [ "cmd/caddy" ];
 
