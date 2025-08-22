@@ -4,9 +4,9 @@ description: 'Checkout into trusted / untrusted / pinned folders consistently.'
 
 inputs:
   merged-as-untrusted-at:
-    description: "Whether and which SHA to checkout for the merge commit in the ./untrusted folder."
+    description: "Whether and which SHA to checkout for the merge commit in the ./nixpkgs/untrusted folder."
   target-as-trusted-at:
-    description: "Whether and which SHA to checkout for the target commit in the ./trusted folder."
+    description: "Whether and which SHA to checkout for the target commit in the ./nixpkgs/trusted folder."
 
 runs:
   using: composite
