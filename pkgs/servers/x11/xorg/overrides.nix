@@ -321,7 +321,6 @@ self: super:
   });
 
   oclock = addMainProgram super.oclock { };
-  smproxy = addMainProgram super.smproxy { };
 
   x11perf = super.x11perf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [
