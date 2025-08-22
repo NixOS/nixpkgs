@@ -3322,9 +3322,6 @@ with pkgs;
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
-
-  krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
-
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
   };
