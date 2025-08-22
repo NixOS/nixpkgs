@@ -4,12 +4,13 @@
   fetchPypi,
   isPy3k,
   numpy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "arrayqueues";
   version = "1.4.1";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-7I+5BQO/gsvTREDkBfxrMblw3JPfY48S4KI4PCGPtFY=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   meta = {
     homepage = "https://github.com/portugueslab/arrayqueues";
