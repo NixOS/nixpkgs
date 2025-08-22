@@ -689,6 +689,11 @@ let
     gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
+    RcppPlanc = with pkgs; [
+      which
+      cmake
+      pkg-config
+    ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = with pkgs; [ zlib.dev ];
@@ -1381,6 +1386,10 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    RcppPlanc = with pkgs; [
+      hwloc
+      hdf5.dev
+    ];
     screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
