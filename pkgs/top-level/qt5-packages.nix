@@ -109,13 +109,9 @@ makeScopeWithSplicing' {
 
         kproperty = callPackage ../development/libraries/kproperty { };
 
-        kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
         kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
-
-        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
         ldutils = callPackage ../development/libraries/ldutils { };
 
