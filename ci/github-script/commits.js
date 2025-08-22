@@ -169,7 +169,16 @@ module.exports = async ({ github, context, core, dry }) => {
       core.startGroup(`Commit ${sha}`)
       core.info(`Author: ${commit.author.name} ${commit.author.email}`)
       core.info(`Date: ${new Date(commit.author.date)}`)
-      core[severity](message)
+      switch (severity) {
+        case 'error':
+          core.error(message)
+          break
+        case 'warning':
+          core.warning(message)
+          break
+        default:
+          core.info(message)
+      }
       core.endGroup()
       if (colored_diff) core.info(colored_diff)
     })
