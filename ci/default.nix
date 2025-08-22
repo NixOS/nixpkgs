@@ -17,7 +17,12 @@ let
     else
       nixpkgs;
 
-  pkgs = import nixpkgs' { inherit system; };
+  pkgs = import nixpkgs' {
+    inherit system;
+    # Nixpkgs generally — and CI specifically — do not use aliases,
+    # because we want to ensure they are not load-bearing.
+    allowAliases = false;
+  };
 
   fmt =
     let
@@ -60,10 +65,12 @@ let
 
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt underneath,
-        # the default formatter for Nix code.
+        # This uses nixfmt underneath, the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
-        programs.nixfmt.enable = true;
+        programs.nixfmt = {
+          enable = true;
+          package = pkgs.nixfmt;
+        };
 
         programs.yamlfmt = {
           enable = true;
@@ -134,7 +141,9 @@ rec {
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { inherit pkgs; });
   manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
-  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix { };
+  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
+    nix = pkgs.nixVersions.latest;
+  };
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
