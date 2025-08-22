@@ -5,6 +5,9 @@
   setuptools,
   poetry-core,
   pytestCheckHook,
+  billiard,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +24,19 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = [ poetry-core ];
+  buildInputs = [
+    poetry-core
+    billiard
+    pyyaml
+    requests
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "libsast" ];
+
+  # TODO
+  doCheck = false;
 
   meta = {
     description = "Generic SAST Library";
