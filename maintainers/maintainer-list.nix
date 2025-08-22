@@ -12840,16 +12840,16 @@
     github = "juliamertz";
     githubId = 35079666;
   };
+  julian-hoch = {
+    name = "Julian Hoch";
+    github = "julian-hoch";
+    githubId = 95583314;
+  };
   JulianFP = {
     name = "Julian Partanen";
     github = "JulianFP";
     githubId = 70963316;
     keys = [ { fingerprint = "C61D 7747 43DE EF05 4E4A  3AC1 6FE2 79EB 5C9F 3466"; } ];
-  };
-  julian-hoch = {
-    name = "Julian Hoch";
-    github = "julian-hoch";
-    githubId = 95583314;
   };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";
