@@ -7,20 +7,21 @@
   gperf,
   autoreconfHook,
   libpoly,
+  ncurses5,
 }:
 
 let
   gmp-static = gmp.override { withStatic = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yices";
-  version = "2.6.5";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";
     repo = "yices2";
-    rev = "Yices-${version}";
-    hash = "sha256-/sKyHkFW5I5kojNIRPEKojzTvfRZiyVIN5VlBIbAV7k=";
+    tag = "yices-${finalAttrs.version}";
+    hash = "sha256-siyepgxqKWRyO4+SB95lmhJ98iDubk0R0ErEJdSsM8o=";
   };
 
   postPatch = "patchShebangs tests/regress/check.sh";
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
+  nativeCheckInputs = [ ncurses5 ];
+
   meta = with lib; {
     description = "High-performance theorem prover and SMT solver";
     homepage = "https://yices.csl.sri.com";
@@ -48,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
-}
+})
