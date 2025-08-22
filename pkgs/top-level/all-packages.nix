@@ -4617,10 +4617,6 @@ with pkgs;
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
-  zbackup = callPackage ../tools/backup/zbackup {
-    protobuf = protobuf_21;
-  };
-
   zbar = libsForQt5.callPackage ../tools/graphics/zbar { };
 
   # Nvidia support does not require any proprietary libraries, so CI can build it.
