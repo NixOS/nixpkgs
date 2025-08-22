@@ -100,7 +100,7 @@ buildPythonPackage rec {
     "test_cross_module_exception_translator"
   ];
 
-  postInstallCheck = ''
+  postCheck = ''
     make cpptest
   '';
 
