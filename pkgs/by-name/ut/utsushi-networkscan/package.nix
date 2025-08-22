@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Network scan plugin for ImageScan v3";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
