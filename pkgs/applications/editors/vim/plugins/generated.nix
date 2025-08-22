@@ -11712,6 +11712,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-unity = buildVimPlugin {
+    pname = "nvim-unity";
+    version = "2025-08-21";
+    src = fetchFromGitHub {
+      owner = "mesalon";
+      repo = "nvim-unity";
+      rev = "b10b791c09d35f7c6b3ecd2b0facb5ac9006dc50";
+      sha256 = "sha256-gVL+jCSUxEPALFmYXlOtTU5OjsXoxwSN3B91l6jfAm0=";
+    };
+    meta.homepage = "https://github.com/apyra/nvim-unity";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-various-textobjs = buildVimPlugin {
     pname = "nvim-various-textobjs";
     version = "2025-08-11";
