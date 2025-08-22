@@ -72,6 +72,7 @@
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xorg-twm,
   xprop,
   xrandr,
   xrefresh,
@@ -150,6 +151,7 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = xorg-twm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
@@ -2347,54 +2349,6 @@ self: with self; {
         libX11
         libxkbfile
         libXrandr
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  twm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      libSM,
-      libX11,
-      libXext,
-      libXmu,
-      xorgproto,
-      libXrandr,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "twm";
-      version = "1.0.13.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/twm-1.0.13.1.tar.xz";
-        sha256 = "1igj7lr8xw5ap5wld5a18vav8jn8pa4ajbz5hk495d58b9sk89d5";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        libSM
-        libX11
-        libXext
-        libXmu
-        xorgproto
-        libXrandr
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
