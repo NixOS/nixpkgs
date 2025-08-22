@@ -2520,7 +2520,7 @@ self: super: with self; {
 
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
-  chromadb = callPackage ../development/python-modules/chromadb { };
+  chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
 
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
