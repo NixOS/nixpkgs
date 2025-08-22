@@ -5,6 +5,7 @@
   pandoc,
   installShellFiles,
 }:
+
 python3Packages.buildPythonPackage rec {
   pname = "autotrash";
   version = "0.4.7";
@@ -28,7 +29,9 @@ python3Packages.buildPythonPackage rec {
     installShellFiles
     pandoc
   ];
+
   postBuild = "make -C doc autotrash.1";
+
   postInstall = "installManPage doc/autotrash.1";
 
   pythonImportsCheck = [ "autotrash" ];
