@@ -380,6 +380,7 @@ print OUT <<EOF;
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xorg-twm,
   xprop,
   xrefresh,
   xtrans,
@@ -447,6 +448,7 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = xorg-twm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
