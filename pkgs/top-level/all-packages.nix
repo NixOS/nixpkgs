@@ -12169,8 +12169,6 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   };
 
-  kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
-
   alkimia = kdePackages.callPackage ../development/libraries/alkimia { };
   kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
 
