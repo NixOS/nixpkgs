@@ -846,16 +846,6 @@ self: super:
     ];
   });
 
-  twm = super.twm.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      bison
-      flex
-    ];
-    meta = attrs.meta // {
-      mainProgram = "twm";
-    };
-  });
-
   xauth = super.xauth.overrideAttrs (attrs: {
     doCheck = false; # fails
     preConfigure =

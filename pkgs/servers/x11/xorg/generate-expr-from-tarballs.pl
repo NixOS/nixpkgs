@@ -373,6 +373,7 @@ print OUT <<EOF;
   pixman,
   sessreg,
   smproxy,
+  tab-window-manager,
   transset,
   util-macros,
   viewres,
@@ -486,6 +487,7 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = tab-window-manager;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
