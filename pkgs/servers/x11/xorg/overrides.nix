@@ -846,19 +846,6 @@ self: super:
     ];
   });
 
-  xauth = super.xauth.overrideAttrs (attrs: {
-    doCheck = false; # fails
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xauth";
-    };
-  });
-
   xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
