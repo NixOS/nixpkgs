@@ -3242,6 +3242,8 @@ self: super: with self; {
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
+  cysystemd = callPackage ../development/python-modules/cysystemd { };
+
   cython = callPackage ../development/python-modules/cython { };
 
   cython-test-exception-raiser =
