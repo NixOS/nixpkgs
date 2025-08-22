@@ -287,7 +287,7 @@ rec {
           loc = builtins.unsafeGetAttrPos arg fargs;
         in
         "Function called without required argument \"${arg}\" at "
-        + "${loc.file}:${loc.line}${prettySuggestions (getSuggestions arg)}";
+        + "${loc.file}:${toString loc.line}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
       error = errorForArg (head (attrNames missingArgs));
