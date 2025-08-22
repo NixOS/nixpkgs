@@ -2583,7 +2583,8 @@
       ];
     "idteck_prox" =
       ps: with ps; [
-      ]; # missing inputs: rfk101py
+        rfk101py
+      ];
     "ifttt" =
       ps: with ps; [
         pyfttt
