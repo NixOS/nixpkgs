@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  curlHTTP3,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.tests = {
-    inherit curlHTTP3;
+    inherit curl;
   };
 
   meta = {
