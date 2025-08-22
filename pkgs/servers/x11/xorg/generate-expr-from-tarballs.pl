@@ -383,6 +383,7 @@ print OUT <<EOF;
   xauth,
   xbacklight,
   xbitmaps,
+  xcalc,
   xcb-proto,
   xcmsdb,
   xconsole,
@@ -448,6 +449,7 @@ self: with self; {
     xauth
     xbacklight
     xbitmaps
+    xcalc
     xcmsdb
     xconsole
     xcursorgen
