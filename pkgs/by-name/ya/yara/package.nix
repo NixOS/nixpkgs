@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yara";
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     tag = "v${version}";
-    hash = "sha256-ryRbLXnhC7nAxtlhr4bARxmNdtPhpvGKwlOiYPYPXOE=";
+    hash = "sha256-vSwjP0wbC65jEOxY9zrHAV1gEhcZ96emqvkuUw20Twc=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = enableStatic;
+
+  preFixup = ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/bin/yara
+  '';
 
   meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
