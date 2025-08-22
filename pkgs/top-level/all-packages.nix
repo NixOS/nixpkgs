@@ -9283,7 +9283,7 @@ with pkgs;
     zig_0_15
     ;
 
-  zig = zig_0_14;
+  zig = zig_0_15;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
