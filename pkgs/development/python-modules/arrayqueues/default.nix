@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "arrayqueues" ];
 
   meta = {
     homepage = "https://github.com/portugueslab/arrayqueues";
