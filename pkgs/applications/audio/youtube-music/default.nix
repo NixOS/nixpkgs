@@ -9,6 +9,7 @@
   nodejs,
   pnpm,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Electron wrapper around YouTube Music";
