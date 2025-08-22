@@ -17,14 +17,14 @@
   enableStatic ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yara";
   version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vSwjP0wbC65jEOxY9zrHAV1gEhcZ96emqvkuUw20Twc=";
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
-    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
     platforms = lib.platforms.all;
   };
-}
+})
