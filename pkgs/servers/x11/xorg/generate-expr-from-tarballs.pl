@@ -382,6 +382,7 @@ print OUT <<EOF;
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
@@ -436,6 +437,7 @@ self: with self; {
     xbacklight
     xbitmaps
     xcmsdb
+    xconsole
     xcursorgen
     xdriinfo
     xev
