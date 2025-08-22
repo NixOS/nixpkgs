@@ -56,6 +56,7 @@
   mkfontscale,
   pixman,
   sessreg,
+  smproxy,
   transset,
   util-macros,
   viewres,
@@ -109,6 +110,7 @@ self: with self; {
     mkfontscale
     pixman
     sessreg
+    smproxy
     transset
     viewres
     xbitmaps
@@ -2163,46 +2165,6 @@ self: with self; {
         libX11
         libxkbfile
         libXrandr
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  smproxy = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      libSM,
-      libXmu,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "smproxy";
-      version = "1.0.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/smproxy-1.0.8.tar.xz";
-        sha256 = "1j7n5wxbrbzvrrlmg4r7iak1n9r09543nbfpg38y477cwbm89rgy";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        libSM
-        libXmu
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

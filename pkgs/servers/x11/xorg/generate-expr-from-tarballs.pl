@@ -372,6 +372,7 @@ print OUT <<EOF;
   mkfontscale,
   pixman,
   sessreg,
+  smproxy,
   transset,
   util-macros,
   viewres,
@@ -425,6 +426,7 @@ self: with self; {
     mkfontscale
     pixman
     sessreg
+    smproxy
     transset
     viewres
     xbitmaps
