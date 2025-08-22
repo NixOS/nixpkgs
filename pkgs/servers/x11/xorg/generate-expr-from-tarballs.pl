@@ -376,6 +376,7 @@ print OUT <<EOF;
   xdriinfo,
   xev,
   xfsinfo,
+  xgamma,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -419,6 +420,7 @@ self: with self; {
     xdriinfo
     xev
     xfsinfo
+    xgamma
     xlsatoms
     xlsclients
     xlsfonts
