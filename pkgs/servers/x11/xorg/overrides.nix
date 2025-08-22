@@ -217,8 +217,6 @@ self: super:
 
   oclock = addMainProgram super.oclock { };
 
-  xcalc = addMainProgram super.xcalc { };
-
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
       "out"
