@@ -49,6 +49,7 @@
   libxxf86dga,
   libxxf86misc,
   libxxf86vm,
+  listres,
   lndir,
   luit,
   makedepend,
@@ -101,6 +102,7 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    listres
     lndir
     luit
     makedepend
@@ -2081,46 +2083,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xshmfence" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  listres = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXaw,
-      libXmu,
-      xorgproto,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "listres";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/listres-1.0.6.tar.xz";
-        sha256 = "1jj3xqm4bkzzdikb189ga6q79267jklpf5byhzr599lvsvpm672d";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libXaw
-        libXmu
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })
