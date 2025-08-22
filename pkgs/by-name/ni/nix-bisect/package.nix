@@ -6,7 +6,7 @@
 
 let
   pname = "nix-bisect";
-  version = "0.4.1-unstable-2024-04-19";
+  version = "0.4.1";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
