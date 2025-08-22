@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "reolink";
-  version = "0053";
+  version = "0.64";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = "reolink";
     tag = "v${version}";
-    hash = "sha256-DZcTfmzO9rBhhRN2RkgoPwUPE+LPPeZgc8kmhYU9V2I=";
+    hash = "sha256-3r5BwVlNolji2HIGjqv8gkizx4wWxrKYkiNmSJedKmI=";
   };
 
   propagatedBuildInputs = [
