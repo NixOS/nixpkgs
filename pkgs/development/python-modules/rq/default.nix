@@ -49,6 +49,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  # redisTestHook does not work on darwin-x86_64
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
     "test_deleted_jobs_arent_executed"

@@ -69,8 +69,6 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.http3;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   preCheck = ''
     # Some tests depends on sanic on PATH
     PATH="$out/bin:$PATH"
@@ -78,6 +76,11 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
+  ''
+  # Work around "OSError: AF_UNIX path too long"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace worker/test_socket.py \
+      --replace-fail '"./test.sock"' '"/tmp/test.sock"'
   '';
 
   disabledTests = [

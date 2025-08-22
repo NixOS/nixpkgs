@@ -7,8 +7,14 @@
   psycopg2,
   jinja2,
   beautifulsoup4,
+  pytest-django,
+  pytestCheckHook,
   python,
   pytz,
+  redis,
+  redisTestHook,
+  setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -29,17 +35,26 @@ buildPythonPackage rec {
     ./disable-unsupported-tests.patch
   ];
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
     beautifulsoup4
     django-debug-toolbar
     psycopg2
     jinja2
+    pytest-django
+    pytestCheckHook
     pytz
+    redis
+    redisTestHook
   ];
 
   pythonImportsCheck = [ "cachalot" ];
+
+  # redisTestHook does not work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # disable broken pinning test
   preCheck = ''
