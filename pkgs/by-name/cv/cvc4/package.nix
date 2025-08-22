@@ -61,6 +61,19 @@ stdenv.mkDerivation rec {
     ./cvc4-bash-patsub-replacement.patch
   ];
 
+  postPatch = ''
+        # Fix missing size_t declarations by adding after pragma once or include guards
+        sed -i '/#pragma once/a\
+    #include <cstddef>' src/expr/emptyset.h || sed -i '1i\
+    #include <cstddef>' src/expr/emptyset.h
+
+        sed -i '/#define CVC4__EXPR__EXPR_IOMANIP_H/a\
+    #include <cstddef>' src/expr/expr_iomanip.h
+
+        sed -i '/#define CVC4__UTIL__REGEXP_H/a\
+    #include <cstddef>' src/util/regexp.h
+  '';
+
   preConfigure = ''
     patchShebangs ./src/
   '';
