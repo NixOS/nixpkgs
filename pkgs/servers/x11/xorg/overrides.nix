@@ -923,7 +923,6 @@ self: super:
   });
 
   xfd = addMainProgram super.xfd { };
-  xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };

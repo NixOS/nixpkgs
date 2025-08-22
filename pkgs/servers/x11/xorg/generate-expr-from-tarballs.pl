@@ -389,6 +389,7 @@ print OUT <<EOF;
   xcursor-themes,
   xdriinfo,
   xev,
+  xfontsel,
   xfsinfo,
   xgamma,
   xgc,
@@ -443,6 +444,7 @@ self: with self; {
     xcursorgen
     xdriinfo
     xev
+    xfontsel
     xfsinfo
     xgamma
     xgc
