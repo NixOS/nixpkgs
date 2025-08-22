@@ -7,16 +7,21 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "wrtag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ev/dfj6WpBZzOaN1RXHcEmkd2pVLX92J/VhoMXYGPPw=";
+    hash = "sha256-fYxtZnOO4+uU6p8p7uNPDnIinUT+TYXfO3G17PtcqQA=";
   };
 
-  vendorHash = "sha256-es6pfWw3NqKKV9jfsgQhEU6IbWeptqbP0yvum/BxOuI=";
+  vendorHash = "sha256-Baz5oCKh26+t30ZyjfdYt3YobWAxSRwk12wdFEVPLRY=";
+
+  postInstall = ''
+    install -Dm444 contrib/completions/{wrtag,metadata}.fish -t $out/share/fish/vendor_completions.d/
+    install -Dm444 contrib/completions/wrtag.bash -T $out/share/bash-completions/completions/wrtag
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
