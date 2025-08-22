@@ -6,9 +6,8 @@
     maintainers = [ schnusch ];
   };
 
-  nodes.machine =
-    { ... }:
-    {
+  nodes = rec {
+    machine = {
       users.users = {
         alice.isNormalUser = true;
         bob.isNormalUser = true;
@@ -32,6 +31,11 @@
         OnUnitActiveSec = "10s";
       };
     };
+    disabled = {
+      imports = [ machine ];
+      systemd.user.tmpfiles.enable = false;
+    };
+  };
 
   testScript =
     { ... }:
@@ -49,5 +53,12 @@
       machine.succeed("systemctl --user --machine=bob@ is-active systemd-tmpfiles-clean.timer")
       machine.succeed("runuser -u bob -- touch ~bob/cleaned_up/file")
       machine.wait_until_fails("[ -e ~bob/cleaned_up/file ]")
+
+      # disabled user tmpfiles
+      disabled.succeed("loginctl enable-linger alice bob")
+      for user in ("alice", "bob"):
+          for verb in ("is-enabled", "is-active"):
+              for unit in ("systemd-tmpfiles-setup.service", "systemd-tmpfiles-clean.timer"):
+                  disabled.fail(f"systemctl --user --machine={user}@ {verb} {unit}")
     '';
 }

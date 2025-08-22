@@ -12,9 +12,6 @@ with lib;
 let
   cfg = config.systemd.user;
 
-  hasTmpfiles =
-    cfg.tmpfiles.rules != [ ] || any (cfg': cfg'.rules != [ ]) (attrValues cfg.tmpfiles.users);
-
   systemd = config.systemd.package;
 
   inherit (systemdUtils.lib)
@@ -123,6 +120,13 @@ in
     };
 
     systemd.user.tmpfiles = {
+      enable =
+        (mkEnableOption "systemd user units systemd-tmpfiles-setup.service and systemd-tmpfiles-clean.timer")
+        // {
+          default = true;
+          example = false;
+        };
+
       rules = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -215,7 +219,7 @@ in
 
     systemd.user.timers = {
       # enable systemd user tmpfiles
-      systemd-tmpfiles-clean.wantedBy = optional hasTmpfiles "timers.target";
+      systemd-tmpfiles-clean.wantedBy = optional cfg.tmpfiles.enable "timers.target";
     }
     # Generate timer units for all services that have a ‘startAt’ value.
     // (mapAttrs (name: service: {
@@ -240,7 +244,7 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
 
     # enable systemd user tmpfiles
-    systemd.user.services.systemd-tmpfiles-setup.wantedBy = optional hasTmpfiles "basic.target";
+    systemd.user.services.systemd-tmpfiles-setup.wantedBy = optional cfg.tmpfiles.enable "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
     # write the tmpfiles.d rules for everyone there
