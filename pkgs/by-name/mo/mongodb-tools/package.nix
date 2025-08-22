@@ -5,6 +5,7 @@
   openssl,
   pkg-config,
   libpcap,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -52,10 +53,15 @@ buildGoModule rec {
       runHook postBuild
     '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      iamanaws
+    ];
   };
 }
