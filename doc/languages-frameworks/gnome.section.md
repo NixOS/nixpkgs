@@ -129,6 +129,8 @@ The hooks do the the following:
 
 - []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGApps*` hook.
 
+- []{#ssec-gnome-hooks-glycin-loaders} `glycin-loader`'s [setup hook](#glycin-loaders-hook) will patch the crates of your build to work with Nix and populate `XDG_DATA_DIRS` with the path to the loaders.
+
 You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs` in `preFixup` hook:
 
 ```nix

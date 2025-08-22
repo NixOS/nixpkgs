@@ -50,28 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    glycin-loaders
     gtk4
     lcms2
     libadwaita
     libgweather
     libseccomp
   ];
-
-  preConfigure = ''
-    # Dirty approach to add patches after cargoSetupPostUnpackHook
-    # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
-  '';
-
-  preFixup = ''
-    # Needed for the glycin crate to find loaders.
-    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   passthru = {
     updateScript =
@@ -103,14 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jk ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jk ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     mainProgram = "loupe";
   };
 })
