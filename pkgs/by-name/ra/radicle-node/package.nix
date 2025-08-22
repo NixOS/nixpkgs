@@ -1,6 +1,6 @@
 {
   asciidoctor,
-  fetchgit,
+  fetchFromRadicle,
   git,
   installShellFiles,
   jq,
@@ -22,9 +22,11 @@ rustPlatform.buildRustPackage rec {
   version = "1.3.0";
   env.RADICLE_VERSION = version;
 
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
+    node = "z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM";
+    tag = "v${version}";
     hash = "sha256-0gK+fM/YGGpxlcR1HQixbLK0/sv+HH29h6ajEP2w2pI=";
     leaveDotGit = true;
     postFetch = ''

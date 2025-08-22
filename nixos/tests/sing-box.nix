@@ -111,7 +111,10 @@ in
   name = "sing-box";
 
   meta = {
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      prince213
+    ];
   };
 
   nodes = {
@@ -436,26 +439,25 @@ in
             dns = {
               final = "dns:default";
               independent_cache = true;
-              fakeip = {
-                enabled = true;
-                inet4_range = "198.18.0.0/16";
-              };
               servers = [
                 {
-                  detour = "outbound:direct";
+                  type = "udp";
                   tag = "dns:default";
-                  address = hosts."${target_host}";
+                  server = hosts."${target_host}";
                 }
                 {
+                  type = "fakeip";
                   tag = "dns:fakeip";
-                  address = "fakeip";
+                  inet4_range = "198.18.0.0/16";
+                }
+                {
+                  type = "resolved";
+                  tag = "dns:resolved";
+                  service = "service:resolved";
+                  accept_default_resolvers = true;
                 }
               ];
               rules = [
-                {
-                  outbound = [ "any" ];
-                  server = "dns:default";
-                }
                 {
                   query_type = [
                     "A"
@@ -479,6 +481,7 @@ in
               }
             ];
             route = {
+              default_domain_resolver = "dns:default";
               default_interface = "eth1";
               final = "outbound:direct";
               rules = [
@@ -491,6 +494,12 @@ in
                 }
               ];
             };
+            services = [
+              {
+                type = "resolved";
+                tag = "service:resolved";
+              }
+            ];
           };
         };
       };

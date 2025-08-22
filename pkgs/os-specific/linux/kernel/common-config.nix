@@ -322,7 +322,7 @@ let
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
-      NET_SCH_BPF = whenAtLeast "6.16" yes;
+      NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
       L2TP_V3 = yes;
       L2TP_IP = module;
       L2TP_ETH = module;
@@ -1091,7 +1091,9 @@ let
         HOLTEK_FF = yes;
         INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
+        LOGITECH_FF = yes;
         LOGIG940_FF = yes;
+        LOGIWHEELS_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
         NVIDIA_SHIELD_FF = whenAtLeast "6.5" yes;
         PLAYSTATION_FF = whenAtLeast "5.12" yes;

@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/python-mammoth";
     changelog = "https://github.com/mwilliamson/python-mammoth/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

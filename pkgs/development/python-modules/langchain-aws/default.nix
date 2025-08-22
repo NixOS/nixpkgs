@@ -79,7 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       natsukium
       sarahec
     ];

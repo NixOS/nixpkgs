@@ -1845,6 +1845,8 @@ self: super: with self; {
 
   beziers = callPackage ../development/python-modules/beziers { };
 
+  bgutil-ytdlp-pot-provider = callPackage ../development/python-modules/bgutil-ytdlp-pot-provider { };
+
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bibtexparser_2 = callPackage ../development/python-modules/bibtexparser/2.nix { };
@@ -5126,8 +5128,6 @@ self: super: with self; {
   filelock = callPackage ../development/python-modules/filelock { };
 
   files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
-
-  filesplit = callPackage ../development/python-modules/filesplit { };
 
   filetype = callPackage ../development/python-modules/filetype { };
 
@@ -13992,13 +13992,7 @@ self: super: with self; {
     callPackage ../development/python-modules/pyside6 { inherit (pkgs) cmake ninja; }
   );
 
-  pyside6-fluent-widgets = callPackage ../development/python-modules/pyside6-fluent-widgets { };
-
   pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
-
-  pysidesix-frameless-window =
-    callPackage ../development/python-modules/pysidesix-frameless-window
-      { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 

@@ -103,7 +103,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

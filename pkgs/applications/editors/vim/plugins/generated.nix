@@ -3130,6 +3130,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  commasemi-nvim = buildVimPlugin {
+    pname = "commasemi.nvim";
+    version = "2025-03-06";
+    src = fetchFromGitHub {
+      owner = "saifulapm";
+      repo = "commasemi.nvim";
+      rev = "cbfa3554e554f0534fcd79de273742a532c0068f";
+      sha256 = "13b334fx6yn1iyijvm7vb6il1zqpzx112rhw6ajp3lvgqanpz23d";
+    };
+    meta.homepage = "https://github.com/saifulapm/commasemi.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   comment-box-nvim = buildVimPlugin {
     pname = "comment-box.nvim";
     version = "2024-02-03";
@@ -15636,6 +15649,19 @@ final: prev: {
       sha256 = "0di84i53g1azxr02jlfm9kzzg0fg1dprxn2llrm9in4wglxf9yix";
     };
     meta.homepage = "https://github.com/kaarmu/typst.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  typstwatch-nvim = buildVimPlugin {
+    pname = "typstwatch.nvim";
+    version = "2025-08-20";
+    src = fetchFromGitHub {
+      owner = "J0schu";
+      repo = "typstwatch.nvim";
+      rev = "570c71b11c7d7ddd969df257290c10d82bbe2861";
+      sha256 = "1fd9lyisj46byxr9gdcyqkydmpfzqfz07nihmij2p935w0fm9ndb";
+    };
+    meta.homepage = "https://github.com/J0schu/typstwatch.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

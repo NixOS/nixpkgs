@@ -27,17 +27,6 @@
   }
  },
  "https://oss.sonatype.org/content/repositories/snapshots": {
-  "com/fazecast#jSerialComm/2.11.1-20240515.234541-3/SNAPSHOT": {
-   "jar": "sha256-n4A3U5elHQhq9b0YVgvWCuXAHqt0RzxL5e4Fe4iGTkM=",
-   "module": "sha256-xeVUO5f2Imx43EgYUI5vbLXyyEmJh/jT106eLUWtUYg=",
-   "pom": "sha256-y+ZXr7k89vlAHOMZmlTNYl8D0Nki+6CDame/QNX/e2M="
-  },
-  "com/fazecast/jSerialComm/2.11.1-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.fazecast",
-    "lastUpdated": "20241221185706"
-   }
-  },
   "net/java/dev/jna#jna-platform/5.1.1-20181118.214522-1/SNAPSHOT": {
    "pom": "sha256-STVISbMwC8BymYDxq6UJhC3ZWqO+p7iA7lRW34ZcX6g="
   },
@@ -559,6 +548,11 @@
   },
   "com/fasterxml/jackson/dataformat#jackson-dataformats-text/2.15.1": {
    "pom": "sha256-xLCopnocY3IgeJlhd5bYafE/UerrGsN/wHqcpxPaQjU="
+  },
+  "com/fazecast#jSerialComm/2.11.2": {
+   "jar": "sha256-IG2ScOZI3wMyR+deuECTpek9ePB8U+X+H6n8SmAaxXY=",
+   "module": "sha256-9ogHv84GSzOaAwFlbzbffC8GORkp7GKOyGyOMK7bufw=",
+   "pom": "sha256-jc/TZu3kSH1ZOSy+OvUaN3cUT09dRPinstTcvwBB38I="
   },
   "com/github/jonpeterson#jackson-module-model-versioning/1.2.2": {
    "jar": "sha256-FcepndfH5cTcOLXkhn1TZw1YDYqAXvQ4A7qT8IN2Uc0=",

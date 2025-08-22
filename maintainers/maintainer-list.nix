@@ -7275,6 +7275,12 @@
     github = "eigengrau";
     githubId = 4939947;
   };
+  eihqnh = {
+    email = "eihqnh@outlook.com";
+    github = "eihqnh";
+    githubId = 40905037;
+    name = "eihqnh";
+  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
@@ -19091,12 +19097,6 @@
     name = "Oops418";
     githubId = 93655215;
   };
-  oosquare = {
-    name = "Justin Chen";
-    email = "oosquare@outlook.com";
-    github = "oosquare";
-    githubId = 42143810;
-  };
   opeik = {
     email = "sandro@stikic.com";
     github = "opeik";
@@ -20964,12 +20964,6 @@
     githubId = 2141853;
     name = "Bang Lee";
   };
-  qwqawawow = {
-    email = "eihqnh@outlook.com";
-    github = "qwqawawow";
-    githubId = 40905037;
-    name = "qwqawawow";
-  };
   qxrein = {
     email = "mnv07@proton.me";
     github = "qxrein";
@@ -22465,6 +22459,13 @@
     matrix = "@s0me1newithhand7s:matrix.org";
     github = "s0me1newithhand7s";
     githubId = 117505144;
+  };
+  s0ssh = {
+    name = "s0ssh";
+    email = "me@s0s.sh";
+    github = "s0ssh";
+    githubId = 168315776;
+    keys = [ { fingerprint = "1D34 4976 77AD 462C CA9F  D5F1 FF16 29B1 3E89 9C1A"; } ];
   };
   s1341 = {
     email = "s1341@shmarya.net";
