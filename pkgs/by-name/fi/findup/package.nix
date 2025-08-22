@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "findup";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "booniepepper";
     repo = "findup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EjfKNIYJBXjlKFNV4dJpOaXCfB5PUdeMjl4k1jFRfG0=";
+    hash = "sha256-ZrwEOWoXo1RnujroQDGAv4vqRD0ZSyzo8MEnIbHFrY4=";
   };
 
   nativeBuildInputs = [ zig.hook ];
