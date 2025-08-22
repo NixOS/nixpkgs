@@ -6909,7 +6909,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) cgal libxml2;
+    inherit (pkgs) cgal_5 libxml2;
   };
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
