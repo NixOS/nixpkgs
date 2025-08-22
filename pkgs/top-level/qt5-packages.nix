@@ -33,6 +33,7 @@ makeScopeWithSplicing' {
         let
           mkFrameworks = import ../development/libraries/kde-frameworks;
           attrs = {
+            inherit config;
             inherit libsForQt5;
             inherit (pkgs) lib fetchurl;
           };
