@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   inherit (edlib) pname src meta;
-  version = "1.3.9";
+  version = "1.3.9.post1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
