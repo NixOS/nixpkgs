@@ -1669,6 +1669,9 @@
   "fetchfromsourcehut": [
     "index.html#fetchfromsourcehut"
   ],
+  "fetchfromradicle": [
+    "index.html#fetchfromradicle"
+  ],
   "requirefile": [
     "index.html#requirefile"
   ],
