@@ -1,10 +1,10 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   electron,
   python3,
-  stdenv,
   copyDesktopItems,
   nodejs,
   pnpm,
@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+PCDA7lHaUQw9DhODRsEScyJC+9v8UPiZ1W8w2h/Ljg=";
   };
 
+  patches = [
+    # MPRIS's DesktopEntry property needs to match the desktop entry basename
+    ./fix-mpris-desktop-entry.patch
+  ];
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
@@ -36,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -50,6 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
         -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
         -c.electronVersion=${electron.version}
     '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.github.th_ch.youtube_music";
+      exec = "youtube-music %u";
+      icon = "youtube-music";
+      desktopName = "YouTube Music";
+      startupWMClass = "com.github.th_ch.youtube_music";
+      categories = [ "AudioVideo" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -83,22 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
-
-  patches = [
-    # MPRIS's DesktopEntry property needs to match the desktop entry basename
-    ./fix-mpris-desktop-entry.patch
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "com.github.th_ch.youtube_music";
-      exec = "youtube-music %u";
-      icon = "youtube-music";
-      desktopName = "YouTube Music";
-      startupWMClass = "com.github.th_ch.youtube_music";
-      categories = [ "AudioVideo" ];
-    })
-  ];
 
   meta = {
     description = "Electron wrapper around YouTube Music";
