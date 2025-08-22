@@ -28110,6 +28110,12 @@
     githubId = 1311192;
     name = "Alexander Kiselyov";
   };
+  ylannl = {
+    email = "ravi@ylan.nl";
+    github = "ylannl";
+    githubId = 1742643;
+    name = "Ravi Peters";
+  };
   ylecornec = {
     email = "yves.stan.lecornec@tweag.io";
     github = "ylecornec";

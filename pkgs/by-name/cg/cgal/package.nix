@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       raskin
       drew-dirac
+      ylannl
     ];
   };
 }
