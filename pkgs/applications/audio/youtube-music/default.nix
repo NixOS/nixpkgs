@@ -100,14 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${
-      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.rev
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.tag
     }";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aacebedo
       SuperSandro2000
     ];
