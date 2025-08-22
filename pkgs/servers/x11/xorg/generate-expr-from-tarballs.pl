@@ -373,6 +373,7 @@ print OUT <<EOF;
   util-macros,
   viewres,
   xauth,
+  xbacklight,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -422,6 +423,7 @@ self: with self; {
     transset
     viewres
     xauth
+    xbacklight
     xbitmaps
     xcmsdb
     xcursorgen
