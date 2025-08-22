@@ -9,7 +9,6 @@
   openssl,
   withJemalloc ? false,
   jemalloc,
-  curlHTTP3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,10 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-
-  passthru.tests = {
-    inherit curlHTTP3;
-  };
 
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
