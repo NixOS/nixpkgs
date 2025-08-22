@@ -16703,6 +16703,8 @@ self: super: with self; {
 
   shellescape = callPackage ../development/python-modules/shellescape { };
 
+  shelljob = callPackage ../development/python-modules/shelljob { };
+
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 = toPythonModule (
