@@ -15656,16 +15656,6 @@ with pkgs;
     }
   );
 
-  xsw = callPackage ../applications/misc/xsw {
-    # Enable the next line to use this in terminal.
-    # Note that it requires sixel capable terminals such as mlterm
-    # or xterm -ti 340
-    SDL = SDL_sixel;
-    SDL_gfx = SDL_gfx.override { SDL = SDL_sixel; };
-    SDL_image = SDL_image.override { SDL = SDL_sixel; };
-    SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
-  };
-
   yamale = with python3Packages; toPythonApplication yamale;
 
   zap-chip-gui = zap-chip.override { withGui = true; };
