@@ -65,6 +65,7 @@
   xdriinfo,
   xev,
   xfsinfo,
+  xgamma,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -108,6 +109,7 @@ self: with self; {
     xdriinfo
     xev
     xfsinfo
+    xgamma
     xlsatoms
     xlsclients
     xlsfonts
@@ -4911,44 +4913,6 @@ self: with self; {
         libXfont2
         xorgproto
         xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xgamma = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      libXxf86vm,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xgamma";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xgamma-1.0.7.tar.xz";
-        sha256 = "13xw2fqp9cs7xj3nqi8khqxv81rk0dd8khp59xgs2lw9bbldly8w";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
-        libXxf86vm
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
