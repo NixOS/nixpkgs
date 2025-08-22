@@ -122,6 +122,7 @@ jobs:
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block merging a PR.
   unlock:
+    if: github.event_name != 'pull_request'
     # Modify this list to add or remove jobs from required status checks.
     needs:
       - check
