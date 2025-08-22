@@ -62,6 +62,7 @@
   util-macros,
   viewres,
   xauth,
+  xbacklight,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -116,6 +117,7 @@ self: with self; {
     transset
     viewres
     xauth
+    xbacklight
     xbitmaps
     xcmsdb
     xcursorgen
@@ -2213,42 +2215,6 @@ self: with self; {
         libXmu
         xorgproto
         libXrender
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xbacklight = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxcb,
-      xcbutil,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xbacklight";
-      version = "1.2.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xbacklight-1.2.4.tar.xz";
-        sha256 = "1vp890ic26y4k2l0haw94z4nim3j7gp3g9w5flw2zj0qdw70phyl";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libxcb
-        xcbutil
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
