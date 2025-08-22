@@ -3381,7 +3381,7 @@ with pkgs;
     lua = lua5_2_compat;
   };
 
-  kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
+  kdbg = callPackage ../development/tools/misc/kdbg { };
 
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
