@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "pdtpartners";
     repo = "nix-snapshotter";
     rev = "v${version}";
-    hash = "sha256-TCZdXCmnqCPsd3PjLv/LDSKJhTspLliL0DE+c/XP9BY=";
+    hash = "sha256-nrY/S0wJM3aQcZpPNYTy/kHaBCg5y6/O+gZNHIWVTRQ=";
   };
 
   nix-snapshotter-lib = callPackage "${src}/package.nix" { };
