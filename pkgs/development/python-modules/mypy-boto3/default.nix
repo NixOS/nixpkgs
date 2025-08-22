@@ -98,8 +98,8 @@ rec {
       "sha256-/6S/GdXeAYY9wdapWjcrCyaDmeijp6kSy63m0ITW3fs=";
 
   mypy-boto3-appfabric =
-    buildMypyBoto3Package "appfabric" "1.40.0"
-      "sha256-NtPZSYolKwbty/QgQHi5XeuBE6uDMM+hf3RRw+S9UtE=";
+    buildMypyBoto3Package "appfabric" "1.40.15"
+      "sha256-wLCPBODUaTw6VdnbZ0bD9BzIVTPuGpVlZfeGBZY95B8=";
 
   mypy-boto3-appflow =
     buildMypyBoto3Package "appflow" "1.40.0"
