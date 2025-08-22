@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/portugueslab/arrayqueues";
     description = "Multiprocessing queues for numpy arrays using shared memory";
+    changelog = "https://github.com/portugueslab/arrayqueues/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tbenst ];
   };
