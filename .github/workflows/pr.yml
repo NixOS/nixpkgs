@@ -61,6 +61,7 @@ jobs:
       headBranch: ${{ needs.prepare.outputs.headBranch }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
+      ownersCanFail: ${{ !contains(fromJSON(needs.prepare.outputs.touched), 'owners') }}
 
   lint:
     name: Lint
