@@ -51,6 +51,7 @@
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
@@ -95,6 +96,7 @@ self: with self; {
     transset
     xbitmaps
     xcmsdb
+    xconsole
     xcursorgen
     xdriinfo
     xev
@@ -2964,52 +2966,6 @@ self: with self; {
         libXfixes
         xorgproto
         libXrender
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xconsole = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXaw,
-      libXmu,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xconsole";
-      version = "1.1.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xconsole-1.1.0.tar.xz";
-        sha256 = "128i77kn5pfrcrw31p90cb97g8a5y5173admr3gpdnndr9w5jxqc";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libX11
-        libXaw
-        libXmu
-        xorgproto
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
