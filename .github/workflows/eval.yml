@@ -111,7 +111,7 @@ jobs:
           MATRIX_SYSTEM: ${{ matrix.system }}
           MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
         run: |
-          nix-build untrusted/ci --arg nixpkgs ./pinned  -A eval.singleSystem \
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/pinned  -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
             --argstr nixPath "$MATRIX_VERSION" \
@@ -190,7 +190,7 @@ jobs:
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build untrusted/ci --arg nixpkgs ./pinned -A eval.diff \
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/pinned -A eval.diff \
             --arg beforeDir ./target \
             --arg afterDir "$(readlink ./merged)" \
             --argstr evalSystem "$MATRIX_SYSTEM" \
@@ -233,7 +233,7 @@ jobs:
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.combine \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/pinned -A eval.combine \
             --arg diffDir ./diff \
             --out-link combined
 
@@ -241,11 +241,11 @@ jobs:
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C trusted diff --name-only ${{ inputs.mergedSha }} \
+          git -C nixpkgs/trusted diff --name-only ${{ inputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.compare \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/pinned -A eval.compare \
             --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
             --argstr githubAuthorId "$AUTHOR_ID" \
@@ -392,8 +392,8 @@ jobs:
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Ensure flake outputs on all systems still evaluate
-        run: nix flake check --all-systems --no-build './untrusted?shallow=1'
+        run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
-          time nix-env -I ./untrusted -f ./untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+          time nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
