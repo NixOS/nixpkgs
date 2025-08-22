@@ -6645,6 +6645,8 @@ self: super: with self; {
 
   httptools = callPackage ../development/python-modules/httptools { };
 
+  http-tools = callPackage ../development/python-modules/http-tools { };
+
   httpx = callPackage ../development/python-modules/httpx { };
 
   httpx-auth = callPackage ../development/python-modules/httpx-auth { };
