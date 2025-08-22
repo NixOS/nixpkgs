@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
