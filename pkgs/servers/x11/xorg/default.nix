@@ -57,6 +57,7 @@
   sessreg,
   transset,
   util-macros,
+  viewres,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -107,6 +108,7 @@ self: with self; {
     pixman
     sessreg
     transset
+    viewres
     xbitmaps
     xcmsdb
     xcursorgen
@@ -2286,50 +2288,6 @@ self: with self; {
         libXmu
         xorgproto
         libXrandr
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  viewres = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXaw,
-      libXmu,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "viewres";
-      version = "1.0.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/viewres-1.0.8.tar.xz";
-        sha256 = "1lkc5gx7g8zjgjixinq50vlvnv03z2mvj4incdkb341k20miq8jb";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libXaw
-        libXmu
-        xorgproto
         libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
