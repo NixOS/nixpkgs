@@ -2439,6 +2439,7 @@ mapAliases {
     zeroad-unwrapped = lib.warnOnInstantiate "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'" zeroad-unwrapped; # Added 2025-03-22
   };
   zeromq4 = zeromq; # Added 2024-11-03
+  zexy = throw "'zexy' has been removed as it is unmaintained"; # Added 2025-08-22
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zfs_2_1 = throw "zfs 2.1 has been removed as it is EOL. Please upgrade to a newer version"; # Added 2024-12-25
