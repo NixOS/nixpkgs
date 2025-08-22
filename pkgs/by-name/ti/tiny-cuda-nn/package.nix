@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Remove this once a release is made with
   # https://github.com/NVlabs/tiny-cuda-nn/commit/78a14fe8c292a69f54e6d0d47a09f52b777127e1
-  postPatch = lib.optionals (cudaAtLeast "11.0") ''
+  postPatch = ''
     substituteInPlace bindings/torch/setup.py --replace-fail \
       "-std=c++14" "-std=c++17"
   '';
