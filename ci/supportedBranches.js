@@ -9,7 +9,6 @@ const typeConfig = {
   staging: ['development', 'secondary'],
   'staging-next': ['development', 'secondary'],
   'haskell-updates': ['development', 'secondary'],
-  'python-updates': ['development', 'secondary'],
   nixos: ['channel'],
   nixpkgs: ['channel'],
 }
