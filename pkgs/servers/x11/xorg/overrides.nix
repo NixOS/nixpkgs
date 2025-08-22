@@ -846,7 +846,6 @@ self: super:
     ];
   });
 
-  xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
