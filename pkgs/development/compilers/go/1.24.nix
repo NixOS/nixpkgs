@@ -28,6 +28,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
   version = "1.24.5";
+  # https://pkg.go.dev/cmd/distpack
+  # https://github.com/NixOS/nixpkgs/pull/254497
+  # https://github.com/NixOS/nixpkgs/pull/256505
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
@@ -98,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     ulimit -a
 
     pushd src
-    ./make.bash
+    ./make.bash -no-banner -distpack
     popd
     runHook postBuild
   '';
@@ -107,36 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Contains the wrong perl shebang when cross compiling,
     # since it is not used for anything we can deleted as well.
     rm src/regexp/syntax/make_perl_groups.pl
-  ''
-  + (
-    if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
-      ''
-        mv bin/*_*/* bin
-        rmdir bin/*_*
-        ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-          ''
-            rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
-          ''
-        }
-      ''
-    else
-      lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-        rm -rf bin/*_*
-        ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-          ''
-            rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
-          ''
-        }
-      ''
-  );
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/go
-    cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
-    mkdir -p $out/bin
+    mkdir -p $out/{share,bin}
+    tar -C $out/share -x -z -f "pkg/distpack/go${finalAttrs.version}.$GOOS-$GOARCH.tar.gz"
     ln -s $out/share/go/bin/* $out/bin
     runHook postInstall
   '';
