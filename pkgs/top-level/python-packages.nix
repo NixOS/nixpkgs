@@ -1803,6 +1803,8 @@ self: super: with self; {
 
   beetcamp = callPackage ../development/python-modules/beetcamp { };
 
+  beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -2167,6 +2169,8 @@ self: super: with self; {
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bthomehub5-devicelist = callPackage ../development/python-modules/bthomehub5-devicelist { };
+
+  btlewrap = callPackage ../development/python-modules/btlewrap { };
 
   btrees = callPackage ../development/python-modules/btrees { };
 
@@ -6893,6 +6897,8 @@ self: super: with self; {
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
     inherit (pkgs) cgal_5 libxml2;
   };
+
+  iglo = callPackage ../development/python-modules/iglo { };
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
 
@@ -12028,6 +12034,8 @@ self: super: with self; {
 
   progressbar33 = callPackage ../development/python-modules/progressbar33 { };
 
+  proliphix = callPackage ../development/python-modules/proliphix { };
+
   prometheus-api-client = callPackage ../development/python-modules/prometheus-api-client { };
 
   prometheus-async = callPackage ../development/python-modules/prometheus-async { };
@@ -13511,6 +13519,8 @@ self: super: with self; {
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
   pyopengltk = callPackage ../development/python-modules/pyopengltk { };
+
+  pyopenjtalk = callPackage ../development/python-modules/pyopenjtalk { };
 
   pyopensprinkler = callPackage ../development/python-modules/pyopensprinkler { };
 
@@ -16298,6 +16308,8 @@ self: super: with self; {
   scrypt = callPackage ../development/python-modules/scrypt { };
 
   scs = callPackage ../development/python-modules/scs { };
+
+  scsgate = callPackage ../development/python-modules/scsgate { };
 
   scspell = callPackage ../development/python-modules/scspell { };
 

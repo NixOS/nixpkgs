@@ -1154,6 +1154,7 @@ mapAliases {
   imagemagick7Big = throw "'imagemagick7Big' has been renamed to/replaced by 'imagemagickBig'"; # Converted to throw 2024-10-17
   imagemagick7 = throw "'imagemagick7' has been renamed to/replaced by 'imagemagick'"; # Converted to throw 2024-10-17
   imagemagick7_light = throw "'imagemagick7_light' has been renamed to/replaced by 'imagemagick_light'"; # Converted to throw 2024-10-17
+  imaginer = throw "'imaginer' has been removed due to lack of upstream maintenance"; # Added 2025-08-15
   immersed-vr = lib.warnOnInstantiate "'immersed-vr' has been renamed to 'immersed'" immersed; # Added 2024-08-11
   inconsolata-nerdfont = lib.warnOnInstantiate "inconsolata-nerdfont is redundant. Use nerd-fonts.inconsolata instead." nerd-fonts.inconsolata; # Added 2024-11-10
   incrtcl = tclPackages.incrtcl; # Added 2024-10-02
@@ -1412,6 +1413,22 @@ mapAliases {
     [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
   '';
   linux_latest_hardened = linuxPackages_latest_hardened;
+
+  # Added 2025-08-10
+  linuxPackages_hardened = linuxKernel.packages.linux_hardened;
+  linux_hardened = linuxPackages_hardened.kernel;
+  linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
+  linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
+  linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
+  linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
+  linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
+  linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
+  linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
+  linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
+  linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
+  linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+  linuxPackages_6_12_hardened = linuxKernel.packages.linux_6_12_hardened;
+  linux_6_12_hardened = linuxKernel.kernels.linux_6_12_hardened;
 
   # Added 2023-11-18, modified 2024-01-09
   linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support";
