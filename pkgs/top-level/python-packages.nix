@@ -4739,6 +4739,8 @@ self: super: with self; {
 
   esig = callPackage ../development/python-modules/esig { };
 
+  esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esper = callPackage ../development/python-modules/esper { };
