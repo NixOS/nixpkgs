@@ -412,6 +412,7 @@ print OUT <<EOF;
   xrandr,
   xrefresh,
   xset,
+  xsetroot,
   xtrans,
   xvinfo,
   xwininfo,
@@ -467,6 +468,7 @@ self: with self; {
     xrandr
     xrefresh
     xset
+    xsetroot
     xtrans
     xvinfo
     xwininfo
