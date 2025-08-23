@@ -2,7 +2,7 @@
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
 if ! test -d "$kernel/lib/modules"; then
-    if test -z "$rootModules" || test -n "$allowMissing"; then
+    if (test -z "$rootModules" || test -n "$allowMissing") && test -n "$allowEmpty"; then
         mkdir -p "$out"
         exit 0
     else

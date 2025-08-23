@@ -766,6 +766,7 @@ with pkgs;
       firmware,
       rootModules,
       allowMissing ? false,
+      allowEmpty ? false,
       extraFirmwarePaths ? [ ],
     }:
     callPackage ../build-support/kernel/modules-closure.nix {
@@ -774,6 +775,7 @@ with pkgs;
         firmware
         rootModules
         allowMissing
+        allowEmpty
         extraFirmwarePaths
         ;
     };

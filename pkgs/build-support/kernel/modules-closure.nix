@@ -21,6 +21,8 @@
   rootModules,
   # When `true`, missing modules won't fail the build.
   allowMissing ? false,
+  # When `true`, an empty output won't fail the build.
+  allowEmpty ? false,
   # A list of firmware paths to be included in the closure.
   extraFirmwarePaths ? [ ],
 }:
@@ -37,6 +39,7 @@ stdenvNoCC.mkDerivation {
     firmware
     rootModules
     allowMissing
+    allowEmpty
     extraFirmwarePaths
     ;
   allowedReferences = [ "out" ];
