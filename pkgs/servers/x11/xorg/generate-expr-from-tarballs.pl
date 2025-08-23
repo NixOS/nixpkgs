@@ -61,6 +61,7 @@ $pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
@@ -345,8 +346,9 @@ print OUT <<EOF;
   libxcb-render-util,
   libxcb-util,
   libxcb-wm,
-  libxcvt,
+  libxcomposite,
   libxcursor,
+  libxcvt,
   libxdmcp,
   libxext,
   libxfixes,
@@ -446,6 +448,7 @@ self: with self; {
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;

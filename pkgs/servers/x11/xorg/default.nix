@@ -29,8 +29,9 @@
   libxcb-render-util,
   libxcb-util,
   libxcb-wm,
-  libxcvt,
+  libxcomposite,
   libxcursor,
+  libxcvt,
   libxdmcp,
   libxext,
   libxfixes,
@@ -130,6 +131,7 @@ self: with self; {
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
@@ -1753,44 +1755,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXcomposite = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXfixes,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXcomposite";
-      version = "0.4.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXcomposite-0.4.6.tar.xz";
-        sha256 = "11rcvk380l5540gfqy9p8mbzw3l1p5g8l214p870f28smvqbqh7y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXfixes
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcomposite" ];
         platforms = lib.platforms.unix;
       };
     })

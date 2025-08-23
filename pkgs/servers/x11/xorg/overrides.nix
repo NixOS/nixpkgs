@@ -204,14 +204,6 @@ self: super:
     };
   });
 
-  libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
   libXdamage = super.libXdamage.overrideAttrs (attrs: {
     outputs = [
       "out"
