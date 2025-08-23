@@ -1803,6 +1803,8 @@ self: super: with self; {
 
   beetcamp = callPackage ../development/python-modules/beetcamp { };
 
+  beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -2167,6 +2169,8 @@ self: super: with self; {
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bthomehub5-devicelist = callPackage ../development/python-modules/bthomehub5-devicelist { };
+
+  btlewrap = callPackage ../development/python-modules/btlewrap { };
 
   btrees = callPackage ../development/python-modules/btrees { };
 

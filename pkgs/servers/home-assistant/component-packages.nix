@@ -562,7 +562,8 @@
       ];
     "beewi_smartclim" =
       ps: with ps; [
-      ]; # missing inputs: beewi-smartclim
+        beewi-smartclim
+      ];
     "bge" =
       ps: with ps; [
       ];
