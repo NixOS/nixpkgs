@@ -382,6 +382,7 @@ print OUT <<EOF;
   xev,
   xfsinfo,
   xgamma,
+  xgc,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -426,6 +427,7 @@ self: with self; {
     xev
     xfsinfo
     xgamma
+    xgc
     xlsatoms
     xlsclients
     xlsfonts
