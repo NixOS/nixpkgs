@@ -9,6 +9,8 @@
   openssl,
   curl,
   versionCheckHook,
+  clang,
+  llvmPackages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    rustPlatform.bindgenHook
+    clang
+    llvmPackages.libclang
   ];
 
   buildInputs = [
