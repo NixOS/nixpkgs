@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "graphinder";
-  version = "1.11.6";
+  version = "2.0.0b4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Escape-Technologies";
     repo = "graphinder";
     tag = "v${version}";
-    hash = "sha256-TDc6aIFkxShlfC6fLYMKULfrFUAYhQZrIHZNDuMh68g=";
+    hash = "sha256-emBWhEJxYRAw3WTd8t+lurnHX8SeCcLBHGH9B+Owuag=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
