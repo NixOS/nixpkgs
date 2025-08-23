@@ -84,6 +84,7 @@
   xrefresh,
   xset,
   xsetroot,
+  xsm,
   xtrans,
   xvinfo,
   xwininfo,
@@ -130,6 +131,7 @@ self: with self; {
     xrefresh
     xset
     xsetroot
+    xsm
     xtrans
     xvinfo
     xwininfo
@@ -5427,54 +5429,6 @@ self: with self; {
         libX11
         libXmu
         xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xsm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      libSM,
-      libX11,
-      libXaw,
-      xorgproto,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xsm";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xsm-1.0.6.tar.xz";
-        sha256 = "1kk398lbwyag8dljfmjfn4psdwmh66yhvab85xckf306qrscfk5p";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libICE
-        libSM
-        libX11
-        libXaw
-        xorgproto
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
