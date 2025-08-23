@@ -33,7 +33,7 @@
   # openai
   openai,
   # toolkit
-  duckduckgo-search,
+  duckduckgo-search_8,
   markdownify,
   # torch
   numpy,
@@ -108,7 +108,7 @@ buildPythonPackage rec {
     #   opentelemetry-sdk
     # ];
     toolkit = [
-      duckduckgo-search
+      duckduckgo-search_8
       markdownify
     ];
     torch = [
