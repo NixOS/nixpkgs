@@ -69,6 +69,7 @@
   libxrandr,
   libxrender,
   libxres,
+  libxscrnsaver,
   libxt,
   libxv,
   libxvmc,
@@ -238,6 +239,7 @@ self: with self; {
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
   libXv = libxv;
   libXvMC = libxvmc;
@@ -936,44 +938,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "windowswm" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXScrnSaver = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXScrnSaver";
-      version = "1.2.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.5.tar.xz";
-        sha256 = "004drphnsckx30g8xn554a1nr17p1zhl2547fpif0lvjhigkcmsh";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xscrnsaver" ];
         platforms = lib.platforms.unix;
       };
     })
