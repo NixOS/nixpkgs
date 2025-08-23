@@ -44,16 +44,16 @@ stdenv.mkDerivation rec {
     ++ [ libxml2 ];
 
   prePatch = ''
-    substituteInPlace ocaml-dep.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-dep.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "virt-top";
   };
 }
