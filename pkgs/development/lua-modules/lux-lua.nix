@@ -39,8 +39,11 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    lua
     openssl
+  ];
+
+  propagatedBuildInputs = [
+    lua
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
