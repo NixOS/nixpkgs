@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-docx";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "python-openxml";
     repo = "python-docx";
     tag = "v${version}";
-    hash = "sha256-isxMtq5j5J02GcHMzOJdJw+ZokLoxA6fG1xsN21Irbc=";
+    hash = "sha256-5x2VmMiY5fZiXoswCDcs89olL0vbpGzmJZThrNS/SmI=";
   };
 
   build-system = [ setuptools ];
