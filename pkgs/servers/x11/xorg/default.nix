@@ -44,6 +44,7 @@
   font-winitzki-cyrillic,
   font-xfree86-type1,
   gccmakedep,
+  iceauth,
   ico,
   imake,
   libapplewm,
@@ -162,6 +163,7 @@ self: with self; {
     editres
     fonttosfnt
     gccmakedep
+    iceauth
     ico
     imake
     libdmx
@@ -307,42 +309,6 @@ self: with self; {
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  iceauth = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "iceauth";
-      version = "1.0.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/iceauth-1.0.10.tar.xz";
-        sha256 = "0ad0kbr5bfdk9na3jmjpg26gd6hwv4lxja2nkdwxrybal9yzpvix";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXTrap = callPackage (
