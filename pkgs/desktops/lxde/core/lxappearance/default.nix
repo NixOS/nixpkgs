@@ -1,29 +1,39 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   intltool,
   pkg-config,
   libX11,
   gtk2,
   gtk3,
+  libxslt,
+  docbook_xsl,
   wrapGAppsHook3,
   withGtk3 ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxappearance";
   version = "0.6.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/lxde/LXAppearance/${pname}-${version}.tar.xz";
-    sha256 = "0f4bjaamfxxdr9civvy55pa6vv9dx1hjs522gjbbgx7yp1cdh8kj";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "lxappearance";
+    tag = finalAttrs.version;
+    hash = "sha256-YxU6jikCRmV2b+080nyMFU9FCMlz77KIqJqoCHVjp8M=";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     pkg-config
     intltool
     wrapGAppsHook3
+    autoreconfHook
+    libxslt
+    docbook_xsl
   ];
 
   buildInputs = [
@@ -35,6 +45,8 @@ stdenv.mkDerivation rec {
     ./lxappearance-0.6.3-xdg.system.data.dirs.patch
   ];
 
+  env.XSLTPROC = lib.getExe' libxslt "xsltproc";
+
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
   meta = with lib; {
@@ -45,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
-}
+})
