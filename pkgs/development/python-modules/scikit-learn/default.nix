@@ -2,7 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   cython,
@@ -17,9 +17,12 @@
   pytestCheckHook,
   pytest-xdist,
   pillow,
-  joblib,
   threadpoolctl,
-  pythonOlder,
+
+  # test
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +32,11 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    pname = "scikit_learn";
-    inherit version;
-    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn";
+    repo = "scikit-learn";
+    tag = version;
+    hash = "sha256-jZaeev69C3whBUMnGJ91jkJt3Zsh37kdKEYe27kwJp4=";
   };
 
   postPatch = ''
@@ -71,6 +73,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    writableTmpDirAsHomeHook
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -81,23 +84,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
+  ];
 
-    # Fail due to new deprecation warnings in scipy
-    # FIXME: reenable when fixed upstream
-    "test_logistic_regression_path_convergence_fail"
-    "test_linalg_warning_with_newton_solver"
-    "test_newton_cholesky_fallback_to_lbfgs"
-
-    # NuSVC memmap tests causes segmentation faults in certain environments
-    # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
-    # (https://github.com/joblib/joblib/issues/563). See also:
-    # https://github.com/scikit-learn/scikit-learn/issues/17582
-    "NuSVC and memmap"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # doesn't seem to produce correct results?
-    # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
-    "test_sparse_input"
+  disabledTestPaths = [
+    "tests/test_build.py::test_openmp_parallelism_enabled"
   ];
 
   pytestFlags = [
@@ -108,14 +98,12 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    cd $TMPDIR
-    export HOME=$TMPDIR
     export OMP_NUM_THREADS=1
   '';
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
@@ -125,7 +113,10 @@ buildPythonPackage rec {
       in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ davhau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
