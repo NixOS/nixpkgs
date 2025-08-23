@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromSourcehut {
     owner = "~rkta";
     repo = "w3m";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A11vHFiyotFncqWRiljRJbHO1wEzmWTEh1DOel803q4=";
+    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
   };
 
   env = {
