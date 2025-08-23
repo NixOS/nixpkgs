@@ -551,6 +551,12 @@ let
     ];
     HiCParser = [ pkgs.zlib ];
     yyjsonr = with pkgs; [ zlib.dev ];
+    RbowtieCuda = with pkgs; [
+      cmake
+      cudaPackages.cuda_nvcc
+      cudaPackages.cuda_cudart
+      rocmPackages.hip-common
+    ];
     RNifti = with pkgs; [ zlib.dev ];
     RNiftyReg = with pkgs; [ zlib.dev ];
     highs = [
@@ -2007,6 +2013,16 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    RbowtieCuda = old.RbowtieCuda.overrideAttrs (attrs: {
+      env.rocthrust_DIR = "${lib.getDev pkgs.rocmPackages.rocthrust}/lib/cmake/rocthrust";
+      env.rocprim_DIR = "${lib.getDev pkgs.rocmPackages.rocprim}/lib/cmake/rocprim";
+      postPatch = ''
+        substituteInPlace src/nvbio/CMakeLists.txt \
+        --replace-fail "Thrust REQUIRED" "rocthrust REQUIRED"
+        # --replace-fail "hip REQUIRED" "HIP REQUIRED"
+      '';
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -2193,6 +2209,7 @@ let
           --replace-fail "Sys.getenv(\"QUARTO_PATH\", unset = NA_character_)" "Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
     });
+
 
     Rhisat2 = old.Rhisat2.overrideAttrs (attrs: {
       enableParallelBuilding = false;
