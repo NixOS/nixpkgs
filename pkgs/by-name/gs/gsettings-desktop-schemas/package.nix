@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "48.0";
+  version = "49.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5o8VWBO/GPhlqLLI6dRzWItsytyvu2Zqt4iFfGwtG9M=";
+    hash = "sha256-8xCgVDtLQot5ratYetzrPGUJSC3CohCUj6wwqnmykiY=";
   };
 
   strictDeps = true;
