@@ -83,6 +83,7 @@
   xrandr,
   xrefresh,
   xset,
+  xsetroot,
   xtrans,
   xvinfo,
   xwininfo,
@@ -128,6 +129,7 @@ self: with self; {
     xrandr
     xrefresh
     xset
+    xsetroot
     xtrans
     xvinfo
     xwininfo
@@ -5423,48 +5425,6 @@ self: with self; {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libX11
-        libXmu
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xsetroot = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xbitmaps,
-      libXcursor,
-      libXmu,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xsetroot";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xsetroot-1.1.3.tar.xz";
-        sha256 = "1l9qcv4mldj70slnmfg56nv7yh9j9ca1x795bl26whmlkrdb90b0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xbitmaps
-        libXcursor
         libXmu
         xorgproto
       ];
