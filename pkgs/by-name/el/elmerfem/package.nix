@@ -55,22 +55,20 @@ stdenv.mkDerivation rec {
     patchShebangs ./
   '';
 
-  storepath = placeholder "out";
-
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   cmakeFlags = [
-    "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
-    "-DWITH_OpenMP:BOOLEAN=TRUE"
-    "-DWITH_MPI:BOOLEAN=TRUE"
-    "-DWITH_QT5:BOOLEAN=TRUE"
-    "-DWITH_OCC:BOOLEAN=TRUE"
-    "-DWITH_VTK:BOOLEAN=TRUE"
-    "-DWITH_ELMERGUI:BOOLEAN=TRUE"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
-    "-DUSE_MACOS_PACKAGE_MANAGER=False"
+    (lib.cmakeFeature "ELMER_INSTALL_LIB_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeBool "WITH_OpenMP" true)
+    (lib.cmakeBool "WITH_MPI" true)
+    (lib.cmakeBool "WITH_QT6" true)
+    (lib.cmakeBool "WITH_OCC" true)
+    (lib.cmakeBool "WITH_VTK" true)
+    (lib.cmakeBool "WITH_ELMERGUI" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_OpenGL_GL_PREFERENCE" "GLVND")
+    (lib.cmakeBool "USE_MACOS_PACKAGE_MANAGER" false)
   ];
 
   meta = with lib; {
