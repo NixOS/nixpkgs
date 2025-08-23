@@ -162,6 +162,9 @@ in
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+
+        # As used by Void, Alpine to fix musl "struct sysinfo" redefinition issues
+        ./1-4-glibc-specific-inclusion-of-sysinfo.h-in-kernel.h.patch
       ];
     };
 }
