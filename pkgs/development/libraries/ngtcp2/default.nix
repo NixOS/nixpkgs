@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     # must match version usage in meta.changelog
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Pmk752i/lgO/os2SegevGN+MKaVuQii2HrVWaR15Gg=";
+    hash = "sha256-McLt2NlBNPcDuyE9z6qKUkMvtCL0xdLRi5pOaZyqlpk=";
     fetchSubmodules = true;
   };
 
