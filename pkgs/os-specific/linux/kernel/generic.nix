@@ -72,6 +72,7 @@ let
       extraMeta ? { },
       extraPassthru ? { },
 
+      isLTS ? false,
       isZen ? false,
       isLibre ? false,
       isHardened ? false,
@@ -332,6 +333,7 @@ let
               commonStructuredConfig
               structuredExtraConfig
               extraMakeFlags
+              isLTS
               isZen
               isHardened
               isLibre
