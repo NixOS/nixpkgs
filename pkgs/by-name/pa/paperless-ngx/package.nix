@@ -168,16 +168,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "django"
     "django-allauth"
-    "django-auditlog"
-    "django-guardian"
-    "django-multiselectfield"
-    "imap-tools"
-    "pathvalidate"
     "redis"
-    "scikit-learn"
-    "tika-client"
   ];
 
   dependencies =
