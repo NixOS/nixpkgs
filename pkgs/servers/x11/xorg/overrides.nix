@@ -986,7 +986,6 @@ self: super:
     };
   });
 
-  xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
 
   # convert Type1 vector fonts to OpenType fonts

@@ -387,6 +387,7 @@ print OUT <<EOF;
   xset,
   xsetroot,
   xsm,
+  xstdcmap,
   xtrans,
   xvinfo,
   xwininfo,
@@ -429,6 +430,7 @@ self: with self; {
     xset
     xsetroot
     xsm
+    xstdcmap
     xtrans
     xvinfo
     xwininfo
