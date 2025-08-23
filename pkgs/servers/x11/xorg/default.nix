@@ -39,6 +39,7 @@
   libxfont_1,
   libxfont_2,
   libxft,
+  libxi,
   libxmu,
   libxpm,
   libxrandr,
@@ -144,6 +145,7 @@ self: with self; {
   libXfont2 = libxfont_2;
   libXfont = libxfont_1;
   libXft = libxft;
+  libXi = libxi;
   libXmu = libxmu;
   libXpm = libxpm;
   libXrandr = libxrandr;
@@ -1763,46 +1765,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXfixes,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXi";
-      version = "1.8.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXi-1.8.2.tar.xz";
-        sha256 = "0161qsac0dgvkkcihpm2062p1lk2l5mj4i7smd713qnnadg5bq6h";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXfixes
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xi" ];
         platforms = lib.platforms.unix;
       };
     })

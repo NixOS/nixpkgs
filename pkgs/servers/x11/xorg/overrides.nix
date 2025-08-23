@@ -194,24 +194,6 @@ self: super:
     };
   });
 
-  libXi = super.libXi.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
-    ];
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "xorg_cv_malloc0_returns_null=no"
-      ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
-  });
-
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
     outputs = [
       "out"
