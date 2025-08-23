@@ -85,6 +85,7 @@
   xset,
   xsetroot,
   xsm,
+  xstdcmap,
   xtrans,
   xvinfo,
   xwininfo,
@@ -132,6 +133,7 @@ self: with self; {
     xset
     xsetroot
     xsm
+    xstdcmap
     xtrans
     xvinfo
     xwininfo
@@ -5418,44 +5420,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/app/xrdb-1.2.2.tar.xz";
         sha256 = "1x1ka0zbcw66a06jvsy92bvnsj9vxbvnq1hbn1az4f0v4fmzrx9i";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXmu
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xstdcmap = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXmu,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xstdcmap";
-      version = "1.0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xstdcmap-1.0.5.tar.xz";
-        sha256 = "1061b95j08mlwpadyilmpbzfgmm08z69k8nrkbn9k11rg7ilfn1n";
       };
       hardeningDisable = [
         "bindnow"
