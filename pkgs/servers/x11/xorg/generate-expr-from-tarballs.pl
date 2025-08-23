@@ -478,6 +478,7 @@ print OUT <<EOF;
   xorg-sgml-doctools,
   xprop,
   xrandr,
+  xrdb,
   xrefresh,
   xset,
   xsetroot,
@@ -550,6 +551,7 @@ self: with self; {
     xorgproto
     xprop
     xrandr
+    xrdb
     xrefresh
     xset
     xsetroot
