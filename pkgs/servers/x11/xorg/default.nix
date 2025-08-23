@@ -68,6 +68,7 @@
   libxpresent,
   libxrandr,
   libxrender,
+  libxres,
   libxt,
   libxv,
   libxvmc,
@@ -236,6 +237,7 @@ self: with self; {
   libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXres = libxres;
   libXt = libxt;
   libXv = libxv;
   libXvMC = libxvmc;
@@ -1050,44 +1052,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xinerama" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXres = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXres";
-      version = "1.2.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXres-1.2.3.tar.xz";
-        sha256 = "1p39xfpgckp22v60h36wvy2zbpmqgra585krja4nmj6n05a8zpnj";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xres" ];
         platforms = lib.platforms.unix;
       };
     })
