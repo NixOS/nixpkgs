@@ -205,15 +205,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXpresent = super.libXpresent.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
     outputs = [
       "out"

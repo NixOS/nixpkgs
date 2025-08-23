@@ -65,6 +65,7 @@
   libxmu,
   libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
   libxt,
@@ -232,6 +233,7 @@ self: with self; {
   libXmu = libxmu;
   libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXt = libxt;
@@ -1048,48 +1050,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xinerama" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXpresent = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXfixes,
-      libXrandr,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXpresent";
-      version = "1.0.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXpresent-1.0.2.tar.xz";
-        sha256 = "00knsc4hrxzq3rx7ff1h0k0h418p66p0cdh14fra81i2h6s22nsf";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXfixes
-        libXrandr
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xpresent" ];
         platforms = lib.platforms.unix;
       };
     })
