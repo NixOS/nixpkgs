@@ -17,6 +17,22 @@
     in
     self;
 
+  vulkan-headers-qmplay2 =
+    let
+      self = {
+        pname = "vulkan-headers";
+        version = "1.3.300";
+
+        src = fetchFromGitHub {
+          owner = "KhronosGroup";
+          repo = "Vulkan-Headers";
+          tag = "v${self.version}";
+          hash = "sha256-6J+6yvbEQXLY+Wkf1pWKtUAZGbe5Tc01uVh3Wqmk2+8=";
+        };
+      };
+    in
+    self;
+
   qmvk = {
     pname = "qmvk";
     version = "0-unstable-2025-06-05";
