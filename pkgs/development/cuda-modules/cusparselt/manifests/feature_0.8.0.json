@@ -32,7 +32,7 @@
     },
     "windows-x86_64": {
       "outputs": {
-        "bin": false,
+        "bin": true,
         "dev": true,
         "doc": false,
         "lib": false,
