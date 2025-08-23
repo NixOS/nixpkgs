@@ -12030,6 +12030,8 @@ self: super: with self; {
 
   progressbar33 = callPackage ../development/python-modules/progressbar33 { };
 
+  proliphix = callPackage ../development/python-modules/proliphix { };
+
   prometheus-api-client = callPackage ../development/python-modules/prometheus-api-client { };
 
   prometheus-async = callPackage ../development/python-modules/prometheus-async { };

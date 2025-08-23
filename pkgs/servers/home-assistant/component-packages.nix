@@ -4614,7 +4614,8 @@
       ]; # missing inputs: ProgettiHWSW
     "proliphix" =
       ps: with ps; [
-      ]; # missing inputs: proliphix
+        proliphix
+      ];
     "prometheus" =
       ps: with ps; [
         prometheus-client
