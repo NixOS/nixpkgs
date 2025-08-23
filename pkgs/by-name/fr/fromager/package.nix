@@ -6,19 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fromager";
-  version = "0.47.0";
+  version = "0.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = version;
-    hash = "sha256-Jw5fOhY4WOwYG5QPCcsT6+BicGtqz9UrHcpPsPQlOWc=";
+    hash = "sha256-aKoZKpzgJ3e5JRYSSeLmLlji1Fj8omxvwGZfNXDOhLs=";
   };
 
   build-system = with python3.pkgs; [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = with python3.pkgs; [
@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     pyproject-hooks
     pyyaml
     requests
+    requests-mock
     resolvelib
     rich
     setuptools
