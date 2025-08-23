@@ -70,6 +70,7 @@
   xhost,
   xkbutils,
   xkeyboard-config,
+  xkill,
   xlsatoms,
   xlsclients,
   xlsfonts,
@@ -116,6 +117,7 @@ self: with self; {
     xgc
     xhost
     xkbutils
+    xkill
     xlsatoms
     xlsclients
     xlsfonts
@@ -5110,44 +5112,6 @@ self: with self; {
       buildInputs = [
         libX11
         libxkbfile
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkill = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXmu,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xkill";
-      version = "1.0.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xkill-1.0.6.tar.xz";
-        sha256 = "01xrmqw498hqlhn6l1sq89s31k6sjf6xlij6a08pnrvmqiwama75";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXmu
         xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
