@@ -215,13 +215,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXp = super.libXp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [
       xorg.libXext
