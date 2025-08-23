@@ -1,6 +1,6 @@
 {
   callPackage,
-  fetchFromSavannah,
+  fetchgit,
   installShellFiles,
   lib,
   readline,
@@ -14,9 +14,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnucap";
   version = "20240220";
 
-  src = fetchFromSavannah {
-    repo = "gnucap";
-    rev = finalAttrs.version;
+  src = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/gnucap.git";
+    tag = finalAttrs.version;
     hash = "sha256-aZMiNKwI6eQZAxlF/+GoJhKczohgGwZ0/Wgpv3+AhYY=";
   };
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
     '';
     homepage = "http://www.gnucap.org/";
-    changelog = "https://git.savannah.gnu.org/gitweb/?p=gnucap.git;a=blob;f=NEWS";
+    changelog = "https://gitweb.git.savannah.gnu.org/gitweb/?p=gnucap.git;a=blob;f=NEWS";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH

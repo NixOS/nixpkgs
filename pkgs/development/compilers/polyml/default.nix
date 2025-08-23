@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polyml";
-  version = "5.9.1";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
     rev = "v${version}";
-    sha256 = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
+    sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
   };
 
   postPatch = ''

@@ -7,7 +7,7 @@
   llvmPackages,
 }:
 let
-  version = (builtins.fromJSON (builtins.readFile ./manifest.json)).info.productSemanticVersion;
+  version = (builtins.fromJSON (builtins.readFile ./manifest.json)).info.buildVersion;
 
   hashes = (builtins.fromJSON (builtins.readFile ./hashes.json));
 
@@ -117,8 +117,8 @@ else
         url = "https://www.visualstudio.com/license-terms/mt644918/";
       };
       platforms = lib.platforms.all;
-      # The arm manifest is missing critical pieces.
-      broken = stdenvNoCC.hostPlatform.isAarch;
+      # The arm32 manifest is missing critical pieces.
+      broken = stdenvNoCC.hostPlatform.isAarch32;
       sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       teams = [ lib.teams.windows ];
     };
