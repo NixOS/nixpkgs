@@ -8,6 +8,7 @@
   glew,
   gsl,
   lcms2,
+  libjpeg,
   libpng,
   libtiff,
   libGLU,
@@ -35,6 +36,7 @@ stdenv.mkDerivation {
     glew
     gsl
     lcms2
+    libjpeg
     libpng
     libtiff
     libGLU

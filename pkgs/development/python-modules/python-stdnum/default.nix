@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -13,22 +13,23 @@ buildPythonPackage rec {
   version = "2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_stdnum";
-    inherit version;
-    hash = "sha256-awFkWWnrPf1VBhoBFNWTdTzZ5lPOqQgxmLfuoSZEOXo=";
+  src = fetchFromGitHub {
+    owner = "arthurdejong";
+    repo = "python-stdnum";
+    tag = version;
+    hash = "sha256-9m4tO9TX9lV4V3wTkMFDj0Mc+jl4bKsHM/adeF3cBTE=";
   };
 
   build-system = [ setuptools ];
+
+  optional-dependencies = {
+    SOAP = [ zeep ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
-
-  optional-dependencies = {
-    SOAP = [ zeep ];
-  };
 
   pythonImportsCheck = [ "stdnum" ];
 

@@ -126,6 +126,20 @@ originalAttrs:
               EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
           fi
 
+          # We include `-fmacro-prefix-map` in `cc-wrapper` for non‐GCC
+          # platforms only, but they get picked up and passed down to
+          # e.g. GFortran calls that complain about the option not
+          # applying to the language. Hack around it by asking GCC not
+          # to complain.
+          #
+          # TODO: Someone please fix this to do things that make sense.
+          if [[ $EXTRA_FLAGS_FOR_BUILD == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_BUILD+=" -Wno-complain-wrong-lang"
+          fi
+          if [[ $EXTRA_FLAGS_FOR_TARGET == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_TARGET+=" -Wno-complain-wrong-lang"
+          fi
+
           # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
           # the startfiles.
           # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx

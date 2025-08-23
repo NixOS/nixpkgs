@@ -1,6 +1,6 @@
 # D (Dlang) {#dlang}
 
-Nixpkgs provides multiple D compilers such as `ldc`, `dmd` and `gdc`.
+Nixpkgs provides multiple D compilers such as `ldc` and `dmd`.
 These can be used like any other package during build time.
 
 However, Nixpkgs provides a build helper for compiling packages using the `dub` package manager.

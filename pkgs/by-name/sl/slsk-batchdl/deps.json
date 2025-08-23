@@ -40,89 +40,14 @@
     "hash": "sha256-MRt7yj6+/ORmr2WBERpQ+1gMRzIaPFKddHoB4zZmv2k="
   },
   {
-    "pname": "Microsoft.ApplicationInsights",
-    "version": "2.22.0",
-    "hash": "sha256-mUQ63atpT00r49ca50uZu2YCiLg3yd6r3HzTryqcuEA="
-  },
-  {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "9.0.1",
     "hash": "sha256-A3W2Hvhlf1ODx1NYWHwUyziZOGMaDPvXHZ/ubgNLYJA="
   },
   {
-    "pname": "Microsoft.CodeCoverage",
-    "version": "17.9.0",
-    "hash": "sha256-OaGa4+jRPHs+T+p/oekm2Miluqfd2IX8Rt+BmUx8kr4="
-  },
-  {
     "pname": "Microsoft.CSharp",
     "version": "4.7.0",
     "hash": "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="
-  },
-  {
-    "pname": "Microsoft.NET.Test.Sdk",
-    "version": "17.9.0",
-    "hash": "sha256-q/1AJ7eNlk02wvN76qvjl2xBx5iJ+h5ssiE/4akLmtI="
-  },
-  {
-    "pname": "Microsoft.Testing.Extensions.Telemetry",
-    "version": "1.5.3",
-    "hash": "sha256-bIXwPSa3jkr2b6xINOqMUs6/uj/r4oVFM7xq3uVIZDU="
-  },
-  {
-    "pname": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
-    "version": "1.5.3",
-    "hash": "sha256-IfMRfcyaIKEMRtx326ICKtinDBEfGw/Sv8ZHawJ96Yc="
-  },
-  {
-    "pname": "Microsoft.Testing.Extensions.VSTestBridge",
-    "version": "1.5.3",
-    "hash": "sha256-XpM/yFjhLSsuzyDV+xKubs4V1zVVYiV05E0+N4S1h0g="
-  },
-  {
-    "pname": "Microsoft.Testing.Platform",
-    "version": "1.5.3",
-    "hash": "sha256-y61Iih6w5D79dmrj2V675mcaeIiHoj1HSa1FRit2BLM="
-  },
-  {
-    "pname": "Microsoft.Testing.Platform.MSBuild",
-    "version": "1.5.3",
-    "hash": "sha256-YspvjE5Jfi587TAfsvfDVJXNrFOkx1B3y1CKV6m7YLY="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.12.0",
-    "hash": "sha256-3XBHBSuCxggAIlHXmKNQNlPqMqwFlM952Av6RrLw1/w="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.9.0",
-    "hash": "sha256-iiXUFzpvT8OWdzMj9FGJDqanwHx40s1TXVY9l3ii+s0="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.TestHost",
-    "version": "17.9.0",
-    "hash": "sha256-1BZIY1z+C9TROgdTV/tq4zsPy7Q71GQksr/LoMKAzqU="
-  },
-  {
-    "pname": "MSTest.Analyzers",
-    "version": "3.7.3",
-    "hash": "sha256-6mNfHtx9FBWA6/QrRUepwbxXWG/54GRyeZYazDiMacg="
-  },
-  {
-    "pname": "MSTest.TestAdapter",
-    "version": "3.7.3",
-    "hash": "sha256-3O/AXeS+3rHWstinivt73oa0QDp+xQpTc9p46EF+Mtc="
-  },
-  {
-    "pname": "MSTest.TestFramework",
-    "version": "3.7.3",
-    "hash": "sha256-RweCMMf14GI6HqjDIP68JM67IaJKYQTZy0jk5Q4DFxs="
-  },
-  {
-    "pname": "Newtonsoft.Json",
-    "version": "13.0.1",
-    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -136,8 +61,8 @@
   },
   {
     "pname": "Soulseek",
-    "version": "7.1.0",
-    "hash": "sha256-n6LUNuPmmy9QYNNALR0ObYyR9LJalf0H8P+SKnoqfFc="
+    "version": "7.1.2",
+    "hash": "sha256-yel9mxRf1idEQssM7n4SIVQPMQDMDmyvfL5owllqgf0="
   },
   {
     "pname": "SpotifyAPI.Web",
@@ -155,11 +80,6 @@
     "hash": "sha256-7IPt39cY+0j0ZcRr/J45xPtEjnSXdUJ/5ai3ebaYQiE="
   },
   {
-    "pname": "System.Diagnostics.DiagnosticSource",
-    "version": "5.0.0",
-    "hash": "sha256-6mW3N6FvcdNH/pB58pl+pFSCGWgyaP4hfVtC/SMWDV4="
-  },
-  {
     "pname": "System.IO.Pipelines",
     "version": "9.0.1",
     "hash": "sha256-CnmDanknCGbNnoDjgZw62M/Grg8IMTJDa8x3P07UR2A="
@@ -173,11 +93,6 @@
     "pname": "System.Memory",
     "version": "4.6.0",
     "hash": "sha256-OhAEKzUM6eEaH99DcGaMz2pFLG/q/N4KVWqqiBYUOFo="
-  },
-  {
-    "pname": "System.Reflection.Metadata",
-    "version": "1.6.0",
-    "hash": "sha256-JJfgaPav7UfEh4yRAQdGhLZF1brr0tUWPl6qmfNWq/E="
   },
   {
     "pname": "System.Text.Encodings.Web",

@@ -60,6 +60,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "backrefs" ];
+
   optional-dependencies = {
     recommended = [
       mkdocs-minify-plugin

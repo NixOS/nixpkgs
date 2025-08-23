@@ -31,7 +31,6 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinned-from: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
@@ -44,7 +43,7 @@ jobs:
           # Note that it's fine to run this on untrusted code because:
           # - There's no secrets accessible here
           # - The build is sandboxed
-          if ! nix-build untrusted/ci --arg nixpkgs ./pinned -A fmt.check; then
+          if ! nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A fmt.check; then
             echo "Some files are not properly formatted"
             echo "Please format them by going to the Nixpkgs root directory and running one of:"
             echo "  nix-shell --run treefmt"
@@ -66,7 +65,6 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinned-from: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
@@ -81,7 +79,7 @@ jobs:
       - name: Parse all nix files
         run: |
           # Tests multiple versions at once, let's make sure all of them run, so keep-going.
-          nix-build untrusted/ci --arg nixpkgs ./pinned -A parse --keep-going
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A parse --keep-going
 
   nixpkgs-vet:
     runs-on: ubuntu-24.04-arm
@@ -94,7 +92,6 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinned-from: untrusted
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
@@ -112,7 +109,7 @@ jobs:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if nix-build untrusted/ci --arg nixpkgs ./pinned -A nixpkgs-vet --arg base "./trusted" --arg head "./untrusted"; then
+          if nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A nixpkgs-vet --arg base "./nixpkgs/trusted" --arg head "./nixpkgs/untrusted"; then
             exit 0
           else
             exitCode=$?

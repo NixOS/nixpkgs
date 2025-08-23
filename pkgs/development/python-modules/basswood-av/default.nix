@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pkg-config,
-  cython_3_1,
+  cython,
   ffmpeg,
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    cython_3_1
+    cython
   ];
 
   nativeBuildInputs = [ pkg-config ];

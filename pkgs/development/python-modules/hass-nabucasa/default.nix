@@ -43,6 +43,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "acme"
     "josepy"
+    "snitun"
   ];
 
   dependencies = [

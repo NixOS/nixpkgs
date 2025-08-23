@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lhasa";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://soulsphere.org/projects/lhasa/lhasa-${version}.tar.gz";
-    sha256 = "sha256-p/yIPDBMUIVi+5P6MHpMNCsMiG/MJl8ouS3Aw5IgxbM=";
+    sha256 = "sha256-v4eFxwYJ0h62K32ueJTxOIiPiJ086Xho1QL24Tp5Kxw=";
   };
 
   meta = with lib; {

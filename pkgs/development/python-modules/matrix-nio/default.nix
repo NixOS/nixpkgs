@@ -29,6 +29,7 @@
   hyperframe,
   hypothesis,
   pytest-aiohttp,
+  pytest-asyncio_0,
   pytest-benchmark,
   pytestCheckHook,
 
@@ -93,7 +94,7 @@ buildPythonPackage rec {
     hpack
     hyperframe
     hypothesis
-    pytest-aiohttp
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytest-benchmark
     pytestCheckHook
   ];

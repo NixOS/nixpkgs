@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-weather";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_weather";
     inherit version;
-    hash = "sha256-oGk2M/YaVm8pY4JDFOWGkKbDhEfd/OYBgWLSzV3peAQ=";
+    hash = "sha256-qgrHlJXOKWY5UnB2lZAJun3xA9sxn5+ZNNI6+aDnE98=";
   };
 
   build-system = [ poetry-core ];

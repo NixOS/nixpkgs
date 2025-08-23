@@ -5,15 +5,14 @@
   click,
   pytestCheckHook,
   pytest-click,
-  setuptools,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "click-shell";
   version = "2.1";
-  pyproject = true;
+  format = "setuptools";
 
+  # PyPi release is missing tests
   src = fetchFromGitHub {
     owner = "clarkperkins";
     repo = "click-shell";
@@ -21,17 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-4QpQzg0yFuOFymGiTI+A8o6LyX78iTJMqr0ernYbilI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [
     pytest-click
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "click_shell" ];
+
+  preCheck = "export HOME=$(mktemp -d)";
 
   meta = with lib; {
     description = "Extension to click that easily turns your click app into a shell utility";
@@ -42,7 +40,6 @@ buildPythonPackage rec {
       with command completion to any click app.
     '';
     homepage = "https://github.com/clarkperkins/click-shell";
-    changelog = "https://github.com/clarkperkins/click-shell/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ binsky ];
   };

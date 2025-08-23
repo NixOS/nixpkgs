@@ -1,0 +1,11 @@
+diff --git a/requirements.txt b/requirements.txt
+index 66e0de13..68d651b1 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,5 +1,5 @@
+ grpcio-tools>=1.10.1
+ pyinotify==0.9.6
+-unicode_slugify==0.1.5
++python-slugify>=7.0.0
+ pyqt5>=5.6
+ protobuf
