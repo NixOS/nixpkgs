@@ -51,7 +51,6 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinned-from: untrusted
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
         with:
@@ -66,33 +65,33 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           pushFilter: '(-source$|-nixpkgs-tarball-)'
 
-      - run: nix-env --install -f pinned -A nix-build-uncached
+      - run: nix-env --install -f nixpkgs/untrusted-pinned -A nix-build-uncached
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: echo "${{ matrix.systems }}" | xargs -n1 nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A shell --argstr system
+        run: echo "${{ matrix.systems }}" | xargs -n1 nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A shell --argstr system
 
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
           contains(fromJSON(inputs.baseBranch).type, 'primary')
-        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixos --out-link nixos-manual
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixos --out-link nixos-manual
 
       - name: Build Nixpkgs manual
         if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
-        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs -A manual-nixpkgs-tests
 
       - name: Build Nixpkgs manual tests
         if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
-        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A manual-nixpkgs-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs-tests
 
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
-        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A lib-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A lib-tests
 
       - name: Build tarball
         if: contains(matrix.builds, 'tarball') && !cancelled()
-        run: nix-build-uncached untrusted/ci --arg nixpkgs ./pinned -A tarball
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A tarball
 
       - name: Upload NixOS manual
         if: |

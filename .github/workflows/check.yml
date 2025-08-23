@@ -103,7 +103,6 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          pinned-from: trusted
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
@@ -117,7 +116,7 @@ jobs:
           pushFilter: -source$
 
       - name: Build codeowners validator
-        run: nix-build trusted/ci --arg nixpkgs ./pinned -A codeownersValidator
+        run: nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A codeownersValidator
 
       - uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
         if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
@@ -137,9 +136,9 @@ jobs:
       - name: Validate codeowners
         if: steps.app-token.outputs.token
         env:
-          OWNERS_FILE: untrusted/ci/OWNERS
+          OWNERS_FILE: nixpkgs/untrusted/ci/OWNERS
           GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY_PATH: untrusted
+          REPOSITORY_PATH: nixpkgs/untrusted
           OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
           # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
           EXPERIMENTAL_CHECKS: "avoid-shadowing"

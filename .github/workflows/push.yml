@@ -13,7 +13,6 @@ on:
       - release-*
       - staging-*
       - haskell-updates
-      - python-updates
 
 permissions: {}
 
