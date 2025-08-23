@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-json";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-json-v${version}";
-    hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
+    hash = "sha256-SIthe4OQ+gDq/GhwRwjrpFwMr6jXPT93llixGDE6sOU=";
   };
 
   sourceRoot = "${src.name}/packages/serialization/json/";
