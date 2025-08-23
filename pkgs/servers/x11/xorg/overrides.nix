@@ -968,7 +968,6 @@ self: super:
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
-  xkill = addMainProgram super.xkill { };
   xload = addMainProgram super.xload { };
   xmag = addMainProgram super.xmag { };
   xmessage = addMainProgram super.xmessage { };
