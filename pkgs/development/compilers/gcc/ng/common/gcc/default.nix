@@ -8,7 +8,6 @@
   langAda ? false,
   langC ? true,
   langCC ? true,
-  langD ? false,
   langFortran ? false,
   langGo ? false,
   langJava ? false,
@@ -176,7 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.intersperse "," (
           lib.optional langC "c"
           ++ lib.optional langCC "c++"
-          ++ lib.optional langD "d"
           ++ lib.optional langFortran "fortran"
           ++ lib.optional langJava "java"
           ++ lib.optional langAda "ada"
