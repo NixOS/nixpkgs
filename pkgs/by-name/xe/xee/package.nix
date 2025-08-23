@@ -24,25 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "xee"
   ];
 
-  nativeBuildInputs = [
-    # "${cargoDeps}/build-data-0.2.1/src/lib.rs" is pretty terrible
-    (writers.writePython3Bin "git" { } ''
-      import sys
-      import os
-      sys.argv[0] = os.path.basename(sys.argv[0])
-      if sys.argv == ["git", "rev-parse", "HEAD"]:
-          print("${finalAttrs.src.rev}")
-      elif sys.argv == ["git", "rev-parse", "--abbrev-ref=loose", "HEAD"]:
-          print("${finalAttrs.src.rev}")
-      elif sys.argv == ["git", "status", "-s"]:
-          pass
-      elif sys.argv == ["git", "log", "-1", "--pretty=%ct"]:
-          print(os.environ.get("SOURCE_DATE_EPOCH", "0"))
-      else:
-          raise RuntimeError(sys.argv[1:])
-    '')
-  ];
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
