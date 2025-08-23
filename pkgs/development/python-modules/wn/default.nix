@@ -1,24 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
+  fetchFromGitHub,
   pythonOlder,
   hatchling,
   httpx,
   tomli,
+
+  starlette,
+
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.11.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TDvTNh+5cxgBoy9nuXItHOdtfbsP+3F16egZjUBSpak=";
+  src = fetchFromGitHub {
+    owner = "goodmami";
+    repo = "wn";
+    tag = "v${version}";
+    hash = "sha256-xUraVRQmr4Oq1T/RiWgch8YJtAZR9ebOzaGBJ1NPKtw=";
   };
 
   build-system = [ hatchling ];
@@ -28,11 +34,25 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    # doesn't exist in nixpkgs yet
+    # editor = [
+    #   wn-editor
+    # ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+    web = [
+      starlette
+    ];
+  };
+
+  # probably not worth spending time on plus require additional dependencies
+  disabledTestPaths = [ "bench/" ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.web;
 
   pythonImportsCheck = [ "wn" ];
 
@@ -41,6 +61,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [
+      zendo
+      jk
+    ];
   };
 }

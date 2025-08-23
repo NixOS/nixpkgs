@@ -1,0 +1,61 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+deleted file mode 100644
+index 315396f..0000000
+--- a/MANIFEST.in
++++ /dev/null
+@@ -1,18 +0,0 @@
+-garak/analyze
+-garak/buffs
+-garak/configs
+-garak/detectors
+-garak/evaluators
+-garak/generators
+-garak/harnesses
+-garak/probes
+-garak/resources
+-garak/data
+-
+-include *.md
+-include *.txt
+-recursive-include garak *.py
+-recursive-include garak/analyze *.py *.jinja
+-recursive-include garak/configs *.yaml
+-recursive-include garak/resources *
+-recursive-include garak/data *
+\ No newline at end of file
+diff --git a/pyproject.toml b/pyproject.toml
+index 728402a..bdbdd64 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+-requires      = ["setuptools>=61.0.0", "wheel"]
+-build-backend = "setuptools.build_meta"
++requires = ["flit_core >=3.11,<4"]
++build-backend = "flit_core.buildapi"
+ 
+ [project]
+ name = "garak"
+@@ -139,11 +139,18 @@ audio = [
+ [project.scripts]
+ garak = "garak.__main__:main"
+ 
+-[tool.setuptools]
+-packages = ["garak"]
++[tool.flit.module]
++name = "garak"
+ 
+-[tool.setuptools.package-data]
+-"garak.resources" = ["*"]
++[tool.flit.sdist]
++include = [
++  "*.md",
++  "*.txt",
++  "garak/analyze/templates/*",
++  "garak/configs/*",
++  "garak/resources/*.json",
++  "garak/resources/*.yaml",
++]
+ 
+ [tool.black]
+ line-length = 88

@@ -1,0 +1,477 @@
+diff --git a/garak/generators/cohere.py b/garak/generators/cohere.py
+index bf06764..e78f835 100644
+--- a/garak/generators/cohere.py
++++ b/garak/generators/cohere.py
+@@ -4,17 +4,23 @@ Support for Cohere's text generation API. Uses the command model by default,
+ but just supply the name of another either on the command line or as the
+ constructor param if you want to use that. You'll need to set an environment
+ variable called COHERE_API_KEY to your Cohere API key, for this generator.
++
++NOTE: As of Cohere v5.0.0+, the generate API is legacy and chat API is recommended.
++This implementation follows Cohere's official migration guide:
++- For v1 API: Uses cohere.Client() to maintain full backward compatibility
++- For v2 API: Uses cohere.ClientV2() for the recommended chat interface
+ """
+ 
+ import logging
+ from typing import List, Union
+ 
+ import backoff
++from cohere.core.api_error import ApiError
+ import cohere
+ import tqdm
+ 
+-from garak import _config
+ from garak.generators.base import Generator
++import garak._config as _config
+ 
+ 
+ COHERE_GENERATION_LIMIT = (
+@@ -26,6 +32,10 @@ class CohereGenerator(Generator):
+     """Interface to Cohere's python library for their text2text model.
+ 
+     Expects API key in COHERE_API_KEY environment variable.
++
++    Following Cohere's migration guide, this implementation:
++    - For api_version="v1": Uses cohere.Client() with generate() API (supports multiple generations)
++    - For api_version="v2": Uses cohere.ClientV2() with chat() API (recommended, requires multiple API calls)
+     """
+ 
+     ENV_VAR = "COHERE_API_KEY"
+@@ -33,13 +43,13 @@ class CohereGenerator(Generator):
+         "temperature": 0.750,
+         "k": 0,
+         "p": 0.75,
+-        "preset": None,
+         "frequency_penalty": 0.0,
+         "presence_penalty": 0.0,
+         "stop": [],
++        "preset": None,  # Only used with v1 API
++        "api_version": "v2",  # "v1" for legacy generate API, "v2" for chat API (recommended)
+     }
+ 
+-    supports_multiple_generations = True
+     generator_family_name = "Cohere"
+ 
+     def __init__(self, name="command", config_root=_config):
+@@ -51,32 +61,123 @@ class CohereGenerator(Generator):
+         logging.debug(
+             "Cohere generation request limit capped at %s", COHERE_GENERATION_LIMIT
+         )
+-        self.generator = cohere.Client(self.api_key)
+ 
+-    @backoff.on_exception(backoff.fibo, cohere.error.CohereAPIError, max_value=70)
++        # Validate api_version
++        if self.api_version not in ["v1", "v2"]:
++            logging.warning(
++                f"Invalid api_version '{self.api_version}'. Using 'v2' instead."
++            )
++            self.api_version = "v2"
++
++        # Initialize appropriate client based on API version
++        # Following Cohere's guidance to use Client() for v1 and ClientV2() for v2
++        if self.api_version == "v1":
++            self.generator = cohere.Client(api_key=self.api_key)
++        else:  # api_version == "v2"
++            self.generator = cohere.ClientV2(api_key=self.api_key)
++
++    @backoff.on_exception(backoff.fibo, ApiError, max_value=70)
+     def _call_cohere_api(self, prompt, request_size=COHERE_GENERATION_LIMIT):
+-        """as of jun 2 2023, empty prompts raise:
+-        cohere.error.CohereAPIError: invalid request: prompt must be at least 1 token long
+-        filtering exceptions based on message instead of type, in backoff, isn't immediately obvious
++        """Empty prompts raise API errors (e.g. invalid request: prompt must be at least 1 token long).
++        We catch these using the ApiError base class in Cohere v5+.
++        Filtering exceptions based on message instead of type, in backoff, isn't immediately obvious
+         - on the other hand blank prompt / RTP shouldn't hang forever
+         """
+         if prompt == "":
+             return [""] * request_size
+         else:
+-            response = self.generator.generate(
+-                model=self.name,
+-                prompt=prompt,
+-                temperature=self.temperature,
+-                num_generations=request_size,
+-                max_tokens=self.max_tokens,
+-                preset=self.preset,
+-                k=self.k,
+-                p=self.p,
+-                frequency_penalty=self.frequency_penalty,
+-                presence_penalty=self.presence_penalty,
+-                end_sequences=self.stop,
+-            )
+-            return [g.text for g in response]
++            if self.api_version == "v2":
++                # Use chat API with ClientV2 (recommended in v5+)
++                responses = []
++                # Chat API doesn't support num_generations, so we need to make multiple calls
++                for _ in range(request_size):
++                    try:
++                        # Use the correct UserChatMessageV2 class
++                        message = cohere.UserChatMessageV2(content=prompt)
++
++                        response = self.generator.chat(
++                            model=self.name,
++                            messages=[message],
++                            temperature=self.temperature,
++                            max_tokens=self.max_tokens,
++                            k=self.k,
++                            p=self.p,
++                            frequency_penalty=self.frequency_penalty,
++                            presence_penalty=self.presence_penalty,
++                            # Note: stop_sequences/end_sequences, logit_bias, truncate, and preset
++                            # are not supported in the Chat endpoint per Cohere migration guide
++                        )
++
++                        # Extract text from message content
++                        if hasattr(response, "message") and hasattr(
++                            response.message, "content"
++                        ):
++                            # Get the first text content item
++                            for content_item in response.message.content:
++                                if hasattr(content_item, "text"):
++                                    responses.append(content_item.text)
++                                    break
++                            else:
++                                # No text content found
++                                logging.warning(
++                                    "No text content found in chat response"
++                                )
++                                responses.append(str(response))
++                        else:
++                            logging.warning(
++                                "Chat response structure doesn't match expected format"
++                            )
++                            responses.append(str(response))
++                    except ApiError as e:
++                        raise e  # bubble up ApiError for backoff handling
++                    except Exception as e:
++                        logging.error(f"Chat API error: {e}")
++                        responses.append(None)
++
++                # Ensure we return the correct number of responses
++                if len(responses) < request_size:
++                    responses.extend([None] * (request_size - len(responses)))
++                return responses
++            else:  # api_version == "v1"
++                # Use legacy generate API with cohere.Client()
++                # Following Cohere's guidance for full backward compatibility
++                try:
++                    response = self.generator.generate(
++                        model=self.name,
++                        prompt=prompt,
++                        temperature=self.temperature,
++                        num_generations=request_size,
++                        max_tokens=self.max_tokens,
++                        preset=self.preset,
++                        k=self.k,
++                        p=self.p,
++                        frequency_penalty=self.frequency_penalty,
++                        presence_penalty=self.presence_penalty,
++                        end_sequences=self.stop,
++                    )
++
++                    # Handle response based on structure
++                    if hasattr(response, "generations"):
++                        # Handle the v5+ API response format
++                        return [gen.text for gen in response.generations]
++                    else:
++                        # Try to handle other possible response formats
++                        try:
++                            if isinstance(response, list):
++                                return [g.text for g in response]
++                            elif hasattr(response, "text"):
++                                return [response.text]
++                            else:
++                                # Last resort - try to convert response to string
++                                return [str(response)]
++                        except RuntimeError as e:
++                            logging.error(
++                                f"Failed to extract text from Cohere response: {e}"
++                            )
++                            return [None] * request_size
++                except RuntimeError as e:
++                    logging.error(f"Generate API error: {e}")
++                    return [None] * request_size
+ 
+     def _call_model(
+         self, prompt: str, generations_this_call: int = 1
+diff --git a/pyproject.toml b/pyproject.toml
+index d5ec64a..aacd026 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -69,7 +69,7 @@ dependencies = [
+   "datasets>=3.0.0",
+   "colorama>=0.4.3",
+   "tqdm>=4.67.1",
+-  "cohere>=4.5.1,<5",
++  "cohere>=5.16.0",
+   "openai>=1.45.0,<2",
+   "replicate>=0.8.3",
+   "google-api-python-client>=2.0",
+diff --git a/requirements.txt b/requirements.txt
+index 5a6702e..0c88d95 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -3,7 +3,7 @@ transformers>=4.51.3
+ datasets>=3.0.0
+ colorama>=0.4.3
+ tqdm>=4.67.1
+-cohere>=4.5.1,<5
++cohere>=5.16.0
+ openai>=1.45.0,<2
+ replicate>=0.8.3
+ google-api-python-client>=2.0
+diff --git a/tests/generators/test_cohere.py b/tests/generators/test_cohere.py
+new file mode 100644
+index 0000000..fbdd8d9
+--- /dev/null
++++ b/tests/generators/test_cohere.py
+@@ -0,0 +1,218 @@
++import os
++import json
++import logging
++import pytest
++import httpx
++import respx
++
++from garak.generators.cohere import CohereGenerator, COHERE_GENERATION_LIMIT
++from garak.exception import APIKeyMissingError
++
++# Default model name and API URLs
++DEFAULT_MODEL_NAME = "command"
++COHERE_API_BASE = "https://api.cohere.com"
++COHERE_V1 = f"{COHERE_API_BASE}/v1"
++COHERE_V2 = f"{COHERE_API_BASE}/v2"
++
++# API version constants
++API_V1 = "v1"  # Legacy generate API
++API_V2 = "v2"  # Recommended chat API
++
++# ─── Fixtures ─────────────────────────────────────────────────────────
++
++
++@pytest.fixture(autouse=True)
++def set_fake_env():
++    """Autouse fixture to set and restore the Cohere API key."""
++    var = CohereGenerator.ENV_VAR
++    orig = os.environ.get(var)
++    os.environ[var] = "fake-api-key"
++    yield
++    if orig is None:
++        os.environ.pop(var, None)
++    else:
++        os.environ[var] = orig
++
++
++@pytest.fixture
++def cohere_mock_responses():
++    """Provide mock HTTP response specs for Cohere endpoints."""
++    return {
++        "generate_response": {
++            "code": 200,
++            "json": {
++                "generations": [
++                    {"text": "Mocked generate response 1."},
++                    {"text": "Mocked generate response 2."},
++                ]
++            },
++        },
++        "chat_response": {
++            "code": 200,
++            "json": {"message": {"content": [{"text": "Mocked chat response."}]}},
++        },
++        "missing_content_response": {
++            "code": 200,
++            "json": {"message": {}},  # no content
++        },
++    }
++
++
++def mock_cohere_endpoint(respx_mock, path, spec):
++    """Helper to mock a Cohere HTTP endpoint with a given response spec."""
++    url = f"{COHERE_API_BASE}{path}"
++    return respx_mock.post(url).mock(
++        return_value=httpx.Response(spec["code"], json=spec["json"])
++    )
++
++
++# ─── Instantiation & Defaults ─────────────────────────────────────────
++
++
++def test_cohere_instantiation():
++    # Test v2 (default)
++    gen_v2 = CohereGenerator()
++    assert gen_v2.name == DEFAULT_MODEL_NAME
++    assert gen_v2.api_key == "fake-api-key"
++    assert hasattr(gen_v2, "generator")
++    assert gen_v2.api_version == "v2"
++
++    # Test v1
++    gen_v1 = CohereGenerator()
++    gen_v1.api_version = "v1"
++    # Re-initialize the generator with v1
++    gen_v1.__init__()
++    assert gen_v1.api_version == "v1"
++
++
++def test_cohere_missing_api_key():
++    var = CohereGenerator.ENV_VAR
++    saved = os.environ.pop(var, None)
++    try:
++        with pytest.raises(APIKeyMissingError):
++            CohereGenerator()
++    finally:
++        if saved is not None:
++            os.environ[var] = saved
++
++
++def test_cohere_default_parameters():
++    gen = CohereGenerator()
++    assert gen.api_version == "v2"  # Default should be v2 (chat API)
++    assert gen.temperature == CohereGenerator.DEFAULT_PARAMS["temperature"]
++    assert gen.max_tokens == CohereGenerator.DEFAULT_PARAMS["max_tokens"]
++    gen.temperature = 0.5
++    assert gen.temperature == 0.5
++
++
++# ─── API Version Tests ─────────────────────────────────────────────────────────
++
++
++def test_api_version_validation():
++    # Test invalid api_version gets corrected to v2
++    gen = CohereGenerator()
++    gen.api_version = "invalid"
++    gen.__init__()
++    assert gen.api_version == "v2"
++
++    # Test v1 is accepted
++    gen = CohereGenerator()
++    gen.api_version = "v1"
++    gen.__init__()
++    assert gen.api_version == "v1"
++
++    # Test v2 is accepted
++    gen = CohereGenerator()
++    gen.api_version = "v2"
++    gen.__init__()
++    assert gen.api_version == "v2"
++
++
++# ─── (Optional) Generation Limit Enforcement ─────────────────────────────────
++# If generate() does not currently enforce COHERE_GENERATION_LIMIT, this test is skipped
++import pytest
++
++# ─── Legacy Generate API (respx) (respx) ──────────────────────────────────────
++
++
++@pytest.mark.respx(base_url=COHERE_API_BASE)
++def test_cohere_generate_api_respx(respx_mock, cohere_mock_responses):
++    route = mock_cohere_endpoint(
++        respx_mock, "/v1/generate", cohere_mock_responses["generate_response"]
++    )
++    gen = CohereGenerator()
++    gen.api_version = "v1"  # Use legacy generate API
++    # Re-initialize the generator with v1
++    gen.__init__()
++    result = gen.generate("Test prompt", generations_this_call=1)
++
++    # Assert headers
++    last = respx_mock.calls.last.request
++    assert last.headers["Authorization"] == "Bearer fake-api-key"
++    assert "application/json" in last.headers.get("Content-Type", "")
++
++    # Assert payload
++    payload = json.loads(last.content)
++    assert payload["model"] == DEFAULT_MODEL_NAME
++    assert payload["prompt"] == "Test prompt"
++
++    # Assert response parsing
++    assert result == [
++        cohere_mock_responses["generate_response"]["json"]["generations"][0]["text"],
++        cohere_mock_responses["generate_response"]["json"]["generations"][1]["text"],
++    ]
++
++
++# ─── Chat API (respx) ─────────────────────────────────────────────────
++
++
++@pytest.mark.respx(base_url=COHERE_API_BASE)
++@pytest.mark.parametrize(
++    "response_key, expect_error_str",
++    [
++        ("chat_response", False),
++        ("missing_content_response", True),
++    ],
++)
++def test_cohere_chat_api_respx(
++    respx_mock, cohere_mock_responses, response_key, expect_error_str
++):
++    spec = cohere_mock_responses[response_key]
++    mock_cohere_endpoint(respx_mock, "/v2/chat", spec)
++    gen = CohereGenerator()
++    # Default is already v2, but being explicit for test clarity
++    gen.api_version = "v2"
++    gen.__init__()
++    result = gen.generate("Test prompt")
++
++    # Header & payload checks
++    last = respx_mock.calls.last.request
++    assert last.headers["Authorization"] == "Bearer fake-api-key"
++    payload = json.loads(last.content)
++    assert payload.get("model") == DEFAULT_MODEL_NAME
++    assert payload.get("messages")[0]["content"] == "Test prompt"
++
++    # Check response or None for error cases
++    if expect_error_str:
++        assert result[0] is None, f"Expected None for error but got {result[0]}"
++    else:
++        assert isinstance(result[0], str) and result[0]
++
++
++# ─── Logging on Error Variants ─────────────────────────────────────────
++
++
++def test_chat_response_logs_warning(respx_mock, cohere_mock_responses, caplog):
++    caplog.set_level(logging.WARNING)
++    mock_cohere_endpoint(
++        respx_mock, "/v2/chat", cohere_mock_responses["missing_content_response"]
++    )
++
++    gen = CohereGenerator()
++    gen.api_version = "v2"  # Use chat API
++    gen.__init__()
++    caplog.clear()
++
++    result = gen.generate("Test prompt")
++    assert result[0] is None, f"Expected None for error but got {result[0]}"
++    assert "warning" in caplog.text.lower() or "error" in caplog.text.lower()
+diff --git a/tests/generators/test_ollama.py b/tests/generators/test_ollama.py
+index 478e415..5174464 100644
+--- a/tests/generators/test_ollama.py
++++ b/tests/generators/test_ollama.py
+@@ -24,21 +24,9 @@ def ollama_is_running():
+ 
+ 
+ def no_models():
+-    # In newer versions of ollama, list() returns a ListResponse object
+     response = ollama.list()
+-    
+-    try:
+-        # Try to access the models attribute or property
+-        models = getattr(response, 'models', None)
+-        if models is None:
+-            # If no models attribute, try using it as a dict
+-            models = response.get('models', [])
+-        
+-        # Check if models is empty
+-        return len(models) == 0
+-    except (AttributeError, TypeError):
+-        # If we can't access models, assume there are no models
+-        return True
++    # ListResponse object has a models attribute that is a list
++    return not hasattr(response, 'models') or len(response.models) == 0
+ 
+ 
+ @pytest.mark.skipif(
