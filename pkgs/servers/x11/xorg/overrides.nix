@@ -200,11 +200,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
     outputs = [
       "out"
