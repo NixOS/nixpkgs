@@ -69,6 +69,7 @@ $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
 $pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
+$pcMap{"xpresent"} = "libXpresent";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
 $pcMap{"xt"} = "libXt";
@@ -359,6 +360,7 @@ print OUT <<EOF;
   libxmu,
   libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
   libxt,
@@ -475,6 +477,7 @@ self: with self; {
   libXmu = libxmu;
   libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXt = libxt;
