@@ -18,8 +18,13 @@
         owner = "Chatterino";
         repo = "chatterino2";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-W2sqlqL6aa68aQ3nE161G64x7K7p8iByX03g1dseQbs=";
+        hash = "sha256-IHnMKlWPowJdd+pmpi2w438bjpy4nvAGewfm7Nvdy0k=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          rm -rf $out/.git
+        '';
       };
 
       passthru = {
