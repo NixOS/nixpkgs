@@ -381,6 +381,7 @@ print OUT <<EOF;
   xlsclients,
   xlsfonts,
   xmag,
+  xmessage,
   xmodmap,
   xorg-cf-files,
   xorg-docs,
@@ -424,6 +425,7 @@ self: with self; {
     xlsclients
     xlsfonts
     xmag
+    xmessage
     xmodmap
     xorgproto
     xprop

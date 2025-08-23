@@ -973,7 +973,6 @@ self: super:
   xkbprint = addMainProgram super.xkbprint { };
   xkill = addMainProgram super.xkill { };
   xload = addMainProgram super.xload { };
-  xmessage = addMainProgram super.xmessage { };
   xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
