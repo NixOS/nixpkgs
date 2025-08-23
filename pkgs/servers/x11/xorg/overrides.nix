@@ -113,8 +113,6 @@ self: super:
       )
   ) { };
 
-  iceauth = addMainProgram super.iceauth { };
-
   mkfontdir = xorg.mkfontscale;
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
