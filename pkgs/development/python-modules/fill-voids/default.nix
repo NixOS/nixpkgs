@@ -42,8 +42,8 @@ buildPythonPackage {
     description = "Remap, mask, renumber, unique, and in-place transposition of 3D labeled images and point clouds";
     homepage = "https://github.com/seung-lab/fill_voids";
     license = with lib.licenses; [
-      gpl3
-      lgpl3
+      gpl3Only
+      lgpl3Plus
     ];
     maintainers = with lib.maintainers; [ afermg ];
     platforms = lib.platforms.all;
