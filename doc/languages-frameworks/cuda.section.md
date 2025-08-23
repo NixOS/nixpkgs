@@ -265,7 +265,7 @@ By default, the NVIDIA Container Toolkit will use the GPU index to identify spec
 
 #### Using docker-compose {#cuda-using-docker-compose}
 
-It's possible to expose GPU's to a `docker-compose` environment as well. With a `docker-compose.yaml` file like follows:
+It's possible to expose GPUs to a `docker-compose` environment as well. With a `docker-compose.yaml` file like follows:
 
 ```yaml
 services:

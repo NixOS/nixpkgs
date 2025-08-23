@@ -87,7 +87,7 @@ nix build --impure --expr 'with (import ./. {}); azure-cli.withExtensions [ azur
 
 Check if the desired functionality was added.
 
-You can check if the extensions was recognized by running:
+You can check if the extensions were recognized by running:
 
 ```sh
 ./result/bin/az extension list

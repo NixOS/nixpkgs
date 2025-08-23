@@ -47,8 +47,8 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
   A value of `null` can be seen as an equivalent of `FROM scratch`.
 
-  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
-  Otherwise, the resulting image with contain the single layer created by `buildImage`.
+  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image and the layer created by `buildImage`).
+  Otherwise, the resulting image will contain the single layer created by `buildImage`.
 
   :::{.note}
   Only **Env** configuration is inherited from the base image.
@@ -507,7 +507,7 @@ This allows the function to produce reproducible images.
   This can be seen as an equivalent of `ADD contents/ /` in a `Dockerfile`.
 
   All the contents specified by `contents` will be added as a final layer in the generated image.
-  They will be added as links to the actual files (e.g. links to the store paths).
+  They will be added as links to the actual files (e.g., links to the store paths).
   The actual files will be added in previous layers.
 
   _Default value:_ `[]`
@@ -561,7 +561,7 @@ This allows the function to produce reproducible images.
 `gname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-gname}
 
 : Credentials for Nix store ownership.
-  Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+  Can be overridden to, e.g., `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
 
   _Default value:_ `0` / `0` / `"root"` / `"root"`
 
