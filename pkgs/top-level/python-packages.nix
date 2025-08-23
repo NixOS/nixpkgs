@@ -1803,6 +1803,8 @@ self: super: with self; {
 
   beetcamp = callPackage ../development/python-modules/beetcamp { };
 
+  beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };
