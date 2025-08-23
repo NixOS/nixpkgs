@@ -4,6 +4,7 @@
   gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -50,6 +51,17 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
+
+  patches = [
+    # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
+    # https://github.com/ggml-org/llama.cpp/pull/15531
+    (fetchpatch {
+      url = "https://github.com/ggml-org/llama.cpp/pull/15531/commits/63a83ffefe4d478ebadff89300a0a3c5d660f56a.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/llama.cpp/";
+      hash = "sha256-9LGnzviBgYYOOww8lhiLXf7xgd/EtxRXGQMredOO4qM=";
+    })
+  ];
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
