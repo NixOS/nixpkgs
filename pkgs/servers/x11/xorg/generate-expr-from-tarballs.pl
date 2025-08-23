@@ -403,6 +403,7 @@ print OUT <<EOF;
   xmag,
   xmessage,
   xmodmap,
+  xmore,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -459,6 +460,7 @@ self: with self; {
     xmag
     xmessage
     xmodmap
+    xmore
     xorgproto
     xprop
     xrandr
