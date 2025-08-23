@@ -73,6 +73,7 @@ $pcMap{"xpresent"} = "libXpresent";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
 $pcMap{"xres"} = "libXres";
+$pcMap{"xscrnsaver"} = "libXScrnSaver";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
@@ -356,6 +357,7 @@ print OUT <<EOF;
   libxrandr,
   libxrender,
   libxres,
+  libxscrnsaver,
   libxt,
   libxv,
   libxvmc,
@@ -455,6 +457,7 @@ self: with self; {
   libXrandr = libxrandr;
   libXrender = libxrender;
   libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
   libXv = libxv;
   libXvMC = libxvmc;
