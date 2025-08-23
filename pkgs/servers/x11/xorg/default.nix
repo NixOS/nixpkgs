@@ -36,6 +36,8 @@
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
   libxmu,
   libxpm,
   libxrandr,
@@ -138,6 +140,8 @@ self: with self; {
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
   libXmu = libxmu;
   libXpm = libxpm;
   libXrandr = libxrandr;
@@ -1757,90 +1761,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXfont = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libfontenc,
-      xorgproto,
-      freetype,
-      xtrans,
-      zlib,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXfont";
-      version = "1.5.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2";
-        sha256 = "0hiji1bvpl78aj3a3141hkk353aich71wv8l5l2z51scfy878zqs";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libfontenc
-        xorgproto
-        freetype
-        xtrans
-        zlib
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xfont" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXfont2 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libfontenc,
-      xorgproto,
-      freetype,
-      xtrans,
-      zlib,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXfont2";
-      version = "2.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXfont2-2.0.7.tar.xz";
-        sha256 = "1ywfwpirvi7fmd3my3cb6szzd9c4p7xy7s1kjjv6k1x4xgyq4ywb";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libfontenc
-        xorgproto
-        freetype
-        xtrans
-        zlib
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xfont2" ];
         platforms = lib.platforms.unix;
       };
     })
