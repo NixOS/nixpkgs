@@ -718,6 +718,11 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
+    hpndDec = {
+      fullName = "Historical Permission Notice and Disclaimer - DEC variant";
+      spdxId = "HPND-DEC";
+    };
+
     hpndDoc = {
       fullName = "Historical Permission Notice and Disclaimer - documentation variant";
       spdxId = "HPND-doc";

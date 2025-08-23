@@ -384,6 +384,7 @@ print OUT <<EOF;
   xgamma,
   xgc,
   xhost,
+  xkbutils,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -430,6 +431,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbutils
     xlsatoms
     xlsclients
     xlsfonts
