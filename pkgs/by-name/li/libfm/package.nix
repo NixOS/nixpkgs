@@ -23,22 +23,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if extraOnly then "libfm-extra" else "libfm";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "libfm";
     tag = finalAttrs.version;
-    hash = "sha256-SQHV4kv8Fz24x7g2G8qc+uJR9qeN1Ez1KHnKK9YULY0=";
+    hash = "sha256-dmu5ygPuZe2YWAzIVPx5zskQeB51hXcLbMczxWgCr78=";
   };
-
-  patches = [
-    # Add casts to fix -Werror=incompatible-pointer-types
-    (fetchpatch {
-      url = "https://github.com/lxde/libfm/commit/fbcd183335729fa3e8dd6a837c13a23ff3271000.patch";
-      hash = "sha256-RbX8jkP/5ao6NWEnv8Pgy4zwZaiDsslGlRRWdoV3enA=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
