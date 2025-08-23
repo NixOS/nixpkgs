@@ -1187,7 +1187,6 @@ in
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
   plantuml-server = runTest ./plantuml-server.nix;
-  plasma-bigscreen = runTest ./plasma-bigscreen.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = runTest ./plausible.nix;
   playwright-python = runTest ./playwright-python.nix;
