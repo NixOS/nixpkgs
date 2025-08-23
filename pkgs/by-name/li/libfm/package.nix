@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
+  gtk-doc,
   glib,
   intltool,
   menu-cache,
@@ -23,9 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = if extraOnly then "libfm-extra" else "libfm";
   version = "1.3.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/libfm-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "libfm";
+    tag = finalAttrs.version;
+    hash = "sha256-SQHV4kv8Fz24x7g2G8qc+uJR9qeN1Ez1KHnKK9YULY0=";
   };
 
   patches = [
@@ -37,9 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     vala
     pkg-config
     intltool
+    gtk-doc
   ];
   buildInputs = [
     glib
@@ -55,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional withGtk3 "--with-gtk=3";
 
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
-
-  postPatch = ''
-    # Ensure the files are re-generated from Vala sources.
-    rm src/actions/*.c
-  '';
 
   # libfm-extra is pulled in by menu-cache and thus leads to a collision for libfm
   postInstall = optionalString (!extraOnly) ''
