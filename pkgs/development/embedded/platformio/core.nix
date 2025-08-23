@@ -72,6 +72,7 @@ buildPythonApplication rec {
     click
     click-completion
     colorama
+    esp-idf-size
     git
     intelhex
     lockfile
@@ -81,6 +82,7 @@ buildPythonApplication rec {
     pyserial
     pyyaml
     requests
+    rich-click
     semantic-version
     setuptools
     spdx-license-list-data.json

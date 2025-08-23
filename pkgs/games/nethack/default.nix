@@ -227,7 +227,7 @@ stdenv.mkDerivation rec {
     homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "nethack";
   };
 }

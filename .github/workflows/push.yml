@@ -13,7 +13,6 @@ on:
       - release-*
       - staging-*
       - haskell-updates
-      - python-updates
 
 permissions: {}
 
@@ -43,6 +42,8 @@ jobs:
       issues: write
       pull-requests: write
       statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ github.sha }}
       systems: ${{ needs.prepare.outputs.systems }}

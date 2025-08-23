@@ -65,6 +65,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = lib.licenses.agpl3Plus;
     mainProgram = "symfony";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

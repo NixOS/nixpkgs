@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
-  version = "1.4.5";
+  version = "1.4.6";
   _name = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "sha256-enUxHYVhdiDQLMAnQnRjx/mvIEHgL8k/W8Jda6PMrfE=";
+    sha256 = "sha256-HAOKyL/OVR6E175QIr/VZILy1w7mqMt6RJkifzGLYn0=";
   };
 
   prePatch = ''

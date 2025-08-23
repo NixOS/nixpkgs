@@ -16,6 +16,8 @@ on:
         default: false
         type: boolean
     secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
       OWNER_APP_PRIVATE_KEY:
         required: false
 
@@ -69,8 +71,6 @@ jobs:
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
     name: ${{ matrix.system }}${{ matrix.version && format(' @ {0}', matrix.version) || '' }}
-    outputs:
-      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     timeout-minutes: 15
     steps:
       # This is not supposed to be used and just acts as a fallback.
@@ -87,108 +87,81 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check out the PR at the test merge commit
-        uses: ./.github/actions/get-merge-commit
+      - name: Check out the PR at merged and target commits
+        uses: ./.github/actions/checkout
         with:
-          mergedSha: ${{ inputs.mergedSha }}
-          merged-as-untrusted: true
-          pinnedFrom: untrusted
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
-      - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: '(-source|-single-chunk)$'
+
+      - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
           MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
         run: |
-          nix-build untrusted/ci --arg nixpkgs ./pinned  -A eval.singleSystem \
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned  -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
             --argstr nixPath "$MATRIX_VERSION" \
             --out-link merged
-          # If it uses too much memory, slightly decrease chunkSize
+          # If it uses too much memory, slightly decrease chunkSize.
+          # Note: Keep the same further down in sync!
 
-      - name: Upload the output paths and eval stats
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}merged-${{ matrix.system }}
-          path: merged/*
-
-      - name: Log current API rate limits
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api /rate_limit | jq
-
-      - name: Get target run id
+      # Running the attrpath generation step separately from the outpath step afterwards.
+      # The idea is that, *if* Eval on the target branch has not finished, yet, we will
+      # generate the attrpaths in the meantime - and the separate command command afterwards
+      # will check cachix again for whether Eval has finished. If no Eval result from the
+      # target branch can be found the second time, we proceed to run it in here. Attrpaths
+      # generation takes roughly 30 seconds, so for every normal use-case this should be more
+      # than enough of a head start for Eval on the target branch to finish.
+      # This edge-case, that Eval on the target branch is delayed is unlikely to happen anyway:
+      # For a commit to become the target commit of a PR, it must *already* be on the branch.
+      # Normally, CI should always start running on that push event *before* it starts running
+      # on the PR.
+      - name: Evaluate the ${{ matrix.system }} attribute paths at the target commit
         if: inputs.targetSha
-        id: targetRunId
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        env:
-          MATRIX_SYSTEM: ${{ matrix.system }}
-          TARGET_SHA: ${{ inputs.targetSha }}
-        with:
-          script: |
-            const system = process.env.MATRIX_SYSTEM
-            const targetSha = process.env.TARGET_SHA
-
-            let run_id
-            try {
-              run_id = (await github.rest.actions.listWorkflowRuns({
-                ...context.repo,
-                workflow_id: 'push.yml',
-                event: 'push',
-                head_sha: targetSha
-              })).data.workflow_runs[0].id
-            } catch {
-              throw new Error(`Could not find a push.yml workflow run for ${targetSha}.`)
-            }
-
-            // Waiting 120 * 5 sec = 10 min. max.
-            // Eval takes max 5-6 minutes, normally.
-            for (let i = 0; i < 120; i++) {
-              const result = await github.rest.actions.listWorkflowRunArtifacts({
-                ...context.repo,
-                run_id,
-                name: `merged-${system}`
-              })
-              if (result.data.total_count > 0) {
-                core.setOutput('targetRunId', run_id)
-                return
-              }
-              await new Promise(resolve => setTimeout(resolve, 5000))
-            }
-            // No artifact found at this stage. This usually means that Eval failed on the target branch.
-            // This should only happen when Eval is broken on the target branch and this PR fixes it.
-            // Continue without targetRunId to skip the remaining steps, but pass the job.
-
-      - name: Log current API rate limits
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api /rate_limit | jq
-
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-        if: steps.targetRunId.outputs.targetRunId
-        with:
-          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
-          name: merged-${{ matrix.system }}
-          path: target
-          github-token: ${{ github.token }}
-          merge-multiple: true
-
-      - name: Compare outpaths against the target branch
-        if: steps.targetRunId.outputs.targetRunId
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build untrusted/ci --arg nixpkgs ./pinned -A eval.diff \
-            --arg beforeDir ./target \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.attrpathsSuperset \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --argstr nixPath "nixVersions.latest"
+
+      - name: Evaluate the ${{ matrix.system }} output paths at the target commit
+        if: inputs.targetSha
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        # This should be very quick, because it pulls the eval results from Cachix.
+        run: |
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg chunkSize 8000 \
+            --argstr nixPath "nixVersions.latest" \
+            --out-link target
+
+      - name: Compare outpaths against the target branch
+        if: inputs.targetSha
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.diff \
+            --arg beforeDir "$(readlink ./target)" \
             --arg afterDir "$(readlink ./merged)" \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        if: steps.targetRunId.outputs.targetRunId
+        if: inputs.targetSha
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
@@ -197,7 +170,7 @@ jobs:
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: needs.eval.outputs.targetRunId && !cancelled() && !failure()
+    if: inputs.targetSha && !cancelled() && !failure()
     permissions:
       statuses: write
     timeout-minutes: 5
@@ -206,11 +179,10 @@ jobs:
         with:
           sparse-checkout: .github/actions
       - name: Check out the PR at the target commit
-        uses: ./.github/actions/get-merge-commit
+        uses: ./.github/actions/checkout
         with:
-          targetSha: ${{ inputs.targetSha }}
-          target-as-trusted: true
-          pinnedFrom: trusted
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -224,7 +196,7 @@ jobs:
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.combine \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.combine \
             --arg diffDir ./diff \
             --out-link combined
 
@@ -232,12 +204,11 @@ jobs:
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C trusted fetch --depth 1 origin ${{ inputs.mergedSha }}
-          git -C trusted diff --name-only ${{ inputs.mergedSha }} \
+          git -C nixpkgs/trusted diff --name-only ${{ inputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build trusted/ci --arg nixpkgs ./pinned -A eval.compare \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
             --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
             --argstr githubAuthorId "$AUTHOR_ID" \
@@ -375,17 +346,17 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and checkout the merge commit
-        uses: ./.github/actions/get-merge-commit
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
         with:
-          merged-as-untrusted: true
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Ensure flake outputs on all systems still evaluate
-        run: nix flake check --all-systems --no-build ./untrusted
+        run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
-          time nix-env -I ./untrusted -f ./untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+          time nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null

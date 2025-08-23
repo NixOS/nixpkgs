@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "firecrawl-py";
-  version = "1.7.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mendableai";
     repo = "firecrawl";
     tag = "v${version}";
-    hash = "sha256-Tsw5OMjv/t9lt3seG31958R9o+s/6N7MGzHgqgkHrzQ=";
+    hash = "sha256-GIde8FiU1/gS3oFfTf7f7Tc4KvDVL873VE5kjyh33Is=";
   };
 
   sourceRoot = "${src.name}/apps/python-sdk";
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://firecrawl.dev";
     changelog = "https://github.com/mendableai/firecrawl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

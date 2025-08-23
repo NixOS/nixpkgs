@@ -38,6 +38,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/github/github-mcp-server";
     license = lib.licenses.mit;
     mainProgram = "github-mcp-server";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

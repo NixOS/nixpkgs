@@ -39,7 +39,6 @@ php.buildComposerProject2 (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://drupal.org/";
     maintainers = with lib.maintainers; [
-      drupol
       OulipianSummer
     ];
     platforms = php.meta.platforms;

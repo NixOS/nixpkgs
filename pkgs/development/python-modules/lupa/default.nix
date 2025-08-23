@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lupa";
-  version = "2.4";
+  version = "2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UwDSH4GqG9TUX1XjHd26O4eYlWlgaKP4TPy1/ZFIqs0=";
+    hash = "sha256-acaonyt7CKMEDX7Soe7MujejHdyS+hmTOcU6KuPEjDQ=";
   };
 
   build-system = [

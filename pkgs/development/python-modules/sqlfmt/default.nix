@@ -5,14 +5,15 @@
   click,
   fetchFromGitHub,
   gitpython,
+  importlib-metadata,
   jinja2,
   platformdirs,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  tomli,
   tqdm,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   version = "0.27.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
@@ -29,12 +30,16 @@ buildPythonPackage rec {
     hash = "sha256-Yel9SB7KrDqtuZxNx4omz6u4AID8Fk5kFYKBEZD1fuU=";
   };
 
+  pythonRelaxDeps = [ "platformdirs" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
     click
+    importlib-metadata
     jinja2
     platformdirs
+    tomli
     tqdm
   ];
 
@@ -46,11 +51,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
   '';
 

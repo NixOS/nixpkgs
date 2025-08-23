@@ -1801,6 +1801,8 @@ self: super: with self; {
 
   bech32 = callPackage ../development/python-modules/bech32 { };
 
+  beetcamp = callPackage ../development/python-modules/beetcamp { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -1844,6 +1846,8 @@ self: super: with self; {
   bezier = callPackage ../development/python-modules/bezier { };
 
   beziers = callPackage ../development/python-modules/beziers { };
+
+  bgutil-ytdlp-pot-provider = callPackage ../development/python-modules/bgutil-ytdlp-pot-provider { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
@@ -2198,8 +2202,6 @@ self: super: with self; {
 
   bumps = callPackage ../development/python-modules/bumps { };
 
-  bunch = callPackage ../development/python-modules/bunch { };
-
   bundlewrap = callPackage ../development/python-modules/bundlewrap { };
 
   bundlewrap-keepass = callPackage ../development/python-modules/bundlewrap-keepass { };
@@ -2518,7 +2520,7 @@ self: super: with self; {
 
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
-  chromadb = callPackage ../development/python-modules/chromadb { };
+  chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
 
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
@@ -2798,6 +2800,8 @@ self: super: with self; {
   color-operations = callPackage ../development/python-modules/color-operations { };
 
   color-parser-py = callPackage ../development/python-modules/color-parser-py { };
+
+  coloraide = callPackage ../development/python-modules/coloraide { };
 
   colorama = callPackage ../development/python-modules/colorama { };
 
@@ -3242,16 +3246,6 @@ self: super: with self; {
 
   cython_0 = callPackage ../development/python-modules/cython/0.nix { };
 
-  cython_3_1 = cython.overridePythonAttrs rec {
-    version = "3.1.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "cython";
-      repo = "cython";
-      tag = version;
-      hash = "sha256-lP8ILCzAZuoPzFhCqGXwIpifN8XoWz93SJ7c3XVe69Y=";
-    };
-  };
-
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   dacite = callPackage ../development/python-modules/dacite { };
@@ -3420,6 +3414,8 @@ self: super: with self; {
   dbt-extractor = callPackage ../development/python-modules/dbt-extractor { };
 
   dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
+
+  dbt-protos = callPackage ../development/python-modules/dbt-protos { };
 
   dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
 
@@ -4144,10 +4140,6 @@ self: super: with self; {
     callPackage ../development/python-modules/djangorestframework-guardian
       { };
 
-  djangorestframework-guardian2 =
-    callPackage ../development/python-modules/djangorestframework-guardian2
-      { };
-
   djangorestframework-jsonp = callPackage ../development/python-modules/djangorestframework-jsonp { };
 
   djangorestframework-recursive =
@@ -4737,6 +4729,8 @@ self: super: with self; {
 
   esig = callPackage ../development/python-modules/esig { };
 
+  esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esper = callPackage ../development/python-modules/esper { };
@@ -5077,9 +5071,7 @@ self: super: with self; {
 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
-  feedgenerator = callPackage ../development/python-modules/feedgenerator {
-    inherit (pkgs) glibcLocales;
-  };
+  feedgenerator = callPackage ../development/python-modules/feedgenerator { };
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
@@ -5107,8 +5099,6 @@ self: super: with self; {
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
-  fido2_2 = callPackage ../development/python-modules/fido2/2.nix { };
-
   fields = callPackage ../development/python-modules/fields { };
 
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
@@ -5126,8 +5116,6 @@ self: super: with self; {
   filelock = callPackage ../development/python-modules/filelock { };
 
   files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
-
-  filesplit = callPackage ../development/python-modules/filesplit { };
 
   filetype = callPackage ../development/python-modules/filetype { };
 
@@ -6586,7 +6574,7 @@ self: super: with self; {
 
   hightime = callPackage ../development/python-modules/hightime { };
 
-  hijri-converter = callPackage ../development/python-modules/hijri-converter { };
+  hijridate = callPackage ../development/python-modules/hijridate { };
 
   hikari = callPackage ../development/python-modules/hikari { };
 
@@ -6903,7 +6891,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) cgal libxml2;
+    inherit (pkgs) cgal_5 libxml2;
   };
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
@@ -8321,7 +8309,7 @@ self: super: with self; {
     (toPythonModule (
       pkgs.libxml2.override {
         pythonSupport = true;
-        inherit python;
+        python3 = python;
       }
     )).py;
 
@@ -13992,13 +13980,7 @@ self: super: with self; {
     callPackage ../development/python-modules/pyside6 { inherit (pkgs) cmake ninja; }
   );
 
-  pyside6-fluent-widgets = callPackage ../development/python-modules/pyside6-fluent-widgets { };
-
   pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
-
-  pysidesix-frameless-window =
-    callPackage ../development/python-modules/pysidesix-frameless-window
-      { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
@@ -14250,6 +14232,8 @@ self: super: with self; {
   pytest-asyncio-cooperative =
     callPackage ../development/python-modules/pytest-asyncio-cooperative
       { };
+
+  pytest-asyncio_0 = callPackage ../development/python-modules/pytest-asyncio/0.nix { };
 
   pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
     version = "0.21.2";
@@ -14533,7 +14517,11 @@ self: super: with self; {
 
   pytest7CheckHook = pytestCheckHook.override { pytest = pytest_7; };
 
+  pytest8_3CheckHook = pytestCheckHook.override { pytest = pytest_8_3; };
+
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
+
+  pytest_8_3 = callPackage ../development/python-modules/pytest/8_3.nix { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
@@ -15123,7 +15111,9 @@ self: super: with self; {
 
   pytweening = callPackage ../development/python-modules/pytweening { };
 
-  pytz = callPackage ../development/python-modules/pytz { };
+  pytz = callPackage ../development/python-modules/pytz {
+    inherit (pkgs) tzdata;
+  };
 
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
@@ -15800,6 +15790,8 @@ self: super: with self; {
 
   rfc3987 = callPackage ../development/python-modules/rfc3987 { };
 
+  rfc3987-syntax = callPackage ../development/python-modules/rfc3987-syntax { };
+
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
@@ -15828,6 +15820,8 @@ self: super: with self; {
   rich-pixels = callPackage ../development/python-modules/rich-pixels { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
+
+  rich-tables = callPackage ../development/python-modules/rich-tables { };
 
   rich-theme-manager = callPackage ../development/python-modules/rich-theme-manager { };
 
@@ -16187,6 +16181,8 @@ self: super: with self; {
 
   scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
 
+  scanpy = callPackage ../development/python-modules/scanpy { };
+
   scapy = callPackage ../development/python-modules/scapy {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
@@ -16436,6 +16432,8 @@ self: super: with self; {
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   service-identity = callPackage ../development/python-modules/service-identity { };
+
+  session-info2 = callPackage ../development/python-modules/session-info2 { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
 
@@ -17890,9 +17888,11 @@ self: super: with self; {
   tensorflow-build =
     let
       compat = rec {
-        protobufTF = pkgs.protobuf_21.override { abseil-cpp = pkgs.abseil-cpp_202301; };
+        #protobufTF = pkgs.protobuf_21.override { abseil-cpp = pkgs.abseil-cpp_202301; };
+        protobufTF = pkgs.protobuf;
         # https://www.tensorflow.org/install/source#gpu
-        cudaPackagesTF = pkgs.cudaPackages_11;
+        #cudaPackagesTF = pkgs.cudaPackages_11;
+        cudaPackagesTF = pkgs.cudaPackages;
         grpcTF =
           (pkgs.grpc.overrideAttrs (oldAttrs: rec {
             # nvcc fails on recent grpc versions, so we use the latest patch level
@@ -17931,7 +17931,7 @@ self: super: with self; {
       grpc = compat.grpcTF;
       grpcio = compat.grpcioTF;
       tensorboard = compat.tensorboardTF;
-      abseil-cpp = pkgs.abseil-cpp_202301;
+      #abseil-cpp = pkgs.abseil-cpp_202301;
       snappy-cpp = pkgs.snappy;
 
       # Tensorflow 2.13 doesn't support gcc13:
@@ -17939,7 +17939,7 @@ self: super: with self; {
       #
       # We use the nixpkgs' default libstdc++ to stay compatible with other
       # python modules
-      stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
+      #stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
     };
 
   tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
@@ -17958,9 +17958,7 @@ self: super: with self; {
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 
-  tensorrt = callPackage ../development/python-modules/tensorrt {
-    cudaPackages = pkgs.cudaPackages_11;
-  };
+  tensorrt = callPackage ../development/python-modules/tensorrt { };
 
   tensorstore = callPackage ../development/python-modules/tensorstore { };
 

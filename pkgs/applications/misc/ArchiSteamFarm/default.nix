@@ -9,6 +9,14 @@
   callPackage,
 }:
 
+let
+  plugins = [
+    "ArchiSteamFarm.OfficialPlugins.ItemsMatcher"
+    "ArchiSteamFarm.OfficialPlugins.MobileAuthenticator"
+    "ArchiSteamFarm.OfficialPlugins.Monitoring"
+    "ArchiSteamFarm.OfficialPlugins.SteamTokenDumper"
+  ];
+in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
@@ -26,7 +34,12 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  projectFile = "ArchiSteamFarm.sln";
+  projectFile = [
+    "ArchiSteamFarm"
+  ]
+  ++ plugins;
+  testProjectFile = "ArchiSteamFarm.Tests";
+
   executable = "ArchiSteamFarm";
 
   enableParallelBuilding = false;
@@ -50,7 +63,7 @@ buildDotnetModule rec {
 
   doCheck = true;
 
-  preInstall = ''
+  installPhase = ''
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -58,20 +71,19 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
-  '';
 
-  postInstall = ''
+    dotnetInstallPhase
+
     buildPlugin() {
       echo "Publishing plugin $1"
-      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
-        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        $dotnetFlags $dotnetInstallFlags
+      dotnetProjectFiles=("$1")
+      dotnetInstallPath="$out/lib/ArchiSteamFarm/plugins/$1"
+      dotnetInstallPhase
     }
 
-    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
-    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  ''
+  + lib.concatMapStrings (p: "buildPlugin ${p}\n") plugins
+  + ''
 
     chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
     wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm

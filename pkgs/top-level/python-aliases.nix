@@ -126,6 +126,7 @@ mapAliases ({
   buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
   buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
+  bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
@@ -188,6 +189,7 @@ mapAliases ({
   distutils_extra = distutils-extra; # added 2023-10-12
   digital-ocean = python-digitalocean; # addad 2024-04-12
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
+  djangorestframework-guardian2 = throw "djangorestframework-guardian2 has been removed because djangorestframework-guardian is active again and the upstream project was archived"; # added 2025-08-22
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django-allauth-2fa = throw "django-allauth-2fa was removed because it was unused and django-allauth now contains 2fa logic itself."; # added 2025-02-15
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18
@@ -258,6 +260,7 @@ mapAliases ({
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
+  filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   flaskbabel = flask-babel; # added 2023-01-19
   flask-babelex = throw "flask-babelex package has been removed, use flask-babel instead"; # added 2024-10-07
   flask_assets = flask-assets; # added 2023-08-23
@@ -329,6 +332,7 @@ mapAliases ({
   hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hglib = python-hglib; # added 2023-10-13
+  hijri-converter = hijridate; # added 2025-08-07
   hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
   homeassistant-bring-api = bring-api; # added 2024-04-11
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
@@ -626,6 +630,8 @@ mapAliases ({
   py-scrypt = scrypt; # added 2025-08-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysimplegui = throw "pysimplegui update to v5 broke the package, it now needs a license key to decrypt the source code"; # added 2024-09-16
+  pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
+  pysidesix-frameless-window = throw "pysidesix-frameless-window has been removed, since it is unmaintained"; # added 2025-08-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
   pysmi-lextudio = pysmi; # added 2024-07-18

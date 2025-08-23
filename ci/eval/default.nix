@@ -30,6 +30,7 @@ let
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
           ".version"
@@ -140,6 +141,8 @@ let
         env = {
           inherit evalSystem chunkSize;
         };
+        __structuredAttrs = true;
+        unsafeDiscardReferences.out = true;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)

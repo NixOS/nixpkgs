@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-JV5sa/jiqubcenSeYC4jlB/RgGJt3o1HTIyy7U4Ljlg=";
+    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
   };
 
   outputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa/ipa_*.so
   '';
 
   strictDeps = true;

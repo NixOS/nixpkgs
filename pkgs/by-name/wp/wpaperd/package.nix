@@ -7,6 +7,8 @@
   wayland,
   libGL,
   dav1d,
+  installShellFiles,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
+    scdoc
   ];
   buildInputs = [
     wayland
@@ -35,6 +39,20 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [
     "avif"
   ];
+
+  postBuild = ''
+    scdoc < man/wpaperd-output.5.scd > man/wpaperd-output.5
+  '';
+
+  postInstall =
+    let
+      targetDir = "target/*/$cargoBuildType";
+    in
+    ''
+      installShellCompletion ${targetDir}/completions/*.{bash,fish}
+      installShellCompletion --zsh ${targetDir}/completions/_*
+      installManPage ${targetDir}/man/*.1 man/*.5
+    '';
 
   meta = with lib; {
     description = "Minimal wallpaper daemon for Wayland";

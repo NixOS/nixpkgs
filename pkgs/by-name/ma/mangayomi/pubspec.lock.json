@@ -440,11 +440,11 @@
       "dependency": "direct main",
       "description": {
         "name": "d4rt",
-        "sha256": "40ecf0b73603a8268050e890eb4d037b5bdf4184f439cc18d593e83b100a19e7",
+        "sha256": "4220081caf1cea231e127a8fd2801b4b55464a51f840b56bb079ce2b3792e9e6",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.0.9"
+      "version": "0.1.1"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -683,6 +683,17 @@
       },
       "source": "hosted",
       "version": "3.4.1"
+    },
+    "flutter_discord_rpc_fork": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "67e99dd4547bdba15a49d53ab61f50397b194804",
+        "url": "https://github.com/Schnitzel5/flutter-discord-rpc.git"
+      },
+      "source": "git",
+      "version": "1.0.4"
     },
     "flutter_inappwebview": {
       "dependency": "direct main",

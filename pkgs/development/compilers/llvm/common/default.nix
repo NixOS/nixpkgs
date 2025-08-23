@@ -488,6 +488,11 @@ let
         {
           libclc = callPackage ./libclc { };
         }
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
+      flang = callPackage ./flang {
+        mlir = tools.mlir;
+      };
+    }
   );
 
   libraries = lib.makeExtensible (

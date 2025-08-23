@@ -246,7 +246,6 @@ python3Packages.buildPythonApplication rec {
     '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
-      drupol
       shivaraj-bh
     ];
   };

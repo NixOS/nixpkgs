@@ -31,11 +31,8 @@
       gui =
         { ... }:
         common {
-          services.xserver = {
-            enable = true;
-            desktopManager.plasma5.enable = true;
-            desktopManager.plasma5.runUsingSystemd = true;
-          };
+          services.xserver.enable = true;
+          services.desktopManager.plasma6.enable = true;
 
           services.displayManager = {
             sddm.enable = true;

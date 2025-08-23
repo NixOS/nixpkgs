@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

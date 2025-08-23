@@ -8,7 +8,7 @@
   setuptools-scm,
 
   # tests
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   pythonImportsCheck = [ "makefun" ];
 

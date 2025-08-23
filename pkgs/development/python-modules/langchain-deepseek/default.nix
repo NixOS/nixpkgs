@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-deepseek";
-  version = "0.1.4";
+  version = "0.3.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-deepseek==${version}";
-    hash = "sha256-lIlThVpyZF5osiCyYMO8kQUNtG5eUjXGZLdgRraj4Yc=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/deepseek";

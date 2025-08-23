@@ -138,6 +138,18 @@ let
         ];
       });
 
+      hassil = super.hassil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.3";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) repo owner;
+          tag = "v${version}";
+          hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+        };
+
+        disabledTestPaths = [ ];
+      });
+
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchFromGitHub {
@@ -341,7 +353,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.8.2";
+  hassVersion = "2025.8.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -362,13 +374,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-z/wEYitbn8D0LEUTnBfDWfeo+NdDxX42Ifz2D5pbM8I=";
+    hash = "sha256-FiaRCXWEn1AsLaLH88hfZjMNeRcmP5uNJxxFvEW5K3c=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-6VnXCc6NWwKUQWmIB/xJmR2AZgfXEXh8DNmoKzSY3GI=";
+    hash = "sha256-X7G9SAN1t4OPLdyRu/Fwfq70JWu5k1F6Qgz8YgP4jis=";
   };
 
   build-system = with python.pkgs; [

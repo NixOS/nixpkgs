@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchgit,
+  fetchFromRadicle,
   stdenv,
   libiconv,
   zlib,
@@ -13,9 +13,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-tui";
   version = "0.6.0";
 
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z39mP9rQAaGmERfUMPULfPUi473tY.git";
-    rev = "refs/namespaces/z6MkswQE8gwZw924amKatxnNCXA55BMupMmRg7LvJuim2C1V/refs/tags/${finalAttrs.version}";
+  src = fetchFromRadicle {
+    seed = "seed.radicle.xyz";
+    repo = "z39mP9rQAaGmERfUMPULfPUi473tY";
+    node = "z6MkswQE8gwZw924amKatxnNCXA55BMupMmRg7LvJuim2C1V";
+    tag = finalAttrs.version;
     hash = "sha256-rz9l9GtycqZoROUI6Hn0Fv5Br0YCIrcHlEWLMP4hasQ=";
     leaveDotGit = true;
     postFetch = ''

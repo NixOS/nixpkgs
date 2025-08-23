@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Only
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

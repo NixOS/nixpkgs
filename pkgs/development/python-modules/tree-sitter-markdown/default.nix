@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "tree-sitter-markdown";
   # only update to the latest version on PyPI
-  version = "0.3.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-markdown";
     tag = "v${version}";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-I9KDE1yZce8KIGPLG5tmv5r/NCWwN95R6fIyvGdx+So=";
   };
 
   build-system = [
