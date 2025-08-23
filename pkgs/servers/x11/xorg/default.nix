@@ -67,6 +67,7 @@
   xfsinfo,
   xgamma,
   xgc,
+  xhost,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -112,6 +113,7 @@ self: with self; {
     xfsinfo
     xgamma
     xgc
+    xhost
     xlsatoms
     xlsclients
     xlsfonts
@@ -4915,50 +4917,6 @@ self: with self; {
         libXfont2
         xorgproto
         xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xhost = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXau,
-      libXmu,
-      xorgproto,
-      gettext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xhost";
-      version = "1.0.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xhost-1.0.10.tar.xz";
-        sha256 = "1qavfaxqpj2mp2jdb8ivvv7bza546lff95dq90lp3727b40dgbx8";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        gettext
-      ];
-      buildInputs = [
-        libX11
-        libXau
-        libXmu
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

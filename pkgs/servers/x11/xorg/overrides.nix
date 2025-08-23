@@ -965,7 +965,6 @@ self: super:
   xfd = addMainProgram super.xfd { };
   xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
-  xhost = addMainProgram super.xhost { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
