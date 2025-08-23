@@ -16303,6 +16303,8 @@ self: super: with self; {
 
   scs = callPackage ../development/python-modules/scs { };
 
+  scsgate = callPackage ../development/python-modules/scsgate { };
+
   scspell = callPackage ../development/python-modules/scspell { };
 
   sdbus = callPackage ../development/python-modules/sdbus { };

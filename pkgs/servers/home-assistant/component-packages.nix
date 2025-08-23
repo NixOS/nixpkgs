@@ -5169,7 +5169,8 @@
       ];
     "scsgate" =
       ps: with ps; [
-      ]; # missing inputs: scsgate
+        scsgate
+      ];
     "search" =
       ps: with ps; [
       ];
