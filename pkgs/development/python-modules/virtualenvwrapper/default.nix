@@ -5,6 +5,8 @@
   pbr,
   pip,
   pkgs,
+  setuptools,
+  setuptools-scm,
   stevedore,
   virtualenv,
   virtualenv-clone,
@@ -14,7 +16,7 @@
 buildPythonPackage rec {
   pname = "virtualenvwrapper";
   version = "6.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,51 +31,58 @@ buildPythonPackage rec {
     pip
     pkgs.which
   ];
-  propagatedBuildInputs = [
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     stevedore
     virtualenv
     virtualenv-clone
   ];
 
   postPatch = ''
-    for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
-      substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
+    substituteInPlace "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh" \
+      --replace-fail "which" "${pkgs.which}/bin/which"
 
-      # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
-      # script) because the user has to evaluate the script and we don't want
-      # modify the global PYTHONPATH which would affect the user's
-      # environment.
-      # Furthermore it isn't possible to just use VIRTUALENVWRAPPER_PYTHON
-      # for this workaround, because this variable is well quoted inside the
-      # shell script.
-      # (the trailing " -" is required to only replace things like these one:
-      # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
-      # if-statements or anything like that.
-      # ...and yes, this "patch" is hacky :)
-      substituteInPlace "$file" --replace '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
-    done
+    # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
+    # script) because the user has to evaluate the script and we don't want
+    # modify the global PYTHONPATH which would affect the user's
+    # environment.
+    # Furthermore it isn't possible to just use VIRTUALENVWRAPPER_PYTHON
+    # for this workaround, because this variable is well quoted inside the
+    # shell script.
+    # (the trailing " -" is required to only replace things like these one:
+    # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
+    # if-statements or anything like that.
+    # ...and yes, this "patch" is hacky :)
+    substituteInPlace "virtualenvwrapper.sh" --replace-fail \
+      '"$VIRTUALENVWRAPPER_PYTHON" -' \
+      'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
   '';
 
   postInstall = ''
-        # This might look like a dirty hack but we can't use the makeWrapper function because
-        # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
-        # aren't normal executables. Instead, the user has to evaluate them.
+    # This might look like a dirty hack but we can't use the makeWrapper function because
+    # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+    # aren't normal executables. Instead, the user has to evaluate them.
 
-        for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
-          local wrapper="$out/bin/$file"
-          local wrapped="$out/bin/.$file-wrapped"
-          mv "$wrapper" "$wrapped"
+    for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+      local wrapper="$out/bin/$file"
+      local wrapped="$out/bin/.$file-wrapped"
+      mv "$wrapper" "$wrapped"
 
-          # WARNING: Don't indent the lines below because that would break EOF
-          cat > "$wrapper" << EOF
+      # WARNING: Don't indent the lines below because that would break EOF
+      cat > "$wrapper" << EOF
     export PATH="${python}/bin:\$PATH"
     export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
     source "$wrapped"
     EOF
 
-          chmod -x "$wrapped"
-          chmod +x "$wrapper"
-        done
+      chmod -x "$wrapped"
+      chmod +x "$wrapper"
+    done
   '';
 
   meta = with lib; {
