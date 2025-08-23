@@ -68,6 +68,7 @@
   xprop,
   xrandr,
   xrefresh,
+  xset,
   xtrans,
   xvinfo,
   xwininfo,
@@ -107,6 +108,7 @@ self: with self; {
     xprop
     xrandr
     xrefresh
+    xset
     xtrans
     xvinfo
     xwininfo
@@ -5948,48 +5950,6 @@ self: with self; {
         libX11
         libXmu
         xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xset = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      libXmu,
-      xorgproto,
-      libXxf86misc,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xset";
-      version = "1.2.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xset-1.2.5.tar.xz";
-        sha256 = "0bsyyx3k32k9vpb8x3ks7hlfr03nm0i14fv3cg6n4f2vcdajsscz";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        libXmu
-        xorgproto
-        libXxf86misc
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
