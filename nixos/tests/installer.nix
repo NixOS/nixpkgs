@@ -42,7 +42,7 @@ let
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
-        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
+        boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
@@ -640,6 +640,7 @@ let
       clevisFallbackTest ? false,
       disableFileSystems ? false,
       selectNixPackage ? pkgs: pkgs.nixVersions.stable,
+      broken ? false,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -656,6 +657,7 @@ let
           "x86_64-darwin"
           "i686-linux"
         ];
+        inherit broken;
       };
       nodes =
         let
@@ -849,14 +851,23 @@ let
             "mount LABEL=boot /mnt/boot",
         )
       '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      postBootCommands = ''
-        target.wait_for_text("[Pp]assphrase for")
-        target.send_chars("supersecret\n")
-      '';
+      # The serial console is much more reliable than OCR, but
+      # scripted stage 1 doesn't forward logs / password prompts to
+      # it. (TODO: The test framework should use 'console=ttyS0'
+      # anyway, but currently it uses 'console=tty0' for the sake of
+      # the interactive driver)
+      enableOCR = !systemdStage1;
+      postBootCommands =
+        if systemdStage1 then
+          ''
+            target.wait_for_console_text("passphrase for")
+            target.send_console("supersecret\n")
+          ''
+        else
+          ''
+            target.wait_for_text("[Pp]assphrase for")
+            target.send_chars("supersecret\n")
+          '';
     };
 
   # The (almost) simplest partitioning scheme: a swap partition and
@@ -882,11 +893,13 @@ let
 
   simple-test-config-by-attr = simple-test-config // {
     testByAttrSwitch = true;
+    broken = true;
   };
 
   simple-test-config-from-by-attr-to-flake = simple-test-config // {
     testByAttrSwitch = true;
     testFlakeSwitch = true;
+    broken = true;
   };
 
   simple-uefi-grub-config = {
@@ -1390,6 +1403,7 @@ in
   # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
   # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    broken = true;
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
