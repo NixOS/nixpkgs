@@ -67,6 +67,8 @@ $pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xfont"} = "libXfont";
+$pcMap{"xfont2"} = "libXfont2";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
 $pcMap{"xpm"} = "libXpm";
@@ -350,6 +352,8 @@ print OUT <<EOF;
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
   libxmu,
   libxpm,
   libxrandr,
@@ -437,6 +441,8 @@ self: with self; {
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
   libXmu = libxmu;
   libXpm = libxpm;
   libXrandr = libxrandr;

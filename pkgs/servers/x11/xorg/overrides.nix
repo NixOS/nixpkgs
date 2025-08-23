@@ -156,16 +156,6 @@ self: super:
     };
   });
 
-  libXfont = super.libXfont.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ freetype ]; # propagate link reqs. like bzip2
-    # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
-  });
-
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
