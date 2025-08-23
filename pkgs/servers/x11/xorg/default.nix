@@ -38,6 +38,7 @@
   libxfixes,
   libxfont_1,
   libxfont_2,
+  libxft,
   libxmu,
   libxpm,
   libxrandr,
@@ -142,6 +143,7 @@ self: with self; {
   libXfixes = libxfixes;
   libXfont2 = libxfont_2;
   libXfont = libxfont_1;
+  libXft = libxft;
   libXmu = libxmu;
   libXpm = libxpm;
   libXrandr = libxrandr;
@@ -1761,48 +1763,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXft = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontconfig,
-      freetype,
-      libX11,
-      xorgproto,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXft";
-      version = "2.3.9";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXft-2.3.9.tar.xz";
-        sha256 = "1xbn77zqjzx2zdzqcsbf8pvivlqplnciifxk6lk97mjyjiw5p8k0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        fontconfig
-        freetype
-        libX11
-        xorgproto
-        libXrender
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xft" ];
         platforms = lib.platforms.unix;
       };
     })

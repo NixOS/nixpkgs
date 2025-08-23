@@ -194,27 +194,6 @@ self: super:
     };
   });
 
-  libXft = super.libXft.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXrender
-      freetype
-      fontconfig
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-
-    # the include files need ft2build.h, and Requires.private isn't enough for us
-    postInstall = ''
-      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
-    '';
-    passthru = attrs.passthru // {
-      inherit freetype fontconfig;
-    };
-  });
-
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [
       "out"
