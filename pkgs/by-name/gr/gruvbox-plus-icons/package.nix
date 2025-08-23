@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  plasma5Packages,
+  kdePackages,
   gnome-icon-theme,
   hicolor-icon-theme,
   nix-update-script,
@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "6.3.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4UJOiDdw5BxtOjLQjCpkQnUwQRs49GZTShpcElWjAU8=";
+    hash = "sha256-MCof2CFQfh/ChFNlsxw9BmrFf1A804HzWoHJdNsrW74=";
   };
 
   patches = [ ./folder-color.patch ];
@@ -26,10 +26,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
   ];
+
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall
