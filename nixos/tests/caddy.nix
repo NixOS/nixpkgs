@@ -74,7 +74,7 @@
           services.caddy = {
             package = pkgs.caddy.withPlugins {
               plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-              hash = "sha256-Da1XSih/yRehXZhvrv3wGp1OEouE7W8WQrdohz9rehQ=";
+              hash = "sha256-RrB0/qXL0mCvkxKaz8zhj5GWKEtOqItXP2ASYz7VdMU=";
             };
             configFile = pkgs.writeText "Caddyfile" ''
               {
