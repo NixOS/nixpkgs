@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxmenu-data";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxmenu-data";
     tag = finalAttrs.version;
-    hash = "sha256-gWuhE6U33gAzlp21PGZ9qzC3bwi1nXO+WNMNj5xB6SE=";
+    hash = "sha256-5QdQ+7nzj7wDrfdt4GT8VW4+sHgZdE7h3cReY2pmcak=";
   };
 
   nativeBuildInputs = [
