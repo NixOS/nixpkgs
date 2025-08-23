@@ -986,7 +986,6 @@ self: super:
     };
   });
 
-  xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
