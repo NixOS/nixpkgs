@@ -55,6 +55,7 @@ let
       fee1-dead
       prince213
       ryan4yin
+      lonerOrz
     ];
   };
 in
