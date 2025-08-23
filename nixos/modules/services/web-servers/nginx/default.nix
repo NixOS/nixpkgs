@@ -207,11 +207,11 @@ let
                 if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
               };"
             }
+            ${optionalString (cfg.sslEcdhCurve != null) "ssl_conf_command Groups \"${cfg.sslEcdhCurve}\";"}
 
             ${optionalString cfg.recommendedTlsSettings ''
               # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
 
-              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -986,6 +986,13 @@ in
         default = false;
         example = "/path/to/dhparams.pem";
         description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
+      };
+
+      sslEcdhCurve = mkOption {
+        type = types.nullOr types.str;
+        default = "X25519MLKEM768:X25519:P-256:P-384";
+        example = "X25519MLKEM768";
+        description = "Supported groups for TLS key exchange.";
       };
 
       proxyResolveWhileRunning = mkOption {
