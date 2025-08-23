@@ -7,7 +7,7 @@ import ../make-test-python.nix (
 
       [Container]
       Image=localhost/scratchimg:latest
-      Exec=bash -c 'trap exit SIGTERM SIGINT; while true; do sleep 1; done'
+      Exec=bash -c 'trap exit SIGTERM SIGINT; while true; do /bin/sleep 1; done'
       ContainerName=quadlet
       Volume=/nix/store:/nix/store
       Volume=/run/current-system/sw/bin:/bin
