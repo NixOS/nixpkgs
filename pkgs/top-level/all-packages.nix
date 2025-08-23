@@ -599,7 +599,9 @@ with pkgs;
     tests = pkgs.tests.fetchFirefoxAddon;
   };
 
-  fetchNextcloudApp = callPackage ../build-support/fetchnextcloudapp { };
+  fetchNextcloudApp = callPackage ../build-support/fetchnextcloudapp { } // {
+    tests = pkgs.tests.fetchNextcloudApp;
+  };
 
   # `fetchurl' downloads a file from the network.
   fetchurl =
