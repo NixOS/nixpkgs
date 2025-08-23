@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, click
-, pygments
-, prompt-toolkit
-, sqlparse
-, configobj
-, cli-helpers
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  click,
+  pygments,
+  prompt-toolkit,
+  sqlparse,
+  configobj,
+  cli-helpers,
 }:
 
 buildPythonPackage rec {

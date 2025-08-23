@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, frida-tools
+{
+  lib,
+  python3,
+  fetchPypi,
+  frida-tools,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
         hash = "sha256-+g/ici7hw/V+rEeIIMOlri9iSvgmTL35AAyYD/f3Xj8=";
       };
       doCheck = false;
-      nativeCheckInputs = [];
+      nativeCheckInputs = [ ];
     }))
     delegator-py
     requests
