@@ -344,6 +344,10 @@ let
       orga = "blessanabraham";
       repo = "tree-sitter-gemini";
     };
+    "tree-sitter-go-template" = {
+      orga = "ngalaiko";
+      repo = "tree-sitter-go-template";
+    };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
       repo = "tree-sitter-godot-resource";
