@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.3.72";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-huggingface==${version}";
+    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";

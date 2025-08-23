@@ -13,7 +13,6 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaAtLeast;
 
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
@@ -101,6 +100,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken = !(cudaAtLeast "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

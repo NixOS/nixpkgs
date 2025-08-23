@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zcc-helper";
-  version = "3.5.2";
+  version = "3.6";
   pyproject = true;
 
   src = fetchFromBitbucket {
     owner = "mark_hannon";
     repo = "zcc";
     rev = "release_${version}";
-    hash = "sha256-6cpLpzzJPoyWaldXZzptV2LY5aYmRtVf0rd1Ye71VG0=";
+    hash = "sha256-93zSEGr5y00+heuG0hTME+BkLQBUmHnXXMH12ktMtM4=";
   };
 
   build-system = [ setuptools ];
@@ -24,13 +24,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # tests require running a server
-    "tests/test_controller.py"
-    # fixture 'when' not found
-    "tests/test_socket.py"
   ];
 
   meta = {

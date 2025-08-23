@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-groq";
-  version = "0.3.72";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-groq==${version}";
+    hash = "sha256-++9I6t5nED6Nm35X4TVIZ3wCClKXU97QqmSJ0p7YChM=";
   };
 
   sourceRoot = "${src.name}/libs/partners/groq";

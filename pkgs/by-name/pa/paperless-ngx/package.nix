@@ -24,23 +24,24 @@
   xcbuild,
   pango,
   pkg-config,
+  symlinkJoin,
   nltk-data,
   xorg,
 }:
 let
-  version = "2.17.1";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
+    hash = "sha256-POHF00cV8pl6i1rcwxtZ+Q1AlLybDj6gSlL0lPwSSCo=";
   };
 
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_1;
+      django = prev.django_5_2;
 
       fido2 = prev.fido2.overridePythonAttrs {
         version = "1.2.0";
@@ -71,88 +72,85 @@ let
     poppler-utils
   ];
 
-  frontend =
-    let
-      frontendSrc = src + "/src-ui";
-    in
-    stdenv.mkDerivation rec {
-      pname = "paperless-ngx-frontend";
-      inherit version;
+  frontend = stdenv.mkDerivation (finalAttrs: {
+    pname = "paperless-ngx-frontend";
+    inherit version;
 
-      src = frontendSrc;
+    src = src + "/src-ui";
 
-      pnpmDeps = pnpm.fetchDeps {
-        inherit pname version src;
-        fetcherVersion = 1;
-        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
-      };
-
-      nativeBuildInputs = [
-        node-gyp
-        nodejs_20
-        pkg-config
-        pnpm.configHook
-        python3
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        xcbuild
-      ];
-
-      buildInputs = [
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        giflib
-      ];
-
-      CYPRESS_INSTALL_BINARY = "0";
-      NG_CLI_ANALYTICS = "false";
-
-      buildPhase = ''
-        runHook preBuild
-
-        pushd node_modules/canvas
-        node-gyp rebuild
-        popd
-
-        pnpm run build --configuration production
-
-        runHook postBuild
-      '';
-
-      doCheck = true;
-      checkPhase = ''
-        runHook preCheck
-
-        pnpm run test
-
-        runHook postCheck
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/lib/paperless-ui
-        mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-        runHook postInstall
-      '';
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-bx/jXlG3lRiwKyz1M0dU00Xn5xaeALSIxIAGzo8gAgo=";
     };
+
+    nativeBuildInputs = [
+      node-gyp
+      nodejs_20
+      pkg-config
+      pnpm.configHook
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ];
+
+    buildInputs = [
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      giflib
+    ];
+
+    CYPRESS_INSTALL_BINARY = "0";
+    NG_CLI_ANALYTICS = "false";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd node_modules/canvas
+      node-gyp rebuild
+      popd
+
+      # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
+      pnpm run build --configuration production | cat
+
+      runHook postBuild
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+
+      pnpm run test | cat
+
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib/paperless-ui
+      mv ../src/documents/static/frontend $out/lib/paperless-ui/
+
+      runHook postInstall
+    '';
+  });
+
+  nltkDataDir = symlinkJoin {
+    name = "paperless_ngx_nltk_data";
+    paths = with nltk-data; [
+      punkt-tab
+      snowball-data
+      stopwords
+    ];
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
   pyproject = true;
 
   inherit version src;
-
-  # Manual partial backport of:
-  # - https://github.com/paperless-ngx/paperless-ngx/commit/9889c59d3daa8f4ac8ec2400c00ddc36a7ca63c9
-  # - https://github.com/paperless-ngx/paperless-ngx/pull/10538
-  # Fixes build with latest dependency versions.
-  # FIXME: remove in next update
-  patches = [
-    ./dep-updates.patch
-  ];
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
@@ -161,8 +159,7 @@ python.pkgs.buildPythonApplication rec {
     fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
-      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES" \
-      --replace-fail "djangorestframework-guardian~=0.3.0" "djangorestframework-guardian2"
+      --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
@@ -171,6 +168,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "django"
     "django-allauth"
     "django-auditlog"
     "django-guardian"
@@ -185,6 +183,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies =
     with python.pkgs;
     [
+      babel
       bleach
       channels
       channels-redis
@@ -204,6 +203,7 @@ python.pkgs.buildPythonApplication rec {
         }
       ))
       django-auditlog
+      django-cachalot
       django-celery-results
       django-compression-middleware
       django-cors-headers
@@ -213,7 +213,7 @@ python.pkgs.buildPythonApplication rec {
       django-multiselectfield
       django-soft-delete
       djangorestframework
-      djangorestframework-guardian2
+      djangorestframework-guardian
       drf-spectacular
       drf-spectacular-sidecar
       drf-writable-nested
@@ -232,6 +232,7 @@ python.pkgs.buildPythonApplication rec {
       pathvalidate
       pdf2image
       psycopg
+      psycopg-pool
       python-dateutil
       python-dotenv
       python-gnupg
@@ -320,6 +321,7 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
+    export PAPERLESS_NLTK_DIR=${passthru.nltkDataDir}
   '';
 
   disabledTests = [
@@ -337,22 +339,22 @@ python.pkgs.buildPythonApplication rec {
     # Favicon tests fail due to static file handling in the test environment
     "test_favicon_view"
     "test_favicon_view_missing_file"
+    # Requires DNS
+    "test_send_webhook_data_or_json"
+    "test_workflow_webhook_send_webhook_retry"
+    "test_workflow_webhook_send_webhook_task"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     inherit
-      python
-      path
       frontend
+      nltkDataDir
+      path
+      python
       tesseract5
       ;
-    nltkData = with nltk-data; [
-      punkt-tab
-      snowball-data
-      stopwords
-    ];
     tests = { inherit (nixosTests) paperless; };
   };
 

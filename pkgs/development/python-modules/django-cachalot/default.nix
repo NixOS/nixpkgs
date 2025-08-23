@@ -7,8 +7,14 @@
   psycopg2,
   jinja2,
   beautifulsoup4,
+  pytest-django,
+  pytestCheckHook,
   python,
   pytz,
+  redis,
+  redisTestHook,
+  setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -29,31 +35,44 @@ buildPythonPackage rec {
     ./disable-unsupported-tests.patch
   ];
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
     beautifulsoup4
     django-debug-toolbar
     psycopg2
     jinja2
+    pytest-django
+    pytestCheckHook
     pytz
+    redis
+    redisTestHook
   ];
 
   pythonImportsCheck = [ "cachalot" ];
 
-  # disable broken pinning test
+  # redisTestHook does not work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   preCheck = ''
-    substituteInPlace cachalot/tests/read.py \
-      --replace-fail \
-        "def test_explain(" \
-        "def _test_explain("
+    export DJANGO_SETTINGS_MODULE=settings
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} runtests.py
-    runHook postCheck
-  '';
+  pytestFlags = [
+    "-o python_files=*.py"
+    "-o collect_imported_tests=false"
+    "cachalot/tests"
+    "cachalot/admin_tests"
+  ];
+
+  disabledTests = [
+    # relies on specific EXPLAIN output format from sqlite, which is not stable
+    "test_explain"
+    # broken on django-debug-toolbar 6.0
+    "test_rendering"
+  ];
 
   meta = with lib; {
     description = "No effort, no worry, maximum performance";

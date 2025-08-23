@@ -15,7 +15,6 @@
   bintools,
   coreutils ? null,
   apple-sdk ? null,
-  zlib ? null,
   nativeTools,
   noLibc ? false,
   nativeLibc,
@@ -560,19 +559,11 @@ stdenvNoCC.mkDerivation {
     ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
   ''
 
-  + optionalString cc.langD or false ''
-    wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
-  ''
-
   + optionalString cc.langFortran or false ''
     wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
     ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
     ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     export named_fc=${targetPrefix}gfortran
-  ''
-
-  + optionalString cc.langJava or false ''
-    wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
   ''
 
   + optionalString cc.langGo or false ''
@@ -584,8 +575,7 @@ stdenvNoCC.mkDerivation {
   propagatedBuildInputs = [
     bintools
   ]
-  ++ extraTools
-  ++ optionals cc.langD or cc.langJava or false [ zlib ];
+  ++ extraTools;
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
@@ -698,12 +688,12 @@ stdenvNoCC.mkDerivation {
       + optionalString (!isArocc) ''
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
-      + optionalString (!(cc.langD or false)) ''
+      + ''
         include "-${
           if isArocc then "I" else "idirafter"
         }" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
       ''
-      + optionalString (isGNU && (!(cc.langD or false))) ''
+      + optionalString isGNU ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
           include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
@@ -822,9 +812,6 @@ stdenvNoCC.mkDerivation {
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
     ''
-    + optionalString (cc.langD or cc.langJava or false && !isArocc) ''
-      echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
-    ''
 
     ##
     ## Hardening support
@@ -882,9 +869,6 @@ stdenvNoCC.mkDerivation {
     ''
     + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
-    ''
-    + optionalString cc.langD or false ''
-      hardening_unsupported_flags+=" format"
     ''
     + optionalString cc.langFortran or false ''
       hardening_unsupported_flags+=" format"

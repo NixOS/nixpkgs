@@ -126,6 +126,7 @@ mapAliases ({
   buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
   buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
+  bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
@@ -188,6 +189,7 @@ mapAliases ({
   distutils_extra = distutils-extra; # added 2023-10-12
   digital-ocean = python-digitalocean; # addad 2024-04-12
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
+  djangorestframework-guardian2 = throw "djangorestframework-guardian2 has been removed because djangorestframework-guardian is active again and the upstream project was archived"; # added 2025-08-22
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django-allauth-2fa = throw "django-allauth-2fa was removed because it was unused and django-allauth now contains 2fa logic itself."; # added 2025-02-15
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18

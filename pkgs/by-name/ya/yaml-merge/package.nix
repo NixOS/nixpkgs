@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSavannah,
+  fetchgit,
   flex,
   bison,
   python3,
@@ -67,17 +67,11 @@ let
 
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
-  gnulib = fetchFromSavannah {
-    repo = "gnulib";
+  gnulib = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
-  };
-
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "grub-2.12";
-    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # The locales are fetched from translationproject.org at build time,
@@ -95,7 +89,12 @@ assert !(efiSupport && xenSupport);
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
-  inherit src;
+
+  src = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
+  };
 
   patches = [
     ./fix-bash-completion.patch
