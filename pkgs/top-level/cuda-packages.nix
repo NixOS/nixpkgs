@@ -117,13 +117,12 @@ let
       };
 
     # Loose packages
-    # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
+    # Barring packages which share a home (e.g., cudatoolkit), new packages
     # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
     # discovered and added to the package set.
 
     # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
-    cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
     tests =
       let
