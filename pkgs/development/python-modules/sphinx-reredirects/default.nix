@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  flit-core,
   sphinx,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
