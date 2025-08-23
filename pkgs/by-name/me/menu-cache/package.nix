@@ -1,20 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   glib,
   pkg-config,
   libfm-extra,
+  autoreconfHook,
+  gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "menu-cache";
   version = "1.1.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/lxde/menu-cache-${version}.tar.xz";
-    sha256 = "1iry4zlpppww8qai2cw4zid4081hh7fz8nzsp5lqyffbkm2yn0pd";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "menu-cache";
+    tag = finalAttrs.version;
+    hash = "sha256-UPSBAoDjI4nwyDsGK5yIrAR03WhGMSxv1IePSQ3SzxE=";
   };
 
   patches = [
@@ -27,18 +31,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gtk-doc
+  ];
 
   buildInputs = [
     glib
     libfm-extra
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read freedesktop.org menu files";
     homepage = "https://blog.lxde.org/tag/menu-cache/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
