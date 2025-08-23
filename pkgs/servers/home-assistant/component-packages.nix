@@ -2590,7 +2590,8 @@
       ];
     "iglo" =
       ps: with ps; [
-      ]; # missing inputs: iglo
+        iglo
+      ];
     "igloohome" =
       ps: with ps; [
         igloohome-api
