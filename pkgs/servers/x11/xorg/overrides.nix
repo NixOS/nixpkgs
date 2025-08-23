@@ -457,8 +457,6 @@ self: super:
   xkbprint = addMainProgram super.xkbprint { };
   xload = addMainProgram super.xload { };
 
-  xpr = addMainProgram super.xpr { };
-
   xwd = addMainProgram super.xwd { };
 }
 
