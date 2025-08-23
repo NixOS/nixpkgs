@@ -7,7 +7,6 @@
   fetchFromGitHub,
   symlinkJoin,
   autoAddDriverRunpath,
-  fetchpatch2,
 
   # build system
   cmake,
@@ -71,6 +70,8 @@
   bitsandbytes,
   flashinfer,
   py-libnuma,
+  setproctitle,
+  openai-harmony,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -94,7 +95,7 @@ let
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
-  # see CMakeLists.txt, grepping for GIT_TAG near cutlass
+  # see CMakeLists.txt, grepping for CUTLASS_REVISION
   # https://github.com/vllm-project/vllm/blob/v${version}/CMakeLists.txt
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
@@ -113,8 +114,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "575f7724b9762f265bbee5889df9c7d630801845";
-      hash = "sha256-8WrKMl0olr0nYV4FRJfwSaJ0F5gWQpssoFMjr9tbHBk=";
+      rev = "0e43e774597682284358ff2c54530757b654b8d1";
+      hash = "sha256-wxL/jtq/lsLg1o+4392KNgfw5TYlW6lqEVbmR3Jl4/Q=";
     };
 
     dontConfigure = true;
@@ -140,8 +141,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "1c2624e53c078854e0637ee566c72fe2107e75f4";
-      hash = "sha256-WWFhHEUSAlsXr2yR4rGlTQQnSafXKg8gO5PQA8HPYGE=";
+      rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
+      hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
     };
 
     dontConfigure = true;
@@ -233,6 +234,7 @@ let
     libcusolver # cusolverDn.h
     cuda_nvtx
     cuda_nvrtc
+    # cusparselt # cusparseLt.h
     libcublas
   ];
 
@@ -249,7 +251,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.10.0";
+  version = "0.10.1.1";
   pyproject = true;
 
   # https://github.com/vllm-project/vllm/issues/12083
@@ -261,18 +263,10 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-R9arpFz+wkDGmB3lW+H8d/37EoAQDyCWjLHJW1VTutk=";
+    hash = "sha256-lLNjBv5baER0AArX3IV4HWjDZ2jTGXyGIvnHupR8MGM=";
   };
 
   patches = [
-    # error: ‘BF16Vec16’ in namespace ‘vec_op’ does not name a type; did you mean ‘FP16Vec16’?
-    # Reported: https://github.com/vllm-project/vllm/issues/21714
-    # Fix from https://github.com/vllm-project/vllm/pull/21848
-    (fetchpatch2 {
-      name = "build-fix-for-arm-without-bf16";
-      url = "https://github.com/vllm-project/vllm/commit/b876860c6214d03279e79e0babb7eb4e3e286cbd.patch";
-      hash = "sha256-tdBAObFxliVUNTWeSggaLtS4K9f8zEVu22nSgRmMsDs=";
-    })
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
@@ -394,6 +388,8 @@ buildPythonPackage rec {
     opentelemetry-api
     opentelemetry-exporter-otlp
     bitsandbytes
+    setproctitle
+    openai-harmony
     # vLLM needs Torch's compiler to be present in order to use torch.compile
     torch.stdenv.cc
   ]
