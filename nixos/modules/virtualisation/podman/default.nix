@@ -235,7 +235,10 @@ in
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
-          network.network_backend = "netavark";
+          network = {
+            network_backend = "netavark";
+            firewall_backend = if config.networking.nftables.enable then "nftables" else "iptables";
+          };
         };
       };
 
