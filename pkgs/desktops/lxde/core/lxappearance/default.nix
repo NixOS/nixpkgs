@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxappearance";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxappearance";
     tag = finalAttrs.version;
-    hash = "sha256-YxU6jikCRmV2b+080nyMFU9FCMlz77KIqJqoCHVjp8M=";
+    hash = "sha256-t5P3JYGZzhTaJ3s23r6yrAQoFcCV5uteHh67sWY1KrI=";
   };
 
   enableParallelBuilding = true;
@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
     mainProgram = "lxappearance";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })
