@@ -147,6 +147,7 @@
   xorg-sgml-doctools,
   xprop,
   xrandr,
+  xrdb,
   xrefresh,
   xset,
   xsetroot,
@@ -220,6 +221,7 @@ self: with self; {
     xorgproto
     xprop
     xrandr
+    xrdb
     xrefresh
     xset
     xsetroot
@@ -2564,44 +2566,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/app/xpr-1.2.0.tar.xz";
         sha256 = "1hyf6mc2l7lzkf21d5j4z6glg9y455hlsg8lv2lz028k6gw0554b";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXmu
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xrdb = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXmu,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xrdb";
-      version = "1.2.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xrdb-1.2.2.tar.xz";
-        sha256 = "1x1ka0zbcw66a06jvsy92bvnsj9vxbvnq1hbn1az4f0v4fmzrx9i";
       };
       hardeningDisable = [
         "bindnow"

@@ -674,13 +674,6 @@ self: super:
 
   xpr = addMainProgram super.xpr { };
 
-  xrdb = super.xrdb.overrideAttrs (attrs: {
-    configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
-    meta = attrs.meta // {
-      mainProgram = "xrdb";
-    };
-  });
-
   xwd = addMainProgram super.xwd { };
 }
 
