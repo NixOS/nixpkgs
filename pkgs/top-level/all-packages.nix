@@ -760,6 +760,7 @@ with pkgs;
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure =
+    # Arguments documentation in `../build-support/kernel/modules-closure.nix`.
     {
       kernel,
       firmware,
