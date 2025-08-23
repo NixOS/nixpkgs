@@ -152,15 +152,6 @@ python.pkgs.buildPythonApplication rec {
 
   inherit version src;
 
-  # Manual partial backport of:
-  # - https://github.com/paperless-ngx/paperless-ngx/commit/9889c59d3daa8f4ac8ec2400c00ddc36a7ca63c9
-  # - https://github.com/paperless-ngx/paperless-ngx/pull/10538
-  # Fixes build with latest dependency versions.
-  # FIXME: remove in next update
-  patches = [
-    ./dep-updates.patch
-  ];
-
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
     if (( $NIX_BUILD_CORES > 3)); then
