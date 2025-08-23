@@ -14253,6 +14253,16 @@ self: super: with self; {
     };
   });
 
+  pytest-asyncio_0_26 = pytest-asyncio.overridePythonAttrs (old: rec {
+    version = "0.26.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "pytest-dev";
+      repo = "pytest-asyncio";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-GEhFwwQCXwtqfSiew/sOvJYV3JREqOGD4fQONlRR/Mw=";
+    };
+  });
+
   pytest-base-url = callPackage ../development/python-modules/pytest-base-url { };
 
   pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
