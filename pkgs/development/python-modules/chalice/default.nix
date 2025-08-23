@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.28.0";
+  version = "1.32.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "chalice";
     tag = version;
-    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
+    hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
   };
 
   postPatch = ''
