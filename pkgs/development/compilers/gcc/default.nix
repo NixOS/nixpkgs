@@ -416,6 +416,7 @@ pipe
           longDescription
           platforms
           teams
+          identifiers
           ;
       };
     }
