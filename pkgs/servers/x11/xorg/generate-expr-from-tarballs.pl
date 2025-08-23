@@ -476,6 +476,7 @@ print OUT <<EOF;
   xorgproto,
   xorg-server,
   xorg-sgml-doctools,
+  xpr,
   xprop,
   xrandr,
   xrdb,
@@ -549,6 +550,7 @@ self: with self; {
     xmodmap
     xmore
     xorgproto
+    xpr
     xprop
     xrandr
     xrdb
