@@ -159,6 +159,17 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
         llvmPackages = pkgs.llvmPackages_12;
       };
+      ghc928Bindist = callPackage ../development/compilers/ghc/9.2.8.nix {
+        bootPkgs = bb.packages.ghc902Binary;
+        inherit (buildPackages.python311Packages) sphinx;
+        python3 = buildPackages.python311;
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
+        useLLVM = false;
+        enableUnregisterised = true;
+        genBindist = true;
+      };
       ghc92 = compiler.ghc928;
       ghc947 = callPackage ../development/compilers/ghc/9.4.7.nix {
         bootPkgs =

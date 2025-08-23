@@ -14,6 +14,7 @@
 
   # build-tools
   bootPkgs,
+  autoreconfHook,
   autoconf,
   automake,
   coreutils,
@@ -96,6 +97,8 @@
   # Registerised RV64 compiler produces programs that segfault
   # See https://gitlab.haskell.org/ghc/ghc/-/issues/23957
   enableUnregisterised ? stdenv.hostPlatform.isRiscV64 || stdenv.targetPlatform.isRiscV64,
+
+  genBindist ? false,
 }:
 
 assert !enableNativeBignum -> gmp != null;
@@ -350,6 +353,11 @@ stdenv.mkDerivation (
       ./9.4.6-bytestring-posix-source.patch
     ]
 
+    ++ lib.optionals stdenv.targetPlatform.isLoongArch64 [
+      # https://gitlab.haskell.org/ghc/ghc/-/blob/ea25088d4edd9f96e48f0a7f9407fd8eb9c2ae9c
+      ./loongarch-support.patch
+    ]
+
     ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
       # Prevent the paths module from emitting symbols that we don't use
       # when building with separate outputs.
@@ -576,6 +584,7 @@ stdenv.mkDerivation (
     nativeBuildInputs = [
       perl
       autoconf
+      autoreconfHook
       automake
       m4
       python3
@@ -720,5 +729,12 @@ stdenv.mkDerivation (
     dontStrip = true;
     dontPatchELF = true;
     noAuditTmpdir = true;
+  }
+  // lib.optionalAttrs genBindist {
+    installPhase = ''
+      mkdir $out
+      make binary-dist BINARY_DIST_DIR=$out
+    '';
+    outputs = [ "out" ];
   }
 )
