@@ -8,15 +8,5 @@
         },
         "sha256": "09qfpxyxi3z8cd64r2r5mxvh54a5sx8p5mk4d50y4ga2k6pa66bb",
         "version": "6.12.41"
-    },
-    "6.15": {
-        "patch": {
-            "extra": "-hardened1",
-            "name": "linux-hardened-v6.15.9-hardened1.patch",
-            "sha256": "132h0cgv8kzrlz7jprqvwcnragc2v793a759bhg0q6w3ninmncjc",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.15.9-hardened1/linux-hardened-v6.15.9-hardened1.patch"
-        },
-        "sha256": "0zcma8ycdwwzd4yci9752acsv85wh27lahclh5x2yc4jakw3lkz9",
-        "version": "6.15.9"
     }
 }
