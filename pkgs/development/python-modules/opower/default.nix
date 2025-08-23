@@ -41,6 +41,11 @@ buildPythonPackage rec {
     python-dotenv
   ];
 
+  disabledTestPaths = [
+    # network access
+    "tests/test_opower.py"
+  ];
+
   pythonImportsCheck = [ "opower" ];
 
   disabledTests = [

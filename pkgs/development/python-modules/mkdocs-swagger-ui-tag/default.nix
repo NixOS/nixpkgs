@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.6.11";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Blueswen";
     repo = "mkdocs-swagger-ui-tag";
     tag = "v${version}";
-    hash = "sha256-hxf7onjH26QsdB19r71NSC/67u+pEYdJo3e4OvWGgtI=";
+    hash = "sha256-zn+ASunOiAg/kxsvaHUYKuWc5UZ406RO/LSQ+qkAEn0=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MkDocs plugin supports for add Swagger UI in page";
     homepage = "https://github.com/Blueswen/mkdocs-swagger-ui-tag";
-    changelog = "https://github.com/blueswen/mkdocs-swagger-ui-tag/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/blueswen/mkdocs-swagger-ui-tag/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ snpschaaf ];
   };

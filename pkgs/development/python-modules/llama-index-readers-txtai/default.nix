@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-txtai";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_txtai";
     inherit version;
-    hash = "sha256-N5FiwVZ+KWEQlcfVqHVcHJHzRb6Ct+iR2Dc+Wee7y+M=";
+    hash = "sha256-0eOJ9r27lG6WwOz27+N5qldROoaU5UAewtY4N4m8Kcs=";
   };
 
   build-system = [ poetry-core ];

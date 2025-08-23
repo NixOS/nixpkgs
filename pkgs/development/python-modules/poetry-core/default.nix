@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   build,
-  git,
+  gitMinimal,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     build
-    git
+    gitMinimal
     pytest-mock
     pytest-cov-stub
     pytestCheckHook

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django-environ,
-  mock,
   django,
   pytestCheckHook,
   pytest-django,
@@ -28,7 +27,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     django-environ
-    mock
     pytestCheckHook
     pytest-django
   ];
@@ -38,9 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
-    license = with licenses; [
-      bsd2
-    ];
+    license = with licenses; [ bsd2 ];
     maintainers = [ ];
   };
 }

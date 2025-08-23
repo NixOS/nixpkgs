@@ -48,7 +48,6 @@
     !enablePlugin
     || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   nukeReferences,
-  sanitiseHeaderPathsHook,
   callPackage,
   majorMinorVersion,
   apple-sdk,
@@ -108,6 +107,10 @@ let
   crossNameAddon = optionalString (
     !lib.systems.equals targetPlatform hostPlatform
   ) "${targetPlatform.config}${stageNameAddon}-";
+
+  targetPrefix = lib.optionalString (
+    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
+  ) "${stdenv.targetPlatform.config}-";
 
   callFile = callPackageWith {
     # lets
@@ -169,7 +172,6 @@ let
       pkgsBuildTarget
       profiledCompiler
       reproducibleBuild
-      sanitiseHeaderPathsHook
       staticCompiler
       stdenv
       targetPackages
@@ -322,7 +324,7 @@ pipe
         "target"
       ];
 
-      configureFlags = callFile ./common/configure-flags.nix { };
+      configureFlags = callFile ./common/configure-flags.nix { inherit targetPrefix; };
 
       inherit targetConfig;
 
@@ -409,13 +411,14 @@ pipe
       inherit enableShared enableMultilib;
 
       meta = {
-        inherit (callFile ./common/meta.nix { })
+        inherit (callFile ./common/meta.nix { inherit targetPrefix; })
           homepage
           license
           description
           longDescription
           platforms
           teams
+          mainProgram
           ;
       };
     }

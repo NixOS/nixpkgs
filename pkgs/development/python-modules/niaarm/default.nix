@@ -24,14 +24,14 @@
 buildPythonPackage rec {
   pname = "niaarm";
   # nixpkgs-update: no auto update
-  version = "0.4.2";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
     tag = version;
-    hash = "sha256-WvVXL1a1DvgLF3upbGUi1+nH5aDBUNx5Bitlkb8lQkc=";
+    hash = "sha256-524rJ5b9e0U1rqu1iCGMA3Tgnn9bO4biCC1FMoGNqms=";
   };
 
   pythonRelaxDeps = [

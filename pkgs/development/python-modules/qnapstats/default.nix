@@ -30,6 +30,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ responses ];
 
+  # File "/build/source/tests/test-models.py", line 124, in <module>
+  #   assert json.dumps(qnap.get_system_stats(), sort_keys=True) == systemstats
+  # https://github.com/colinodell/python-qnapstats/issues/104
+  doCheck = false;
+
   checkPhase = ''
     runHook preCheck
 
@@ -37,9 +42,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
-  # https://github.com/colinodell/python-qnapstats/issues/104
-  doCheck = false;
 
   pythonImportsCheck = [ "qnapstats" ];
 

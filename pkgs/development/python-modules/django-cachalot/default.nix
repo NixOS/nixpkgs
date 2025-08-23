@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "django-cachalot";
   version = "2.8.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "noripyt";
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "No effort, no worry, maximum performance";
     homepage = "https://github.com/noripyt/django-cachalot";
-    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

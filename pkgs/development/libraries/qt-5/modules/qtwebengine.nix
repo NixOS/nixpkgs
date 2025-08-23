@@ -9,7 +9,6 @@
 
   bison,
   flex,
-  git,
   gperf,
   ninja,
   pkg-config,
@@ -95,7 +94,6 @@ qtModule (
     nativeBuildInputs = [
       bison
       flex
-      git
       gperf
       ninja
       pkg-config

@@ -150,7 +150,10 @@ python.pkgs.buildPythonApplication rec {
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi;
 
-  pythonRelaxDeps = [ "certifi" ];
+  pythonRelaxDeps = [
+    "certifi"
+    "lxml"
+  ];
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];

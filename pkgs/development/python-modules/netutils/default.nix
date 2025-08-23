@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

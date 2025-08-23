@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyssim";
-  version = "0.7";
+  version = "0.7.1";
   pyproject = true;
 
   build-system = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "jterrace";
     repo = "pyssim";
     tag = "v${version}";
-    sha256 = "sha256-LDNIugQeRqNsAZ5ZxS/NxHokEAwefpfRutTRpR0IcXk=";
+    sha256 = "sha256-6393EATaXg12pYXPaHty+8LepUM6kgtZ0zSjZ1Izytg=";
   };
 
   patches = [

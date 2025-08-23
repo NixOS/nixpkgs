@@ -20,14 +20,14 @@
 }:
 buildPythonPackage rec {
   pname = "luna-usb";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "luna";
     tag = version;
-    hash = "sha256-8onTF0iJF7HpNCjNxUg89YRjfYb94CrFgGtmprp7g2E=";
+    hash = "sha256-gySaNbebWUS8wS8adPQo1mT+jmdb+2ddlMckTa36JCY=";
   };
 
   postPatch = ''
