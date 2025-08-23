@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "elupus";
