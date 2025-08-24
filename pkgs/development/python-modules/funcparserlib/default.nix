@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "funcparserlib";
-  version = "1.0.1";
+  version = "2.0.0a0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "vlasovskikh";
     repo = "funcparserlib";
     rev = version;
-    hash = "sha256-LE9ItCaEzEGeahpM3M3sSnDBXEr6uX5ogEkO5x2Jgzc=";
+    hash = "sha256-Iwz0bPlFzOuH2Ax9GayuMGxjfBIt0JtTNCBhC81IMTo=";
   };
 
   nativeBuildInputs = [ poetry-core ];
