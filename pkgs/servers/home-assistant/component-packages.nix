@@ -4986,7 +4986,8 @@
       ];
     "ripple" =
       ps: with ps; [
-      ]; # missing inputs: python-ripple-api
+        python-ripple-api
+      ];
     "risco" =
       ps: with ps; [
         pyrisco
