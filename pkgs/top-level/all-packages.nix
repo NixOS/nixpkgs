@@ -6390,19 +6390,19 @@ with pkgs;
     spidermonkey_140
     ;
 
-  supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
+  supercollider = qt6Packages.callPackage ../by-name/su/supercollider/package.nix {
     fftw = fftwSinglePrec;
   };
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
   supercolliderPlugins = recurseIntoAttrs {
-    sc3-plugins = callPackage ../development/interpreters/supercollider/plugins/sc3-plugins.nix {
+    sc3-plugins = callPackage ../by-name/su/supercollider/plugins/sc3-plugins.nix {
       fftw = fftwSinglePrec;
     };
   };
 
-  supercollider-with-plugins = callPackage ../development/interpreters/supercollider/wrapper.nix {
+  supercollider-with-plugins = callPackage ../by-name/su/supercollider/wrapper.nix {
     plugins = [ ];
   };
 

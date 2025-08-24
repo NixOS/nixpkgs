@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   cmake,
   runtimeShell,
@@ -12,13 +11,14 @@
   fftw,
   curl,
   gcc,
-  libsForQt5,
   libXt,
   qtbase,
   qttools,
   qtwebengine,
+  qtwayland,
   readline,
   qtwebsockets,
+  wrapQtAppsHook,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -28,22 +28,26 @@
   runCommand,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supercollider";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchurl {
-    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
+    url = "https://github.com/supercollider/supercollider/releases/download/Version-${finalAttrs.version}/SuperCollider-${finalAttrs.version}-Source.tar.bz2";
+    hash = "sha256-q3EOhDdvXAgskvzqdGW4XTdZNPPafe7Vg0V6CkiwqRg=";
   };
 
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
-    ./supercollider-3.12.0-env-dirs.patch
+    ./supercollider-3.14.0-env-dirs.patch
   ];
 
   postPatch = ''
-    substituteInPlace common/sc_popen.cpp --replace '/bin/sh' '${runtimeShell}'
+    substituteInPlace common/sc_popen.cpp --replace-fail '/bin/sh' '${runtimeShell}'
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=(--prefix PATH : $out/bin)
   '';
 
   strictDeps = true;
@@ -52,7 +56,8 @@ mkDerivation rec {
     cmake
     pkg-config
     qttools
-    libsForQt5.wrapQtAppsHook
+    qtwebengine
+    wrapQtAppsHook
   ]
   ++ lib.optionals useSCEL [ emacs ];
 
@@ -68,7 +73,10 @@ mkDerivation rec {
     qtwebsockets
     readline
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    alsa-lib
+    qtwayland
+  ];
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -110,9 +118,12 @@ mkDerivation rec {
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
-    changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
-    maintainers = [ ];
+    changelog = "https://github.com/supercollider/supercollider/blob/Version-${finalAttrs.version}/CHANGELOG.md";
+    mainProgram = "scide";
+    maintainers = with lib.maintainers; [
+      liff
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})
