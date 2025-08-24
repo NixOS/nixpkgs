@@ -7075,6 +7075,10 @@ self: super: with self; {
 
   intbitset = callPackage ../development/python-modules/intbitset { };
 
+  intel-extension-for-pytorch =
+    callPackage ../development/python-modules/intel-extension-for-pytorch
+      { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   intellifire4py = callPackage ../development/python-modules/intellifire4py { };
