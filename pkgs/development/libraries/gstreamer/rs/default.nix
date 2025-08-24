@@ -265,12 +265,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      # Applies patches.
-      # TODO: remove with 0.14
-      inherit mopidy;
-    };
-
     updateScript = nix-update-script {
       # use numbered releases rather than gstreamer-* releases
       # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
