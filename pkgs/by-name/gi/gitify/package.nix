@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-oUjlLE7PzA4wfiQlVPnAYk3MF/lqD7hb+k++0RFGvw4=";
+    fetcherVersion = 2;
+    hash = "sha256-AvDKdyJW4kWh2r6XFDyx9DB3PEJc9a0viHKboOVQATg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

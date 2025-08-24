@@ -902,8 +902,8 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "1.23.0";
-            hash = "sha256-jnn169toS1zaixiOrtWjgOvv3UskM13vfFcvaQEesjU=";
+            version = "1.24.0";
+            hash = "sha256-2M7N4Ccw9FAaMmG36hGHi6i0i1qR+uPCSgXELAA03Xk=";
           };
           meta = {
             changelog = "https://marketplace.visualstudio.com/items/Catppuccin.catppuccin-vsc-icons/changelog";
@@ -1020,8 +1020,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.10.0";
-          hash = "sha256-DMlWWJQNHJDBio71DkSl10/8KvuQxUQDIm0FJS1iEWQ=";
+          version = "1.10.1";
+          hash = "sha256-TD2lWGZCKTj9qbwV9elue+jyoQLEOmPBuePpOXH8wEg=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1183,8 +1183,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.3.7";
-          hash = "sha256-SqgCXR6LXy1lSc2fRhRsB7QSqKngRB4ypdPlXt3OOx4=";
+          version = "8.3.9";
+          hash = "sha256-HryTXKCBF7i9zV3JELAM+NF3JW97XWCoSqTRPNr8yjQ=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1197,8 +1197,8 @@ let
         mktplcRef = {
           publisher = "DanielGavin";
           name = "ols";
-          version = "0.1.38";
-          hash = "sha256-LmCGTyV/oHKq502Hp1UvJ/6q90MC6D5l5/7cd38EGm8=";
+          version = "0.1.43";
+          hash = "sha256-b5jBEj4Kw5Nmm1L1RSNIZsqbpdo3EkOGaSH/7QK8y84=";
         };
         meta = {
           description = "Visual Studio Code extension for Odin language";
@@ -1212,8 +1212,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.14.3";
-          hash = "sha256-B0FYMM7usSkQgq7jZfo3uEvERRQ6PrinO36KJGke/Yo=";
+          version = "3.14.19";
+          hash = "sha256-58D9ZzNIMrVa0nQjev0dGNth29iWL7U/X0NkVLSB7hg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1501,8 +1501,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "17.3.3";
-          hash = "sha256-o16wFKcH/sYluRWXSTulZ9K7D/ECUXa3w6DeikVQe5w=";
+          version = "17.3.4";
+          hash = "sha256-HrIvJ0+E9lL6wa6lQSjvqdiQiVVCcKAJIPp+x8x/QMc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -2045,8 +2045,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.35.3";
-          hash = "sha256-VYhKuLiXjLDyRYIE6zg3ZzDeVs9ulTHaAT18BTLz1/M=";
+          version = "6.36.0";
+          hash = "sha256-A0EuYOJLH+FXhz2DAem9vDCRkwPOfZ01cWkWEffO7FE=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2093,8 +2093,8 @@ let
         mktplcRef = {
           name = "gc-excelviewer";
           publisher = "grapecity";
-          version = "4.2.63";
-          hash = "sha256-oEsRnkwuickSyLy3nEqSlAQ8JNemORtu2jijCFGgGWY=";
+          version = "4.2.64";
+          hash = "sha256-bHxU/u6T6r4rSfl9olBZZVI8NTttJFzJw3dgYlvavxw=";
         };
         meta = {
           description = "Edit Excel spreadsheets and CSV files in Visual Studio Code and VS Code for the Web";
@@ -2972,8 +2972,8 @@ let
         mktplcRef = {
           name = "marp-vscode";
           publisher = "marp-team";
-          version = "3.2.1";
-          hash = "sha256-c3e4vWmnR/enummRSfwlulPEAjZ9TlncnAU3SJcUEaI=";
+          version = "3.3.0";
+          hash = "sha256-Z/dhVvmyhyjEM3QUswLA2ExXeFIRzNOUn7Kd6s/C50k=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3936,8 +3936,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.43.1";
-          hash = "sha256-RMJKhGVziSg/N0Z62+rwna2jCZd4/8JIG7wdGpRfZYg=";
+          version = "1.44.0";
+          hash = "sha256-KlB0YlAIdVMuLzBv5S9DbANBBDQoTog1FC8ykFeTvnM=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4190,8 +4190,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.53.0";
-          hash = "sha256-5/YnHyhC83pDEaEN4H/QHIjw/oiAGPWZphzAzhMBPkk=";
+          version = "1.55.0";
+          hash = "sha256-HdD8D8oy/VtIhDj+BQNIDx2YhZXX7VsR2+U1WrKIOoc=";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -4947,8 +4947,8 @@ let
         mktplcRef = {
           name = "vscode-mdx";
           publisher = "unifiedjs";
-          version = "1.8.15";
-          hash = "sha256-n2aWgvhSaU7TU45yeIUU8OmIMOAVYYB500jxrChPeA4=";
+          version = "1.8.16";
+          hash = "sha256-OTlWvbym109IG6Fqkte5jbFMDVbQMn0CXVI3bnnFa+o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/unifiedjs.vscode-mdx/changelog";
@@ -5411,8 +5411,8 @@ let
         mktplcRef = {
           name = "php-debug";
           publisher = "xdebug";
-          version = "1.36.1";
-          hash = "sha256-4r3mf7q6n1b/cVYIGZyRNK5nEAJYzTz4cJrKNH+R01s=";
+          version = "1.37.0";
+          hash = "sha256-7Dz8i66tWPStk2fgFdZPY2Jz3j4IquJVyQbSnV+SVpk=";
         };
         meta = {
           description = "PHP Debug Adapter";
