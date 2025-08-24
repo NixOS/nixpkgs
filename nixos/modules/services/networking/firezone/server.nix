@@ -923,9 +923,11 @@ in
           {
             name = "firezone";
             ensureDBOwnership = true;
+            ensureClauses.superuser = true;
           }
         ];
         ensureDatabases = [ "firezone" ];
+        settings.wal_level = "logical";
       };
 
       services.firezone.server.settings = {
