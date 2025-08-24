@@ -683,15 +683,7 @@ self: super:
     };
   });
 
-  xev = addMainProgram super.xev { };
   xeyes = addMainProgram super.xeyes { };
-
-  xvinfo = super.xvinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.libXext ];
-    meta = attrs.meta // {
-      mainProgram = "xvinfo";
-    };
-  });
 
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
     configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
@@ -1026,13 +1018,6 @@ self: super:
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
-  xcursorgen = addMainProgram super.xcursorgen { };
-
-  xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ xorg.xcursorgen ];
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-    configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
-  });
 
   xinit =
     (super.xinit.override {
@@ -1120,7 +1105,6 @@ self: super:
   xfd = addMainProgram super.xfd { };
   xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
-  xfsinfo = addMainProgram super.xfsinfo { };
   xgamma = addMainProgram super.xgamma { };
   xgc = addMainProgram super.xgc { };
   xhost = addMainProgram super.xhost { };
@@ -1139,15 +1123,6 @@ self: super:
     configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
     meta = attrs.meta // {
       mainProgram = "xrdb";
-    };
-  });
-
-  xrandr = super.xrandr.overrideAttrs (attrs: {
-    postInstall = ''
-      rm $out/bin/xkeystone
-    '';
-    meta = attrs.meta // {
-      mainProgram = "xrandr";
     };
   });
 
