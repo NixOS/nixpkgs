@@ -27,6 +27,12 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
+
+    # TODO: remove when included in a release
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/499a5c345165f0d4a94b98d08f1ace7268781564.patch?full_index=1";
+      hash = "sha256-wF4+CytC1OB5egJGOfLm1USsYY12f9kADymVrxotezE=";
+    })
   ]
   ++ gypPatches;
 }
