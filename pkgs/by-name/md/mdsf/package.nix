@@ -7,7 +7,7 @@
 }:
 let
   pname = "mdsf";
-  version = "0.10.4";
+  version = "0.10.5";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "hougesen";
     repo = "mdsf";
     tag = "v${version}";
-    hash = "sha256-NH3DE6ef1HuS5ADVFros+iDQMZVVgG8V9OuFzzkig8g=";
+    hash = "sha256-m7VoGozJShEw6qVXScxgX7CCyIh62unVvzjq/W7Ynu8=";
   };
 
-  cargoHash = "sha256-dGqFRXezzqOpHA74fnLUGQAI8KgbPmWIL46UP0wza40=";
+  cargoHash = "sha256-AMo2LPC6RviYu2qx202o0gFIIJdjNJxS/zY06TEcpKw=";
 
   checkFlags = [
     # Failing due to the method under test trying to create a directory & write to the filesystem

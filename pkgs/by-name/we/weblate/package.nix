@@ -27,7 +27,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.12.2";
+  version = "5.13";
 
   pyproject = true;
 
@@ -40,13 +40,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-YaP0lhL7E0pv3ZyfpQ47CjhrzjJPDwGpSTcgXDaMZdA=";
+    hash = "sha256-fx07SmQodgC4bI/zQT6TNcvGYzVoKT42aXpUx5SlUrk=";
   };
-
-  patches = [
-    # FIXME This shouldn't be necessary and probably has to do with some dependency mismatch.
-    ./cache.lock.patch
-  ];
 
   build-system = with python.pkgs; [ setuptools ];
 
@@ -83,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
       certifi
       charset-normalizer
       crispy-bootstrap3
+      crispy-bootstrap5
       cryptography
       cssselect
       cython
@@ -125,7 +121,6 @@ python.pkgs.buildPythonApplication rec {
       pyicumessageformat
       pyparsing
       python-dateutil
-      python-redis-lock
       qrcode
       rapidfuzz
       redis
@@ -145,15 +140,9 @@ python.pkgs.buildPythonApplication rec {
       weblate-schemas
     ]
     ++ django.optional-dependencies.argon2
-    ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi;
-
-  pythonRelaxDeps = [
-    "certifi"
-    "lxml"
-  ];
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
