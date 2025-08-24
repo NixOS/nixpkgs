@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   mouseinfo,
@@ -25,11 +26,12 @@ buildPythonPackage {
     hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
-  nativeCheckInputs = [
+  doCheck = stdenv.hostPlatform.isLinux;
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xvfb-run
     scrot
   ];
-  checkPhase = ''
+  checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     xvfb-run python -c 'import pyautogui'
     # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
     # xvfb-run python -m unittest tests.test_pyautogui
