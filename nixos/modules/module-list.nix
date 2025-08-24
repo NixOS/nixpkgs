@@ -1114,6 +1114,7 @@
   ./services/networking/crab-hole.nix
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
+  ./services/networking/ctrld.nix
   ./services/networking/dae.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
