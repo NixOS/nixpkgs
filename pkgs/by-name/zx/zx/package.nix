@@ -14,37 +14,48 @@ let
       args:
       buildGoModule (
         args
-        // rec {
-          version = "0.25.3";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            tag = "v${version}";
-            hash = "sha256-YYwvz6TCLAtVHsmXLGC+L/CQVAy5qSFU6JS1o5O5Zkg=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
+        // (
+          let
+            version = "0.25.9";
+          in
+          {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              tag = "v${version}";
+              hash = "sha256-eaYDUKtTEisSNyb5KN+32JX1yY/UJ4/UDQwzToEMAkw=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        )
       );
   };
 in
 buildNpmPackage (finalAttrs: {
   pname = "zx";
-  version = "8.5.4";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     tag = finalAttrs.version;
-    hash = "sha256-328I8SgBIeTCNFH3Ahm9Zb1OCxwGuhWE/iWmDHElbsA=";
+    hash = "sha256-xiTJoMjnnEb6jPrZvTWMgZJI6S22yyIrN4JiTPeiDpU=";
   };
 
-  npmDepsHash = "sha256-R0pCoITmLQBj0T1iIXXN4clpEKDn9wkG5Ke0AedgnlQ=";
+  npmDepsHash = "sha256-pmZNuYadyD5CnH3AICPx4y8yHCq25Kjkpd+EnCNochI=";
+
+  makeCacheWritable = true;
+
+  npmFlags = [ "--legacy-peer-deps" ];
 
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
