@@ -244,7 +244,20 @@ stdenv.mkDerivation (
     '')
     + ''
       rm $out/bin/c-index-test
-      patchShebangs $python/bin
+
+      # TODO(@sternenseemann): support scan-build{,-py} properly in clang-tools
+      # scan-build expects these to be in ../libexec. These scripts use perl and
+      # are left with impure shebangs to avoid an 100MB closure size increase.
+      moveToOutput "libexec/c*-analyzer" "$out"
+
+      # Move scan-build-py (!) and its dependencies to $python
+      moveToOutput "bin/scan-build-py" "$python"
+      moveToOutput "lib/libear" "$python"
+      moveToOutput "lib/libscanbuild" "$python"
+      moveToOutput "libexec/analyze-c*" "$python"
+      moveToOutput "libexec/intercept-c*" "$python"
+
+      patchShebangs $python/bin $python/libexec
 
       mkdir -p $dev/bin
     ''
