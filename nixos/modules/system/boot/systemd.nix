@@ -113,6 +113,10 @@ let
     "systemd-rfkill.service"
     "systemd-rfkill.socket"
 
+    # Boot counting
+    "boot-complete.target"
+    "systemd-bless-boot.service"
+
     # Hibernate / suspend.
     "hibernate.target"
     "suspend.target"
