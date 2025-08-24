@@ -12419,6 +12419,8 @@ self: super: with self; {
 
   pyairports = callPackage ../development/python-modules/pyairports { };
 
+  pyairtable = callPackage ../development/python-modules/pyairtable { };
+
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyais = callPackage ../development/python-modules/pyais { };
