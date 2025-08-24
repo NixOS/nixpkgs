@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "swh-model";
-  version = "7.1.0";
+  version = "8.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-model";
     tag = "v${version}";
-    hash = "sha256-I0DaSipE5TVFqAdGkNo4e66l1x4A26EYk0F4tKMy33k=";
+    hash = "sha256-Fo2s6mCiEMAVogbobmosYelFVE0es83msY7qK2FJBUE=";
   };
 
   build-system = [
