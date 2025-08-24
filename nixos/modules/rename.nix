@@ -127,6 +127,10 @@ in
       "services"
       "dd-agent"
     ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
+    (mkRemovedOptionModule [
+      "services"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
       The dnscrypt-wrapper module was removed since the project has been effectively unmaintained since 2018;
@@ -265,6 +269,18 @@ in
       LightDM. Please use the services.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "plasma5"
+    ] "the Plasma 5 desktop environment has been removed from nixpkgs, as it has reached EOL upstream.")
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are
@@ -350,6 +366,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "private-gpt" ] ''
       The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "gateone" ] ''
+      The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

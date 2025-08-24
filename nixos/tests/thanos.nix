@@ -1,3 +1,5 @@
+{ ... }:
+
 let
   grpcPort = 19090;
   queryPort = 9090;
@@ -30,10 +32,9 @@ let
       };
     };
   };
-
 in
-import ./make-test-python.nix {
-  name = "prometheus";
+{
+  name = "thanos";
 
   nodes = {
     prometheus =

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   python3,
   libffi,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.25.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     tag = "v${version}";
-    hash = "sha256-yH5omiYs07ZKECI+DAnpYq4T+r2O/RuGdtN+dhYxePc=";
+    hash = "sha256-T0yaTXRQFEdx6lap+S68I2RRA2kQnjbKGz+YB6okJkY=";
     fetchSubmodules = true;
 
     # remove unused libraries from rp2 port's SDK. we leave this and the other
@@ -29,6 +30,20 @@ stdenv.mkDerivation rec {
       rm -rf $out/lib/pico-sdk/lib/{tinyusb,lwip,btstack}
     '';
   };
+
+  patches = [
+    # Fixes Mbed TLS submodule build with GCC 14.
+    #
+    # See:
+    # * <https://github.com/openwrt/openwrt/pull/15479>
+    # * <https://github.com/Mbed-TLS/mbedtls/issues/9003>
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/52b6c9247997e51a97f13bb9e94749bc34e2d52e/package/libs/mbedtls/patches/100-fix-gcc14-build.patch";
+      stripLen = 1;
+      extraPrefix = "lib/mbedtls/";
+      hash = "sha256-Sllp/iWWEhykMJ3HALw5KzR4ta22120Jcl51JZCkZE0=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -53,9 +68,9 @@ stdenv.mkDerivation rec {
 
   skippedTests =
     " -e select_poll_fd"
-    + lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
+    +
+      lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+        " -e ffi_callback -e float_parse -e float_parse_doubleproc -e 'thread/stress_*' -e select_poll_eintr"
     + lib.optionalString (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
     ) " -e float_parse";

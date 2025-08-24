@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Strfry: A nostr relay implementation in C++";
+    description = "Nostr relay implementation in C++";
     homepage = "https://github.com/hoytech/strfry";
     mainProgram = "strfry";
     license = lib.licenses.mit;

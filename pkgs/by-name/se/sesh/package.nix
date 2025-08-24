@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
 }:
 buildGoModule rec {
   pname = "sesh";
@@ -19,14 +20,22 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Smart session manager for the terminal";
     homepage = "https://github.com/joshmedeski/sesh";
     changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gwg313 ];
+    maintainers = with lib.maintainers; [
+      gwg313
+      t-monaghan
+    ];
     mainProgram = "sesh";
   };
 }

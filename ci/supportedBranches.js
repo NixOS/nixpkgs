@@ -9,20 +9,23 @@ const typeConfig = {
   staging: ['development', 'secondary'],
   'staging-next': ['development', 'secondary'],
   'haskell-updates': ['development', 'secondary'],
-  'python-updates': ['development', 'secondary'],
   nixos: ['channel'],
   nixpkgs: ['channel'],
 }
 
 function split(branch) {
-  return { ...branch.match(/(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/).groups }
+  return {
+    ...branch.match(
+      /(?<prefix>.+?)(-(?<version>\d{2}\.\d{2}|unstable)(?:-(?<suffix>.*))?)?$/,
+    ).groups,
+  }
 }
 
 function classify(branch) {
   const { prefix, version } = split(branch)
   return {
     stable: (version ?? 'unstable') !== 'unstable',
-    type: typeConfig[prefix] ?? [ 'wip' ]
+    type: typeConfig[prefix] ?? ['wip'],
   }
 }
 

@@ -202,10 +202,8 @@ in
       }
     ];
 
-    # Starting auditd should also enable loading the audit rules..
+    # Starting the userspace daemon should also enable audit in the kernel
     security.audit.enable = lib.mkDefault true;
-
-    environment.systemPackages = [ pkgs.audit ];
 
     # setting this to anything other than /etc/audit/plugins.d will break, so we pin it here
     security.auditd.settings.plugin_dir = "/etc/audit/plugins.d";

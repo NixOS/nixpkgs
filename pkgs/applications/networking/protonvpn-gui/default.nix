@@ -66,7 +66,10 @@ buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
-    install -Dm 644 ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications
+
+    # Fix the desktop file to correctly identify the wrapped app and show the icon during runtime
+    substitute ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications/protonvpn-app.desktop \
+      --replace-fail "StartupWMClass=protonvpn-app" "StartupWMClass=.protonvpn-app-wrapped"
     install -Dm 644 ${src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
   '';
 

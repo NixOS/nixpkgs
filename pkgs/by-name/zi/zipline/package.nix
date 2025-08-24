@@ -28,17 +28,33 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
+
+  vips' = vips.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "8.17.1";
+      src = fetchFromGitHub {
+        inherit (prevAttrs.src) owner repo;
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
+        postFetch = ''
+          rm -r $out/test/test-suite/images/
+        '';
+      };
+      outputs = lib.remove "devdoc" prevAttrs.outputs;
+      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
+    }
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-16D44QQHrXn6y+3IRsWh6iHSr+o4l3zHDW7SOFMsHnc=";
+    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -49,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
+    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
   };
 
   buildInputs = [
     openssl
-    vips
+    vips'
   ];
 
   nativeBuildInputs = [
@@ -84,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
+    pnpm prune --prod
+    find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}
 

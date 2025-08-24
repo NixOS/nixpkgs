@@ -9,14 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "crush";
-  version = "0.2.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SjrkQFSjJrPNynARE92uKA53hkstIUBSvQbqcYSsnaM=";
+    hash = "sha256-QUYNJ2Ifny9Zj9YVQHcH80E2qa4clWVg2T075IEWujM=";
   };
+
+  vendorHash = "sha256-vdzAVVGr7uTW/A/I8TcYW189E3960SCIqatu7Kb60hg=";
 
   # rename TestMain to prevent it from running, as it panics in the sandbox.
   postPatch = ''
@@ -25,8 +27,6 @@ buildGoModule (finalAttrs: {
         "func TestMain" \
         "func DisabledTestMain"
   '';
-
-  vendorHash = "sha256-aI3MSaQYUOLJxBxwCoVg13HpxK46q6ZITrw1osx5tiE=";
 
   ldflags = [
     "-s"

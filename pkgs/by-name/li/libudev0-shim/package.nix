@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/archlinux/libudev0-shim";
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

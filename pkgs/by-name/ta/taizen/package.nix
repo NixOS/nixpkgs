@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = with lib; {
-    description = "curses based mediawiki browser";
+    description = "Curses-based mediawiki browser";
     homepage = "https://github.com/nerdypepper/taizen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

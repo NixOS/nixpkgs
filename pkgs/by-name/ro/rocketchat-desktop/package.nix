@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rocketchat-desktop";
-  version = "4.7.1";
+  version = "4.8.1";
 
   src = fetchurl {
     url = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/download/${version}/rocketchat-${version}-linux-amd64.deb";
-    hash = "sha256-6Wr4058jeU+hJafJmV9NQEkAt699E4fyKmtUwqkIQCw=";
+    hash = "sha256-WzKQLJhP5pAF2uT9teDIDZ9+Fh/wugymO3XCyXTOM3o=";
   };
 
   nativeBuildInputs = [

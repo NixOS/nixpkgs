@@ -9,8 +9,8 @@
   requests-mock,
   rich,
   setuptools,
-  tomli,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "containers";
@@ -32,8 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     requests
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     progress_bar = [ rich ];
@@ -43,11 +42,8 @@ buildPythonPackage rec {
     fixtures
     pytestCheckHook
     requests-mock
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "podman" ];
 

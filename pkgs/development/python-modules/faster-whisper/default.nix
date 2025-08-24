@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SYSTRAN";
     repo = "faster-whisper";
     tag = "v${version}";
-    hash = "sha256-1j0ZNQY+P7ZflFCxKkFncJl7Rwuf3AMhzsS6CO9uLD0=";
+    hash = "sha256-kv2pLszImGzrPI0q2eglX//BMrj2pF0oMHnZ+7VKrHI=";
   };
 
   build-system = [

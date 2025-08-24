@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.11.1";
+  version = "3.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-jyNOL5u+XVVqChD7Fs3yJCcW14bTvitiQa4H4DTeja0=";
+    hash = "sha256-J/NPLR9ShKhvHDU0/NpUNp95RViS2KygqvnuDHdwiP0=";
   };
 
   build-system = [

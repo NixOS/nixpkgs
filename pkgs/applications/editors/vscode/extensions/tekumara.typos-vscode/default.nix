@@ -68,6 +68,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
   };
 }

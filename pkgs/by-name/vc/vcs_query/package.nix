@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mageta/vcs_query";
-    description = "eMail query-command to use vCards in mutt and Vim";
+    description = "Email query-command to use vCards in mutt and Vim";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     mainProgram = "vcs_query";

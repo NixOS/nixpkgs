@@ -1,11 +1,12 @@
 --- a/build-logic/src/main/kotlin/velocity-init-manifest.gradle.kts
 +++ b/build-logic/src/main/kotlin/velocity-init-manifest.gradle.kts
-@@ -2,28 +2,9 @@ import org.gradle.jvm.tasks.Jar
- import org.gradle.kotlin.dsl.withType
- import java.io.ByteArrayOutputStream
+@@ -8,29 +8,10 @@ interface Injected {
+     val execOps: ExecOperations
+ }
  
 -val currentShortRevision = ByteArrayOutputStream().use {
--    exec {
+-    val execOps = objects.newInstance<Injected>().execOps
+-    execOps.exec {
 -        executable = "git"
 -        args = listOf("rev-parse", "HEAD")
 -        standardOutput = it
@@ -15,7 +16,7 @@
 -
  tasks.withType<Jar> {
      manifest {
--        val buildNumber = System.getenv("BUILD_NUMBER")
+         val buildNumber = System.getenv("BUILD_NUMBER")
 -        val velocityHumanVersion: String =
 -            if (project.version.toString().endsWith("-SNAPSHOT")) {
 -                if (buildNumber == null) {
@@ -26,7 +27,7 @@
 -            } else {
 -                archiveVersion.get()
 -            }
-+        val velocityHumanVersion = System.getenv("BUILD_VERSION")
++        val velocityHumanVersion = System.getenv("BUILD_VERSION");
          attributes["Implementation-Version"] = velocityHumanVersion
      }
  }

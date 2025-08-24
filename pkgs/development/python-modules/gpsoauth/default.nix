@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gpsoauth";
-  version = "1.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WCAu0wM5fSkntGTcleJxS///haGw+Iv2jzrWOFnr5DU=";
+    hash = "sha256-njt2WmpOA2TewbxBV70+1+XsMGZYnihdC0aYaRCqa9I=";
   };
 
   nativeBuildInputs = [

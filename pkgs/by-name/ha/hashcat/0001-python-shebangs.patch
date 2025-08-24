@@ -1,0 +1,42 @@
+diff --git a/tools/bitlocker2hashcat.py b/tools/bitlocker2hashcat.py
+index f7501a37b..a72fb8c78 100755
+--- a/tools/bitlocker2hashcat.py
++++ b/tools/bitlocker2hashcat.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python3
++
+ # Construct a hash for use with hashcat mode 22100
+ # Usage: python3 bitlocker2hashcat.py <bitlocker_image> -o <bitlocker_partition_offset>
+ # Hashcat supports modes $bitlocker$0$ and $bitlocker$1$ and therefore this script will output hashes that relate to a VMK protected by a user password only.
+diff --git a/tools/keybag2hashcat.py b/tools/keybag2hashcat.py
+index 83da25c5e..6a30384ac 100755
+--- a/tools/keybag2hashcat.py
++++ b/tools/keybag2hashcat.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python3
++
+ import argparse
+ import logging
+ import sys
+diff --git a/tools/shiro1-to-hashcat.py b/tools/shiro1-to-hashcat.py
+old mode 100755
+new mode 100644
+index 9619530ef..86ee8e502
+--- a/tools/shiro1-to-hashcat.py
++++ b/tools/shiro1-to-hashcat.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python3
++
+ import os
+ import re
+ import glob
+diff --git a/tools/veeamvbk2hashcat.py b/tools/veeamvbk2hashcat.py
+index e8d6ac05c..5f6d1977a 100755
+--- a/tools/veeamvbk2hashcat.py
++++ b/tools/veeamvbk2hashcat.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python3
++
+ import argparse
+ import binascii
+ 

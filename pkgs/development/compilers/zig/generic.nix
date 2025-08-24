@@ -13,10 +13,10 @@
   callPackage,
   version,
   hash,
-  patches ? [ ],
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  ...
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,18 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache";
   '';
 
-  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
-  # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch =
-    let
-      zigSystemPath =
-        if lib.versionAtLeast finalAttrs.version "0.12" then
-          "lib/std/zig/system.zig"
-        else
-          "lib/std/zig/system/NativeTargetInfo.zig";
-    in
+    # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+    # work in Nix's sandbox. Use env from our coreutils instead.
     ''
-      substituteInPlace ${zigSystemPath} \
+      substituteInPlace lib/std/zig/system.zig \
         --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
     ''
     # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
@@ -112,24 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.13" then
+    else
       ''
         stage3/bin/zig build langref
-      ''
-    else
-      ''
-        stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
       '';
 
-  postInstall =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
-      ''
-        install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      ''
-    else
-      ''
-        install -Dm444 langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      '';
+  postInstall = ''
+    install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

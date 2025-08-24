@@ -8,6 +8,7 @@
   nix-update-script,
   pkg-config,
   qt6,
+  wrapGAppsHook4,
   testers,
   util-linux,
   xz,
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qt6.wrapQtAppsHook
+    wrapGAppsHook4
     util-linux
   ];
 
@@ -80,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--unset QT_QPA_PLATFORMTHEME"
     "--unset QT_STYLE_OVERRIDE"
   ];
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests.version = testers.testVersion {

@@ -3,6 +3,7 @@
   ruby,
   bundlerApp,
   bundlerUpdateScript,
+  nixosTests,
 }:
 
 bundlerApp {
@@ -16,7 +17,10 @@ bundlerApp {
     "oxs"
   ];
 
-  passthru.updateScript = bundlerUpdateScript "oxidized";
+  passthru = {
+    tests = nixosTests.oxidized;
+    updateScript = bundlerUpdateScript "oxidized";
+  };
 
   meta = with lib; {
     description = "Network device configuration backup tool. It's a RANCID replacement";

@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "du + rust = dust. Like du but more intuitive";
+    description = "du, but more intuitive";
     homepage = "https://github.com/bootandy/dust";
     changelog = "https://github.com/bootandy/dust/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

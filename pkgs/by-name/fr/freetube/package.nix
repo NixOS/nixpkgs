@@ -20,13 +20,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.5";
+  version = "0.23.8";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-tVe//h20cTVgpHeo3IlfGfuAH+dM6H5MEfGny5Uhrjk=";
+    hash = "sha256-CHp/6/E/v6UdSe3xoB66Ot24WuZDPdmNyUG1w2w3bX0=";
   };
 
   # Darwin requires writable Electron dist
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-F1YcdshWGRCO7kHsCK0Ejs0aMR7BFXd5M9ITdRVcpbk=";
+    hash = "sha256-ia5wLRt3Hmo4/dsB1/rhGWGJ7LMnVR9ju9lSlQZDTTg=";
   };
 
   nativeBuildInputs = [

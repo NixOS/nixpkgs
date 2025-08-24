@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mcpadapt";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grll";
     repo = "mcpadapt";
     tag = "v${version}";
-    hash = "sha256-mU/zcNEHmPfSMEMgjj4u0iwmXBH2cJzGEANPxyiR1l0=";
+    hash = "sha256-yz4fPywhlCu6DIhYoeaK/eAYjht8LCzx9ltX2XsIFxw=";
   };
 
   build-system = [ hatchling ];

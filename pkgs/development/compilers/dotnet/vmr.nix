@@ -188,14 +188,6 @@ stdenv.mkDerivation rec {
     substituteInPlace \
       src/runtime/src/native/libs/CMakeLists.txt \
       --replace-fail 'add_compile_options(-Weverything)' 'add_compile_options(-Wall)'
-
-    # strip native symbols in runtime
-    # see: https://github.com/dotnet/source-build/issues/2543
-    xmlstarlet ed \
-      --inplace \
-      -s //Project -t elem -n PropertyGroup \
-      -s \$prev -t elem -n KeepNativeSymbols -v false \
-      src/runtime/Directory.Build.props
   ''
   + lib.optionalString (lib.versionAtLeast version "9") (
     ''
@@ -393,6 +385,10 @@ stdenv.mkDerivation rec {
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   LOCALE_ARCHIVE = lib.optionalString isLinux "${glibcLocales}/lib/locale/locale-archive";
 
+  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+  # caused by separateDebugInfo
+  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+
   buildFlags = [
     "--with-packages"
     bootstrapSdk.artifacts
@@ -447,11 +443,11 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstall
 
-      mkdir "$out"
+      mkdir -p "$out"/lib
 
       pushd "artifacts/${assets}/Release"
       find . -name \*.tar.gz | while read archive; do
-        target=$out/$(basename "$archive" .tar.gz)
+        target=$out/lib/$(basename "$archive" .tar.gz)
         # dotnet 9 currently has two copies of the sdk tarball
         [[ ! -e "$target" ]] || continue
         mkdir "$target"
@@ -460,7 +456,7 @@ stdenv.mkDerivation rec {
       popd
 
       local -r unpacked="$PWD/.unpacked"
-      for nupkg in $out/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
+      for nupkg in $out/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
           rm -rf "$unpacked"
           unzip ${unzipFlags} "$unpacked" "$nupkg"
           chmod -R +rw "$unpacked"
@@ -479,9 +475,6 @@ stdenv.mkDerivation rec {
     echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
   '';
 
-  # dotnet cli is in the root, so we need to strip from there
-  # TODO: should we install in $out/share/dotnet?
-  stripDebugList = [ "." ];
   # stripping dlls results in:
   # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
   # stripped crossgen2 results in:
@@ -490,6 +483,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     stripExclude=(\*.dll crossgen2)
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     inherit releaseManifest buildRid targetRid;

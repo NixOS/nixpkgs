@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pycasbin";
-  version = "1.45.0";
+  version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
     tag = "v${version}";
-    hash = "sha256-pErgGW9zSux2ki7WItHjkMncC2kiuxcRkcGmCtFUtCo=";
+    hash = "sha256-rlEO6ZBy23MbYICRWOo/RmiphuN5JtiKNK/+k2Ian+g=";
   };
 
   build-system = [ setuptools ];

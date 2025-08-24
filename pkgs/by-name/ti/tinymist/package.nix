@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Tinymist is an integrated language service for Typst";
+    description = "Integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;

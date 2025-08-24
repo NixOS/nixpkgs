@@ -234,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Intelligent Input Bus, input method framework";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "ibus";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     description = "Quake 3 Arena point release";
     license = licenses.unfreeRedistributable;
     platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

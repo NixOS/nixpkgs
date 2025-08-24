@@ -59,6 +59,8 @@ This can happen when an identifier was added, renamed, or removed.
 
     Added new content?
         $ redirects add-content ❬identifier❭ ❬path❭
+    often:
+        $ redirects add-content ❬identifier❭ index.html
 
     Moved existing content to a different output path?
         $ redirects move-content ❬identifier❭ ❬path❭
@@ -69,7 +71,11 @@ This can happen when an identifier was added, renamed, or removed.
     Removed content? Redirect to alternatives or relevant release notes.
         $ redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
 
-    NOTE: Run `nix-shell doc` or `nix-shell nixos/doc/manual` to make this command available.
+    NOTE: Run the right nix-shell to make this command available.
+        Nixpkgs:
+        $ nix-shell doc
+        NixOS:
+        $ nix-shell nixos/doc/manual
 """)
         error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)

@@ -9,16 +9,16 @@
 
 buildGo124Module rec {
   pname = "go-camo";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = "go-camo";
-    rev = "v${version}";
-    hash = "sha256-uf/r+QDukuFbbsFQal0mfZaGHZYk1fGn8Kt1ipFD/vI=";
+    tag = "v${version}";
+    hash = "sha256-BdKIfDDN6GXc53SFDkJ8Dui5rrm27blA+EEOS/oAanE=";
   };
 
-  vendorHash = "sha256-PQ9Q+xaziTASH361qeBW0mVDtcXwU3/Sm/V/O4T2AP8=";
+  vendorHash = "sha256-0DkIbD+9gIbARqvmudRavwcWVLADGKwEYMMX6a5Qoq4=";
 
   nativeBuildInputs = [
     installShellFiles

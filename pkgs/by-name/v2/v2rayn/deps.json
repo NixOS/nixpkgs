@@ -11,8 +11,8 @@
   },
   {
     "pname": "Avalonia",
-    "version": "11.3.2",
-    "hash": "sha256-eDptsmrO7QxIvHm5kCs9ZE/N1tAuIBvaJMKiAcsu9yk="
+    "version": "11.3.3",
+    "hash": "sha256-UvENUQgoTUikjIMTL+oI93FNwr1gZfoGVtZdYzBzdts="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -31,38 +31,38 @@
   },
   {
     "pname": "Avalonia.Controls.ColorPicker",
-    "version": "11.3.2",
-    "hash": "sha256-Lr943SkpYMZz3+TPA7vc/mtbQH0r/eLewZFNGNf3i2M="
+    "version": "11.3.3",
+    "hash": "sha256-zg35D8NygrU8mCAsLLoPmrzXZcV31NuHNtTaiZZhOxc="
   },
   {
     "pname": "Avalonia.Controls.DataGrid",
-    "version": "11.3.2",
-    "hash": "sha256-PFz2fgrBzXQWPLj9X1wdDKDH2iy/54E4NBa+yO7DTfQ="
+    "version": "11.3.3",
+    "hash": "sha256-kDO6o2U2SRVMRE/60FOiLfWi90HxYhoUnAIcxX270ww="
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "11.3.2",
-    "hash": "sha256-A3LV30ekjXWdo/pRldL4S68AAA6BTuLU8ZGCinkNrvk="
+    "version": "11.3.3",
+    "hash": "sha256-/jYjxA5vJqU5IpJkgnlathprzdHB/ihdL35ZZBRESeU="
   },
   {
     "pname": "Avalonia.Diagnostics",
-    "version": "11.3.2",
-    "hash": "sha256-fMXY9p16o/wpUXFjRngf96gVwSlX/WCY0fn3nE/TmIY="
+    "version": "11.3.3",
+    "hash": "sha256-rHBFnhZ+gAqPqqDfZxBxUr3wXIpgOc9hInwzDOgdk5E="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "11.3.2",
-    "hash": "sha256-Mxvpd5JKmIpjQCZmuiSb6IkKfwQhA3o712Ubdx0gP28="
+    "version": "11.3.3",
+    "hash": "sha256-kUSE90HoJz9NsYCphLUQgNkxb3xHhFIlqXa6lzuGi4c="
   },
   {
     "pname": "Avalonia.Native",
-    "version": "11.3.2",
-    "hash": "sha256-HLVKaAVIRnm77lk7LJfrbiEmGWVIim7XMMoZAyGVUFA="
+    "version": "11.3.3",
+    "hash": "sha256-QmvN5gUsgjk7ViacdXOwHULHid0TfAKJGW3cf9A8bwQ="
   },
   {
     "pname": "Avalonia.ReactiveUI",
-    "version": "11.3.2",
-    "hash": "sha256-lYKhqoKqEZB4tttXehK5KoBMkwVeTxAThh87dns4C/c="
+    "version": "11.3.3",
+    "hash": "sha256-Clq/13CZRTFEJmVw41Tw0tJEtm0AYvBKJah7OdFbBSo="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
@@ -76,28 +76,28 @@
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "11.3.2",
-    "hash": "sha256-NIkrj4pMvxVvznexzEXmNI8KXWLSXmVbHHWpwz9h3M8="
+    "version": "11.3.3",
+    "hash": "sha256-gHZA53IyRAdeIg7yRIN6Pzh0AbOGd5B9mckEWsPuK7A="
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "11.3.2",
-    "hash": "sha256-cBJo/tTewA2/LSygJ5aAyPPr11KpLPwS1I6kQxDMy24="
+    "version": "11.3.3",
+    "hash": "sha256-pUMqXnupxztsAP/n4U2pSgTga89gy7CBLg39y2j0EjA="
   },
   {
     "pname": "Avalonia.Themes.Simple",
-    "version": "11.3.2",
-    "hash": "sha256-c8QtpXv+B1CTkW9ovxOZwjRZAkD4KZzIvhIhI5WJXdo="
+    "version": "11.3.3",
+    "hash": "sha256-nUfIEeJZgiLuy681S16Qncri6fvCGF7tYk4dSf3JY4s="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "11.3.2",
-    "hash": "sha256-FNs+O2knXcmUpfDjd/9JcNmpzEi8g3UQ3pQHItnN2U8="
+    "version": "11.3.3",
+    "hash": "sha256-jlQXEdbZjfRsu2MjYzHGUAyn+uvdACXCvm63HjUKqfQ="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "11.3.2",
-    "hash": "sha256-OCH5bwJ7Zje0/L7qtDcFa+yje/uwm2pYNE169J866/I="
+    "version": "11.3.3",
+    "hash": "sha256-7A+uzB7g21P+RnKO4bKOJVY35qPz5Xna8n8VGG7RoMw="
   },
   {
     "pname": "CliWrap",
@@ -111,8 +111,8 @@
   },
   {
     "pname": "Downloader",
-    "version": "3.3.4",
-    "hash": "sha256-QbbWlP3IzDzPWuZcQCfqpKQZMPSMETL/+6AXlhcjVc8="
+    "version": "4.0.2",
+    "hash": "sha256-+F4cSVEjeHI8QfCjphKJLdZlViGE7/rSVq/MYDtiyPE="
   },
   {
     "pname": "DynamicData",
@@ -161,13 +161,13 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "8.0.1",
-    "hash": "sha256-lzTYLpRDAi3wW9uRrkTNJtMmaYdtGJJHdBLbUKu60PM="
+    "version": "8.0.2",
+    "hash": "sha256-UfLfEQAkXxDaVPC7foE/J3FVEXd31Pu6uQIhTic3JgY="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
-    "version": "8.0.1",
-    "hash": "sha256-TYce3qvMr92JbAZ62ATBsocaH0joJzw0px0tYGZ9N0U="
+    "version": "8.0.3",
+    "hash": "sha256-5MSY1aEwUbRXehSPHYw0cBZyFcUH4jkgabddxhMiu3Q="
   },
   {
     "pname": "Microsoft.Win32.Registry",

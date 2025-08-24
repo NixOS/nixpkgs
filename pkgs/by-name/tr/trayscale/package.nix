@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=deedles.dev/trayscale/internal/version.version=${version}"
+    "-X=deedles.dev/trayscale/internal/metadata.version=${version}"
   ];
 
   nativeBuildInputs = [

@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "brush";
-  version = "0.2.20";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "reubeno";
     repo = "brush";
     tag = "brush-shell-v${version}";
-    hash = "sha256-yPd/dU/GOnx+R8tqkvWs+WsN0Zb6AHFITaE+N4m2rco=";
+    hash = "sha256-CAQkbesP0wqyt7yA53BQlW/tkCoCPKEBoDLTVJBnR6o=";
   };
 
-  cargoHash = "sha256-IrjBd+RswBjk/2QW0syU4Hkj2rLfOn/W+czvdEw86RE=";
+  cargoHash = "sha256-x/OyO96XKABf1hqSg0GMzWw6aeLOu7z2yu9rQQSM4Lc=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

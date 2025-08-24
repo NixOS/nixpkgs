@@ -139,7 +139,7 @@ in
   options.services.netbird.server.management = {
     enable = mkEnableOption "Netbird Management Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = mkPackageOption pkgs "netbird-management" { };
 
     domain = mkOption {
       type = str;

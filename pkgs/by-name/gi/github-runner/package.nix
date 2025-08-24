@@ -25,13 +25,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.327.1";
+  version = "2.328.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wTbhuBg9eIq1wGifeORTUvp9+yWDHb42J88o2Fmnrfo=";
+    hash = "sha256-3Q2bscLKdUBPx+5X0qxwtcy3CU6N/wE8yO1CcATSyBQ=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -151,6 +151,8 @@ buildDotnetModule (finalAttrs: {
   disabledTests = [
     "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
     "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    # intermittently failing
+    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
   ]
   ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
     "Cancel_CloneHashTask_WhenNotNeeded"
@@ -206,14 +208,13 @@ buildDotnetModule (finalAttrs: {
     # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
   ]
   ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
-    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
     "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
   ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];

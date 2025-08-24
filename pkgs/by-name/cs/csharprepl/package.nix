@@ -21,7 +21,7 @@ buildDotnetGlobalTool {
     changelog = "https://github.com/waf/CSharpRepl/blob/main/CHANGELOG.md";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     mainProgram = "csharprepl";
   };
 }

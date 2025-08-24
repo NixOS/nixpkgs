@@ -26,14 +26,8 @@
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
-  nodePlatform = hostPlatform.parsed.kernel.name; # nodejs's `process.platform`
-  nodeArch = # nodejs's `process.arch`
-    {
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${hostPlatform.parsed.cpu.name}
-      or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
+  nodePlatform = hostPlatform.node.platform;
+  nodeArch = hostPlatform.node.arch;
   electron = electron_35;
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
@@ -43,17 +37,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.23.2";
+  version = "0.24.1";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4WPnS+ZaiNgtib70ii/XfWkn2tNg2OsSAglD+mpnDvg=";
+    hash = "sha256-Yq5TD5yInv+0d1S6M58I8CneCAGUwH0ThGrEJfLIrX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-OdzjT6ktxvQNIk0Um9iru7Wm5LcBE3f5vrO4rsksf5U=";
+    hash = "sha256-tRDc7Rky59Rh08QTNiG3yopErHJzARxN8BZGrSUECLE=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -98,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-tpn+TlSrGIABmSM9B3iQc39nZmGEf5MliKyaKOsM7yM=";
+    outputHash = "sha256-U2FGvdtGiM97aXmbfNIfi87hvwDkd1dvlAABYiDgAGI=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [

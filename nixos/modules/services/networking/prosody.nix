@@ -369,6 +369,11 @@ let
           kick other. Useful in jitsi-meet to kick ghosts.
         '';
       };
+      moderation = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Allow rooms to be moderated";
+      };
 
       # Extra parameters. Defaulting to prosody default values.
       # Adding them explicitly to make them visible from the options
@@ -567,7 +572,7 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''" muc_mam",''}${optionalString muc.allowners_muc ''" muc_allowners",''} }
+            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''} }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
@@ -585,18 +590,14 @@ let
             ${muc.extraConfig}
       '') cfg.muc}
 
-      ${
-        lib.optionalString (cfg.httpFileShare != null) ''
-          Component ${toLua cfg.httpFileShare.domain} "http_file_share"
-            modules_disabled = { "s2s" }
-        ''
-        + lib.optionalString (cfg.httpFileShare.http_host != null) ''
+      ${lib.optionalString (cfg.httpFileShare != null) ''
+        Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+          modules_disabled = { "s2s" }
+        ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
           http_host = "${cfg.httpFileShare.http_host}"
-        ''
-        + ''
-          ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
-        ''
-      }
+        ''}
+        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
+      ''}
 
       ${lib.concatStringsSep "\n" (
         lib.mapAttrsToList (n: v: ''
@@ -879,7 +880,11 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional prosody configuration";
+        description = ''
+          Additional prosody configuration
+
+          The generated file is processed by `envsubst` to allow secrets to be passed securely via environment variables.
+        '';
       };
 
       log = mkOption {
@@ -973,13 +978,19 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst -i ${
+          config.environment.etc."prosody/prosody.cfg.lua".source
+        } -o /run/prosody/prosody.cfg.lua
+      '';
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
           Type = "simple";
-          RuntimeDirectory = [ "prosody" ];
+          RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
+          Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
           ExecStart = "${lib.getExe cfg.package} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";

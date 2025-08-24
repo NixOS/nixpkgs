@@ -6,7 +6,6 @@
   pytestCheckHook,
   numpy,
   pillow,
-  pillow-jpls,
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
@@ -25,7 +24,7 @@ let
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.25.1";
+  version = "0.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,7 +33,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-AwKaqCqPjLyNwXomV/pxijpsTQajekBO/rgLQJpuYww=";
+    hash = "sha256-zaa0daGMQHktYkG56JA2a7s5UZSv8AbinO5roe9rWQc=";
   };
 
   build-system = [
@@ -44,7 +43,6 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     pillow
-    pillow-jpls
     pydicom
     typing-extensions
   ];
@@ -70,6 +68,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require pyjpegls
+    "test_construction_10"
     "test_jpegls_monochrome"
     "test_jpegls_rgb"
     "test_jpeglsnearlossless_monochrome"
@@ -98,11 +97,11 @@ buildPythonPackage rec {
   # updates the wrong fetcher
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
     changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

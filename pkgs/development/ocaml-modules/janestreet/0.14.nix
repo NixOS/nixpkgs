@@ -15,7 +15,7 @@ with self;
     version = "0.14.1";
     minimalOCamlVersion = "4.09";
     hash = "0wm2081kzd5zsqs516cn3f975bnnmnyynv8fa818gmfa65i6mxm8";
-    meta.description = "A library that makes it nicer to work with nested functional data structures";
+    meta.description = "Library that makes it nicer to work with nested functional data structures";
     propagatedBuildInputs = [ higher_kinded ];
   };
 
@@ -99,7 +99,7 @@ with self;
   async_js = janePackage {
     pname = "async_js";
     hash = "0rld8792lfwbinn9rhrgacivz49vppgy29smpqnvpga89wchjv0v";
-    meta.description = "A small library that provide Async support for JavaScript platforms";
+    meta.description = "Small library that provide Async support for JavaScript platforms";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [
       async_rpc_kernel
@@ -237,7 +237,7 @@ with self;
     pname = "bin_prot";
     hash = "1qyqbfp4zdc2jb87370cdgancisqffhf9x60zgh2m31kqik8annr";
     minimalOCamlVersion = "4.04.2";
-    meta.description = "A binary protocol generator";
+    meta.description = "Binary protocol generator";
     propagatedBuildInputs = [
       ppx_compare
       ppx_custom_printf
@@ -250,7 +250,7 @@ with self;
   bonsai = janePackage {
     pname = "bonsai";
     hash = "0k4grabwqc9sy4shzp77bgfvyajvvc0l8qq89ia7cvlwvly7gv6a";
-    meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
+    meta.description = "Library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ ppx_pattern_bind ];
     propagatedBuildInputs = [ incr_dom ];
   };
@@ -389,7 +389,7 @@ with self;
     version = "0.14.1";
     minimalOCamlVersion = "4.09";
     hash = "05jvxgqsx3j2v8rqpd91ah76dgc1q2dz38kjklmx0vms4r4gvlsx";
-    meta.description = "A library with an encoding of higher kinded types in OCaml";
+    meta.description = "Library with an encoding of higher kinded types in OCaml";
     propagatedBuildInputs = [
       base
       ppx_jane
@@ -399,7 +399,7 @@ with self;
   incr_dom = janePackage {
     pname = "incr_dom";
     hash = "0mi98cwi4npdh5vvcz0pb4sbb9j9dydl52s51rswwc3kn8mipxfx";
-    meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
+    meta.description = "Library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [
       async_js
@@ -622,7 +622,7 @@ with self;
     pname = "ppx_hash";
     hash = "1zf03xdrg4jig7pdcrdpbabyjkdpifb31z2z1bf9wfdawybdhwkq";
     minimalOCamlVersion = "4.04.2";
-    meta.description = "A ppx rewriter that generates hash functions from type expressions and definitions";
+    meta.description = "PPX rewriter that generates hash functions from type expressions and definitions";
     propagatedBuildInputs = [
       ppx_compare
       ppx_sexp_conv
@@ -736,7 +736,7 @@ with self;
     pname = "ppx_pattern_bind";
     hash = "0yxkwnn30nxgrspi191zma95bgrh134aqh2bnpj3wg0245ki55zv";
     minimalOCamlVersion = "4.07";
-    meta.description = "A ppx for writing fast incremental bind nodes in a pattern match";
+    meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
     propagatedBuildInputs = [ ppx_let ];
   };
 
@@ -744,14 +744,14 @@ with self;
     pname = "ppx_pipebang";
     hash = "0450b3p2rpnnn5yyvbkcd3c33jr2z0dp8blwxddaj2lv7nzl5dzf";
     minimalOCamlVersion = "4.04.2";
-    meta.description = "A ppx rewriter that inlines reverse application operators `|>` and `|!`";
+    meta.description = "PPX rewriter that inlines reverse application operators `|>` and `|!`";
     propagatedBuildInputs = [ ppxlib ];
   };
 
   ppx_python = janePackage {
     pname = "ppx_python";
     hash = "0gk4nqz4i9v3hwjg5mvgpgwj0dfcgpyc7ikba93cafyhn6fy83zk";
-    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    meta.description = "[@@deriving] plugin to generate Python conversion functions";
     # Compatibility with ppxlib 0.23
     patches = fetchpatch {
       url = "https://github.com/janestreet/ppx_python/commit/b2fe0040cc39fa6164de868f8a20edb38d81170e.patch";
@@ -782,7 +782,7 @@ with self;
     version = "0.14.1";
     hash = "1lvsr0d68kakih1ll33hy6dxbjkly6lmky4q6z0h0hrcbd6z48k4";
     minimalOCamlVersion = "4.04.2";
-    meta.description = "A ppx rewriter for easy construction of s-expressions";
+    meta.description = "PPX rewriter for easy construction of s-expressions";
     propagatedBuildInputs = [
       ppx_here
       ppx_sexp_conv
@@ -793,7 +793,7 @@ with self;
     pname = "ppx_sexp_value";
     hash = "1d1c92pyypqkd9473d59j0sfppxvcxggbc62w8bkqnbxrdmvirn9";
     minimalOCamlVersion = "4.04.2";
-    meta.description = "A ppx rewriter that simplifies building s-expressions from ocaml values";
+    meta.description = "PPX rewriter that simplifies building s-expressions from ocaml values";
     propagatedBuildInputs = [
       ppx_here
       ppx_sexp_conv
@@ -856,7 +856,7 @@ with self;
   pythonlib = janePackage {
     pname = "pythonlib";
     hash = "0qr0mh9jiv1ham5zlz9i4im23a1vh6x1yp6dp2db2s4icmfph639";
-    meta.description = "A library to help writing wrappers around ocaml code for python";
+    meta.description = "Library to help writing wrappers around ocaml code for python";
     meta.broken = lib.versionAtLeast ocaml.version "4.13";
     propagatedBuildInputs = [
       ppx_expect
@@ -950,7 +950,7 @@ with self;
       base
       ppx_jane
     ];
-    meta.description = "A library to use CSS-style selectors to traverse sexp trees";
+    meta.description = "Library to use CSS-style selectors to traverse sexp trees";
   };
 
   sexplib0 = janePackage {
@@ -1005,7 +1005,7 @@ with self;
   splay_tree = janePackage {
     pname = "splay_tree";
     hash = "1xbzzbqb054hl1v1zcgfwdgzqihni3a0dmvrric9xggmgn4ycmqq";
-    meta.description = "A splay tree implementation";
+    meta.description = "Splay tree implementation";
     propagatedBuildInputs = [ core_kernel ];
   };
 

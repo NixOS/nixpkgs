@@ -641,13 +641,13 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2025.710.0",
-    "hash": "sha256-p1AFltuRloCm/krTzGzhI5A89NT5yU2nK6ILwhgzLnc="
+    "version": "2025.808.0",
+    "hash": "sha256-XmetdqG3z66uhdfvY4iEmDAK8Zh2uXPk5Dm25raeYw4="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
-    "version": "2024.809.1-nativelibs",
-    "hash": "sha256-F7xd66bCEDgEjYgqmx21lYde+ebCsX/E2fuqWXH4xyU="
+    "version": "2025.806.0-nativelibs",
+    "hash": "sha256-2oqo+sJvTnV3bTCLOlReOWTJpg0eI+g62Q+e2iXImeU="
   },
   {
     "pname": "ppy.osu.Framework.SourceGeneration",
@@ -656,8 +656,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.708.0",
-    "hash": "sha256-lgGl/jLHMlguuPbQ7MW8uTUk+ZibmMiqtMZnE3xWEr4="
+    "version": "2025.815.0",
+    "hash": "sha256-DD9yPAmCJrCj/uix6HbRlbQZfyvLyIrKmLP4fZed5fo="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -676,18 +676,18 @@
   },
   {
     "pname": "ppy.Veldrid",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-mGlMQbp2/ewA7PzamEeMA1pbboC73iAIARhK4MPrwO4="
+    "version": "4.9.66-g086790861c",
+    "hash": "sha256-jnFiRUk+8EV5QMnormygSwm74U949FSqPKYNfMrkI54="
   },
   {
     "pname": "ppy.Veldrid.MetalBindings",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-8jkbU2QV4HV8RU1vnSNtP8kNEhDWbTb3Dr2cl8w/T6A="
+    "version": "4.9.66-g086790861c",
+    "hash": "sha256-opJ2dRHQP6HPYHw7hM5iWgQeP38RMINv2dJmSF7PptA="
   },
   {
     "pname": "ppy.Veldrid.OpenGLBindings",
-    "version": "4.9.62-gca0239da6b",
-    "hash": "sha256-I81to2x5D4LlIJN80d5DbqcU0jPTVSPoc0tvL15YG6I="
+    "version": "4.9.66-g086790861c",
+    "hash": "sha256-4zrLJpQVA9BiQP2XeKgW9L/1z3pazDCH46elQ02Un5E="
   },
   {
     "pname": "ppy.Veldrid.SPIRV",
@@ -1006,8 +1006,8 @@
   },
   {
     "pname": "SixLabors.ImageSharp",
-    "version": "3.1.7",
-    "hash": "sha256-jMD/FiIwW1kNhTI6hKig8/QFOO3eTQX/C22cSAcKBH4="
+    "version": "3.1.11",
+    "hash": "sha256-MlRF+3SGfahbsB1pZGKMOrsfUCx//hCo7ECrXr03DpA="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",

@@ -15,14 +15,14 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2507.1";
+  version = "2508.1";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-F6rMEPmw2UxWw+XWsUXrrUjvrDcIA1W+spkcq3tdUMI=";
+    hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -78,7 +78,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ]);
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "USE_LINKER" "lld")
     (lib.cmakeBool "ENABLE_LTO" true)
     (lib.cmakeBool "ENABLE_ASSERTIONS" false)

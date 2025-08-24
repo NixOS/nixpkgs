@@ -1,0 +1,53 @@
+--- a/CMakeLists.txt	2025-08-15 11:37:20
++++ b/CMakeLists.txt	2025-08-15 11:40:06
+@@ -29,21 +29,7 @@
+ if(EXISTS "${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets/CMakeLists.txt")
+     add_subdirectory("${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets" EXCLUDE_FROM_ALL)
+ else()
+-    FetchContent_Declare(
+-        qtColorWidgets
+-        GIT_REPOSITORY https://gitlab.com/mattbas/Qt-Color-Widgets.git
+-        GIT_TAG 352bc8f99bf2174d5724ee70623427aa31ddc26a
+-    )
+-  #Workaround for duplicate GUID in windows WIX installer
+-  if (WIN32)
+-      FetchContent_GetProperties(qtColorWidgets)
+-      if(NOT qtcolorwidgets_POPULATED)
+-          FetchContent_Populate(qtColorWidgets)
+-          add_subdirectory(${qtcolorwidgets_SOURCE_DIR} ${qtcolorwidgets_BINARY_DIR} EXCLUDE_FROM_ALL)
+-      endif()
+-  else()
+-      FetchContent_MakeAvailable(qtColorWidgets)
+-  endif()
++    find_package(QtColorWidgets REQUIRED)
+ endif()
+ 
+ # This can be read from ${PROJECT_NAME} after project() is called
+@@ -115,12 +101,7 @@
+   if(EXISTS "${CMAKE_SOURCE_DIR}/external/KDSingleApplication/CMakeLists.txt")
+     add_subdirectory("${CMAKE_SOURCE_DIR}/external/KDSingleApplication")
+   else()
+-    FetchContent_Declare(
+-        kdsingleApplication
+-        GIT_REPOSITORY https://github.com/KDAB/KDSingleApplication.git
+-        GIT_TAG v1.2.0
+-    )
+-    FetchContent_MakeAvailable(KDSingleApplication)
++    find_package(KDSingleApplication-qt6 REQUIRED)
+   endif()
+ endif()
+ 
+@@ -128,12 +109,7 @@
+ option(BUILD_STATIC_LIBS ON)
+ 
+ if (APPLE)
+-  FetchContent_Declare(
+-      qHotKey
+-      GIT_REPOSITORY https://github.com/flameshot-org/QHotkey
+-      GIT_TAG master
+-  )
+-  FetchContent_MakeAvailable(QHotKey)
++  find_package(QHotKey REQUIRED)
+ endif()
+ 
+ add_subdirectory(src)

@@ -89,7 +89,7 @@ let
         backoff = callPackage ../development/ocaml-modules/backoff { };
 
         bap = callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages_14) llvm;
+          inherit (pkgs.llvmPackages) llvm;
         };
 
         base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -261,6 +261,8 @@ let
         cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
         coin = callPackage ../development/ocaml-modules/coin { };
+
+        colombe = callPackage ../development/ocaml-modules/colombe { };
 
         color = callPackage ../development/ocaml-modules/color { };
 
@@ -534,15 +536,17 @@ let
 
         elpi = callPackage ../development/ocaml-modules/elpi (
           let
-            ppxlib_0_15 =
-              if lib.versionAtLeast ppxlib.version "0.15" then
-                ppxlib.override { version = "0.15.0"; }
-              else
-                ppxlib;
+            ppx_deriving_ =
+              cap:
+              ppx_deriving.override {
+                ppxlib = ppxlib.override {
+                  version = if lib.versionAtLeast ppxlib.version cap then cap else ppxlib.version;
+                };
+              };
           in
           {
-            ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-            inherit ppxlib_0_15;
+            ppx_deriving_0_15 = ppx_deriving_ "0.15";
+            ppx_deriving = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -1042,6 +1046,8 @@ let
 
         letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
 
+        letters = callPackage ../development/ocaml-modules/letters { };
+
         libc = callPackage ../development/ocaml-modules/libc { };
 
         lilv = callPackage ../development/ocaml-modules/lilv {
@@ -1348,6 +1354,8 @@ let
         nottui-lwt = callPackage ../development/ocaml-modules/lwd/nottui-lwt.nix { };
 
         nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
+
+        nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
 
         notty = callPackage ../development/ocaml-modules/notty { };
 
@@ -1689,7 +1697,9 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
-        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml { };
+        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
+          mdx = mdx.override { inherit logs; };
+        };
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
@@ -1892,6 +1902,8 @@ let
         semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
         semver = callPackage ../development/ocaml-modules/semver { };
+
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
 
         seq = callPackage ../development/ocaml-modules/seq { };
 

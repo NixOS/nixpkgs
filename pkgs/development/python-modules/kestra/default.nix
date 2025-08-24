@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "kestra";
-  version = "0.21.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";
     repo = "libs";
     tag = "v${version}";
-    hash = "sha256-WaAw/PKoHPjbNrpCV6CuqUIb2Ysv4rHYFJbgGyU6li0=";
+    hash = "sha256-WtwvOSgAcN+ly0CnkL0Y7lrO4UhSSiXmoAyGXP/hFtE=";
   };
 
   sourceRoot = "${src.name}/python";

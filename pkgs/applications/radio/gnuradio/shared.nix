@@ -24,6 +24,7 @@ let
     minor = builtins.elemAt (lib.splitVersion version) 2;
     patch = builtins.elemAt (lib.splitVersion version) 3;
   };
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 {
   src =
@@ -53,26 +54,30 @@ in
       feat: info:
       (lib.optionals (hasFeature feat) (
         (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
-        ++ (lib.optionals (builtins.hasAttr "pythonRuntime" info) info.pythonRuntime)
+        ++ (lib.optionals (
+          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
+        ) info.pythonRuntime)
       ))
     ) featuresInfo
   );
-  cmakeFlags = lib.mapAttrsToList (
+  cmakeFlags = [
+    # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
+    (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
+  ]
+  ++ lib.mapAttrsToList (
     feat: info:
     (
       if feat == "basic" then
         # Abuse this unavoidable "iteration" to set this flag which we want as
         # well - it means: Don't turn on features just because their deps are
         # satisfied, let only our cmakeFlags decide.
-        "-DENABLE_DEFAULT=OFF"
-      else if hasFeature feat then
-        "-DENABLE_${info.cmakeEnableFlag}=ON"
+        (lib.cmakeBool "ENABLE_DEFAULT" false)
       else
-        "-DENABLE_${info.cmakeEnableFlag}=OFF"
+        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
     )
   ) featuresInfo;
   disallowedReferences = [
-    # TODO: Should this be conditional?
     stdenv.cc
     stdenv.cc.cc
   ]
@@ -126,6 +131,8 @@ in
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
+  ''
+  + lib.optionalString (hasFeature "gr-qtgui") ''
     export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
   '';
 

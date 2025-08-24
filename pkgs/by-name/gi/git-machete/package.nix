@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.36.3";
-  format = "pyproject";
+  version = "3.36.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = "git-machete";
-    rev = "v${version}";
-    hash = "sha256-WjyRTtUDgw+luSzHvsJLPCkxWQldqA8idYrbLwWHScQ=";
+    tag = "v${version}";
+    hash = "sha256-9xJCwu2TeWsxut6y4VJV6Qou4G81kXcGPHJPrOrsGuc=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
-    changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
+    changelog = "https://github.com/VirtusLab/git-machete/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ blitz ];
     mainProgram = "git-machete";

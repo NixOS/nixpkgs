@@ -25,7 +25,7 @@
 
 let
   pname = "faiss";
-  version = "1.11.0";
+  version = "1.12.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${version}";
-    hash = "sha256-N8UkL+KS9Da6RtaHI9pY5gAzFtTSMJ9R5h4RSX9b1Ro=";
+    hash = "sha256-VYryu70qu3JA0euPSD2xp2oJcACr7gXvssyZs1VBnSU=";
   };
 
   nativeBuildInputs = [

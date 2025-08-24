@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+_dotnetIsSolution() {
+  dotnet sln ${1:+"$1"} list 2>/dev/null
+}
+
 dotnetConfigurePhase() {
   echo "Executing dotnetConfigureHook"
 
@@ -108,9 +112,12 @@ dotnetBuildPhase() {
   dotnetBuild() {
     local -r projectFile="${1-}"
 
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
-      if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+      if [[ -n $useRuntime ]]; then
         runtimeIdFlags+=("--runtime" "$runtimeId")
       fi
 
@@ -188,9 +195,12 @@ dotnetCheckPhase() {
 
   local projectFile runtimeId
   for projectFile in "${testProjectFiles[@]-${projectFiles[@]}}"; do
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
-      if [[ $projectFile == *.csproj ]]; then
+      if [[ -n $useRuntime ]]; then
         runtimeIdFlags=("--runtime" "$runtimeId")
       fi
 
@@ -251,7 +261,7 @@ dotnetFromEnv'
 
   local wrapperFlags=()
   if (( ${#runtimeDeps[@]} > 0 )); then
-    local libraryPath=("${dotnetRuntimeDeps[@]/%//lib}")
+    local libraryPath=("${runtimeDeps[@]/%//lib}")
     local OLDIFS="$IFS" IFS=':'
     wrapperFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPath[*]}")
     IFS="$OLDIFS"
@@ -356,9 +366,12 @@ dotnetInstallPhase() {
   dotnetPublish() {
     local -r projectFile="${1-}"
 
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
-      runtimeIdFlags=()
-      if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+      local runtimeIdFlags=()
+      if [[ -n $useRuntime ]]; then
         runtimeIdFlags+=("--runtime" "$runtimeId")
       fi
 
@@ -380,7 +393,18 @@ dotnetInstallPhase() {
   dotnetPack() {
     local -r projectFile="${1-}"
 
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
+      local runtimeIdFlags=()
+      if [[ -n $useRuntime ]]; then
+        runtimeIdFlags+=("--runtime" "$runtimeId")
+        # set RuntimeIdentifier because --runtime is broken:
+        # https://github.com/dotnet/sdk/issues/13983
+        runtimeIdFlags+=(-p:RuntimeIdentifier="$runtimeId")
+      fi
+
       dotnet pack ${1+"$projectFile"} \
              -maxcpucount:"$maxCpuFlag" \
              -p:ContinuousIntegrationBuild=true \
@@ -390,7 +414,7 @@ dotnetInstallPhase() {
              --configuration "$dotnetBuildType" \
              --no-restore \
              --no-build \
-             --runtime "$runtimeId" \
+             "${runtimeIdFlags[@]}" \
              "${flags[@]}" \
              "${packFlags[@]}"
     done

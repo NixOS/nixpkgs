@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runCommand "uiua-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
       ''
         uiua init
-        diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+        diff -U3 --color=auto <(uiua run main.ua 2>&1) <(echo '"Hello, World!"')
         touch $out
       '';
 

@@ -4,21 +4,23 @@
   makeDesktopItem,
   lib,
   xorg,
+  wayland,
+  wayland-protocols,
 }:
 let
   pname = "LycheeSlicer";
-  version = "7.4.2";
+  version = "7.4.3";
 
   src = fetchurl {
     url = "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-RTLlNB6eiesXZayC69hpnXQsAgmPuaJTC+18Q6KzAP0=";
+    hash = "sha256-V+X8aF+uFnhSIm5MC8/EfYwWkLoHqqgT1G5Ozn5Y69I=";
   };
 
   desktopItem = makeDesktopItem {
     name = "Lychee Slicer";
     genericName = "Resin Slicer";
     comment = "All-in-one 3D slicer for Resin and Filament";
-    desktopName = "Lychee";
+    desktopName = "LycheeSlicer";
     noDisplay = false;
     exec = "lychee";
     terminal = false;
@@ -39,16 +41,21 @@ appimageTools.wrapType2 {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
-  extraLibraries = [
+  extraPkgs = _: [
     xorg.libxshmfence
+    wayland
+    wayland-protocols
   ];
 
   meta = {
     description = "All-in-one 3D slicer for resin and FDM printers";
     homepage = "https://lychee.mango3d.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ tarinaky ];
+    maintainers = with lib.maintainers; [
+      tarinaky
+      ZachDavies
+    ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "lychee";
+    mainProgram = "LycheeSlicer";
   };
 }

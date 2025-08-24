@@ -82,7 +82,9 @@ in
         # Needed for mounting filesystems with new checksums
         "xxhash_generic"
         "blake2b_generic"
-        "sha256_generic" # Should be baked into our kernel, just to be sure
+
+        # `sha256` is always available, whereas `sha256_generic` is not available from 6.17 onwards
+        "sha256" # Should be baked into our kernel, just to be sure
       ];
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''

@@ -52,6 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
+  postInstall = ''
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
+  '';
+
   # no tests
   doCheck = false;
 

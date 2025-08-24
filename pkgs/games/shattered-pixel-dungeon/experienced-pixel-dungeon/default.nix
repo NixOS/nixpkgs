@@ -19,6 +19,6 @@ callPackage ../generic.nix rec {
   meta = {
     homepage = "https://github.com/TrashboxBobylev/Experienced-Pixel-Dungeon-Redone";
     downloadPage = "https://github.com/TrashboxBobylev/Experienced-Pixel-Dungeon-Redone/releases";
-    description = "A fork of the Shattered Pixel Dungeon roguelike without limits on experience and items";
+    description = "Fork of the Shattered Pixel Dungeon roguelike without limits on experience and items";
   };
 }

@@ -126,6 +126,7 @@ mapAliases ({
   buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
   buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
+  bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
@@ -188,6 +189,7 @@ mapAliases ({
   distutils_extra = distutils-extra; # added 2023-10-12
   digital-ocean = python-digitalocean; # addad 2024-04-12
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
+  djangorestframework-guardian2 = throw "djangorestframework-guardian2 has been removed because djangorestframework-guardian is active again and the upstream project was archived"; # added 2025-08-22
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django-allauth-2fa = throw "django-allauth-2fa was removed because it was unused and django-allauth now contains 2fa logic itself."; # added 2025-02-15
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18
@@ -230,6 +232,8 @@ mapAliases ({
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   dugong = throw "dugong is unmaintained since 2022 and has therefore been removed"; # added 2024-12-12
+  editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
+  easyeda2ato = throw "easyeda2ato as been removed in favor of atopile-easyda2kicad"; # added 2025-06-08
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
@@ -256,6 +260,7 @@ mapAliases ({
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
+  filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   flaskbabel = flask-babel; # added 2023-01-19
   flask-babelex = throw "flask-babelex package has been removed, use flask-babel instead"; # added 2024-10-07
   flask_assets = flask-assets; # added 2023-08-23
@@ -321,11 +326,13 @@ mapAliases ({
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
+  hahomematic = throw "hahomematic has been superseded by aiohomematic"; # added 2025-08-16
   hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hglib = python-hglib; # added 2023-10-13
+  hijri-converter = hijridate; # added 2025-08-07
   hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
   homeassistant-bring-api = bring-api; # added 2024-04-11
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
@@ -348,6 +355,7 @@ mapAliases ({
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years"; # added 2024-05-21
   ipython_genutils = ipython-genutils; # added 2023-10-12
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
+  inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
   itanium_demangler = itanium-demangler; # added 2022-10-17
   jaeger-client = throw "jaeger-client was removed because it is deprecated upstream. OpenTelemetry is recommended instead."; # Added 2024-12-09
   jaraco_classes = jaraco-classes; # added 2023-07-14
@@ -453,6 +461,7 @@ mapAliases ({
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   niko-home-control = throw "niko-home-control was removed because Home Assistant switched to nhc"; # added 2025-01-09
   ninja-python = ninja; # add 2022-08-03
+  nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
   nose = throw "nose has been removed since it has been deprecated and unmaintained for almost a decade and does not work on Python 3.12; please switch to pytest or another test runner/framework"; # added 2024-07-28
   nose3 = throw "nose3 has been removed since it is unmaintained and does not work with Python 3.12"; # added 2024-07-28
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
@@ -586,6 +595,7 @@ mapAliases ({
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   python-picnic-api = throw "python-picnic-api was removed because Home Assistant switched to python-picnic-api2"; # added 2025-03-05
   python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
+  pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytrends = throw "pytrends has been removed, as it no longer works and is abandoned upstream"; # added 2025-02-02
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
@@ -620,6 +630,8 @@ mapAliases ({
   py-scrypt = scrypt; # added 2025-08-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysimplegui = throw "pysimplegui update to v5 broke the package, it now needs a license key to decrypt the source code"; # added 2024-09-16
+  pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
+  pysidesix-frameless-window = throw "pysidesix-frameless-window has been removed, since it is unmaintained"; # added 2025-08-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
   pysmi-lextudio = pysmi; # added 2024-07-18

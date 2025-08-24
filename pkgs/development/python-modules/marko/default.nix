@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "marko";
-  version = "2.1.4";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "marko";
     tag = "v${version}";
-    hash = "sha256-syHuGAYA/s8jtlxBUt3aVPe55s2bdpzidBf1JvsI604=";
+    hash = "sha256-3ACZdroZzp/ld/MgH/2QAQ3hdFbwSW66Wkdb7N3V2Ds=";
   };
 
   build-system = [
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Markdown parser with high extensibility";
     homepage = "https://github.com/frostming/marko";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

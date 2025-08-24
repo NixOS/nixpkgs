@@ -90,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     changelog = "https://github.com/opencollab/arpack-ng/blob/${finalAttrs.version}/CHANGES";
-    description = ''
-      A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems.
-    '';
+    description = "Collection of Fortran77 subroutines to solve large scale eigenvalue problems";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ttuegel

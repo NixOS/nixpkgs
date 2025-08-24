@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    description = "community managed domain list";
+    description = "Community managed domain list";
     homepage = "https://github.com/SagerNet/sing-geosite";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;

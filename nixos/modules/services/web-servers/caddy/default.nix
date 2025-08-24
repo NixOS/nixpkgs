@@ -14,13 +14,11 @@ let
   virtualHosts = attrValues cfg.virtualHosts;
   acmeEnabledVhosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
   vhostCertNames = unique (map (hostOpts: hostOpts.useACMEHost) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkVHostConf =
     hostOpts:
     let
-      sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
+      sslCertDir = certs.${hostOpts.useACMEHost}.directory;
     in
     ''
       ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
@@ -392,7 +390,7 @@ in
     ++ map (
       name:
       mkCertOwnershipAssertion {
-        cert = config.security.acme.certs.${name};
+        cert = certs.${name};
         groups = config.users.groups;
         services = [ config.systemd.services.caddy ];
       }
@@ -412,11 +410,8 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      wants = map (certName: "acme-finished-${certName}.target") vhostCertNames;
-      after =
-        map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
-      before = map (certName: "acme-${certName}.service") dependentCertNames;
+      wants = map (certName: "acme-${certName}.service") vhostCertNames;
+      after = map (certName: "acme-${certName}.service") vhostCertNames;
 
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;

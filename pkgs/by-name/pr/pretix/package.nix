@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.6.0";
+  version = "2025.7.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bDE4ygTCX7hynWjoni9ZWMGujKvPk0TKaG42SQ6w9Rk=";
+    hash = "sha256-emPzCwViqbGqlQRYmyamhQ5y6a3g67TTYIdv6FWbGEU=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-LQPbOC9SaolD/fyiFoObndx7pcS7iaYVytz6y+bQZqQ=";
+    npmDepsHash = "sha256-cvyOpEw6z0cNUdHRmyEZUoeKPMOAtC+YHYXCltbHdm0=";
 
     dontBuild = true;
 

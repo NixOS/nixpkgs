@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "typstyle";
     maintainers = with lib.maintainers; [
-      drupol
       prince213
     ];
   };

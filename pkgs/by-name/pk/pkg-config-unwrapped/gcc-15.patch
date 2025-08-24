@@ -1,0 +1,35 @@
+From 4444e3e5b7130c1664d7617e079e776ac0437661 Mon Sep 17 00:00:00 2001
+From: Dmitry Bogatov <serenity@kaction.cc>
+Date: Thu, 26 Jun 2025 00:26:31 +0000
+Subject: [PATCH] Avoid using "bool" as identifier (was made a keyword in
+ gcc-15)
+
+---
+ glib/glib/goption.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/glib/glib/goption.c b/glib/glib/goption.c
+index 0a22f6f..bdd8837 100644
+--- a/glib/glib/goption.c
++++ b/glib/glib/goption.c
+@@ -166,7 +166,7 @@ typedef struct
+   gpointer arg_data;
+   union
+   {
+-    gboolean bool;
++    gboolean bool_value;
+     gint integer;
+     gchar *str;
+     gchar **array;
+@@ -1600,7 +1600,7 @@ free_changes_list (GOptionContext *context,
+           switch (change->arg_type)
+             {
+             case G_OPTION_ARG_NONE:
+-              *(gboolean *)change->arg_data = change->prev.bool;
++              *(gboolean *)change->arg_data = change->prev.bool_value;
+               break;
+             case G_OPTION_ARG_INT:
+               *(gint *)change->arg_data = change->prev.integer;
+-- 
+2.47.2
+

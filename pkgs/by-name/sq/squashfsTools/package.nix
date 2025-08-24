@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
+    hash = "sha256-fJ+Ijg0cj92abGe80+1swVeZamarVpnPYM7+izcPJ+k=";
   };
 
   patches = [

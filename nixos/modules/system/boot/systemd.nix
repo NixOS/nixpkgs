@@ -550,6 +550,11 @@ in
           (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
         ]
       );
+      shadow = (
+        mkMerge [
+          (mkAfter [ "systemd" ])
+        ]
+      );
     };
 
     environment.systemPackages = [ cfg.package ];

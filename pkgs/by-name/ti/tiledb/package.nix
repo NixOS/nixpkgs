@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
+    description = "Allows you to manage massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

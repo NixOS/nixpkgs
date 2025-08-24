@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-h1XfBG7M8aAN9W09RgIowJ2vgWAjWbUnV1KBXa5aGJU=";
+    hash = "sha256-UsnGLBCt3uodzaBLeOKV4eYEoxwHkUlHDBAe6kAleDc=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -151,6 +151,10 @@ buildPythonPackage rec {
 
     # Fails in nixpkgs-review due to a port conflict with simultaneous python builds
     "test_config_compatibility"
+
+    # Fails with `sandbox=false` by mis-configuring the model it's using.
+    # AttributeError: 'DistributedDataParallel' object has no attribute '_ignored_modules'. Did you mean: 'named_modules'?
+    "test_ignored_modules_regex"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied

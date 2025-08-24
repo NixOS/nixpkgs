@@ -30,6 +30,9 @@ stdenvNoCC.mkDerivation rec {
     hicolor-icon-theme
   ];
 
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
+
   dontDropIconThemeCache = true;
 
   installPhase = ''

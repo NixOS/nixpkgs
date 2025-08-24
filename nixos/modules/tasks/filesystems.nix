@@ -84,13 +84,20 @@ let
         mountPoint = mkOption {
           example = "/mnt/usb";
           type = nonEmptyWithoutTrailingSlash;
-          description = "Location of the mounted file system.";
+          default = name;
+          description = ''
+            Location where the file system will be mounted.
+
+            This is called `mountpoint` in {manpage}`mount(8)` and `fs_file` in {manpage}`fstab(5)`
+          '';
         };
 
         stratis.poolUuid = mkOption {
           type = types.uniq (types.nullOr types.str);
           description = ''
             UUID of the stratis pool that the fs is located in
+
+            This is only relevant if you are using [stratis](https://stratis-storage.github.io/).
           '';
           example = "04c68063-90a5-4235-b9dd-6180098a20d9";
           default = null;
@@ -100,14 +107,29 @@ let
           default = null;
           example = "/dev/sda";
           type = types.nullOr nonEmptyStr;
-          description = "Location of the device.";
+          description = ''
+            The device as passed to `mount`.
+
+            This can be any of:
+
+            - a filename of a block special device such as `/dev/sdc3`
+            - a tag such as `UUID=fdd68895-c307-4549-8c9c-90e44c71f5b7`
+            - (for bind mounts only) the source path
+            - something else depending on the {option}`fsType`. For example, `nfs` device may look like `knuth.cwi.nl:/dir`
+
+            This is called `device` in {manpage}`mount(8)` and `fs_spec` in {manpage}`fstab(5)`.
+          '';
         };
 
         fsType = mkOption {
           default = "auto";
           example = "ext3";
           type = nonEmptyStr;
-          description = "Type of the file system.";
+          description = ''
+            Type of the file system.
+
+            This is the `fstype` passed to `-t` in the {manpage}`mount(8)` command, and is called `fs_vfstype` in {manpage}`fstab(5)`.
+          '';
         };
 
         options = mkOption {
@@ -115,7 +137,14 @@ let
           example = [ "data=journal" ];
           description = ''
             Options used to mount the file system.
-            See {manpage}`mount(8)` for common options.
+
+            This is called `options` in {manpage}`mount(8)` and `fs_mntops` in {manpage}`fstab(5)`
+
+            Some options that can be used for all mounts are documented in {manpage}`mount(8)` under `FILESYSTEM-INDEPENDENT MOUNT OPTIONS`.
+
+            Options that systemd understands are documented in {manpage}`systemd.mount(5)` under `FSTAB`.
+
+            Each filesystem supports additional options, see the docs for that filesystem.
           '';
           type = types.nonEmptyListOf nonEmptyStr;
         };
@@ -131,13 +160,14 @@ let
             to this list, any other filesystem whose mount point is a parent of
             the path will be mounted before this filesystem. The paths do not need
             to actually be the {option}`mountPoint` of some other filesystem.
+
+            This is useful for mounts which require keys and/or configuration files residing on another filesystem.
           '';
         };
 
       };
 
       config = {
-        mountPoint = mkDefault name;
         device = mkIf (elem config.fsType specialFSTypes) (mkDefault config.fsType);
       };
 
@@ -153,7 +183,12 @@ let
           default = null;
           example = "root-partition";
           type = types.nullOr nonEmptyStr;
-          description = "Label of the device (if any).";
+          description = ''
+            Label of the device. This simply sets {option}`device` to
+            `/dev/disk/by-id/''${label}`. Note that devices will not
+            have a label unless they contain a filesystem which
+            supports labels, such as ext4 or fat32.
+          '';
         };
 
         autoFormat = mkOption {
@@ -461,13 +496,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages =
-      with pkgs;
-      [
-        fuse3
-        fuse
-      ]
-      ++ config.system.fsPackages;
+    environment.systemPackages = config.system.fsPackages;
 
     environment.etc.fstab.text =
       let

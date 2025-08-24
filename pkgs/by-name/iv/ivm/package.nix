@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   cargo,
-  llvm_16,
+  llvm,
   stdenv,
   libffi,
   libz,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttr: {
       --prefix PATH : ${
         lib.makeBinPath [
           cargo
-          llvm_16.dev
+          llvm.dev
           stdenv.cc
         ]
       } \

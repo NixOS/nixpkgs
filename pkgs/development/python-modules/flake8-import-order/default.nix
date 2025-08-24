@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
-  version = "0.18.2";
+  version = "0.19.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4jlB+JLaPgwJ1xG6u7DHO8c1JC6bIWtyZhZ1ipINkA4=";
+    hash = "sha256-Ezs8VUl2MeQjUHT8mKlQeLuoF4MjefIqMfCtJFW8sLI=";
   };
 
   propagatedBuildInputs = [ pycodestyle ];

@@ -74,6 +74,7 @@ let
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
           "-D BUILD_NUMBER=${lib.versions.patch source.version}"
+          "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
         ]

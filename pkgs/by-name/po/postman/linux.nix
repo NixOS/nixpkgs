@@ -49,6 +49,7 @@
   pname,
   version,
   src,
+  passthru,
   meta,
 }:
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation {
     pname
     version
     src
+    passthru
     meta
     ;
 

@@ -220,6 +220,7 @@ let
       };
     in
     stdenv.mkDerivation (
+      finalAttrs:
       let
         attrs = {
           pname = "php";
@@ -387,6 +388,11 @@ let
               in
               php;
             inherit ztsSupport;
+
+            services.default = {
+              imports = [ ./service.nix ];
+              php-fpm.package = lib.mkDefault finalAttrs.finalPackage;
+            };
           };
 
           meta = with lib; {

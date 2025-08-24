@@ -133,9 +133,8 @@ let
     patches = (oldAttrs.patches or [ ]) ++ [
       (fetchpatch {
         name = "cargo-c-test-rlib-fix.patch";
-        url = "https://github.com/lu-zero/cargo-c/commit/8421f2da07cd066d2ae8afbb027760f76dc9ee6c.diff";
-        hash = "sha256-eZSR4DKSbS5HPpb9Kw8mM2ZWg7Y92gZQcaXUEu1WNj0=";
-        revert = true;
+        url = "https://github.com/lu-zero/cargo-c/commit/dd02009d965cbd664785149a90d702251de747b3.diff";
+        hash = "sha256-Az0WFF9fc5+igcV8C/QFhq5GE4PAyGEO84D9ECxx3v0=";
       })
     ];
   });
@@ -147,7 +146,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.13.5";
+  version = "0.14.1";
 
   outputs = [
     "out"
@@ -159,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-5jR/YLCBeFnB0+O2OOCLBEKwikiQ5e+SbOeQCijnd8Q=";
+    hash = "sha256-gCT/ZcXR9VePXYtEENXxgBNvA84KT1OYUR8kSyLBzrI=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -184,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-ErQ5Um0e7bWhzDErEN9vmSsKTpTAm4MA5PZ7lworVKU=";
+    hash = "sha256-sX3P5qrG0M/vJkvzvJGzv4fcMn6FvrLPOUh++vKJ/gY=";
   };
 
   patches = [
@@ -193,12 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Remove in 0.14, it has been replaced by a different fix:
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
     ./ignore-network-tests.patch
-
-    # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
-    # Cannot be upstreamed due to MSRV bump in native-tls:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2142
-    ./reqwest-init-tls.patch
   ];
 
   strictDeps = true;

@@ -4,6 +4,7 @@
   cppo,
   dune-build-info,
   fetchurl,
+  fetchpatch,
   jq,
   lib,
   makeWrapper,
@@ -54,6 +55,14 @@ buildDunePackage {
     url = "https://github.com/melange-re/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     inherit hash;
   };
+  patches = lib.optional (lib.versionAtLeast ppxlib.version "0.36") (fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/melange-re/melange/pull/1352.patch";
+    hash = "sha256-PMf66nB743nzW4/xblHjNZFv1BS8xC9maD+eCDDUWAY=";
+    excludes = [
+      "*.opam"
+      "*.template"
+    ];
+  });
   nativeBuildInputs = [
     cppo
     makeWrapper

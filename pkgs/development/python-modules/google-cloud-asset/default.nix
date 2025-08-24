@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.30.1";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-asset-v${version}";
-    sha256 = "sha256-4Ifg9igzsVR8pWH/lcrGwCnByqYQjPKChNPJGmmQbKI=";
+    tag = "google-cloud-build-v${version}";
+    sha256 = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-asset";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-${src.tag}/packages/google-cloud-asset/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

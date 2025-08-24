@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 let
-  version = "0.5.0";
+  version = "0.5.1";
 in
 python3Packages.buildPythonApplication {
   pname = "pigment";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication {
     owner = "Jeffser";
     repo = "Pigment";
     tag = version;
-    hash = "sha256-VwqCv2IPxPKT/6PDk8sosAIZlyu8zl5HDQEaIRWlJKg=";
+    hash = "sha256-tWWDX1njnI1FOZhTUE1i+5pqZeLZFzHBrfoGFHCKnX0=";
   };
 
   nativeBuildInputs = [

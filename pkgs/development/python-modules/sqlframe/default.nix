@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.31.3";
+  version = "3.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-x9ILbtl71Xp4p5OWQ/goays5W6uE17FCes7ZVfWZBwY=";
+    hash = "sha256-ekDt9vsHdHhUNaQghG3EaM82FRZYdw+gaxENcurSayk=";
   };
 
   build-system = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "Turning PySpark Into a Universal DataFrame API";
     homepage = "https://github.com/eakmanrq/sqlframe";
-    changelog = "https://github.com/eakmanrq/sqlframe/releases/tag/v${version}";
+    changelog = "https://github.com/eakmanrq/sqlframe/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.1-48-g12e851937";
+  version = "1.4.1-49-g263b4f7b4";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
     tag = finalAttrs.version;
-    hash = "sha256-L8ANz4lGXO7q9MyFJjhZr4cQpOkAl7NHbrzOm7lPVBs=";
+    hash = "sha256-ESmo/USm+mML6Go5QWDoGaHS6uLHIKlVS+3CNFhRtVQ=";
   };
 
   nativeBuildInputs = [

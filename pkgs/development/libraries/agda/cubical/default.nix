@@ -2,28 +2,18 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
-  ghc,
 }:
 
 mkDerivation rec {
   pname = "cubical";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
     rev = "v${version}";
-    hash = "sha256-KwwN2g2naEo4/rKTz2L/0Guh5LxymEYP53XQzJ6eMjM=";
+    hash = "sha256-Lmzofq2rKFmfsAoH3zIFB2QLeUhFmIO44JsF+dDrubw=";
   };
-
-  # The cubical library has several `Everything.agda` files, which are
-  # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc ];
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
-  '';
 
   meta = with lib; {
     description = "Cubical type theory library for use with the Agda compiler";

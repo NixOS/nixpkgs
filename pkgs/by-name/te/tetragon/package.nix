@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   go,
-  llvm_16,
-  clang_16,
+  llvm,
+  clang,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    clang_16
+    clang
     go
-    llvm_16
+    llvm
     pkg-config
   ];
 

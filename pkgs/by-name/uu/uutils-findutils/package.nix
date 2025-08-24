@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "find";
     maintainers = with lib.maintainers; [
       defelo
-      drupol
     ];
     platforms = lib.platforms.unix;
   };

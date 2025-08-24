@@ -203,6 +203,7 @@ in
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
@@ -238,6 +239,12 @@ in
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {
