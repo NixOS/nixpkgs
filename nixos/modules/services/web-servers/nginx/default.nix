@@ -1589,9 +1589,7 @@ in
       };
     };
 
-    environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = configFile;
-    };
+    environment.etc."nginx/nginx.conf".source = configFile;
 
     # This service waits for all certificates to be available
     # before reloading nginx configuration.
