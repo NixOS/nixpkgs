@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "temporalio";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-NY7+ryldTV60K1Ky9Q1iNEmXqXlZgSMEE4f6PGeZ5BE=";
+    hash = "sha256-PwU50Xa87bjJQXqHcovZBByYwwFp7ar7qHYsdFIrnhA=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-Z0LxIGY7af1tcRTcMe4FDCH1zxzX1J9AJuZfZUMAAUI=";
+    hash = "sha256-yE5mShJ++Zx+5AwsotGn20b7dC6BEbTiIy1xST9du+U=";
   };
 
   cargoRoot = "temporalio/bridge";
