@@ -133,7 +133,6 @@ buildGoModule rec {
     mainProgram = "frankenphp";
     maintainers = with lib.maintainers; [
       gaelreyrol
-      shyim
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
