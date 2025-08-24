@@ -169,8 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl
 
-    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    (python3Packages.python.withPackages (ps: with ps; [ distlib ]))
+    # For python changes other than simple package additions, ping @dramforever for review.
+    # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
+    python3Packages.distlib
+    # Hooks from the python package are needed to add `$pythonPath` so
+    # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
+    python3Packages.python
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
