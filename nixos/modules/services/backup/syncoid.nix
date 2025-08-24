@@ -7,7 +7,7 @@
 let
   cfg = config.services.syncoid;
 
-  # Extract local dasaset names (so no datasets containing "@")
+  # Extract local dataset names (so no datasets containing "@")
   localDatasetName =
     d:
     lib.optionals (d != null) (
@@ -24,75 +24,74 @@ let
       builtins.split "[^a-zA-Z0-9_.\\-]+" name
     );
 
-  # Function to build "zfs allow" commands for the filesystems we've delegated
-  # permissions to. It also checks if the target dataset exists before
-  # delegating permissions, if it doesn't exist we delegate it to the parent
-  # dataset (if it exists). This should solve the case of provisoning new
-  # datasets.
   buildAllowCommand =
+    action: permissions: dataset:
+    lib.escapeShellArgs [
+      "zfs"
+      action
+      cfg.user
+      (lib.concatStringsSep "," permissions)
+      dataset
+    ];
+
+  # Function to build "zfs allow" commands to allow syncoid to access the
+  # source dataset.
+  buildSourceAllowScript =
     permissions: dataset:
     (
       "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
-        # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+        ${buildAllowCommand "allow" permissions dataset}
+      ''}"
+    );
 
+  # Function to build "zfs unallow" commands to remove delegated permissions
+  # from the source dataset.
+  buildSourceUnallowScript =
+    permissions: dataset:
+    (
+      "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
+        ${buildAllowCommand "unallow" permissions dataset}
+      ''}"
+    );
+
+  # Function to build "zfs allow" commands for the target dataset we've
+  # delegated permissions to. It also checks if the target dataset
+  # exists before delegating permissions, if it doesn't exist we
+  # delegate it to the parent dataset. This should solve the case of
+  # provisoning new datasets.
+  buildTargetAllowScript =
+    permissions: dataset:
+    (
+      "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
         # Run a ZFS list on the dataset to check if it exists
         if ${
           lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
+            "zfs"
             "list"
             dataset
           ]
         } 2> /dev/null; then
-          ${lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
-            "allow"
-            cfg.user
-            (lib.concatStringsSep "," permissions)
-            dataset
-          ]}
-        ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
-          else
-            ${lib.escapeShellArgs [
-              "/run/booted-system/sw/bin/zfs"
-              "allow"
-              cfg.user
-              (lib.concatStringsSep "," permissions)
-              # Remove the last part of the path
-              (builtins.dirOf dataset)
-            ]}
-        ''}
+          ${buildAllowCommand "allow" permissions dataset}
+        else
+          # Remove the last part of the path
+          ${buildAllowCommand "allow" permissions (builtins.dirOf dataset)}
         fi
       ''}"
     );
 
-  # Function to build "zfs unallow" commands for the filesystems we've
+  # Function to build "zfs unallow" commands for the target datasets we've
   # delegated permissions to. Here we unallow both the target but also
   # on the parent dataset because at this stage we have no way of
   # knowing if the allow command did execute on the parent dataset or
   # not in the pre-hook. We can't run the same if in the post hook
   # since the dataset should have been created at this point.
-  buildUnallowCommand =
+  buildTargetUnallowScript =
     permissions: dataset:
     (
       "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
-        # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-        ${lib.escapeShellArgs [
-          "/run/booted-system/sw/bin/zfs"
-          "unallow"
-          cfg.user
-          (lib.concatStringsSep "," permissions)
-          dataset
-        ]}
-        ${lib.optionalString ((builtins.dirOf dataset) != ".") (
-          lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
-            "unallow"
-            cfg.user
-            (lib.concatStringsSep "," permissions)
-            # Remove the last part of the path
-            (builtins.dirOf dataset)
-          ]
-        )}
+        ${buildAllowCommand "unallow" permissions dataset}
+        # Remove the last part of the path
+        ${buildAllowCommand "unallow" permissions (builtins.dirOf dataset)}
       ''}"
     );
 in
@@ -365,15 +364,16 @@ in
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
             after = [ "zfs.target" ];
             startAt = cfg.interval;
+            # Explicitly use the booted system to guarantee the stable API needed by ZFS
             # syncoid may need zpool to get feature@extensible_dataset
-            path = [ "/run/booted-system/sw/bin/" ];
+            path = [ "/run/booted-system/sw" ];
             serviceConfig = {
               ExecStartPre =
-                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source))
-                ++ (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
+                (map (buildSourceAllowScript c.localSourceAllow) (localDatasetName c.source))
+                ++ (map (buildTargetAllowScript c.localTargetAllow) (localDatasetName c.target));
               ExecStopPost =
-                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source))
-                ++ (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
+                (map (buildSourceUnallowScript c.localSourceAllow) (localDatasetName c.source))
+                ++ (map (buildTargetUnallowScript c.localTargetAllow) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs (
                 [ "${cfg.package}/bin/syncoid" ]
                 ++ lib.optionals c.useCommonArgs cfg.commonArgs
