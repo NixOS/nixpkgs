@@ -7,13 +7,13 @@
   pytestCheckHook,
   pythonOlder,
   beautifulsoup4,
-  setuptools-scm,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
   version = "0.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-2ch9BxgrqbfIJ8fzFKYscha4+G7OAVz+OIOqYwX2gSA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ flit-core ];
 
   optional-dependencies = {
     social_cards_generation = [ matplotlib ];

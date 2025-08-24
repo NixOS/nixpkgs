@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-hierarkey";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-hierarkey";
     tag = version;
-    hash = "sha256-vXc31tUQrukdXeiMHZYP12o0C3R28CsC5fHjhMgRdU0=";
+    hash = "sha256-zIz7aokOGLGXV/xJnYcz8lBP7b2rxLrfaD3i/DLpFR8=";
   };
 
   build-system = [ setuptools ];
