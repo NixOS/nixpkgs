@@ -58,7 +58,7 @@ let
   # TODO: Should this be RFC42-ised so that users can set additional options without modifying the module?
   postfixMtaConfig = pkgs.writeText "mailman-postfix.cfg" ''
     [postfix]
-    postmap_command: ${pkgs.postfix}/bin/postmap
+    postmap_command: ${config.services.postfix.package}/bin/postmap
     transport_file_type: hash
   '';
 
