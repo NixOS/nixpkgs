@@ -12,24 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.22.1";
+  version = "0.23.5";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
+    sha256 = "sha256-h6WsTXPlJYoMZ6QDR99LQr5uV0ij8NC02ZEVhg/U+qc=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "git2-version.patch";
-      url = "https://github.com/cargo-generate/cargo-generate/commit/be2237177ee7ae996e2991189b07a5d211cd0d01.patch";
-      hash = "sha256-F/o1EeDBfRhIB8atpOHoc6ZnUFCyD1QkCERv4m/YeWE=";
-    })
-  ];
-
-  cargoHash = "sha256-5cfROJQWIhQNMbDhaCs2bfv4I3KDWcXBsmbbbDQ331s=";
+  cargoHash = "sha256-pZm7bsMIOQF/wSwFH5kFXN5mG/H1cKz5hyM2DeNmUQ8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -62,6 +54,8 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=git::utils::should_canonicalize"
+    # The following skip can be removed once this issue is resolved: https://github.com/cargo-generate/cargo-generate/issues/1541
+    "--skip=hooks_and_rhai::it_fails_when_a_system_command_returns_non_zero_exit_code"
   ];
 
   env = {
