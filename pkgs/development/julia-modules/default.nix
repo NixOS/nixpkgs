@@ -7,6 +7,7 @@
   makeWrapper,
   python3,
   runCommand,
+  writableTmpDirAsHomeHook,
   writeTextFile,
 
   # Artifacts dependencies
@@ -194,6 +195,10 @@ let
               pyyaml
             ]
           ))
+        ];
+
+        nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+          writableTmpDirAsHomeHook
         ];
       }
       ''
