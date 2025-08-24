@@ -76,6 +76,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "boto3"
+    "pandas"
     "pyarrow"
   ];
 
