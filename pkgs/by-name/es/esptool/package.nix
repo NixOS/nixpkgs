@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   softhsm,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -43,9 +44,35 @@ python3Packages.buildPythonApplication rec {
     hsm = [ python-pkcs11 ];
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     rm -v $out/bin/*.py
-  '';
+  ''
+  +
+    lib.strings.concatMapStrings
+      (
+        cmd:
+        # Unfortunately, espsecure and espefuse do not run in cross-compilation
+        lib.optionalString
+          (
+            python3Packages.stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform
+            || cmd == "esptool"
+          )
+          ''
+            installShellCompletion --cmd ${cmd} \
+              --bash <(_${lib.toUpper cmd}_COMPLETE=bash_source $out/bin/${cmd}) \
+              --zsh <(_${lib.toUpper cmd}_COMPLETE=zsh_source $out/bin/${cmd}) \
+              --fish <(_${lib.toUpper cmd}_COMPLETE=fish_source $out/bin/${cmd})
+          ''
+      )
+      [
+        "esptool"
+        "espsecure"
+        "espefuse"
+      ];
 
   nativeCheckInputs =
     with python3Packages;
