@@ -15,6 +15,9 @@
   # Conda manages most pkgs itself, but expects a few to be on the system.
   condaDeps ? [
     stdenv.cc
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libSM
     xorg.libICE
     xorg.libX11
@@ -23,7 +26,6 @@
     xorg.libXrender
     libselinux
     libGL
-    zlib
   ],
   # Any extra nixpkgs you'd like available in the FHS env for Conda to use
   extraPkgs ? [ ],
@@ -43,7 +45,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.3.1-1";
+  version = "25.5.1-1";
 
   src =
     let
@@ -54,13 +56,23 @@ let
       arch = selectSystem {
         x86_64-linux = "x86_64";
         aarch64-linux = "aarch64";
+        x86_64-darwin = "x86_64";
+        aarch64-darwin = "arm64";
+      };
+      osName = selectSystem {
+        x86_64-linux = "Linux";
+        aarch64-linux = "Linux";
+        x86_64-darwin = "MacOSX";
+        aarch64-darwin = "MacOSX";
       };
     in
     fetchurl {
-      url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
+      url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-${osName}-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-U6hhCUY8/XC6esqzltQW5iMBKRTu4ARynh7Nb+lOjGk=";
-        aarch64-linux = "sha256-TKoMJmq3JrRAzK1Ap0d0FnSU4AHaXeKBt08tVnPkrOk=";
+        x86_64-linux = "sha256-YSrxE7SdsDaOK+QaxNUbcIjuvV8x2u64nyP/+Pkg21g=";
+        aarch64-linux = "sha256-t9YR3Kpjjv1wCkpOsk+8ufe5TMF3PXxlWVnDMNC2jhY=";
+        x86_64-darwin = "sha256-QVLyYAQNRSv+AMZ6xrQprsf/O5j2K6uKvkxGjpjlGJE=";
+        aarch64-darwin = "sha256-Lsb3mBdwszlqmrQm4HrI71sStDk6ouS8yYQ3b+OqMn4=";
       };
     };
 
@@ -114,11 +126,15 @@ buildFHSEnv {
     export PATH=${installationPath}/bin:$PATH
     # Paths for gcc if compiling some C sources with pip
     export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
-    export NIX_CFLAGS_LINK="-L${installationPath}lib"
+    export NIX_CFLAGS_LINK="-L${installationPath}/lib"
     # Some other required environment variables
-    export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-    export QTCOMPOSE=${xorg.libX11}/share/X11/locale
-    export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+      export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+    ''}
+    export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.${
+      if stdenv.hostPlatform.isDarwin then "dylib" else "so"
+    }
     # Allows `conda activate` to work properly
     condaSh=${installationPath}/etc/profile.d/conda.sh
     if [ ! -f $condaSh ]; then
@@ -134,8 +150,10 @@ buildFHSEnv {
     mainProgram = "conda-shell";
     homepage = "https://conda.io";
     platforms = [
-      "aarch64-linux"
       "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ jluttine ];
