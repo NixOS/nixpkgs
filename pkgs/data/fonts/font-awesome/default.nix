@@ -64,4 +64,8 @@ in
     version = "6.7.2";
     hash = "sha256-MaJG96kYj8ukJVyqOTDpkHH/eWr/ZlbVKk9AvJM7ub4=";
   };
+  v7 = font-awesome {
+    version = "7.0.0";
+    hash = "sha256-S8i8KIcDbHwmnJ2JjYleD0cmh9YGuzF+hGzlruTRZIk=";
+  };
 }
