@@ -10,7 +10,7 @@ haskellPackages.mkDerivation rec {
     owner = "thornoar";
     repo = "pshash";
     tag = "v${version}";
-    hash = "sha256-Fqf5qg8TbtVxamXHzDMWJs52dRLhT09eakK71opDR/4=";
+    hash = "sha256-TnMXT0sgUkHCbZ2YgDmSgOg8A2DKk/LyKK2XXwabrYc=";
   };
 
   postPatch = ''
