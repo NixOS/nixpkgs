@@ -64,6 +64,31 @@ let
   xsessionWrapper = pkgs.writeScript "xsession-wrapper" ''
     #! ${pkgs.bash}/bin/bash
 
+    ${optionalString config.services.displayManager.logToJournal ''
+      # Pass logging to systemd's journal.
+      # Must come first, as this re-executes the whole script and we shouldn't
+      # be re-executing most of the remaining commands in here.
+      if [ -z "$_DID_SYSTEMD_CAT" ]; then
+        export _DID_SYSTEMD_CAT=1
+        exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
+      fi
+      unset _DID_SYSTEMD_CAT
+    ''}
+
+    ${optionalString
+      (config.services.displayManager.logToJournal && config.services.displayManager.logToFile)
+      ''
+        exec > >(tee ~/.xsession-errors) 2>&1
+      ''
+    }
+
+    ${optionalString
+      (!config.services.displayManager.logToJournal && config.services.displayManager.logToFile)
+      ''
+        exec > ~/.xsession-errors 2>&1
+      ''
+    }
+
     # Shared environment setup for graphical sessions.
 
     . /etc/profile
@@ -77,17 +102,6 @@ let
     if test -f ~/.xprofile; then
         source ~/.xprofile
     fi
-
-    ${optionalString config.services.displayManager.logToJournal ''
-      if [ -z "$_DID_SYSTEMD_CAT" ]; then
-        export _DID_SYSTEMD_CAT=1
-        exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
-      fi
-    ''}
-
-    ${optionalString config.services.displayManager.logToFile ''
-      exec &> >(tee ~/.xsession-errors)
-    ''}
 
     # Load X defaults. This should probably be safe on wayland too.
     ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
@@ -117,8 +131,6 @@ let
     # Work around KDE errors when a user first logs in and
     # .local/share doesn't exist yet.
     mkdir -p "''${XDG_DATA_HOME:-$HOME/.local/share}"
-
-    unset _DID_SYSTEMD_CAT
 
     ${cfg.displayManager.sessionCommands}
 
