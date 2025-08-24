@@ -3,16 +3,14 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_0,
+  cython,
   fastrlock,
   numpy,
-  wheel,
   pytestCheckHook,
   mock,
   setuptools,
   cudaPackages,
   addDriverRunpath,
-  pythonOlder,
   symlinkJoin,
 }:
 
@@ -58,10 +56,8 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.5.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "13.6.0";
+  pyproject = true;
 
   stdenv = cudaPackages.backendStdenv;
 
@@ -69,7 +65,7 @@ buildPythonPackage rec {
     owner = "cupy";
     repo = "cupy";
     tag = "v${version}";
-    hash = "sha256-8RgyvsU3lnt6nO0J1tiLBOdYsX0jJkjPH/SpKQz4o7s=";
+    hash = "sha256-nU3VL0MSCN+mI5m7C5sKAjBSL6ybM6YAk5lJiIDY0ck=";
     fetchSubmodules = true;
   };
 
@@ -83,11 +79,14 @@ buildPythonPackage rec {
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    cython
+    fastrlock
     setuptools
-    wheel
+  ];
+
+  nativeBuildInputs = [
     addDriverRunpath
-    cython_0
     cudaPackages.cuda_nvcc
   ];
 
@@ -101,7 +100,7 @@ buildPythonPackage rec {
   NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastrlock
     numpy
   ];
