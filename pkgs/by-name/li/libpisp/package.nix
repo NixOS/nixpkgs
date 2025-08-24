@@ -7,6 +7,8 @@
   ninja,
   boost,
   nlohmann_json,
+  glibc,
+  libgcc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +31,20 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     nlohmann_json
   ];
+
+  preFixup = ''
+    so=$out/lib/libpisp.so.1
+    patchelf --set-soname $so $so
+    patchelf --remove-rpath $so
+    needed=$(patchelf --print-needed $so)
+    for pkg in ${glibc} ${boost} ${libgcc} ${stdenv.cc.cc.lib}; do
+      for lib in $needed; do
+        for libpath in $(find -L $pkg/lib -type f -name "$lib"); do
+          patchelf --replace-needed $lib $libpath $so
+        done
+      done
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/raspberrypi/libpisp";
