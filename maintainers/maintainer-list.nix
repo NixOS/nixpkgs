@@ -5877,6 +5877,13 @@
     githubId = 30749142;
     keys = [ { fingerprint = "4E35 F2E5 2132 D654 E815  A672 DB2C BC24 2868 6000"; } ];
   };
+  debling = {
+    name = "Denilson S. Ebling";
+    email = "d.ebling8@gmail.com";
+    github = "debling";
+    githubId = 32403873;
+    keys = [ { fingerprint = "3EDD 9C88 B0F2 58F8 C25F  5D2C CCBC 8AA1 AF06 2142"; } ];
+  };
   declan = {
     name = "Declan Rixon";
     email = "declan.fraser.rixon@gmail.com";
