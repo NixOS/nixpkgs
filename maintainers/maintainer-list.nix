@@ -18477,6 +18477,11 @@
     github = "0xnook";
     githubId = 88323754;
   };
+  nooneknowspeter = {
+    name = "peter";
+    github = "nooneknowspeter";
+    githubId = 157999171;
+  };
   noreferences = {
     email = "norkus@norkus.net";
     github = "jozuas";
