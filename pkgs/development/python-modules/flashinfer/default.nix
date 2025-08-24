@@ -15,30 +15,21 @@
   ninja,
   numpy,
   torch,
+  pynvml,
+  einops,
 }:
 
-let
+buildPythonPackage rec {
   pname = "flashinfer";
-  version = "0.2.9";
-
-  src_cutlass = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "cutlass";
-    # Using the revision obtained in submodule inside flashinfer's `3rdparty`.
-    tag = "v${version}";
-    hash = "sha256-d4czDoEv0Focf1bJHOVGX4BDS/h5O7RPoM/RrujhgFQ=";
-  };
-
-in
-buildPythonPackage {
-  format = "setuptools";
-  inherit pname version;
+  version = "0.2.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${version}";
-    hash = "sha256-M0q6d+EpuTehbw68AQ73Fhwmw2tzjymYjSXaol9QC7Y=";
+    hash = "sha256-MZiZwdedz+Vxa1+VBfHDKf4NVSiOAytGboIJ0DvCXmk=";
+    fetchSubmodules = true;
   };
 
   build-system = [ setuptools ];
@@ -48,19 +39,15 @@ buildPythonPackage {
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
   ];
+
   dontUseCmakeConfigure = true;
 
-  buildInputs = [
-    cudaPackages.cuda_cudart
-    cudaPackages.libcublas
-    cudaPackages.cuda_cccl
-    cudaPackages.libcurand
+  buildInputs = with cudaPackages; [
+    cuda_cccl
+    cuda_cudart
+    libcublas
+    libcurand
   ];
-
-  postPatch = ''
-    rmdir 3rdparty/cutlass
-    ln -s ${src_cutlass} 3rdparty/cutlass
-  '';
 
   # FlashInfer offers two installation modes:
   #
@@ -86,6 +73,8 @@ buildPythonPackage {
   dependencies = [
     numpy
     torch
+    pynvml
+    einops
   ];
 
   meta = with lib; {
