@@ -1050,6 +1050,9 @@ with haskellLib;
   # https://github.com/pixbi/duplo/issues/25
   duplo = doJailbreak super.duplo;
 
+  # https://github.com/fgaz/dual/pull/3
+  dual-game = doJailbreak super.dual-game;
+
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
 
