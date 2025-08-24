@@ -3,7 +3,7 @@
 nodejsInstallExecutables() {
     local -r packageJson="${1-./package.json}"
 
-    local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
+    local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' "$packageJson")"
 
     # Based on code from Python's buildPythonPackage wrap.sh script, for
     # supporting both the case when makeWrapperArgs is an array and a
