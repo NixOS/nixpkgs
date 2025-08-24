@@ -10,6 +10,7 @@
   pylibjpeg-data,
   pylibjpeg-libjpeg,
   pylibjpeg-openjpeg,
+  pylibjpeg-rle,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +31,15 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  optional-dependencies = {
-    libjpeg = [ pylibjpeg-libjpeg ];
-    openjpeg = [ pylibjpeg-openjpeg ];
-    #rle = [ pylibjpeg-rle ]; # not in Nixpkgs
-  };
+  optional-dependencies =
+    let
+      extras = {
+        libjpeg = [ pylibjpeg-libjpeg ];
+        openjpeg = [ pylibjpeg-openjpeg ];
+        rle = [ pylibjpeg-rle ];
+      };
+    in
+    extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
     pytestCheckHook
