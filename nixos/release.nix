@@ -233,6 +233,15 @@ rec {
     }
   );
 
+  iso_cosmic = forAllSystems (
+    system:
+    makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-cosmic.nix;
+      type = "graphical";
+      inherit system;
+    }
+  );
+
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (
     system:
     makeSdImage {
