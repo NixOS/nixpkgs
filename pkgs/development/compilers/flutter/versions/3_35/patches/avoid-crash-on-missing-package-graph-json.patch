@@ -1,0 +1,95 @@
+Prevent crashes due to missing or incomplete package_graph.json
+
+Modify package graph parsing to safely handle missing package_graph.json file
+and missing dependencies or devDependencies entries by using empty defaults
+instead of throwing errors.
+
+--- a/packages/flutter_tools/lib/src/package_graph.dart
++++ b/packages/flutter_tools/lib/src/package_graph.dart
+@@ -36,18 +36,9 @@
+     isExclusiveDevDependency: true,
+   );
+
+-  final List<String>? dependencies = packageGraph.dependencies[project.manifest.appName];
+-  if (dependencies == null) {
+-    throwToolExit('''
+-Failed to parse ${packageGraph.file.path}: dependencies for `${project.manifest.appName}` missing.
+-Try running `flutter pub get`''');
+-  }
+-  final List<String>? devDependencies = packageGraph.devDependencies[project.manifest.appName];
+-  if (devDependencies == null) {
+-    throwToolExit('''
+-Failed to parse ${packageGraph.file.path}: devDependencies for `${project.manifest.appName}` missing.
+-Try running `flutter pub get`''');
+-  }
++  final List<String> dependencies = packageGraph.dependencies[project.manifest.appName] ?? <String>[];
++  final List<String> devDependencies = packageGraph.devDependencies[project.manifest.appName] ?? <String>[];
++
+   final packageNamesToVisit = <String>[...dependencies, ...devDependencies];
+   while (packageNamesToVisit.isNotEmpty) {
+     final String current = packageNamesToVisit.removeLast();
+@@ -55,13 +46,7 @@
+       continue;
+     }
+
+-    final List<String>? dependencies = packageGraph.dependencies[current];
+-
+-    if (dependencies == null) {
+-      throwToolExit('''
+-Failed to parse ${packageGraph.file.path}: dependencies for `$current` missing.
+-Try running `flutter pub get`''');
+-    }
++    final List<String> dependencies = packageGraph.dependencies[current] ?? <String>[];
+     packageNamesToVisit.addAll(dependencies);
+
+     result[current] = Dependency(
+@@ -89,7 +74,7 @@
+       currentDependency.rootUri,
+       isExclusiveDevDependency: false,
+     );
+-    packageNamesToVisit.addAll(packageGraph.dependencies[current]!);
++    packageNamesToVisit.addAll(packageGraph.dependencies[current] ?? <String>[]);
+   }
+   return result.values.toList();
+ }
+@@ -147,6 +132,9 @@
+     final File file = project.packageConfig.fileSystem.file(
+       project.packageConfig.uri.resolve('package_graph.json'),
+     );
++    if (!file.existsSync()) {
++      return PackageGraph(file, <String>[], <String, List<String>>{}, <String, List<String>>{});
++    }
+     try {
+       return PackageGraph.fromJson(file, jsonDecode(file.readAsStringSync()));
+     } on IOException catch (e) {
+
+--- a/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart
++++ b/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart
+@@ -384,7 +384,12 @@
+ }
+
+ Future<bool> _nativeBuildRequired(FlutterNativeAssetsBuildRunner buildRunner) async {
+-  final List<String> packagesWithNativeAssets = await buildRunner.packagesWithNativeAssets();
++  late final List<String> packagesWithNativeAssets;
++  try {
++    packagesWithNativeAssets = await buildRunner.packagesWithNativeAssets();
++  } catch (error) {
++    packagesWithNativeAssets = <String>[];
++  }
+   if (packagesWithNativeAssets.isEmpty) {
+     globals.logger.printTrace(
+       'No packages with native assets. Skipping native assets compilation.',
+@@ -412,7 +417,12 @@
+   FileSystem fileSystem,
+   FlutterNativeAssetsBuildRunner buildRunner,
+ ) async {
+-  final List<String> packagesWithNativeAssets = await buildRunner.packagesWithNativeAssets();
++  late final List<String> packagesWithNativeAssets;
++  try {
++    packagesWithNativeAssets = await buildRunner.packagesWithNativeAssets();
++  } catch (error) {
++    packagesWithNativeAssets = <String>[];
++  }
+   if (packagesWithNativeAssets.isEmpty) {
+     globals.logger.printTrace(
+       'No packages with native assets. Skipping native assets compilation.',

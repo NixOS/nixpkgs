@@ -8,6 +8,7 @@
   go,
   libsForQt5,
   qt6,
+  udevCheckHook,
 }:
 
 let
@@ -20,14 +21,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.47.2";
+  version = "4.48.1";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-sRE+Nnb3oqiJEjqiyG+3/sZLp23nquw5+4VpbZVFCQ8=";
+    hash = "sha256-zpkjYnGsmPKjxUpp2H1qSzqthOO1mTmki3bPqo35sBo=";
   };
 
   postPatch = ''
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
     pname = "bitbox-web";
     inherit version;
     inherit src;
-    sourceRoot = "source/frontends/web";
-    npmDepsHash = "sha256-eazc3OIusY8cbaF8RJOrVcyWPQexcz6lZYLLCpB1mHc=";
+    sourceRoot = "${src.name}/frontends/web";
+    npmDepsHash = "sha256-9NS85U4L5sLX3n/uN4p4CB5vfpWMMcnf6wESlFdQPlI=";
     installPhase = "cp -r build $out";
   };
 
@@ -83,7 +84,10 @@ stdenv.mkDerivation rec {
     go
     qt6.wrapQtAppsHook
     rcc
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Companion app for the BitBox02 hardware wallet";

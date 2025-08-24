@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "wtfutil";
-  version = "0.43.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
     rev = "v${version}";
-    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
+    sha256 = "sha256-05w5OyXlywt4jN0S0kv1GvbxmqZpEGud8PhV5ODCFu8=";
   };
 
-  vendorHash = "sha256-mQdKw3DeBEkCOtV2/B5lUIHv5EBp+8QSxpA13nFxESw=";
+  vendorHash = "sha256-Vanus0oD11GxuQwwM8EoOLPsjgkQvQMiaHp6fRQZTrQ=";
   proxyVendor = true;
 
   doCheck = false;
@@ -50,16 +50,16 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
     changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       xiaoxiangmoe
       kalbasit
     ];
     mainProgram = "wtfutil";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

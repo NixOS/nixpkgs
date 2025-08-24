@@ -20,7 +20,7 @@
 }:
 buildPythonPackage rec {
   pname = "piqp";
-  version = "0.4.2";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "PREDICT-EPFL";
     repo = "piqp";
     tag = "v${version}";
-    hash = "sha256-/lADjg4NyDdV9yeYBW2gbPydY8TfV247B/dI/ViRVlI=";
+    hash = "sha256-hVUeDV2GrBAOIgaWhg+RV+8CFRIm8Kv6/wCs5bXs2aY=";
   };
 
   postPatch =
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Proximal Interior Point Quadratic Programming solver";
+    description = "Proximal Interior Point Quadratic Programming solver";
     homepage = "https://github.com/PREDICT-EPFL/piqp";
     license = licenses.bsd2;
     maintainers = with maintainers; [ renesat ];

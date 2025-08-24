@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchFromGitHub,
+  fetchsvn,
   makeWrapper,
   unzip,
   jre,
@@ -11,21 +11,20 @@
 }:
 let
   pname = "josm";
-  version = "19396";
+  version = "19423";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-M4fm/tpsCsAhSvTGkgSi6IurGe0pJsqdT0XsCxgmzEo=";
+      hash = "sha256-s8aMV31NsDFE5XLP523PH3RNvq78eTAa+UvmjyY5a+E=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-2Mn903WIyQAQ9nXyTi5kZHKnCUUfa+1UCAx0Yoj2AMU=";
+      hash = "sha256-8eps1eTUn9FHHYwECH/742PV7wnnRO08dlZmaxd1aZU=";
     };
-    pkg = fetchFromGitHub {
-      owner = "JOSM";
-      repo = "josm";
-      tag = "${version}-tested";
-      hash = "sha256-9xEqf3SZN7in8CBoCBXGGQ5CS3Sf9ifZv7PAzJ2tO4k=";
+    pkg = fetchsvn {
+      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
+      rev = version;
+      hash = "sha256-4mK+IdVRDhINJqzOovw7YPNiJmFxTCIfYVNMXKSdBv0=";
     };
   };
 
@@ -53,15 +52,20 @@ stdenv.mkDerivation {
     else
       ''
         install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-        cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
+        cp -R ${srcs.pkg}/usr/share $out
 
         # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
         makeWrapper ${jre}/bin/java $out/bin/josm \
           --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
           --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib' \
           --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-          --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+          --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
       '';
+
+  passthru = {
+    inherit srcs;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Extensible editor for OpenStreetMap";
@@ -72,6 +76,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       rycee
       sikmir
+      starsep
     ];
     platforms = lib.platforms.all;
     mainProgram = "josm";

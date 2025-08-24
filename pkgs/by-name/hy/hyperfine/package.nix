@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-c8yK9U8UWRWUSGGGrAds6zAqxAiBLWq/RcZ6pvYNpgk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eZpGqkowp/R//RqLRk3AIbTpW3i9e+lOWpfdli7S4uE=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -29,15 +28,15 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line benchmarking tool";
     homepage = "https://github.com/sharkdp/hyperfine";
     changelog = "https://github.com/sharkdp/hyperfine/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       thoughtpolice
     ];

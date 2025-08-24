@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tAY4MUytFVa7kXLeOg4xak8XKGgApnEGWiK51W/7uDg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AFCCXZKm6XmiaayOqvGhMzjyMwAqVK1GZccWHWV5/9c=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,16 +30,16 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to fetch the source code of a Rust crate";
     mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
       janlikar

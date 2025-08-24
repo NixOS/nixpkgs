@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libidn2
     openssl
-  ] ++ lib.optional (!enableStubOnly) unbound;
+  ]
+  ++ lib.optional (!enableStubOnly) unbound;
 
   cmakeFlags = [ (lib.strings.cmakeBool "ENABLE_STUB_ONLY" enableStubOnly) ];
 

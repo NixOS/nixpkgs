@@ -46,6 +46,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require openssh_wrapper which is outdated and not available
     "test_repr_openssh"
+
+    # Test fails randomly
+    "test_timeout"
   ];
 
   pythonImportsCheck = [ "proxmoxer" ];

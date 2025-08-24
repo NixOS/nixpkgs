@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
     mainProgram = "i7z";
     homepage = "https://github.com/DimitryAndric/i7z";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bluescreen303 ];
     # broken on ARM
     platforms = [ "x86_64-linux" ];
   };

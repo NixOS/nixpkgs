@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = [ "clap_mangen" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
 
   OPENSSL_NO_VENDOR = true;
@@ -54,12 +53,12 @@ rustPlatform.buildRustPackage {
       --zsh <(${gitGr} completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/9999years/git-gr";
     changelog = "https://github.com/9999years/git-gr/releases/tag/v${version}";
     description = "Gerrit CLI client";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers._9999years ];
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-gr";
   };
 

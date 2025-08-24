@@ -27,15 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hVw2HnIHlA7vvt0Sr6F2qVhvBZ33aCeqb9vgbu3rgBo=";
   };
 
-  postPatch =
-    ''
-      # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
-      sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      # Don't build tests when we're not running them
-      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-    '';
+  postPatch = ''
+    # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
+    sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    # Don't build tests when we're not running them
+    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+  '';
 
   strictDeps = true;
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.4.1";
+  version = "30.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "aboutcode-org";
     repo = "license-expression";
     tag = "v${version}";
-    hash = "sha256-H1IAA/fxQkMMsvCv02gLXE3odokNejPRGZVZnhE61II=";
+    hash = "sha256-Bgkm0nhu/jeqtg3444R2encCtfzd7xnwyCXlZWaYSQ0=";
   };
 
   dontConfigure = true;

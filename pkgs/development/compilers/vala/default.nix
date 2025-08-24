@@ -74,27 +74,25 @@ let
         "devdoc"
       ];
 
-      nativeBuildInputs =
-        [
-          pkg-config
-          flex
-          bison
-          libxslt
-          gobject-introspection
-        ]
-        ++ lib.optional (stdenv.hostPlatform.isDarwin) expat
-        ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
-        ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
-        ++ extraNativeBuildInputs;
+      nativeBuildInputs = [
+        pkg-config
+        flex
+        bison
+        libxslt
+        gobject-introspection
+      ]
+      ++ lib.optional (stdenv.hostPlatform.isDarwin) expat
+      ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
+      ++ extraNativeBuildInputs;
 
-      buildInputs =
-        [
-          glib
-          libiconv
-          libintl
-        ]
-        ++ lib.optional (withGraphviz) graphviz
-        ++ extraBuildInputs;
+      buildInputs = [
+        glib
+        libiconv
+        libintl
+      ]
+      ++ lib.optional (withGraphviz) graphviz
+      ++ extraBuildInputs;
 
       enableParallelBuilding = true;
 

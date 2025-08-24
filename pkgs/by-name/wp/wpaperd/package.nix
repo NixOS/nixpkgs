@@ -6,6 +6,9 @@
   libxkbcommon,
   wayland,
   libGL,
+  dav1d,
+  installShellFiles,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,17 +22,37 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mBdrOmS+e+Npei5+RmtbTkBCGR8L5O83hulNU1z0Akk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-d8jzoNCn9J36SE4tQZ1orgOfFGbhVtHaaO940b3JxmQ=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
+    scdoc
   ];
   buildInputs = [
     wayland
     libGL
     libxkbcommon
+    dav1d
   ];
+
+  buildFeatures = [
+    "avif"
+  ];
+
+  postBuild = ''
+    scdoc < man/wpaperd-output.5.scd > man/wpaperd-output.5
+  '';
+
+  postInstall =
+    let
+      targetDir = "target/*/$cargoBuildType";
+    in
+    ''
+      installShellCompletion ${targetDir}/completions/*.{bash,fish}
+      installShellCompletion --zsh ${targetDir}/completions/_*
+      installManPage ${targetDir}/man/*.1 man/*.5
+    '';
 
   meta = with lib; {
     description = "Minimal wallpaper daemon for Wayland";

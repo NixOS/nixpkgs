@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   fixDarwinDylibNames,
+  apache-orc,
   autoconf,
   aws-sdk-cpp,
   aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
@@ -36,7 +37,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf_29,
+  protobuf,
   python3,
   rapidjson,
   re2,
@@ -61,9 +62,6 @@
 }:
 
 let
-  # https://github.com/apache/arrow/issues/45807
-  protobuf = protobuf_29;
-
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
@@ -133,45 +131,52 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      boost
-      brotli
-      bzip2
-      flatbuffers
-      gflags
-      glog
-      gtest
-      libbacktrace
-      lz4
-      nlohmann_json # alternative JSON parser to rapidjson
-      protobuf # substrait requires protobuf
-      rapidjson
-      re2
-      snappy
-      thrift
-      utf8proc
-      zlib
-      zstd
-    ]
-    ++ lib.optionals enableFlight [
-      grpc
-      openssl
-      protobuf
-      sqlite
-    ]
-    ++ lib.optionals enableS3 [
-      aws-sdk-cpp-arrow
-      openssl
-    ]
-    ++ lib.optionals enableGcs [
-      crc32c
-      curl
-      google-cloud-cpp
-      grpc
-      nlohmann_json
-    ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    apache-orc
+    boost
+    brotli
+    bzip2
+    flatbuffers
+    gflags
+    glog
+    gtest
+    libbacktrace
+    lz4
+    nlohmann_json # alternative JSON parser to rapidjson
+    protobuf # substrait requires protobuf
+    rapidjson
+    re2
+    snappy
+    thrift
+    utf8proc
+    zlib
+    zstd
+  ]
+  ++ lib.optionals enableFlight [
+    grpc
+    openssl
+    protobuf
+    sqlite
+  ]
+  ++ lib.optionals enableS3 [
+    aws-sdk-cpp-arrow
+    openssl
+  ]
+  ++ lib.optionals enableGcs [
+    crc32c
+    curl
+    google-cloud-cpp
+    grpc
+    nlohmann_json
+  ];
+
+  # apache-orc looks for things in caps
+  env = {
+    LZ4_ROOT = lz4;
+    ZSTD_ROOT = zstd.dev;
+  };
 
   preConfigure = ''
     patchShebangs build-support/
@@ -179,57 +184,57 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
-  cmakeFlags =
-    [
-      "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
-      "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
-      "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
-      "-DARROW_BUILD_INTEGRATION=ON"
-      "-DARROW_BUILD_UTILITIES=ON"
-      "-DARROW_EXTRA_ERROR_CONTEXT=ON"
-      "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
-      "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
-      "-Dxsimd_SOURCE=AUTO"
-      "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
-      "-DARROW_COMPUTE=ON"
-      "-DARROW_CSV=ON"
-      "-DARROW_DATASET=ON"
-      "-DARROW_FILESYSTEM=ON"
-      "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
-      "-DARROW_HDFS=ON"
-      "-DARROW_IPC=ON"
-      "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
-      "-DARROW_JSON=ON"
-      "-DARROW_USE_GLOG=ON"
-      "-DARROW_WITH_BACKTRACE=ON"
-      "-DARROW_WITH_BROTLI=ON"
-      "-DARROW_WITH_BZ2=ON"
-      "-DARROW_WITH_LZ4=ON"
-      "-DARROW_WITH_NLOHMANN_JSON=ON"
-      "-DARROW_WITH_SNAPPY=ON"
-      "-DARROW_WITH_UTF8PROC=ON"
-      "-DARROW_WITH_ZLIB=ON"
-      "-DARROW_WITH_ZSTD=ON"
-      "-DARROW_MIMALLOC=ON"
-      "-DARROW_SUBSTRAIT=ON"
-      "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
-      "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
-      "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
-      "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
-      # Parquet options:
-      "-DARROW_PARQUET=ON"
-      "-DPARQUET_BUILD_EXECUTABLES=ON"
-      "-DPARQUET_REQUIRE_ENCRYPTION=ON"
-    ]
-    ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
-    ++ lib.optionals enableS3 [
-      "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+    "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
+    "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_BUILD_INTEGRATION=ON"
+    "-DARROW_BUILD_UTILITIES=ON"
+    "-DARROW_EXTRA_ERROR_CONTEXT=ON"
+    "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
+    "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
+    "-Dxsimd_SOURCE=AUTO"
+    "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_COMPUTE=ON"
+    "-DARROW_CSV=ON"
+    "-DARROW_DATASET=ON"
+    "-DARROW_FILESYSTEM=ON"
+    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_HDFS=ON"
+    "-DARROW_IPC=ON"
+    "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
+    "-DARROW_JSON=ON"
+    "-DARROW_USE_GLOG=ON"
+    "-DARROW_WITH_BACKTRACE=ON"
+    "-DARROW_WITH_BROTLI=ON"
+    "-DARROW_WITH_BZ2=ON"
+    "-DARROW_WITH_LZ4=ON"
+    "-DARROW_WITH_NLOHMANN_JSON=ON"
+    "-DARROW_WITH_SNAPPY=ON"
+    "-DARROW_WITH_UTF8PROC=ON"
+    "-DARROW_WITH_ZLIB=ON"
+    "-DARROW_WITH_ZSTD=ON"
+    "-DARROW_MIMALLOC=ON"
+    "-DARROW_SUBSTRAIT=ON"
+    "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
+    "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    "-DARROW_ORC=ON"
+    # Parquet options:
+    "-DARROW_PARQUET=ON"
+    "-DPARQUET_BUILD_EXECUTABLES=ON"
+    "-DPARQUET_REQUIRE_ENCRYPTION=ON"
+  ]
+  ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [
+    "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
+  ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
@@ -264,14 +269,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs =
-    [
-      perl
-      which
-      sqlite
-    ]
-    ++ lib.optionals enableS3 [ minio ]
-    ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs = [
+    perl
+    which
+    sqlite
+  ]
+  ++ lib.optionals enableS3 [ minio ]
+  ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let
@@ -281,6 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
+        # File already exists in database: orc_proto.proto
+        "arrow-orc-adapter-test"
       ];
     in
     ''

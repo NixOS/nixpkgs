@@ -24,8 +24,9 @@
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+  stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "ctranslate2";
   version = "4.6.0";
 
@@ -37,13 +38,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withCUDA [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withCUDA [
+    cudaPackages.cuda_nvcc
+  ];
 
   cmakeFlags = [
     # https://opennmt.net/CTranslate2/installation.html#build-options
@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
 
   buildInputs =
     lib.optionals withMkl [
@@ -98,6 +99,6 @@ stdenv.mkDerivation rec {
       hexa
       misuzu
     ];
-    broken = (cudaPackages.cudaOlder "11.4") || !(withCuDNN -> withCUDA);
+    broken = !(withCuDNN -> withCUDA);
   };
 }

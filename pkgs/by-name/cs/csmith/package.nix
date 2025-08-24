@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
     m4
     makeWrapper
   ];
-  buildInputs =
-    [ libbsd ]
-    ++ (with perlPackages; [
-      perl
-      SysCPU
-    ]);
+  buildInputs = [
+    libbsd
+  ]
+  ++ (with perlPackages; [
+    perl
+    SysCPU
+  ]);
 
   CXXFLAGS = "-std=c++98";
 

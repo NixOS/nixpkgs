@@ -154,53 +154,12 @@ The boot process should have brought up networking (check `ip
 a`). Networking is necessary for the installer, since it will
 download lots of stuff (such as source tarballs or Nixpkgs channel
 binaries). It's best if you have a DHCP server on your network.
-Otherwise configure networking manually using `ifconfig`.
+Otherwise configure networking manually using `ip`.
 
-On the graphical installer, you can configure the network, wifi
-included, through NetworkManager. Using the `nmtui` program, you can do
-so even in a non-graphical session. If you prefer to configure the
-network manually, disable NetworkManager with
+You can configure the network, Wi-Fi included, through NetworkManager.
+Using the `nmtui` program, you can do so even in a non-graphical session.
+ If you prefer to configure the network manually, disable NetworkManager with
 `systemctl stop NetworkManager`.
-
-On the minimal installer, NetworkManager is not available, so
-configuration must be performed manually. To configure the wifi, first
-start wpa_supplicant with `sudo systemctl start wpa_supplicant`, then
-run `wpa_cli`. For most home networks, you need to type in the following
-commands:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "myhomenetwork"
-OK
-> set_network 0 psk "mypassword"
-OK
-> enable_network 0
-OK
-```
-
-For enterprise networks, for example *eduroam*, instead do:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "eduroam"
-OK
-> set_network 0 identity "myname@example.com"
-OK
-> set_network 0 password "mypassword"
-OK
-> enable_network 0
-OK
-```
-
-When successfully connected, you should see a line such as this one
-
-```plain
-<3>CTRL-EVENT-CONNECTED - Connection to 32:85:ab:ef:24:5c completed [id=0 id_str=]
-```
-
-you can now leave `wpa_cli` by typing `quit`.
 
 If you would like to continue the installation from a different machine
 you can use activated SSH daemon. You need to copy your ssh key to

@@ -22,15 +22,14 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = true;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5LKKjHzIlXw0bUmF7GDCVW0cptCxohq6CNPIrMZKorM=";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kejadlen/git-together/releases/tag/v${version}";
     description = "Better commit attribution while pairing without messing with your git workflow";
     homepage = "https://github.com/kejadlen/git-together";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sentientmonkey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sentientmonkey ];
     mainProgram = "git-together";
   };
 }

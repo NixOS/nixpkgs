@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gopher64";
-  version = "1.0.16";
+  version = "1.0.17";
 
   src = fetchFromGitHub {
     owner = "gopher64";
     repo = "gopher64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TduOmKK4OAmhP2VUT0eeoKHQHmsM8kptrxfgCdDFTRU=";
+    hash = "sha256-DDFtPISV17jQMECBIqYbbGhZpjYXuNnOq7EiEVtSzgc=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -50,8 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "@GIT_REV@" $(cat GIT_REV)
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9fZ7zFTqt1VNnmCqFzWrZFD1PQZ7paz7r2Mb+9+C9Rs=";
+  cargoHash = "sha256-31kEYwlDA6iYcwPZyQU4gM/VLfPNeYcDKhhBqzNp/QE=";
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
@@ -60,15 +59,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      sdl3
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    bzip2
+    sdl3
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
   # these are dlopen-ed during runtime
   runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux [

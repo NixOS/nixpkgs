@@ -55,7 +55,7 @@ in
       wantedBy = [ "multi-user.target" ];
     };
 
-    # set up Security wrapper Same as inteded in deb post install
+    # set up Security wrapper Same as intended in deb post install
     security.wrappers.cato-clientd = {
       source = "${cfg.package}/bin/cato-clientd";
       owner = "root";

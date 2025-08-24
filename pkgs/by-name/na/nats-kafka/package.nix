@@ -30,12 +30,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "NATS to Kafka Bridging";
     mainProgram = "nats-kafka";
     homepage = "https://github.com/nats-io/nats-kafka";
     changelog = "https://github.com/nats-io/nats-kafka/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

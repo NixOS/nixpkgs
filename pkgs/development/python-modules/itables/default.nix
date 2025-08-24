@@ -22,15 +22,15 @@
 
 buildPythonPackage rec {
   pname = "itables";
-  version = "2.4.0";
+  version = "2.4.4";
 
   # itables has 4 different node packages, each with their own
   # package-lock.json, and partially depending on each other.
   # Our fetchNpmDeps tooling in nixpkgs doesn't support this yet, so we fetch
-  # the source tarball from pypi, wich includes the javascript bundle already.
+  # the source tarball from pypi, which includes the javascript bundle already.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S5HASUVfqTny+Vu15MYSSrEffCaJuL7UhDOc3eudVWI=";
+    hash = "sha256-KeK3cff9OrcLnSI0YVtXPaMl5hCDJpfphmgMzANqr1s=";
   };
 
   pyproject = true;

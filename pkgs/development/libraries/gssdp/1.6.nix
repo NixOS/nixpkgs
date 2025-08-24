@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
-  version = "1.6.3";
+  version = "1.6.4";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
-    sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
+    hash = "sha256-/5f9+39WHT5oE7T2ohRSWefC7/Q8wOY/P9Ax0LYmYDI=";
   };
 
   depsBuildBuild = [
@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     python3
-  ] ++ lib.optionals enableManpages [ buildPackages.pandoc ];
+  ]
+  ++ lib.optionals enableManpages [ buildPackages.pandoc ];
 
   buildInputs = [
     libsoup_3

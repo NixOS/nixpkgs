@@ -15,12 +15,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-foCIzzFoEpcE6i0QrSbiob3YHIOeTpjwpAMtcPGL8Vg=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PphgRSVCj724eYAC04Orpz/klYuAhphiQ3v5TRChs+w=";
 
   cargoBuildFlags = [

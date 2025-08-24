@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "2.0.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     tag = version;
-    hash = "sha256-klDyrbIJeAm3C7sCo4Z4OKDvm5+V8mfwYbyS22CKVQU=";
+    hash = "sha256-GmP3ZWn678ss3VtF26iI4t3CZegbajENg7gL19u3Mas=";
   };
 
   build-system = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Assert issues with datetime

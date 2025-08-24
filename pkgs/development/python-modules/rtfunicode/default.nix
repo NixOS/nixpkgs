@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "rtfunicode";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjpieters";

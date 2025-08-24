@@ -4,15 +4,16 @@
   fetchzip,
   ripgrep,
   makeWrapper,
+  testers,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1748404992-ga3f78f";
+  version = "0.0.1755532879-g2b6e3d";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${version}.tgz";
-    hash = "sha256-axd5VP7afa4ptAl/y8CEVguqoRKVRhWfRDSI0sgyXqA=";
+    url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
+    hash = "sha256-i3YZcyaeq8CkMsEKhJg/39/0ijJGym2DcRFsZpBRXe0=";
   };
 
   postPatch = ''
@@ -25,7 +26,7 @@ buildNpmPackage rec {
       "version": "0.0.0",
       "license": "UNLICENSED",
       "dependencies": {
-        "@sourcegraph/amp": "${version}"
+        "@sourcegraph/amp": "${finalAttrs.version}"
       },
       "bin": {
         "amp": "./bin/amp-wrapper.js"
@@ -39,12 +40,12 @@ buildNpmPackage rec {
     # Create a wrapper script that will be installed by npm
     cat > bin/amp-wrapper.js << EOF
     #!/usr/bin/env node
-    require('@sourcegraph/amp/dist/amp.js')
+    import('@sourcegraph/amp/dist/main.js')
     EOF
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-05+hBr+eX3I92U9TsqPQrYcJCmKXTvz3n6ZTxR1XvC8=";
+  npmDepsHash = "sha256-pZNvuSf9ioiv3UPmtdbXC0RXgtelrBl5ZtW/y/KnSqQ=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -69,6 +70,10 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "HOME=$(mktemp -d) amp --version";
+  };
 
   meta = {
     description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
@@ -81,4 +86,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "amp";
   };
-}
+})

@@ -25,7 +25,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   meta = {
-    description = "The opinionated PHP code formatter";
+    description = "Opinionated PHP code formatter";
     homepage = "https://github.com/lkrms/pretty-php";
     license = lib.licenses.mit;
     mainProgram = "pretty-php";

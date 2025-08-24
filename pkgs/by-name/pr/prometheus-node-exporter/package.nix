@@ -36,13 +36,13 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for machine metrics";
     mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

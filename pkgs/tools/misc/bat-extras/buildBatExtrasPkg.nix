@@ -48,26 +48,26 @@ stdenv.mkDerivation (
       bash
       fish
       zsh
-    ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
       bash ./test.sh --compiled --suite ${name}
       runHook postCheck
     '';
 
-    installPhase =
-      ''
-        runHook preInstall
-        mkdir -p $out/bin
-        cp -p bin/${name} $out/bin/${name}
-      ''
-      + lib.optionalString (dependencies != [ ]) ''
-        wrapProgram $out/bin/${name} \
-          --prefix PATH : ${lib.makeBinPath dependencies}
-      ''
-      + ''
-        runHook postInstall
-      '';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      cp -p bin/${name} $out/bin/${name}
+    ''
+    + lib.optionalString (dependencies != [ ]) ''
+      wrapProgram $out/bin/${name} \
+        --prefix PATH : ${lib.makeBinPath dependencies}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
     # We already patched
     dontPatchShebangs = true;

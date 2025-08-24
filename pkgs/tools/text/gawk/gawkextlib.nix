@@ -53,11 +53,10 @@ let
 
       inherit patches;
 
-      postPatch =
-        ''
-          cd ${name}
-        ''
-        + extraPostPatch;
+      postPatch = ''
+        cd ${name}
+      ''
+      + extraPostPatch;
 
       nativeBuildInputs = [
         autoconf
@@ -95,7 +94,8 @@ let
         license = lib.licenses.gpl3Plus;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ tomberek ];
-      } // lib.optionalAttrs (broken != null) { inherit broken; };
+      }
+      // lib.optionalAttrs (broken != null) { inherit broken; };
     }
   );
   gawkextlib = buildExtension {

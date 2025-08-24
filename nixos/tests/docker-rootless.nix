@@ -3,7 +3,7 @@
 {
   name = "docker-rootless";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ abbradar ];
+    maintainers = [ ];
   };
 
   nodes = {

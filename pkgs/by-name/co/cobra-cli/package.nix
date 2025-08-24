@@ -35,12 +35,12 @@ buildGoModule rec {
       --prefix PATH : ${go}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cobra CLI tool to generate applications and commands";
     mainProgram = "cobra-cli";
     homepage = "https://github.com/spf13/cobra-cli/";
     changelog = "https://github.com/spf13/cobra-cli/releases/tag/${version}";
-    license = licenses.afl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.afl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

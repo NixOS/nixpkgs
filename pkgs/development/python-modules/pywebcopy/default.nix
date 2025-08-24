@@ -31,7 +31,8 @@ buildPythonPackage rec {
     lxml-html-clean
     requests
     six
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

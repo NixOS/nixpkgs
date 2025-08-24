@@ -64,37 +64,37 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals x11Mode [
-      libXaw
-      libXext
-      libXpm
-    ]
-    ++ lib.optionals qtMode [
-      gzip
-      qt5.qtbase.bin
-      qt5.qtmultimedia.bin
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals x11Mode [
+    libXaw
+    libXext
+    libXpm
+  ]
+  ++ lib.optionals qtMode [
+    gzip
+    qt5.qtbase.bin
+    qt5.qtmultimedia.bin
+  ];
 
-  nativeBuildInputs =
-    [
-      flex
-      bison
-      copyDesktopItems
-    ]
-    ++ lib.optionals x11Mode [
-      mkfontdir
-      bdftopcf
-    ]
-    ++ lib.optionals qtMode [
-      pkg-config
-      mkfontdir
-      qt5.qtbase.dev
-      qt5.qtmultimedia.dev
-      qt5.wrapQtAppsHook
-      bdftopcf
-    ];
+  nativeBuildInputs = [
+    flex
+    bison
+    copyDesktopItems
+  ]
+  ++ lib.optionals x11Mode [
+    mkfontdir
+    bdftopcf
+  ]
+  ++ lib.optionals qtMode [
+    pkg-config
+    mkfontdir
+    qt5.qtbase.dev
+    qt5.qtmultimedia.dev
+    qt5.wrapQtAppsHook
+    bdftopcf
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -227,7 +227,7 @@ stdenv.mkDerivation rec {
     homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "nethack";
   };
 }

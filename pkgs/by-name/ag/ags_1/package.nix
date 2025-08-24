@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ebnkUaee/pnfmw1KmOZj+MP1g5wA+8BT/TPKmn4Dkwc=";
     fetchSubmodules = true;
   };
@@ -57,6 +57,11 @@ buildNpmPackage (finalAttrs: {
     linux-pam
     networkmanager
     upower
+  ];
+
+  patches = [
+    # Workaround for TypeScript 5.9: https://github.com/Aylur/ags/issues/725#issuecomment-3070009695
+    ./ts59.patch
   ];
 
   postPatch = ''

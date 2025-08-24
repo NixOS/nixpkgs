@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   meteocalc,
+  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
@@ -32,7 +33,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-aiohttp
+    pytest-asyncio_0
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytestCheckHook
   ];
 

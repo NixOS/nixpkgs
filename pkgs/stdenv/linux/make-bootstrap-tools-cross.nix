@@ -32,7 +32,8 @@ lib.mapAttrs (n: make) (
     mipsel-unknown-linux-gnu = mipsel-linux-gnu;
     mips64el-unknown-linux-gnuabin32 = mips64el-linux-gnuabin32;
     mips64el-unknown-linux-gnuabi64 = mips64el-linux-gnuabi64;
-    powerpc64-unknown-linux-gnuabielfv2 = ppc64;
+    powerpc64-unknown-linux-gnuabielfv1 = ppc64-elfv1;
+    powerpc64-unknown-linux-gnuabielfv2 = ppc64-elfv2;
     powerpc64le-unknown-linux-gnu = powernv;
     riscv64-unknown-linux-gnu = riscv64;
     s390x-unknown-linux-gnu = s390x;

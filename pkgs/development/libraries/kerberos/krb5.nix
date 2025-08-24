@@ -54,58 +54,56 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-fcommon";
   };
 
-  configureFlags =
-    [
-      "--localstatedir=/var/lib"
-      (lib.withFeature withLdap "ldap")
-      (lib.withFeature withLibedit "libedit")
-      (lib.withFeature withVerto "system-verto")
-    ]
-    # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
-    # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
-    ++ lib.optionals staticOnly [
-      "--enable-static"
-      "--disable-shared"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isFreeBSD ''WARN_CFLAGS=''
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "krb5_cv_attr_constructor_destructor=yes,yes"
-      "ac_cv_func_regcomp=yes"
-      "ac_cv_printf_positional=yes"
-    ];
+  configureFlags = [
+    "--localstatedir=/var/lib"
+    (lib.withFeature withLdap "ldap")
+    (lib.withFeature withLibedit "libedit")
+    (lib.withFeature withVerto "system-verto")
+  ]
+  # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
+  # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
+  ++ lib.optionals staticOnly [
+    "--enable-static"
+    "--disable-shared"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD ''WARN_CFLAGS=''
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "krb5_cv_attr_constructor_destructor=yes,yes"
+    "ac_cv_func_regcomp=yes"
+    "ac_cv_printf_positional=yes"
+  ];
 
-  nativeBuildInputs =
-    [
-      byacc
-      perl
-      pkg-config
-    ]
-    # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
+  nativeBuildInputs = [
+    byacc
+    perl
+    pkg-config
+  ]
+  # Provides the mig command used by the build scripts
+  ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals (
-      stdenv.hostPlatform.isLinux
-      && stdenv.hostPlatform.libc != "bionic"
-      && !(stdenv.hostPlatform.useLLVM or false)
-    ) [ keyutils ]
-    ++ lib.optionals withLdap [ openldap ]
-    ++ lib.optionals withLibedit [ libedit ]
-    ++ lib.optionals withVerto [ libverto ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform.libc != "bionic"
+    && !(stdenv.hostPlatform.useLLVM or false)
+  ) [ keyutils ]
+  ++ lib.optionals withLdap [ openldap ]
+  ++ lib.optionals withLibedit [ libedit ]
+  ++ lib.optionals withVerto [ libverto ];
 
   sourceRoot = "krb5-${version}/src";
 
-  postPatch =
-    ''
-      substituteInPlace config/shlib.conf \
-        --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
-    ''
-    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
-    # necessary for FreeBSD code path in configure
-    + ''
-      substituteInPlace ./config/config.guess --replace-fail /usr/bin/uname uname
-    '';
+  postPatch = ''
+    substituteInPlace config/shlib.conf \
+      --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  ''
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  + ''
+    substituteInPlace ./config/config.guess --replace-fail /usr/bin/uname uname
+  '';
 
   libFolders = [
     "util"

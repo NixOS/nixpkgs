@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "git-relevant-history";
   version = "2022-09-15";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "rainlabs-eu";
     repo = "git-relevant-history";

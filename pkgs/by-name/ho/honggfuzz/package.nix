@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
+    description = "Security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
     longDescription = ''
       Honggfuzz is a security oriented, feedback-driven, evolutionary,
       easy-to-use fuzzer with interesting analysis options. It is

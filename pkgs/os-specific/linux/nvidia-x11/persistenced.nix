@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "nvidia-persistenced";
   };
 }

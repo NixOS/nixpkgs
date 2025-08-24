@@ -14,8 +14,7 @@ let
   defaultConfig = {
     dispatcher = {
       id = "dispatcher";
-      socket_file_mode = "0770";
-      application_socket = "/dev/shm/dispatcher/default.sock";
+      local_udp_forwarding = true;
     };
     log.console = {
       level = "info";

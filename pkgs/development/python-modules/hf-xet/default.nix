@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hf-xet";
-  version = "1.1.2";
+  version = "1.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "xet-core";
     tag = "v${version}";
-    hash = "sha256-272xEw5W2Mo7a/OFpPbVNJMNc3TlmAsOdYFVw4HbXYk=";
+    hash = "sha256-6KANNPFFZCpmDPnMgIBDBypYkkkeI0Las7BFiCHwzXI=";
   };
 
   sourceRoot = "${src.name}/hf_xet";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-wV8qF3EARKkJWGQVhOPjgi7yKL1idRiuZrJ/HnL1BsQ=";
+    hash = "sha256-G/O2PxdXDCFBSy0PvC8uvRhWib4+DAKPeK5WNV1gxAY=";
   };
 
   nativeBuildInputs = [

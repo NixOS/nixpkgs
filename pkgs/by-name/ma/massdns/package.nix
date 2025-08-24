@@ -23,15 +23,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Resolve large amounts of domain names";
     homepage = "https://github.com/blechschmidt/massdns";
     changelog = "https://github.com/blechschmidt/massdns/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ geoffreyfrogeye ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ geoffreyfrogeye ];
     mainProgram = "massdns";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # error: use of undeclared identifier 'MSG_NOSIGNAL'
-    badPlatforms = platforms.darwin;
+    badPlatforms = lib.platforms.darwin;
   };
 }

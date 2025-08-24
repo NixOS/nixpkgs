@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -23,8 +24,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-config=.coveragerc --cov sockio" "" \
-      --replace "--cov-report html --cov-report term" "" \
       --replace "--durations=2 --verbose" ""
   '';
 
@@ -32,6 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

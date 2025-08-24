@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Xc9uc//5wTBWJ89mcaC/4c8/xtTvnu8g2Aa1viUhluo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-h4g4+2yiqr3CTkSgv8fTHEVQwSunFfYFhIczSGA+M5U=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to pretty print SARIF diagnostics";
+    description = "CLI tool to pretty print SARIF diagnostics";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

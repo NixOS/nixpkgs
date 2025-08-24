@@ -10,8 +10,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyyaml";
-  version = "7.0.1";
+  pname = "pyyaml-ft";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Quansight-Labs";
     repo = "pyyaml-ft";
     tag = "v${version}";
-    hash = "sha256-hmHozVmqQuS+NqRN2SSEqNCemyKcBM19elhka4GykE0=";
+    hash = "sha256-GiXYpcAccKgROw144eOPY0gS0xW+3K/jRUl+JnBEaO8=";
   };
 
   build-system = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libyaml ];
 
-  pythonImportsCheck = [ "yaml" ];
+  pythonImportsCheck = [ "yaml_ft" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inform6";
-  version = "6.42-r8";
+  version = "6.42-r9";
 
   src = fetchurl {
     url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${version}.tar.gz";
-    sha256 = "sha256-Co3XNcr0LDGeEYTxIFmqTsaKm4q5VpLpVsTNnJHUX8o=";
+    sha256 = "sha256-aHYjqjdISnyUxtruDDWD0cHEOxBpvm3+TfNxtGofezQ=";
   };
 
   buildInputs = [ perl ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive fiction compiler and libraries";
     longDescription = ''
       Inform 6 is a C-like programming language for writing interactive fiction
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/DavidGriffith/inform6unix";
     changelog = "https://gitlab.com/DavidGriffith/inform6unix/-/raw/${version}/NEWS";
-    license = licenses.artistic2;
+    license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ ddelabru ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

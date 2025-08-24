@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hrUd4J15cDyd78BVVzi8jiDqJI1dE35WUdOo6Tq8gH8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ml/OW4S4fIMLmm7vVPgsXB7CigDYORGFpN3jZRp1f8c=";
 
   nativeBuildInputs = [
@@ -42,12 +41,12 @@ rustPlatform.buildRustPackage rec {
   #   https://travis-ci.org/sagiegurari/cargo-make
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       figsoda
       xrelkd
     ];

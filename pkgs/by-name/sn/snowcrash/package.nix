@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "snowcrash";
-  version = "unstable-2022-08-15";
+  version = "0-unstable-2022-08-15";
 
   src = fetchFromGitHub {
     owner = "redcode-labs";

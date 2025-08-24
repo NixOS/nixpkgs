@@ -17,6 +17,7 @@
   pango,
   webkitgtk_4_1,
   openssl,
+  sqlite,
   gstreamer,
   gst-libav,
   gst-plugins-base,
@@ -27,6 +28,7 @@
   xclip,
   wl-clipboard,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     webkitgtk_4_1
     openssl
+    sqlite
     libfixposix
   ];
 
@@ -102,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nyxt; };
   };
 
   meta = with lib; {

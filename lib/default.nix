@@ -287,6 +287,7 @@ let
         init
         crossLists
         unique
+        uniqueStrings
         allUnique
         intersectLists
         subtractLists
@@ -433,6 +434,8 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        revOrTag
+        repoRevToName
         ;
       inherit (self.modules)
         evalModules

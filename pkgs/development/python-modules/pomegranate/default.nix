@@ -3,25 +3,20 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
+  fetchpatch,
+  pytestCheckHook,
   setuptools,
-
-  # dependencies
   apricot-select,
   networkx,
   numpy,
   scikit-learn,
   scipy,
   torch,
-
-  # tests
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -46,6 +41,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  patches = [
+    # Fix tests for pytorch 2.6
+    (fetchpatch {
+      name = "python-2.6.patch";
+      url = "https://github.com/jmschrei/pomegranate/pull/1142/commits/9ff5d5e2c959b44e569937e777b26184d1752a7b.patch";
+      hash = "sha256-BXsVhkuL27QqK/n6Fa9oJCzrzNcL3EF6FblBeKXXSts=";
+    })
   ];
 
   pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [

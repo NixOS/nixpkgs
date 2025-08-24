@@ -45,8 +45,9 @@
 #     requirements, but would probably allow both aarch64/x86_64 to work.
 #
 
-let
+{ lib, ... }:
 
+let
   # Creates a node. If 'joinNode' parameter, a string containing an IP address,
   # is non-null, then the CockroachDB server will attempt to join/connect to
   # the cluster node specified at that address.
@@ -59,7 +60,6 @@ let
       config,
       ...
     }:
-
     {
       # Bank/TPC-C benchmarks take some memory to complete
       virtualisation.memorySize = 2048;
@@ -103,32 +103,28 @@ let
         ${pkgs.chrony}/bin/chronyc waitsync
       '';
     };
-
 in
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  {
-    name = "cockroachdb";
-    meta.maintainers = with pkgs.lib.maintainers; [ thoughtpolice ];
+{
+  name = "cockroachdb";
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
-    nodes = {
-      node1 = makeNode "country=us,region=east,dc=1" "192.168.1.1" null;
-      node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
-      node3 = makeNode "country=eu,region=west,dc=2" "192.168.1.3" "192.168.1.1";
-    };
+  nodes = {
+    node1 = makeNode "country=us,region=east,dc=1" "192.168.1.1" null;
+    node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
+    node3 = makeNode "country=eu,region=west,dc=2" "192.168.1.3" "192.168.1.1";
+  };
 
-    # NOTE: All the nodes must start in order and you must NOT use startAll, because
-    # there's otherwise no way to guarantee that node1 will start before the others try
-    # to join it.
-    testScript = ''
-      for node in node1, node2, node3:
-          node.start()
-          node.wait_for_unit("cockroachdb")
-      node1.succeed(
-          "cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1",
-          "cockroach workload init bank 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
-          "cockroach workload run bank --duration=1m 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
-      )
-    '';
-  }
-)
+  # NOTE: All the nodes must start in order and you must NOT use startAll, because
+  # there's otherwise no way to guarantee that node1 will start before the others try
+  # to join it.
+  testScript = ''
+    for node in node1, node2, node3:
+        node.start()
+        node.wait_for_unit("cockroachdb")
+    node1.succeed(
+        "cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1",
+        "cockroach workload init bank 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+        "cockroach workload run bank --duration=1m 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+    )
+  '';
+}

@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "dlundqvist";
     repo = "xone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qMZlQgAe5vB5zfuhyK7EBxIwfhnC5MvnF/qr3BGnDms=";
+    hash = "sha256-myiKYXJ4Qisz6uJYO75xs/lGj7A/Ft+6frky9lBuWzc=";
   };
 
   setSourceRoot = ''

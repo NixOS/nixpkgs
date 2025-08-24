@@ -144,7 +144,7 @@ let
     ++ google-api-core.optional-dependencies.grpc
     ++ unstructured.optional-dependencies.all-docs
   );
-  version = "0.0.82";
+  version = "0.0.89";
   unstructured_api_nltk_data = python3.pkgs.nltk.dataDir (d: [
     d.punkt
     d.averaged-perceptron-tagger
@@ -158,7 +158,7 @@ stdenvNoCC.mkDerivation {
     owner = "Unstructured-IO";
     repo = "unstructured-api";
     rev = version;
-    hash = "sha256-mvcARpewqC25x3ZdpM8QB7SjbqGoBL/rtxi90KdKdO8=";
+    hash = "sha256-FxWOR13wZwowZny2t4Frwl+cLMv+6nkHxQm9Xc4Y9Kw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -181,11 +181,11 @@ stdenvNoCC.mkDerivation {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "open-source toolkit designed to make it easy to prepare unstructured data like PDFs, HTML and Word Documents for downstream data science tasks";
+  meta = {
+    description = "Open-source toolkit designed to make it easy to prepare unstructured data like PDFs, HTML and Word Documents for downstream data science tasks";
     homepage = "https://github.com/Unstructured-IO/unstructured-api";
     changelog = "https://github.com/Unstructured-IO/unstructured-api/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

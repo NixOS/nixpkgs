@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sectools" ];
 
   meta = with lib; {
-    description = "library containing functions to write security tools";
+    description = "Library containing functions to write security tools";
     homepage = "https://github.com/p0dalirius/sectools";
     changelog = "https://github.com/p0dalirius/sectools/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Only ];

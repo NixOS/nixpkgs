@@ -29,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  postPatch = ''
+    # GTest needs C++17
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/15 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'std=c++14' 'std=c++17'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

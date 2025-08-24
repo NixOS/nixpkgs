@@ -4,23 +4,25 @@
   fetchFromGitLab,
   imagemagick,
   inkscape,
+  jq,
   xcursorgen,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hackneyed";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitLab {
     owner = "Enthymeme";
     repo = "hackneyed-x11-cursors";
     rev = version;
-    hash = "sha256-+7QtHgBuhJtQejiHeZ+QoedJo24LqSY51XRVLv9Ho2g=";
+    hash = "sha256-gq+qBYm15satH/XXK1QYDVu2L2DvZ+2aYg/wDqncwmA=";
   };
 
   nativeBuildInputs = [
     imagemagick
     inkscape
+    jq
     xcursorgen
   ];
 
@@ -33,6 +35,7 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [
     "INKSCAPE=inkscape"
     "INSTALL=install"
+    "JQ=jq"
     "PREFIX=$(out)"
     "VERBOSE=1"
     "XCURSORGEN=xcursorgen"
@@ -50,11 +53,11 @@ stdenvNoCC.mkDerivation rec {
         --replace 'inkscape-version: $(INKSCAPE)' 'inkscape-version:'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/Enthymeme/hackneyed-x11-cursors";
     description = "Scalable cursor theme that resembles Windows 3.x/NT 3.x cursors";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ somasis ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ somasis ];
   };
 }

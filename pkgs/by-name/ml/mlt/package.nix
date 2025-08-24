@@ -32,8 +32,6 @@
   python3,
   swig,
   qt ? null,
-  enableSDL1 ? stdenv.hostPlatform.isLinux,
-  SDL,
   enableSDL2 ? true,
   SDL2,
   gitUpdater,
@@ -47,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-z1bW+hcVeMeibC1PUS5XNpbkNB+75YLoOWZC2zuDol4=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
@@ -55,82 +53,75 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      which
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ]
-    ++ lib.optionals enablePython [
-      python3
-      swig
-    ]
-    ++ lib.optionals (qt != null) [
-      qt.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    which
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    swig
+  ]
+  ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      (opencv4.override { inherit ffmpeg; })
-      ffmpeg
-      fftw
-      frei0r
-      libdv
-      libjack2
-      libsamplerate
-      libvorbis
-      libxml2
-      movit
-      rtaudio
-      rubberband
-      sox
-      vid-stab
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals enableJackrack [
-      glib
-      ladspa-sdk
-      ladspaPlugins
-    ]
-    ++ lib.optionals (qt != null) [
-      qt.qtbase
-      qt.qtsvg
-      (qt.qt5compat or null)
-      libarchive
-    ]
-    ++ lib.optionals enableSDL1 [
-      SDL
-      libX11
-    ]
-    ++ lib.optionals enableSDL2 [
-      SDL2
-      libX11
-    ];
+  buildInputs = [
+    (opencv4.override { inherit ffmpeg; })
+    ffmpeg
+    fftw
+    frei0r
+    libdv
+    libjack2
+    libsamplerate
+    libvorbis
+    libxml2
+    movit
+    rtaudio
+    rubberband
+    sox
+    vid-stab
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ]
+  ++ lib.optionals enableJackrack [
+    glib
+    ladspa-sdk
+    ladspaPlugins
+  ]
+  ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
+    libarchive
+  ]
+  ++ lib.optionals enableSDL2 [
+    SDL2
+    libX11
+  ];
 
   outputs = [
     "out"
     "dev"
   ];
 
-  cmakeFlags =
-    [
-      # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
-      "-DMOD_OPENCV=ON"
-    ]
-    ++ lib.optionals enablePython [
-      "-DSWIG_PYTHON=ON"
-    ]
-    ++ lib.optionals (qt != null) [
-      "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
-      "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
-    ];
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
+  ]
+  ++ lib.optionals enablePython [
+    "-DSWIG_PYTHON=ON"
+  ]
+  ++ lib.optionals (qt != null) [
+    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
+    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
+  ];
 
   preFixup = ''
     wrapProgram $out/bin/melt \

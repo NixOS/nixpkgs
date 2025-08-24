@@ -8,12 +8,15 @@
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  freezegun,
   pycognito,
   pyjwt,
   pytest-aiohttp,
+  pytest-socket,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  sentence-stream,
   setuptools,
   snitun,
   syrupy,
@@ -23,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.96.0";
+  version = "0.111.2";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -32,12 +35,16 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-U6rxX1VgSpOkmd/kyf2thYF/0TtsguWbVxXaeuq/wvs=";
+    hash = "sha256-64DdjyzeeYI9u8hYP7CwZvLhCcCzztti2DshvtYcxNQ=";
   };
 
-  pythonRelaxDeps = [ "acme" ];
-
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+    "josepy"
+    "snitun"
+  ];
 
   dependencies = [
     acme
@@ -48,16 +55,24 @@ buildPythonPackage rec {
     cryptography
     pycognito
     pyjwt
+    sentence-stream
     snitun
     webrtc-models
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-aiohttp
+    pytest-socket
     pytest-timeout
     pytestCheckHook
     syrupy
     xmltodict
+  ];
+
+  disabledTests = [
+    # mock time 10800s (3h) vs 43200s (12h)
+    "test_subscription_reconnection_handler_renews_and_starts"
   ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];

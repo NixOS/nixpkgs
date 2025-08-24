@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARm81++VByh/erog1aDQTOaxd60M9OuTbJGdgHx24pw=";
+    hash = "sha256-6LBTUb6kCR/oSyIhiVADSz+oE2xLSY5GKxUQ4HcDFJk=";
   };
 
   postPatch = ''
@@ -40,8 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-O+1ARimSN26geZanLV5E94vnZk0HsE4pyjNS3dADg8Y=";
+  cargoHash = "sha256-s6gXinH706tAxDyHrhPV4u+Z1tbLvBOhI1JhdiwrHG8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -114,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "rebuilderd";
   };
 })

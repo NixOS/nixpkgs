@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication {
   pname = "av-98";
   version = "1.0.2dev";
+  format = "setuptools";
 
   src = fetchgit {
     url = "https://tildegit.org/solderpunk/AV-98.git";

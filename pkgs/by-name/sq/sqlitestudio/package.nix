@@ -8,6 +8,9 @@
   python3,
   copyDesktopItems,
   makeDesktopItem,
+
+  sqlitestudio-plugins,
+  includeOfficialPlugins ? lib.meta.availableOn stdenv.hostPlatform sqlitestudio-plugins,
 }:
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";
@@ -20,28 +23,34 @@ stdenv.mkDerivation rec {
     hash = "sha256-nGu1MYI3uaQ/3rc5LlixF6YEUU+pUsB6rn/yjFDGYf0=";
   };
 
-  nativeBuildInputs =
-    [ copyDesktopItems ]
-    ++ (with libsForQt5.qt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ (with libsForQt5.qt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      readline
-      tcl
-      python3
-    ]
-    ++ (with libsForQt5.qt5; [
-      qtbase
-      qtsvg
-      qtdeclarative
-      qtscript
-    ]);
+  buildInputs = [
+    readline
+    tcl
+    python3
+  ]
+  ++ (with libsForQt5.qt5; [
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtscript
+  ]);
 
-  qmakeFlags = [ "./SQLiteStudio3" ];
+  qmakeFlags = [
+    "./SQLiteStudio3"
+    "DEFINES+=NO_AUTO_UPDATES"
+  ]
+  ++ lib.optionals includeOfficialPlugins [
+    "DEFINES+=PLUGINS_DIR=${sqlitestudio-plugins}/lib/sqlitestudio"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -67,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free, open source, multi-platform SQLite database manager";
     homepage = "https://sqlitestudio.pl/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     mainProgram = "sqlitestudio";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ asterismono ];

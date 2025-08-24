@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-7mApZj3Ksy8Av0W+0+UZQCkH281bSBd4xo8/7JowmHs=";
-  cargoDepsName = finalAttrs.pname;
+  cargoDepsName = "geoclock";
 
   meta = {
     description = "Displays time as calculated by your longitude";

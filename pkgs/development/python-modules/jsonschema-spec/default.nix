@@ -15,6 +15,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   responses,
 }:
 
@@ -33,8 +34,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/^--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
   '';
@@ -54,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     responses
   ];
 

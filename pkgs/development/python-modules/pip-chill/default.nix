@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pip_chill" ];
 
   meta = {
-    description = "A more relaxed `pip freeze`";
+    description = "More relaxed `pip freeze`";
     homepage = "https://github.com/rbanffy/pip-chill";
     changelog = "https://github.com/rbanffy/pip-chill/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;

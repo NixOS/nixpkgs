@@ -3,7 +3,7 @@
 # requires the CUDA toolkit (via nvcc) to be available.
 #
 # This means that if you plan to use flashinfer, you will need to set the
-# environment varaible `CUDA_HOME` to `cudatoolkit`.
+# environment variable `CUDA_HOME` to `cudatoolkit`.
 {
   lib,
   config,
@@ -19,25 +19,26 @@
 
 let
   pname = "flashinfer";
-  version = "0.2.5";
+  version = "0.2.9";
 
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     # Using the revision obtained in submodule inside flashinfer's `3rdparty`.
-    rev = "df8a550d3917b0e97f416b2ed8c2d786f7f686a3";
+    tag = "v${version}";
     hash = "sha256-d4czDoEv0Focf1bJHOVGX4BDS/h5O7RPoM/RrujhgFQ=";
   };
 
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${version}";
-    hash = "sha256-YrYfatkI9DQkFEEGiF8CK/bTafaNga4Ufyt+882C0bQ=";
+    hash = "sha256-M0q6d+EpuTehbw68AQ73Fhwmw2tzjymYjSXaol9QC7Y=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +78,7 @@ buildPythonPackage {
   preConfigure = ''
     export FLASHINFER_ENABLE_AOT=1
     export TORCH_NVCC_FLAGS="--maxrregcount=64"
+    export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
   TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;

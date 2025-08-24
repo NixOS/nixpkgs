@@ -16,18 +16,18 @@
 
 buildGoModule rec {
   pname = "v2ray-core";
-  version = "5.32.0";
+  version = "5.38.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    hash = "sha256-8EnJZvcioNJbNHQYbnYEVZnpxNIb8ObhmkqYmisdYIc=";
+    hash = "sha256-vx0ttx7ACbgTeP7JCb+VHHBwPS97RVK9tZJaxf/bIyQ=";
   };
 
   # `nix-update` doesn't support `vendorHash` yet.
   # https://github.com/Mic92/nix-update/pull/95
-  vendorHash = "sha256-wENi5VgY/pzYlw0CcWAKHAI2M6qfxf2XFAnAJU63YXk=";
+  vendorHash = "sha256-P/QWkUXJPHHndN2yEVYl3mq55Vi5/ayNwMtDHyQygdQ=";
 
   ldflags = [
     "-s"
@@ -70,6 +70,9 @@ buildGoModule rec {
     description = "Platform for building proxies to bypass network restrictions";
     mainProgram = "v2ray";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ servalcatty ];
+    maintainers = with lib.maintainers; [
+      servalcatty
+      ryan4yin
+    ];
   };
 }

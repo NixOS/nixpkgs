@@ -1,15 +1,22 @@
+# Evaluates all the accessible paths in nixpkgs.
+# *This only builds on Linux* since it requires the Linux sandbox isolation to
+# be able to write in various places while evaluating inside the sandbox.
+#
+# This file is used by nixpkgs CI (see .github/workflows/eval.yml) as well as
+# being used directly as an entry point in Lix's CI (in `flake.nix` in the Lix
+# repo).
+#
+# If you know you are doing a breaking API change, please ping the nixpkgs CI
+# maintainers and the Lix maintainers (`nix eval -f . lib.teams.lix`).
 {
   callPackage,
   lib,
   runCommand,
   writeShellScript,
-  writeText,
   symlinkJoin,
-  time,
-  procps,
-  nixVersions,
+  busybox,
   jq,
-  python3,
+  nix,
 }:
 
 let
@@ -23,6 +30,7 @@ let
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
           ".version"
@@ -30,8 +38,6 @@ let
         ]
       );
     };
-
-  nix = nixVersions.latest;
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
@@ -42,9 +48,10 @@ let
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           nix
-          time
         ];
       }
       ''
@@ -58,8 +65,7 @@ let
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --option eval-system "${evalSystem}" \
-            --arg enableWarnings false > $out/paths.json
+            --option eval-system "${evalSystem}" > $out/paths.json
       '';
 
   singleSystem =
@@ -67,11 +73,11 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem,
+      evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       checkMeta ? true,
 
       # Don't try to eval packages marked as broken.
@@ -93,7 +99,7 @@ let
         set +e
         command time -o "$outputDir/timestats/$myChunk" \
           -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          nix-env -f "${nixpkgs}/pkgs/top-level/release-outpaths-parallel.nix" \
           --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
@@ -126,15 +132,17 @@ let
     in
     runCommand "nixpkgs-eval-${evalSystem}"
       {
-        nativeBuildInputs = [
-          nix
-          time
-          procps
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           jq
+          nix
         ];
         env = {
           inherit evalSystem chunkSize;
         };
+        __structuredAttrs = true;
+        unsafeDiscardReferences.out = true;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -155,14 +163,14 @@ let
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
-            echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
+            availMemory=$(free -m | grep Mem | awk '{print $7}')
+            freeSwap=$(free -m | grep Swap | awk '{print $4}')
+            echo "Available memory: $(( availMemory )) MiB, free swap: $(( freeSwap )) MiB"
 
             if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
               echo "$availMemory" > $out/${evalSystem}/min-avail-memory
             fi
-            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( availMemory < $(<$out/${evalSystem}/min-free-swap) )); then
+            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( freeSwap < $(<$out/${evalSystem}/min-free-swap) )); then
               echo "$freeSwap" > $out/${evalSystem}/min-free-swap
             fi
             sleep 4
@@ -201,7 +209,8 @@ let
     }:
     runCommand "combined-eval"
       {
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
           jq
         ];
       }
@@ -213,7 +222,8 @@ let
           reduce .[] as $item ({}; {
             added: (.added + $item.added),
             changed: (.changed + $item.changed),
-            removed: (.removed + $item.removed)
+            removed: (.removed + $item.removed),
+            rebuilds: (.rebuilds + $item.rebuilds)
           })
         ' > $out/combined-diff.json
 

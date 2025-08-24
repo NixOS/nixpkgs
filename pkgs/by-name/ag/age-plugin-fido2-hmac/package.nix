@@ -29,7 +29,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-fido2-hmac";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DQVNUvKUyx1MUpWy5TeL1FYM5s8eeoNnNjKYozVgAxE=";
   };
 

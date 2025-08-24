@@ -2,6 +2,8 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  boto3,
+  botocore,
   certifi,
   cffi,
   charset-normalizer,
@@ -11,6 +13,7 @@
   filelock,
   idna,
   keyring,
+  numpy,
   packaging,
   pandas,
   platformdirs,
@@ -30,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.14.0";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +42,7 @@ buildPythonPackage rec {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-r3g+eVVyK9t5qpAGvimapuWilAh3eHJEFUw8VBwtKw8=";
+    hash = "sha256-mow8TxmkeaMkgPTLUpx5Gucn4347gohHPyiBYjI/cDs=";
   };
 
   build-system = [
@@ -49,6 +52,8 @@ buildPythonPackage rec {
 
   dependencies = [
     asn1crypto
+    boto3
+    botocore
     certifi
     cffi
     charset-normalizer
@@ -83,6 +88,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    numpy
     pytest-xdist
     pytestCheckHook
   ];
@@ -100,6 +106,9 @@ buildPythonPackage rec {
     "test/unit/test_ocsp.py"
     "test/unit/test_retry_network.py"
     "test/unit/test_s3_util.py"
+    # AssertionError: /build/source/.wiremock/wiremock-standalone.jar does not exist
+    "test/unit/test_programmatic_access_token.py"
+    "test/unit/test_oauth_token.py"
   ];
 
   disabledTests = [
@@ -118,7 +127,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kcl";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-9QPGQ8PfXtb37RIrfqLeezobmXSpgvYzxJOWldmgnyc=";
+    hash = "sha256-LJ+Mclw/dMyOeUHg6TAckSbvDGFYCf6mMGzDmiIQVZc=";
   };
 
-  vendorHash = "sha256-zToyM20ykPAd+EHwSUsX+4BvBPT8iXk5suGK2ZYBjvc=";
+  vendorHash = "sha256-jNQ0g7BGXUoYKV5RkU/f9GrSC3ygeZv83SekAmyKLxc=";
 
   subPackages = [ "cmd/kcl" ];
 
@@ -63,7 +63,7 @@ buildGoModule rec {
   updateScript = nix-update-script { };
 
   meta = {
-    description = "A command line interface for KCL programming language";
+    description = "Command line interface for KCL programming language";
     changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;

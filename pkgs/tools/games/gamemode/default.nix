@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FeralInteractive";
     repo = "gamemode";
     tag = finalAttrs.version;
-    hash = "sha256-JkDFhFLUHlgD6RKxlxMjrSF2zQ4AWmRUQMLbWYwIZmg=";
+    hash = "sha256-V0rewbSVOGFqJqXyCz4jXpuDM0EfjdkpGPl+WdDwI5I=";
   };
 
   outputs = [

@@ -18,7 +18,7 @@ in
     # let the system boot up
     machine.wait_for_unit("multi-user.target")
     # test whether the database is running
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     # test whether the actual hydra daemons are running
     machine.wait_for_unit("hydra-init.service")
     machine.require_unit_state("hydra-queue-runner.service")

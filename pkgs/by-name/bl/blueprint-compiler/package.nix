@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FnMQtqy+uejWn3tDeaj92h2x9TzyiK5KdlRm55ObgPg=";
+    hash = "sha256-3vAFkP/psM/IsFtzVOIVSU77Z+RV4d3N70U7ggrDqfo=";
   };
 
   postPatch = ''

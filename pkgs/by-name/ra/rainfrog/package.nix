@@ -7,7 +7,7 @@
   rainfrog,
 }:
 let
-  version = "0.3.1";
+  version = "0.3.5";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -17,11 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "achristmascarl";
     repo = "rainfrog";
     tag = "v${version}";
-    hash = "sha256-sUZnHlTxOz0j2KsWi/qaI5MYT0mkANn6deH54TS/JYw=";
+    hash = "sha256-XLub56L26HHRW1UoNOT/wY1j85dJyaFDmmESGgzUank=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wgJWPlURS2DxcRMzDEAXa50nQswcjbe0zj2QgF0HZys=";
+  cargoHash = "sha256-ZDO6wDp3t+/uoQdQR9AROjyVOLZ6Jc/gvXjHQCWDtog=";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${version}";
-    description = "A database management TUI for postgres";
+    description = "Database management TUI for postgres";
     homepage = "https://github.com/achristmascarl/rainfrog";
     license = lib.licenses.mit;
     mainProgram = "rainfrog";

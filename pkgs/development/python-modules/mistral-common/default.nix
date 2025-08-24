@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.4";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mistral_common";
     inherit version;
-    hash = "sha256-CvQSSrCdFAl2HpHsYWgUdogtRvlBjuqJCNOcASIuD2s=";
+    hash = "sha256-DRl52CIntiX21xs8goF28FnajQ9aMwfN9TtIQJo5cKQ=";
   };
 
   pythonRelaxDeps = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mistral_common" ];
 
   meta = with lib; {
-    description = "mistral-common is a set of tools to help you work with Mistral models.";
+    description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
     license = licenses.asl20;
     maintainers = with maintainers; [ bgamari ];

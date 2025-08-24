@@ -10,6 +10,7 @@
   pulseaudio,
   writeShellScriptBin,
   gclient2nix,
+  rustc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec python3 "$@"
     '')
     python3
+    rustc
     pkg-config
     gclient2nix.gclientUnpackHook
   ];
@@ -34,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     alsa-lib
     pulseaudio
+  ];
+
+  patches = [
+    ./webrtc-fix-gcc-build.patch
   ];
 
   postPatch = ''
@@ -57,8 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     "use_sysroot=false"
     "is_clang=false"
     "treat_warnings_as_errors=false"
+    "use_llvm_libatomic=false"
 
-    # https://github.com/signalapp/ringrtc/blob/main/bin/build-electron
+    # https://github.com/signalapp/ringrtc/blob/main/bin/build-desktop
     "rtc_build_examples=false"
     "rtc_build_tools=false"
     "rtc_use_x11=false"
@@ -70,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     "symbol_level=1"
     "rtc_include_tests=false"
     "rtc_enable_protobuf=false"
+
+    ''rust_sysroot_absolute="${rustc}"''
   ];
   ninjaFlags = [ "webrtc" ];
 

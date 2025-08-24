@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+qY0BG3XNCm5vm5W6VX4a0JWCb4JSat/oK9GLXRis/M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/y+9EA3PhyI5iqg2wM0ny41nBDJiKnsjvbmPfCe5RJk=";
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       sciencentistguy
     ];

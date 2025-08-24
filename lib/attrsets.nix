@@ -509,7 +509,7 @@ rec {
 
     `nameList`
 
-    : The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+    : The list of attributes to fetch from `set`. Each attribute name must exist on the attribute set
 
     `set`
 
@@ -632,6 +632,16 @@ rec {
     `pred`
 
     : Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
+
+      <!-- TIP -->
+      If possible, decide on `name` first and on `value` only if necessary.
+      This avoids evaluating the value if the name is already enough, making it possible, potentially, to have the argument reference the return value.
+      (Depending on context, that could still be considered a self reference by users; a common pattern in Nix.)
+
+      <!-- TIP -->
+      `filterAttrs` is occasionally the cause of infinite recursion in configuration systems that allow self-references.
+      To support the widest range of user-provided logic, perform the `filterAttrs` call as late as possible.
+      Typically that's right before using it in a derivation, as opposed to an implicit conversion whose result is accessible to the user's expressions.
 
     `set`
 
@@ -1163,7 +1173,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (path: x: x.name)
       attrs
     ```
     :::
@@ -1747,7 +1757,7 @@ rec {
 
   /**
     Get the first of the `outputs` provided by the package, or the default.
-    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    This function is aligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
     Like `getOutput`, the function is idempotent.
 
     # Inputs

@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/kclvm";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eJ3Gh2l6T2DxJRQRHamPOr/ILtzsqFB497DdXVJ90RE=";
 
   buildInputs = [ rustc ];
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   meta = with lib; {
-    description = "A high-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
+    description = "High-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
     homepage = "https://github.com/kcl-lang/kcl";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;

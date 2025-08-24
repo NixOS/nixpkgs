@@ -20,21 +20,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-pNc/SWAtQWMbB2+lIQkJdBYSZ97iJXK71mS59qQa7Hs=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
-    ghostscript
     poppler
-    texlive.combined.scheme-minimal
   ];
 
-  postPatch = ''
-    touch config.rpath
-  '';
-
   doCheck = true;
+
+  nativeCheckInputs = [
+    ghostscript
+    texlive.combined.scheme-minimal
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/trueroad/extractpdfmark";

@@ -2,20 +2,10 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super:
-let
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in
-{
+self: super: {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
@@ -92,7 +82,8 @@ in
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
     testFlags = [
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
@@ -148,6 +139,12 @@ in
     hlint
     stylish-haskell
     ;
+
+  # directory-ospath-streaming requires the ospath API in core packages
+  # filepath, directory and unix.
+  stan = super.stan.override {
+    directory-ospath-streaming = null;
+  };
 
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)

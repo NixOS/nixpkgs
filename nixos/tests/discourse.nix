@@ -4,9 +4,9 @@
 #  3. replying to that message via email.
 
 {
+  lib,
   package,
   pkgs,
-  lib,
   ...
 }:
 let
@@ -25,8 +25,6 @@ in
 {
   name = "discourse";
   meta.maintainers = with lib.maintainers; [ talyz ];
-
-  _module.args.package = lib.mkDefault pkgs.discourse;
 
   nodes.discourse =
     { nodes, ... }:
@@ -62,7 +60,7 @@ in
 
       services.discourse = {
         enable = true;
-        inherit admin;
+        inherit admin package;
         hostname = discourseDomain;
         sslCertificate = "${certs.${discourseDomain}.cert}";
         sslCertificateKey = "${certs.${discourseDomain}.key}";
@@ -107,13 +105,13 @@ in
 
       services.postfix = {
         enable = true;
-        origin = clientDomain;
-        relayDomains = [ clientDomain ];
-        config = {
+        settings.main = {
           compatibility_level = "2";
-          smtpd_banner = "ESMTP server";
+          mydestination = [ clientDomain ];
           myhostname = clientDomain;
-          mydestination = clientDomain;
+          origin = clientDomain;
+          relay_domains = [ clientDomain ];
+          smtpd_banner = "ESMTP server";
         };
       };
 

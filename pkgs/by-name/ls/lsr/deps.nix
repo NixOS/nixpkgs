@@ -8,11 +8,11 @@
 
 linkFarm "zig-packages" [
   {
-    name = "ourio-0.0.0-_s-z0asOAgAhpi7gSpLLvWGj_4XURez4W9TWN6SGs5BP";
+    name = "ourio-0.0.0-_s-z0dAWAgD3XNod2pTh0H8X-a3CjtpAwduh7jcgBz0G";
     path = fetchgit {
       url = "https://github.com/rockorager/ourio";
-      rev = "54c1a1ed8d0994636770e5185ecdb59fe6d8535e";
-      hash = "sha256-WnNfO51t3Qc5LmeDOB6MVrsaUWR41mGuwbO5t5sCtwE=";
+      rev = "ed8a67650e5dbb0a6dca811c9d769187e306ad94";
+      hash = "sha256-GbfZyzbjkVAcOECjQFWkDRw6QZr+kPXzadaI7xBSkig=";
     };
   }
   {

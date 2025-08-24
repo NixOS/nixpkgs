@@ -9,20 +9,17 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "139.0.1";
+  version = "142.0";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "78ae10fc14900eb1273b7ff798a159504f68166c39b1f12ef9ea04243debc78472c24499da01641590feb5d2b28475131d2ec94d6f28fd4f2f644a721f7f40ba";
+    sha512 = "b0c1c766083a30a92b77dcf16a584d9fb341cd811d21c3a34da4cd0d714fd6adc73b608092d66058697bc4562faacc44859153e49ffdeb6e14e059e59f2ea246";
   };
 
   meta = {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Web browser built from Firefox source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
-    maintainers = with lib.maintainers; [
-      lovesegfault
-      hexa
-    ];
+    maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
     # since Firefox 60, build on 32-bit platforms fails with "out of memory".

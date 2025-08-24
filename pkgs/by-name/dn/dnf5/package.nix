@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -34,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.13.1";
+  version = "5.2.16.0";
 
   outputs = [
     "out"
@@ -45,24 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-Qt3G4jsJNk7iMOWliGjyR2dOGpWANVtZFeYwlsYbFrw=";
+    hash = "sha256-k71UKcKF5IdK96Q3TnAwFGoTRYmTlSO2kkPD54Bd9s8=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      createrepo_c
-      doxygen
-      gettext
-      help2man
-      pkg-config
-      sphinx
-    ]
-    ++ (with python3Packages; [
-      breathe
-      sphinx-autoapi
-      sphinx-rtd-theme
-    ]);
+  nativeBuildInputs = [
+    cmake
+    createrepo_c
+    doxygen
+    gettext
+    help2man
+    pkg-config
+    sphinx
+  ]
+  ++ (with python3Packages; [
+    breathe
+    sphinx-autoapi
+    sphinx-rtd-theme
+  ]);
 
   buildInputs = [
     appstream

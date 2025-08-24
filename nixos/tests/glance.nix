@@ -80,5 +80,5 @@
     assert location == "Nivelles, Belgium"
   '';
 
-  meta.maintainers = [ lib.maintainers.drupol ];
+  meta.maintainers = [ ];
 }

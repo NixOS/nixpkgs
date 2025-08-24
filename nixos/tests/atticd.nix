@@ -78,7 +78,7 @@ in
           s3.wait_for_unit("minio.service")
           s3.wait_for_open_port(9000)
           s3.succeed(
-              "mc config host add minio "
+              "mc alias set minio "
               + "http://localhost:9000 "
               + "${accessKey} ${secretKey} --api s3v4",
               "mc mb minio/attic",

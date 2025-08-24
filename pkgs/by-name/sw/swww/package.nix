@@ -13,19 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.10.0-unstable-2025-05-27";
+  version = "0.10.3";
 
-  # Fixes build for locating wayland.xml, go back to regular tagged releases at next version bump
-  # https://codeberg.org/LGFae/waybackend/issues/2
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
-    rev = "800619eb70c0f4293a5b449103f55a0a3cfe2963";
-    hash = "sha256-zkw1r2mmICkplgXTyN6GckTy0XEBAEoz4H1VQuP8eMU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GXqXZn29r7ktL01KBzlPZ+9b1fdnAPF8qhsQxhiqAsQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-L2mbQJ0dAiB8+NOATnrPhVrjHvE5zjA1frhPbLUJ3sI=";
+  cargoHash = "sha256-jCjeHeHML8gHtvFcnHbiGL5fZ3LhABhXrcUTQriUDc0=";
 
   buildInputs = [
     lz4

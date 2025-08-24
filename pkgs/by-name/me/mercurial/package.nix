@@ -65,18 +65,17 @@ let
       lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs =
-      [
-        makeWrapper
-        gettext
-        installShellFiles
-        setuptools
-      ]
-      ++ lib.optionals rustSupport [
-        rustPlatform.cargoSetupHook
-        cargo
-        rustc
-      ];
+    nativeBuildInputs = [
+      makeWrapper
+      gettext
+      installShellFiles
+      setuptools
+    ]
+    ++ lib.optionals rustSupport [
+      rustPlatform.cargoSetupHook
+      cargo
+      rustc
+    ];
     buildInputs = [ docutils ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";

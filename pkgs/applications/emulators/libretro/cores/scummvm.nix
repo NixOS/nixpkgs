@@ -25,13 +25,13 @@ let
 in
 mkLibretroCore {
   core = "scummvm";
-  version = "0-unstable-2025-05-23";
+  version = "0-unstable-2025-07-03";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "scummvm";
-    rev = "e566a6432fd1951417bf78280cc7c741957fc419";
-    hash = "sha256-K78lyq1v3v55CCFLVAJStvfPltfkoGE9tj39gwPgZ44=";
+    rev = "686cdd13719b92554fa46b264c512ca7deec7a96";
+    hash = "sha256-3w1rYVPX7ENGUgKdrFRQShWoEXfagxdtzd98m1hKeYU=";
   };
 
   extraBuildInputs = [

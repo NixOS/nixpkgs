@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.4.0rc2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-I25qAJEryYaYO7KIVIoTlgzLS6PWkNG6b4NFyhghyKQ=";
+    hash = "sha256-Ekyavcin13B4DAxv0/XG5QTBuLE7PRospAXe40fHeX0=";
   };
 
   build-system = [
@@ -66,9 +66,10 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ] ++ optional-dependencies.botocore;
+  ]
+  ++ optional-dependencies.botocore;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # pystac href error (possible related to network)
@@ -85,9 +86,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Load STAC items into xarray Datasets.";
+    description = "Load STAC items into xarray Datasets";
     homepage = "https://github.com/opendatacube/odc-stac/";
-    changelog = "https://github.com/opendatacube/odc-stac/tag/v${version}";
+    changelog = "https://github.com/opendatacube/odc-stac/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

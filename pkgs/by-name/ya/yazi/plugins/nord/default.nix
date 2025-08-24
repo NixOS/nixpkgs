@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "nordic yazi";
+    description = "Nordic yazi";
     homepage = "https://github.com/stepbrobd/nord.yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stepbrobd ];

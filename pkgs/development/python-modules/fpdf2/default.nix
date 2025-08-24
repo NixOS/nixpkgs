@@ -10,6 +10,7 @@
   fonttools,
 
   pytestCheckHook,
+  pytest-cov-stub,
   qrcode,
   camelot,
   uharfbuzz,
@@ -18,20 +19,15 @@
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.8.2";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
     tag = version;
-    hash = "sha256-NfHMmyFT+ZpqfRc41DetbFXs/twr12XagOkk3nGhrYk=";
+    hash = "sha256-uLaVRseakLg7Q9QO4F6BM7vQIFeA44ry8cqDfas8oMA=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=fpdf --cov-report=xml" ""
-  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -43,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     qrcode
     camelot
     uharfbuzz
@@ -66,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/py-pdf/fpdf2";
     description = "Simple PDF generation for Python";
-    changelog = "https://github.com/py-pdf/fpdf2/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/fpdf2/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jfvillablanca ];
   };

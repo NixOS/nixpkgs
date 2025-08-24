@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
@@ -21,6 +21,7 @@
   fastapi,
   freezegun,
   instructor,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
@@ -30,21 +31,21 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.22";
+  version = "0.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-6KHiRwz3lR0+w1DHn1HgYK93MP9hvYFgoUvXtEogskA=";
+    hash = "sha256-9CBEVe3FCpqUMtoTQKikgDmSvqqppTPWYrhElPh6UcA=";
   };
 
   sourceRoot = "${src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx
@@ -61,11 +62,13 @@ buildPythonPackage rec {
     fastapi
     freezegun
     instructor
+    opentelemetry-sdk
     pytest-asyncio
     pytest-vcr
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -85,13 +88,12 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # due to circular import
-    "tests/integration_tests/test_client.py"
-    "tests/integration_tests/test_prompts.py"
+    # Circular import
+    "tests/integration_tests/"
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    # Tests require a Langsmith API key
+    # Require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
     # Marked as flaky in source

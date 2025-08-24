@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iroh";
-  version = "0.34.1";
+  version = "0.91.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "iroh";
     rev = "v${version}";
-    hash = "sha256-kOqmkuKOP2dWrUVaGwHckWjaFVZkSoXqqUgn+2KaWkc=";
+    hash = "sha256-eY/w3YBuNPsCDhu58S7cykFCY0ikpMR4RFWHVMjH33Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-O/j+/sRyMtqd4GaER2trn9SEFpZuSlc5q1MTXU+rwLg=";
+  cargoHash = "sha256-tkqomIOOfPSbyNMNJskqZLXdU8uDK91f9IGjhz+q300=";
 
   # Some tests require network access which is not available in nix build sandbox.
   doCheck = false;

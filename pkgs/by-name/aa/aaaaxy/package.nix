@@ -22,17 +22,17 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.6.194";
+  version = "1.6.283";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = "aaaaxy";
-    rev = "v${version}";
-    hash = "sha256-4iL3+GeyOZoZN8IXo0jjSq3hYHKBTpytk8owXMdfACo=";
+    tag = "v${version}";
+    hash = "sha256-OBF5oPWoctosL1uR6/I/uNM3F39d14dmz8TKOxp5FIs=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-XBcrs6G3Kq9WsODegy2KxqSp+qwr+NpdLJLa3qmW9kA=";
+  vendorHash = "sha256-g37+5IquBaRMGw48V/pCsJaeKlGR5a2Hj3NFcrolQ7g=";
 
   buildInputs = [
     alsa-lib
@@ -128,12 +128,12 @@ buildGoModule rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
   };
 }

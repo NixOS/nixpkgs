@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   colcon,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   setuptools,
   scspell,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     scspell
     writableTmpDirAsHomeHook

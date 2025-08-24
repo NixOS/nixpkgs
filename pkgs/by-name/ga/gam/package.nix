@@ -63,13 +63,13 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line management for Google Workspace";
     mainProgram = "gam";
     homepage = "https://github.com/GAM-team/GAM/wiki";
     changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thanegill ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thanegill ];
   };
 
 }

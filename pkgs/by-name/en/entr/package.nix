@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   TARGET_OS = stdenv.hostPlatform.uname.system;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
     changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       pSub
       synthetica
     ];

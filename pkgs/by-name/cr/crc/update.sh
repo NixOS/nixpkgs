@@ -26,7 +26,7 @@ CRC_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 
 CRC_GIT_PREFETCH=$(nix-prefetch-url --unpack https://github.com/crc-org/crc/archive/${CRC_COMMIT}.tar.gz)
-CRC_GIT_HASH=$(nix hash convert --to sri --hash-algo sha256 ${CRC_GIT_PREFETCH})
+CRC_GIT_HASH=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 ${CRC_GIT_PREFETCH})
 
 FILE_MAKEFILE=${WORKDIR}/Makefile
 curl --silent https://raw.githubusercontent.com/crc-org/crc/${CRC_COMMIT}/Makefile >$FILE_MAKEFILE

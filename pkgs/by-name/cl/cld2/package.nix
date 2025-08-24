@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "cld2";
-  version = "unstable-2015-08-21";
+  version = "0-unstable-2015-08-21";
 
   src = fetchFromGitHub {
     owner = "CLD2Owners";

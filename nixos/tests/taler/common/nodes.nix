@@ -55,14 +55,22 @@ rec {
             settings = {
               taler.CURRENCY = CURRENCY;
             };
-            includes = [ ../conf/taler-accounts.conf ];
+            includes = [
+              ../conf/taler-accounts.conf
+              # The exchange requires a token from the bank, so its credentials
+              # need to be set at runtime
+              "/etc/taler/secrets/exchange-account.secret.conf"
+            ];
             exchange = {
               enable = true;
               debug = true;
               openFirewall = true;
+              # https://docs.taler.net/taler-exchange-manual.html#coins-denomination-keys
+              # NOTE: use `taler-harness`, not `taler-wallet-cli`
               denominationConfig = lib.readFile ../conf/taler-denominations.conf;
               settings = {
                 exchange = {
+                  inherit CURRENCY;
                   MASTER_PUBLIC_KEY = "2TQSTPFZBC2MC4E52NHPA050YXYG02VC3AB50QESM6JX1QJEYVQ0";
                   BASE_URL = "http://exchange:8081/";
                 };
@@ -103,7 +111,7 @@ rec {
                 # WIRE_TYPE = "iban";
                 X_TALER_BANK_PAYTO_HOSTNAME = "bank:8082";
                 # IBAN_PAYTO_BIC = "SANDBOXX";
-                BASE_URL = "bank:8082";
+                BASE_URL = "http://bank:8082/";
 
                 # Allow creating new accounts
                 ALLOW_REGISTRATION = "yes";

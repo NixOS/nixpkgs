@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    hash = "sha256-luWcbYCv5OM3aidxiO7glqD+VYnCZMElZYaPKbtvMYI=";
+    hash = "sha256-Y0FMCq4crSbm0tJtYq04ZFwWw+vlfxXKXBo0XUgf7hw=";
   };
 
   postPatch = ''

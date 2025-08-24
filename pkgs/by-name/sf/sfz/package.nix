@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mKH1vgk+3tZEnjJRkfa0dDR383VN1VLNd3HEzC7f8YI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/I0cSnB/HVhJr5qf5dMvawggwM7qHJbnD4InECuKdcA=";
 
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context

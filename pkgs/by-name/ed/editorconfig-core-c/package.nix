@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-c";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-myJNJxKwgmgm+P2MqnYmW8OC0oYcInL+Suyf/xwX9xo=";
     fetchSubmodules = true;
   };

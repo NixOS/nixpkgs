@@ -25,20 +25,21 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.24.1";
+  version = "3.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-t6dqiC9zY3Apcc4F/x5c/QhsNKGBZxIY20a50wCEER8=";
+    hash = "sha256-RqUVG4aIZDAVuKcT41ODKkyEidmschcFaY24P1CjosU=";
   };
 
   pythonRelaxDeps = [
     "botocore"
     "colorama"
     "pathspec"
+    "packaging"
     "PyYAML"
     "six"
     "termcolor"
@@ -54,7 +55,6 @@ python.pkgs.buildPythonApplication rec {
     fabric
     pathspec
     pyyaml
-    future
     requests
     semantic-version
     setuptools
@@ -70,7 +70,7 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit"
   ];
 
@@ -93,12 +93,12 @@ python.pkgs.buildPythonApplication rec {
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

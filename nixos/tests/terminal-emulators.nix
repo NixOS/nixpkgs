@@ -36,8 +36,6 @@ let
 
     darktile.pkg = p: p.darktile;
 
-    deepin-terminal.pkg = p: p.deepin.deepin-terminal;
-
     eterm.pkg = p: p.eterm;
     eterm.executable = "Eterm";
     eterm.pinkValue = "#D40055";
@@ -63,7 +61,7 @@ let
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";
 
-    konsole.pkg = p: p.plasma5Packages.konsole;
+    konsole.pkg = p: p.kdePackages.konsole;
 
     lxterminal.pkg = p: p.lxterminal;
 

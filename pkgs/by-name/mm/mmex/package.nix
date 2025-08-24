@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-gpDwfRKXgp6hEpitflVIAIOU/k3Fx6hKKhyzQvLlog8=";
   };
@@ -35,20 +35,19 @@ stdenv.mkDerivation rec {
       --replace-fail "sqlite3mc_amalgamation.h" "sqlite3.h"
   '';
 
-  nativeBuildInputs =
-    [
-      appstream # for appstreamcli
-      cmake
-      gettext
-      git
-      makeWrapper
-      pkg-config
-      wrapGAppsHook3
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ];
+  nativeBuildInputs = [
+    appstream # for appstreamcli
+    cmake
+    gettext
+    git
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ];
 
   buildInputs = [
     curl

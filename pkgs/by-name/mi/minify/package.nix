@@ -44,13 +44,13 @@ buildGoModule rec {
     installShellCompletion --cmd minify --bash cmd/minify/bash_completion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Go minifiers for web formats";
     homepage = "https://go.tacodewolff.nl/minify";
     downloadPage = "https://github.com/tdewolff/minify";
     changelog = "https://github.com/tdewolff/minify/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "minify";
   };
 }

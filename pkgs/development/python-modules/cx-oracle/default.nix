@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "cx-oracle";
   version = "8.3.0";
+  format = "setuptools";
 
   buildInputs = [ odpic ];
 

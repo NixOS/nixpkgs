@@ -5,7 +5,7 @@
   gobject-introspection,
   gtk3,
   mcomix,
-  python3,
+  python312, # TODO: Revert to python3 when upgrading past 3.1.0
   testers,
   wrapGAppsHook3,
 
@@ -17,7 +17,7 @@
   unrarSupport ? false, # unfree software
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   pname = "mcomix";
   version = "3.1.0";
   pyproject = true;
@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3.pkgs.setuptools
+    python312.pkgs.setuptools
     wrapGAppsHook3
   ];
 
   propagatedBuildInputs =
-    with python3.pkgs;
+    with python312.pkgs;
     [
       pillow
       pycairo

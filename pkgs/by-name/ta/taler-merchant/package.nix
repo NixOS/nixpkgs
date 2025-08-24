@@ -14,6 +14,7 @@
   libgcrypt,
   texinfo,
   curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,6 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  postFixup = ''
+    # - taler-merchant-dbinit expects `versioning.sql` under `share/taler/sql`
+    # - taler-merchant-httpd expects `share/taler/merchant/templates`
+    mkdir -p $out/share/taler/sql
+    ln -s $out/share/taler-merchant $out/share/taler/merchant
+    ln -s $out/share/taler-merchant/sql $out/share/taler/sql/merchant
+  '';
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
@@ -89,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ jq ];
 
   checkTarget = "check";
+
+  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Merchant component for the GNU Taler electronic payment system";

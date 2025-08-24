@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage {
     ./ignore_read-only_filesystem.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Qb0TPpYGDjsqHkI4B8QRz5c9rqZ+H98YjOg5K++zpBg=";
 
   meta = with lib; {

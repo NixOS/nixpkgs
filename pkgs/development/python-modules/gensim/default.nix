@@ -54,13 +54,12 @@ buildPythonPackage rec {
   # Test setup takes several minutes
   doCheck = false;
 
-  pytestFlagsArray = [ "gensim/test" ];
+  enabledTestPaths = [ "gensim/test" ];
 
   meta = with lib; {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
     changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jyp ];
   };
 }

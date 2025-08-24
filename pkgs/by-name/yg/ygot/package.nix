@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ygot";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "ygot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jhPo3K6Q/LcfMkp2jaFwHGoFJSMdBNFidVU3A42Locw=";
+    hash = "sha256-O8nBcXRKKd+dV0jub5tVvG8WoxGMR4r1cqOmTzO+LDU=";
   };
 
-  vendorHash = "sha256-MxyjO/uptmBXz+JWgRcP/SWeEWyz9pNA9eM4Rul45cM=";
+  vendorHash = "sha256-AgSKfy8Dbc5fRhJ2oskmkShL/mHb2FKkGZoqPyagLfE=";
 
   excludedPackages = [
     "demo/*"
@@ -29,23 +29,22 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
+  postInstall = ''
+    # The normal binary names are far too generic
+    mv $out/bin/generator $out/bin/ygot_generator
+    mv $out/bin/proto_generator $out/bin/ygot_proto_generator
+  ''
+  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
     ''
-      # The normal binary names are far too generic
-      mv $out/bin/generator $out/bin/ygot_generator
-      mv $out/bin/proto_generator $out/bin/ygot_proto_generator
+      installShellCompletion --cmd gnmidiff \
+        --bash <(${emulator} $out/bin/gnmidiff completion bash) \
+        --zsh <(${emulator} $out/bin/gnmidiff completion zsh) \
+        --fish <(${emulator} $out/bin/gnmidiff completion fish)
     ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        installShellCompletion --cmd gnmidiff \
-          --bash <(${emulator} $out/bin/gnmidiff completion bash) \
-          --zsh <(${emulator} $out/bin/gnmidiff completion zsh) \
-          --fish <(${emulator} $out/bin/gnmidiff completion fish)
-      ''
-    );
+  );
 
   passthru.updateScript = nix-update-script { };
 

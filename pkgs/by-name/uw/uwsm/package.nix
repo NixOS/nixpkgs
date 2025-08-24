@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.21.4";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/URa5/NK4AowYx933HwKE01191HMRSvuxtDKFKiMQr8=";
+    hash = "sha256-lKPCtlTfIAb7axthl/PUU82cULafYIhZ5xJolFKSOno=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     bash # sh
     systemd
     python
-  ] ++ lib.optionals uuctlSupport [ dmenu ];
+  ]
+  ++ lib.optionals uuctlSupport [ dmenu ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"

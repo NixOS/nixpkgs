@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "362";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.2";
+  scipVersion = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";

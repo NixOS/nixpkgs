@@ -39,7 +39,14 @@ let
     (writeScriptBin "netbox-manage" ''
       #!${stdenv.shell}
       export PYTHONPATH=${pkg.pythonPath}
-      sudo -u netbox ${pkg}/bin/netbox "$@"
+      case "$(whoami)" in
+      "root")
+        ${util-linux}/bin/runuser -u netbox -- ${pkg}/bin/netbox "$@";;
+      "netbox")
+        ${pkg}/bin/netbox "$@";;
+      *)
+        echo "This must be run by either by root 'netbox' user"
+      esac
     '');
 
 in
@@ -102,20 +109,18 @@ in
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "25.05" then
+        if lib.versionAtLeast config.system.stateVersion "25.11" then
+          pkgs.netbox_4_3
+        else if lib.versionAtLeast config.system.stateVersion "25.05" then
           pkgs.netbox_4_2
-        else if lib.versionAtLeast config.system.stateVersion "24.11" then
-          pkgs.netbox_4_1
-        else if lib.versionAtLeast config.system.stateVersion "24.05" then
-          pkgs.netbox_3_7
         else
-          pkgs.netbox_3_6;
+          pkgs.netbox_4_1;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "24.11"
-        then pkgs.netbox_4_1
-        else if lib.versionAtLeast config.system.stateVersion "24.05"
-        then pkgs.netbox_3_7
-        else pkgs.netbox_3_6;
+        if lib.versionAtLeast config.system.stateVersion "25.11"
+        then pkgs.netbox_4_3
+        else if lib.versionAtLeast config.system.stateVersion "25.05"
+        then pkgs.netbox_4_2
+        else pkgs.netbox_4_1;
       '';
       description = ''
         NetBox package to use.
@@ -271,15 +276,14 @@ in
         };
       };
 
-      extraConfig =
-        ''
-          with open("${cfg.secretKeyFile}", "r") as file:
-              SECRET_KEY = file.readline()
-        ''
-        + (lib.optionalString (cfg.keycloakClientSecret != null) ''
-          with open("${cfg.keycloakClientSecret}", "r") as file:
-              SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
-        '');
+      extraConfig = ''
+        with open("${cfg.secretKeyFile}", "r") as file:
+            SECRET_KEY = file.readline()
+      ''
+      + (lib.optionalString (cfg.keycloakClientSecret != null) ''
+        with open("${cfg.keycloakClientSecret}", "r") as file:
+            SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
+      '');
     };
 
     services.redis.servers.netbox.enable = true;

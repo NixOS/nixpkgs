@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
   };
 
-  nativeBuildInputs =
-    [
-      build2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-    ];
+  nativeBuildInputs = [
+    build2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+  ];
 
   patches = [
     # Install missing .h files needed by dependers

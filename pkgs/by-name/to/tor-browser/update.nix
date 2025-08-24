@@ -67,7 +67,7 @@ writeShellScript "update-${pname}" ''
   for platform in ${lib.escapeShellArgs meta.platforms}; do
     arch="''${platforms[$platform]}"
     sha256=$(grep "${name}-$arch-$version.tar.xz" "$HOME/shasums" | head -1 | cut -d" " -f1)
-    hash=$(nix hash to-sri --type sha256 "$sha256")
+    hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256")
 
     update-source-version "${pname}" "$version" "$hash" --ignore-same-version --source-key="sources.$platform"
   done

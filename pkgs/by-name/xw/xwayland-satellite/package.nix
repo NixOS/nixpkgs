@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xwayland-satellite";
-  version = "0.5.1";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
     tag = "v${version}";
-    hash = "sha256-/hBM43/Gd0/tW+egrhlWgOIISeJxEs2uAOIYVpfDKeU=";
+    hash = "sha256-m+9tUfsmBeF2Gn4HWa6vSITZ4Gz1eA1F5Kh62B0N4oE=";
   };
 
   postPatch = ''
@@ -27,8 +27,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1tt7YNornw9U9FRdsRkdWx3Al3FZtvtCBXn9Pln+gk4=";
+  cargoHash = "sha256-2+qQSCyWOtOJ4fTVCHbvHYO+k4vxC2nbEOJMdjQZOgY=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

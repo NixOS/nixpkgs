@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "6.4.1";
+  version = "7.1";
   pyproject = true;
 
   # The GitHub source requires some assets to be compiled, which in turn
@@ -39,12 +39,14 @@ buildPythonPackage rec {
   # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zsPm1JIKbRePoetvSvgLNw/dVXDtkkuXkQThV/EMoJc=";
+    hash = "sha256-4d4q+Ctiy/TTt3qTxVd5vGetezF5trT4JOxPIU1XDAE=";
   };
 
   build-system = [
     setuptools
   ];
+
+  pythonRelaxDeps = [ "django-tasks" ];
 
   dependencies = [
     anyascii
@@ -64,7 +66,8 @@ buildPythonPackage rec {
     requests
     telepath
     willow
-  ] ++ willow.optional-dependencies.heif;
+  ]
+  ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)

@@ -25,13 +25,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      altgraph
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      typing-extensions
-    ];
+  dependencies = [
+    altgraph
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
   # Checks assume to find darwin specific libraries
   doCheck = stdenv.buildPlatform.isDarwin;
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Analyze and edit Mach-O headers, the executable format used by Mac OS X.";
+    description = "Analyze and edit Mach-O headers, the executable format used by Mac OS X";
     homepage = "https://github.com/ronaldoussoren/macholib";
     changelog = "https://github.com/ronaldoussoren/macholib/releases/tag/v${version}";
     license = licenses.mit;

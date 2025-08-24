@@ -1,5 +1,4 @@
 {
-  fetchFromGitHub,
   gnupg,
   gpgme,
   isLuaJIT,
@@ -7,6 +6,7 @@
   libgit2,
   libgpg-error,
   lua,
+  lux-cli,
   nix,
   openssl,
   pkg-config,
@@ -20,22 +20,15 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "lux-lua";
 
-  version = "0.1.6";
+  version = lux-cli.version;
 
-  src = fetchFromGitHub {
-    owner = "nvim-neorocks";
-    repo = "lux";
-    # NOTE: Lux's tags represent the lux-cli version, which may differ from the lux-lua version
-    tag = "v0.5.3";
-    hash = "sha256-iiXPLm05HsenB6I8aLiFjRMkziQ0khlSWvvskvVwuDA=";
-  };
+  src = lux-cli.src;
 
   buildAndTestSubdir = "lux-lua";
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-S3dcjFDVwvdUFpRjHhJRPjEluRxWi+XSxN5mj1WP26A=";
+  cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
     pkg-config
@@ -46,8 +39,11 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    lua
     openssl
+  ];
+
+  propagatedBuildInputs = [
+    lua
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
@@ -63,14 +59,19 @@ rustPlatform.buildRustPackage rec {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
     cargo xtask-${luaFeature} dist
+    mkdir -p $out
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D -v target/dist/${luaVersionDir}/* -t $out/${luaVersionDir}
-    install -D -v target/dist/lib/pkgconfig/* -t $out/lib/pkgconfig
+    cp -r target/dist/share $out
+    cp -r target/dist/lib $out
+    mkdir -p $out/lib/lua
+    ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
     runHook postInstall
   '';
 

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/ayla_iot_unofficial.py" ];
+  enabledTestPaths = [ "tests/ayla_iot_unofficial.py" ];
 
   # tests interact with the actual API
   doCheck = false;

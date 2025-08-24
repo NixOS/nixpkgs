@@ -41,12 +41,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # pydantic.warnings.PydanticDeprecatedSince211: Accessing this attribute on the instance is
     # deprecated, and will be removed in Pydantic V3. Instead, you should access this attribute from
     # the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   meta = {

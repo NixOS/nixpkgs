@@ -17,24 +17,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sndio
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD) libbsd;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD) libbsd;
 
   outputs = [
     "out"
     "man"
   ];
 
-  preBuild =
-    ''
-      makeFlagsArray+=("PREFIX=$out")
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD) ''
-      makeFlagsArray+=(LDADD="-lsndio -lbsd")
+  preBuild = ''
+    makeFlagsArray+=("PREFIX=$out")
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD) ''
+    makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
-      # Fix warning about implicit declaration of function 'strlcpy'
-      substituteInPlace aucatctl.c \
-        --replace '#include <string.h>' '#include <bsd/string.h>'
-    '';
+    # Fix warning about implicit declaration of function 'strlcpy'
+    substituteInPlace aucatctl.c \
+      --replace '#include <string.h>' '#include <bsd/string.h>'
+  '';
 
   meta = with lib; {
     description = "Utility that allows to send MIDI messages to control sndiod and/or aucat volumes";

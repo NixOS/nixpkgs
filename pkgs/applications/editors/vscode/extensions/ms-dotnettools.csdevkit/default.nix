@@ -16,19 +16,19 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-XHx64V8JJl+/kb+kkTowu7mE7ysBRhUQJqicxjbHM3k=";
+        hash = "sha256-1NGZTdAw2VS7txYuyKrpsm0bvLYYpsFZfkLCT5j2MIk=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-Pm3jUARrH8bksiCpYtUvo0UB3Oq67EjJGYLGLV54rl4=";
+        hash = "sha256-7d5tSZOGkmtfaL/IFk7ksFRAOlv58/Jw/N+nhlyJEHE=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-hgd7tpRn2WP0PL4IOpZLL6Uzw1V9rSqlOTDfgFxwWGk=";
+        hash = "sha256-1qinxbsBU5Ot/ce5OcIH9ybhhHoRSHv98Mwr/Piwmis=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-PQPxwwHbLXa5+p/SfH4IFu/OBEa/1CKdfaM+HAegiDA=";
+        hash = "sha256-1LMV1e9xCoXa0UhyUkNFJJ0Nr0xJasPbfYAr6h7l6EE=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -38,7 +38,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csdevkit";
     publisher = "ms-dotnettools";
-    version = "1.19.63";
+    version = "1.41.11";
     inherit (extInfo) hash arch;
   };
   sourceRoot = "extension"; # This has more than one folder.
@@ -121,6 +121,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
             --add-needed libssl.so \
             "$file"
         done
+
+        # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+        mkdir -p "$out/lib"
+        ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
       ''}
     )
   '';

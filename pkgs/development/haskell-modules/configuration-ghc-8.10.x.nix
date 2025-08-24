@@ -133,6 +133,9 @@ self: super: {
 
   hlint = self.hlint_3_4_1;
 
+  # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
+  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+
   mime-string = disableOptimization super.mime-string;
 
   # weeder 2.3.* no longer supports GHC 8.10

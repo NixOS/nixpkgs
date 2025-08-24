@@ -55,12 +55,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/k8s-manifest-sigstore";
     changelog = "https://github.com/sigstore/k8s-manifest-sigstore/releases/tag/v${version}";
     description = "Kubectl plugin for signing Kubernetes manifest YAML files with sigstore";
     mainProgram = "kubectl-sigstore";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

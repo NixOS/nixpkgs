@@ -7,32 +7,33 @@
 }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     rev = "mimir-${version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-75KHS+jIPEvcB7SHBBcBi5uycwY7XR4RNc1khNYVZFE=";
+    hash = "sha256-auA063TveLtfLD7W1/RuN4COljiwKqz0K/l2vwtxPTQ=";
   };
 
   vendorHash = null;
 
-  subPackages =
-    [
-      "cmd/mimir"
-      "cmd/mimirtool"
-    ]
-    ++ (map (pathName: "tools/${pathName}") [
-      "compaction-planner"
-      "copyblocks"
-      "copyprefix"
-      "delete-objects"
-      "list-deduplicated-blocks"
-      "listblocks"
-      "mark-blocks"
-      "undelete-blocks"
-    ]);
+  subPackages = [
+    "cmd/mimir"
+    "cmd/mimirtool"
+  ]
+  ++ (map (pathName: "tools/${pathName}") [
+    "compaction-planner"
+    "copyblocks"
+    "copyprefix"
+    "delete-objects"
+    "list-deduplicated-blocks"
+    "listblocks"
+    "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
+    "undelete-blocks"
+  ]);
 
   passthru = {
     updateScript = nix-update-script {

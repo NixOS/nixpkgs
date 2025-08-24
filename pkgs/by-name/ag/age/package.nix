@@ -21,7 +21,7 @@ buildGoModule (final: {
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    rev = "v${final.version}";
+    tag = "v${final.version}";
     hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
   };
 

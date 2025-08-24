@@ -50,6 +50,7 @@
   kmod,
   libcap,
   libcap_ng,
+  libnbd,
   libnl,
   libxml2,
   lmdb,
@@ -195,6 +196,7 @@ let
     with python.pkgs;
     buildPythonPackage {
       pname = "ceph-common";
+      format = "setuptools";
       inherit src version;
 
       sourceRoot = "ceph-${version}/src/python-common";
@@ -243,8 +245,12 @@ let
           };
           cargoRoot = "src/_bcrypt";
           cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit pname version src;
-            sourceRoot = "${pname}-${version}/${cargoRoot}";
+            inherit
+              pname
+              version
+              src
+              cargoRoot
+              ;
             hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
@@ -355,10 +361,10 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.2";
+  version = "19.2.3";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-7FD9LJs25VzUCRIBm01Cm3ss1YLTN9YLwPZnHSMd8rs=";
+    hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
   };
 in
 rec {
@@ -367,14 +373,6 @@ rec {
     inherit src version;
 
     patches = [
-      (fetchpatch2 {
-        name = "ceph-s3select-arrow-18-compat.patch";
-        url = "https://github.com/ceph/s3select/commit/f333ec82e6e8a3f7eb9ba1041d1442b2c7cd0f05.patch";
-        hash = "sha256-21fi5tMIs/JmuhwPYMWtampv/aqAe+EoPAXZLJlOvgo=";
-        stripLen = 1;
-        extraPrefix = "src/s3select/";
-      })
-
       ./boost-1.85.patch
 
       (fetchpatch2 {
@@ -428,6 +426,7 @@ rec {
         gtest
         icu
         libcap
+        libnbd
         libnl
         libxml2
         lmdb
@@ -546,7 +545,8 @@ rec {
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ] ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     preBuild =
       # The legacy-option-headers target is not correctly empbedded in the build graph.

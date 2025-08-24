@@ -11,18 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeflate";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bucVkRgZdzLe2HFzIP+Trq4+FJ5kLYdIVNUiJ2f52zg=";
+    hash = "sha256-IaXXm9VrZ0Pgb3yTh1fPKkifJDvCxvCfTH08Sdho0Ko=";
   };
 
   cmakeFlags = [
     "-DLIBDEFLATE_BUILD_TESTS=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ zlib ];

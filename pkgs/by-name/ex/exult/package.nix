@@ -18,16 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "exult";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
     rev = "v${version}";
-    hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
+    hash = "sha256-SZwYaqTTWESNRphXefa3JyH988y3WiaIr12yORhiFow=";
   };
 
-  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.10.1/nix/store/...-exult-1.10.1/bin
+  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.12.0/nix/store/...-exult-1.12.0/bin
   postPatch = ''
     substituteInPlace macosx/macosx.am \
       --replace-fail DESTDIR NIX_DESTDIR
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (!enableTools) "--disable-tools";
 
   meta = with lib; {
-    description = "Exult is a project to recreate Ultima VII for modern operating systems";
+    description = "Recreation of Ultima VII for modern operating systems";
     longDescription = ''
       Ultima VII, an RPG from the early 1990's, still has a huge following. But,
       being a DOS game with a very nonstandard memory manager, it is difficult
