@@ -30,11 +30,6 @@ let
     wineBuild = "wineWow";
   };
 
-  wine-xembed = wine-wow64.overrideDerivation (oldAttrs: {
-    patchFlags = [ "-p2" ];
-    patches = [ "${airwave-src}/fix-xembed-wine-windows.patch" ];
-  });
-
 in
 
 multiStdenv.mkDerivation {
@@ -53,7 +48,7 @@ multiStdenv.mkDerivation {
     file
     libX11
     qt5.qtbase
-    wine-xembed
+    wine-wow64
   ];
 
   postPatch = ''
@@ -63,7 +58,7 @@ multiStdenv.mkDerivation {
     # For airwave-host-32.exe.so, point wineg++ to 32-bit versions of
     # these libraries, as $NIX_LDFLAGS contains only 64-bit ones.
     substituteInPlace src/host/CMakeLists.txt --replace '-m32' \
-      '-m32 -L${wine-xembed}/lib -L${wine-xembed}/lib/wine -L${multiStdenv.cc.libc.out}/lib/32'
+      '-m32 -L${wine-wow64}/lib -L${wine-wow64}/lib/wine -L${multiStdenv.cc.libc.out}/lib/32'
   '';
 
   # libstdc++.so link gets lost in 64-bit executables during
@@ -79,8 +74,8 @@ multiStdenv.mkDerivation {
     mv $out/bin $out/libexec
     mkdir $out/bin
     mv $out/libexec/airwave-manager $out/bin
-    wrapProgram $out/libexec/airwave-host-32.exe --set WINELOADER ${wine-xembed}/bin/wine
-    wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${wine-xembed}/bin/wine64
+    wrapProgram $out/libexec/airwave-host-32.exe --set WINELOADER ${wine-wow64}/bin/wine
+    wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${wine-wow64}/bin/wine64
   '';
 
   meta = {
