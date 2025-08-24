@@ -5606,7 +5606,7 @@ let
         };
       };
 
-      zxwy9.evenbettercomments = buildVscodeMarketplaceExtension {
+      zxwy9.evenbettercomments = buildVscodeMarketplaceExtension rec {
         mktplcRef = {
           name = "evenbettercomments";
           publisher = "Tion";
@@ -5616,7 +5616,8 @@ let
         meta = {
           description = "Improve your code commenting by using stylised comments for Alerts, Infos, Warnings, TODOs, and more!";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tion.evenbettercomments";
-          homepage = "";
+          homepage = "https://github.com/Zxynine/EvenBetterComments";
+          changelog = "https://github.com/Zxynine/EvenBetterComments/blob/${mktplcRef.version}/CHANGELOG.md";
           license = lib.licenses.mit;
           maintainers = [ ];
         };
