@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ ncurses5 ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance theorem prover and SMT solver";
     homepage = "https://yices.csl.sri.com";
-    license = licenses.gpl3;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 })
