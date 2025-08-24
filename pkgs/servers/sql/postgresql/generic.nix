@@ -665,8 +665,8 @@ let
             ''
               wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
 
-              mkdir -p "$dev/nix-support"
-              substitute "${lib.getDev postgresql}/nix-support/pg_config.env" "$dev/nix-support/pg_config.env" \
+              mkdir -p "$out/nix-support"
+              substitute "${lib.getDev postgresql}/nix-support/pg_config.env" "$out/nix-support/pg_config.env" \
                 --replace-fail "${postgresql}" "$out" \
                 --replace-fail "${postgresql.man}" "$out"
             '';
@@ -714,7 +714,6 @@ let
             # buildEnv doesn't support passing `outputs`, so going via overrideAttrs.
             outputs = [
               "out"
-              "dev"
             ];
           };
     in
