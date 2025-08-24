@@ -8,7 +8,6 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfium-binaries";
-  # also update rev of headers in python3Packages.pypdfium2
   version = "7363";
 
   src =
