@@ -217,51 +217,12 @@ self: super:
     };
   });
 
-  # Propagate some build inputs because of header file dependencies.
-  # Note: most of these are in Requires.private, so maybe builder.sh
-  # should propagate them automatically.
-  libXt = super.libXt.overrideAttrs (attrs: {
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libSM ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
-    outputDoc = "devdoc";
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-  });
-
-  libICE = super.libICE.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-  });
-
   libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
     outputs = [
       "out"
       "dev"
     ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libXaw = super.libXaw.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
   });
 
   libXdamage = super.libXdamage.overrideAttrs (attrs: {
@@ -318,27 +279,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXmu = super.libXmu.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
-  });
-
-  libSM = super.libSM.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libICE
-      xorg.xtrans
-    ];
-  });
-
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -369,21 +309,6 @@ self: super:
       "out"
       "dev"
     ];
-  });
-
-  libXpm = super.libXpm.overrideAttrs (attrs: {
-    outputs = [
-      "bin"
-      "dev"
-      "out"
-    ]; # tiny man in $bin
-    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
-    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
-    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
-    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
-    meta = attrs.meta // {
-      mainProgram = "sxpm";
-    };
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {

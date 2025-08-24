@@ -11,18 +11,24 @@
   libdmx,
   libfontenc,
   libfs,
+  libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
   libxcvt,
   libxcursor,
   libxdmcp,
   libxext,
   libxfixes,
+  libxmu,
+  libxpm,
   libxrandr,
   libxrender,
+  libxt,
   libxv,
   lndir,
   luit,
@@ -89,15 +95,21 @@ self: with self; {
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
+  libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXmu = libxmu;
+  libXpm = libxpm;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXt = libxt;
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
@@ -1742,80 +1754,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libICE = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xtrans,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libICE";
-      version = "1.1.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libICE-1.1.2.tar.xz";
-        sha256 = "09c656nqkz3dpik012d2cwmd5a2dkxqgjpcq2v3v6pi22ka4wklp";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "ice" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libSM = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      libuuid,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libSM";
-      version = "1.2.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libSM-1.2.6.tar.xz";
-        sha256 = "1gimv11iwzd9gqg345dd8x09szw75v4c2wr5qsdd5gswn6yhlz5y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        libuuid
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "sm" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libWindowsWM = callPackage (
     {
       stdenv,
@@ -1926,53 +1864,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXmu,
-      libXpm,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXaw";
-      version = "1.0.16";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz";
-        sha256 = "13wwqfwaahm6dh35w0nkvw32x3li2s0glsks34ggh267ahmmf7bk";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXmu
-        libXpm
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xaw6"
-          "xaw7"
-        ];
         platforms = lib.platforms.unix;
       };
     })
@@ -2259,49 +2150,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXmu = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXt,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXmu";
-      version = "1.2.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXmu-1.2.1.tar.xz";
-        sha256 = "1cp82iz7yki63iykvb3alwy4nwy01k2axi5rqpyfafca4j9pgcpw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xmu"
-          "xmuu"
-        ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXp = callPackage (
     {
       stdenv,
@@ -2336,50 +2184,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xp" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXpm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      libXt,
-      gettext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXpm";
-      version = "3.5.17";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXpm-3.5.17.tar.xz";
-        sha256 = "0hvf49qy55gwldpwpw7ihcmn5i2iinpjh2rbha63hzcy060izcv4";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        gettext
-      ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xpm" ];
         platforms = lib.platforms.unix;
       };
     })
@@ -2460,46 +2264,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xres" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXt = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libICE,
-      xorgproto,
-      libSM,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXt";
-      version = "1.3.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXt-1.3.1.tar.xz";
-        sha256 = "120jjd6l7fjdxy5myrc1dmc0cwpqa18a97hrbg0d9x146frp99z0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libICE
-        xorgproto
-        libSM
-        libX11
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xt" ];
         platforms = lib.platforms.unix;
       };
     })
