@@ -4689,6 +4689,8 @@ self: super: with self; {
 
   env-canada = callPackage ../development/python-modules/env-canada { };
 
+  environ-config = callPackage ../development/python-modules/environ-config { };
+
   environmental-override = callPackage ../development/python-modules/environmental-override { };
 
   environs = callPackage ../development/python-modules/environs { };
@@ -12417,6 +12419,8 @@ self: super: with self; {
 
   pyairports = callPackage ../development/python-modules/pyairports { };
 
+  pyairtable = callPackage ../development/python-modules/pyairtable { };
+
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyais = callPackage ../development/python-modules/pyais { };
@@ -17371,6 +17375,8 @@ self: super: with self; {
   sslib = callPackage ../development/python-modules/sslib { };
 
   ssort = callPackage ../development/python-modules/ssort { };
+
+  st-pages = callPackage ../development/python-modules/st-pages { };
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
