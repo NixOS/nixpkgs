@@ -41,6 +41,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # numba.core.errors.TypingError: Failed in nopython mode pipeline (step: nopython frontend)
+    "pynndescent/tests/test_pynndescent_.py"
+  ];
+
   pythonImportsCheck = [ "pynndescent" ];
 
   meta = {
