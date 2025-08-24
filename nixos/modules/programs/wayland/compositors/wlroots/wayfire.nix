@@ -62,7 +62,10 @@ in
             ];
           };
         }
-        (import ./wayland-session.nix {
+
+        (import ./wlroots.nix { inherit lib pkgs; })
+
+        (import ../wayland-session.nix {
           inherit lib pkgs;
           enableXWayland = cfg.xwayland.enable;
         })

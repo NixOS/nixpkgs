@@ -337,19 +337,19 @@
   ./programs/vivid.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
-  ./programs/wayland/cardboard.nix
-  ./programs/wayland/dwl.nix
+  ./programs/wayland/compositors/non-wlroots/cardboard.nix
+  ./programs/wayland/compositors/non-wlroots/miracle-wm.nix
+  ./programs/wayland/compositors/non-wlroots/niri.nix
+  ./programs/wayland/compositors/wlroots/dwl.nix
+  ./programs/wayland/compositors/wlroots/hyprland.nix
+  ./programs/wayland/compositors/wlroots/labwc.nix
+  ./programs/wayland/compositors/wlroots/river.nix
+  ./programs/wayland/compositors/wlroots/sway.nix
+  ./programs/wayland/compositors/wlroots/wayfire.nix
   ./programs/wayland/gtklock.nix
-  ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
-  ./programs/wayland/labwc.nix
-  ./programs/wayland/miracle-wm.nix
-  ./programs/wayland/niri.nix
-  ./programs/wayland/river.nix
-  ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
-  ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
