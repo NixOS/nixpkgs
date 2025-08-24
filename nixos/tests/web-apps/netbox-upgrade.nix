@@ -1,8 +1,8 @@
 import ../make-test-python.nix (
   { lib, pkgs, ... }:
   let
-    oldNetbox = "netbox_4_1";
-    newNetbox = "netbox_4_2";
+    oldNetbox = "netbox_4_2";
+    newNetbox = "netbox_4_3";
 
     apiVersion =
       version:
