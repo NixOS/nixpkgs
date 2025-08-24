@@ -198,6 +198,7 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
+  ./programs/dsym.nix
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
   ./programs/environment.nix
