@@ -11,15 +11,16 @@
   cmake,
   curl,
   gdal,
+  gtest,
   hdf5-cpp,
   laszip,
   libe57format,
   libgeotiff,
+  libpq,
   libtiff,
   libxml2,
   openscenegraph,
   pkg-config,
-  libpq,
   proj,
   sqlite,
   tiledb,
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.4";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    hash = "sha256-52v7oDmvq820mJ91XAZI1rQEwssWcHagcd2QNVV6zPA=";
+    hash = "sha256-yknPekBxM0wbKjyPj+aGIUohL1zzG34kiS3d6VmPkz0=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     gdal
+    gtest
     hdf5-cpp
     laszip
     libgeotiff
+    libpq
     libtiff
     libxml2
     openscenegraph
-    libpq
     proj
     sqlite
     tiledb
@@ -118,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Removed in GDAL 3.11
     "pdal_io_gdal_writer_test"
+
+    # Require data to be downloaded from Internet
+    "pdal_io_copc_reader_test"
   ];
 
   nativeCheckInputs = [
