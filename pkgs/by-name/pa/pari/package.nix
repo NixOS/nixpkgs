@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes ];
     teams = [ teams.sage ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "gp";
