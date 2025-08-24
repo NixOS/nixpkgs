@@ -337,7 +337,7 @@ mattermost.overrideAttrs (
 
       # Start Postgres.
       export PGDATA="$NIX_BUILD_TOP/.postgres"
-      initdb -U postgres
+      initdb -E UTF8 -U postgres
       mkdir -p "$PGDATA/run"
       cat <<EOF >> "$PGDATA/postgresql.conf"
       unix_socket_directories = '$PGDATA/run'
