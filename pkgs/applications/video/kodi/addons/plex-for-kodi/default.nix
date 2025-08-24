@@ -1,11 +1,20 @@
-{ lib, addonDir, buildKodiAddon, fetchFromGitHub, addonUpdateScript, kodi-six, six, requests, }:
+{
+  lib,
+  addonDir,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+  kodi-six,
+  six,
+  requests,
+}:
 
 buildKodiAddon rec {
   pname = "plex";
   namespace = "script.plex";
   version = "0.7.9-rev4";
 
- src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "pannal";
     repo = "plex-for-kodi";
     rev = "v${version}";
