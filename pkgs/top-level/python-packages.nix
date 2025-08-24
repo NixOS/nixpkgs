@@ -2594,6 +2594,8 @@ self: super: with self; {
 
   cleanvision = callPackage ../development/python-modules/cleanvision { };
 
+  clearpasspy = callPackage ../development/python-modules/clearpasspy { };
+
   cleo = callPackage ../development/python-modules/cleo { };
 
   clevercsv = callPackage ../development/python-modules/clevercsv { };
