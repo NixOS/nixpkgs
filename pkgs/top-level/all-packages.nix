@@ -3321,8 +3321,6 @@ with pkgs;
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
-  krename = libsForQt5.callPackage ../applications/misc/krename { };
-
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
   krunner-translator = libsForQt5.callPackage ../tools/misc/krunner-translator { };
