@@ -170,7 +170,14 @@ stdenv.mkDerivation (finalAttrs: {
     perl
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    (python3Packages.python.withPackages (ps: with ps; [ distlib ]))
+    # Required packages taken from pythondeps.toml
+    (python3Packages.python.withPackages (
+      ps: with ps; [
+        meson-python
+        packaging
+        pycotap
+      ]
+    ))
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
