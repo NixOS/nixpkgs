@@ -22,6 +22,8 @@ buildKodiAddon rec {
   };
 
   # Plex for Kodi writes to its own directory by default, needs to be patched to a non-store path.
+  # Once https://github.com/pannal/plex-for-kodi/pull/219 is merged, this can be replaced with a smaller patch that just sets the environment variable INSTALLATION_DIR_AVOID_WRITE, e.g. adding to main.py:
+  # import os; os.environ("INSTALLATION_DIR_AVOID_WRITE") = True
   patches = [ ./plex-template-dir.patch ];
 
   propagatedBuildInputs = [
