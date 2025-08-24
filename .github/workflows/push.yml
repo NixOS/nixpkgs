@@ -1,10 +1,6 @@
 name: Push
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/push.yml
-      # eval is tested via pr.yml
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -13,6 +9,14 @@ on:
       - release-*
       - staging-*
       - haskell-updates
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
@@ -39,11 +43,9 @@ jobs:
     # Those are not actually used on push, but will throw an error if not set.
     permissions:
       # compare
-      issues: write
-      pull-requests: write
       statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
-      mergedSha: ${{ github.sha }}
+      mergedSha: ${{ inputs.mergedSha || github.sha }}
       systems: ${{ needs.prepare.outputs.systems }}

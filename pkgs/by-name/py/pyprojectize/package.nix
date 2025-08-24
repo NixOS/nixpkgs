@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyprojectize";
-  version = "1a6";
+  version = "1a7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hroncok";
     repo = "pyprojectize";
     tag = version;
-    hash = "sha256-NW74IoGdghtX2Wlxocosx8zb3Htfqq6zN9iNpICdffs=";
+    hash = "sha256-MVA8Mx+jpPrNB099BfAxGBfZWyvFTYR8q0vyspj7jSY=";
   };
 
   build-system = with python3.pkgs; [
