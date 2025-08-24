@@ -2,54 +2,53 @@
   lib,
   stdenv,
   fetchzip,
+  installShellFiles,
+  bintools,
+  writeShellScript,
+  nix-update,
 }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-
-  plat =
-    {
-      x86_64-linux = "linux_amd64";
-      aarch64-linux = "linux_arm64";
-      armv7l-linux = "linux_armv7";
-    }
-    .${system} or throwSystem;
-
-  hash =
-    {
-      x86_64-linux = "sha256-Ewez2QUsIAmxyjxR8wvt7UJpXVHjIb8s6gGF1YNgrec=";
-      aarch64-linux = "sha256-5hZaOqnTYWeUJXGObzUZMqE62ZgNvJ9Wi8shVng10l8=";
-      armv7l-linux = "sha256-MOM0OS2/mhYaxowsBVnZH0poR+wXsbjsJKldU/nAfjU=";
-    }
-    .${system} or throwSystem;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "1.0.4";
+  version = "1.1.3";
 
-  src = fetchzip {
-    url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";
-    stripRoot = false;
-    inherit hash;
-  };
-
-  updateScript = ./update.sh;
-
-  installPhase =
+  src =
     let
-      interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      arch = selectSystem {
+        x86_64-linux = "amd64";
+        aarch64-linux = "arm64";
+        armv7l-linux = "armv7";
+      };
     in
-    ''
-      runHook preInstall
+    fetchzip {
+      url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_linux_${arch}.tar.gz";
+      stripRoot = false;
+      hash = selectSystem {
+        x86_64-linux = "sha256-UTG5jwe8iXqukjT6P5nqOuuPkjr/8CpvxZyOHw2pP60=";
+        aarch64-linux = "sha256-30QDGFJAUw/bwkBJXQygXjQ7bGTYomCJG/HOEAbJiM0=";
+        armv7l-linux = "sha256-UeMuynvrcz800RBj2R90yTYT11VpY8q3QWHXD7JBqcA=";
+      };
+    };
 
-      mkdir -p $out/bin
-      cp zrok $out/bin/
-      chmod +x $out/bin/zrok
-      patchelf --set-interpreter "${interpreter}" "$out/bin/zrok"
+  nativeBuildInputs = [ installShellFiles ];
 
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+
+    patchelf --set-interpreter ${bintools.dynamicLinker} zrok
+    installBin zrok
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = writeShellScript "update-zrok" ''
+    ${lib.getExe nix-update} pkgsCross.gnu64.zrok
+    ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.zrok --version skip
+    ${lib.getExe nix-update} pkgsCross.armv7l-hf-multiplatform.zrok --version skip
+  '';
 
   meta = {
     description = "Geo-scale, next-generation sharing platform built on top of OpenZiti";
