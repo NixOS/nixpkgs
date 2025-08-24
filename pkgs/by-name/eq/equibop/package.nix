@@ -17,9 +17,6 @@
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
-  # Enables the use of Equicord from nixpkgs instead of
-  # letting Equibop manage it's own version
-  withSystemEquicord ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
@@ -65,12 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./disable_update_checking.patch
-  ]
-  ++ lib.optional withSystemEquicord (
-    replaceVars ./use_system_equicord.patch {
-      inherit equicord;
-    }
-  );
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
