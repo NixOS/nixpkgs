@@ -33,6 +33,7 @@ let
     extends
     toFunction
     id
+    elem
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -437,15 +438,16 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs = {
-        inherit (drv) name system meta;
-        inherit outputs;
-      }
-      // optionalAttrs (drv._hydraAggregate or false) {
-        _hydraAggregate = true;
-        constituents = map hydraJob (flatten drv.constituents);
-      }
-      // (listToAttrs outputsList);
+      commonAttrs =
+        {
+          inherit (drv) name system meta;
+          inherit outputs;
+        }
+        // optionalAttrs (drv._hydraAggregate or false) {
+          _hydraAggregate = true;
+          constituents = map hydraJob (flatten drv.constituents);
+        }
+        // (listToAttrs outputsList);
 
       makeOutput =
         outputName:
@@ -844,4 +846,15 @@ rec {
         transformDrv
         ;
     };
+
+  /**
+    TODO
+  */
+  overridePossibleArgs =
+    drv: overrides:
+    let
+      # TODO check that drv isDerivation and overrides is attrset?
+      availableArgs = attrNames (functionArgs drv.override);
+    in
+    drv.override (filterAttrs (arg: _: elem arg availableArgs) overrides);
 }
