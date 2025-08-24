@@ -11069,10 +11069,6 @@ with pkgs;
   */
   inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
 
-  kde-rounded-corners =
-    kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
-      { };
-
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
     inherit (plasma5Packages) breeze-icons;
     inherit (pantheon) elementary-icon-theme;
