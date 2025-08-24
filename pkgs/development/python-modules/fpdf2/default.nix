@@ -15,6 +15,7 @@
   camelot,
   uharfbuzz,
   lxml,
+  pikepdf,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     camelot
     uharfbuzz
     lxml
+    pikepdf
   ];
 
   disabledTestPaths = [
