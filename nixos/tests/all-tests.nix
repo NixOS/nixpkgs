@@ -735,6 +735,7 @@ in
   i3wm = runTest ./i3wm.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
   ifm = runTest ./ifm.nix;
+  ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
