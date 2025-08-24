@@ -54,7 +54,7 @@ in
 
 [ ]
 # Pass the path to a C++ compiler directly in the Makefile.in
-++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
+++ optional (!lib.systems.equals targetPlatform hostPlatform && !atLeast15) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
