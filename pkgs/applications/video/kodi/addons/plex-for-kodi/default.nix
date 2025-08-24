@@ -33,7 +33,6 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://www.plex.tv";
-    source = "https://github.com/pannal/plex-for-kodi";
     description = "Unofficial Plex for Kodi add-on";
     license = licenses.gpl2Only;
     maintainers = teams.kodi.members;
