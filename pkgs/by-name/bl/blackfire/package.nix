@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://blackfire.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

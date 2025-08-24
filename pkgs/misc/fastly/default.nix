@@ -82,7 +82,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       ereslibre
-      shyim
     ];
     mainProgram = "fastly";
   };
