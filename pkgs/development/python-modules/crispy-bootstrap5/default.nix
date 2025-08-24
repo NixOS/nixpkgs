@@ -10,15 +10,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "django-crispy-bootstrap4";
-  version = "2024.10";
+  pname = "crispy-bootstrap5";
+  version = "2025.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
-    repo = "crispy-bootstrap4";
+    repo = "crispy-bootstrap5";
     tag = version;
-    hash = "sha256-lBm48krF14WuUMX9lgx9a++UhJWHWPxOhj3R1j4QTOs=";
+    hash = "sha256-XU0iPqtq7y74fsBgSQMyoVW48f7QMIIBYHggmvKAjYE=";
   };
 
   build-system = [ setuptools ];
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "crispy_bootstrap4" ];
+  pythonImportsCheck = [ "crispy_bootstrap5" ];
 
   meta = with lib; {
-    description = "Bootstrap 4 template pack for django-crispy-forms";
-    homepage = "https://github.com/django-crispy-forms/crispy-bootstrap4";
-    changelog = "https://github.com/django-crispy-forms/crispy-bootstrap4/blob/${version}/CHANGELOG.md";
+    description = "Bootstrap 5 template pack for django-crispy-forms";
+    homepage = "https://github.com/django-crispy-forms/crispy-bootstrap5";
+    changelog = "https://github.com/django-crispy-forms/crispy-bootstrap5/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
