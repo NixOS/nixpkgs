@@ -496,6 +496,10 @@ let
       orga = "crystal-lang-tools";
       repo = "tree-sitter-crystal";
     };
+    "tree-sitter-slint" = {
+      orga = "slint-ui";
+      repo = "tree-sitter-slint";
+    };
   };
 
   pinnedGrammars = [
