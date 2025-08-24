@@ -1,0 +1,25 @@
+From a91b51d7cc67d0e5e4949fa6f1c83af0593de06e Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Fri, 22 Aug 2025 21:45:38 +0200
+Subject: [PATCH] Add desktopName to package.json
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ electron/package.json | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/electron/package.json b/electron/package.json
+index 5c17a55d..b36ecb6a 100644
+--- a/electron/package.json
++++ b/electron/package.json
+@@ -2,6 +2,7 @@
+     "name": "electron",
+     "version": "1.0.0",
+     "license": "MIT",
++    "desktopName": "io.shapez.desktop",
+     "type": "module",
+     "main": "dist/index.js",
+     "private": true,
+-- 
+2.50.1
+
