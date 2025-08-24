@@ -28,10 +28,10 @@ python3Packages.buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "mp.mpfshell" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wendlers/mpfshell";
     description = "Simple shell based file explorer for ESP8266 Micropython based devices";
     mainProgram = "mpfshell";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }
