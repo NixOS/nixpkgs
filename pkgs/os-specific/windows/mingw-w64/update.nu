@@ -70,7 +70,7 @@ def main [] {
 
   # Prefetch to get the new hash
   let new_hash = nix-prefetch-url --type sha256 $new_url
-  | nix hash to-sri --type sha256 $in
+  | nix-hash --to-sri --type sha256 $in
 
   # Set the hash
   replace ./pkgs/os-specific/windows/mingw-w64/headers.nix $current_hash $new_hash

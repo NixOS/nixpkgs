@@ -8,7 +8,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 function prefetch-sri() {
     nix-prefetch-url "$1" 2>/dev/null |
-        xargs nix --experimental-features nix-command hash to-sri --type sha256
+        xargs nix-hash --to-sri --type sha256
 }
 
 declare -A platforms=(
