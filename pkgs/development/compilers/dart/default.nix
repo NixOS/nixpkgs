@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm LICENSE
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
