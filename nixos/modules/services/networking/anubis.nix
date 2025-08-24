@@ -12,6 +12,27 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
+  optionalUnixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  settingsToUnixSocketAddrs =
+    settings:
+    builtins.filter (x: x != "") [
+      (optionalUnixAddr settings.BIND_NETWORK settings.BIND)
+      (optionalUnixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    ];
+
+  runtimeDirectoryPrefix = "/run/anubis/";
+  unixSocketAddrToRuntimeDirectory =
+    unixSocketAddr: lib.removePrefix "/run/" (builtins.dirOf unixSocketAddr);
+
+  settingsToRuntimeDirectory =
+    settings: lib.unique (map unixSocketAddrToRuntimeDirectory (settingsToUnixSocketAddrs settings));
+
+  instanceConfigs = lib.mapAttrs (name: attrs: rec {
+    unixSocketAddrs = settingsToUnixSocketAddrs attrs.settings;
+    runtimeDirectory = settingsToRuntimeDirectory attrs.settings;
+  }) enabledInstances;
+  instanceConfigsList = (lib.mapAttrsToList (_: attrs: attrs) instanceConfigs);
+
   commonSubmodule =
     isDefault:
     let
@@ -245,6 +266,19 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
+    assertions = [
+      {
+        assertion = lib.all (
+          instance: lib.all (lib.hasPrefix runtimeDirectoryPrefix) instance.unixSocketAddrs
+        ) instanceConfigsList;
+        message = "BIND and METRICS_BIND set with unix sockets must be located in ${runtimeDirectoryPrefix}";
+      }
+      {
+        assertion = lib.all (instance: builtins.length instance.runtimeDirectory <= 1) instanceConfigsList;
+        message = "BIND and METRICS_BIND of each instance set with unix sockets must be located in the same runtime directory";
+      }
+    ];
+
     users.users = lib.mkIf (cfg.defaultOptions.user == "anubis") {
       anubis = {
         isSystemUser = true;
@@ -276,20 +310,7 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
-          RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
-              "anubis"
-            else
-              null;
-
+          RuntimeDirectory = instanceConfigs."${name}".runtimeDirectory;
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;

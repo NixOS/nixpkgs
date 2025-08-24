@@ -22,14 +22,38 @@
             USER_DEFINED_INSTANCE = true;
           };
 
+          "unix-listen-1" =
+            let
+              runtimeDirectory = "/run/anubis/unix-listen-1";
+            in
+            {
+              settings = {
+                TARGET = "http://localhost:8080";
+                BIND = "${runtimeDirectory}/anubis.sock";
+                METRICS_BIND = "${runtimeDirectory}/anubis-metrics.sock";
+              };
+            };
+
+          "unix-listen-2" =
+            let
+              runtimeDirectory = "/run/anubis/unix-listen-2";
+            in
+            {
+              settings = {
+                TARGET = "http://localhost:8080";
+                BIND = "${runtimeDirectory}/anubis.sock";
+                METRICS_BIND = "${runtimeDirectory}/anubis-metrics.sock";
+              };
+            };
+
           "tcp" = {
             user = "anubis-tcp";
             group = "anubis-tcp";
             settings = {
               TARGET = "http://localhost:8080";
-              BIND = ":9000";
+              BIND = "127.0.0.1:9000";
               BIND_NETWORK = "tcp";
-              METRICS_BIND = ":9001";
+              METRICS_BIND = "127.0.0.1:9001";
               METRICS_BIND_NETWORK = "tcp";
             };
           };
@@ -51,9 +75,16 @@
           "/metrics".proxyPass = "http://unix:${config.services.anubis.instances."".settings.METRICS_BIND}";
         };
 
+        virtualHosts."unix-listen-1".locations = {
+          "/".proxyPass = "http://unix:${config.services.anubis.instances."unix-listen-1".settings.BIND}";
+          "/metrics".proxyPass = "http://unix:${
+            config.services.anubis.instances."unix-listen-1".settings.METRICS_BIND
+          }";
+        };
+
         virtualHosts."tcp.localhost".locations = {
-          "/".proxyPass = "http://localhost:9000";
-          "/metrics".proxyPass = "http://localhost:9001";
+          "/".proxyPass = "http://${config.services.anubis.instances."tcp".settings.BIND}";
+          "/metrics".proxyPass = "http://${config.services.anubis.instances."tcp".settings.METRICS_BIND}";
         };
 
         virtualHosts."unix.localhost".locations = {
@@ -92,10 +123,25 @@
       machine.wait_for_open_unix_socket(f"/run/anubis/{instance}.sock")
       machine.wait_for_open_unix_socket(f"/run/anubis/{instance}-metrics.sock")
 
+    for instance in ["unix-listen-1", "unix-listen-2"]:
+      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}/anubis.sock")
+      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}/anubis-metrics.sock")
+
     # Default unix socket mode
     machine.succeed('curl -f http://basic.localhost | grep "it works"')
     machine.succeed('curl -f http://basic.localhost -H "User-Agent: Mozilla" | grep anubis')
     machine.succeed('curl -f http://basic.localhost/metrics | grep anubis_challenges_issued')
+
+    # Multiple unix mode
+    machine.succeed('curl -f http://unix-listen-1.localhost -H "User-Agent: Mozilla" | grep anubis')
+    machine.succeed('curl -f http://unix-listen-1.localhost/metrics | grep anubis_challenges_issued')
+    machine.succeed('stat /run/anubis/unix-listen-1/anubis.sock')
+    machine.succeed('stat /run/anubis/unix-listen-1/anubis-metrics.sock')
+
+    machine.succeed('curl -f http://unix-listen-2.localhost -H "User-Agent: Mozilla" | grep anubis')
+    machine.succeed('curl -f http://unix-listen-2.localhost/metrics | grep anubis_challenges_issued')
+    machine.succeed('stat /run/anubis/unix-listen-2/anubis.sock')
+    machine.succeed('stat /run/anubis/unix-listen-2/anubis-metrics.sock')
 
     # TCP mode
     machine.succeed('curl -f http://tcp.localhost -H "User-Agent: Mozilla" | grep anubis')
