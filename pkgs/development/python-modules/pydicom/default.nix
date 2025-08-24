@@ -58,6 +58,8 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.pixeldata;
 
+  passthru.pydicom-data = test_data;
+
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
   # Linking pydicom-data dicom files to $HOME/.pydicom/data
