@@ -52,8 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt.bin
   ];
 
+  patches = [
+    ./0001-spawn-sh-instead-of-bin-sh.patch
+  ]
   # TODO: remove together with ninja 1.11
-  patches = lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
     (fetchpatch {
       name = "ninja1.11-python3.13-compat.patch";
       url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
