@@ -19,6 +19,9 @@
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
   # ECL but that’s much slower.
   bootstrapLisp ? null,
+  # lisp-modules related args
+  wrapLisp,
+  packageOverrides ? (self: super: { }),
 }:
 
 let
@@ -279,6 +282,24 @@ stdenv.mkDerivation (self: {
       }
     ''
   );
+
+  passthru = {
+    inherit
+      (wrapLisp {
+        inherit packageOverrides;
+        pkg = self.finalPackage;
+        faslExt = "fasl";
+        flags = [
+          "--dynamic-space-size"
+          "3000"
+        ];
+      })
+      pkgs
+      withPackages
+      buildASDFSystem
+      withOverrides
+      ;
+  };
 
   meta = with lib; {
     description = "Common Lisp compiler";
