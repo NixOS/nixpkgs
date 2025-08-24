@@ -33,19 +33,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-z0RLQ6n3hdsaBy3BiIOpuvpPBq3ST02r7lfsGfJypb8=";
   };
 
-  nativeBuildInputs =
-    [
-      nodejs
-      cargo-tauri.hook
+  nativeBuildInputs = [
+    nodejs
+    cargo-tauri.hook
 
-      yarnConfigHook
-      yarnBuildHook
+    yarnConfigHook
+    yarnBuildHook
 
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook4
-    ];
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
