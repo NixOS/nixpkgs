@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6ad955f..ae3584b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,8 +23,6 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+ 
+ if(PMP_BUILD_VIS)
+-  set(GLFW_SOURCE_DIR "external/glfw-3.3.8")
+-  set(GLEW_SOURCE_DIR "external/glew-2.2.0")
+   set(IMGUI_SOURCE_DIR "external/imgui-1.89.8")
+   set(STB_IMAGE_SOURCE_DIR "external/stb_image-2.28")
+   set(STB_IMAGE_WRITE_SOURCE_DIR "external/stb_image_write-1.16")
+@@ -32,34 +30,13 @@ if(PMP_BUILD_VIS)
+   add_subdirectory(${STB_IMAGE_WRITE_SOURCE_DIR})
+   add_subdirectory(${STB_IMAGE_SOURCE_DIR})
+ 
+-  # Building only the GLFW lib
+-  set(BUILD_SHARED_LIBS
+-      OFF
+-      CACHE BOOL "")
+-  set(GLFW_BUILD_EXAMPLES
+-      OFF
+-      CACHE BOOL "")
+-  set(GLFW_BUILD_TESTS
+-      OFF
+-      CACHE BOOL "")
+-  set(GLFW_BUILD_DOCS
+-      OFF
+-      CACHE BOOL "")
+-  set(GLFW_INSTALL
+-      OFF
+-      CACHE BOOL "")
+-
+   # setup use of GLFW and GLEW
+   if(NOT EMSCRIPTEN)
+-    add_subdirectory(${GLFW_SOURCE_DIR} ${GLEW_SOURCE_DIR})
+-
++    find_package(glfw3 REQUIRED)
++    find_package(GLEW REQUIRED)
++    
+     add_definitions(-DGLEW_STATIC)
+-    add_library(glew STATIC ${GLEW_SOURCE_DIR}/src/glew.c
+-                            ${GLEW_SOURCE_DIR}/include)
+-    set_property(TARGET glew PROPERTY POSITION_INDEPENDENT_CODE ON)
+-    target_include_directories(glew PUBLIC ${GLEW_SOURCE_DIR}/include
+-                                           ${GLFW_SOURCE_DIR}/include)
+-    target_link_libraries(glew ${GLFW_LIBRARIES})
++    add_library(glew ALIAS GLEW::GLEW)
+   endif()
+ 
+   # setup IMGUI
