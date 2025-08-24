@@ -1,17 +1,18 @@
 name: PR
 
 on:
-  pull_request:
-    paths:
-      - .github/actions/checkout/action.yml
-      - .github/workflows/build.yml
-      - .github/workflows/check.yml
-      - .github/workflows/eval.yml
-      - .github/workflows/lint.yml
-      - .github/workflows/pr.yml
-      - .github/workflows/labels.yml
-      - .github/workflows/reviewers.yml # needs eval results from the same event type
   pull_request_target:
+  workflow_call:
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+      NIXPKGS_CI_APP_PRIVATE_KEY:
+        required: true
+      OWNER_APP_PRIVATE_KEY:
+        # The Test workflow should not actually request reviews from owners.
+        required: false
+      OWNER_RO_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -80,7 +81,6 @@ jobs:
       statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
