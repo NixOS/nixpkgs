@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confluent-cli";
-  version = "4.34.0";
+  version = "4.35.0";
 
   # To get the latest version:
   # curl -L https://cnfl.io/cli | sh -s -- -l | grep -v latest | sort -V | tail -n1
@@ -26,10 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${finalAttrs.version}/confluent_${finalAttrs.version}_${system}.tar.gz";
       hash = selectSystem {
-        x86_64-linux = "sha256-PfQ3YGzlyihxcSLgKEOT/xsr6cih2p5mtiJ8WG/NH/s=";
-        aarch64-linux = "sha256-zZyHLBdPb7lNp0YFIXkqlfq0ArnhZa4ysTpcp09z+fI=";
-        x86_64-darwin = "sha256-hrMBArwFAhOYMEsVVD+hnn697bY1iS2Yer4IdOSvvfg=";
-        aarch64-darwin = "sha256-kVx2iGoOgkooMe6sfdE0d5e3WX7+M/Ov0sjFwWBhTX4=";
+        x86_64-linux = "sha256-lcrL4KgtBEAVme/fJRdTdgeJG2amxhTcymPGe3SC5LA=";
+        aarch64-linux = "sha256-FkgH5uAdrxavpslcQwhnd9T5qonGosDjOCQNm+Ei+BY=";
+        x86_64-darwin = "sha256-gg4Nu+fTkUWVtuvADdn5c9X9GmO4LpunS/BP4XZ1rLU=";
+        aarch64-darwin = "sha256-4i4qLQ8nnpXQ92Jhe7ek9GI3fFJsvjsk/r/Oi/F/GDo=";
       };
     };
 
