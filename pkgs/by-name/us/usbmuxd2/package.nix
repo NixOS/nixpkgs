@@ -9,41 +9,15 @@
   avahi,
   clang,
   git,
+  libgeneral,
 }:
-let
-
-  libgeneral = clangStdenv.mkDerivation rec {
-    pname = "libgeneral";
-    version = "74";
-    src = fetchFromGitHub {
-      owner = "tihmstar";
-      repo = pname;
-      rev = "refs/tags/${version}";
-      hash = "sha256-6aowcIYssc1xqH6kTi/cpH2F7rgc8+lGC8HgZWYH2w0=";
-      # Leave DotGit so that autoconfigure can read version from git tags
-      leaveDotGit = true;
-    };
-    nativeBuildInputs = [
-      autoreconfHook
-      git
-      pkg-config
-    ];
-    meta = with lib; {
-      description = "Helper library used by usbmuxd2";
-      homepage = "https://github.com/tihmstar/libgeneral";
-      license = licenses.lgpl21;
-      platforms = platforms.all;
-    };
-  };
-
-in
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation {
   pname = "usbmuxd2";
   version = "unstable-2023-12-12";
 
   src = fetchFromGitHub {
     owner = "tihmstar";
-    repo = pname;
+    repo = "usbmuxd2";
     rev = "2ce399ddbacb110bd5a83a6b8232d42c9a9b6e84";
     hash = "sha256-UVLLE73XuWTgGlpTMxUDykFmiBDqz6NCRO2rpRAYfow=";
     # Leave DotGit so that autoconfigure can read version from git tags
@@ -72,6 +46,8 @@ clangStdenv.mkDerivation rec {
     libusb1
   ];
 
+  doInstallCheck = true;
+
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -81,12 +57,12 @@ clangStdenv.mkDerivation rec {
     "sbindir=${placeholder "out"}/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tihmstar/usbmuxd2";
     description = "Socket daemon to multiplex connections from and to iOS devices";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "usbmuxd";
   };
 }

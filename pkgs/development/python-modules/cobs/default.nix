@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "cobs";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kvf4eRzeGufGuTb10MNf4p/rEN4l95wVsK8NZyl4PMA=";
+    hash = "sha256-291eMhEdcnhvg9DCaSFdzWrGKbGsGWLGh4Ih87LKmNo=";
   };
 
   checkPhase = ''

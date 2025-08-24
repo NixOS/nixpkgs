@@ -1,14 +1,14 @@
 {
   boost178,
   cuda_cudart,
-  cudaOlder,
+  cudaAtLeast,
+  e2fsprogs,
   gst_all_1,
   lib,
   nss,
   numactl,
   pulseaudio,
-  qt5 ? null,
-  qt6 ? null,
+  qt6,
   rdma-core,
   stdenv,
   ucx,
@@ -17,15 +17,9 @@
 }:
 prevAttrs:
 let
-  inherit (lib.strings) versionOlder versionAtLeast;
-  inherit (prevAttrs) version;
-  qt = if lib.strings.versionOlder prevAttrs.version "2022.4.2.1" then qt5 else qt6;
-  qtwayland =
-    if lib.versions.major qt.qtbase.version == "5" then
-      lib.getBin qt.qtwayland
-    else
-      lib.getLib qt.qtwayland;
-  qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+  qtwayland = lib.getLib qt6.qtwayland;
+  qtWaylandPlugins = "${qtwayland}/${qt6.qtbase.qtPluginPrefix}";
+  # NOTE(@connorbaker): nsight_systems doesn't support Jetson, so no need for case splitting on aarch64-linux.
   hostDir =
     {
       aarch64-linux = "host-linux-armv8";
@@ -38,91 +32,105 @@ let
       x86_64-linux = "target-linux-x64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  versionString = with lib.versions; "${majorMinor version}.${patch version}";
 in
 {
+  outputs = [ "out" ]; # NOTE(@connorbaker): Force a single output so relative lookups work.
+
   # An ad hoc replacement for
   # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
   env = prevAttrs.env or { } // {
     rmPatterns =
       prevAttrs.env.rmPatterns or ""
       + toString [
-        "nsight-systems/${versionString}/${hostDir}/lib{arrow,jpeg}*"
-        "nsight-systems/${versionString}/${hostDir}/lib{ssl,ssh,crypto}*"
-        "nsight-systems/${versionString}/${hostDir}/libboost*"
-        "nsight-systems/${versionString}/${hostDir}/libexec"
-        "nsight-systems/${versionString}/${hostDir}/libstdc*"
-        "nsight-systems/${versionString}/${hostDir}/python/bin/python"
-        "nsight-systems/${versionString}/${hostDir}/Mesa"
+        "${hostDir}/lib{arrow,jpeg}*"
+        "${hostDir}/lib{ssl,ssh,crypto}*"
+        "${hostDir}/libboost*"
+        "${hostDir}/libexec"
+        "${hostDir}/libstdc*"
+        "${hostDir}/python/bin/python"
+        "${hostDir}/Mesa"
       ];
   };
-  postPatch =
-    prevAttrs.postPatch or ""
-    + ''
-      for path in $rmPatterns; do
-        rm -r "$path"
+
+  # NOTE(@connorbaker): nsight-exporter and nsight-sys are deprecated scripts wrapping nsys, it's fine to remove them.
+  prePatch = prevAttrs.prePatch or "" + ''
+    if [[ -d bin ]]; then
+      nixLog "Removing bin wrapper scripts"
+      for knownWrapper in bin/{nsys{,-ui},nsight-{exporter,sys}}; do
+        [[ -e $knownWrapper ]] && rm -v "$knownWrapper"
       done
-      patchShebangs nsight-systems
-    '';
-  nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ qt.wrapQtAppsHook ];
+      unset -v knownWrapper
+
+      nixLog "Removing empty bin directory"
+      rmdir -v bin
+    fi
+
+    if [[ -d nsight-systems ]]; then
+      nixLog "Lifting components of Nsight System to the top level"
+      mv -v nsight-systems/*/* .
+      nixLog "Removing empty nsight-systems directory"
+      rmdir -pv nsight-systems/*
+    fi
+  '';
+
+  postPatch = prevAttrs.postPatch or "" + ''
+    for path in $rmPatterns; do
+      rm -r "$path"
+    done
+    patchShebangs nsight-systems
+  '';
+
+  nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ qt6.wrapQtAppsHook ];
+
   dontWrapQtApps = true;
-  buildInputs = prevAttrs.buildInputs or [ ] ++ [
-    (qt.qtdeclarative or qt.full)
-    (qt.qtsvg or qt.full)
-    (qt.qtimageformats or qt.full)
-    (qt.qtpositioning or qt.full)
-    (qt.qtscxml or qt.full)
-    (qt.qttools or qt.full)
-    (qt.qtwebengine or qt.full)
-    (qt.qtwayland or qt.full)
-    boost178
-    cuda_cudart.stubs
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    nss
-    numactl
-    pulseaudio
-    qt.qtbase
-    qtWaylandPlugins
-    rdma-core
-    ucx
-    wayland
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXrandr
-    xorg.libXtst
-  ];
 
-  postInstall =
-    prevAttrs.postInstall or ""
-    # 1. Move dependencies of nsys, nsys-ui binaries to bin output
-    # 2. Fix paths in wrapper scripts
-    + ''
-      moveToOutput 'nsight-systems/${versionString}/${hostDir}' "''${!outputBin}"
-      moveToOutput 'nsight-systems/${versionString}/${targetDir}' "''${!outputBin}"
-      moveToOutput 'nsight-systems/${versionString}/bin' "''${!outputBin}"
-      substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
-        --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
-      wrapQtApp "$bin/nsight-systems/${versionString}/${hostDir}/nsys-ui.bin"
-    '';
+  buildInputs =
+    prevAttrs.buildInputs or [ ]
+    ++ [
+      (qt6.qtdeclarative or qt6.full)
+      (qt6.qtsvg or qt6.full)
+      (qt6.qtimageformats or qt6.full)
+      (qt6.qtpositioning or qt6.full)
+      (qt6.qtscxml or qt6.full)
+      (qt6.qttools or qt6.full)
+      (qt6.qtwebengine or qt6.full)
+      (qt6.qtwayland or qt6.full)
+      boost178
+      cuda_cudart.stubs
+      e2fsprogs
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      nss
+      numactl
+      pulseaudio
+      qt6.qtbase
+      qtWaylandPlugins
+      rdma-core
+      ucx
+      wayland
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXrandr
+      xorg.libXtst
+    ]
+    # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      gst_all_1.gst-plugins-bad
+    ];
 
-  preFixup =
-    prevAttrs.preFixup or ""
-    + ''
-      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so $bin/nsight-systems/${versionString}/${hostDir}/Plugins/imageformats/libqtiff.so
-    '';
+  postInstall = prevAttrs.postInstall or "" + ''
+    moveToOutput '${hostDir}' "''${!outputBin}"
+    moveToOutput '${targetDir}' "''${!outputBin}"
+    moveToOutput 'bin' "''${!outputBin}"
+    wrapQtApp "''${!outputBin}/${hostDir}/nsys-ui.bin"
+  '';
+
+  # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+  preFixup = prevAttrs.preFixup or "" + ''
+    patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/${hostDir}/Plugins/imageformats/libqtiff.so"
+  '';
 
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
   ];
-
-  brokenConditions = prevAttrs.brokenConditions or { } // {
-    "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
-    "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
-  };
-  badPlatformsConditions = prevAttrs.badPlatformsConditions or { } // {
-    # Older releases require boost 1.70, which is deprecated in Nixpkgs
-    "CUDA too old (<11.8)" = cudaOlder "11.8";
-  };
 }

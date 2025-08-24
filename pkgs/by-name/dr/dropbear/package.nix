@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     (lib.concatStringsSep " ")
   ];
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--enable-wtmp=no"
+    "--enable-wtmpx=no"
+  ];
+
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlagsArray=(
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -147,17 +147,17 @@ in
         ) cfg.settings.addons)
       ];
 
-    environment.variables =
-      {
-        XMODIFIERS = "@im=fcitx";
-        QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
-      }
-      // lib.optionalAttrs (!cfg.waylandFrontend) {
-        GTK_IM_MODULE = "fcitx";
-        QT_IM_MODULE = "fcitx";
-      }
-      // lib.optionalAttrs cfg.ignoreUserConfig {
-        SKIP_FCITX_USER_PATH = "1";
-      };
+    environment.variables = {
+      XMODIFIERS = "@im=fcitx";
+      QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
+    };
+
+    environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
+      SKIP_FCITX_USER_PATH = "1";
+    };
   };
 }

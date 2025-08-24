@@ -2,18 +2,18 @@
   lib,
   stdenv,
   kernel,
-  fetchFromGitLab,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "unstable-2025-02-28";
+  version = "unstable-2025-06-17";
 
-  src = fetchFromGitLab {
-    owner = "shdwchn10";
+  src = fetchFromGitHub {
+    owner = "AliEmreSenel";
     repo = "zenpower3";
-    rev = "138fa0637b46a0b0a087f2ba4e9146d2f9ba2475";
-    sha256 = "sha256-kLtkG97Lje+Fd5FoYf+UlSaEyxFaETtXrSjYzFnHkjY=";
+    rev = "41e042935ee9840c0b9dd55d61b6ddd58bc4fde6";
+    hash = "sha256-0U/JmEd6OJJeUm1ZLFYxpKH15n7+QTWYOgtKIFAuf/4=";
   };
 
   hardeningDisable = [ "pic" ];

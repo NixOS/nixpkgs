@@ -23,15 +23,15 @@
 }:
 
 let
-  version = "2025.4.943";
+  version = "2025.5.943";
   sources = {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_amd64.deb";
-      hash = "sha256-QWLeAq1bhIBw1UzGp62cR7KaOcGOmHgBZJHR3NgB3JY=";
+      hash = "sha256-d4H3w+X3i3Hqqz8jbGx8eZ7ZuKrYJScbpFgeXKK71yI=";
     };
     aarch64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_arm64.deb";
-      hash = "sha256-PDS64b4F3VzUlKNSUBynBRemDkRgbx53xZ7pOL00N0A=";
+      hash = "sha256-E6+vSUSVNEd4+fNYsWcflk1fZb4dzNcjG8Mep7ZHw84=";
     };
   };
 in
@@ -92,9 +92,10 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed libpcap.so.0.8 ${libpcap}/lib/libpcap.so $out/bin/warp-dex
     mv lib/systemd/system $out/lib/systemd/
     substituteInPlace $out/lib/systemd/system/warp-svc.service \
-      --replace "ExecStart=" "ExecStart=$out"
+      --replace-fail "ExecStart=" "ExecStart=$out"
     substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
-      --replace "ExecStart=" "ExecStart=$out"
+      --replace-fail "ExecStart=" "ExecStart=$out" \
+      --replace-fail "BindsTo=" "PartOf="
 
     cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
 
@@ -151,7 +152,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     mainProgram = "warp-cli";
     maintainers = with maintainers; [
-      devpikachu
       marcusramberg
     ];
     platforms = [

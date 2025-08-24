@@ -87,18 +87,17 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment =
-        {
-          MB_PLUGINS_DIR = "${dataDir}/plugins";
-          MB_DB_FILE = "${dataDir}/metabase.db";
-          MB_JETTY_HOST = cfg.listen.ip;
-          MB_JETTY_PORT = toString cfg.listen.port;
-        }
-        // optionalAttrs (cfg.ssl.enable) {
-          MB_JETTY_SSL = true;
-          MB_JETTY_SSL_PORT = toString cfg.ssl.port;
-          MB_JETTY_SSL_KEYSTORE = cfg.ssl.keystore;
-        };
+      environment = {
+        MB_PLUGINS_DIR = "${dataDir}/plugins";
+        MB_DB_FILE = "${dataDir}/metabase.db";
+        MB_JETTY_HOST = cfg.listen.ip;
+        MB_JETTY_PORT = toString cfg.listen.port;
+      }
+      // optionalAttrs (cfg.ssl.enable) {
+        MB_JETTY_SSL = true;
+        MB_JETTY_SSL_PORT = toString cfg.ssl.port;
+        MB_JETTY_SSL_KEYSTORE = cfg.ssl.keystore;
+      };
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;

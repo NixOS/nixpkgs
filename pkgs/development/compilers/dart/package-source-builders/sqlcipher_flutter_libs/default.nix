@@ -9,16 +9,21 @@
 let
   artifacts =
     lib.mapAttrs
-      (
-        version: sha512:
-        fetchurl {
-          url = "https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/${version}.c";
-          inherit sha512;
-        }
-      )
+      (version: hash: rec {
+        file = fetchurl {
+          inherit url hash;
+        };
+        url =
+          if lib.versionOlder version "v4_6_1" then
+            "https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/${version}.c"
+          else
+            "https://fsn1.your-objectstorage.com/simon-public/assets/sqlcipher/${version}.c";
+      })
       {
-        v4_5_7 = "11bb454d761b994f7e44f35dabd3fc8ac3b40499d6fdc29d58a38fb9b4dcdd6eb14ff3978ceb7c6f3bd5eee4a5abeec5f0453b944268f9aaf942b0366df1e73d";
-        v4_5_6 = "939ae692239adc0581211a37ed9ffa8b37c8f771c830977ecb06dc6accc4c3db767ce6abeaf91133815e2ae837785affa92f4c95b2e68cb6d563bd761f3e0cb1";
+        v4_8_0 = "sha256-nfYmi9PJlMbLqiFRksOIUXYHgD8LL2AVey9GCUc03Jw=";
+        v4_6_1 = "sha256-8kBJiy8g1odpBQQUF5A7f9g3+WStbJTARyfvAi84YVE=";
+        v4_5_7 = "sha256-lDgSEVGZcoruF7nAp0C2kr6TN7XllpMzMVi/R1XfGP4=";
+        v4_5_6 = "sha256-evZl3JUeyAfW0fGJ0EfFQs64Z/yRCZGeOeDGgXrFHFU=";
       };
 in
 stdenv.mkDerivation rec {
@@ -31,16 +36,15 @@ stdenv.mkDerivation rec {
 
     cp -r "$src" "$out"
     _replace() {
-      URL="https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/v$1.c"
       # --replace-fail messes with the file if it fails (is empty afterwards) so we do this instead
-      if cat "$out/linux/CMakeLists.txt" | grep "$URL" >/dev/null 2>/dev/null; then
-        substituteInPlace "$out/linux/CMakeLists.txt" --replace "$URL" "file://$2"
+      if cat "$out/linux/CMakeLists.txt" | grep "$1" >/dev/null 2>/dev/null; then
+        substituteInPlace "$out/linux/CMakeLists.txt" --replace "$1" "file://$2"
       else
         return 2
       fi
     }
-    _replace "4_5_7" "${artifacts.v4_5_7}" || \
-    _replace "4_5_6" "${artifacts.v4_5_6}" || \
+
+    ${lib.concatMapAttrsStringSep " || " (_: v: ''_replace "${v.url}" "${v.file}"'') artifacts} || \
     (echo "unknown version of sqlcipher, please add to pkgs/development/compilers/dart/package-source-builders/sqlcipher_flutter_libs" && cat linux/CMakeLists.txt | grep "https://storage.*" -o && exit 2)
 
     runHook postInstall

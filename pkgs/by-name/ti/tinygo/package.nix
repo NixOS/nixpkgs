@@ -39,7 +39,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I/9JXjt6aF/80Mh3iRgUYXv4l+m3XIpmKsIBviOuWCo=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
@@ -65,7 +65,8 @@ buildGoModule rec {
   buildInputs = [
     llvm
     clang.cc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -129,7 +130,8 @@ buildGoModule rec {
     avrdude
     openocd
     binaryen
-  ] ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
+  ]
+  ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall

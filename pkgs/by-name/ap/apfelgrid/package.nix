@@ -6,7 +6,8 @@
   apfel,
   applgrid,
   lhapdf,
-  root5,
+  root,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nhartland";
     repo = "APFELgrid";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0l0cyxd00kmb5aggzwsxg83ah0qiwav0shbxkxwrz3dvw78n89jk";
   };
 
@@ -25,7 +26,8 @@ stdenv.mkDerivation rec {
     apfel
     applgrid
     lhapdf
-    root5
+    root
+    zlib
   ];
 
   enableParallelBuilding = true;

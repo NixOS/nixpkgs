@@ -70,7 +70,7 @@ for opt; do
         --mandir)               show+=("$MANDIR") ;;
         --sharedir)             show+=("$PGSHAREDIR") ;;
         --sysconfdir)           show+=("$SYSCONFDIR") ;;
-        --pgxs)                 show+=("@postgresql-dev@/lib/pgxs/src/makefiles/pgxs.mk") ;;
+        --pgxs)                 show+=("$PGXS") ;;
         --configure)            show+=("$CONFIGURE_ARGS") ;;
         --cc)                   show+=("$CC") ;;
         --cppflags)             show+=("$CPPFLAGS") ;;
@@ -108,7 +108,7 @@ LOCALEDIR = $LOCALEDIR
 MANDIR = $MANDIR
 SHAREDIR = $PGSHAREDIR
 SYSCONFDIR = $SYSCONFDIR
-PGXS = @postgresql-dev@/lib/pgxs/src/makefiles/pgxs.mk
+PGXS = $PGXS
 CONFIGURE = $CONFIGURE_ARGS
 CC = $CC
 CPPFLAGS = $CPPFLAGS

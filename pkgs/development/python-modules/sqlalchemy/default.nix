@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -43,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.40";
+  version = "2.0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-RMfK6XrO7WjDw0T31IY4Hi2C68CsBCwAih/Z5SNS/iY=";
+    hash = "sha256-e/DkS9CioMLG/qMOf0//DxMFDTep4xEtCVTp/Hn0Wiw=";
   };
 
   postPatch = ''
@@ -108,6 +109,13 @@ buildPythonPackage rec {
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
+  };
 
   meta = with lib; {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${

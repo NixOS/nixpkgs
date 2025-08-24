@@ -50,16 +50,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glfw
-      libvgm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-    ];
+  buildInputs = [
+    glfw
+    libvgm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+  ];
 
   checkInputs = [
     cppunit

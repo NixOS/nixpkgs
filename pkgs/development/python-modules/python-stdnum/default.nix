@@ -1,37 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "1.20";
+  version = "2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
+  src = fetchFromGitHub {
+    owner = "arthurdejong";
+    repo = "python-stdnum";
+    tag = version;
+    hash = "sha256-9m4tO9TX9lV4V3wTkMFDj0Mc+jl4bKsHM/adeF3cBTE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
-  '';
-
-  nativeBuildInputs = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     SOAP = [ zeep ];
   };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "stdnum" ];
 

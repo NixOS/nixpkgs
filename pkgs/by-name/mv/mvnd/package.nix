@@ -77,27 +77,26 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  passthru =
-    {
-      updateScript = nix-update-script { };
-    }
-    // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      tests.version = testers.testVersion {
-        # `java` or `JAVA_HOME` is required to run mvnd
-        # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
-        package =
-          runCommand "mvnd"
-            {
-              inherit version;
-              nativeBuildInputs = [ makeWrapper ];
-            }
-            ''
-              mkdir -p $out/bin
-              makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
-                --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
-            '';
-      };
-    });
+  passthru = {
+    updateScript = nix-update-script { };
+  }
+  // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    tests.version = testers.testVersion {
+      # `java` or `JAVA_HOME` is required to run mvnd
+      # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
+      package =
+        runCommand "mvnd"
+          {
+            inherit version;
+            nativeBuildInputs = [ makeWrapper ];
+          }
+          ''
+            mkdir -p $out/bin
+            makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
+              --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
+          '';
+    };
+  });
 
   meta = {
     description = "Apache Maven Daemon";

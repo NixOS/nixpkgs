@@ -10,6 +10,7 @@
   lame,
   mpv-unwrapped,
   ninja,
+  callPackage,
   nixosTests,
   nodejs,
   jq,
@@ -77,6 +78,7 @@ let
   };
 in
 python3.pkgs.buildPythonApplication rec {
+  format = "setuptools";
   inherit pname version;
 
   outputs = [
@@ -91,6 +93,8 @@ python3.pkgs.buildPythonApplication rec {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    # Used in with-addons.nix
+    ./patches/allow-setting-addons-folder.patch
   ];
 
   inherit cargoDeps;
@@ -113,12 +117,14 @@ python3.pkgs.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
@@ -269,6 +275,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
+    withAddons = ankiAddons: callPackage ./with-addons.nix { inherit ankiAddons; };
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
@@ -292,6 +299,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit (mesa.meta) platforms;
     maintainers = with maintainers; [
       euank
+      junestepp
       oxij
     ];
     # Reported to crash at launch on darwin (as of 2.1.65)

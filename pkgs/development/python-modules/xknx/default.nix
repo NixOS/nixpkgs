@@ -6,7 +6,7 @@
   cryptography,
   ifaddr,
   freezegun,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -31,11 +31,12 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 

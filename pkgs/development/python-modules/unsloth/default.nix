@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "unsloth";
-  version = "2025.5.9";
+  version = "2025.8.1";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit version;
-    hash = "sha256-ud4+6BmyNvtvJz56dhS9SIXxTDw740rSfxxoi5itw4U=";
+    hash = "sha256-hkE+f6apgilrE0lFTWRe8PEvRQ71YuoHpQgzd/R/FaI=";
   };
 
   build-system = [
@@ -74,6 +74,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "protobuf"
     "transformers"
+    "torch"
   ];
 
   # The source repository contains no test

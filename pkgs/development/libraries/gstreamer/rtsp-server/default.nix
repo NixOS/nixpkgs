@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-rtsp-server";
-  version = "1.26.0";
+  version = "1.26.3";
 
   outputs = [
     "out"
@@ -28,30 +28,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6YPAOUluP3XjlpZVTOdNtBIOJGXeF6ocw3FgVo6bQLw=";
+    hash = "sha256-QV6KU6mER4l3DdTxFqwuOkoz3kJnPFeswlxboPRAb8U=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      gobject-introspection
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    gobject-introspection
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      gst-plugins-base
-      gst-plugins-bad
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    gst-plugins-base
+    gst-plugins-bad
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   mesonFlags = [
     "-Dglib_debug=disabled" # cast checks should be disabled on stable releases

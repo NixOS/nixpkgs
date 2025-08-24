@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-kDh/5SOwKPYl9sC9W17bnzG73fGI5iX6lSjcB3IjOss=";
 
   meta = {
-    description = "Commandline-utility to list/view/edit/delete entries in a firefox-sync account.";
+    description = "Commandline-utility to list/view/edit/delete entries in a firefox-sync account";
     homepage = "https://github.com/Mikescher/firefox-sync-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ambroisie ];

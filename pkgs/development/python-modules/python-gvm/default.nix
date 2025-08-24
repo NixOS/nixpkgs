@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "26.2.0";
+  version = "26.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "python-gvm";
     tag = "v${version}";
-    hash = "sha256-xWNOUgTanOVYjvoZZkQBrKYr0z+dn0/ur5jdO549FXw=";
+    hash = "sha256-9OSL7Li95p79P1+8yViI/pV/nLwuk580/6Be99+DTWU=";
   };
 
   build-system = [ poetry-core ];
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     # No running SSH available
     "test_connect_error"
     "test_feed_xml_error"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_feed_xml_error" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_feed_xml_error" ];
 
   pythonImportsCheck = [ "gvm" ];
 

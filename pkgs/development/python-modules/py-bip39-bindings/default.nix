@@ -23,11 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-CglVEvmZ8xYtjFPNhCyzToYrOvGe/Sw3zHAIy1HidzM=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-DsY4IBxuOTUTMiQs93K8G1hG7jI6PnoQ3Rpbd6iyFpU=";
+  };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -38,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "bip39" ];
 

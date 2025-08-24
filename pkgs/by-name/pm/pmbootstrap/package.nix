@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.4.2";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-5N8yAd/1gSzHP2wXpqZb+LpylQ/LYspJ+YaY2YaWCSs=";
+    hash = "sha256-fkzDVMO0huAuJDJIt0dyNGnRD6Go7XZ/YRv/JMtlbss=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -52,16 +52,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # skip impure tests
-  disabledTests =
-    [
-      "test_pkgrepo_pmaports"
-      "test_random_valid_deviceinfos"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # assert chroot.type == ChrootType.BUILDROOT
-      # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
-      "test_valid_chroots"
-    ];
+  disabledTests = [
+    "test_pkgrepo_pmaports"
+    "test_random_valid_deviceinfos"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # assert chroot.type == ChrootType.BUILDROOT
+    # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
+    "test_valid_chroots"
+  ];
 
   versionCheckProgramArg = "--version";
 

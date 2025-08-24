@@ -2,6 +2,7 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
+  defusedxml,
   fetchPypi,
   hatchling,
   llama-index-core,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.4.8";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-0oIbFkwRRTt5k0VjVabFRGMaCuhlamRt+fwAnxbPuZ8=";
+    hash = "sha256-8yRhe/xNmzITbSX/U1G5K8C1aaKWFz7iqFkcH4hu/ww=";
   };
 
   pythonRelaxDeps = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   dependencies = [
     beautifulsoup4
+    defusedxml
     llama-index-core
     pymupdf
     pypdf

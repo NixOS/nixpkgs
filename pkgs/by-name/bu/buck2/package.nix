@@ -44,7 +44,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  version = "2025-05-06";
+  version = "2025-08-15";
 
   # map our platform name to the rust toolchain suffix
   # NOTE (aseipp): must be synchronized with update.sh!
@@ -82,7 +82,7 @@ let
   # tooling
   prelude-src =
     let
-      prelude-hash = "48c249f8c7b99ff501d6e857754760315072b306";
+      prelude-hash = "892cb85f5fc3258c7e4f89a836821ec4b8c7ee44";
       name = "buck2-prelude-${version}.tar.gz";
       hash = buildHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
@@ -108,13 +108,28 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontStrip = true;
 
-  unpackPhase = "unzstd ${buck2-src} -o ./buck2 && unzstd ${rust-project-src} -o ./rust-project";
-  buildPhase = "chmod +x ./buck2 && chmod +x ./rust-project";
-  checkPhase = "./buck2 --version && ./rust-project --version";
+  unpackPhase = ''
+    runHook preUnpack
+    unzstd ${buck2-src} -o ./buck2
+    unzstd ${rust-project-src} -o ./rust-project
+    runHook postUnpack
+  '';
+  buildPhase = ''
+    runHook preBuild
+    chmod +x ./buck2 && chmod +x ./rust-project
+    runHook postBuild
+  '';
+  checkPhase = ''
+    runHook preCheck
+    ./buck2 --version && ./rust-project --version
+    runHook postCheck
+  '';
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
     install -D rust-project $out/bin/rust-project
+    runHook postInstall
   '';
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd buck2 \
@@ -149,7 +164,11 @@ stdenv.mkDerivation {
       mit
     ];
     mainProgram = "buck2";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      lf-
+      _9999years
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

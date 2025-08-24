@@ -136,18 +136,17 @@ stdenv.mkDerivation (finalAttrs: {
     quilt
   ];
 
-  buildInputs =
-    [
-      xorg.libX11
-      xorg.libxkbfile
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libsecret
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libxkbfile
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libsecret
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   patches = [
     # Remove all git calls from the VS Code build script except `git rev-parse
@@ -198,98 +197,97 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      # Apply patches.
-      quilt push -a
+    # Apply patches.
+    quilt push -a
 
-      export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-      export SKIP_SUBMODULE_DEPS=1
-      export NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096"
+    export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+    export SKIP_SUBMODULE_DEPS=1
+    export NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096"
 
-      # Remove all built-in extensions, as these are 3rd party extensions that
-      # get downloaded from the VS Code marketplace.
-      jq --slurp '.[0] * .[1]' "./lib/vscode/product.json" <(
-        cat << EOF
-      {
-        "builtInExtensions": []
-      }
-      EOF
-      ) | sponge ./lib/vscode/product.json
+    # Remove all built-in extensions, as these are 3rd party extensions that
+    # get downloaded from the VS Code marketplace.
+    jq --slurp '.[0] * .[1]' "./lib/vscode/product.json" <(
+      cat << EOF
+    {
+      "builtInExtensions": []
+    }
+    EOF
+    ) | sponge ./lib/vscode/product.json
 
-      # Disable automatic updates.
-      sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
-        lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
+    # Disable automatic updates.
+    sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
+      lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
 
-      # Patch out remote download of nodejs from build script.
-      patch -p1 -i ${./remove-node-download.patch}
+    # Patch out remote download of nodejs from build script.
+    patch -p1 -i ${./remove-node-download.patch}
 
-      # Install dependencies.
-      patchShebangs .
-      find . -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} yarn --cwd {} \
-            --offline --frozen-lockfile --ignore-scripts --ignore-engines
-      patchShebangs .
+    # Install dependencies.
+    patchShebangs .
+    find . -name "yarn.lock" -printf "%h\n" | \
+        xargs -I {} yarn --cwd {} \
+          --offline --frozen-lockfile --ignore-scripts --ignore-engines
+    patchShebangs .
 
-      # Use esbuild from nixpkgs.
-      ${patchEsbuild "./lib/vscode/build" "0.12.6"}
-      ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
+    # Use esbuild from nixpkgs.
+    ${patchEsbuild "./lib/vscode/build" "0.12.6"}
+    ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
 
-      # Kerberos errors while building, so remove it for now as it is not
-      # required.
-      yarn remove kerberos --cwd lib/vscode/remote --offline --frozen-lockfile --ignore-scripts --ignore-engines
+    # Kerberos errors while building, so remove it for now as it is not
+    # required.
+    yarn remove kerberos --cwd lib/vscode/remote --offline --frozen-lockfile --ignore-scripts --ignore-engines
 
-      # Put ripgrep binary into bin, so post-install does not try to download it.
-      find -name ripgrep -type d \
-        -execdir mkdir -p {}/bin \; \
-        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+    # Put ripgrep binary into bin, so post-install does not try to download it.
+    find -name ripgrep -type d \
+      -execdir mkdir -p {}/bin \; \
+      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
-      # Run post-install scripts after patching.
-      find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
-        -and -type f -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
-      patchShebangs .
+    # Run post-install scripts after patching.
+    find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
+      -and -type f -name "yarn.lock" -printf "%h\n" | \
+        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+    patchShebangs .
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-      # (see issue #101229).
-      pushd ./lib/vscode/remote/node_modules/@parcel/watcher
-      mkdir -p ./build/Release
-      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-      popd
-    ''
-    + ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+    # (see issue #101229).
+    pushd ./lib/vscode/remote/node_modules/@parcel/watcher
+    mkdir -p ./build/Release
+    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+    popd
+  ''
+  + ''
 
-      # Build binary packages (argon2, node-pty, etc).
-      npm rebuild --offline
-      npm rebuild --offline --prefix lib/vscode/remote
+    # Build binary packages (argon2, node-pty, etc).
+    npm rebuild --offline
+    npm rebuild --offline --prefix lib/vscode/remote
 
-      # Build code-server and VS Code.
-      yarn build
-      VERSION=${finalAttrs.version} yarn build:vscode
+    # Build code-server and VS Code.
+    yarn build
+    VERSION=${finalAttrs.version} yarn build:vscode
 
-      # Inject version into package.json.
-      jq --slurp '.[0] * .[1]' ./package.json <(
-        cat << EOF
-      {
-        "version": "${finalAttrs.version}"
-      }
-      EOF
-      ) | sponge ./package.json
+    # Inject version into package.json.
+    jq --slurp '.[0] * .[1]' ./package.json <(
+      cat << EOF
+    {
+      "version": "${finalAttrs.version}"
+    }
+    EOF
+    ) | sponge ./package.json
 
-      # Create release, keeping all dependencies.
-      KEEP_MODULES=1 yarn release
+    # Create release, keeping all dependencies.
+    KEEP_MODULES=1 yarn release
 
-      # Prune development dependencies.  We only need to do this for the root as
-      # the VS Code build process already does this for VS Code.
-      npm prune --omit=dev --prefix release
+    # Prune development dependencies.  We only need to do this for the root as
+    # the VS Code build process already does this for VS Code.
+    npm prune --omit=dev --prefix release
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

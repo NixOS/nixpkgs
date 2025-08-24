@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "terminal hex editor";
+    description = "Terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ramkromberg ];

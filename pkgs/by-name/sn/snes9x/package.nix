@@ -37,49 +37,47 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals withGtk [
-      cmake
-      ninja
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals withGtk [
+    cmake
+    ninja
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      libX11
-      libXv
-      minizip
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      pulseaudio
-      libselinux
-      util-linuxMinimal # provides libmount
-    ]
-    ++ lib.optionals (!withGtk) [
-      libpng
-      libXext
-      libXinerama
-    ]
-    ++ lib.optionals withGtk [
-      gtkmm3
-      libepoxy
-      libXdmcp
-      libXrandr
-      pcre2
-      portaudio
-      SDL2
-    ];
+  buildInputs = [
+    libX11
+    libXv
+    minizip
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    pulseaudio
+    libselinux
+    util-linuxMinimal # provides libmount
+  ]
+  ++ lib.optionals (!withGtk) [
+    libpng
+    libXext
+    libXinerama
+  ]
+  ++ lib.optionals withGtk [
+    gtkmm3
+    libepoxy
+    libXdmcp
+    libXrandr
+    pcre2
+    portaudio
+    SDL2
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -131,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         Version build with ${interface} interface.
       '';
       license = lib.licenses.unfreeRedistributable // {
-        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.rev}/LICENSE";
+        url = "https://github.com/snes9xgit/snes9x/blob/${finalAttrs.src.tag}/LICENSE";
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [

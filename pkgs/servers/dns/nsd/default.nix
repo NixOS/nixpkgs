@@ -4,6 +4,8 @@
   fetchurl,
   libevent,
   openssl,
+  pkg-config,
+  systemdMinimal,
   nixosTests,
   bind8Stats ? false,
   checking ? false,
@@ -16,17 +18,18 @@
   rootServer ? false,
   rrtypes ? false,
   zoneStats ? false,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.11.1";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aW5QBSAI3k+nqx2BjVt362MkfuovBXURTJWS/5GIphQ=";
+    sha256 = "sha256-+ezCz3m6UFgPLfYpGO/EQAhMW/EQV9tEwZqpZDzUteg=";
   };
 
   prePatch = ''
@@ -36,6 +39,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libevent
     openssl
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+    pkg-config
   ];
 
   enableParallelBuilding = true;
@@ -55,6 +62,7 @@ stdenv.mkDerivation rec {
     ++ edf rootServer "root-server"
     ++ edf rrtypes "draft-rrtypes"
     ++ edf zoneStats "zone-stats"
+    ++ edf withSystemd "systemd"
     ++ [
       "--with-ssl=${openssl.dev}"
       "--with-libevent=${libevent.dev}"

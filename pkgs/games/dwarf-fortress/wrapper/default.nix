@@ -215,30 +215,29 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
     dontUnpack = true;
     dontBuild = true;
     preferLocalBuild = true;
-    installPhase =
-      ''
-        mkdir -p $out/bin
+    installPhase = ''
+      mkdir -p $out/bin
 
-        substitute $runDF $out/bin/dwarf-fortress \
-          --subst-var-by stdenv_shell ${stdenv.shell} \
-          --subst-var-by dfExe ${dwarf-fortress.exe} \
-          --subst-var dfInit
-        chmod 755 $out/bin/dwarf-fortress
-      ''
-      + lib.optionalString enableDFHack ''
-        substitute $runDF $out/bin/dfhack \
-          --subst-var-by stdenv_shell ${stdenv.shell} \
-          --subst-var-by dfExe dfhack \
-          --subst-var dfInit
-        chmod 755 $out/bin/dfhack
-      ''
-      + lib.optionalString enableSoundSense ''
-        substitute $runSoundSense $out/bin/soundsense \
-          --subst-var-by stdenv_shell ${stdenv.shell} \
-          --subst-var-by jre ${jre} \
-          --subst-var dfInit
-        chmod 755 $out/bin/soundsense
-      '';
+      substitute $runDF $out/bin/dwarf-fortress \
+        --subst-var-by stdenv_shell ${stdenv.shell} \
+        --subst-var-by dfExe ${dwarf-fortress.exe} \
+        --subst-var dfInit
+      chmod 755 $out/bin/dwarf-fortress
+    ''
+    + lib.optionalString enableDFHack ''
+      substitute $runDF $out/bin/dfhack \
+        --subst-var-by stdenv_shell ${stdenv.shell} \
+        --subst-var-by dfExe dfhack \
+        --subst-var dfInit
+      chmod 755 $out/bin/dfhack
+    ''
+    + lib.optionalString enableSoundSense ''
+      substitute $runSoundSense $out/bin/soundsense \
+        --subst-var-by stdenv_shell ${stdenv.shell} \
+        --subst-var-by jre ${jre} \
+        --subst-var dfInit
+      chmod 755 $out/bin/soundsense
+    '';
 
     doInstallCheck = stdenv.hostPlatform.isLinux;
     nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [

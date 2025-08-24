@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "tscli";
-  version = "0.0.7";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = "tscli";
     tag = "v${version}";
-    hash = "sha256-o08ynbx+Pclme+xS00jx7096D2jHnvJg28UISZayxKY=";
+    hash = "sha256-RsWpZYRb/6ZpOio5te7qokGJeTlSmu/MH+BVoQVbkNw=";
   };
 
-  vendorHash = "sha256-+4PFwEib/8o+1mk5SOkIZkK7W1elIFToU1DI9P8s1Y8=";
+  vendorHash = "sha256-RELJJN2ldcUkbyskitg1y6vakdQ6mRkmT7Y25TS2sz8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

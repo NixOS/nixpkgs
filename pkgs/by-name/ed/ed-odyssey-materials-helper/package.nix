@@ -3,26 +3,29 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk23,
+  jdk24,
   makeWrapper,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.178";
+  version = "2.223";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
+    hash = "sha256-NPiy1KQxi6iRR3tEjdPnx8w++sCLIsZ2FQXSUQL0WrA=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +40,9 @@ stdenv.mkDerivation rec {
     # so this removes 1) the popup about it when you first start the program, 2) the option in the settings
     # and makes the program always know that it is set up
     ./remove-urlscheme-settings.patch
+
+    # Upstream requested that sentry is only to be used with official builds, remove it so it doesn't complain about the lack of DSN
+    ./remove-sentry.patch
   ];
   postPatch = ''
     # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
@@ -49,6 +55,11 @@ stdenv.mkDerivation rec {
     # remove "new version available" popup
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
+
+    for f in build.gradle */build.gradle; do
+      substituteInPlace $f \
+        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+    done
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -56,7 +67,10 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk24}"
+    "--stacktrace"
+  ];
 
   gradleBuildTask = "application:jpackage";
 
@@ -84,8 +98,12 @@ stdenv.mkDerivation rec {
           glib
           libXtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [

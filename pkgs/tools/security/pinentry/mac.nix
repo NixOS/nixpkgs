@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   # use pregenerated nib files because generating them requires XCode
   postPatch = ''
     cp -r ${./mac/Main.nib} macosx/Main.nib
@@ -97,7 +101,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pinentry for GPG on Mac";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://github.com/GPGTools/pinentry-mac";
+    homepage = "https://github.com/GPGTools/pinentry";
     platforms = lib.platforms.darwin;
     mainProgram = "pinentry-mac";
   };

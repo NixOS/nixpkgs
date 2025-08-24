@@ -35,11 +35,11 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     pname = "knot-resolver";
-    version = "5.7.5";
+    version = "5.7.6";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-      sha256 = "80239cf9aa92599d9cbad4642dea5520b2ccfbc9c6f968886ea46179cb3cdf66";
+      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
     };
 
     outputs = [
@@ -48,33 +48,32 @@ let
     ];
 
     # Path fixups for the NixOS service.
-    postPatch =
-      ''
-        patch meson.build <<EOF
-        @@ -50,2 +50,2 @@
-        -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
-        -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
-        +systemd_work_dir  = '/var/lib/knot-resolver'
-        +systemd_cache_dir = '/var/cache/knot-resolver'
-        EOF
+    postPatch = ''
+      patch meson.build <<EOF
+      @@ -50,2 +50,2 @@
+      -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
+      -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
+      +systemd_work_dir  = '/var/lib/knot-resolver'
+      +systemd_cache_dir = '/var/cache/knot-resolver'
+      EOF
 
-        # ExecStart can't be overwritten in overrides.
-        # We need that to use wrapped executable and correct config file.
-        sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+      # ExecStart can't be overwritten in overrides.
+      # We need that to use wrapped executable and correct config file.
+      sed '/^ExecStart=/d' -i systemd/kresd@.service.in
 
-        # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
-        # Even though they should already be loaded and they're in RPATH, too.
-        for f in daemon/lua/{kres,zonefile}.lua; do
-          substituteInPlace "$f" \
-            --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
-        done
-      ''
-      # some tests have issues with network sandboxing, apparently
-      + optionalString doInstallCheck ''
-        echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-        sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
-          tests/config/doh2.test.lua modules/http/http_doh.test.lua
-      '';
+      # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
+      # Even though they should already be loaded and they're in RPATH, too.
+      for f in daemon/lua/{kres,zonefile}.lua; do
+        substituteInPlace "$f" \
+          --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+      done
+    ''
+    # some tests have issues with network sandboxing, apparently
+    + optionalString doInstallCheck ''
+      echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
+      sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
+        tests/config/doh2.test.lua modules/http/http_doh.test.lua
+    '';
 
     preConfigure = ''
       patchShebangs scripts/
@@ -87,52 +86,49 @@ let
     ];
 
     # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
-    buildInputs =
-      [
-        knot-dns
-        lua.lua
-        libuv
-        gnutls
-        lmdb
-      ]
-      ## the rest are optional dependencies
-      ++ optionals stdenv.hostPlatform.isLinux [
-        # lib
-        systemd
-        libcap_ng
-      ]
-      ++ [
-        jemalloc
-        nghttp2
-      ]
-      ++ [
-        fstrm
-        protobufc
-      ] # dnstap support
+    buildInputs = [
+      knot-dns
+      lua.lua
+      libuv
+      gnutls
+      lmdb
+    ]
+    ## the rest are optional dependencies
+    ++ optionals stdenv.hostPlatform.isLinux [
+      # lib
+      systemd
+      libcap_ng
+    ]
+    ++ [
+      jemalloc
+      nghttp2
+    ]
+    ++ [
+      fstrm
+      protobufc
+    ] # dnstap support
     ;
 
-    mesonFlags =
-      [
-        "-Dkeyfile_default=${dns-root-data}/root.ds"
-        "-Droot_hints=${dns-root-data}/root.hints"
-        "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
-        "-Dmalloc=jemalloc"
-        "--default-library=static" # not used by anyone
-      ]
-      ++ optional doInstallCheck "-Dunit_tests=enabled"
-      ++ optional doInstallCheck "-Dconfig_tests=enabled"
-      ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
+    mesonFlags = [
+      "-Dkeyfile_default=${dns-root-data}/root.ds"
+      "-Droot_hints=${dns-root-data}/root.hints"
+      "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
+      "-Dmalloc=jemalloc"
+      "--default-library=static" # not used by anyone
+    ]
+    ++ optional doInstallCheck "-Dunit_tests=enabled"
+    ++ optional doInstallCheck "-Dconfig_tests=enabled"
+    ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
     ;
 
-    postInstall =
-      ''
-        rm "$out"/lib/libkres.a
-        rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
-      ''
-      + optionalString stdenv.hostPlatform.isLinux ''
-        rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
-      '';
+    postInstall = ''
+      rm "$out"/lib/libkres.a
+      rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
+    ''
+    + optionalString stdenv.hostPlatform.isLinux ''
+      rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
+    '';
 
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [

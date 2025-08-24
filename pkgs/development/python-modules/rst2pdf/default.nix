@@ -30,6 +30,8 @@ buildPythonPackage rec {
     hash = "sha256-P/6BbUsyda7iG4/90Isua+TXWQzYixifczy8aZbWN4Y=";
   };
 
+  pythonRelaxDeps = [ "packaging" ];
+
   outputs = [
     "out"
     "man"

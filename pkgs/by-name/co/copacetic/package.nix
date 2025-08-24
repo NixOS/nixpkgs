@@ -45,16 +45,15 @@ buildGoModule rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
-  postInstall =
-    ''
-      mv $out/bin/copacetic $out/bin/copa
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd copa \
-        --bash <($out/bin/copa completion bash) \
-        --fish <($out/bin/copa completion fish) \
-        --zsh <($out/bin/copa completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/copacetic $out/bin/copa
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd copa \
+      --bash <($out/bin/copa completion bash) \
+      --fish <($out/bin/copa completion fish) \
+      --zsh <($out/bin/copa completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

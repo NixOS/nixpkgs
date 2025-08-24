@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";
-  version = "2.1";
+  version = "3.0";
   format = "setuptools";
 
   # distutils usage
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "z3c.checkversions";
-    hash = "sha256-j5So40SyJf7XfCz3P9YFR/6z94up3LY2/dfEmmIbxAk=";
+    hash = "sha256-VMGSlocgEddBrUT0A4ihtCdhSbirWYe9FmQ0QyOGOEs=";
   };
 
   propagatedBuildInputs = [ zc-buildout ];

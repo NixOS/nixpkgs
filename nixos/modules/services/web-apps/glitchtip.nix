@@ -171,12 +171,13 @@ in
 
           wants = [ "network-online.target" ];
           requires =
-            lib.optional cfg.database.createLocally "postgresql.service"
+            lib.optional cfg.database.createLocally "postgresql.target"
             ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
-          after =
-            [ "network-online.target" ]
-            ++ lib.optional cfg.database.createLocally "postgresql.service"
-            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
+          after = [
+            "network-online.target"
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target"
+          ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
 
           inherit environment;
         };

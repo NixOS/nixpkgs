@@ -1,0 +1,15 @@
+diff --git a/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Microsoft.CodeAnalysis.LanguageServer.csproj b/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Microsoft.CodeAnalysis.LanguageServer.csproj
+index c32f01a6695..b98bab44c4e 100644
+--- a/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Microsoft.CodeAnalysis.LanguageServer.csproj
++++ b/src/LanguageServer/Microsoft.CodeAnalysis.LanguageServer/Microsoft.CodeAnalysis.LanguageServer.csproj
+@@ -54,8 +54,8 @@
+     <RuntimeIdentifiers Condition="'$(TargetRid)' == '' and '$(PortableTargetRid)' == ''">win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
+ 
+     <!-- These indicate that the runtime/apphost packages should not be downloaded as part of build/restore -->
+-    <EnableRuntimePackDownload>false</EnableRuntimePackDownload>
+-    <EnableAppHostPackDownload>false</EnableAppHostPackDownload>
++    <EnableRuntimePackDownload>true</EnableRuntimePackDownload>
++    <EnableAppHostPackDownload>true</EnableAppHostPackDownload>
+ 
+     <!-- Publish ready to run executables when we're publishing platform specific executables. -->
+     <PublishReadyToRun Condition="'$(RuntimeIdentifier)' != '' AND '$(Configuration)' == 'Release' ">true</PublishReadyToRun>

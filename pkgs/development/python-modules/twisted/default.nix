@@ -33,7 +33,7 @@
 
   # tests
   cython-test-exception-raiser,
-  git,
+  gitMinimal,
   glibcLocales,
   pyhamcrest,
   hypothesis,
@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.11.0";
+  version = "25.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-aV0FVtXsV53MRk0oVrY0iA7RMZ9FsQ0ZBD8rV+sBFbU=";
+    hash = "sha256-HesnI1jLa+Hj6PxvnIs2946w+nwiM9Lb4R7G/uBOoxY=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -86,94 +86,93 @@ buildPythonPackage rec {
 
   postPatch =
     let
-      skippedTests =
-        {
-          "src/twisted/conch/test/test_cftp.py" = [
-            # timezone issues
-            "ListingTests.test_localeIndependent"
-            "ListingTests.test_newSingleDigitDayOfMonth"
-            "ListingTests.test_oldFile"
-            "ListingTests.test_oldSingleDigitDayOfMonth"
-            "ListingTests.test_newFile"
-          ];
-          "src/twisted/test/test_log.py" = [
-            # wrong timezone offset calculation
-            "FileObserverTests.test_getTimezoneOffsetEastOfUTC"
-            "FileObserverTests.test_getTimezoneOffsetWestOfUTC"
-            "FileObserverTests.test_getTimezoneOffsetWithoutDaylightSavingTime"
-          ];
-          "src/twisted/test/test_udp.py" = [
-            # "No such device" (No multicast support in the build sandbox)
-            "MulticastTests.test_joinLeave"
-            "MulticastTests.test_loopback"
-            "MulticastTests.test_multicast"
-            "MulticastTests.test_multiListen"
-          ];
-          "src/twisted/trial/test/test_script.py" = [
-            # Fails in LXC containers with less than all cores available (limits.cpu)
-            "AutoJobsTests.test_cpuCount"
-          ];
-          "src/twisted/internet/test/test_unix.py" = [
-            # flaky?
-            "UNIXTestsBuilder.test_sendFileDescriptorTriggersPauseProducing"
-          ];
-        }
-        // lib.optionalAttrs (pythonAtLeast "3.12") {
-          "src/twisted/trial/_dist/test/test_workerreporter.py" = [
-            "WorkerReporterTests.test_addSkipPyunit"
-          ];
-          "src/twisted/trial/_dist/test/test_worker.py" = [
-            "LocalWorkerAMPTests.test_runSkip"
-          ];
-        }
-        // lib.optionalAttrs (pythonOlder "3.13") {
-          # missing ciphers in the crypt module due to libxcrypt
-          "src/twisted/web/test/test_tap.py" = [
-            "ServiceTests.test_HTTPSFailureOnMissingSSL"
-            "ServiceTests.test_HTTPSFailureOnMissingSSL"
-          ];
-          "src/twisted/conch/test/test_checkers.py" = [
-            "HelperTests.test_refuteCryptedPassword"
-            "HelperTests.test_verifyCryptedPassword"
-            "HelperTests.test_verifyCryptedPasswordMD5"
-            "UNIXPasswordDatabaseTests.test_defaultCheckers"
-            "UNIXPasswordDatabaseTests.test_passInCheckers"
-          ];
-          "src/twisted/cred/test/test_strcred.py" = [
-            "UnixCheckerTests.test_isChecker"
-            "UnixCheckerTests.test_unixCheckerFailsPassword"
-            "UnixCheckerTests.test_unixCheckerFailsPasswordBytes"
-            "UnixCheckerTests.test_unixCheckerFailsUsername"
-            "UnixCheckerTests.test_unixCheckerFailsUsernameBytes"
-            "UnixCheckerTests.test_unixCheckerSucceeds"
-            "UnixCheckerTests.test_unixCheckerSucceedsBytes"
-            "CryptTests.test_verifyCryptedPassword"
-            "CryptTests.test_verifyCryptedPasswordOSError"
-          ];
-          # dependant on UnixCheckerTests.test_isChecker
-          "src/twisted/cred/test/test_cred.py" = [
-            "HashedPasswordOnDiskDatabaseTests.testBadCredentials"
-            "HashedPasswordOnDiskDatabaseTests.testGoodCredentials"
-            "HashedPasswordOnDiskDatabaseTests.testGoodCredentials_login"
-            "HashedPasswordOnDiskDatabaseTests.testHashedCredentials"
-          ];
-        }
-        // lib.optionalAttrs (pythonAtLeast "3.13") {
-          "src/twisted/web/test/test_flatten.py" = [
-            "FlattenerErrorTests.test_asynchronousFlattenError"
-            "FlattenerErrorTests.test_cancel"
-          ];
-        }
-        // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-          "src/twisted/internet/test/test_process.py" = [
-            # invalid syntaax
-            "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors"
-            "ProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors"
-            # exit code 120
-            "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded"
-            "ProcessTestsBuilder_SelectReactorTests.test_processEnded"
-          ];
-        };
+      skippedTests = {
+        "src/twisted/conch/test/test_cftp.py" = [
+          # timezone issues
+          "ListingTests.test_localeIndependent"
+          "ListingTests.test_newSingleDigitDayOfMonth"
+          "ListingTests.test_oldFile"
+          "ListingTests.test_oldSingleDigitDayOfMonth"
+          "ListingTests.test_newFile"
+        ];
+        "src/twisted/test/test_log.py" = [
+          # wrong timezone offset calculation
+          "FileObserverTests.test_getTimezoneOffsetEastOfUTC"
+          "FileObserverTests.test_getTimezoneOffsetWestOfUTC"
+          "FileObserverTests.test_getTimezoneOffsetWithoutDaylightSavingTime"
+        ];
+        "src/twisted/test/test_udp.py" = [
+          # "No such device" (No multicast support in the build sandbox)
+          "MulticastTests.test_joinLeave"
+          "MulticastTests.test_loopback"
+          "MulticastTests.test_multicast"
+          "MulticastTests.test_multiListen"
+        ];
+        "src/twisted/trial/test/test_script.py" = [
+          # Fails in LXC containers with less than all cores available (limits.cpu)
+          "AutoJobsTests.test_cpuCount"
+        ];
+        "src/twisted/internet/test/test_unix.py" = [
+          # flaky?
+          "UNIXTestsBuilder.test_sendFileDescriptorTriggersPauseProducing"
+        ];
+      }
+      // lib.optionalAttrs (pythonAtLeast "3.12") {
+        "src/twisted/trial/_dist/test/test_workerreporter.py" = [
+          "WorkerReporterTests.test_addSkipPyunit"
+        ];
+        "src/twisted/trial/_dist/test/test_worker.py" = [
+          "LocalWorkerAMPTests.test_runSkip"
+        ];
+      }
+      // lib.optionalAttrs (pythonOlder "3.13") {
+        # missing ciphers in the crypt module due to libxcrypt
+        "src/twisted/web/test/test_tap.py" = [
+          "ServiceTests.test_HTTPSFailureOnMissingSSL"
+          "ServiceTests.test_HTTPSFailureOnMissingSSL"
+        ];
+        "src/twisted/conch/test/test_checkers.py" = [
+          "HelperTests.test_refuteCryptedPassword"
+          "HelperTests.test_verifyCryptedPassword"
+          "HelperTests.test_verifyCryptedPasswordMD5"
+          "UNIXPasswordDatabaseTests.test_defaultCheckers"
+          "UNIXPasswordDatabaseTests.test_passInCheckers"
+        ];
+        "src/twisted/cred/test/test_strcred.py" = [
+          "UnixCheckerTests.test_isChecker"
+          "UnixCheckerTests.test_unixCheckerFailsPassword"
+          "UnixCheckerTests.test_unixCheckerFailsPasswordBytes"
+          "UnixCheckerTests.test_unixCheckerFailsUsername"
+          "UnixCheckerTests.test_unixCheckerFailsUsernameBytes"
+          "UnixCheckerTests.test_unixCheckerSucceeds"
+          "UnixCheckerTests.test_unixCheckerSucceedsBytes"
+          "CryptTests.test_verifyCryptedPassword"
+          "CryptTests.test_verifyCryptedPasswordOSError"
+        ];
+        # dependant on UnixCheckerTests.test_isChecker
+        "src/twisted/cred/test/test_cred.py" = [
+          "HashedPasswordOnDiskDatabaseTests.testBadCredentials"
+          "HashedPasswordOnDiskDatabaseTests.testGoodCredentials"
+          "HashedPasswordOnDiskDatabaseTests.testGoodCredentials_login"
+          "HashedPasswordOnDiskDatabaseTests.testHashedCredentials"
+        ];
+      }
+      // lib.optionalAttrs (pythonAtLeast "3.13") {
+        "src/twisted/web/test/test_flatten.py" = [
+          "FlattenerErrorTests.test_asynchronousFlattenError"
+          "FlattenerErrorTests.test_cancel"
+        ];
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        "src/twisted/internet/test/test_process.py" = [
+          # invalid syntaax
+          "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors"
+          "ProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors"
+          # exit code 120
+          "ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded"
+          "ProcessTestsBuilder_SelectReactorTests.test_processEnded"
+        ];
+      };
     in
     lib.concatStringsSep "\n" (
       lib.mapAttrsToList (
@@ -194,16 +193,15 @@ buildPythonPackage rec {
     $out/bin/twistd --help > /dev/null
   '';
 
-  nativeCheckInputs =
-    [
-      git
-      glibcLocales
-    ]
-    ++ optional-dependencies.test
-    ++ optional-dependencies.conch
-    ++ optional-dependencies.http2
-    ++ optional-dependencies.serial
-    ++ optional-dependencies.tls;
+  nativeCheckInputs = [
+    gitMinimal
+    glibcLocales
+  ]
+  ++ optional-dependencies.test
+  ++ optional-dependencies.conch
+  ++ optional-dependencies.http2
+  ++ optional-dependencies.serial
+  ++ optional-dependencies.tls;
 
   preCheck = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -233,7 +231,8 @@ buildPythonPackage rec {
       pyhamcrest
       hypothesis
       httpx
-    ] ++ httpx.optional-dependencies.http2;
+    ]
+    ++ httpx.optional-dependencies.http2;
     tls = [
       idna
       pyopenssl

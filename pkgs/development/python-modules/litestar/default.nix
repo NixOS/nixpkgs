@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "litestar";
-  version = "2.13.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
     tag = "v${version}";
-    hash = "sha256-PR2DVNRtILHs7XwVi9/ZCVRJQFqfGLn1x2gpYtYjHDo=";
+    hash = "sha256-67O/NxPBBLa1QfH1o9laOAQEin8jRA8SkcV7QEzCjI0=";
   };
 
   build-system = [
@@ -96,7 +96,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Follow github CI
     "docs/examples/"
   ];
@@ -105,7 +105,7 @@ buildPythonPackage rec {
     homepage = "https://litestar.dev/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/litestar/releases/tag/v${version}";
+    changelog = "https://github.com/litestar-org/litestar/releases/tag/${src.tag}";
     description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
     license = lib.licenses.mit;
     mainProgram = "litestar";

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python wrapper for subprocess which provides command pipeline functionality";
     homepage = "https://sarge.readthedocs.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

@@ -48,12 +48,8 @@ Overlays are Nix functions which accept two arguments, conventionally called `se
 self: super:
 
 {
-  boost = super.boost.override {
-    python = self.python3;
-  };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
-  };
+  boost = super.boost.override { python = self.python3; };
+  rr = super.callPackage ./pkgs/rr { stdenv = self.stdenv_32bit; };
 }
 ```
 
@@ -99,13 +95,9 @@ Introduced in [PR #83888](https://github.com/NixOS/nixpkgs/pull/83888), we are a
 self: super:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.mkl;
-  };
+  blas = super.blas.override { blasProvider = self.mkl; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.mkl;
-  };
+  lapack = super.lapack.override { lapackProvider = self.mkl; };
 }
 ```
 
@@ -123,13 +115,9 @@ To override `blas` and `lapack` with its reference implementations (i.e. for dev
 self: super:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.lapack-reference;
-  };
+  blas = super.blas.override { blasProvider = self.lapack-reference; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.lapack-reference;
-  };
+  lapack = super.lapack.override { lapackProvider = self.lapack-reference; };
 }
 ```
 

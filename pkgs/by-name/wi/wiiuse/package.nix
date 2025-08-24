@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_EXAMPLE_SDL=OFF"
-  ] ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+  ]
+  ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
   meta = with lib; {
     description = "Feature complete cross-platform Wii Remote access library";

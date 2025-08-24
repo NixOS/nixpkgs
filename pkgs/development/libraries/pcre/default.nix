@@ -39,13 +39,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional enableJit "shadowstack";
 
-  configureFlags =
-    [
-      "--enable-unicode-properties"
-      "--disable-cpp"
-    ]
-    ++ lib.optional enableJit "--enable-jit=auto"
-    ++ lib.optional (variant != null) "--enable-${variant}";
+  configureFlags = [
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+  ++ lib.optional enableJit "--enable-jit=auto"
+  ++ lib.optional (variant != null) "--enable-${variant}";
 
   patches = [
     # https://bugs.exim.org/show_bug.cgi?id=2173
@@ -72,13 +71,12 @@ stdenv.mkDerivation rec {
   # XXX: test failure on Cygwin
   # we are running out of stack on both freeBSDs on Hydra
 
-  postFixup =
-    ''
-      moveToOutput bin/pcre-config "$dev"
-    ''
-    + lib.optionalString (variant != null) ''
-      ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
-    '';
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+  + lib.optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
+  '';
 
   meta = {
     homepage = "https://www.pcre.org/";

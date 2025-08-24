@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.8";
+  version = "0.0.1-alpha.19";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-w/UEENP9tqwqFX/oCvI67DDMSmXzlCazAIP2wfmdDSs=";
+    hash = "sha256-CCk6ZrhEFMLYtjNrzp7PBH2W4QFSH1Bqlw+Wh2OPFC4=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-XISRy7Ncy0lTlsCFYmJBcgGiDJfdygTDF4f9O9ZlzDU=";
+  cargoHash = "sha256-TNXWRBJInnLiFyf29O8c6ZE7Qhb6sXM0fPRDqMPWSSw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export CARGO_BIN_EXE_ty="$PWD"/target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/ty
   '';
 
-  # All the packages referenced in `crates/ty/README.md`, plus `crates/ty` itself.
   cargoTestFlags = [
     "--package=ty" # CLI tests; file-watching tests only on Linux platforms
     "--package=ty_python_semantic" # core type checking tests

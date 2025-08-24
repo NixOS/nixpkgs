@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "korrect";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-U363YI1CQg7KAUtzN2GPm4fNnD3TgJy+6hT/3JZ8e2s=";
+    hash = "sha256-/tFrHTZ6YHnN9OvoHBJWEnwX780DYrs0f5wV1dPyAcc=";
   };
-  cargoHash = "sha256-WP03Gv+Nai834xurVzdzV4uLA8fT/lbdu4zGWUgDKJo=";
+  cargoHash = "sha256-bG31pqI/eB+J0FUq/lWak6Ekf+00JiCfuKZdyUkIAAw=";
 
   passthru.updateScript = nix-update-script { };
 

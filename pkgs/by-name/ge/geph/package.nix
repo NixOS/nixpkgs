@@ -14,6 +14,7 @@
   libglvnd,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
@@ -23,18 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.61";
+  version = "0.2.82";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-qy1E5x5Fn+xwS5st6HkMrJu9nksXQQIyJf97FvNOKO4=";
+    hash = "sha256-z4f6XoMSjMmq+Uf8A/6M+aJs6oDJGdMffVflwc0Q2so=";
   };
 
-  cargoHash = "sha256-r97DsSsqp/KtgqtYQe92nz2qaOBcJF6w9ckfxpk8Cxg=";
-
-  patches = [ ./test-fix.patch ];
+  cargoHash = "sha256-PhLNS6DdCisQ8sOWm1V72UJpLZX4gVNkt1779mmMB1c=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
@@ -64,13 +63,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Wrong test
-    "--skip=traffcount::tests::test_traffic_cleanup"
     "--skip=traffcount::tests::test_traffic_count_basic"
     # Requires network
     "--skip=dns::tests::resolve_google"
     # Never finish
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
+    "--skip=tests::ping_pong"
   ];
 
   desktopItems = [
@@ -99,6 +98,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ]
     }' "$out/bin/geph5-client-gui"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "geph5-client-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";

@@ -9,7 +9,7 @@
   pkgsBB ? pkgs.pkgsBuildBuild,
   nix ? pkgs-nixVersions.stable,
   nixVersions ? [
-    pkgs-nixVersions.minimum
+    pkgs-nixVersions.nix_2_24
     nix
     pkgs-nixVersions.latest
   ],

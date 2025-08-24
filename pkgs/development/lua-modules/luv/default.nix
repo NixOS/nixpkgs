@@ -13,7 +13,7 @@
 
 buildLuarocksPackage rec {
   pname = "luv";
-  version = "1.50.0-1";
+  version = "1.51.0-1";
 
   src = fetchFromGitHub {
     owner = "luvit";
@@ -21,7 +21,7 @@ buildLuarocksPackage rec {
     rev = version;
     # Need deps/lua-compat-5.3 only
     fetchSubmodules = true;
-    hash = "sha256-PS3+qpELpX0tr7UqrlnE4NYScJb50j+9J4fbH9CTr/s=";
+    hash = "sha256-vQfr0TwhkvRDJwZnxDD/53yCzyDouzQimTnwj4drs/c=";
   };
 
   # to make sure we dont use bundled deps
@@ -29,17 +29,16 @@ buildLuarocksPackage rec {
     rm -rf deps/lua deps/luajit deps/libuv
   '';
 
-  patches =
-    [
-      # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
-      # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
-      # uv_stream userdata)"
-      ./disable-failing-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
-      ./disable-failing-darwin-tests.patch
-    ];
+  patches = [
+    # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
+    # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
+    # uv_stream userdata)"
+    ./disable-failing-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
+    ./disable-failing-darwin-tests.patch
+  ];
 
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];

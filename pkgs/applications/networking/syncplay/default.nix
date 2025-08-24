@@ -32,15 +32,14 @@ buildPythonApplication rec {
   buildInputs = lib.optionals enableGUI [
     (if stdenv.hostPlatform.isLinux then qt6.qtwayland else qt6.qtbase)
   ];
-  propagatedBuildInputs =
-    [
-      certifi
-      pem
-      twisted
-    ]
-    ++ twisted.optional-dependencies.tls
-    ++ lib.optional enableGUI pyside6
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && enableGUI) appnope;
+  propagatedBuildInputs = [
+    certifi
+    pem
+    twisted
+  ]
+  ++ twisted.optional-dependencies.tls
+  ++ lib.optional enableGUI pyside6
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && enableGUI) appnope;
   nativeBuildInputs = lib.optionals enableGUI [ qt6.wrapQtAppsHook ];
 
   makeFlags = [

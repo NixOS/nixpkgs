@@ -13,7 +13,10 @@
 
 let
   meta = {
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      rvdp
+    ];
     platforms = lib.platforms.linux;
   };
 
@@ -54,8 +57,8 @@ let
   # part of the dbus-broker project, just in separate repositories.
   c-dvar = dep {
     pname = "c-dvar";
-    version = "1.1.0";
-    hash = "sha256-p/C+BktclVseCtZJ1Q/YK03vP2ClnYRLB1Vmj2OQJD4=";
+    version = "1.2.0";
+    hash = "sha256-OlV6yR1tNWFN+rxPPGmbfbh7WyB6FwORyZR1V553iYE=";
     buildInputs = [
       c-stdaux
       c-utf8
@@ -91,8 +94,8 @@ let
   };
   c-stdaux = dep {
     pname = "c-stdaux";
-    version = "1.5.0";
-    hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0=";
+    version = "1.6.0";
+    hash = "sha256-/15lop+WUkTW9v9h7BBdwRSpJgcBXaJNtMM7LXgcQE4=";
   };
   c-utf8 = dep {
     pname = "c-utf8";
@@ -105,13 +108,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-broker";
-  version = "36";
+  version = "37";
 
   src = fetchFromGitHub {
     owner = "bus1";
     repo = "dbus-broker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5dAMKjybqrHG57vArbtWEPR/svSj2ION75JrjvnnpVM=";
+    hash = "sha256-a9ydcJKZP8MLzu9lv40p9sTyo8IsU++9HOFeGU3+Tok=";
   };
 
   patches = [

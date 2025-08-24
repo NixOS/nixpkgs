@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "treelib";
-  version = "1.7.1";
+  version = "1.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "caesar0301";
     repo = "treelib";
     tag = "v${version}";
-    hash = "sha256-+6Ur2hEhUxHccZLdWHCyCkdI6Zr/wGTBIIzzbpEEiSY=";
+    hash = "sha256-jvaZVy+FUcCcIdvWK6zFL8IBVH+hMiPMmv5shFXLo0k=";
   };
 
   propagatedBuildInputs = [ six ];

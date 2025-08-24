@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-hpsAga5741oTBT87Rt7XTyxxu7SQ5Usw+2VVr54oA8k=";
+    hash = "sha256-VE/b1Cs/wpZlu7lOURT/QfP7DuNudD441zG603LT4LM=";
   };
 
   patches = [ ./use-system-libs.patch ];
@@ -74,10 +74,13 @@ buildPythonPackage rec {
     rm -r curl_cffi
   '';
 
-  pytestFlags = [
+  enabledTestPaths = [
     "tests/unittest"
+  ];
+
+  disabledTestPaths = [
     # test accesses network
-    "--deselect tests/unittest/test_smoke.py::test_async"
+    "tests/unittest/test_smoke.py::test_async"
   ];
 
   disabledTests = [

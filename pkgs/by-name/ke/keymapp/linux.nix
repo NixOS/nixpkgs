@@ -48,15 +48,17 @@ stdenv.mkDerivation {
     gappsWrapperArgs+=(--set-default '__NV_PRIME_RENDER_OFFLOAD' 1)
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "keymapp";
-    icon = "keymapp";
-    desktopName = "Keymapp";
-    categories = [
-      "Settings"
-      "HardwareSettings"
-    ];
-    type = "Application";
-    exec = "keymapp";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "keymapp";
+      icon = "keymapp";
+      desktopName = "Keymapp";
+      categories = [
+        "Settings"
+        "HardwareSettings"
+      ];
+      type = "Application";
+      exec = "keymapp";
+    })
+  ];
 }

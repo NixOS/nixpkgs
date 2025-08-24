@@ -14,30 +14,29 @@
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     tag = version;
-    hash = "sha256-GG8aQJoCBV5wolPEzSuZhqNn//ytaTAptjY42YKga4E=";
+    hash = "sha256-nvImelAvcbHpv6JTxX+sKpldVXG6u9Biu+VDt95r9I4=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      (libevent.override { inherit openssl; })
-      libprom
-      libmicrohttpd
-      sqlite.dev
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
-      systemdMinimal
-    ];
+  buildInputs = [
+    openssl
+    (libevent.override { inherit openssl; })
+    libprom
+    libmicrohttpd
+    sqlite.dev
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
+    systemdMinimal
+  ];
 
   patches = [
     ./pure-configure.patch

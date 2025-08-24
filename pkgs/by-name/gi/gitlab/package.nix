@@ -9,7 +9,7 @@
   gitlabEnterprise ? false,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   nixosTests,
   nodejs_20,
   replace,
@@ -79,10 +79,11 @@ let
             dontBuilt = true;
             installPhase = ''
               cp -R ext/glfm_markdown $out
+              rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-73uliXjZNT8Ok98ai2rY+b0jYqxoQH3qW5YS+Ap6KK0=";
+          hash = "sha256-TG2pUE80o/Sa147Lcb7yIJC+mfaDzzW7m2d7dTi5yi0=";
         };
 
         dontBuild = false;
@@ -220,7 +221,7 @@ stdenv.mkDerivation {
     rubyEnv.bundler
     tzdata
     git
-    nettools
+    net-tools
   ];
 
   patches = [

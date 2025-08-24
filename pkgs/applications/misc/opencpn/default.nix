@@ -60,76 +60,73 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      gtest
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gtest
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      curl
-      dbus
-      flac
-      gitMinimal
-    ]
-    ++ [
-      glew
-      jasper
-      libGLU
-      libarchive
-      libdatrie
-      libepoxy
-      libexif
-      libogg
-      libopus
-      libsndfile
-      libthai
-      libunarr
-      libusb1
-      libvorbis
-      libxkbcommon
-      lz4
-      libmpg123
-      portaudio
-      rapidjson
-      sqlite
-      tinyxml
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-utils
-      libselinux
-      libsepol
-      util-linux
-      xorg.libXdmcp
-      xorg.libXtst
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lame
-    ];
+  buildInputs = [
+    at-spi2-core
+    curl
+    dbus
+    flac
+    gitMinimal
+  ]
+  ++ [
+    glew
+    jasper
+    libGLU
+    libarchive
+    libdatrie
+    libepoxy
+    libexif
+    libogg
+    libopus
+    libsndfile
+    libthai
+    libunarr
+    libusb1
+    libvorbis
+    libxkbcommon
+    lz4
+    libmpg123
+    portaudio
+    rapidjson
+    sqlite
+    tinyxml
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-utils
+    libselinux
+    libsepol
+    util-linux
+    xorg.libXdmcp
+    xorg.libXtst
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lame
+  ];
 
-  cmakeFlags =
-    [
-      "-DOCPN_BUNDLE_DOCS=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Override OpenCPN platform detection.
-      "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
-    ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals (!stdenv.hostPlatform.isx86) [

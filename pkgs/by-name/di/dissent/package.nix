@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.34";
+  version = "0.0.35";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     tag = "v${version}";
-    hash = "sha256-65UsXSxcEQhQM3N4wUoEehJmF9pJPcGCG7fF/DWe+zU=";
+    hash = "sha256-cmp+oAUV+Oehs/kz6DRW57NgegBWbFVT/7xfY7CbcZM=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildGoModule rec {
     install -D -m 444 -t $out/share/dbus-1/services nix/so.libdb.dissent.service
   '';
 
-  vendorHash = "sha256-unb/x7bzWWkr2zKioOarY2VdrGBiJq/mORsWifuulqQ=";
+  vendorHash = "sha256-AhzM0wu2wwwG/sDY+r2wgmotK4zA5u6vzq4KoPMLkL0=";
 
   meta = {
     description = "Third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";

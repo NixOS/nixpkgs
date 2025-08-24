@@ -7,7 +7,7 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.14";
+  version = "0.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,32 +33,40 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ohsoc3g5XUp9vSXxyOGj20wXzCXZC02ktHYVQjDqNeM=";
+    hash = "sha256-mz6eabETkAzDoPjXE5VJvgrR1vnXXmx3JO4xZRH4TRQ=";
   };
+
+  patches = [
+    ./0001-fix-find-nanobind-from-python-module.patch
+  ];
 
   build-system = [
     cmake
     ninja
-    pybind11
+    nanobind
     scikit-build-core
   ];
   dontUseCmakeConfigure = true;
 
-  dependencies =
-    [
-      pydantic
-      sentencepiece
-      tiktoken
-      torch
-      transformers
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      triton
-    ];
+  dependencies = [
+    pydantic
+    sentencepiece
+    tiktoken
+    torch
+    transformers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  NIX_CFLAGS_COMPILE = toString [
+    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+    "-ffat-lto-objects"
   ];
 
   disabledTests = [
@@ -84,7 +92,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/v${version}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
   };
 }

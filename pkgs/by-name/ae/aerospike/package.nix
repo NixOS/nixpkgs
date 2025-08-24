@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aerospike-server";
-  version = "8.0.0.7";
+  version = "8.0.0.9";
 
   src = fetchFromGitHub {
     owner = "aerospike";
     repo = "aerospike-server";
     rev = version;
-    hash = "sha256-pusPYp3zbd+y+Gc3XnAk8sn74jp/+UzjoWb1wuD1+uE=";
+    hash = "sha256-3cXj+U8dtPk92fjUS+EDxuE2HklCIWhChjiLfJh5vHk=";
     fetchSubmodules = true;
   };
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     cp target/Linux-x86_64/bin/asd $out/bin/asd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flash-optimized, in-memory, NoSQL database";
     mainProgram = "asd";
     homepage = "https://aerospike.com/";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

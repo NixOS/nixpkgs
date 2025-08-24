@@ -30,10 +30,10 @@
   # The NixOS configuration to be installed onto the disk image.
   config,
 
-  # size of the FAT boot disk, in megabytes.
+  # size of the FAT boot disk in MiB (1024*1024 bytes)
   bootSize ? 1024,
 
-  # The size of the root disk, in megabytes.
+  # The size of the root disk in MiB (1024*1024 bytes)
   rootSize ? 2048,
 
   # The name of the ZFS pool
@@ -74,7 +74,7 @@
   # Shell code executed after the VM has finished.
   postVM ? "",
 
-  # Guest memory size
+  # Guest memory size in MiB (1024*1024 bytes)
   memSize ? 1024,
 
   name ? "nixos-disk-image",

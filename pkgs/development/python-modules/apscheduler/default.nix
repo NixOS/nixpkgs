@@ -7,7 +7,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytest-tornado,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   pytz,
   setuptools,
@@ -31,6 +31,10 @@ buildPythonPackage rec {
     hash = "sha256-tFEm9yXf8CqcipSYtM7JM6WQ5Qm0YtgWhZvZOBAzy+w=";
   };
 
+  postPatch = ''
+    sed -i "/addopts/d" pyproject.toml
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -45,24 +49,23 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-tornado
-    pytestCheckHook
+    pytest8_3CheckHook
     pytz
     tornado
     twisted
   ];
 
-  disabledTests =
-    [
-      "test_broken_pool"
-      # gevent tests have issue on newer Python releases
-      "test_add_live_job"
-      "test_add_pending_job"
-      "test_shutdown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_submit_job"
-      "test_max_instances"
-    ];
+  disabledTests = [
+    "test_broken_pool"
+    # gevent tests have issue on newer Python releases
+    "test_add_live_job"
+    "test_add_pending_job"
+    "test_shutdown"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
   pythonImportsCheck = [ "apscheduler" ];
 

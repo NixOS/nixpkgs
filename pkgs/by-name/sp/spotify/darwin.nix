@@ -11,18 +11,18 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.64.408";
+  version = "1.2.69.449";
 
   src =
     if stdenv.hostPlatform.isAarch64 then
       (fetchurl {
-        url = "https://web.archive.org/web/20250522123639/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-28T+AxhnM1K6W50JUu9RdFRKsBRDTQulKK2+kk2RTMQ=";
+        url = "https://web.archive.org/web/20250811170447/https://download.scdn.co/SpotifyARM64.dmg";
+        hash = "sha256-x9lpcQI1kZc4OIvQBhKXmI7t/2DIDbzufZhpNCKTxPA=";
       })
     else
       (fetchurl {
-        url = "https://web.archive.org/web/20250522130546/https://download.scdn.co/Spotify.dmg";
-        hash = "sha256-P8itkT2w7xQl0WfMLcNHgi1zcoYMqOdGmNDXdwhZBUs=";
+        url = "https://web.archive.org/web/20250811170211/https://download.scdn.co/Spotify.dmg";
+        hash = "sha256-z6pmQ3Wmwnd3YQNf1WPdPNCRxHX1PjqAEt50trGe0Bk=";
       });
 
   nativeBuildInputs = [ undmg ];

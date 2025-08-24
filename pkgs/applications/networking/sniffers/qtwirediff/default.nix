@@ -25,31 +25,29 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r qtwirediff.app $out/Applications
-      makeWrapper $out/{Applications/qtwirediff.app/Contents/MacOS,bin}/qtwirediff
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm755 -T qtwirediff $out/bin/qtwirediff
-      wrapProgram $out/bin/qtwirediff \
-        --prefix PATH : "${lib.makeBinPath [ wireshark-cli ]}"
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r qtwirediff.app $out/Applications
+    makeWrapper $out/{Applications/qtwirediff.app/Contents/MacOS,bin}/qtwirediff
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm755 -T qtwirediff $out/bin/qtwirediff
+    wrapProgram $out/bin/qtwirediff \
+      --prefix PATH : "${lib.makeBinPath [ wireshark-cli ]}"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = {
     description = "Debugging tool to diff network traffic leveraging Wireshark";

@@ -41,7 +41,8 @@ buildGoModule rec {
       runtimeDependencies = [
         bash
         getent
-      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
     in
     ''
       wrapProgram $out/bin/goss \

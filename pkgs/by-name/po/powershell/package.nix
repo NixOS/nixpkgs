@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.5.1";
+  version = "7.5.2";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -48,49 +48,46 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      less
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    less
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      curl
-      icu
-      libuuid
-      libunwind
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lttng-ust
-      pam
-    ];
+  buildInputs = [
+    curl
+    icu
+    libuuid
+    libunwind
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lttng-ust
+    pam
+  ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/{bin,share/powershell}
-      cp -R * $out/share/powershell
-      chmod +x $out/share/powershell/pwsh
-      makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
-        --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-        --set TERM xterm \
-        --set POWERSHELL_TELEMETRY_OPTOUT 1 \
-        --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    mkdir -p $out/{bin,share/powershell}
+    cp -R * $out/share/powershell
+    chmod +x $out/share/powershell/pwsh
+    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+      --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
+      --set TERM xterm \
+      --set POWERSHELL_TELEMETRY_OPTOUT 1 \
+      --set DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $out/share/powershell/libcoreclrtraceptprovider.so
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $out/share/powershell/libcoreclrtraceptprovider.so
 
-    ''
-    + ''
-      runHook postInstall
-    '';
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   dontStrip = true;
 
@@ -99,19 +96,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-0fAWzM5acQbjYJC/E65xtGEV8lZGWu4Hdgsm5gf00DM=";
+        hash = "sha256-oC0deViccejTXkWNkPCFz8HwpojrvqTauGMhh8BX96E=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-h5Y93+/2rHJmv/vgIbCK2u0mStSjq5Nqgg5tf0Wp7oo=";
+        hash = "sha256-1NLFVih1X1zYsmCa1xF8Hq2gqgCG8ZXUgTHuSC731xo=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-SwXo6jVSZhFKmm8/A0yosaKamLGhbKYL2OVLNf+horM=";
+        hash = "sha256-kF3J7Au1iJk6rKn//hXdv/x2QWSwnL32PV6iXoNig5w=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-u5tff4BgAHNU112pL8ZDDHe6B0z4G/ohVvG6Nz/0d+U=";
+        hash = "sha256-j6lYT2+V0pyhRmxDl6w5w3E3PWWBwS366evVPAbXdmQ=";
       };
     };
     tests.version = testers.testVersion {

@@ -71,14 +71,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.20.3";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-kgohENAx5PpLQ9pBfl/zSq65l/DqJfufBf0gWR1WJHY=";
+    hash = "sha256-GU1CVwc31bLai8QoXch/UTx//+OG2V/6jG9Ocz4MDuA=";
   };
 
   pythonRelaxDeps = [

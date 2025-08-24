@@ -76,22 +76,21 @@ let
         dedicatedServer: {
           version = "${unstableVersionMajor}-${builtins.substring 0 8 rev}";
           src = fetchArmagetron rev hash;
-          extraBuildInputs =
-            [
-              protobuf
-              boost
-            ]
-            ++ lib.optionals (!dedicatedServer) [
-              glew
-              ftgl
-              freetype
-              libGL
-              libGLU
-              libX11
-              SDL2
-              SDL2_image
-              SDL2_mixer
-            ];
+          extraBuildInputs = [
+            protobuf
+            boost
+          ]
+          ++ lib.optionals (!dedicatedServer) [
+            glew
+            ftgl
+            freetype
+            libGL
+            libGLU
+            libX11
+            SDL2
+            SDL2_image
+            SDL2_mixer
+          ];
           extraNativeBuildInputs = [ bison ];
         };
 
@@ -160,19 +159,18 @@ let
         ./bootstrap.sh
       '';
 
-      configureFlags =
-        [
-          "--enable-automakedefaults"
-          "--enable-authentication"
-          "--disable-memmanager"
-          "--disable-useradd"
-          "--disable-initscripts"
-          "--disable-etc"
-          "--disable-uninstall"
-          "--disable-sysinstall"
-        ]
-        ++ lib.optional dedicatedServer "--enable-dedicated"
-        ++ lib.optional (!dedicatedServer) "--enable-music";
+      configureFlags = [
+        "--enable-automakedefaults"
+        "--enable-authentication"
+        "--disable-memmanager"
+        "--disable-useradd"
+        "--disable-initscripts"
+        "--disable-etc"
+        "--disable-uninstall"
+        "--disable-sysinstall"
+      ]
+      ++ lib.optional dedicatedServer "--enable-dedicated"
+      ++ lib.optional (!dedicatedServer) "--enable-music";
 
       buildInputs =
         lib.singleton (libxml2.override { enableHttp = true; }) ++ (resolvedParams.extraBuildInputs or [ ]);
@@ -184,12 +182,14 @@ let
         pkg-config
         which
         python3
-      ] ++ (resolvedParams.extraNativeBuildInputs or [ ]);
+      ]
+      ++ (resolvedParams.extraNativeBuildInputs or [ ]);
 
-      nativeInstallCheckInputs =
-        [ gnugrep ]
-        ++ lib.optional (!dedicatedServer) xvfb-run
-        ++ (resolvedParams.extraNativeInstallCheckInputs or [ ]);
+      nativeInstallCheckInputs = [
+        gnugrep
+      ]
+      ++ lib.optional (!dedicatedServer) xvfb-run
+      ++ (resolvedParams.extraNativeInstallCheckInputs or [ ]);
 
       postInstall = lib.optionalString (!dedicatedServer) ''
         mkdir -p $out/share/{applications,icons/hicolor}

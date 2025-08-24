@@ -52,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioelectricitymaps" ];
 
   # https://github.com/jpbede/aioelectricitymaps/pull/415
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module for interacting with Electricity maps";

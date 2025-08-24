@@ -13,23 +13,22 @@ let
       "${cfg.execWrapper} ${cfg.package}/bin/microsocks"
     else
       "${cfg.package}/bin/microsocks";
-  args =
-    [
-      "-i"
-      cfg.ip
-      "-p"
-      (toString cfg.port)
-    ]
-    ++ lib.optionals (cfg.authOnce) [ "-1" ]
-    ++ lib.optionals (cfg.disableLogging) [ "-q" ]
-    ++ lib.optionals (cfg.outgoingBindIp != null) [
-      "-b"
-      cfg.outgoingBindIp
-    ]
-    ++ lib.optionals (cfg.authUsername != null) [
-      "-u"
-      cfg.authUsername
-    ];
+  args = [
+    "-i"
+    cfg.ip
+    "-p"
+    (toString cfg.port)
+  ]
+  ++ lib.optionals (cfg.authOnce) [ "-1" ]
+  ++ lib.optionals (cfg.disableLogging) [ "-q" ]
+  ++ lib.optionals (cfg.outgoingBindIp != null) [
+    "-b"
+    cfg.outgoingBindIp
+  ]
+  ++ lib.optionals (cfg.authUsername != null) [
+    "-u"
+    cfg.authUsername
+  ];
 in
 {
   options.services.microsocks = {

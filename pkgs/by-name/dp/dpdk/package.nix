@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpdk";
-  version = "25.03";
+  version = "25.07";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
+    sha256 = "sha256-aIbL7cNQu4y+80fRA2fWJZ42Q1Yn+7J9V4rb3A07QQ0=";
   };
 
   nativeBuildInputs = [
@@ -73,34 +73,33 @@ stdenv.mkDerivation rec {
     patchShebangs config/arm buildtools
   '';
 
-  mesonFlags =
-    [
-      "-Dtests=false"
-      "-Denable_docs=true"
-      "-Ddeveloper_mode=disabled"
-    ]
-    ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
-    ++ lib.optional (machine != null) "-Dmachine=${machine}"
-    ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  mesonFlags = [
+    "-Dtests=false"
+    "-Denable_docs=true"
+    "-Ddeveloper_mode=disabled"
+  ]
+  ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
+  ++ lib.optional (machine != null) "-Dmachine=${machine}"
+  ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
-  postInstall =
-    ''
-      # Remove Sphinx cache files. Not only are they not useful, but they also
-      # contain store paths causing spurious dependencies.
-      rm -rf $out/share/doc/dpdk/html/.doctrees
+  postInstall = ''
+    # Remove Sphinx cache files. Not only are they not useful, but they also
+    # contain store paths causing spurious dependencies.
+    rm -rf $out/share/doc/dpdk/html/.doctrees
 
-      wrapProgram $out/bin/dpdk-devbind.py \
-        --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-    ''
-    + lib.optionalString (withExamples != [ ]) ''
-      mkdir -p $examples/bin
-      find examples -type f -executable -exec install {} $examples/bin \;
-    '';
+    wrapProgram $out/bin/dpdk-devbind.py \
+      --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
+  ''
+  + lib.optionalString (withExamples != [ ]) ''
+    mkdir -p $examples/bin
+    find examples -type f -executable -exec install {} $examples/bin \;
+  '';
 
   outputs = [
     "out"
     "doc"
-  ] ++ lib.optional (withExamples != [ ]) "examples";
+  ]
+  ++ lib.optional (withExamples != [ ]) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";

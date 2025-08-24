@@ -76,6 +76,7 @@ buildPythonPackage rec {
       cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_badrequest
       cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_overlimit
       cinderclient.tests.unit.test_shell.ShellTest.test_password_prompted
+      cinderclient.tests.unit.test_shell.TestLoadVersionedActions.test_load_versioned_actions_with_help
     ")
 
     runHook postCheck

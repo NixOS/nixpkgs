@@ -20,6 +20,14 @@ stdenv.mkDerivation {
     ./include-dir.patch
   ];
 
+  # ref. https://gitlab.com/libeigen/eigen/-/merge_requests/977
+  # This was merged upstream and can be removed on next release
+  postPatch = ''
+    substituteInPlace Eigen/src/SVD/BDCSVD.h --replace-fail \
+      "if (l == 0) {" \
+      "if (i >= k && l == 0) {"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {

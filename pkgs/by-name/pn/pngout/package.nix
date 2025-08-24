@@ -59,14 +59,13 @@ stdenv.mkDerivation {
   # pngout is code-signed on Darwin, so don’t alter the binary to avoid breaking the signature.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp ${platform.folder}/pngout $out/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ${platform.folder}/pngout $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
+  '';
 
   meta = {
     description = "Tool that aggressively optimizes the sizes of PNG images";

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-xls";
-    rev = "v${version}";
-    hash = "sha256-wxsx/LfeBxi+NnHxfxk3svzsBcdwOiLQ1660eoHfmLg=";
+    tag = "v${version}";
+    hash = "sha256-+iwdMSGUsUbWFO4s4+3Zf+47J9bzFffWthZoeThT8f0=";
   };
 
   patches = [

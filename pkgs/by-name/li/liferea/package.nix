@@ -41,28 +41,27 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk3
-      webkitgtk_4_1
-      libxml2
-      libxslt
-      sqlite
-      libsoup_3
-      libpeas
-      gsettings-desktop-schemas
-      json-glib
-      libsecret
-      glib-networking
-      libnotify
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gtk3
+    webkitgtk_4_1
+    libxml2
+    libxslt
+    sqlite
+    libsoup_3
+    libpeas
+    gsettings-desktop-schemas
+    json-glib
+    libsecret
+    glib-networking
+    libnotify
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   enableParallelBuilding = true;
 

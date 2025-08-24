@@ -12,6 +12,7 @@
   tree-sitter-comment = lib.importJSON ./tree-sitter-comment.json;
   tree-sitter-commonlisp = lib.importJSON ./tree-sitter-commonlisp.json;
   tree-sitter-cpp = lib.importJSON ./tree-sitter-cpp.json;
+  tree-sitter-crystal = lib.importJSON ./tree-sitter-crystal.json;
   tree-sitter-css = lib.importJSON ./tree-sitter-css.json;
   tree-sitter-cuda = lib.importJSON ./tree-sitter-cuda.json;
   tree-sitter-cue = lib.importJSON ./tree-sitter-cue.json;
@@ -95,6 +96,7 @@
   tree-sitter-scheme = lib.importJSON ./tree-sitter-scheme.json;
   tree-sitter-scss = lib.importJSON ./tree-sitter-scss.json;
   tree-sitter-smithy = lib.importJSON ./tree-sitter-smithy.json;
+  tree-sitter-sml = lib.importJSON ./tree-sitter-sml.json;
   tree-sitter-solidity = lib.importJSON ./tree-sitter-solidity.json;
   tree-sitter-sparql = lib.importJSON ./tree-sitter-sparql.json;
   tree-sitter-sql = lib.importJSON ./tree-sitter-sql.json;

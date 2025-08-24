@@ -14,8 +14,6 @@ declare -A versions
 declare -A hashes
 
 architectures["x86_64-linux"]="x86_64-unknown-linux-gnu"
-architectures["x86_64-darwin"]="x86_64-apple-darwin"
-architectures["aarch64-darwin"]="aarch64-apple-darwin"
 
 BASE_URL="https://files.nordicsemi.com/artifactory/swtools/external/nrfutil"
 

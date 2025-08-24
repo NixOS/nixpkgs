@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-commander";
-  version = "1.18.2";
+  version = "1.18.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-commander";
     tag = finalAttrs.version;
-    hash = "sha256-dNZDlpvpN5hh/3YccZPJDEFkBLv9I8YOdFT/COp7+Uw=";
+    hash = "sha256-rSaj1Fg2seZKlzlERZZmz80kxJT1vZ+INiJlWfZ9m6g=";
   };
 
   # hard-coded schema paths
@@ -53,8 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     poppler
     samba
-    gtest
   ];
+
+  mesonFlags = [ (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck) ];
+
+  checkInputs = [ gtest ];
+
+  doCheck = false; # gtest requires C/C++17 but the project is written in C/C++11
 
   meta = {
     description = "Fast and powerful twin-panel file manager for the Linux desktop";

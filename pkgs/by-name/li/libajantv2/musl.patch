@@ -1,7 +1,7 @@
-From 6b27c75125f2b2c66d5d6dd8d35569260ac72f17 Mon Sep 17 00:00:00 2001
+From 8312398dbc1f0a960c0e64c2faaa756277c0f67c Mon Sep 17 00:00:00 2001
 From: Alyssa Ross <hi@alyssa.is>
 Date: Fri, 3 Jan 2025 12:21:28 +0100
-Subject: [PATCH] Don't use non-standard ACCESSPERMS macro
+Subject: [PATCH 3/3] Don't use non-standard ACCESSPERMS macro
 
 This macro is non-standard, and is not defined by e.g. musl libc.
 It's just a define for 0777, so just use that instead.
@@ -28,5 +28,5 @@ index 78196446..e18b10a3 100644
  				char* result = getcwd(cwdBuf, AJA_MAX_PATH);
  				AJA_UNUSED(result);
 -- 
-2.47.0
+2.49.0
 

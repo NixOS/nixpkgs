@@ -35,31 +35,29 @@ let
 
         strictDeps = true;
 
-        buildPhase =
-          ''
-            runHook preBuild
-          ''
-          + lib.concatMapStrings (file: ''
-            nkf -w ${file} \
-              | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
-              > ${file + suffix}
-          '') (lib.optionals useUtf8 (map lib.escapeShellArg files))
-          + ''
-            runHook postBuild
-          '';
+        buildPhase = ''
+          runHook preBuild
+        ''
+        + lib.concatMapStrings (file: ''
+          nkf -w ${file} \
+            | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
+            > ${file + suffix}
+        '') (lib.optionals useUtf8 (map lib.escapeShellArg files))
+        + ''
+          runHook postBuild
+        '';
 
-        installPhase =
-          ''
-            runHook preInstall
-          ''
-          + lib.concatMapStrings (file: ''
-            install -Dm644 \
-              ${lib.escapeShellArg file} \
-              $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
-          '') (map (file: file + suffix) files)
-          + ''
-            runHook postInstall
-          '';
+        installPhase = ''
+          runHook preInstall
+        ''
+        + lib.concatMapStrings (file: ''
+          install -Dm644 \
+            ${lib.escapeShellArg file} \
+            $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
+        '') (map (file: file + suffix) files)
+        + ''
+          runHook postInstall
+        '';
 
         doInstallCheck = true;
         installCheckPhase = ''
@@ -95,7 +93,7 @@ lib.listToAttrs (
   map mkDictNameValue [
     {
       name = "L";
-      description = "The standard SKK dictionary";
+      description = "Standard SKK dictionary";
       license = lib.licenses.gpl2Plus;
     }
     {

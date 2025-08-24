@@ -35,13 +35,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "7";
+  version = "9";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-EaAMkYbQwj0IXDraRZHqvdK19SlyKtXfqkIOGzkiY7Q=";
+    hash = "sha256-O211trFJ9tQRVdlztp5ER0Ej6SIrCDn45mRGns7NV90=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -114,7 +114,16 @@ buildDotnetModule (finalAttrs: {
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
+    inherit
+      (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_9_0
+        dotnetCorePackages.sdk_8_0
+      ])
+      packages
+      targetPackages
+      ;
+  };
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
 
   executables = [ "Grayjay" ];

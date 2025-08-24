@@ -7,14 +7,10 @@
   valgrind,
   librandombytes,
   libcpucycles,
-  lib25519,
 }:
-let
-  version = "20241004";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
-  inherit version;
+  version = "20241004";
 
   src = fetchzip {
     url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
@@ -64,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
-      package = lib25519;
+      package = finalAttrs.finalPackage;
       command = "lib25519-test | head -n 2 | grep version";
-      version = "lib25519 version ${version}";
+      version = "lib25519 version ${finalAttrs.version}";
     };
   };
 
@@ -87,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       imadnyc
       jleightcap
     ];
+    teams = with lib.teams; [ ngi ];
     # This supports whatever platforms libcpucycles supports
     inherit (libcpucycles.meta) platforms;
   };

@@ -6,13 +6,16 @@
   setuptools-scm,
   # python dependencies
   docling,
+  docling-jobkit,
   fastapi,
   httpx,
   pydantic-settings,
   python-multipart,
+  scalar-fastapi,
   uvicorn,
   websockets,
   tesserocr,
+  typer,
   rapidocr-onnxruntime,
   onnxruntime,
   torch,
@@ -28,20 +31,15 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "0.11.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-dPCD7Ovc6Xiga+gYOwg0mJIIhHywVOyxKIAFF5XUsYw=";
+    hash = "sha256-A8q1mjrtm8VgwsOpBCVD61K88wrjsYHiWdbv0XvACG4=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"kfp[kubernetes]>=2.10.0",' ""
-  '';
 
   build-system = [
     hatchling
@@ -52,20 +50,26 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  dependencies =
-    [
-      docling
-      fastapi
-      httpx
-      pydantic-settings
-      python-multipart
-      uvicorn
-      websockets
-    ]
-    ++ lib.optionals withUI optional-dependencies.ui
-    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-    ++ lib.optionals withCPU optional-dependencies.cpu;
+  pythonRemoveDeps = [
+    "mlx-vlm" # not yet available on nixpkgs
+  ];
+
+  dependencies = [
+    docling
+    (docling-jobkit.override { inherit withTesserocr withRapidocr; })
+    fastapi
+    httpx
+    pydantic-settings
+    python-multipart
+    scalar-fastapi
+    typer
+    uvicorn
+    websockets
+  ]
+  ++ lib.optionals withUI optional-dependencies.ui
+  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+  ++ lib.optionals withCPU optional-dependencies.cpu;
 
   optional-dependencies = {
     ui = [
@@ -99,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/docling-project/docling-serve";
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

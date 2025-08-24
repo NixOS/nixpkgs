@@ -42,24 +42,23 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs =
-    [
-      cppzmq
-      ffmpeg
-      imagemagick
-      jsoncpp
-      libopenshot-audio
-      python3
-      qtbase
-      qtmultimedia
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    cppzmq
+    ffmpeg
+    imagemagick
+    jsoncpp
+    libopenshot-audio
+    python3
+    qtbase
+    qtmultimedia
+    zeromq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   strictDeps = true;
 

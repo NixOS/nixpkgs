@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "streamdeck";
-  version = "0.9.6";
+  version = "0.9.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ELZtxGzUuonStMFputI7OHu06W//nC5KOCC3OD3iPA=";
+    hash = "sha256-jVhuZihvjuA5rwl55JAmtFq+h/f5M68Vo44jh8HjUI4=";
   };
 
   patches = [

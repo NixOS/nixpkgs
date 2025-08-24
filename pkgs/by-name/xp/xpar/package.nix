@@ -19,15 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
 
-  configureFlags =
-    [
-      "--disable-arch-native"
-      "--enable-lto"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-x86-64"
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "--enable-aarch64";
+  configureFlags = [
+    "--disable-arch-native"
+    "--enable-lto"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-x86-64"
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "--enable-aarch64";
 
   meta = {
     description = "Error/erasure code system guarding data integrity";

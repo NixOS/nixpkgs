@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     xf86inputlibinput.dev
   ];
 
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
+
   postPatch = ''
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace-fail 'QStringLiteral("gsettings' \

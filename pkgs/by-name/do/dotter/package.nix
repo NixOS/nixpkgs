@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7YExvmuliTL9oagXNUtZ7ZOPyELcS+igK1tXdhG0kQk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UBZZu8D1fbNOn2obviP+/Qw+E/OoNKRA4NXzqCqghGs=";
 
   nativeCheckInputs = [
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Dotfile manager and templater written in rust 🦀";
+    description = "Dotfile manager and templater written in Rust";
     homepage = "https://github.com/SuperCuber/dotter";
     license = licenses.unlicense;
     maintainers = with maintainers; [ linsui ];

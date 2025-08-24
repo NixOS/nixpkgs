@@ -61,29 +61,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals enableX11 [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enableX11 [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      libusb1
-      openssl
-      SDL2
-      SDL2_ttf
-      SDL2_mixer
-    ]
-    ++ lib.optionals enableX11 [
-      fontconfig
-      freetype
-      glib
-      gtk2
-      libX11
-    ];
+  buildInputs = [
+    libusb1
+    openssl
+    SDL2
+    SDL2_ttf
+    SDL2_mixer
+  ]
+  ++ lib.optionals enableX11 [
+    fontconfig
+    freetype
+    glib
+    gtk2
+    libX11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SDL" true)

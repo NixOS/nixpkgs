@@ -8,10 +8,11 @@
   nanobind,
   ninja,
   pcpp,
-  scikit-build,
-  setuptools,
+  scikit-build-core,
+  typing-extensions,
 
   # buildInputs
+  imath,
   isl,
 
   # tests
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2025.1.5";
+  version = "2025.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
     tag = "v${version}";
-    hash = "sha256-hzqxVLNKm63XliX5rDB54f6n1nJPVJJSAMmNTInbOEE=";
+    hash = "sha256-6VNA07XnzmOTsrH16fXzEdl1HmShmrtUjQyUs18CxYc=";
   };
 
   build-system = [
@@ -35,19 +36,24 @@ buildPythonPackage rec {
     nanobind
     ninja
     pcpp
-    scikit-build
-    setuptools
+    scikit-build-core
+    typing-extensions
   ];
 
-  buildInputs = [ isl ];
+  buildInputs = [
+    imath
+    isl
+  ];
 
   dontUseCmakeConfigure = true;
 
-  preConfigure = ''
-    python ./configure.py \
-        --no-use-shipped-isl \
-        --isl-inc-dir=${lib.getDev isl}/include \
-  '';
+  pypaBuildFlags = [
+    "--config-setting=cmake.define.USE_SHIPPED_ISL=OFF"
+    "--config-setting=cmake.define.USE_SHIPPED_IMATH=OFF"
+    "--config-setting=cmake.define.USE_BARVINOK=OFF"
+    "--config-setting=cmake.define.ISL_INC_DIRS:LIST='${lib.getDev isl}/include'"
+    "--config-setting=cmake.define.ISL_LIB_DIRS:LIST='${lib.getLib isl}/lib'"
+  ];
 
   # Force resolving the package from $out to make generated ext files usable by tests
   preCheck = ''

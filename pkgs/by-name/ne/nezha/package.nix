@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.12.4";
+  version = "1.13.0";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -58,26 +58,25 @@ buildGo124Module {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-f9zP9koWjP8PPtQhbYx56J1mW8+xKuZCfxgOLw6XGc0=";
+    hash = "sha256-lZN9ZH70AzDCtvFnr2dxjXSKhGd/+HvN9hCydlOYpKU=";
   };
 
   proxyVendor = true;
 
-  prePatch =
-    ''
-      rm -rf cmd/dashboard/*-dist
+  prePatch = ''
+    rm -rf cmd/dashboard/*-dist
 
-      cp ${frontend-templates} service/singleton/frontend-templates.yaml
-    ''
-    + lib.concatStringsSep "\n" (
-      map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
-        [
-          nezha-theme-admin
-          nezha-theme-user
-        ]
-        ++ withThemes
-      )
-    );
+    cp ${frontend-templates} service/singleton/frontend-templates.yaml
+  ''
+  + lib.concatStringsSep "\n" (
+    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
+      [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes
+    )
+  );
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.

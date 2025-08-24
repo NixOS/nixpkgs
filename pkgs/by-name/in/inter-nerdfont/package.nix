@@ -39,6 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "NerdFont patch of the Inter font";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.midirhee12 ];
+    maintainers = [ lib.maintainers.midischwarz12 ];
   };
 })

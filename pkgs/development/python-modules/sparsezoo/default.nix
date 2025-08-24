@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sparsezoo";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neuralmagic";
     repo = "sparsezoo";
     tag = "v${version}";
-    hash = "sha256-c4F95eVvj673eFO/rbmv4LY3pGmqo+arbsYqElznwdA=";
+    hash = "sha256-eMP/whm06QX5x/RBoYsYwuKxFnpFmqlgh2uDsI3Vaog=";
   };
 
   build-system = [ setuptools ];
@@ -114,7 +114,7 @@ buildPythonPackage rec {
   meta = {
     description = "Neural network model repository for highly sparse and sparse-quantized models with matching sparsification recipes";
     homepage = "https://github.com/neuralmagic/sparsezoo";
-    changelog = "https://github.com/neuralmagic/sparsezoo/releases/tag/v${version}";
+    changelog = "https://github.com/neuralmagic/sparsezoo/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

@@ -154,13 +154,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages =
-      [
-        pkgs.libnfc-nci
-      ]
-      ++ lib.optionals cfg.enableIFD [
-        pkgs.ifdnfc-nci
-      ];
+    environment.systemPackages = [
+      pkgs.libnfc-nci
+    ]
+    ++ lib.optionals cfg.enableIFD [
+      pkgs.ifdnfc-nci
+    ];
 
     environment.etc = {
       "libnfc-nci.conf".text = generateSettings "nci";

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.44.1";
+  version = "2.44.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,8 +26,13 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${version}";
-    hash = "sha256-r9F/3H/Bagi9QJHZDEsa80dglVE9vS1f9Cqt7CZWn8Y=";
+    hash = "sha256-ZpTQjAmrLoenDWzd/0NpD7fqTd6Dv1J0Ks0db4twwYk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3,<3.1.0" Cython
+  '';
 
   # The project can build both an optimized cython version and an unoptimized
   # python version. This ensures we fail if we build the wrong one.

@@ -50,37 +50,36 @@
 }:
 
 let
-  libs =
-    {
-      inherit
-        nix-util
-        nix-util-c
-        nix-store
-        nix-store-c
-        nix-fetchers
-        nix-expr
-        nix-expr-c
-        nix-flake
-        nix-flake-c
-        nix-main
-        nix-main-c
-        nix-cmd
-        ;
-    }
-    // lib.optionalAttrs (lib.versionAtLeast version "2.29pre") {
-      inherit
-        nix-fetchers-c
-        ;
-    }
-    //
-      lib.optionalAttrs
-        (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-        {
-          # Currently fails in static build
-          inherit
-            nix-perl-bindings
-            ;
-        };
+  libs = {
+    inherit
+      nix-util
+      nix-util-c
+      nix-store
+      nix-store-c
+      nix-fetchers
+      nix-expr
+      nix-expr-c
+      nix-flake
+      nix-flake-c
+      nix-main
+      nix-main-c
+      nix-cmd
+      ;
+  }
+  // lib.optionalAttrs (lib.versionAtLeast version "2.29pre") {
+    inherit
+      nix-fetchers-c
+      ;
+  }
+  //
+    lib.optionalAttrs
+      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      {
+        # Currently fails in static build
+        inherit
+          nix-perl-bindings
+          ;
+      };
 
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
@@ -135,20 +134,19 @@ stdenv.mkDerivation (finalAttrs: {
   */
   dontFixup = true;
 
-  checkInputs =
-    [
-      # Make sure the unit tests have passed
-      nix-util-tests.tests.run
-      nix-store-tests.tests.run
-      nix-expr-tests.tests.run
-      nix-fetchers-tests.tests.run
-      nix-flake-tests.tests.run
+  checkInputs = [
+    # Make sure the unit tests have passed
+    nix-util-tests.tests.run
+    nix-store-tests.tests.run
+    nix-expr-tests.tests.run
+    nix-fetchers-tests.tests.run
+    nix-flake-tests.tests.run
 
-      # Make sure the functional tests have passed
-      nix-functional-tests
-    ]
-    ++ lib.optionals
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    # Make sure the functional tests have passed
+    nix-functional-tests
+  ]
+  ++
+    lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       [
         # Perl currently fails in static build
         # TODO: Split out tests into a separate derivation?
@@ -225,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     mainProgram = "nix";
-    description = "The Nix package manager";
+    description = "Nix package manager";
     longDescription = nix-cli.meta.longDescription;
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;
@@ -236,26 +234,25 @@ stdenv.mkDerivation (finalAttrs: {
       "out"
       "man"
     ];
-    pkgConfigModules =
-      [
-        "nix-cmd"
-        "nix-expr"
-        "nix-expr-c"
-        "nix-fetchers"
-      ]
-      ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
-        "nix-fetchers-c"
-      ]
-      ++ [
-        "nix-flake"
-        "nix-flake-c"
-        "nix-main"
-        "nix-main-c"
-        "nix-store"
-        "nix-store-c"
-        "nix-util"
-        "nix-util-c"
-      ];
+    pkgConfigModules = [
+      "nix-cmd"
+      "nix-expr"
+      "nix-expr-c"
+      "nix-fetchers"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+      "nix-fetchers-c"
+    ]
+    ++ [
+      "nix-flake"
+      "nix-flake-c"
+      "nix-main"
+      "nix-main-c"
+      "nix-store"
+      "nix-store-c"
+      "nix-util"
+      "nix-util-c"
+    ];
   };
 
 })

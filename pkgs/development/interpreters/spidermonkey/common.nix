@@ -24,6 +24,7 @@
 
   # runtime
   icu75,
+  icu77,
   nspr,
   readline,
   zlib,
@@ -65,40 +66,46 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://src.fedoraproject.org/rpms/mozjs91/raw/e3729167646775e60a3d8c602c0412e04f206baf/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
         hash = "sha256-WgDIBidB9XNQ/+HacK7jxWnjOF8PEUt5eB0+Aubtl48=";
       })
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "140") [
+      # mozjs-140.pc does not contain -DXP_UNIX on Linux
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1973994
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
+        hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
+      })
     ];
 
-  nativeBuildInputs =
-    [
-      cargo
-      m4
-      perl
-      pkg-config
-      # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
-      # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
-      (if lib.versionOlder version "115" then python311 else python3)
-      rustc
-      rustc.llvmPackages.llvm # for llvm-objdump
-      which
-      zip
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "128") [
-      rust-cbindgen
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cargo
+    m4
+    perl
+    pkg-config
+    # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
+    # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
+    (if lib.versionOlder version "115" then python311 else python3)
+    rustc
+    rustc.llvmPackages.llvm # for llvm-objdump
+    which
+    zip
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "128") [
+    rust-cbindgen
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      icu75
-      nspr
-      readline
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    (if (lib.versionAtLeast version "140") then icu77 else icu75)
+    nspr
+    readline
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -106,32 +113,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   setOutputFlags = false; # Configure script only understands --includedir
 
-  configureFlags =
-    [
-      "--with-intl-api"
-      "--with-system-icu"
-      "--with-system-nspr"
-      "--with-system-zlib"
-      # Fedora and Arch disable optimize, but it doesn't seme to be necessary
-      # It turns on -O3 which some gcc version had a problem with:
-      # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
-      "--enable-optimize"
-      "--enable-readline"
-      "--enable-release"
-      "--enable-shared-js"
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "91") [
-      "--disable-debug"
-    ]
-    ++ [
-      "--disable-jemalloc"
-      "--disable-strip"
-      "--disable-tests"
-      # Spidermonkey seems to use different host/build terminology for cross
-      # compilation here.
-      "--host=${stdenv.buildPlatform.config}"
-      "--target=${stdenv.hostPlatform.config}"
-    ];
+  configureFlags = [
+    "--with-intl-api"
+    "--with-system-icu"
+    "--with-system-nspr"
+    "--with-system-zlib"
+    # Fedora and Arch disable optimize, but it doesn't seme to be necessary
+    # It turns on -O3 which some gcc version had a problem with:
+    # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
+    "--enable-optimize"
+    "--enable-readline"
+    "--enable-release"
+    "--enable-shared-js"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "91") [
+    "--disable-debug"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "140") [
+    # For pkgconfig file.
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1907030
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1957023
+    "--includedir=${placeholder "dev"}/include"
+  ]
+  ++ [
+    "--disable-jemalloc"
+    "--disable-strip"
+    "--disable-tests"
+    # Spidermonkey seems to use different host/build terminology for cross
+    # compilation here.
+    "--host=${stdenv.buildPlatform.config}"
+    "--target=${stdenv.hostPlatform.config}"
+  ];
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
   # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
@@ -180,6 +192,11 @@ stdenv.mkDerivation (finalAttrs: {
       configureScript=../js/src/configure
     '';
 
+  env = lib.optionalAttrs (lib.versionAtLeast version "140") {
+    # '-Wformat-security' ignored without '-Wformat'
+    NIX_CFLAGS_COMPILE = "-Wformat";
+  };
+
   # Remove unnecessary static lib
   preFixup = ''
     moveToOutput bin/js${lib.versions.major version}-config "$dev"
@@ -196,11 +213,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [
-      abbradar
       lostnet
       catap
+      bobby285271
     ];
-    broken = stdenv.hostPlatform.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+    broken = stdenv.hostPlatform.isDarwin; # 91 is broken, >=115 requires SDK 13.3 (see #242666).
     platforms = platforms.unix;
   };
 })

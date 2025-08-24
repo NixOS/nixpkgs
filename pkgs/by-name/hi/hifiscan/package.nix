@@ -9,6 +9,7 @@ let
   hash = "sha256-8eystqjNdDP2X9beogRcsa+Wqu50uMHZv59jdc5GjUc=";
 in
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   inherit pname version;
 
   pythonPath = with python3Packages; [

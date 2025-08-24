@@ -13,9 +13,23 @@ let
   inherit (config.boot.kernel) features randstructSeed;
   inherit (config.boot.kernelPackages) kernel;
 
+  modulesTypeDesc = ''
+    This can either be a list of modules, or an attrset. In an
+    attrset, names that are set to `true` represent modules that will
+    be included. Note that setting these names to `false` does not
+    prevent the module from being loaded. For that, use
+    {option}`boot.blacklistedKernelModules`.
+  '';
+
   kernelModulesConf = pkgs.writeText "nixos.conf" ''
     ${concatStringsSep "\n" config.boot.kernelModules}
   '';
+
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
 
 in
 
@@ -88,7 +102,7 @@ in
           {
             name = "foo";
             patch = ./foo.patch;
-            extraStructuredConfig.FOO = lib.kernel.yes;
+            structuredExtraConfig.FOO = lib.kernel.yes;
             features.foo = true;
           }
           {
@@ -113,7 +127,7 @@ in
                                         # (required, but can be null if only config changes
                                         # are needed)
 
-          extraStructuredConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
+          structuredExtraConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
             FOO = lib.kernel.yes;       # (optional)
           };                            # values should generally be lib.kernel.yes,
                                         # lib.kernel.no or lib.kernel.module
@@ -124,7 +138,7 @@ in
 
           extraConfig = "FOO y";        # extra configuration options in string form without the CONFIG_ prefix
                                         # (optional, multiple lines allowed to specify multiple options)
-                                        # (deprecated, use extraStructuredConfig instead)
+                                        # (deprecated, use structuredExtraConfig instead)
         }
         ```
 
@@ -188,20 +202,23 @@ in
     };
 
     boot.kernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+      type = attrNamesToTrue;
+      default = { };
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
         {option}`boot.initrd.availableKernelModules` or
         {option}`boot.initrd.kernelModules`.
+
+        ${modulesTypeDesc}
       '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.availableKernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+      type = attrNamesToTrue;
+      default = { };
       example = [
         "sata_nv"
         "ext3"
@@ -220,13 +237,21 @@ in
         modules for PCI devices are loaded when they match the PCI ID
         of a device in your system).  To force a module to be loaded,
         include it in {option}`boot.initrd.kernelModules`.
+
+        ${modulesTypeDesc}
       '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.kernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = "List of modules that are always loaded by the initrd.";
+      type = attrNamesToTrue;
+      default = { };
+      description = ''
+        Set of modules that are always loaded by the initrd.
+
+        ${modulesTypeDesc}
+      '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.includeDefaultModules = mkOption {
@@ -236,6 +261,24 @@ in
         This option, if set, adds a collection of default kernel modules
         to {option}`boot.initrd.availableKernelModules` and
         {option}`boot.initrd.kernelModules`.
+      '';
+    };
+
+    boot.initrd.allowMissingModules = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the initrd can be built even though modules listed in
+        {option}`boot.initrd.kernelModules` or
+        {option}`boot.initrd.availableKernelModules` are missing from
+        the kernel. This is useful when combining configurations that
+        include a lot of modules, such as
+        {option}`hardware.enableAllHardware`, with kernels that don't
+        provide as many modules as typical NixOS kernels.
+
+        Note that enabling this is discouraged. Instead, try disabling
+        individual modules by setting e.g.
+        `boot.initrd.availableKernelModules.foo = lib.mkForce false;`
       '';
     };
 
@@ -344,7 +387,7 @@ in
     (mkIf config.boot.kernel.enable {
       system.build = { inherit kernel; };
 
-      system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+      system.modulesTree = [ (lib.getOutput "modules" kernel) ] ++ config.boot.extraModulePackages;
 
       # Not required for, e.g., containers as they don't have their own kernel or initrd.
       # They boot directly into stage 2.
@@ -371,19 +414,22 @@ in
 
           ln -s ${initrdPath} $out/initrd
 
-          ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ${optionalString (config.boot.initrd.secrets != { }) ''
+            ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ''}
 
           ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
         '';
 
       # Implement consoleLogLevel both in early boot and using sysctl
       # (so you don't need to reboot to have changes take effect).
-      boot.kernelParams =
-        [ "loglevel=${toString config.boot.consoleLogLevel}" ]
-        ++ optionals config.boot.vesa [
-          "vga=0x317"
-          "nomodeset"
-        ];
+      boot.kernelParams = [
+        "loglevel=${toString config.boot.consoleLogLevel}"
+      ]
+      ++ optionals config.boot.vesa [
+        "vga=0x317"
+        "nomodeset"
+      ];
 
       boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
@@ -450,7 +496,6 @@ in
         with config.lib.kernelConfig;
         [
           # !!! Should this really be needed?
-          (isYes "MODULES")
           (isYes "BINFMT_ELF")
         ]
         ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-xmlstruct";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "go-xmlstruct";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7nDxLvTu/l3bbkG/MYFWqO0KGNfVVwW9/WqvKvj0wOc=";
+    hash = "sha256-FS3rFiYpaw6DlttyvJUcPc4ZDQRj5kBYwGxTWb+AAho=";
   };
 
-  vendorHash = "sha256-dxnMWxcWu67FI833bFoxy+5s2ELp3gXisLiTACZRzGU=";
+  vendorHash = "sha256-myt5JjEDnLfkYkB+yb/oaH4dgIOB9qFcqcEb6KO5vBk=";
 
   doInstallCheck = true;
   installCheckPhase = ''

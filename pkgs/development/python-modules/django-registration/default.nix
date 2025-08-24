@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-registration";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ubernostrum";
     repo = "django-registration";
     tag = version;
-    hash = "sha256-02kAZXxzTdLBvgff+WNUww2k/yGqxIG5gv8gXy9z7KE=";
+    hash = "sha256-k7r4g+iCdAwAUNQdbtxzS5kqgAavEBAJERSWgXvbXqg=";
   };
 
   build-system = [ pdm-backend ];

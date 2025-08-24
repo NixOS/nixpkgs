@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     libX11
     libXft
     freetype
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   makeFlags = [ "PREFIX=$(out)" ];
 

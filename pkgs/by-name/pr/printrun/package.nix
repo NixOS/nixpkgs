@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kliment";

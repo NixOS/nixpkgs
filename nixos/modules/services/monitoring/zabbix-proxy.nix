@@ -91,11 +91,11 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [
-          nettools
+          net-tools
           nmap
           traceroute
         ];
-        defaultText = literalExpression "[ nettools nmap traceroute ]";
+        defaultText = literalExpression "[ net-tools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
@@ -337,7 +337,7 @@ in
       description = "Zabbix Proxy";
 
       wantedBy = [ "multi-user.target" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
       preStart =

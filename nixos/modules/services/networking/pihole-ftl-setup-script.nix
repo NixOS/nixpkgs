@@ -26,7 +26,7 @@ in
   if [ ! -f '${cfg.stateDirectory}'/gravity.db ]; then
     $pihole -g
     # Send SIGRTMIN to FTL, which makes it reload the database, opening the newly created one
-    ${pkgs.procps}/bin/kill -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
+    ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
   fi
 
   source ${pihole}/usr/share/pihole/advanced/Scripts/api.sh
@@ -61,7 +61,7 @@ in
   for i in 1 2 3; do
     (TestAPIAvailability) && break
     echo "Retrying API shortly..."
-    ${pkgs.coreutils}/bin/sleep .5s
+    ${lib.getExe' pkgs.coreutils "sleep"} .5s
   done;
 
   LoginAPI

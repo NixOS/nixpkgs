@@ -4,20 +4,22 @@
   rustPlatform,
   openssl,
   pkg-config,
+  stdenv,
+  buildPackages,
+  installShellFiles,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";
-  version = "0-unstable-2024-12-17";
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fqGxor2PgsQemnPNoZkgNUNc7yRg2eqHTLzJAVpt6+8=";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Thumuss";
     repo = "utpm";
-    rev = "6c2cabc8e7e696ea129f55aa7732a6be63bc2319";
-    hash = "sha256-uuET0BG2kBFEEWSSZ35h6+tnqTTjEHOP50GR3IkL+CE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NlH+fPkTNqaQc2BrjerktnKS2L731K9G3z+N2xdx3kg=";
   };
+
+  cargoHash = "sha256-WR9LD5HjLgh9jirnjTc6BeNg8KjVZI+DuJRYEbN3tmE=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -26,9 +28,23 @@ rustPlatform.buildRustPackage {
   ];
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
-  doCheck = false; # no tests
+  postInstall =
+    let
+      utpm =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.utpm;
+    in
+    ''
+      installShellCompletion --cmd utpm \
+        --bash <(${utpm}/bin/utpm generate bash) \
+        --fish <(${utpm}/bin/utpm generate fish) \
+        --zsh <(${utpm}/bin/utpm generate zsh)
+    '';
 
   meta = {
     description = "Package manager for typst";
@@ -42,4 +58,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "utpm";
     maintainers = with lib.maintainers; [ louis-thevenet ];
   };
-}
+})

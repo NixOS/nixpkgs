@@ -26,44 +26,43 @@
   python310,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldmud";
-  version = "3.6.7";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "ldmud";
     repo = "ldmud";
-    rev = version;
-    sha256 = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
+    tag = finalAttrs.version;
+    hash = "sha256-ojOLM1vkuwuF0vXx6lCH0+OlyLkkOOnTJEUiZPpUhzo=";
   };
 
   patches = [
-    ./libxml2-2.12.0-compat.patch
     ./mysql-compat.patch
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     bison
   ];
-  buildInputs =
-    [
-      libgcrypt
-      libxcrypt-legacy
-      pcre
-      json_c
-      libxml2
-    ]
-    ++ lib.optional mccpSupport zlib
-    ++ lib.optional mysqlSupport libmysqlclient
-    ++ lib.optional postgresSupport libpq
-    ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional tlsSupport openssl
-    ++ lib.optional pythonSupport python310
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  buildInputs = [
+    libgcrypt
+    libxcrypt-legacy
+    pcre
+    json_c
+    libxml2
+  ]
+  ++ lib.optional mccpSupport zlib
+  ++ lib.optional mysqlSupport libmysqlclient
+  ++ lib.optional postgresSupport libpq
+  ++ lib.optional sqliteSupport sqlite
+  ++ lib.optional tlsSupport openssl
+  ++ lib.optional pythonSupport python310
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # To support systems without autoconf LD puts its configure.ac in a non-default
   # location and uses a helper script. We skip that script and symlink the .ac
@@ -86,10 +85,14 @@ stdenv.mkDerivation rec {
     (lib.enableFeature pythonSupport "use-python")
   ];
 
-  preConfigure = lib.optionalString mysqlSupport ''
-    export CPPFLAGS="-I${lib.getDev libmysqlclient}/include/mysql"
-    export LDFLAGS="-L${libmysqlclient}/lib/mysql"
-  '';
+  preConfigure =
+    lib.optionalString mysqlSupport ''
+      export CPPFLAGS="-I${lib.getDev libmysqlclient}/include/mysql"
+      export LDFLAGS="-L${libmysqlclient}/lib/mysql"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export LDFLAGS="$LDFLAGS -L${libiconv}/lib -liconv"
+    '';
 
   installTargets = [
     "install-driver"
@@ -105,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
     homepage = "https://ldmud.eu";
-    changelog = "https://github.com/ldmud/ldmud/blob/${version}/HISTORY";
+    changelog = "https://github.com/ldmud/ldmud/blob/${finalAttrs.version}/HISTORY";
     longDescription = ''
       LDMud started as a project to clean up and modernize Amylaar's LPMud
       gamedriver. Primary goals are full documentation, a commented source body
@@ -120,4 +123,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ cpu ];
   };
-}
+})

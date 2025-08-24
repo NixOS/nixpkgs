@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xstatic-bootbox";
   version = "5.5.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-Bootbox";

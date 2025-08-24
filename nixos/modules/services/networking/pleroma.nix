@@ -122,7 +122,7 @@ in
           wants = [ "network-online.target" ];
           after = [
             "network-online.target"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "pleroma.service" ];
           environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";

@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.15.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hifi";
@@ -20,7 +21,15 @@ python3.pkgs.buildPythonApplication rec {
     echo "${version}" > heisenbridge/version.txt
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "irc"
+  ];
+
+  dependencies = with python3.pkgs; [
     irc
     ruamel-yaml
     mautrix

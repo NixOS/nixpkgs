@@ -22,16 +22,13 @@ mkCoqDerivation {
   };
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.version [
-      {
-        case = range "8.10" "9.0";
-        out = "1.0.2";
-      }
-      {
-        case = range "8.5" "8.14";
-        out = "1.0.0";
-      }
+    lib.switch coq.coq-version [
+      (case (range "8.10" "9.1") "1.0.2")
+      (case (range "8.5" "8.14") "1.0.0")
     ] null;
 
   propagatedBuildInputs = [ mathcomp-boot ];

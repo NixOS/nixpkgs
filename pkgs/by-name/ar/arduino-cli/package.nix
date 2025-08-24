@@ -60,7 +60,8 @@ let
       "-w"
       "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
       "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"

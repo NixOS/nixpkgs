@@ -26,6 +26,8 @@
   libmysqlclient,
   withSQLite ? false,
   sqlite,
+  withTLSRPT ? true,
+  libtlsrpt,
 }:
 
 let
@@ -48,6 +50,7 @@ let
       "-DHAS_LDAP"
       "-DUSE_LDAP_SASL"
     ]
+    ++ lib.optional withTLSRPT "-DUSE_TLSRPT"
   );
   auxlibs = lib.concatStringsSep " " (
     [
@@ -62,35 +65,36 @@ let
     ++ lib.optional withMySQL "-lmysqlclient"
     ++ lib.optional withSQLite "-lsqlite3"
     ++ lib.optional withLDAP "-lldap"
+    ++ lib.optional withTLSRPT "-ltlsrpt"
   );
 
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.2";
+  version = "3.10.4";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-vMpWQTLUz1+cnONU2rndNe6OniGQCGRiPIFdrBa/vCc=";
+    hash = "sha256-z7ZoYf6PlkeH3a6rFfPKPn7z3nMPlxca/EpeyjOMpEQ=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     m4
   ];
-  buildInputs =
-    [
-      db
-      openssl
-      cyrus_sasl
-      icu
-      libnsl
-      pcre2
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withLDAP openldap;
+  buildInputs = [
+    db
+    openssl
+    cyrus_sasl
+    icu
+    libnsl
+    pcre2
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withMySQL libmysqlclient
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withLDAP openldap
+  ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];

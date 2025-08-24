@@ -18,18 +18,17 @@
 
 buildPythonPackage rec {
   pname = "panphon";
-  version = "0.21.2";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FpYHbkEeQzyPfbpigZ1EMNlzLLFWB/wNcGHYFYiEE2k=";
+    hash = "sha256-OD1HfVh/66HKWoKHjiT+d8FkXW++ngHJ6X1JjYopujU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    setuptools # need for pkg_resources
     unicodecsv
     pyyaml
     regex

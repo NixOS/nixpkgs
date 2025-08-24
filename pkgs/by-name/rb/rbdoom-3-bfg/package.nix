@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = "rbdoom-3-bfg";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9BZEFO+e5IG6hv9+QI9OJecQ84rLTWBDz4k0GU6SeDE=";
     fetchSubmodules = true;
   };
