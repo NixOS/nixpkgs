@@ -90,6 +90,7 @@ in
   nspr,
   nss_esr,
   nss_latest,
+  onnxruntime,
   pango,
   xorg,
   zip,
@@ -509,6 +510,9 @@ buildStdenv.mkDerivation {
     (enableFeature jackSupport "jack")
     (enableFeature pulseaudioSupport "pulseaudio")
     (enableFeature sndioSupport "sndio")
+  ]
+  ++ lib.optionals (!buildStdenv.hostPlatform.isDarwin && lib.versionAtLeast version "141") [
+    "--with-onnx-runtime=${lib.getLib onnxruntime}/lib"
   ]
   ++ [
     (enableFeature crashreporterSupport "crashreporter")
