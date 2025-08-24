@@ -11162,7 +11162,7 @@ with pkgs;
   };
 
   scheherazade-new = scheherazade.override {
-    version = "4.300";
+    version = "4.400";
   };
 
   inherit (callPackages ../data/fonts/gdouros { })
