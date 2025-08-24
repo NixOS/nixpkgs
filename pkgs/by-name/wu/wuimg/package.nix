@@ -40,33 +40,52 @@
   withX11 ? false,
   exoticImageFormats ? true,
 }:
+let
+  # Use `ar` with lto support
+  ar =
+    stdenv.cc.bintools.targetPrefix
+    + (
+      if stdenv.cc.isClang then
+        "llvm-ar"
+      else if stdenv.cc.isGNU then
+        "gcc-ar"
+      else
+        "ar"
+    );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wuimg";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "kaleido";
     repo = "wuimg";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dPcfgp1RZ6TlyaO+qjcFM7fZlX1bUJcYhb2Nn05tASQ=";
+    tag = "w${finalAttrs.version}";
+    hash = "sha256-9iTHgFOoA/0W6gMlA9hJzrlISogv3/eMa3Rru01mx8E=";
   };
 
-  mesonFlags =
-    lib.optionals (!withX11) [ "-Dwindow_glfw=disabled" ]
-    ++ lib.optionals (!exoticImageFormats) [
-      # Disable all external formats
-      "-Dauto_features=disabled"
-      "-Ddisable_external=true"
-      # Except jpeg, png, svg, webp
-      "-Djpeg=enabled"
-      "-Dpng=enabled"
-      "-Dsvg=enabled"
-      "-Dwebp=enabled"
-      # Also, enable wayland and drm backends
-      "-Dwindow_wayland=enabled"
-      "-Dwindow_drm=enabled"
-    ];
+  mesonFlags = [
+    # Enable lto
+    "-Db_lto=true"
+  ]
+  ++ lib.optionals (!withX11) [
+    # Configure X11 support
+    "-Dwindow_glfw=disabled"
+  ]
+  ++ lib.optionals (!exoticImageFormats) [
+    # Disable all external formats
+    "-Dauto_features=disabled"
+    "-Ddisable_external=true"
+    # Except jpeg, png, svg, webp
+    "-Djpeg=enabled"
+    "-Dpng=enabled"
+    "-Dsvg=enabled"
+    "-Dwebp=enabled"
+    # Also, enable wayland and drm backends
+    "-Dwindow_wayland=enabled"
+    "-Dwindow_drm=enabled"
+  ];
 
   strictDeps = true;
 
@@ -78,49 +97,52 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      # Minimum
-      libarchive
-      libepoxy
-      exiv2
-      icu
-      lcms
-      libuchardet
+  buildInputs = [
+    # Minimum
+    libarchive
+    libepoxy
+    exiv2
+    icu
+    lcms
+    libuchardet
 
-      # Wayland
-      wayland
-      libGL
-      libxkbcommon
-      wayland-protocols
+    # Wayland
+    wayland
+    libGL
+    libxkbcommon
+    wayland-protocols
 
-      # DRM/KMS
-      libdrm
-      libgbm
+    # DRM/KMS
+    libdrm
+    libgbm
 
-      # Minimal external formats
-      libjpeg
-      libpng
-      librsvg
-      libwebp
-    ]
-    ++ lib.optionals withX11 [ glfw ]
-    ++ lib.optionals exoticImageFormats [
-      # More exotic external formats
-      zlib
-      libavif
-      flif
-      giflib
-      libheif
-      jbigkit
-      jbig2dec
-      openjpeg
-      charls
-      libjxl
-      lerc
-      libraw
-      libtiff
-    ];
+    # Minimal external formats
+    libjpeg
+    libpng
+    librsvg
+    libwebp
+  ]
+  ++ lib.optionals withX11 [ glfw ]
+  ++ lib.optionals exoticImageFormats [
+    # More exotic external formats
+    zlib
+    libavif
+    flif
+    giflib
+    libheif
+    jbigkit
+    jbig2dec
+    openjpeg
+    charls
+    libjxl
+    lerc
+    libraw
+    libtiff
+  ];
+
+  preConfigure = ''
+    export AR="${ar}"
+  '';
 
   buildPhase = ''
     runHook preBuild
