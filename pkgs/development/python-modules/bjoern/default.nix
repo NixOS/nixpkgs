@@ -4,12 +4,13 @@
   fetchFromGitHub,
   libev,
   python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bjoern";
   version = "3.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jonashaag";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-drFLM6GsgrM8atQDxmb3/1bpj+C1WetQLjNbZqCTzog=";
     fetchSubmodules = true; # fetch http-parser and statsd-c-client submodules
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ libev ];
 
