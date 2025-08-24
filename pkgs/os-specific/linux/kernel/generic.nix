@@ -398,9 +398,20 @@ let
                       )
                     )).version
                     emptyFile;
+                ikconfigSameAsConfigfile =
+                  pkgsBuildBuild.runCommandNoCC "${finalAttrs.finalPackage.name}-ikconfig-same"
+                    {
+                      nativeBuildInputs = [ pkgsBuildBuild.linux-scripts ];
+                      kernel = "${finalAttrs.finalPackage}/${stdenv.hostPlatform.linux-kernel.target}";
+                    }
+                    ''
+                      extract-ikconfig "$kernel" > ikconfig
+                      diff -U0 "${configfile}" ikconfig
+                      touch "$out"
+                    '';
               in
               {
-                inherit versionDoesNotDependOnPatchesEtc;
+                inherit versionDoesNotDependOnPatchesEtc ikconfigSameAsConfigfile;
                 testsForKernel = nixosTests.kernel-generic.passthru.testsForKernel overridableKernel;
                 # Disabled by default, because the infinite recursion is hard to understand. The other test's error is better and produces a shorter trace.
                 # inherit versionDoesNotDependOnPatchesEtcNixOS;
