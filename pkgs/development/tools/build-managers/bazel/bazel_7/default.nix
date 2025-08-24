@@ -707,6 +707,16 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
+  # Work around an issue with the old vendored zlib and modern versions
+  # of Clang on macOS.
+  #
+  # Fixed in newer versions of Bazel and rules_java; see
+  # <https://github.com/bazelbuild/bazel/issues/25124>.
+  #
+  # Credit to Homebrew for the hack:
+  # <https://github.com/Homebrew/homebrew-core/blob/b61d1f7d7963c08c472d829b25de5d0a06dc4b3d/Formula/b/bazel.rb#L55-L60>
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fno-define-target-os-macros";
+
   passthru = {
     # TODO add some tests to cover basic functionality, and also tests for enableNixHacks=true (buildBazelPackage tests)
     # tests = ...
