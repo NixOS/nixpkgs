@@ -9767,6 +9767,18 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
+  dovecot_2_3 = callPackage ../by-name/do/dovecot/2_3.nix { };
+  dovecot_2_4 = callPackage ../by-name/do/dovecot/package.nix { };
+
+  dovecot_pigeonhole_2_3 = callPackage ../by-name/do/dovecot_pigeonhole/2_3.nix { };
+  dovecot_pigeonhole_2_4 = callPackage ../by-name/do/dovecot_pigeonhole/package.nix { };
+
+  dovecot_fts_xapian_2_3 = callPackage ../by-name/do/dovecot_fts_xapian/2_3.nix { };
+  dovecot_fts_xapian_2_4 = callPackage ../by-name/do/dovecot_fts_xapian/package.nix { };
+
+  dovecot_exporter_2_3 = callPackage ../by-name/do/dovecot_exporter/2_3.nix { };
+  dovecot_exporter_2_4 = callPackage ../by-name/do/dovecot_exporter/package.nix { };
+
   envoy = callPackage ../by-name/en/envoy/package.nix {
     jdk = openjdk11_headless;
   };
