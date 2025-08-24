@@ -4,16 +4,18 @@
   buildPythonPackage,
   pythonOlder,
   pytestCheckHook,
+  versionCheckHook,
 
   # dependencies
   beancount-black,
   beancount-parser,
   beanhub-forms,
   beanhub-import,
+  beanhub-inbox,
   click,
   fastapi,
   jinja2,
-  poetry-core,
+  hatchling,
   pydantic-settings,
   pydantic,
   pyyaml,
@@ -31,8 +33,8 @@
   tomli,
 
   # tests
-  pytest,
   pytest-asyncio,
+  pytest-factoryboy,
   pytest-httpx,
   pytest-mock,
 }:
@@ -55,13 +57,14 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     beancount-black
     beancount-parser
     beanhub-forms
     beanhub-import
+    beanhub-inbox
     click
     fastapi
     jinja2
@@ -95,11 +98,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-factoryboy
     pytest-httpx
     pytest-mock
     pytestCheckHook
+    versionCheckHook
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "beanhub_cli" ];
 
