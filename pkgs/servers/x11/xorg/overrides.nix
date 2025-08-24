@@ -156,29 +156,6 @@ self: super:
     };
   });
 
-  libXfont = super.libXfont.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ freetype ]; # propagate link reqs. like bzip2
-    # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
-  });
-
-  libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86dga = super.libXxf86dga.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
@@ -217,126 +194,12 @@ self: super:
     };
   });
 
-  # Propagate some build inputs because of header file dependencies.
-  # Note: most of these are in Requires.private, so maybe builder.sh
-  # should propagate them automatically.
-  libXt = super.libXt.overrideAttrs (attrs: {
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libSM ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
-    outputDoc = "devdoc";
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-  });
-
-  libICE = super.libICE.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-  });
-
-  libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libXaw = super.libXaw.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
-  });
-
-  libXdamage = super.libXdamage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXft = super.libXft.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXrender
-      freetype
-      fontconfig
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-
-    # the include files need ft2build.h, and Requires.private isn't enough for us
-    postInstall = ''
-      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
-    '';
-    passthru = attrs.passthru // {
-      inherit freetype fontconfig;
-    };
-  });
-
-  libXi = super.libXi.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
-    ];
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "xorg_cv_malloc0_returns_null=no"
-      ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
-  });
-
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
     outputs = [
       "out"
       "dev"
     ];
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXmu = super.libXmu.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
-  });
-
-  libSM = super.libSM.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libICE
-      xorg.xtrans
-    ];
   });
 
   libXres = super.libXres.overrideAttrs (attrs: {
@@ -354,36 +217,11 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  libXvMC = super.libXvMC.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
   libXp = super.libXp.overrideAttrs (attrs: {
     outputs = [
       "out"
       "dev"
     ];
-  });
-
-  libXpm = super.libXpm.overrideAttrs (attrs: {
-    outputs = [
-      "bin"
-      "dev"
-      "out"
-    ]; # tiny man in $bin
-    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
-    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
-    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
-    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
-    meta = attrs.meta // {
-      mainProgram = "sxpm";
-    };
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
@@ -437,20 +275,6 @@ self: super:
 
   xcalc = addMainProgram super.xcalc { };
 
-  xcbutil = super.xcbutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  xcbutilerrors = super.xcbutilerrors.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
   xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -459,34 +283,6 @@ self: super:
     meta = attrs.meta // {
       maintainers = [ lib.maintainers.lovek323 ];
     };
-  });
-
-  xcbutilimage = super.xcbutilimage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilkeysyms = super.xcbutilkeysyms.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilrenderutil = super.xcbutilrenderutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilwm = super.xcbutilwm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
   });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {

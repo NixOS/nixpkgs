@@ -39,22 +39,51 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"dmx"} = "libdmx";
 $pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
+$pcMap{"ice"} = "libICE";
 $pcMap{"libfs"} = "libFS";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"sm"} = "libSM";
 $pcMap{"x11"} = "libX11";
 $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
+$pcMap{"xaw6"} = "libXaw";
+$pcMap{"xaw7"} = "libXaw";
 $pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-atom"} = "xcbutil";
+$pcMap{"xcb-aux"} = "xcbutil";
+$pcMap{"xcb-errors"} = "xcbutilerrors";
+$pcMap{"xcb-event"} = "xcbutil";
+$pcMap{"xcb-ewmh"} = "xcbutilwm";
+$pcMap{"xcb-icccm"} = "xcbutilwm";
+$pcMap{"xcb-image"} = "xcbutilimage";
+$pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
+$pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
+$pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xfont"} = "libXfont";
+$pcMap{"xfont2"} = "libXfont2";
+$pcMap{"xft"} = "libXft";
+$pcMap{"xi"} = "libXi";
+$pcMap{"xmu"} = "libXmu";
+$pcMap{"xmuu"} = "libXmu";
+$pcMap{"xpm"} = "libXpm";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
+$pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
+$pcMap{"xvmc"} = "libXvMC";
+$pcMap{"xvmc-wrapper"} = "libXvMC";
+$pcMap{"xxf86dga"} = "libXxf86dga";
+$pcMap{"xxf86misc"} = "libXxf86misc";
+$pcMap{"xxf86vm"} = "libXxf86vm";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -304,19 +333,41 @@ print OUT <<EOF;
   libdmx,
   libfontenc,
   libfs,
+  libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
-  libxcvt,
+  libxcb-errors,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-util,
+  libxcb-wm,
+  libxcomposite,
   libxcursor,
+  libxcvt,
+  libxdamage,
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
+  libxft,
+  libxi,
+  libxmu,
+  libxpm,
   libxrandr,
   libxrender,
+  libxt,
   libxv,
+  libxvmc,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   lndir,
   luit,
   makedepend,
@@ -382,18 +433,40 @@ self: with self; {
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
+  libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
+  libXdamage = libxdamage;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
+  libXft = libxft;
+  libXi = libxi;
+  libXmu = libxmu;
+  libXpm = libxpm;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXt = libxt;
   libXv = libxv;
+  libXvMC = libxvmc;
+  libXxf86dga = libxxf86dga;
+  libXxf86misc = libxxf86misc;
+  libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
+  xcbutil = libxcb-util;
+  xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
