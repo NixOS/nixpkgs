@@ -10,7 +10,7 @@
   makeBinaryWrapper,
   kdsingleapplication,
   nix-update-script,
-  enableWlrSupport ? false,
+  enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
   enableMonochromeIcon ? false,
 }:
 
