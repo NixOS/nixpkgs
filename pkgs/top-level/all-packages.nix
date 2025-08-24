@@ -13192,10 +13192,6 @@ with pkgs;
     syncthing-relay
     ;
 
-  syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
-    # renamed in KF5 -> KF6
-    plasma-framework = kdePackages.libplasma;
-  };
   syncthingtray-minimal = syncthingtray.override {
     webviewSupport = false;
     jsSupport = false;
