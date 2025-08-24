@@ -14,7 +14,7 @@ let
 in
 buildPythonPackage {
   name = "fill-voids";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
