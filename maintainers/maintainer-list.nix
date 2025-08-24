@@ -22853,6 +22853,11 @@
     github = "SchweGELBin";
     githubId = 67663319;
   };
+  sciencemarc = {
+    name = "Marc Lavergne";
+    github = "sciencemarc";
+    githubId = 24737495;
+  };
   sciencentistguy = {
     email = "jamie@quigley.xyz";
     name = "Jamie Quigley";
