@@ -329,6 +329,17 @@ let
           // stdenv.hostPlatform.gcc or { };
       };
     });
+
+    /**
+      A set of package sets that is
+      - natively compiled, i.e. buildPlatform == hostPlatform
+      - default Nixpkgs configuration
+
+      These package sets are memoized so that you can reference them multiple
+      times in the same Nix evaluator process without causing any unnecessary
+      evaluation.
+    */
+    pkgsPlain = import ./pkgs-plain.nix;
   };
 
   # The complete chain of package set builders, applied from top to bottom.
