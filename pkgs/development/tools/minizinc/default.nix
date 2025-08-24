@@ -13,6 +13,22 @@
   zlib,
 }:
 
+let
+  gecode_6_3_0 = gecode.overrideAttrs (_: {
+    version = "6.3.0";
+    src = fetchFromGitHub {
+      owner = "gecode";
+      repo = "gecode";
+      rev = "f7f0d7c273d6844698f01cec8229ebe0b66a016a";
+      hash = "sha256-skf2JEtNkRqEwfHb44WjDGedSygxVuqUixskTozi/5k=";
+    };
+    patches = [ ];
+  });
+in
+let
+  gecode = gecode_6_3_0;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
   version = "2.9.3";
@@ -42,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/minizinc/solvers/
     jq \
       '.version = "${gecode.version}"
-       | .mznlib = "${gecode}/share/gecode/mznlib"
+       | .mznlib = "${gecode}/share/minizinc/gecode/"
        | .executable = "${gecode}/bin/fzn-gecode"' \
        ${./gecode.msc} \
        >$out/share/minizinc/solvers/gecode.msc
