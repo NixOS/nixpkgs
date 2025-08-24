@@ -231,7 +231,12 @@
   "libclc/use-default-paths.patch" = [
     {
       after = "19";
+      before = "20";
       path = ../19;
+    }
+    {
+      after = "20";
+      path = ../20;
     }
   ];
 }
