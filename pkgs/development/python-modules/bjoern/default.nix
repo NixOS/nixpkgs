@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bjoern";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   # tests are not published to pypi anymore
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jonashaag";
     repo = "bjoern";
     rev = version;
-    hash = "sha256-d7u/lEh2Zr5NYWYu4Zr7kgyeOIQuHQLYrZeiZMHbpio=";
+    hash = "sha256-drFLM6GsgrM8atQDxmb3/1bpj+C1WetQLjNbZqCTzog=";
     fetchSubmodules = true; # fetch http-parser and statsd-c-client submodules
   };
 
