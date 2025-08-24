@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "btest";
-  version = "1.1";
+  version = "1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "zeek";
     repo = "btest";
     tag = "v${version}";
-    hash = "sha256-D01hAKcE52eKJRUh1/x5DGxRQpWgA2J0nutshpKrtRU=";
+    hash = "sha256-c+iWzqq0RiRkZlRYjUCXIaFqgnyFdbMAWDNrVYZUvgw=";
   };
 
   # No tests available and no module to import
