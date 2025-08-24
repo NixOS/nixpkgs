@@ -8,13 +8,13 @@
 }:
 ocamlPackages.buildDunePackage {
   pname = "cerberus";
-  version = "0-unstable-2025-07-25";
+  version = "0-unstable-2025-08-18";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "cerberus";
-    rev = "9f8f2d375366e8c6c3c60dcf2da757344d877b14";
-    hash = "sha256-wwc2XXQ3AdXBhBX7FPhpm56w3g9rrC8tESelcXSwjPE=";
+    rev = "9eb2ce27adc4a45c69da347c660d9b5477d764a8";
+    hash = "sha256-++fCZvk4ee166eciipTQ8GId6DWrG6aonAzHpK/10f0=";
   };
 
   minimalOCamlVersion = "4.12";
