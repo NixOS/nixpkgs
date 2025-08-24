@@ -1,0 +1,3 @@
+build-dirs:
+	mkdir -p "@OMBUILDDIR@"/lib/@host_short@/omc
+	mkdir -p "@OMBUILDDIR@"/include/omc
