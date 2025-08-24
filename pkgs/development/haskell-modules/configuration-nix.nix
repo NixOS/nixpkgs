@@ -1870,4 +1870,6 @@ builtins.intersectAttrs super {
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
+
+  botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 }
