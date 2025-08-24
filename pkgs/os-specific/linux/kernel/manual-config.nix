@@ -245,13 +245,11 @@ lib.makeOverridable (
           rust-bindgen-unwrapped
         ];
 
-        env = {
-          RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+        RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-          # avoid leaking Rust source file names into the final binary, which adds
-          # a false dependency on rust-lib-src on targets with uncompressed kernels
-          KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
-        };
+        # avoid leaking Rust source file names into the final binary, which adds
+        # a false dependency on rust-lib-src on targets with uncompressed kernels
+        KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
 
         patches =
           # kernelPatches can contain config changes and no actual patch
