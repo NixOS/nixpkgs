@@ -1,0 +1,12 @@
+diff --git a/src/Pure/System/isabelle_system.scala b/src/Pure/System/isabelle_system.scala
+index 687014f..9b211a2 100644
+--- a/src/Pure/System/isabelle_system.scala
++++ b/src/Pure/System/isabelle_system.scala
+@@ -215,6 +215,7 @@ object Isabelle_System {
+         Files.copy(src.toPath, target.toPath,
+           StandardCopyOption.COPY_ATTRIBUTES,
+           StandardCopyOption.REPLACE_EXISTING)
++        target.setWritable(true)
+       }
+       catch {
+         case ERROR(msg) =>
