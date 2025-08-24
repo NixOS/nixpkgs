@@ -9,17 +9,17 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lime";
-  version = "5.2.98";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "lime";
-    rev = version;
-    hash = "sha256-LdwXBJpwSA/PoCXL+c1pcX1V2Fq/eR6nNmwBKDM1Vr8=";
+    rev = finalAttrs.version;
+    hash = "sha256-iKp0q+nYrqrd5JUuQdE0u+WCNs7JmC7GGUd8TzP9Qs4=";
   };
 
   buildInputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})
