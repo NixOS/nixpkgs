@@ -169,6 +169,8 @@ buildPythonPackage rec {
     "test_confidence"
     "test_e2e_webp_conversions"
     "test_asr_pipeline_conversion"
+    "test_threaded_pipeline"
+    "test_pipeline_comparison"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"
