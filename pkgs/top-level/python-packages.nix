@@ -4324,6 +4324,8 @@ self: super: with self; {
 
   dploot = callPackage ../development/python-modules/dploot { };
 
+  draccus = callPackage ../development/python-modules/draccus { };
+
   drafthorse = callPackage ../development/python-modules/drafthorse { };
 
   draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
@@ -8044,6 +8046,8 @@ self: super: with self; {
   leidenalg = callPackage ../development/python-modules/leidenalg { igraph-c = pkgs.igraph; };
 
   lektricowifi = callPackage ../development/python-modules/lektricowifi { };
+
+  lerobot = callPackage ../development/python-modules/lerobot { };
 
   letpot = callPackage ../development/python-modules/letpot { };
 
