@@ -170,7 +170,10 @@ stdenv.mkDerivation (finalAttrs: {
     perl
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    (python3Packages.python.withPackages (ps: with ps; [ distlib ]))
+    # And don't use `python.withPackages` directly, use `python.pythonOnBuildForHost.withPackages` instead
+    # because the result of `withPackages` doesn't get respliced
+    python3Packages.python
+    python3Packages.distlib
   ]
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
