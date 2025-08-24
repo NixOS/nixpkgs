@@ -1,0 +1,22 @@
+From e8b910246d0c7c3d9fff994f71c6f8a48ec09a50 Mon Sep 17 00:00:00 2001
+From: Tristan Ross <tristan.ross@midstall.com>
+Date: Sat, 24 Aug 2024 19:56:24 -0700
+Subject: [PATCH] [libclc] use default paths with find_program when possible
+
+---
+ libclc/CMakeLists.txt | 4 ++--
+ 1 file changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 02bb859ae8590b..6bcd8ae52a5794 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,7 +55,7 @@ if( LIBCLC_STANDALONE_BUILD OR CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DI
+   # Import required tools
+   if( NOT EXISTS ${LIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR} )
+     foreach( tool IN ITEMS clang llvm-as llvm-link opt )
+-      find_program( LLVM_TOOL_${tool} ${tool} PATHS ${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )
++      find_program( LLVM_TOOL_${tool} ${tool} PATHS ${LLVM_TOOLS_BINARY_DIR} )
+       set( ${tool}_exe ${LLVM_TOOL_${tool}} )
+       set( ${tool}_target )
+     endforeach()

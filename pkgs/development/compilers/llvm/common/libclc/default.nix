@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./libclc-gnu-install-dirs.patch
+    (getVersionFile "libclc/gnu-install-dirs.patch")
   ]
   # LLVM 19 changes how host tools are looked up.
   # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
