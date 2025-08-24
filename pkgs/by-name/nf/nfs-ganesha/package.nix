@@ -16,6 +16,8 @@
   flex,
   nfs-utils,
   acl,
+  useCeph ? false,
+  ceph,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
     ntirpc
     liburcu
     nfs-utils
+    ceph
   ];
 
   postPatch = ''
