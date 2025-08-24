@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fonttools,
   lxml,
+  pikepdf,
   pillow,
   pytest-cov-stub,
   pytestCheckHook,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     camelot
     lxml
+    pikepdf
     pytest-cov-stub
     pytestCheckHook
     qrcode
