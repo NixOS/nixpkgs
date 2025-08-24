@@ -10461,6 +10461,8 @@ self: super: with self; {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
+  nmcli = callPackage ../development/python-modules/nmcli { };
+
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
 
   noaa-coops = callPackage ../development/python-modules/noaa-coops { };
