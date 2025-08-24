@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -108,6 +109,10 @@ buildPythonPackage rec {
     # NameError: name 'ParallelismConfig' is not defined
     "test_hf_argument_parser"
     "test_hf_argument_parser_incorrect_string_arguments"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    # These sparse tests also time out, on x86_64-darwin.
+    "sim_sparse"
   ];
 
   disabledTestPaths = [
