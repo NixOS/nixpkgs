@@ -630,7 +630,7 @@ in
               ''
               + concatStrings (
                 mapAttrsToList (name: inbox: ''
-                  if [ ! -e ${stateDir}/inboxes/${escapeShellArg name} ]; then
+                  if [ ! -e ${escapeShellArg inbox.inboxdir} ]; then
                     # public-inbox-init creates an inbox and adds it to a config file.
                     # It tries to atomically write the config file by creating
                     # another file in the same directory, and renaming it.
@@ -643,7 +643,7 @@ in
                       ${escapeShellArgs (
                         [
                           name
-                          "${stateDir}/inboxes/${name}"
+                          inbox.inboxdir
                           inbox.url
                         ]
                         ++ inbox.address
@@ -653,9 +653,9 @@ in
                   fi
 
                   ln -sf ${inbox.description} \
-                    ${stateDir}/inboxes/${escapeShellArg name}/description
+                    ${escapeShellArg inbox.inboxdir}/description
 
-                  export GIT_DIR=${stateDir}/inboxes/${escapeShellArg name}/all.git
+                  export GIT_DIR=${escapeShellArg inbox.inboxdir}/all.git
                   if test -d "$GIT_DIR"; then
                     # Config is inherited by each epoch repository,
                     # so just needs to be set for all.git.
