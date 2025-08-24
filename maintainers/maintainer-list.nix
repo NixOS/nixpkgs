@@ -369,6 +369,12 @@
     githubId = 7755101;
     name = "Aaron Andersen";
   };
+  aanhlongg = {
+    email = "nguyen.vietlong@protonmail.com";
+    github = "aanhlongg";
+    githubId = 169835631;
+    name = "Vietlong Nguyen";
+  };
   aaqaishtyaq = {
     email = "aaqaishtyaq@gmail.com";
     github = "aaqaishtyaq";
