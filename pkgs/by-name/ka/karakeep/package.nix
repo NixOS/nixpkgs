@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   nix-update-script,
   testers,
@@ -129,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      karakeep = nixosTests.karakeep;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
