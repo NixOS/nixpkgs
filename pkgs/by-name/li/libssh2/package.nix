@@ -1,5 +1,6 @@
 {
   lib,
+  cmakeMinimal,
   stdenv,
   fetchurl,
   openssl,
@@ -35,8 +36,15 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
-  propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
+  nativeBuildInputs = [ cmakeMinimal ];
+
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+
+  propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
+
+  cmakeFlags = [
+    "-DENABLE_ZLIB_COMPRESSION=ON"
+  ];
 
   passthru.tests = {
     inherit
