@@ -31,7 +31,7 @@ let
         passAsFile = [ "phpOptions" ];
       }
       ''
-        cat $phpPackage/etc/php.ini $phpOptionsPath > $out
+        cat $phpPackage/lib/php.ini $phpPackage/etc/php.ini $phpOptionsPath > $out
       '';
 
   artisanWrapper = pkgs.writeShellScriptBin "librenms-artisan" ''
