@@ -1047,35 +1047,43 @@ let
 
       functionTo =
         elemType:
-        mkOptionType {
-          name = "functionTo";
-          description = "function that evaluates to a(n) ${
-            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
-          }";
-          descriptionClass = "composite";
-          check = isFunction;
-          merge = loc: defs: {
-            # An argument attribute has a default when it has a default in all definitions
-            __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
-              lib.map (fn: lib.functionArgs fn.value) defs
-            );
-            __functor =
-              _: callerArgs:
-              (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (
-                map (fn: {
-                  inherit (fn) file;
-                  value = fn.value callerArgs;
-                }) defs
-              )).mergedValue;
-          };
-          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
-          getSubModules = elemType.getSubModules;
-          substSubModules = m: functionTo (elemType.substSubModules m);
-          functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
-            type = payload: types.functionTo payload.elemType;
-          };
-          nestedTypes.elemType = elemType;
-        };
+        mkOptionType (
+          let
+            optionDescription = optionDescriptionPhrase (
+              class: class == "noun" || class == "composite"
+            ) elemType;
+            firstOptionDescriptionLetter = lib.strings.toLower (builtins.substring 0 1 optionDescription);
+            optionDescriptionPrefix =
+              if elem firstOptionDescriptionLetter (lib.strings.stringToCharacters "aeiou") then "an" else "a";
+          in
+          {
+            name = "functionTo";
+            description = "function that evaluates to ${optionDescriptionPrefix} ${optionDescription}";
+            descriptionClass = "composite";
+            check = isFunction;
+            merge = loc: defs: {
+              # An argument attribute has a default when it has a default in all definitions
+              __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
+                lib.map (fn: lib.functionArgs fn.value) defs
+              );
+              __functor =
+                _: callerArgs:
+                (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (
+                  map (fn: {
+                    inherit (fn) file;
+                    value = fn.value callerArgs;
+                  }) defs
+                )).mergedValue;
+            };
+            getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
+            getSubModules = elemType.getSubModules;
+            substSubModules = m: functionTo (elemType.substSubModules m);
+            functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
+              type = payload: types.functionTo payload.elemType;
+            };
+            nestedTypes.elemType = elemType;
+          }
+        );
 
       # A submodule (like typed attribute set). See NixOS manual.
       submodule =
