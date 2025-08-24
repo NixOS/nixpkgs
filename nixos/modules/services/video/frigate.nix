@@ -157,6 +157,15 @@ in
 
     package = mkPackageOption pkgs "frigate" { };
 
+    configureNginx = mkOption {
+      description = ''
+        Configure Nginx as a reverse proxy for Frigate.
+        Note that this makes some assumptions on your setup and loads additional modules.
+      '';
+      type = types.bool;
+      default = true;
+    };
+
     hostname = mkOption {
       type = str;
       example = "frigate.exampe.com";
@@ -257,7 +266,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.nginx = {
+    services.nginx = mkIf cfg.configureNginx {
       enable = true;
       additionalModules = with pkgs.nginxModules; [
         develkit
