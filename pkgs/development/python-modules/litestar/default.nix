@@ -13,11 +13,13 @@
   cryptography,
   fsspec,
   httpx,
+  httpx-sse,
   jinja2,
   litestar-htmx,
   mako,
   msgspec,
   multidict,
+  multipart,
   picologging,
   polyfactory,
   psutil,
@@ -64,11 +66,13 @@ buildPythonPackage rec {
     cryptography
     fsspec
     httpx
+    httpx-sse
     jinja2
     litestar-htmx
     mako
     msgspec
     multidict
+    multipart
     picologging
     polyfactory
     psutil
@@ -92,6 +96,12 @@ buildPythonPackage rec {
     pytest-rerunfailures
     versionCheckHook
   ];
+
+  disabledTests = [
+    # Network
+    "test_subprocess_async_client"
+  ];
+
   versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
