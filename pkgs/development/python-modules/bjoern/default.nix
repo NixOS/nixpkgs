@@ -11,11 +11,10 @@ buildPythonPackage rec {
   version = "3.2.2";
   format = "setuptools";
 
-  # tests are not published to pypi anymore
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = "bjoern";
-    rev = version;
+    tag = version;
     hash = "sha256-drFLM6GsgrM8atQDxmb3/1bpj+C1WetQLjNbZqCTzog=";
     fetchSubmodules = true; # fetch http-parser and statsd-c-client submodules
   };
@@ -30,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jonashaag/bjoern";
     description = "Screamingly fast Python 2/3 WSGI server written in C";
+    changelog = "https://github.com/jonashaag/bjoern/blob/${src.tag}/CHANGELOG";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cmcdragonkai ];
   };
