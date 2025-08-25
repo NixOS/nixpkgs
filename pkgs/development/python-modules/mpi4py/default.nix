@@ -6,8 +6,9 @@
   setuptools,
   mpi,
   toPythonModule,
-  pytestCheckHook,
   mpiCheckPhaseHook,
+  mpich,
+  mpi4py,
 }:
 
 buildPythonPackage rec {
@@ -40,22 +41,34 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mpi4py" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mpiCheckPhaseHook
-  ];
-  disabledTestPaths = lib.optionals (mpi.pname == "mpich") [
-    # These tests from some reason cause pytest to crash, and therefor it is
-    # hard to debug them. Upstream mentions these tests to raise issues in
-    # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
-    # there (setting MPI4PY_RC_RECV_MPROBE=0) doesn't work.
-    "test/test_util_pool.py"
-    "demo/futures/test_futures.py"
   ];
 
   __darwinAllowLocalNetworking = true;
 
+  doCheck = true;
+
+  # skip spawn related tests for openmpi implemention
+  # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
+  env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
+
+  # follow the upstream check process in https://github.com/mpi4py/mpi4py/blob/4.0.3/.github/workflows/ci-test.yml
+  checkPhase = ''
+    runHook preCheck
+
+    for nproc in {1..2}; do
+      echo "Testing mpi4py (np=$nproc)"
+      mpiexec -n $nproc python test/main.py -v
+      echo "Testing mpi4py.futures (np=$nproc)"
+      mpiexec -n $nproc python demo/futures/test_futures.py -v
+    done
+
+    runHook postCheck
+  '';
+
   passthru = {
     inherit mpi;
+    tests.mpich = mpi4py.override { mpi = mpich; };
   };
 
   meta = {
