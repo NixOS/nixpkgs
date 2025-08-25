@@ -10431,8 +10431,6 @@ self: super: with self; {
 
   nitime = callPackage ../development/python-modules/nitime { };
 
-  nitpick = callPackage ../applications/version-management/nitpick { };
-
   nitransforms = callPackage ../development/python-modules/nitransforms { };
 
   nitrokey = callPackage ../development/python-modules/nitrokey { };
