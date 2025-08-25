@@ -49,7 +49,12 @@
   ];
   "llvm/gnu-install-dirs.patch" = [
     {
+      after = "22";
+      path = ../22;
+    }
+    {
       after = "21";
+      before = "22";
       path = ../21;
     }
     {
