@@ -96,6 +96,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     badPlatforms = [
+      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
+      "aarch64-linux"
+
       # clang++: error: unsupported option '-ffat-lto-objects' for target 'arm64-apple-darwin'
       # idem for 'x86_64-apple-darwin'
       lib.systems.inspect.patterns.isDarwin
