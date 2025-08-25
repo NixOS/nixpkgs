@@ -10,13 +10,13 @@
   libglvnd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xp-pen-g430-driver";
   version = "1.2.13.1";
 
   src = fetchzip {
     url = "https://archive.org/download/linux-pentablet-v-1.2.13.1.tar.gz-20200428/Linux_Pentablet_V1.2.13.1.tar.gz%2820200428%29.zip/Linux_Pentablet_V1.2.13.1.tar.gz";
-    name = "xp-pen-g430-driver-${version}.tar.gz";
+    name = "xp-pen-g430-driver-${finalAttrs.version}.tar.gz";
     hash = "sha256-Wavf4EAzR/NX3GOfdAEdFX08gkD03FVvAkIl37Zmipc=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ ];
   };
-}
+})
