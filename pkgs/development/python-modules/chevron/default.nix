@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "chevron";
-  version = "0.14.0-unstable-2021-03-21";
+  version = "0.13.1";
   pyproject = true;
 
   # No tests available in the PyPI tarball
