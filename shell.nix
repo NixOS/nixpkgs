@@ -28,6 +28,7 @@ let
 in
 curPkgs
 // pkgs.mkShellNoCC {
+  name = "nixpkgs";
   inputsFrom = [
     fmt.shell
   ];

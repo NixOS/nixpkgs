@@ -97,11 +97,13 @@ let
     let
       args = stageFun prevStage;
       args' = args // {
-        stdenv = args.stdenv // {
-          # For debugging
-          __bootPackages = prevStage;
-          __hatPackages = nextStage;
-        };
+        stdenv = args.stdenv.override (prevArgs: {
+          # Extra package attributes for debugging
+          extraAttrs = prevArgs.extraAttrs or { } // {
+            __bootPackages = prevStage;
+            __hatPackages = nextStage;
+          };
+        });
       };
       thisStage =
         if args.__raw or false then
