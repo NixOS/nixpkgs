@@ -19,7 +19,7 @@
   aiostream,
   aiohttp-oauthlib,
   aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0_26,
   trustme,
   aioresponses,
   vdirsyncer,
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-subtesthack
-    pytest-asyncio
+    pytest-asyncio_0_26
     trustme
     aioresponses
   ];
