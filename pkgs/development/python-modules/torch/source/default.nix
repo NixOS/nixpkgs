@@ -72,13 +72,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ?
-    if cudaSupport then
-      triton-cuda
-    else if rocmSupport then
-      rocmPackages.triton
-    else
-      triton,
+  _tritonEffective ? if cudaSupport then triton-cuda else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -183,11 +177,16 @@ let
     else if rocmSupport then
       # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
       # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
-      # TODO: Retest after ROCm 6.4 or torch 2.8
-      lib.lists.subtractLists [
-        "gfx1010"
-        "gfx1012"
-      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
+      # TODO: Remove after Ck backend UX refactor https://github.com/pytorch/pytorch/pull/152951
+      lib.lists.subtractLists
+        [
+          "gfx1010"
+          "gfx1012"
+        ]
+        (
+          rocmPackages.clr.localGpuTargetsWithGenericFallback
+            or rocmPackages.clr.gpuTargetsWithGenericFallback
+        )
     else
       throw "No GPU targets specified"
   );
@@ -295,6 +294,11 @@ buildPythonPackage rec {
     ./clang19-template-warning.patch
   ]
   ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+  ++ lib.optionals rocmSupport [
+    # backport: [PATCH] [ROCm] enable hipblaslt on gfx908 for ROCm >= 6.3 (#159092)
+    # includes fix for missing trailing comma that will break ROCm >6.4
+    ./hipblaslt-gfx908-backport.patch
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Propagate CUPTI to Kineto by overriding the search path with environment variables.
     # https://github.com/pytorch/pytorch/pull/108847
@@ -359,6 +363,10 @@ buildPythonPackage rec {
     substituteInPlace aten/src/ATen/CMakeLists.txt \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
+
+    # Allow aotriton 10 instead of exactly 9 (drop-in compatible)
+    substituteInPlace aten/src/ATen/native/transformers/hip/flash_attn/aot/mha_all_aot.hip \
+      --replace-fail 'AOTRITON_VERSION_MINOR != 9' 'AOTRITON_VERSION_MINOR != 9 && AOTRITON_VERSION_MINOR != 10'
   ''
   # Detection of NCCL version doesn't work particularly well when using the static binary.
   + lib.optionalString cudaSupport ''

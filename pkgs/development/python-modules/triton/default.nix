@@ -81,6 +81,11 @@ buildPythonPackage rec {
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    ''
+    # Don't use FHS path for ROCm LLD
+    + ''
+      substituteInPlace third_party/amd/backend/compiler.py \
+        --replace-fail '"/opt/rocm/llvm/bin/ld.lld"' "os.environ['ROCM_PATH']"' + "/llvm/bin/ld.lld"'
     '';
 
   build-system = [ setuptools ];

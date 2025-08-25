@@ -3,17 +3,15 @@
   config,
   callPackage,
   newScope,
+  stdenv,
   recurseIntoAttrs,
   symlinkJoin,
   fetchFromGitHub,
-  ffmpeg_4,
   boost179,
   opencv,
   libjpeg_turbo,
   python3Packages,
-  triton-llvm,
   openmpi,
-  rocmGpuArches ? [ ],
 }:
 
 let
@@ -23,12 +21,13 @@ let
       inherit (self) llvm;
       pyPackages = python3Packages;
       openmpi-orig = openmpi;
+      rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
-      inherit rocmGpuArches;
+      inherit rocmClangStdenv;
+      stdenv = rocmClangStdenv;
       buildTests = false;
       buildBenchmarks = false;
-      stdenv = llvm.rocmClangStdenv;
 
       rocmPath = self.callPackage ./rocm-path { };
       rocmUpdateScript = self.callPackage ./update.nix { };
@@ -36,56 +35,76 @@ let
       ## ROCm ##
       llvm = recurseIntoAttrs (
         callPackage ./llvm/default.nix {
-          inherit (self) rocm-device-libs rocm-runtime;
+          # rocm-device-libs is used for .src only
+          # otherwise would cause infinite recursion
+          inherit (self) rocm-device-libs;
         }
       );
       inherit (self.llvm) rocm-merged-llvm clang openmp;
 
-      rocm-core = self.callPackage ./rocm-core { };
+      rocm-core = self.callPackage ./rocm-core {
+        inherit stdenv;
+      };
+
+      rocm-cmake = self.callPackage ./rocm-cmake {
+        inherit stdenv;
+      };
+
+      rocm-device-libs = self.callPackage ./rocm-device-libs {
+        inherit stdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocm-runtime = self.callPackage ./rocm-runtime {
+        inherit stdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocm-comgr = self.callPackage ./rocm-comgr {
+        inherit stdenv;
+        inherit (llvm) rocm-merged-llvm;
+      };
+
+      rocminfo = self.callPackage ./rocminfo {
+        inherit stdenv;
+      };
+
       amdsmi = pyPackages.callPackage ./amdsmi {
         inherit (self) rocmUpdateScript;
       };
-
-      rocm-cmake = self.callPackage ./rocm-cmake { };
 
       rocm-smi = pyPackages.callPackage ./rocm-smi {
         inherit (self) rocmUpdateScript;
       };
 
-      rocm-device-libs = self.callPackage ./rocm-device-libs {
-        inherit (llvm) rocm-merged-llvm;
+      aqlprofile = self.callPackage ./aqlprofile {
+        stdenv = rocmClangStdenv;
       };
-
-      rocm-runtime = self.callPackage ./rocm-runtime {
-        inherit (llvm) rocm-merged-llvm;
-      };
-
-      rocm-comgr = self.callPackage ./rocm-comgr {
-        inherit (llvm) rocm-merged-llvm;
-      };
-
-      rocminfo = self.callPackage ./rocminfo { };
-
-      # Unfree
-      hsa-amd-aqlprofile-bin = self.callPackage ./hsa-amd-aqlprofile-bin { };
 
       rdc = self.callPackage ./rdc { };
 
       rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { };
 
-      hip-common = self.callPackage ./hip-common { };
+      hip-common = self.callPackage ./hip-common {
+        stdenv = rocmClangStdenv;
+      };
 
-      # Eventually will be in the LLVM repo
       hipcc = self.callPackage ./hipcc {
+        inherit stdenv;
         inherit (llvm) rocm-merged-llvm;
       };
 
       # Replaces hip, opencl-runtime, and rocclr
-      clr = self.callPackage ./clr { };
+      clr = self.callPackage ./clr {
+        stdenv = rocmClangStdenv;
+      };
 
-      aotriton = self.callPackage ./aotriton { };
+      aotriton = self.callPackage ./aotriton {
+        inherit stdenv;
+      };
 
       hipify = self.callPackage ./hipify {
+        inherit stdenv;
         inherit (llvm)
           clang
           rocm-merged-llvm
@@ -102,7 +121,6 @@ let
         inherit (llvm) clang;
       };
 
-      # Needs GCC
       roctracer = self.callPackage ./roctracer { };
 
       rocgdb = self.callPackage ./rocgdb { };
@@ -193,7 +211,9 @@ let
 
       miopen-hip = self.miopen;
 
-      migraphx = self.callPackage ./migraphx { };
+      migraphx = self.callPackage ./migraphx {
+        inherit stdenv;
+      };
 
       rpp = self.callPackage ./rpp { };
 
@@ -213,10 +233,8 @@ let
       };
 
       mivisionx = self.callPackage ./mivisionx {
+        inherit stdenv;
         opencv = opencv.override { enablePython = true; };
-        # TODO: Remove this pin in ROCm 6.4+
-        # FFMPEG support was improved in https://github.com/ROCm/MIVisionX/pull/1460
-        ffmpeg = ffmpeg_4;
         # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
         # See: https://github.com/ROCm/MIVisionX/issues/1051
         libjpeg_turbo = libjpeg_turbo.overrideAttrs {
@@ -264,21 +282,6 @@ let
       );
       mpi = self.openmpi;
 
-      triton-llvm = triton-llvm.overrideAttrs {
-        src = fetchFromGitHub {
-          owner = "llvm";
-          repo = "llvm-project";
-          # make sure this matches triton llvm rel branch hash for now
-          # https://github.com/triton-lang/triton/blob/release/3.2.x/cmake/llvm-hash.txt
-          rev = "86b69c31642e98f8357df62c09d118ad1da4e16a";
-          hash = "sha256-W/mQwaLGx6/rIBjdzUTIbWrvGjdh7m4s15f70fQ1/hE=";
-        };
-        pname = "triton-llvm-rocm";
-        patches = [ ]; # FIXME: https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch doesn't apply, may need to rebase
-      };
-
-      triton = pyPackages.callPackage ./triton { rocmPackages = self; };
-
       ## Meta ##
       # Emulate common ROCm meta layout
       # These are mainly for users. I strongly suggest NOT using these in nixpkgs derivations
@@ -289,7 +292,7 @@ let
         rocm-developer-tools = symlinkJoin {
           name = "rocm-developer-tools-meta";
           paths = [
-            hsa-amd-aqlprofile-bin
+            aqlprofile
             rocm-core
             rocr-debug-agent
             roctracer
@@ -312,7 +315,6 @@ let
           name = "rocm-ml-libraries-meta";
           paths = [
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-core
             miopen-hip
@@ -371,7 +373,6 @@ let
           paths = [
             rocm-core
             llvm.clang
-            llvm.mlir
             llvm.openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
             rocm-language-runtime
           ];
@@ -403,7 +404,6 @@ let
             hipify
             rocm-cmake
             llvm.clang
-            llvm.mlir
             llvm.openmp
             rocm-runtime
             rocm-hip-runtime
@@ -454,6 +454,10 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      hsa-amd-aqlprofile-bin = lib.warn ''
+        'hsa-amd-aqlprofile-bin' has been replaced by 'aqlprofile'.
+      '' self.aqlprofile; # Added 2025-08-19
+
       rocm-thunk = throw ''
         'rocm-thunk' has been removed. It's now part of the ROCm runtime.
       ''; # Added 2025-3-16
