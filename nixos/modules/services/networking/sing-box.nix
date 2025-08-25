@@ -30,7 +30,7 @@ in
         };
         default = { };
         description = ''
-          The sing-box configuration, see https://sing-box.sagernet.org/configuration/ for documentation.
+          The sing-box configuration, see <https://sing-box.sagernet.org/configuration/> for documentation.
 
           Options containing secret data should be set to an attribute set
           containing the attribute `_secret` - a string pointing to a file

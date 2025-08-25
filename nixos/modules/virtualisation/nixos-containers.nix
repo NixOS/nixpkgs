@@ -729,7 +729,7 @@ in
                   so that no overlapping UID/GID ranges are assigned to multiple containers.
                   This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
 
-                  See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
+                  See <https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users=> for details.
                 '';
               };
 

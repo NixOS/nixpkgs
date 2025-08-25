@@ -86,7 +86,7 @@ in
 
       configurators = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        description = "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        description = "Configurator Steps, see <https://docs.buildbot.net/latest/manual/configuration/configurators.html>";
         default = [ ];
         example = [
           "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
