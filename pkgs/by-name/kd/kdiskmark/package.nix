@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = with kdePackages; [
     qtbase
     qttools
-    polkit-qt
+    polkit-qt-1
   ];
 
   preConfigure = ''
