@@ -10069,6 +10069,12 @@
     githubId = 44377258;
     name = "Heitor Augusto";
   };
+  heitorPB = {
+    email = "heitorpbittencourt@gmail.com";
+    github = "heitorPB";
+    githubId = 13461702;
+    name = "Heitor Pascoal de Bittencourt";
+  };
   hekazu = {
     name = "Henri Peurasaari";
     email = "henri.peurasaari@helsinki.fi";
