@@ -431,15 +431,16 @@ in
               machine.send_key("alt-f4")
 
           # Morph is how we go online
-          with subtest("morph browser works"):
-              open_starter()
-              machine.send_chars("Morph\n")
-              wait_for_text(r"(Bookmarks|address|site|visited any)")
-              machine.screenshot("morph_open")
-
-              # morph-browser has a separate VM test to test its basic functionalities
-
-              machine.send_key("alt-f4")
+          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+          # with subtest("morph browser works"):
+          #     open_starter()
+          #     machine.send_chars("Morph\n")
+          #     wait_for_text(r"(Bookmarks|address|site|visited any)")
+          #     machine.screenshot("morph_open")
+          #
+          #     # morph-browser has a separate VM test to test its basic functionalities
+          #
+          #     machine.send_key("alt-f4")
 
           # LSS provides DE settings
           with subtest("system settings open"):
@@ -613,13 +614,13 @@ in
               machine.send_key("ret")
 
               # Peers should be loaded
-              wait_for_text("Morph") # or Gallery, but Morph is already packaged
+              wait_for_text("Gallery")
               machine.screenshot("settings_lomiri-content-hub_peers")
 
-              # Select Morph as content source
+              # Select Gallery as content source
               mouse_click(340, 80)
 
-              # Expect Morph to be brought into the foreground, with its Downloads page open
+              # Expect Gallery to be brought into the foreground, with its sharing page open
               wait_for_text("No downloads")
 
               # If lomiri-content-hub encounters a problem, it may have crashed the original application issuing the request.
@@ -631,7 +632,7 @@ in
               # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
               machine.send_key("esc")
 
-              machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
+              machine.sleep(2) # sleep a tiny bit so gallery can close & the focus can return to LSS
               machine.send_key("alt-f4")
         '';
     }
