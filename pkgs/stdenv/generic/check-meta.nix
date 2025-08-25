@@ -527,6 +527,7 @@ let
         toPretty' = toPretty {
           allowPrettyValues = true;
           indent = "  ";
+          customPrinters = lib.meta.platform.prettyPrinters;
         };
       in
       {
@@ -535,9 +536,18 @@ let
         errormsg = ''
           is not available on the requested hostPlatform:
             hostPlatform.config = "${hostPlatform.config}"
-            package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
-            package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
-        '';
+            ${
+              if attrs.meta ? platformConstraints then
+                ''
+                  package.platformConstraints:
+                    ${toPretty' attrs.meta.platformConstraints}
+                ''
+              else
+                ''
+                  package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
+                  package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
+                ''
+            }'';
       }
     else if !(hasAllowedInsecure attrs) then
       {
