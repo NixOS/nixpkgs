@@ -19,7 +19,7 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "gremlinpython";
-  version = "3.7.3";
+  version = "3.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "tinkerpop";
     tag = version;
-    hash = "sha256-Yc0l3kE+6dM9v4QUZPFpm/yjDCrqVO35Vy5srEjAExE=";
+    hash = "sha256-cN33ZyNVNiV45qWqG9eSjCCV84s2Q5pTXkg7Htcq4Gs=";
   };
 
   sourceRoot = "${src.name}/gremlin-python/src/main/python";
