@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -18,6 +17,7 @@
   # dependencies
   diskcache,
   jinja2,
+  llama-cpp,
   numpy,
   typing-extensions,
 
@@ -33,10 +33,11 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
-
 }:
 let
-  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
+  llama-cpp' = llama-cpp.override {
+    inherit cudaSupport cudaPackages;
+  };
 in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
@@ -50,7 +51,11 @@ buildPythonPackage rec {
     hash = "sha256-EUDtCv86J4bznsTqNsdgj1IYkAu83cf+RydFTUb2NEE=";
     fetchSubmodules = true;
   };
-  # src = /home/gaetan/llama-cpp-python;
+
+  postPatch = ''
+    substituteInPlace llama_cpp/llama_cpp.py \
+      --replace-fail '_base_path = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))' '_base_path = pathlib.Path("${llama-cpp'}")'
+  '';
 
   patches = [
     # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
@@ -64,25 +69,7 @@ buildPythonPackage rec {
   ];
 
   dontUseCmakeConfigure = true;
-  SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
-    # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
-    # -march=native* which is either a no-op (if cc-wrapper is able to ignore
-    # it), or an attempt to build a non-reproducible binary.
-    #
-    # This issue was spotted when cmake rules appended feature modifiers to
-    # -mcpu, breaking linux build as follows:
-    #
-    # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
-    [
-      "-DGGML_NATIVE=off"
-      "-DGGML_BUILD_NUMBER=1"
-    ]
-    ++ lib.optionals cudaSupport [
-      "-DGGML_CUDA=on"
-      "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
-      "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
-    ]
-  );
+  SKBUILD_CMAKE_ARGS = "-DLLAMA_BUILD=off";
 
   enableParallelBuilding = true;
 
@@ -97,16 +84,7 @@ buildPythonPackage rec {
     scikit-build-core
   ];
 
-  buildInputs = lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      cuda_cudart # cuda_runtime.h
-      cuda_cccl # <thrust/*>
-      libcublas # cublas_v2.h
-    ]
-  );
-
-  stdenv = stdenvTarget;
+  buildInputs = [ llama-cpp' ];
 
   dependencies = [
     diskcache
@@ -134,7 +112,7 @@ buildPythonPackage rec {
       rev-prefix = "v";
       allowedVersions = "^[.0-9]+$";
     };
-    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       withCuda = llama-cpp-python.override {
         cudaSupport = true;
       };
