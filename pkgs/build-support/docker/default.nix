@@ -1049,6 +1049,7 @@ rec {
           "/proc/"
           "/sys/"
           "${builtins.storeDir}/"
+          "$NIX_BUILD_TOP"
           "$out/layer.tar"
         ]
       );
@@ -1085,6 +1086,7 @@ rec {
                     --exclude=./proc \
                     --exclude=./sys \
                     --exclude=.${builtins.storeDir} \
+                    --exclude=".$NIX_BUILD_TOP" \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                     --hard-dereference \
                     -cf $out/layer.tar .
