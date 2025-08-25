@@ -40,6 +40,7 @@ let
       repo,
       rev,
       name ? "source",
+      hash ? null, # TODO: triage needed
       sha256 ? null,
       artifact ? null,
       ...
@@ -57,7 +58,7 @@ let
               };
             }
             {
-              cond = args ? sha256;
+              cond = args ? sha256; # TODO: triage needed
               out = {
                 ext = "zip";
                 fmt = "zip";
@@ -96,7 +97,7 @@ let
           out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";
         }
       ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-      fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x);
+      fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x); # TODO: triage needed
     in
     fetch { inherit url; };
 in
@@ -140,6 +141,7 @@ switch arg [
     out =
       let
         v = if isVersion arg then arg else shortVersion arg;
+        # TODO: triage needed
         given-sha256 = release.${v}.sha256 or "";
         sha256 = if given-sha256 == "" then fakeSha256 else given-sha256;
         rv = release.${v} // {
