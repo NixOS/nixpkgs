@@ -9,6 +9,7 @@
   parameterized,
   pillow,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   pythonOlder,
   torch,
 }:
@@ -27,9 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-J9m5LMOleHf2UziUbOtwf+DFpu/wBDcAyHUor4kqrR8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     jupyter
     nbconvert
     numpy
@@ -40,10 +42,6 @@ buildPythonPackage rec {
   ];
 
   env.EINOPS_TEST_BACKENDS = "numpy";
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "einops" ];
 
