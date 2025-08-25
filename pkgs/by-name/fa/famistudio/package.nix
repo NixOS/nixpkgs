@@ -47,7 +47,7 @@ buildDotnetModule (finalAttrs: {
           args
           // {
             inherit (finalAttrs) version src;
-            sourceRoot = "${finalAttrs.src.name}/ThirdParty/${args.depname}";
+            sourceRoot = "source/ThirdParty/${args.depname}";
           }
         );
       nativeWrapperToReplaceFormat =

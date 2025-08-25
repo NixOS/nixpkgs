@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
-    rev = version;
+    tag = version;
     hash = "sha256-Qc2l/CSVK+8k7b3RZA8hQsGTq29OvkDMbMzHcnPm/yE=";
   };
 
@@ -24,7 +24,7 @@ let
 
     pname = "commafeed-frontend";
 
-    sourceRoot = "${src.name}/commafeed-client";
+    sourceRoot = "source/commafeed-client";
 
     npmDepsHash = "sha256-bQShz6dmE9IZ9to5Z2DScncc/WVJnX1tRCm8XQJNmiU=";
 
@@ -101,6 +101,6 @@ maven.buildMavenPackage {
     homepage = "https://github.com/Athou/commafeed";
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = with lib.maintainers; [ raroh73 ];
   };
 }
