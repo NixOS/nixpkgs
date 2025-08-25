@@ -2039,7 +2039,8 @@
       ];
     "gitter" =
       ps: with ps; [
-      ]; # missing inputs: gitterpy
+        gitterpy
+      ];
     "glances" =
       ps: with ps; [
         glances-api
