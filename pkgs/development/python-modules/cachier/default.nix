@@ -9,6 +9,7 @@
   portalocker,
   pytestCheckHook,
   pytest-cov-stub,
+  sqlalchemy,
   pymongo,
   dnspython,
   pymongo-inmemory,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
+    sqlalchemy
     pymongo
     dnspython
     pymongo-inmemory
@@ -70,6 +72,7 @@ buildPythonPackage rec {
     # timing sensitive
     "test_being_calc_next_time"
     "test_pickle_being_calculated"
+    "test_sql_concurrency"
   ];
 
   preBuild = ''
