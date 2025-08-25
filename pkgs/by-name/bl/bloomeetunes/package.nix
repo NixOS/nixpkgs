@@ -1,29 +1,30 @@
 {
-  autoPatchelfHook,
   lib,
+  flutter327,
   fetchFromGitHub,
-  flutter324,
-  mpv,
-  makeDesktopItem,
+  autoPatchelfHook,
   copyDesktopItems,
+  makeDesktopItem,
+  mpv-unwrapped,
 }:
 
-flutter324.buildFlutterApplication rec {
+let
+  version = "2.12.3";
+in
+flutter327.buildFlutterApplication {
   pname = "bloomeetunes";
-  version = "2.11.6";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "HemantKArya";
     repo = "BloomeeTunes";
-    tag = "v${version}+171";
-    hash = "sha256-gSAe5S5rdcNLP4v7NTchQj3UJ/h6msLax9H77w+JJnk=";
+    tag = "v${version}+177";
+    hash = "sha256-PZXBdS9lmQGP2hTqCF+vsMwIPp/vHncqAmJWngWhRB4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    youtube_explode_dart = "sha256-ctUSoXLUJCu23hvEzYy5EoTCv7gG79rEiMFX7i1RGX0=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -40,16 +41,16 @@ flutter324.buildFlutterApplication rec {
     })
   ];
 
+  preBuild = ''
+    echo "CLIENT_ID = XXXXX\nCLIENT_SECRET = XXXX EOF" > assets/.env
+  '';
+
   postInstall = ''
     install -Dm644 assets/icons/bloomee_new_logo_c.png $out/share/pixmaps/bloomeetunes.png
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/bloomeetunes/lib:${
-      lib.makeLibraryPath [
-        mpv
-      ]
-    }
+    --prefix LD_LIBRARY_PATH : $out/app/bloomeetunes/lib:${lib.makeLibraryPath [ mpv-unwrapped ]}
   '';
 
   passthru.updateScript = ./update.sh;
