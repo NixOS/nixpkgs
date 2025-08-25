@@ -4,6 +4,7 @@
   lib,
   stdenv,
   nodejs,
+  python2,
   pkgs,
   libtool,
   runCommand,
@@ -12,7 +13,10 @@
 }:
 
 let
-  inherit (nodejs) python;
+  # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
+  utillinux = if pkgs ? utillinux then pkgs.utillinux else pkgs.util-linux;
+
+  python = if nodejs ? python then nodejs.python else python2;
 
   # Create a tar wrapper that filters all the 'Ignoring unknown extended header keyword' noise
   tarWrapper = runCommand "tarWrapper" { } ''
@@ -546,8 +550,8 @@ let
           python
           nodejs
         ]
-        ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
-        ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
+        ++ lib.optional (stdenv.isLinux) utillinux
+        ++ lib.optional (stdenv.isDarwin) libtool
         ++ buildInputs;
 
         inherit nodejs;
@@ -668,8 +672,8 @@ let
           python
           nodejs
         ]
-        ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
-        ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
+        ++ lib.optional (stdenv.isLinux) utillinux
+        ++ lib.optional (stdenv.isDarwin) libtool
         ++ buildInputs;
 
         inherit dontStrip; # Stripping may fail a build for some package deployments
@@ -767,7 +771,7 @@ let
           python
           nodejs
         ]
-        ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
+        ++ lib.optional (stdenv.isLinux) utillinux
         ++ buildInputs;
         buildCommand = ''
           mkdir -p $out/bin
