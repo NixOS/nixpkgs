@@ -887,8 +887,6 @@ self: super: with self; {
 
   argparse-manpage = callPackage ../development/python-modules/argparse-manpage { };
 
-  args = callPackage ../development/python-modules/args { };
-
   aria2p = callPackage ../development/python-modules/aria2p { };
 
   ariadne = callPackage ../development/python-modules/ariadne { };
