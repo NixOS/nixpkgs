@@ -10,19 +10,45 @@ let
     mkEnableOption
     mkPackageOption
     mkDefault
+    mkOption
     types
     mkIf
     ;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "homebox" "settings" ]
+      [ "services" "homebox" "environment" ]
+    )
+  ];
   options.services.homebox = {
     enable = mkEnableOption "homebox";
     package = mkPackageOption pkgs "homebox" { };
-    settings = lib.mkOption {
-      type = types.attrsOf types.str;
+    user = mkOption {
+      type = types.str;
+      default = "homebox";
+      description = "User account under which Homebox runs.";
+    };
+    group = mkOption {
+      type = types.str;
+      default = "homebox";
+      description = "Group under which Homebox runs.";
+    };
+    connectionString = lib.mkOption {
+      type = types.str;
+      default = "file:///var/lib/homebox";
+      description = "Path to the Homebox data directory.";
+    };
+    storagePrefix = lib.mkOption {
+      type = types.nullOr types.str;
+      default = "data";
+      description = "Optional prefix path for storage. If set to null the storage will be used as is.";
+    };
+    environment = mkOption {
+      type = types.submodule { freeformType = types.attrsOf types.str; };
       defaultText = lib.literalExpression ''
         {
-          HBOX_STORAGE_DATA = "/var/lib/homebox/data";
           HBOX_DATABASE_DRIVER = "sqlite3";
           HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
           HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
@@ -31,12 +57,12 @@ in
         }
       '';
       description = ''
-        The homebox configuration as Environment variables. For definitions and available options see the upstream
+        The homebox configuration as environment variables. For definitions and available options see the upstream
         [documentation](https://homebox.software/en/configure/#configure-homebox).
       '';
     };
     database = {
-      createLocally = lib.mkOption {
+      createLocally = mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
@@ -47,14 +73,42 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.homebox = {
+    assertions = [
+      {
+        assertion = !(cfg.environment ? HBOX_STORAGE_DATA);
+        message = ''
+          `services.homebox.environment.HBOX_STORAGE_DATA` has been deprecated.
+          Please use `services.homebox.connectionString` and `services.homebox.storagePrefix` instead.
+        '';
+      }
+      {
+        assertion = (cfg.environment.HBOX_STORAGE_CONN_STRING == cfg.connectionString);
+        message = ''
+          You cannot set `services.homebox.connectionString` and
+          `services.homebox.environment.HBOX_STORAGE_CONN_STRING` to point to different locations.
+          Please use `services.homebox.connectionString` to set it.
+        '';
+      }
+      {
+        assertion = (
+          cfg.environment ? HBOX_STORAGE_PATH == false
+          || cfg.environment.HBOX_STORAGE_PATH == cfg.storagePrefix
+        );
+        message = ''
+          You cannot set `services.homebox.storagePrefix` and
+          `services.homebox.environment.HBOX_STORAGE_PREFIX_PATH` to different paths.
+          Please use `services.homebox.storagePrefix` to set it.
+        '';
+      }
+    ];
+    users.users.${cfg.user} = {
       isSystemUser = true;
-      group = "homebox";
+      group = cfg.group;
     };
-    users.groups.homebox = { };
-    services.homebox.settings = lib.mkMerge [
+    users.groups.${cfg.group} = { };
+    services.homebox.environment = lib.mkMerge [
       (lib.mapAttrs (_: mkDefault) {
-        HBOX_STORAGE_DATA = "/var/lib/homebox/data";
+        HBOX_STORAGE_CONN_STRING = cfg.connectionString;
         HBOX_DATABASE_DRIVER = "sqlite3";
         HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
         HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
@@ -62,15 +116,20 @@ in
         HBOX_MODE = "production";
       })
 
-      (lib.mkIf cfg.database.createLocally {
+      (mkIf cfg.database.createLocally {
         HBOX_DATABASE_DRIVER = "postgres";
         HBOX_DATABASE_HOST = "/run/postgresql";
         HBOX_DATABASE_USERNAME = "homebox";
         HBOX_DATABASE_DATABASE = "homebox";
         HBOX_DATABASE_PORT = toString config.services.postgresql.settings.port;
       })
+
+      (mkIf (cfg.storagePrefix != null) {
+        HBOX_STORAGE_PREFIX_PATH = mkDefault cfg.storagePrefix;
+      })
     ];
-    services.postgresql = lib.mkIf cfg.database.createLocally {
+
+    services.postgresql = mkIf cfg.database.createLocally {
       enable = true;
       ensureDatabases = [ "homebox" ];
       ensureUsers = [
@@ -83,18 +142,16 @@ in
     systemd.services.homebox = {
       requires = lib.optional cfg.database.createLocally "postgresql.target";
       after = lib.optional cfg.database.createLocally "postgresql.target";
-      environment = cfg.settings;
+      inherit (cfg) environment;
       serviceConfig = {
-        User = "homebox";
-        Group = "homebox";
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = lib.getExe cfg.package;
-        StateDirectory = "homebox";
-        WorkingDirectory = "/var/lib/homebox";
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
-        StateDirectoryMode = "0700";
         Restart = "always";
+        StateDirectory = "homebox";
 
         # Hardening
         CapabilityBoundingSet = "";
