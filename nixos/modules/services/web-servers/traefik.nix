@@ -418,16 +418,13 @@ in
       routing.files = mkIf (!(isDefault "install.file")) {
         "custom-migrated".settings = cfg.routing.settings;
       };
-      install.settings =
-        mkIf (!(isDefault "routing.dir") || !(isDefault "routing.file")) mkIf
-          (cfg.routing.dir != null || !(isDefault "routing.file"))
-          {
-            providers.file = {
-              directory = mkIf (!(isDefault "routing.dir")) cfg.routing.dir;
-              filename = mkIf (!(isDefault "routing.file")) cfg.routing.file;
-              watch = mkDefault true;
-            };
-          };
+      install.settings = mkIf (cfg.routing.dir != null || !(isDefault "routing.file")) {
+        providers.file = {
+          directory = mkIf (cfg.routing.dir != null) cfg.routing.dir;
+          filename = mkIf (!(isDefault "routing.file")) cfg.routing.file;
+          watch = mkDefault true;
+        };
+      };
     };
 
     systemd.services.traefik = {
