@@ -3885,7 +3885,8 @@
       ];
     "nasweb" =
       ps: with ps; [
-      ]; # missing inputs: webio-api
+        webio-api
+      ];
     "national_grid_us" =
       ps: with ps; [
       ];
@@ -7435,6 +7436,7 @@
     "nam"
     "namecheapdns"
     "nanoleaf"
+    "nasweb"
     "neato"
     "ness_alarm"
     "nest"
