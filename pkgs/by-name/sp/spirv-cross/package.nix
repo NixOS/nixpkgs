@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "SPIRV_CROSS_SHARED" true)
+  ];
+
   postFixup = ''
     substituteInPlace $out/lib/pkgconfig/*.pc \
       --replace '=''${prefix}//' '=/'
