@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 7364948..d67c580 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,5 @@
+ [build-system]
+ requires = [
+-  "pip",
+-  "nuitka",
+   # https://setuptools-git-versioning.readthedocs.io/en/latest/differences.html
+   "setuptools>=64.0.0",
+   "setuptools-git-versioning",
