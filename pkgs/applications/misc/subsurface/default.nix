@@ -23,7 +23,7 @@
   qtlocation,
   qtsvg,
   qttools,
-  qtwebengine,
+  qtpositioning,
   libXcomposite,
   bluez,
   writeScript,
@@ -142,7 +142,7 @@ stdenv.mkDerivation {
     qtconnectivity
     qtsvg
     qttools
-    qtwebengine
+    qtpositioning
   ];
 
   nativeBuildInputs = [
