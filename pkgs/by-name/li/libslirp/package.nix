@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-MKP3iBExaPQryiahI1l/4bTgVht5Vu8AxaDyMotqmMo=";
   };
+
+  patches = [
+    # honor dns resolver port number on macos
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/baa4160b26431448b503d8d897db24fa0eb1386b.patch";
+      hash = "sha256-TJDr0qRaoT0MjMcayG8j7jXlFN63BEl1L9/q+MnSWXs=";
+    })
+  ];
 
   separateDebugInfo = true;
 
