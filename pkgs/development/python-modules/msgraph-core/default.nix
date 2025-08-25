@@ -9,7 +9,7 @@
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
-  requests,
+  microsoft-kiota-serialization-json,
   azure-identity,
   pytestCheckHook,
   responses,
@@ -36,13 +36,14 @@ buildPythonPackage rec {
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
     microsoft-kiota-http
-    requests
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     azure-identity
     pytestCheckHook
     python-dotenv
+    microsoft-kiota-serialization-json
     responses
   ];
 
