@@ -69,23 +69,40 @@ stdenv.mkDerivation rec {
     elfutils
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cmakeFlags = [
     # workaround for missing CMAKE_INSTALL_DATAROOTDIR
     # in pkgs/development/tools/build-managers/cmake/setup-hook.sh
-    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
     # qtdeclarative in nixpkgs does not provide qmlsc
     # fix can't find Qt6QmlCompilerPlusPrivate
-    "-DQT_NO_FIND_QMLSC=TRUE"
-    "-DWITH_DOCS=ON"
-    "-DBUILD_DEVELOPER_DOCS=ON"
-    "-DBUILD_QBS=OFF"
-    "-DQTC_CLANG_BUILDMODE_MATCH=ON"
-    "-DCLANGTOOLING_LINK_CLANG_DYLIB=ON"
+    (lib.cmakeBool "QT_NO_FIND_QMLSC" true)
+    (lib.cmakeBool "WITH_DOCS" true)
+    (lib.cmakeBool "BUILD_DEVELOPER_DOCS" true)
+    (lib.cmakeBool "BUILD_QBS" false)
+    (lib.cmakeBool "QTC_CLANG_BUILDMODE_MATCH" true)
+    (lib.cmakeBool "CLANGTOOLING_LINK_CLANG_DYLIB" true)
   ];
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
   ];
+
+  postInstall = ''
+    # Small hack to set-up right prefix in cmake modules for header files
+    cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX="''${!outputDev}"
+
+    cmake --install . --prefix "''${!outputDev}" --component Devel
+  '';
+
+  # Remove prefix from the QtC config to make sane output path for 3rd-party plug-ins.
+  postFixup = ''
+    substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
+  '';
 
   meta = with lib; {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
@@ -96,7 +113,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.qt.io/Qt_Creator";
     license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
-    maintainers = [ maintainers.rewine ];
+    maintainers = with maintainers; [
+      rewine
+      zatm8
+    ];
     platforms = platforms.linux;
+    mainProgram = "qtcreator";
   };
 }
