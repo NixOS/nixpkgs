@@ -577,7 +577,7 @@ buildStdenv.mkDerivation {
       xorg.xorgproto
       zlib
       (
-        if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
+        if (lib.versionAtLeast version "141") then nss_latest else nss_esr # 3.90
       )
     ]
     ++ lib.optional alsaSupport alsa-lib
