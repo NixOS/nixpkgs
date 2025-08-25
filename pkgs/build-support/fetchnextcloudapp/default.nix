@@ -9,6 +9,7 @@
   url,
   hash ? "",
   sha256 ? "",
+  sha512 ? "",
   appName ? null,
   appVersion ? null,
   license,
@@ -23,7 +24,12 @@ applyPatches (
   {
     inherit patches;
     src = (if unpack then fetchzip else fetchurl) {
-      inherit url hash sha256;
+      inherit
+        url
+        hash
+        sha256
+        sha512
+        ;
       meta = {
         license = lib.licenses.${license};
         longDescription = description;
@@ -42,6 +48,7 @@ applyPatches (
         exit 1
       fi
     '';
+    # Optionally set name if appName and appVersion are provided
   }
   // lib.optionalAttrs (appName != null && appVersion != null) {
     name = "nextcloud-app-${appName}-${appVersion}";
