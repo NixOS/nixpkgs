@@ -2,7 +2,6 @@
   lib,
   anyio,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   httpx,
   hypothesis,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anyio
-    curio
     httpx
     hypothesis
     pytestCheckHook
