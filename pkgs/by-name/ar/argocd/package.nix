@@ -9,25 +9,25 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.14.11";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    hash = "sha256-KCU/WMytx4kOzlkZDwLfRRfutBtdk6UVBNdXOWC5kWc=";
+    hash = "sha256-zg6zd10hpGUOukrwMK0qJXBL8nVgPSZJ6+jh+/mbOL0=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-Xm9J08pxzm3fPQjMA6NDu+DPJGsvtUvj+n/qrOZ9BE4=";
+  vendorHash = "sha256-tYHA1WlziKWOvv3uF3tTSrvqDoHBVRhUnKZXOxT1rMk=";
 
   # Set target as ./cmd per cli-local
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile
   subPackages = [ "cmd" ];
 
   ldflags =
     let
-      packageUrl = "github.com/argoproj/argo-cd/v2/common";
+      packageUrl = "github.com/argoproj/argo-cd/v3/common";
     in
     [
       "-s"
@@ -46,7 +46,7 @@ buildGoModule rec {
   prePatch = ''
     export KUBECTL_VERSION=$(grep 'k8s.io/kubectl v' go.mod | cut -f 2 -d " " | cut -f 1 -d "=" )
     echo using $KUBECTL_VERSION
-    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v2/common.kubectlVersion=''${KUBECTL_VERSION}"
+    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
   '';
   installPhase = ''
     runHook preInstall
