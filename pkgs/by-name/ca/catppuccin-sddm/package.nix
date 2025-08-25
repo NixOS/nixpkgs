@@ -2,9 +2,12 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  bash,
   just,
+  catppuccin-whiskers,
   kdePackages,
   flavor ? "mocha",
+  accent ? "mauve",
   font ? "Noto Sans",
   fontSize ? "9",
   background ? null,
@@ -12,24 +15,30 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "catppuccin-sddm";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "sddm";
     rev = "v${version}";
-    hash = "sha256-mDOiIGcpIvl4d3Dtsb2AX/1OggFEJ+hAjCd2LH7lqv0=";
+    hash = "sha256-J2DkKptVjWFcA2R71Vv7e0DCZJKeIl5TwjbnzI1kYmw=";
   };
 
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
     just
+    catppuccin-whiskers
   ];
 
   propagatedBuildInputs = [
     kdePackages.qtsvg
   ];
+
+  preBuild = ''
+    substituteInPlace justfile \
+      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -43,9 +52,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p "$out/share/sddm/themes/"
-    cp -r dist/catppuccin-${flavor} "$out/share/sddm/themes/catppuccin-${flavor}"
+    cp -r themes/catppuccin-${flavor}-${accent} "$out/share/sddm/themes/catppuccin-${flavor}-${accent}"
 
-    configFile=$out/share/sddm/themes/catppuccin-${flavor}/theme.conf
+    configFile=$out/share/sddm/themes/catppuccin-${flavor}-${accent}/theme.conf
 
     substituteInPlace $configFile \
       --replace-fail 'Font="Noto Sans"' 'Font="${font}"' \
