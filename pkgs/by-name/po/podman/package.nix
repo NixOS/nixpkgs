@@ -27,6 +27,7 @@
   fuse-overlayfs,
   util-linux,
   iptables,
+  nftables,
   iproute2,
   catatonit,
   gvproxy,
@@ -45,6 +46,7 @@ let
       fuse-overlayfs
       util-linux
       iptables
+      nftables
       iproute2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
