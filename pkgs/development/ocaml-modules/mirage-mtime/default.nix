@@ -3,7 +3,7 @@
   fetchurl,
   buildDunePackage,
   mtime,
-  version ? "5.0.0",
+  version ? "5.1.0",
 }:
 
 buildDunePackage {
@@ -13,7 +13,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-mtime/releases/download/v${version}/mirage-mtime-${version}.tbz";
-    hash = "sha256-IwdaAyZyj8gfRPxQP9SOwb28AbtVy9PY7qcr0Pns9GU=";
+    hash = "sha256-5f+6Jy3XXJ5A7YzLv4fZYUNFw623v+ld0XCjxuNn3q4=";
   };
 
   propagatedBuildInputs = [
