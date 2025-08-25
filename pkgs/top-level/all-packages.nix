@@ -2324,7 +2324,7 @@ with pkgs;
 
   roundcube = callPackage ../servers/roundcube { };
 
-  roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
+  roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
   rsyslog = callPackage ../tools/system/rsyslog {
     withHadoop = false; # Currently Broken
@@ -3455,9 +3455,9 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
-  nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
+  nodePackages_latest = recurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
+  nodePackages = recurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
 
@@ -3964,7 +3964,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
+  platformioPackages = recurseIntoAttrs (callPackage ../development/embedded/platformio { });
   platformio =
     if stdenv.hostPlatform.isLinux then
       platformioPackages.platformio-chrootenv
@@ -5156,10 +5156,10 @@ with pkgs;
 
   # Haskell and GHC
 
-  haskell = callPackage ./haskell-packages.nix { };
+  haskell = recurseIntoAttrs (callPackage ./haskell-packages.nix { });
 
   haskellPackages =
-    dontRecurseIntoAttrs
+    recurseIntoAttrs
       # Prefer native-bignum to avoid linking issues with gmp
       # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
       # until 9.8 is ready
@@ -7849,7 +7849,7 @@ with pkgs;
 
   #GMP ex-satellite, so better keep it near gmp
   # A GMP fork
-  gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
+  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -9641,7 +9641,7 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
-  rPackages = dontRecurseIntoAttrs (
+  rPackages = recurseIntoAttrs (
     callPackage ../development/r-modules {
       overrides = (config.rPackageOverrides or (_: { })) pkgs;
     }
@@ -10489,7 +10489,7 @@ with pkgs;
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = dontRecurseIntoAttrs (
+  fusePackages = recurseIntoAttrs (
     callPackage ../os-specific/linux/fuse {
       util-linux = util-linuxMinimal;
     }
@@ -10924,7 +10924,7 @@ with pkgs;
 
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };
 
-  windows = callPackages ../os-specific/windows { };
+  windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
@@ -11170,7 +11170,7 @@ with pkgs;
     pretendard-std
     ;
 
-  sourceHanPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han { });
+  sourceHanPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han { });
   source-han-sans = sourceHanPackages.sans;
   source-han-serif = sourceHanPackages.serif;
   source-han-mono = sourceHanPackages.mono;
@@ -11524,6 +11524,8 @@ with pkgs;
   emacs-gtk = emacs30-gtk3;
   emacs-nox = emacs30-nox;
   emacs-pgtk = emacs30-pgtk;
+
+  emacsPackages = recurseIntoAttrs emacs.pkgs;
 
   emacsPackagesFor =
     emacs:

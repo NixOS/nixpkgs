@@ -3,41 +3,9 @@
   # Ensures no aliases are in the results.
   allowAliases = false;
 
-  # Enable recursion into attribute sets that nix-env normally doesn't look into
-  # so that we can get a more complete picture of the available packages for the
-  # purposes of the index.
+  # Remove Packages sets that we don't want to have appear on search.nixos.org and the index.
   packageOverrides =
-    super:
-    with super;
-    lib.mapAttrs (_: set: recurseIntoAttrs set) {
-      inherit (super)
-        agdaPackages
-        apacheHttpdPackages
-        fusePackages
-        gns3Packages
-        haskellPackages
-        idrisPackages
-        nodePackages
-        nodePackages_latest
-        platformioPackages
-        rPackages
-        roundcubePlugins
-        sourceHanPackages
-        zabbix60
-        windows
-        ;
-
-      # Make sure haskell.compiler is included, so alternative GHC versions show up,
-      # but don't add haskell.packages.* since they contain the same packages (at
-      # least by name) as haskellPackages.
-      haskell = super.haskell // {
-        compiler = recurseIntoAttrs super.haskell.compiler;
-      };
-
-      # emacsPackages is an alias for emacs.pkgs
-      # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
-      emacsPackages = emacs.pkgs;
-
+    super: with super; {
       # minimal-bootstrap packages aren't used for anything but bootstrapping our
       # stdenv. They should not be used for any other purpose and therefore not
       # show up in search results or repository tracking services that consume our
