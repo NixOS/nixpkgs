@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
-  jdk23,
+  jdk24,
   gtk3,
   gsettings-desktop-schemas,
   writeScript,
@@ -27,7 +27,7 @@ let
   pname = "sparrow";
   version = "2.2.3";
 
-  openjdk = jdk23.override { enableJavaFX = true; };
+  openjdk = jdk24.override { enableJavaFX = true; };
 
   sparrowArch =
     {
