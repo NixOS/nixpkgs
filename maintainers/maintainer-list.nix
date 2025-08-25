@@ -27789,6 +27789,12 @@
     githubId = 11050617;
     name = "Dominik Xaver Hörl";
   };
+  xaverhimmelsbach = {
+    email = "xaver.himmelsbach@gmail.com";
+    github = "xaverhimmelsbach";
+    githubId = 107110451;
+    name = "Xaver Himmelsbach";
+  };
   xavierzwirtz = {
     email = "me@xavierzwirtz.com";
     github = "xavierzwirtz";
