@@ -3,6 +3,7 @@
   runCommand,
   gsettings-desktop-schemas,
   mate-wayland-session,
+  buildPackages,
   glib,
 }:
 
@@ -24,5 +25,5 @@ runCommand "mate-gsettings-overrides" { preferLocalBuild = true; } ''
 
   chmod -R a+w "$data_dir"
 
-  ${glib.dev}/bin/glib-compile-schemas --strict "$schema_dir"
+  ${lib.getExe' (lib.getDev buildPackages.glib) "glib-compile-schemas"} --strict "$schema_dir"
 ''
