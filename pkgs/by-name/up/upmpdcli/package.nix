@@ -1,12 +1,12 @@
 { fetchgit, stdenv, lib, autoreconfHook, pkg-config, libupnpp, libnpupnp, curl, expat, mpd_clientlib, libmicrohttpd, jsoncpp
-, makeWrapper, python
+, makeWrapper, python3
 , recoll
 , mutagen
 }:
 
 let
-  recoll'= recoll.override { python3Packages = python.pkgs; };
-  mutagen'= python.pkgs.mutagen;
+  recoll'= recoll.override { python3Packages = python3.pkgs; };
+  mutagen'= python3.pkgs.mutagen;
 in
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config libupnpp libnpupnp curl expat mpd_clientlib libmicrohttpd jsoncpp
-    makeWrapper python recoll'
+    makeWrapper python3 recoll'
   ];
 
   enableParallelBuilding = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     patchShebangs $out
     wrapProgram $out/share/upmpdcli/cdplugins/uprcl/uprcl-app.py \
-      --prefix PYTHONPATH : $out/share/upmpdcli/cdplugins/uprcl:$out/share/upmpdcli/cdplugins/pycommon:${recoll'}/${python.sitePackages}:${mutagen'}/${python.sitePackages}
+      --prefix PYTHONPATH : $out/share/upmpdcli/cdplugins/uprcl:$out/share/upmpdcli/cdplugins/pycommon:${recoll'}/${python3.sitePackages}:${mutagen'}/${python3.sitePackages}
   '';
 
   meta = {
