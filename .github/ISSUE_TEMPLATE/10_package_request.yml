@@ -1,0 +1,31 @@
+name: "Request: Nix Package"
+description: "Package requests have been deprecated. Please open a pull request with your desired package instead."
+title: "Package Request"
+labels: ["0.kind: packaging request", "4.workflow: auto-close"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Thank you for your interest in packaging new software in Nixpkgs. Unfortunately, in order to mitigate the unsustainable growth of unmaintained packages, **Nixpkgs is no longer using package requests to coordinate new package additions**.
+
+        That said, **we encourage you to [contribute](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#quick-start-to-adding-a-package) this package as a Pull Request yourself** - anyone can [become a package maintainer](https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md)! Should you need any help during packaging, feel free to reach out on [Matrix](https://matrix.to/#/#dev:nixos.org) or [Discourse](https://discourse.nixos.org/c/dev/14). You are also welcome to open custom _Tracking_ issues if you would like the assistance of other volunteers in packaging a software ecosystem.
+
+        This change has the benefit of decreasing future maintainer burden on the long term, and was implemented after several contributors reached a consensus. You can read more about this on Pull Request [#391926](https://github.com/NixOS/nixpkgs/pull/391926) and Issue [#425040](https://github.com/NixOS/nixpkgs/issues/425040).
+
+        ---
+  - type: "checkboxes"
+    id: "ignored"
+    attributes:
+      label: "Again, we no longer use package requests to package new software. Please open a pull request instead."
+      options:
+        - label: "I didn't read any of that."
