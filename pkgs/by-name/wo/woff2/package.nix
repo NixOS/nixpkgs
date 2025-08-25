@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # without this binaries only get built if shared libs are disable
     sed 's@^if (NOT BUILD_SHARED_LIBS)$@if (TRUE)@g' -i CMakeLists.txt
+
+    # gcc=15 reshuffled c++ headers, and the code that assumed that some
+    # headers include some others broke.
+    sed -i '1 i#include <cstdint>' include/woff2/output.h
   '';
 
   meta = with lib; {
