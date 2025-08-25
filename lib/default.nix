@@ -207,6 +207,7 @@ let
         mapAttrsRecursive
         mapAttrsRecursiveCond
         genAttrs
+        genAttrs'
         isDerivation
         toDerivation
         optionalAttrs
