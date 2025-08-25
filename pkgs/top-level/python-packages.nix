@@ -2662,8 +2662,6 @@ self: super: with self; {
 
   clikit = callPackage ../development/python-modules/clikit { };
 
-  clint = callPackage ../development/python-modules/clint { };
-
   clintermission = callPackage ../development/python-modules/clintermission { };
 
   clip = callPackage ../development/python-modules/clip { };
