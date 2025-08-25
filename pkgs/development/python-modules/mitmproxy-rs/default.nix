@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.12.3";
+  version = "0.12.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     tag = "v${version}";
-    hash = "sha256-bWvSaUx5nv8d17eOWyYlhSDi71rHycrFoDGRuQEL7LU=";
+    hash = "sha256-Wd/4XzSMQ3qgacFUlxReQFyonUbTqWKDCk3m+kWhXy0=";
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
