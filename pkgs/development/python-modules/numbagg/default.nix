@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.0";
+  version = "0.9.1";
   pname = "numbagg";
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "numbagg";
     repo = "numbagg";
     tag = "v${version}";
-    hash = "sha256-BuD5hjAd++pW4pEQyl0UP9gd3J8SjJirtpxVE53BLpM=";
+    hash = "sha256-IathtnmGlgug+u7AS1ulgf2462br5DdU3TJBDlBPf08=";
   };
 
   build-system = [
