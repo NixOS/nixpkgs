@@ -6443,10 +6443,6 @@ with pkgs;
 
   guile = guile_3_0;
 
-  guile-sdl = callPackage ../by-name/gu/guile-sdl/package.nix {
-    guile = guile_2_2;
-  };
-
   guile-xcb = callPackage ../by-name/gu/guile-xcb/package.nix {
     guile = guile_2_2;
   };
