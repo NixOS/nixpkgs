@@ -17,6 +17,7 @@ let
     lts = {
       version = "6.12.43";
       hash = "sha256-Jc3VKpUaIc1nBbbCZ/jAx/kteuQBQBO6TEPlaNq8Jrk=";
+      isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
@@ -30,6 +31,7 @@ let
       version,
       suffix ? "xanmod1",
       hash,
+      isLTS ? false,
     }:
     buildLinux (
       args
@@ -76,6 +78,7 @@ let
           ./update-xanmod.sh
           variant
         ];
+        inherit isLTS;
 
         extraMeta = {
           branch = lib.versions.majorMinor version;
