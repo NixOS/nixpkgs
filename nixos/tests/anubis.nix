@@ -89,8 +89,8 @@
       machine.wait_for_open_port(port)
 
     for instance in ["anubis", "anubis-unix-upstream"]:
-      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}.sock")
-      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}-metrics.sock")
+      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}/{instance}.sock")
+      machine.wait_for_open_unix_socket(f"/run/anubis/{instance}/{instance}-metrics.sock")
 
     # Default unix socket mode
     machine.succeed('curl -f http://basic.localhost | grep "it works"')
