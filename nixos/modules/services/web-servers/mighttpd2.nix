@@ -50,7 +50,7 @@ in
       type = types.lines;
       description = ''
         Verbatim config file to use
-        (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
+        (see <https://kazu-yamamoto.github.io/mighttpd2/config.html>)
       '';
     };
 
@@ -84,7 +84,7 @@ in
       type = types.lines;
       description = ''
         Verbatim routing file to use
-        (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
+        (see <https://kazu-yamamoto.github.io/mighttpd2/config.html>)
       '';
     };
 
