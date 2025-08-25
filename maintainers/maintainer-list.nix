@@ -15204,6 +15204,12 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lynxeko = {
+    email = "erikvillarreal7+nixpkgs@gmail.com";
+    github = "LynxEko";
+    githubId = 69017613;
+    name = "Erik Villarreal";
+  };
   lzcunt = {
     email = "umutinanerdogan@proton.me";
     github = "lzcunt";
