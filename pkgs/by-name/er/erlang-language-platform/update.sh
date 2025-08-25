@@ -18,7 +18,7 @@ for release in $releases; do
   IFS=: read -r name url <<< "$release"
   hash_name=$(echo "$name" | sed 's/.tar.gz$//')
   hash_prefetched=$(nix-prefetch-url --type sha256 "$url")
-  hash_sri=$(nix hash to-sri --type sha256 "$hash_prefetched")
+  hash_sri=$(nix-hash --to-sri --type sha256 "$hash_prefetched")
   echo "$hash_name" "$hash_sri"
 done |
   jq -sR 'rtrimstr("\n") | split("\n") | map(split(" ") | {(.[0]): .[1]}) | add' > hashes.json
