@@ -10864,6 +10864,7 @@ with pkgs;
     ubootLibreTechCC
     ubootNanoPCT4
     ubootNanoPCT6
+    ubootNanoPiR5S
     ubootNovena
     ubootOdroidC2
     ubootOdroidXU3
