@@ -2698,6 +2698,8 @@ self: super: with self; {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  clx-sdk-xms = callPackage ../development/python-modules/clx-sdk-xms { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
