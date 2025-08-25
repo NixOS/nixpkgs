@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ropper";
-  version = "1.13.10";
+  version = "1.13.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "sashs";
     repo = "Ropper";
     rev = "v${version}";
-    hash = "sha256-yuHJ+EpglumEAXEu0iJKIXK1ouW1yptNahM9Wmk7AW4=";
+    hash = "sha256-MOAbACLDdeKCMV4K/n1rAQlxDN0JoDIiUF6Zr3yPw8o=";
   };
 
   build-system = [ setuptools ];
