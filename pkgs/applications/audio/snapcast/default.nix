@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
     rev = "v${version}";
-    hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
+    hash = "sha256-LxmYsuwFCQpeoiDK4QOREIWcMIfZABT5AdKzh9reQWI=";
   };
 
   nativeBuildInputs = [
