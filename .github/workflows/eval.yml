@@ -18,8 +18,6 @@ on:
     secrets:
       CACHIX_AUTH_TOKEN:
         required: true
-      OWNER_APP_PRIVATE_KEY:
-        required: false
 
 permissions: {}
 
@@ -354,9 +352,10 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
-      - name: Ensure flake outputs on all systems still evaluate
-        run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'
-
-      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
+      - name: Run misc eval tasks in parallel
         run: |
-          time nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+          # Ensure flake outputs on all systems still evaluate
+          nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1' &
+          # Query nixpkgs with aliases enabled to check for basic syntax errors
+          nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null &
+          wait

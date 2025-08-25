@@ -65,6 +65,7 @@ let
           services.postgresqlBackup = {
             enable = true;
             databases = lib.optional (!backupAll) "postgres";
+            pgdumpOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           };
         };
 
