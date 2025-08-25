@@ -6793,7 +6793,8 @@
       ];
     "yeelightsunflower" =
       ps: with ps; [
-      ]; # missing inputs: yeelightsunflower
+        yeelightsunflower
+      ];
     "yi" =
       ps: with ps; [
         aioftp
