@@ -13,7 +13,9 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
+  generateSplicesForMkScope,
   patchesFn ? lib.id,
+  useNG ? false,
   # Allows passthrough to packages via newScope in ./common/default.nix.
   # This makes it possible to do
   # `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
@@ -39,6 +41,50 @@ let
     };
   }
   // llvmVersions;
+
+  mkPackageNG =
+    {
+      name ? null,
+      officialRelease ? null,
+      gitRelease ? null,
+      monorepoSrc ? null,
+      version ? null,
+    }@args:
+    let
+      inherit
+        (import ./common/common-let.nix {
+          inherit lib;
+          inherit gitRelease officialRelease version;
+        })
+        releaseInfo
+        ;
+      inherit (releaseInfo) release_version;
+      attrName =
+        args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
+    in
+    lib.nameValuePair attrName (
+      recurseIntoAttrs (
+        callPackage ./common/default-ng.nix (
+          {
+            inherit (stdenvAdapters) overrideCC;
+            inherit
+              officialRelease
+              gitRelease
+              monorepoSrc
+              version
+              patchesFn
+              bootBintools
+              bootBintoolsNoLibc
+              ;
+
+            buildLlvmPackages = buildPackages."llvmPackages_${attrName}";
+            targetLlvmPackages = targetPackages."llvmPackages_${attrName}" or llvmPackages."${attrName}";
+            otherSplices = generateSplicesForMkScope "llvmPackages_${attrName}";
+          }
+          // packageSetArgs # Allow overrides.
+        )
+      )
+    );
 
   mkPackage =
     {
@@ -84,6 +130,8 @@ let
       )
     );
 
-  llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
+  llvmPackages = lib.mapAttrs' (
+    version: args: (if useNG then mkPackageNG else mkPackage) (args // { inherit version; })
+  ) versions;
 in
 llvmPackages // { inherit mkPackage versions; }
