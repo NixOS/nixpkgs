@@ -36,15 +36,12 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  # fix namespace
   pythonNamespaces = [ "azure.multiapi" ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.multiapi.storage"
-  ];
+  pythonImportsCheck = [ "azure.multiapi.storagev2" ];
 
   meta = {
     description = "Microsoft Azure Storage Client Library for Python with multi API version support";
