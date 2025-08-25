@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.12.1";
+  version = "2025.14.3";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5M/sKoCFVGW4VcOPzL8dVhTuo+esjINPXw76fnO7OEw=";
+    hash = "sha256-tHLm0XmS5vV+o3VmFHWG8wZnrb0p63Nz1zVyvc/e5+s=";
     fetchSubmodules = true;
   };
 
@@ -114,13 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Handled by separateDebugInfo so we don't need special installation handling
     "-DSLANG_ENABLE_SPLIT_DEBUG_INFO=OFF"
     "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
-    # slang-rhi tries to download WebGPU dawn binaries, and as stated on
-    # https://github.com/shader-slang/slang-rhi is "under active refactoring
-    # and development, and is not yet ready for general use."
-    "-DSLANG_ENABLE_SLANG_RHI=OFF"
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
     "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
+    # slang-rhi tries to download headers and precompiled binaries for these backends
+    "-DSLANG_RHI_ENABLE_OPTIX=OFF"
+    "-DSLANG_RHI_ENABLE_VULKAN=OFF"
+    "-DSLANG_RHI_ENABLE_METAL=OFF"
+    "-DSLANG_RHI_ENABLE_WGPU=OFF"
   ]
   ++ lib.optionals withGlslang [
     "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"

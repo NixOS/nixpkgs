@@ -298,13 +298,20 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    security.pam.services.sudo = {
-      sshAgentAuth = true;
-      usshAuth = true;
-    };
-    security.pam.services.sudo-i = {
-      sshAgentAuth = true;
-      usshAuth = true;
+    security.pam.services = {
+      su-l = {
+        rootOK = true;
+        forwardXAuth = true;
+        logFailures = true;
+      };
+      sudo = {
+        sshAgentAuth = true;
+        usshAuth = true;
+      };
+      sudo-i = {
+        sshAgentAuth = true;
+        usshAuth = true;
+      };
     };
 
     environment.etc.sudoers = {

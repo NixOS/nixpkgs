@@ -7790,12 +7790,6 @@
     githubId = 5427394;
     name = "Ersin Akinci";
   };
-  ertes = {
-    email = "esz@posteo.de";
-    github = "ertes";
-    githubId = 1855930;
-    name = "Ertugrul Söylemez";
-  };
   esau79p = {
     github = "EsAu79p";
     githubId = 21313906;
