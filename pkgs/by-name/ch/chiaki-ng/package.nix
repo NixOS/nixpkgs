@@ -5,16 +5,10 @@
   cmake,
   pkg-config,
   protobuf,
-  python3,
+  python3Packages,
   ffmpeg,
   libopus,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qtwayland,
-  qtdeclarative,
-  qtwebengine,
+  kdePackages,
   SDL2,
   libevdev,
   udev,
@@ -35,14 +29,14 @@
   xxHash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
   version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HQmXbi2diewA/+AMjlkyffvD73TkX6D+lMh+FL2Rcz4=";
     fetchSubmodules = true;
   };
@@ -50,23 +44,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
     protobuf
-    python3
-    python3.pkgs.wrapPython
-    python3.pkgs.protobuf
-    python3.pkgs.setuptools
-  ];
+  ]
+  ++ (with python3Packages; [
+    wrapPython
+    protobuf
+    setuptools
+  ]);
 
   buildInputs = [
     ffmpeg
     libopus
-    qtbase
-    qtmultimedia
-    qtsvg
-    qtdeclarative
-    qtwayland
-    qtwebengine
     protobuf
     SDL2
     curlFull
@@ -85,7 +74,15 @@ stdenv.mkDerivation rec {
     lcms2
     libdovi
     xxHash
-  ];
+  ]
+  ++ (with kdePackages; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtdeclarative
+    qtwayland
+    qtwebengine
+  ]);
 
   # handle library name discrepancy when curl not built with cmake
   postPatch = ''
@@ -103,7 +100,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = [
-    python3.pkgs.requests
+    python3Packages.requests
   ];
 
   postInstall = ''
@@ -114,16 +111,16 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streetpea.github.io/chiaki-ng/";
     description = "Next-Generation of Chiaki (the open-source remote play client for PlayStation)";
     # Includes OpenSSL linking exception that we currently have no way
     # to represent.
     #
     # See also: <https://github.com/spdx/license-list-XML/issues/939>
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.linux;
     mainProgram = "chiaki";
   };
-}
+})
