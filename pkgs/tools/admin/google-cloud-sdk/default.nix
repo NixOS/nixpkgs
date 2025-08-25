@@ -87,9 +87,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/google-cloud-sdk
-    if [ -d platform/bundledpythonunix ]; then
-      rm -r platform/bundledpythonunix
-    fi
     cp -R * .install $out/google-cloud-sdk/
 
     mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
