@@ -5647,8 +5647,8 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
-  wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
+  wrapRustcWith = { package, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
+  wrapRustc = package: wrapRustcWith { inherit package; };
 
   rust_1_89 = callPackage ../development/compilers/rust/1_89.nix {
     llvm_20 = llvmPackages_20.libllvm;

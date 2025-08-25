@@ -9,6 +9,15 @@ rustPlatform.buildRustPackage {
   pname = "clippy";
   inherit (rustc) version src;
 
+  patches = [
+    ./patches/clippy-driver-env.patch
+  ];
+
+  patchFlags = [
+    "-p1"
+    "-d src/tools/clippy"
+  ];
+
   separateDebugInfo = true;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again

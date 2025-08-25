@@ -111,7 +111,7 @@ in
           inherit (bootstrapRustPackages) cargo rustc rustfmt;
         });
         rustc = wrapRustcWith {
-          inherit (self) rustc-unwrapped;
+          package = self.rustc-unwrapped;
           sysroot = if fastCross then self.rustc-unwrapped else null;
         };
         rustfmt = self.callPackage ./rustfmt.nix {
@@ -127,12 +127,18 @@ in
             self.callPackage ./cargo_cross.nix { };
         cargo-auditable = self.callPackage ./cargo-auditable.nix { };
         cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
-        clippy = self.callPackage ./clippy.nix {
-          # We want to use self, not buildRustPackages, so that
-          # buildPackages.clippy uses the cross compiler and supports
-          # linting for the target platform.
-          rustPlatform = makeRustPlatform self;
-        };
+        clippy =
+          let
+            clippy-unwrapped = self.callPackage ./clippy.nix { };
+          in
+          if !fastCross then
+            clippy-unwrapped
+          else
+            wrapRustcWith {
+              package = clippy-unwrapped;
+              sysroot = self.rustc-unwrapped;
+              flavor = "clippy";
+            };
       }
     );
   };
