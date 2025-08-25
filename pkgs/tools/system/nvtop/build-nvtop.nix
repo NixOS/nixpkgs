@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
 
   # https://github.com/Syllo/nvtop/commit/33ec008e26a00227a666ccb11321e9971a50daf8
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests.version = testers.testVersion {

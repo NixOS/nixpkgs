@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "validate" (if finalAttrs.doCheck then "enabled" else "disabled"))
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     updateScript = nix-update-script { };
