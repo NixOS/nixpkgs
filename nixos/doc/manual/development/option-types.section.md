@@ -345,6 +345,39 @@ If the you're interested in can be distinguished without a label, you may simpli
 :   An attribute set containing one attribute, whose name must be picked from
     the attribute set (`attr1`, etc) and whose value consists of definitions that are valid for the corresponding option (`option1`, etc).
 
+    :::{.example}
+    ```nix
+    mkOption {
+      type = attrTag {
+        foo = mkOption {
+          type = bool;
+        };
+        bar = mkOption {
+          type = int;
+        };
+      };
+    }
+    ```
+
+    The following value examples would match the defined type:
+
+    ```nix
+    { foo = true; }
+    ```
+
+    OR
+
+    ```nix
+    { bar = true; }
+    ```
+
+    While this value would NOT match the defined type and print an error message:
+
+    ```nix
+    { bar = true; foo = true; }
+    ```
+    :::
+
     This type appears in the documentation as _attribute-tagged union_.
 
     Example:
