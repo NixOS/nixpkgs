@@ -4524,7 +4524,8 @@
       ];
     "plum_lightpad" =
       ps: with ps; [
-      ]; # missing inputs: plumlightpad
+        plumlightpad
+      ];
     "pocketcasts" =
       ps: with ps; [
         pycketcasts
@@ -7530,6 +7531,7 @@
     "playstation_network"
     "plex"
     "plugwise"
+    "plum_lightpad"
     "point"
     "poolsense"
     "powerfox"
