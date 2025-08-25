@@ -7,17 +7,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.11";
+  version = "4.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${version}";
-    hash = "sha256-9PlqnpUlV5b8g+lctGjVL1Xgf25SS5xqkDaa1bSlxpk=";
+    hash = "sha256-/ISxVYU+rfsgtS01E4wFNKztahT+0kadscB6SrZeUPE=";
   };
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [
+    poetry-core
+    hatchling
+  ];
 
   pythonRelaxDeps = true;
 
