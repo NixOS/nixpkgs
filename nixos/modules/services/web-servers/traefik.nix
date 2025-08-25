@@ -407,15 +407,13 @@ in
       dynamic.files = mkIf (cfg.dynamic.settings != opt.dynamic.settings.default) {
         "custom-migrated".settings = cfg.dynamic.settings;
       };
-      static.settings =
-        mkIf (cfg.dynamic.dir != null || cfg.dynamic.file != opt.dynamic.file.default)
-          {
-            providers.file = {
-              directory = mkIf (cfg.dynamic.dir != null) cfg.dynamic.dir;
-              filename = mkIf (cfg.dynamic.file != opt.dynamic.file.default) cfg.dynamic.file;
-              watch = mkDefault true;
-            };
-          };
+      static.settings = mkIf (cfg.dynamic.dir != null || cfg.dynamic.file != opt.dynamic.file.default) {
+        providers.file = {
+          directory = mkIf (cfg.dynamic.dir != null) cfg.dynamic.dir;
+          filename = mkIf (cfg.dynamic.file != opt.dynamic.file.default) cfg.dynamic.file;
+          watch = mkDefault true;
+        };
+      };
     };
 
     systemd.services.traefik = {
