@@ -4,7 +4,7 @@
   fetchPypi,
   llama-index-core,
   llama-index-readers-file,
-  poetry-core,
+  hatchling,
   pythonOlder,
   s3fs,
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-3wzxfKkwhC4YfUYPBa/XKqIZQ6zLgB9SSHR+vPhwzOA=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
