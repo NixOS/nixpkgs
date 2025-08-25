@@ -93,14 +93,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.7";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-c8Wp/bP5KHDN/i2bMyiOQgnHDw8tPbg4IZIQ5Ut4SIo=";
+    hash = "sha256-jzNeAsL4kMGRhD9MftOL1UrM7GX8AYCab+nosptsqLY=";
   };
 
   build-system = with python.pkgs; [
