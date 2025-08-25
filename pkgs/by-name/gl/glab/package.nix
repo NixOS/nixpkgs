@@ -85,6 +85,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       freezeboy
       luftmensch-luftmensch
+      anthonyroussel
     ];
     mainProgram = "glab";
   };
