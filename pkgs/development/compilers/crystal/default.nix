@@ -27,6 +27,8 @@
   tzdata,
   which,
   zlib,
+  # https://github.com/crystal-lang/crystal/issues/12299
+  withInterpreter ? stdenv.hostPlatform.isx86_64,
 }:
 
 # We need to keep around at least the latest version released with a stable
@@ -47,10 +49,12 @@ let
     gmp
     openssl
     readline
+    pcre2
     libxml2
     libyaml
-    libffi
-  ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isx86_64) [ libffi ]
+  ++ lib.optionals withInterpreter [ pcre2 ];
 
   binaryUrl =
     version: rel:
@@ -194,11 +198,14 @@ let
         openssl
       ]
       ++ extraBuildInputs
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isx86_64) [ libffi ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+      ++ lib.optionals withInterpreter [ pcre2 ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
         "progress=1"
+        "interpreter=${if withInterpreter then "1" else "0"}"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
