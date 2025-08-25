@@ -2230,8 +2230,6 @@ self: super: with self; {
 
   bytewax = callPackage ../development/python-modules/bytewax { };
 
-  bz2file = callPackage ../development/python-modules/bz2file { };
-
   cache = callPackage ../development/python-modules/cache { };
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
