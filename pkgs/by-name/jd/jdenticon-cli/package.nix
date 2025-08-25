@@ -14,7 +14,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "dmester";
     repo = "jdenticon";
-    rev = version;
+    tag = version;
     hash = "sha256-uOPNsfEreC7F+Y0WWmudZSPnGxqarna0JPOwQyK6LiQ=";
   };
   npmDepsHash = "sha256-LXwvb088oHmA57EryfYtKi0L/9sB+yyUr/K/qGA1W9k=";
