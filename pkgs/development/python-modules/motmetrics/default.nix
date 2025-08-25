@@ -19,7 +19,7 @@
 
 buildPythonPackage {
   pname = "motmetrics";
-  version = "1.4.0-unstable-2025-01-14";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
