@@ -2071,6 +2071,12 @@
     githubId = 29145250;
     name = "Armeen Mahdian";
   };
+  armelclo = {
+    email = "armel@armelclo.fr";
+    github = "ArmelClo";
+    githubId = 61419525;
+    name = "Armel Cloarec";
+  };
   armijnhemel = {
     email = "armijn@tjaldur.nl";
     github = "armijnhemel";
