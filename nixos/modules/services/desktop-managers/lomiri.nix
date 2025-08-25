@@ -125,7 +125,8 @@ in
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            morph-browser
+            # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+            # morph-browser
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
             teleports
           ]);
