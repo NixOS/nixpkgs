@@ -2,7 +2,7 @@
   lib,
   copyDesktopItems,
   makeDesktopItem,
-  makeWrapper,
+  makeBinaryWrapper,
   writeText,
 
   fetchFromGitHub,
@@ -109,11 +109,10 @@ buildNimPackage' (finalAttrs: {
     downloadPage = "https://github.com/Anuken/animdustry/releases";
     description = "Anime gacha rhythm game";
     longDescription = ''
-      the anime gacha bullet hell rhythm game;
-      created as a mindustry april 1st event";
+      the anime gacha bullet hell rhythm game
+      created as a mindustry april 1st event
     '';
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3;
+    license = licenses.gpl3; # Listed in animdustry.nimble
     platforms = platforms.all;
     maintainers = with maintainers; [
       Ezjfc
