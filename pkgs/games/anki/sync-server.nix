@@ -10,7 +10,12 @@
 
 rustPlatform.buildRustPackage {
   pname = "anki-sync-server";
-  inherit (anki) version src cargoDeps;
+  inherit (anki)
+    version
+    src
+    cargoDeps
+    patches
+    ;
 
   # only build sync server
   cargoBuildFlags = [
