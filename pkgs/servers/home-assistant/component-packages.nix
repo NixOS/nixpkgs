@@ -900,7 +900,8 @@
       ];
     "clementine" =
       ps: with ps; [
-      ]; # missing inputs: python-clementine-remote
+        python-clementine-remote
+      ];
     "clickatell" =
       ps: with ps; [
       ];
