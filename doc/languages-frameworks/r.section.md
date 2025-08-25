@@ -106,6 +106,54 @@ Executing `nix-shell` will then drop you into an environment equivalent to the
 one above. If you need additional packages just add them to the list and
 re-enter the shell.
 
+## torch with GPU acceleration {#torch-gpu-accel}
+
+The `torch` package included in `nixpkgs` is based on the binary packages by the
+mlverse team. By default, the CPU version of the package is installed. On Linux
+distributions other than NixOS, it is possible to enable GPU acceleration by
+setting `config.cudaSupport` to true when importing `nixpkgs` in a `shell.nix`.
+You will also need to use `nixglhost`. Here is an example of such a shell:
+
+```nix
+{ pkgs ? import <nixpkgs> {config.cudaSupport = true; }, lib ? pkgs.lib }:
+
+let
+ nixglhost-sources = pkgs.fetchFromGitHub {
+   owner = "numtide";
+   repo = "nix-gl-host";
+   rev = "main";
+   # Replace this with the hash Nix will complain about, TOFU style.
+   hash = "";
+ };
+
+ nixglhost = pkgs.callPackage "${nixglhost-sources}/default.nix" { };
+
+ rpkgs = builtins.attrValues {
+   inherit (pkgs.rPackages)
+     torch;
+ };
+
+ wrapped_pkgs = pkgs.rWrapper.override {
+   packages = [ rpkgs ];
+ };
+
+in pkgs.mkShell {
+  buildInputs = [
+    nixglhost
+    wrapped_pkgs
+  ];
+}
+
+```
+
+After executing `nix-shell` to drop in that environment, call `nixglhost R` to
+start a GPU accelerated R session. Test that everything worked well by calling
+`torch::cuda_memory_summary()` which should return a list of summary statistics
+regarding the available GPU memory.
+
+We are looking for contributors that could help us package the darwin binaries
+as well as fix `torch` for NixOS as well.
+
 ## Updating the package set {#updating-the-package-set}
 
 There is a script and associated environment for regenerating the package
