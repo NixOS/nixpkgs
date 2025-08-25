@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-oNAxRogG+FTkB6A5SEMUUXMnCcgMue602nQ+TQkjvmk=";
+    hash = "sha256-hI5DaKuePmfvWV3+Ol1JGlJrxeoRzbYLQw4QwtDX15o=";
   };
 
   patches = [
