@@ -171,6 +171,40 @@ module.exports = async ({ github, context, core, dry }) => {
     return prLabels
   }
 
+  async function handleAutoClose(item) {
+    const issue_number = item.number
+
+    if (item.labels.some(({ name }) => name === '0.kind: packaging request')) {
+      const body = [
+        'Thanks for opening this package request. Unfortunately, in order to mitigate the unsustainable growth of unmaintained packages, Nixpkgs is no longer using package requests to coordinate new package additions.',
+        '',
+        'That said, **we encourage you to [contribute](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#quick-start-to-adding-a-package) this package as a Pull Request yourself** - should you need any help during packaging, feel free to reach out on [Matrix](https://matrix.to/#/#dev:nixos.org) or [Discourse](https://discourse.nixos.org/c/dev/14). You are also welcome to open custom _Tracking_ issues if you would like the assistance of other volunteers in packaging a software ecosystem.',
+        '',
+        '*This change has the benefit of decreasing future maintainer burden on the long term, and was implemented after several contributors reached a consensus. You can read more about this on Pull Request [391926](https://www.github.com/NixOS/nixpkgs/issues/391926) and Issue [425040](https://www.github.com/NixOS/nixpkgs/issues/425040).*',
+      ].join('\n')
+
+      core.info(`Issue #${item.number}: auto-closed`)
+
+      if (!dry) {
+        await github.rest.issues.createComment({
+          ...context.repo,
+          issue_number,
+          body,
+        })
+
+        await github.rest.issues.update({
+          ...context.repo,
+          issue_number,
+          state: 'closed',
+          state_reason: 'not_planned',
+        })
+      }
+
+      return true
+    }
+    return false
+  }
+
   async function handle({ item, stats }) {
     try {
       const log = (k, v, skip) => {
@@ -190,6 +224,9 @@ module.exports = async ({ github, context, core, dry }) => {
         Object.assign(itemLabels, await handlePullRequest({ item, stats }))
       } else {
         stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          if (await handleAutoClose(item)) return
+        }
       }
 
       const latest_event_at = new Date(
