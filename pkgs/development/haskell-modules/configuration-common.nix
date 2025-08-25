@@ -2084,6 +2084,11 @@ with haskellLib;
   gi-gtk_4 = self.gi-gtk_4_0_12;
   gi-gdk_4 = self.gi-gdk_4_0_10;
 
+  # 2025-08-18: add missing gi-gio dependency for gi-vips, https://github.com/haskell-gi/haskell-gi/pull/475
+  gi-vips = overrideCabal (drv: {
+    patches = (drv.patches or [ ]) ++ [ ./patches/gi-vips-add-gi-gio-to-build-depends-cabal.patch ];
+  }) super.gi-vips;
+
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
   # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
