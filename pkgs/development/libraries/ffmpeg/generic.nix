@@ -575,12 +575,14 @@ stdenv.mkDerivation (
       # Ffmpeg > 4 doesn't know about the flag anymore
       (enableFeature buildAvresample "avresample")
     ]
+    ++ [
+      (enableFeature buildAvutil "avutil")
+    ]
     ++ optionals (lib.versionOlder version "8.0") [
       # FFMpeg >= 8 doesn't know about the flag anymore
       (enableFeature (buildPostproc && withGPL) "postproc")
     ]
     ++ [
-      (enableFeature buildAvutil "avutil")
       (enableFeature buildSwresample "swresample")
       (enableFeature buildSwscale "swscale")
     ]
@@ -824,10 +826,10 @@ stdenv.mkDerivation (
       perl
       pkg-config
     ]
-    # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
-    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     # 8.0 is only compatible with nasm, and we don't want to rebuild all older ffmpeg builds at this moment.
     ++ (if versionOlder version "8.0" then [ yasm ] else [ nasm ])
+    # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
+    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
