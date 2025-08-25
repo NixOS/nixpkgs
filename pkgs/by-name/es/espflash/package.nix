@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-dLX5FC5A3+Dr3Dex+YEAnDgNNOQYd2JgGujXWpnSNUo=";
 
+  cargoBuildFlags = [
+    "--exclude xtask"
+    "--workspace"
+  ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espflash \
       --bash <($out/bin/espflash completions bash) \
