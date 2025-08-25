@@ -1,0 +1,56 @@
+{
+  "x86_64-darwin": {
+    "versions": {
+      "release_id": 44,
+      "components": {
+        "binary": {
+          "version": "810cfd26d78170c02845ffaf3eb9c368",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcW8yIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--27a117bd86c316be75eebda772a2d48006f14bf1/cmp-binary-macos_x64-810cfd26d78170c02845ffaf3eb9c368.zip",
+          "size": 77146249
+        },
+        "database": {
+          "version": "9cc626267aa5f6df9bcb5f94584712fd",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcXdpIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cf01fb04c0546502f488194e90ba9eec2f1d4fff/cmp-database-9cc626267aa5f6df9bcb5f94584712fd.zip",
+          "size": 193753489
+        },
+        "resources": {
+          "version": "1fd546a9c0ff2fb29a2217c75775d81f",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcEF4IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9f2f79638b4baf9745988ea9afda0f38bec53f37/cmp-resources-1fd546a9c0ff2fb29a2217c75775d81f.zip",
+          "size": 89416219
+        }
+      }
+    },
+    "hashes": {
+      "binary": "sha256-j05EKt7xrBoXQv/igx1wYZlHA4aWrJGxUX+2XGu1lHI=",
+      "database": "sha256-iY1sIK5ADQRofE6GB0ktenyb1TEyADLshLQMTlCG0U0=",
+      "resources": "sha256-Zco9jJWIxkZXz7Yp9gIdv3ea0vcy5F1i53c89Zv/zdc="
+    }
+  },
+  "x86_64-linux": {
+    "versions": {
+      "release_id": 44,
+      "components": {
+        "binary": {
+          "version": "d22edf1bac8211caaa28c2600ceb695b",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcWcyIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--b52ecc99ef47dfc46bf099f46e4119ea628b11b5/cmp-binary-linux_x64-d22edf1bac8211caaa28c2600ceb695b.zip",
+          "size": 122172889
+        },
+        "database": {
+          "version": "9cc626267aa5f6df9bcb5f94584712fd",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcXdpIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cf01fb04c0546502f488194e90ba9eec2f1d4fff/cmp-database-9cc626267aa5f6df9bcb5f94584712fd.zip",
+          "size": 193753489
+        },
+        "resources": {
+          "version": "1fd546a9c0ff2fb29a2217c75775d81f",
+          "download": "https://fold.it/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcEF4IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9f2f79638b4baf9745988ea9afda0f38bec53f37/cmp-resources-1fd546a9c0ff2fb29a2217c75775d81f.zip",
+          "size": 89416219
+        }
+      }
+    },
+    "hashes": {
+      "binary": "sha256-3udKY3PM2vmKvFNj05+39N7pijtgaX6FT27gX0YFE44=",
+      "database": "sha256-iY1sIK5ADQRofE6GB0ktenyb1TEyADLshLQMTlCG0U0=",
+      "resources": "sha256-Zco9jJWIxkZXz7Yp9gIdv3ea0vcy5F1i53c89Zv/zdc="
+    }
+  }
+}
