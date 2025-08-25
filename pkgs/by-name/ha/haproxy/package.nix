@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     "SSL_INC=${lib.getDev sslPkg}/include"
     "SSL_LIB=${lib.getDev sslPkg}/lib"
     "USE_QUIC=yes"
+    "USE_TPROXY=1"
   ]
   ++ lib.optionals (sslLibrary == "aws-lc") [
     "USE_OPENSSL_AWSLC=true"
@@ -103,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_GETADDRINFO=1"
+    "USE_LINUX_TPROXY=1"
   ]
   ++ lib.optionals withPrometheusExporter [
     "USE_PROMEX=yes"
