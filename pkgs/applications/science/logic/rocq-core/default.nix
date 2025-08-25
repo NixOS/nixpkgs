@@ -22,8 +22,8 @@ let
   lib = import ../../../../build-support/rocq/extra-lib.nix { inherit (args) lib; };
 
   release = {
-    "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
-    "9.1+rc1".sha256 = "sha256-GShKHQ9EdvyNe9WlkzF6KLYybc5dPeVrh4bpkVy6pY4=";
+    "9.0.0".hash = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
+    "9.1+rc1".hash = "sha256-GShKHQ9EdvyNe9WlkzF6KLYybc5dPeVrh4bpkVy6pY4=";
   };
   releaseRev = v: "V${v}";
   fetched =
