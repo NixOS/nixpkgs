@@ -653,8 +653,8 @@ rec {
       "sha256-LFuz5/nCZGpSfgqyswxn80VzxXsqzZlBFqPtPJ8bzgo=";
 
   mypy-boto3-iotanalytics =
-    buildMypyBoto3Package "iotanalytics" "1.40.0"
-      "sha256-llbeFHGDeVXv++P6wtIh+lwMbVlNPIpDim7s5Ux4MV8=";
+    buildMypyBoto3Package "iotanalytics" "1.40.16"
+      "sha256-kLN+S5x9XMO8TovR57hwXnqQvC6K+JwHncgmrLFOpFY=";
 
   mypy-boto3-iotdeviceadvisor =
     buildMypyBoto3Package "iotdeviceadvisor" "1.40.15"
