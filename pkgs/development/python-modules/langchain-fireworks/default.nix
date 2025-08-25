@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-fireworks";
-  version = "0.3.72";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-fireworks==${version}";
+    hash = "sha256-OZou323FAk2I4YuQV7sllbzDwFQWy/90FK3gIHnEBd0=";
   };
 
   sourceRoot = "${src.name}/libs/partners/fireworks";
@@ -62,8 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_fireworks" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-fireworks==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-fireworks==";
+    };
   };
 
   meta = {
