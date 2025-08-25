@@ -405,6 +405,22 @@ The tester produces an empty output and only succeeds when the checks using `exp
 
 Check that two paths have the same contents.
 
+`assertion` (string)
+
+: A message that is printed before the comparison, after `Checking:`.
+
+`expected` (path or value coercible to store path)
+
+: The path to the expected [file system object] content
+
+`actual` (value coercible to store path) <!-- path value is possible, but wrong in practice, but let's not bother readers with our predictions -->
+
+: The path to the actual file system object content to check
+
+`postFailureMessage` (string)
+
+: A message that is printed last if the file system object contents at the two paths don't match exactly.
+
 :::{.example #ex-testEqualContents-toyexample}
 
 # Check that two paths have the same contents
@@ -427,6 +443,11 @@ testers.testEqualContents {
       ''
         sed -e 's/bar/baz/g' $base >$out
       '';
+  # if applicable
+  postFailureMessage = ''
+    The bar-baz replacer produced an unexpected result.
+    If the new behavior is acceptable and validated against the bar-baz specification, run ./adopt-new-bar-baz-result.sh to adjust this test and require the new behavior.
+  '';
 }
 ```
 
@@ -695,3 +716,5 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+
+[file system object]: https://nix.dev/manual/nix/latest/store/file-system-object
