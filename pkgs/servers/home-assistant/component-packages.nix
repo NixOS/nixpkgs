@@ -2428,7 +2428,8 @@
       ];
     "horizon" =
       ps: with ps; [
-      ]; # missing inputs: horimote
+        horimote
+      ];
     "hp_ilo" =
       ps: with ps; [
         python-hpilo
