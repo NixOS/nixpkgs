@@ -13,6 +13,16 @@ const typeConfig = {
   nixpkgs: ['channel'],
 }
 
+// "order" ranks the development branches by how likely they are the intended base branch
+// when they are an otherwise equally good fit according to ci/github-script/prepare.js.
+const orderConfig = {
+  master: 0,
+  release: 1,
+  staging: 2,
+  'haskell-updates': 3,
+  'staging-next': 4,
+}
+
 function split(branch) {
   return {
     ...branch.match(
@@ -24,8 +34,11 @@ function split(branch) {
 function classify(branch) {
   const { prefix, version } = split(branch)
   return {
+    branch,
+    order: orderConfig[prefix] ?? Infinity,
     stable: (version ?? 'unstable') !== 'unstable',
     type: typeConfig[prefix] ?? ['wip'],
+    version: version ?? 'unstable',
   }
 }
 
@@ -39,6 +52,7 @@ if (!module.parent) {
   }
   testSplit('master')
   testSplit('release-25.05')
+  testSplit('staging')
   testSplit('staging-next')
   testSplit('staging-25.05')
   testSplit('staging-next-25.05')
@@ -55,6 +69,7 @@ if (!module.parent) {
   }
   testClassify('master')
   testClassify('release-25.05')
+  testClassify('staging')
   testClassify('staging-next')
   testClassify('staging-25.05')
   testClassify('staging-next-25.05')
