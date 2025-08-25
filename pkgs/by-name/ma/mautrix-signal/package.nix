@@ -19,13 +19,13 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     tag = "v${version}";
-    hash = "sha256-koO1eeMZ8wmty6z2zyJlA7zoM6gYmFlxdF8GB2hOxb8=";
+    hash = "sha256-62Z7Lasx0bzCAWLvHN7uCUqkMk6W80PR24mwfJU/n3Q=";
   };
 
   buildInputs =
@@ -41,7 +41,7 @@ buildGoModule rec {
 
   CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
-  vendorHash = "sha256-NmIWxc+6Leaqm1W+g2XdbMv4iU7Z7k8/g88U0iw/+98=";
+  vendorHash = "sha256-srvqflqleK2KIgesEZPNhSQh/IFmyTElJ7iUjBEmNq0=";
 
   doCheck = true;
   preCheck = ''
@@ -68,6 +68,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       pentane
       ma27
+      SchweGELBin
     ];
     mainProgram = "mautrix-signal";
   };
