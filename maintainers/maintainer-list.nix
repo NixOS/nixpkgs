@@ -9368,6 +9368,12 @@
     githubId = 471835;
     name = "Giorgio Gallo";
   };
+  gipphe = {
+    email = "gipphe@gmail.com";
+    github = "Gipphe";
+    githubId = 2266817;
+    name = "Victor Nascimento Bakke";
+  };
   GirardR1006 = {
     email = "julien.girard2@cea.fr";
     github = "GirardR1006";
