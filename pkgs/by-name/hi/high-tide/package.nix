@@ -13,20 +13,21 @@
   gst_all_1,
   libsecret,
   libportal,
+  alsa-utils,
   pipewire,
   nix-update-script,
 }:
 
 python313Packages.buildPythonApplication rec {
   pname = "high-tide";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${version}";
-    hash = "sha256-lvfEqXXlDuW+30iTQ0FddcnAMZRM0BYeuxLN4++xs/0=";
+    hash = "sha256-AHdv2eazUnxgw5D4SlIzWm/wnC26zedwiAGT0OzjdZs=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +52,16 @@ python313Packages.buildPythonApplication rec {
     libsecret
   ]);
 
-  dependencies = with python313Packages; [
+  dependencies = [
+    alsa-utils
+  ]
+  ++ (with python313Packages; [
     pygobject3
     tidalapi
     requests
     mpd2
     pypresence
-  ];
+  ]);
 
   dontWrapGApps = true;
 
