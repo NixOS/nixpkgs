@@ -5,6 +5,10 @@
   installShellFiles,
   nix-update-script,
   stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
 }:
 
 buildGoModule rec {
@@ -16,6 +20,28 @@ buildGoModule rec {
     repo = "argo-cd";
     rev = "v${version}";
     hash = "sha256-zg6zd10hpGUOukrwMK0qJXBL8nVgPSZJ6+jh+/mbOL0=";
+  };
+
+  ui = stdenv.mkDerivation {
+    pname = "${pname}-ui";
+    inherit version;
+    src = src + "/ui";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      hash = "sha256-ekhSPWzIgFhwSw0bIlBqu8LTYk3vuJ9VM8eHc3mnHGM=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
+
+    postInstall = ''
+      mkdir -p $out
+      cp -r dist $out/dist
+    '';
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
@@ -40,6 +66,11 @@ buildGoModule rec {
     ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  preBuild = ''
+    cp -r ${ui}/dist ./ui
+    stat ./ui/dist/app/index.html # Sanity check
+  '';
 
   # set ldflag for kubectlVersion since it is needed for argo
   # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
