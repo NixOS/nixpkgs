@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  python3,
   gobject-introspection,
   buildPackages,
   withIntrospection ?
@@ -40,11 +41,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-XR6sUe3ivw1Di27mllSrC6qMPOGDpar0UCVeq8DYjaY=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     glib
     meson
     ninja
     pkg-config
+    python3
     makeWrapper
   ]
   ++ lib.optionals withIntrospection [
