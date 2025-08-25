@@ -10678,8 +10678,6 @@ self: super: with self; {
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
-  ofxclient = callPackage ../development/python-modules/ofxclient { };
-
   ofxhome = callPackage ../development/python-modules/ofxhome { };
 
   ofxparse = callPackage ../development/python-modules/ofxparse { };
