@@ -15,7 +15,7 @@ let
     exec = "roomarranger";
     name = "roomarranger";
     desktopName = "Room Arranger";
-    genericName = "Design your room, office, apartment, house.";
+    genericName = "Design your room, office, apartment or house, plan gardens and more...";
     icon = "roomarranger-icon";
     terminal = false;
     categories = [ "Graphics" ];
@@ -28,11 +28,11 @@ in
 
 stdenv.mkDerivation {
   pname = "roomarranger";
-  version = "10.0.1";
+  version = "10.2";
 
   src = fetchurl {
-    url = "https://f000.backblazeb2.com/file/rooarr/rooarr1001-linux64.tar.gz";
-    hash = "sha256-OwJSOfyTQinVKzrJftpFa5NN1kGweBezedpL2aE4LbE=";
+    url = "https://f000.backblazeb2.com/file/rooarr/rooarr1020-linux64.tar.gz";
+    hash = "sha256-24AGP2le5HfcVMlqDjiMRcRWKU/zjACV7KzJlVWMpkw=";
   };
 
   nativeBuildInputs = [
@@ -52,9 +52,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/lib $out/bin
     cp -r rooarr-bin/* $out/lib/
-
-    # Delete bundled dynamic libraries that reference major Qt version 6
-    rm -f $out/lib/*.6
 
     ln -s $out/lib/RoomArranger $out/bin/roomarranger
 
