@@ -7,16 +7,13 @@
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "3.3.0";
-in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "jdenticon-cli";
-  inherit version;
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "dmester";
     repo = "jdenticon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uOPNsfEreC7F+Y0WWmudZSPnGxqarna0JPOwQyK6LiQ=";
   };
   npmDepsHash = "sha256-LXwvb088oHmA57EryfYtKi0L/9sB+yyUr/K/qGA1W9k=";
@@ -49,7 +46,7 @@ buildNpmPackage {
     description = "JavaScript library for generating highly recognizable identicons using HTML5 canvas or SVG.";
     homepage = "https://jdenticon.com/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gipphe ];
+    maintainers = [ lib.maintainers.gipphe ];
     mainProgram = "jdenticon";
   };
 })
