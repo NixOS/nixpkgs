@@ -76,6 +76,9 @@ jobs:
     name: Merge Group
     needs: [prepare]
     uses: ./.github/workflows/merge-group.yml
+    # Those are actually only used on the merge_group event, but will throw an error if not set.
+    permissions:
+      statuses: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
@@ -87,7 +90,7 @@ jobs:
     name: PR
     needs: [prepare]
     uses: ./.github/workflows/pr.yml
-    # Those are not actually used on pull_request, but will throw an error if not set.
+    # Those are actually only used on the pull_request_target event, but will throw an error if not set.
     permissions:
       issues: write
       pull-requests: write
@@ -102,7 +105,7 @@ jobs:
     name: Push
     needs: [prepare]
     uses: ./.github/workflows/push.yml
-    # Those are not actually used on push, but will throw an error if not set.
+    # Those are not actually used on the push or pull_request events, but will throw an error if not set.
     permissions:
       statuses: write
     secrets:
