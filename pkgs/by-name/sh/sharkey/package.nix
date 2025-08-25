@@ -161,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sharkey";
-    maintainers = with lib.maintainers; [ srxl ];
+    maintainers = with lib.maintainers; [
+      srxl
+      tmarkus
+    ];
   };
 })
