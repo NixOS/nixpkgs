@@ -563,6 +563,7 @@ mapAliases {
   ### C ###
 
   caffeWithCuda = throw "caffeWithCuda has been removed, as it was broken and required CUDA 10"; # Added 2024-11-20
+  caffe = throw "caffe has been removed, as it was broken"; # Added 2025-08-25
   calcium = throw "'calcium' has been removed as it has been merged into 'flint3'"; # Added 2025-03-28
   calculix = calculix-ccx; # Added 2024-12-18
   calligra = kdePackages.calligra; # Added 2024-09-27
