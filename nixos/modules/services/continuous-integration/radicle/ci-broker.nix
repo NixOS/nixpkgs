@@ -103,7 +103,10 @@ in
                 };
               }
             );
-            description = "CI adapters.";
+            description = ''
+              CI adapters.
+              See also the options under [services.radicle.ci.adapters](#opt-services.radicle.ci.adapters.native.instances).
+            '';
             default = { };
           };
 
