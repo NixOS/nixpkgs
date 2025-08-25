@@ -14901,8 +14901,6 @@ self: super: with self; {
 
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
-  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat { };
-
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   python-smarttub = callPackage ../development/python-modules/python-smarttub { };
