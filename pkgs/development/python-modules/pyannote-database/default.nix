@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyannote-database";
-  version = "5.0.1";
+  version = "5.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pyannote";
     repo = "pyannote-database";
     tag = version;
-    hash = "sha256-A7Xr24O8OvVAlURrR+SDCh8Uv9Yz3AUJSFDyDShVVjA=";
+    hash = "sha256-MQSSS3h4Jyxs3kwvSYNjBWbY6l/SIIUCTxXInLFE8F8=";
   };
 
   postPatch = ''
