@@ -1362,7 +1362,8 @@
       ];
     "ebox" =
       ps: with ps; [
-      ]; # missing inputs: pyebox
+        pyebox
+      ];
     "ebusd" =
       ps: with ps; [
         ebusdpy
