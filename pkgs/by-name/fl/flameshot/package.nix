@@ -10,7 +10,7 @@
   makeBinaryWrapper,
   kdsingleapplication,
   nix-update-script,
-  enableWlrSupport ? false,
+  enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
   enableMonochromeIcon ? false,
 }:
 
@@ -18,17 +18,18 @@ assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flameshot";
-  version = "13.0.1";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zo+rhvpwhcYqgn8PZ0b48sCb/YWqGSormFnY6pbY8Qc=";
+    hash = "sha256-Wg0jc1AqgetaESmTyhzAHx3zal/5DMDum7fzhClqeck=";
   };
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-I${kdsingleapplication}/include/kdsingleapplication-qt6"
+    (lib.cmakeBool "USE_BUNDLED_KDSINGLEAPPLICATION" false)
     (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
     (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
   ]
