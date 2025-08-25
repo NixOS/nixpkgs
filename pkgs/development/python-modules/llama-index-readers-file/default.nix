@@ -29,6 +29,7 @@ buildPythonPackage rec {
     "pymupdf"
     "pypdf"
     "striprtf"
+    "pandas"
   ];
 
   build-system = [ hatchling ];

@@ -4,7 +4,7 @@
   fetchPypi,
   neo4j,
   llama-index-core,
-  poetry-core,
+  hatchling,
   pythonOlder,
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-Iumsnln5iGMAoB3aY4haecm87jYXlEW4/2+uppW8m9c=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     neo4j
