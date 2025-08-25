@@ -35,8 +35,9 @@
     ''
       with subtest("Wait for login"):
           start_all()
-          machine.wait_for_file("/tmp/xauth_*")
-          machine.succeed("xauth merge /tmp/xauth_*")
+          machine.wait_for_file("/run/sddm/xauth_*")
+          machine.sleep(1)
+          machine.succeed("xauth merge /run/sddm/xauth_*")
 
       with subtest("Check RetroArch started"):
           machine.wait_until_succeeds("pgrep retroarch")
