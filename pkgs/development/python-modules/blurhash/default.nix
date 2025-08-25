@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "blurhash";
-  version = "1.1.4";
+  version = "1.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
