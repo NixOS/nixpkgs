@@ -1,22 +1,30 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  fetchpatch2,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mqtt-exporter";
-  version = "1.7.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kpetremann";
     repo = "mqtt-exporter";
     tag = "v${version}";
-    hash = "sha256-aEuwJeNMB6sou6oyAwCj11lOdMCjCyEsrDcMF/pHzcg=";
+    hash = "sha256-uTs+xIJsLN9re7JppJ+Z7IADoO9Q4HzF/Wf/BF3pZDU=";
   };
 
-  pythonRelaxDeps = [ "prometheus-client" ];
+  patches = [
+    # Allow later prometheus-client, https://github.com/kpetremann/mqtt-exporter/pull/104
+    (fetchpatch2 {
+      name = "remove-time.patch";
+      url = "https://github.com/kpetremann/mqtt-exporter/commit/edc0a274085f01ca095e33e73bcb8400e7fffedb.patch";
+      hash = "sha256-aYeqSCf0cvtbTmgrE77RDyafxIcjShjGm7PEndGm/Lo=";
+    })
+  ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
