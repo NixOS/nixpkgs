@@ -896,10 +896,10 @@ in
               ''}";
           ExecStart = ''
             ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
+              --no-browser \
+              --gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
+              --config=${cfg.configDir} \
+              --data=${cfg.databaseDir} \
               ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
