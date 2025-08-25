@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.04.21.00";
+  version = "2025.06.16.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P2saSFVRBWt5xjAWlKmcPJT9MFV9CXFmA18dIDCO84o=";
+    hash = "sha256-bYMerF7GbsroFmIhlylbS/DxYjnbLBU5VS+kTh6oGSs=";
   };
 
   nativeBuildInputs = [
