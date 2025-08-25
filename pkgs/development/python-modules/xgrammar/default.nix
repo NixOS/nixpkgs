@@ -95,5 +95,10 @@ buildPythonPackage rec {
     homepage = "https://xgrammar.mlc.ai";
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    badPlatforms = [
+      # clang++: error: unsupported option '-ffat-lto-objects' for target 'arm64-apple-darwin'
+      # idem for 'x86_64-apple-darwin'
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
