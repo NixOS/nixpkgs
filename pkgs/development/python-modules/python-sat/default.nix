@@ -8,15 +8,21 @@
 }:
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.8.dev17";
+  version = "0.1.8.dev19";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
-    rev = "a04763de6dafb8d3a0d7f1b231fc0d30be1de4c0"; # upstream does not tag releases
-    hash = "sha256-FG6oAAI8XKXumj6Ys2QjjYcRp1TpwkUZzyfpkdq5V6E=";
+    rev = "304888546c8474937136efa6d24fe0d200191114"; # upstream does not tag releases
+    hash = "sha256-aPyFFQ+ym0Os0Z8xVTSX3NaehxYsclyibSj4MPdJkoU=";
   };
+
+  # Build SAT solver backends in parallel
+  postPatch = ''
+    substituteInPlace solvers/prepare.py \
+      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
+  '';
 
   propagatedBuildInputs = [
     six
