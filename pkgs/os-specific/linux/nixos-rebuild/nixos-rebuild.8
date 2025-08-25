@@ -18,6 +18,7 @@
 .Op Fl -no-build-nix
 .Op Fl -fast
 .Op Fl -rollback
+.Op Fl -generation Ar number
 .br
 .Op Fl -file | f Ar path
 .Op Fl -attr | A Ar attrPath
@@ -241,7 +242,9 @@ $ nixos-rebuild build-image --image-variant proxmox
 .It Cm list-generations Op Fl -json
 List the available generations in a similar manner to the boot loader
 menu. It shows the generation number, build date and time, NixOS version,
-kernel version and the configuration revision.
+kernel version and the configuration revision. This is useful to get
+information e.g. for which generation to roll back to with
+.Ic nixos-rebuild switch Fl -generation Ar number .
 There is also a json version of output available.
 .El
 .
@@ -292,6 +295,15 @@ Instead of building a new configuration as specified by
 defined as the one before the “current” generation of the Nix profile
 .Pa /nix/var/nix/profiles/system Ns
 \&.)
+.
+.It Fl -generation Ar number
+Instead of building a new configuration as specified by
+.Pa /etc/nixos/configuration.nix Ns
+, switch to the generation who's number is
+.Ar number .
+You can use the
+.Cm list-generations
+subcommand to get a list of generations along with their numbers.
 .
 .It Fl -builders Ar builder-spec
 Allow ad-hoc remote builders for building the new system. This requires

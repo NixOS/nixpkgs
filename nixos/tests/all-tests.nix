@@ -1056,6 +1056,7 @@ in
     imports = [ ./nixos-rebuild-specialisations.nix ];
     _module.args.withNg = true;
   };
+  nixos-rebuild-switch = runTest ./nixos-rebuild-switch;
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
     _module.args.withNg = false;
