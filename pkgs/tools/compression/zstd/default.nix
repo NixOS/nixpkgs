@@ -24,6 +24,8 @@
   curl,
   python3Packages,
   haskellPackages,
+  testers,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -126,6 +128,7 @@ stdenv.mkDerivation rec {
       python-zstd = python3Packages.zstd;
       haskell-zstd = haskellPackages.zstd;
       haskell-hs-zstd = haskellPackages.hs-zstd;
+      pkg-config = testers.hasPkgConfigModules { package = zstd; };
     };
   };
 
@@ -146,5 +149,6 @@ stdenv.mkDerivation rec {
     mainProgram = "zstd";
     platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
+    pkgConfigModules = [ "libzstd" ];
   };
 }
