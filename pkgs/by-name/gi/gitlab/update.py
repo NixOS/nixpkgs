@@ -382,6 +382,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "pkgs/by-name/gi/gitaly",
             "pkgs/by-name/gi/gitlab-elasticsearch-indexer",
             "pkgs/by-name/gi/gitlab-pages",
+            "pkgs/by-name/gi/gitlab-shell",
         ],
         cwd=NIXPKGS_PATH,
     )
