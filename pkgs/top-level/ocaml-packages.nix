@@ -11,7 +11,9 @@ let
   mkOcamlPackages =
     ocaml:
     (lib.makeScope newScope (
-      self: with self; {
+      self:
+      with self;
+      {
         inherit ocaml;
 
         ### A ###
@@ -117,8 +119,6 @@ let
         biniou = callPackage ../development/ocaml-modules/biniou { };
 
         binning = callPackage ../development/ocaml-modules/binning { };
-
-        biocaml = throw "biocaml has been removed"; # 2025-06-04
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
@@ -453,16 +453,30 @@ let
             callPackage ../development/tools/ocaml/dune/2.nix { }
           else if lib.versionAtLeast ocaml.version "4.02" then
             pkgs.dune_2
+          else if config.allowAliases then
+            throw "dune_2 is not available for OCaml ${ocaml.version}"
           else
-            throw "dune_2 is not available for OCaml ${ocaml.version}";
+            {
+              inherit (pkgs.dune_2) version pname name;
+              meta = pkgs.dune_2.meta // {
+                broken = true;
+              };
+            };
 
         dune_3 =
           if lib.versionAtLeast ocaml.version "4.08" then
             callPackage ../development/tools/ocaml/dune/3.nix { }
           else if lib.versionAtLeast ocaml.version "4.02" then
             pkgs.dune_3
+          else if config.allowAliases then
+            throw "dune_3 is not available for OCaml ${ocaml.version}"
           else
-            throw "dune_3 is not available for OCaml ${ocaml.version}";
+            {
+              inherit (pkgs.dune_3) version pname name;
+              meta = pkgs.dune_3.meta // {
+                broken = true;
+              };
+            };
 
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
@@ -659,7 +673,6 @@ let
 
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
         gen = callPackage ../development/ocaml-modules/gen { };
@@ -871,7 +884,7 @@ let
           else
             null;
 
-        janeStreet =
+        janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
             import ../development/ocaml-modules/janestreet/0.17.nix {
               inherit self;
@@ -928,7 +941,8 @@ let
             }
           else
             import ../development/ocaml-modules/janestreet {
-            };
+            }
+        );
 
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1424,8 +1438,6 @@ let
         ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
-
-        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -2221,6 +2233,11 @@ let
 
         ### End ###
 
+      }
+      // lib.optionalAttrs config.allowAliases {
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
+        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
     )).overrideScope
       liftJaneStreet;
