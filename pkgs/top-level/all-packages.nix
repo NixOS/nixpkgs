@@ -2841,6 +2841,8 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
+  flatpak-external-data-checker = callPackage ../development/tools/flatpak-external-data-checker { };
+
   fltrdr = callPackage ../tools/misc/fltrdr {
     icu = icu63;
   };
