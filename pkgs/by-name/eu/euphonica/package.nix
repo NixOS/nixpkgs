@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cargo,
   meson,
   ninja,
@@ -25,20 +26,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.96.1-beta";
+  version = "0.96.3-beta";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MMrTabKE+zqVSmbjOg0NCsI47eSu1c73RnsPDgCbhCo=";
+    hash = "sha256-IxU0LXSh516I2x8keLuuoFwfjVF+Xp0Dc56ryYY6w10=";
     fetchSubmodules = true;
+  };
+
+  passthru.updateScript = nix-update-script {
+    # to be dropped once there are stable releases
+    extraArgs = [
+      "--version=unstable"
+    ];
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zFGFmiPozfBSIYxCu4fHynb2eh9emfVPtj3grPAoZeA=";
+    hash = "sha256-j4btvkBIQ+SppqE1rvIHWbQSgBn8ORcKGFDXYypEqsA=";
   };
+
+  mesonBuildType = "release";
 
   nativeBuildInputs = [
     cargo

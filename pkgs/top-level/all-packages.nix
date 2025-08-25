@@ -2222,8 +2222,6 @@ with pkgs;
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
 
-  mat2 = with python3.pkgs; toPythonApplication mat2;
-
   materialx = with python3Packages; toPythonApplication materialx;
 
   # while building documentation meson may want to run binaries for host
