@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.72";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-text-splitters==${version}";
+    hash = "sha256-dMGvGZyux38Svl0OYgiAoYLdAf0lv27lzXgHFTBp3cs=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
@@ -52,8 +52,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-text-splitters==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-text-splitters==";
+    };
   };
 
   meta = {
