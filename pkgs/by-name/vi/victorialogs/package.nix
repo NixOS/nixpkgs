@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.26.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PnXpu2Dna5grozKOGRHi/Gic7djszYh7wJ96EiEYP8U=";
+    hash = "sha256-IKKVCVsHFijSnLawy9oq1qCji2O4+QkSWUvQ4S6tAN8=";
   };
 
   vendorHash = null;
@@ -31,6 +31,15 @@ buildGoModule (finalAttrs: {
       "app/vlogscli"
     ]
     ++ lib.optionals withVlAgent [ "app/vlagent" ];
+
+  postPatch = ''
+    # Allow older go versions
+    substituteInPlace go.mod \
+      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+
+    substituteInPlace vendor/modules.txt \
+      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+  '';
 
   ldflags = [
     "-s"
