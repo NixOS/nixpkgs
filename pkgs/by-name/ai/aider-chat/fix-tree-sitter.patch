@@ -1,0 +1,21 @@
+diff --git a/aider/repomap.py b/aider/repomap.py
+index 23eee239..0a40f2e6 100644
+--- a/aider/repomap.py
++++ b/aider/repomap.py
+@@ -16,6 +16,7 @@ from grep_ast import TreeContext, filename_to_lang
+ from pygments.lexers import guess_lexer_for_filename
+ from pygments.token import Token
+ from tqdm import tqdm
++from tree_sitter import QueryCursor
+ 
+ from aider.dump import dump
+ from aider.special import filter_important_files
+@@ -286,7 +287,7 @@ class RepoMap:
+ 
+         # Run the tags queries
+         query = language.query(query_scm)
+-        captures = query.captures(tree.root_node)
++        captures = QueryCursor(query).captures(tree.root_node)
+ 
+         saw = set()
+         if USING_TSL_PACK:
