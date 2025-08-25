@@ -60,7 +60,6 @@ stdenv.mkDerivation {
     homepage = "https://www.infradead.org/openconnect/";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [
-      pradeepchhetri
       tricktron
       pentane
     ];

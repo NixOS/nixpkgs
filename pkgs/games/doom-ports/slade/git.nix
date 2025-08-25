@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation {
   pname = "slade";
-  version = "3.2.7-unstable-2025-08-08";
+  version = "3.2.7-unstable-2025-08-19";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "e39df3a8809508bede6d0342932d0cb8f8a440f2";
-    hash = "sha256-BZllLj50LpUntpYWyUBI9K64wb7vHTwBWzW20GeJRXQ=";
+    rev = "62467e4ea9f41ac04e28bfed266731da22ff874c";
+    hash = "sha256-c32y2/u4HBH9AcUyacTUFrvzyWr0lz7dnsXmRRjlt2E=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,5 @@ stdenv.mkDerivation {
     homepage = "http://slade.mancubus.net/";
     license = lib.licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ertes ];
   };
 }

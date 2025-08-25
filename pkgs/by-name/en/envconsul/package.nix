@@ -34,7 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/envconsul/";
     description = "Read and set environmental variables for processes from Consul";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
     mainProgram = "envconsul";
   };
 }

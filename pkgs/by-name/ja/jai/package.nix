@@ -9,7 +9,7 @@
 let
   pname = "jai";
   minor = "2";
-  patch = "012";
+  patch = "017";
   version = "0.${minor}.${patch}";
   zipName = "jai-beta-${minor}-${patch}.zip";
   jai = stdenv.mkDerivation {
@@ -20,7 +20,7 @@ let
           nix-store --add-fixed sha256 ${zipName}
       '';
       name = zipName;
-      sha256 = "sha256-1cUEQ+C3qwo3v4E2ioH2NcIH864Cay2dxQT+Yo/fZJ8=";
+      sha256 = "sha256-qVBF71qpFXfBkke9vCs7Wq/+P7ZQIgg4l1iLw8NmQhA=";
     };
     nativeBuildInputs = [ unzip ];
     buildCommand = "unzip $src -d $out";

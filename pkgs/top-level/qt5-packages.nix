@@ -129,8 +129,6 @@ makeScopeWithSplicing' {
 
         libopenshot = callPackage ../development/libraries/libopenshot { };
 
-        packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
-
         libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
 
         libqglviewer = callPackage ../development/libraries/libqglviewer { };
