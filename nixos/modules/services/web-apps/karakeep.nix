@@ -169,7 +169,11 @@ in
         "karakeep-workers.service"
       ];
       partOf = [ "karakeep.service" ];
-      environment = karakeepEnv;
+      environment = {
+        # uses systemd unit CacheDirectory instead of in nix store
+        NEXT_CACHE_DIR = "$CACHE_DIRECTORY";
+      }
+      // karakeepEnv;
       serviceConfig = {
         ExecStart = "${cfg.package}/lib/karakeep/start-web";
         User = "karakeep";
