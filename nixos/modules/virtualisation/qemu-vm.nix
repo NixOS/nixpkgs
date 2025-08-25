@@ -480,6 +480,7 @@ in
             };
             options.driveConfig = mkOption {
               type = lib.types.submodule driveOptions;
+              default = { };
               description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
             };
           }
