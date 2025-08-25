@@ -1450,7 +1450,11 @@ let
     ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
-    ijtiff = [ pkgs.libtiff ];
+    ijtiff = with pkgs; [
+      libtiff
+      libjpeg
+      zlib
+    ];
     ragg =
       with pkgs;
       [
