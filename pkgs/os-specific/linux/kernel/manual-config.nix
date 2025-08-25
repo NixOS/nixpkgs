@@ -340,6 +340,7 @@ lib.makeOverridable (
           "KBUILD_BUILD_VERSION=1-NixOS"
           kernelConf.target
           "vmlinux" # for "perf" and things like that
+          "scripts_gdb"
         ]
         ++ optional isModular "modules"
         ++ optionals buildDTBs [
@@ -447,6 +448,10 @@ lib.makeOverridable (
         postInstall = optionalString isModular ''
           mkdir -p $dev
           cp vmlinux $dev/
+
+          mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+          cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+
           if [ -z "''${dontStrip-}" ]; then
             installFlags+=("INSTALL_MOD_STRIP=1")
           fi
