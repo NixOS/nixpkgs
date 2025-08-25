@@ -5,12 +5,14 @@
 
   pname,
   version,
+  passthru,
   meta,
 }:
 stdenvNoCC.mkDerivation {
   inherit
     pname
     version
+    passthru
     meta
     ;
 

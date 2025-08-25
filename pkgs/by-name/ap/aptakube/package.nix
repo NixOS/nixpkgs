@@ -7,6 +7,9 @@
 let
   pname = "aptakube";
   version = "1.11.10";
+  passthru = {
+    updateScript = ./update.sh;
+  };
   meta = {
     homepage = "https://aptakube.com/";
     description = "Modern, lightweight and multi-cluster Kubernetes GUI";
@@ -21,6 +24,7 @@ if stdenv.hostPlatform.isDarwin then
     inherit
       pname
       version
+      passthru
       meta
       ;
   }
@@ -29,6 +33,7 @@ else
     inherit
       pname
       version
+      passthru
       meta
       ;
   }
