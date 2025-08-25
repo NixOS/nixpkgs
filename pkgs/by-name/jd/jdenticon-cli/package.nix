@@ -37,12 +37,12 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/dmester/jdenticon/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/dmester/jdenticon/releases/tag/${finalAttrs.version}";
     description = "JavaScript library for generating highly recognizable identicons using HTML5 canvas or SVG.";
     homepage = "https://jdenticon.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gipphe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gipphe ];
     mainProgram = "jdenticon";
   };
-}
+})
