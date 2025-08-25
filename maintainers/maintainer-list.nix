@@ -199,6 +199,13 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _3442 = {
+    name = "Alejandro Soto";
+    email = "alejandro@34project.org";
+    github = "3442";
+    githubId = 31359863;
+    keys = [ { fingerprint = "E142 1858 9D0D 90B5 2B1A  5368 F264 360B 2C09 05A6"; } ];
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
