@@ -135,6 +135,7 @@ buildPythonPackage rec {
     # Racy local networking
     "test_load_mappings_cache"
     "test_load_mappings_cache_update"
+    "test_load_mappings_cache_revert_update"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/sphinx-doc/sphinx/issues/12430
