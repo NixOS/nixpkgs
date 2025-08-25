@@ -12415,6 +12415,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  perfanno-nvim = buildVimPlugin {
+    pname = "perfanno.nvim";
+    version = "2024-12-28";
+    src = fetchFromGitHub {
+      owner = "t-troebst";
+      repo = "perfanno.nvim";
+      rev = "8640d6655f17a79af8de3153af2ce90c03f65e86";
+      sha256 = "1097sppcsw41asps1k51ic9h4z0hpzgc44kjfcyqdhclnxwady81";
+    };
+    meta.homepage = "https://github.com/t-troebst/perfanno.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   persisted-nvim = buildVimPlugin {
     pname = "persisted.nvim";
     version = "2025-08-16";
