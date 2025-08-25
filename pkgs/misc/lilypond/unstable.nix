@@ -5,10 +5,10 @@
 }:
 
 lilypond.overrideAttrs (oldAttrs: rec {
-  version = "2.25.27";
+  version = "2.25.28";
   src = fetchzip {
     url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    hash = "sha256-cZ6XZt1y646Kke3wdJ5Jo9ieOejbojsEBSkAvLDXNPw=";
+    hash = "sha256-zqK1KG56OFt+W79pEKaarcUIQcFNdNUt4mObAEEjFJY=";
   };
 
   passthru.updateScript = {
