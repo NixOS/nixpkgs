@@ -296,5 +296,8 @@ in
       })
     ]);
 
-  meta.maintainers = with lib.maintainers; [ srxl ];
+  meta.maintainers = with lib.maintainers; [
+    srxl
+    tmarkus
+  ];
 }
