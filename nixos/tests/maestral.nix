@@ -71,7 +71,7 @@
       with subtest("GUI"):
         gui.wait_for_x()
         gui.wait_for_file("/run/user/1000/xauth_*")
-        gui.sleep(1)
+        gui.wait_until_succeeds("test -s /run/user/1000/xauth_*")
         gui.succeed("xauth merge /run/user/1000/xauth_*")
         gui.wait_for_window("^Desktop ")
         gui.wait_for_unit("maestral.service", "${user.name}")

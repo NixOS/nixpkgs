@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.22";
+  version = "0.1.23";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-mz6eabETkAzDoPjXE5VJvgrR1vnXXmx3JO4xZRH4TRQ=";
+    hash = "sha256-asyxJsrsbfFNh1pLBDzM4kdmunQp7/mTDw3L8KuZf4g=";
   };
 
   patches = [
@@ -78,6 +78,7 @@ buildPythonPackage rec {
     "test_grammar_matcher_json_schema"
     "test_grammar_matcher_tag_dispatch"
     "test_regex_converter"
+    "test_serialize_compiled_grammar_with_hf_tokenizer"
     "test_tokenizer_info"
 
     # Torch not compiled with CUDA enabled
@@ -94,5 +95,13 @@ buildPythonPackage rec {
     homepage = "https://xgrammar.mlc.ai";
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    badPlatforms = [
+      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
+      "aarch64-linux"
+
+      # clang++: error: unsupported option '-ffat-lto-objects' for target 'arm64-apple-darwin'
+      # idem for 'x86_64-apple-darwin'
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

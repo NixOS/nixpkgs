@@ -36,7 +36,7 @@
       with subtest("Wait for login"):
           start_all()
           machine.wait_for_file("/run/sddm/xauth_*")
-          machine.sleep(1)
+          machine.wait_until_succeeds("test -s /run/sddm/xauth_*")
           machine.succeed("xauth merge /run/sddm/xauth_*")
 
       with subtest("Check RetroArch started"):

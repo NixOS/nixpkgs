@@ -1,20 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  defusedxml,
-  pillow,
-  fonttools,
-
-  pytestCheckHook,
-  pytest-cov-stub,
-  qrcode,
   camelot,
-  uharfbuzz,
+  defusedxml,
+  fetchFromGitHub,
+  fonttools,
   lxml,
+  pikepdf,
+  pillow,
+  pytest-cov-stub,
+  pytestCheckHook,
+  qrcode,
+  setuptools,
+  uharfbuzz,
 }:
 
 buildPythonPackage rec {
@@ -29,21 +27,22 @@ buildPythonPackage rec {
     hash = "sha256-uLaVRseakLg7Q9QO4F6BM7vQIFeA44ry8cqDfas8oMA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
-    pillow
     fonttools
+    pillow
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    qrcode
     camelot
-    uharfbuzz
     lxml
+    pikepdf
+    pytest-cov-stub
+    pytestCheckHook
+    qrcode
+    uharfbuzz
   ];
 
   disabledTestPaths = [
