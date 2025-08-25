@@ -336,6 +336,7 @@ mapAliases ({
   hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
   homeassistant-bring-api = bring-api; # added 2024-04-11
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
+  housekeeping = throw "housekeeping has been removed, since it is unmaintained"; # added 2025-08-25
   htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
   HTSeq = htseq; # added 2023-02-19
   hug = throw "hug was marked broken since 2021 and has not established compatibility with newer dependency versions. It has therefore been removed."; # added 2024-11-15
@@ -387,6 +388,7 @@ mapAliases ({
   keras-applications = throw "keras-applications has been removed because it's abandoned since 2022"; # added 2025-01-12
   keras-preprocessing = throw "keras-preprocessing has been removed because it's abandoned since 2024"; # added 2025-01-12
   keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
+  kgb = throw "kgb has been removed, since it is unmaintained"; # added 2025-08-25
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2505-05-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
@@ -555,6 +557,7 @@ mapAliases ({
   pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20
   pychart = throw "pychart does not support Python3"; # added 2025-03-23
   pycontracts = throw "pycontracts has been removed, since upstream is no longer active and it is broken on modern Python versions."; # added 2024-08-09
+  pydiffx = throw "pydiffx has been removed, since it is unmaintained"; # added 2025-08-25
   pydns = py3dns; # added 2024-10-25
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyephember = throw "pyephember was removed because Home Assistant switched to pyephember2"; # added 2025-05-07
@@ -701,6 +704,7 @@ mapAliases ({
   radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rauth = throw "rauth has beed removed, since it is unmaintained upstream"; # added 2024-07-27
+  rbtools = throw "rbtools has been removed, since it is unmaintained"; # added 2025-08-25
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   readme_renderer = readme-renderer; # added 2024-01-07
   recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
