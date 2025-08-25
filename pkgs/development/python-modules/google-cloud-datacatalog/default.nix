@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   grpc-google-iam-v1,
   libcst,
   mock,
-  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -47,11 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.datacatalog" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-datacatalog-v([0-9.]+)"
-    ];
+  passthru = {
+    # python update script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "google-cloud-datacatalog-v";
+    };
   };
 
   meta = {
