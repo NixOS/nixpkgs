@@ -19769,6 +19769,8 @@ self: super: with self; {
 
   webidl = callPackage ../development/python-modules/webidl { };
 
+  webio-api = callPackage ../development/python-modules/webio-api { };
+
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
 
   weblate-schemas = callPackage ../development/python-modules/weblate-schemas { };
