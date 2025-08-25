@@ -17,6 +17,7 @@
   shared-mime-info,
   isocodes,
   glib,
+  bash-completion,
   cairo,
   pango,
   gdk-pixbuf,
@@ -29,6 +30,7 @@
   libpng,
   libtiff,
   libjpeg,
+  librsvg,
   libxml2,
   gnome,
   gsettings-desktop-schemas,
@@ -116,10 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ finalAttrs.setupHooks;
 
   buildInputs = [
+    bash-completion
     libxkbcommon
     libpng
     libtiff
     libjpeg
+    librsvg
     (libepoxy.override { inherit x11Support; })
     isocodes
   ]
