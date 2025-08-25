@@ -23,7 +23,7 @@
   torchWithRocm,
   zlib,
   cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
+  runCommand,
   rocmPackages,
   triton,
 }:
@@ -45,11 +45,12 @@ buildPythonPackage rec {
     (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
       ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
     })
-    (replaceVars ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch {
-      libhipDir = if rocmSupport then "${lib.getLib rocmPackages.clr}/lib" else null;
+    (replaceVars ./0002-nvidia-driver-short-circuit-before-ldconfig.patch {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
+    # Upstream PR: https://github.com/triton-lang/triton/pull/7959
+    ./0005-amd-search-env-paths.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
@@ -81,6 +82,13 @@ buildPythonPackage rec {
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    ''
+    # Don't use FHS path for ROCm LLD
+    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
+    + ''
+      substituteInPlace third_party/amd/backend/compiler.py \
+        --replace-fail 'lld = Path("/opt/rocm/llvm/bin/ld.lld")' \
+        "import os;lld = Path(os.getenv('HIP_PATH', '/opt/rocm/')"' + "/llvm/bin/ld.lld")'
     '';
 
   build-system = [ setuptools ];
@@ -204,6 +212,47 @@ buildPythonPackage rec {
   passthru.tests = {
     # Ultimately, torch is our test suite:
     inherit torchWithRocm;
+
+    # Test that _get_path_to_hip_runtime_dylib works when ROCm is available at runtime
+    rocm-libamdhip64-path =
+      runCommand "triton-rocm-libamdhip64-path-test"
+        {
+          buildInputs = [
+            triton
+            python
+            rocmPackages.clr
+          ];
+        }
+        ''
+          python -c "
+          import os
+          import triton
+          path = triton.backends.amd.driver._get_path_to_hip_runtime_dylib()
+          print(f'libamdhip64 path: {path}')
+          assert os.path.exists(path)
+          " && touch $out
+        '';
+
+    # Test that path_to_rocm_lld works when ROCm is available at runtime
+    # Remove this after `[AMD] Use lld library API #7548` makes it into a release
+    rocm-lld-path =
+      runCommand "triton-rocm-lld-test"
+        {
+          buildInputs = [
+            triton
+            python
+            rocmPackages.clr
+          ];
+        }
+        ''
+          python -c "
+          import os
+          import triton
+          path = triton.backends.backends['amd'].compiler.path_to_rocm_lld()
+          print(f'ROCm LLD path: {path}')
+          assert os.path.exists(path)
+          " && touch $out
+        '';
 
     # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
     # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
