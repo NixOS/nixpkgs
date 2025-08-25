@@ -1,9 +1,11 @@
 {
-  buildNpmPackage,
-  makeWrapper,
-  nodejs,
-  fetchFromGitHub,
   lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
+  makeWrapper,
+  versionCheckHook,
+  nix-update-script,
 }:
 let
   version = "3.3.0";
