@@ -877,10 +877,6 @@ This is used with Gitiles repositories. The arguments expected are similar to `f
 
 This is used with BitBucket repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
-## `fetchFromSavannah` {#fetchfromsavannah}
-
-This is used with Savannah repositories. The arguments expected are very similar to `fetchFromGitHub` above.
-
 ## `fetchFromRepoOrCz` {#fetchfromrepoorcz}
 
 This is used with repo.or.cz repositories. The arguments expected are very similar to `fetchFromGitHub` above.
