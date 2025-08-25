@@ -19,9 +19,4 @@
     rev = "e448ce83486f99ef016c311e10ec0cac805cded3";
     sha256 = "13yp7805xpd605jpfpb3srqb0psy25w7n6x9mpkcyvzhqmpnpfyq";
   };
-  version_from_shard = {
-    url = "https://github.com/hugopl/version_from_shard.git";
-    rev = "v1.2.5";
-    sha256 = "0xizj0q4rd541rwjbx04cjifc2gfx4l5v6q2y7gmd0ndjmkgb8ik";
-  };
 }
