@@ -39,6 +39,11 @@ buildNpmPackage {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/dmester/jdenticon/releases/tag/${finalAttrs.version}";
     description = "JavaScript library for generating highly recognizable identicons using HTML5 canvas or SVG.";
