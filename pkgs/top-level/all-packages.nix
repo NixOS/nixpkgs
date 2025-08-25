@@ -2047,6 +2047,8 @@ with pkgs;
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
+  espansoPlugins = recurseIntoAttrs (callPackage ../by-name/es/espanso/plugins { });
+
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
