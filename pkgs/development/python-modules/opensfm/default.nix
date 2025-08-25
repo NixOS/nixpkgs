@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "opensfm";
-  version = "unstable-2023-12-09";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
