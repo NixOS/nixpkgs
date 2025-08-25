@@ -31,24 +31,7 @@ defaults:
     shell: bash
 
 jobs:
-  no-channel-base:
-    name: no channel base
-    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - run: |
-          cat <<EOF
-          The nixos-* and nixpkgs-* branches are pushed to by the channel
-          release script and should not be merged into directly.
-
-          Please target the equivalent release-* branch or master instead.
-          EOF
-          exit 1
-
-  cherry-pick:
-    if: |
-      github.event_name == 'pull_request' ||
-      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
+  commits:
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
@@ -68,16 +51,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - name: Check cherry-picks
+      - name: Check commits
         id: check
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          TARGETS_STABLE: ${{ fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development') }}
         with:
           script: |
+            const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
             require('./trusted/ci/github-script/commits.js')({
               github,
               context,
               core,
               dry: context.eventName == 'pull_request',
+              cherryPicks: context.eventName == 'pull_request' || targetsStable,
             })
 
       - name: Log current API rate limits
