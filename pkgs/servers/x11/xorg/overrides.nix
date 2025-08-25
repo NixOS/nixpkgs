@@ -437,20 +437,6 @@ self: super:
 
   xcalc = addMainProgram super.xcalc { };
 
-  xcbutil = super.xcbutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  xcbutilerrors = super.xcbutilerrors.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
   xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -459,34 +445,6 @@ self: super:
     meta = attrs.meta // {
       maintainers = [ lib.maintainers.lovek323 ];
     };
-  });
-
-  xcbutilimage = super.xcbutilimage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilkeysyms = super.xcbutilkeysyms.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilrenderutil = super.xcbutilrenderutil.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
-  });
-
-  xcbutilwm = super.xcbutilwm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to get rid of propagating others
   });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
