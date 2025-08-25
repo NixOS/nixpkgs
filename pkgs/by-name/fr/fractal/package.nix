@@ -26,6 +26,7 @@
   xdg-desktop-portal,
   libseccomp,
   glycin-loaders,
+  libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     xdg-desktop-portal
     libseccomp
+    libwebp
   ]
   ++ (with gst_all_1; [
     gstreamer
