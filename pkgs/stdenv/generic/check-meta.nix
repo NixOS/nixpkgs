@@ -125,6 +125,18 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
+  # Allow granular checks to allow only some broken packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowBroken = false;
+  #   allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+  # }
+  allowBrokenPredicate = config.allowBrokenPredicate or (x: false);
+
+  hasDeniedBroken =
+    attrs: (attrs.meta.broken or false) && !allowBroken && !allowBrokenPredicate attrs;
+
   hasUnsupportedPlatform = pkg: !(availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
@@ -516,7 +528,7 @@ let
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
       }
-    else if !allowBroken && attrs.meta.broken or false then
+    else if hasDeniedBroken attrs then
       {
         valid = "no";
         reason = "broken";
