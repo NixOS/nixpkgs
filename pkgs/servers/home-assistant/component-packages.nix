@@ -1253,7 +1253,8 @@
       ];
     "dominos" =
       ps: with ps; [
-      ]; # missing inputs: pizzapi
+        pizzapi
+      ];
     "doods" =
       ps: with ps; [
         pillow
