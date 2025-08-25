@@ -27,14 +27,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.3.3";
+  version = "4.3.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
     tag = version;
-    hash = "sha256-GS1bCDOKtdJkzgP3+CSWEUeHQ9lUcAHDT09QmPOOeVc=";
+    hash = "sha256-D67iwGGF3CrdAi/XKGVkusZlFCsMPIKdVpKDwcVQMrI=";
   };
 
   disabled = python.pythonOlder "3.7";
