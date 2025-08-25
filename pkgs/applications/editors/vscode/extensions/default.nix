@@ -4253,6 +4253,8 @@ let
         };
       };
 
+      shader-slang.slang-language-extension = callPackage ./shader-slang.slang-language-extension { };
+
       shardulm94.trailing-spaces = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "shardulm94";
