@@ -741,6 +741,8 @@ with pkgs;
 
   fetchPypiLegacy = callPackage ../build-support/fetchpypilegacy { };
 
+  fetchTraefikPlugin = callPackage ../build-support/fetchtraefikplugin { };
+
   resolveMirrorURLs =
     { url }:
     fetchurl {
