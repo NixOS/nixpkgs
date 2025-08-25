@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.23.0-unstable-2025-04-21";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
