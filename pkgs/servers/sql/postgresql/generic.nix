@@ -638,12 +638,51 @@ let
     }:
     f:
     let
-      installedExtensions = f postgresql.pkgs;
+      postgresqlPackages = postgresql.pkgs;
+      installedExtensions = f postgresqlPackages;
+
+      # takes the name of an extension
+      recurse =
+        extentionName:
+        let
+          # pull extension by it's name
+          pkg = postgresqlPackages."${extentionName}";
+        in
+        lib.concatLists [
+          # include self
+          [ pkg ]
+          # and dependencies
+          (lib.concatMap recurse pkg.requiredExtensions)
+        ];
+
+      # takes list of required extensions (packages)
+      resolveDependencies =
+        pkgs:
+        # filter result to unique extensions (packages)
+        lib.unique
+          # recurses into each required extension's named dependencies
+          (lib.concatMap (pkg: lib.concatMap recurse pkg.requiredExtensions) pkgs);
+
+      installedExtensionsWithDependencies =
+        # a unique list of extensions (packages) produced from directly
+        # requested extensions and those they depend on
+        lib.unique (
+          lib.concatLists [
+            # directly required extensions
+            installedExtensions
+            # plus the dependencies of those extensions
+            (resolveDependencies installedExtensions)
+          ]
+        );
       finalPackage =
         (buildEnv {
           name = "${postgresql.pname}-and-plugins-${postgresql.version}";
-          paths = installedExtensions ++ [
+          paths = installedExtensionsWithDependencies ++ [
             # consider keeping in-sync with `postBuild` below
+            # TODO: remove trace (commented for easy testing), uncomment to see installedExtensionsWithDependencies
+            # (builtins.trace (builtins.toString (
+            #   map (p: p.pname) installedExtensionsWithDependencies
+            # )) postgresql)
             postgresql
             postgresql.man # in case user installs this into environment
           ];
@@ -660,7 +699,7 @@ let
           nativeBuildInputs = [ makeBinaryWrapper ];
           postBuild =
             let
-              args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+              args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensionsWithDependencies;
             in
             ''
               wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
