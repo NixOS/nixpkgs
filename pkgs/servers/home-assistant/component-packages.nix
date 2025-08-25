@@ -4612,7 +4612,8 @@
       ];
     "progettihwsw" =
       ps: with ps; [
-      ]; # missing inputs: ProgettiHWSW
+        progettihwsw
+      ];
     "proliphix" =
       ps: with ps; [
         proliphix
@@ -7537,6 +7538,7 @@
     "private_ble_device"
     "probe_plus"
     "profiler"
+    "progettihwsw"
     "prometheus"
     "prosegur"
     "proximity"
