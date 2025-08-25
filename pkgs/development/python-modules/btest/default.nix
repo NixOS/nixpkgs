@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  multiprocess,
   pythonOlder,
   setuptools,
 }:
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ multiprocess ];
 
   # No tests available and no module to import
   doCheck = false;
