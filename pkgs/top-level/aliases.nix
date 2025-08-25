@@ -1476,6 +1476,7 @@ mapAliases {
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
   maligned = throw "maligned was deprecated upstream in favor of x/tools/go/analysis/passes/fieldalignment"; # Added 20204-08-24
   manicode = throw "manicode has been renamed to codebuff"; # Added 2024-12-10
+  manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
 
@@ -1591,6 +1592,7 @@ mapAliases {
 
   ### N ###
 
+  namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   ncdu_2 = ncdu; # Added 2022-07-22
   neocities-cli = neocities; # Added 2024-07-31
   neocomp = throw "neocomp has been remove because it fails to build and was unmaintained upstream"; # Added 2025-04-28
@@ -1658,6 +1660,7 @@ mapAliases {
   networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
+  nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
   nix-direnv-flakes = nix-direnv;
   nix-ld-rs = nix-ld; # Added 2024-08-17
   nix-plugin-pijul = throw "nix-plugin-pijul has been removed due to being discontinued"; # added 2025-05-18
@@ -1799,6 +1802,7 @@ mapAliases {
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
   paco = throw "'paco' has been removed as it has been abandoned"; # Added 2025-04-30
   inherit (perlPackages) pacup;
+  pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
   panopticon = throw "'panopticon' has been removed because it is unmaintained upstream"; # Added 2025-01-25
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
   paperless = throw "'paperless' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2024-10-17

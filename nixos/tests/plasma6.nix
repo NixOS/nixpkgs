@@ -33,7 +33,7 @@
       with subtest("Wait for login"):
           start_all()
           machine.wait_for_file("/run/user/1000/xauth_*")
-          machine.sleep(1)
+          machine.wait_until_succeeds("test -s /run/user/1000/xauth_*")
           machine.succeed("xauth merge /run/user/1000/xauth_*")
           machine.succeed("su - ${user.name} -c 'xauth merge /run/user/1000/xauth_*'")
 
