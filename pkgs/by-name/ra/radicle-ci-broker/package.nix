@@ -8,6 +8,7 @@
   sqlite,
   radicle-node,
   versionCheckHook,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -57,7 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) radicle-ci-broker; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Radicle CI broker";
