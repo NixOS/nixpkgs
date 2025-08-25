@@ -38,6 +38,7 @@
   xorg,
   zlib,
   zstd,
+  ffmpeg,
   ...
 }:
 
@@ -94,6 +95,7 @@ stdenv.mkDerivation {
     wayland
     zlib
     zstd
+    ffmpeg
 
     xorg.libICE
     xorg.libSM
