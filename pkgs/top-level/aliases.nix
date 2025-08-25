@@ -1475,6 +1475,7 @@ mapAliases {
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
   maligned = throw "maligned was deprecated upstream in favor of x/tools/go/analysis/passes/fieldalignment"; # Added 20204-08-24
   manicode = throw "manicode has been renamed to codebuff"; # Added 2024-12-10
+  manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
 
