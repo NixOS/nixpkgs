@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.4.3";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ib2sErgz1FPnHxmUE8LD/tD1smNcOc0/Ljncl+E9YdM=";
+    hash = "sha256-ug7cT/HMiOQF6CX6EEFlvgttXFZdRctSTqPAAkun2KU=";
   };
 
   # This patch ensures that the cache implementation respects the env
