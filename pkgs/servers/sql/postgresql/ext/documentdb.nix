@@ -74,16 +74,16 @@ postgresqlBuildExtension (finalAttrs: {
       ln -s ${lib.getLib rum}/lib/${libName} $out/lib/${libName}
     '';
 
+  requiredExtensions = [
+    "rum"
+    "pg_cron"
+    "pgvector"
+    "postgis"
+  ];
+
   enableUpdateScript = false;
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
-
-    withPackages = [
-      "rum"
-      "pg_cron"
-      "pgvector"
-      "postgis"
-    ];
 
     postgresqlExtraSettings = ''
       shared_preload_libraries='pg_cron,pg_documentdb_core,pg_documentdb'
@@ -152,7 +152,9 @@ postgresqlBuildExtension (finalAttrs: {
     homepage = "https://documentdb.io/";
     downloadPage = "https://github.com/microsoft/documentdb/";
     changelog = "https://github.com/microsoft/documentdb/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ jk ];
+    maintainers = with lib.maintainers; [
+      jk
+    ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.mit;
   };
