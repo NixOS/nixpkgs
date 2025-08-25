@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154
+
 cargoInstallPostBuildHook() {
     echo "Executing cargoInstallPostBuildHook"
 
@@ -29,19 +31,19 @@ cargoInstallHook() {
       rm -rf "$target/../../${cargoBuildType}"
       ln -srf "$target" "$target/../../"
     done
-    mkdir -p $out/bin $out/lib
+    mkdir -p "${!outputBin}/bin" "${!outputLib}/lib"
 
-    xargs -r cp -t $out/bin <<< $bins
+    xargs -r cp -t "${!outputBin}/bin" <<< $bins
     find $tmpDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
-      -print0 | xargs -r -0 cp -t $out/lib
+      -print0 | xargs -r -0 cp -t "${!outputLib}/lib"
 
     # If present, copy any .dSYM directories for debugging on darwin
     # https://github.com/NixOS/nixpkgs/issues/330036
-    find "${releaseDir}" -maxdepth 1 -name '*.dSYM' -exec cp -RLt $out/bin/ {} +
+    find "${releaseDir}" -maxdepth 1 -name '*.dSYM' -exec cp -RLt "${!outputBin}/bin/" {} +
 
-    rmdir --ignore-fail-on-non-empty $out/lib $out/bin
+    rmdir --ignore-fail-on-non-empty "${!outputLib}/lib" "${!outputBin}/bin"
     runHook postInstall
 
     echo "Finished cargoInstallHook"
