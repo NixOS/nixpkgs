@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-extractor";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dbt_extractor";
     inherit version;
-    hash = "sha256-zV2VV2qN6kGQJAqvmTajf9dLS3kTymmjw2j8RHK7fhM=";
+    hash = "sha256-1s8I7Hk7i8K9biYO+BgjCuaKT3FDb6SJ8I19saUuL/4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-luPAuRl+yrHinLs6H0ZRVnce2zz1DUrniVOCa1hu1S4=";
+    hash = "sha256-6Y4zfqhj1/IeEX+Ve49jblxeW565Q2ypNClb/Ej0xoc=";
   };
 
   nativeBuildInputs = [
