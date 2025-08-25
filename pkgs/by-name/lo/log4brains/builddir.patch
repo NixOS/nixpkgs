@@ -1,0 +1,82 @@
+Index: b/packages/web/cli/commands/build.ts
+===================================================================
+--- a/packages/web/cli/commands/build.ts
++++ b/packages/web/cli/commands/build.ts
+@@ -16,6 +16,38 @@ type Deps = {
+   appConsole: AppConsole;
+ };
+ 
++/* eslint-disable */
++const fs = require('fs');
++const os = require('os');
++
++// Helper: Recursively copy directory
++function copyDirSync(src: any, dest: any) {
++  if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
++  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
++    const srcPath = path.join(src, entry.name);
++    const destPath = path.join(dest, entry.name);
++    if (entry.isDirectory()) {
++      copyDirSync(srcPath, destPath);
++    } else {
++      fs.copyFileSync(srcPath, destPath);
++    }
++  }
++}
++
++// Helper: Recursively set writeable flag
++function setWriteableSync(target: any) {
++  const stat = fs.statSync(target);
++  if (stat.isDirectory()) {
++    fs.chmodSync(target, 0o755);
++    for (const entry of fs.readdirSync(target)) {
++      setWriteableSync(path.join(target, entry));
++    }
++  } else {
++    fs.chmodSync(target, 0o644);
++  }
++}
++/* eslint-enable */
++
+ export async function buildCommand(
+   { appConsole }: Deps,
+   outPath: string,
+@@ -24,7 +56,13 @@ export async function buildCommand(
+   process.env.NEXT_TELEMETRY_DISABLED = "1";
+   appConsole.println("Building Log4brains...");
+ 
+-  const nextDir = getNextJsDir();
++  const oldNextDir = getNextJsDir();
++
++  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'log4brains-nextjs-'));
++  copyDirSync(oldNextDir, tmpDir);
++  setWriteableSync(tmpDir);
++  const nextDir = tmpDir;
++
+   // eslint-disable-next-line global-require,import/no-dynamic-require,@typescript-eslint/no-var-requires
+   const nextConfig = require(path.join(nextDir, "next.config.js")) as Record<
+     string,
+Index: b/packages/web/nextjs/next.config.js
+===================================================================
+--- a/packages/web/nextjs/next.config.js
++++ b/packages/web/nextjs/next.config.js
+@@ -5,10 +5,6 @@ const withBundleAnalyzer = require("@nex
+   enabled: process.env.ANALYZE === "true"
+ });
+ 
+-const packageJson = require(`${
+-  fs.existsSync(path.join(__dirname, "package.json")) ? "./" : "../"
+-}package.json`);
+-
+ module.exports = withBundleAnalyzer({
+   reactStrictMode: true,
+   target: "serverless",
+@@ -16,7 +12,7 @@ module.exports = withBundleAnalyzer({
+   trailingSlash: true,
+   serverRuntimeConfig: {
+     PROJECT_ROOT: __dirname, // https://github.com/vercel/next.js/issues/8251
+-    VERSION: packageJson.version
++    VERSION: "@NIX_LOG4BRAINS_VERSION@",
+   },
+   webpack(config, { webpack, buildId }) {
+     // For cache invalidation purpose (thanks https://github.com/vercel/next.js/discussions/14743)
