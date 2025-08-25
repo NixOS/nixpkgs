@@ -77,6 +77,7 @@ stdenv.mkDerivation {
       Free for 30 days. Updates are free.
     '';
     homepage = "https://www.roomarranger.com/";
+    changelog = "https://www.roomarranger.com/whatsnew.txt";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ bellackn ];
