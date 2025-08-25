@@ -16,7 +16,7 @@
         enable = true;
         package = pkgs.retroarch-bare;
       };
-      services.xserver.displayManager = {
+      services.displayManager = {
         sddm.enable = true;
         defaultSession = "RetroArch";
         autoLogin = {
@@ -29,7 +29,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       xdo = "${pkgs.xdotool}/bin/xdotool";
     in
     ''
