@@ -13096,6 +13096,8 @@ self: super: with self; {
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
 
+  pyirishrail = callPackage ../development/python-modules/pyirishrail { };
+
   pyisbn = callPackage ../development/python-modules/pyisbn { };
 
   pyisemail = callPackage ../development/python-modules/pyisemail { };
