@@ -12,7 +12,7 @@ async function dismissReviews({ github, context, dry }) {
         pull_number,
       })
     )
-      .filter((review) => review.user.login === 'github-actions[bot]')
+      .filter((review) => review.user?.login === 'github-actions[bot]')
       .map(async (review) => {
         if (review.state === 'CHANGES_REQUESTED') {
           await github.rest.pulls.dismissReview({
@@ -46,7 +46,7 @@ async function postReview({ github, context, core, dry, body }) {
     })
   ).find(
     (review) =>
-      review.user.login === 'github-actions[bot]' &&
+      review.user?.login === 'github-actions[bot]' &&
       // If a review is still pending, we can just update this instead
       // of posting a new one.
       (review.state === 'CHANGES_REQUESTED' ||
