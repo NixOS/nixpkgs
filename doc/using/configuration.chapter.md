@@ -128,6 +128,12 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
 A complete list of licenses can be found in the file `lib/licenses.nix` of the nixpkgs tree.
 
+-   Use the `pkgsUnfree` variant:
+
+    ```ShellSession
+    $ nix-build -A pkgsUnfree.hello-unfree
+    ```
+
 ## Installing insecure packages {#sec-allow-insecure}
 
 There are several ways to tweak how Nix handles a package which has been marked as insecure.
