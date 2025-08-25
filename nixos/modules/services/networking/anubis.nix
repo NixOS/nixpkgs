@@ -182,7 +182,7 @@ let
     options = {
       # see other options above
       BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}.sock";
+        default = "/run/anubis/${instanceName name}/${instanceName name}.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
 
@@ -192,7 +192,7 @@ let
         type = types.str;
       };
       METRICS_BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}-metrics.sock";
+        default = "/run/anubis/${instanceName name}/${instanceName name}-metrics.sock";
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
@@ -286,7 +286,7 @@ in
                 ]
               )
             then
-              "anubis"
+              "anubis/%N"
             else
               null;
 
