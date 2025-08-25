@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "ci-edit";
-  version = "51-unstable-2023-04-11";
+  version = "last_python_2";
   pyproject = true;
 
   src = fetchFromGitHub {
