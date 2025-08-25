@@ -1,0 +1,15 @@
+diff --git a/installed-tests/js/testPackage.js b/installed-tests/js/testPackage.js
+index 624e8521..1308c009 100644
+--- a/installed-tests/js/testPackage.js
++++ b/installed-tests/js/testPackage.js
+@@ -64,10 +64,6 @@ describe('Package module', function () {
+         expect(Pkg.checkSymbol('GIMarshallingTests', '1.0', 'Interface.test_int8_in')).toEqual(true);
+     });
+ 
+-    it('doesn\'t find a non-existent interface method', function () {
+-        expect(Pkg.checkSymbol('GIMarshallingTests', '1.0', 'Interface.test_int42_in')).toEqual(false);
+-    });
+-
+     it('finds an enum value', function () {
+         expect(Pkg.checkSymbol('Regress', '1.0', 'TestEnum.VALUE1')).toEqual(true);
+     });

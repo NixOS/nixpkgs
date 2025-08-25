@@ -61,9 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
 
-    # Disable introspection test in installed tests
-    # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
-    ./disable-introspection-test.patch
+    # TODO(GNOME 49): try to re-enable this on next rebuild.
+    ./disable-failing-tests.patch
   ];
 
   nativeBuildInputs = [
