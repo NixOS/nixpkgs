@@ -3590,7 +3590,8 @@
       ];
     "microbees" =
       ps: with ps; [
-      ]; # missing inputs: microBeesPy
+        microbeespy
+      ];
     "microsoft" =
       ps: with ps; [
         pycsspeechtts
@@ -7389,6 +7390,7 @@
     "meteoclimatic"
     "metoffice"
     "mfi"
+    "microbees"
     "microsoft"
     "microsoft_face"
     "microsoft_face_detect"

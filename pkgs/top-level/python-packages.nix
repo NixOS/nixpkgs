@@ -9191,6 +9191,8 @@ self: super: with self; {
 
   micloud = callPackage ../development/python-modules/micloud { };
 
+  microbeespy = callPackage ../development/python-modules/microbeespy { };
+
   microdata = callPackage ../development/python-modules/microdata { };
 
   microsoft-kiota-abstractions =
