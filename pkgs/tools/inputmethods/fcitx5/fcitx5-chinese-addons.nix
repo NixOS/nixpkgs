@@ -17,6 +17,7 @@
   fmt,
   qtbase,
   luaSupport ? true,
+  withWebEngine ? lib.versions.major qtbase.version == "6", # vulnerable on qt5
 }:
 
 let
@@ -62,13 +63,15 @@ stdenv.mkDerivation rec {
     libime
     curl
     opencc
-    qtwebengine
+    qtbase
     fmt
   ]
+  ++ lib.optional withWebEngine qtwebengine
   ++ lib.optional luaSupport fcitx5-lua;
 
   cmakeFlags = [
     (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
+    (lib.cmakeBool "ENABLE_BROWSER" withWebEngine)
   ];
 
   dontWrapQtApps = true;
