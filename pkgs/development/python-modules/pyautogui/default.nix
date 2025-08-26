@@ -26,12 +26,14 @@ buildPythonPackage {
     hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
+  # `xvfb-run` and `scrot` are only available for Linux, not e.g. darwin, and these
+  # checks will only succeed on Linux.
   doCheck = stdenv.hostPlatform.isLinux;
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeCheckInputs = [
     xvfb-run
     scrot
   ];
-  checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
+  checkPhase = ''
     xvfb-run python -c 'import pyautogui'
     # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
     # xvfb-run python -m unittest tests.test_pyautogui
