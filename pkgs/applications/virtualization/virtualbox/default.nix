@@ -266,7 +266,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
-      ./fix-graphics-driver-loading.patch
     ];
 
   postPatch = ''
