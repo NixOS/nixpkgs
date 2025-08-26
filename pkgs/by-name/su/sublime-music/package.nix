@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.12.0-unstable-2024-01-06";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
