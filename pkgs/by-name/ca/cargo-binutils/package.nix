@@ -15,6 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QdW0HiVhKFuXj7hWZw1lkrFmvVIqbeMKRF2qnBX9wRI=";
 
+  patches = [
+    ./mismatched_lifetime_syntaxes.patch
+  ];
+
   meta = {
     description = "Cargo subcommands to invoke the LLVM tools shipped with the Rust toolchain";
     longDescription = ''
