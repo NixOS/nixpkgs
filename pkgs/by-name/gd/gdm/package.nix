@@ -11,9 +11,6 @@
   json-glib,
   itstool,
   accountsservice,
-  libX11,
-  libXdmcp,
-  libxcb,
   gnome,
   systemd,
   dconf,
@@ -28,10 +25,8 @@
   coreutils,
   xorgserver,
   xwayland,
-  dbus,
   nixos-icons,
   runCommand,
-  udevCheckHook,
 }:
 
 let
@@ -57,10 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   mesonFlags = [
-    "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
     "-Dinitial-vt=1"
-    "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
@@ -75,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -85,9 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     gtk3
     keyutils
-    libX11
-    libXdmcp
-    libxcb
     libgudev
     libselinux
     pam
@@ -112,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
         plymouth
         xorgserver
         xwayland
-        dbus
         ;
     })
 
