@@ -9042,6 +9042,8 @@ with pkgs;
 
   sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
 
+  shader-slang-llvm = callPackage ../by-name/sh/shader-slang/package.nix { withLLVM = true; };
+
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
