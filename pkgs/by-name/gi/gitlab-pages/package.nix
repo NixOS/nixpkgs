@@ -19,6 +19,11 @@ buildGoModule rec {
   vendorHash = "sha256-OubXCpvGtGqegQmdb6R1zw/0DfQ4FdbJGt7qYYRnWnA=";
   subPackages = [ "." ];
 
+  ldflags = [
+    "-X"
+    "main.VERSION=${version}"
+  ];
+
   meta = {
     description = "Daemon used to serve static websites for GitLab users";
     mainProgram = "gitlab-pages";
