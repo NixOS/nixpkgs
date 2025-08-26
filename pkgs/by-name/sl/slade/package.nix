@@ -19,14 +19,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slade";
   version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-+i506uzO2q/9k7en6CKs4ui9gjszrMOYwW+V9W5Lvns=";
   };
 
@@ -67,8 +67,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
+    changelog = "https://github.com/sirjuddington/SLADE/releases/tag/${finalAttrs.version}";
+    mainProgram = "slade";
     license = lib.licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
