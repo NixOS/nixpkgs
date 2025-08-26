@@ -143,6 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals tracingSupport [
     tracy
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
@@ -151,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
     (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Help openxr-loader find this runtime

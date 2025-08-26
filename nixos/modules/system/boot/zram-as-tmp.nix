@@ -36,7 +36,7 @@ in
             then the zram device will have 256 MiB.
             Fractions in the range 0.1–0.5 are recommended
 
-            See: https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example
+            See: <https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example>
           '';
         };
 
@@ -47,7 +47,7 @@ in
           description = ''
             The compression algorithm to use for the zram device.
 
-            See: https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example
+            See: <https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example>
           '';
         };
 
@@ -58,7 +58,7 @@ in
           description = ''
             The file system to put on the device.
 
-            See: https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example
+            See: <https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example>
           '';
         };
 
@@ -70,7 +70,7 @@ in
             by setting "discard".
             Setting this to the empty string clears the option.
 
-            See: https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example
+            See: <https://github.com/systemd/zram-generator/blob/main/zram-generator.conf.example>
           '';
         };
       };

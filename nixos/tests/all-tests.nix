@@ -1488,6 +1488,7 @@ in
   teleport = handleTest ./teleport.nix { };
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix { };
+  temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   thanos = runTest ./thanos.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;

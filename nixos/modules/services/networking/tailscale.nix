@@ -104,7 +104,7 @@ in
       default = { };
       description = ''
         Extra parameters to pass after the auth key.
-        See https://tailscale.com/kb/1215/oauth-clients#registering-new-nodes-using-oauth-credentials
+        See <https://tailscale.com/kb/1215/oauth-clients#registering-new-nodes-using-oauth-credentials>
       '';
     };
 

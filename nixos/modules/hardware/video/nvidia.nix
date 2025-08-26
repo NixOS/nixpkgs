@@ -229,7 +229,7 @@ in
 
         Warning: This feature is relatively new, depending on your system this might
         work poorly. AMD support, especially so.
-        See: https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828
+        See: <https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828>
 
         Note that this option only has any effect if the "nvidia" driver is specified
         in {option}`services.xserver.videoDrivers`, and it should preferably

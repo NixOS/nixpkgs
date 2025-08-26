@@ -30,9 +30,6 @@ in
     fish.generateCompletions = mkDefault false;
   };
 
-  # This pulls in nixos-containers which depends on Perl.
-  boot.enableContainers = mkDefault false;
-
   services = {
     logrotate.enable = mkDefault false;
     udisks2.enable = mkDefault false;
