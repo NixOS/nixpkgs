@@ -4537,11 +4537,6 @@
     githubId = 2245737;
     name = "Christopher Mark Poole";
   };
-  chrpinedo = {
-    github = "chrpinedo";
-    githubId = 2324630;
-    name = "Christian Pinedo";
-  };
   chuahou = {
     email = "human+github@chuahou.dev";
     github = "chuahou";
