@@ -3,6 +3,7 @@
   ocamlPackages,
   fetchFromGitHub,
   versionCheckHook,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -49,7 +50,10 @@ ocamlPackages.buildDunePackage rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) slipshow; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Engine for displaying slips, the next-gen version of slides";

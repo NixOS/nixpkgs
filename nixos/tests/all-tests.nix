@@ -1345,6 +1345,7 @@ in
   simple = runTest ./simple.nix;
   sing-box = runTest ./sing-box.nix;
   slimserver = runTest ./slimserver.nix;
+  slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
   snmpd = runTest ./snmpd.nix;
   smokeping = runTest ./smokeping.nix;
