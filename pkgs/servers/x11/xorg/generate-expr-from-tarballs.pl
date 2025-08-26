@@ -371,7 +371,11 @@ print OUT <<EOF;
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xcursorgen,
+  xcursor-themes,
   xdriinfo,
+  xev,
+  xfsinfo,
   xkeyboard-config,
   xlsatoms,
   xlsclients,
@@ -382,8 +386,10 @@ print OUT <<EOF;
   xorgproto,
   xorg-sgml-doctools,
   xprop,
+  xrandr,
   xrefresh,
   xtrans,
+  xvinfo,
   xwininfo,
   xwud,
 }:
@@ -409,15 +415,20 @@ self: with self; {
     transset
     xbitmaps
     xcmsdb
+    xcursorgen
     xdriinfo
+    xev
+    xfsinfo
     xlsatoms
     xlsclients
     xlsfonts
     xmodmap
     xorgproto
     xprop
+    xrandr
     xrefresh
     xtrans
+    xvinfo
     xwininfo
     xwud
     ;
@@ -458,6 +469,7 @@ self: with self; {
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
+  xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgsgmldoctools = xorg-sgml-doctools;
