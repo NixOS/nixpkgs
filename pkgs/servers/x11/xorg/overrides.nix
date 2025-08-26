@@ -968,7 +968,6 @@ self: super:
     # unfree but redistributable
     redist = [
       "fontibmtype1"
-      "fontbh100dpi"
       "fontbh75dpi"
 
       # Bigelow & Holmes fonts

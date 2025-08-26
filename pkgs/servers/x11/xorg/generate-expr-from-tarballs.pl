@@ -325,6 +325,7 @@ print OUT <<EOF;
   font-adobe-utopia-75dpi,
   font-adobe-utopia-type1,
   font-alias,
+  font-bh-100dpi,
   font-bh-ttf,
   font-bh-type1,
   font-encodings,
@@ -485,6 +486,7 @@ self: with self; {
   fontadobeutopia75dpi = font-adobe-utopia-75dpi;
   fontadobeutopiatype1 = font-adobe-utopia-type1;
   fontalias = font-alias;
+  fontbh100dpi = font-bh-100dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
