@@ -19,6 +19,12 @@
   libxau,
   libxaw,
   libxcb,
+  libxcb-errors,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-util,
+  libxcb-wm,
   libxcvt,
   libxcursor,
   libxdmcp,
@@ -121,6 +127,12 @@ self: with self; {
   libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
+  xcbutil = libxcb-util;
+  xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -2808,53 +2820,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutil = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-0.4.1.tar.xz";
-        sha256 = "04p54r0zjc44fpw1hdy4rhygv37sx2vr2lllxjihykz5v2xkpgjs";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xcb-atom"
-          "xcb-aux"
-          "xcb-event"
-          "xcb-util"
-        ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilcursor = callPackage (
     {
       stdenv,
@@ -2895,225 +2860,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcb-cursor" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilerrors = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xcbproto,
-      xorgproto,
-      m4,
-      python3,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-errors";
-      version = "1.0.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-errors-1.0.1.tar.xz";
-        sha256 = "0mzkh3xj1n690dw8hrdhyjykd71ib0ls9n5cgf9asna2k1xwha2n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-        python3
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xcbproto
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-errors" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilimage = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xcbutil,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-image";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-image-0.4.1.tar.xz";
-        sha256 = "0g8dwknrlz96k176qxh8ar84x9kpppci9b978zyp24nvvbjqxbfc";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xcbutil
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-image" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilkeysyms = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-keysyms";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz";
-        sha256 = "0f66snk179hmp8ppgv1zp9y7pl1vzn52znpikm1fsaj1ji90l9kw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-keysyms" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilrenderutil = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-renderutil";
-      version = "0.3.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz";
-        sha256 = "1fh4dnlwlqyccrhmmwlv082a7mxc7ss7vmzmp7xxp39dwbqd859y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcb-renderutil" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilwm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      gperf,
-      libxcb,
-      xorgproto,
-      m4,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcb-util-wm";
-      version = "0.4.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz";
-        sha256 = "02wai17mxfbvlnj4l4bjbvah97rccdivzvd7mrznhr32s0hlxhv2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        m4
-      ];
-      buildInputs = [
-        gperf
-        libxcb
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xcb-ewmh"
-          "xcb-icccm"
-        ];
         platforms = lib.platforms.unix;
       };
     })

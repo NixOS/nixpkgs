@@ -50,7 +50,17 @@ $pcMap{"xau"} = "libXau";
 $pcMap{"xaw6"} = "libXaw";
 $pcMap{"xaw7"} = "libXaw";
 $pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-atom"} = "xcbutil";
+$pcMap{"xcb-aux"} = "xcbutil";
+$pcMap{"xcb-errors"} = "xcbutilerrors";
+$pcMap{"xcb-event"} = "xcbutil";
+$pcMap{"xcb-ewmh"} = "xcbutilwm";
+$pcMap{"xcb-icccm"} = "xcbutilwm";
+$pcMap{"xcb-image"} = "xcbutilimage";
+$pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
+$pcMap{"xcb-util"} = "xcbutil";
 $pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
@@ -325,6 +335,12 @@ print OUT <<EOF;
   libxau,
   libxaw,
   libxcb,
+  libxcb-errors,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-util,
+  libxcb-wm,
   libxcvt,
   libxcursor,
   libxdmcp,
@@ -427,6 +443,12 @@ self: with self; {
   libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilerrors = libxcb-errors;
+  xcbutilimage = libxcb-image;
+  xcbutilkeysyms = libxcb-keysyms;
+  xcbutil = libxcb-util;
+  xcbutilrenderutil = libxcb-render-util;
+  xcbutilwm = libxcb-wm;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
