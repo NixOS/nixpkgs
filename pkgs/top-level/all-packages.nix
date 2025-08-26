@@ -13867,12 +13867,6 @@ with pkgs;
 
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
-  slade = callPackage ../games/doom-ports/slade {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
   sladeUnstable = callPackage ../games/doom-ports/slade/git.nix {
     wxGTK = wxGTK32.override {
       withWebKit = true;

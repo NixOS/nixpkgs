@@ -6,7 +6,7 @@
   pkg-config,
   which,
   zip,
-  wxGTK,
+  wxGTK32,
   gtk3,
   sfml_2,
   fluidsynth,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK
+    wxGTK32
     gtk3
     sfml_2
     fluidsynth
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
-    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxGTK) "wx-config"))
+    "-DwxWidgets_LIBRARIES=${wxGTK32}/lib"
+    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxGTK32) "wx-config"))
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
