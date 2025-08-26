@@ -139,6 +139,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/unityhub.desktop \
       --replace-fail /opt/unityhub/unityhub $out/opt/unityhub/unityhub
 
+    # This file is used by auto updater to determine whether this install is
+    # a .deb, .rpm, etc. Remove this to disable the auto updater, which auto
+    # downloads the update, in addition to being useless.
+    rm $out/opt/unityhub/resources/package-type
+
     runHook postInstall
   '';
 
