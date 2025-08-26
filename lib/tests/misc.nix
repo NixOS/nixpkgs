@@ -4696,6 +4696,45 @@ runTests {
       };
     };
 
+  # Check that `packagesFromDirectoryRecursive` can be used to create scopes
+  # for sub-directories
+  testPackagesFromDirectoryOneScope =
+    let
+      inherit (lib) makeScope;
+      originalScope = makeScope lib.callPackageWith (_: {
+        a = "a from original scope";
+        b = "b from original scope";
+      });
+    in
+    {
+      expr =
+        lib.filterAttrsRecursive
+          (
+            name: value:
+            !lib.elem name [
+              "callPackage"
+              "newScope"
+              "overrideScope"
+              "packages"
+            ]
+          )
+          (packagesFromDirectoryRecursive {
+            inherit (originalScope) callPackage newScope;
+            directory = ./packages-from-directory/non-scope;
+            # The `recurseIntoDirectory` argument is very important for the
+            # flexibility of the API. Do not remove it!
+            recurseIntoDirectory =
+              processDir: args: lib.recurseIntoAttrs (makeScope args.newScope (self: processDir args));
+          });
+      expected = lib.recurseIntoAttrs {
+        a = "a from non-scope";
+        b = "b from non-scope";
+        my-group = lib.recurseIntoAttrs {
+          b = "b from my-group, b from non-scope = b from original scope";
+        };
+      };
+    };
+
   testFilesystemResolveDefaultNixFile1 = {
     expr = lib.filesystem.resolveDefaultNix ./foo.nix;
     expected = ./foo.nix;
