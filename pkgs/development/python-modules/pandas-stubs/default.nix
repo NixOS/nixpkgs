@@ -34,9 +34,9 @@
   xlsxwriter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pandas-stubs";
-  version = "2.2.3.250308";
+  version = "2.3.0.250703-unstable-2025-08-25";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
-    tag = "v${version}";
-    hash = "sha256-93XVzdb3A2S+Exk33v3U8HDMg9vPKAEkWjLZnBaXMWQ=";
+    rev = "3033eea474b754f7deabfa25a3377ed1efb85c15";
+    hash = "sha256-1RU18pP3rmKoemwk44B3RG0D5jiNkx2fxxcXwMBEngY=";
   };
 
   build-system = [ poetry-core ];
