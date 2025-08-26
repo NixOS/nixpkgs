@@ -10,7 +10,7 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "styluslabs-write-bin";
   version = "2025-01-10";
 
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
       --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
   '';
 
-  passthru.updateScript = ./update.rb;
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = "http://www.styluslabs.com/";
+    homepage = "https://www.styluslabs.com/";
     description = "Word processor for handwriting";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
