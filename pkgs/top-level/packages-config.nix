@@ -17,7 +17,6 @@
         nodePackages
         nodePackages_latest
         platformioPackages
-        rPackages
         roundcubePlugins
         sourceHanPackages
         windows
