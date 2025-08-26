@@ -5574,8 +5574,6 @@ with pkgs;
 
   mono4 = lowPrio (callPackage ../development/compilers/mono/4.nix { });
 
-  mono5 = callPackage ../development/compilers/mono/5.nix { };
-
   mono6 = callPackage ../development/compilers/mono/6.nix { };
 
   mozart2 = callPackage ../development/compilers/mozart {
