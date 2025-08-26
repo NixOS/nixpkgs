@@ -13,6 +13,7 @@
   cloudpickle,
   databricks-sdk,
   docker,
+  fastapi,
   flask,
   gitpython,
   graphene,
@@ -34,6 +35,7 @@
   scipy,
   sqlalchemy,
   sqlparse,
+  uvicorn,
 
   # tests
   aiohttp,
@@ -44,7 +46,6 @@
   botocore,
   catboost,
   datasets,
-  fastapi,
   google-cloud-storage,
   httpx,
   jwt,
@@ -65,7 +66,6 @@
   tensorflow,
   torch,
   transformers,
-  uvicorn,
   xgboost,
 }:
 
@@ -99,6 +99,7 @@ buildPythonPackage rec {
     cloudpickle
     databricks-sdk
     docker
+    fastapi
     flask
     gitpython
     graphene
@@ -122,6 +123,7 @@ buildPythonPackage rec {
     shap
     sqlalchemy
     sqlparse
+    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
@@ -135,7 +137,6 @@ buildPythonPackage rec {
     botocore
     catboost
     datasets
-    fastapi
     google-cloud-storage
     httpx
     jwt
@@ -155,7 +156,6 @@ buildPythonPackage rec {
     tensorflow
     torch
     transformers
-    uvicorn
     xgboost
   ];
 
