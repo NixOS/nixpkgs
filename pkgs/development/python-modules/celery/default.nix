@@ -9,14 +9,13 @@
   click-plugins,
   click-repl,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   gevent,
   google-cloud-firestore,
   google-cloud-storage,
   kombu,
   moto,
   msgpack,
-  nixosTests,
   pymongo,
   redis,
   pydantic,
@@ -27,7 +26,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   setuptools,
   vine,
@@ -38,11 +36,11 @@ buildPythonPackage rec {
   version = "5.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bJcq55aMK1KBIn8Bw6P5hAN9IcUSnQe/NVDMKvxrEKU=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "celery";
+    tag = "v${version}";
+    hash = "sha256-+sickqRfSkBxhcO0W9na6Uov4kZ7S5oqpXXKX0iRQ0w=";
   };
 
   build-system = [ setuptools ];
@@ -114,16 +112,19 @@ buildPythonPackage rec {
     "test_cleanup"
     "test_with_autoscaler_file_descriptor_safety"
     "test_with_file_descriptor_safety"
+
+    # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
+    "test_check_privileges_without_c_force_root_and_no_group_entry"
   ];
 
   pythonImportsCheck = [ "celery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";
   };
 }
