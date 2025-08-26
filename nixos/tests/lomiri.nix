@@ -650,14 +650,14 @@ in
               machine.send_key("ret")
 
               # Peers should be loaded
-              wait_for_text("Morph") # or Gallery, but Morph is already packaged
+              wait_for_text("Gallery")
               machine.screenshot("settings_lomiri-content-hub_peers")
 
-              # Select Morph as content source
-              mouse_click(370, 100)
+              # Select Gallery as content source
+              mouse_click(460, 80)
 
-              # Expect Morph to be brought into the foreground, with its Downloads page open
-              wait_for_text("No downloads")
+              # Expect Gallery to be brought into the foreground, with its sharing page open
+              wait_for_text("Photos")
 
               # If lomiri-content-hub encounters a problem, it may have crashed the original application issuing the request.
               # Check that it's still alive
@@ -666,9 +666,10 @@ in
               machine.screenshot("lomiri-content-hub_exchange")
 
               # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
-              machine.send_key("esc")
+              machine.send_key("tab")
+              machine.send_key("ret")
 
-              machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
+              machine.sleep(2) # sleep a tiny bit so gallery can close & the focus can return to LSS
               machine.send_key("alt-f4")
         '';
     }
