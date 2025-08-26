@@ -18476,6 +18476,12 @@
     githubId = 148037;
     name = "Joachim Breitner";
   };
+  nomis = {
+    email = "nixpkgs@octiron.net";
+    github = "nomis";
+    githubId = 70171;
+    name = "Simon Arlott";
+  };
   nomisiv = {
     email = "simon@nomisiv.com";
     github = "NomisIV";
