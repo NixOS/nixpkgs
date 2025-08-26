@@ -7258,12 +7258,6 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
-  elysasrc = {
-    name = "Elysa";
-    github = "ElysaSrc";
-    githubId = 101974839;
-    email = "elysasrc@proton.me";
-  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "Emantor";
