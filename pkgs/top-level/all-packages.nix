@@ -2653,6 +2653,8 @@ with pkgs;
   cudaPackages_12_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.8"; };
   cudaPackages_12_9 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.9"; };
   cudaPackages_12 = cudaPackages_12_8; # Latest supported by cudnn
+  cudaPackages_13_0 = callPackages ./cuda-packages.nix { cudaMajorMinorVersion = "13.0"; };
+  cudaPackages_13 = cudaPackages_13_0;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
