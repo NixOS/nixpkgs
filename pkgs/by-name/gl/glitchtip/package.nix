@@ -64,6 +64,9 @@ let
       orjson
       psycopg
       pydantic
+      # undocumented on django-allauth side
+      # https://codeberg.org/allauth/django-allauth/issues/4493
+      pyyaml
       sentry-sdk
       symbolic
       user-agents
