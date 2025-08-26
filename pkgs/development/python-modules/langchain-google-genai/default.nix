@@ -72,8 +72,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "libs/genai/v";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "libs/genai/v";
+    };
   };
 
   meta = {

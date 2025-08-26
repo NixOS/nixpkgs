@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.72";
+  version = "0.3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain-tests==${version}";
+    hash = "sha256-RMuxWA/n8d71FReFKO3Y/5P0MYk4aZ5WU2/TRxf9UuE=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
@@ -72,8 +72,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-tests==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-tests==";
+    };
   };
 
   meta = {

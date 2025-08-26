@@ -80,8 +80,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-huggingface==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-huggingface==";
+    };
   };
 
   meta = {
