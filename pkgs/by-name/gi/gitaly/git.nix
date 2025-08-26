@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gitaly-git";
-  version = "2.49.0.gl2";
+  version = "2.50.1.gl1";
 
   # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
     rev = "v${version}";
-    hash = "sha256-VFqUz79RvkOE4CS8GUZTPhah2AbvrlyHr4iYhWqh61Y=";
+    hash = "sha256-q+xQAVsatw0vS4iIgAxciAVVMr33BjG0yM4AvZrXB+8=";
     leaveDotGit = true;
     # The build system clones the repo from the store (since it always expects
     # to be able to clone in the makefiles) and it looks like nix doesn't leave
