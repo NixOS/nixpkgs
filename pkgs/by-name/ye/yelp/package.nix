@@ -1,22 +1,25 @@
 {
-  lib,
   stdenv,
-  gettext,
+  lib,
   fetchurl,
-  webkitgtk_4_1,
-  pkg-config,
-  gtk3,
-  libhandy,
-  glib,
-  gnome,
-  adwaita-icon-theme,
-  sqlite,
+  desktop-file-utils,
+  gettext,
   itstool,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  bzip2,
+  glib,
+  gtk4,
+  libadwaita,
   libxml2,
   libxslt,
-  gst_all_1,
-  wrapGAppsHook3,
+  sqlite,
+  webkitgtk_6_0,
+  xz,
   yelp-xsl,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,29 +32,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config
+    desktop-file-utils
     gettext
     itstool
-    wrapGAppsHook3
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    bzip2
     glib
-    webkitgtk_4_1
-    sqlite
+    gtk4
+    libadwaita
     libxml2
     libxslt
+    sqlite
+    webkitgtk_6_0
+    xz
     yelp-xsl
-    adwaita-icon-theme
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
   ];
 
-  patches = [
-    ./cve-2025-3155.patch
-  ];
+  postPatch = ''
+    chmod +x src/link-gnome-help.sh data/domains/gen_yelp_xml.sh
+    patchShebangs src/link-gnome-help.sh
+    patchShebangs data/domains/gen_yelp_xml.sh
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -61,9 +68,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.gnome.org/Yelp/";
-    description = "Help viewer in Gnome";
+    description = "Help viewer for GNOME";
     teams = [ teams.gnome ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
