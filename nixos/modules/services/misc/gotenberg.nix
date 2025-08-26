@@ -115,7 +115,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start Chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
         };
 
         disableJavascript = mkOption {
@@ -172,7 +172,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start LibreOffice when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start LibreOffice when Gotenberg starts. If false, LibreOffice will start on the first conversion request that uses it.";
         };
 
         disableRoutes = mkOption {
