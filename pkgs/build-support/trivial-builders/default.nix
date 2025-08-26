@@ -281,8 +281,7 @@ rec {
       */
       passthru ? { },
       /*
-         The `checkPhase` to run. Defaults to `shellcheck` on supported
-         platforms and `bash -n`.
+         The `checkPhase` to run. Defaults to `bash -n`.
 
          The script path will be given as `$target` in the `checkPhase`.
 
@@ -333,64 +332,74 @@ rec {
       */
       inheritPath ? true,
     }:
-    writeTextFile {
-      inherit
-        name
-        meta
-        passthru
-        derivationArgs
-        ;
-      executable = true;
-      destination = "/bin/${name}";
-      allowSubstitutes = true;
-      preferLocalBuild = false;
-      text = ''
-        #!${runtimeShell}
-        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-      ''
-      + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
+    let
+      finalPackage = writeTextFile {
+        inherit
+          name
+          meta
+          derivationArgs
+          ;
+        executable = true;
+        destination = "/bin/${name}";
+        allowSubstitutes = true;
+        preferLocalBuild = false;
+        text = ''
+          #!${runtimeShell}
+          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+        ''
+        + lib.optionalString (runtimeEnv != null) (
+          lib.concatStrings (
+            lib.mapAttrsToList (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '') runtimeEnv
+          )
         )
-      )
-      + lib.optionalString (runtimeInputs != [ ]) ''
+        + lib.optionalString (runtimeInputs != [ ]) ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-      ''
-      + ''
+          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+        ''
+        + ''
 
-        ${text}
-      '';
+          ${text}
+        '';
 
-      checkPhase =
-        let
-          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
-            "--exclude"
-            (lib.concatStringsSep "," excludeShellChecks)
-          ];
-          # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
-          # but we still want to use writeShellApplication on those platforms
-          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
-            # use shellcheck which does not include docs
-            # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
-          '';
-        in
-        if checkPhase == null then
-          ''
-            runHook preCheck
-            ${stdenv.shellDryRun} "$target"
-            ${shellcheckCommand}
-            runHook postCheck
-          ''
-        else
-          checkPhase;
-    };
+        checkPhase =
+          if checkPhase == null then
+            ''
+              runHook preCheck
+              ${stdenv.shellDryRun} "$target"
+              runHook postCheck
+            ''
+          else
+            checkPhase;
+
+        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+        passthru = passthru // {
+          tests =
+            (passthru.tests or { })
+            // lib.optionalAttrs shellcheck-minimal.compiler.bootstrapAvailable {
+              shellcheck =
+                let
+                  excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
+                    "--exclude"
+                    (lib.concatStringsSep "," excludeShellChecks)
+                  ];
+                in
+                # use shellcheck which does not include docs
+                # pandoc takes long to build and documentation isn't needed for just running the cli
+                runCommand "${name}-shellcheck" { } ''
+                    ${lib.getExe shellcheck-minimal} ${
+                      lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
+                    } "${finalPackage}/bin/${name}"
+
+                  mkdir "$out"
+                '';
+            };
+        };
+      };
+    in
+    finalPackage;
 
   # Create a C binary
   # TODO: add to writers? pkgs/build-support/writers
