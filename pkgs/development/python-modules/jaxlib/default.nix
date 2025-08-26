@@ -6,8 +6,7 @@
   # Build-time dependencies:
   addDriverRunpath,
   autoAddDriverRunpath,
-  #bazel_6,
-  bazel,
+  bazel_7,
   binutils,
   buildBazelPackage,
   buildPythonPackage,
@@ -226,7 +225,7 @@ let
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
     #bazel = bazel_6;
-    bazel = bazel;
+    bazel = bazel_7;
 
     src = fetchFromGitHub {
       owner = "google";
