@@ -15260,6 +15260,11 @@
     github = "M0NsTeRRR";
     githubId = 37785089;
   };
+  m0ustache3 = {
+    name = "M0ustach3";
+    github = "M0ustach3";
+    githubId = 37956764;
+  };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
     github = "m1cr0man";
