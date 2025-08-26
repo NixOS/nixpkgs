@@ -19,7 +19,6 @@
         platformioPackages
         rPackages
         roundcubePlugins
-        sourceHanPackages
         windows
         ;
 
