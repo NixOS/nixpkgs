@@ -1333,8 +1333,8 @@ rec {
       "sha256-61XlCWCuYZTQlIhGTDAhljkt9xKmpfQwi2oOJCRM/Vw=";
 
   mypy-boto3-support =
-    buildMypyBoto3Package "support" "1.40.0"
-      "sha256-kNDyeCMDOf4pV5P3dMsKotAMrBVR+Dct8abMT7eHnDI=";
+    buildMypyBoto3Package "support" "1.40.17"
+      "sha256-Ngqg/OaZCigXIPORzWl8CMv64KPmu8axXSgnBzBWnII=";
 
   mypy-boto3-support-app =
     buildMypyBoto3Package "support-app" "1.40.0"
