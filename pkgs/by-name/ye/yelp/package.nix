@@ -2,20 +2,21 @@
   stdenv,
   lib,
   fetchurl,
+  desktop-file-utils,
   gettext,
   itstool,
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   bzip2,
   glib,
-  gtk3,
-  libhandy,
+  gtk4,
+  libadwaita,
   libxml2,
   libxslt,
   sqlite,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   xz,
   yelp-xsl,
   gnome,
@@ -31,23 +32,24 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     itstool
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     bzip2
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     libxml2
     libxslt
     sqlite
-    webkitgtk_4_1
+    webkitgtk_6_0
     xz
     yelp-xsl
   ];
