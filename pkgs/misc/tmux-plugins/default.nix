@@ -440,6 +440,43 @@ in
     };
   };
 
+  lazy-restore = mkTmuxPlugin rec {
+    pluginName = "lazy-restore";
+    rtpFilePath = "tmux-lazy-restore.tmux";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "bcampolo";
+      repo = "tmux-lazy-restore";
+      tag = "v${version}";
+      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in LICENSE README.md; do
+        rm -rf $target/$f
+      done
+      wrapProgram $target/scripts/tmux-session-manager.sh \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            coreutils
+            findutils
+            fzf
+            gnused
+            jq
+            tmux
+          ]
+        }
+    '';
+    meta = with lib; {
+      homepage = "https://github.com/bcampolo/tmux-lazy-restore";
+      description = "session manager plugin that allows sessions to be lazily restored in order to save memory and processing power";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ bbigras ];
+    };
+  };
+
   logging = mkTmuxPlugin {
     pluginName = "logging";
     version = "unstable-2019-04-19";
