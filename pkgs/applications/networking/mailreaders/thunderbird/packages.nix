@@ -103,7 +103,7 @@ rec {
   };
 
   # Eventually, switch to an updateScript without versionPrefix hardcoded...
-  thunderbird-esr = thunderbird-128;
+  thunderbird-esr = thunderbird-140;
 
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
