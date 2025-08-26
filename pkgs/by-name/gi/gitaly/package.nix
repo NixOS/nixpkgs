@@ -33,6 +33,8 @@ let
 
     tags = [ "static" ];
 
+    nativeBuildInputs = [ pkg-config ];
+
     doCheck = false;
   };
 
@@ -41,6 +43,7 @@ let
       pname = "gitaly-aux";
 
       subPackages = [
+        # Can be determined by looking at the `go:embed` calls in https://gitlab.com/gitlab-org/gitaly/-/blob/master/packed_binaries.go
         "cmd/gitaly-hooks"
         "cmd/gitaly-ssh"
         "cmd/gitaly-lfs-smudge"
@@ -59,12 +62,31 @@ buildGoModule (
       "cmd/gitaly-backup"
     ];
 
+    dontStrip = true;
+
     preConfigure = ''
+      rm -r tools
+
       mkdir -p _build/bin
       cp -r ${auxBins}/bin/* _build/bin
-      for f in ${git}/bin/git-*; do
-        cp "$f" "_build/bin/gitaly-$(basename $f)";
+
+      # Add git that will be embedded
+      echo 'print-%:;@echo $($*)' >> Makefile
+      sed -i 's:/usr/bin/env ::g' Makefile
+      for bin in $(make print-GIT_PACKED_EXECUTABLES); do
+        from="$(basename "$bin")"
+        from="''${from#gitaly-}"
+        from="${git}/libexec/git-core/''${from%-*}"
+        cp "$from" "$bin"
       done
+
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      HOME=/build PAGER=cat ${git}/bin/git config -l
+      runHook postInstallCheck
     '';
 
     outputs = [ "out" ];
