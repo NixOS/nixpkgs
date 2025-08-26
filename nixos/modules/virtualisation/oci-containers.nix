@@ -193,11 +193,9 @@ let
             Refer to the
             [Docker engine documentation](https://docs.docker.com/engine/network/#published-ports) for full details.
           '';
-          example = literalExpression ''
-            [
-              "127.0.0.1:8080:9000"
-            ]
-          '';
+          example = [
+            "127.0.0.1:8080:9000"
+          ];
         };
 
         user = mkOption {
@@ -405,7 +403,9 @@ let
   mkService =
     name: container:
     let
-      dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+      dependsOn = lib.attrsets.mapAttrsToList (k: v: "${v.serviceName}.service") (
+        lib.attrsets.getAttrs container.dependsOn cfg.containers
+      );
       escapedName = escapeShellArg name;
       preStartScript = pkgs.writeShellApplication {
         name = "pre-start";
@@ -557,7 +557,7 @@ let
         Restart = "always";
       }
       // optionalAttrs (cfg.backend == "podman") {
-        Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+        Environment = "PODMAN_SYSTEMD_UNIT=%n";
         Type = "notify";
         NotifyAccess = "all";
         Delegate = mkIf (container.podman.sdnotify == "healthy") true;
