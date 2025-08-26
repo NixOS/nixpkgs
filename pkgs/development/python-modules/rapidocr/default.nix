@@ -41,7 +41,7 @@ let
     + "/required_for_whl_v1.3.0/resources/models";
 in
 buildPythonPackage {
-  pname = "rapidocr-onnxruntime";
+  pname = "rapidocr";
   inherit version src;
   pyproject = true;
 
@@ -68,7 +68,6 @@ buildPythonPackage {
 
     ln -s ${models}/* rapidocr/models
 
-    # Magic patch from upstream - what does this even do??
     echo "from .rapidocr.main import RapidOCR, VisRes" > __init__.py
   '';
 
