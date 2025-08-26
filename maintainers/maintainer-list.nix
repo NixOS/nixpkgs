@@ -18710,6 +18710,12 @@
     githubId = 51034487;
     matrix = "@nullcube:matrix.org";
   };
+  nulleric = {
+    email = "erichelgeson@gmail.com";
+    name = "Eric Helgeson";
+    github = "erichelgeson";
+    githubId = 271734;
+  };
   nullishamy = {
     email = "spam@amyerskine.me";
     name = "nullishamy";
