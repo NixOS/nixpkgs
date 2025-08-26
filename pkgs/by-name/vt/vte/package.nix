@@ -23,9 +23,11 @@
   pango,
   pcre2,
   cairo,
+  fmt_11,
   fribidi,
   lz4,
   icu,
+  simdutf,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fast-float,
@@ -75,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    fmt_11
     fribidi
     gnutls
     pango # duplicated with propagatedBuildInputs to support gtkVersion == null
@@ -82,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     icu
     fast-float
+    simdutf
   ]
   ++ lib.optionals systemdSupport [
     systemd
