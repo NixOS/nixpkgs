@@ -838,6 +838,19 @@ rec {
         ];
       };
 
+      crateWasm32BinHyphens = assertOutputs {
+        name = "wasm32-crate-bin-hyphens";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-bin-hyphens";
+          crateBin = [ { name = "wasm32-crate-bin-hyphens"; } ];
+          src = mkBin "src/main.rs";
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-bin-hyphens.wasm"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
