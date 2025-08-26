@@ -1020,7 +1020,6 @@ self: super:
     # unfree but redistributable
     redist = [
       "fontadobeutopiatype1"
-      "fontadobeutopia75dpi"
       "fontibmtype1"
       "fontbh100dpi"
       "fontbh75dpi"
