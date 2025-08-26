@@ -18,10 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
   };
 
-  # Build SAT solver backends in parallel
+  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
+  # darwin, where stdenv uses clang
   postPatch = ''
     substituteInPlace solvers/prepare.py \
       --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
+    substituteInPlace solvers/patches/glucose421.patch \
+      --replace-fail "+CXX      := g++" "+CXX      := c++"
   '';
 
   propagatedBuildInputs = [
@@ -43,6 +46,5 @@ buildPythonPackage rec {
       maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
-    badPlatforms = lib.platforms.darwin ++ [ "i686-linux" ];
   };
 }
