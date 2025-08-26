@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
-      --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
+      --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${lib.getLib mtdev}/lib/libmtdev.so.1')"
   '';
 
   build-system = [
@@ -95,20 +95,24 @@ buildPythonPackage rec {
     filetype
   ];
 
-  KIVY_NO_CONFIG = 1;
-  KIVY_NO_ARGS = 1;
-  KIVY_NO_FILELOG = 1;
-  # prefer pkg-config over hardcoded framework paths
-  USE_OSX_FRAMEWORKS = 0;
-  # work around python distutils compiling C++ with $CC (see issue #26709)
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      "-Wno-error=incompatible-pointer-types"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-    ]
-  );
+  env = {
+    KIVY_NO_CONFIG = 1;
+    KIVY_NO_ARGS = 1;
+    KIVY_NO_FILELOG = 1;
+
+    # prefer pkg-config over hardcoded framework paths
+    USE_OSX_FRAMEWORKS = 0;
+
+    # work around python distutils compiling C++ with $CC (see issue #26709)
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals stdenv.cc.isGNU [
+        "-Wno-error=incompatible-pointer-types"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      ]
+    );
+  };
 
   /*
     We cannot run tests as Kivy tries to import itself before being fully
@@ -117,11 +121,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "kivy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kivy/kivy/releases/tag/${src.tag}";
     description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://github.com/kivy/kivy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ risson ];
   };
 }
