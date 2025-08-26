@@ -12,6 +12,7 @@
   openssl,
   gamemode,
   shaderc,
+  makeWrapper,
   # Runtime depends
   glfw,
   sdl3,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python
     python3Packages.zstandard
     shaderc
+    makeWrapper
   ];
 
   buildInputs = [
@@ -79,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     patchShebangs .
+  '';
+
+  postInstall = lib.optionalString gamemodeSupport ''
+    wrapProgram $out/bin/taisei \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ gamemode ]}
   '';
 
   strictDeps = true;
