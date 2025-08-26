@@ -342,6 +342,7 @@ in
           "@system-service"
           "@chown"
           "@pkey" # required by chromium or it crashes
+          "mincore"
         ];
         SystemCallArchitectures = "native";
 
