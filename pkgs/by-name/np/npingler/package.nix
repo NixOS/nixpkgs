@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "npingler";
-  version = "unstable-2025-08-24";
+  version = "unstable-2025-08-26";
 
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "npingler";
-    rev = "b897098be1df890b669dc734edcb10bf8fc798cb";
-    hash = "sha256-mMwfonIP8fnJDNdl9ANhLmYlM8tPLtBCWNIPSRBT/D4=";
+    rev = "13781b1ee6a141dfebdaa4d885e153e1147a2312";
+    hash = "sha256-cWWzXsxvsETm3+91PuRnR27hSZZWVKnWU3YiTvB+t6A=";
   };
 
-  cargoHash = "sha256-VhMpgrNy0NauwBSCR+5vjod9H216HPC+rdQUIFVjnRg=";
+  cargoHash = "sha256-71uqdWsXBd6qsplwI3cA2TxXoj6JOThEHxnv9u6iraQ=";
 
   meta = {
     description = "Nix profile manager for use with npins";
