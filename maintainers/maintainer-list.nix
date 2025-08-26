@@ -9434,10 +9434,6 @@
     githubId = 47015416;
     name = "globule655";
   };
-  gm6k = {
-    email = "nix@quidecco.pl";
-    name = "Isidor Zeuner";
-  };
   gmacon = {
     name = "George Macon";
     matrix = "@gmacon:matrix.org";
