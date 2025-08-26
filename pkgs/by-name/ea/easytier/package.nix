@@ -11,16 +11,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-H7mFBARxElegXeUsp+wTHy8X19Lk5FUL3GuU88+8UVs=";
+    hash = "sha256-N/WOkCaAEtPXJWdZ2452KTQmfFu+tZcH267p3azyntQ=";
   };
 
-  cargoHash = "sha256-BNEc4R3Jzqx4ncMmmeZygM8peHqHGZ/HMy4eJyuvxv0=";
+  # remove if rust 1.89 merged
+  postPatch = ''
+    substituteInPlace easytier/Cargo.toml \
+      --replace-fail 'rust-version = "1.89.0"' ""
+    substituteInPlace easytier-rpc-build/Cargo.toml \
+      --replace-fail 'rust-version = "1.89.0"' ""
+  '';
+
+  cargoHash = "sha256-Z4Q8ZPXPpA5OHkP2j389a6/Cdn9VmULf8sr1vPTelnw=";
 
   nativeBuildInputs = [
     protobuf

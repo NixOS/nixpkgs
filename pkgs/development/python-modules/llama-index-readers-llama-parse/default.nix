@@ -4,7 +4,7 @@
   fetchPypi,
   llama-index-core,
   llama-parse,
-  poetry-core,
+  hatchling,
   pythonOlder,
 }:
 
@@ -23,9 +23,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "llama-parse" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     llama-parse

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "randy3k";
     repo = "rchitect";
     tag = "v${version}";
-    hash = "sha256-M7OWDo3mEEOYtjIpzPIpzPMBtv2TZJKJkSfHczZYS8Y=";
+    hash = "sha256-R1Zr0M6NQw+8MYHSm8ll5oe/P1Q/apO4xnWdWVFTgWQ=";
   };
 
   postPatch = ''
