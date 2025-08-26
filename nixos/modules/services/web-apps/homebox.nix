@@ -131,5 +131,8 @@ in
       wantedBy = [ "multi-user.target" ];
     };
   };
-  meta.maintainers = with lib.maintainers; [ patrickdag ];
+  meta.maintainers = with lib.maintainers; [
+    patrickdag
+    swarsel
+  ];
 }
