@@ -36,7 +36,7 @@ let
     ${lib.optionalString unfreeFonts ''
       FontPath "${xorg.fontbhlucidatypewriter75dpi}/lib/X11/fonts/75dpi"
       FontPath "${xorg.fontbhlucidatypewriter100dpi}/lib/X11/fonts/100dpi"
-      FontPath "${xorg.fontbh100dpi}/lib/X11/fonts/100dpi"
+      FontPath "${xorg.fontbh100dpi}/share/fonts/X11/100dpi"
     ''}
     EndSection
 

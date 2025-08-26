@@ -1023,7 +1023,6 @@ self: super:
       "fontadobeutopia100dpi"
       "fontadobeutopia75dpi"
       "fontibmtype1"
-      "fontbh100dpi"
       "fontbh75dpi"
 
       # Bigelow & Holmes fonts
