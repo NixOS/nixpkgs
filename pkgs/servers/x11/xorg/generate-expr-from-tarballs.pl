@@ -327,6 +327,7 @@ print OUT <<EOF;
   font-alias,
   font-bh-100dpi,
   font-bh-75dpi,
+  font-bh-lucidatypewriter-100dpi,
   font-bh-ttf,
   font-bh-type1,
   font-encodings,
@@ -489,6 +490,7 @@ self: with self; {
   fontalias = font-alias;
   fontbh100dpi = font-bh-100dpi;
   fontbh75dpi = font-bh-75dpi;
+  fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
