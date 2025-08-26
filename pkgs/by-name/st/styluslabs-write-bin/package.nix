@@ -10,7 +10,7 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "styluslabs-write-bin";
   version = "2025-01-10";
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libsForQt5.qtbase # libQt5PrintSupport.so.5
-    libsForQt5.qtsvg # libQt5Svg.so.5
-    libGL # libGL.so.1
-    libX11 # libX11.so.6
-    libXi # libXi.so.6
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libGL
+    libX11
+    libXi
   ];
 
   nativeBuildInputs = [
@@ -39,15 +39,15 @@ stdenv.mkDerivation rec {
     cp * $out/opt/Write
     ln -s $out/opt/Write/Write -t $out/bin
 
-    mkdir -p $out/share/{applications,icons/hicolor/144x144/apps}
+    mkdir -p $out/share/{applications,pixmaps}
     ln -s $out/opt/Write/Write.desktop -t $out/share/applications
-    ln -s $out/opt/Write/Write144x144.png $out/share/icons/hicolor/144x144/apps/styluslabs-write.png
+    ln -s $out/opt/Write/Write144x144.png $out/share/pixmaps/styluslabs-write.png
     substituteInPlace $out/opt/Write/Write.desktop \
       --replace-fail 'Exec=/opt/Write/Write' 'Exec=Write' \
       --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
   '';
 
-  passthru.updateScript = ./update.rb;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.styluslabs.com/";

@@ -12,24 +12,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "styluslabs-write";
-  version = "2024-10-12";
+  version = "2025-01-10";
 
   src = fetchFromGitHub {
     owner = "styluslabs";
     repo = "Write";
-    rev = "b13572e2dd6a87af35cd3edde92c9144a6dd8a2b";
-    hash = "sha256-cL6jU54LTkYu0mLNOgSDgChkDdg7eQaM00hTMas6cTg=";
+    rev = "0924f8fb7b9b211b7309b8324e1aef2950df1c6a";
+    hash = "sha256-aSgBcNRFGSoZlKCAX/uHvByPIkiXYKmBGR4j0k+eabs=";
     fetchSubmodules = true;
-    leaveDotGit = true;
-    # Delete .git folder for better reproducibility
-    # TODO: fix GITCOUNT is always 1 but is not used in Linux Build anyway
+    deepClone = true;
     postFetch = ''
-      cd $out
-      git rev-parse --short HEAD > $out/GITREV
-      git rev-list --count HEAD > $out/GITCOUNT
+      git --git-dir=$out/.git rev-parse --short HEAD > $out/GITREV
+      git --git-dir=$out/.git rev-list --count HEAD > $out/GITCOUNT
       rm -rf $out/.git
     '';
   };
+
+  postPatch = ''
+    # Fix GCC 14 build due to missing <cstdint> include.
+    sed -e '3i #include <cstdint>' -i usvg/svgnode.h
+  '';
 
   hardeningDisable = [ "format" ];
   makeFlags = [
@@ -43,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
     pushd syncscribble
   '';
-
   postBuild = ''
     popd
   '';
@@ -51,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    imagemagick # magick
     pkg-config
+    imagemagick
   ];
 
   buildInputs = [
@@ -65,26 +66,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,opt}
-    install -m555 -D syncscribble/Release/Write $out/opt/
-    install -m444 -D scribbleres/Intro.svg $out/opt/
-    install -m444 -D scribbleres/fonts/DroidSansFallback.ttf $out/opt/
-    ln -s ${roboto}/share/fonts/truetype/Roboto-Regular.ttf $out/opt/Roboto-Regular.ttf
+    mkdir -p $out/{bin,opt/Write}
+    install -Dm555 syncscribble/Release/Write -t $out/opt/Write
+    install -Dm444 scribbleres/Intro.svg -t $out/opt/Write
+    install -Dm444 scribbleres/fonts/DroidSansFallback.ttf -t $out/opt/Write
+    install -Dm444 ${roboto}/share/fonts/truetype/Roboto-Regular.ttf -t $out/opt/Write
 
-    ln -s ../opt/Write $out/bin/Write
+    ln -s ../opt/Write/Write $out/bin/Write
 
-    for i in 16 24 48 64 96 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      magick scribbleres/write_512.png -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/styluslabs-write.png
+    for width in 16 32 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/''${width}x$width/apps
+      magick scribbleres/write_512.png -resize ''${width}x$width $out/share/icons/hicolor/''${width}x$width/apps/styluslabs-write.png
     done
 
     install -Dm444 scribbleres/linux/Write.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/Write.desktop \
-        --replace-fail 'Exec=/opt/Write/Write' 'Exec=Write' \
-        --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
+      --replace-fail 'Exec=/opt/Write/Write' 'Exec=Write' \
+      --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://styluslabs.com/";
