@@ -14,28 +14,28 @@
 }:
 
 let
-  pname = "trilium-next-desktop";
-  version = "0.97.2";
+  pname = "trilium-desktop";
+  version = "0.98.0";
 
-  triliumSource = os: arch: sha256: {
+  triliumSource = os: arch: hash: {
     url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-${os}-${arch}.zip";
-    inherit sha256;
+    inherit hash;
   };
 
   linuxSource = triliumSource "linux";
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.sha256 = "12ms6knzaawryf7qisfnj5fj7v1icvkq7r0fpw55aajm7y0mpmf0";
-  aarch64-linux.sha256 = "0qgvasic531crlckwqn8mm9aimm7kliab2y7i264k60pb8h5spmp";
-  x86_64-darwin.sha256 = "1dam3ig7z21vi6icd4ww46smgn4d7kis3r51h0r5cvi8mc9ahq1i";
-  aarch64-darwin.sha256 = "0wysa3kacxryv1g1rmqm4ikjv9hfp1bqjcv1yn8drsi80zscm4lj";
+  x86_64-linux.hash = "sha256-GrREVY6P9L0ymH6QbXdtOm3mNzFD3u8HAOWDI7/x1VU=";
+  aarch64-linux.hash = "sha256-bLeU2REsKuVRei3WujGJEponiCZAviE8WyofWu2/NPg=";
+  x86_64-darwin.hash = "sha256-pN+6HapDxL/anMQJ2JeGmtBcRrlLMzJlEpSTo9QBbpg=";
+  aarch64-darwin.hash = "sha256-9y8NDrwiz9ql1Ia2F0UYF0XWBCyCahHZaAPOsvIJ5l0=";
 
   sources = {
-    x86_64-linux = linuxSource "x64" x86_64-linux.sha256;
-    aarch64-linux = linuxSource "arm64" aarch64-linux.sha256;
-    x86_64-darwin = darwinSource "x64" x86_64-darwin.sha256;
-    aarch64-darwin = darwinSource "arm64" aarch64-darwin.sha256;
+    x86_64-linux = linuxSource "x64" x86_64-linux.hash;
+    aarch64-linux = linuxSource "arm64" aarch64-linux.hash;
+    x86_64-darwin = darwinSource "x64" x86_64-darwin.hash;
+    aarch64-darwin = darwinSource "arm64" aarch64-darwin.hash;
   };
 
   src = fetchurl sources.${stdenv.hostPlatform.system};
@@ -85,9 +85,9 @@ let
         exec = "trilium";
         icon = "trilium";
         comment = meta.description;
-        desktopName = "TriliumNext Notes";
+        desktopName = "Trilium Notes";
         categories = [ "Office" ];
-        startupWMClass = "Trilium Notes Next";
+        startupWMClass = "Trilium Notes";
       })
     ];
 
@@ -138,8 +138,8 @@ let
 
     installPhase = ''
       runHook preInstall
-      mkdir -p "$out/Applications/TriliumNext Notes.app"
-      cp -r * "$out/Applications/TriliumNext Notes.app/"
+      mkdir -p "$out/Applications/Trilium Notes.app"
+      cp -r * "$out/Applications/Trilium Notes.app/"
       runHook postInstall
     '';
   };
