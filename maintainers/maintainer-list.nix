@@ -23405,12 +23405,6 @@
     githubId = 16364318;
     name = "Jeffrey Harmon";
   };
-  srghma = {
-    email = "srghma@gmail.com";
-    github = "srghma";
-    githubId = 7573215;
-    name = "Sergei Khoma";
-  };
   srgom = {
     github = "SRGOM";
     githubId = 8103619;
