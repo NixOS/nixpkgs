@@ -67,6 +67,7 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless-spec = [ pyyaml ];
     mfa = [
       fido2
       qrcode
