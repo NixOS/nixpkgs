@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   cython,
   docutils,
@@ -33,6 +34,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-q8BoF/pUTW2GMKBhNsqWDBto5+nASanWifS9AcNRc8Q=";
   };
+
+  patches = [
+    # Fix compat with newer Cython
+    (fetchpatch {
+      name = "0001-kivy-Remove-old-Python-2-long.patch";
+      url = "https://github.com/kivy/kivy/commit/5a1b27d7d3bdee6cedb55440bfae9c4e66fb3c68.patch";
+      hash = "sha256-GDNYL8dC1Rh4KJ8oPiIjegOJGzRQ1CsgWQeAvx9+Rc8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
