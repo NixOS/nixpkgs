@@ -1,0 +1,27 @@
+diff --git tests/run-all tests/run-all
+index f9dfa60..b9ad24e 100644
+--- tests/run-all
++++ tests/run-all
+@@ -58,13 +58,20 @@ rm -f ${BASH_TSTOUT}
+ 
+ echo Any output from any test, unless otherwise noted, indicates a possible anomaly
+ 
++failed=0
+ for x in run-*
+ do
+ 	case $x in
+ 	$0|run-minimal|run-gprof)	;;
+ 	*.orig|*~) ;;
+-	*)	echo $x ; sh $x ; rm -f ${BASH_TSTOUT} ;;
++	*)
++		echo $x
++		if ! sh $x; then
++			echo "Test $x failed"
++			failed=$(( failed + 1 )) || true
++		fi
++		rm -f ${BASH_TSTOUT} ;;
+ 	esac
+ done
+ 
+-exit 0
++exit "$failed"
