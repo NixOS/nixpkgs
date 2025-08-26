@@ -35,7 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/porjo/youtubeuploader";
     changelog = "https://github.com/porjo/youtubeuploader/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ srghma ];
     mainProgram = "youtubeuploader";
     platforms = lib.platforms.unix;
   };
