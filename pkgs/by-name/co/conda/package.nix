@@ -15,11 +15,12 @@
   # Conda manages most pkgs itself, but expects a few to be on the system.
   condaDeps ? [
     stdenv.cc
+    libarchive
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libSM
     xorg.libICE
+    xorg.libSM
     xorg.libX11
     xorg.libXau
     xorg.libXi
@@ -27,7 +28,7 @@
     libselinux
     libGL
   ],
-  # Any extra nixpkgs you'd like available in the FHS env for Conda to use
+  # Any extra nixpkgs you'd like available in the FHS env for Conda to use (Linux only)
   extraPkgs ? [ ],
 }:
 
@@ -94,32 +95,19 @@ let
       # of bytes from the top of the installer script
       # and unsetting the library path prevents the zlib library from being discovered
       ''
-        mkdir -p $out/bin
+        mkdir -p "$out/bin"
 
-        sed 's/unset LD_LIBRARY_PATH/#nset LD_LIBRARY_PATH/' ${src} > $out/bin/miniconda-installer.sh
-        chmod +x $out/bin/miniconda-installer.sh
+        sed 's/unset LD_LIBRARY_PATH/#nset LD_LIBRARY_PATH/' ${src} > "$out/bin/miniconda-installer.sh"
+        chmod +x "$out/bin/miniconda-installer.sh"
 
-        makeWrapper                            \
-          $out/bin/miniconda-installer.sh      \
-          $out/bin/install-conda               \
-          --add-flags "-p ${installationPath}" \
-          --add-flags "-b"                     \
-          --prefix "LD_LIBRARY_PATH" : "${libPath}"
+        makeWrapper                              \
+          "$out/bin/miniconda-installer.sh"      \
+          "$out/bin/install-conda"               \
+          --add-flags "-p ${installationPath}"   \
+          --add-flags "-b"                       \
+          --prefix LD_LIBRARY_PATH : "${libPath}"
       ''
   );
-in
-
-buildFHSEnv {
-  pname = "conda-shell";
-  inherit version;
-
-  targetPkgs =
-    pkgs:
-    (builtins.concatLists [
-      [ conda ]
-      condaDeps
-      extraPkgs
-    ]);
 
   profile = ''
     # Add conda to PATH
@@ -135,27 +123,84 @@ buildFHSEnv {
     export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.${
       if stdenv.hostPlatform.isDarwin then "dylib" else "so"
     }
-    # Allows `conda activate` to work properly
+    # Allows \`conda activate\` to work properly
     condaSh=${installationPath}/etc/profile.d/conda.sh
-    if [ ! -f $condaSh ]; then
-      install-conda
+    if [ ! -f "\$condaSh" ]; then
+      $out/bin/install-conda
     fi
-    source $condaSh
+    source "\$condaSh"
   '';
-
-  runScript = "bash -l";
 
   meta = {
     description = "Package manager for Python";
     mainProgram = "conda-shell";
     homepage = "https://conda.io";
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+in
+
+if stdenv.hostPlatform.isDarwin then
+  stdenv.mkDerivation {
+    pname = "conda-shell";
+    inherit version;
+
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [
+      libarchive
+      zlib
+    ];
+
+    dontUnpack = true;
+
+    installPhase = ''
+      mkdir -p "$out/bin"
+
+      # Copy installer and its wrapper into the output
+      cp ${conda}/bin/miniconda-installer.sh "$out/bin/"
+      cp ${conda}/bin/install-conda "$out/bin/"
+
+      # Create an rcfile that sets up Conda and then launch an interactive shell
+      mkdir -p "$out/etc"
+      cat > "$out/etc/conda-shell.rc" <<EOF
+        ${profile}
+      EOF
+
+      # Create the conda-shell launcher
+      cat > "$out/bin/conda-shell" <<EOF
+        #!/bin/sh
+        exec bash --rcfile "$out/etc/conda-shell.rc" -i
+      EOF
+
+      chmod +x "$out/bin/conda-shell"
+    '';
+
+    meta = meta // {
+      platforms = [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
+  }
+else
+  buildFHSEnv {
+    pname = "conda-shell";
+    inherit version profile;
+
+    targetPkgs =
+      pkgs:
+      (builtins.concatLists [
+        [ conda ]
+        condaDeps
+        extraPkgs
+      ]);
+
+    runScript = "bash -l";
+
+    meta = meta // {
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    };
+  }
