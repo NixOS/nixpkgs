@@ -14,14 +14,6 @@
   typing-extensions,
 }:
 
-let
-  test_data = fetchFromGitHub {
-    owner = "pydicom";
-    repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
-    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
-  };
-in
 buildPythonPackage rec {
   pname = "highdicom";
   version = "0.26.1";
@@ -63,7 +55,7 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
-    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+    ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
 
   disabledTests = [
@@ -93,9 +85,6 @@ buildPythonPackage rec {
     "highdicom.sr"
     "highdicom.sc"
   ];
-
-  # updates the wrong fetcher
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "High-level DICOM abstractions for Python";
