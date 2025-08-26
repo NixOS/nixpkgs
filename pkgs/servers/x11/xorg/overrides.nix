@@ -1023,7 +1023,6 @@ self: super:
       "fontadobeutopia100dpi"
       "fontadobeutopia75dpi"
       "fontibmtype1"
-      "fontbh75dpi"
 
       # Bigelow & Holmes fonts
       # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
