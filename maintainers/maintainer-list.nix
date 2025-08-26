@@ -7759,6 +7759,13 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  eripa = {
+    name = "Eric Ripa";
+    email = "eric@ripa.io";
+    keys = [ { fingerprint = "L2IODNAzlzi0tkpCy4LHixqMUhkEas9D3+mo4a+PQZg"; } ];
+    github = "eripa";
+    githubId = 1429673;
+  };
   ern775 = {
     email = "eren.demir2479090@gmail.com";
     github = "ern775";
@@ -9367,6 +9374,12 @@
     github = "giorgiga";
     githubId = 471835;
     name = "Giorgio Gallo";
+  };
+  gipphe = {
+    email = "gipphe@gmail.com";
+    github = "Gipphe";
+    githubId = 2266817;
+    name = "Victor Nascimento Bakke";
   };
   GirardR1006 = {
     email = "julien.girard2@cea.fr";
@@ -14125,6 +14138,11 @@
     githubId = 61395246;
     name = "Lampros Pitsillos";
   };
+  langsjo = {
+    name = "langsjo";
+    github = "langsjo";
+    githubId = 104687438;
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
@@ -18030,6 +18048,12 @@
     githubId = 42888162;
     keys = [ { fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72"; } ];
   };
+  neurofibromin = {
+    name = "Neurofibromin";
+    github = "Neurofibromin";
+    githubId = 125222560;
+    keys = [ { fingerprint = "9F9B FE94 618A D266 67BD 2821 4F67 1AFA D8D4 428B"; } ];
+  };
   neverbehave = {
     email = "i@never.pet";
     github = "NeverBehave";
@@ -20815,11 +20839,10 @@
     githubId = 7279609;
   };
   pyrotelekinetic = {
-    name = "Clover";
-    email = "carter@isons.org";
+    name = "Clover Ison";
+    email = "clover@isons.org";
     github = "pyrotelekinetic";
     githubId = 29682759;
-    keys = [ { fingerprint = "5963 78DB 25AA 608D 2743  D466 5D6A D9AE 71B3 F983"; } ];
   };
   pyrox0 = {
     name = "Pyrox";
@@ -21167,6 +21190,12 @@
     github = "Rampoina";
     githubId = 5653911;
     name = "Rampoina";
+  };
+  randomdude = {
+    name = "Random Dude";
+    email = "randomdude16671@proton.me";
+    github = "randomdude16671";
+    githubId = 210965013;
   };
   rane = {
     name = "Rane";
@@ -23953,6 +23982,12 @@
     github = "sochotnicky";
     githubId = 55726;
     name = "Stanislav Ochotnický";
+  };
+  sodagunz = {
+    name = "sodagunz";
+    github = "sodagunz";
+    githubId = 19618127;
+    email = "sodagunz+nixpkgs@proton.me";
   };
   sodiboo = {
     name = "sodiboo";

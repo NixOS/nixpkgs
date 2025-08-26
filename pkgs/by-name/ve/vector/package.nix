@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -61,6 +62,14 @@ rustPlatform.buildRustPackage {
     libiconv
     coreutils
     zlib
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "1.89-mismatched-lifetime-syntaxes.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/vectordotdev/vector/pull/23645.patch";
+      hash = "sha256-2ADlF4/Z1uR3LR6608lA4tseh+MnHb097PACD/Nq6/0=";
+    })
   ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
