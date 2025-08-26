@@ -293,11 +293,13 @@ in
     # Type
 
     ```
-    packagesFromDirectoryRecursive :: {
+    packagesFromDirectoryRecursive :: (args :: {
       callPackage :: Path -> {} -> a,
       newScope? :: AttrSet -> scope,
       directory :: Path,
-    } -> AttrSet
+      recurseIntoDirectory? :: (args -> AttrSet) -> args -> AttrSet,
+      recurseArgs? :: Any
+    }) -> AttrSet
     ```
 
     # Inputs
@@ -307,12 +309,35 @@ in
       It is typically the `callPackage` function, taken from either `pkgs` or a new scope corresponding to the `directory`.
 
     `newScope`
-    : If present, this function is used when recursing into a directory, to generate a new scope.
+    : If present, this function is used by the default `recurseIntoDirectory` to generate a new scope.
       The arguments are updated with the scope's `callPackage` and `newScope` functions, so packages can require
       anything in their scope, or in an ancestor of their scope.
+      This argument has no effect when `recurseIntoDirectory` is provided.
 
     `directory`
     : The directory to read package files from.
+
+    `recurseIntoDirectory`
+    : This argument is applied to the function which processes directories.
+    : Equivalently, this function takes `processDir` and `args`, and can modify arguments passed to `processDir`
+      (same as above) before calling it, as well as modify its output (which is then returned by `recurseIntoDirectory`).
+
+      :::{.note}
+      When `newScope` is set, the default `recurseIntoDirectory` is equivalent to:
+      ```nix
+      processDir: { newScope, ... }@args:
+        # create a new scope and mark it `recurseForDerivations`
+        lib.recurseIntoAttrs (lib.makeScope newScope (self:
+          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+          processDir (args // {
+            inherit (self) callPackage newScope;
+          })
+        ))
+      ```
+      :::
+
+    `recurseArgs`
+    : Optional argument, which can be hold data used by `recurseIntoDirectory`
 
     # Examples
     :::{.example}
@@ -356,12 +381,43 @@ in
     `a.nix` cannot directly take as inputs packages defined in a child directory, such as `b1`.
     :::
     ::::
+
+    :::{.example}
+    ## Mark with `recurseIntoAttrs` when recursing into a directory
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+
+      recurseIntoDirectory = processDir: args: lib.recurseIntoAttrs (processDir args);
+    }
+    ```
+    :::
+
+    :::{.example}
+    ## Express custom recursion behaviour with `recurseIntoDirectory`
+    For instance, only mark attrsets produced by `packagesFromDirectoryRecursive` with `recurseForDerivations`
+    if they (transitively) contain derivations.
+
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+
+      recurseIntoDirectory = processDir: args: let
+        result = processDir args;
+      in result // {
+        recurseForDerivations =
+          lib.any (child: lib.isDerivation child || child.recurseForDerivations or false) result;
+      };
+    }
+    ```
+    :::
   */
   packagesFromDirectoryRecursive =
     let
       inherit (lib)
         concatMapAttrs
-        id
         makeScope
         recurseIntoAttrs
         removeSuffix
@@ -402,11 +458,38 @@ in
               lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
             ''
         ) (builtins.readDir directory);
+
+      defaultRecurse =
+        processDir: args:
+        if args ? newScope then
+          # Create a new scope and mark it `recurseForDerivations`.
+          # This lets the packages refer to each other.
+          # See:
+          #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+          #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+          recurseIntoAttrs (
+            makeScope args.newScope (
+              self:
+              # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+              processDir (
+                args
+                // {
+                  inherit (self) callPackage newScope;
+                }
+              )
+            )
+          )
+        else
+          processDir args;
     in
     {
       callPackage,
       newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
       directory,
+      # recurseIntoDirectory can modify the function used when processing directory entries
+      #  and recurseArgs can (optionally) hold data for its use ; see function documentation
+      recurseArgs ? throw "lib.packagesFromDirectoryRecursive: recurseArgs wasn't passed in args",
+      recurseIntoDirectory ? defaultRecurse,
     }@args:
     let
       defaultPath = directory + "/package.nix";
@@ -414,26 +497,8 @@ in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath { }
-    else if args ? newScope then
-      # Create a new scope and mark it `recurseForDerivations`.
-      # This lets the packages refer to each other.
-      # See:
-      #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
-      #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-      recurseIntoAttrs (
-        makeScope newScope (
-          self:
-          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
-          processDir (
-            args
-            // {
-              inherit (self) callPackage newScope;
-            }
-          )
-        )
-      )
     else
-      processDir args;
+      recurseIntoDirectory processDir args;
 
   /**
     Append `/default.nix` if the passed path is a directory.
