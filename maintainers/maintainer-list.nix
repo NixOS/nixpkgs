@@ -4656,11 +4656,6 @@
     name = "Christoph Jabs";
     keys = [ { fingerprint = "47D6 1FEB CD86 F3EC D2E3  D68A 83D0 74F3 48B2 FD9D"; } ];
   };
-  chrpinedo = {
-    github = "chrpinedo";
-    githubId = 2324630;
-    name = "Christian Pinedo";
-  };
   chuahou = {
     email = "human+github@chuahou.dev";
     github = "chuahou";
