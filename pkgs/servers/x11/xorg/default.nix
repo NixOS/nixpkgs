@@ -4,6 +4,7 @@
   bdftopcf,
   font-adobe-100dpi,
   font-adobe-75dpi,
+  font-adobe-utopia-100dpi,
   font-alias,
   font-bh-ttf,
   font-bh-type1,
@@ -121,6 +122,7 @@ self: with self; {
   encodings = font-encodings;
   fontadobe100dpi = font-adobe-100dpi;
   fontadobe75dpi = font-adobe-75dpi;
+  fontadobeutopia100dpi = font-adobe-utopia-100dpi;
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
@@ -288,47 +290,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontadobeutopia100dpi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-adobe-utopia-100dpi";
-      version = "1.0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.5.tar.xz";
-        sha256 = "0jq27gs5xpwkghggply5pr215lmamrnpr6x5iia76schg8lyr17v";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
