@@ -1,0 +1,19 @@
+diff --git tests/run-all tests/run-all
+index 1f74923..65cfac4 100644
+--- tests/run-all
++++ tests/run-all
+@@ -57,7 +57,13 @@ do
+ 	case $x in
+ 	$0|run-minimal|run-gprof)	;;
+ 	*.orig|*~) ;;
+-	*)	echo $x ; sh $x ; rm -f ${BASH_TSTOUT} ;;
++	*)
++    echo $x
++    if ! sh $x; then
++      echo "Test $x failed"
++      exit 1
++    fi
++    rm -f ${BASH_TSTOUT} ;;
+ 	esac
+ done
+ 
