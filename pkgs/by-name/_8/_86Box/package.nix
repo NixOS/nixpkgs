@@ -28,6 +28,7 @@
   libvorbis,
   libopus,
   libmpg123,
+  libgcrypt,
 
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
@@ -87,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
   ++ lib.optional enableWayland wayland
-  ++ lib.optional enableVncRenderer libvncserver;
+  ++ lib.optionals enableVncRenderer [
+    libvncserver
+    libgcrypt
+  ];
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
