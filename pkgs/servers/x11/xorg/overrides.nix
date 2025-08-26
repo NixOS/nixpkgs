@@ -1019,7 +1019,6 @@ self: super:
   let
     # unfree but redistributable
     redist = [
-      "fontadobeutopiatype1"
       "fontibmtype1"
       "fontbh100dpi"
       "fontbh75dpi"
