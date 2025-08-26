@@ -1081,8 +1081,8 @@ rec {
       "sha256-eguBtTttYrCcdQ1HYyy7zNVXqVkBbG59aHwzgiV1PwY=";
 
   mypy-boto3-rbin =
-    buildMypyBoto3Package "rbin" "1.40.0"
-      "sha256-1yLtNpzjAZzF2L87OvTsXN7VhwyQt3KA1YpRxPPjNG8=";
+    buildMypyBoto3Package "rbin" "1.40.18"
+      "sha256-zye0xv5P6GemZiH+T/cIyzx9qaeOKitEWpW6LOkc8KM=";
 
   mypy-boto3-rds =
     buildMypyBoto3Package "rds" "1.40.16"
