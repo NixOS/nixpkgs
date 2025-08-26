@@ -9,9 +9,9 @@
   sphinx,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "breathe";
-  version = "4.35.0-unstable-2025-01-16";
+  version = "5.0.0a5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "breathe-doc";
     repo = "breathe";
-    rev = "9711e826e0c46a635715e5814a83cab9dda79b7b"; # 4.35.0 lacks sphinx 7.2+ compat
-    hash = "sha256-Ie+8RLWeBgbC4s3TC6ege2YNdfdM0d906BPxB7EOwq8=";
+    tag = "v${version}";
+    hash = "sha256-tCpnjOm3HPsnAtvamqN0weEN5C2bZWTVOTU6YYXrjkI=";
   };
 
   build-system = [ flit-core ];
