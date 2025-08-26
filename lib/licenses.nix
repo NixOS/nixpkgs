@@ -64,6 +64,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    adobeUtopia = {
+      fullName = "Adobe Utopia Font License";
+      spdxId = "Adobe-Utopia";
+    };
+
     afl20 = {
       spdxId = "AFL-2.0";
       fullName = "Academic Free License v2.0";
