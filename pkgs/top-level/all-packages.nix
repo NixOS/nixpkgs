@@ -11168,7 +11168,7 @@ with pkgs;
     pretendard-std
     ;
 
-  sourceHanPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han { });
+  sourceHanPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han { });
   source-han-sans = sourceHanPackages.sans;
   source-han-serif = sourceHanPackages.serif;
   source-han-mono = sourceHanPackages.mono;
