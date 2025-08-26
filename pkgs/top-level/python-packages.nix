@@ -18683,6 +18683,8 @@ self: super: with self; {
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
+  typer-slim = self.typer.override { package = "typer-slim"; };
+
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 
   inherit (callPackage ../development/python-modules/types-aiobotocore-packages { })
