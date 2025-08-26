@@ -469,15 +469,16 @@ in
               machine.send_key("alt-f4")
 
           # Morph is how we go online
-          with subtest("morph browser works"):
-              open_starter()
-              machine.send_chars("Morph\n")
-              wait_for_text(r"(Bookmarks|address|site|visited any)")
-              machine.screenshot("morph_open")
-
-              # morph-browser has a separate VM test to test its basic functionalities
-
-              machine.send_key("alt-f4")
+          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+          # with subtest("morph browser works"):
+          #     open_starter()
+          #     machine.send_chars("Morph\n")
+          #     wait_for_text(r"(Bookmarks|address|site|visited any)")
+          #     machine.screenshot("morph_open")
+          #
+          #     # morph-browser has a separate VM test to test its basic functionalities
+          #
+          #     machine.send_key("alt-f4")
 
           # LSS provides DE settings
           with subtest("system settings open"):
