@@ -4510,7 +4510,7 @@ with pkgs;
   web-eid-app = libsForQt5.callPackage ../tools/security/web-eid-app { };
 
   wio = callPackage ../by-name/wi/wio/package.nix {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_19;
   };
 
   wring = nodePackages.wring;
