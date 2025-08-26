@@ -361,7 +361,6 @@ let
               "test-process-initgroups"
               "test-process-setgroups"
               "test-process-uid-gid"
-              "test-setproctitle"
               # This is a bit weird, but for some reason fs watch tests fail with
               # sandbox.
               "test-fs-promises-watch"
