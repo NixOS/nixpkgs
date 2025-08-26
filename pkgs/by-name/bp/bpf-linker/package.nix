@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  btfdump,
   rustc,
   zlib,
   libxml2,
@@ -31,9 +32,10 @@ rustPlatform.buildRustPackage rec {
     libxml2
   ];
 
-  # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
-  # rust-src and `-Z build-std=core` are required to properly run the tests
-  doCheck = false;
+  nativeCheckInputs = [
+    btfdump
+    rustc.llvmPackages.clang.cc
+  ];
 
   meta = {
     description = "Simple BPF static linker";
