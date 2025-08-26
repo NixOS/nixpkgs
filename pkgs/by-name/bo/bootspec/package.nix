@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec";
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-fKbF5SyI0UlZTWsygdE8BGWuOoNSU4jx+CGdJoJFhZs=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";
