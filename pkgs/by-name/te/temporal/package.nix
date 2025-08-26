@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nixosTests,
   testers,
   temporal,
 }:
@@ -46,8 +47,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = temporal;
+  passthru.tests = {
+    inherit (nixosTests) temporal;
+    version = testers.testVersion {
+      package = temporal;
+    };
   };
 
   meta = {

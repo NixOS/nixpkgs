@@ -7,6 +7,7 @@
   maturin,
   nexusrpc,
   nix-update-script,
+  nixosTests,
   pythonOlder,
   poetry-core,
   protobuf5,
@@ -79,7 +80,10 @@ buildPythonPackage rec {
     "temporalio.worker"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) temporal; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Temporal Python SDK";

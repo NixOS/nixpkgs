@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   llama-index-core,
-  poetry-core,
+  hatchling,
   pyowm,
   pythonOlder,
   pytestCheckHook,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-qgrHlJXOKWY5UnB2lZAJun3xA9sxn5+ZNNI6+aDnE98=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

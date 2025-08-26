@@ -1323,6 +1323,7 @@ let
         multicore-bench = callPackage ../development/ocaml-modules/multicore-bench { };
 
         multicore-magic = callPackage ../development/ocaml-modules/multicore-magic { };
+        multicore-magic-dscheck = callPackage ../development/ocaml-modules/multicore-magic/dscheck.nix { };
 
         multipart_form = callPackage ../development/ocaml-modules/multipart_form { };
 
