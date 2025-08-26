@@ -1,0 +1,24 @@
+diff --git a/rslib/i18n/src/generated.rs b/rslib/i18n/src/generated.rs
+index f3526f79f..f3fa71ce8 100644
+--- a/rslib/i18n/src/generated.rs
++++ b/rslib/i18n/src/generated.rs
+@@ -4,6 +4,5 @@
+ // Include auto-generated content
+ 
+ #![allow(clippy::all)]
+-#![allow(text_direction_codepoint_in_literal)]
+ 
+ include!(concat!(env!("OUT_DIR"), "/strings.rs"));
+diff --git a/rslib/i18n/src/lib.rs b/rslib/i18n/src/lib.rs
+index bfd6f5ba2..b47c5b208 100644
+--- a/rslib/i18n/src/lib.rs
++++ b/rslib/i18n/src/lib.rs
+@@ -1,6 +1,8 @@
+ // Copyright: Ankitects Pty Ltd and contributors
+ // License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+ 
++#![allow(text_direction_codepoint_in_literal)]
++
+ mod generated;
+ 
+ use std::borrow::Cow;

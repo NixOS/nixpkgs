@@ -93,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    ./patches/i18n.patch
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
   ];
