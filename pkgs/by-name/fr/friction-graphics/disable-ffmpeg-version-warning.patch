@@ -1,0 +1,21 @@
+--- a/src/core/appsupport.cpp
++++ b/src/core/appsupport.cpp
+@@ -1002,17 +1002,7 @@
+ void AppSupport::checkFFmpeg(const bool &isRenderer)
+ {
+     av_log_set_level(AV_LOG_ERROR);
+-#ifndef QT_DEBUG
+-    const QString warning = QObject::tr("Friction is built against an unsupported FFmpeg version. Use at own risk and don't report any issues upstream.");
+-    if (avformat_version() >= 3812708) {
+-        if (isRenderer) { qWarning() << warning; }
+-        else {
+-            QMessageBox::critical(nullptr,
+-                                  QObject::tr("Unsupported FFmpeg version"),
+-                                  warning);
+-        }
+-    }
+-#else
++#ifdef QT_DEBUG
+     Q_UNUSED(isRenderer)
+ #endif
+ }
