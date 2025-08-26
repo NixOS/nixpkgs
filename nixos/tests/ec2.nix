@@ -19,9 +19,13 @@ let
         ../modules/profiles/qemu-guest.nix
         {
           # Hack to make the partition resizing work in QEMU.
-          boot.initrd.postDeviceCommands = mkBefore ''
-            ln -s vda /dev/xvda
-            ln -s vda1 /dev/xvda1
+          boot.initrd.services.udev.rules = ''
+            KERNEL==vda, SYMLINK+=xvda
+            KERNEL==vda1, SYMLINK+=xvda1
+          '';
+          services.udev.extraRules = ''
+            KERNEL==vda, SYMLINK+=xvda
+            KERNEL==vda1, SYMLINK+=xvda1
           '';
 
           amazonImage.format = "qcow2";
