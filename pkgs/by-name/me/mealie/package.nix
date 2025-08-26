@@ -102,7 +102,10 @@ pythonpkgs.buildPythonApplication rec {
         --set OUT "$out"
     '';
 
-  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonpkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   # Needed for tests
   preCheck = ''
