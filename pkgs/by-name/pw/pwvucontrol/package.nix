@@ -57,6 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oQSH4P9WxvkXZ53KM5ZoRAZyQFt60Zz7guBbgT1iiBk=";
   };
 
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(),"
+  '';
+
   nativeBuildInputs = [
     cargo
     desktop-file-utils
@@ -79,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     wireplumber_0_4
   ];
+
+  # For https://github.com/saivert/pwvucontrol/blob/7bf43c746cd49fffbfb244ac4474742c6b3737a9/src/meson.build#L45-L46
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   meta = {
     description = "Pipewire Volume Control";
