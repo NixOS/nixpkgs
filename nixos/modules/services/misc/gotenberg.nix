@@ -303,6 +303,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
+        # NOTE: disable to debug chromium crashes or otherwise no coredump is created and forbidden syscalls are not being logged
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs args}";
 
@@ -340,6 +341,7 @@ in
           "@sandbox"
           "@system-service"
           "@chown"
+          "@pkey" # required by chromium or it crashes
         ];
         SystemCallArchitectures = "native";
 
