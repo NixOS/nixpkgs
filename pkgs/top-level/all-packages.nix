@@ -11001,9 +11001,7 @@ with pkgs;
 
   moeli = eduli;
 
-  emojione = callPackage ../data/fonts/emojione {
-    inherit (nodePackages) svgo;
-  };
+  emojione = callPackage ../data/fonts/emojione { };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -15061,7 +15059,7 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
-  image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
+  image_optim = callPackage ../applications/graphics/image_optim { };
 
   libjack2 = jack2.override { prefix = "lib"; };
 
