@@ -9937,12 +9937,6 @@
     github = "higebu";
     githubId = 733288;
   };
-  hikari = {
-    email = "HikariNee@protonmail.com";
-    github = "HikariNee";
-    githubId = 72349937;
-    name = "Hikari";
-  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
