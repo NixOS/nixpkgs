@@ -2045,8 +2045,6 @@ with pkgs;
     conf = config.element-web.conf or { };
   };
 
-  elm-github-install = callPackage ../tools/package-management/elm-github-install { };
-
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
