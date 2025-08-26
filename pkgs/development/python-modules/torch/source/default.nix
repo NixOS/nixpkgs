@@ -294,6 +294,12 @@ buildPythonPackage rec {
   patches = [
     ./clang19-template-warning.patch
   ]
+  ++ lib.optionals tritonSupport [
+    # Manual backport of [inductor] Fix usage of launch_enter_hook/launch_exit_hook
+    # to fix AttributeError: type object 'CompiledKernel' has no attribute 'launch_enter_hook'
+    # https://github.com/pytorch/pytorch/pull/152457
+    ./triton-2.4-compat.patch
+  ]
   ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Propagate CUPTI to Kineto by overriding the search path with environment variables.

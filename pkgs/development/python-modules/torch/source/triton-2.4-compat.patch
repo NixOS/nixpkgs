@@ -1,0 +1,81 @@
+From c90e23eb73212186b7eb9a98ba69e6309d864c67 Mon Sep 17 00:00:00 2001
+From: Dan Zimmerman <danzimm@meta.com>
+Date: Wed, 30 Apr 2025 13:22:16 +0000
+Subject: [PATCH] [inductor] Fix usage of launch_enter_hook/launch_exit_hook
+ (#152457)
+
+In https://github.com/triton-lang/triton/pull/6467 I moved where `launch_enter_hook`/`launch_exit_hook` are specified (from the kernel class to a config). This PR updates the usages to use the config module if it exists to support tip of main triton.
+
+In https://github.com/triton-lang/triton/pull/6641 I renamed `triton.config` to `triton.knobs`, hence the second commit in this PR.
+
+Test Plan: Setup OSS PT with tip of main triton (namely including https://github.com/triton-lang/triton/pull/6641) and run `python test/inductor/test_pad_mm.py`
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/152457
+Approved by: https://github.com/jamesjwu
+---
+ torch/_inductor/runtime/static_cuda_launcher.py | 15 ++++++++++-----
+ torch/_inductor/runtime/triton_compat.py        |  7 +++++++
+ torch/_inductor/runtime/triton_heuristics.py    | 12 ++++++++++--
+ 3 files changed, 27 insertions(+), 7 deletions(-)
+diff --git a/torch/_inductor/runtime/triton_compat.py b/torch/_inductor/runtime/triton_compat.py
+index d6e45b72ce498..e244ecbee635f 100644
+--- a/torch/_inductor/runtime/triton_compat.py
++++ b/torch/_inductor/runtime/triton_compat.py
+@@ -69,5 +69,10 @@ def _log2(x: Any) -> Any:
+             raise NotImplementedError
+ 
++
++    try:
++        from triton import knobs
++    except ImportError:
++        knobs = None
+ else:
+ 
+     def _raise_error(*args: Any, **kwargs: Any) -> Any:
+@@ -88,6 +93,7 @@ class PTXASError(Exception):  # type: ignore[no-redef]
+     _log2 = _raise_error
+     libdevice = None
+     math = None
++    knobs = None
+ 
+     class triton:  # type: ignore[no-redef]
+         @staticmethod
+@@ -138,4 +144,5 @@ class autograd_profiler:  # type: ignore[no-redef]
+     "math",
+     "triton",
+     "cc_warp_size",
++    "knobs",
+ ]
+diff --git a/torch/_inductor/runtime/triton_heuristics.py b/torch/_inductor/runtime/triton_heuristics.py
+index 93fb36e12bbae..ac79ecd7af467 100644
+--- a/torch/_inductor/runtime/triton_heuristics.py
++++ b/torch/_inductor/runtime/triton_heuristics.py
+@@ -73,6 +73,7 @@
+     GPUTarget,
+     HAS_WARP_SPEC,
+     KernelInterface,
++    knobs,
+     OutOfResources,
+     PTXASError,
+     triton,
+@@ -1423,11 +1424,18 @@ def make_launcher(self) -> LauncherType:
+             binary.shared if hasattr(binary, "shared") else binary.metadata.shared
+         )
+ 
++        if knobs is None:
++            launch_enter = binary.__class__.launch_enter_hook
++            launch_exit = binary.__class__.launch_exit_hook
++        else:
++            launch_enter = knobs.runtime.launch_enter_hook
++            launch_exit = knobs.runtime.launch_exit_hook
++
+         scope = {
+             "grid_meta": cfg.kwargs,
+             "bin": binary,
+-            "launch_enter_hook": binary.__class__.launch_enter_hook,
+-            "launch_exit_hook": binary.__class__.launch_exit_hook,
++            "launch_enter_hook": launch_enter,
++            "launch_exit_hook": launch_exit,
+             "metadata": (
+                 binary.packed_metadata
+                 if hasattr(binary, "packed_metadata")
