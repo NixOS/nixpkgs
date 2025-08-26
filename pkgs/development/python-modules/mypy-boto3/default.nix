@@ -581,8 +581,8 @@ rec {
       "sha256-KQqyk9PFUttzDrZW7viev8xbumdud05EBdNoxz//hEY=";
 
   mypy-boto3-greengrass =
-    buildMypyBoto3Package "greengrass" "1.40.0"
-      "sha256-LjQRVGdaDoTkLT+FRRt5adFZhzrjV+q2s9HyBrR0pdQ=";
+    buildMypyBoto3Package "greengrass" "1.40.18"
+      "sha256-2LlUVjYGni7omje8tlvAJNkKDVSbVIF4mnUNzb01lUQ=";
 
   mypy-boto3-greengrassv2 =
     buildMypyBoto3Package "greengrassv2" "1.40.15"
