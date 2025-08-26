@@ -75,5 +75,6 @@ stdenv.mkDerivation {
     mainProgram = "slade";
     license = lib.licenses.gpl2Only; # https://github.com/sirjuddington/SLADE/issues/1754
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Gliczy ];
   };
 }
