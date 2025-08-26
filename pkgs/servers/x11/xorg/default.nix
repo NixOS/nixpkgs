@@ -30,6 +30,10 @@
   libxrender,
   libxt,
   libxv,
+  libxvmc,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   lndir,
   luit,
   makedepend,
@@ -111,6 +115,10 @@ self: with self; {
   libXrender = libxrender;
   libXt = libxt;
   libXv = libxv;
+  libXvMC = libxvmc;
+  libXxf86dga = libxxf86dga;
+  libXxf86misc = libxxf86misc;
+  libXxf86vm = libxxf86vm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
@@ -2304,163 +2312,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtst" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXvMC = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXv,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXvMC";
-      version = "1.0.14";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXvMC-1.0.14.tar.xz";
-        sha256 = "1nayf8qck0b1xb88dirdbvj7clr18wq1dxs73zwbpzdsnsv9xgp4";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXv
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "xvmc"
-          "xvmc-wrapper"
-        ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXxf86dga = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXxf86dga";
-      version = "1.1.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXxf86dga-1.1.6.tar.xz";
-        sha256 = "03wqsxbgyrdbrhw8fk3fxc9nk8jnwz5537ym2yif73w0g5sl4i5y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xxf86dga" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXxf86misc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXxf86misc";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2";
-        sha256 = "107k593sx27vjz3v7gbb223add9i7w0bjc90gbb3jqpin3i07758";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xxf86misc" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXxf86vm = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXxf86vm";
-      version = "1.1.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXxf86vm-1.1.6.tar.xz";
-        sha256 = "1qryzfzf3qr2xx1sipdn8kw310zs4ygpzgh4mm4m87fffd643bwn";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xxf86vm" ];
         platforms = lib.platforms.unix;
       };
     })

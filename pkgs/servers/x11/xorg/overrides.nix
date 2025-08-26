@@ -166,19 +166,6 @@ self: super:
     configureFlags = lib.optional isDarwin "CFLAGS=-O0";
   });
 
-  libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86dga = super.libXxf86dga.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
   libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
@@ -292,16 +279,6 @@ self: super:
   libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXvMC = super.libXvMC.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
   });
 
   libXp = super.libXp.overrideAttrs (attrs: {
