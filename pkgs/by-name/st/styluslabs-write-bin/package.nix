@@ -1,80 +1,65 @@
 {
   stdenv,
   lib,
+  qt5,
   libsForQt5,
-  libglvnd,
+  libGL,
   libX11,
   libXi,
-  fetchurl,
-  makeDesktopItem,
+  fetchzip,
+  autoPatchelfHook,
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "Write";
-    exec = "Write";
-    comment = "A word processor for handwriting";
-    icon = "write_stylus";
-    desktopName = "Write";
-    genericName = "Write";
-    categories = [
-      "Office"
-      "Graphics"
-    ];
-  };
-in
+
 stdenv.mkDerivation rec {
   pname = "styluslabs-write-bin";
-  version = "300";
+  version = "2025-01-10";
 
-  src = fetchurl {
-    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
-    sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
+  src = fetchzip {
+    url = "https://github.com/styluslabs/Write/releases/download/jan-2025/write-latest.tar.gz";
+    hash = "sha256-aaScsqNLjGWm6XRifTey7x3dyYpRCkkjJyU7eHXN5Z4=";
   };
 
-  sourceRoot = ".";
+  buildInputs = [
+    libsForQt5.qtbase # libQt5PrintSupport.so.5
+    libsForQt5.qtsvg # libQt5Svg.so.5
+    libGL # libGL.so.1
+    libX11 # libX11.so.6
+    libXi # libXi.so.6
+  ];
+
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -R Write $out/
-    # symlink the binary to bin/
-    ln -s $out/Write/Write $out/bin/Write
+    mkdir -p $out/{bin,opt/Write}
+    cp * $out/opt/Write
+    ln -s $out/opt/Write/Write -t $out/bin
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-    mkdir -p $out/share/icons
-    ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+    mkdir -p $out/share/{applications,icons/hicolor/144x144/apps}
+    ln -s $out/opt/Write/Write.desktop -t $out/share/applications
+    ln -s $out/opt/Write/Write144x144.png $out/share/icons/hicolor/144x144/apps/styluslabs-write.png
+    substituteInPlace $out/opt/Write/Write.desktop \
+      --replace-fail 'Exec=/opt/Write/Write' 'Exec=Write' \
+      --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
   '';
-  preFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        libsForQt5.qtbase # libQt5PrintSupport.so.5
-        libsForQt5.qtsvg # libQt5Svg.so.5
-        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-        libglvnd # libGL.so.1
-        libX11 # libX11.so.6
-        libXi # libXi.so.6
-      ];
-    in
-    ''
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${libPath}" \
-        $out/Write/Write
-    '';
+
+  passthru.updateScript = ./update.rb;
 
   meta = {
-    homepage = "http://www.styluslabs.com/";
-    description = "Write is a word processor for handwriting";
+    homepage = "https://www.styluslabs.com/";
+    description = "Word processor for handwriting";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       oyren
       lukts30
       atemu
     ];
+    mainProgram = "Write";
   };
 }
