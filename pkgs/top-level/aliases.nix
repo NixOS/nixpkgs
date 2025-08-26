@@ -1384,6 +1384,13 @@ mapAliases {
   source-han-serif-korean = throw "'source-han-serif-korean' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
   source-han-serif-simplified-chinese = throw "'source-han-serif-simplified-chinese' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
   source-han-serif-traditional-chinese = throw "'source-han-serif-traditional-chinese' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
+  sourceHanPackages.mono = warnAlias "'sourceHanPackages.mono' has been renamed to ''source-han-mono" source-han-mono; # Added 2025-11-03
+  sourceHanPackages.sans = warnAlias "'sourceHanPackages.sans' has been renamed to ''source-han-sans" source-han-sans; # Added 2025-11-03
+  sourceHanPackages.sans-vf-otf = warnAlias "'sourceHanPackages.sans-vf-otf' has been renamed to ''source-han-sans-vf-otf" source-han-sans-vf-otf; # Added 2025-11-03
+  sourceHanPackages.sans-vf-ttf = warnAlias "'sourceHanPackages.sans-vf-ttf' has been renamed to ''source-han-sans-vf-ttf" source-han-sans-vf-ttf; # Added 2025-11-03
+  sourceHanPackages.serif = warnAlias "'sourceHanPackages.serif' has been renamed to ''source-han-serif" source-han-serif; # Added 2025-11-03
+  sourceHanPackages.serif-vf-otf = warnAlias "'sourceHanPackages.serif-vf-otf' has been renamed to ''source-han-serif-vf-otf" source-han-serif-vf-otf; # Added 2025-11-03
+  sourceHanPackages.serif-vf-ttf = warnAlias "'sourceHanPackages.serif-vf-ttf' has been renamed to ''source-han-serif-vf-ttf" source-han-serif-vf-ttf; # Added 2025-11-03
   sourceHanSansPackages.japanese = throw "'sourceHanSansPackages.japanese' has been renamed to/replaced by 'source-han-sans'"; # Converted to throw 2025-10-27
   sourceHanSansPackages.korean = throw "'sourceHanSansPackages.korean' has been renamed to/replaced by 'source-han-sans'"; # Converted to throw 2025-10-27
   sourceHanSansPackages.simplified-chinese = throw "'sourceHanSansPackages.simplified-chinese' has been renamed to/replaced by 'source-han-sans'"; # Converted to throw 2025-10-27
