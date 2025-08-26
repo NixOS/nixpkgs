@@ -39,20 +39,28 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"dmx"} = "libdmx";
 $pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
+$pcMap{"ice"} = "libICE";
 $pcMap{"libfs"} = "libFS";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"sm"} = "libSM";
 $pcMap{"x11"} = "libX11";
 $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
+$pcMap{"xaw6"} = "libXaw";
+$pcMap{"xaw7"} = "libXaw";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xmu"} = "libXmu";
+$pcMap{"xmuu"} = "libXmu";
+$pcMap{"xpm"} = "libXpm";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
+$pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
 $pcMap{"\$PIXMAN"} = "pixman";
@@ -304,18 +312,24 @@ print OUT <<EOF;
   libdmx,
   libfontenc,
   libfs,
+  libice,
   libpciaccess,
   libpthread-stubs,
+  libsm,
   libx11,
   libxau,
+  libxaw,
   libxcb,
   libxcvt,
   libxcursor,
   libxdmcp,
   libxext,
   libxfixes,
+  libxmu,
+  libxpm,
   libxrandr,
   libxrender,
+  libxt,
   libxv,
   lndir,
   luit,
@@ -382,15 +396,21 @@ self: with self; {
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
+  libICE = libice;
   libpthreadstubs = libpthread-stubs;
+  libSM = libsm;
   libX11 = libx11;
   libXau = libxau;
+  libXaw = libxaw;
   libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXmu = libxmu;
+  libXpm = libxpm;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXt = libxt;
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
