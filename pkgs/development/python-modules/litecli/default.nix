@@ -40,12 +40,12 @@ buildPythonPackage rec {
     "litecli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for SQLite Databases with auto-completion and syntax highlighting";
     homepage = "https://github.com/dbcli/litecli";
     changelog = "https://github.com/dbcli/litecli/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nullstring1 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nullstring1 ];
     mainProgram = "litecli";
   };
 }
