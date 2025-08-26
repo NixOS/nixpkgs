@@ -192,7 +192,7 @@ python3Packages.buildPythonApplication rec {
       pyxlsb
       qdrant-client
       rank-bm25
-      rapidocr
+      rapidocr-onnxruntime
       redis
       requests
       restrictedpython
