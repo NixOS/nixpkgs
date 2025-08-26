@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast N-dimensional aggregation functions with Numba";
     homepage = "https://github.com/numbagg/numbagg";
-    changelog = "https://github.com/numbagg/numbagg/releases/tag/${version}";
+    changelog = "https://github.com/numbagg/numbagg/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };
