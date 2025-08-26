@@ -493,8 +493,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.6.4";
-          hash = "sha256-KBOVVVDw+72QSYv4jynqeVBdIfYz+T5hD2//royVJpw=";
+          version = "0.6.5";
+          hash = "sha256-fq3JiqdtYN9kAWDvu8X+2mlU5kj2RwUTPA4QF43vShQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
@@ -920,8 +920,8 @@ let
         mktplcRef = {
           name = "crabviz";
           publisher = "chanhx";
-          version = "0.4.0";
-          hash = "sha256-SOsoSQLDNRqby91Ire4euSz6udRZI6G/RVloVjIvhUM=";
+          version = "0.5.0";
+          hash = "sha256-YLNx/9jmHc0HDm/yHquOlMDPmAbpIdd6UZn0JZQVJko=";
         };
         meta = {
           description = "VSCode extension for generating call graphs based on LSP";
@@ -1614,8 +1614,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.29.2";
-          hash = "sha256-+MkKUhyma/mc5MZa0+RFty5i7rox0EARPTm/uggQj6M=";
+          version = "0.29.3";
+          hash = "sha256-cghDjgv3FWsNpnH6Pa9iPuiPOlLI/iucGH+fzF35ERk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";

@@ -539,9 +539,10 @@ with pkgs;
     ({
       mysql-shell_8 = callPackage ../development/tools/mysql-shell/8.nix {
         antlr = antlr4_10;
-        icu = icu73;
-        protobuf = protobuf_25;
-        stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+        icu = icu77;
+        protobuf = protobuf_25.override {
+          abseil-cpp = abseil-cpp_202407;
+        };
       };
     })
     mysql-shell_8
@@ -549,9 +550,10 @@ with pkgs;
 
   mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
     antlr = antlr4_10;
-    icu = icu73;
-    protobuf = protobuf_25;
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+    icu = icu77;
+    protobuf = protobuf_25.override {
+      abseil-cpp = abseil-cpp_202407;
+    };
   };
 
   # this is used by most `fetch*` functions
@@ -2044,8 +2046,6 @@ with pkgs;
   element-web = callPackage ../by-name/el/element-web/package.nix {
     conf = config.element-web.conf or { };
   };
-
-  elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
   espanso-wayland = espanso.override {
     x11Support = false;
@@ -10922,7 +10922,7 @@ with pkgs;
 
   v4l-utils = callPackage ../os-specific/linux/v4l-utils { };
 
-  windows = callPackages ../os-specific/windows { };
+  windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
@@ -11001,9 +11001,7 @@ with pkgs;
 
   moeli = eduli;
 
-  emojione = callPackage ../data/fonts/emojione {
-    inherit (nodePackages) svgo;
-  };
+  emojione = callPackage ../data/fonts/emojione { };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -13249,6 +13247,9 @@ with pkgs;
   thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
+  thunderbird-140-unwrapped = thunderbirdPackages.thunderbird-140;
+  thunderbird-140 = wrapThunderbird thunderbirdPackages.thunderbird-140 { };
+
   thunderbird-bin = thunderbird-latest-bin;
   thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     pname = "thunderbird-bin";
@@ -15058,7 +15059,7 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
-  image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
+  image_optim = callPackage ../applications/graphics/image_optim { };
 
   libjack2 = jack2.override { prefix = "lib"; };
 

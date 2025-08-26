@@ -1,10 +1,11 @@
 {
-  lib,
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  lib,
   mkdocs,
-  pathspec,
+  playwright,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
   version = "0.7.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -24,12 +25,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    mkdocs
     beautifulsoup4
+    hatchling
+    mkdocs
   ];
 
   nativeCheckInputs = [
-    pathspec
+    playwright
     pytestCheckHook
   ];
 
@@ -40,6 +42,8 @@ buildPythonPackage rec {
     "test_material"
     "test_material_dark_scheme_name"
     "test_template"
+    "test_mkdocs_screenshot"
+    "test_no_console_errors"
   ];
 
   meta = with lib; {

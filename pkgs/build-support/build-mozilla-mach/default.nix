@@ -305,7 +305,8 @@ buildStdenv.mkDerivation {
   ];
 
   patches =
-    lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
+    lib.optionals (lib.versionAtLeast version "136") [ ./136-no-buildconfig.patch ]
+    ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1955112
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
