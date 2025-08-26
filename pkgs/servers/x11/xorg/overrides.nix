@@ -1047,9 +1047,7 @@ self: super:
       "fontadobeutopiatype1"
       "fontadobeutopia100dpi"
       "fontadobeutopia75dpi"
-      "fontbhtype1"
       "fontibmtype1"
-      "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
 

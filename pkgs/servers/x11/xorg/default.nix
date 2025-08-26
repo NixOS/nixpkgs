@@ -3,6 +3,10 @@
   lib,
   bdftopcf,
   font-alias,
+  font-bh-ttf,
+  font-bh-type1,
+  font-encodings,
+  font-mutt-misc,
   font-util,
   gccmakedep,
   ico,
@@ -101,7 +105,11 @@ self: with self; {
     xwininfo
     xwud
     ;
+  encodings = font-encodings;
   fontalias = font-alias;
+  fontbhttf = font-bh-ttf;
+  fontbhtype1 = font-bh-type1;
+  fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
@@ -264,41 +272,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  encodings = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "encodings";
-      version = "1.1.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/encodings-1.1.0.tar.xz";
-        sha256 = "0xg99nmpvik6vaz4h03xay7rx0r3bf5a8azkjlpa3ksn2xi3rwcz";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        mkfontscale
-      ];
-      buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
@@ -700,82 +673,6 @@ self: with self; {
         pkg-config
         bdftopcf
         fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbhttf = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bh-ttf";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bh-ttf-1.0.4.tar.xz";
-        sha256 = "0misxkpjc2bir20m01z355sfk3lbpjnshphjzl32p364006zk9c5";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbhtype1 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bh-type1";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bh-type1-1.0.4.tar.xz";
-        sha256 = "19kjdm0cx766yj9vwkyv7gyg1q4bjag5g500s7nnppmb0vnc7phr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -1407,46 +1304,6 @@ self: with self; {
         pkg-config
         bdftopcf
         fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontmuttmisc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-mutt-misc";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-mutt-misc-1.0.4.tar.xz";
-        sha256 = "095vd33kqd157j6xi4sjxwdsjpwpgqliifa8nkybq8rcw7s5j8xi";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
         mkfontscale
       ];
       buildInputs = [ fontutil ];

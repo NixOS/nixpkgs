@@ -99,7 +99,6 @@ mirror://xorg/individual/driver/xf86-video-vesa-2.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz
 mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2
-mirror://xorg/individual/font/encodings-1.1.0.tar.xz
 mirror://xorg/individual/font/font-adobe-75dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-adobe-100dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.5.tar.xz
@@ -110,8 +109,6 @@ mirror://xorg/individual/font/font-bh-75dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bh-100dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.4.tar.xz
-mirror://xorg/individual/font/font-bh-ttf-1.0.4.tar.xz
-mirror://xorg/individual/font/font-bh-type1-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bitstream-75dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bitstream-100dpi-1.0.4.tar.xz
 mirror://xorg/individual/font/font-bitstream-speedo-1.0.2.tar.gz
@@ -128,7 +125,6 @@ mirror://xorg/individual/font/font-misc-cyrillic-1.0.4.tar.xz
 mirror://xorg/individual/font/font-misc-ethiopic-1.0.5.tar.xz
 mirror://xorg/individual/font/font-misc-meltho-1.0.4.tar.xz
 mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz
-mirror://xorg/individual/font/font-mutt-misc-1.0.4.tar.xz
 mirror://xorg/individual/font/font-schumacher-misc-1.1.3.tar.xz
 mirror://xorg/individual/font/font-screen-cyrillic-1.0.5.tar.xz
 mirror://xorg/individual/font/font-sony-misc-1.0.4.tar.xz
