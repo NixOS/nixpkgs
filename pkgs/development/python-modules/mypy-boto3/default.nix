@@ -242,8 +242,8 @@ rec {
       "sha256-h/dMWTcSGu7IuI2G2G+gt3EbWV1SA4JpOcYiMtlGUxs=";
 
   mypy-boto3-cloudsearch =
-    buildMypyBoto3Package "cloudsearch" "1.40.0"
-      "sha256-sWGWNB+dBURSQhopDDm5rXsvolhDVi8oRshfG57vbw0=";
+    buildMypyBoto3Package "cloudsearch" "1.40.17"
+      "sha256-bnLdoUOM0daHl74qUUfv6RO6Mqkk8Su97RzCjKettQQ=";
 
   mypy-boto3-cloudsearchdomain =
     buildMypyBoto3Package "cloudsearchdomain" "1.40.0"
