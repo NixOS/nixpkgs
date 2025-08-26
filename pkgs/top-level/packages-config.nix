@@ -14,7 +14,6 @@
         gns3Packages
         platformioPackages
         rPackages
-        sourceHanPackages
         ;
 
       # emacsPackages is an alias for emacs.pkgs
