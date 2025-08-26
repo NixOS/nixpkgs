@@ -9,10 +9,10 @@ grafanaPlugin {
     x86_64-darwin = "sha256-yHgF+XmJXnJjfPwabs1dsrnWvssTmYpeZUXUl+gQxfM=";
     aarch64-darwin = "sha256-ysLXSKG7q/u70NynYqKKRlYIl5rkYy0AMoza3sQSPNM=";
   };
-  meta = with lib; {
+  meta = {
     description = "Integrate Sentry data into Grafana";
-    license = licenses.asl20;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arianvp ];
+    platforms = lib.platforms.unix;
   };
 }
