@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromSourcehut,
   pkg-config,
@@ -70,5 +71,6 @@ buildGoModule rec {
     maintainers = [ maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
