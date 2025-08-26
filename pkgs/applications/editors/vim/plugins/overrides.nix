@@ -24,6 +24,7 @@
   direnv,
   fzf,
   gawk,
+  gperf,
   helm-ls,
   himalaya,
   htop,
@@ -2970,6 +2971,11 @@ in
         deno = lib.getExe deno;
       })
     ];
+  });
+
+  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
+    dependencies = [ gperf ];
+    meta.maintainers = with lib.maintainers; [ fredeb ];
   });
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
