@@ -231,8 +231,8 @@ stdenv.mkDerivation (finalAttrs: {
       # No update patch disables check for update function
       # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
       (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/42a1ca1291fde365bfba140cb21a8a074aaccce2/debian/patches/16-no-update.patch";
-        hash = "sha256-qM2e4DkkpmA18Z76OUsnY1MhcGb1dT2PG68JUy6fZEE=";
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
+        hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
     ]
     ++ [ ./extra_symbols.patch ]
