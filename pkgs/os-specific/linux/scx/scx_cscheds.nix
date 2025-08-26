@@ -58,10 +58,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
     substituteInPlace meson.build \
       --replace-fail '[build_bpftool' "['${lib.getExe bash}', build_bpftool"
-
-    # TODO: Remove in next release.
-    substituteInPlace lib/scxtest/overrides.h \
-      --replace-fail '#define __builtin_preserve_enum_value(x,y,z) 1' '#define __builtin_preserve_enum_value(x,y) 1'
   '';
 
   nativeBuildInputs = [
@@ -89,7 +85,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       "systemd" = false;
       # not for nix
       "openrc" = false;
-      "libalpm" = false;
     })
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
@@ -106,16 +101,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "zerocallusedregs"
   ];
 
-  # We copy the compiled header files to the dev output
-  # These are needed for the rust schedulers
-  postFixup = ''
-    mkdir -p ${placeholder "dev"}
-    cp -r libbpf ${placeholder "dev"}
-  '';
-
   outputs = [
     "bin"
-    "dev"
     "out"
   ];
 
