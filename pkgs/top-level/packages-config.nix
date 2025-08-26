@@ -16,7 +16,6 @@
         haskellPackages
         platformioPackages
         rPackages
-        roundcubePlugins
         sourceHanPackages
         ;
 
