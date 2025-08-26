@@ -11,7 +11,6 @@
   handy_window = callPackage ./handy-window { };
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
-  metadata_god = callPackage ./metadata_god { };
   olm = callPackage ./olm { };
   objectbox_flutter_libs = callPackage ./objectbox_flutter_libs { };
   pdfrx = callPackage ./pdfrx { };
