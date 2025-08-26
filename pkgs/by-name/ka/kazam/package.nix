@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kazam";
-  version = "1.5.5-unstable-2025-01-02";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
