@@ -127,68 +127,79 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.traefik.staticConfigOptions.experimental.localPlugins = listToAttrs (
-      map (plugin: nameValuePair plugin.pname { inherit (plugin) moduleName; }) cfg.plugins
-    );
-
-    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
-
-    systemd.services.traefik = {
-      description = "Traefik web server";
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      startLimitIntervalSec = 86400;
-      startLimitBurst = 5;
-      serviceConfig = {
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre =
-          optional (cfg.plugins != [ ]) (
-            let
-              pluginsJoined = pkgs.symlinkJoin {
-                name = "traefik-plugins";
-                paths = cfg.plugins;
-              };
-            in
-            pkgs.writeShellScript "traefik-pre-start-plugins" ''
-              umask 077
-              ${getExe' pkgs.coreutils "ln"} -s ${pluginsJoined} plugins-local
-            ''
-          )
-          ++ optional (cfg.environmentFiles != [ ]) (
-            pkgs.writeShellScript "traefik-pre-start-envsubst" ''
-              umask 077
-              ${getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-            ''
-          );
-        ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
-        Type = "simple";
-        User = "traefik";
-        Group = cfg.group;
-        Restart = "on-failure";
-        AmbientCapabilities = "cap_net_bind_service";
-        CapabilityBoundingSet = "cap_net_bind_service";
-        NoNewPrivileges = true;
-        LimitNPROC = 64;
-        LimitNOFILE = 1048576;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHome = true;
-        ProtectSystem = "full";
-        ReadWritePaths = [ cfg.dataDir ];
-        RuntimeDirectory = "traefik";
-        WorkingDirectory = cfg.dataDir;
+  config =
+    let
+      workDir = config.systemd.services.traefik.serviceConfig.WorkingDirectory;
+    in
+    mkIf cfg.enable {
+      services.traefik.staticConfigOptions = lib.mkIf (cfg.plugins != [ ]) {
+        experimental.localPlugins = listToAttrs (
+          map (
+            plugin: nameValuePair plugin.pname or plugin.plugin { inherit (plugin) moduleName; }
+          ) cfg.plugins
+        );
       };
-    };
+      # todo, clean and change to settings
+      systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
 
-    users.users.traefik = {
-      group = "traefik";
-      home = cfg.dataDir;
-      createHome = true;
-      isSystemUser = true;
-    };
+      systemd.services.traefik = {
+        description = "Traefik web server";
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        startLimitIntervalSec = 86400;
+        startLimitBurst = 5;
+        serviceConfig = {
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStartPre =
+            optional (cfg.plugins != [ ]) (
+              let
+                pluginsJoined = pkgs.symlinkJoin {
+                  name = "plugins-local";
+                  paths = cfg.plugins;
+                };
+              in
+              pkgs.writeShellScript "traefik-pre-start-plugins" ''
+                umask 077
+                ${getExe' pkgs.coreutils "ln"} -Tfs ${pluginsJoined} ${workDir}/plugins-local
+              ''
+            )
+            ++ optional (cfg.environmentFiles != [ ]) (
+              pkgs.writeShellScript "traefik-pre-start-envsubst" ''
+                umask 077
+                ${getExe pkgs.envsubst} -i "${staticConfigFile}" > "${finalStaticConfigFile}"
+              ''
+            );
+          ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
+          Type = "simple";
+          User = "traefik";
+          Group = cfg.group;
+          Restart = "on-failure";
+          AmbientCapabilities = "cap_net_bind_service";
+          CapabilityBoundingSet = "cap_net_bind_service";
+          NoNewPrivileges = true;
+          LimitNPROC = 64;
+          LimitNOFILE = 1048576;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadWritePaths = [
+            cfg.dataDir
+            "${workDir}/plugins-local"
+          ];
+          RuntimeDirectory = "traefik";
+          WorkingDirectory = cfg.dataDir;
+        };
+      };
 
-    users.groups.traefik = { };
-  };
+      users.users.traefik = {
+        group = "traefik";
+        home = cfg.dataDir;
+        createHome = true;
+        isSystemUser = true;
+      };
+
+      users.groups.traefik = { };
+    };
 }
