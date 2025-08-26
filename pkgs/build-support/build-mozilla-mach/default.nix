@@ -305,7 +305,10 @@ buildStdenv.mkDerivation {
   ];
 
   patches =
+    # Remove references to the build clsoure
     lib.optionals (lib.versionAtLeast version "136") [ ./136-no-buildconfig.patch ]
+    # Add MOZ_SYSTEM_DIR env var for native messaging host support
+    ++ lib.optionals (lib.versionAtLeast version "133") [ ./133-env-var-for-system-dir.patch ]
     ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1955112
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
