@@ -99,10 +99,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for Pandas";
     homepage = "https://github.com/pandas-dev/pandas-stubs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ malo ];
   };
 }
