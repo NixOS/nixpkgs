@@ -3970,7 +3970,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
+  platformioPackages = recurseIntoAttrs (callPackage ../development/embedded/platformio { });
   platformio =
     if stdenv.hostPlatform.isLinux then
       platformioPackages.platformio-chrootenv
