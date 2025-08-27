@@ -1216,7 +1216,7 @@ rec {
 
     :::
   */
-  genAttrs = names: f: listToAttrs (map (n: nameValuePair n (f n)) names);
+  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
 
   /**
     Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
