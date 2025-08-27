@@ -6323,6 +6323,12 @@
     githubId = 4951663;
     name = "Morgan Helton";
   };
+  dezash = {
+    email = "desmondmehta@gmail.com";
+    github = "dezash123";
+    githubId = 90272831;
+    name = "Desmond Mehta";
+  };
   dezgeg = {
     email = "tuomas.tynkkynen@iki.fi";
     github = "dezgeg";
