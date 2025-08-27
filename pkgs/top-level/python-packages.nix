@@ -19333,6 +19333,8 @@ self: super: with self; {
 
   uplink = callPackage ../development/python-modules/uplink { };
 
+  uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
+
   upnpy = callPackage ../development/python-modules/upnpy { };
 
   uproot = callPackage ../development/python-modules/uproot { };
