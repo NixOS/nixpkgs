@@ -161,7 +161,6 @@ package-maintainers:
     - jsaddle-dom
     - jsaddle-hello
     - jsaddle-warp
-    - jsaddle-webkit2gtk
     - jsaddle-wkwebview
     - json-sop
     - large-generics
@@ -936,11 +935,17 @@ dont-distribute-packages:
   - yices-easy
   - yices-painless
 
+  # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-webkit2gtk
+  - gi-javascriptcore4
+  - gi-soup2
+  - gi-webkit2
+  - webkit2gtk3-javascriptcore
+
   # These packages don’t build because they use deprecated webkit versions.
   - diagrams-hsqml
   - dialog
   - ghcjs-dom-webkit
-  - gi-webkit
   - hsqml
   - hsqml-datamodel
   - hsqml-datamodel-vinyl
@@ -950,7 +955,6 @@ dont-distribute-packages:
   - hsqml-demo-samples
   - hsqml-morris
   - hstorchat
-  - jsaddle-webkitgtk
   - jsc
   - lambdacat
   - manatee-all
@@ -959,8 +963,6 @@ dont-distribute-packages:
   - markup-preview
   - spike
   - web-browser-in-haskell
-  - webkit
-  - webkitgtk3-javascriptcore
   - websnap
 
   # mesos was removed from nixpkgs
