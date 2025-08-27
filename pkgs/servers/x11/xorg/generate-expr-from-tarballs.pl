@@ -326,6 +326,7 @@ print OUT <<EOF;
   font-alias,
   font-bh-ttf,
   font-bh-type1,
+  font-cronyx-cyrillic,
   font-encodings,
   font-mutt-misc,
   font-util,
@@ -456,6 +457,7 @@ self: with self; {
   fontalias = font-alias;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontcronyxcyrillic = font-cronyx-cyrillic;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
