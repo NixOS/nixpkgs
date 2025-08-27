@@ -1935,8 +1935,6 @@ self: super: with self; {
 
   bk7231tools = callPackage ../development/python-modules/bk7231tools { };
 
-  bkcharts = callPackage ../development/python-modules/bkcharts { };
-
   black = callPackage ../development/python-modules/black { };
 
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
