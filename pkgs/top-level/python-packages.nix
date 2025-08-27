@@ -16920,6 +16920,8 @@ self: super: with self; {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solaredge-local = callPackage ../development/python-modules/solaredge-local { };
+
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solax = callPackage ../development/python-modules/solax { };
