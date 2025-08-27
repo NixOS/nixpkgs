@@ -1,29 +1,49 @@
 {
   lib,
   immich,
-  buildNpmPackage,
   nodejs,
   makeWrapper,
+  stdenv,
 }:
-buildNpmPackage {
+
+let
+  inherit (immich) pnpm;
+in
+stdenv.mkDerivation {
   pname = "immich-cli";
-  src = "${immich.src}/cli";
-  inherit (immich.sources.components.cli) version npmDepsHash;
+  inherit (immich.sources.components.cli) version;
+  inherit (immich) src pnpmDeps;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm
+    pnpm.configHook
+  ];
 
-  inherit (immich.web) preBuild;
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm --filter @immich/sdk build
+    pnpm --filter @immich/cli build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    mv package.json package-lock.json node_modules dist $out/
+    pushd cli
+    mv package.json node_modules dist $out/
+    popd
 
     makeWrapper ${lib.getExe nodejs} $out/bin/immich --add-flags $out/dist/index.js
 
     runHook postInstall
   '';
+
+  dontCheckForBrokenSymlinks = true;
 
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";
