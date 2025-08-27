@@ -6,7 +6,6 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
-  ...
 }:
 
 buildGoModule (finalAttrs: {
