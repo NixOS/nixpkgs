@@ -36,20 +36,6 @@ in
       '';
       type = lib.types.submodule {
         freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
-        options.DefaultMemoryPressureDurationSec = lib.mkOption {
-          type = lib.types.nonEmptyStr;
-          default = "20s";
-          description = ''
-            Sets the amount of time a unit's control group needs to have exceeded memory pressure limits before systemd-oomd will take action.
-            A unit can override this value with ManagedOOMMemoryPressureDurationSec=.
-            Memory pressure limits are defined by DefaultMemoryPressureLimit= and ManagedOOMMemoryPressureLimit=.
-            Must be set to 0, or at least 1 second. Defaults to 30 seconds when unset or 0.
-
-            See {manpage}`oomd.conf(5)` for more details.
-
-            Set to default to 20s in NixOS following the default set by Fedora.
-          '';
-        };
       };
       default = { };
       example = {
