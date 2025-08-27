@@ -24,6 +24,19 @@
 }:
 
 let
+  # Headers required to build the ThunkLibs subtree
+  libForwardingInputs = lib.map lib.getInclude [
+    alsa-lib
+    libdrm
+    libGL
+    wayland
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.xorgproto
+  ];
+
   pkgsCross32 = pkgsCross.gnu32;
   pkgsCross64 = pkgsCross.gnu64;
   devRootFS = buildEnv {
@@ -33,17 +46,8 @@ let
       pkgsCross32.stdenv.cc.libc_dev
       pkgsCross64.stdenv.cc.cc
       pkgsCross32.stdenv.cc.cc
-
-      alsa-lib.dev
-      libdrm.dev
-      libGL.dev
-      wayland.dev
-      xorg.libX11.dev
-      xorg.libxcb.dev
-      xorg.libXrandr.dev
-      xorg.libXrender.dev
-      xorg.xorgproto
-    ];
+    ]
+    ++ libForwardingInputs;
     ignoreCollisions = true;
     pathsToLink = [
       "/include"
@@ -127,9 +131,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
     # Add include paths for thunkgen invocation
     substituteInPlace ThunkLibs/HostLibs/CMakeLists.txt \
-      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libc-cflags) $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libc-cflags) $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) ${
+        lib.concatMapStrings (x: "-isystem " + x + "/include ") libForwardingInputs
+      }"
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
-      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags)"
+      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
 
     # Patch any references to library wrapper paths
     substituteInPlace FEXCore/Source/Interface/Config/Config.json.in \
@@ -173,18 +179,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pkgsCross32.buildPackages.clang
     libclang
     libllvm
-
-    # Headers required to build the ThunkLibs subtree
-    alsa-lib.dev
-    libdrm.dev
-    libGL.dev
-    wayland.dev
-    xorg.libX11.dev
-    xorg.libxcb.dev
-    xorg.libXrandr.dev
-    xorg.libXrender.dev
-    xorg.xorgproto
   ]
+  ++ libForwardingInputs
   ++ (with qt5; [
     qtbase
     qtdeclarative
