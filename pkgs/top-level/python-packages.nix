@@ -17801,6 +17801,8 @@ self: super: with self; {
 
   tappy = callPackage ../development/python-modules/tappy { };
 
+  tapsaff = callPackage ../development/python-modules/tapsaff { };
+
   tasklib = callPackage ../development/python-modules/tasklib { };
 
   taskw = callPackage ../development/python-modules/taskw { };
