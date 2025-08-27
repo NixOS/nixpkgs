@@ -333,6 +333,7 @@ print OUT <<EOF;
   font-bh-type1,
   font-bitstream-100dpi,
   font-bitstream-75dpi,
+  font-bitstream-type1,
   font-cronyx-cyrillic,
   font-encodings,
   font-isas-misc,
@@ -504,6 +505,7 @@ self: with self; {
   fontbhtype1 = font-bh-type1;
   fontbitstream100dpi = font-bitstream-100dpi;
   fontbitstream75dpi = font-bitstream-75dpi;
+  fontbitstreamtype1 = font-bitstream-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
