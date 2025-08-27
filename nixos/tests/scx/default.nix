@@ -12,7 +12,6 @@
 
     specialisation = {
       bpfland.configuration.services.scx.scheduler = "scx_bpfland";
-      central.configuration.services.scx.scheduler = "scx_central";
       cosmos.configuration.services.scx.scheduler = "scx_cosmos";
       flash.configuration.services.scx.scheduler = "scx_flash";
       flatcg.configuration.services.scx.scheduler = "scx_flatcg";
@@ -29,7 +28,6 @@
   testScript = ''
     specialisation = [
       "bpfland",
-      "central",
       "cosmos",
       "flash",
       "flatcg",
