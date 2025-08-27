@@ -69,7 +69,7 @@
   # Boolean flags
   withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
-  srcRepo ? true,
+  srcRepo ? false,
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
@@ -202,6 +202,11 @@ mkDerivation (finalAttrs: {
   postPatch = lib.concatStringsSep "\n" [
     (lib.optionalString srcRepo ''
       rm -fr .git
+    '')
+
+    # See: https://github.com/NixOS/nixpkgs/issues/170426
+    (lib.optionalString (!srcRepo) ''
+      find . -type f \( -name "*.elc" -o -name "*loaddefs.el" \) -exec rm {} \;
     '')
 
     # Add the name of the wrapped gvfsd
