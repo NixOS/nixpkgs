@@ -4,7 +4,6 @@
   fetchzip,
   openjdk,
   makeWrapper,
-  maven,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/kotlin-lsp" --set JAVA_HOME ${openjdk} --prefix PATH : ${
       lib.strings.makeBinPath [
         openjdk
-        maven
       ]
     }
   '';
