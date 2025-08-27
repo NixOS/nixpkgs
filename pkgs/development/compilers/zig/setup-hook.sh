@@ -15,6 +15,10 @@ function zigBuildPhase {
     concatTo flagsArray zigDefaultFlagsArray \
         zigBuildFlags zigBuildFlagsArray
 
+    if [[ -n ${zigDeps-} ]]; then
+        flagsArray+=("--system" "$zigDeps")
+    fi
+
     echoCmd 'zig build flags' "${flagsArray[@]}"
     TERM=dumb zig build "${flagsArray[@]}" --verbose
 
@@ -27,6 +31,10 @@ function zigCheckPhase {
     local flagsArray=()
     concatTo flagsArray zigDefaultFlagsArray \
         zigCheckFlags zigCheckFlagsArray
+
+    if [[ -n ${zigDeps-} ]]; then
+        flagsArray+=("--system" "$zigDeps")
+    fi
 
     echoCmd 'zig check flags' "${flagsArray[@]}"
     TERM=dumb zig build test "${flagsArray[@]}" --verbose
@@ -41,6 +49,10 @@ function zigInstallPhase {
     concatTo flagsArray zigDefaultFlagsArray \
         zigBuildFlags zigBuildFlagsArray \
         zigInstallFlags zigInstallFlagsArray
+
+    if [[ -n ${zigDeps-} ]]; then
+        flagsArray+=("--system" "$zigDeps")
+    fi
 
     if [ -z "${dontAddPrefix-}" ]; then
         # Zig does not recognize `--prefix=/dir/`, only `--prefix /dir/`
