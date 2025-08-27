@@ -7,7 +7,6 @@
   pkg-config,
   icu,
   catch2_3,
-  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +23,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optionals enableManpages [
-    buildPackages.pandoc
   ];
 
   buildInputs = [ catch2_3 ];
@@ -35,8 +31,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=YES"
-  ]
-  ++ lib.optionals (!enableManpages) [
     "-DBUILD_DOCS=OFF"
   ];
 
@@ -47,6 +41,22 @@ stdenv.mkDerivation rec {
     "lib"
     "dev"
   ];
+
+  passthru = lib.optionalAttrs buildPackages.pandoc.compiler.bootstrapAvailable {
+    man = stdenv.mkDerivation {
+      pname = "${pname}-man";
+      inherit version src meta;
+      sourceRoot = "${src.name}/docs";
+      nativeBuildInputs = [
+        cmake
+        buildPackages.pandoc
+      ];
+      cmakeFlags = [
+        "-DBUILD_MAN=YES"
+        "-DBUILD_TOOLS=YES"
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Free and open source C++ spell checking library";
