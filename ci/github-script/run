@@ -49,7 +49,7 @@ program
   .option('--no-dry', 'Make actual modifications')
   .action(async (owner, repo, pr, options) => {
     const prepare = (await import('./prepare.js')).default
-    run(prepare, owner, repo, pr, options)
+    await run(prepare, owner, repo, pr, options)
   })
 
 program
@@ -61,7 +61,7 @@ program
   .option('--no-cherry-picks', 'Do not expect cherry-picks.')
   .action(async (owner, repo, pr, options) => {
     const commits = (await import('./commits.js')).default
-    run(commits, owner, repo, pr, options)
+    await run(commits, owner, repo, pr, options)
   })
 
 program
@@ -77,7 +77,7 @@ program
     try {
       process.env.GITHUB_WORKSPACE = tmp
       process.chdir(tmp)
-      run(labels, owner, repo, pr, options)
+      await run(labels, owner, repo, pr, options)
     } finally {
       rmSync(tmp, { recursive: true })
     }
