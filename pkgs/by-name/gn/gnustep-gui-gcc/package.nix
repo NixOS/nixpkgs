@@ -4,37 +4,22 @@
   fetchzip,
   gnustep-base-gcc,
   wrapGNUstepAppsHook,
+  gnustep-gui
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
-  version = "0.32.0";
+  inherit (gnustep-gui) version src nativeBuildInputs patches;
   pname = "gnustep-gui-gcc";
-
-  src = fetchzip {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-HEH80P51mnLRt4+d+gzpGCv4u6oOdf+x68CcvkR6G/o=";
-  };
-
-  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
   propagatedBuildInputs = [ gnustep-base-gcc ];
 
-  patches = [
-    ../gnustep-gui/fixup-all.patch
-  ];
-
   meta = {
-    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${
-      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }";
-    description = "GUI class library of GNUstep";
-    homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
+    inherit (gnustep-gui.meta) changelog homepage license platforms;
+    description = "GUI class library of GNUstep (GCC Environment)";
     maintainers = with lib.maintainers; [
       ashalkhakov
       dblsaiko
       matthewbauer
     ];
-    platforms = lib.platforms.linux;
   };
 })
