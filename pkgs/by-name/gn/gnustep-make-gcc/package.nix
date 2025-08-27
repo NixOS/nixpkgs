@@ -11,8 +11,6 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   inherit (gnustep-make) version src configureFlags preConfigure makeFlags propagatedBuildInputs patches setupHook;
   pname = "gnustep-make-gcc";
 
-  propagatedBuildInputs = [ which ];
-
   meta = {
     changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
