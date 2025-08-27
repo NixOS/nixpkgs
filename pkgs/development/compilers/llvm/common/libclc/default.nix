@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ]
-  ++ lib.optional (lib.versionAtLeast release_version "19") [
+  ++ lib.optionals (lib.versionAtLeast release_version "19") [
     clang-only
     buildLlvmTools.llvm
     spirv-llvm-translator
