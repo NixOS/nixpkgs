@@ -2,18 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "exifread";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "3.4.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "ExifRead";
-    inherit version;
-    hash = "sha256-CsWjZBadvfK9YvlPXAc5cKtmlKMWYXf15EixDJQ+LKQ=";
+    inherit pname version;
+    hash = "sha256-3H+Np3OWcJykFKDu4cJikC9xOvycBDuqi4IzfXYwb/w=";
   };
+
+  build-system = [ setuptools ];
 
   meta = with lib; {
     description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";

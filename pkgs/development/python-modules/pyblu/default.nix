@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/v${version}";
+    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/${src.tag}";
     description = "BluOS API client";
     homepage = "https://github.com/LouisChrist/pyblu";
     license = lib.licenses.mit;

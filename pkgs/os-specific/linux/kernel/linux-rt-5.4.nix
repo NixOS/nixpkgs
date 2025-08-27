@@ -50,6 +50,8 @@ buildLinux (
       }
       // structuredExtraConfig;
 
+    isLTS = true;
+
     extraMeta = extraMeta // {
       inherit branch;
     };

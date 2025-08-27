@@ -4,6 +4,7 @@
   cargoHash,
   unsupported ? false,
   eolDate ? null,
+  patches ? [ ],
 }:
 
 {
@@ -60,10 +61,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
-  patches = lib.optionals enableSecretProvisioning [
-    (./. + "/provision-patches/${versionUnderscored finalAttrs}/oauth2-basic-secret-modify.patch")
-    (./. + "/provision-patches/${versionUnderscored finalAttrs}/recover-account.patch")
-  ];
+  patches =
+    patches
+    ++ lib.optionals enableSecretProvisioning [
+      (./. + "/provision-patches/${versionUnderscored finalAttrs}/oauth2-basic-secret-modify.patch")
+      (./. + "/provision-patches/${versionUnderscored finalAttrs}/recover-account.patch")
+    ];
 
   postPatch =
     let

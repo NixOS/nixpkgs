@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "rlax";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
     tag = "v${version}";
-    hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
+    hash = "sha256-w5vhXBMUlcqlLTKA58QgQ4pxyGs3etxJLIFUVPhE7H8=";
   };
 
   # TODO: remove these patches at the next release (already on master)
@@ -111,7 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    changelog = "https://github.com/google-deepmind/rlax/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

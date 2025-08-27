@@ -1,3 +1,5 @@
+# Run with:
+#   nix-build -A nixosTests.php.fpm-modular
 { lib, php, ... }:
 {
   name = "php-${php.version}-fpm-modular-nginx-test";

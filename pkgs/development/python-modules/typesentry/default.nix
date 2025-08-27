@@ -26,6 +26,6 @@ buildPythonPackage {
     description = "Python 2.7 & 3.5+ runtime type-checker";
     homepage = "https://github.com/h2oai/typesentry";
     license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

@@ -31,6 +31,8 @@ default-package-overrides:
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
+  - hiedb < 0.7
   # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
   - hnix-store-remote < 0.7
   # 2025-01-17: need to match stackage version of hosc
@@ -94,7 +96,6 @@ extra-packages:
   - hlint == 3.4.1                      # 2022-09-21: preserve for ghc 8.10
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
-  - hpack == 0.38.0                     # 2025-04-23: preserve for stack == 3.5.1
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
@@ -109,7 +110,6 @@ extra-packages:
   - ormolu == 0.5.2.0                   # 2023-08-08: preserve for ghc 9.0
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.7.0                   # 2025-01-27: for ghc 9.10 compat
-  - persistent-test < 2.13.1.4          # 2025-06-04: incompatible with persistent < 2.16, see conf*-common.nix
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: preserve for ghc 9.2
   - retrie < 1.2.0.0                    # 2022-12-30: preserve for ghc < 9.2
@@ -437,8 +437,6 @@ package-maintainers:
     - hercules-ci-cnix-store
     - inline-c
     - inline-c-cpp
-  roosemberth:
-    - git-annex
   rvl:
     - taffybar
     - arbtt

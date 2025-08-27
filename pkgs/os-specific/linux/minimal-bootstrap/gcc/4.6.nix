@@ -84,6 +84,7 @@ bash.runCommand "${pname}-${version}"
       license = licenses.gpl3Plus;
       teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''

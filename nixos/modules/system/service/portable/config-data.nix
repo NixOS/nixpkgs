@@ -1,10 +1,13 @@
 # Tests in: ../../../../tests/modular-service-etc/test.nix
+
+# Non-modular context provided by the modular services integration.
+{ pkgs }:
+
 # Configuration data support for portable services
 # This module provides configData for services, enabling configuration reloading
 # without terminating and restarting the service process.
 {
   lib,
-  pkgs,
   ...
 }:
 let

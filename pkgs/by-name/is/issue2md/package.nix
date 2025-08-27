@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "CLI tool to convert GitHub issue into Markdown file";
     homepage = "https://github.com/bigwhite/issue2md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "issue2md";
   };
 })

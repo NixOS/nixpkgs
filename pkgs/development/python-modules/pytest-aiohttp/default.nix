@@ -38,6 +38,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [ "-Wignore::pytest.PytestDeprecationWarning" ];
+
   meta = with lib; {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";
     changelog = "https://github.com/aio-libs/pytest-aiohttp/blob/${src.rev}/CHANGES.rst";

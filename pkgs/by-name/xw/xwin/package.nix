@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-77ArdZ9mOYEon4nzNUNSL0x0UlE1iVujFLwreAd9iMM=";
+
+  strictDeps = true;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "native-tls"
+  ];
 
   doCheck = true;
   # Requires network access

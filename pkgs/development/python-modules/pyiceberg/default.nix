@@ -84,6 +84,7 @@ buildPythonPackage rec {
   env.CIBUILDWHEEL = "1";
 
   pythonRelaxDeps = [
+    "cachetools"
     "rich"
   ];
 

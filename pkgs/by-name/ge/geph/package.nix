@@ -14,6 +14,7 @@
   libglvnd,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
@@ -23,16 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.72";
+  version = "0.2.82";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-+/oOQjebkn3iYi5UXFzFoe0ldu+p+nf5uEjGhk5nlNo=";
+    hash = "sha256-z4f6XoMSjMmq+Uf8A/6M+aJs6oDJGdMffVflwc0Q2so=";
   };
 
-  cargoHash = "sha256-OFSsMa/xErNB+1cvEOnGshJJEcG8ZDf9y/uYVnsVwhU=";
+  cargoHash = "sha256-PhLNS6DdCisQ8sOWm1V72UJpLZX4gVNkt1779mmMB1c=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
@@ -97,6 +98,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ]
     }' "$out/bin/geph5-client-gui"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "geph5-client-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";

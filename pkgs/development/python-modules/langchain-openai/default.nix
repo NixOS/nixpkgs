@@ -102,8 +102,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-openai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-openai==";
+    };
   };
 
   meta = {

@@ -150,7 +150,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
           and called for daemon start/shutdown/SIGHUP events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -160,7 +160,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
           and called for qemu domains begin/end/migrate events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -170,7 +170,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
           and called for lxc domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -180,7 +180,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
           and called for libxl-handled xen domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -190,7 +190,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/network.d/
           and called for networks begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
     };
@@ -205,7 +205,7 @@ let
           This option enables the older libvirt NSS module. This method uses
           DHCP server records, therefore is dependent on the hostname provided
           by the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
 
@@ -215,7 +215,7 @@ let
         description = ''
           This option enables the newer libvirt_guest NSS module. This module
           uses the libvirt guest name instead of the hostname of the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
     };

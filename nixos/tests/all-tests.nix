@@ -423,7 +423,6 @@ in
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;
-  deepin = runTest ./deepin.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dependency-track = runTest ./dependency-track.nix;
@@ -540,10 +539,6 @@ in
     # used in `tested` job
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr;
-  };
-  firefox-esr-128 = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.firefox-esr-128;
   };
   firefox-esr-140 = runTest {
     imports = [ ./firefox.nix ];
@@ -1089,6 +1084,7 @@ in
   ntpd-rs = runTest ./ntpd-rs.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
+  nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
   nzbhydra2 = runTest ./nzbhydra2.nix;
   ocis = runTest ./ocis.nix;
@@ -1140,6 +1136,7 @@ in
   packagekit = runTest ./packagekit.nix;
   paisa = runTest ./paisa.nix;
   pam-file-contents = runTest ./pam/pam-file-contents.nix;
+  pam-lastlog = runTest ./pam/pam-lastlog.nix;
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
@@ -1192,10 +1189,7 @@ in
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
   plantuml-server = runTest ./plantuml-server.nix;
-  plasma-bigscreen = runTest ./plasma-bigscreen.nix;
-  plasma5 = runTest ./plasma5.nix;
   plasma6 = runTest ./plasma6.nix;
-  plasma5-systemd-start = runTest ./plasma5-systemd-start.nix;
   plausible = runTest ./plausible.nix;
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;
@@ -1351,6 +1345,7 @@ in
   simple = runTest ./simple.nix;
   sing-box = runTest ./sing-box.nix;
   slimserver = runTest ./slimserver.nix;
+  slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
   snmpd = runTest ./snmpd.nix;
   smokeping = runTest ./smokeping.nix;
@@ -1494,6 +1489,7 @@ in
   teleport = handleTest ./teleport.nix { };
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix { };
+  temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   thanos = runTest ./thanos.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;

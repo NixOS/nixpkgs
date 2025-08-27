@@ -70,6 +70,6 @@ buildPythonPackage rec {
     description = "data.table for Python";
     homepage = "https://github.com/h2oai/datatable";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

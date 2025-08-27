@@ -4,7 +4,7 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 

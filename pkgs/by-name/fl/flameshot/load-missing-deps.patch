@@ -1,9 +1,15 @@
---- a/CMakeLists.txt	2025-08-15 11:37:20
-+++ b/CMakeLists.txt	2025-08-15 11:40:06
-@@ -29,21 +29,7 @@
- if(EXISTS "${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets/CMakeLists.txt")
-     add_subdirectory("${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets" EXCLUDE_FROM_ALL)
- else()
+--- a/CMakeLists.txt	2025-08-21 13:12:55
++++ b/CMakeLists.txt	2025-08-21 13:16:26
+@@ -24,28 +24,8 @@
+ #Needed due to linker error with QtColorWidget
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
++find_package(QtColorWidgets REQUIRED)
+ 
+-# Dependency can be fetched via flatpak builder
+-if(EXISTS "${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets/CMakeLists.txt")
+-    add_subdirectory("${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets" EXCLUDE_FROM_ALL)
+-else()
 -    FetchContent_Declare(
 -        qtColorWidgets
 -        GIT_REPOSITORY https://gitlab.com/mattbas/Qt-Color-Widgets.git
@@ -19,25 +25,12 @@
 -  else()
 -      FetchContent_MakeAvailable(qtColorWidgets)
 -  endif()
-+    find_package(QtColorWidgets REQUIRED)
- endif()
- 
+-endif()
+-
  # This can be read from ${PROJECT_NAME} after project() is called
-@@ -115,12 +101,7 @@
-   if(EXISTS "${CMAKE_SOURCE_DIR}/external/KDSingleApplication/CMakeLists.txt")
-     add_subdirectory("${CMAKE_SOURCE_DIR}/external/KDSingleApplication")
-   else()
--    FetchContent_Declare(
--        kdsingleApplication
--        GIT_REPOSITORY https://github.com/KDAB/KDSingleApplication.git
--        GIT_TAG v1.2.0
--    )
--    FetchContent_MakeAvailable(KDSingleApplication)
-+    find_package(KDSingleApplication-qt6 REQUIRED)
-   endif()
- endif()
- 
-@@ -128,12 +109,7 @@
+ if (APPLE)
+   set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
+@@ -133,12 +113,7 @@
  option(BUILD_STATIC_LIBS ON)
  
  if (APPLE)

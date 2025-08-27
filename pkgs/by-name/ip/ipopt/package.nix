@@ -19,13 +19,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "ipopt";
-  version = "3.14.17";
+  version = "3.14.18";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
     rev = "releases/${version}";
-    sha256 = "sha256-0IRHryADQArhhtfbQjCy+EDvVRi/ywc51IwiQOfWlR4=";
+    sha256 = "sha256-Tifw0awNLiJrWhMF61O2VW85I3eVxDChkod5avAV6zA=";
   };
 
   CXXDEFS = [
@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://projects.coin-or.org/Ipopt";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

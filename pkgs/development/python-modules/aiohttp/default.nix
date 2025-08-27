@@ -8,7 +8,7 @@
   isPyPy,
 
   # build-system
-  cython_3_1,
+  cython,
   pkgconfig,
   setuptools,
 
@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.14";
+  version = "3.12.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-KPPxP6x/3sz2mDJNswh/xPatcMtVdYv3aArg//7tSao=";
+    hash = "sha256-nVDGSbzjCdyJFCsHq8kJigNA4vGs4Pg1Vyyvw+gKg2w=";
   };
 
   patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3_1
+    cython
     pkgconfig
     setuptools
   ];

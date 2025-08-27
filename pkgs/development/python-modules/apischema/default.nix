@@ -4,7 +4,7 @@
   fetchFromGitHub,
   graphql-core,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytestCheckHook
+    pytest8_3CheckHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 

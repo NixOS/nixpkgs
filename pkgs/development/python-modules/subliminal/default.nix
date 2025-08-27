@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.2.1";
+  version = "2.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
+    hash = "sha256-eAXzD6diep28wCZjWLOZpOX1bnakEldhs2LX5CPu5OI=";
   };
 
   build-system = [ setuptools ];
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     description = "Python library to search and download subtitles";
     mainProgram = "subliminal";
     homepage = "https://github.com/Diaoul/subliminal";
-    changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/Diaoul/subliminal/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

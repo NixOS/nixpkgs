@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patch -p1 -i ${../avy/minisat-fenv.patch} -d Minisat || true
+    patch -p1 -i ${./minisat-fenv.patch} -d Minisat || true
   '';
 
   enableParallelBuilding = true;
