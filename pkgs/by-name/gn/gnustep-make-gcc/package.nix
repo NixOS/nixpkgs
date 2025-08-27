@@ -4,15 +4,30 @@
   fetchurl,
   gnustep-libobjc,
   which,
-  gnustep-make
+  gnustep-make,
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
-  inherit (gnustep-make) version src configureFlags preConfigure makeFlags propagatedBuildInputs patches setupHook;
+  inherit (gnustep-make)
+    version
+    src
+    configureFlags
+    preConfigure
+    makeFlags
+    propagatedBuildInputs
+    patches
+    setupHook
+    ;
   pname = "gnustep-make-gcc";
 
   meta = {
-    inherit (gnustep-make.meta) changelog homepage license platforms maintainers;
+    inherit (gnustep-make.meta)
+      changelog
+      homepage
+      license
+      platforms
+      maintainers
+      ;
     description = "Build manager for GNUstep (GCC environment)";
   };
 })

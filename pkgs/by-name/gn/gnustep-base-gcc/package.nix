@@ -20,12 +20,18 @@
   libxml2,
   libxslt,
   portaudio,
-  gnustep-base
+  gnustep-base,
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base-gcc";
-  inherit (gnustep-base) version src outputs patches nativeBuildInputs;
+  inherit (gnustep-base)
+    version
+    src
+    outputs
+    patches
+    nativeBuildInputs
+    ;
 
   propagatedNativeBuildInputs = [
     gnustep-make-gcc
@@ -53,7 +59,13 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    inherit (gnustep-base.meta) changelog homepage license platforms maintainers;
+    inherit (gnustep-base.meta)
+      changelog
+      homepage
+      license
+      platforms
+      maintainers
+      ;
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa (GCC Environment)";
   };
 })
