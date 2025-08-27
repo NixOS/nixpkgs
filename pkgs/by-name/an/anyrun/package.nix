@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "anyrun";
-  version = "0-unstable-2025-08-18";
+  version = "25.9.0.pre-release.1-unstable-2025-08-19";
 
   src = fetchFromGitHub {
-    owner = "kirottu";
+    owner = "anyrun-org";
     repo = "anyrun";
-    rev = "bed987ed5dec0b29865b973ad4fce04c5da2ea21";
-    hash = "sha256-2iAIrSC4ubTCEM5BeC+R7dywkj9CAV0K6vHbqxCcCtA=";
+    rev = "af1ffe4f17921825ff2a773995604dce2b2df3cd";
+    hash = "sha256-PKxVhfjd2AlzTopuVEx5DJMC4R7LnM5NIoMmirKMsKI=";
   };
 
-  cargoHash = "sha256-n+UJzx80JAQ4hqdk7OjyvSsCYql9I6yKLA5ab9iS9vQ=";
+  cargoHash = "sha256-KpAnfytTtCJunhpk9exv8LYtF8mKDGFUUbsPP47M+Kk=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Wayland-native, highly customizable runner";
-    homepage = "https://github.com/kirottu/anyrun";
+    homepage = "https://github.com/anyrun-org/anyrun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       khaneliman

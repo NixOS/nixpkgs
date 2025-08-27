@@ -1895,9 +1895,6 @@ with pkgs;
   capstone = callPackage ../development/libraries/capstone { };
   capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
-  cataract = callPackage ../applications/misc/cataract { };
-  cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
-
   catch2 = callPackage ../development/libraries/catch2 { };
 
   catch2_3 = callPackage ../development/libraries/catch2/3.nix { };
@@ -2618,6 +2615,8 @@ with pkgs;
   cocoapods = callPackage ../development/tools/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
+
+  comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
 
   compass = callPackage ../development/tools/compass { };
 
@@ -3455,9 +3454,9 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
-  nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
+  nodePackages_latest = recurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
+  nodePackages = recurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
 
@@ -4169,8 +4168,6 @@ with pkgs;
 
   # aka., pgp-tools
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
-
-  sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
   sks = callPackage ../servers/sks {
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
@@ -5558,10 +5555,6 @@ with pkgs;
   mlton = mlton20210117;
 
   mono = mono6;
-
-  mono4 = lowPrio (callPackage ../development/compilers/mono/4.nix { });
-
-  mono5 = callPackage ../development/compilers/mono/5.nix { };
 
   mono6 = callPackage ../development/compilers/mono/6.nix { };
 

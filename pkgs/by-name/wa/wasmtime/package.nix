@@ -81,7 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = lib.licenses.asl20;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.llvm-exception
+    ];
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre
