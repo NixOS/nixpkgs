@@ -4,6 +4,7 @@
   fetchFromGitHub,
   capstone,
   filebytes,
+  keystone-engine,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     capstone
     filebytes
   ];
+
+  optional-dependencies = {
+    ropchain = [ keystone-engine ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
