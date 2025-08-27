@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.20.0";
+  version = "1.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-ING+C2MACKFto+1FON5OGFgzLf8SM99ViTdADzNzQLw=";
+    hash = "sha256-sm0G8z5Jaes8XybxeAUiRh3LVuzvnGaem5FLkcA5Qls=";
   };
 
   # TODO: remove at the next release
