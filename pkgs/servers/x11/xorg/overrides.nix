@@ -1,6 +1,7 @@
 {
   callPackage,
   lib,
+  config,
   stdenv,
   makeWrapper,
   fetchurl,
@@ -919,3 +920,8 @@ self: super:
   mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
   // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
 )
+
+# deprecate some packages
+// lib.optionalAttrs config.allowAliases {
+  fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005";
+}
