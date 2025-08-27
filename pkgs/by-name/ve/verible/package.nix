@@ -5,8 +5,6 @@
   fetchFromGitHub,
   bazel_7,
   jdk,
-  bison,
-  flex,
   python3,
   cctools,
 }:
@@ -16,8 +14,8 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "bac7a5dc8b5535d7b36d0405f76badfba77c84c2";
-    hash = "sha256-TXooqzqfvf1twldfrs0m8QR3AJkUCIyBS36TFTwN4Eg=";
+    rev = "ef470614dde092c96b2b757c23d9377fcc101d24";
+    hash = "sha256-GvteC/xEFWA+ahA/PCjWiPxLvMBvGDQS4YsL3cOQPe8=";
   };
 in
 buildBazelPackage rec {
@@ -26,8 +24,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2025-03-30";
-  GIT_VERSION = "v0.0-3956-ge12a194d";
+  GIT_DATE = "2025-08-27";
+  GIT_VERSION = "v0.0-4019-gc2540abe";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -38,12 +36,11 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
+    hash = "sha256-Sjlgr3QZ8yqwo2zV5fsaISJ/pv8P6lGiP28gSXTpssQ=";
   };
 
   bazel = bazel_7;
   bazelFlags = [
-    "--//bazel:use_local_flex_bison"
     "--registry"
     "file://${registry}"
   ];
@@ -51,17 +48,15 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d16jB/kE2jYPg=";
-        x86_64-linux = "sha256-kiI/LX0l9ERxItsqiAyl+BP3QnLr0Ly2YVb988M4jVs=";
-        aarch64-darwin = "sha256-bkw4ErWYblzr3lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
+        aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d17jB/kE2jYPg=";
+        x86_64-linux = "sha256-kqVHv+qDKbAIvgTisr2CIhZXrjnufwatQkqUQtsFMQY=";
+        aarch64-darwin = "sha256-bkw4ErWYblzr4lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
     jdk # bazel uses that.
-    bison # We use local flex and bison as WORKSPACE sources fail
-    flex # .. to compile with newer glibc
     python3
   ];
   LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
