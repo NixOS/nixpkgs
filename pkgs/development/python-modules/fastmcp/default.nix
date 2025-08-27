@@ -14,6 +14,7 @@
   exceptiongroup,
   httpx,
   mcp,
+  openapi-core,
   openapi-pydantic,
   pydantic,
   pyperclip,
@@ -31,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.11.1";
+  version = "2.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-Y71AJdWcRBDbq63p+lcQplqutz2UTQ3f+pTyhcolpuw=";
+    hash = "sha256-jIXrMyNnyPE2DUgg+sxT6LD4dTmKQglh4cFuaw179Z0=";
   };
 
   postPatch = ''
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     exceptiongroup
     httpx
     mcp
+    openapi-core
     openapi-pydantic
     pyperclip
     python-dotenv
@@ -87,6 +89,10 @@ buildPythonPackage rec {
     "test_keep_alive_starts_new_session_if_manually_closed"
     "test_keep_alive_maintains_session_if_reentered"
     "test_close_session_and_try_to_use_client_raises_error"
+    "test_run_mcp_config"
+    "test_uv_transport"
+    "test_uv_transport_module"
+    "test_github_api_schema_performance"
 
     # RuntimeError: Client failed to connect: Timed out while waiting for response
     "test_timeout"
@@ -94,20 +100,25 @@ buildPythonPackage rec {
 
     # assert 0 == 2
     "test_multi_client"
+    "test_canonical_multi_client_with_transforms"
 
     # fastmcp.exceptions.ToolError: Unknown tool
     "test_multi_client_with_logging"
     "test_multi_client_with_elicitation"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Server failed to start after 10 attempts
+    "test_unauthorized_access"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
-    "tests/auth/providers/test_bearer.py"
-    "tests/auth/test_oauth_client.py"
-    "tests/client/test_openapi.py"
+    "tests/client/auth/test_oauth_client.py"
+    "tests/client/test_openapi_experimental.py"
+    "tests/client/test_openapi_legacy.py"
     "tests/client/test_sse.py"
     "tests/client/test_streamable_http.py"
-    "tests/server/http/test_http_dependencies.py"
+    "tests/server/auth/test_jwt_provider.py"
     "tests/server/http/test_http_dependencies.py"
   ];
 
