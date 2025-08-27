@@ -331,6 +331,7 @@ print OUT <<EOF;
   font-bh-lucidatypewriter-75dpi,
   font-bh-ttf,
   font-bh-type1,
+  font-cronyx-cyrillic,
   font-encodings,
   font-mutt-misc,
   font-util,
@@ -495,6 +496,7 @@ self: with self; {
   fontbhlucidatypewriter75dpi = font-bh-lucidatypewriter-75dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontcronyxcyrillic = font-cronyx-cyrillic;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
