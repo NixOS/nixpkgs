@@ -10775,8 +10775,6 @@ self: super: with self; {
 
   oocsi = callPackage ../development/python-modules/oocsi { };
 
-  opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
-
   open-clip-torch = callPackage ../development/python-modules/open-clip-torch { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
