@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
       "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"
+      "powerpc-linux"
     ];
     license = licenses.gpl2Only;
     mainProgram = "kexec";
