@@ -15403,6 +15403,8 @@ self: super: with self; {
 
   python-qt = toPythonModule (pkgs.python-qt.override { python3 = self.python; });
 
+  python-qt-qt6 = toPythonModule (pkgs.qt6Packages.python-qt.override { python3 = self.python; });
+
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
