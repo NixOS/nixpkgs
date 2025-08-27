@@ -139,7 +139,6 @@
 , "rimraf"
 , "sass"
 , "semver"
-, "serve"
 , "sloc"
 , "smartdc"
 , "speed-test"
