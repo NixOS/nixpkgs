@@ -1,8 +1,5 @@
 {
-  _experimental-update-script-combinators,
-  callPackage,
   fetchFromSourcehut,
-  unstableGitUpdater,
   lib,
   pkg-config,
   stdenv,
@@ -11,11 +8,9 @@
   wayland-protocols,
   wayland-scanner,
   zig_0_15,
+  nix-update-script,
 }:
 
-let
-  zig = zig_0_15;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-bedload";
   version = "0.2.0";
@@ -27,11 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MOZju7mU/AtaSm9CJgb/UqYpCg697tefJC1yvQPK3S8=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-h/TwjH546U2Z8LwvB417qq2lR3Ja0nWdVzoLI7Xna6w=";
+  };
 
   nativeBuildInputs = [
     pkg-config
-    zig
+    zig_0_15.hook
   ];
 
   buildInputs = [
@@ -40,15 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
-
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (unstableGitUpdater { tagPrefix = "v"; })
-    ./update-build-zig-zon.sh
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Display information about river in json in the STDOUT";
