@@ -12,12 +12,7 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make-gcc";
 
   meta = {
-    inherit (gnustep-make.meta) changelog homepage license platforms;
+    inherit (gnustep-make.meta) changelog homepage license platforms maintainers;
     description = "Build manager for GNUstep (GCC environment)";
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-      matthewbauer
-    ];
   };
 })
