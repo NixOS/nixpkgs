@@ -14,7 +14,7 @@
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
-  inherit (gnustep-back) version src nativeBuildInputs buildInputs meta;
+  inherit (gnustep-back) version src nativeBuildInputs buildInputs;
   pname = "gnustep-back-gcc";
 
   propagatedBuildInputs = [ gnustep-gui-gcc ];
