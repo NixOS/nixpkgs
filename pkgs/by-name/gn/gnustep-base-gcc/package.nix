@@ -1,8 +1,6 @@
 {
   lib,
   gobjcStdenv,
-  fetchpatch,
-  fetchzip,
   aspell,
   audiofile,
   binutils-unwrapped,
@@ -21,9 +19,7 @@
   libtiff,
   libxml2,
   libxslt,
-  pkg-config,
   portaudio,
-  wrapGNUstepAppsHook,
   gnustep-base
 }:
 
@@ -57,12 +53,7 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    inherit (gnustep-base.meta) changelog homepage license platforms;
-    description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-      matthewbauer
-    ];
+    inherit (gnustep-base.meta) changelog homepage license platforms maintainers;
+    description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa (GCC Environment)";
   };
 })
