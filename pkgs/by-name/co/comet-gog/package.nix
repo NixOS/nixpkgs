@@ -21,9 +21,9 @@ let
     };
     # version pin that is compatible with heroic
     "heroic" = {
-      version = "0.2.0";
-      srcHash = "sha256-LAEt2i/SRABrz+y2CTMudrugifLgHNxkMSdC8PXYF0E=";
-      cargoHash = "sha256-SvDE+QqaSK0+4XgB3bdmqOtwxBDTlf7yckTR8XjmMXc=";
+      version = "0.3.1";
+      srcHash = "sha256-asg2xp9A5abmsF+CgOa+ScK2sQwSNFQXD5Qnm76Iyhg=";
+      cargoHash = "sha256-K0lQuk2PBwnVlkRpYNo4Z7to/Lx2fY6RIlkgmMjvEtc=";
     };
   };
 
