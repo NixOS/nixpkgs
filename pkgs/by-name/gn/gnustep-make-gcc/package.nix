@@ -4,36 +4,14 @@
   fetchurl,
   gnustep-libobjc,
   which,
+  gnustep-make
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
+  inherit (gnustep-make) version src configureFlags preConfigure makeFlags propagatedBuildInputs patches setupHook;
   pname = "gnustep-make-gcc";
-  version = "2.9.3";
-
-  src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-k8oyC3BieevKU3YNqJ1MPyu8VH9HI5ZxQKNDRtnwTCQ=";
-  };
-
-  configureFlags = [
-    "--with-layout=fhs-system"
-    "--disable-install-p"
-  ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --with-config-file=$out/etc/GNUstep/GNUstep.conf"
-  '';
-
-  makeFlags = [
-    "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
-  ];
-
-  buildInputs = [ gnustep-libobjc ];
 
   propagatedBuildInputs = [ which ];
-
-  patches = [ ../gnustep-make/fixup-paths.patch ];
-  setupHook = ../gnustep-make/setup-hook.sh;
 
   meta = {
     changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
