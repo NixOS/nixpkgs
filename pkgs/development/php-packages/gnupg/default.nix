@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.5.3";
+  version = "1.5.4";
 in
 buildPecl {
   inherit version;
@@ -20,7 +20,7 @@ buildPecl {
     repo = "php-gnupg";
     rev = "gnupg-${version}";
     fetchSubmodules = true;
-    hash = "sha256-F9Rq+mmUhvXfIuoifqRM/ZIMYszCF93cvv13Vt/A5Mo=";
+    hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
   };
 
   buildInputs = [ gpgme ];
