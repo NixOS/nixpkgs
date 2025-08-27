@@ -7,6 +7,7 @@
   libxml2,
   pkg-config,
   getopt,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,10 @@ stdenv.mkDerivation rec {
     ]
     ++ [ libxml2 ];
 
-  prePatch = ''
-    substituteInPlace ocaml-dep.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+  postPatch = ''
+    substituteInPlace ocaml-dep.sh.in --replace-fail'#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace configure.ac --replace-fail 'AC_CONFIG_MACRO_DIR([m4])' 'AC_CONFIG_MACRO_DIRS([m4 ${gettext}/share/gettext/m4])'
   '';
 
   meta = with lib; {
