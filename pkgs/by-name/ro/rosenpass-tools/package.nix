@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   inherit (rosenpass) version src;
   pname = "rosenpass-tools";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
     installShellFiles

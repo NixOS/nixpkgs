@@ -4195,10 +4195,6 @@ with pkgs;
     inherit (python3Packages) sphinx;
   };
 
-  rosenpass = callPackage ../tools/networking/rosenpass { };
-
-  rosenpass-tools = callPackage ../tools/networking/rosenpass/tools.nix { };
-
   rpm = callPackage ../tools/package-management/rpm {
     lua = lua5_4;
   };

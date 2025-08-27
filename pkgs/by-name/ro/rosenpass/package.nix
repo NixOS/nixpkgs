@@ -1,13 +1,13 @@
 {
   lib,
-  fetchFromGitHub,
-  nixosTests,
-  rustPlatform,
   stdenv,
-  installShellFiles,
+  rustPlatform,
+  fetchFromGitHub,
   cmake,
-  libsodium,
+  installShellFiles,
   pkg-config,
+  libsodium,
+  nixosTests,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,11 +23,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vx6kSdDOXiIp2626yKVieDuS9DD5/wKyXutMiKMKn24=";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate
+    installShellFiles
     pkg-config
     rustPlatform.bindgenHook # for C-bindings in the crypto libs
-    installShellFiles
   ];
 
   buildInputs = [ libsodium ];
