@@ -13,8 +13,8 @@
   setuptools,
   tqdm,
   typing-extensions,
+  pinecone-plugin-assistant,
   pinecone-plugin-interface,
-  pinecone-plugin-inference,
   urllib3,
 }:
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
     loguru
     numpy
     python-dateutil
+    pinecone-plugin-assistant
     pinecone-plugin-interface
-    pinecone-plugin-inference
     pyyaml
     requests
     tqdm

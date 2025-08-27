@@ -3,19 +3,19 @@
   lib,
   fetchPypi,
   poetry-core,
-  pinecone-plugin-interface,
+  requests,
 }:
 
 buildPythonPackage rec {
-  pname = "pinecone-plugin-inference";
-  version = "3.1.0";
+  pname = "pinecone-plugin-assistant";
+  version = "1.7.0";
 
   pyproject = true;
 
   src = fetchPypi {
-    pname = "pinecone_plugin_inference";
+    pname = "pinecone_plugin_assistant";
     inherit version;
-    hash = "sha256-7/gmF44f5EhXe+L/PY27Byvvu9wtiI4hRiRSOhw3zY0=";
+    hash = "sha256-4m47oQqLccPaDXd8/0B2aAIugpY8SRPQ/+tsVSch5II=";
   };
 
   build-system = [
@@ -23,14 +23,18 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pinecone-plugin-interface
+    requests
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   meta = {
     homepage = "https://www.pinecone.io/";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [ codgician ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    description = "Embeddings plugin for Pinecone SDK";
+    description = "Assistant plugin for Pinecone SDK";
   };
 }
