@@ -2,22 +2,27 @@
   buildGoModule,
   fetchFromGitiles,
   lib,
+  git,
 }:
 let
-  commit = "500493c154652d6986a34b341e98df244ae1ad0d";
+  commit = "b6bffbd35b309667f3716491c3fa51fae5b6f169";
   git-repo = "https://chromium.googlesource.com/infra/luci/luci-go";
 in
 buildGoModule {
   pname = "luci-go";
-  version = "0-unstable-2024-10-31";
+  version = "0-unstable-2025-08-26";
 
   src = fetchFromGitiles {
     url = git-repo;
     rev = commit;
-    hash = "sha256-HP4Aizt5FJA3IAlqs7gylw8/xUbBwsmReGaR8jIkmrk=";
+    hash = "sha256-vKASbHcu50l/kAUI5yAjOssjRKjsx0VxKQB7b3HprSI=";
   };
 
-  vendorHash = "sha256-FMqbEls6MivPeReZTADrfcAvxo8o0Gy7bq9xG6WN38k=";
+  vendorHash = "sha256-4BiC5LI7mG7jCz2dt+Wj+MTqzif68C+TAf/0JNExuYg=";
+
+  preCheck = ''
+    export PATH="${git}/bin:$PATH"
+  '';
 
   checkFlags =
     let
@@ -31,6 +36,9 @@ buildGoModule {
         # require filesystem access
         "TestPythonBasic"
         "TestPythonFromPath"
+
+        # incompatible with our sandbox
+        "TestFindRoot"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -40,7 +48,7 @@ buildGoModule {
     longDescription = ''
       LUCI services and tools in Go. This is part of Chromium infra and
       provides facilities useful for packaging software from the Chromium
-      ecosystem.
+      ecosystem. Provides cipd.
     '';
     homepage = "${git-repo}/";
     changelog = "${git-repo}/+log?s=${commit}";
