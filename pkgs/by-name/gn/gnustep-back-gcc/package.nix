@@ -13,11 +13,6 @@ gobjcStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Generic backend for GNUstep (GCC environment)";
-    inherit (gnustep-back.meta) mainProgram homepage license platforms;
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-      matthewbauer
-    ];
+    inherit (gnustep-back.meta) mainProgram homepage license platforms maintainers;
   };
 })
