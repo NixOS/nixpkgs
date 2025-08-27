@@ -349,6 +349,15 @@ rec {
       )
     );
 
+  settingsToSections =
+    settings:
+    concatStringsSep "\n" (
+      mapAttrsToList (section_name: section_attrs: ''
+        [${section_name}]
+        ${attrsToSection section_attrs}
+      '') settings
+    );
+
   generateUnits =
     {
       allowCollisions ? true,
