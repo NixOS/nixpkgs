@@ -1,5 +1,5 @@
 /*
-  List of NixOS maintainers.
+  List of active NixOS maintainers.
    ```nix
    handle = {
      # Required

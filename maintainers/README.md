@@ -34,15 +34,15 @@ In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
 
-### How to lose maintainer status
+### Losing maintainer status
 
-Maintainers who have become inactive on a given package can be removed.
+Maintainers who have become inactive can be removed.
 This helps us keep an accurate view of the state of maintenance in Nixpkgs.
 
 The inactivity measure is currently not strictly enforced.
 We would typically look at it if we notice that the author hasn't reacted to package-related notifications for more than 3 months.
 
-Removing the maintainer happens by making a PR on the package, adding that person as a reviewer, and then waiting a week for a reaction.
+Removing the maintainer happens by making a PR, adding that person as a reviewer, and then waiting a week for a reaction.
 
 The maintainer is welcome to come back at any time.
 
