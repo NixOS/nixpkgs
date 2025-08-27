@@ -11662,6 +11662,8 @@ self: super: with self; {
 
   pinecone-client = callPackage ../development/python-modules/pinecone-client { };
 
+  pinecone-plugin-assistant = callPackage ../development/python-modules/pinecone-plugin-assistant { };
+
   pinecone-plugin-inference = callPackage ../development/python-modules/pinecone-plugin-inference { };
 
   pinecone-plugin-interface = callPackage ../development/python-modules/pinecone-plugin-interface { };
