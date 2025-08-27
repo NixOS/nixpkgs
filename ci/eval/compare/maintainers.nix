@@ -95,14 +95,20 @@ let
 
   attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
+  # TODO: create ping lists for other contacts once non-GitHub ping
+  #  implementations get merged
   listToPing = lib.concatMap (
     pkg:
-    builtins.map (maintainer: {
-      id = maintainer.githubId;
-      inherit (maintainer) github;
-      packageName = pkg.name;
-      dueToFiles = pkg.filenames;
-    }) pkg.maintainers
+    builtins.map
+      (maintainer: {
+        id = maintainer.githubId;
+        inherit (maintainer) github;
+        packageName = pkg.name;
+        dueToFiles = pkg.filenames;
+      })
+      # TODO: If community consensus (e.g. an RFC) makes `githubId` mandatory,
+      #  simplify to `pkg.maintainers`
+      (builtins.filter (maintainer: maintainer ? githubId) pkg.maintainers)
   ) attrsWithModifiedFiles;
 
   byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
