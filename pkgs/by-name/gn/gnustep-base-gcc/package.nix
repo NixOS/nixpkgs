@@ -29,36 +29,10 @@
 
 gobjcStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base-gcc";
-  inherit (gnustep-base) version src outputs;
-
-  nativeBuildInputs = [
-    pkg-config
-    wrapGNUstepAppsHook
-  ];
+  inherit (gnustep-base) version src outputs nativeBuildInputs propagatedBuildInputs;
 
   propagatedNativeBuildInputs = [
     gnustep-make-gcc
-  ];
-
-  propagatedBuildInputs = [
-    aspell
-    audiofile
-    binutils-unwrapped
-    cups
-    giflib
-    gmp
-    gnutls
-    icu
-    libffi
-    libgcrypt
-    libiberty
-    libiconv
-    libjpeg
-    libpng
-    libtiff
-    libxml2
-    libxslt
-    portaudio
   ];
 
   patches = [
