@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sashs";
     repo = "Ropper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MOAbACLDdeKCMV4K/n1rAQlxDN0JoDIiUF6Zr3yPw8o=";
   };
 
@@ -36,9 +36,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Show information about files in different file formats";
-    mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
+    changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];
+    mainProgram = "ropper";
   };
 }
