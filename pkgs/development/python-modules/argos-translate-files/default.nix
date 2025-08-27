@@ -2,36 +2,43 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  writableTmpDirAsHomeHook,
+  setuptools,
   lxml,
+  pymupdf,
+  pysrt,
   translatehtml,
 }:
 
 buildPythonPackage rec {
   pname = "argos-translate-files";
   version = "1.4.0";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-vKnPL0xgyJ1vYtB2AgnKv4BqigSiFYmIm5HBq4hQ7nI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
+    pymupdf
+    pysrt
     translatehtml
+  ];
+
+  nativeCheckInputs = [
+    # pythonImportsCheck needs a home dir for argostranslatefiles
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
     ln -s */requires.txt requirements.txt
   '';
 
-  # required for import check to work (argostranslate)
-  env.HOME = "/tmp";
-
   pythonImportsCheck = [ "argostranslatefiles" ];
-
-  doCheck = false; # no tests
 
   meta = with lib; {
     description = "Translate files using Argos Translate";
