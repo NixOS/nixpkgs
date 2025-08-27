@@ -37,6 +37,24 @@ in
         hash = "sha256-QuVZBcHSn/DK+xbjM36Y89+w22vk7NRV4MkbjgvS28A=";
       })
 
+      # Exclude known-flaky tests
+      # Remove when version > 2.15.0
+      (fetchpatch {
+        name = "0004-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-1.patch";
+        url = "https://github.com/canonical/mir/commit/967d872daab50d845adce389c0672edfd18b90c9.patch";
+        hash = "sha256-XfTWQj+fmPpC1hIqt7ELGU6Yq2wJSO+FQ8bsikI5h0I=";
+      })
+      (fetchpatch {
+        name = "0005-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-2.patch";
+        url = "https://github.com/canonical/mir/commit/932d8744852bca9830668018474890bce0c5f6d6.patch";
+        hash = "sha256-+udEt6pF5VLSBtRgo9r1YdVsinARWLAL4AeEG01DV68=";
+      })
+      (fetchpatch {
+        name = "0006-mir-exclude-tests-surfaces_with_exclusive_zone_set_to_negative_one_do_not_respect_other_exclusive_zones-3.patch";
+        url = "https://github.com/canonical/mir/commit/fbad5e50be02992f6cf1f41f928950532f3f62c5.patch";
+        hash = "sha256-J0YEhXf8sAWEHHxU7QKSJjOoHiXsYqotBfgGm79X6GA=";
+      })
+
       # Fix ignored return value of std::lock_guard
       # Remove when version > 2.15.0
       # Was changed as part of the big platform API change, no individual upstream commit with this fix
