@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1696.patch";
       hash = "sha256-yjX2FkOK8bz29a/XSA7qXgQw9lxzx8VIgEBREW32NN4=";
     })
+    # Fix 32-bit PowerPC build
+    (fetchpatch {
+      url = "https://github.com/uxlfoundation/oneTBB/pull/987/commits/c828ae47b8f4bea7736d2f9d05460e2b529c9d7d.patch";
+      hash = "sha256-faNiVdHRIkmavufDHQQ8vHppvdahZ7yhJVL3bOwNTFg=";
+    })
   ];
 
   # Fix build with modern gcc
