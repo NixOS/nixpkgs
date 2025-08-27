@@ -1936,6 +1936,32 @@ runTests {
 
   # ATTRSETS
 
+  testGenAttrs = {
+    expr = attrsets.genAttrs [ "foo" "bar" ] (name: "x_" + name);
+    expected = {
+      foo = "x_foo";
+      bar = "x_bar";
+    };
+  };
+  testGenAttrs' = {
+    expr = attrsets.genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s));
+    expected = {
+      x_foo = "y_foo";
+      x_bar = "y_bar";
+    };
+  };
+  testGenAttrs'Example2 = {
+    expr = attrsets.genAttrs' [
+      {
+        x = "foo";
+        y = "baz";
+      }
+    ] (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
+    expected = {
+      x_foo = "y_baz";
+    };
+  };
+
   testConcatMapAttrs = {
     expr =
       concatMapAttrs
