@@ -139,7 +139,7 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   First, make sure that the listed GitHub handle matches the author of the commit.
 
-  Then, visit the URL `https://api.github.com/users/ghost` and validate that the `id` field matches the provided `githubId`.
+  Then, visit the URL `https://api.github.com/user/10137` and validate that the `login` field matches the provided `github` handle.
 
 ### Maintainer teams
 
