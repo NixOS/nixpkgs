@@ -11,19 +11,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
   # nixpkgs-update: no auto update
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dYFUYdMQMT8CZFMrCrhQ8JPEhA4CVf+f7VLFt3JNmn8=";
+    hash = "sha256-ufMoB71xebxO/Cu/xVQ3BMrcCgIlkG+MXH2Ru2i6uXo=";
   };
-
-  patches = [
-    # Fix openssl adaptor code for musl based static binaries.
-    ./aws-c-cal-musl-compat.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 

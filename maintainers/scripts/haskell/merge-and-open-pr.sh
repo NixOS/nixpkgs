@@ -80,13 +80,7 @@ echo "Merging https://github.com/NixOS/nixpkgs/pull/${curr_haskell_updates_pr_nu
 gh pr merge --repo NixOS/nixpkgs --merge "$curr_haskell_updates_pr_num"
 
 # Update stackage, Hackage hashes, and regenerate Haskell package set
-echo "Updating Stackage..."
-./maintainers/scripts/haskell/update-stackage.sh --do-commit
-echo "Updating Hackage hashes..."
-./maintainers/scripts/haskell/update-hackage.sh --do-commit
-echo "Regenerating Hackage packages..."
-# Using fast here because after the hackage-update eval errors will likely break the transitive dependencies check.
-./maintainers/scripts/haskell/regenerate-hackage-packages.sh --fast --do-commit
+./maintainers/scripts/haskell/update-package-set.sh
 
 # Push these new commits to the haskell-updates branch
 echo "Pushing commits just created to the remote $push_remote/haskell-updates branch..."

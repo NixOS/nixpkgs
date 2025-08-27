@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edlib";
-  version = "unstable-2021-08-20";
+  version = "1.3.9.post1";
 
   src = fetchFromGitHub {
     owner = "Martinsos";
     repo = "edlib";
-    rev = "f8afceb49ab0095c852e0b8b488ae2c88e566afd";
-    hash = "sha256-P/tFbvPBtA0MYCNDabW+Ypo3ltwP4S+6lRDxwAZ1JFo=";
+    tag = finalAttrs.version;
+    hash = "sha256-XejxohLVdBBzpYZ//OpqC1ActmCaZ8tunJyhOYtZmKQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://martinsos.github.io/edlib";
     description = "Lightweight, fast C/C++ library for sequence alignment using edit distance";
-    maintainers = with maintainers; [ bcdarwin ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

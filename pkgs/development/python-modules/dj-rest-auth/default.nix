@@ -81,6 +81,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Test connects to graph.facebook.com
     "TestSocialLoginSerializer"
+    # claim[user_id] is "1" (str) vs 1 (int)
+    "test_custom_jwt_claims"
+    "test_custom_jwt_claims_cookie_w_authentication"
   ];
 
   disabledTestPaths = [

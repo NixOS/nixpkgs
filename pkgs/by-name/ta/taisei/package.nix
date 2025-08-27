@@ -12,32 +12,31 @@
   openssl,
   gamemode,
   shaderc,
-  ensureNewerSourcesForZipFilesHook,
+  makeWrapper,
   # Runtime depends
   glfw,
-  SDL2,
+  sdl3,
   SDL2_mixer,
   cglm,
   freetype,
   libpng,
   libwebp,
-  libzip,
   zlib,
   zstd,
   spirv-cross,
+  mimalloc,
 
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rThLz8o6IYhIBUc0b1sAQi2aF28btajcM1ScTv+qn6c=";
+    hash = "sha256-Cs66kyNSVjUZUH+ddZGjFwSUQtwqX4uuGQh+ZLv6N6o=";
     fetchSubmodules = true;
   };
 
@@ -48,24 +47,24 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.python
     python3Packages.zstandard
-    ensureNewerSourcesForZipFilesHook
     shaderc
+    makeWrapper
   ];
 
   buildInputs = [
     glfw
-    SDL2
+    sdl3
     SDL2_mixer
     cglm
     freetype
     libpng
     libwebp
-    libzip
     zlib
     zstd
     opusfile
     openssl
     spirv-cross
+    mimalloc
   ]
   ++ lib.optional gamemodeSupport gamemode;
 
@@ -74,11 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "install_macos_bundle" false)
     (lib.mesonEnable "install_relocatable" false)
     (lib.mesonEnable "shader_transpiler" false)
+    (lib.mesonEnable "shader_transpiler_dxbc" false)
     (lib.mesonEnable "gamemode" gamemodeSupport)
+    (lib.mesonEnable "package_data" false)
+    (lib.mesonEnable "vfs_zip" false)
   ];
 
   preConfigure = ''
     patchShebangs .
+  '';
+
+  postInstall = lib.optionalString gamemodeSupport ''
+    wrapProgram $out/bin/taisei \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ gamemode ]}
   '';
 
   strictDeps = true;

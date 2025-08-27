@@ -763,7 +763,7 @@ in
           Force certificate authentication for server-to-server connections?
           This provides ideal security, but requires servers you communicate
           with to support encryption AND present valid, trusted certificates.
-          For more information see https://prosody.im/doc/s2s#security
+          For more information see <https://prosody.im/doc/s2s#security>
         '';
       };
 
@@ -880,7 +880,11 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional prosody configuration";
+        description = ''
+          Additional prosody configuration
+
+          The generated file is processed by `envsubst` to allow secrets to be passed securely via environment variables.
+        '';
       };
 
       log = mkOption {
@@ -974,13 +978,19 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst -i ${
+          config.environment.etc."prosody/prosody.cfg.lua".source
+        } -o /run/prosody/prosody.cfg.lua
+      '';
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
           Type = "simple";
-          RuntimeDirectory = [ "prosody" ];
+          RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
+          Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
           ExecStart = "${lib.getExe cfg.package} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";

@@ -2,30 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   termcolor,
-  pytest,
-  packaging,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZCLoMlj1sMBM58YyF2x3Msq1/bkJyznMpckTn4EnbAo=";
+    hash = "sha256-c7i2UWPr8Q+fZx76ue7T1W8g0spovag/pkdAqSwI9l0=";
   };
 
-  buildInputs = [ pytest ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     termcolor
-    packaging
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -166,7 +166,7 @@ The following is a non-exhaustive list of such differences:
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
 If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
-The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}

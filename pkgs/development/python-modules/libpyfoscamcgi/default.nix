@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "libpyfoscamcgi";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Foscam-wangzhengyu";
     repo = "libfoscamcgi";
     tag = "v${version}";
-    hash = "sha256-L9QGXBEK1cehP/eJ2++Um4WCgQMG5Rv8UAnZg4Mfwu4=";
+    hash = "sha256-QthzyMdZ2iberDmbeqf6MaUv8lH5xhlZLL8ZAlapvIk=";
   };
 
   build-system = [ setuptools ];

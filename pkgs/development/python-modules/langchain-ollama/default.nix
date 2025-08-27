@@ -60,8 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-ollama==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-ollama==";
+    };
   };
 
   meta = {

@@ -55,6 +55,6 @@ buildPythonPackage {
       a consistent and modern look across all desktop platforms
       (Windows, macOS, Linux).
     '';
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
   };
 }

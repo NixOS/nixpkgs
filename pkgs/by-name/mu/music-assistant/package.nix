@@ -3,7 +3,6 @@
   python3,
   fetchFromGitHub,
   ffmpeg-headless,
-  librespot,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -48,14 +47,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.5";
+  version = "2.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-v9xFUjjk7KHsUtuZjQWLtc1m3f6VOUPlQtSBtUR6Pcg=";
+    hash = "sha256-7Q+BYw7wnT7QdqrDjagaxupzD0iKTc26z4TfxNtugdA=";
   };
 
   patches = [
@@ -63,9 +62,9 @@ python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
-    (replaceVars ./librespot.patch {
-      librespot = lib.getExe librespot;
-    })
+
+    # Look up librespot from PATH at runtime
+    ./librespot.patch
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
@@ -93,6 +92,11 @@ python.pkgs.buildPythonApplication rec {
     "pillow"
     "xmltodict"
     "zeroconf"
+  ];
+
+  pythonRemoveDeps = [
+    # no runtime dependency resolution
+    "uv"
   ];
 
   dependencies =

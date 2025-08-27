@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo125Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
@@ -9,20 +9,20 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u4H1wC5RL3p7GNL7WQkmK8DNgwKQvgxHd8TIug+Be+o=";
+    hash = "sha256-3sUkEbC96/XUR1tvCmxu56hPh7Ag/sD6/pGrq9JhHC8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-guG/JnwUi2WeClSfAX9pRG3kLJMTvTDiJ7L54TGeSd0=";
+  vendorHash = "sha256-eNUhk76YLHtXCFaxiavM6d8CMeE+YQ+vOecDUCiTh5k=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
     pnpmDeps = pnpm_10.fetchDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 1;
-      hash = "sha256-UgbclnoOqsWY5fYAGoDJON9MDtN5edw65JRleghdReE=";
+      hash = "sha256-q2oXyFVdaDfJ4NFDt26/VJVXzQLCuKXHtCx1mah6Js8=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";

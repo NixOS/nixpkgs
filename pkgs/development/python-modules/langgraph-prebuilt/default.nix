@@ -89,8 +89,12 @@ buildPythonPackage rec {
     "tests/conftest.py"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "prebuilt==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "prebuilt==";
+    };
   };
 
   meta = {

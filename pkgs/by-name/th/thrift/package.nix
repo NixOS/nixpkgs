@@ -33,11 +33,17 @@ stdenv.mkDerivation rec {
     cmake
     flex
     pkg-config
-    python3
-    python3.pkgs.setuptools
-  ]
-  ++ lib.optionals (!static) [
-    python3.pkgs.twisted
+    (python3.withPackages (
+      ps:
+      with ps;
+      [
+        setuptools
+        six
+      ]
+      ++ lib.optionals (!static) [
+        twisted
+      ]
+    ))
   ];
 
   buildInputs = [

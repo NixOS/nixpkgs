@@ -39,8 +39,11 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    lua
     openssl
+  ];
+
+  propagatedBuildInputs = [
+    lua
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
@@ -67,6 +70,8 @@ rustPlatform.buildRustPackage rec {
     runHook preInstall
     cp -r target/dist/share $out
     cp -r target/dist/lib $out
+    mkdir -p $out/lib/lua
+    ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
     runHook postInstall
   '';
 

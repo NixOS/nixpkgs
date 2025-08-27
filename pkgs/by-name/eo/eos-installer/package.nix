@@ -14,6 +14,7 @@
   gtk3,
   systemdMinimal,
   udisks,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     gtk3
     systemdMinimal
     udisks
+    xz
   ];
 
   preConfigure = ''

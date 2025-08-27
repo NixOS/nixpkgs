@@ -63,6 +63,8 @@ python3Packages.buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "urwid" ];
+
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3

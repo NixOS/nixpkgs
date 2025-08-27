@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
       hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
     })
+    # Fix the tests on Darwin when `$TMPDIR` does not end with a slash
+    # and its parent directory is not writable by the build user, as on
+    # Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
+    # <https://github.com/libarchive/libarchive/pull/2708>
+    ./fix-darwin-tmpdir-handling.patch
   ];
 
   outputs = [

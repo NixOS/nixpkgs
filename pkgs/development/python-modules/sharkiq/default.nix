@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-FIPU2D0e0JGcoxFKe5gf5nKZ0T/a18WS9I+LXeig1is=";
+    hash = "sha256-bojLyL16DOFgbU8rglzBRxcgsHwaTQQAsJQZCaXo5pw=";
   };
 
   build-system = [ setuptools ];
