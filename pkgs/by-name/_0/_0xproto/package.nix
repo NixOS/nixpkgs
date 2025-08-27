@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "0xproto";
@@ -22,6 +23,10 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 -t $out/share/fonts/truetype/ *.ttf
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Free and Open-source font for programming";
