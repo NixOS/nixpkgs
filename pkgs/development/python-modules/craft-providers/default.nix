@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.4.0";
+  version = "3.0.0";
 
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-frcRv+19czsZ948SEKfYsMUP6n9MbJv6gxXUAdwFw4Y=";
+    hash = "sha256-8StnxyuvyK9HRl1smbhJFz1qZxyNOWnzELG0ku0dh8k=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.9.1" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
