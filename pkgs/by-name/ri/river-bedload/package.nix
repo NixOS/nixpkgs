@@ -1,6 +1,5 @@
 {
   _experimental-update-script-combinators,
-  callPackage,
   fetchFromSourcehut,
   unstableGitUpdater,
   lib,
@@ -11,8 +10,8 @@
   wayland-protocols,
   wayland-scanner,
   zig_0_14,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-bedload";
   version = "0.1.1-unstable-2025-03-19";
@@ -24,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CQH2LQi2ga4YDD2ZYb998ExDJHK4TGHq5h3z94703Dc=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-EqfWZlTyV0zmw4HVBUmdN039DVz1nzptwBAAKjsJ2IQ=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -37,14 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
-
   passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
     (unstableGitUpdater { tagPrefix = "v"; })
-    ./update-build-zig-zon.sh
   ];
 
   meta = {
