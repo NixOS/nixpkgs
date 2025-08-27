@@ -14,7 +14,7 @@
 
 python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.10.2";
+  version = "8.11.2";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ python312Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-klG+cT2vXo9v9tIJhJNCeGTiuV5C+oed0Vi9310PnqQ=";
+    hash = "sha256-Rc3OSRTTpYA7WKI/WEvCdq1SQnkO91FXzQscV2b93TI=";
   };
 
   patches = [
@@ -59,7 +59,9 @@ python312Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools>=69.0,<80.9.0' 'setuptools' \
+      --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -113,6 +115,7 @@ python312Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "click"
     "craft-parts"
+    "craft-providers"
     "cryptography"
     "docutils"
     "jsonschema"
@@ -175,6 +178,11 @@ python312Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
+    # Disabled because we're uisng a later version of a library than
+    # specified which changes the behaviour in a non-breaking way, apart
+    # from when a test is looking for a specific error message
+    "test_esm_error[core]"
+    "test_esm_error[core18]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
