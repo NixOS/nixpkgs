@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-/26iwaV6E15TWrObIvXE4AipEboe1gv6WYu4BndPtUs=";
   };
 
+  postPatch = ''
+    # https://github.com/StefanBRas/pytest-shared-session-scope/issues/39
+    substituteInPlace src/pytest_shared_session_scope/_scheduler.py \
+      --replace-fail parse_spec_config parse_tx_spec_config
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [
