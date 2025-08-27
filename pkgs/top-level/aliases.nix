@@ -1125,6 +1125,8 @@ mapAliases {
   gtkextra = throw "'gtkextra' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   gtkperf = throw "'gtkperf' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   guardian-agent = throw "'guardian-agent' has been removed, as it hasn't been maintained upstream in years and accumulated many vulnerabilities"; # Added 2024-06-09
+  gui-for-clash = throw "'gui-for-clash' has been removed due to lack of maintenance"; # Added 2025-08-27
+  gui-for-singbox = throw "'gui-for-singbox' has been removed due to lack of maintenance"; # Added 2025-08-27
   guile-disarchive = disarchive; # Added 2023-10-27
   guile-sdl = throw "guile-sdl has been removed, as it was broken"; # Added 2025-08-25
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
