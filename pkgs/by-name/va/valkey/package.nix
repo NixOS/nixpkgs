@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  passthru.serverBin = "valkey-server";
+
   meta = with lib; {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
