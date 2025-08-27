@@ -44,6 +44,8 @@ lib.overrideDerivation
       }
       // (args.features or { });
 
+      isLTS = true;
+
       extraMeta =
         if (rpiVersion < 3) then
           {
