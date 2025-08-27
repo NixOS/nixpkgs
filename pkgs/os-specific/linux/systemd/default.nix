@@ -153,6 +153,7 @@
   withShellCompletions ? true,
   withSysusers ? true,
   withSysupdate ? true,
+  withSysupdateD ? true,
   withTimedated ? true,
   withTimesyncd ? true,
   withTpm2Tss ? true,
@@ -188,6 +189,7 @@ assert withHomed -> withPam;
 assert withHomed -> withOpenSSL;
 assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
+assert withSysupdateD -> withSysupdate;
 assert withImportd -> (withGcrypt || withOpenSSL);
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;

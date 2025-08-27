@@ -10792,6 +10792,7 @@ with pkgs;
     withResolved = false;
     withShellCompletions = false;
     withSysupdate = false;
+    withSysupdateD = false;
     withSysusers = false;
     withTimedated = false;
     withTimesyncd = false;
