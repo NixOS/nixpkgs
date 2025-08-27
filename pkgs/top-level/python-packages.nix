@@ -9451,6 +9451,10 @@ self: super: with self; {
 
   mkdocs-graphviz = callPackage ../development/python-modules/mkdocs-graphviz { };
 
+  mkdocs-include-markdown-plugin =
+    callPackage ../development/python-modules/mkdocs-include-markdown-plugin
+      { };
+
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
