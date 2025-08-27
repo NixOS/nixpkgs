@@ -32,6 +32,8 @@ let
       common-updater-scripts,
       curl,
       jq,
+      coreutils,
+      formats,
 
       version,
       phpSrc ? null,
@@ -390,7 +392,11 @@ let
             inherit ztsSupport;
 
             services.default = {
-              imports = [ ./service.nix ];
+              imports = [
+                (lib.modules.importApply ./service.nix {
+                  inherit formats coreutils;
+                })
+              ];
               php-fpm.package = lib.mkDefault finalAttrs.finalPackage;
             };
           };

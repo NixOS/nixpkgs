@@ -10775,6 +10775,8 @@ self: super: with self; {
 
   oocsi = callPackage ../development/python-modules/oocsi { };
 
+  opaque = callPackage ../development/python-modules/opaque { };
+
   opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
 
   open-clip-torch = callPackage ../development/python-modules/open-clip-torch { };
@@ -10812,6 +10814,8 @@ self: super: with self; {
   };
 
   opencamlib = callPackage ../development/python-modules/opencamlib { };
+
+  opencc = callPackage ../development/python-modules/opencc { };
 
   opencensus = callPackage ../development/python-modules/opencensus { };
 
