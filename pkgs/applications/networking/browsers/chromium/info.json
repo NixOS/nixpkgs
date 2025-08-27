@@ -803,7 +803,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "139.0.7258.138",
+    "version": "139.0.7258.154",
     "deps": {
       "depot_tools": {
         "rev": "ea7a0baff0d8554cf6d38f525b4e7882c2b4ec18",
@@ -815,16 +815,16 @@
         "hash": "sha256-gwptzuirIdPAV9XCaAT09aM/fY7d6xgBU7oSu9C4tmE="
       },
       "ungoogled-patches": {
-        "rev": "139.0.7258.138-1",
-        "hash": "sha256-dmkUQHG9E0owKBIZi/e0mC5lc07rmU1muzP63PLdtTs="
+        "rev": "139.0.7258.154-1",
+        "hash": "sha256-GGuHEkqcTEvy1m1m8n4hReo8DmLQMDd5J6P1iTnG4Ys="
       },
       "npmHash": "sha256-R2gOpfPOUAmnsnUTIvzDPHuHNzL/b2fwlyyfTrywEcI="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "884e54ea8d42947ed636779015c5b4815e069838",
-        "hash": "sha256-MCBHB1ms3H8AXqiIDHH7C+8/NDcgsn3pDx7mKtGdfbc=",
+        "rev": "9e0d6b2b47ffb17007b713429c9a302f9e43847f",
+        "hash": "sha256-L3cq3kx7hOv8bzwkQ+nyDM9VDzsvHaRzrSwrqwyCdHA=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -899,8 +899,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "96492b317e27ba4106ed00f5faa4534cfeaa0b8f",
-        "hash": "sha256-TE8vYLNnAzVkGQZ2ZYuNHnu8fwp2Qv4ANP0btgrKYSQ="
+        "rev": "d9fc4a372074b1079c193c422fc4a180e79b6636",
+        "hash": "sha256-owMOjZEXhjXkEwzKdNVUk6Uzqdfp8UQq4JLDSvbvyeA="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -1384,8 +1384,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "849572b5c41e5bf59dc88bf54c41067faa9b5b00",
-        "hash": "sha256-lTUkzpzIskbEL7b2xBWT8s9YNyu1AZ235SBo5AfQtpg="
+        "rev": "bbdc38bc2d1693f56154f78eb5d4ff296d8ca3da",
+        "hash": "sha256-LYo73KuSVBEcRN1PqG0EBFeKaLy66UPtZ3DMHP5YVXM="
       },
       "src/third_party/perfetto": {
         "url": "https://chromium.googlesource.com/external/github.com/google/perfetto.git",
@@ -1599,8 +1599,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "4d36678284f92d381f411c7947588d7a09989ca4",
-        "hash": "sha256-X5k2R7/sS3/C2S5hC1ILSquWjnPol3Pk+xe1suzgnFs="
+        "rev": "a0a7886d6b3707be8d4b403e463fa82fdb3f216c",
+        "hash": "sha256-KjIBJw40hiBkcHNn96dD5iZs2n2HMWIkAJ6ND2+5JJQ="
       }
     }
   }

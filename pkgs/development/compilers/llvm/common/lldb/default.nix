@@ -28,7 +28,6 @@
   fetchpatch,
   fetchpatch2,
   replaceVars,
-  ...
 }:
 
 let

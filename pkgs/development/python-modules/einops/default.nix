@@ -9,6 +9,7 @@
   parameterized,
   pillow,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   pythonOlder,
   torch,
 }:
@@ -27,9 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-J9m5LMOleHf2UziUbOtwf+DFpu/wBDcAyHUor4kqrR8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     jupyter
     nbconvert
     numpy
@@ -41,23 +43,13 @@ buildPythonPackage rec {
 
   env.EINOPS_TEST_BACKENDS = "numpy";
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "einops" ];
 
-  disabledTests = [
-    # Tests are failing as mxnet is not pulled-in
-    # https://github.com/NixOS/nixpkgs/issues/174872
-    "test_all_notebooks"
-    "test_dl_notebook_with_all_backends"
-    "test_backends_installed"
-    # depends on tensorflow, which is not available on Python 3.13
-    "test_notebook_2_with_all_backends"
+  disabledTestPaths = [
+    # skip folder with notebook samples that depend on large packages
+    # or accelerator access and have been unreliable
+    "scripts/"
   ];
-
-  disabledTestPaths = [ "einops/tests/test_layers.py" ];
 
   __darwinAllowLocalNetworking = true;
 

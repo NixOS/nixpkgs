@@ -4,7 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  makeBinaryWrapper,
+  makeWrapper,
   pciutils,
   versionCheckHook,
   nix-update-script,
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
   ];
 
   # NOTE: The HyFetch project maintains an updated version of neofetch renamed

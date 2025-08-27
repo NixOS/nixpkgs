@@ -1935,8 +1935,6 @@ self: super: with self; {
 
   bk7231tools = callPackage ../development/python-modules/bk7231tools { };
 
-  bkcharts = callPackage ../development/python-modules/bkcharts { };
-
   black = callPackage ../development/python-modules/black { };
 
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
@@ -2229,8 +2227,6 @@ self: super: with self; {
   bytesize = toPythonModule (pkgs.libbytesize.override { python3Packages = self; });
 
   bytewax = callPackage ../development/python-modules/bytewax { };
-
-  bz2file = callPackage ../development/python-modules/bz2file { };
 
   cache = callPackage ../development/python-modules/cache { };
 
@@ -8727,7 +8723,11 @@ self: super: with self; {
 
   lsp-tree-sitter = callPackage ../development/python-modules/lsp-tree-sitter { };
 
-  lsprotocol = callPackage ../development/python-modules/lsprotocol { };
+  lsprotocol = lsprotocol_2023;
+
+  lsprotocol_2023 = callPackage ../development/python-modules/lsprotocol/2023.nix { };
+
+  lsprotocol_2025 = callPackage ../development/python-modules/lsprotocol/2025.nix { };
 
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
@@ -10431,8 +10431,6 @@ self: super: with self; {
 
   nitime = callPackage ../development/python-modules/nitime { };
 
-  nitpick = callPackage ../applications/version-management/nitpick { };
-
   nitransforms = callPackage ../development/python-modules/nitransforms { };
 
   nitrokey = callPackage ../development/python-modules/nitrokey { };
@@ -10458,6 +10456,8 @@ self: super: with self; {
   nltk = callPackage ../development/python-modules/nltk { };
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
+
+  nmcli = callPackage ../development/python-modules/nmcli { };
 
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
 
@@ -11662,7 +11662,7 @@ self: super: with self; {
 
   pinecone-client = callPackage ../development/python-modules/pinecone-client { };
 
-  pinecone-plugin-inference = callPackage ../development/python-modules/pinecone-plugin-inference { };
+  pinecone-plugin-assistant = callPackage ../development/python-modules/pinecone-plugin-assistant { };
 
   pinecone-plugin-interface = callPackage ../development/python-modules/pinecone-plugin-interface { };
 
@@ -14906,8 +14906,6 @@ self: super: with self; {
   python-sat = callPackage ../development/python-modules/python-sat { };
 
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
-
-  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat { };
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
