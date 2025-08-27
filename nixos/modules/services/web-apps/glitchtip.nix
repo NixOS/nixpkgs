@@ -58,6 +58,12 @@ in
         default = 8000;
       };
 
+      workingDirectory = lib.mkOption {
+        type = lib.types.str;
+        description = "The working directory for the GlitchTip services. It will receive user upload data when using the default local filesystem storage.";
+        default = "/var/lib/glitchtip";
+      };
+
       settings = lib.mkOption {
         description = ''
           Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
@@ -170,9 +176,11 @@ in
           wantedBy = [ "multi-user.target" ];
 
           wants = [ "network-online.target" ];
-          requires =
-            lib.optional cfg.database.createLocally "postgresql.target"
-            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
+          requires = [
+            "glitchtip-setup.service"
+          ]
+          ++ lib.optional cfg.database.createLocally "postgresql.target"
+          ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
           after = [
             "network-online.target"
           ]
@@ -188,7 +196,7 @@ in
           RuntimeDirectory = "glitchtip";
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
-          WorkingDirectory = "${pkg}/lib/glitchtip";
+          WorkingDirectory = cfg.workingDirectory;
 
           # hardening
           AmbientCapabilities = "";
@@ -242,6 +250,16 @@ in
           };
         };
 
+        glitchtip-setup = {
+          description = "Setup GlitchTip working directory";
+          serviceConfig = {
+            Type = "simple";
+            ExecStartPre = "${lib.getExe' pkgs.coreutils "cp"} -pur ${pkg}/lib/glitchtip ${cfg.workingDirectory}";
+            ExecStart = "/run/current-system/sw/bin/chown -R glitchtip: ${cfg.workingDirectory}";
+            Restart = "on-abort";
+          };
+        };
+
         glitchtip-worker = commonService // {
           description = "GlitchTip Job Runner";
 
@@ -271,7 +289,6 @@ in
 
     users.users = lib.mkIf (cfg.user == "glitchtip") {
       glitchtip = {
-        home = "/var/lib/glitchtip";
         group = cfg.group;
         extraGroups = lib.optionals cfg.redis.createLocally [ "redis-glitchtip" ];
         isSystemUser = true;
