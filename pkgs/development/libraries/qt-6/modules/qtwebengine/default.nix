@@ -7,7 +7,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -111,14 +110,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-wcby9uD8xb4re9+s+rdl1hcpxDcHxuI68vUNAC7Baas=";
-    })
   ];
 
   postPatch = ''
