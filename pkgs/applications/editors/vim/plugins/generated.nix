@@ -7496,6 +7496,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  live-preview-nvim = buildVimPlugin {
+    pname = "live-preview.nvim";
+    version = "2025-08-17";
+    src = fetchFromGitHub {
+      owner = "brianhuster";
+      repo = "live-preview.nvim";
+      rev = "5890c4f7cb81a432fd5f3b960167757f1b4d4702";
+      sha256 = "0gr68xmx9ph74pqnlpbfx9kj5bh7yg3qh0jni98z2nmkzfvg4qcx";
+    };
+    meta.homepage = "https://github.com/brianhuster/live-preview.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   live-rename-nvim = buildVimPlugin {
     pname = "live-rename.nvim";
     version = "2025-06-23";

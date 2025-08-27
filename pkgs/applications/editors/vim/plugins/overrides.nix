@@ -1794,6 +1794,22 @@ in
     dependencies = [ self.litee-nvim ];
   };
 
+  live-preview-nvim = super.live-preview-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fzf-lua
+      mini-pick
+      snacks-nvim
+      telescope-nvim
+    ];
+
+    nvimSkipModules = [
+      # Ignore livepreview._spec as it fails nvimRequireCheck.
+      # This file runs tests on require which unfortunately fails as it attempts to require the base plugin. See https://github.com/brianhuster/live-preview.nvim/blob/5890c4f7cb81a432fd5f3b960167757f1b4d4702/lua/livepreview/_spec.lua#L25
+      "livepreview._spec"
+    ];
+    meta.license = lib.licenses.gpl3Only;
+  };
+
   lspcontainers-nvim = super.lspcontainers-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
