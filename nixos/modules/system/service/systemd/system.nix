@@ -59,44 +59,28 @@ let
     // concatMapAttrs (
       subServiceName: subService: makeUnits unitType (dash prefix subServiceName) subService
     ) service.services;
+
+  modularServiceConfiguration = portable-lib.configure {
+    serviceManagerPkgs = pkgs;
+    extraRootModules = [
+      ./service.nix
+      ./config-data-path.nix
+    ];
+    extraRootSpecialArgs = {
+      systemdPackage = config.systemd.package;
+    };
+  };
 in
 {
+  _class = "nixos";
+
   # First half of the magic: mix systemd logic into the otherwise abstract services
   options = {
     system.services = mkOption {
       description = ''
         A collection of NixOS [modular services](https://nixos.org/manual/nixos/unstable/#modular-services) that are configured as systemd services.
       '';
-      type = types.attrsOf (
-        types.submoduleWith {
-          class = "service";
-          modules = [
-            ./service.nix
-            ./config-data-path.nix
-
-            # TODO: Consider removing pkgs. Service modules can provide their own
-            #       dependencies.
-            {
-              # Extend portable services option
-              options.services = lib.mkOption {
-                type = types.attrsOf (
-                  types.submoduleWith {
-                    specialArgs.pkgs = pkgs;
-                    modules = [ ];
-                  }
-                );
-              };
-            }
-          ];
-          specialArgs = {
-            # perhaps: features."systemd" = { };
-            # TODO: Consider removing pkgs. Service modules can provide their own
-            #       dependencies.
-            inherit pkgs;
-            systemdPackage = config.systemd.package;
-          };
-        }
-      );
+      type = types.attrsOf modularServiceConfiguration.serviceSubmodule;
       default = { };
       visible = "shallow";
     };

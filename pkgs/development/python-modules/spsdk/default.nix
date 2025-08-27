@@ -39,6 +39,7 @@
   x690,
 
   # tests
+  cookiecutter,
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
@@ -95,6 +96,7 @@ buildPythonPackage rec {
     click-command-tree
     click-option-group
     colorama
+    cookiecutter
     crcmod
     cryptography
     deepmerge
@@ -122,6 +124,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spsdk" ];
 
   nativeCheckInputs = [
+    cookiecutter
     ipykernel
     pytest-notebook
     pytestCheckHook
@@ -134,6 +137,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Missing rotk private key
     "test_general_notebooks"
+
+    # Attempts to access /run
+    "test_nxpimage_famode_export_cli"
   ];
 
   meta = {

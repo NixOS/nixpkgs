@@ -51,6 +51,10 @@ A [`_class`](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalMo
 Provide it as the first attribute in the module:
 
 ```nix
+# Non-module dependencies (`importApply`)
+{ writeScript, runtimeShell }:
+
+# Service module
 { lib, config, ... }:
 {
   _class = "service";
@@ -87,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     services = {
       default = {
-        imports = [ ./service.nix ];
+        imports = [ (lib.modules.importApply ./service.nix { inherit pkgs; }) ];
         example.package = finalAttrs.finalPackage;
         # ...
       };

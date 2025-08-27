@@ -35,6 +35,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "pyocd"
+  ];
+
   dependencies = [
     pyocd
   ];
