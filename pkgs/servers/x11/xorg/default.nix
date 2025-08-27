@@ -16,6 +16,7 @@
   font-bh-ttf,
   font-bh-type1,
   font-bitstream-100dpi,
+  font-bitstream-75dpi,
   font-cronyx-cyrillic,
   font-encodings,
   font-isas-misc,
@@ -199,6 +200,7 @@ self: with self; {
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontbitstream100dpi = font-bitstream-100dpi;
+  fontbitstream75dpi = font-bitstream-75dpi;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
@@ -370,46 +372,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/font/font-arabic-misc-1.0.4.tar.xz";
         sha256 = "0rrlcqbyx9y7hnhbkjir8rs6jkfqyalj1zvhr8niv2n7a8dydzs6";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbitstream75dpi = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bitstream-75dpi";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bitstream-75dpi-1.0.4.tar.xz";
-        sha256 = "09pq7dvyyxj6kvps1dm3qr15pjwh9iq9118fryqc5a94fkc39sxa";
       };
       hardeningDisable = [
         "bindnow"
