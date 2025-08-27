@@ -1,18 +1,11 @@
---- a/src/CMakeLists.txt	2025-08-12 16:34:27
-+++ b/src/CMakeLists.txt	2025-08-15 11:45:56
-@@ -220,7 +220,7 @@
- 
-   target_link_libraries(
-           flameshot
--          kdsingleapplication
-+          kdsingleapplication-qt6
-   )
- endif()
- 
-@@ -447,64 +447,3 @@
+--- a/src/CMakeLists.txt	2025-08-21 13:12:55
++++ b/src/CMakeLists.txt	2025-08-21 13:18:55
+@@ -449,66 +449,4 @@
+     else ()
+         message(WARNING "Unable to find executable windeployqt.")
      endif ()
- endif ()
- 
+-endif ()
+-
 -# macdeployqt
 -if (APPLE)
 -# Code signing settings - optional, set to empty string to skip signing
@@ -73,4 +66,4 @@
 -   endif()
 -
 -
--endif ()
+ endif ()

@@ -1256,6 +1256,7 @@ with lib.maintainers;
       orzklv
       bahrom04
       bemeritus
+      shakhzodkudratov
     ];
     scope = "Maintain Uzbek Linux state & community packages and modules.";
     shortName = "Uzinfocom Open Source";

@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
 
   postPatch = ''
     substituteInPlace src/deb/filius.desktop \
-      --replace 'Exec=/usr/share/filius/filius.sh' 'Exec=filius'
+      --replace-fail 'Exec=/usr/share/filius/filius.sh' 'Exec=filius'
   '';
 
   nativeBuildInputs = [

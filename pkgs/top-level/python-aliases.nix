@@ -78,7 +78,6 @@ mapAliases ({
   amiibo-py = throw "amiibo-py has been removed because the upstream repository was removed"; # Added 2025-01-13
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
   ansible-doctor = throw "ansible-doctor has been promoted to a top-level attribute name: `pkgs.ansible-doctor`"; # Added 2023-05-16
-  ansible-later = throw "ansible-later has been promoted to a top-level attribute name: `pkgs.ansible-later`"; # Added 2023-05-16
   ansible-lint = throw "ansible-lint has been promoted to a top-level attribute name: `pkgs.ansible-lint`"; # Added 2023-05-16
   ansible-navigator = throw "ansible-navigator has been promoted to a top-level attribute name: pkgs.ansible-navigator"; # Added 2024-08-07
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
@@ -828,6 +827,7 @@ mapAliases ({
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02
+  unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   update_checker = update-checker; # added 2024-01-07
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13

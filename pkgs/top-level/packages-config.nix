@@ -18,9 +18,7 @@
         nodePackages_latest
         platformioPackages
         rPackages
-        roundcubePlugins
         sourceHanPackages
-        windows
         ;
 
       # Make sure haskell.compiler is included, so alternative GHC versions show up,
