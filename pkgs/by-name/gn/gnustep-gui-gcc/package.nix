@@ -14,12 +14,7 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ gnustep-base-gcc ];
 
   meta = {
-    inherit (gnustep-gui.meta) changelog homepage license platforms;
+    inherit (gnustep-gui.meta) changelog homepage license platforms maintainers;
     description = "GUI class library of GNUstep (GCC Environment)";
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-      matthewbauer
-    ];
   };
 })
