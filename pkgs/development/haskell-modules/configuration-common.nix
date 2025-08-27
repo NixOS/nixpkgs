@@ -2731,6 +2731,8 @@ with haskellLib;
           hasql-notifications = dontCheck super.hasql-notifications_0_2_2_2;
           hasql-pool = dontCheck super.hasql-pool_1_0_1;
           hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
+          text-builder = super.text-builder_0_6_10;
+          text-builder-dev = super.text-builder-dev_0_3_10;
         }
       ))
       [
