@@ -64,8 +64,12 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-chroma==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-chroma==";
+    };
   };
 
   meta = {

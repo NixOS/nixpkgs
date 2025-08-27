@@ -13,15 +13,15 @@
 
 buildGoModule rec {
   pname = "transito";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "transito";
     rev = "v${version}";
-    hash = "sha256-5aG/hmpUAN2qYxpqMKLl2WnYgR/sPdtAwLGkFXVyrNs=";
+    hash = "sha256-87U9RdlP260ApkGJB3dLitxAdY3I9nWrukxzRnwuJ2E=";
   };
-  vendorHash = "sha256-7QMO+/f+yc5GfxvDLIXuf+QT2cAmbgI6iQqWmQIkMMA=";
+  vendorHash = "sha256-mgvfrNKvdjLa7O0oTSec8u3eHHU66ZDqpKzNeeyy2J0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -66,6 +66,7 @@ buildGoModule rec {
       GTFS data, to name a few: Lisbon, NYC, Brussels, Krakow, and Bourges.
     '';
     homepage = "https://git.sr.ht/~mil/transito";
+    changelog = "https://git.sr.ht/~mil/transito/refs/v${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.McSinyx ];
     mainProgram = "transito";

@@ -3,6 +3,7 @@
   bitvector-for-humans,
   buildPythonPackage,
   fetchFromGitHub,
+  fastapi,
   hidapi,
   loguru,
   poetry-core,
@@ -11,6 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   typer,
+  uvicorn,
   webcolors,
   udevCheckHook,
 }:
@@ -39,6 +41,13 @@ buildPythonPackage rec {
     typer
     webcolors
   ];
+
+  optional-dependencies = {
+    webapi = [
+      fastapi
+      uvicorn
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

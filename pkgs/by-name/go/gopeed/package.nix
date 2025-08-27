@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter327,
   autoPatchelfHook,
   buildGoModule,
   libayatana-appindicator,
@@ -44,7 +44,7 @@ let
     meta = metaCommon;
   };
 in
-flutter324.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 
