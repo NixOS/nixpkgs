@@ -57,17 +57,12 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
-      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }";
+    inherit (gnustep-base-meta) changelog homepage license platforms;
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
-    homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       ashalkhakov
       dblsaiko
       matthewbauer
     ];
-    platforms = lib.platforms.linux;
   };
 })
