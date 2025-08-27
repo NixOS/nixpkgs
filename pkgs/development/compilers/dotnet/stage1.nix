@@ -30,6 +30,11 @@ let
         passthru = old.passthru or { } // {
           inherit (stage0.vmr) fetch-drv fetch-deps;
         };
+      } // lib.optionalAttrs (lib.versionAtLeast old.version "10") {
+        buildPhase = ":";
+        installPhase = ''
+          mkdir "$out" "$man" "$debug"
+        '';
       });
 
 in
