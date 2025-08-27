@@ -34,6 +34,11 @@ function zigBuildPhase {
       zigDefaultCpuFlag zigDefaultOptimizeFlag
   fi
 
+  if [[ -n ${zigDeps-} ]]; then
+    # TODO: use concatTo
+    flagsArray+=("--system" "$zigDeps")
+  fi
+
   echoCmd 'zig build flags' "${flagsArray[@]}"
   TERM=dumb zig build "${flagsArray[@]}" --verbose
 
@@ -59,6 +64,11 @@ function zigCheckPhase {
   if [ -z "${dontSetZigDefaultFlags:-}" ]; then
     concatTo flagsArray \
       zigDefaultCpuFlag zigDefaultOptimizeFlag
+  fi
+
+  if [[ -n ${zigDeps-} ]]; then
+    # TODO: use concatTo
+    flagsArray+=("--system" "$zigDeps")
   fi
 
   echoCmd 'zig check flags' "${flagsArray[@]}"
@@ -93,6 +103,11 @@ function zigInstallPhase {
   if [ -z "${dontAddPrefix-}" ] && [ -n "$prefix" ]; then
     # Zig does not recognize `--prefix=/dir/`, only `--prefix /dir/`
     flagsArray+=("${prefixKey:---prefix}" "$prefix")
+  fi
+
+  if [[ -n ${zigDeps-} ]]; then
+    # TODO: use concatTo
+    flagsArray+=("--system" "$zigDeps")
   fi
 
   echoCmd 'zig install flags' "${flagsArray[@]}"
