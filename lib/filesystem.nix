@@ -424,7 +424,7 @@ in
     in
     {
       callPackage,
-      newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
+      newScope ? (callPackage ({ newScope }: { inherit newScope; }) { }).newScope,
       directory,
     }@args:
     let

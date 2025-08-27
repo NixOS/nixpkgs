@@ -4205,56 +4205,94 @@ runTests {
     expected = false;
   };
 
-  testPackagesFromDirectoryRecursive = {
-    expr = packagesFromDirectoryRecursive {
-      callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory/plain;
-    };
-    expected = {
-      a = "a";
-      b = "b";
-      # Note: Other files/directories in `./test-data/c/` are ignored and can be
-      # used by `package.nix`.
-      c = "c";
-      my-namespace = {
-        d = "d";
-        e = "e";
-        f = "f";
-        my-sub-namespace = {
-          g = "g";
-          h = "h";
+  testPackagesFromDirectoryRecursive =
+    let
+      inherit (lib) makeScope;
+      originalScope = makeScope lib.callPackageWith (_: {
+        b = "b from original scope";
+      });
+    in
+    {
+      expr =
+        lib.filterAttrsRecursive
+          (
+            name: value:
+            !lib.elem name [
+              "callPackage"
+              "newScope"
+              "overrideScope"
+              "packages"
+            ]
+          )
+          (packagesFromDirectoryRecursive {
+            inherit (originalScope) callPackage;
+            directory = ./packages-from-directory/plain;
+          });
+      expected = {
+        a = "a";
+        b = "b";
+        # Note: Other files/directories in `./test-data/c/` are ignored and can be
+        # used by `package.nix`.
+        c = "c";
+        my-namespace = {
+          b = "b from original scope";
+          d = "d";
+          e = "e";
+          f = "f";
+          my-sub-namespace = {
+            g = "g";
+            h = "h";
+          };
         };
       };
     };
-  };
 
   # Make sure that passing a string for the `directory` works.
   #
   # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
   # See: https://github.com/NixOS/nix/issues/9428
-  testPackagesFromDirectoryRecursiveStringDirectory = {
-    expr = packagesFromDirectoryRecursive {
-      callPackage = path: overrides: import path overrides;
-      # Do NOT remove the `builtins.toString` call here!!!
-      directory = builtins.toString ./packages-from-directory/plain;
-    };
-    expected = {
-      a = "a";
-      b = "b";
-      # Note: Other files/directories in `./test-data/c/` are ignored and can be
-      # used by `package.nix`.
-      c = "c";
-      my-namespace = {
-        d = "d";
-        e = "e";
-        f = "f";
-        my-sub-namespace = {
-          g = "g";
-          h = "h";
+  testPackagesFromDirectoryRecursiveStringDirectory =
+    let
+      inherit (lib) makeScope;
+      originalScope = makeScope lib.callPackageWith (_: {
+        b = "b from original scope";
+      });
+    in
+    {
+      expr =
+        lib.filterAttrsRecursive
+          (
+            name: value:
+            !lib.elem name [
+              "callPackage"
+              "newScope"
+              "overrideScope"
+              "packages"
+            ]
+          )
+          (packagesFromDirectoryRecursive {
+            inherit (originalScope) callPackage;
+            # Do NOT remove the `builtins.toString` call here!!!
+            directory = builtins.toString ./packages-from-directory/plain;
+          });
+      expected = {
+        a = "a";
+        b = "b";
+        # Note: Other files/directories in `./test-data/c/` are ignored and can be
+        # used by `package.nix`.
+        c = "c";
+        my-namespace = {
+          b = "b from original scope";
+          d = "d";
+          e = "e";
+          f = "f";
+          my-sub-namespace = {
+            g = "g";
+            h = "h";
+          };
         };
       };
     };
-  };
 
   # Check that `packagesFromDirectoryRecursive` can process a directory with a
   # top-level `package.nix` file into a single package.
