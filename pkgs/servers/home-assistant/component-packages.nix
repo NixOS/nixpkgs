@@ -6016,7 +6016,8 @@
       ];
     "thinkingcleaner" =
       ps: with ps; [
-      ]; # missing inputs: pythinkingcleaner
+        pythinkingcleaner
+      ];
     "thomson" =
       ps: with ps; [
       ];
