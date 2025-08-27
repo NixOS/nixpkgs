@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.22";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-taQyrthHrlHc6Zy8947bpxvbHeSq0+JbgxROtQOGq44=";
+    hash = "sha256-TcXCGI27qJOVbR8XaJzE9dYV/3uDM9HATU1OkziRib8=";
   };
 
   patches = [
@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
     ./restore-missing-dependencies-fields.patch
   ];
 
-  npmDepsHash = "sha256-1AJ+EZfPKioeptms3uio4U20zeQ9+yKC69Gbm6HlFMY=";
+  npmDepsHash = "sha256-0j6kXlnWg7N23cnmMialZVqyZTAzgPn0VGAqSeYIVZM=";
 
   preConfigure = ''
     mkdir -p packages/generated
