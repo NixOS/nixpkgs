@@ -43,6 +43,11 @@ buildPecl {
       --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
   '';
 
+  patches = [
+    # https://github.com/php-gnupg/php-gnupg/issues/62
+    ./missing-new-line-test.patch
+  ];
+
   doCheck = true;
 
   meta = {
