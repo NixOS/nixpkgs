@@ -1,3 +1,5 @@
+# Tests LUKS specifically with scripted stage 1. Remove in 26.11.
+
 { lib, pkgs, ... }:
 {
   name = "luks";
@@ -5,6 +7,8 @@
   nodes.machine =
     { pkgs, ... }:
     {
+
+      boot.initrd.systemd.enable = false;
 
       # Use systemd-boot
       virtualisation = {
