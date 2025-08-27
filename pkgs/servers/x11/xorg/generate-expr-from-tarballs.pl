@@ -499,6 +499,7 @@ self: with self; {
   fontbhtype1 = font-bh-type1;
   fontbitstream100dpi = font-bitstream-100dpi;
   fontbitstream75dpi = font-bitstream-75dpi;
+  fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005";
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
