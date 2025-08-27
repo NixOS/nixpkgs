@@ -39,6 +39,8 @@ rustPlatform.buildRustPackage {
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
