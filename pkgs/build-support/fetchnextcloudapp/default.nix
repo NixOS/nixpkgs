@@ -48,7 +48,6 @@ applyPatches (
         exit 1
       fi
     '';
-    # Optionally set name if appName and appVersion are provided
   }
   // lib.optionalAttrs (appName != null && appVersion != null) {
     name = "nextcloud-app-${appName}-${appVersion}";
