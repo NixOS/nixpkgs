@@ -4,7 +4,7 @@
   fetchurl,
   buildRubyGem,
   bundlerEnv,
-  ruby,
+  ruby_3_4,
   libarchive,
   libguestfs,
   qemu,
@@ -19,6 +19,8 @@ let
   version = "2.4.8";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
   hash = "sha256-AVagvZKbVT4RWrCJdskhABTunRM9tBb5+jovYM/VF+0=";
+
+  ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -60,7 +62,7 @@ in
 buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit version;
+  inherit ruby version;
 
   doInstallCheck = true;
   dontBuild = false;
