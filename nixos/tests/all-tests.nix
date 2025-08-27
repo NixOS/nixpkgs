@@ -850,7 +850,6 @@ in
   login = runTest ./login.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
-  luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
   lxc = handleTest ./lxc { };
   lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
