@@ -121,5 +121,7 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ johnrtitor ];
+  meta = {
+    inherit (pkgs.scx.full.meta) maintainers;
+  };
 }
