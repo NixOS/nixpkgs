@@ -391,9 +391,10 @@ in
           inherit (pkgs.nextcloud31Packages.apps) mail calendar contacts;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
-            sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
-            url = "https://gitlab.com/eneiluj/phonetrack-oc/-/wikis/uploads/931aaaf8dca24bf31a7e169a83c17235/phonetrack-0.6.9.tar.gz";
-            version = "0.6.9";
+            license = "agpl3Plus";
+            sha512 = "f67902d1b48def9a244383a39d7bec95bb4215054963a9751f99dae9bd2f2740c02d2ef97b3b76d69a36fa95f8a9374dd049440b195f4dad2f0c4bca645de228";
+            url = "https://github.com/julien-nc/phonetrack/releases/download/v0.8.2/phonetrack-0.8.2.tar.gz";
+            version = "0.8.2";
           };
         }
       '';
