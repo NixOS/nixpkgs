@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ldapdomaindump";
-  version = "0.10.0-unstable-2025-04-06";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
