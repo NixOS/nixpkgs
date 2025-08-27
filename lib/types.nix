@@ -796,8 +796,9 @@ let
                 inherit elemType lazy placeholder;
               };
         in
-        {
-          elemType,
+        args@{
+          elemType ? throw "Internal error: the implementation of attrsWith must refer to getElemType, not elemType.",
+          getElemType ? _name: elemType,
           lazy ? false,
           placeholder ? "name",
         }:
@@ -817,6 +818,7 @@ let
                   (
                     name: defs:
                     let
+                      elemType = getElemType name;
                       merged = mergeDefinitions (loc ++ [ name ]) elemType defs;
                       # mergedValue will trigger an appropriate error when accessed
                     in
@@ -831,7 +833,7 @@ let
                 loc: defs:
                 mapAttrs (n: v: v.value) (
                   filterAttrs (n: v: v ? value) (
-                    zipAttrsWith (name: defs: (mergeDefinitions (loc ++ [ name ]) elemType (defs)).optionalValue)
+                    zipAttrsWith (name: defs: (mergeDefinitions (loc ++ [ name ]) (getElemType name) (defs)).optionalValue)
                       # Push down position info.
                       (pushPositions defs)
                   )
@@ -840,23 +842,29 @@ let
           emptyValue = {
             value = { };
           };
-          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<${placeholder}>" ]);
-          getSubModules = elemType.getSubModules;
+          getSubOptions = prefix: (getElemType "<${placeholder}>").getSubOptions (prefix ++ [ "<${placeholder}>" ]);
+          getSubModules = if args?elemType then elemType.getSubModules else null;
           substSubModules =
             m:
             attrsWith {
               elemType = elemType.substSubModules m;
+              getElemType = name: (getElemType name).substSubModules m;
               inherit lazy placeholder;
             };
           functor =
-            (elemTypeFunctor "attrsWith" {
-              inherit elemType lazy placeholder;
-            })
-            // {
-              # Custom type merging required because of the "placeholder" attribute
-              inherit binOp;
-            };
-          nestedTypes.elemType = elemType;
+            if args ? elemType
+            then
+              elemTypeFunctor "attrsWith" { inherit elemType lazy placeholder; }
+              // {
+                # Custom type merging required because of the "placeholder" attribute
+                inherit binOp;
+              }
+            else
+              defaultFunctor "attrsWith" // { 
+                type = payload: types.attrsWith payload;
+                payload = args // { inherit lazy placeholder; };
+              };
+          nestedTypes = builtins.intersectAttrs { elemType = null; } args;
         };
 
       # TODO: deprecate this in the future:
