@@ -5861,7 +5861,8 @@
       ];
     "tapsaff" =
       ps: with ps; [
-      ]; # missing inputs: tapsaff
+        tapsaff
+      ];
     "tasmota" =
       ps: with ps; [
         aiohasupervisor
