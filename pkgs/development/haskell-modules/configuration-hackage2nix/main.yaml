@@ -437,8 +437,6 @@ package-maintainers:
     - hercules-ci-cnix-store
     - inline-c
     - inline-c-cpp
-  roosemberth:
-    - git-annex
   rvl:
     - taffybar
     - arbtt
