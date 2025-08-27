@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "marcusolsson-calendar-panel";
-  version = "4.0.1";
-  zipHash = "sha256-xyqu9e6PImQmwN/p05TrSYx5uOmghbTVfoy4JT7hyqA=";
+  version = "4.1.0";
+  zipHash = "sha256-SQIzKCfBo0UDqwrl7ZkbHq2F+ddwviLYVQbgi+zsT20=";
   meta = with lib; {
     description = "Calendar Panel is a Grafana plugin that displays events from various data sources";
     license = licenses.asl20;
