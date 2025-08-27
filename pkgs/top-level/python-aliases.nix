@@ -666,6 +666,7 @@ mapAliases ({
   python-language-server = throw "python-language-server is no longer maintained, use the python-lsp-server community fork instead."; # Added 2022-08-03
   python-Levenshtein = levenshtein;
   python-pushover = throw "python-pushover has been removed, since it is unmaintained and is broken"; # added 2023-07-03
+  python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = subunit; # added 2021-09-10
   python-wifi = throw "python-wifi does not support Python3";
   pytest_xdist = pytest-xdist; # added 2021-01-04
