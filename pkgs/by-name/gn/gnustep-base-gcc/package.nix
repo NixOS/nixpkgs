@@ -3,6 +3,7 @@
   gobjcStdenv,
   gnustep-make-gcc,
   gnustep-base,
+fetchpatch,
 }:
 
 gobjcStdenv.mkDerivation (finalAttrs: {
