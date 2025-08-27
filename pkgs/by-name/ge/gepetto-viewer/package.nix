@@ -16,6 +16,8 @@
   qgv,
   stdenv,
   runCommand,
+
+  withPythonQt ? false,
 }:
 let
   gepetto-viewer = stdenv.mkDerivation (finalAttrs: {
@@ -43,8 +45,10 @@ let
 
     buildInputs = [
       python3Packages.boost
-      python3Packages.python-qt
       libsForQt5.qtbase
+    ]
+    ++ lib.optionals withPythonQt [
+      python3Packages.python-qt
     ];
 
     nativeBuildInputs = [
