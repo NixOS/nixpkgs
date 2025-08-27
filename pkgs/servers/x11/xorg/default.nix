@@ -17,6 +17,7 @@
   font-bh-type1,
   font-bitstream-100dpi,
   font-bitstream-75dpi,
+  font-bitstream-type1,
   font-cronyx-cyrillic,
   font-encodings,
   font-isas-misc,
@@ -201,6 +202,7 @@ self: with self; {
   fontbhtype1 = font-bh-type1;
   fontbitstream100dpi = font-bitstream-100dpi;
   fontbitstream75dpi = font-bitstream-75dpi;
+  fontbitstreamtype1 = font-bitstream-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
@@ -381,44 +383,6 @@ self: with self; {
       nativeBuildInputs = [
         pkg-config
         bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbitstreamtype1 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bitstream-type1";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.4.tar.xz";
-        sha256 = "0a669193ivi2lxk3v692kq1pqavaswlpi9hbi8ib8bfp9j5j6byy";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
         mkfontscale
       ];
       buildInputs = [ fontutil ];

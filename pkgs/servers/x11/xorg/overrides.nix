@@ -866,27 +866,6 @@ self: super:
   });
 
   xwd = addMainProgram super.xwd { };
-
-  # convert Type1 vector fonts to OpenType fonts
-  fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
-
-    postBuild = ''
-      # convert Postscript (Type 1) font to otf
-      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
-          name=$(basename $i | cut -d. -f1)
-          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
-      done
-    '';
-
-    postInstall = ''
-      # install the otf fonts
-      fontDir="$out/lib/X11/fonts/misc/"
-      install -D -m 644 -t "$fontDir" *.otf
-      mkfontscale "$fontDir"
-    '';
-  });
-
 }
 
 # mark some packages as unfree
