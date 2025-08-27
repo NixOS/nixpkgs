@@ -7,6 +7,8 @@
   qtwebengine,
   qtxmlpatterns,
   qttools,
+
+  withWebengine ? false, # vulnerable, so disabled by default
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     qmake
     qttools
     qtxmlpatterns
+  ]
+  ++ lib.optionals withWebengine [
     qtwebengine
   ];
 
