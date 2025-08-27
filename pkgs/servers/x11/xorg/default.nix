@@ -16,6 +16,7 @@
   font-bh-type1,
   font-bitstream-100dpi,
   font-bitstream-75dpi,
+  font-bitstream-type1,
   font-encodings,
   font-mutt-misc,
   font-util,
@@ -183,6 +184,7 @@ self: with self; {
   fontbitstream100dpi = font-bitstream-100dpi;
   fontbitstream75dpi = font-bitstream-75dpi;
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005";
+  fontbitstreamtype1 = font-bitstream-type1;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
@@ -384,44 +386,6 @@ self: with self; {
       nativeBuildInputs = [
         pkg-config
         bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbitstreamtype1 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-bitstream-type1";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.4.tar.xz";
-        sha256 = "0a669193ivi2lxk3v692kq1pqavaswlpi9hbi8ib8bfp9j5j6byy";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
         mkfontscale
       ];
       buildInputs = [ fontutil ];

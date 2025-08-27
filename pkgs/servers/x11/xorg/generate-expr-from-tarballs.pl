@@ -333,6 +333,7 @@ print OUT <<EOF;
   font-bh-type1,
   font-bitstream-100dpi,
   font-bitstream-75dpi,
+  font-bitstream-type1,
   font-encodings,
   font-mutt-misc,
   font-util,
@@ -500,6 +501,7 @@ self: with self; {
   fontbitstream100dpi = font-bitstream-100dpi;
   fontbitstream75dpi = font-bitstream-75dpi;
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005";
+  fontbitstreamtype1 = font-bitstream-type1;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
