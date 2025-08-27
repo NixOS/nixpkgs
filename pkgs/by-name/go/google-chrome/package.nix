@@ -318,7 +318,6 @@ let
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      jnsgruk
       johnrtitor
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
