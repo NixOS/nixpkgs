@@ -46036,10 +46036,10 @@ in
   aws-cdk = nodeEnv.buildNodePackage {
     name = "aws-cdk";
     packageName = "aws-cdk";
-    version = "2.1004.0";
+    version = "2.1027.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/aws-cdk/-/aws-cdk-2.1004.0.tgz";
-      sha512 = "3E5ICmSc7ZCZCwLX7NY+HFmmdUYgRaL+67h/BDoDQmkhx9StC8wG4xgzHFY9k8WQS0+ib/MP28f2d9yzHtQLlQ==";
+      url = "https://registry.npmjs.org/aws-cdk/-/aws-cdk-2.1027.0.tgz";
+      sha512 = "oo2d1o8L1GBmAG4cDzIloEBOkijf1VzpZKJJguAodUCffDDOaAd6zjEbQbedb3SY+Vg+8m9OUOEXzeLMMg3GPQ==";
     };
     buildInputs = globalBuildInputs;
     meta = {
