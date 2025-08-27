@@ -45,5 +45,7 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pytest-shared-session-scope/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
+    # https://github.com/StefanBRas/pytest-shared-session-scope/issues/39
+    broken = lib.versionAtLeast pytest-xdist.version "3.7.0";
   };
 }
