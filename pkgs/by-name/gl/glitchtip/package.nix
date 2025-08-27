@@ -72,6 +72,7 @@ let
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
+    ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ django-redis.optional-dependencies.hiredis
