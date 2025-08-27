@@ -286,7 +286,16 @@ in
       in
       {
         sudo = {
-          source = "${lib.getExe cfg.package}";
+          source = lib.getExe cfg.package;
+          inherit
+            owner
+            group
+            setuid
+            permissions
+            ;
+        };
+        sudoedit = {
+          source = lib.getExe' cfg.package "sudoedit";
           inherit
             owner
             group

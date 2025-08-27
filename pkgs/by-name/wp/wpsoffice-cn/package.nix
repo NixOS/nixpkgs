@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
     libmysqlclient
     llvmPackages.openmp
     dbus
-    libsForQt5.fcitx5-qt
   ];
 
   dontWrapQtApps = true;
