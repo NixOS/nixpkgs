@@ -8723,7 +8723,11 @@ self: super: with self; {
 
   lsp-tree-sitter = callPackage ../development/python-modules/lsp-tree-sitter { };
 
-  lsprotocol = callPackage ../development/python-modules/lsprotocol { };
+  lsprotocol = lsprotocol_2023;
+
+  lsprotocol_2023 = callPackage ../development/python-modules/lsprotocol/2023.nix { };
+
+  lsprotocol_2025 = callPackage ../development/python-modules/lsprotocol/2025.nix { };
 
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
