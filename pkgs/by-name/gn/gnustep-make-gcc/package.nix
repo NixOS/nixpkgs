@@ -12,17 +12,12 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make-gcc";
 
   meta = {
-    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
-      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }";
-    description = "Build manager for GNUstep";
-    homepage = "https://gnustep.github.io/";
-    license = lib.licenses.lgpl2Plus;
+    inherit (gnustep-make.meta) changelog homepage license platforms;
+    description = "Build manager for GNUstep (GCC environment)";
     maintainers = with lib.maintainers; [
       ashalkhakov
       dblsaiko
       matthewbauer
     ];
-    platforms = lib.platforms.unix;
   };
 })
