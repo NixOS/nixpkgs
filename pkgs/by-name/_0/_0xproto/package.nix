@@ -18,10 +18,12 @@ stdenvNoCC.mkDerivation rec {
       stripRoot = false;
     };
 
+  # Exclude files in ZxProto/. The fonts are identical, with only the filenames changed.:
+  # https://github.com/0xType/0xProto/pull/112
   installPhase = ''
     runHook preInstall
-    install -Dm644 -t $out/share/fonts/opentype/ *.otf
-    install -Dm644 -t $out/share/fonts/truetype/ *.ttf
+    install -Dm644 -t $out/share/fonts/opentype/ *.otf ./No-Ligatures/*-NL.otf
+    install -Dm644 -t $out/share/fonts/truetype/ *.ttf ./No-Ligatures/*-NL.ttf
     runHook postInstall
   '';
 
