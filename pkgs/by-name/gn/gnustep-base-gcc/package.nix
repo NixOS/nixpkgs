@@ -29,13 +29,7 @@
 
 gobjcStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base-gcc";
-  inherit (gnustep-base) version src;
-
-  outputs = [
-    "out"
-    "dev"
-    "lib"
-  ];
+  inherit (gnustep-base) version src outputs;
 
   nativeBuildInputs = [
     pkg-config
