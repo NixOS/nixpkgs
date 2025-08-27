@@ -338,6 +338,7 @@ print OUT <<EOF;
   font-bh-lucidatypewriter-75dpi,
   font-bh-ttf,
   font-bh-type1,
+  font-bitstream-100dpi,
   font-cronyx-cyrillic,
   font-encodings,
   font-isas-misc,
@@ -520,6 +521,7 @@ self: with self; {
   fontbhlucidatypewriter75dpi = font-bh-lucidatypewriter-75dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontbitstream100dpi = font-bitstream-100dpi;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
