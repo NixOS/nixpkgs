@@ -16922,6 +16922,8 @@ self: super: with self; {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solaredge-local = callPackage ../development/python-modules/solaredge-local { };
+
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solax = callPackage ../development/python-modules/solax { };
@@ -19332,6 +19334,10 @@ self: super: with self; {
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
   uplc = callPackage ../development/python-modules/uplc { };
+
+  uplink = callPackage ../development/python-modules/uplink { };
+
+  uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 
