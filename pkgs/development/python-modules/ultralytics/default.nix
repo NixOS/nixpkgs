@@ -102,6 +102,7 @@ buildPythonPackage rec {
     "test_yolov10"
     "test_yoloe"
     "test_multichannel"
+    "test_grayscale"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Aborted
