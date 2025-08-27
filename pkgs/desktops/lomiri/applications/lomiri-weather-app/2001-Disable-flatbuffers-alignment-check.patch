@@ -1,0 +1,30 @@
+From 6f9decc06d800790445c8d9d80e01b84a0106e8d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 16 Feb 2025 00:07:19 +0100
+Subject: [PATCH] src/plugin/open_meteo/open_meteo_weather_provider.cpp:
+ Disable flatbuffers alignment check
+
+---
+ src/plugin/open_meteo/open_meteo_weather_provider.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugin/open_meteo/open_meteo_weather_provider.cpp b/src/plugin/open_meteo/open_meteo_weather_provider.cpp
+index 4ab7c15..dd84697 100644
+--- a/src/plugin/open_meteo/open_meteo_weather_provider.cpp
++++ b/src/plugin/open_meteo/open_meteo_weather_provider.cpp
+@@ -318,8 +318,11 @@ void OpenMeteoWeatherProvider::onResponse(QNetworkReply *reply)
+ 
+ void OpenMeteoWeatherProvider::handleResponseChunk(QByteArray bytes, QVariant userData)
+ {
++    flatbuffers::Verifier::Options verifierOptions;
++    verifierOptions.check_alignment = false;
+     flatbuffers::Verifier verifier((const uint8_t *)bytes.constData(),
+-                                   (const size_t)bytes.length());
++                                   (const size_t)bytes.length(),
++                                   verifierOptions);
+     bool ok = openmeteo_sdk::VerifyWeatherApiResponseBuffer(verifier);
+     if (!ok) {
+         qDebug() << "error in flatbuffer data!";
+-- 
+2.47.2
+
