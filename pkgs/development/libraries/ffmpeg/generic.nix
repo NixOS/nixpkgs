@@ -9,7 +9,6 @@
   perl,
   texinfo,
   texinfo6,
-  yasm,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
@@ -826,8 +825,7 @@ stdenv.mkDerivation (
       perl
       pkg-config
     ]
-    # 8.0 is only compatible with nasm, and we don't want to rebuild all older ffmpeg builds at this moment.
-    ++ optionals stdenv.hostPlatform.isx86 (if versionOlder version "8.0" then [ yasm ] else [ nasm ])
+    ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     ++ optionals withCudaLLVM [ clang ]
