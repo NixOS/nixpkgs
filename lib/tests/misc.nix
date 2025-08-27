@@ -4374,17 +4374,18 @@ runTests {
             inherit (emptyScope) callPackage newScope;
             directory = ./packages-from-directory/scope;
           });
-      expected = lib.recurseIntoAttrs {
+      expected = recurseIntoAttrs {
         a = "a";
         b = "b";
         # Note: Other files/directories in `./test-data/c/` are ignored and can be
         # used by `package.nix`.
         c = "c";
-        my-namespace = lib.recurseIntoAttrs {
+        my-namespace = recurseIntoAttrs {
+          b = "b-from-my-namespace";
           d = "d";
           e = "e";
-          f = "f";
-          my-sub-namespace = lib.recurseIntoAttrs {
+          f = "b-from-my-namespace"; # Ensure 'my-namespace.b' is used here, not the top-level 'b'.
+          my-sub-namespace = recurseIntoAttrs {
             g = "g";
             h = "h";
           };

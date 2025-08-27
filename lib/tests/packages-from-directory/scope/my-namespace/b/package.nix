@@ -1,0 +1,1 @@
+{ }: "b-from-my-namespace"
