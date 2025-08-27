@@ -1,3 +1,6 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i "python3 -I" -p "python3.withPackages(ps: with ps; [ numpy pandas scipy ])"
+
 import json
 import os
 from scipy.stats import ttest_rel
