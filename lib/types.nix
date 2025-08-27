@@ -56,6 +56,7 @@ let
     escapeNixString
     hasInfix
     isStringLike
+    optionalString
     ;
   inherit (lib.trivial)
     boolToString
@@ -1228,7 +1229,8 @@ let
               let
                 docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
               in
-              docsEval._module.freeformType.description or name;
+              docsEval._module.freeformType.description
+                or (name + optionalString (class != null) " of class `${class}`");
           check = x: isAttrs x || isFunction x || path.check x;
           merge =
             loc: defs:
