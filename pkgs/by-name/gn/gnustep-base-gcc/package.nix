@@ -57,7 +57,7 @@ gobjcStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    inherit (gnustep-base-meta) changelog homepage license platforms;
+    inherit (gnustep-base.meta) changelog homepage license platforms;
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
     maintainers = with lib.maintainers; [
       ashalkhakov
