@@ -16,7 +16,6 @@
         haskellPackages
         nodePackages
         nodePackages_latest
-        platformioPackages
         rPackages
         sourceHanPackages
         ;
