@@ -11620,8 +11620,6 @@ with pkgs;
 
   fclones = callPackage ../tools/misc/fclones { };
 
-  feh = callPackage ../applications/graphics/feh { };
-
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
