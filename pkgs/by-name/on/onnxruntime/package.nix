@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -24,7 +23,7 @@
   protobuf_21,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
-  ncclSupport ? config.cudaSupport,
+  ncclSupport ? config.cudaSupport && cudaPackages.nccl.meta.available,
   cudaPackages ? { },
 }@inputs:
 
@@ -167,12 +166,9 @@ effectiveStdenv.mkDerivation rec {
       cudnn # cudnn.h
       cuda_cudart
     ]
-    ++ lib.optionals (cudaSupport && ncclSupport) (
-      with cudaPackages;
-      [
-        nccl
-      ]
-    )
+    ++ lib.optionals ncclSupport [
+      nccl
+    ]
   );
 
   nativeCheckInputs = [
@@ -267,7 +263,7 @@ effectiveStdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit cudaSupport cudaPackages; # for the python module
+    inherit cudaSupport cudaPackages ncclSupport; # for the python module
     protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
