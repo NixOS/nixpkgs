@@ -1,5 +1,14 @@
 _: prevAttrs: {
-  badPlatformsConditions = prevAttrs.badPlatformsConditions or { } // {
-    "Package is not supported; use drivers from linuxPackages" = true;
+  passthru = prevAttrs.passthru or { } // {
+    platformAssertions = prevAttrs.passthru.platformAssertions or [ ] ++ [
+      {
+        message = "Package is not supported; use drivers from linuxPackages";
+        assertion = false;
+      }
+    ];
+
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [ "out" ];
+    };
   };
 }

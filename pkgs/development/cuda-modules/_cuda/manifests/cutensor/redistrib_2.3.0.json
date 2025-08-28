@@ -1,0 +1,57 @@
+{
+    "release_date": "2025-08-11",
+    "release_label": "2.3.0",
+    "release_product": "cutensor",
+    "libcutensor": {
+        "name": "NVIDIA cuTENSOR",
+        "license": "cuTensor",
+        "license_path": "libcutensor/LICENSE.txt",
+        "version": "2.3.0.6",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcutensor/linux-x86_64/libcutensor-linux-x86_64-2.3.0.6_cuda12-archive.tar.xz",
+                "sha256": "8903ea04daa32e25dda1b4d12cbdb475aefb2bb3f2317413b16c96fcadd8fd8b",
+                "md5": "2a793f1808ab95eac80414e6f5f95450",
+                "size": "429247820"
+            },
+            "cuda13": {
+                "relative_path": "libcutensor/linux-x86_64/libcutensor-linux-x86_64-2.3.0.6_cuda13-archive.tar.xz",
+                "sha256": "2d2768520b2d7f76a7081ddbe64c3cf61094e3e668ea296ac943c4f8435a1441",
+                "md5": "fe9b4d5fcceab428189688f6c1518748",
+                "size": "386289552"
+            }
+        },
+        "cuda_variant": [
+            "12",
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcutensor/linux-sbsa/libcutensor-linux-sbsa-2.3.0.6_cuda12-archive.tar.xz",
+                "sha256": "fdf5b10e6d09a30dae7e2956333cdb02c580a9b61d447154b7de8127ed7fa9d8",
+                "md5": "34cce96f713430945bdbbb0ca379111b",
+                "size": "427353736"
+            },
+            "cuda13": {
+                "relative_path": "libcutensor/linux-sbsa/libcutensor-linux-sbsa-2.3.0.6_cuda13-archive.tar.xz",
+                "sha256": "380d7b2bf8f3aebbe467225345008ccb27256d60fd1dad38665f4c7d23278a76",
+                "md5": "0c42604f9773f8032ed5de61a2dcc5a1",
+                "size": "385042432"
+            }
+        },
+        "windows-x86_64": {
+            "cuda12": {
+                "relative_path": "libcutensor/windows-x86_64/libcutensor-windows-x86_64-2.3.0.6_cuda12-archive.zip",
+                "sha256": "0df80ccbfc1c607290e4ee0ef6f5400deaac674f1937f4609bff9215d1c39aef",
+                "md5": "1b839d28bc670f5d5ee8ac2b47169ff8",
+                "size": "218110876"
+            },
+            "cuda13": {
+                "relative_path": "libcutensor/windows-x86_64/libcutensor-windows-x86_64-2.3.0.6_cuda13-archive.zip",
+                "sha256": "643998686714108f178d1cd395aada3dd53ac89c29bc91995c42380cc4f66cec",
+                "md5": "9858a29ec264d5bad8fe78c694e5c40a",
+                "size": "150006949"
+            }
+        }
+    }
+}

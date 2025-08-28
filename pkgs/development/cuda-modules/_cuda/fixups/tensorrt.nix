@@ -1,128 +1,167 @@
 {
   _cuda,
-  cudaOlder,
-  cudaPackages,
-  cudaMajorMinorVersion,
+  backendStdenv,
+  cuda_cudart,
+  cudnn,
+  cuda_nvrtc,
   lib,
+  libcudla ? null, # only for Jetson
   patchelf,
-  requireFile,
   stdenv,
 }:
 let
-  inherit (lib)
-    attrsets
-    maintainers
-    meta
-    strings
-    versions
-    ;
-  inherit (stdenv) hostPlatform;
-  # targetArch :: String
-  targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
-    x86_64-linux = "x86_64-linux-gnu";
-    aarch64-linux = "aarch64-linux-gnu";
-  };
+  inherit (_cuda.lib) majorMinorPatch;
+  inherit (backendStdenv) hasJetsonCudaCapability;
+  inherit (lib.attrsets) getLib;
+  inherit (lib.lists) optionals;
+  inherit (lib.strings) concatStringsSep;
 in
-finalAttrs: prevAttrs: {
-  # Useful for inspecting why something went wrong.
-  brokenConditions =
-    let
-      cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
-      cudaTooNew =
-        (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
-        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaMajorMinorVersion;
-      cudnnVersionIsSpecified = finalAttrs.passthru.featureRelease.cudnnVersion != null;
-      cudnnVersionSpecified = versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion;
-      cudnnVersionProvided = versions.majorMinor finalAttrs.passthru.cudnn.version;
-      cudnnTooOld =
-        cudnnVersionIsSpecified && (strings.versionOlder cudnnVersionProvided cudnnVersionSpecified);
-      cudnnTooNew =
-        cudnnVersionIsSpecified && (strings.versionOlder cudnnVersionSpecified cudnnVersionProvided);
-    in
-    prevAttrs.brokenConditions or { }
-    // {
-      "CUDA version is too old" = cudaTooOld;
-      "CUDA version is too new" = cudaTooNew;
-      "CUDNN version is too old" = cudnnTooOld;
-      "CUDNN version is too new" = cudnnTooNew;
-    };
+finalAttrs: prevAttrs:
+let
+  majorMinorPatchVersion = majorMinorPatch finalAttrs.version;
+  majorVersion = lib.versions.major finalAttrs.version;
+in
+{
+  allowFHSReferences = true;
 
-  src = requireFile {
-    name = finalAttrs.passthru.redistribRelease.filename;
-    inherit (finalAttrs.passthru.redistribRelease) hash;
-    message = ''
-      To use the TensorRT derivation, you must join the NVIDIA Developer Program and
-      download the ${finalAttrs.version} TAR package for CUDA ${cudaMajorMinorVersion} from
-      ${finalAttrs.meta.homepage}.
+  nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ patchelf ];
 
-      Once you have downloaded the file, add it to the store with the following
-      command, and try building this derivation again.
-
-      $ nix-store --add-fixed sha256 ${finalAttrs.passthru.redistribRelease.filename}
-    '';
-  };
-
-  # We need to look inside the extracted output to get the files we need.
-  sourceRoot = "TensorRT-${finalAttrs.version}";
-
-  buildInputs = prevAttrs.buildInputs or [ ] ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
+  buildInputs =
+    prevAttrs.buildInputs or [ ]
+    ++ [
+      (getLib cudnn)
+      (getLib cuda_nvrtc)
+      cuda_cudart
+    ]
+    ++ optionals hasJetsonCudaCapability [ libcudla ];
 
   preInstall =
+    let
+      inherit (stdenv.hostPlatform) parsed;
+      # x86_64-linux-gnu
+      targetString = concatStringsSep "-" [
+        parsed.cpu.name
+        parsed.kernel.name
+        parsed.abi.name
+      ];
+    in
     prevAttrs.preInstall or ""
-    + strings.optionalString (targetArch != "unsupported") ''
-      # Replace symlinks to bin and lib with the actual directories from targets.
+    # Replace symlinks to bin and lib with the actual directories from targets.
+    + ''
       for dir in bin lib; do
-        rm "$dir"
-        mv "targets/${targetArch}/$dir" "$dir"
+        [[ -L "$dir" ]] || continue
+        nixLog "replacing symlink $NIX_BUILD_TOP/$sourceRoot/$dir with $NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
+        rm --verbose "$NIX_BUILD_TOP/$sourceRoot/$dir"
+        mv --verbose --no-clobber "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir" "$NIX_BUILD_TOP/$sourceRoot/$dir"
       done
-
-      # Remove broken symlinks
+      unset -v dir
+    ''
+    # Remove symlinks if they exist
+    + ''
       for dir in include samples; do
-        rm "targets/${targetArch}/$dir" || :
+        if [[ -L "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir" ]]; then
+          nixLog "removing symlink $NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
+          rm --verbose "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
+        fi
       done
+      unset -v dir
+
+      if [[ -d "$NIX_BUILD_TOP/$sourceRoot/targets" ]]; then
+        nixLog "removing targets directory"
+        rm --recursive --verbose "$NIX_BUILD_TOP/$sourceRoot/targets" || {
+          nixErrorLog "could not delete $NIX_BUILD_TOP/$sourceRoot/targets: $(ls -laR "$NIX_BUILD_TOP/$sourceRoot/targets")"
+          exit 1
+        }
+      fi
+    '';
+
+  autoPatchelfIgnoreMissingDeps =
+    prevAttrs.autoPatchelfIgnoreMissingDeps or [ ]
+    ++ optionals hasJetsonCudaCapability [
+      "libnvdla_compiler.so"
+    ];
+
+  postInstall =
+    prevAttrs.postInstall or ""
+    # Create a symlink for the Onnx header files in include/onnx
+    # NOTE(@connorbaker): This is shared with the tensorrt-oss package, with the `out` output swapped with `include`.
+    # When updating one, check if the other should be updated.
+    + ''
+      mkdir "''${!outputInclude:?}/include/onnx"
+      pushd "''${!outputInclude:?}/include" >/dev/null
+      nixLog "creating symlinks for Onnx header files"
+      ln -srvt "''${!outputInclude:?}/include/onnx/" NvOnnx*.h
+      popd >/dev/null
+    ''
+    # Move the python directory, which contains header files, to the include output.
+    + ''
+      nixLog "moving python directory to include output"
+      moveToOutput python "''${!outputInclude:?}"
+
+      nixLog "remove python wheels"
+      rm --verbose "''${!outputInclude:?}"/python/*.whl
+    ''
+    + ''
+      nixLog "moving data directory to samples output"
+      moveToOutput data "''${!outputSamples:?}"
+    ''
+    # Remove the Windows library used for cross-compilation if it exists.
+    + ''
+      if [[ -e "''${!outputLib:?}/lib/libnvinfer_builder_resource_win.so.${majorMinorPatchVersion}" ]]; then
+        nixLog "removing Windows library"
+        rm --verbose "''${!outputLib:?}/lib/libnvinfer_builder_resource_win.so.${majorMinorPatchVersion}"
+      fi
+    ''
+    # Remove the stub libraries.
+    + ''
+      nixLog "removing stub libraries"
+      rm --recursive --verbose "''${!outputLib:?}/lib/stubs" || {
+        nixErrorLog "could not delete ''${!outputLib:?}/lib/stubs"
+        exit 1
+      }
     '';
 
   # Tell autoPatchelf about runtime dependencies.
-  postFixup =
-    let
-      versionTriple = "${versions.majorMinor finalAttrs.version}.${versions.patch finalAttrs.version}";
-    in
-    prevAttrs.postFixup or ""
-    + ''
-      ${meta.getExe' patchelf "patchelf"} --add-needed libnvinfer.so \
-        "$lib/lib/libnvinfer.so.${versionTriple}" \
-        "$lib/lib/libnvinfer_plugin.so.${versionTriple}" \
-        "$lib/lib/libnvinfer_builder_resource.so.${versionTriple}"
-    '';
+  postFixup = prevAttrs.postFixup or "" + ''
+    nixLog "patchelf-ing ''${!outputBin:?}/bin/trtexec with runtime dependencies"
+    patchelf \
+      "''${!outputBin:?}/bin/trtexec" \
+      --add-needed libnvinfer_plugin.so.${majorVersion}
+  '';
 
   passthru = prevAttrs.passthru or { } // {
     # The CUDNN used with TensorRT.
-    # If null, the default cudnn derivation will be used.
-    # If a version is specified, the cudnn derivation with that version will be used,
-    # unless it is not available, in which case the default cudnn derivation will be used.
-    cudnn =
-      let
-        desiredName = _cuda.lib.mkVersionedName "cudnn" (
-          lib.versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion
-        );
-      in
-      if finalAttrs.passthru.featureRelease.cudnnVersion == null || (cudaPackages ? desiredName) then
-        cudaPackages.cudnn
-      else
-        cudaPackages.${desiredName};
+    inherit cudnn;
+
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [
+        "out"
+        "bin"
+        "dev"
+        "include"
+        "lib"
+        "samples"
+        "static"
+        # "stubs" removed in postInstall
+      ];
+    };
   };
 
   meta = prevAttrs.meta or { } // {
-    badPlatforms =
-      prevAttrs.meta.badPlatforms or [ ]
-      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
+    description = "SDK that facilitates high-performance machine learning inference";
+    longDescription = ''
+      NVIDIA TensorRT is an SDK that facilitates high-performance machine learning inference. It complements training
+      frameworks such as TensorFlow, PyTorch, and MXNet. It focuses on running an already-trained network quickly and
+      efficiently on NVIDIA hardware.
+    ''
+    + prevAttrs.meta.longDescription;
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
-    teams = prevAttrs.meta.teams or [ ];
+    # NOTE: As of 2025-08-31, TensorRT doesn't follow the standard naming convention for URL paths that the rest of
+    # the redistributables do. As such, we need to specify downloadPage manually.
+    downloadPage = "https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt";
+    changelog = "https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/release-notes.html#release-notes";
 
-    # Building TensorRT on Hydra is impossible because of the non-redistributable
-    # license and because the source needs to be manually downloaded from the
-    # NVIDIA Developer Program (see requireFile above).
-    hydraPlatforms = lib.platforms.none;
+    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.aidalgol ];
+    license = _cuda.lib.licenses.tensorrt;
   };
 }

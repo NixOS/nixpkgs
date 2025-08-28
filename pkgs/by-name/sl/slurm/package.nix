@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableNVML [
     (runCommand "collect-nvml" { } ''
       mkdir $out
-      ln -s ${nvml.dev}/include $out/include
-      ln -s ${nvml.lib}/lib/stubs $out/lib
+      ln -s ${lib.getDev nvml}/include $out/include
+      ln -s ${lib.getLib nvml}/lib/stubs $out/lib
     '')
   ];
 
