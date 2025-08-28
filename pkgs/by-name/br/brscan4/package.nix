@@ -3,17 +3,13 @@
   lib,
   fetchurl,
   callPackage,
+  autoPatchelfHook,
   patchelf,
   makeWrapper,
+  avahi,
   libusb-compat-0_1,
 }:
 let
-  myPatchElf = file: ''
-    patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.hostPlatform.is64bit "-x86-64"}.so.2 \
-      ${file}
-  '';
-
   udevRules = callPackage ./udev_rules_type1.nix { };
 
 in
@@ -39,16 +35,22 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    autoPatchelfHook
     makeWrapper
     patchelf
     udevRules
   ];
-  buildInputs = [ libusb-compat-0_1 ];
+  buildInputs = [
+    avahi
+    libusb-compat-0_1
+  ];
   dontBuild = true;
 
-  postPatch = ''
-    ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
+  # Avoid dependency on X11 and legacy GTK. It doesn't look like brscan_gnetconfig, which
+  # links against GTK, is ever even called.
+  autoPatchelfIgnoreMissingDeps = [ "libgtk-x11-2.0.so.0" ];
 
+  postPatch = ''
     RPATH=${libusb-compat-0_1.out}/lib
     for a in usr/lib64/sane/*.so*; do
       if ! test -L $a; then
