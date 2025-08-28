@@ -107,15 +107,16 @@ let
     # Maintaining state across reboots.
     "systemd-random-seed.service"
   ]
-  ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
+  ++ optionals cfg.package.withBootloader [
+    "systemd-boot-random-seed.service"
+    "systemd-bless-boot.service"
+  ]
   ++ [
     "systemd-backlight@.service"
     "systemd-rfkill.service"
     "systemd-rfkill.socket"
 
-    # Boot counting
     "boot-complete.target"
-    "systemd-bless-boot.service"
 
     # Hibernate / suspend.
     "hibernate.target"

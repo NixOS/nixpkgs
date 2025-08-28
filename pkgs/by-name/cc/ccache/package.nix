@@ -158,6 +158,10 @@ stdenv.mkDerivation (finalAttrs: {
               ln -s ${unwrappedCC}/$file $out/$file
             done
           '';
+
+        meta = {
+          inherit (unwrappedCC.meta) mainProgram;
+        };
       };
 
     updateScript = nix-update-script { };
