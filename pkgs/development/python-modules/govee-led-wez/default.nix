@@ -14,7 +14,7 @@
 
 buildPythonPackage {
   pname = "govee-led-wez";
-  version = "0.0.15";
+  version = "0.0.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
