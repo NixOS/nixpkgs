@@ -1,26 +1,24 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
   biopython,
+  buildPythonPackage,
   docopt,
+  fetchFromGitHub,
   flametree,
-  numpy,
-  proglog,
-  pytestCheckHook,
-  pythonOlder,
-  python-codon-tables,
-  primer3,
   genome-collector,
   matplotlib,
+  numpy,
+  primer3,
+  proglog,
+  pytestCheckHook,
+  python-codon-tables,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dnachisel";
   version = "3.2.16";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
@@ -29,7 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-F+G7dwehUCHYKSGsLQR4OZg2NQ4677XMlN6jOcmz8No=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     biopython
     docopt
     flametree
