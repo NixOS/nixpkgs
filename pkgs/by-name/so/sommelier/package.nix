@@ -43,6 +43,10 @@ stdenv.mkDerivation {
     xorg.libxcb
   ];
 
+  patches = [
+    ./no-dmabuf-fixup.patch
+  ];
+
   preConfigure = ''
     patchShebangs gen-shim.py
   '';
