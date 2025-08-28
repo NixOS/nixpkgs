@@ -159,7 +159,6 @@ stdenv.mkDerivation (
         pkg-config
         which
       ]
-      ++ lib.optionals mysqlSupport [ libmysqlclient ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     }
