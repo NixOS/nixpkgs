@@ -6,7 +6,6 @@
   libxcb,
   makeBinaryWrapper,
   zig_0_14,
-  callPackage,
   nixosTests,
   x11Support ? true,
 }:
@@ -32,13 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.optionals x11Support [ libxcb ]);
 
-  postPatch = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        zig = zig_0_14;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-eVV9IOqSj9nZ05il2qN7A2RiXa/6rq6I5n5p5pC8EkE=";
+  };
+
   zigBuildFlags = [
     "-Denable_x11_support=${lib.boolToString x11Support}"
   ];
