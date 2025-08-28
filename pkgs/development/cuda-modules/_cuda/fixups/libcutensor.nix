@@ -1,23 +1,43 @@
 {
+  _cuda,
   cuda_cudart,
   lib,
   libcublas,
 }:
 finalAttrs: prevAttrs: {
+  allowFHSReferences = true;
+
   buildInputs =
     prevAttrs.buildInputs or [ ]
     ++ [ (lib.getLib libcublas) ]
     # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
     ++ lib.optionals (lib.hasPrefix "1.4" finalAttrs.version) [ (lib.getLib cuda_cudart) ];
-  meta = prevAttrs.meta or { } // {
-    description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
-    homepage = "https://developer.nvidia.com/cutensor";
-    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.obsidian-systems-maintenance ];
-    teams = prevAttrs.meta.teams;
-    license = lib.licenses.unfreeRedistributable // {
-      shortName = "cuTENSOR EULA";
-      fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
-      url = "https://docs.nvidia.com/cuda/cutensor/license.html";
+
+  passthru = prevAttrs.passthru or { } // {
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [
+        "out"
+        "dev"
+        "include"
+        "lib"
+        "static"
+      ];
     };
+  };
+
+  meta = prevAttrs.meta or { } // {
+    description = "GPU-accelerated tensor linear algebra library for tensor contraction, reduction, and elementwise operations";
+    longDescription = ''
+      NVIDIA cuTENSOR is a GPU-accelerated tensor linear algebra library for tensor contraction, reduction, and
+      elementwise operations. Using cuTENSOR, applications can harness the specialized tensor cores on NVIDIA GPUs for
+      high-performance tensor computations and accelerate deep learning training and inference, computer vision,
+      quantum chemistry, and computational physics workloads.
+    ''
+    + prevAttrs.meta.longDescription;
+    homepage = "https://developer.nvidia.com/cutensor";
+    changelog = "https://docs.nvidia.com/cuda/cutensor/latest/release_notes.html";
+
+    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ lib.maintainers.obsidian-systems-maintenance ];
+    license = _cuda.lib.licenses.cutensor;
   };
 }

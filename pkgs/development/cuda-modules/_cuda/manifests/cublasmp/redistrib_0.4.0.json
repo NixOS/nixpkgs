@@ -1,0 +1,55 @@
+{
+    "release_date": "2025-03-10",
+    "release_label": "0.4.0",
+    "release_product": "cublasmp",
+    "libcal": {
+        "name": "NVIDIA libcal library",
+        "license": "libcal library",
+        "license_path": "libcal/LICENSE.txt",
+        "version": "0.4.4.50",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcal/linux-x86_64/libcal-linux-x86_64-0.4.4.50_cuda12-archive.tar.xz",
+                "sha256": "291a665f48e9bc56718b9af75ca5354265476681a7d62cd4ee6601573ee1901e",
+                "md5": "695483de2276cd8e02ac0b0a4fba5cb7",
+                "size": "193252"
+            }
+        },
+        "cuda_variant": [
+            "12"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcal/linux-sbsa/libcal-linux-sbsa-0.4.4.50_cuda12-archive.tar.xz",
+                "sha256": "41919928433a9e174aafb364671a6adc4de28f3917924d387c7ef1b62baea3c3",
+                "md5": "ede6c7a60b706d74f7af0eb322b0efdb",
+                "size": "170228"
+            }
+        }
+    },
+    "libcublasmp": {
+        "name": "NVIDIA cuBLASMp library",
+        "license": "cuBLASMp library",
+        "license_path": "libcublasmp/LICENSE.txt",
+        "version": "0.4.0.789",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcublasmp/linux-x86_64/libcublasmp-linux-x86_64-0.4.0.789_cuda12-archive.tar.xz",
+                "sha256": "dba785a0301d2af320c8a3d9598874f270a02a77a14bfe59e94345669cacb6b6",
+                "md5": "df88e223517ac3f35793a4c4f3789524",
+                "size": "3697804"
+            }
+        },
+        "cuda_variant": [
+            "12"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcublasmp/linux-sbsa/libcublasmp-linux-sbsa-0.4.0.789_cuda12-archive.tar.xz",
+                "sha256": "0dbc7e91789ea3428bada7527c0012f6d5ae5c418779bb678365c2f20b2010a5",
+                "md5": "a8a1b99d37c0b7f524b1766b4cdd05d0",
+                "size": "3646532"
+            }
+        }
+    }
+}

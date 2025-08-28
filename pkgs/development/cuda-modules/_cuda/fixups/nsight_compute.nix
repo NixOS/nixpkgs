@@ -25,8 +25,12 @@ let
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 {
+  allowFHSReferences = true;
+
   outputs = [ "out" ]; # NOTE(@connorbaker): Force a single output so relative lookups work.
+
   nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ wrapQtAppsHook ];
+
   buildInputs =
     prevAttrs.buildInputs or [ ]
     ++ [
@@ -39,10 +43,10 @@ in
       e2fsprogs
       ucx
     ]
-    ++ lib.optionals (cudaMajorMinorVersion == "12.9") [
-      elfutils
-    ];
+    ++ lib.optionals (cudaAtLeast "12.9") [ elfutils ];
+
   dontWrapQtApps = true;
+
   preInstall = prevAttrs.preInstall or "" + ''
     if [[ -d nsight-compute ]]; then
       nixLog "Lifting components of Nsight Compute to the top level"
@@ -53,6 +57,7 @@ in
 
     rm -rf host/${archDir}/Mesa/
   '';
+
   postInstall =
     prevAttrs.postInstall or ""
     + ''
@@ -71,16 +76,44 @@ in
       nixLog "Removing QNX 800 target directory for Jetson builds"
       rm -rfv "''${!outputBin}/target/qnx-800-tegra-a64"
     '';
+
   # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
   preFixup = prevAttrs.preFixup or "" + ''
     patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
   '';
+
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
+    "libcuda.so.1"
   ];
+
   # NOTE(@connorbaker): It might be a problem that when nsight_compute contains hosts and targets of different
   # architectures, that we patchelf just the binaries matching the builder's platform; autoPatchelfHook prints
   # messages like
   #   skipping [$out]/host/linux-desktop-glibc_2_11_3-x64/libQt6Core.so.6 because its architecture (x64) differs from
   #   target (AArch64)
+
+  passthru = prevAttrs.passthru or { } // {
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [
+        "out"
+        "doc"
+      ];
+    };
+  };
+
+  meta = prevAttrs.meta or { } // {
+    description = "Interactive profiler for CUDA and NVIDIA OptiX";
+    longDescription = ''
+      NVIDIA Nsight Compute is an interactive profiler for CUDA and NVIDIA OptiX that provides detailed performance
+      metrics and API debugging via a user interface and command-line tool. Users can run guided analysis and compare
+      results with a customizable and data-driven user interface, as well as post-process and analyze results in their
+      own workflows.
+    ''
+    + prevAttrs.meta.longDescription;
+    homepage = "https://developer.nvidia.com/nsight-compute";
+    changelog = "https://docs.nvidia.com/nsight-compute/ReleaseNotes";
+
+    mainProgram = "ncu";
+  };
 }

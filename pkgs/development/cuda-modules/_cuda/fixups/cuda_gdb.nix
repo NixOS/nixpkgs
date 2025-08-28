@@ -1,35 +1,74 @@
 {
   cudaAtLeast,
-  gmp,
   expat,
-  libxcrypt-legacy,
-  ncurses6,
-  python310,
-  python311,
-  python312,
-  stdenv,
+  gmp,
   lib,
+  libxcrypt-legacy,
+  ncurses,
+  python3,
+  stdenv,
 }:
+let
+  python3MajorMinorVersion = lib.versions.majorMinor python3.version;
+in
 prevAttrs: {
+  allowFHSReferences = true;
+
   buildInputs =
     prevAttrs.buildInputs or [ ]
-    ++ [
-      gmp
+    ++ [ gmp ]
+    # aarch64, sbsa needs expat
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ expat ]
+    # From 12.5, cuda-gdb comes with Python TUI wrappers
+    ++ lib.optionals (cudaAtLeast "12.5") [
       libxcrypt-legacy
-      ncurses6
-      python310
-      python311
-      python312
-    ]
-    # aarch64,sbsa needs expat
-    ++ lib.lists.optionals (stdenv.hostPlatform.isAarch64) [ expat ];
+      ncurses
+      python3
+    ];
 
-  installPhase =
-    prevAttrs.installPhase or ""
-    # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
-    # to avoid autopatchelf failing to find libpython3.8.so.
-    + ''
-      find $bin -name '*python3.8*' -delete
-      find $bin -name '*python3.9*' -delete
+  postInstall =
+    prevAttrs.postInstall or ""
+    # Remove binaries requiring Python3 versions we do not have
+    + lib.optionalString (cudaAtLeast "12.5") ''
+      pushd "''${!outputBin}/bin" >/dev/null
+      nixLog "removing cuda-gdb-python*-tui binaries for Python 3 versions other than ${python3MajorMinorVersion}"
+      for pygdb in cuda-gdb-python*-tui; do
+        if [[ "$pygdb" == "cuda-gdb-python${python3MajorMinorVersion}-tui" ]]; then
+          continue
+        fi
+        nixLog "removing $pygdb"
+        rm -rf "$pygdb"
+      done
+      unset -v pygdb
+      popd >/dev/null
     '';
+
+  passthru = prevAttrs.passthru or { } // {
+    brokenAssertions = prevAttrs.passthru.brokenAssertions or [ ] ++ [
+      {
+        # TODO(@connorbaker): Figure out which are supported.
+        message = "python 3 version is supported";
+        assertion = true;
+      }
+    ];
+
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [
+        "out"
+        "bin"
+      ];
+    };
+  };
+
+  meta = prevAttrs.meta or { } // {
+    description = "NVIDIA tool for debugging CUDA applications on Linux and QNX systems";
+    longDescription = ''
+      CUDA-GDB is the NVIDIA tool for debugging CUDA applications running on Linux and QNX. CUDA-GDB is an extension
+      to GDB, the GNU Project debugger. The tool provides developers with a mechanism for debugging CUDA
+      applications running on actual hardware.
+    ''
+    + prevAttrs.meta.longDescription;
+    homepage = "https://docs.nvidia.com/cuda/cuda-gdb";
+    changelog = "https://docs.nvidia.com/cuda/cuda-gdb#release-notes";
+  };
 }

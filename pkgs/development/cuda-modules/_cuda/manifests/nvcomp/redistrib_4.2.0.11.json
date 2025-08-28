@@ -1,0 +1,57 @@
+{
+    "release_date": "2025-02-18",
+    "release_label": "4.2.0.11",
+    "release_product": "nvcomp",
+    "nvcomp": {
+        "name": "NVIDIA nvCOMP library",
+        "license": "nvCOMP library",
+        "license_path": "nvcomp/LICENSE.txt",
+        "version": "4.2.0.11",
+        "linux-x86_64": {
+            "cuda11": {
+                "relative_path": "nvcomp/linux-x86_64/nvcomp-linux-x86_64-4.2.0.11_cuda11-archive.tar.xz",
+                "sha256": "2d60c0caa5fc68eead96ac5c16bcd8bd97aaa83fa69c7d79fdfcbab4110666c7",
+                "md5": "43365aa39d8402228b44b02231c0ef7a",
+                "size": "17801304"
+            },
+            "cuda12": {
+                "relative_path": "nvcomp/linux-x86_64/nvcomp-linux-x86_64-4.2.0.11_cuda12-archive.tar.xz",
+                "sha256": "0e235903b08f0173835b204e9fa90208660c33eb6a986ec178bb05ea891d5119",
+                "md5": "4a62651b726a72220da454abab80b7fb",
+                "size": "30387876"
+            }
+        },
+        "cuda_variant": [
+            "11",
+            "12"
+        ],
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "nvcomp/linux-sbsa/nvcomp-linux-sbsa-4.2.0.11_cuda11-archive.tar.xz",
+                "sha256": "abc6ea596b63536272f6ed28df2919e3e1876dfad5c62be2732d87ce45de09b5",
+                "md5": "bae00a3e6aa64465cd5a82dbdfc1b62d",
+                "size": "17748288"
+            },
+            "cuda12": {
+                "relative_path": "nvcomp/linux-sbsa/nvcomp-linux-sbsa-4.2.0.11_cuda12-archive.tar.xz",
+                "sha256": "dedc289953e9011a0876b7ae0bbb422155a7302646487cba0c384a4518318a47",
+                "md5": "544836680f98f6ff0ca16da8fcd90f87",
+                "size": "30304504"
+            }
+        },
+        "windows-x86_64": {
+            "cuda11": {
+                "relative_path": "nvcomp/windows-x86_64/nvcomp-windows-x86_64-4.2.0.11_cuda11-archive.zip",
+                "sha256": "7d1cafcbfd0373e8d2a7af996091ceb1e1fa64f2590fc2c8224b69f70d67e3bb",
+                "md5": "7f60a83746d095d327ac89530a43a850",
+                "size": "49056601"
+            },
+            "cuda12": {
+                "relative_path": "nvcomp/windows-x86_64/nvcomp-windows-x86_64-4.2.0.11_cuda12-archive.zip",
+                "sha256": "746e1e3c85538bd2602b8acdc793ee92cf62d7bd0cc7a49e8c7954c1c35083b0",
+                "md5": "f44ddb1ec447d2eb0675069cdb2e9bb3",
+                "size": "76816338"
+            }
+        }
+    }
+}
