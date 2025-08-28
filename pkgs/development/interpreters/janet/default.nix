@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.38.0";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PLfBFsZqwSpE+3cduDXyRZZDpiL8+zHyIjVopK0oqPo=";
+    hash = "sha256-riWY+afuKzZA9bC5HCL/HJtTeykxGFemFORlhn7yCLI=";
   };
 
   postPatch = ''
