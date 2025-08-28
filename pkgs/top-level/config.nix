@@ -196,7 +196,13 @@ let
     };
 
     cudaSupport = mkMassRebuild {
-      feature = "build packages with CUDA support by default";
+      description = ''
+        Whether to build packages with CUDA support by default while building nixpkgs packages.
+
+        By enabling CUDA support, you agree to the terms and conditions of the following licenses:
+
+        ${lib.concatMapStringsSep "\n" (l: " - ${l.fullName}: ${builtins.toJSON l}") cudaLicenses}
+      '';
     };
 
     replaceBootstrapFiles = mkMassRebuild {
@@ -288,6 +294,16 @@ let
     };
   };
 
+  cudaLicenses =
+    let
+      licenses = lib.licenses;
+    in
+    [
+      licenses.nvidiaCuda
+      licenses.nvidiaCudaRedist
+    ]
+    ++ builtins.attrNames (import ../development/cuda-modules/_cuda/lib/licenses.nix);
+
 in
 {
 
@@ -311,6 +327,8 @@ in
     warnings = optionals config.warnUndeclaredOptions (
       mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
+
+    allowlistedLicenses = lib.mkIf config.cudaSupport cudaLicenses;
   };
 
 }

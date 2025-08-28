@@ -34,6 +34,8 @@ let
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 {
+  allowFHSReferences = true;
+
   outputs = [ "out" ]; # NOTE(@connorbaker): Force a single output so relative lookups work.
 
   # An ad hoc replacement for
@@ -133,4 +135,25 @@ in
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
   ];
+
+  passthru = prevAttrs.passthru or { } // {
+    redistBuilderArg = prevAttrs.passthru.redistBuilderArg or { } // {
+      outputs = [
+        "out"
+        "doc"
+      ];
+    };
+  };
+
+  meta = prevAttrs.meta or { } // {
+    description = "System-wide performance analysis and visualization tool";
+    longDescription = ''
+      NVIDIA Nsight Systems is a system-wide performance analysis tool designed to visualize an application's
+      algorithms, identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or
+      size of CPUs and GPUs, from large servers to our smallest systems-on-a-chip (SoCs).
+    ''
+    + prevAttrs.meta.longDescription;
+    homepage = "https://developer.nvidia.com/nsight-systems";
+    changelog = "https://docs.nvidia.com/nsight-systems/ReleaseNotes";
+  };
 }
