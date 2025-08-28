@@ -6220,7 +6220,8 @@
       ];
     "travisci" =
       ps: with ps; [
-      ]; # missing inputs: TravisPy
+        travispy
+      ];
     "trend" =
       ps: with ps; [
         numpy

@@ -18467,6 +18467,8 @@ self: super: with self; {
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
+  travispy = callPackage ../development/python-modules/travispy { };
+
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
