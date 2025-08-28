@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-openvpn";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager-openvpn/${lib.versions.majorMinor finalAttrs.version}/NetworkManager-openvpn-${finalAttrs.version}.tar.xz";
-    sha256 = "qhtfmt341kvIxFk2HPDV4+uZ8Utg6oKjUAYxkor2Km8=";
+    sha256 = "S9ochVm7jDX28THAntrpDN/M0DFOi4y5isVeCbYAWtw=";
   };
 
   patches = [

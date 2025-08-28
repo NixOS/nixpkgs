@@ -1,14 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
   gettext,
   itstool,
-  python3,
   wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
@@ -22,27 +20,21 @@
   libxml2,
   sane-backends,
   vala,
-  gnome,
+  gitUpdater,
   gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "46.0";
+  version = "48.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "simple-scan";
+    tag = version;
+    hash = "sha256-Y+uVAW0jpXJgadP6CjG8zeLgikFY2Pm0z4TZoyYK4+g=";
   };
-
-  patches = [
-    # simple-scan: Use RDNN app ID
-    # https://gitlab.gnome.org/GNOME/simple-scan/-/issues/390
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/simple-scan/-/commit/c09a6def153e52494072a36233c7e7b3307b67bf.patch";
-      hash = "sha256-deyssrsVwPAfT5ru6c0LFwR2pEFnZ0v8wMqoi96tw8s=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -50,7 +42,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    python3
     wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
@@ -70,15 +61,12 @@ stdenv.mkDerivation rec {
     sane-backends
   ];
 
-  postPatch = ''
-    patchShebangs data/meson_compile_gschema.py
-  '';
-
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "simple-scan";
+    updateScript = gitUpdater {
+      # Ignore tags like 48.1-2, which actually does not introduce any changes.
+      ignoredVersions = "-";
     };
   };
 
