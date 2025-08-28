@@ -6,12 +6,14 @@
   fetchpatch,
   keyring,
   pytestCheckHook,
+  setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "plyer";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kivy";
@@ -45,20 +47,24 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    rm -r examples
     # remove all the wifi stuff. Depends on a python wifi module that has not been updated since 2016
     find -iname "wifi*" -exec rm {} \;
     substituteInPlace plyer/__init__.py \
-      --replace "wifi = Proxy('wifi', facades.Wifi)" "" \
-      --replace "'wifi', " ""
+      --replace-fail "wifi = Proxy('wifi', facades.Wifi)" "" \
+      --replace-fail "'wifi', " ""
     substituteInPlace plyer/facades/__init__.py \
-      --replace "from plyer.facades.wifi import Wifi" ""
+      --replace-fail "from plyer.facades.wifi import Wifi" ""
   '';
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ keyring ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   enabledTestPaths = [ "plyer/tests" ];
@@ -69,18 +75,18 @@ buildPythonPackage rec {
     # The test and the API under test do work outside the nix build.
     "test_uniqueid"
   ];
+
   preCheck = ''
-    HOME=$(mktemp -d)
     mkdir -p $HOME/.config/ $HOME/Pictures
   '';
 
   pythonImportsCheck = [ "plyer" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Plyer is a platform-independent api to use features commonly found on various platforms";
     homepage = "https://github.com/kivy/plyer";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     teams = [
       lib.teams.ngi
     ];
