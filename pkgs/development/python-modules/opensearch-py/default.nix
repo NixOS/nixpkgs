@@ -21,7 +21,7 @@
   # tests
   botocore,
   mock,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     botocore
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-mock
     pytestCheckHook
     pyyaml
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     "test_basicauth_in_request_session"
     "test_callable_in_request_session"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky tests: OSError: [Errno 48] Address already in use
     "test_redirect_failure_when_allow_redirect_false"
     "test_redirect_success_when_allow_redirect_true"
