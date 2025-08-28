@@ -22358,6 +22358,12 @@
     githubId = 2660;
     name = "Russell Sim";
   };
+  RustyNova = {
+    email = "rusty.nova.jsb@gmail.com";
+    github = "RustyNova016";
+    githubId = 50844553;
+    name = "RustyNova";
+  };
   rutherther = {
     name = "Rutherther";
     email = "rutherther@proton.me";
