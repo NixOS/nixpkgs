@@ -9,15 +9,15 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbps";
-  version = "0.59.2";
+  version = "0.60.5";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
-    rev = version;
-    hash = "sha256-3+LzFLDZ1zfRPBETMlpEn66zsfHRHQLlgeZPdMtmA14=";
+    tag = finalAttrs.version;
+    hash = "sha256-ht5hhaaE9QAsp+5xmOAYQE9fgL0GBuQvz0qB64z0cbs=";
   };
 
   nativeBuildInputs = [
@@ -37,24 +37,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=deprecated-declarations";
 
+  # Don't try to install keys to /var/db/xbps, put in $out/share for now
   postPatch = ''
-    # _BSD_SOURCE causes cpp warning
-    # https://github.com/void-linux/xbps/issues/576
-    substituteInPlace bin/xbps-fbulk/main.c lib/util.c lib/external/dewey.c lib/external/fexec.c \
-      --replace 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
-      --replace '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
-
-    # fix calloc argument cause a build failure
-    substituteInPlace bin/xbps-fbulk/main.c \
-      --replace-fail 'calloc(sizeof(*depn), 1)' 'calloc(1UL, sizeof(*depn))'
-
-    # fix unprefixed ranlib (needed on cross)
-    substituteInPlace lib/Makefile \
-      --replace 'SILENT}ranlib ' 'SILENT}$(RANLIB) '
-
-    # Don't try to install keys to /var/db/xbps, put in $out/share for now
     substituteInPlace data/Makefile \
-      --replace '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
+      --replace-fail '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
   '';
 
   enableParallelBuilding = true;
@@ -66,4 +52,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };
-}
+})
