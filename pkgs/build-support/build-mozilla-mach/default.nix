@@ -444,7 +444,20 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+  ''
+  +
+    # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
+    lib.optionalString
+      (
+        stdenv.hostPlatform.isDarwin
+        && lib.versionAtLeast version "143"
+        && lib.versionOlder apple-sdk_15.version "15.4"
+      )
+      ''
+        mkdir -p xnu/sys
+        cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
+        export CXXFLAGS="-isystem $(pwd)/xnu"
+      '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
