@@ -7,7 +7,7 @@ Work-in-Progress rewrite of
 
 The current state of `nixos-rebuild` is dire: it is one of the most critical
 pieces of code we have in NixOS, but it has tons of issues:
-- The code is written in Bash, and while this by itself is not necessary bad,
+- The code is written in Bash, and while this by itself is not necessarily bad,
   it means that it is difficult to do refactorings due to the lack of tooling
   for the language
 - The code itself is a hacky mess. Changing even one line of code can cause
@@ -18,7 +18,7 @@ pieces of code we have in NixOS, but it has tons of issues:
   builds Flakes inside a temporary directory and reads the resulting symlink
   since the code seems to predate `--print-out-paths` flag
 
-Given all of those above, improvements in the `nixos-rebuild` are difficult to
+Given all of the above, improvements in the `nixos-rebuild` are difficult to
 do. A full rewrite is probably the easier way to improve the situation since
 this can be done in a separate package that will not break anyone. So this is
 an attempt of the rewrite.
@@ -44,7 +44,7 @@ nix-build -A nixos-rebuild-ng -A nixos-rebuild-ng.tests.linters
 ```
 
 The command above will build, run the unit tests and linters, and also check if
-the code is formatted. However, sometimes is more convenient to run just a few
+the code is formatted. However, sometimes it's more convenient to run just a few
 tests to debug, in this case you can run:
 
 ```console
@@ -97,7 +97,7 @@ not possible to fix, please open an issue and we can discuss a solution.
   please open an issue
 - We do some additional validation of flags, like exiting with an error when
   `--build-host` or `--target-host` is used with `repl`, since the user could
-  assume that the `repl` would be run remotely while it always run the local
+  assume that the `repl` would be run remotely while it always runs the local
   machine. `nixos-rebuild` silently ignored those flags, so this
   [may cause some issues](https://github.com/NixOS/nixpkgs/pull/363922) for
   wrappers
@@ -108,7 +108,7 @@ not possible to fix, please open an issue and we can discuss a solution.
   may be difficult to fix, so right now I only recommend using
   `nixos-rebuild-ng` if you are testing in a VM or in a filesystem with
   snapshots like BTRFS or ZFS. Those bugs are unlikely to be unfixable but the
-  errors can be difficult to understand. If you want to go anyway,
+  errors can be difficult to understand. If you want to go on,
   `nix-collect-garbage -d` and `nix store repair` are your friends
 
 ## TODON'T

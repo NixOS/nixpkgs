@@ -18,6 +18,7 @@
   flax,
   jax,
   ml-collections,
+  msgspec,
   omegaconf,
   pydantic,
   pytestCheckHook,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "tyro";
-  version = "0.9.27";
+  version = "0.9.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentyi";
     repo = "tyro";
     tag = "v${version}";
-    hash = "sha256-2duLVdBwNpGWCV+WgtzyXjoVhukVjUUhIWXVBEk4QIA=";
+    hash = "sha256-dxciOLNxOjTTIm7P1XTRMgW1a6Sdbnfnqc0EEfyq7IM=";
   };
 
   build-system = [ hatchling ];
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     flax
     jax
     ml-collections
+    msgspec
     omegaconf
     pydantic
     pytestCheckHook

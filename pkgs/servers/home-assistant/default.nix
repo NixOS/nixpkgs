@@ -214,6 +214,17 @@ let
         };
       });
 
+      py-madvr2 = super.py-madvr2.overridePythonAttrs rec {
+        version = "1.6.33";
+        src = fetchFromGitHub {
+          owner = "iloveicedgreentea";
+          repo = "py-madvr";
+          tag = "v${version}";
+          hash = "sha256-z+PVLz9eApGJ94I/Jp0MyqNpKQwIemk8j+OyqFmIbgI=";
+        };
+        pythonImportsCheck = [ "madvr" ];
+      };
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";

@@ -14367,6 +14367,8 @@
   };
   lenny = {
     name = "Lenny.";
+    github = "LennyPenny";
+    githubId = 4027243;
     matrix = "@lenny:flipdot.org";
     keys = [ { fingerprint = "6D63 2D4D 0CFE 8D53 F5FD  C7ED 738F C800 6E9E A634"; } ];
   };
@@ -19040,12 +19042,6 @@
     github = "OleMussmann";
     githubId = 14004859;
     name = "Ole Mussmann";
-  };
-  olifloof = {
-    email = "benmoreosm@gmail.com";
-    github = "olifloof";
-    githubId = 35699052;
-    name = "oli";
   };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";

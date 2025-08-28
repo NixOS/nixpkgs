@@ -5550,7 +5550,8 @@
       ];
     "solaredge_local" =
       ps: with ps; [
-      ]; # missing inputs: solaredge-local
+        solaredge-local
+      ];
     "solarlog" =
       ps: with ps; [
         solarlog-cli
