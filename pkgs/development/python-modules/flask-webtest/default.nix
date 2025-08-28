@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-webtest";
-  version = "0.1.4";
+  version = "0.1.6";
   pyproject = true;
 
   # Pypi tarball doesn't include version.py
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "level12";
     repo = "flask-webtest";
     tag = version;
-    hash = "sha256-4USNT6HYh49v+euCePYkL1gR6Ul8C0+/xanuYGxKpfM=";
+    hash = "sha256-wcEc9j62bQXAmXczsunITQP3sU040d6Ws8cz0w7+5r4=";
   };
 
   build-system = [ setuptools ];
