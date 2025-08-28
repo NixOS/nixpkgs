@@ -1,0 +1,36 @@
+https://savannah.gnu.org/support/index.php?110521
+https://git.savannah.gnu.org/cgit/autoconf.git/patch/?id=3a9802d60156809c139e9b4620bf04917e143ee2
+--- a/lib/Autom4te/FileUtils.pm
++++ b/lib/Autom4te/FileUtils.pm
+@@ -34,12 +34,12 @@ This perl module provides various general purpose file handling functions.
+ 
+ =cut
+ 
+-use 5.006;
++use 5.008;
+ use strict;
+ use warnings FATAL => 'all';
+ 
+ use Exporter;
+-use File::stat;
++use Time::HiRes qw(stat);
+ use IO::File;
+ 
+ use Autom4te::Channels;
+@@ -115,10 +115,11 @@ sub mtime ($)
+   return 0
+     if $file eq '-' || ! -f $file;
+ 
+-  my $stat = stat ($file)
++  my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
++    $atime,$mtime,$ctime,$blksize,$blocks) = stat ($file)
+     or fatal "cannot stat $file: $!";
+ 
+-  return $stat->mtime;
++  return $mtime;
+ }
+ 
+ 
+-- 
+cgit v1.2.1
+

@@ -1,0 +1,10 @@
+--- a/src/generator/lib_gen.cr	1969-12-31 17:00:01.000000000 -0700
++++ b/src/generator/lib_gen.cr	2023-07-14 11:48:41.509397114 -0600
+@@ -10,7 +10,7 @@
+ 
+     private def libraries : Array(String)
+       namespace.shared_libraries.map do |library|
+-        library[/lib([^\/]+)\.(?:so|.+?\.dylib).*/, 1]
++        library[/(?:\/[^\/]*)+\/lib([^\/]+)\.(?:so|.+?\.dylib).*/, 1]
+       end
+     end

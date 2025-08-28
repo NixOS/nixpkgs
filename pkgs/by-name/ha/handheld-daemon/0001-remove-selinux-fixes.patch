@@ -1,0 +1,37 @@
+diff --git a/src/hhd/plugins/power/power.py b/src/hhd/plugins/power/power.py
+index 5ece857..be41542 100644
+--- a/src/hhd/plugins/power/power.py
++++ b/src/hhd/plugins/power/power.py
+@@ -79,12 +79,6 @@ def create_subvol():
+         )
+         return
+ 
+-    # Fixup selinux for swap
+-    subprocess.run(
+-        ["semanage", "fcontext", "-a", "-t", "var_t", HHD_SWAP_SUBVOL],
+-    )
+-    subprocess.run(["restorecon", HHD_SWAP_SUBVOL])
+-
+     logger.info(f"Creating swap subvolume {HHD_SWAP_SUBVOL}")
+     os.system(f"btrfs subvolume create {HHD_SWAP_SUBVOL}")
+ 
+@@ -153,19 +147,6 @@ def create_temporary_swap():
+         subprocess.run(["chmod", "600", HHD_SWAP_FILE], check=True)
+         subprocess.run(["mkswap", HHD_SWAP_FILE], check=True)
+ 
+-    # Fixup selinux for swap
+-    subprocess.run(
+-        [
+-            "semanage",
+-            "fcontext",
+-            "-a",
+-            "-t",
+-            "swapfile_t",
+-            HHD_SWAP_FILE,
+-        ],
+-    )
+-    subprocess.run(["restorecon", HHD_SWAP_FILE])
+-
+     # Enable swap
+     subprocess.run(["swapon", HHD_SWAP_FILE], check=True)
+ 

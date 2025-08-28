@@ -1,0 +1,14 @@
+--- ./src/scripts/elua/core/util.lua.old	2015-05-17 11:59:57.307743243 +0200
++++ ./src/scripts/elua/core/util.lua	2015-05-17 12:39:11.906797377 +0200
+@@ -159,7 +159,10 @@
+         local ev = os.getenv("ELUA_" .. libname:upper() .. "_LIBRARY_PATH")
+         local succ, v = load_lib(libname, ev)
+         if not succ then
+-            error(v, 2)
++            succ, v = load_lib(libname, "$out/lib")
++            if not succ then
++                error(v, 2)
++            end
+         end
+         lib = v
+         loaded_libs[libname] = lib

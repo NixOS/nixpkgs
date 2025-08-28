@@ -1,0 +1,22 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -23,7 +23,7 @@
+ omedit-testsuite: omedit-testsuite.skip
+ omedit-testsuite.skip: omedit.skip testsuite-depends
+ 	$(MAKE) -f $(defaultMakefileTarget) -C OMEdit/Testsuite
+-omparser: omparser.skip
++omparser: build-dirs omparser.skip
+ omparser.skip:
+ 	test -f $@ || $(MAKE) -C OMParser OMBUILDDIR=@OMBUILDDIR@ "host_short=@host_short@" CC="@CC@" CXX="@CXX@" CFLAGS="@CFLAGS@" CPPFLAGS="@CPPFLAGS@" CXXFLAGS="@CXXFLAGS@"
+ omsimulator: omsimulator.skip
+@@ -134,6 +134,10 @@
+ INSTALL_JAVADIR    = ${DESTDIR}${datadir}/omc/java
+ INSTALL_LOCALEDIR  = ${DESTDIR}${datadir}/locale
+ 
++build-dirs:
++	mkdir -p "@OMBUILDDIR@"/lib/@host_short@/omc
++	mkdir -p "@OMBUILDDIR@"/include/omc
++
+ install-dirs:
+ 	@test ! "${DESTDIR}/@prefix@" -ef "@OMBUILDDIR@" || (echo Error: Install and build dirs are the same && false)
+ 	if [ "@APP@" = ".app" ]; then mkdir -p ${INSTALL_APPDIR}; fi

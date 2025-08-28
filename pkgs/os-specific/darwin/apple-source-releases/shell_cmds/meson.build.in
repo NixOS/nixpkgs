@@ -1,0 +1,423 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/shell_cmds/blob/main/shell_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('shell_cmds', 'c', 'cpp', version : '@version@')
+add_global_arguments('-D__FBSDID=__RCSID', language : 'c')
+
+fs = import('fs')
+
+# Dependencies
+build_cc = meson.get_compiler('c', native : true)
+
+host_cc = meson.get_compiler('c')
+host_cxx = meson.get_compiler('cpp')
+
+
+# pam = cc.find_library('pam')
+libedit = dependency('libedit')
+libresolv = host_cc.find_library('resolv')
+libsbuf = host_cc.find_library('sbuf')
+libutil = host_cc.find_library('util')
+libxo = dependency('libxo')
+
+
+# Generators
+bison = generator(
+    find_program('bison', required : true),
+    arguments : ['@INPUT@', '--header=@OUTPUT0@', '--output=@OUTPUT1@'],
+    output : [ '@BASENAME@.tab.h', '@BASENAME@.tab.c'],
+)
+
+
+# Binaries
+
+## These commands all are single files with a man page.
+
+single_file_cmds = [
+    'basename',
+    'chroot',
+    'dirname',
+    'echo',
+    'false',
+    'getopt',
+    'hostname',
+    'jot',
+    'kill',
+    'killall',
+    'lastcomm',
+    'logname',
+    'mktemp',
+    'nice',
+    'nohup', # needs vproc_priv.h
+    'path_helper',
+    'printenv',
+    'printf',
+    'pwd',
+    'realpath',
+    'renice',
+    'script',
+    'seq',
+    'shlock',
+    'sleep',
+    'systime',
+    'tee',
+    'time',
+    'true',
+    'uname',
+    'what',
+    'whereis',
+    'which',
+    'yes',
+]
+
+foreach cmd : single_file_cmds
+    executable(
+        cmd,
+        install : true,
+        sources : [ f'@cmd@/@cmd@.c' ],
+    )
+    foreach section : [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        if fs.exists(f'@cmd@/@cmd@.@section@')
+            install_man(f'@cmd@/@cmd@.@section@')
+        endif
+    endforeach
+endforeach
+
+install_data(
+    'alias/generic.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'alias',
+)
+install_man(
+    'alias/alias.1',
+    'alias/builtin.1',
+)
+foreach alias : run_command('cat', 'xcodescripts/builtins.txt', check : true).stdout().strip().split('\n')
+    install_symlink(
+        alias,
+        install_dir : get_option('bindir'),
+        pointing_to : 'alias',
+    )
+endforeach
+
+executable(
+    'apply',
+    dependencies : libsbuf,
+    install : true,
+    sources : [ 'apply/apply.c' ],
+)
+install_man('apply/apply.1')
+
+executable(
+    'date',
+    include_directories : 'date',
+    install : true,
+    sources : [
+        'date/date.c',
+        'date/vary.c',
+    ],
+)
+install_man('date/date.1')
+
+executable(
+    'env',
+    include_directories : 'env',
+    install : true,
+    sources : [
+        'env/env.c',
+        'env/envopts.c',
+    ],
+)
+install_man('env/env.1')
+
+executable(
+    'expr',
+    install : true,
+    sources : [
+        bison.process('expr/expr.y')
+    ],
+)
+install_man('expr/expr.1')
+
+executable(
+    'find',
+    c_args : [ '-D_DARWIN_USE_64_BIT_INODE' ],
+    include_directories : 'find',
+    install : true,
+    sources : [
+        'find/find.c',
+        'find/function.c',
+        'find/ls.c',
+        'find/main.c',
+        'find/misc.c',
+        'find/operator.c',
+        'find/option.c',
+        bison.process('find/getdate.y'),
+    ],
+)
+install_man('find/find.1')
+
+executable(
+    'hexdump',
+    include_directories : 'hexdump',
+    install : true,
+    sources : [
+        'hexdump/conv.c',
+        'hexdump/display.c',
+        'hexdump/hexdump.c',
+        'hexdump/hexsyntax.c',
+        'hexdump/odsyntax.c',
+        'hexdump/parse.c',
+    ],
+)
+install_man(
+    'hexdump/hexdump.1',
+    'hexdump/od.1',
+)
+install_symlink(
+    'od',
+    install_dir : get_option('bindir'),
+    pointing_to : 'hexdump',
+)
+
+executable(
+    'id',
+    c_args : [ '-DUSE_BSM_AUDIT' ],
+    include_directories : 'id',
+    install : true,
+    sources : [
+        'id/id.c',
+        # 'id/open_directory.c', # Not actually used and doesn’t compile anyway.
+    ],
+)
+install_man(
+    'id/groups.1',
+    'id/id.1',
+    'id/whoami.1',
+)
+foreach cmd : [ 'groups', 'whoami' ]
+    install_symlink(
+        cmd,
+        install_dir : get_option('bindir'),
+        pointing_to : 'id',
+    )
+endforeach
+
+executable(
+    'locate',
+    include_directories : 'locate/locate',
+    install : true,
+    sources : [
+        'locate/locate/locate.c',
+        'locate/locate/util.c',
+    ],
+)
+executable(
+    'locate.bigram',
+    include_directories : 'locate/locate',
+    install : true,
+    sources : [ 'locate/bigram/locate.bigram.c', ],
+)
+executable(
+    'locate.code',
+    include_directories : 'locate/locate',
+    install : true,
+    sources : [ 'locate/code/locate.code.c', ],
+)
+install_data(
+    'locate/locate/locate.rc',
+    install_dir : get_option('sysconfdir'),
+)
+install_data(
+    'locate/locate/concatdb.sh',
+    'locate/locate/updatedb.sh',
+    'locate/locate/mklocatedb.sh',
+    install_dir : get_option('libexecdir'),
+    install_mode : 'r-xr-xr-x',
+    rename : [
+        'locate.concatdb',
+        'locate.updatedb',
+        'locate.mklocatedb',
+    ],
+)
+install_man(
+    'locate/locate/locate.1',
+    'locate/locate/locate.updatedb.8',
+    'locate/bigram/locate.bigram.8',
+    'locate/code/locate.code.8',
+)
+foreach manpage : [ 'concatdb', 'mklocatedb' ]
+    install_symlink(
+        f'locate.@manpage@.8',
+        install_dir : get_option('mandir') + '/man8',
+        pointing_to : 'locate.updatedb.8',
+    )
+endforeach
+
+executable(
+    'lockf',
+    install : true,
+    sources : [ 'lockf/lockf.c' ],
+)
+install_man('lockf/lockf.1')
+
+# Building `sh` requires several custom targets to generate files it needs.
+
+bash_bin = find_program('bash')
+mknodes = executable('mknodes', sources : 'sh/mknodes.c', native : true)
+mksyntax = executable('mksyntax', sources : 'sh/mksyntax.c', native : true)
+
+builtins = custom_target(
+    command : [ bash_bin, '@SOURCE_ROOT@/sh/mkbuiltins', '@SOURCE_ROOT@/sh'],
+    output : [ 'builtins.c', 'builtins.h' ],
+)
+
+nodes = custom_target(
+    command : [ mknodes, '@SOURCE_ROOT@/sh/nodetypes', '@SOURCE_ROOT@/sh/nodes.c.pat' ],
+    output : [ 'nodes.c', 'nodes.h' ],
+)
+
+syntax = custom_target(
+    command : [ mksyntax ],
+    output : [ 'syntax.c', 'syntax.h' ],
+)
+
+tokens = custom_target(
+    command : [ bash_bin, '@SOURCE_ROOT@/sh/mktokens' ],
+    output : 'token.h',
+)
+
+executable(
+    'sh',
+    c_args : [ '-DSHELL' ],
+    dependencies : [ libedit ],
+    include_directories : [ 'sh', 'sh/bltin' ],
+    install : true,
+    sources : [
+        'kill/kill.c',
+        'printf/printf.c',
+        'sh/alias.c',
+        'sh/arith_yacc.c',
+        'sh/arith_yylex.c',
+        'sh/bltin/echo.c',
+        'sh/cd.c',
+        'sh/error.c',
+        'sh/eval.c',
+        'sh/exec.c',
+        'sh/expand.c',
+        'sh/histedit.c',
+        'sh/input.c',
+        'sh/jobs.c',
+        'sh/mail.c',
+        'sh/main.c',
+        'sh/memalloc.c',
+        'sh/miscbltin.c',
+        'sh/mystring.c',
+        'sh/options.c',
+        'sh/output.c',
+        'sh/parser.c',
+        'sh/redir.c',
+        'sh/show.c',
+        'sh/trap.c',
+        'sh/var.c',
+        'test/test.c',
+        builtins,
+        nodes,
+        syntax,
+        tokens,
+    ],
+)
+install_man('sh/sh.1')
+
+# Requires entitlements
+# executable(
+#     'su',
+#     dependencies : pam,
+#     sources : [ 'su/su.c' ],
+# )
+# install_data(
+#     'su/su.pam',
+#     install_dir : get_option('sysconfdir') + 'pam.d',
+#     rename : 'su'
+# )
+# install_man('su/su.1')
+
+executable(
+    'stdbuf',
+    install : true,
+    sources : [ 'stdbuf/stdbuf.c' ],
+)
+install_man('stdbuf/stdbuf.1')
+
+executable(
+    '[',
+    install : true,
+    sources : [ 'test/test.c' ],
+)
+install_man(
+    'test/[.1',
+    'test/test.1',
+)
+install_symlink(
+    'test',
+    install_dir : get_option('bindir'),
+    pointing_to : '[',
+)
+
+
+executable(
+    'users',
+    install : true,
+    sources : [ 'users/users.cc' ],
+)
+install_man('users/users.1')
+
+executable(
+    'w',
+    c_args : [
+        '-DHAVE_KVM=0',
+        '-DHAVE_UTMPX=1',
+    ],
+    dependencies : [ libresolv, libsbuf, libutil, libxo ],
+    include_directories : 'w',
+    install : true,
+    sources : [
+        'w/fmt.c',
+        'w/pr_time.c',
+        'w/proc_compare.c',
+        'w/w.c',
+    ],
+)
+install_man(
+    'w/uptime.1',
+    'w/w.1',
+)
+install_symlink(
+    'uptime',
+    install_dir : get_option('bindir'),
+    pointing_to : 'w',
+)
+
+executable(
+    'who',
+    c_args : [
+        '-D_UTMPX_COMPAT',
+        '-DSUPPORT_UTMPX',
+    ],
+    install : true,
+    sources : [ 'who/who.c' ],
+)
+install_man('who/who.1')
+
+executable(
+    'xargs',
+    include_directories : 'xargs',
+    install : true,
+    sources : [
+        'xargs/strnsubst.c',
+        'xargs/xargs.c',
+    ],
+)
+install_man('xargs/xargs.1')

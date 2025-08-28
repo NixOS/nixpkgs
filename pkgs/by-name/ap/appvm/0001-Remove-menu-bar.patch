@@ -1,0 +1,12 @@
+diff --git a/src/resources/ui/virt-viewer.ui b/src/resources/ui/virt-viewer.ui
+index 430f879..68856fc 100644
+--- a/src/resources/ui/virt-viewer.ui
++++ b/src/resources/ui/virt-viewer.ui
+@@ -137,7 +137,6 @@
+     </child>
+     <child type="titlebar">
+       <object class="GtkHeaderBar" id="header">
+-        <property name="visible">True</property>
+         <property name="can-focus">False</property>
+         <property name="show-close-button">True</property>
+         <child>

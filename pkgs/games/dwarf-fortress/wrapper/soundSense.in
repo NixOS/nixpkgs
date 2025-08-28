@@ -1,0 +1,11 @@
+#!@stdenv_shell@ -e
+
+export NIXPKGS_DF_EXE="soundsense/soundSense.sh"
+export NIXPKGS_DF_GAME=0
+source @dfInit@
+
+for path in soundsense/*; do
+  update_path "$path"
+done
+
+JDK_JAVA_OPTIONS='--add-opens=java.xml/com.sun.org.apache.xerces.internal.parsers=ALL-UNNAMED' PATH="@jre@/bin:$PATH" go "$@"

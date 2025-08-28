@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index 524b6b7..8a880f1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -9,7 +9,6 @@ all: install info
+ 
+ install:
+ 	@install -Dm750 $(SRC) $(DEST)
+-	@install -Dm644 $(SRC).conf $(DEST).conf
+ 
+ info:
+ 	@printf 'Successfully installed %s to %s.\n' $(SRC) $(DEST)
+diff --git a/update-systemd-resolved b/update-systemd-resolved
+index 1452e1a..39641cb 100755
+--- a/update-systemd-resolved
++++ b/update-systemd-resolved
+@@ -29,7 +29,8 @@
+ DBUS_DEST="org.freedesktop.resolve1"
+ DBUS_NODE="/org/freedesktop/resolve1"
+ 
+-SCRIPT_NAME="${BASH_SOURCE[0]##*/}"
++PATH="@PATH@"
++SCRIPT_NAME="update-systemd-resolved"
+ 
+ log() {
+   logger -s -t "$SCRIPT_NAME" "$@"

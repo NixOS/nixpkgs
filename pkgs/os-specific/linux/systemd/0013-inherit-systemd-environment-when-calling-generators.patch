@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yuriy Taraday <yorik.sar@gmail.com>
+Date: Fri, 17 Jun 2022 12:45:10 +0000
+Subject: [PATCH] inherit systemd environment when calling generators.
+
+Systemd generators need access to the environment configured in
+stage-2-init.sh since it schedules fsck and mkfs executions based on
+being able to find an appropriate binary for the target filesystem.
+
+With this commit I am altering the systemd behaviour since upstream
+tries to gather environments with that they call
+"environment-generators" and then seems to pass that on to all the other
+executables that are being called from managers.
+---
+ src/core/manager.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/core/manager.c b/src/core/manager.c
+index 9577b89783..9cfd2798b9 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -4158,9 +4158,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
+          * adjust generated units to that. Let's pass down some bits of information that are easy for us to
+          * determine (but a bit harder for generator scripts to determine), as environment variables. */
+ 
++        // On NixOS we must propagate PATH to generators so they are
++        // able to find binaries such as `fsck.${fstype}` and
++        // `mkfs.${fstype}`. That is why we ignore transient_environment that
++        // overrides the PATH variable. This propagates systemd's
++        // environment (e.g. PATH) that was setup
++        // before calling systemd from stage-2-init.sh.
++#if 0
+         nl = strv_copy(m->transient_environment);
+         if (!nl)
+                 return -ENOMEM;
++#endif
+ 
+         r = strv_env_assign(&nl, "SYSTEMD_SCOPE", runtime_scope_to_string(m->runtime_scope));
+         if (r < 0)

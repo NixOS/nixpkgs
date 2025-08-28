@@ -1,0 +1,13 @@
+diff --git a/cmake/QtPublicSbomHelpers.cmake b/cmake/QtPublicSbomHelpers.cmake
+index 3767fb4ff26..b642ea3e4b6 100644
+--- a/cmake/QtPublicSbomHelpers.cmake
++++ b/cmake/QtPublicSbomHelpers.cmake
+@@ -369,7 +369,7 @@ function(_qt_internal_setup_sbom)
+     endif()
+ 
+     option(QT_GENERATE_SBOM "Generate SBOM documents in SPDX v2.3 tag:value format."
+-        "${default_value}")
++        OFF)
+ 
+     string(CONCAT help_string
+         "Generate SBOM documents in SPDX v2.3 JSON format if required python dependency "

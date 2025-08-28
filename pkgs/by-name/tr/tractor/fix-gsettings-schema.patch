@@ -1,0 +1,13 @@
+diff --git a/src/tractor/db.py b/src/tractor/db.py
+index 6f39bc4..22fbdd2 100644
+--- a/src/tractor/db.py
++++ b/src/tractor/db.py
+@@ -15,7 +15,7 @@ def dconf() -> Gio.Settings:
+     """
+     schema = "org.tractor"
+     schemas = Gio.SettingsSchemaSource.get_default()
+-    if not Gio.SettingsSchemaSource.lookup(schemas, schema, False):
++    if not Gio.SettingsSchemaSource.lookup(schemas, schema, recursive=True):
+         gschema_dir = "/usr/share/glib-2.0/schemas/"
+         for directory in GLib.get_system_data_dirs():
+             gdir = f"{directory}/glib-2.0/schemas/"

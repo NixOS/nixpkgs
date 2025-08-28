@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Tue, 3 Sep 2024 09:09:19 +0200
+Subject: [PATCH] Fix QEMU firmware path
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ mkosi/qemu.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mkosi/qemu.py b/mkosi/qemu.py
+index 0c406d818a9fa9dcce3be97d0c89e9df0d2a96fa..c134ab4a8bfba1e3564c831a5069be52d90ee15a 100644
+--- a/mkosi/qemu.py
++++ b/mkosi/qemu.py
+@@ -211,7 +211,7 @@ def find_ovmf_firmware(config: Config, firmware: Firmware) -> Optional[OvmfConfi
+     if not firmware.is_uefi():
+         return None
+ 
+-    desc = list((config.tools() / "usr/share/qemu/firmware").glob("*"))
++    desc = list((config.tools() / "@QEMU_FIRMWARE@").glob("*"))
+     if config.tools() == Path("/"):
+         desc += list((config.tools() / "etc/qemu/firmware").glob("*"))
+ 

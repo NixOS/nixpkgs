@@ -1,0 +1,34 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/removefile/blob/main/removefile.xcodeproj/project.pbxproj
+
+# Project settings
+project('removefile', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Libraries
+library(
+    'removefile',
+    c_args : [
+        '-D__DARWIN_NOW_CANCELABLE=1',
+    ],
+    install : true,
+    sources : [
+        'removefile.c',
+        'removefile_random.c',
+        'removefile_rename_unlink.c',
+        'removefile_sunlink.c',
+        'removefile_tree_walker.c',
+    ],
+)
+install_headers(
+    'checkint.h',
+    'removefile.h',
+)
+install_man(
+    'checkint.3',
+    'removefile.3',
+)

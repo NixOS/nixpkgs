@@ -1,0 +1,22 @@
+diff --git a/scripts/mosh.pl b/scripts/mosh.pl
+index 56e96d7..2a2177e 100755
+--- a/scripts/mosh.pl
++++ b/scripts/mosh.pl
+@@ -61,7 +61,7 @@ my $have_ipv6 = eval {
+ 
+ $|=1;
+ 
+-my $client = 'mosh-client';
++my $client = '@mosh-client@';
+ my $server = 'mosh-server';
+ 
+ my $predict = undef;
+@@ -91,7 +91,7 @@ my @cmdline = @ARGV;
+ my $usage =
+ qq{Usage: $0 [options] [--] [user@]host [command...]
+         --client=PATH        mosh client on local machine
+-                                (default: "mosh-client")
++                                (default: "@mosh-client@")
+         --server=COMMAND     mosh server on remote machine
+                                 (default: "mosh-server")
+ 

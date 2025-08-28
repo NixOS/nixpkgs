@@ -1,0 +1,40 @@
+diff --git a/check_wmi_plus.makeman.sh b/check_wmi_plus.makeman.sh
+index 38dc7a4..3fe4369 100755
+--- a/check_wmi_plus.makeman.sh
++++ b/check_wmi_plus.makeman.sh
+@@ -19,15 +19,6 @@ mkdir -p "$manpage_dir/man1"
+ # the full path to the manpage file
+ manfile="$manpage_dir/man1/check_wmi_plus.1"
+ 
+-# if we are not running in a terminal then only show the text-based help
+-if [ ! -t 0 ]; then
+-   # we are not running in a terminal
+-   echo "Not running in a terminal - showing text-based help"
+-   echo
+-   exec $check_wmi_plus_text_help
+-fi
+-
+-
+ usage()
+ {
+ cat << EOT
+diff --git a/check_wmi_plus_help.pl b/check_wmi_plus_help.pl
+index 3440db2..2982da2 100755
+--- a/check_wmi_plus_help.pl
++++ b/check_wmi_plus_help.pl
+@@ -24,7 +24,7 @@ if ($opt_help) {
+       # we have the script to make the manpage and have not been asked to show text only help
+       exec ("$make_manpage_script \"$0 --itexthelp\" \"$manpage_dir\"") or print STDERR "couldn't exec $make_manpage_script: $!";
+    } else {
+-      print "Warning: Can not access/execute Manpage script ($make_manpage_script).\nShowing help in text-only format.\n\n";
++     # print "Warning: Can not access/execute Manpage script ($make_manpage_script).\nShowing help in text-only format.\n\n";
+    }
+ }
+ 
+@@ -692,4 +692,4 @@ show_ini_help_overview(1);
+ finish_program($ERRORS{'UNKNOWN'});
+ }
+ 
+-1;
+\ No newline at end of file
++1;
