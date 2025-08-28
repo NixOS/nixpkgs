@@ -14909,6 +14909,8 @@ self: super: with self; {
 
   pysenz = callPackage ../development/python-modules/pysenz { };
 
+  pyseq-align = callPackage ../development/python-modules/pyseq-align { };
+
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
