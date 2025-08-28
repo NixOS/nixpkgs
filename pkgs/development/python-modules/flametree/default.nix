@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python file and zip operations made easy";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Flametree";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/Flametree/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };
