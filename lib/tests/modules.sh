@@ -345,14 +345,14 @@ checkConfigOutput '^true$' "$@" ./define-module-check.nix
 set --
 checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'A definition for option .*. is not of type .*.\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced option merging.
 checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already declared in .*/declare-coerced-value-no-default.nix.' config.value ./declare-coerced-value.nix ./declare-coerced-value-no-default.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'A definition for option .* is not of type .*.\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check `graph` attribute
@@ -761,6 +761,26 @@ checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-
 checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
 checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
 checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
+# Check that some types expose the 'valueMeta'
+checkConfigOutput '\{\}' options.str.valueMeta ./types-valueMeta.nix
+checkConfigOutput '["foo", "bar"]' config.attrsOfResult ./types-valueMeta.nix
+checkConfigOutput '2' config.listOfResult ./types-valueMeta.nix
+
+# Check that composed types expose the 'valueMeta'
+# attrsOf submodule (also on merged options,types)
+checkConfigOutput '42' options.attrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
+checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
+
+# listOf submodule (also on merged options,types)
+checkConfigOutput '42' config.listResult ./composed-types-valueMeta.nix
+checkConfigOutput '42' config.mergedListResult ./composed-types-valueMeta.nix
+
+# Add check
+checkConfigOutput '^0$' config.v1CheckedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.v1CheckedFail ./add-check.nix
+checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
+
 
 cat <<EOF
 ====== module tests ======
