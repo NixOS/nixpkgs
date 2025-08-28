@@ -28,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru.updateScript = directoryListingUpdater {
-    inherit (finalAttrs) pname version;
+    pname = "ltris2";
+    inherit (finalAttrs) version;
     url = "https://lgames.sourceforge.io/LTris/";
     extraRegex = "(?!.*-win(32|64)).*";
   };
