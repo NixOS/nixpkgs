@@ -8,8 +8,13 @@ index 0db7013..218276f 100644
  import 'package:melos/src/command_runner.dart';
  
 -Future<void> main(List<String> arguments) async => launchExecutable(
--      arguments,
--      LaunchConfig(
+-  arguments,
+-  LaunchConfig(
+-    name: ExecutableName('melos'),
+-    launchFromSelf: false,
+-    entrypoint: melosEntryPoint,
+-  ),
+-);
 +Future<void> main(List<String> arguments) async {
 +  final melosYamlPath = findMelosYaml();
 +
@@ -24,13 +29,10 @@ index 0db7013..218276f 100644
 +    LaunchContext(
 +      directory: Directory.current,
 +      localInstallation: ExecutableInstallation(
-         name: ExecutableName('melos'),
--        launchFromSelf: false,
--        entrypoint: melosEntryPoint,
++        name: ExecutableName('melos'),
 +        isSelf: false,
 +        packageRoot: melosYamlPath,
-       ),
--    );
++      ),
 +    ),
 +  );
 +}
