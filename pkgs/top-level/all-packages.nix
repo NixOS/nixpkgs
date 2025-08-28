@@ -2463,53 +2463,55 @@ with pkgs;
 
   ibus = callPackage ../tools/inputmethods/ibus { };
 
-  ibus-engines = recurseIntoAttrs {
-    anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
+  ibus-engines =
+    recurseIntoAttrs {
+      anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-    bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo { };
+      bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo { };
 
-    cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
+      cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
 
-    chewing = callPackage ../tools/inputmethods/ibus-engines/ibus-chewing { };
+      chewing = callPackage ../tools/inputmethods/ibus-engines/ibus-chewing { };
 
-    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+      hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
-    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
+      libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
-    libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
+      libthai = callPackage ../tools/inputmethods/ibus-engines/ibus-libthai { };
 
-    libthai = callPackage ../tools/inputmethods/ibus-engines/ibus-libthai { };
+      m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
+      inherit mozc mozc-ut;
 
-    inherit mozc mozc-ut;
+      openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
+        withIbusSupport = true;
+      };
 
-    openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-      withIbusSupport = true;
+      pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
+
+      rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
+
+      table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
+
+      table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
+        ibus-table = ibus-engines.table;
+      };
+
+      table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
+        ibus-table = ibus-engines.table;
+      };
+
+      uniemoji = callPackage ../tools/inputmethods/ibus-engines/ibus-uniemoji { };
+
+      typing-booster-unwrapped = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster { };
+
+      typing-booster = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster/wrapper.nix {
+        typing-booster = ibus-engines.typing-booster-unwrapped;
+      };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      kkc = throw "ibus-engines.kkc has been removed as it depending on libkkc which was removed"; # added 2025-08-28
     };
-
-    pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
-
-    rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
-
-    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
-
-    table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
-      ibus-table = ibus-engines.table;
-    };
-
-    table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
-      ibus-table = ibus-engines.table;
-    };
-
-    uniemoji = callPackage ../tools/inputmethods/ibus-engines/ibus-uniemoji { };
-
-    typing-booster-unwrapped = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster { };
-
-    typing-booster = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster/wrapper.nix {
-      typing-booster = ibus-engines.typing-booster-unwrapped;
-    };
-  };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix { };
 
