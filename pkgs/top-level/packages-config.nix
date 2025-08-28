@@ -14,8 +14,6 @@
         fusePackages
         gns3Packages
         haskellPackages
-        nodePackages
-        nodePackages_latest
         platformioPackages
         rPackages
         sourceHanPackages

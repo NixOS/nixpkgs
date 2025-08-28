@@ -598,7 +598,7 @@ in
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.15.3/docker/compose/docker-compose.sqlite-tika.yml#L64-L69
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
           chromium.disableJavascript = true;
           extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
         };

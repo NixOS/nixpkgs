@@ -72,13 +72,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ?
-    if cudaSupport then
-      triton-cuda
-    else if rocmSupport then
-      rocmPackages.triton
-    else
-      triton,
+  _tritonEffective ? if cudaSupport then triton-cuda else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,

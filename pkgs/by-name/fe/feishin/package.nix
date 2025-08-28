@@ -7,7 +7,6 @@
   darwin,
   copyDesktopItems,
   makeDesktopItem,
-  ...
 }:
 let
   pname = "feishin";

@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland
     wayland-protocols
+    wayland-scanner # For cross, build uses $PKG_CONFIG to look for wayland-scanner
   ];
 
   enableParallelBuilding = true;
