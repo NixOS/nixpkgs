@@ -4,7 +4,6 @@
   zig_0_14,
   zig_0_15,
   fetchFromGitHub,
-  callPackage,
 }:
 
 let
@@ -38,11 +37,12 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
     };
 
-    nativeBuildInputs = [ zig_0_14 ];
+    zigDeps = zig_0_14.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-5ub+AA2PYuHrzPfouii/zfuFmQfn6mlMw4yOUDCw3zI=";
+    };
 
-    postConfigure = ''
-      ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-    '';
+    nativeBuildInputs = [ zig_0_14.hook ];
   };
 
   zls_0_15 = finalAttrs: {
@@ -56,10 +56,11 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-6IkRtQkn+qUHDz00QvCV/rb2yuF6xWEXug41CD8LLw8=";
     };
 
-    nativeBuildInputs = [ zig_0_15 ];
+    zigDeps = zig_0_15.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-dy1V0DFXiHxJg397Wkx30scrhNoq5neYKMzu5QSrdjE=";
+    };
 
-    postConfigure = ''
-      ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-    '';
+    nativeBuildInputs = [ zig_0_15.hook ];
   };
 }
