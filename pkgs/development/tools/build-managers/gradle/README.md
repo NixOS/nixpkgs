@@ -3,7 +3,7 @@
 ## Introduction
 
 Gradle build scripts are written in a DSL, computing the list of Gradle
-dependencies is a turing-complete task, not just in theory but in
+dependencies is a Turing-complete task, not just in theory but also in
 practice. Fetching all of the dependencies often requires building some
 native code, running some commands to check the host platform, or just
 fetching some files using either JVM code or commands like `curl` or
@@ -22,7 +22,7 @@ use the latest version of a dependency as opposed to a fixed version.
 Obviously, this is horrible for reproducibility. Additionally, Gradle
 doesn't offer a way to export the list of dependency URLs and hashes (it
 does in a way, but it's far from being complete, and as such is useless
-for nixpkgs). Even if did, it would be annoying to use considering
+for Nixpkgs). Even if it did, it would be annoying to use considering
 fetching non-Gradle dependencies in Gradle scripts is commonplace.
 
 That's why the setup hook uses mitm-cache, a program designed for
@@ -89,7 +89,7 @@ it hasn't yet downloaded a file with this hash, and then fetch `a.jar`,
 and finally download `b.jar.sha1`, locate it in its cache, and then
 *not* download `b.jar`. This means `b.jar` won't be stored in the MITM
 cache. Then, consider that on a later invocation, the fetching order
-changed, whether it was because of a running on different system,
+changed, whether it was because of running on a different system,
 changed behavior after a Gradle update, or any other source of
 nondeterminism - `b.jar` is fetched before `a.jar`. Gradle will first
 fetch `b.jar.sha1`, not find it in its cache, attempt to fetch `b.jar`,
@@ -103,7 +103,7 @@ stripping is hardcoded, but `.md5/.sha1` file rejection is configured
 via CLI arguments.
 
 **Caveat**: Gradle .module files also contain file hashes, in md5, sha1,
-sha256, sha512 formats. It posed no problem as of yet, but it might in
+sha256, sha512 formats. It has posed no problem as of yet, but it might in
 the future. If it does pose problems, the deps derivation code can be
 extended to find all checksums in .module files and copy existing files
 there if their hash matches.
@@ -173,11 +173,11 @@ following items:
 The mitm-cache lockfile format is described in the [mitm-cache
 README](https://github.com/chayleaf/mitm-cache#readme).
 
-The nixpkgs Gradle lockfile format is more complicated:
+The Nixpkgs Gradle lockfile format is more complicated:
 
 ```json
 {
-  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
+  "!comment": "This is a Nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the Nixpkgs manual.",
   "!version": 1,
   "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx-controllers": {
     "gdx-controllers#gdx-controllers-core/2.2.4-20231021.200112-6/SNAPSHOT": {
@@ -223,7 +223,7 @@ Each URL has a value associated with it. The value may be:
   discern where the repo base ends and the group ID begins).
 
 `compress-deps-json.py` converts the JSON from mitm-cache format into
-nixpkgs Gradle lockfile format. `fetch.nix` does the opposite.
+Nixpkgs Gradle lockfile format. `fetch.nix` does the opposite.
 
 ## Security Considerations
 
@@ -242,4 +242,4 @@ the following:
   doesn't match)
 
 Please be mindful of the above when working on Gradle support for
-nixpkgs.
+Nixpkgs.

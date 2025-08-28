@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rsQzMvOoQEuushd0jBGQt9j6zXj2G1SMax8d4QoDV6s=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3

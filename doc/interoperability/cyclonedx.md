@@ -47,12 +47,12 @@ FOD properties describe a [fixed-output derivation](https://nixos.org/manual/nix
 The `nix:fod:method` property is required and must be accompanied by a `nix:store_path` property within the same property list.
 All other properties in this namespace are method-specific.
 To reproduce the build of a component the `nix:fod:method` value is resolved to an [appropriate function](#chap-pkgs-fetchers) within Nixpkgs whose arguments intersect with the given properties.
-When generating `nix:fod` properties the method selected should be a stable function with a minimal number arguments.
+When generating `nix:fod` properties the method selected should be a stable function with a minimal number of arguments.
 For example, the `fetchFromGitHub` is commonly used within Nixpkgs but should be reduced to a call to the function by which it is implemented, `fetchzip`.
 
 | Property         | Description |
 |------------------|-------------|
-| `nix:fod:method` | Nixpkg function that produces this FOD. Required. Examples: `"fetchzip"`, `"fetchgit"` |
+| `nix:fod:method` | Nixpkgs function that produces this FOD. Required. Examples: `"fetchzip"`, `"fetchgit"` |
 | `nix:fod:name`   | Derivation name, present when method is `"fetchzip"` |
 | `nix:fod:ref`    | [Git ref](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefrefaref), present when method is `"fetchgit"` |
 | `nix:fod:rev`    | [Git rev](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefrevisionarevision), present when method is `"fetchgit"` |

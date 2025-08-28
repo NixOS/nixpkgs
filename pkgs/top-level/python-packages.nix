@@ -2720,6 +2720,8 @@ self: super: with self; {
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
+  cmudict = callPackage ../development/python-modules/cmudict { };
+
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
   co2signal = callPackage ../development/python-modules/co2signal { };
@@ -4319,6 +4321,8 @@ self: super: with self; {
   dpkt = callPackage ../development/python-modules/dpkt { };
 
   dploot = callPackage ../development/python-modules/dploot { };
+
+  draccus = callPackage ../development/python-modules/draccus { };
 
   drafthorse = callPackage ../development/python-modules/drafthorse { };
 
@@ -15331,6 +15335,8 @@ self: super: with self; {
 
   qemu = callPackage ../development/python-modules/qemu { qemu = pkgs.qemu; };
 
+  qemu-qmp = callPackage ../development/python-modules/qemu-qmp { };
+
   qgrid = callPackage ../development/python-modules/qgrid { };
 
   qiling = callPackage ../development/python-modules/qiling { };
@@ -16921,6 +16927,8 @@ self: super: with self; {
   soco = callPackage ../development/python-modules/soco { };
 
   softlayer = callPackage ../development/python-modules/softlayer { };
+
+  solaredge-local = callPackage ../development/python-modules/solaredge-local { };
 
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
@@ -19332,6 +19340,10 @@ self: super: with self; {
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
   uplc = callPackage ../development/python-modules/uplc { };
+
+  uplink = callPackage ../development/python-modules/uplink { };
+
+  uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 
