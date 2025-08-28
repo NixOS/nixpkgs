@@ -66,5 +66,16 @@
         minMajorVersion = "6";
       };
     };
+
+    "13.0" = {
+      clang = {
+        maxMajorVersion = "20";
+        minMajorVersion = "7";
+      };
+      gcc = {
+        maxMajorVersion = "15";
+        minMajorVersion = "6";
+      };
+    };
   };
 }
