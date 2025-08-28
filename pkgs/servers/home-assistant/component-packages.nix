@@ -935,7 +935,8 @@
       ];
     "cmus" =
       ps: with ps; [
-      ]; # missing inputs: pycmus
+        pycmus
+      ];
     "co2signal" =
       ps: with ps; [
         aioelectricitymaps

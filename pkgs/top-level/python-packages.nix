@@ -12615,6 +12615,8 @@ self: super: with self; {
 
   pycmarkgfm = callPackage ../development/python-modules/pycmarkgfm { };
 
+  pycmus = callPackage ../development/python-modules/pycmus { };
+
   pycocotools = callPackage ../development/python-modules/pycocotools { };
 
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
