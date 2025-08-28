@@ -703,6 +703,10 @@ with haskellLib;
           hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
         };
         postUnpack = "sourceRoot=$sourceRoot/cachix";
+        # Fix ambiguous 'show' reference: https://github.com/cachix/cachix/pull/704
+        postPatch = ''
+          sed -i 's/<> show i/<> Protolude.show i/' src/Cachix/Client/NixVersion.hs
+        '';
       })
       (
         lib.pipe
