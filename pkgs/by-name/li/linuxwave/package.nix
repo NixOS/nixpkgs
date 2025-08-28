@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   zig_0_14,
-  callPackage,
 }:
 
 let
@@ -22,14 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
-
   nativeBuildInputs = [
     installShellFiles
     zig.hook
   ];
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ZpDmHTuWaMip8JQKv5O67+OyHKZHk5pFmxs+eqhLFao=";
+  };
 
   postInstall = ''
     installManPage man/linuxwave.1
