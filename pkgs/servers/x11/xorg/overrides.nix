@@ -446,6 +446,10 @@ self: super:
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ]; # mainly to avoid propagation
     buildInputs = attrs.buildInputs ++ [
       xorg.libXext
       xorg.libXfixes
