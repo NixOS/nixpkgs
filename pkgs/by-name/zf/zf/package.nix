@@ -5,9 +5,8 @@
   installShellFiles,
   testers,
   zig_0_15,
-  callPackage,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
   upstreamVersion = "0.10.3";
@@ -26,18 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
     zig_0_15
   ];
 
-  deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-  };
-
   dontSetZigDefaultFlags = true;
 
   zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
     "-Dcpu=baseline"
     "-Doptimize=ReleaseFast"
   ];
+
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-uVPc7Sj+TnzQPePMaLxz5/y71gHefMjfPyx2w6kNeto=";
+  };
 
   postInstall = ''
     installManPage doc/zf.1
@@ -51,9 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   doInstallCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = finalAttrs.upstreamVersion;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.upstreamVersion;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
