@@ -334,6 +334,7 @@ print OUT <<EOF;
   font-cronyx-cyrillic,
   font-encodings,
   font-isas-misc,
+  font-micro-misc,
   font-mutt-misc,
   font-util,
   gccmakedep,
@@ -499,6 +500,7 @@ self: with self; {
   fontbhtype1 = font-bh-type1;
   fontcronyxcyrillic = font-cronyx-cyrillic;
   fontisasmisc = font-isas-misc;
+  fontmicromisc = font-micro-misc;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
