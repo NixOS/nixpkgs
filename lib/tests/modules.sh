@@ -394,7 +394,7 @@ checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.p
 ## specialArgs should work
 checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special.nix
 
-## shorthandOnlyDefines config behaves as expected
+## shorthandOnlyDefinesConfig behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
 checkConfigError "In module ..*define-submoduleWith-shorthand.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
