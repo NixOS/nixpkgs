@@ -183,7 +183,6 @@ stdenv.mkDerivation (
         pkg-config
         which
       ]
-      ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
       ++ lib.optionals isCrossBuild [
         # `qtbase` expects to find `cc` (with no prefix) in the `$PATH` for qmake and host_build marked projects.
