@@ -1018,7 +1018,8 @@
       ];
     "cppm_tracker" =
       ps: with ps; [
-      ]; # missing inputs: clearpasspy
+        clearpasspy
+      ];
     "cpuspeed" =
       ps: with ps; [
         py-cpuinfo
