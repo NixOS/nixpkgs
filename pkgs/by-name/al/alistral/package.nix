@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TyxeuDMmoRvIVaapA/KstFnARPpPv9h19Bg3/XnwQWs=";
 
+  buildNoDefaultFeatures = true;
+  # Would be cleaner with an "--all-features" option
+  buildFeatures = [ "full" ];
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -39,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/RustyNova016/Alistral/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Power tools for Listenbrainz";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [
+      jopejoe1
+      RustyNova
+    ];
     mainProgram = "alistral";
   };
 })

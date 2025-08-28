@@ -1801,7 +1801,11 @@ self: super: with self; {
 
   bech32 = callPackage ../development/python-modules/bech32 { };
 
-  beetcamp = callPackage ../development/python-modules/beetcamp { };
+  beetcamp = callPackage ../development/python-modules/beetcamp {
+    beets = pkgs.beets.override {
+      python3Packages = self;
+    };
+  };
 
   beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
 
@@ -10796,6 +10800,8 @@ self: super: with self; {
   openai = callPackage ../development/python-modules/openai { };
 
   openai-agents = callPackage ../development/python-modules/openai-agents { };
+
+  openai-harmony = callPackage ../development/python-modules/openai-harmony { };
 
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 

@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-N/WOkCaAEtPXJWdZ2452KTQmfFu+tZcH267p3azyntQ=";
+    hash = "sha256-0TuRNxf8xDhwUjBXJsv7dhgeYjr/voIt+/0tinImUhA=";
   };
 
   # remove if rust 1.89 merged
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'rust-version = "1.89.0"' ""
   '';
 
-  cargoHash = "sha256-Z4Q8ZPXPpA5OHkP2j389a6/Cdn9VmULf8sr1vPTelnw=";
+  cargoHash = "sha256-FQC3JD051fEZQO9UriNzJPrxE0QcSQ8p3VTk3tQGPBc=";
 
   nativeBuildInputs = [
     protobuf

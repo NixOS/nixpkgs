@@ -67,10 +67,14 @@ buildPythonPackage rec {
       '"ffmpeg"' '"${lib.getExe ffmpeg}"'
   '';
 
-  # > Checking runtime dependencies for whisperx-3.3.2-py3-none-any.whl
-  # >   - faster-whisper==1.1.0 not satisfied by version 1.1.1
-  # This has been updated on main, so we expect this clause to be removed upon the next update.
-  pythonRelaxDeps = [ "faster-whisper" ];
+  pythonRelaxDeps = [
+    # > Checking runtime dependencies for whisperx-3.3.2-py3-none-any.whl
+    # >   - faster-whisper==1.1.0 not satisfied by version 1.1.1
+    # This has been updated on main, so we expect this clause to be removed upon the next update.
+    "faster-whisper"
+
+    "ctranslate2"
+  ];
 
   # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
   # not finding its default logger, which then promptly segfaults.
