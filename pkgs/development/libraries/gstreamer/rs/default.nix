@@ -189,6 +189,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
     ./ignore-tests.patch
+    (fetchpatch {
+      name = "x264enc-test-fix.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
+      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
+    })
   ];
 
   strictDeps = true;
