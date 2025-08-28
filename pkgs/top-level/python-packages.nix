@@ -10797,6 +10797,8 @@ self: super: with self; {
 
   openai-agents = callPackage ../development/python-modules/openai-agents { };
 
+  openai-harmony = callPackage ../development/python-modules/openai-harmony { };
+
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openaiauth = callPackage ../development/python-modules/openaiauth { };
