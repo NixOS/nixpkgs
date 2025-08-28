@@ -32,6 +32,7 @@
   zlib,
   minizip,
   libjpeg,
+  openjpeg,
   libpng,
   libtiff,
   libwebp,
@@ -276,6 +277,30 @@ qtModule (
 
       # Fix the build with gperf ≥ 3.2 and Clang 19.
       ./qtwebengine-gperf-3.2.patch
+
+      # support for building with python 3.12
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/python3.12-six.patch";
+        hash = "sha256-gjc9sOPbcyHtJWnSHpkpupY6dIAODO20tiaTEtAfFr0=";
+      })
+
+      # Build with C++17, which is required by ICU 75
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/build-with-c++17.patch";
+        hash = "sha256-1fhkj50radAc3uG386UnS735+LRe0Xs8jQOJtMqE7hQ=";
+      })
+
+      # Use system openjpeg
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-openjpeg2.patch";
+        hash = "sha256-H3WwC40t0FRMGf1K2aXucrQjynMU/U/14goB4HK9/KM=";
+      })
+
+      # Use system lcms2
+      (fetchpatch2 {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/raw/313423e0178cee6eb9419c5803b982df2a71d689/debian/patches/system-lcms2.patch";
+        hash = "sha256-ccEbt5T54uXTV1pJnHI12NfYJ+QdUSUJFj0xcKcmtIA=";
+      })
     ];
 
     postPatch = ''
@@ -285,15 +310,6 @@ qtModule (
         substituteInPlace configure.pri --replace 'qtLog("Gn version too old")' 'return(true)'
 
         cd src/3rdparty/chromium;
-
-        patch -p1 < ${
-          (fetchpatch {
-            # support for building with python 3.12
-            name = "python312-six.patch";
-            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
-            hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
-          })
-        }
 
         # Manually fix unsupported shebangs
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
@@ -369,6 +385,7 @@ qtModule (
     buildInputs = [
       # Image formats
       libjpeg
+      openjpeg
       libpng
       libtiff
       libwebp
