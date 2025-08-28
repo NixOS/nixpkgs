@@ -2720,6 +2720,8 @@ self: super: with self; {
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
+  cmudict = callPackage ../development/python-modules/cmudict { };
+
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
   co2signal = callPackage ../development/python-modules/co2signal { };
@@ -15332,6 +15334,8 @@ self: super: with self; {
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
   qemu = callPackage ../development/python-modules/qemu { qemu = pkgs.qemu; };
+
+  qemu-qmp = callPackage ../development/python-modules/qemu-qmp { };
 
   qgrid = callPackage ../development/python-modules/qgrid { };
 
