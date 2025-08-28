@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-codon-tables";
   version = "0.1.18";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "python_codon_tables";
     inherit version;
     hash = "sha256-c/VSmArSkq+46LzW3r+CQEG1mwp87ACbZ7EWkMOGOQc=";
   };
+
+  build-system = [ setuptools ];
 
   # no tests in tarball
   doCheck = false;
