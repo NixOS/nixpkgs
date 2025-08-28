@@ -6512,7 +6512,8 @@
       ];
     "watson_iot" =
       ps: with ps; [
-      ]; # missing inputs: ibmiotf
+        ibmiotf
+      ];
     "watttime" =
       ps: with ps; [
         aiowatttime
