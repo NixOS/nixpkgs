@@ -607,7 +607,7 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 This is a wrapper around `pkgs.runCommandWith`, which
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
-- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs change.
 
 It accepts the following attributes:
 - the derivation's `name` ;

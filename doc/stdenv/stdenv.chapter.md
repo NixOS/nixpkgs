@@ -336,7 +336,7 @@ To determine the exact rules for dependency propagation, we start by assigning t
 | `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
 | `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
-Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
 We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules below. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
 
@@ -437,7 +437,7 @@ Since these packages are able to be run at build-time, they are always added to 
 
 ##### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost`, but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -734,7 +734,7 @@ The key to use when specifying the installation [`prefix`](#var-stdenv-prefix). 
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
-By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+By default, when building statically, `stdenv` will try to add build system appropriate configure flags to try to enable static builds.
 
 If this is undesirable, set this variable to true.
 
@@ -1529,7 +1529,7 @@ Note that support for some hardening flags varies by compiler, CPU architecture,
 
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
-The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
+The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to be packaged is incompatible.
 
 #### `format` {#format}
 

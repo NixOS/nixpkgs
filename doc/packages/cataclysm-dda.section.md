@@ -8,7 +8,7 @@ without tiles), install `cataclysmDDA.stable.curses`. Note: `cataclysm-dda` is
 an alias to `cataclysmDDA.stable.tiles`.
 
 If you like access to a development build of your favorite git revision,
-override `cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like curses
+override `cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like the curses
 build):
 
 ```nix

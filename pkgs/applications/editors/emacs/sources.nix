@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromBitbucket,
-  fetchurl,
+  fetchzip,
 }:
 
 let
@@ -26,8 +26,8 @@ let
       src =
         {
           "mainline" = (
-            fetchurl {
-              url = "mirror://gnu/emacs/emacs-${rev}.tar.xz";
+            fetchzip {
+              url = "mirror://gnu/emacs/${rev}.tar.xz";
               inherit hash;
             }
           );
@@ -107,8 +107,8 @@ in
     pname = "emacs";
     version = "30.2";
     variant = "mainline";
-    rev = "30.2";
-    hash = "sha256-s/NvGKbdJxVxM3AWYlfeL64B+dOM/oeM7Zsebe1b79k=";
+    rev = "emacs-30.2";
+    hash = "sha256-W2eZ+cNQhi/fMeRkwOqSKU7Vzvp43WUOpiwaLLNEXtg=";
     patches = fetchpatch: [
       (builtins.path {
         name = "inhibit-lexical-cookie-warning-67916.patch";

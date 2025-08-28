@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build-aux/cargo.sh
     meson rewrite kwargs set project / version '${finalAttrs.version}'
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / 'news_flash_gtk'" \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / 'news_flash_gtk'"
   '';
 
   strictDeps = true;
@@ -87,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-bad
   ]);
+
+  # For https://gitlab.com/news-flash/news_flash_gtk/-/blob/8e5fc4acf5ca6be5b8cd616466a17e7a273f9dda/src/meson.build#L47
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v.";
