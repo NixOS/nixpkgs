@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   gtfs-realtime-bindings,
+  httpx,
   pythonOlder,
   requests,
   setuptools,
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   dependencies = [
     gtfs-realtime-bindings
+    httpx
     requests
   ];
 
