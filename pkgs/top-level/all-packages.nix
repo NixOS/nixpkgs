@@ -2474,8 +2474,6 @@ with pkgs;
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
-    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
-
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
     libthai = callPackage ../tools/inputmethods/ibus-engines/ibus-libthai { };
