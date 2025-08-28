@@ -2789,7 +2789,8 @@
       ];
     "irish_rail_transport" =
       ps: with ps; [
-      ]; # missing inputs: pyirishrail
+        pyirishrail
+      ];
     "iron_os" =
       ps: with ps; [
         aioesphomeapi
