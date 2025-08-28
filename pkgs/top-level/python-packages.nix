@@ -15844,6 +15844,8 @@ self: super: with self; {
 
   rfcat = callPackage ../development/python-modules/rfcat { };
 
+  rfk101py = callPackage ../development/python-modules/rfk101py { };
+
   rflink = callPackage ../development/python-modules/rflink { };
 
   rgpio = toPythonModule (
