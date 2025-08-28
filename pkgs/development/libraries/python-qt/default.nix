@@ -110,5 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21;
     platforms = platforms.all;
     maintainers = with maintainers; [ hlolli ];
+    # ref. https://github.com/MeVisLab/pythonqt/issues/276
+    broken = (stdenv.hostPlatform.isDarwin && qt6Support);
   };
 })
