@@ -6278,6 +6278,8 @@ self: super: with self; {
   # built-in for pypi
   greenlet = if isPyPy then null else callPackage ../development/python-modules/greenlet { };
 
+  greenwavereality = callPackage ../development/python-modules/greenwavereality { };
+
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
   grep-ast = callPackage ../development/python-modules/grep-ast { };

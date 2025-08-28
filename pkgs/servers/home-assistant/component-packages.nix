@@ -2192,7 +2192,8 @@
       ];
     "greenwave" =
       ps: with ps; [
-      ]; # missing inputs: greenwavereality
+        greenwavereality
+      ];
     "group" =
       ps: with ps; [
       ];
