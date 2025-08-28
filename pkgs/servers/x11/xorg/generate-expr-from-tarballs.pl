@@ -336,6 +336,7 @@ print OUT <<EOF;
   font-isas-misc,
   font-micro-misc,
   font-misc-cyrillic,
+  font-misc-ethiopic,
   font-mutt-misc,
   font-util,
   gccmakedep,
@@ -503,6 +504,7 @@ self: with self; {
   fontisasmisc = font-isas-misc;
   fontmicromisc = font-micro-misc;
   fontmisccyrillic = font-misc-cyrillic;
+  fontmiscethiopic = font-misc-ethiopic;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
