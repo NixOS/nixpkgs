@@ -30,6 +30,12 @@ rustPlatform.buildRustPackage {
 
   env = {
     BPF_CLANG = lib.getExe llvmPackages.clang;
+    RUSTFLAGS = lib.concatStringsSep " " [
+      "-C relocation-model=pic"
+      "-C link-args=-lelf"
+      "-C link-args=-lz"
+      "-C link-args=-lzstd"
+    ];
   };
 
   hardeningDisable = [
