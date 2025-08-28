@@ -8771,6 +8771,8 @@ self: super: with self; {
 
   luxtronik = callPackage ../development/python-modules/luxtronik { };
 
+  lw12 = callPackage ../development/python-modules/lw12 { };
+
   lxmf = callPackage ../development/python-modules/lxmf { };
 
   lxml = callPackage ../development/python-modules/lxml { inherit (pkgs) libxml2 libxslt zlib; };

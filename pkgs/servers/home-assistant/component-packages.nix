@@ -3402,7 +3402,8 @@
       ];
     "lw12wifi" =
       ps: with ps; [
-      ]; # missing inputs: lw12
+        lw12
+      ];
     "lyric" =
       ps: with ps; [
         aiolyric
