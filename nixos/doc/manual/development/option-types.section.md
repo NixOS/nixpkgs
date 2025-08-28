@@ -290,6 +290,8 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         With this option enabled, defining a non-`config` section
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
+        Note that this behavior does *not* apply to `path` values,
+        similar to how it does not apply to `function` values.
 
 `types.deferredModule`
 
