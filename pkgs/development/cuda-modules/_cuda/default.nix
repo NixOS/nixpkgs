@@ -24,6 +24,7 @@ lib.fixedPoints.makeExtensible (final: {
   };
   extensions = [ ]; # Extensions applied to every CUDA package set.
   fixups = import ./fixups { inherit lib; };
+  manifests = import ./manifests { inherit lib; };
   lib = import ./lib {
     _cuda = final;
     inherit lib;
