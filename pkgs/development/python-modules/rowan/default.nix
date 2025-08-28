@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rowan";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "rowan";
     rev = "v${version}";
-    hash = "sha256-klIqyX04w1xYmYtAbLF5jwpcJ83oKOaENboxyCL70EY=";
+    hash = "sha256-fcxVpzLhbLjPIifNBx0olq1dUTmNM9IH38MQybkWZSg=";
   };
 
   nativeBuildInputs = [
