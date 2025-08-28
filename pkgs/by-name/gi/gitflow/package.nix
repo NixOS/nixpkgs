@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "CJ-Systems";
     repo = "gitflow-cjs";
     rev = version;
-    sha256 = "";
+    sha256 = "sha256-uc4WVbvr6BpHnuznLPgVJQL7eaidp0IoOcuj+QqgAkQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
