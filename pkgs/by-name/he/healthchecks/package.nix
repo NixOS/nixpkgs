@@ -97,6 +97,6 @@ py.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    maintainers = [ ];
   };
 }
