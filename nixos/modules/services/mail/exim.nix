@@ -127,12 +127,18 @@ in
         ExecReload = "!${coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
       };
-      preStart = ''
-        if ! test -d ${cfg.spoolDir}; then
-          ${coreutils}/bin/mkdir -p ${cfg.spoolDir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.spoolDir}
-        fi
-      '';
+    };
+
+    systemd.tmpfiles.settings = {
+      exim = {
+        ${cfg.spoolDir} = {
+          d = {
+            mode = "0700";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+      };
     };
 
   };
