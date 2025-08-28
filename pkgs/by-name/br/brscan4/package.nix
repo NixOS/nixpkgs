@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     done
     popd > /dev/null
 
-    # Generate an LD_PRELOAD wrapper to redirect execvp(), open() and open64()
+    # Generate an LD_PRELOAD wrapper to redirect various system
     # calls to `/opt/brother/scanner/brscan4`.
     preload=$out/libexec/brother/scanner/brscan4/libpreload.so
     mkdir -p $(dirname $preload)
