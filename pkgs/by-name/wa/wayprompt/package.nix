@@ -1,5 +1,4 @@
 {
-  callPackage,
   lib,
   zig_0_13,
   stdenv,
@@ -12,6 +11,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,8 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-+9Zgq5/Zbb1I3CMH1pivPkddThaGDXM+vVCzWppXq+0=";
   };
-
-  deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     zig_0_13.hook
@@ -42,15 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
+  zigDeps = zig_0_13.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-52XIiS178qraIrgLGsJj6ESS9YbQYRTsk0wrLeIgUMg=";
+  };
 
   postFixup = ''
     substituteInPlace $out/bin/wayprompt-ssh-askpass \
       --replace-fail wayprompt $out/bin/wayprompt
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://git.sr.ht/~leon_plickat/wayprompt";
