@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "flashinfer";
-  version = "0.2.14";
+  version = "0.2.14.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${version}";
-    hash = "sha256-MZiZwdedz+Vxa1+VBfHDKf4NVSiOAytGboIJ0DvCXmk=";
     fetchSubmodules = true;
+    hash = "sha256-njJUKlsX62gZrTSyIEvrx62S2Z6Ngtxaitg8SxGt/sM=";
   };
 
   build-system = [ setuptools ];
@@ -70,6 +70,10 @@ buildPythonPackage rec {
 
   TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
+  pythonRemoveDeps = [
+    "cuda-python"
+    "nvidia-cudnn-frontend"
+  ];
   dependencies = [
     numpy
     torch
@@ -77,7 +81,7 @@ buildPythonPackage rec {
     einops
   ];
 
-  meta = with lib; {
+  meta = {
     broken = !torch.cudaSupport || !config.cudaSupport;
     homepage = "https://flashinfer.ai/";
     description = "Library and kernel generator for Large Language Models";
@@ -88,7 +92,7 @@ buildPythonPackage rec {
       and inference, and delivers state-of-the-art performance across diverse
       scenarios.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ breakds ];
   };
 }
