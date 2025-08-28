@@ -11,7 +11,7 @@
   gtk4,
   atk,
   gobject-introspection,
-  spidermonkey_128,
+  spidermonkey_140,
   pango,
   cairo,
   readline,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   nativeCheckInputs = [
