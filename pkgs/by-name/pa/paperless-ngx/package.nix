@@ -169,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "rapidfuzz"
     "redis"
   ];
 
