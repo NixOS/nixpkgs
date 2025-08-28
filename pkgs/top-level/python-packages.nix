@@ -11741,6 +11741,8 @@ self: super: with self; {
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
+  pizzapi = callPackage ../development/python-modules/pizzapi { };
+
   pjsua2 =
     (toPythonModule (
       pkgs.pjsip.override {
