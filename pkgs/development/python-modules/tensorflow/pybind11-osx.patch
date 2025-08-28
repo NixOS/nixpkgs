@@ -1,0 +1,12 @@
+diff -Naurd x/third_party/systemlibs/pybind11.BUILD y/third_party/systemlibs/pybind11.BUILD
+--- x/third_party/systemlibs/pybind11.BUILD	2023-10-17 19:01:11.988196127 +0000
++++ y/third_party/systemlibs/pybind11.BUILD	2023-10-17 19:04:09.916356016 +0000
+@@ -6,3 +6,8 @@
+         "@org_tensorflow//third_party/python_runtime:headers",
+     ],
+ )
++
++config_setting(
++    name = "osx",
++    constraint_values = ["@platforms//os:osx"],
++)
