@@ -5,7 +5,7 @@ The code in this directory is used by the [eval.yml](../../.github/workflows/eva
 Furthermore it also allows local evaluation using:
 
 ```
-nix-build ci -A eval.full
+nix-build ci -A eval.baseline
 ```
 
 The most important two arguments are:
@@ -27,3 +27,19 @@ The following arguments can be used to fine-tune performance:
   Example: `--arg chunkSize 10000`
 
 Note that 16GB memory is the recommended minimum, while with less than 8GB memory evaluation time suffers greatly.
+
+## Local eval with rebuilds / comparison
+
+To compare two commits locally, first run the following on the baseline commit:
+
+```
+BASELINE=$(nix-build ci -A eval.baseline --no-out-link)
+```
+
+Then, on the commit with your changes:
+
+```
+nix-build ci -A eval.full --arg baseline $BASELINE
+```
+
+Keep in mind to otherwise pass the same set of arguments for both commands (`evalSystems`, `quickTest`, `chunkSize`).
