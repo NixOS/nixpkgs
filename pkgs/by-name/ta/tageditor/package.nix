@@ -7,8 +7,8 @@
   cpp-utilities,
   mp4v2,
   libid3tag,
-  libsForQt5,
-  qt5,
+  kdePackages,
+  qt6,
   tagparser,
 }:
 
@@ -26,19 +26,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     mp4v2
     libid3tag
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtwebengine
     cpp-utilities
-    libsForQt5.qtutilities
+    kdePackages.qtutilities
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwebengine
     tagparser
+  ];
+
+  cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt6"
+    "-DQt6_DIR=${qt6.qtbase}/lib/cmake/Qt6"
+    "-DQt6WebEngineWidgets_DIR=${qt6.qtwebengine}/lib/cmake/Qt6WebEngineWidgets"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
