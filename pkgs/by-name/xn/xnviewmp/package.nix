@@ -6,6 +6,8 @@
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
+  writeShellScript,
+  nix-update,
 }:
 let
   icon =
@@ -52,6 +54,14 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/xnviewmp.png
   '';
+
+  passthru = {
+    inherit src;
+    updateScript = writeShellScript "update-xnviewmp" ''
+      latestVersion=$(curl --fail --silent "http://www.xnview.com/update.txt" | awk -F= '/\[XnViewMP\]/{getline; if($1=="version") print $2}')
+      ${lib.getExe nix-update} xnviewmp --version $latestVersion
+    '';
+  };
 
   meta = {
     description = "Efficient multimedia viewer, browser and converter";
