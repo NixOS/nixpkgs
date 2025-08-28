@@ -510,6 +510,7 @@
   ./services/databases/ferretdb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
+  ./services/databases/ghidra-server.nix
   ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb2.nix
   ./services/databases/influxdb.nix
