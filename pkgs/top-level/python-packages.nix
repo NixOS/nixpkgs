@@ -15527,6 +15527,8 @@ self: super: with self; {
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
+  raspyrfm-client = callPackage ../development/python-modules/raspyrfm-client { };
+
   rasterio = callPackage ../development/python-modules/rasterio { };
 
   ratarmount = callPackage ../development/python-modules/ratarmount { };
