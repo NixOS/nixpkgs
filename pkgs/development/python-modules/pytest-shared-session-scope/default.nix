@@ -13,21 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-shared-session-scope";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StefanBRas";
     repo = "pytest-shared-session-scope";
     tag = "v${version}";
-    hash = "sha256-/26iwaV6E15TWrObIvXE4AipEboe1gv6WYu4BndPtUs=";
+    hash = "sha256-HB8RuF/+BmW3KBZ7C8EpUMuBntvcjSsrkLUiBvPwcf8=";
   };
-
-  postPatch = ''
-    # https://github.com/StefanBRas/pytest-shared-session-scope/issues/39
-    substituteInPlace src/pytest_shared_session_scope/_scheduler.py \
-      --replace-fail parse_spec_config parse_tx_spec_config
-  '';
 
   build-system = [ hatchling ];
 
