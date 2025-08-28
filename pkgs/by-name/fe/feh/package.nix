@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   xorg,
-  imlib2,
+  imlib2Full,
   libjpeg,
   libpng,
   curl,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXt
     xorg.libX11
     xorg.libXinerama
-    imlib2
+    imlib2Full
     libjpeg
     libpng
     curl
