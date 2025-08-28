@@ -56,10 +56,7 @@ buildGoModule rec {
     description = "Warp + Psiphon, an anti censorship utility for Iran";
     homepage = "https://github.com/bepass-org/warp-plus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "warp-plus";
-    # Doesn't work with Go toolchain >1.22, runtime error:
-    # 'panic: tls.ConnectionState doesn't match'
-    broken = true;
   };
 }
