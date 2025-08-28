@@ -10581,6 +10581,8 @@ self: super: with self; {
 
   num2words = callPackage ../development/python-modules/num2words { };
 
+  numato-gpio = callPackage ../development/python-modules/numato-gpio { };
+
   numba = callPackage ../development/python-modules/numba { inherit (pkgs.config) cudaSupport; };
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };

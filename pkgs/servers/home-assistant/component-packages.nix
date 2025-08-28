@@ -4070,7 +4070,8 @@
       ];
     "numato" =
       ps: with ps; [
-      ]; # missing inputs: numato-gpio
+        numato-gpio
+      ];
     "number" =
       ps: with ps; [
       ];
@@ -7483,6 +7484,7 @@
     "ntfy"
     "nuheat"
     "nuki"
+    "numato"
     "number"
     "nut"
     "nws"
