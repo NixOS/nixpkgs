@@ -6,13 +6,6 @@
 
   # build-system
   setuptools,
-
-  # tests
-  tree-sitter-python,
-  tree-sitter-rust,
-  tree-sitter-html,
-  tree-sitter-javascript,
-  tree-sitter-json,
 }:
 
 buildPythonPackage rec {
@@ -32,25 +25,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    tree-sitter-python
-    tree-sitter-rust
-    tree-sitter-html
-    tree-sitter-javascript
-    tree-sitter-json
-  ];
-
   pythonImportsCheck = [ "tree_sitter" ];
-
-  preCheck = ''
-    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
-    rm -r tree_sitter
-  '';
-
-  disabledTests = [
-    # test fails in nix sandbox
-    "test_dot_graphs"
-  ];
 
   meta = {
     description = "Python bindings to the Tree-sitter parsing library";
