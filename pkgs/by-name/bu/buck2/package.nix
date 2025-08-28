@@ -43,9 +43,10 @@ let
   # procued by GitHub Actions. this also includes the hash for a download of a
   # compatible buck2-prelude
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  archHashes = buildHashes.${stdenv.hostPlatform.system};
 
   # map our platform name to the rust toolchain suffix
-  # NOTE (aseipp): must be synchronized with update.sh!
+  # NOTE (aseipp): must be synchronized with update.nu!
   platform-suffix =
     {
       x86_64-darwin = "x86_64-apple-darwin";
@@ -53,7 +54,7 @@ let
       x86_64-linux = "x86_64-unknown-linux-gnu";
       aarch64-linux = "aarch64-unknown-linux-gnu";
     }
-    ."${stdenv.hostPlatform.system}";
+    .${stdenv.hostPlatform.system};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "buck2";
@@ -64,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     # zstd-compressed
     (fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
-      hash = buildHashes."buck2-${stdenv.hostPlatform.system}";
+      hash = archHashes.buck2;
     })
     # rust-project, which is used to provide IDE integration Buck2 Rust projects,
     # is part of the official distribution
     (fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/rust-project-${platform-suffix}.zst";
-      hash = buildHashes."rust-project-${stdenv.hostPlatform.system}";
+      hash = archHashes.rust-project;
     })
   ];
 
@@ -124,11 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
     # for downstream consumers to use when they need to automate any kind of
     # tooling
     prelude = fetchurl {
-      url = "https://github.com/facebook/buck2-prelude/archive/${buildHashes.prelude-git}.tar.gz";
-      hash = buildHashes.prelude-fod;
+      url = "https://github.com/facebook/buck2-prelude/archive/${buildHashes.preludeGit}.tar.gz";
+      hash = buildHashes.preludeFod;
     };
 
-    updateScript = ./update.sh;
+    updateScript = ./update.nu;
   };
 
   meta = {
