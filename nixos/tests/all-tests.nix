@@ -884,6 +884,7 @@ in
   i3wm = runTest ./i3wm.nix;
   icecast = runTest ./icecast.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
+  icosa-gallery = runTest ./web-apps/icosa-gallery.nix;
   ifm = runTest ./ifm.nix;
   ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
