@@ -604,6 +604,8 @@ stdenv.mkDerivation (finalAttrs: {
       export CFLAGS_NODIST="-fno-semantic-interposition"
     '';
 
+  hardeningEnable = [ "pie" ];
+
   setupHook = python-setup-hook sitePackages;
 
   postInstall =
