@@ -1165,6 +1165,7 @@ mapAliases {
   ibniz = throw "ibniz has been removed because it fails to compile and the source url is dead"; # Added 2025-04-07
   ib-tws = throw "ib-tws has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   ib-controller = throw "ib-controller has been removed from nixpkgs as it was broken"; # Added 2024-07-15
+  ibus-engines.kkc = throw "ibus-engines.kkc has been removed as it depending on libkkc which was removed"; # added 2025-08-28
   icuReal = throw "icuReal has been removed from nixpkgs as a mistake"; # Added 2025-02-18
   imagemagick7Big = throw "'imagemagick7Big' has been renamed to/replaced by 'imagemagickBig'"; # Converted to throw 2024-10-17
   imagemagick7 = throw "'imagemagick7' has been renamed to/replaced by 'imagemagick'"; # Converted to throw 2024-10-17
