@@ -76,7 +76,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
-  # Maintained by Andrew Gallapher, who's involved with GPG in multiple ways: https://andrewg.com/
+  # FreePG (https://freepg.org) is a set of commonly-used patches for GnuPG that
+  # have not been merged upstream. It is used by Arch Linux, Debian, Fedora and
+  # NixOS, and is maintained by Andrew Gallagher.
+  #
+  # The main purpose of including these patches in Nixpkgs is to maintain
+  # compatibility with OpenPGP.
+  #
   freepgPatches = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "freepg";
