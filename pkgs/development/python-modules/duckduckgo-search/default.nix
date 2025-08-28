@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   doCheck = false; # tests require network access
 
-  pythonImportsCheck = [ "duckduckgo_search" ];
+  pythonImportsCheck = [ "ddgs" ];
 
   meta = {
     description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
