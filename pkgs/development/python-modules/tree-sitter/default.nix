@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
 
@@ -17,11 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-zXYa0OTR/IiksbgIO64G1PlzrPb18pu/E+qWCcHeycE=";
   };
-
-  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
-  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-    ./segfault-patch.diff
-  ];
 
   build-system = [ setuptools ];
 
