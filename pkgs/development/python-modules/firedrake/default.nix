@@ -170,6 +170,9 @@ buildPythonPackage rec {
   '';
 
   passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       mpich = firedrake.override {
         petsc4py = petsc4py.override { mpi = mpich; };
