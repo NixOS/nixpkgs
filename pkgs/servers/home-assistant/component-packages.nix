@@ -5403,7 +5403,8 @@
       ];
     "sinch" =
       ps: with ps; [
-      ]; # missing inputs: clx-sdk-xms
+        clx-sdk-xms
+      ];
     "siren" =
       ps: with ps; [
       ];
