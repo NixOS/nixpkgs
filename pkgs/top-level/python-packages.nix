@@ -14559,6 +14559,8 @@ self: super: with self; {
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
+  pythinkingcleaner = callPackage ../development/python-modules/pythinkingcleaner { };
+
   python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
   python-apt = callPackage ../development/python-modules/python-apt { };
