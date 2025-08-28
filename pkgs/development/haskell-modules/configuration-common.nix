@@ -3239,6 +3239,11 @@ with haskellLib;
 
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;
+
+  # 2025-8-26: Too strict bounds on base <=4.19, see https://github.com/typeclasses/stripe/pull/11
+  stripe-concepts = doJailbreak super.stripe-concepts;
+  stripe-signature = doJailbreak super.stripe-signature;
+  stripe-wreq = doJailbreak super.stripe-wreq;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
