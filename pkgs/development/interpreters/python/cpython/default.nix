@@ -38,8 +38,8 @@
   windows,
 
   # optional dependencies
-  bluezSupport ? false,
-  bluez,
+  bluezSupport ? !withMinimalDeps && stdenv.hostPlatform.isLinux,
+  bluez-headers,
   mimetypesSupport ? !withMinimalDeps,
   mailcap,
   tzdata,
@@ -108,8 +108,6 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert bluezSupport -> bluez != null;
-
 assert lib.assertMsg (
   enableFramework -> stdenv.hostPlatform.isDarwin
 ) "Framework builds are only supported on Darwin.";
@@ -155,8 +153,7 @@ let
   passthru =
     let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
-      # bluez is excluded manually to break an infinite recursion.
-      inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && !lib.isDerivation v) inputs;
+      inputs' = lib.filterAttrs (n: v: n != "passthruFun" && !lib.isDerivation v) inputs;
       # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
       # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
       # __splices as an arg and using the cache if populated.
@@ -257,7 +254,7 @@ let
       zstd
     ]
     ++ optionals bluezSupport [
-      bluez
+      bluez-headers
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
