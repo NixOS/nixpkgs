@@ -2474,6 +2474,7 @@ mapAliases {
   xineLib = throw "'xineLib' has been renamed to/replaced by 'xine-lib'"; # Converted to throw 2024-10-17
   xineUI = throw "'xineUI' has been renamed to/replaced by 'xine-ui'"; # Converted to throw 2024-10-17
   xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
+  xlife = throw "xlife has been removed, because it is unmaintained"; # Added 2025-08-28
   xlsxgrep = throw "'xlsxgrep' has been dropped due to lack of maintenance."; # Added 2024-11-01
   xmlada = gnatPackages.xmlada; # Added 2024-02-25
   xmlroff = throw "'xmlroff' has been removed as it is unmaintained and broken"; # Added 2025-05-18
