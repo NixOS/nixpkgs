@@ -1,16 +1,21 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
-  pytestCheckHook,
-  pytest-cov-stub,
   huggingface-hub,
   matplotlib,
+  numpy,
+  packaging,
   pandas,
+  prettytable,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rich,
   scikit-learn,
-  stdenv,
   streamlit,
   tabulate,
 }:
@@ -30,7 +35,9 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    huggingface-hub
+    numpy
+    packaging
+    prettytable
     scikit-learn
     tabulate
   ];
@@ -38,19 +45,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     pandas
-    pytestCheckHook
     pytest-cov-stub
+    pytestCheckHook
+    pyyaml
     streamlit
   ];
+  optional-dependencies = {
+    rich = [ rich ];
+  };  
   enabledTestPaths = [ "skops" ];
   disabledTests = [
     # flaky
     "test_base_case_works_as_expected"
+    # fairlearn is not available in nixpkgs
+    "TestAddFairlearnMetricFrame"
   ];
   disabledTestPaths = [
-    # try to download data from Huggingface Hub:
-    "skops/hub_utils/tests"
-    "skops/card/tests"
     # minor output formatting issue
     "skops/card/_model_card.py"
   ]
