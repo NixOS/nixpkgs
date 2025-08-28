@@ -5,6 +5,7 @@
   fetchurl,
   installShellFiles,
   versionCheckHook,
+  autoPatchelfHook,
   zstd,
 }:
 
@@ -49,8 +50,8 @@ let
     {
       x86_64-darwin = "x86_64-apple-darwin";
       aarch64-darwin = "aarch64-apple-darwin";
-      x86_64-linux = "x86_64-unknown-linux-musl";
-      aarch64-linux = "aarch64-unknown-linux-musl";
+      x86_64-linux = "x86_64-unknown-linux-gnu";
+      aarch64-linux = "aarch64-unknown-linux-gnu";
     }
     ."${stdenv.hostPlatform.system}";
 in
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "unstable-${buildHashes.version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
 
   srcs = [
-    # the platform-specific, statically linked binary — which is also
+    # the platform-specific binary — which is also
     # zstd-compressed
     (fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
@@ -79,7 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     installShellFiles
+    autoPatchelfHook
     zstd
+  ];
+
+  buildInputs = [
+    #225963
+    stdenv.cc.cc.libgcc or null
   ];
 
   installPhase = ''
@@ -91,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall =
+  # Have to put this at a weird stage because if it is put in
+  # postInstall, preFixup, or postFixup, autoPatchelf wouldn't
+  # have run yet
+  preInstallCheck =
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
