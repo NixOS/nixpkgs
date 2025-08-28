@@ -6862,7 +6862,8 @@
       ];
     "zhong_hong" =
       ps: with ps; [
-      ]; # missing inputs: zhong-hong-hvac
+        zhong-hong-hvac
+      ];
     "ziggo_mediabox_xl" =
       ps: with ps; [
       ]; # missing inputs: ziggo-mediabox-xl
