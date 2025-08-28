@@ -12030,6 +12030,8 @@ self: super: with self; {
 
   prodict = callPackage ../development/python-modules/prodict { };
 
+  progettihwsw = callPackage ../development/python-modules/progettihwsw { };
+
   proglog = callPackage ../development/python-modules/proglog { };
 
   progress = callPackage ../development/python-modules/progress { };
