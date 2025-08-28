@@ -290,6 +290,8 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         With this option enabled, defining a non-`config` section
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
+        Note that this behavior does *not* apply to [path values](https://nix.dev/manual/nix/latest/language/types.html#type-path),
+        similar to how it does not apply to [function values](https://nix.dev/manual/nix/latest/language/types.html#type-function).
 
 `types.deferredModule`
 
