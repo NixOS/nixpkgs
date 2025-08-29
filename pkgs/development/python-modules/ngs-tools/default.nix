@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Reusable tools for working with next-generation sequencing (NGS) data";
     downloadPage = "https://github.com/Lioscro/ngs-tools";
-    homepage = "";
+    homepage = "https://ngs-tools.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kupac ];
   };
