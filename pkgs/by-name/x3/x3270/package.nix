@@ -88,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IBM 3270 terminal emulator for the X Window System";
     homepage = "https://x3270.bgp.nu/index.html";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.anna328p ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.anna328p ];
   };
 })
