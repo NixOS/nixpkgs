@@ -17913,6 +17913,10 @@ self: super: with self; {
 
   telfhash = callPackage ../development/python-modules/telfhash { };
 
+  tellcore-net = callPackage ../development/python-modules/tellcore-net { };
+
+  tellcore-py = callPackage ../development/python-modules/tellcore-py { };
+
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
   temescal = callPackage ../development/python-modules/temescal { };
