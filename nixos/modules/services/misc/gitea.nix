@@ -302,6 +302,34 @@ in
           description = "Path to the dump files.";
         };
 
+        skip = mkOption {
+          type =
+            with types;
+            let
+              value = enum [
+                "repository"
+                "log"
+                "custom-dir"
+                "lfs-data"
+                "attachment-data"
+                "package-data"
+                "index"
+                "db"
+              ];
+            in
+            either value (listOf value);
+          default = [ ];
+          example = [
+            "log"
+            "index"
+          ];
+          apply = x:
+            concatStringsSep " " (map (v: "--skip-${v}") (if isList x then x else [ x ]));
+          description = ''
+            Exclude data from dump.
+          '';
+        };
+
         type = mkOption {
           type = types.enum [
             "zip"
@@ -1013,7 +1041,8 @@ in
         User = cfg.user;
         ExecStart =
           "${exe} dump --type ${cfg.dump.type}"
-          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}"
+          + optionalString (cfg.dump.skip != []) " ${cfg.dump.skip}";
         WorkingDirectory = cfg.dump.backupDir;
       };
     };

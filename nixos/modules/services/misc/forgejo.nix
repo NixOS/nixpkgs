@@ -33,6 +33,8 @@ let
     lib.flatten (lib.mapAttrsToList mkSecret cfg.secrets);
 
   inherit (lib)
+    concatStringsSep
+    isList
     literalExpression
     mkChangedOptionModule
     mkDefault
@@ -261,6 +263,34 @@ in
           default = "${cfg.stateDir}/dump";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the directory where the dump archives will be stored.";
+        };
+
+        skip = mkOption {
+          type =
+            with types;
+            let
+              value = enum [
+                "repository"
+                "log"
+                "custom-dir"
+                "lfs-data"
+                "attachment-data"
+                "package-data"
+                "index"
+                "repo-archives"
+              ];
+            in
+            either value (listOf value);
+          default = [ ];
+          example = [
+            "log"
+            "index"
+          ];
+          apply = x:
+            concatStringsSep " " (map (v: "--skip-${v}") (if isList x then x else [ x ]));
+          description = ''
+            Exclude data from dump.
+          '';
         };
 
         type = mkOption {
@@ -822,7 +852,8 @@ in
         User = cfg.user;
         ExecStart =
           "${exe} dump --type ${cfg.dump.type}"
-          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+          + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}"
+          + optionalString (cfg.dump.skip != []) " ${cfg.dump.skip}";
         WorkingDirectory = cfg.dump.backupDir;
       };
     };
