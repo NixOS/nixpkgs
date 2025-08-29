@@ -5,7 +5,6 @@
   python3,
   qtbase,
   qtdeclarative,
-  qtsvg,
 }:
 
 let
@@ -15,7 +14,6 @@ in
 qtModule {
   pname = "qtdeclarative";
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ qtsvg ]; # Ugh, really?
   nativeBuildInputs = [ python3 ];
   # We need a runnable qmlcachegen to build qtdeclarative itself, and some dependers
   # of this package also expect to get runnable tools with it.
