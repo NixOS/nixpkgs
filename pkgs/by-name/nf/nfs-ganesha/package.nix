@@ -8,7 +8,6 @@
   krb5,
   xfsprogs,
   jemalloc,
-  dbus,
   libcap,
   ntirpc,
   liburcu,
@@ -18,6 +17,8 @@
   acl,
   useCeph ? false,
   ceph,
+  useDbus ? true,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
   };
 
+  patches = lib.optional useDbus ./allow-bypassing-dbus-pkg-config-test.patch;
+
   preConfigure = "cd src";
 
   cmakeFlags = [
@@ -52,6 +55,13 @@ stdenv.mkDerivation rec {
     "-DRADOS_URLS=ON"
     "-DUSE_FSAL_CEPH=ON"
     "-DUSE_FSAL_RGW=ON"
+  ]
+  ++ lib.optionals useDbus [
+    "-DUSE_DBUS=ON"
+    "-DDBUS_NO_PKGCONFIG=ON"
+    "-DDBUS_LIBRARY_DIRS=${dbus.lib}/lib"
+    "-DDBUS_INCLUDE_DIRS=${dbus.dev}/include/dbus-1.0\\;${dbus.lib}/lib/dbus-1.0/include"
+    "-DDBUS_LIBRARIES=dbus-1"
   ];
 
   nativeBuildInputs = [
@@ -60,7 +70,8 @@ stdenv.mkDerivation rec {
     bison
     flex
     sphinx
-  ];
+  ]
+  ++ lib.optional useDbus dbus.dev;
 
   buildInputs = [
     acl
@@ -91,6 +102,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
+  ''
+  + lib.optionalString useDbus ''
+    # Policy for D-Bus statistics interface
+    install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
 
   meta = with lib; {
