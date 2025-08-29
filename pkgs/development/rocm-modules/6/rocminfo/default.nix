@@ -30,13 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-fQPtO5TNbCbaZZ7VtGkkqng5QZ+FcScdh1opWr5YkLU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     rocm-cmake
+    python3
   ];
 
   buildInputs = [ rocm-runtime ];
-  propagatedBuildInputs = [ python3 ];
   cmakeFlags = [ "-DROCRTST_BLD_TYPE=Release" ];
 
   prePatch = ''
