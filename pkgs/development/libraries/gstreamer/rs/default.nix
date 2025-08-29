@@ -188,11 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Disable uriplaylistbin test that requires network access.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/676
-    # TODO: Remove in 0.14, it has been replaced by a different fix:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
-    ./ignore-network-tests.patch
+    # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
+    ./ignore-tests.patch
 
     # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
