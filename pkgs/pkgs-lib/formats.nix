@@ -118,27 +118,39 @@ optionalAttrs allowAliases aliases
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
 
+  /*
+    Creates a structured value type suitable for serialization formats.
+
+    Parameters:
+    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
+
+    Returns a type suitable for structured data formats that supports:
+    - Basic types: boolean, integer, float, string, path
+    - Complex types: attribute sets and lists
+  */
+  mkStructuredType =
+    { typeName }:
+    let
+      baseType = oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ];
+      valueType = (nullOr baseType) // {
+        description = "${typeName} value";
+      };
+    in
+    valueType;
+
   json =
     { }:
     {
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "JSON value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "JSON"; };
 
       generate =
         name: value:
@@ -152,7 +164,7 @@ optionalAttrs allowAliases aliases
               preferLocalBuild = true;
             }
             ''
-              jq . "$valuePath"> $out
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -179,23 +191,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.1 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.1"; };
 
     };
 
@@ -218,23 +214,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.2 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.2"; };
 
     };
 
@@ -483,23 +463,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ]
-            // {
-              description = "TOML value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "TOML"; };
 
       generate =
         name: value:
@@ -532,23 +496,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "CDN value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -868,23 +816,9 @@ optionalAttrs allowAliases aliases
   pythonVars =
     { }:
     {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              float
-              int
-              path
-              str
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "Python value";
-            };
-        in
-        attrsOf valueType;
+      type = attrsOf (mkStructuredType {
+        typeName = "Python";
+      });
       generate =
         name: value:
         pkgs.callPackage (
@@ -929,23 +863,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type =
-          let
-            valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
-              // {
-                description = "XML value";
-              };
-          in
-          valueType;
+        type = mkStructuredType { typeName = "XML"; };
 
         generate =
           name: value:
