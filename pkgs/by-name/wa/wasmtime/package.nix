@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # error: linker `rust-lld` not found
       !isAarch64;
 
+  # prevent $out from being propagated to $dev:
+  # the library and header files are not dependent on the binaries
+  propagatedBuildOutputs = [ ];
+
   postInstall =
     let
       inherit (stdenv.targetPlatform.rust) cargoShortTarget;
