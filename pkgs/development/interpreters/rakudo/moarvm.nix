@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moarvm";
-  version = "2025.06";
+  version = "2025.08";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "MoarVM";
     repo = "MoarVM";
     tag = finalAttrs.version;
-    hash = "sha256-QtJ8cLAbsFJ26wkfQCbIMVU1ArWlAXjsQ/RJbQ0wRNo=";
+    hash = "sha256-e7X2Mqe63+kGSWRY3UesfOXe6Pf4uNd5WcDIpluAR3A=";
     fetchSubmodules = true;
   };
 
