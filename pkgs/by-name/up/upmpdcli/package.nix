@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, libupnpp, libnpupnp, curl, expat, mpd_clientlib, libmicrohttpd, jsoncpp
+{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, libupnpp, libnpupnp, curl, expat, libmpdclient, libmicrohttpd, jsoncpp
 , makeWrapper, python3
 , recoll
 , mutagen
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ai41slMaJlVnENRevelYdDIR6x4XCjh7l6IVIZbUV+s=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libupnpp libnpupnp curl expat mpd_clientlib libmicrohttpd jsoncpp
+  nativeBuildInputs = [ autoreconfHook pkg-config libupnpp libnpupnp curl expat libmpdclient libmicrohttpd jsoncpp
     makeWrapper python3 recoll'
   ];
 
