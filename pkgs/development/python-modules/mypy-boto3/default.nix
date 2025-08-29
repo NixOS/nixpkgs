@@ -1309,8 +1309,8 @@ rec {
       "sha256-IHBV71mK16u4EEiQddrEOEWIB4mIAjo6wyZronw8+2w=";
 
   mypy-boto3-sso =
-    buildMypyBoto3Package "sso" "1.40.0"
-      "sha256-I//h5aZulOxyEz6X4NQc+rlbKhfnoJodbNWlsFVPtF4=";
+    buildMypyBoto3Package "sso" "1.40.20"
+      "sha256-XlnYeHhZ5IttMBKIa2rsk22QDRp2M72x1nAeJ3CiKa0=";
 
   mypy-boto3-sso-admin =
     buildMypyBoto3Package "sso-admin" "1.40.7"
