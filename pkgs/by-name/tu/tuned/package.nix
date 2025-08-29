@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuned";
-  version = "2.25.1";
+  version = "2.26.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-performance";
     repo = "tuned";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MMyYMgdvoAIeLCqUZMoQYsYYbgkXku47nZWq2aowPFg=";
+    hash = "sha256-tqr8o4rRhN75hXCdsIhFedfWvicmlIFuZjBNKLQgimQ=";
   };
 
   patches = [
@@ -82,15 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
+    "DESTDIR=${placeholder "out"}"
     "PREFIX="
 
-    "DATADIR=/share"
-    "DESTDIR=${placeholder "out"}"
-    "KERNELINSTALLHOOKDIR=/lib/kernel/install.d"
     "PYTHON=${lib.getExe python3Packages.python}"
     "PYTHON_SITELIB=/${python3Packages.python.sitePackages}"
     "TMPFILESDIR=/lib/tmpfiles.d"
-    "TUNED_PROFILESDIR=/lib/tuned/profile"
     "UNITDIR=/lib/systemd/system"
   ];
 
