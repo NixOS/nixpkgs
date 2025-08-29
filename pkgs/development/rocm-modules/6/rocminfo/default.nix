@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/ROCm/rocminfo";
     license = licenses.ncsa;
+    mainProgram = "rocminfo";
     maintainers = with maintainers; [ lovesegfault ];
     teams = [ teams.rocm ];
     platforms = platforms.linux;
