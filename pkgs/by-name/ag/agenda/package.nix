@@ -16,15 +16,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "agenda";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "dahenson";
     repo = "agenda";
-    rev = version;
-    sha256 = "sha256-tzGcqCxIkoBNskpadEqv289Sj5bij9u+LdYySiGdop8=";
+    tag = finalAttrs.version;
+    hash = "sha256-tzGcqCxIkoBNskpadEqv289Sj5bij9u+LdYySiGdop8=";
   };
 
   nativeBuildInputs = [
@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast, no-nonsense to-do (task) list designed for elementary OS";
     homepage = "https://github.com/dahenson/agenda";
-    maintainers = with maintainers; [ xiorcale ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ xiorcale ];
+    teams = with lib.teams; [ pantheon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
     mainProgram = "com.github.dahenson.agenda";
   };
-}
+})
