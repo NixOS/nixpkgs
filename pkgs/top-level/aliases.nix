@@ -2409,6 +2409,7 @@ mapAliases {
   vtk_9 = lib.warnOnInstantiate "'vtk_9' has been renamed to 'vtk_9_5'" vtk_9_5; # Added 2025-07-18
   vtk_9_egl = lib.warnOnInstantiate "'vtk_9_5' now build with egl support by default, so `vtk_9_egl` is deprecated, consider using 'vtk_9_5' instead." vtk_9_5; # Added 2025-07-18
   vtk_9_withQt5 = throw "'vtk_9_withQt5' has been removed, Consider using 'vtkWithQt5' instead." vtkWithQt5; # Added 2025-07-18
+  vtm = throw "'vtm' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
 
