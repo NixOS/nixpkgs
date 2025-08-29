@@ -1,81 +1,104 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  unzip,
-  autoPatchelfHook,
+  callPackage,
+  runCommand,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  openjtalk-src = fetchFromGitHub {
+    owner = "VOICEVOX";
+    repo = "open_jtalk";
+    rev = "1.11"; # this is actually a branch. why?
+    hash = "sha256-SBLdQ8D62QgktI8eI6eSNzdYt5PmGo6ZUCKxd01Z8UE=";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.15.9";
+  version = "0.16.1";
+  modelVersion = "0.16.0";
 
-  src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
+  src = fetchFromGitHub {
+    owner = "VOICEVOX";
+    repo = "voicevox_core";
+    tag = finalAttrs.version;
+    hash = "sha256-LCczOvU4NzHXoHp3QN5TzJkr1oSJP+V8JYQHLH0ObWQ=";
+  };
 
-  nativeBuildInputs = [ unzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  cargoHash = "sha256-VQSIR120aDxZAlELXP/pJp2P+29aJ/EFjmqn4Unax58=";
 
-  buildInputs = [ stdenv.cc.cc.lib ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 libonnxruntime.* libvoicevox_core.* -t $out/lib
-    install -Dm644 model/* -t $out/lib/model
-    install -Dm644 *.h -t $out/include
-    install -Dm644 README.txt -t $out/share/doc/voicevox-core
-
-    runHook postInstall
+  postPatch = ''
+    cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
+    substitute ${./openjtalk.patch} ./openjtalk.patch \
+      --replace-fail "@openjtalk_src@" "$(pwd)/openjtalk"
+    patch -d $cargoDepsCopy/open_jtalk-sys-* -p1 < ./openjtalk.patch
   '';
 
-  # When updating, run the following command to fetch all FODs:
-  # nix-build -A voicevox-core.sources --keep-going
-  passthru.sources =
-    let
-      # Note: Only the prebuilt binaries are able to decrypt the encrypted voice models
-      fetchCoreArtifact =
-        { id, hash }:
-        fetchurl {
-          url = "https://github.com/VOICEVOX/voicevox_core/releases/download/${finalAttrs.version}/voicevox_core-${id}-cpu-${finalAttrs.version}.zip";
-          inherit hash;
-        };
-    in
-    {
-      "x86_64-linux" = fetchCoreArtifact {
-        id = "linux-x64";
-        hash = "sha256-dEikEQcGL6h59nTxY833XGBawUjceq8NxIUVhRdQ2I8=";
-      };
-      "aarch64-linux" = fetchCoreArtifact {
-        id = "linux-arm64";
-        hash = "sha256-92aZEb2bz7xXA4uSo3lWy/cApr88I+yNqDlAWo6nFpg=";
-      };
-      "x86_64-darwin" = fetchCoreArtifact {
-        id = "osx-x64";
-        hash = "sha256-/5MghfgI8wup+o+eYMgcjI9Mjkjt1NPuN0x3JnqAlxg=";
-      };
-      "aarch64-darwin" = fetchCoreArtifact {
-        id = "osx-arm64";
-        hash = "sha256-UrgI4dy/VQCLZ/gyMX0D0YPabtw3IA76CpjLmbFLQeY=";
-      };
+  cargoBuildFlags = [ "-p voicevox_core_c_api" ];
+
+  # don't link onnxruntime directly
+  buildFeatures = [ "load-onnxruntime" ];
+
+  # setting this to anything disables trying to download onnxruntime
+  env.ORT_LIB_LOCATION = "dummy";
+
+  nativeBuildInputs = [ cmake ];
+
+  doCheck = false;
+
+  passthru.voicevox-onnxruntime = callPackage ./onnxruntime.nix { };
+
+  passthru.models = stdenv.mkDerivation {
+    pname = "voicevox-models";
+    version = finalAttrs.modelVersion;
+
+    src = fetchFromGitHub {
+      owner = "VOICEVOX";
+      repo = "voicevox_vvm";
+      tag = finalAttrs.modelVersion;
+      hash = "sha256-c8tTiNsXkSnEFYUtL+Q3ApZRasJVSKSBjsdsJ8wpJ+A=";
     };
+
+    nativeBuildInputs = [ python3 ];
+
+    installPhase = ''
+      runHook preInstall
+
+      # convert multipart zip archive into single file
+      python scripts/merge_vvm.py
+      mkdir -p "$out"
+      cp vvms/* "$out"
+
+      runHook postInstall
+    '';
+  };
+
+  passthru.wrapped = runCommand "voicevox-core-${finalAttrs.version}-wrapped" { } (
+    ''
+      mkdir -p "$out"/lib
+      cp ${finalAttrs.finalPackage}/lib/* "$out"/lib
+      chmod -R +w "$out/lib"
+      ln -s ${finalAttrs.passthru.voicevox-onnxruntime}/lib/* "$out"/lib
+      ln -s ${finalAttrs.passthru.models} "$out"/lib/model
+    ''
+    # allow loading sibling onnxruntime library
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath '$ORIGIN' "$out"/lib/libvoicevox_core*
+    ''
+  );
 
   meta = {
     changelog = "https://github.com/VOICEVOX/voicevox_core/releases/tag/${finalAttrs.version}";
     description = "Core library for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox_core";
-    license = with lib.licenses; [
-      mit
-      {
-        name = "VOICEVOX Core Library Terms of Use";
-        url = "https://github.com/VOICEVOX/voicevox_resource/blob/main/core/README.md";
-        free = false;
-        redistributable = true;
-      }
-    ];
+    license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       tomasajt
       eljamm
     ];
-    platforms = lib.attrNames finalAttrs.passthru.sources;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
