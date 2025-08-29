@@ -12549,6 +12549,8 @@ self: super: with self; {
 
   pybind11_2 = callPackage ../development/python-modules/pybind11_2 { };
 
+  pybind11_3 = callPackage ../development/python-modules/pybind11_3 { };
+
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
