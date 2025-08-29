@@ -2,15 +2,12 @@
   stdenv,
   fetchFromGitHub,
   perl,
-  icu,
-  zlib,
-  gmp,
   lib,
   nqp,
   removeReferencesTo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakudo";
   version = "2025.06.1";
 
@@ -18,23 +15,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-cofiX6VHHeki8GQcMamDyPYoVMUKiuhKVz8Gh8L9qu0=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = [
-    icu
-    zlib
-    gmp
-    perl
-  ];
-  configureScript = "perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
   configureFlags = [
     "--backends=moar"
-    "--with-nqp=${nqp}/bin/nqp"
+    "--with-nqp=${lib.getExe nqp}"
   ];
 
   disallowedReferences = [ stdenv.cc.cc ];
@@ -52,5 +43,6 @@ stdenv.mkDerivation rec {
       sgo
       prince213
     ];
+    mainProgram = "rakudo";
   };
-}
+})
