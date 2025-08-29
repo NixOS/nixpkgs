@@ -13,6 +13,7 @@ let
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
+    "aarch64-linux" = "linux-aarch64";
     "aarch64-darwin" = "macosx-aarch64";
   };
 
@@ -85,8 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       epl20
     ];
     maintainers = [ ];
-    platforms = [
-      "x86_64-linux"
+    platforms = lib.platforms.linux ++ [
       "aarch64-darwin"
     ];
     mainProgram = "Weasis";
