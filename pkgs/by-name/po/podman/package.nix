@@ -16,7 +16,6 @@
   nixosTests,
   python3,
   makeWrapper,
-  runtimeShell,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -126,7 +125,6 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
