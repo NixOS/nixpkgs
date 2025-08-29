@@ -54,6 +54,7 @@ buildPythonPackage rec {
   optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
+    aiohttp
     botocore
     mock
     pytest-asyncio
@@ -82,6 +83,13 @@ buildPythonPackage rec {
     # Failing tests, issue opened at https://github.com/opensearch-project/opensearch-py/issues/849
     "test_basicauth_in_request_session"
     "test_callable_in_request_session"
+
+    # Failing tests, issue opened at https://github.com/opensearch-project/opensearch-py/issues/949
+    # fixture 'event_loop' not found
+    "test_sniff_after_n_seconds"
+    "test_sniff_on_start_error_if_no_sniffed_hosts"
+    "test_sniff_on_start_waits_for_sniff_to_complete"
+    "test_sniff_on_start_close_unlocks_async_calls"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) [
     # Flaky tests: OSError: [Errno 48] Address already in use
