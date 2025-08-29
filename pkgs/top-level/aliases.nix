@@ -1985,6 +1985,12 @@ mapAliases {
   python = python2; # Added 2022-01-11
   python-swiftclient = throw "'python-swiftclient' has been renamed to/replaced by 'swiftclient'"; # Converted to throw 2024-10-17
   pythonFull = python2Full; # Added 2022-01-11
+  python3Full = throw "python3Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python310Full = throw "python310Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python311Full = throw "python311Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python312Full = throw "python312Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python313Full = throw "python313Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python314Full = throw "python314Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
   pythonPackages = python.pkgs; # Added 2022-01-11
   pypy39 = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
 

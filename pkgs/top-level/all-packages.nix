@@ -6202,36 +6202,6 @@ with pkgs;
     pythonAttr = "python27Full";
     x11Support = true;
   };
-  python3Full = python3.override {
-    self = python3Full;
-    pythonAttr = "python3Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
-  python310Full = python310.override {
-    self = python310Full;
-    pythonAttr = "python310Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
-  python311Full = python311.override {
-    self = python311Full;
-    pythonAttr = "python311Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
-  python312Full = python312.override {
-    self = python312Full;
-    pythonAttr = "python312Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
-  python313Full = python313.override {
-    self = python313Full;
-    pythonAttr = "python313Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
-  python314Full = python314.override {
-    self = python314Full;
-    pythonAttr = "python314Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-  };
 
   # https://py-free-threading.github.io
   python313FreeThreading = python313.override {
