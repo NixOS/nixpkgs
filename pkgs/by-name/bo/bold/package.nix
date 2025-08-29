@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
   zig_0_13,
   versionCheckHook,
   gitUpdater,
@@ -19,9 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7sn/8SIoT/JGdza8SpX+8usiVhqugVVMaLU1a1oMdj8=";
   };
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig_0_13.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-SSP+wvSJm+lOKMnUfyh56ZUB0eP0gHRwz0qmMhvp7Rw=";
+  };
 
   nativeBuildInputs = [
     zig_0_13.hook
