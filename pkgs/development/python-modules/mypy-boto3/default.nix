@@ -1125,8 +1125,8 @@ rec {
       "sha256-y80XkJoge5ED3oj4562wlG8GaXcCzTI8It58RW+skRQ=";
 
   mypy-boto3-robomaker =
-    buildMypyBoto3Package "robomaker" "1.40.0"
-      "sha256-3Ip7qLa3LCKjoM4duODUt8fA0OCMFCVUvZkmK84TRgs=";
+    buildMypyBoto3Package "robomaker" "1.40.19"
+      "sha256-qPJ/kxKiVat3aj6aVLDgIYpoGlpsrF7kjfxJ9UWbV0o=";
 
   mypy-boto3-rolesanywhere =
     buildMypyBoto3Package "rolesanywhere" "1.40.0"
