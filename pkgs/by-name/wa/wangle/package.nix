@@ -90,6 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
+
   checkPhase = ''
     runHook preCheck
 
