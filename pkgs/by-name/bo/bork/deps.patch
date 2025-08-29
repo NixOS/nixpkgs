@@ -1,0 +1,26 @@
+diff --git a/build.zig.zon b/build.zig.zon
+index d56bca8..c69d5da 100644
+--- a/build.zig.zon
++++ b/build.zig.zon
+@@ -12,8 +12,8 @@
+             .hash = "zeit-0.6.0-5I6bk5daAgC-P60TjxRqW0bYknfCGxJp-03eS9UjGrO7",
+         },
+         .ziggy = .{
+-            .url = "git+https://github.com/kristoff-it/ziggy#8a29017169f43dc2c3526817e98142eb9a335087",
+-            .hash = "ziggy-0.1.0-kTg8vwkbBgAOHreabwZtDDtNDi3U_RAiOMvuRDTJiy0I",
++            .url = "git+https://github.com/kristoff-it/ziggy#eeb21acc0a369dca503167fe963f4f5a7eda2659",
++            .hash = "ziggy-0.1.0-kTg8vwBEBgA21d_qL5UmAoCr3bvnjkTRbF41tZzo2zuL",
+         },
+         .clap = .{
+             .url = "git+https://github.com/Hejsil/zig-clap#a4e784da8399c51d5eeb5783e6a485b960d5c1f9",
+@@ -28,8 +28,8 @@
+             .hash = "zg-0.13.4-AAAAAGiZ7QLz4pvECFa_wG4O4TP4FLABHHbemH2KakWM",
+         },
+         .websocket = .{
+-            .url = "git+https://github.com/karlseguin/websocket.zig#69ac58551be9ff5f41689198bb57e29f8436cf39",
+-            .hash = "1220dba3f6cb8c7a2be0f29243176b44b7d6bbdb45735fcaf5cfb3d1e0fa71cb9031",
++            .url = "git+https://github.com/karlseguin/websocket.zig#7240830dc8d1ab426d408cb76144794169943aa9",
++            .hash = "websocket-0.1.0-ZPISdRJ0AwBHOWGe9mnKAUU2hXEXhfdbsW3smK4zpY97",
+         },
+         .known_folders = .{
+             .url = "git+https://github.com/ziglibs/known-folders#aa24df42183ad415d10bc0a33e6238c437fc0f59",
