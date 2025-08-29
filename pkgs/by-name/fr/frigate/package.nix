@@ -2,7 +2,6 @@
   lib,
   stdenv,
   callPackage,
-  replaceVars,
   python312Packages,
   fetchFromGitHub,
   fetchurl,
@@ -27,7 +26,20 @@ let
     inherit version src;
   };
 
-  python = python312Packages.python;
+  python = python312Packages.python.override {
+    packageOverrides = self: super: {
+      joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "authlib";
+          repo = "joserfc";
+          tag = version;
+          hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -56,7 +68,7 @@ let
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
 in
-python312Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
   format = "other";
@@ -65,11 +77,7 @@ python312Packages.buildPythonApplication rec {
 
   patches = [
     ./constants.patch
-
-    (replaceVars ./ffmpeg.patch {
-      ffmpeg = lib.getExe ffmpeg-headless;
-      ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
-    })
+    ./ffmpeg.patch
   ];
 
   postPatch = ''
@@ -109,7 +117,7 @@ python312Packages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  dependencies = with python312Packages; [
+  dependencies = with python3Packages; [
     # docker/main/requirements.txt
     scikit-build
     # docker/main/requirements-wheel.txt
@@ -191,7 +199,8 @@ python312Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  nativeCheckInputs = with python312Packages; [
+  nativeCheckInputs = with python3Packages; [
+    ffmpeg-headless
     pytestCheckHook
   ];
 
@@ -213,7 +222,7 @@ python312Packages.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath = (python312Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
+    pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };
