@@ -11,15 +11,15 @@
   scdoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wpaperd";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
     repo = "wpaperd";
-    rev = version;
-    hash = "sha256-mBdrOmS+e+Npei5+RmtbTkBCGR8L5O83hulNU1z0Akk=";
+    tag = finalAttrs.version;
+    hash = "sha256-6XVpjTdo/wI65Lzd02fjqir7a28EEBBp3794zLgxayY=";
   };
 
   cargoHash = "sha256-d8jzoNCn9J36SE4tQZ1orgOfFGbhVtHaaO940b3JxmQ=";
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "wpaperd";
   };
-}
+})
