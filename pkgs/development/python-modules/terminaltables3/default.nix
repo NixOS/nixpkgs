@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "terminaltables3";
-  version = "4.0.0-unstable-2024-07-21";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
