@@ -143,6 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Do not install the upstream udev rules, they rely on specific
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
+
+    # write fapi-config suitable for testing
+    cat > $out/etc/tpm2-tss/fapi-config-test.json <<EOF
+    {
+      "profile_dir": "${placeholder "out"}/etc/tpm2-tss/fapi-profiles/",
+      "system_pcrs" : []
+    }
+    EOF
   '';
 
   doCheck = false;
