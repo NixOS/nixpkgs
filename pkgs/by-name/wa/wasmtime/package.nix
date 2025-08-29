@@ -57,10 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       inherit (stdenv.targetPlatform.rust) cargoShortTarget;
     in
     ''
-      # move libs from out to dev
-      install -d -m 0755 $dev/lib
-      install -m 0644 ''${!outputLib}/lib/* $dev/lib
-      rm -r ''${!outputLib}/lib
+      moveToOutput lib $dev
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
