@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   cmake,
   ctestCheckHook,
@@ -49,7 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    withDicts = callPackage ./wrapper.nix { nuspell = finalAttrs.finalPackage; };
+
     tests = {
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withDicts (d: [ d.en_US ]);
+      };
+
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
       cmake = testers.hasCmakeConfigModules {

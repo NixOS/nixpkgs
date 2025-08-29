@@ -1,19 +1,38 @@
 {
-  stdenv,
   lib,
+  buildEnv,
   nuspell,
-  makeWrapper,
-  dicts ? [ ],
+  hunspellDicts,
+  makeBinaryWrapper,
 }:
 
-let
-  searchPath = lib.makeSearchPath "share/hunspell" dicts;
-in
-stdenv.mkDerivation {
-  name = (lib.appendToName "with-dicts" nuspell).name;
-  nativeBuildInputs = [ makeWrapper ];
-  buildCommand = ''
-    makeWrapper ${nuspell}/bin/nuspell $out/bin/nuspell --prefix DICPATH : ${lib.escapeShellArg searchPath}
-  '';
-  meta = removeAttrs nuspell.meta [ "outputsToInstall" ];
-}
+lib.makeOverridable (
+  dicts: f:
+  buildEnv {
+    inherit (lib.appendToName "with-dicts" nuspell) name version;
+
+    paths = f dicts;
+
+    pathsToLink = [ "/share/hunspell" ];
+
+    nativeBuildInputs = [ makeBinaryWrapper ];
+
+    postBuild = ''
+      makeWrapper ${lib.getExe nuspell} $out/bin/nuspell \
+        --prefix DICPATH : $out/share/hunspell
+    '';
+
+    meta = {
+      inherit (nuspell.meta)
+        description
+        longDescription
+        homepage
+        changelog
+        license
+        maintainers
+        mainProgram
+        platforms
+        ;
+    };
+  }
+) hunspellDicts
