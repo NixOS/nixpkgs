@@ -43,17 +43,19 @@ buildPythonPackage rec {
     pytestCheckHook
     mpiCheckPhaseHook
   ];
-  disabledTestPaths = lib.optionals (mpi.pname == "mpich") [
-    # These tests from some reason cause pytest to crash, and therefor it is
-    # hard to debug them. Upstream mentions these tests to raise issues in
-    # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
-    # there (setting MPI4PY_RC_RECV_MPROBE=0) doesn't work.
-    "test/test_util_pool.py"
-    "demo/futures/test_futures.py"
-  ] ++ lib.optionals (mpi.pname == "openmpi") [
-    # This test is currently broken with openmpi
-    "test/test_spawn.py"
-  ];
+  disabledTestPaths =
+    lib.optionals (mpi.pname == "mpich") [
+      # These tests from some reason cause pytest to crash, and therefor it is
+      # hard to debug them. Upstream mentions these tests to raise issues in
+      # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
+      # there (setting MPI4PY_RC_RECV_MPROBE=0) doesn't work.
+      "test/test_util_pool.py"
+      "demo/futures/test_futures.py"
+    ]
+    ++ lib.optionals (mpi.pname == "openmpi") [
+      # This test is currently broken with openmpi
+      "test/test_spawn.py"
+    ];
 
   # frame work hangs currently
   doCheck = false;
