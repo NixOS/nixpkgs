@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "countryguess";
-  version = "0.4.5";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "plotski";
     repo = "countryguess";
     tag = "v${version}";
-    hash = "sha256-JzhkXHitleQ2UIxdem8PYR5QhKGmkyfHmxG6VDP7pB0=";
+    hash = "sha256-yZyEOFXwbaYAIDl6LoHkwoqlhVzqShY8ZXPasB6unQ8=";
   };
 
   build-system = [
