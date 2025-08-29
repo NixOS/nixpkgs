@@ -684,13 +684,7 @@ in
         networkmanager.connectionConfig = {
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
-          "wifi.powersave" =
-            if cfg.wifi.powersave == null then
-              null
-            else if cfg.wifi.powersave then
-              3
-            else
-              2;
+          "wifi.powersave" = lib.mkIf (cfg.wifi.powersave != null) (if cfg.wifi.powersave then 3 else 2);
         };
       }
     ];
