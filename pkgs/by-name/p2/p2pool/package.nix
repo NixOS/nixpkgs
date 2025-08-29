@@ -14,15 +14,15 @@
   zeromq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p2pool";
-  version = "4.9";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
-    rev = "v${version}";
-    hash = "sha256-nFoR5n6vm6Q1UBxX+3U6O6NExcrM1Mab+WjEOgRSKCE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jjY/+ZS7UYecHTQT93WAUZYYc+CZpG4Vbotmsq65un0=";
     fetchSubmodules = true;
   };
 
@@ -54,16 +54,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized pool for Monero mining";
     homepage = "https://github.com/SChernykh/p2pool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       ratsclub
       JacoMalan1
+      jk
     ];
     mainProgram = "p2pool";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

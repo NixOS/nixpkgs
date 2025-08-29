@@ -5,7 +5,6 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
-  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -17,25 +16,6 @@
   confDir ? "/etc",
 }:
 let
-
-  # Called for Nix < 2.26
-  commonAutoconf =
-    args:
-    nixDependencies.callPackage
-      (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
-      {
-        inherit
-          storeDir
-          stateDir
-          confDir
-          ;
-        aws-sdk-cpp =
-          if lib.versionAtLeast args.version "2.12pre" then
-            nixDependencies.aws-sdk-cpp
-          else
-            nixDependencies.aws-sdk-cpp-old;
-      };
-
   # Called for Nix == 2.28. Transitional until we always use
   # per-component packages.
   commonMeson =
@@ -47,13 +27,6 @@ let
         confDir
         ;
     };
-
-  # https://github.com/NixOS/nix/pull/7585
-  patch-monitorfdhup = fetchpatch2 {
-    name = "nix-7585-monitor-fd-hup.patch";
-    url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
-    hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
-  };
 
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
@@ -146,43 +119,17 @@ let
       nixComponentsAttributeName
     ];
 
+  maintainers = [
+    lib.maintainers.lovesegfault
+    lib.maintainers.artturin
+  ];
+  teams = [ lib.teams.nix ];
+
 in
 lib.makeExtensible (
   self:
   (
     {
-      nix_2_3 =
-        (commonAutoconf {
-          version = "2.3.18";
-          hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
-          patches = [
-            patch-monitorfdhup
-          ];
-          self_attribute_name = "nix_2_3";
-          knownVulnerabilities = [
-            "CVE-2024-38531"
-            "CVE-2024-47174"
-            "CVE-2025-46415"
-            "CVE-2025-46416"
-            "CVE-2025-52991"
-            "CVE-2025-52992"
-            "CVE-2025-52993"
-          ];
-          maintainers = with lib.maintainers; [ flokli ];
-          teams = [ ];
-        }).overrideAttrs
-          {
-            # https://github.com/NixOS/nix/issues/10222
-            # spurious test/add.sh failures
-            enableParallelChecking = false;
-          };
-
-      nix_2_24 = commonAutoconf {
-        version = "2.24.15";
-        hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
-        self_attribute_name = "nix_2_24";
-      };
-
       nix_2_28 = commonMeson {
         version = "2.28.4";
         hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
@@ -191,7 +138,7 @@ lib.makeExtensible (
 
       nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
         version = "2.29.1";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -205,7 +152,7 @@ lib.makeExtensible (
 
       nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.30.2";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -219,7 +166,7 @@ lib.makeExtensible (
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.31pre20250712_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -232,23 +179,6 @@ lib.makeExtensible (
       git = addTests "git" self.nixComponents_git.nix-everything;
 
       latest = self.nix_2_30;
-
-      # The minimum Nix version supported by Nixpkgs
-      # Note that some functionality *might* have been backported into this Nix version,
-      # making this package an inaccurate representation of what features are available
-      # in the actual lowest minver.nix *patch* version.
-      minimum =
-        let
-          minver = import ../../../../lib/minver.nix;
-          major = lib.versions.major minver;
-          minor = lib.versions.minor minver;
-          attribute = "nix_${major}_${minor}";
-          nix = self.${attribute};
-        in
-        if !self ? ${attribute} then
-          throw "The minimum supported Nix version is ${minver} (declared in lib/minver.nix), but pkgs.nixVersions.${attribute} does not exist."
-        else
-          nix;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_28;
@@ -265,10 +195,12 @@ lib.makeExtensible (
       )
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";
         nix_2_26 = throw "nix_2_26 has been removed. use nix_2_28.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
 
+        minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
       }
     )

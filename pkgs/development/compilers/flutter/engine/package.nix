@@ -18,7 +18,6 @@
   fetchgit,
   runCommand,
   llvmPackages,
-  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -165,7 +164,11 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
   ]
-  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE"
+  ++ lib.optionals (lib.versionAtLeast flutterVersion "3.35") [
+    "-Wno-macro-redefined"
+    "-Wno-error=macro-redefined"
+  ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
@@ -213,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
     chmod -R u+w -- src/flutter/third_party/swiftshader
 
-    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+    ln -s ${llvmPackages.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
 
     mkdir -p src/flutter/buildtools/${constants.alt-platform}
     ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
@@ -254,6 +257,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     popd
+  ''
+  # error: 'close_range' is missing exception specification 'noexcept(true)'
+  + lib.optionalString (lib.versionAtLeast flutterVersion "3.35") ''
+    substituteInPlace src/flutter/third_party/dart/runtime/bin/process_linux.cc \
+      --replace-fail "(unsigned int first, unsigned int last, int flags)" "(unsigned int first, unsigned int last, int flags) noexcept(true)"
+  ''
+  + ''
     popd
   '';
 
@@ -336,21 +346,19 @@ stdenv.mkDerivation (finalAttrs: {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta =
-    with lib;
-    {
-      # Very broken on Darwin
-      broken = stdenv.hostPlatform.isDarwin;
-      description = "Flutter engine";
-      homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    }
-    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta = {
+    # Very broken on Darwin
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Flutter engine";
+    homepage = "https://flutter.dev";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  }
+  // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

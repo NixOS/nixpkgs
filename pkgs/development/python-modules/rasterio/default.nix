@@ -45,6 +45,11 @@ buildPythonPackage rec {
     hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cython~=3.0.2" cython
+  '';
+
   nativeBuildInputs = [
     cython
     gdal

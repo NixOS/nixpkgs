@@ -54,9 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
-
   postBuild = ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
@@ -68,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${electron.headers}
     npm run postinstall
 
+    # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \
+      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
   '';

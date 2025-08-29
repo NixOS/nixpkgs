@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -25,7 +26,7 @@
 
 let
   pname = "vector";
-  version = "0.48.0";
+  version = "0.49.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -34,10 +35,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = "vector";
     rev = "v${version}";
-    hash = "sha256-qgf3aMZc1cgPlsAzgtaXLUx99KwN5no1amdkwFVyl4Y=";
+    hash = "sha256-sow1BFJgwOOajJ7dTmoUNJ3OpI9/73Uigrcb1CIBOE8=";
   };
 
-  cargoHash = "sha256-t8mfZpLrzrxj1WUpJPqZWyfBf9XobcqZY/hAeVGzhcM=";
+  cargoHash = "sha256-a7923ubtads5ZLjc+27RHtPFKmgv0aMOxiSrvIVr5VA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,6 +62,14 @@ rustPlatform.buildRustPackage {
     libiconv
     coreutils
     zlib
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "1.89-mismatched-lifetime-syntaxes.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/vectordotdev/vector/pull/23645.patch";
+      hash = "sha256-2ADlF4/Z1uR3LR6608lA4tseh+MnHb097PACD/Nq6/0=";
+    })
   ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.

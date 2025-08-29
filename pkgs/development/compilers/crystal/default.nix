@@ -247,8 +247,7 @@ let
         ln -s $bin/bin $out/bin
         ln -s $bin/share/bash-completion $out/share/bash-completion
         ln -s $bin/share/zsh $out/share/zsh
-        # fish completion was introduced in 1.6.0
-        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
+        ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall

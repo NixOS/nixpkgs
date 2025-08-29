@@ -42,7 +42,7 @@ in
           USB_BLACKLIST_PHONE = 1;
         };
         description = ''
-          Options passed to TLP. See https://linrunner.de/tlp for all supported options..
+          Options passed to TLP. See <https://linrunner.de/tlp> for all supported options..
         '';
       };
 

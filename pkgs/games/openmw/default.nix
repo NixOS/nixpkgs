@@ -123,7 +123,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      abbradar
       marius851000
     ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
-      drupol
       NotAShelf
       viperML
     ];

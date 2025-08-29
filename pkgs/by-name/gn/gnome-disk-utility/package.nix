@@ -1,31 +1,32 @@
 {
   lib,
   stdenv,
-  gettext,
   fetchurl,
-  pkg-config,
-  udisks2,
-  libhandy,
-  libsecret,
-  libdvdread,
-  meson,
-  ninja,
-  gtk3,
+  adwaita-icon-theme,
+  desktop-file-utils,
+  docbook-xsl-nons,
+  gettext,
   glib,
-  wrapGAppsHook3,
-  libnotify,
-  itstool,
   gnome,
   gnome-settings-daemon,
-  adwaita-icon-theme,
-  libxml2,
   gsettings-desktop-schemas,
+  gtk3,
+  itstool,
   libcanberra-gtk3,
-  libxslt,
-  docbook-xsl-nons,
-  desktop-file-utils,
+  libdvdread,
+  libhandy,
+  libnotify,
   libpwquality,
+  libsecret,
+  libxml2,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
   systemd,
+  udisks2,
+  wrapGAppsHook3,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,32 +39,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
+    docbook-xsl-nons
+    gettext
+    itstool
+    libxml2
+    libxslt
     meson
     ninja
     pkg-config
-    gettext
-    itstool
-    libxslt
-    docbook-xsl-nons
-    desktop-file-utils
     wrapGAppsHook3
-    libxml2
   ];
 
   buildInputs = [
-    gtk3
-    glib
-    libhandy
-    libsecret
-    libpwquality
-    libnotify
-    libdvdread
-    libcanberra-gtk3
-    udisks2
     adwaita-icon-theme
-    systemd
+    glib
     gnome-settings-daemon
     gsettings-desktop-schemas
+    gtk3
+    libcanberra-gtk3
+    libdvdread
+    libhandy
+    libnotify
+    libpwquality
+    libsecret
+    systemd
+    udisks2
+    xz
   ];
 
   passthru = {

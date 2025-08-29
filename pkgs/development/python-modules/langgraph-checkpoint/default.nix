@@ -63,8 +63,12 @@ buildPythonPackage rec {
     "test_embed_with_path"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "checkpoint==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpoint==";
+    };
   };
 
   meta = {
@@ -73,7 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

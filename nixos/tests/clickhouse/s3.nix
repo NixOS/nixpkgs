@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, package, ... }:
 
 let
   s3 = {
@@ -40,7 +40,10 @@ let
 in
 {
   name = "clickhouse-s3";
-  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
+  meta.maintainers = with pkgs.lib.maintainers; [
+    jpds
+    thevar1able
+  ];
 
   nodes = {
     clickhouse = {
@@ -50,7 +53,10 @@ in
         };
       };
 
-      services.clickhouse.enable = true;
+      services.clickhouse = {
+        enable = true;
+        inherit package;
+      };
       virtualisation.diskSize = 15 * 1024;
       virtualisation.memorySize = 4 * 1024;
     };

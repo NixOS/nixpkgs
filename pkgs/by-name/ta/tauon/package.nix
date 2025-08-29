@@ -48,14 +48,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "8.0.1";
+  version = "8.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-m94/zdlJu/u/dchIXhqB47bkl6Uej2hVr8R6RNg8Vaw=";
+    hash = "sha256-AV8B09H/25+2ZOoGux2/A4xP8sBBpRP197JYkS9/awk=";
   };
 
   postUnpack = ''
@@ -65,10 +65,6 @@ python3Packages.buildPythonApplication rec {
     rmdir source/src/phazor/miniaudio
     ln -s ${miniaudio.src} source/src/phazor/miniaudio
   '';
-
-  patches = [
-    ./install_mode_true.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/tauon/t_modules/t_phazor.py \

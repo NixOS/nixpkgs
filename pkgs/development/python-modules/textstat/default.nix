@@ -2,21 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cmudict,
   setuptools,
   pyphen,
   pytestCheckHook,
   pytest,
 }:
 buildPythonPackage rec {
-  version = "0.7.4";
+  version = "0.7.8";
   pname = "textstat";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "textstat";
     repo = "textstat";
-    rev = version;
-    hash = "sha256-UOCWsIdoVGxmkro4kNBYNMYhA3kktngRDxKjo6o+GXY=";
+    tag = version;
+    hash = "sha256-EEGTmZXTAZ4fsfZk/ictvjQ6lCAi5Ma/Ae83ziGDQXQ=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     setuptools
     pyphen
+    cmudict
   ];
 
   pythonImportsCheck = [
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [
-    "test.py"
+    "tests/"
   ];
 
   meta = {

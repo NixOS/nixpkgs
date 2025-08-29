@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.6.0";
+  version = "8.7.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FYWeUS78jvFV9nj/9RSRxPFYKYxSF04dIXZINSbn7WA=";
+    hash = "sha256-LP5Yfjdz2GB/6LvvvNd7XPuBYSTKyJ5JE1PeuPL6kyQ=";
   };
 
   patches = [
@@ -222,6 +222,11 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
+      # hangs with cuda enabled, also:
+      # eglInitialize: Failed to get system egl display
+      # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      $ETN 'test_recipe_browser_webengine'
+
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )

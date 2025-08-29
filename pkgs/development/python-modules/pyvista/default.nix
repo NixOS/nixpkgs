@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.45.3";
+  version = "0.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-9N1dF/zwjzoxX4xYIr5084M9pAk3YK3T48OUnCoC0NU=";
+    hash = "sha256-k5Sr41mmZJCEiIeEyyqulzYrI3cQYTWN5ooW41QUPuQ=";
   };
 
   # remove this line once pyvista 0.46 is released

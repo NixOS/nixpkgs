@@ -13,6 +13,7 @@
   gsl,
   man,
   pkg-config,
+  writableTmpDirAsHomeHook,
 
   unstableGitUpdater,
   writeScript,
@@ -25,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.5-unstable-2025-07-31";
+  version = "11.5-unstable-2025-08-26";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "71e547b1a210d1ff06daeb4dee5247cd949d0178";
-    hash = "sha256-gMZCmpGPSgM73PRbRY5BgyaTeRnojduNnZntvr75jzw=";
+    rev = "f2abd58b4311e3f873619a6da1e65c5ad3d81943";
+    hash = "sha256-4si8ObGNeM+grMR83pXppm50HZrw01tayQLePhwNRhk=";
   };
 
   buildInputs =
@@ -183,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     man
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   installCheckInputs = [
@@ -190,19 +192,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   /*
-    XXX: The upstream assumes that `$HOME` is `/home/$USER`, and the source files
-    lie in `$HOME/cl` . The script presented here uses a fake `$USER` and a
-    symbolic linked `$HOME/cl` , which make the test suite work but do not meet
-    the conditions completely.
+    The test suite assumes that "there are two subdirectories of the home directory referred to: cl and test",
+    where `cl` is "the s7 source directory" and `test` is "a safe place to write temp files".
   */
   installCheckPhase = ''
     runHook preInstallCheck
 
+    ln -sr . $HOME/cl
+    mkdir $HOME/test
+
     $CC s7.c -c -o s7.o
     $CC ffitest.c s7.o -o ffitest
     mv ffitest $dst_bin
-    mkdir -p nix-build/home
-    ln -sr . nix-build/home/cl
 
     ${lib.optionalString withArb ''
       substituteInPlace s7test.scm \
@@ -211,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp $out/lib/libarb_s7.so .
     ''}
 
-    USER=nix-s7-builder PATH="$dst_bin:$PATH" HOME=$PWD/nix-build/home \
+    PATH="$dst_bin:$PATH" \
         s7-repl s7test.scm
 
     rm $dst_bin/ffitest

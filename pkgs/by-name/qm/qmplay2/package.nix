@@ -29,6 +29,9 @@
 
 let
   sources = callPackage ./sources.nix { };
+  vulkan-headers-qmplay2 = vulkan-headers.overrideAttrs (oldAttrs: {
+    inherit (sources.vulkan-headers-qmplay2) version src;
+  });
 in
 assert lib.elem qtVersion [
   "5"
@@ -43,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -va ${sources.qmvk.src}/* qmvk/
     chmod --recursive 744 qmvk
     popd
-    substituteInPlace src/qmplay2/vulkan/VulkanWindow.cpp \
-      --replace-fail "getSubmitInfo()" "getSubmitInfo(0)"
   '';
 
   nativeBuildInputs = [
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
     libxcb
     taglib
-    vulkan-headers
+    vulkan-headers-qmplay2
     vulkan-tools
   ]
   ++ lib.optionals (qtVersion == "6") [

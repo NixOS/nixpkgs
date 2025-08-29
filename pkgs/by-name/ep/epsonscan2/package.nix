@@ -15,8 +15,7 @@
   libtool,
   libusb1,
   makeDesktopItem,
-  qtbase,
-  wrapQtAppsHook,
+  qt5,
 
   withGui ? true,
   withNonFreePlugins ? false,
@@ -81,7 +80,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withGui [
     imagemagick # to make icons
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ]
   ++ lib.optionals withNonFreePlugins [
     autoPatchelfHook
@@ -96,7 +95,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withGui [
     copyDesktopItems
-    qtbase
+    qt5.qtbase
   ]
   ++ lib.optionals withNonFreePlugins [
     libtool.lib

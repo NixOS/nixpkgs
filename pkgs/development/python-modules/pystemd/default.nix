@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.13.2";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
+    hash = "sha256-8G1OWyGIGnyRAEkuYMzC9LZOULTWt3c8lAE9LG8aANs=";
   };
 
   postPatch = ''

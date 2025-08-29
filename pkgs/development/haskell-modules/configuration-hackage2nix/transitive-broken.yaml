@@ -721,7 +721,6 @@ dont-distribute-packages:
  - dhall-secret
  - dia-functions
  - diagrams-html5
- - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
@@ -1026,7 +1025,6 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
- - fs-sim
  - ftdi
  - ftp-client-conduit
  - FTPLine
@@ -1196,7 +1194,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_12_0_0
+ - grisette_0_13_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1363,7 +1361,6 @@ dont-distribute-packages:
  - haskelldb-hsql-postgresql
  - haskelldb-hsql-sqlite3
  - haskelldb-th
- - HaskellNet-SSL
  - haskelm
  - haskey
  - haskey-mtl
@@ -1584,7 +1581,7 @@ dont-distribute-packages:
  - HPong
  - hpqtypes-effectful
  - hpqtypes-extras
- - hpqtypes-extras_1_17_0_1
+ - hpqtypes-extras_1_18_0_0
  - hprotoc
  - hprotoc-fork
  - hps
@@ -1872,7 +1869,6 @@ dont-distribute-packages:
  - json-pointer-hasql
  - json-query
  - json-rpc-client
- - json-schema
  - json-state
  - json-togo
  - json2-hdbc
@@ -1935,12 +1931,13 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
+ - knead
  - knit-haskell
  - koji-install
  - koji-tool
+ - koji-tool_1_3
  - korfu
  - ks-test
- - kubernetes-api-client
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
@@ -2010,7 +2007,6 @@ dont-distribute-packages:
  - legion-discovery
  - legion-discovery-client
  - legion-extra
- - leksah
  - leksah-server
  - lens-utils
  - lenz
@@ -2062,7 +2058,6 @@ dont-distribute-packages:
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
- - list1
  - listenbrainz-client
  - ListT
  - liszt
@@ -2073,6 +2068,7 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
+ - llvm-dsl
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
@@ -2133,7 +2129,6 @@ dont-distribute-packages:
  - magic-wormhole
  - mahoro
  - maid
- - mail-pool
  - MailchimpSimple
  - mailgun
  - majordomo
@@ -2281,14 +2276,11 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp-pm
  - mptcpanalyzer
- - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
  - msgpack-idl
  - msgpack-persist
- - msgpack-rpc
  - msgpack-rpc-conduit
  - msgpack-testsuite
  - msi-kb-backlit
@@ -2532,6 +2524,7 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
+ - patch-image
  - pathfindingcore
  - patterns
  - paypal-rest-client
@@ -2616,6 +2609,16 @@ dont-distribute-packages:
  - Plot-ho-matic
  - PlslTools
  - plugins-auto
+ - pms-application-service
+ - pms-domain-service
+ - pms-infra-cmdrun
+ - pms-infra-procspawn
+ - pms-infra-socket
+ - pms-infra-watch
+ - pms-infrastructure
+ - pms-ui-notification
+ - pms-ui-request
+ - pms-ui-response
  - png-file
  - pngload
  - pointless-lenses
@@ -2632,7 +2635,6 @@ dont-distribute-packages:
  - polysemy-hasql
  - polysemy-hasql-test
  - polysemy-kvstore-jsonfile
- - polysemy-log-co
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
@@ -2718,6 +2720,7 @@ dont-distribute-packages:
  - psql
  - ptera
  - ptera-th
+ - pty-mcp-server
  - publicsuffixlist
  - puffytools
  - Pugs
@@ -2815,6 +2818,7 @@ dont-distribute-packages:
  - rbr
  - rc
  - rdioh
+ - rds-data-polysemy
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -2838,12 +2842,10 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-dom-colonnade
  - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
- - reflex-localize-dom
  - reflex-monad-auth
  - reflex-process
  - reform-blaze
@@ -2862,7 +2864,6 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
- - registry-messagepack
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3256,7 +3257,6 @@ dont-distribute-packages:
  - spelling-suggest
  - sphero
  - spice
- - spike
  - SpinCounter
  - splines
  - sprinkles
@@ -3490,7 +3490,6 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
- - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
@@ -3769,7 +3768,6 @@ dont-distribute-packages:
  - xml-catalog
  - xml-enumerator
  - xml-enumerator-combinators
- - xml-isogen
  - xml-monad
  - xml-pipe
  - xml-push

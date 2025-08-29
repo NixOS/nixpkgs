@@ -25,13 +25,13 @@
 
 buildDunePackage rec {
   pname = "smtml";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${version}";
-    hash = "sha256-gmYyVUkwXBqGKGhp6Pqdf2PJafUJ1hF96WxOLq1h2f8=";
+    hash = "sha256-hgpxOQZ7mhELcT71j1EZJNstnTSntEjKDEokUaj5kAs=";
   };
 
   nativeBuildInputs = [

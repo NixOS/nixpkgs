@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "weblate-schemas";
-  version = "2025.2";
+  version = "2025.5";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_schemas";
     inherit version;
-    hash = "sha256-C8+p+NHCAbLnHh8ujV5YdbjFSzXsKAoUyNhM3iIRPG4=";
+    hash = "sha256-ZhFF3UD7lX/KXVDZFOn+Gc1w/cpzzVYVrbpVeJ9/wiE=";
   };
 
   build-system = [ setuptools ];

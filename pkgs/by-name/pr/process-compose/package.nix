@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch2,
   installShellFiles,
 }:
 
@@ -11,13 +10,13 @@ let
 in
 buildGoModule rec {
   pname = "process-compose";
-  version = "1.64.1";
+  version = "1.73.0";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = "process-compose";
     tag = "v${version}";
-    hash = "sha256-qv/fVfuQD7Nan5Nn1RkwXoGZuPYSRWQaojEn6MCF9BQ=";
+    hash = "sha256-oqScez+Ms01/TyGo3HmhtEgofIbpLqQtEyQH6kxVGrw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,15 +28,6 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  patches = [
-    # Fix a linker issue with dlopen on x86_64-darwin
-    # https://github.com/f1bonacc1/process-compose/pull/342
-    (fetchpatch2 {
-      url = "https://github.com/F1bonacc1/process-compose/commit/af82749c5dacaa20f2c3b07ca4e081d1b38e40c4.patch";
-      hash = "sha256-5Hgvwn2GEp/lINPefxXdJUGb2TJfufqAPm+/3gdi6XY=";
-    })
-  ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
@@ -55,7 +45,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorHash = "sha256-qkfJo+QGqcqiZMLuWbj0CpgRWxbqTu6DGAW8pBu4O/0=";
+  vendorHash = "sha256-fV0yuANSZyJlPGZ/nt5q9Bz6ps5bKM8gtLmNmfPMMoU=";
 
   doCheck = false;
 

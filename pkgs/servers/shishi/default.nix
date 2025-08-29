@@ -25,20 +25,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shishi";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "mirror://gnu/shishi/shishi-${version}.tar.gz";
-    sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
+    hash = "sha256-lXmP/RLdAaT4jgMR7gPKSibly05ekFmkDk/E2fKRfpI=";
   };
 
   separateDebugInfo = true;
-
-  # Fixes support for gcrypt 1.6+
-  patches = [
-    ./gcrypt-fix.patch
-    ./freebsd-unistd.patch
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

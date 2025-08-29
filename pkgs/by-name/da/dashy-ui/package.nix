@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doDist = false;
   meta = {
-    description = "dashy";
+    description = "Open source, highly customizable, easy-to-use, privacy-respecting dashboard app";
     homepage = "https://dashy.to";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.therealgramdalf ];

@@ -6,19 +6,19 @@
   qttools,
   fio,
   cmake,
-  polkit-qt,
+  polkit-qt-1,
   extra-cmake-modules,
   fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
   pname = "kdiskmark";
-  version = "3.1.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = version;
-    hash = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
+    hash = "sha256-b42PNUrG10RyGct6dPtdT89oO222tEovkSPoRcROfaQ=";
     fetchSubmodules = true;
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qttools
-    polkit-qt
+    polkit-qt-1
   ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+      --replace-fail \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
   '';
 
   qtWrapperArgs = [

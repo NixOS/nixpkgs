@@ -4,7 +4,7 @@
   buildPythonPackage,
   setuptools,
   websockets,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   optional-dependencies.ws = [ websockets ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);

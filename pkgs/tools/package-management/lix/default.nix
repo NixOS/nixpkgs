@@ -17,6 +17,8 @@
   nixpkgs-review,
   nix-direnv,
   nix-fast-build,
+  haskell,
+  nix-serve-ng,
   colmena,
 
   storeDir ? "/nix/store",
@@ -109,6 +111,15 @@ let
           nix-fast-build = nix-fast-build.override {
             inherit (self) nix-eval-jobs;
           };
+
+          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+            (haskell.lib.compose.enableCabalFlag "lix")
+            (haskell.lib.compose.overrideCabal (drv: {
+              # https://github.com/aristanetworks/nix-serve-ng/issues/46
+              # Resetting (previous) broken flag since it may be related to C++ Nix
+              broken = lib.versionAtLeast self.lix.version "2.93";
+            }))
+          ];
 
           colmena = colmena.override {
             nix = self.lix;
@@ -291,9 +302,7 @@ lib.makeExtensible (self: {
 
   latest = self.lix_2_93;
 
-  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
-  # See: https://git.lix.systems/lix-project/lix/issues/662
-  stable = self.lix_2_91;
+  stable = self.lix_2_93;
 
   # Previously, `nix-eval-jobs` was not packaged here, so we export an
   # attribute with the previously-expected structure for compatibility. This

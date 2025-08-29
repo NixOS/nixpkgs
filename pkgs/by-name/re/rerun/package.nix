@@ -6,6 +6,7 @@
   # nativeBuildInputs
   binaryen,
   lld,
+  llvmPackages,
   pkg-config,
   protobuf,
   rustfmt,
@@ -31,16 +32,15 @@
     "map_view"
   ],
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-OMSLCS1j55MYsC3pv4qPQjqO9nRgGj+AUOlcyESFXek=";
+    hash = "sha256-unPgvQcYhshdx5NGCl/pLh8UdJ9T6B8Fd0s8G1NSBmE=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-8XmOtB1U2SAOBchrpKMAv5I8mFvJniVVcmFPugtD4RI=";
+  cargoHash = "sha256-zdq8djnmH8srSd9sml7t6wsbxpTaT3x5/7hkDRgelbg=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -98,6 +98,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustfmt
     nasm
   ];
+
+  # NOTE: Without setting these environment variables the web-viewer
+  # preBuild step uses the nix wrapped CC which doesn't support
+  # multiple targets including wasm32-unknown-unknown. These are taken
+  # from the following issue discussion in the rust ring crate:
+  # https://github.com/briansmith/ring/discussions/2581#discussioncomment-14096969
+  env =
+    let
+      inherit (llvmPackages) clang-unwrapped;
+      majorVersion = lib.versions.major clang-unwrapped.version;
+
+      # resource dir + builtins from the unwrapped clang
+      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${majorVersion}";
+      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${majorVersion}/include";
+    in
+    {
+      CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
+      CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
+    };
 
   buildInputs = [
     freetype

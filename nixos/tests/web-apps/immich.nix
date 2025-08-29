@@ -18,9 +18,6 @@
         enable = true;
         environment.IMMICH_LOG_LEVEL = "verbose";
       };
-
-      # TODO: Remove when PostgreSQL 17 is supported.
-      services.postgresql.package = pkgs.postgresql_16;
     };
 
   testScript = ''

@@ -14,6 +14,7 @@
   bash,
   bindfs,
   dbus,
+  android-tools,
   e2fsprogs,
   fakeroot,
   fuse,
@@ -25,13 +26,13 @@
 }:
 
 let
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "ayasa520";
     repo = "waydroid-helper";
     tag = "v${version}";
-    hash = "sha256-QxtCxujf7S3YRx/4rRMecFBomP+9tqrIBdYhc3WQT20=";
+    hash = "sha256-O1QJzv1p+cBAxVB2YXC45EQMsbIC01StmiIXEGdzqGw=";
   };
 in
 python3Packages.buildPythonApplication {
@@ -83,6 +84,7 @@ python3Packages.buildPythonApplication {
     httpx
     pygobject3
     pyyaml
+    pywayland
   ];
 
   strictDeps = true;
@@ -93,6 +95,7 @@ python3Packages.buildPythonApplication {
     "\${gappsWrapperArgs[@]}"
     "--prefix PATH : ${
       lib.makeBinPath [
+        android-tools
         bindfs
         e2fsprogs
         fakeroot

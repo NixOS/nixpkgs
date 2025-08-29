@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     + lib.optionalString stdenv.cc.isClang " -Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
-    description = "Buzztrax is a modular music composer for Linux";
+    description = "Modular music composer for Linux";
     homepage = "https://www.buzztrax.org/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.bendlas ];

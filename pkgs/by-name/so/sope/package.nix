@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  fetchpatch,
   libxml2,
   openssl,
   openldap,
@@ -14,7 +15,7 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.2";
+  version = "5.12.3";
 
   src = fetchFromGitHub {
     owner = "Alinto";
@@ -23,6 +24,15 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-GeJ1o8Juw7jm3/pkfuMqVpfMxKewU6hQmBoPmb0HgTc=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-53603.patch";
+      url = "https://github.com/Alinto/sope/commit/e954ab0cd254dc1837af690329b04504410cbe63.patch";
+      hash = "sha256-F/dexphHH8S90njmTDvm+NZChbKekv78tUgB+VFOsSY=";
+    })
+  ];
+
+  nativeBuildInputs = lib.optional (libpq != null) [ libpq.pg_config ];
   buildInputs = [
     gnustep-base
     libxml2
@@ -71,9 +81,9 @@ clangStdenv.mkDerivation rec {
   meta = {
     description = "Extensive set of frameworks which form a complete Web application server environment";
     license = lib.licenses.publicDomain;
-    homepage = "https://github.com/inverse-inc/sope";
+    homepage = "https://github.com/Alinto/sope";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];
-    knownVulnerabilities = [ "CVE-2025-53603" ];
+    knownVulnerabilities = [ ];
   };
 }

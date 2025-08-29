@@ -33,13 +33,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "8.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_openstackclient";
     inherit version;
-    hash = "sha256-m5xCs/a8S0tICmJU/FYKywGXh4MeCUOW2/msmuVxrks=";
+    hash = "sha256-1hKvGN/GbMjzHmzpZpC2wnOt6KJA7EC39INaiJb7vgE=";
   };
 
   build-system = [

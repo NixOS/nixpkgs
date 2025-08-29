@@ -29,7 +29,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Kine is an etcdshim that translates etcd API to RDMS";
+    description = "etcdshim that translates etcd API to RDMS";
     homepage = "https://github.com/k3s-io/kine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ techknowlogick ];

@@ -2,7 +2,7 @@
 
 ## Configuring Emacs {#sec-emacs-config}
 
-The Emacs package comes with some extra helpers to make it easier to configure. `emacs.pkgs.withPackages` allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use `company` `counsel`, `flycheck`, `ivy`, `magit`, `projectile`, and `use-package` you could use this as a `~/.config/nixpkgs/config.nix` override:
+The Emacs package comes with some extra helpers to make it easier to configure. `emacs.pkgs.withPackages` allows you to manage packages from ELPA. This means that you will not have to install those packages from within Emacs. For instance, if you wanted to use `company`, `counsel`, `flycheck`, `ivy`, `magit`, `projectile`, and `use-package`, you could use this as a `~/.config/nixpkgs/config.nix` override:
 
 ```nix
 {
@@ -24,7 +24,7 @@ The Emacs package comes with some extra helpers to make it easier to configure. 
 }
 ```
 
-You can install it like any other packages via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provides a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.
+You can install it like any other package via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provides a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.
 
 ```nix
 {

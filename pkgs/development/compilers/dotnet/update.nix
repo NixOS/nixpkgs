@@ -124,13 +124,16 @@ writeScript "update-dotnet-vmr.sh" ''
           gpg --batch --verify release.sig "$tarball"
       )
 
-      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
+      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
           map(select(.PrivateSourceBuiltArtifactsVersion))
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
+          artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
+          eval "$artifactVar"
+
+          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))

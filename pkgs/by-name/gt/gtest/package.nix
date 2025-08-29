@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  sanitiseHeaderPathsHook,
   # Enable C++17 support
   #     https://github.com/google/googletest/issues/3081
   # Projects that require a higher standard can override this package.
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    sanitiseHeaderPathsHook
   ];
 
   cmakeFlags = [

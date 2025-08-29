@@ -11,7 +11,9 @@ let
   mkOcamlPackages =
     ocaml:
     (lib.makeScope newScope (
-      self: with self; {
+      self:
+      with self;
+      {
         inherit ocaml;
 
         ### A ###
@@ -89,7 +91,7 @@ let
         backoff = callPackage ../development/ocaml-modules/backoff { };
 
         bap = callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages_14) llvm;
+          inherit (pkgs.llvmPackages) llvm;
         };
 
         base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -117,8 +119,6 @@ let
         biniou = callPackage ../development/ocaml-modules/biniou { };
 
         binning = callPackage ../development/ocaml-modules/binning { };
-
-        biocaml = throw "biocaml has been removed"; # 2025-06-04
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
@@ -261,6 +261,8 @@ let
         cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
         coin = callPackage ../development/ocaml-modules/coin { };
+
+        colombe = callPackage ../development/ocaml-modules/colombe { };
 
         color = callPackage ../development/ocaml-modules/color { };
 
@@ -534,15 +536,17 @@ let
 
         elpi = callPackage ../development/ocaml-modules/elpi (
           let
-            ppxlib_0_15 =
-              if lib.versionAtLeast ppxlib.version "0.15" then
-                ppxlib.override { version = "0.15.0"; }
-              else
-                ppxlib;
+            ppx_deriving_ =
+              cap:
+              ppx_deriving.override {
+                ppxlib = ppxlib.override {
+                  version = if lib.versionAtLeast ppxlib.version cap then cap else ppxlib.version;
+                };
+              };
           in
           {
-            ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-            inherit ppxlib_0_15;
+            ppx_deriving_0_15 = ppx_deriving_ "0.15";
+            ppx_deriving = ppx_deriving_ "0.33.0";
           }
         );
 
@@ -655,7 +659,6 @@ let
 
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
         gen = callPackage ../development/ocaml-modules/gen { };
@@ -867,7 +870,7 @@ let
           else
             null;
 
-        janeStreet =
+        janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
             import ../development/ocaml-modules/janestreet/0.17.nix {
               inherit self;
@@ -924,7 +927,8 @@ let
             }
           else
             import ../development/ocaml-modules/janestreet {
-            };
+            }
+        );
 
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1041,6 +1045,8 @@ let
         letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
 
         letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
+
+        letters = callPackage ../development/ocaml-modules/letters { };
 
         libc = callPackage ../development/ocaml-modules/libc { };
 
@@ -1317,6 +1323,7 @@ let
         multicore-bench = callPackage ../development/ocaml-modules/multicore-bench { };
 
         multicore-magic = callPackage ../development/ocaml-modules/multicore-magic { };
+        multicore-magic-dscheck = callPackage ../development/ocaml-modules/multicore-magic/dscheck.nix { };
 
         multipart_form = callPackage ../development/ocaml-modules/multipart_form { };
 
@@ -1348,6 +1355,8 @@ let
         nottui-lwt = callPackage ../development/ocaml-modules/lwd/nottui-lwt.nix { };
 
         nottui-pretty = callPackage ../development/ocaml-modules/lwd/nottui-pretty.nix { };
+
+        nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
 
         notty = callPackage ../development/ocaml-modules/notty { };
 
@@ -1416,8 +1425,6 @@ let
         ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
-
-        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -1689,7 +1696,9 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
-        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml { };
+        ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
+          mdx = mdx.override { inherit logs; };
+        };
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
@@ -1824,17 +1833,6 @@ let
 
         resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
-        resto = callPackage ../development/ocaml-modules/resto { };
-        resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
-        resto-cohttp = callPackage ../development/ocaml-modules/resto/cohttp.nix { };
-        resto-cohttp-client = callPackage ../development/ocaml-modules/resto/cohttp-client.nix { };
-        resto-cohttp-self-serving-client =
-          callPackage ../development/ocaml-modules/resto/cohttp-self-serving-client.nix
-            { };
-        resto-cohttp-server = callPackage ../development/ocaml-modules/resto/cohttp-server.nix { };
-        resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
-        resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
-
         result = callPackage ../development/ocaml-modules/ocaml-result { };
 
         rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
@@ -1892,6 +1890,8 @@ let
         semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
         semver = callPackage ../development/ocaml-modules/semver { };
+
+        sendmail = callPackage ../development/ocaml-modules/colombe/sendmail.nix { };
 
         seq = callPackage ../development/ocaml-modules/seq { };
 
@@ -2209,6 +2209,11 @@ let
 
         ### End ###
 
+      }
+      // lib.optionalAttrs config.allowAliases {
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
+        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
     )).overrideScope
       liftJaneStreet;

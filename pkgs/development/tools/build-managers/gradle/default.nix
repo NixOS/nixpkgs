@@ -223,6 +223,11 @@ rec {
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
+  gradle_9 = gen {
+    version = "9.0.0";
+    hash = "sha256-j609eClspRgRPz0pAWYXx/k2fcAF+TK9nZO/RbpGBys=";
+    defaultJava = jdk21;
+  };
   gradle_8 = gen {
     version = "8.14.3";
     hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";

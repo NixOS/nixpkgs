@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
-  setuptools-git,
   numpy,
   pandas,
   bokeh,
@@ -20,10 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-c4od7ij8U98u2jXqLy0aHDfdugHfFCI/yeh9gKHvvC4=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'setuptools_git'," ""
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
-    setuptools-git
   ];
 
   dependencies = [

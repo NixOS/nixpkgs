@@ -53,6 +53,10 @@ let
           mkdir -p $out/bin
           makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
             --add-flags "-jar $out/share/java/${jar'}.jar"
+
+          # Other distributions like debian distribute it as saxon*-xslt,
+          # this makes compilling packages that target other distros easier.
+          ln -s $out/bin/${mainProgram} $out/bin/${mainProgram}-xslt
         ''
         + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
           mv lib $out/share/java

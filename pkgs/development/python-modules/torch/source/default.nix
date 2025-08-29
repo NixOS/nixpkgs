@@ -72,13 +72,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ?
-    if cudaSupport then
-      triton-cuda
-    else if rocmSupport then
-      rocmPackages.triton
-    else
-      triton,
+  _tritonEffective ? if cudaSupport then triton-cuda else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -552,10 +546,7 @@ buildPythonPackage rec {
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl # Provides nccl.h AND a static copy of NCCL!
     ]
-    ++ lists.optionals (cudaOlder "11.8") [
-      cuda_nvprof # <cuda_profiler_api.h>
-    ]
-    ++ lists.optionals (cudaAtLeast "11.8") [
+    ++ [
       cuda_profiler_api # <cuda_profiler_api.h>
     ]
   )

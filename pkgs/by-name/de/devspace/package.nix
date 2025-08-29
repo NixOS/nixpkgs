@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "devspace";
-  version = "6.3.16";
+  version = "6.3.17";
 
   src = fetchFromGitHub {
     owner = "devspace-sh";
     repo = "devspace";
     rev = "v${version}";
-    hash = "sha256-MkH38rzeHnw3kf7HEPFVJIUzm+dcmplD92+tw4dyOyE=";
+    hash = "sha256-b0eRiPt4g8JEoQPdl3qXsEXuYIy+VvVBU8/cPIqW/20=";
   };
 
   vendorHash = null;

@@ -49,7 +49,7 @@ jobs:
                     repo: context.repo.repo,
                     pull_number: pull_request.number
                   })).filter(review =>
-                    review.user.login == 'github-actions[bot]' &&
+                    review.user?.login == 'github-actions[bot]' &&
                     review.state == 'DISMISSED'
                   ).map(review => github.graphql(`
                     mutation($node_id:ID!) {

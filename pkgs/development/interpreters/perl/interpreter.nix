@@ -87,6 +87,9 @@ stdenv.mkDerivation (
       ./cpp-precomp.patch
       ./sw_vers.patch
     ]
+    # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+    # https://github.com/arsv/perl-cross/pull/159
+    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross-fdopendir.patch
     ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
     ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
 
@@ -324,11 +327,8 @@ stdenv.mkDerivation (
       rev = crossVersion;
       hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
-    patches = [
-      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
-      # https://github.com/arsv/perl-cross/pull/159
-      ./cross-fdopendir.patch
-    ];
+
+    # Patches are above!!!
 
     depsBuildBuild = [
       buildPackages.stdenv.cc

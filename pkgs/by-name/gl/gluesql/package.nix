@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "GlueSQL is quite sticky. It attaches to anywhere";
+    description = "Rust library for SQL databases";
     homepage = "https://github.com/gluesql/gluesql";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

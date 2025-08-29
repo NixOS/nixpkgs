@@ -45,6 +45,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/buildpacks/pack/";
     license = lib.licenses.asl20;
     mainProgram = "pack";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

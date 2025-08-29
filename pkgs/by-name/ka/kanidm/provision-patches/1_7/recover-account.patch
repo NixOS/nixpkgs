@@ -45,9 +45,9 @@ index 90ccb1927..85e31ddef 100644
  pub enum AdminTaskRequest {
 -    RecoverAccount { name: String },
 +    RecoverAccount { name: String, password: Option<String> },
+     DisableAccount { name: String },
      ShowReplicationCertificate,
      RenewReplicationCertificate,
-     RefreshReplicationConsumer,
 @@ -309,8 +309,8 @@ async fn handle_client(
  
          let resp = async {

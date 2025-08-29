@@ -421,7 +421,6 @@ with lib.maintainers;
       frlan
       leona
       osnyx
-      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -451,8 +450,9 @@ with lib.maintainers;
   fslabs = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      greaka
       lpostula
+      mockersf
+      NthTensor
     ];
     scope = "Group registration for packages maintained by Foresight Spatial Labs.";
     shortName = "Foresight Spatial Labs employees";
@@ -1022,7 +1022,6 @@ with lib.maintainers;
   php = {
     members = [
       aanderse
-      drupol
       ma27
       piotrkwiecinski
       talyz
@@ -1249,6 +1248,17 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
+  };
+
+  uzinfocom = {
+    members = [
+      orzklv
+      bahrom04
+      bemeritus
+      shakhzodkudratov
+    ];
+    scope = "Maintain Uzbek Linux state & community packages and modules.";
+    shortName = "Uzinfocom Open Source";
   };
 
   windows = {

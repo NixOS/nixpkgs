@@ -38,24 +38,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
-    rev = finalAttrs.version;
-    hash = "sha256-WumXAWO65XnNQqHMqAwfj2Y+KGOVTWx95qIuyE1M9us=";
+    tag = finalAttrs.version;
+    hash = "sha256-554ZN+GfkGHN0cthsb/fPWdo+U2IqLz4q+x60SxRAfk=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-FindMUMPS.cmake.patch";
-      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
-      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
-    })
     # update include file path and link with clangAPINotes
     # https://github.com/casadi/casadi/issues/3969
     ./clang-19.diff
+
+    # Add missing include
+    # ref. https://github.com/casadi/casadi/pull/4192
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/4192/commits/fc1a83e8db37f328657eabff41f00a9a34d3cc74.patch";
+      hash = "sha256-9GXOtYa/BFq5vp6tE8HxO8xW3ep3my6TPD3FvkDhUUA=";
+    })
+
+    # Fix build with osqp v1
+    # ref. https://github.com/casadi/casadi/pull/4105
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/4105/commits/cca4eb5d423c9d034f0666f71338063d3f8c9c43.patch";
+      hash = "sha256-pDI9x4yzPj+rjtzZpFKwfSsyE52Jt20izfqo5blkUOA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/4105/commits/6035a95e48088928134c3827ab90a2a3a82b1389.patch";
+      hash = "sha256-1nOcCLXVwFBRH/abAhTly28+1oNjDumJCjT0NyRAgz0=";
+    })
   ];
 
   postPatch = ''
@@ -200,7 +213,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "CasADi is a symbolic framework for numeric optimization implementing automatic differentiation in forward and reverse modes on sparse matrix-valued computational graphs. It supports self-contained C-code generation and interfaces state-of-the-art codes such as SUNDIALS, IPOPT etc. It can be used from C++, Python or Matlab/Octave";
+    description = "Symbolic framework for numeric optimization";
+    longDescription = ''
+      CasADi is a symbolic framework for numeric optimization
+      implementing automatic differentiation in forward and reverse
+      modes on sparse matrix-valued computational graphs. It supports
+      self-contained C-code generation and interfaces state-of-the-art
+      codes such as SUNDIALS, IPOPT etc. It can be used from C++,
+      Python or Matlab/Octave
+    '';
     homepage = "https://github.com/casadi/casadi";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];

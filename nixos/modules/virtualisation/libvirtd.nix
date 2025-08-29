@@ -31,6 +31,10 @@ let
     ''}
     ${cfg.qemu.verbatimConfig}
   '';
+  networkConfigFile = pkgs.writeText "network.conf" ''
+    firewall_backend = "${cfg.firewallBackend}"
+  '';
+
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
 
@@ -146,7 +150,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
           and called for daemon start/shutdown/SIGHUP events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -156,7 +160,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
           and called for qemu domains begin/end/migrate events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -166,7 +170,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
           and called for lxc domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -176,7 +180,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
           and called for libxl-handled xen domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -186,7 +190,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/network.d/
           and called for networks begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
     };
@@ -201,7 +205,7 @@ let
           This option enables the older libvirt NSS module. This method uses
           DHCP server records, therefore is dependent on the hostname provided
           by the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
 
@@ -211,7 +215,7 @@ let
         description = ''
           This option enables the newer libvirt_guest NSS module. This module
           uses the libvirt guest name instead of the hostname of the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
     };
@@ -385,6 +389,18 @@ in
         Whether to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
+
+    firewallBackend = mkOption {
+      type = types.enum [
+        "iptables"
+        "nftables"
+      ];
+      default = if config.networking.nftables.enable then "nftables" else "iptables";
+      defaultText = lib.literalExpression "if config.networking.nftables.enable then \"nftables\" else \"iptables\"";
+      description = ''
+        The backend used to setup virtual network firewall rules.
+      '';
+    };
   };
 
   ###### implementation
@@ -461,6 +477,9 @@ in
 
         # Copy generated qemu config to libvirt directory
         cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
+
+        # Copy generated network config to libvirt directory
+        cp -f ${networkConfigFile} /var/lib/${dirName}/network.conf
 
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
         for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do

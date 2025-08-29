@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.42.0";
+  version = "2.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-9HUomW55Yg5N7u3Wb4imzRUYECeGkb3lkHPLEGzuAnA=";
+    hash = "sha256-U82hGvWXkKwZ4um0VevVoYiIfzswu5hLDYvxtqJqmHU=";
   };
 
   build-system = [
@@ -101,6 +101,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "lxml"
+    "pypdfium2"
     "pillow"
   ];
 
@@ -167,6 +169,8 @@ buildPythonPackage rec {
     "test_confidence"
     "test_e2e_webp_conversions"
     "test_asr_pipeline_conversion"
+    "test_threaded_pipeline"
+    "test_pipeline_comparison"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

@@ -2,16 +2,17 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rc+ojp4h++ctkjS/pew/p06lxWshrkOizkv63BLsmJQ=";
+    hash = "sha256-9EsULRhqXttn4vSayOOTCpvX6ZjJygjWx5OQJrEC43E=";
   };
 
   vendorHash = "sha256-lW5XIaY5NAn3sSDJExMd1i/dueb4p1Uc4Qpr4xsgmfE=";
@@ -22,6 +23,12 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "cmd/terraform-mcp-server" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Terraform Model Context Protocol (MCP) Server";
@@ -36,7 +43,10 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/hashicorp/terraform-mcp-server";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ connerohnesorge ];
+    maintainers = with lib.maintainers; [
+      connerohnesorge
+      pilz
+    ];
     mainProgram = "terraform-mcp-server";
   };
 })

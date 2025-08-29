@@ -453,7 +453,7 @@ in
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
         MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
       };
     };
     buildInputs = oa.buildInputs ++ [

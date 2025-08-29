@@ -10,7 +10,7 @@
   libxml2,
   libX11,
   glslang,
-  llvmPackages_13,
+  llvmPackages_14,
   versionCheckHook,
   gitUpdater,
 
@@ -27,33 +27,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.12.1";
+  version = "2025.15.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5M/sKoCFVGW4VcOPzL8dVhTuo+esjINPXw76fnO7OEw=";
+    hash = "sha256-PBsBLzQ1+7+4Uw18OOhxkMZC5+YiUJlfHfIp7wUM5Rk=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Slang's build definitions do not support using system provided cmake packages
-    # for its dependencies.
-    # While it does come with "SLANG_USE_SYSTEM_XYZ" flags, these expect Slang to be
-    # imported into some other CMake build that already provides the necessary target.
-    # This patch adds the required `find_package` calls and sets up target aliases where needed.
-    ./1-find-packages.patch
-  ]
-  ++ lib.optionals withSharedLLVM [
-    # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
-    ./2-shared-llvm.patch
-  ]
-  ++ lib.optionals withGlslang [
-    # Upstream depends on glslang 13 and there are minor breaking changes in glslang 15, the version
-    # we ship in nixpkgs.
-    ./3-glslang-15.patch
-  ];
+  patches =
+    lib.optionals withSharedLLVM [
+      # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
+      ./1-shared-llvm.patch
+    ]
+    ++ lib.optionals withGlslang [
+      # Upstream depends on glslang 13 and there are minor breaking changes in glslang 15, the version
+      # we ship in nixpkgs.
+      ./2-glslang-15.patch
+    ];
 
   outputs = [
     "out"
@@ -78,10 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ]
   ++ lib.optionals withLLVM [
-    # Slang only supports LLVM 13:
-    # https://github.com/shader-slang/slang/blob/master/docs/building.md#llvm-support
-    llvmPackages_13.llvm
-    llvmPackages_13.libclang
+    # Slang only supports LLVM 14:
+    # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
+    llvmPackages_14.llvm
+    llvmPackages_14.libclang
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -114,13 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Handled by separateDebugInfo so we don't need special installation handling
     "-DSLANG_ENABLE_SPLIT_DEBUG_INFO=OFF"
     "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
-    # slang-rhi tries to download WebGPU dawn binaries, and as stated on
-    # https://github.com/shader-slang/slang-rhi is "under active refactoring
-    # and development, and is not yet ready for general use."
-    "-DSLANG_ENABLE_SLANG_RHI=OFF"
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
     "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
+    # slang-rhi tries to download headers and precompiled binaries for these backends
+    "-DSLANG_RHI_ENABLE_OPTIX=OFF"
+    "-DSLANG_RHI_ENABLE_VULKAN=OFF"
+    "-DSLANG_RHI_ENABLE_METAL=OFF"
+    "-DSLANG_RHI_ENABLE_WGPU=OFF"
   ]
   ++ lib.optionals withGlslang [
     "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"

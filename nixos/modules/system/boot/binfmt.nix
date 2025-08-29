@@ -185,7 +185,7 @@ in
 
         description = ''
           Extra binary formats to register with the kernel.
-          See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
+          See <https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html> for more details.
         '';
 
         type = types.attrsOf (

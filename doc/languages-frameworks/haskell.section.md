@@ -17,7 +17,7 @@ The compiler and most build tools are exposed at the top level:
 * `ghc` is the default version of GHC
 * Language specific tools: `cabal-install`, `stack`, `hpack`, …
 
-Many “normal” user facing packages written in Haskell, like `niv` or `cachix`,
+Many “normal” user-facing packages written in Haskell, like `niv` or `cachix`,
 are also exposed at the top level, and there is nothing Haskell specific to
 installing and using them.
 
@@ -57,7 +57,7 @@ Available compilers are collected under `haskell.compiler`.
 Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.8 is `haskell.packages.ghc948`. In fact `haskellPackages` (at the time of writing) is just an alias
+9.4.8 is `haskell.packages.ghc948`. In fact, `haskellPackages` (at the time of writing) is just an alias
 for `haskell.packages.ghc984`:
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
@@ -110,12 +110,12 @@ files to loosen this a bit.
 
 Normally when you build Haskell packages with `cabal-install`, `cabal-install`
 does dependency resolution. It will look at all Haskell package versions known
-on Hackage and tries to pick for every (transitive) dependency of your build
+on Hackage and try to pick for every (transitive) dependency of your build
 exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
-It will take as input packages with names off the desired dependencies
+It will take as input packages with names of the desired dependencies
 and just check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
 
@@ -131,8 +131,8 @@ for a specific package, see
 ### Limitations {#haskell-limitations}
 
 Our main objective with `haskellPackages` is to package Haskell software in
-nixpkgs. This entails some limitations, partially due to self-imposed
-restrictions of nixpkgs, partially in the name of maintainability:
+Nixpkgs. This entails some limitations, partially due to self-imposed
+restrictions of Nixpkgs, partially in the name of maintainability:
 
 * Only the packages built with the default compiler see extensive testing of the
   whole package set. For other GHC versions only a few essential packages are
@@ -184,7 +184,7 @@ Older minor versions for a supported major version will only be kept, if they ar
 
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
-Every haskell package set has its own haskell-aware `mkDerivation` which is used
+Every Haskell package set has its own Haskell-aware `mkDerivation` which is used
 to build its packages. Generally you won't have to interact with this builder
 since [cabal2nix](#haskell-cabal2nix) can generate packages
 using it for an arbitrary cabal package definition. Still it is useful to know
@@ -192,7 +192,7 @@ the parameters it takes when you need to
 [override](#haskell-overriding-haskell-packages) a generated Nix expression.
 
 `haskellPackages.mkDerivation` is a wrapper around `stdenv.mkDerivation` which
-re-defines the default phases to be haskell aware and handles dependency
+re-defines the default phases to be Haskell-aware and handles dependency
 specification, test suites, benchmarks etc. by compiling and invoking the
 package's `Setup.hs`. It does *not* use or invoke the `cabal-install` binary,
 but uses the underlying `Cabal` library instead.
@@ -541,7 +541,7 @@ turtle-incremental-build
 
 ## Development environments {#haskell-development-environments}
 
-In addition to building and installing Haskell software, nixpkgs can also
+In addition to building and installing Haskell software, Nixpkgs can also
 provide development environments for Haskell projects. This has the obvious
 advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
@@ -720,7 +720,7 @@ pkgs.haskellPackages.shellFor {
 
 ### haskell-language-server {#haskell-language-server}
 
-To use HLS in short: Install `pkgs.haskell-language-server` e.g. in
+To use HLS in short: Install `pkgs.haskell-language-server`, e.g. in
 `nativeBuildInputs` in `shellFor` and use the `haskell-language-server-wrapper`
 command to run it. See the [HLS user guide] on how to configure your text
 editor to use HLS and how to test your setup.
@@ -754,7 +754,7 @@ stack) and pick the appropriate versioned binary from your path.
 
 Be careful when installing HLS globally and using a pinned nixpkgs for a
 Haskell project in a `nix-shell`. If the nixpkgs versions deviate to much
-(e.g., use different `glibc` versions) the `haskell-language-server-?.?.?`
+(e.g., use different `glibc` versions) the `haskell-language-server-?.?.?`
 executable will try to detect these situations and refuse to start. It is
 recommended to obtain HLS via `nix-shell` from the nixpkgs version pinned in
 there instead.

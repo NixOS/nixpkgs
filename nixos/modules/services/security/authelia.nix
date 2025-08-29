@@ -48,7 +48,7 @@ let
             as the values will be preserved in your nix store.
             This attribute allows you to configure the location of secret files to be loaded at runtime.
 
-            https://www.authelia.com/configuration/methods/secrets/
+            <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
           type = types.submodule {
@@ -117,7 +117,7 @@ let
             If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
             or make sure you use the `_FILE` suffix.
             If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
-            For more details: https://www.authelia.com/configuration/methods/secrets/
+            For more details: <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
         };
@@ -128,7 +128,7 @@ let
             There are several values that are defined and documented in nix such as `default_2fa_method`,
             but additional items can also be included.
 
-            https://github.com/authelia/authelia/blob/master/config.template.yml
+            <https://github.com/authelia/authelia/blob/master/config.template.yml>
           '';
           default = { };
           example = ''
@@ -284,7 +284,7 @@ in
         Multi-domain protection currently requires multiple instances of Authelia.
         If you don't require multiple instances of Authelia you can define just the one.
 
-        https://www.authelia.com/roadmap/active/multi-domain-protection/
+        <https://www.authelia.com/roadmap/active/multi-domain-protection/>
       '';
       example = ''
         {

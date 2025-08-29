@@ -183,6 +183,10 @@ let
       orga = "stsewd";
       repo = "tree-sitter-rst";
     };
+    "tree-sitter-sml" = {
+      orga = "MatthewFluet";
+      repo = "tree-sitter-sml";
+    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";

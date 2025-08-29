@@ -166,7 +166,7 @@ The following is a non-exhaustive list of such differences:
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
 If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
-The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
@@ -336,7 +336,7 @@ To determine the exact rules for dependency propagation, we start by assigning t
 | `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
 | `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
-Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
 We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules below. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
 
@@ -437,7 +437,7 @@ Since these packages are able to be run at build-time, they are always added to 
 
 ##### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost`, but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -734,7 +734,7 @@ The key to use when specifying the installation [`prefix`](#var-stdenv-prefix). 
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
-By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+By default, when building statically, `stdenv` will try to add build system appropriate configure flags to try to enable static builds.
 
 If this is undesirable, set this variable to true.
 
@@ -1017,8 +1017,8 @@ If set to `true`, the standard environment will enable debug information in C/C+
 To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
 
 ```nix
-let
-  pkgs = import ./. {
+{
+  pkgs ? import <nixpkgs> {
     config = { };
     overlays = [
       (final: prev: {
@@ -1026,21 +1026,15 @@ let
         readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
       })
     ];
-  };
-
-  myDebugInfoDirs = pkgs.symlinkJoin {
-    name = "myDebugInfoDirs";
-    paths = with pkgs; [
-      glibc.debug
-      ncurses.debug
-      openssl.debug
-      readline.debug
-    ];
-  };
-in
+  },
+}:
 pkgs.mkShell {
-
-  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = pkgs.lib.makeSearchPathOutput "debug" "lib/debug" [
+    pkgs.glibc
+    pkgs.ncurses
+    pkgs.openssl
+    pkgs.readline
+  ];
 
   packages = [
     pkgs.gdb
@@ -1048,16 +1042,16 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+    gdb socat
   '';
 }
 ```
 
 This setup works as follows:
 - Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
-- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
-- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
-- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use this variable for looking up debug symbols.
+  [`lib.makeSearchPathOutput`](#function-library-lib.strings.makeSearchPathOutput) constructs a colon-separated search path, pointing to the directories containing the debug symbols of the listed packages.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell).
 
 :::
 
@@ -1529,7 +1523,7 @@ Note that support for some hardening flags varies by compiler, CPU architecture,
 
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
-The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
+The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to be packaged is incompatible.
 
 #### `format` {#format}
 

@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "25.1.4";
+  version = "25.2";
   pyproject = true;
 
   namePrefix = "";
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "cloud-init";
     tag = version;
-    hash = "sha256-Ubu0uhpRrr4eV4ztOq/l004/+B2kjBWjRNwYcuHCfbU=";
+    hash = "sha256-Ww76dhfoGrIbxPiXHxDjpgPsinmfrs42NnGmzhBeGC0=";
   };
 
   patches = [

@@ -90,8 +90,6 @@ let
       pname,
       meta,
       buildInputs ? [ ],
-      everythingFile ? "./Everything.agda",
-      includePaths ? [ ],
       libraryName ? pname,
       libraryFile ? "${libraryName}.agda-lib",
       buildPhase ? null,
@@ -100,17 +98,14 @@ let
       ...
     }:
     let
-      agdaWithArgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
-      includePathArgs = concatMapStrings (path: "-i" + path + " ") (
-        includePaths ++ [ (dirOf everythingFile) ]
-      );
+      agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
     in
     {
       inherit libraryName libraryFile;
 
       isAgdaDerivation = true;
 
-      buildInputs = buildInputs ++ [ agdaWithArgs ];
+      buildInputs = buildInputs ++ [ agdaWithPkgs ];
 
       buildPhase =
         if buildPhase != null then
@@ -118,8 +113,7 @@ let
         else
           ''
             runHook preBuild
-            agda ${includePathArgs} ${everythingFile}
-            rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
+            agda --build-library
             runHook postBuild
           '';
 

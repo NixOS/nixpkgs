@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.9";
+  version = "1.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "SasView";
     repo = "sasmodels";
     tag = "v${version}";
-    hash = "sha256-eD0YTQYR64tKwG7VxmQkHV2ZACs24hx/sS4me7qTcu4=";
+    hash = "sha256-cTXFlTCm521+xhcggFvDqVZrTJuDiVZ8PazBwA3mKJU=";
   };
 
   build-system = [ setuptools ];

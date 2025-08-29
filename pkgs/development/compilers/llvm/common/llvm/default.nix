@@ -296,7 +296,7 @@ stdenv.mkDerivation (
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
           (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ++
-        lib.optional (lib.versions.major release_version == "20" && stdenv.hostPlatform.isRiscV)
+        lib.optional (lib.versions.major release_version == "20")
           # Test failure on riscv64, fixed in llvm 21
           # https://github.com/llvm/llvm-project/issues/150818
           (

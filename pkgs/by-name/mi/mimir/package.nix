@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.16.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     rev = "mimir-${version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-+GFsWBjZHxRe3a2/ZT0zkoRXDTR4qopTUcU5Fx9t5xA=";
+    hash = "sha256-auA063TveLtfLD7W1/RuN4COljiwKqz0K/l2vwtxPTQ=";
   };
 
   vendorHash = null;
@@ -30,6 +30,8 @@ buildGoModule rec {
     "list-deduplicated-blocks"
     "listblocks"
     "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
     "undelete-blocks"
   ]);
 

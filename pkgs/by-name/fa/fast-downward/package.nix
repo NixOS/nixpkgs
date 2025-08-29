@@ -74,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fast-downward.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

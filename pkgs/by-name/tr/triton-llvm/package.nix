@@ -6,7 +6,6 @@
   pkg-config,
   cmake,
   ninja,
-  git,
   libxml2,
   libxcrypt,
   libedit,
@@ -65,7 +64,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "21.0.0-git"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "21.0.0-unstable-2025-06-10"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   outputs = [
     "out"
@@ -81,15 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "a66376b0dc3b2ea8a84fda26faca287980986f78";
-    hash = "sha256-7xUPozRerxt38UeJxA8kYYxOQ4+WzDREndD2+K0BYkU=";
+    rev = "8957e64a20fc7f4277565c6cfe3e555c119783ce";
+    hash = "sha256-ljdwHPLGZv72RBPBg5rs7pZczsB+WJhdCeHJxoi4gJQ=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
     ninja
-    git
     python
   ]
   ++ lib.optionals (buildDocs || buildMan) [

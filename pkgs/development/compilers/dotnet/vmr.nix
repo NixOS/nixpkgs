@@ -18,6 +18,7 @@
   darwin,
   xcbuild,
   swiftPackages,
+  apple-sdk_13,
   openssl,
   getconf,
   python3,
@@ -109,12 +110,15 @@ stdenv.mkDerivation rec {
     krb5
     lttng-ust_2_12
   ]
-  ++ lib.optionals isDarwin [
-    xcbuild
-    swift
-    krb5
-    sigtool
-  ];
+  ++ lib.optionals isDarwin (
+    [
+      xcbuild
+      swift
+      krb5
+      sigtool
+    ]
+    ++ lib.optional (lib.versionAtLeast version "10") apple-sdk_13
+  );
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -141,9 +145,8 @@ stdenv.mkDerivation rec {
       ./vmr-compiler-opt-v8.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "10") [
-      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: The "AddSourceToNuGetConfig" task failed unexpectedly.
-      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: System.Xml.XmlException->Microsoft.Build.Framework.BuildException.GenericBuildTransferredException: There are multiple root elements. Line 9, position 2.
-      ./source-build-externals-overwrite-rather-than-append-.patch
+      ./mscordac-fix-missing-libunwind-symbols-on-linux.patch
+      ./bundler-fix-file-size-estimation-when-bundling-symli.patch
     ];
 
   postPatch = ''
@@ -178,24 +181,20 @@ stdenv.mkDerivation rec {
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
       src/source-build-reference-packages/src/referencePackages/Directory.Build.props
 
+  ''
+  + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
     xmlstarlet ed \
       --inplace \
       -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
-      src/source-build-externals/src/${lib.optionalString (lib.versionAtLeast version "10") "repos/src/"}application-insights/.props/_GlobalStaticVersion.props
+      src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+  ''
+  + ''
 
     # this fixes compile errors with clang 15 (e.g. darwin)
     substituteInPlace \
       src/runtime/src/native/libs/CMakeLists.txt \
       --replace-fail 'add_compile_options(-Weverything)' 'add_compile_options(-Wall)'
-
-    # strip native symbols in runtime
-    # see: https://github.com/dotnet/source-build/issues/2543
-    xmlstarlet ed \
-      --inplace \
-      -s //Project -t elem -n PropertyGroup \
-      -s \$prev -t elem -n KeepNativeSymbols -v false \
-      src/runtime/Directory.Build.props
   ''
   + lib.optionalString (lib.versionAtLeast version "9") (
     ''
@@ -393,6 +392,10 @@ stdenv.mkDerivation rec {
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   LOCALE_ARCHIVE = lib.optionalString isLinux "${glibcLocales}/lib/locale/locale-archive";
 
+  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+  # caused by separateDebugInfo
+  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+
   buildFlags = [
     "--with-packages"
     bootstrapSdk.artifacts
@@ -447,11 +450,11 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstall
 
-      mkdir "$out"
+      mkdir -p "$out"/lib
 
       pushd "artifacts/${assets}/Release"
       find . -name \*.tar.gz | while read archive; do
-        target=$out/$(basename "$archive" .tar.gz)
+        target=$out/lib/$(basename "$archive" .tar.gz)
         # dotnet 9 currently has two copies of the sdk tarball
         [[ ! -e "$target" ]] || continue
         mkdir "$target"
@@ -460,7 +463,7 @@ stdenv.mkDerivation rec {
       popd
 
       local -r unpacked="$PWD/.unpacked"
-      for nupkg in $out/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
+      for nupkg in $out/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
           rm -rf "$unpacked"
           unzip ${unzipFlags} "$unpacked" "$nupkg"
           chmod -R +rw "$unpacked"
@@ -479,9 +482,6 @@ stdenv.mkDerivation rec {
     echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
   '';
 
-  # dotnet cli is in the root, so we need to strip from there
-  # TODO: should we install in $out/share/dotnet?
-  stripDebugList = [ "." ];
   # stripping dlls results in:
   # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
   # stripped crossgen2 results in:
@@ -490,6 +490,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     stripExclude=(\*.dll crossgen2)
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     inherit releaseManifest buildRid targetRid;

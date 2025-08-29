@@ -28,6 +28,10 @@ buildPythonPackage rec {
     regex
   ];
 
+  pythonRelaxDeps = [
+    "regex"
+  ];
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook

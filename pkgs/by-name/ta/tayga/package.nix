@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xOm4fetFq2UGuhOojrT8WOcX78c6MLTMVbDv+O62x2E=";
   };
 
+  makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
+
   preBuild = ''
     echo "#define TAYGA_VERSION \"${finalAttrs.version}\"" > version.h
   '';

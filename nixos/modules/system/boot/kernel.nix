@@ -387,7 +387,7 @@ in
     (mkIf config.boot.kernel.enable {
       system.build = { inherit kernel; };
 
-      system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+      system.modulesTree = [ (lib.getOutput "modules" kernel) ] ++ config.boot.extraModulePackages;
 
       # Not required for, e.g., containers as they don't have their own kernel or initrd.
       # They boot directly into stage 2.
@@ -496,7 +496,6 @@ in
         with config.lib.kernelConfig;
         [
           # !!! Should this really be needed?
-          (isYes "MODULES")
           (isYes "BINFMT_ELF")
         ]
         ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));

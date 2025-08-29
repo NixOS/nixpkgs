@@ -98,7 +98,7 @@ in
 
         This option is incompatible with `addNetworkInterface`.
 
-        Note: This is experimental. Please check https://github.com/cyberus-technology/virtualbox-kvm/issues.
+        Note: This is experimental. Please check <https://github.com/cyberus-technology/virtualbox-kvm/issues>.
       '';
     };
   };

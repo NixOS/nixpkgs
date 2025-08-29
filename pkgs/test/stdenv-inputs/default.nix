@@ -42,14 +42,13 @@ in
 
 stdenv.mkDerivation {
   name = "stdenv-inputs-test";
-  phases = [ "buildPhase" ];
 
   buildInputs = [
     foo
     bar
   ];
 
-  buildPhase = ''
+  buildCommand = ''
     env
 
     printf "checking whether binaries are available... " >&2

@@ -2,7 +2,6 @@
   autoPatchelfHook,
   blas,
   cmake,
-  cudaPackages_11 ? null,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
@@ -158,11 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
       cuda_cudart # cuda_runtime.h
       libcublas # cublas_v2.h
       libcusparse # cusparse.h
-    ]
-    ++ lists.optionals (cudaOlder "11.8") [
-      cuda_nvprof # <cuda_profiler_api.h>
-    ]
-    ++ lists.optionals (cudaAtLeast "11.8") [
       cuda_profiler_api # <cuda_profiler_api.h>
     ]
   )

@@ -8,18 +8,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/PuykGiXpjk2Fp1Sif59hvOIepZ7KcJRvL/9RMatQJA=";
+    hash = "sha256-s4+1hqdlJh5jOy6uZz608n5DzuBR+v/s+7D85oFwQIY=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-HzrN549MfI+TN7BKssisIsga7udGKvextruzuoLq8M4=";
+    hash = "sha256-cGO66hQxgpoxphtt/BPPDIBuAG8yQseCdzUdAO2mkr4=";
   };
 
   buildPhase = ''
@@ -50,6 +50,9 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "qwen";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lonerOrz ];
+    maintainers = with lib.maintainers; [
+      lonerOrz
+      taranarmo
+    ];
   };
 })

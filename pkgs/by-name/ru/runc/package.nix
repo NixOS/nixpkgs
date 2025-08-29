@@ -9,19 +9,20 @@
   libapparmor,
   libseccomp,
   libselinux,
+  runtimeShell,
   makeWrapper,
   nixosTests,
 }:
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.15";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    rev = "v${version}";
-    hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
+    tag = "v${version}";
+    hash = "sha256-oXoDio3l23Z6UyAhb9oDMo1O4TLBbFyLh9sRWXnfLVY=";
   };
 
   vendorHash = null;
@@ -44,7 +45,10 @@ buildGoModule rec {
     libapparmor
   ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" ];
+  makeFlags = [
+    "BUILDTAGS+=seccomp"
+    "SHELL=${runtimeShell}"
+  ];
 
   buildPhase = ''
     runHook preBuild

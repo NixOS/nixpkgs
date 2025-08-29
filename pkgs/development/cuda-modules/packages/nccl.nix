@@ -20,14 +20,8 @@ let
     cudaAtLeast
     flags
     ;
-  # versions 2.26+ with CUDA 11.x error with
-  # fatal error: cuda/atomic: No such file or directory
-  version = if cudaAtLeast "12.0" then "2.27.6-1" else "2.25.1-1";
-  hash =
-    if cudaAtLeast "12.0" then
-      "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU="
-    else
-      "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
+  version = "2.27.6-1";
+  hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
@@ -58,12 +52,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cuda_nvcc # crt/host_config.h
     cuda_cudart
-  ]
-  # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
-  # against other version, like below, it's important that we use the same format. Otherwise,
-  # we'll get incorrect results.
-  # For example, lib.versionAtLeast "12.0" "12.0.0" == false.
-  ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+    cuda_cccl
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 

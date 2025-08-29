@@ -15,8 +15,6 @@ let
     vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null
   ) vhostsConfigs;
   vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
   virtualHosts = mapAttrs (
     vhostName: vhostConfig:
     let
@@ -163,6 +161,8 @@ let
   configFile =
     (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
       ''
+        ${cfg.prependConfig}
+
         pid /run/nginx/nginx.pid;
         error_log ${cfg.logError};
         daemon off;
@@ -442,6 +442,7 @@ let
                   auth_basic off;
                   auth_request off;
                   proxy_pass http://${vhost.acmeFallbackHost};
+                  proxy_set_header Host $host;
                 }
               ''}
             '';
@@ -829,6 +830,18 @@ in
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
+        '';
+      };
+
+      prependConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration lines prepended to the generated Nginx
+          configuration file. Can for example be used to load modules.
+          {option}`prependConfig` can be specified more than once
+          and its value will be concatenated (contrary to {option}`config`
+          which can be set only once).
         '';
       };
 
@@ -1481,16 +1494,14 @@ in
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
       after = [
         "network.target"
       ]
-      ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-      ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
-      # Nginx needs to be started in order to be able to request certificates
-      # (it's hosting the acme challenge after all)
-      # This fixes https://github.com/NixOS/nixpkgs/issues/81842
-      before = map (certName: "acme-${certName}.service") dependentCertNames;
+      # Ensure nginx runs with baseline certificates in place.
+      ++ map (certName: "acme-${certName}.service") vhostCertNames;
+      # Ensure nginx runs (with current config) before the actual ACME jobs run
+      before = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       stopIfChanged = false;
       preStart = ''
         ${cfg.preStart}
@@ -1585,26 +1596,24 @@ in
     # This service waits for all certificates to be available
     # before reloading nginx configuration.
     # sslTargets are added to wantedBy + before
-    # which allows the acme-finished-$cert.target to signify the successful updating
+    # which allows the acme-order-renew-$cert.service to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload =
       let
-        sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
-        sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+        sslOrderRenewServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       in
       mkIf (cfg.enableReload || vhostCertNames != [ ]) {
         wants = optionals cfg.enableReload [ "nginx.service" ];
-        wantedBy = sslServices ++ [ "multi-user.target" ];
-        # Before the finished targets, after the renew services.
+        wantedBy = sslOrderRenewServices ++ [ "multi-user.target" ];
+        # XXX Before the finished targets, after the renew services.
         # This service might be needed for HTTP-01 challenges, but we only want to confirm
         # certs are updated _after_ config has been reloaded.
-        before = sslTargets;
-        after = sslServices;
+        after = sslOrderRenewServices;
         restartTriggers = optionals cfg.enableReload [ configFile ];
         # Block reloading if not all certs exist yet.
         # Happens when config changes add new vhosts/certs.
         unitConfig = {
-          ConditionPathExists = optionals (sslServices != [ ]) (
+          ConditionPathExists = optionals (vhostCertNames != [ ]) (
             map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames
           );
           # Disable rate limiting for this, because it may be triggered quickly a bunch of times

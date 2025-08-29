@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-tuna";
-  version = "1.9.10";
+  version = "1.9.11";
 
   nativeBuildInputs = [
     cmake
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "univrsal";
     repo = "tuna";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y4ny8XJIk4KtmRTWdO6tHevT4Ivr1TqkNMNhua499sY=";
+    hash = "sha256-XB2qQ96HhZRpONE8EOYHbKWvI52EZwkNCyfBv6UkRjU=";
     fetchSubmodules = true;
   };
 

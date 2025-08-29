@@ -1,4 +1,4 @@
-module.exports = async function ({ github, core }, callback) {
+module.exports = async ({ github, core }, callback) => {
   const Bottleneck = require('bottleneck')
 
   const stats = {
@@ -23,7 +23,7 @@ module.exports = async function ({ github, core }, callback) {
     // Requests to a different host do not count against the rate limit.
     if (options.url.startsWith('https://github.com')) return request(options)
     // Requests to the /rate_limit endpoint do not count against the rate limit.
-    if (options.url == '/rate_limit') return request(options)
+    if (options.url === '/rate_limit') return request(options)
     // Search requests are in a different resource group, which allows 30 requests / minute.
     // We do less than a handful each run, so not implementing throttling for now.
     if (options.url.startsWith('/search/')) return request(options)

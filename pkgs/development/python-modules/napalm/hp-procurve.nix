@@ -5,21 +5,24 @@
   napalm,
   netmiko,
   pip,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
   pname = "napalm-hp-procurve";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napalm-automation-community";
     repo = "napalm-hp-procurve";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cO4kxI90krj1knzixRKWxa77OAaxjO8dLTy02VpkV9M=";
   };
 
@@ -27,16 +30,25 @@ buildPythonPackage rec {
     # Dependency installation in setup.py doesn't work
     echo -n > requirements.txt
     substituteInPlace setup.cfg \
-      --replace "--cov=napalm_procurve --cov-report term-missing -vs --pylama" ""
+      --replace " --pylama" ""
   '';
 
-  nativeBuildInputs = [ pip ];
+  build-system = [
+    setuptools
+    pip
+  ];
 
   buildInputs = [ napalm ];
 
-  propagatedBuildInputs = [ netmiko ];
+  dependencies = [
+    netmiko
+    standard-telnetlib
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # AssertionError: Some methods vary.
@@ -53,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HP ProCurve Driver for NAPALM automation frontend";
     homepage = "https://github.com/napalm-automation-community/napalm-hp-procurve";
+    changelog = "https://github.com/napalm-automation-community/napalm-hp-procurve/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

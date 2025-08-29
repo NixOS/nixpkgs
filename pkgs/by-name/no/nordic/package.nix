@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gtk-engine-murrine,
   jdupes,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -154,7 +154,7 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $sddm/nix-support
 
-    printWords ${libsForQt5.breeze-icons} ${libsForQt5.plasma-framework} ${libsForQt5.plasma-workspace} \
+    printWords ${kdePackages.breeze-icons} ${kdePackages.libplasma} ${kdePackages.plasma-workspace} \
       >> $sddm/nix-support/propagated-user-env-packages
   '';
 

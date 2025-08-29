@@ -26,7 +26,6 @@ It also implements [NixOS](https://nixos.org/nixos/), a purely-functional Linux 
 
 * [Discourse Forum](https://discourse.nixos.org/)
 * [Matrix Chat](https://matrix.to/#/#space:nixos.org)
-* [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
@@ -79,7 +78,7 @@ You can donate to the NixOS foundation through [SEPA bank transfers](https://nix
 
 Nixpkgs is licensed under the [MIT License](COPYING).
 
-Note:
-MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
+> [!Note]
+> MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
 It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
 The aforementioned artifacts are all covered by the licenses of the respective packages.

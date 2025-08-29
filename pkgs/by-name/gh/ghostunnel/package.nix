@@ -7,6 +7,8 @@
   ghostunnel,
   apple-sdk_12,
   darwinMinVersionHook,
+  writeScript,
+  runtimeShell,
 }:
 
 buildGoModule rec {
@@ -41,7 +43,11 @@ buildGoModule rec {
   };
 
   passthru.services.default = {
-    imports = [ ./service.nix ];
+    imports = [
+      (lib.modules.importApply ./service.nix {
+        inherit writeScript runtimeShell;
+      })
+    ];
     ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };
 

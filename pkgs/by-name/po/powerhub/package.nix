@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "powerhub";
-  version = "2.0.7";
+  version = "2.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdrianVollmer";
     repo = "PowerHub";
     tag = version;
-    hash = "sha256-ejdG/vMINyvToP8GAhRMdp/Jq8rZNBubDbRcg2i05lM=";
+    hash = "sha256-vZIdYjP7F7lUauOCkouwUpR/gO0gEjFR8HLqD3ZjS3E=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

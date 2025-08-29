@@ -2,12 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   apple-sdk,
   versionCheckHook,
   nix-update-script,
-  ...
 }:
 
 buildGoModule (finalAttrs: {

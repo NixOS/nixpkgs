@@ -23,7 +23,7 @@ Thus you should pick one or more of the following lines:
 
 ```nix
 {
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
   services.desktopManager.gnome.enable = true;
   services.xserver.desktopManager.mate.enable = true;

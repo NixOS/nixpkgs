@@ -52,5 +52,5 @@ tree = parser.parse(
 print(tree.root_node)
 ```
 
-The `tree_sitter_rust.language()` function references the Rust grammar loaded in the Nix shell. The resulting tree allows you to inspect the structure of the code programmatically.
+The `tree_sitter_rust.language()` function references the Rust grammar loaded in the Nix shell. The resulting tree allows you to programmatically inspect the structure of the code.
 

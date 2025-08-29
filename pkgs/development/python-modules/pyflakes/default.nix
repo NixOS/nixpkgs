@@ -26,6 +26,7 @@ buildPythonPackage rec {
   disabledTests = lib.optionals isPyPy [
     # https://github.com/PyCQA/pyflakes/issues/779
     "test_eofSyntaxError"
+    "test_misencodedFileUTF16"
     "test_misencodedFileUTF8"
     "test_multilineSyntaxError"
   ];

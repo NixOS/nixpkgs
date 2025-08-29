@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  sanitiseHeaderPathsHook,
 
   openssl,
   glog,
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [

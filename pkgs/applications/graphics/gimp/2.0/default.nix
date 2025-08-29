@@ -28,6 +28,7 @@
   libwmf,
   zlib,
   libzip,
+  xz,
   ghostscript,
   aalib,
   shared-mime-info,
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwmf
     zlib
     libzip
+    xz
     ghostscript
     aalib
     shared-mime-info

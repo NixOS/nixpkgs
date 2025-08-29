@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchzip {
     url = "https://dl.suckless.org/tools/dmenu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3lRLa3NIg+7bUSDnef/rVL3XwvWWHTIPQ8mcVaq/SVI=";
+    hash = "sha256-6bFq3Pj3cuZqLR0pkoJyfx3CDWmmSqkDoEVptMfej7g=";
   };
 
   buildInputs = [

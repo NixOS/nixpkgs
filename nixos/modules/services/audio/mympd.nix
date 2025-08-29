@@ -61,7 +61,7 @@ in
               description = ''
                 Whether to enable listening on the SSL port.
 
-                Refer to <https://jcorporation.github.io/myMPD/configuration/configuration-files#ssl-options>
+                Refer to <https://jcorporation.github.io/myMPD/020-configuration/configuration-files#ssl-options>
                 for more information.
               '';
               default = false;
@@ -70,7 +70,7 @@ in
         };
         description = ''
           Manages the configuration files declaratively. For all the configuration
-          options, see <https://jcorporation.github.io/myMPD/configuration/configuration-files>.
+          options, see <https://jcorporation.github.io/myMPD/020-configuration/configuration-files>.
 
           Each key represents the "File" column from the upstream configuration table, and the
           value is the content of that file.

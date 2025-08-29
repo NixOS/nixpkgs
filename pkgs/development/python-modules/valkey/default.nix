@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "valkey";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
     tag = "v${version}";
-    hash = "sha256-TaAkifgasirA72OSO+up0+1EUhCENKba7vPIJxhTkh8=";
+    hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
 
   build-system = [ setuptools ];

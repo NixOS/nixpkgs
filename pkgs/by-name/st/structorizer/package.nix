@@ -5,13 +5,14 @@
   jdk11,
   makeDesktopItem,
   makeWrapper,
+  wrapGAppsHook3,
   copyDesktopItems,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-30";
+  version = "3.32-31";
 
   desktopItems = [
     (makeDesktopItem {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-sv/Uoh1UPVsioKpeJeuqs+EPPsuQwO54WIUPyc8Fjco=";
+    hash = "sha256-SOaNX48V42xR/bSj2jKpN7FMiR/ziWl8RYg/PQrfiaA=";
   };
 
   patches = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     jdk11
     makeWrapper
+    wrapGAppsHook3
     copyDesktopItems
   ];
 
@@ -85,7 +87,8 @@ stdenv.mkDerivation rec {
     install -D ${pname}.jar -t $out/share/java/
       makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}.jar" \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
+      ''${gappsWrapperArgs[@]}
 
     cat << EOF > $out/share/mime/packages/structorizer.xml
     <?xml version="1.0" encoding="UTF-8"?>
@@ -106,6 +109,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  dontWrapGApps = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -38,7 +38,7 @@ writeShellApplication {
     if matchBoard != null && matchPlatform != null then
       ''
         pushd ${klipper-firmware}
-        ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice} ${klipper-firmware}/klipper.bin $@
+        ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice} ${klipper-firmware}/klipper.bin "$@"
         popd
       ''
     else

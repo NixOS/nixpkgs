@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
-    description = "OpenVINO™ Toolkit repository";
+    description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
 

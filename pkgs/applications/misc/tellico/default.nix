@@ -2,14 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  mkDerivation,
   cmake,
   exempi,
   extra-cmake-modules,
   karchive,
   kdoctools,
   kfilemetadata,
-  khtml,
   kitemmodels,
   knewstuff,
   kxmlgui,
@@ -49,7 +47,6 @@ stdenv.mkDerivation rec {
     exempi
     karchive
     kfilemetadata
-    khtml
     kitemmodels
     knewstuff
     kxmlgui

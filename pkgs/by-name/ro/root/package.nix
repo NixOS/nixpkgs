@@ -46,13 +46,13 @@
   patchRcPathCsh,
   patchRcPathFish,
   patchRcPathPosix,
-  tbb,
+  tbb_2022,
   xrootd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.36.02";
+  version = "6.36.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-UQ1nezOsfKSKoNcSvbiNg1of9qN074bxoeFo+ieetHA=";
+    hash = "sha256-zGNn2PVjxtSco0wJ0LU8sPQaUo22+GrxEf12dEzaRZY=";
   };
 
   clad_src = fetchFromGitHub {
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     patchRcPathPosix
     pcre2
     python3
-    tbb
+    tbb_2022
     xrootd
     xxHash
     xz

@@ -6,6 +6,7 @@
   lua,
   jemalloc,
   pkg-config,
+  nixosTests,
   tcl,
   which,
   ps,
@@ -115,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
+
+  passthru = {
+    tests.redis = nixosTests.redis;
+    serverBin = "valkey-server";
+  };
 
   meta = with lib; {
     homepage = "https://valkey.io/";

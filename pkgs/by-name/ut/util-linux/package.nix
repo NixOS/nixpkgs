@@ -17,7 +17,7 @@
   cryptsetup,
   ncursesSupport ? true,
   ncurses,
-  pamSupport ? true,
+  pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
   pam,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -28,7 +28,10 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
+  # Doesn't build on Darwin, only makes sense on systems which have pam
+  withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
   gitUpdater,
+  nixosTests,
 }:
 
 let
@@ -36,24 +39,15 @@ let
 in
 stdenv.mkDerivation (finalPackage: rec {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41";
+  version = "2.41.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
+    hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    # https://github.com/util-linux/util-linux/pull/3013
-    ./fix-darwin-build.patch
-    # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
-    ./fix-mount-regression.patch
-    # https://github.com/util-linux/util-linux/pull/3530
-    ./libmount-subdir-remove-unused-code.patch
-    ./libmount-subdir-restrict-for-real-mounts-only.patch
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     (fetchurl {
       name = "bits-only-build-when-cpu_set_t-is-available.patch";
       url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
@@ -72,10 +66,15 @@ stdenv.mkDerivation (finalPackage: rec {
     "out"
     "lib"
     "man"
+    "login"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "mount" ]
-  ++ [ "login" ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "swap" ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "mount"
+    "swap"
+  ]
+  ++ lib.optionals withLastlog [
+    "lastlog"
+  ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -129,8 +128,7 @@ stdenv.mkDerivation (finalPackage: rec {
     "--disable-ipcrm"
     "--disable-ipcs"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Doesn't build on Darwin, also doesn't really make sense on Darwin
+  ++ lib.optionals (!withLastlog) [
     "--disable-liblastlog2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -145,12 +143,10 @@ stdenv.mkDerivation (finalPackage: rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     autoconf
     automake116x
+    installShellFiles
+    pkg-config
   ]
   ++ lib.optionals translateManpages [ po4a ]
   ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
@@ -183,6 +179,18 @@ stdenv.mkDerivation (finalPackage: rec {
       prefix=$login _moveSbin
       ln -svf "$login/bin/"* $bin/bin/
     ''
+    + lib.optionalString withLastlog ''
+      # moveToOutput "lib/liblastlog2*" "$lastlog"
+      ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
+      moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
+
+      moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
+      substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
+        --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+
+      moveToOutput "bin/lastlog2" "$lastlog"
+      ln -svf "$lastlog/bin/"* $bin/bin/
+    ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
 
       moveToOutput sbin/swapon "$swap"
@@ -209,6 +217,10 @@ stdenv.mkDerivation (finalPackage: rec {
     # encode upstream assumption to be used in man-db
     # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
     hasCol = stdenv.hostPlatform.libc == "glibc";
+
+    tests = {
+      inherit (nixosTests) pam-lastlog;
+    };
   };
 
   meta = {

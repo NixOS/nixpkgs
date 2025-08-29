@@ -14,7 +14,7 @@
   frozendict,
   jsonschema,
   pyserial-asyncio,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
   ];

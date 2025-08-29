@@ -125,7 +125,10 @@ in
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            morph-browser
+            # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+            # morph-browser
+            # Adding another browser that is known-working until Morph Browser can migrate to Qt6
+            pkgs.epiphany
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
             teleports
           ]);
@@ -148,11 +151,11 @@ in
         lomiri-download-manager
       ];
 
-      # Copy-pasted basic stuff
-      hardware.graphics.enable = lib.mkDefault true;
-      fonts.enableDefaultPackages = lib.mkDefault true;
-
       services.accounts-daemon.enable = true;
+      services.udisks2.enable = true;
+      services.upower.enable = true;
+      services.geoclue2.enable = true;
+      services.telepathy.enable = true;
 
       services.ayatana-indicators = {
         enable = true;
@@ -176,18 +179,12 @@ in
           );
       };
 
-      services.udisks2.enable = true;
-      services.upower.enable = true;
-      services.geoclue2.enable = true;
-
       services.gnome.evolution-data-server = {
         enable = true;
         plugins = with pkgs; [
           # TODO: lomiri.address-book-service
         ];
       };
-
-      services.telepathy.enable = true;
 
       services.displayManager = {
         defaultSession = lib.mkDefault "lomiri";

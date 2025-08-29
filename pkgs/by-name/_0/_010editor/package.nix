@@ -13,19 +13,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "15.0.2";
+  version = "16.0";
 
-  src =
-    if stdenv.hostPlatform.isLinux then
-      fetchzip {
-        url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-        hash = "sha256-oXwC4criDox8rac7mnJroqxMNKU7k+y7JQqc88XoRFc=";
-      }
-    else
-      fetchurl {
-        url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-        hash = "sha256-RZtFV3AbE5KfzW18usW0FS/AnX8Uets/RkVayBAODQ4=";
-      };
+  src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
   sourceRoot = ".";
 
@@ -53,13 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/Applications
         cp -R *.app $out/Applications
       '';
+
       linuxInstall = ''
         mkdir -p $out/opt && cp -ar source/* $out/opt
 
-        # Unset wrapped QT plugins since they're already included in the package,
-        # else the program crashes because of the conflict
+        # Use makeWrapper to clean environment and force xcb
         makeWrapper $out/opt/010editor $out/bin/010editor \
-          --unset QT_PLUGIN_PATH
+          --unset QT_PLUGIN_PATH \
+          --set QT_QPA_PLATFORM xcb
 
         # Copy the icon and generated desktop file
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
@@ -84,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     exec = "010editor %f";
     icon = "010";
     desktopName = "010 Editor";
-    genericName = "Text and hex edtior";
+    genericName = "Text and hex editor";
     categories = [ "Development" ];
     mimeTypes = [
       "text/html"
@@ -93,6 +84,23 @@ stdenv.mkDerivation (finalAttrs: {
       "text/x-c++src"
       "text/xml"
     ];
+  };
+
+  passthru.srcs = {
+    x86_64-linux = fetchzip {
+      url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
+      hash = "sha256-DK+AIk90AC/KjZR0yBMHaRF7ajuX+UvT8rqDVdL678M=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-TWatSVqm9a+bVLXtJjiWAtkcB7qZqoeJ7Gmr62XUVz4=";
+    };
+
+    aarch64-darwin = fetchurl {
+      url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
+      hash = "sha256-CtExBuu6EL8ilq3+gtwjNwnMxXkKgPdrk34tYvjN2ps=";
+    };
   };
 
   meta = {

@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
-  oracledb,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
+  fetchFromGitHub,
   hatchling,
+  oracledb,
+  pytest-mypy-plugins,
+  pytest-xdist,
+  pytestCheckHook,
+  redis,
   typing-extensions,
 }:
 
@@ -16,13 +17,17 @@ buildPythonPackage rec {
   version = "5.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    pname = "django_stubs_ext";
-    inherit version;
-    hash = "sha256-2dFRuRn+JDh2D1vZOPA+HLCMhNBlH55ZF/ExOQfkJoM=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-kF5g0/rkMQxYTfSrTqzZ6BuqGlE42K/AVhc1/ARc+/c=";
   };
+
+  postPatch = ''
+    cd ext
+    ln -s ../scripts
+  '';
 
   build-system = [ hatchling ];
 
@@ -36,8 +41,18 @@ buildPythonPackage rec {
     oracle = [ oracledb ];
   };
 
+  nativeCheckInputs = [
+    pytest-mypy-plugins
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # error: Skipping analyzing "django.db": module is installed, but missing library stubs or py.typed marker  [import-untyped] (diff)
+    "tests/typecheck"
+  ];
+
   # Tests are not shipped with PyPI
-  doCheck = false;
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 

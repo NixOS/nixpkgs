@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/coin-or/Osi";
     license = licenses.epl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

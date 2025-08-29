@@ -18,41 +18,74 @@ let
   };
 
   # Via https://webtorrent.io/free-torrents
-  httpUrl = "https://webtorrent.io/torrents/sintel.torrent";
-  magnetUrl = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent";
+  http.url = "https://webtorrent.io/torrents/sintel.torrent";
+  magnet.url = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent";
 
-  # All routes to download the torrent should produce the same output and
-  # therefore have the same FOD hash.
-  hash = "sha256-EzbmBiTEWOlFUNaV5R4eDeD9EBbp6d93rfby88ACg0s=";
+  flattened.hash = "sha256-EzbmBiTEWOlFUNaV5R4eDeD9EBbp6d93rfby88ACg0s=";
+  unflattened.hash = "sha256-lVrlo1AwmFcxwsIsY976VYqb3hAprFH1xWYdmlTuw0U=";
 in
-
-{
-  http-link = testers.invalidateFetcherByDrvHash fetchtorrent {
-    inherit hash;
-    url = httpUrl;
-    backend = "transmission";
+# Seems almost but not quite worth using lib.mapCartesianProduct...
+builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrent v) {
+  http-link = {
+    inherit (http) url;
+    inherit (flattened) hash;
     inherit (sintel) meta;
   };
-  magnet-link = testers.invalidateFetcherByDrvHash fetchtorrent {
-    inherit hash;
-    url = magnetUrl;
+  http-link-transmission = {
+    inherit (http) url;
     backend = "transmission";
+    inherit (flattened) hash;
     inherit (sintel) meta;
   };
-  http-link-rqbit = testers.invalidateFetcherByDrvHash fetchtorrent {
-    inherit hash;
-    url = httpUrl;
-    backend = "rqbit";
-    meta = sintel.meta // {
-      broken = true;
-    };
+  magnet-link = {
+    inherit (magnet) url;
+    inherit (flattened) hash;
+    inherit (sintel) meta;
   };
-  magnet-link-rqbit = testers.invalidateFetcherByDrvHash fetchtorrent {
-    inherit hash;
-    url = magnetUrl;
+  magnet-link-transmission = {
+    inherit (magnet) url;
+    backend = "transmission";
+    inherit (flattened) hash;
+    inherit (sintel) meta;
+  };
+  http-link-rqbit = {
+    inherit (http) url;
     backend = "rqbit";
-    meta = sintel.meta // {
-      broken = true;
-    };
+    inherit (flattened) hash;
+    inherit (sintel) meta;
+  };
+  magnet-link-rqbit = {
+    inherit (magnet) url;
+    backend = "rqbit";
+    inherit (flattened) hash;
+    inherit (sintel) meta;
+  };
+  http-link-rqbit-flattened = {
+    inherit (http) url;
+    backend = "rqbit";
+    flatten = true;
+    inherit (flattened) hash;
+    inherit (sintel) meta;
+  };
+  magnet-link-rqbit-flattened = {
+    inherit (magnet) url;
+    backend = "rqbit";
+    flatten = true;
+    inherit (flattened) hash;
+    inherit (sintel) meta;
+  };
+  http-link-rqbit-unflattened = {
+    inherit (http) url;
+    backend = "rqbit";
+    flatten = false;
+    inherit (unflattened) hash;
+    inherit (sintel) meta;
+  };
+  magnet-link-rqbit-unflattened = {
+    inherit (magnet) url;
+    backend = "rqbit";
+    flatten = false;
+    inherit (unflattened) hash;
+    inherit (sintel) meta;
   };
 }

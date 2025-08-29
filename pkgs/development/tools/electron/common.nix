@@ -86,26 +86,6 @@ in
 
   patches =
     base.patches
-    # Fix building with Rust 1.86+
-    # electron_33 and electron_34 use older chromium versions which expect rust
-    # to provide the older `adler` library instead of the newer `adler2` library
-    # This patch makes those older versions also use the new adler2 library
-    ++ lib.optionals (lib.versionOlder info.version "35") [
-      ./use-rust-adler2.patch
-    ]
-    # Requirements for the next section
-    ++ lib.optionals (lib.versionOlder info.version "35") [
-      (fetchpatch {
-        name = "Avoid-build-rust-PartitionAlloc-dep-when-not-build_with_chromium.patch";
-        url = "https://github.com/chromium/chromium/commit/ee94f376a0dd642a93fbf4a5fa8e7aa8fb2a69b5.patch";
-        hash = "sha256-qGjy9VZ4d3T5AuqOrBKEajBswwBU/7j0n80rpvHZLmM=";
-      })
-      (fetchpatch {
-        name = "Suppress-unsafe_libc_call-warning-for-rust-remap_alloc-cc.patch";
-        url = "https://github.com/chromium/chromium/commit/d5d79d881e74c6c8630f7d2f3affd4f656fdeb4e.patch";
-        hash = "sha256-1oy5WRvNzKuUTJkt8kULUqE4JU+EKEV1PB9QN8HF4SE=";
-      })
-    ]
     # Fix building with Rust 1.87+
     # https://issues.chromium.org/issues/407024458
     ++ lib.optionals (lib.versionOlder info.version "37") [
@@ -150,6 +130,15 @@ in
         name = "Dont-apply-FALLTHROUGH-edit-to-gperf-3-2-output.patch";
         url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch";
         hash = "sha256-z/aQ1oQjFZnkUeRnrD6P/WDZiYAI1ncGhOUM+HmjMZA=";
+      })
+    ]
+    # Fix build with Rust 1.89.0
+    ++ lib.optionals (lib.versionOlder info.version "38") [
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
+      (fetchpatch {
+        name = "Define-rust-no-alloc-shim-is-unstable-v2.patch";
+        url = "https://github.com/chromium/chromium/commit/6aae0e2353c857d98980ff677bf304288d7c58de.patch";
+        hash = "sha256-Dd38c/0hiH+PbGPJhhEFuW6kUR45A36XZqOVExoxlhM=";
       })
     ];
 

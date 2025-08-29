@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      abbradar
       siraben
     ];
     mainProgram = "powder";

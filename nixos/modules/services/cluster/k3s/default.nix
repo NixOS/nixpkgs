@@ -293,7 +293,7 @@ let
           description = ''
             Extra HelmChart field definitions that are merged with the rest of the HelmChart
             custom resource. This can be used to set advanced fields or to overwrite
-            generated fields. See https://docs.k3s.io/helm#helmchart-field-definitions
+            generated fields. See <https://docs.k3s.io/helm#helmchart-field-definitions>
             for possible fields.
           '';
         };

@@ -7,10 +7,10 @@
   llvm_12,
   libffi,
   cmake,
+  perl,
   python3,
   zlib,
   libxml2,
-  openssl,
   pkg-config,
   curl,
   which,
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     cmake
     mrustc
     mrustc-minicargo
+    perl
     pkg-config
     python3
     time
@@ -68,8 +69,7 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     # for cargo
-    openssl
-    (curl.override { inherit openssl; })
+    curl
   ];
 
   makeFlags = [

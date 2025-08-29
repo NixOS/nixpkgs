@@ -7,65 +7,84 @@
   installShellFiles,
   nix-update-script,
   pkg-config,
-  python3,
   openssl,
   versionCheckHook,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.20.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-v5PEj3T/eirAMpHHMR6LE9X8qDNhvCJP40Nleal3oOw=";
+    hash = "sha256-a/cUg8yLW4vGPiTtqhyUdkV79JbOB40N4V7Asney7sk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-zgmiWyWB08v1WQVFzxpC/LGwF+XXbs8iW1d7i9Iw0Q4=";
+  cargoHash = "sha256-NK1TOY5Puo881bhgF3w470k2N4LoC6/qTI93uhg7Alw=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    # Required because of codex-rs/login/src/login_with_chatgpt.py
-    python3
-  ];
+  buildInputs = [ openssl ];
 
   nativeCheckInputs = [ gitMinimal ];
 
   __darwinAllowLocalNetworking = true;
-  env = {
+  preCheck = ''
     # Disables sandbox tests which want to access /usr/bin/touch
-    CODEX_SANDBOX = "seatbelt";
+    export CODEX_SANDBOX=seatbelt
     # Skips tests that require networking
-    CODEX_SANDBOX_NETWORK_DISABLED = 1;
-  };
+    export CODEX_SANDBOX_NETWORK_DISABLED=1
+    # Required by ui_snapshot_add_details and ui_snapshot_update_details_with_rename
+    export TERM=dumb
+    # Required by azure_overrides_assign_properties_used_for_responses_url and env_var_overrides_loaded_auth
+    export USER=test
+  '';
   checkFlags = [
-    # Wants to access /bin/zsh
-    "--skip=shell::tests::test_run_with_profile_escaping_and_execution"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=includes_base_instructions_override_in_request"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=includes_user_instructions_message_in_request"
-    # Fails with 'stream ended unexpectedly: InternalAgentDied'
-    "--skip=originator_config_override_is_used"
-    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
-    "--skip=azure_overrides_assign_properties_used_for_responses_url"
-    # Fails with 'called `Result::unwrap()` on an `Err` value: NotPresent'
-    "--skip=env_var_overrides_loaded_auth"
+    # Wants to access unix sockets
+    "--skip=allow_unix_socketpair_recvfrom"
+    # Needs access to python3. However, adding python3 to nativeCheckInputs doesn't resolve the issue
+    "--skip=exec_command::session_manager::tests::session_manager_streams_and_truncates_from_now"
+    "--skip=python_multiprocessing_lock_works_under_sandbox"
     # Version 0.0.0 hardcoded
     "--skip=test_conversation_create_and_send_message_ok"
-    # Version 0.0.0 hardcoded
     "--skip=test_send_message_session_not_found"
-    # Version 0.0.0 hardcoded
     "--skip=test_send_message_success"
+    "--skip=suite::auth::get_auth_status_no_auth"
+    "--skip=suite::auth::get_auth_status_with_api_key"
+    "--skip=suite::auth::get_auth_status_with_api_key_no_include_token"
+    "--skip=suite::login::login_and_cancel_chatgpt"
+    "--skip=suite::login::logout_chatgpt_removes_auth"
+    # Tests fail
+    "--skip=diff_render::tests::ui_snapshot_add_details"
+    "--skip=diff_render::tests::ui_snapshot_update_details_with_rename"
+    "--skip=diff_render::tests::ui_snapshot_blank_context_line"
+    "--skip=diff_render::tests::ui_snapshot_single_line_replacement_counts"
+    "--skip=diff_render::tests::ui_snapshot_vertical_ellipsis_between_hunks"
+    # Needs acces to sleep. However, adding coreutils to nativeCheckInputs doesn't resolve the issue
+    "--skip=suite::exec_stream_events::test_aggregated_output_interleaves_in_order"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Wants to access /bin/zsh
+    "--skip=shell::tests::test_run_with_profile_escaping_and_execution"
+    # Requires access to the Apple system configuration
+    "--skip=azure_overrides_assign_properties_used_for_responses_url"
+    "--skip=env_var_overrides_loaded_auth"
+    "--skip=includes_base_instructions_override_in_request"
+    "--skip=includes_user_instructions_message_in_request"
+    "--skip=originator_config_override_is_used"
+    "--skip=per_turn_overrides_keep_cached_prefix_and_key_constant"
+    "--skip=overrides_turn_context_but_keeps_cached_prefix_and_key_constant"
+    "--skip=prefixes_context_and_instructions_once_and_consistently_across_requests"
+    "--skip=test_apply_patch_tool"
+    "--skip=suite::prompt_caching::codex_mini_latest_tools"
+    "--skip=suite::prompt_caching::prompt_tools_are_consistent_across_requests"
   ];
 
   postInstall = lib.optionalString installShellCompletions ''

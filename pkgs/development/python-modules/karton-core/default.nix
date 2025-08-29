@@ -26,7 +26,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "boto3" ];
+  pythonRelaxDeps = [
+    "aioboto3"
+    "boto3"
+  ];
 
   dependencies = [
     aioboto3

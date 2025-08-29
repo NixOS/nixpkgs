@@ -184,7 +184,7 @@ builtins.intersectAttrs super {
 
   # Doesn't declare LLVM dependency, needs llvm-config
   llvm-codegen = addBuildTools [
-    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
+    pkgs.llvmPackages.llvm.dev # for native llvm-config
   ] super.llvm-codegen;
 
   # hledger* overrides
@@ -339,25 +339,27 @@ builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng =
-    (overrideCabal (old: {
+  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
+    # nix-serve-ng isn't regularly released to Hackage
+    (overrideSrc {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "6e8d82a451fccbaa4714da8f7a3db5907bdfa96d";
-        hash = "sha256-Ht5wD/n2I/tQWNgYIdmi3UQbm1FNwp9m9JmDjZEd6ng=";
+        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
+        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
       };
-      version = "1.0.0-unstable-2024-12-02";
-      #editedCabalFile = null;
+      version = "1.0.1-unstable-2025-05-28";
+    })
+
+    (overrideCabal (old: {
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
-      # error: output '/nix/store/hv6lzj1nlshn8q5lirzgys8f4vgym4hg-nix-serve-ng-1.0.0-unstable-2024-12-02' is not allowed to refer to the following paths:
-      #    /nix/store/qza2y18fwkq1wzi02qywf691r42r5jfy-ghc-9.6.6
-      broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
-    }) super.nix-serve-ng).override
-      {
-        nix = pkgs.nixVersions.nix_2_24;
+
+      passthru = old.passthru or { } // {
+        tests.lix = pkgs.lixPackageSets.stable.nix-serve-ng;
       };
+    }))
+  ];
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -502,11 +504,27 @@ builtins.intersectAttrs super {
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
   # `dev` and `lib` output in, or Cabal will have trouble finding the library.
   # Since it looks a bit neater having it in a list, we circumvent the singular
-  # LLVM input here.
-  llvm-ffi = addBuildDepends [
-    pkgs.llvmPackages_16.llvm.lib
-    pkgs.llvmPackages_16.llvm.dev
-  ] (super.llvm-ffi.override { LLVM = null; });
+  # LLVM input that llvm-ffi declares.
+  llvm-ffi =
+    let
+      chosenLlvmVersion = 20;
+      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
+      shouldUpgrade =
+        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
+    in
+    lib.warnIf shouldUpgrade
+      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
+      lib.pipe
+      super.llvm-ffi
+      [
+        # ATTN: There is no matching flag for the latest supported LLVM version,
+        # so you may need to remove this when updating chosenLlvmVersion
+        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
+        (addBuildDepends [
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
+        ])
+      ];
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
@@ -832,6 +850,14 @@ builtins.intersectAttrs super {
     pkgs.z3
   ] super.crucible-llvm;
 
+  # yaml doesn't build its executables (json2yaml, yaml2json) by default:
+  # https://github.com/snoyberg/yaml/issues/194
+  yaml = lib.pipe super.yaml [
+    (disableCabalFlag "no-exe")
+    enableSeparateBinOutput
+    (addBuildDepend self.optparse-applicative)
+  ];
+
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark =
     overrideCabal
@@ -1120,6 +1146,25 @@ builtins.intersectAttrs super {
     ];
   }) super.relocant;
 
+  # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
+  haskell-pgmq = overrideCabal (drv: {
+    env = drv.env or { } // {
+      postgresqlEnableTCP = toString true;
+    };
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      # otherwise .dev gets selected?!
+      (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
+      pkgs.postgresqlTestHook
+    ];
+  }) super.haskell-pgmq;
+
+  # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
+  haskell-bee-redis = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.redisTestHook
+    ];
+  }) super.haskell-bee-redis;
+
   retrie = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_1_1;
@@ -1231,6 +1276,33 @@ builtins.intersectAttrs super {
           ]
         }"
     '';
+
+    passthru = {
+      updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
+
+      # This is used by regenerate-hackage-packages.nix to supply the configuration
+      # values we can easily generate automatically without checking them in.
+      compilerConfig =
+        pkgs.runCommand "hackage2nix-${self.ghc.haskellCompilerName}-config.yaml"
+          {
+            nativeBuildInputs = [
+              self.ghc
+            ];
+          }
+          ''
+            cat > "$out" << EOF
+            # generated by haskellPackages.cabal2nix-unstable.compilerConfig
+            compiler: ${self.ghc.haskellCompilerName}
+
+            core-packages:
+            EOF
+
+            ghc-pkg list \
+              | tail -n '+2' \
+              | sed -e 's/[()]//g' -e 's/\s\+/  - /' \
+              >> "$out"
+          '';
+    };
   }) (justStaticExecutables super.cabal2nix-unstable);
 
   # test suite needs local redis daemon
@@ -1292,6 +1364,13 @@ builtins.intersectAttrs super {
     (self.generateOptparseApplicativeCompletions [ "cloudy" ])
   ];
 
+  # We don't have multiple GHC versions to test against in PATH
+  ghc-hie = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip=/GHC.Iface.Ext.Binary/readHieFile"
+    ];
+  }) super.ghc-hie;
+
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
@@ -1342,6 +1421,16 @@ builtins.intersectAttrs super {
     (overrideCabal { mainProgram = "agda"; })
     # Split outputs to reduce closure size
     enableSeparateBinOutput
+    # Build the primitive library to generate its interface files.
+    # These are needed in order to use Agda in Nix builds.
+    (overrideCabal (drv: {
+      postInstall = drv.postInstall or "" + ''
+        agdaExe=''${bin:-$out}/bin/agda
+
+        echo "Generating Agda core library interface files..."
+        (cd "$("$agdaExe" --print-agda-data-dir)/lib/prim" && "$agdaExe" --build-library)
+      '';
+    }))
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
@@ -1712,6 +1801,20 @@ builtins.intersectAttrs super {
   ];
 
   xmobar = enableSeparateBinOutput super.xmobar;
+
+  # These test cases access the network
+  hpack_0_38_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip"
+        "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+        "--skip"
+        "/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip"
+        "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+      ];
+    }) super.hpack_0_38_1
+  );
 
   # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
   inherit

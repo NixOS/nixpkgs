@@ -2,7 +2,6 @@
   lib,
   stdenv,
   callPackage,
-  ...
 }:
 let
   pname = "aptakube";

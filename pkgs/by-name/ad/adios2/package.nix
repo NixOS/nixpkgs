@@ -161,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Enable support for Little/Big Endian Interoperability
     (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
 
+    # force use of "-fallow-argument-mismatch"
+    (lib.cmakeBool "ADIOS2_USE_Fortran_flag_argument_mismatch" true)
+
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")

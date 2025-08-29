@@ -294,6 +294,45 @@ in
       );
     };
 
+    discordAuthentication = lib.mkOption {
+      description = ''
+        To configure Discord auth, you'll need to create an application at
+        <https://discord.com/developers/applications/>
+
+        See <https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6>
+        for details on setting up your Discord app.
+      '';
+      default = null;
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            clientId = lib.mkOption {
+              type = lib.types.str;
+              description = "Authentication client identifier.";
+            };
+            clientSecretFile = lib.mkOption {
+              type = lib.types.str;
+              description = "File path containing the authentication secret.";
+            };
+            serverId = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                Restrict logins to a specific server (optional, but recommended).
+                You can find a Discord server's ID by right-clicking the server icon,
+                and select “Copy Server ID”.
+              '';
+            };
+            serverRoles = lib.mkOption {
+              type = lib.types.commas;
+              default = "";
+              description = "Optionally restrict logins to a comma-separated list of role IDs";
+            };
+          };
+        }
+      );
+    };
+
     oidcAuthentication = lib.mkOption {
       description = ''
         To configure generic OIDC auth, you'll need some kind of identity
@@ -721,6 +760,12 @@ in
             SLACK_MESSAGE_ACTIONS = builtins.toString cfg.slackIntegration.messageActions;
           })
 
+          (lib.mkIf (cfg.discordAuthentication != null) {
+            DISCORD_CLIENT_ID = cfg.discordAuthentication.clientId;
+            DISCORD_SERVER_ID = cfg.discordAuthentication.serverId;
+            DISCORD_SERVER_ROLES = cfg.discordAuthentication.serverRoles;
+          })
+
           (lib.mkIf (cfg.smtp != null) {
             SMTP_HOST = cfg.smtp.host;
             SMTP_PORT = builtins.toString cfg.smtp.port;
@@ -759,6 +804,9 @@ in
           ''}
           ${lib.optionalString (cfg.oidcAuthentication != null) ''
             export OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+          ''}
+          ${lib.optionalString (cfg.discordAuthentication != null) ''
+            export DISCORD_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.discordAuthentication.clientSecretFile})"
           ''}
           ${lib.optionalString (cfg.sslKeyFile != null) ''
             export SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"

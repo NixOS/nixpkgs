@@ -1,7 +1,6 @@
 {
   lib,
   backendStdenv,
-  cudaOlder,
   setupCudaHook,
 }:
 prevAttrs: {
@@ -34,13 +33,6 @@ prevAttrs: {
         --replace-fail \
           '$(TOP)/$(_TARGET_DIR_)/include' \
           "''${!outputDev}/include"
-    ''
-    # Additional patching required pre-CUDA 12.5.
-    + lib.optionalString (cudaOlder "12.5") ''
-      substituteInPlace bin/nvcc.profile \
-        --replace-fail \
-          '$(TOP)/$(_NVVM_BRANCH_)' \
-          "''${!outputBin}/nvvm"
     ''
     + ''
       cat << EOF >> bin/nvcc.profile

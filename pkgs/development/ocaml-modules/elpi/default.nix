@@ -11,9 +11,7 @@
   re,
   perl,
   ncurses,
-  ppxlib,
   ppx_deriving,
-  ppxlib_0_15,
   ppx_deriving_0_15,
   coqPackages,
   version ?
@@ -88,12 +86,10 @@ buildDunePackage {
   ++ (
     if lib.versionAtLeast version "1.13" || version == "dev" then
       [
-        ppxlib
         ppx_deriving
       ]
     else
       [
-        ppxlib_0_15
         ppx_deriving_0_15
       ]
   );

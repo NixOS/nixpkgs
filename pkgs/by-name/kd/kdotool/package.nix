@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ dbus ];
 
   meta = with lib; {
-    description = "xdotool-like for KDE Wayland";
+    description = "xdotool clone for KDE Wayland";
     homepage = "https://github.com/jinliu/kdotool";
     license = licenses.asl20;
     maintainers = with maintainers; [ kotatsuyaki ];

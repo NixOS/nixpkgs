@@ -21,13 +21,15 @@
   buildPhase ? null,
   configurePhase ? null,
   meta ? { },
-  enableDebugInfo ? false,
+  erlangCompilerOptions ? [ ],
+  # Deterministic Erlang builds remove full system paths from debug information
+  # among other things to keep builds more reproducible. See their docs for more:
+  # https://www.erlang.org/doc/man/compile
+  erlangDeterministicBuilds ? true,
   ...
 }@attrs:
 
 let
-  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
-
   rebar3 = rebar3WithPlugins {
     plugins = buildPlugins;
   };
@@ -66,6 +68,12 @@ let
         propagatedBuildInputs = lib.unique beamDeps;
 
         inherit src;
+
+        ERL_COMPILER_OPTIONS =
+          let
+            options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+          in
+          "[${lib.concatStringsSep "," options}]";
 
         # stripping does not have any effect on beam files
         # it is however needed for dependencies with NIFs

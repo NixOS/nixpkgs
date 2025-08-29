@@ -36,7 +36,7 @@ lib.warnIf (withDocs != null)
 
     src = fetchurl {
       url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
-      hash = "sha256-Yt1JxEw5ntGz9/cx6Hp4IzTYNPCOCYo18sh1R9Xbsmk=";
+      hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
     };
 
     hardeningDisable = [

@@ -61,6 +61,8 @@
   openasar,
   withVencord ? false,
   vencord,
+  withEquicord ? false,
+  equicord,
   withMoonlight ? false,
   moonlight,
   withTTS ? true,
@@ -71,10 +73,15 @@
   disableUpdates ? true,
   commandLineArgs ? "",
 }:
-assert lib.assertMsg (
-  !(withMoonlight && withVencord)
-) "discord: Moonlight and Vencord can not be enabled at the same time";
+
 let
+  discordMods = [
+    withVencord
+    withEquicord
+    withMoonlight
+  ];
+  enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
+
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
       {
@@ -89,6 +96,9 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
+assert lib.assertMsg (
+  enabledDiscordModsCount <= 1
+) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
 stdenv.mkDerivation rec {
   inherit
     pname
@@ -207,6 +217,12 @@ stdenv.mkDerivation rec {
       mkdir $out/opt/${binaryName}/resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
+    ''
+    + lib.strings.optionalString withEquicord ''
+      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+      mkdir $out/opt/${binaryName}/resources/app.asar
+      echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+      echo 'require("${equicord}/desktop/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
     ''
     + lib.strings.optionalString withMoonlight ''
       mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar

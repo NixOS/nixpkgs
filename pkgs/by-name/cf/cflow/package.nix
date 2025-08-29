@@ -8,17 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cflow";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-0BFGyvkAHiZhM0F8KoJYpktfwW/LCCoU9lKCBNDJcIY=";
+    url = "mirror://gnu/cflow/cflow-${version}.tar.bz2";
+    hash = "sha256-gyFie1W2x4d/akP8xvn4RqlLFHaggaA1Rl96eNNJmrg=";
   };
 
-  patchPhase = ''
-    substituteInPlace "src/cflow.h"					\
-      --replace "/usr/bin/cpp"						\
-                "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
+  postPatch = ''
+    substituteInPlace "config.h.in" \
+      --replace-fail "[[__maybe_unused__]]" "__attribute__((__unused__))"
+    substituteInPlace "src/cflow.h" \
+      --replace-fail "/usr/bin/cpp" "${stdenv.cc.cc}/bin/cpp"
   '';
 
   buildInputs = [

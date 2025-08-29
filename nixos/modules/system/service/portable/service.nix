@@ -1,7 +1,11 @@
+# Non-module arguments
+# These are separate from the module arguments to avoid implicit dependencies.
+# This makes service modules self-contains, allowing mixing of Nixpkgs versions.
+{ pkgs }:
+
+# The module
 {
   lib,
-  config,
-  options,
   ...
 }:
 let
@@ -12,14 +16,16 @@ in
   # https://nixos.org/manual/nixos/unstable/#modular-services
   _class = "service";
   imports = [
+    ../../../../../modules/generic/meta-maintainers.nix
     ../../../misc/assertions.nix
+    (lib.modules.importApply ./config-data.nix { inherit pkgs; })
   ];
   options = {
     services = mkOption {
       type = types.attrsOf (
         types.submoduleWith {
           modules = [
-            ./service.nix
+            (lib.modules.importApply ./service.nix { inherit pkgs; })
           ];
         }
       );

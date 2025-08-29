@@ -45,11 +45,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-  version = "1.56.1";
+  version = "1.56.2";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nK3VUK4xLy/+JDt3N9P0bVa+71Ob7IODyoyw0/32LvU=";
+    hash = "sha256-u0SJGnleC3khPO4sSRSVpt1ksh9ydEVZFzDX94kBaJo=";
   };
 
   strictDeps = true;

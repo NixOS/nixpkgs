@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Rotonda - composable, programmable BGP Engine";
+    description = "Composable, programmable BGP Engine";
     homepage = "https://github.com/NLnetLabs/rotonda";
     changelog = "https://github.com/NLnetLabs/rotonda/blob/refs/tags/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.mpl20;

@@ -27,7 +27,7 @@
   fribidi,
   libaom,
   libheif,
-  libkdcraw,
+  #libkdcraw,
   lcms2,
   gsl,
   openexr,
@@ -109,7 +109,7 @@ mkDerivation rec {
     lager
     libaom
     libheif
-    libkdcraw
+    #libkdcraw
     giflib
     libjxl
     mlt
@@ -168,7 +168,6 @@ mkDerivation rec {
     description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with lib.maintainers; [
-      abbradar
       sifmelcara
       nek0
     ];

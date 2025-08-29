@@ -526,6 +526,24 @@ let
       # preventing compilations of chromium with versions below their intended version, not about running the very
       # exact version or even running a newer version.
       ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "138") [
+      (fetchpatch {
+        # Unbreak building with Rust 1.89+ which introduced
+        # a new mismatched_lifetime_syntaxes lint.
+        # https://issues.chromium.org/issues/424424323
+        name = "chromium-138-rust-1.86-mismatched_lifetime_syntaxes.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6658267
+        url = "https://chromium.googlesource.com/chromium/src/+/94a87ff38c51fd1a71980a5051d3553978391608^!?format=TEXT";
+        decode = "base64 -d";
+        includes = [ "build/rust/cargo_crate.gni" ];
+        hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
+      })
+    ]
+    ++ lib.optionals (!chromiumVersionAtLeast "138") [
+      # Rebased variant of the patch above for
+      # electron 35 (M134) and 36 (M136)
+      ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
     ];
 
     postPatch =

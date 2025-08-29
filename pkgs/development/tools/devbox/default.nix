@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "devbox";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "jetify-com";
     repo = pname;
     rev = version;
-    hash = "sha256-ANbIwR3XiphHbaeg3YtwtHZ9UbwK3BOnPb5ZF1EJtEw=";
+    hash = "sha256-+OsFKBtc4UkkI37YJM9uKIJZC1+KkuDJJKjipRzyF7k=";
   };
 
   ldflags = [

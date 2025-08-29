@@ -5,7 +5,7 @@
 }:
 let
   pname = "tparse";
-  version = "0.17.0";
+  version = "0.18.0";
 in
 buildGoModule {
   inherit pname version;
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "mfridman";
     repo = "tparse";
     rev = "v${version}";
-    hash = "sha256-yU4hP+EJ+Ci3Ms0dAoSuqZFT9RRwqmN1V0x5cV+87z0=";
+    hash = "sha256-oJApKmdo8uvnm6npXpzcKBRRkZ901AH1kZqGuoLdB3U=";
   };
 
-  vendorHash = "sha256-m0YTGzzjr7/4+vTNhfPb7y2xtsI/y4Q2pbg+3yqSFaw=";
+  vendorHash = "sha256-4W6RryyQByUcwM2P2jmG2wXjNMrnpcCTSOJiw1M/Kd0=";
 
   ldflags = [
     "-s"

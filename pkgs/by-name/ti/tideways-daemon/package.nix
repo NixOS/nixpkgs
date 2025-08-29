@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-daemon";
-  version = "1.9.48";
+  version = "1.9.52";
 
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
@@ -28,15 +28,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://tideways.s3.amazonaws.com/daemon/${finalAttrs.version}/tideways-daemon_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-5o39BwSKltqkbbcbArbKXmU3HQdXwC7QD3sq+3OK3yI=";
+        hash = "sha256-8OGGF1b74lYv1EQgcY54gdwJ2mvuS2D2oNdmKoJmkmM=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://tideways.s3.amazonaws.com/daemon/${finalAttrs.version}/tideways-daemon_linux_aarch64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-akhRnWAzisjxOb4j3HCSGZ1e/qJcHERR2Msd1hB1on4=";
+        hash = "sha256-adtA5+Ft7ToTDeQ2vp3Hx1UUHgU0NUlcCVpJsV1alvU=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://tideways.s3.amazonaws.com/daemon/${finalAttrs.version}/tideways-daemon_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-7Ss+TQPkMyV18LU2EA7KZZjtb2S6hzEbwkIzAemee5E=";
+        hash = "sha256-kMIvW3dabv9iHLOx9QbsuiBkts62FHjvEYzBze9prlw=";
       };
     };
     updateScript = "${

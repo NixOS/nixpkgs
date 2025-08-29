@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.11.1";
+  version = "1.15";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CEGr7PDOVRi210XvICH8iLYDKn8S9bGruBO4tycvsT8=";
+    hash = "sha256-PdSlynwOjC9SkUh3H6doEgHwwBry5Ti5XjRoS2bc5a0=";
   };
 
   postPatch = ''

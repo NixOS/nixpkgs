@@ -33,6 +33,7 @@
   librsvg,
   libwmf,
   zlib,
+  xz,
   libzip,
   ghostscript,
   aalib,
@@ -175,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libwmf
     zlib
+    xz
     libzip
     ghostscript
     aalib

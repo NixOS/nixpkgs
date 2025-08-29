@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "autobase";
-  version = "7.17.0";
+  version = "7.18.0";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "autobase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSx9zOnoJouH2sAByG0947uxgqPu9cx3fTbA2MDiMt4=";
+    hash = "sha256-EnRF0dRgLM0NPWhlXnIlpULx1NEbK4VRq+atGJYUNsU=";
   };
 
   npmDepsHash = "sha256-H9Xy1VD7WQvi0+86v6CMcmc0L3mB6KuSCtgQSF4AlkY=";

@@ -21,22 +21,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0-nightly-2025-08-05";
+  version = "0.2-nightly-2025-08-22";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
-    tag = lib.strings.removePrefix "0-" finalAttrs.version;
-    hash = "sha256-1v/PnGYchauwSpYxP6mXNkkcK1bLF/u6VAYTPXk5bVc=";
+    tag = lib.strings.removePrefix "0.2-" finalAttrs.version;
+    hash = "sha256-bv8ZQuEU8QqtC7fvtELXlkQkjPoGqqSglhE0lzsTEIk=";
   };
 
-  cargoHash = "sha256-xrlcn18ryK7PrR/KfBKN0ot+h06nj4cl2Gx4Dm1RyqU=";
+  cargoHash = "sha256-89xxPl6nIp4VLsQqsaXH9VKWX6Ehw6KCJaOuxnSxu0g=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
     let
-      tag = lib.strings.removePrefix "0-" finalAttrs.version;
-      versionDate = lib.strings.removePrefix "0-nightly-" finalAttrs.version;
+      tag = lib.strings.removePrefix "0.2-" finalAttrs.version;
+      versionDate = lib.strings.removePrefix "0.2-nightly-" finalAttrs.version;
     in
     {
       VERGEN_IDEMPOTENT = "1";
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       null;
 
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     xorg.libXcursor
     xorg.libXrandr
@@ -116,7 +116,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
           jq -r ".[0].tag_name" \
         )"
-        exec nix-update --version "0-$version" ruffle
+        exec nix-update --version "0.2-$version" ruffle
       '';
     });
   };
@@ -135,7 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://ruffle.rs/";
     downloadPage = "https://ruffle.rs/downloads";
-    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0-" finalAttrs.version}";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0.2" finalAttrs.version}";
     license = [
       lib.licenses.mit
       lib.licenses.asl20

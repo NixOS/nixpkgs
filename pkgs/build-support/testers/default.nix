@@ -56,10 +56,16 @@
       assertion,
       actual,
       expected,
+      postFailureMessage ? null,
     }:
     runCommand "equal-contents-${lib.strings.toLower assertion}"
       {
-        inherit assertion actual expected;
+        inherit
+          assertion
+          actual
+          expected
+          postFailureMessage
+          ;
         nativeBuildInputs = [ diffoscopeMinimal ];
       }
       ''
@@ -69,6 +75,10 @@
         then
           echo
           echo 'Contents must be equal, but were not!'
+          if [[ -n "''${postFailureMessage:-}" ]]; then
+            echo
+            echo "$postFailureMessage"
+          fi
           echo
           echo "+: expected,   at $expected"
           echo "-: unexpected, at $actual"

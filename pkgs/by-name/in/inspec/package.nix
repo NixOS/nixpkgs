@@ -16,7 +16,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "inspec";
 
   meta = {
-    description = "Inspec is an open-source testing framework for infrastructure with a human- and machine-readable language for specifying compliance, security and policy requirements";
+    description = "Open-source testing framework for infrastructure with a human- and machine-readable language for specifying compliance, security and policy requirements";
     homepage = "https://inspec.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dylanmtaylor ];

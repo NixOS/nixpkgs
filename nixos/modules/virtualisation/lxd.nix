@@ -68,7 +68,7 @@ in
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
           "neighbour: ndisc_cache: neighbor table overflow!".
-          See https://lxd.readthedocs.io/en/latest/production-setup/
+          See <https://lxd.readthedocs.io/en/latest/production-setup/>
           for details.
         '';
       };

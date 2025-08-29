@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     mainProgram = "m33-linux";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

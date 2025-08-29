@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gat";
-  version = "0.24.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "gat";
     tag = "v${version}";
-    hash = "sha256-xP7xDuab8QH1PULgF8/FGwDNV/5bYqXkvxgR/Mk4GVw=";
+    hash = "sha256-DgIAAlA7rhMvTovmIZOsJ7KoXizGZXT2GRkTnxOh7L0=";
   };
 
-  vendorHash = "sha256-1uIpgcl+6H7aleW28YE8IidJysEB2n+wt2Dz0kZGNzk=";
+  vendorHash = "sha256-Aq+wcBeYpKWwXgGUZbAqT0zm1Bri7Df3rt7ycwy060o=";
 
   env.CGO_ENABLED = 0;
 

@@ -90,7 +90,8 @@ buildPythonPackage rec {
     tests.pytest = langchain-core.overridePythonAttrs (_: {
       doCheck = true;
     });
-
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-core==";
     };

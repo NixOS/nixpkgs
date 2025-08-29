@@ -61,6 +61,11 @@ buildPythonPackage rec {
     # https://github.com/fabric/fabric/issues/2341
     "client_defaults_to_a_new_SSHClient"
     "defaults_to_auto_add"
+
+    # Fixture "fake_agent" called directly. Fixtures are not meant to be called directly
+    "no_stdin"
+    "fake_agent"
+    "fake"
   ];
 
   meta = {

@@ -60,6 +60,12 @@ let
       # outdated snapshot
       "tests/components/backup/test_sensors.py::test_sensors"
     ];
+    bosch_alarm = [
+      # outdated snapshots
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-solution_3000]"
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-amax_3000]"
+      "tests/components/bosch_alarm/test_binary_sensor.py::test_binary_sensor[None-b5512]"
+    ];
     bmw_connected_drive = [
       # outdated snapshot
       "tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
@@ -78,13 +84,33 @@ let
       # outdated snapshot in eve_weather_sensor variant
       "tests/components/matter/test_number.py::test_numbers"
     ];
+    minecraft_server = [
+      # FileNotFoundError: [Errno 2] No such file or directory: '/etc/resolv.conf'
+      "tests/components/minecraft_server/test_binary_sensor.py"
+      "tests/components/minecraft_server/test_diagnostics.py"
+      "tests/components/minecraft_server/test_init.py"
+      "tests/components/minecraft_server/test_sensor.py"
+    ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+    nzbget = [
+      # type assertion fails due to introduction of parameterized type
+      "tests/components/nzbget/test_config_flow.py::test_user_form"
+      "tests/components/nzbget/test_config_flow.py::test_user_form_show_advanced_options"
+      "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
+      "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
+    ];
     openai_conversation = [
       # outdated snapshot
       "tests/components/openai_conversation/test_conversation.py::test_function_call"
+      # Pydantic validation error
+      "tests/components/openai_conversation/test_conversation.py"
+      "tests/components/openai_conversation/test_ai_task.py"
+      # TypeError: object ImagesResponse can't be used in 'await' expression
+      "tests/components/openai_conversation/test_init.py::test_generate_image_service"
+      "tests/components/openai_conversation/test_init.py::test_generate_image_service_error"
     ];
     overseerr = [
       # imports broken future module

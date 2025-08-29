@@ -62664,56 +62664,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  svgo = nodeEnv.buildNodePackage {
-    name = "svgo";
-    packageName = "svgo";
-    version = "3.3.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/svgo/-/svgo-3.3.2.tgz";
-      sha512 = "OoohrmuUlBs8B8o6MB2Aevn+pRIH9zDALSR+6hhqVfa6fRwG/Qw9VUMSMW9VNg2CFc/MTIfabtdOVl9ODIJjpw==";
-    };
-    dependencies = [
-      sources."@trysound/sax-0.2.0"
-      sources."boolbase-1.0.0"
-      sources."commander-7.2.0"
-      sources."css-select-5.1.0"
-      (
-        sources."css-tree-2.3.1"
-        // {
-          dependencies = [
-            sources."mdn-data-2.0.30"
-          ];
-        }
-      )
-      sources."css-what-6.1.0"
-      (
-        sources."csso-5.0.5"
-        // {
-          dependencies = [
-            sources."css-tree-2.2.1"
-          ];
-        }
-      )
-      sources."dom-serializer-2.0.0"
-      sources."domelementtype-2.3.0"
-      sources."domhandler-5.0.3"
-      sources."domutils-3.2.2"
-      sources."entities-4.5.0"
-      sources."mdn-data-2.0.28"
-      sources."nth-check-2.1.1"
-      sources."picocolors-1.1.1"
-      sources."source-map-js-1.2.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Nodejs-based tool for optimizing SVG vector graphics files";
-      homepage = "https://svgo.dev";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   tern = nodeEnv.buildNodePackage {
     name = "tern";
     packageName = "tern";

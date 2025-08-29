@@ -112,9 +112,8 @@ let
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
-      emilytrau
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
     ];
     platforms = platforms.darwin ++ [

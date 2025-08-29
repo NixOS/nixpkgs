@@ -35,7 +35,7 @@
   rsync,
   icu,
   pnpm_9,
-  nodePackages,
+  svgo,
   nodejs,
   jq,
   moreutils,
@@ -82,7 +82,7 @@ let
     libjpeg
     jpegoptim
     gifsicle
-    nodePackages.svgo
+    svgo
     jhead
   ];
 
@@ -445,7 +445,7 @@ let
       platforms = platforms.linux;
       maintainers = with maintainers; [ talyz ];
       license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
+      description = "Open source discussion platform";
     };
   };
 in

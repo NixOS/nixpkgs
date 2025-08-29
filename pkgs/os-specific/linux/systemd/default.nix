@@ -138,6 +138,7 @@
   withLogind ? true,
   withMachined ? true,
   withNetworkd ? true,
+  withNspawn ? !buildLibsOnly,
   withNss ? !stdenv.hostPlatform.isMusl,
   withOomd ? true,
   withOpenSSL ? true,
@@ -195,7 +196,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.6";
+  version = "257.7";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -203,6 +204,8 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1734643670";
+
+  kbd' = if withPam then kbd else kbd.override { withVlock = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -213,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-Myb/ra7NQTDzN7B9jn8svbhTrLSfiqWaSxREe/nDyYo=";
+    hash = "sha256-9OnjeMrfV5DSAoX/aetI4r/QLPYITUd2aOY0DYfkTzQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -242,11 +245,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
-    ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
+
+    # https://github.com/systemd/systemd/issues/33392
+    # https://github.com/systemd/systemd/pull/33400
+    ./0018-bootctl-do-not-fail-when-the-same-file-is-updated-mu.patch
+
     # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
     # if the install prefix is not /usr, but that does not work for us
     # because we include the config snippet manually
     ./0019-meson-Don-t-link-ssh-dropins.patch
+
     ./0020-install-unit_file_exists_full-follow-symlinks.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
@@ -359,7 +367,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     meson
     glibcLocales
-    getent
     m4
     autoPatchelfHook
 
@@ -391,7 +398,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    libcap
+    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
     bashInteractive # for patch shebangs
@@ -480,8 +487,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
     # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+    (lib.mesonOption "loadkeys-path" "${kbd'}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd'}/bin/setfont")
 
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
@@ -562,6 +569,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libiptc" withIptables)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
+    (lib.mesonEnable "sysupdated" withSysupdate)
     (lib.mesonEnable "seccomp" withLibseccomp)
     (lib.mesonEnable "selinux" withSelinux)
     (lib.mesonEnable "tpm2" withTpm2Tss)
@@ -577,6 +585,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
+    # (lib.mesonEnable "nspawn" withNspawn) # nspawn build can be turned off on systemd 258, on 257.x it will just not be installed in systemdLibs but the build is unconditional
 
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
@@ -625,11 +634,6 @@ stdenv.mkDerivation (finalAttrs: {
       # build fails with an error message.
       binaryReplacements = [
         {
-          search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
-          where = [ "src/nspawn/nspawn-setuid.c" ];
-        }
-        {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
           where = [
@@ -674,6 +678,16 @@ stdenv.mkDerivation (finalAttrs: {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
+        }
+      ]
+      ++ lib.optionals withNspawn [
+        {
+          # we only need to patch getent when nspawn will actually be built/installed
+          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
+          # patching getent unconditionally here introduces infinite recursion on musl
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
         }
       ]
       ++ lib.optionals withImportd [
@@ -911,13 +925,15 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withPortabled
+      withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
       util-linux
       kmod
-      kbd
       ;
+
+    kbd = kbd';
 
     # Many TPM2-related units are only installed if this trio of features are
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521

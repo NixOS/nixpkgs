@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-/jaSmDk8eweXbYO0yyhXiLvp/T4viFsNC4vGoTMhbbU=";
+    hash = "sha256-A8q1mjrtm8VgwsOpBCVD61K88wrjsYHiWdbv0XvACG4=";
   };
 
   build-system = [
@@ -103,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/docling-project/docling-serve";
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

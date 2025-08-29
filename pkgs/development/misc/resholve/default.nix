@@ -2,7 +2,6 @@
   lib,
   pkgsBuildHost,
   resholve,
-  ...
 }:
 
 let

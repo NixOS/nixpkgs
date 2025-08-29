@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "5";
+          patch = "6";
           suffix = "";
         };
-        hash = "sha256-k+WD8kNFTm6eRYjKLCZiIGrZYWWYYyd6/NuWgBZH1kA=";
+        hash = "sha256-F7pVCIGdhzahT7/EfTbhhJRqh3hRsunEtsQ6y0SjsQQ=";
       };
     };
 
@@ -92,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "rc1";
+        suffix = "rc2";
       };
-      hash = "sha256-hwd4CunxnFv1ufJ4JxgboRza17spLqScrVQkMx5A7os=";
+      hash = "sha256-vGKFTPIyNFvSLJCRpoRk4B4FbGRzo//6hFcsijQtplY=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -105,37 +105,7 @@
           inherit passthruFun;
           pythonAttr = "python3Minimal";
           # strip down that python version as much as possible
-          openssl = null;
-          readline = null;
-          ncurses = null;
-          gdbm = null;
-          sqlite = null;
-          tzdata = null;
-          libuuid = null;
-          bzip2 = null;
-          libxcrypt = null;
-          xz = null;
-          zlib = null;
-          libffi = null;
-          stripConfig = true;
-          stripIdlelib = true;
-          stripTests = true;
-          stripTkinter = true;
-          rebuildBytecode = false;
-          stripBytecode = true;
-          includeSiteCustomize = false;
-          enableOptimizations = false;
-          enableLTO = false;
-          mimetypesSupport = false;
-          withExpat = false;
-          withMpdecimal = false;
-          /*
-            The actual 'allowedReferences' attribute is set inside the cpython derivation.
-            This is necessary in order to survive overrides of dependencies.
-          */
-          allowedReferenceNames = [
-            "bashNonInteractive"
-          ];
+          withMinimalDeps = true;
         }
         // sources.python313
       )).overrideAttrs

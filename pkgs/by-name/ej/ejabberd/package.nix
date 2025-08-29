@@ -141,7 +141,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "25.07";
+  version = "25.08";
 
   nativeBuildInputs = [
     makeWrapper
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-DDvxmRennd9tAC9LqV8eAAzcF+kZemvgsOviWD9CHlM=";
+    hash = "sha256-nipFr4ezo2prlpLfAW8iu8HAG8nhkIXXiAbsoM7QKTM=";
   };
 
   passthru.tests = {
@@ -222,7 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sander
-      abbradar
       chuangzhu
       toastal
     ];

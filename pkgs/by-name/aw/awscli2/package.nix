@@ -53,6 +53,7 @@ let
           build-system = with final; [
             setuptools
           ];
+          postPatch = null;
           src = prev.src.override {
             inherit version;
             hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";

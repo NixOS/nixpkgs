@@ -12,7 +12,7 @@
   libGL,
   glew,
   opencsg,
-  cgal,
+  cgal_5,
   mpfr,
   gmp,
   glib,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     boost
     glew
     opencsg
-    cgal
+    cgal_5
     mpfr
     gmp
     glib
