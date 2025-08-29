@@ -1377,7 +1377,6 @@ dont-distribute-packages:
  - haskus-web
  - haslo
  - hasloGUI
- - hasmtlib
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -1640,9 +1639,6 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
- - hsqml-datamodel-vinyl
- - hsqml-demo-morris
- - hsqml-morris
  - hsreadability
  - hssourceinfo
  - hssqlppp-th
@@ -2034,14 +2030,6 @@ dont-distribute-packages:
  - linnet-conduit
  - linux-ptrace
  - lio-eci11
- - liquid-base
- - liquid-bytestring
- - liquid-containers
- - liquid-ghc-prim
- - liquid-parallel
- - liquid-platform
- - liquid-prelude
- - liquid-vector
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
@@ -2096,6 +2084,7 @@ dont-distribute-packages:
  - lrucaching-haxl
  - ls-usb
  - LslPlus
+ - lsm-tree
  - lsystem
  - luachunk
  - lucid-colonnade
@@ -2954,7 +2943,6 @@ dont-distribute-packages:
  - rv
  - s-expression
  - S3
- - safe-coupling
  - safe-failure
  - safe-failure-cme
  - safe-plugins
@@ -2978,6 +2966,7 @@ dont-distribute-packages:
  - sandwich-contexts-kubernetes
  - sandwich-contexts-minio
  - sandwich-webdriver
+ - sandwich-webdriver_0_4_0_1
  - sarsi
  - sasha
  - sasl
@@ -3174,7 +3163,6 @@ dont-distribute-packages:
  - smith-client
  - Smooth
  - smt
- - smtlib-backends-z3
  - smtlib2-debug
  - smtlib2-pipe
  - smtlib2-quickcheck
@@ -3683,6 +3671,7 @@ dont-distribute-packages:
  - WebCont
  - webcrank-wai
  - webdriver-w3c
+ - webdriver_0_13_0_0
  - webify
  - webserver
  - WEditorBrick

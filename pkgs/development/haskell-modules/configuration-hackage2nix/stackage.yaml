@@ -1046,7 +1046,6 @@ default-package-overrides:
   - gi-xlib ==2.0.14
   - ginger ==0.10.6.0
   - gio ==0.13.12.0
-  - git-annex ==10.20250416
   - git-lfs ==1.2.5
   - git-mediate ==1.1.0
   - githash ==0.1.7.0
