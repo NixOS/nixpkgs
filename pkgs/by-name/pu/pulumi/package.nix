@@ -156,18 +156,17 @@ buildGoModule rec {
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+
       # Test building packages that reuse our version and src.
       inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
-      # Pulumi currently requires protobuf4, but Nixpkgs defaults to a newer
-      # version. Test that we can actually build the package with protobuf4.
-      # https://github.com/pulumi/pulumi/issues/16828
-      # https://github.com/NixOS/nixpkgs/issues/351751#issuecomment-2462163436
-      pythonPackage =
+      pythonPackage = python3Packages.pulumi;
+      pythonPackageProtobuf5 =
         (python3Packages.overrideScope (
           final: _: {
-            protobuf = final.protobuf4;
+            protobuf = final.protobuf5;
           }
         )).pulumi;
+
       pulumiTestHookShellcheck = testers.shellcheck {
         name = "pulumi-test-hook-shellcheck";
         src = ./extra/pulumi-test-hook.sh;
