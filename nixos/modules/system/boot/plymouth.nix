@@ -75,6 +75,20 @@ let
         exit 1
     fi
   '';
+
+  # 'emergency.serivce' and 'rescue.service' have
+  # 'ExecStartPre=-plymouth quit --wait', but 'plymouth' is not on
+  # their 'ExecSearchPath'. We could set 'ExecSearchPath', but it
+  # overrides 'DefaultEnvironment=PATH=...', which is trouble for the
+  # initrd shell. It's simpler to just reset 'ExecStartPre' with an
+  # empty string and then set it to exactly what we want.
+  preStartQuitFixup = {
+    serviceConfig.ExecStartPre = [
+      ""
+      "${plymouth}/bin/plymouth quit --wait"
+    ];
+  };
+
 in
 
 {
@@ -182,6 +196,9 @@ in
     # Prevent Plymouth taking over the screen during system updates.
     systemd.services.plymouth-start.restartIfChanged = false;
 
+    systemd.services.rescue = preStartQuitFixup;
+    systemd.services.emergency = preStartQuitFixup;
+
     boot.initrd.systemd = {
       extraBin.plymouth = "${plymouth}/bin/plymouth"; # for the recovery shell
       storePaths = [
@@ -190,6 +207,10 @@ in
         "${plymouth}/sbin/plymouthd"
       ];
       packages = [ plymouth ]; # systemd units
+
+      services.rescue = preStartQuitFixup;
+      services.emergency = preStartQuitFixup;
+
       contents = {
         # Files
         "/etc/plymouth/plymouthd.conf".source = configFile;
