@@ -963,6 +963,7 @@
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/certspotter.nix
+  ./services/monitoring/cloudprober.nix
   ./services/monitoring/cockpit.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
