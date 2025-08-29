@@ -240,29 +240,44 @@ let
 
   compare = callPackage ./compare { };
 
+  baseline =
+    {
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
+      # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000,
+      quickTest ? false,
+    }:
+    symlinkJoin {
+      name = "nixpkgs-eval-baseline";
+      paths = map (
+        evalSystem:
+        singleSystem {
+          inherit quickTest evalSystem chunkSize;
+        }
+      ) evalSystems;
+    };
+
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       quickTest ? false,
+      baseline,
     }:
     let
       diffs = symlinkJoin {
-        name = "diffs";
+        name = "nixpkgs-eval-diffs";
         paths = map (
           evalSystem:
-          let
-            eval = singleSystem {
-              inherit quickTest evalSystem chunkSize;
-            };
-          in
           diff {
             inherit evalSystem;
-            # Local "full" evaluation doesn't do a real diff.
-            beforeDir = eval;
-            afterDir = eval;
+            beforeDir = baseline;
+            afterDir = singleSystem {
+              inherit quickTest evalSystem chunkSize;
+            };
           }
         ) evalSystems;
       };
@@ -280,7 +295,8 @@ in
     combine
     compare
     # The above three are used by separate VMs in a GitHub workflow,
-    # while the below is intended for testing on a single local machine
+    # while the below are intended for testing on a single local machine
+    baseline
     full
     ;
 }
