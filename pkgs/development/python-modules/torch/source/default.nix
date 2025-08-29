@@ -24,7 +24,7 @@
   magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
+  useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
   MPISupport ? false,
   mpi,
   buildDocs ? false,
@@ -580,7 +580,8 @@ buildPythonPackage rec {
     ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
     ++ lists.optionals useSystemNccl [
       # Some platforms do not support NCCL (i.e., Jetson)
-      nccl # Provides nccl.h AND a static copy of NCCL!
+      (lib.getDev nccl) # Provides nccl.h
+      (lib.getOutput "static" nccl) # Provides static library
     ]
     ++ [
       cuda_profiler_api # <cuda_profiler_api.h>
