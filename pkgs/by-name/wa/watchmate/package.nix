@@ -48,13 +48,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 assets/icons/io.gitlab.azymohliad.WatchMate-symbolic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PineTime smart watch companion app for Linux phone and desktop";
     mainProgram = "watchmate";
     homepage = "https://github.com/azymohliad/watchmate";
     changelog = "https://github.com/azymohliad/watchmate/raw/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ chuangzhu ];
+    platforms = lib.platforms.linux;
   };
 })
