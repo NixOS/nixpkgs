@@ -10,6 +10,7 @@
   makeWrapper,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -17,18 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1u0zDGUytuMhqe7NOJeXd1DKch8P7FT02MYgMkX3eMc=";
+    hash = "sha256-jVKCjAYeWjy2jDOHEb6vu4ZNTXrSETgUt6NIE++trPE=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-C84VZfpMua1RrFhTFhWfY2xZAPDtNllkAbdHljlYdZs=";
+  cargoHash = "sha256-Kv8wYxPGainwayru9pWBplg2PNcC86ZTAmDp9M4G1bQ=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    perl
     pkg-config
   ];
 
