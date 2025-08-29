@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       ereslibre
       matthewbauer
+      nekowinston
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";
