@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pprintpp";
-  version = "0.4.0-unstable-2022-05-31";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
