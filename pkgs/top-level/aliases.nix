@@ -2413,6 +2413,7 @@ mapAliases {
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
 
   ### W ###
+  w_scan = throw "'w_scan' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
   wakatime = wakatime-cli; # 2024-05-30
   wal_e = throw "wal_e was removed as it is unmaintained upstream and depends on the removed boto package; upstream recommends using wal-g or pgbackrest"; # Added 2024-09-22
   wapp = tclPackages.wapp; # Added 2024-10-02
