@@ -31,6 +31,7 @@
   protobuf,
   pyarrow,
   pydot,
+  pymilvus,
   pymongo,
   python-dateutil,
   pytz,
@@ -62,15 +63,26 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.66.0";
+  version = "2.67.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-nRofy9pvhO5SUvkIk73ViFm1gPWxEhj1rAUeCVYIpYs=";
+    hash = "sha256-gHlbmPNtSKjYO4YPPtWnjul977APsHwe/2cq2UG4wuk=";
   };
+
+  sourceRoot = "${src.name}/sdks/python";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "==" ">=" \
+      --replace-fail ",<2.3.0" ""
+
+    substituteInPlace setup.py \
+      --replace-fail "  copy_tests_from_docs()" ""
+  '';
 
   pythonRelaxDeps = [
     "grpcio"
@@ -94,8 +106,6 @@ buildPythonPackage rec {
     "pydot"
     "redis"
   ];
-
-  sourceRoot = "${src.name}/sdks/python";
 
   build-system = [
     cython
@@ -125,6 +135,7 @@ buildPythonPackage rec {
     protobuf
     pyarrow
     pydot
+    pymilvus
     pymongo
     python-dateutil
     pytz
@@ -135,18 +146,6 @@ buildPythonPackage rec {
   ];
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "distlib==0.3.7" "distlib" \
-      --replace-fail "yapf==0.29.0" "yapf" \
-      --replace-fail "grpcio-tools==1.62.1" "grpcio-tools" \
-      --replace-fail "mypy-protobuf==3.5.0" "mypy-protobuf" \
-      --replace-fail "numpy>=1.14.3,<2.3.0" "numpy"
-
-    substituteInPlace setup.py \
-      --replace-fail "  copy_tests_from_docs()" ""
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -178,6 +177,14 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [
+    #  FileNotFoundError: [Errno 2] No such file or directory:
+    # '/nix/store/...-python3.13-apache-beam-2.67.0/lib/python3.13/site-packages/apache_beam/yaml/docs/yaml.md'
+    "apache_beam/yaml/examples/testing/examples_test.py"
+
+    # from google.cloud.sql.connector import Connector
+    # E   ModuleNotFoundError: No module named 'google.cloud'
+    "apache_beam/ml/rag/ingestion/cloudsql_it_test.py"
+
     # Fails with
     #     _______ ERROR collecting apache_beam/io/external/xlang_jdbcio_it_test.py _______
     #     apache_beam/io/external/xlang_jdbcio_it_test.py:80: in <module>
@@ -339,6 +346,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # fixture 'self' not found
+    "test_with_batched_input_exceeds_size_limit"
+    "test_with_batched_input_splits_large_batch"
+
     # IndexError: list index out of range
     "test_only_sample_exceptions"
 
