@@ -43,6 +43,7 @@
   pandoc,
 
   # Scripts
+  bash,
   bridge-utils,
   coreutils,
   diffutils,
@@ -223,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
+    bash
     bzip2
     e2fsprogs.dev
     libnl
