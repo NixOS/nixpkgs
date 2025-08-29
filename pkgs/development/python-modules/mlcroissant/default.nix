@@ -22,6 +22,7 @@
   # tests
   apache-beam,
   gitpython,
+  librosa,
   pillow,
   pytestCheckHook,
   pyyaml,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "mlcroissant";
-  version = "1.0.21";
+  version = "1.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlcommons";
     repo = "croissant";
     tag = "v${version}";
-    hash = "sha256-yUAF/NQHz8WUIaIIsqOwTMppl5+EZhURFpHnde9OOpE=";
+    hash = "sha256-uJOxKNrK3eN2wyPFEQr2J4+vZeSK1KPyFDag2jcyWZw=";
   };
 
   sourceRoot = "${src.name}/python/mlcroissant";
@@ -66,6 +67,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     apache-beam
     gitpython
+    librosa
     pillow
     pytestCheckHook
     pyyaml
