@@ -103,7 +103,20 @@ rec {
   };
 
   # Eventually, switch to an updateScript without versionPrefix hardcoded...
-  thunderbird-esr = thunderbird-128;
+  thunderbird-esr = thunderbird-140;
+
+  thunderbird-140 = common {
+    applicationName = "Thunderbird ESR";
+
+    version = "140.2.0esr";
+    sha512 = "6a10f95b805f00a0820c822ae07bc52ac39d0a55f084c319d27f01710d8a1d809b7b224da966632ae0a22658bf14e76c8fd7cec022718316c306c43809a4997d";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-140";
+      versionPrefix = "140";
+      versionSuffix = "esr";
+    };
+  };
 
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
