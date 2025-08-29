@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://pydash.readthedocs.io";
     changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }
