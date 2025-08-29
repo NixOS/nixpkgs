@@ -19,7 +19,7 @@
 # any activity since then.
 buildPythonPackage {
   pname = "sphinx-version-warning";
-  version = "unstable-2019-08-10";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
