@@ -2,17 +2,18 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasynth";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Rerumu";
     repo = "Wasynth";
     rev = "v${version}";
-    sha256 = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
+    sha256 = "sha256-0Gtqet6KKLtooh9cU2R/top142AeT+uIxFwe1dPTvAU=";
   };
 
   # A lock file isn't provided, so it must be added manually.
@@ -28,6 +29,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     rm $out/bin/{luajit,luau}_translate
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = with lib; {
     description = "WebAssembly translation tools for various languages";
