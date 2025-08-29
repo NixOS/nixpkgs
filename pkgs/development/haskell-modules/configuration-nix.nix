@@ -123,6 +123,9 @@ builtins.intersectAttrs super {
     + drv.preCheck or "";
   }) super.agda2lagda;
 
+  # Executable is of interest without the closure of the library
+  fix-whitespace = enableSeparateBinOutput super.fix-whitespace;
+
   # scrypt requires SSE2
   password = super.password.override (
     lib.optionalAttrs (!(lib.meta.availableOn pkgs.stdenv.hostPlatform self.scrypt)) {
