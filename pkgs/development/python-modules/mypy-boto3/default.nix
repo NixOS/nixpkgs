@@ -470,8 +470,8 @@ rec {
       "sha256-DQZUI72cnRt4YwHMQivMdL4y9B9EN2H7dIMmybcX/Uk=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.40.14"
-      "sha256-h997Y0qrpGtWKvwDMX5S9wmm+JDEpa/zb5LTYWZJyoQ=";
+    buildMypyBoto3Package "eks" "1.40.19"
+      "sha256-2LwmEEYeKrx5Ee/1ETxaQz29/dT+CPd88jJpPqBBcng=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
