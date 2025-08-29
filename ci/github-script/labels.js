@@ -171,6 +171,47 @@ module.exports = async ({ github, context, core, dry }) => {
     return prLabels
   }
 
+  // Returns true if the issue was closed. In this case, the labeling does not need to
+  // continue for this issue. Returns false if no action was taken.
+  async function handleAutoClose(item) {
+    const issue_number = item.number
+
+    if (item.labels.some(({ name }) => name === '0.kind: packaging request')) {
+      const body = [
+        'Thank you for your interest in packaging new software in Nixpkgs. Unfortunately, to mitigate the unsustainable growth of unmaintained packages, **Nixpkgs is no longer accepting package requests** via Issues.',
+        '',
+        'As a [volunteer community][community], we are always open to new contributors. If you wish to see this package in Nixpkgs, **we encourage you to [contribute] it yourself**, via a Pull Request. Anyone can [become a package maintainer][maintainers]! You can find language-specific packaging information in the [Nixpkgs Manual][nixpkgs]. Should you need any help, please reach out to the community on [Matrix] or [Discourse].',
+        '',
+        '[community]: https://nixos.org/community',
+        '[contribute]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#quick-start-to-adding-a-package',
+        '[maintainers]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md',
+        '[nixpkgs]: https://nixos.org/manual/nixpkgs/unstable/',
+        '[Matrix]: https://matrix.to/#/#dev:nixos.org',
+        '[Discourse]: https://discourse.nixos.org/c/dev/14',
+      ].join('\n')
+
+      core.info(`Issue #${item.number}: auto-closed`)
+
+      if (!dry) {
+        await github.rest.issues.createComment({
+          ...context.repo,
+          issue_number,
+          body,
+        })
+
+        await github.rest.issues.update({
+          ...context.repo,
+          issue_number,
+          state: 'closed',
+          state_reason: 'not_planned',
+        })
+      }
+
+      return true
+    }
+    return false
+  }
+
   async function handle({ item, stats }) {
     try {
       const log = (k, v, skip) => {
@@ -190,6 +231,12 @@ module.exports = async ({ github, context, core, dry }) => {
         Object.assign(itemLabels, await handlePullRequest({ item, stats }))
       } else {
         stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          // If this returns true, the issue was closed. In this case we return, to not
+          // label the issue anymore. Most importantly this avoids unlabeling stale issues
+          // which are closed via auto-close.
+          if (await handleAutoClose(item)) return
+        }
       }
 
       const latest_event_at = new Date(
