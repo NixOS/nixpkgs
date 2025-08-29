@@ -3015,12 +3015,12 @@ final: prev: {
 
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
-    version = "2025-08-21";
+    version = "2025-08-29";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "codecompanion.nvim";
-      rev = "79cc678ca5f79a5ed04affa73116cb9bbe41bb12";
-      sha256 = "1lm10bijwcr5dl7br6djlij3ixn12bhplc24j7qfiypphxw78yxq";
+      rev = "c34e49676dd9bd44c9a18588167cdc0a31077dbd";
+      sha256 = "0nmfrfjhs2l0m2cmgqgmsnc0irr1d8fv8xm6zglkdadppf0bm4s3";
     };
     meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
     meta.hydraPlatforms = [ ];
