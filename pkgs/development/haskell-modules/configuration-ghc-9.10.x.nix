@@ -85,7 +85,7 @@ in
     url = "https://github.com/clash-lang/ghc-typelits-natnormalise/commit/a133c7e4dc38834e0cd913eeb7a10d501642dc26.patch";
     sha256 = "sha256-HqGLrbIcLJ8DP0Qe1jU4p4Tt8bykOd7qqskdNwXVcPs=";
     includes = [ "tests/ErrorTests.hs" ];
-  }) (doJailbreak (doDistribute super.ghc-typelits-natnormalise_0_7_11));
+  }) (doJailbreak (doDistribute super.ghc-typelits-natnormalise_0_7_12));
 
   #
   # Jailbreaks
