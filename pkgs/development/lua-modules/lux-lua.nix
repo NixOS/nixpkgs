@@ -9,6 +9,7 @@
   lux-cli,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
 }:
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
+    perl
     pkg-config
   ];
 
