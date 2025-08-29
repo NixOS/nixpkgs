@@ -8,6 +8,7 @@
   libbpf,
   libbfd,
   libopcodes,
+  libpcap,
   glibc,
   cereal,
   asciidoctor,
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     libbpf
     libbfd
     libopcodes
+    libpcap
     cereal
     asciidoctor
   ];
