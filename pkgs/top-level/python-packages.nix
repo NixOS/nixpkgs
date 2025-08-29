@@ -2516,6 +2516,8 @@ self: super: with self; {
 
   chex = callPackage ../development/python-modules/chex { };
 
+  chime = callPackage ../development/python-modules/chime { };
+
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   chispa = callPackage ../development/python-modules/chispa { };
