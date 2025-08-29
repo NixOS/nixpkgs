@@ -1272,6 +1272,7 @@ in
   qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = runTest ./qownnotes.nix;
+  qtcreator = import ./qtcreator.nix { inherit runTest; };
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
   quake3 = runTest ./quake3.nix;
