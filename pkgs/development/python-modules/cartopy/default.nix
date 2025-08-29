@@ -77,11 +77,14 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "cartopy"
-    "-m"
-    "'not network and not natural_earth'"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "natural_earth"
   ];
 
   disabledTests = [

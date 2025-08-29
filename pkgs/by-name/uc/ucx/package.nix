@@ -36,15 +36,15 @@ let
   # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
   stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "ucx";
-  version = "1.18.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${version}";
-    sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-n3xJmbvUXZzfhotOBJRyH2OEL4NFZIKyB808HwEQSYo=";
   };
 
   outputs = [
@@ -103,11 +103,14 @@ stdenv'.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    # LoongArch64 is not supported.
+    # See: https://github.com/openucx/ucx/issues/9873
+    badPlatforms = lib.platforms.loongarch64;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

@@ -540,9 +540,7 @@ stdenv.mkDerivation {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    maintainers = with lib.maintainers; [
-      prusnak
-    ];
+    maintainers = with lib.maintainers; [ ];
     teams = [ lib.teams.haskell ];
   };
 }

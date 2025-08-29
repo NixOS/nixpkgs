@@ -96,7 +96,7 @@ in
     rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
-      description = "better mouse support for tmux";
+      description = "Better mouse support for tmux";
       longDescription = ''
         Features:
 
@@ -142,7 +142,7 @@ in
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
-      description = "continuous saving of tmux environment";
+      description = "Continuous saving of tmux environment";
       longDescription = ''
         Features:
         * continuous saving of tmux environment
@@ -238,6 +238,26 @@ in
     };
   };
 
+  dotbar = mkTmuxPlugin rec {
+    pluginName = "dotbar";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "vaaleyard";
+      repo = "tmux-dotbar";
+      tag = version;
+      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+    };
+    meta = {
+      homepage = "https://github.com/vaaleyard/tmux-dotbar";
+      downloadPage = "https://github.com/vaaleyard/tmux-dotbar";
+      description = "Simple and minimalist status bar for tmux";
+      changelog = "https://github.com/vaaleyard/tmux-dotbar/releases/tag/${version}";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
     version = "0-unstable-2024-08-25";
@@ -255,11 +275,13 @@ in
        wrapProgram $target/scripts/open.sh \
          --prefix PATH : ${
            with pkgs;
-           lib.makeBinPath [
-             fzf
-             xclip
-             wl-clipboard
-           ]
+           lib.makeBinPath (
+             [ fzf ]
+             ++ lib.optionals stdenv.hostPlatform.isLinux [
+               xclip
+               wl-clipboard
+             ]
+           )
          }
     '';
     meta = {
@@ -353,6 +375,26 @@ in
       repo = "tmux-gruvbox";
       rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
       hash = "sha256-jvGCrV94vJroembKZLmvGO8NknV1Hbgz2IuNmc/BE9A=";
+    };
+  };
+
+  harpoon = mkTmuxPlugin {
+    pluginName = "harpoon";
+    rtpFilePath = "harpoon.tmux";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "chaitanyabsprip";
+      repo = "tmux-harpoon";
+      rev = "v0.4.0";
+      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+    };
+    meta = {
+      homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      downloadPage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      description = "Tool to bookmark session supporting auto create for sessions";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
     };
   };
 
@@ -766,12 +808,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.5.3";
+    version = "1.6.6";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
-      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
+      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
@@ -1051,10 +1093,29 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/o0th/tmux-nova";
-      description = "tmux-nova theme";
+      description = "Tmux-nova theme";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ o0th ];
+    };
+  };
+
+  tmux-toggle-popup = mkTmuxPlugin rec {
+    pluginName = "tmux-toggle-popup";
+    rtpFilePath = "toggle-popup.tmux";
+    version = "0.4.2";
+    src = fetchFromGitHub {
+      owner = "loichyan";
+      repo = "tmux-toggle-popup";
+      tag = "v${version}";
+      hash = "sha256-dlCUK+yrBkY0DnKoj/s9dJ6yITBMfWMgw3wnwzuxim4=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/loichyan/tmux-toggle-popup";
+      description = "Handy plugin to create toggleable popups";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ szaffarano ];
     };
   };
 }

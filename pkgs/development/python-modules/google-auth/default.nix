@@ -82,16 +82,14 @@ buildPythonPackage rec {
     "system_tests/"
     # Requires a running aiohttp event loop
     "tests_async/"
+
+    # cryptography 44 compat issue
+    "tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
-  ];
-
-  pytestFlagsArray = [
-    # cryptography 44 compat issue
-    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   __darwinAllowLocalNetworking = true;

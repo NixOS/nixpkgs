@@ -40,7 +40,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "GoMock is a mocking framework for the Go programming language";
+    description = "Mocking framework for the Go programming language";
     homepage = "https://github.com/uber-go/mock";
     changelog = "https://github.com/uber-go/mock/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;

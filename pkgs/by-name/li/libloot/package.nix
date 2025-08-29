@@ -146,7 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-/8WOEt9dxKFTTZbhf5nt81jo/yHuALPxh/IwAOehi9w=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-re/cKqf/CAD7feNIEuou4ZP8BNkArd5CvREx1610jig=";
 
       lang = "c++";
@@ -164,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-ygjSyixg+9HFFNV/G+w+TxGFTrjlWxlDt8phpCE8xyQ=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-6sY2M7kjSYB3+6+zoMxPwdl+g7ARLHm9RdSODHQR8bE=";
 
       lang = "c++";
@@ -182,7 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-MvadQ4cWpzNgF/lUW5Jb758DvfRPGZ7s1W4MbO7nbIw=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-m/vRnAJyMQOosxnjSUgHIY1RCkdB5+HFVqqzYVEpgOI=";
 
       lang = "c";

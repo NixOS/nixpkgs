@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = pinData.serverCargoHash;
 
   buildInputs = [

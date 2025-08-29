@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "djview";
-  version = "4.12";
+  version = "4.12.3";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
-    hash = "sha256-VnPGqLfhlbkaFyCyQJGRW4FF3jSHnbEVi8k2sQDq8+M=";
+    hash = "sha256-F7+5cxq4Bw4BI1OB8I5XsSMf+19J6wMYc+v6GJza9H0=";
   };
 
   nativeBuildInputs = [

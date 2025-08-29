@@ -92,15 +92,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "papermill" ];
 
-  # Using pytestFlagsArray to prevent disabling false positives
-  pytestFlagsArray = [
-    # AssertionError: 'error' != 'display_data'
-    "--deselect=papermill/tests/test_execute.py::TestBrokenNotebook2::test"
-
-    # AssertionError: '\x1b[31mSystemExit\x1b[39m\x1b[31m:\x1b[39m 1\n' != '\x1b[0;31mSystemExit\x1b[0m\x1b[0;31m:\x1b[0m 1\n'
-    "--deselect=papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
-  ];
-
   disabledTests = [
     # pytest 8 compat
     "test_read_with_valid_file_extension"
@@ -113,6 +104,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # ImportError: cannot import name 'mock_s3' from 'moto'
     "papermill/tests/test_s3.py"
+
+    # AssertionError: 'error' != 'display_data'
+    "papermill/tests/test_execute.py::TestBrokenNotebook2::test"
+
+    # AssertionError: '\x1b[31mSystemExit\x1b[39m\x1b[31m:\x1b[39m 1\n' != '\x1b[0;31mSystemExit\x1b[0m\x1b[0;31m:\x1b[0m 1\n'
+    "papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
   ];
 
   __darwinAllowLocalNetworking = true;

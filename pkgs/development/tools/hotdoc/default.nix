@@ -89,15 +89,18 @@ buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
-  pytestFlagsArray = [
-    # Executing hotdoc exits with code 1
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  pytestFlags = [
     # Run the tests by package instead of current dir
     "--pyargs"
     "hotdoc"
+  ];
+
+  disabledTestPaths = [
+    # Executing hotdoc exits with code 1
+    "tests/test_hotdoc.py::TestHotdoc::test_basic"
+    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
   ];
 
   disabledTests = [

@@ -38,7 +38,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "umoci modifies Open Container images";
+    description = "Modifies Open Container images";
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];

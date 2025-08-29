@@ -54,7 +54,7 @@ beamPackages.mixRelease rec {
   };
 
   meta = {
-    description = "Lexical is a next-generation elixir language server";
+    description = "Next-generation elixir language server";
     homepage = "https://github.com/lexical-lsp/lexical";
     changelog = "https://github.com/lexical-lsp/lexical/releases/tag/v${version}";
     license = lib.licenses.asl20;

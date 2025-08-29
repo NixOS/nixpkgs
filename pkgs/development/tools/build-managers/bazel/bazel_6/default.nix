@@ -779,12 +779,16 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish \
       --name bazel.fish \
       ./bazel_src/output/bazel-complete.fish
+
+    runHook postInstall
   '';
 
   # Install check fails on `aarch64-darwin`
   # https://github.com/NixOS/nixpkgs/issues/145587
   doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
+    runHook preInstallCheck
+
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
@@ -829,7 +833,7 @@ stdenv.mkDerivation rec {
       exit 1
     fi
 
-    runHook postInstall
+    runHook postInstallCheck
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.

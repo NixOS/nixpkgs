@@ -69,9 +69,8 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.arrays;
 
-  pytestFlagsArray = [
-    "--hypothesis-profile"
-    "ci"
+  pytestFlags = [
+    "--hypothesis-profile=ci"
   ];
 
   meta = with lib; {

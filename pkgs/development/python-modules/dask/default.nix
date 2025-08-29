@@ -111,11 +111,14 @@ buildPythonPackage rec {
   ++ optional-dependencies.dataframe;
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
+    "--reruns=3"
+  ];
+
+  disabledTestMarks = [
     # Don't run tests that require network access
-    "-m 'not network'"
+    "network"
   ];
 
   disabledTests = [

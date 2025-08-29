@@ -6,7 +6,6 @@
   libsecret,
   python3,
   testers,
-  vsce,
   nix-update-script,
 }:
 
@@ -17,7 +16,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6Tt7IewbCLHG8DVoD8PV6VmrNu3MCUHITgYFq9smvOo=";
   };
 
@@ -39,7 +38,7 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = vsce;
+      package = finalAttrs.finalPackage;
     };
     updateScript = nix-update-script {
       extraArgs = [

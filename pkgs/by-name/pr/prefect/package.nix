@@ -192,7 +192,7 @@ python3Packages.buildPythonApplication rec {
   # );
 
   meta = {
-    description = "Prefect is a workflow orchestration framework for building resilient data pipelines in Python";
+    description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];

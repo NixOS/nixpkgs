@@ -16,11 +16,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "20.1.1";
+  version = "20.2.1";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
-    hash = "sha256-fcJXyuGow39uep6Giexft+3a/nnoJSsKdwjtAQKTMj0=";
+    hash = "sha256-oemc2lJDPsWWG+tcJAk8u5lSGUpIoI6K/fE/TZC5bWw=";
   };
 
   nativeBuildInputs = [

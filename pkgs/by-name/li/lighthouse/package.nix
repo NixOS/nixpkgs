@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-pb44m+iWArlIim2tqbaH+pwCSqIdqzfVZJ9yj/ne1LY=";
-  useFetchCargoVendor = true;
 
   buildFeatures = [
     "modern"

@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     fetchLFS = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-scCF4xpc1COdlg57/eNTPdgY7/cJkdcc2s1YNraXzXk=";
 
   offlineCache = fetchYarnDeps {

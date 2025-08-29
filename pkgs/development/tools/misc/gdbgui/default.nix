@@ -13,7 +13,7 @@
 buildPythonApplication rec {
   pname = "gdbgui";
 
-  version = "0.15.2.0";
+  version = "0.15.3.0";
   format = "setuptools";
 
   buildInputs = [ gdb ];
@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vmMlRmjFqhs3Vf+IU9IDtJzt4dZ0yIOmXIVOx5chZPA=";
+    hash = "sha256-/HyFE0JnoN03CDyCQCo/Y9RyH4YOMoeB7khReIb8t7Y=";
   };
 
   postPatch = ''

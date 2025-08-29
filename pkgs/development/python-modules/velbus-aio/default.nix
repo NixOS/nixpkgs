@@ -10,6 +10,7 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "2025.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
@@ -39,11 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "velbusaio" ];
 
@@ -51,7 +49,7 @@ buildPythonPackage rec {
     description = "Python library to support the Velbus home automation system";
     homepage = "https://github.com/Cereal2nd/velbus-aio";
     changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     harfbuzz
     python3
-    wayland
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     fuse3
     libappindicator-gtk3
     libdbusmenu-gtk3
+    wayland
   ]
   ++ lib.optionals withLibsecret [ libsecret ]
   ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]

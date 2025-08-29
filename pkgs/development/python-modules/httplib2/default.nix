@@ -62,7 +62,7 @@ buildPythonPackage rec {
     "test_connection_close"
   ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  disabledTestPaths = [ "python2" ];
 
   pythonImportsCheck = [ "httplib2" ];
 

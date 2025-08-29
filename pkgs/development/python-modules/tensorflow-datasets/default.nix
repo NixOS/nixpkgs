@@ -138,12 +138,6 @@ buildPythonPackage rec {
     zarr
   ];
 
-  pytestFlagsArray = [
-    # AttributeError: 'NoneType' object has no attribute 'Table'
-    "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
-    "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
-  ];
-
   disabledTests = [
     # Since updating apache-beam to 2.65.0
     # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
@@ -208,6 +202,10 @@ buildPythonPackage rec {
     # Require `gcld3` and `nltk.punkt` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/text/c4_test.py"
     "tensorflow_datasets/text/c4_utils_test.py"
+
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   meta = {

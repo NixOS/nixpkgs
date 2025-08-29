@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-sNV2k3cbQe60Jpq1J2T6TQAz+NEyLXvS97//vXJ17TM=";
+    hash = "sha256-iks3ENcv7OtU30kZyG6Z7bG/WrYQQLbfXP55IkltmaE=";
   };
 
   build-system = [ setuptools ];

@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (weechat.meta) platforms;
     homepage = "https://github.com/KenjiE20/highmon/";
-    description = "highmon.pl is a weechat script that adds 'Highlight Monitor'";
+    description = "WeeChat script that adds 'Highlight Monitor'";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ govanify ];
   };

@@ -87,7 +87,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-native-cpu.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
   nativeBuildInputs = [

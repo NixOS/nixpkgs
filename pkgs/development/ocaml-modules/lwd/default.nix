@@ -7,14 +7,13 @@
 
 buildDunePackage rec {
   pname = "lwd";
-  version = "0.3";
+  version = "0.4";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/let-def/lwd/releases/download/v${version}/lwd-${version}.tbz";
-    sha256 = "sha256-H/vyW2tn2OBuWwcmPs8NcINXgFe93MSxRd8dzeoXARI=";
+    hash = "sha256-nnFltlBWfPOerF4HuVNGzXcZxRSdsM+abeD5ZdQ+x8U=";
   };
 
   propagatedBuildInputs = [ seq ];

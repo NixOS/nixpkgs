@@ -78,7 +78,7 @@ buildGo123Module {
   };
 
   meta = with lib; {
-    description = "Filebrowser is a web application for managing files and directories";
+    description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ oakenshield ];

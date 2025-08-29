@@ -76,9 +76,12 @@ buildPythonPackage rec {
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
-    "-m 'not integration'"
+  ];
+
+  disabledTestMarks = [
+    "integration"
   ];
 
   meta = with lib; {

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fables-tales";
     repo = "rubyfmt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IIHPU6iwFwQ5cOAtOULpMSjexFtTelSd/LGLuazdmUo=";
     fetchSubmodules = true;
   };
@@ -61,7 +61,6 @@ rustPlatform.buildRustPackage rec {
     ./0003-ignore-warnings.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8LgAHznxU30bbK8ivNamVD3Yi2pljgpqJg2WC0nxftk=";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";

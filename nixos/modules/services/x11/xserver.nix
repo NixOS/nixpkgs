@@ -277,6 +277,11 @@ in
         "dir"
       ];
     })
+    (lib.mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "tty"
+    ] "'services.xserver.tty' was removed because it was ineffective.")
   ];
 
   ###### interface
@@ -675,12 +680,6 @@ in
         '';
       };
 
-      tty = mkOption {
-        type = types.nullOr types.int;
-        default = 7;
-        description = "Virtual console for the X server.";
-      };
-
       display = mkOption {
         type = types.nullOr types.int;
         default = 0;
@@ -886,7 +885,6 @@ in
       "${cfg.xkb.dir}"
     ]
     ++ optional (cfg.display != null) ":${toString cfg.display}"
-    ++ optional (cfg.tty != null) "vt${toString cfg.tty}"
     ++ optional (cfg.dpi != null) "-dpi ${toString cfg.dpi}"
     ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
     ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"

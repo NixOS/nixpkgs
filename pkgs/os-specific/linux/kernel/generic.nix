@@ -139,12 +139,19 @@ let
 
       structuredConfigFromPatches = map (
         {
-          extraStructuredConfig ? { },
+          structuredExtraConfig ? { },
           ...
-        }:
-        {
-          settings = extraStructuredConfig;
-        }
+        }@args:
+        if args ? extraStructuredConfig then
+          throw ''
+            Passing `extraStructuredConfig` to the Linux kernel (e.g.
+            via `boot.kernelPatches` in NixOS) is not supported anymore. Use
+            `structuredExtraConfig` instead.
+          ''
+        else
+          {
+            settings = structuredExtraConfig;
+          }
       ) kernelPatches;
 
       # appends kernel patches extraConfig

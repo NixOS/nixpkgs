@@ -59,7 +59,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wzSRUZeB5f9Z/D+Sa5Nl77jh7GDnnUehcmwanPcaSKM=";
 
   pnpmDeps = pnpm_9.fetchDeps {

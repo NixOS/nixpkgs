@@ -3,6 +3,7 @@
   stdenv,
   linuxPackages_latest,
   perl,
+  python3,
   man,
 }:
 
@@ -10,7 +11,10 @@ stdenv.mkDerivation {
   pname = "linux-manual";
   inherit (linuxPackages_latest.kernel) version src;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    perl
+    python3
+  ];
   nativeInstallCheckInputs = [ man ];
 
   dontConfigure = true;
@@ -18,8 +22,11 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   postPatch = ''
+    # Use scripts/kernel-doc.py here, not scripts/kernel-doc because
+    # patchShebangs skips symlinks
+
     patchShebangs --build \
-      scripts/kernel-doc \
+      scripts/kernel-doc.py \
       scripts/split-man.pl
   '';
 

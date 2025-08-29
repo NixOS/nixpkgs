@@ -163,6 +163,8 @@ Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automaticall
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
 
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
@@ -826,6 +828,10 @@ Additionally, the following optional arguments can be given:
   :::
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
+
+*`rootDir`* (String)
+
+: When not empty, copy only contents of the subdirectory of the repository to the result. Automatically sets `sparseCheckout` and `nonConeMode` to avoid checking out any extra pieces. Incompatible with `leaveDotGit`.
 
 Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
 Future parameters additions might also happen without immediately being documented here.

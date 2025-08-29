@@ -30,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "genie_partner_sdk" ];
 
   meta = {
-    description = "An SDK to interact with the AladdinConnect (or OHD) partner API";
+    description = "SDK to interact with the AladdinConnect (or OHD) partner API";
     homepage = "https://github.com/Genie-Garage/aladdin-python-sdk";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];

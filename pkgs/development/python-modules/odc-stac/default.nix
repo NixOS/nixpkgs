@@ -69,7 +69,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.botocore;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # pystac href error (possible related to network)

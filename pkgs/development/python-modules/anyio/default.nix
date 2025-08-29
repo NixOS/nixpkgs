@@ -75,11 +75,12 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.trio;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
-    "-m"
-    "'not network'"
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
+  ];
+
+  disabledTestMarks = [
+    "network"
   ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -11,7 +11,7 @@
 
 buildGoModule {
   pname = "catnip-gtk4";
-  version = "unstable-2023-06-17";
+  version = "0-unstable-2023-06-17";
 
   src = fetchFromGitHub {
     owner = "diamondburned";

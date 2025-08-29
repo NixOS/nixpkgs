@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.28.0";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     tag = version;
-    hash = "sha256-jNKnc8IPkXDxRUY9QJ+35qt2na1nO6RPeCVWBLb7lME=";
+    hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
+    description = "Allows you to manage massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

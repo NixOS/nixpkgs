@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "shim";
-    rev = version;
+    tag = version;
     hash = "sha256-KFpt//A4/T0FRBSPuTKQH/mEIqLVEiE+Lpvuq7ec6eo=";
     fetchSubmodules = true;
   };

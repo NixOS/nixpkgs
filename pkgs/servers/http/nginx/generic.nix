@@ -218,6 +218,13 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
+      ++ lib.optionals (!lib.versionAtLeast version "1.29.1") [
+        (fetchpatch {
+          name = "CVE-2025-53859.patch";
+          url = "https://nginx.org/download/patch.2025.smtp.txt";
+          hash = "sha256-v49sLskFNMoKuG8HQISw8ST7ga6DS+ngJiL0D3sUyGk=";
+        })
+      ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";

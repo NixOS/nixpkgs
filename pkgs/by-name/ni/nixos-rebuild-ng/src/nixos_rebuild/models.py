@@ -86,7 +86,11 @@ class Flake:
 
     @override
     def __str__(self) -> str:
-        return f"{self.path}#{self.attr}"
+        if isinstance(self.path, Path):
+            # https://github.com/NixOS/nixpkgs/issues/433726
+            return f"{self.path.absolute()}#{self.attr}"
+        else:
+            return f"{self.path}#{self.attr}"
 
     @classmethod
     def parse(cls, flake_str: str, target_host: Remote | None = None) -> Self:

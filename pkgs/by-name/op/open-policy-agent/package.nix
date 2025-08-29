@@ -14,13 +14,13 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p03yjLPphS4jp0dK3hlREKzAzCKRPOpvUnmGaGzrwww=";
+    hash = "sha256-FFJiw2OE5mTFyjOdMoau8Ix8Q+id5hIpCeQaUua1IKg=";
   };
 
   vendorHash = null;
@@ -49,11 +49,25 @@ buildGoModule (finalAttrs: {
         "TestInterQueryCache_ClientError"
         "TestIntraQueryCache_ClientError"
         "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Skip tests that require network, not available in the darwin sandbox
         "TestHTTPSClient"
         "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        # Flaky
+        "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
       ]
       ++ lib.optionals (!enableWasmEval) [
         "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
@@ -74,6 +88,7 @@ buildGoModule (finalAttrs: {
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm v1/server/server_test.go
+      rm v1/server/server_bench_test.go
     '';
 
   postInstall = ''

@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.101.2";
+  version = "1.102.3";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-pcsto9zEq8BTP5jlQoGQzWEhdJNJMNkJY9S6FGw7LrI=";
+    hash = "sha256-WY2vmDt3sSgbyouGxBFfJ0hZZ5ZJWhBnTvegyq4zmFM=";
   };
 
   ## fetchNpmDeps doesn't correctly process git dependencies
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-iSKDwe/ufJnC7mDqG0x+WcCckyUY/9dI/4ZTMvfBWIc=";
+        outputHash = "sha256-ElxgztLu6MCdP0c+D/gUmztsQ2hNqJjmRWpJu3N2Z1g=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;

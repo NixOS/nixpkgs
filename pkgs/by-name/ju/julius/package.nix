@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "julius";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "bvschaik";
     repo = "julius";
     rev = "v${version}";
-    hash = "sha256-I5GTaVWzz0ryGLDSS3rzxp+XFVXZa9hZmgwon/6r83A=";
+    hash = "sha256-ppA/lCugFfzcbANuyWUvH3/1STNRdYOhRNR4tlfWEhc=";
   };
 
   patches = [

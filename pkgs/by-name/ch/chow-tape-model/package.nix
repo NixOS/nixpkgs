@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };

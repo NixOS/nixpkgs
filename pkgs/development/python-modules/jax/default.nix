@@ -84,21 +84,25 @@ buildPythonPackage rec {
   # high parallelism will result in the tests getting stuck
   dontUsePytestXdist = true;
 
+  pytestFlags = [
+    "--numprocesses=4"
+    "-Wignore::DeprecationWarning"
+  ];
+
   # NOTE: Don't run the tests in the experimental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
-  pytestFlagsArray = [
-    "--numprocesses=4"
-    "-W ignore::DeprecationWarning"
+  enabledTestPaths = [
     "tests/"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
     # reported at: https://github.com/jax-ml/jax/issues/26106
-    "--deselect tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
-    "--deselect tests/shape_poly_test.py::ShapePolyTest"
-    "--deselect tests/tree_util_test.py::TreeTest"
+    "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
+    "tests/shape_poly_test.py::ShapePolyTest"
+    "tests/tree_util_test.py::TreeTest"
   ];
 
   # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with

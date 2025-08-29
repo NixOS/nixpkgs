@@ -1,32 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  sphinx,
+  fetchFromGitHub,
   pbr,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3";
+  pyproject = true;
 
-  # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
-  # directories). But python2 is EOL, so not supporting it, should be ok.
-  disabled = pythonOlder "3";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1nbwflv9szyh37yr075xhck8b4gg2c7g3sa38mfi7wv7qhpxcif8";
+  src = fetchFromGitHub {
+    owner = "sphinx-contrib";
+    repo = "fulltoc";
+    tag = version;
+    hash = "sha256-rpzKiZgsuAqhLDEYURv77SDJny3eqfj0VtJ1tqT29IQ=";
   };
 
-  nativeBuildInputs = [ pbr ];
-  propagatedBuildInputs = [ sphinx ];
+  env.PBR_VERSION = version;
 
-  # There are no unit tests
+  build-system = [ pbr ];
+
+  dependencies = [ sphinx ];
+
+  # Module has no unit tests
   doCheck = false;
-  # Ensure package importing works
+
   pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
+    changelog = "https://github.com/sphinx-contrib/fulltoc/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jluttine ];
   };

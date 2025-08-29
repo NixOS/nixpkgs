@@ -11,6 +11,7 @@
   which,
   autoAddDriverRunpath,
   makeWrapper,
+  nix-update-script,
 
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
   coreMLSupport ? stdenv.hostPlatform.isDarwin && false, # FIXME currently broken
@@ -72,13 +73,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tvCT0QRdmRGsjtQZcEZMgSe2/47tSkfdaPqS/2MuQTs=";
+    hash = "sha256-dppBhiCS4C3ELw/Ckx5W0KOMUvOHUiisdZvkS7gkxj4=";
   };
 
   # The upstream download script tries to download the models to the
@@ -169,6 +170,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Port of OpenAI's Whisper model in C/C++";

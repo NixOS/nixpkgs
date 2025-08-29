@@ -31,7 +31,7 @@ lib.overrideDerivation
         {
           "1" = "bcmrpi_defconfig";
           "2" = "bcm2709_defconfig";
-          "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
+          "3" = if stdenv.hostPlatform.isAarch64 then "bcm2711_defconfig" else "bcm2709_defconfig";
           "4" = "bcm2711_defconfig";
         }
         .${toString rpiVersion};

@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp src/squid $out/bin
     cp src/unlinkd $out/libexec
     cp src/mime.conf.default $out/etc/mime.conf
+    cp src/log/file/log_file_daemon $out/libexec
     cp -r icons $out/share
     cp -r errors $out/share
     runHook postInstall
@@ -101,8 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-    knownVulnerabilities = [
-      "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/"
-    ];
+    # In the past, it has been brought up that Squid had many security vulnerabilities
+    # (see https://megamansec.github.io/Squid-Security-Audit/). As of version 7.0,
+    # all of them have been solved, as tracked in their GitHub Security page:
+    # https://github.com/squid-cache/squid/security
+    knownVulnerabilities = [ ];
   };
 })

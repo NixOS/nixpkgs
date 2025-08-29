@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pystac-client";
-  version = "0.8.6";
+  version = "0.9.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "stac-utils";
     repo = "pystac-client";
     tag = "v${version}";
-    hash = "sha256-rbRxqR6hZy284JfQu5+dukFTBHllqzjo0k9aWhrkRAU=";
+    hash = "sha256-+DOWf1ZAwylicdSuOBNivi0Z7DxaymZF756X7fogAjc=";
   };
 
   build-system = [ setuptools ];
@@ -46,16 +46,25 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
+  ];
+
+  disabledTestMarks = [
     # Tests accessing Internet
-    "-m 'not vcr'"
+    "vcr"
+  ];
+
+  # requires cql2
+  disabledTests = [
+    "test_filter_conversion_to_cql2_json"
+    "test_filter_conversion_to_cql2_text"
   ];
 
   pythonImportsCheck = [ "pystac_client" ];
 
   meta = {
-    description = "A Python client for working with STAC Catalogs and APIs";
+    description = "Python client for working with STAC Catalogs and APIs";
     homepage = "https://github.com/stac-utils/pystac-client";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];

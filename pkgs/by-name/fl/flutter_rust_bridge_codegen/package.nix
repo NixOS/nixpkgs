@@ -12,12 +12,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "flutter_rust_bridge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Us+LwT6tjBcTl2xclVsiLauSlIO8w+PiokpiDB+h1fI=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-pxEwcLiRB95UBfXb+JgS8duEXiZUApH/C8Exus5TkfU=";
   cargoBuildFlags = "--package flutter_rust_bridge_codegen";
   cargoTestFlags = "--package flutter_rust_bridge_codegen";

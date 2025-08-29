@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "tcpflow";
-    rev = "tcpflow-${version}";
+    tag = "tcpflow-${version}";
     sha256 = "0vbm097jhi5n8pg08ia1yhzc225zv9948blb76f4br739l9l22vq";
     fetchSubmodules = true;
   };

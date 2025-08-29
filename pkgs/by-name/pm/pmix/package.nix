@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qj/exBi1siCHY1QqNY+ad6n3XI4JZuwnM93Vp+rj1AQ=";
     fetchSubmodules = true;
   };

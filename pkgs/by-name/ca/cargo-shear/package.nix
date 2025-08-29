@@ -6,7 +6,7 @@
   cargo-shear,
 }:
 let
-  version = "1.4.0";
+  version = "1.5.0";
 in
 rustPlatform.buildRustPackage {
   pname = "cargo-shear";
@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "Boshen";
     repo = "cargo-shear";
     rev = "v${version}";
-    hash = "sha256-UJbYzyVEg1FxoebBVURwbugjAeE93dXM47lXUoonMLM=";
+    hash = "sha256-UZOSdCErZ7dT1KiuyupD2KMf8JgPfBOZn1GFWNJFtFU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ynxJbNrzuDlqa5elavO+faFDt90CoZsPoVODW8NlFcY=";
+  cargoHash = "sha256-qVkM2Zg2R3ZzCBEJFMXY7hfptiBvDaA+nVO1SVUuUNg=";
 
   # https://github.com/Boshen/cargo-shear/blob/a0535415a3ea94c86642f39f343f91af5cdc3829/src/lib.rs#L20-L23
   SHEAR_VERSION = version;

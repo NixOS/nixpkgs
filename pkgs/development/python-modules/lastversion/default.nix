@@ -63,9 +63,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
+  enabledTestPaths = [
     "tests/test_cli.py"
-    "-k"
+  ];
+
+  enabledTests = [
     "test_cli_format"
   ];
 

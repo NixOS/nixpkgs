@@ -17,6 +17,7 @@
   requests-mock,
   hypothesis,
   jsonschema,
+  lxml,
   git,
   squashfsTools,
   socat,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.18.0";
+  version = "2.19.0";
 
   pyproject = true;
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-mjmWB6kgQNY++aAb9Ql/1cISGqX1mivz62y0Sa65FwM=";
+    hash = "sha256-qzaQW+bKq+sDjRsDDY5oYQWMX50rEskgxyKwhLpFpt4=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    lxml
     overrides
     pydantic
     pyxdg

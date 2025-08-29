@@ -23,9 +23,9 @@ buildHomeAssistantComponent rec {
     zeroconf
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # this test seems to be broken
-    "--deselect=tests/test_local.py::test_track"
+    "tests/test_local.py::test_track"
   ];
   nativeCheckInputs = [
     home-assistant

@@ -451,7 +451,7 @@ in
         '';
       };
     };
-    services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
+    services.postfix.settings.main = mkIf cfg.postfix.enable cfg.postfix.config;
 
     systemd.services.postfix = mkIf cfg.postfix.enable {
       serviceConfig.SupplementaryGroups = [ postfixCfg.group ];

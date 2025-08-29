@@ -97,7 +97,7 @@ let
         };
       });
 
-      av = super.av.overridePythonAttrs (rec {
+      av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -105,16 +105,14 @@ let
           tag = "v${version}";
           hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
-      });
+      };
 
-      brother = super.brother.overridePythonAttrs (rec {
-        version = "4.3.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          tag = version;
-          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
-        };
+      imageio = super.imageio.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # broken by pyav pin
+          "test_keyframe_intervals"
+          "test_lagging_video_stream"
+        ];
       });
 
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
@@ -147,6 +145,10 @@ let
           tag = "v${version}";
           hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
+        pytestFlagsArray = [
+          "-W"
+          "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+        ];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
@@ -243,44 +245,6 @@ let
         };
       });
 
-      pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.12";
-        src = fetchFromGitHub {
-          owner = "rfleming71";
-          repo = "pyoctoprintapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      # snmp component does not support pysnmp 7.0+
-      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.6";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmp";
-          tag = "v${version}";
-          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
-        };
-      });
-
-      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmpcrypto";
-          tag = "v${version}";
-          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
-        };
-        build-system = with self; [ setuptools ];
-        postPatch = ''
-          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-          substituteInPlace setup.py --replace \
-            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-            "observed_version = [36, 2, 0]"
-        '';
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -289,6 +253,8 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
@@ -301,6 +267,27 @@ let
         };
         patches = [ ];
         doCheck = false;
+      });
+
+      python-roborock = super.python-roborock.overridePythonAttrs rec {
+        version = "2.18.2";
+
+        src = fetchFromGitHub {
+          owner = "Python-roborock";
+          repo = "python-roborock";
+          tag = "v${version}";
+          hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
+        };
+      };
+
+      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
+        version = "21.5";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
+        };
       });
 
       # Pinned due to API changes ~1.0
@@ -354,7 +341,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.7.3";
+  hassVersion = "2025.8.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -375,13 +362,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-FT77obtb081QOgw+nqbQvvW+3x/L2WUr3DLT8X1Wpwg=";
+    hash = "sha256-o1j1ejSMa6T18nNxrmvNcOSWAMbi8b11wgHKO+w5gHA=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-jO+rNIzEvtQ1vhSD1Xbq/SKV5XvBOb4MmkkczoeD1Kc=";
+    hash = "sha256-6LyI3t/+wKIVIcVwCny9AIYEaONiwc4GFmbwqjv/9r8=";
   };
 
   build-system = with python.pkgs; [
@@ -517,14 +504,17 @@ python.pkgs.buildPythonApplication rec {
       "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
   ];
 
-  enabledTestPaths = [ "tests" ];
+  enabledTestPaths = [
+    # tests are located in tests/
+    "tests"
+  ];
 
   disabledTestPaths = [
     # we neither run nor distribute hassfest

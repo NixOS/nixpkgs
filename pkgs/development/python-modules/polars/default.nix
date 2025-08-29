@@ -239,11 +239,10 @@ buildPythonPackage rec {
       pytest-benchmark
     ];
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "--benchmark-disable"
-      "-n auto"
-      "--dist loadgroup"
-      ''-m "slow or not slow"''
+      "-nauto"
+      "--dist=loadgroup"
     ];
     disabledTests = [
       "test_read_kuzu_graph_database" # kuzu

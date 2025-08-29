@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # tries to call python -m bork

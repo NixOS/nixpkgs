@@ -45,11 +45,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "verifast";
-  version = "25.06";
+  version = "25.07";
 
   src = fetchurl {
     url = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
-    sha256 = "sha256-cIFAjZmFNiCnn7/Ddn82fW9sz9ryamOx8wo4JImqy1o=";
+    sha256 = "sha256-SNLFO0puS6a/A71jA9vZKgK/uJYlPAYmaylznHi60js=";
   };
 
   dontConfigure = true;

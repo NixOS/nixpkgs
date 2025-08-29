@@ -344,6 +344,10 @@ rec {
       kernel = kernels.windows;
       abi = abis.gnu;
     };
+    isMsvc = {
+      kernel = kernels.windows;
+      abi = abis.msvc;
+    };
     isWasi = {
       kernel = kernels.wasi;
     };

@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-QcqpAWsMhTKTBV4kCKhG/9b+l3Kh6gj/o78/w6it+K8=";
   nativeCheckInputs = [ rustfmt ];
   passthru.updateScript = nix-update-script { };
-  useFetchCargoVendor = true;
 
   meta = {
     description = "Code formatter for the Yew framework";

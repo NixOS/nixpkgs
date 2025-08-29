@@ -51,9 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bison
     doxygen
-    xorg.xvfb
   ]
+  ++ lib.optional stdenv.isLinux xorg.xvfb
   ++ lib.optional withWaylandTools wayland-scanner;
+
   buildInputs = [
     xkeyboard_config
     libxcb
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';

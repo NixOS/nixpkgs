@@ -9,10 +9,7 @@
   libXt,
   openusd,
   tbb,
-  # There is a f3d overridden with EGL enabled vtk in top-level/all-packages.nix
-  # compiling with EGL enabled vtk will result in f3d running in headless mode
-  # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
-  vtk_9,
+  vtk,
   autoPatchelfHook,
   python3Packages,
   opencascade-occt,
@@ -50,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vtk_9
+    vtk
     opencascade-occt
     assimp
     fontconfig

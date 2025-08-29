@@ -47,13 +47,17 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pytestFlagsArray = [
-    # Requires CUDA access which is not possible in the nix environment.
-    "-m 'not gpu and not mpi'"
+  pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "pytorch_pfn_extras" ];
+
+  disabledTestMarks = [
+    # Requires CUDA access which is not possible in the nix environment.
+    "gpu"
+    "mpi"
+  ];
 
   disabledTests = [
     # AssertionError: assert 4 == 0

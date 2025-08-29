@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature visualizerSupport "fftw")
     (lib.enableFeature clockSupport "clock")
     (lib.withFeature taglibSupport "taglib")
+    (lib.withFeatureAs true "boost" boost.dev)
   ];
 
   nativeBuildInputs = [

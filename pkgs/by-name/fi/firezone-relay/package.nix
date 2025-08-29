@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qDeXAzOeTenL6OIsun/rEfPMo62mQT7RhJEmqemzMsM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-uqy4GgYaSX2kM4a37093lHmhvOtNUhkEs6/ZS1bjuYo=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "relay";

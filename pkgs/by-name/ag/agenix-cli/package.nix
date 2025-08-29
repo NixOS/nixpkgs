@@ -5,19 +5,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agenix-cli";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";
-    tag = "v${version}";
-    sha256 = "sha256-0+QVY1sDhGF4hAN6m2FdKZgm9V1cuGGjY4aitRBnvKg=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-eJp6t8h8uOP0YupYn8x6VAAmUbVrXypxNMGx4SK/6d8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xpA9BTA7EK3Pw8EJOjIq1ulBAcX4yNhc4kqhxsoCbv0=";
+  cargoHash = "sha256-2xTkCdWKQVg8Sp0LDkC/LH9GYBXNpxdoLX30Ndz0muM=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -31,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "agenix";
   };
-}
+})

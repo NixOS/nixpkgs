@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9fro1Dx7P+P9NTsg0gtMfr0s4TEpkZA31EFAnObiNFo=";
   meta = with lib; {
     description = "Ultra-fast, adaptable deployment of the tantivy search engine via REST";

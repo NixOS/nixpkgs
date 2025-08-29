@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+wVcUpSlJsd6GAZgBor7eAu6IYnlfJwzZDYKqUKpa9M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rZusngSIwdDfNe7tIA2WtIzzje6UBxyz/hfeRLqJHUY=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found

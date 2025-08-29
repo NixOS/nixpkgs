@@ -116,10 +116,15 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
 
 def get_bootspec(profile: str | None, generation: int) -> BootSpec:
     system_directory = system_dir(profile, generation, None)
-    boot_json_path = os.path.realpath("%s/%s" % (system_directory, "boot.json"))
+    boot_json_path = os.path.join(system_directory, "boot.json")
     if os.path.isfile(boot_json_path):
-        boot_json_f = open(boot_json_path, 'r')
-        bootspec_json = json.load(boot_json_f)
+        with open(boot_json_path, 'r') as boot_json_f:
+            # check if json is well-formed, else throw error with filepath
+            try:
+                bootspec_json = json.load(boot_json_f)
+            except ValueError as e:
+                print(f"error: Malformed Json: {e}, in {boot_json_path}", file=sys.stderr)
+                sys.exit(1)
     else:
         boot_json_str = run(
             [

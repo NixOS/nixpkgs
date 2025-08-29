@@ -90,7 +90,6 @@ let
     cargoRoot = "src-tauri";
     buildAndTestSubdir = "src-tauri";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-BwuV5nAQcTAtdfK4+NKEt8Cj7gqnatRwHh/BYJJrIPo=";
 
     patches = [

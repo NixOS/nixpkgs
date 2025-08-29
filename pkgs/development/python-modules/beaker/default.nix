@@ -57,9 +57,9 @@ buildPythonPackage rec {
 
   # Can not run memcached tests because it immediately tries to connect.
   # Disable external tests because they need to connect to a live database.
-  pytestFlagsArray = [
-    "--ignore=tests/test_memcached.py"
-    "--ignore-glob='tests/test_managers/test_ext_*'"
+  disabledTestPaths = [
+    "tests/test_memcached.py"
+    "tests/test_managers/test_ext_*"
   ];
 
   meta = {

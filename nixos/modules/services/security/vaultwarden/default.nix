@@ -224,7 +224,8 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;

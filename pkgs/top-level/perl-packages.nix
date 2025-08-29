@@ -3307,6 +3307,13 @@ with self;
       url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Authentication-Credential-HTTP-1.018.tar.gz";
       hash = "sha256-b6GBbe5kSw216gzBXF5xHcLO0gg2JavOcJZSHx1lpSk=";
     };
+    patches = [
+      (fetchpatch {
+        name = "CVE-2025-40920.patch";
+        url = "https://github.com/perl-catalyst/Catalyst-Authentication-Credential-HTTP/commit/ad2c03aad95406db4ce35dfb670664ebde004c18.patch";
+        hash = "sha256-WI6JwvY6i3KkQO9HbbSvHPX8mgM8I2cF0UTjF1D14T4=";
+      })
+    ];
     buildInputs = [
       ModuleBuildTiny
       TestException
@@ -3316,6 +3323,7 @@ with self;
     propagatedBuildInputs = [
       CatalystPluginAuthentication
       ClassAccessor
+      CryptSysRandom
       DataUUID
       StringEscape
     ];
@@ -6834,7 +6842,7 @@ with self;
       hash = "sha256-Z/ymiwUm5zTi2VvGsyutAcMZ5Yer9j5M80Itpmu+o6A=";
     };
     meta = {
-      description = "modern bcrypt implementation";
+      description = "Modern bcrypt implementation";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -7473,6 +7481,22 @@ with self;
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  CryptSysRandom = buildPerlPackage {
+    pname = "Crypt-SysRandom";
+    version = "0.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-SysRandom-0.007.tar.gz";
+      hash = "sha256-pdSemPyjxSZsea6YmoXsoik0sFiAPuSz5usI78pO70Y=";
+    };
+    meta = {
+      description = "Perl interface to system randomness";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -8853,7 +8877,7 @@ with self;
     };
     propagatedBuildInputs = [ DateSimple ];
     meta = {
-      description = "work with a range of dates";
+      description = "Work with a range of dates";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -13818,6 +13842,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
       hash = "sha256-O7KiC6Nd+VjcCk8jBvwF2QPYuMTePIvu/OF3OdKByVg=";
     };
+    # Fix dynamic loading not available when cross compiling
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/install_share/d' Makefile.PL
+      sed -i '/File::ShareDir::Install/d' Makefile.PL
+    '';
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ FileShareDirInstall ];
     meta = {
@@ -13827,8 +13856,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      # Can't load module IO, dynamic loading not available in this perl.
-      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 
@@ -17826,6 +17853,33 @@ with self;
         artistic1
         gpl1Plus
         bsd3
+      ];
+    };
+  };
+
+  IPCShareable = buildPerlPackage {
+    pname = "IPC-Shareable";
+    version = "1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/ST/STEVEB/IPC-Shareable-1.13.tar.gz";
+      hash = "sha256-RW5mX3Kj+3ulqOcOMhz8nIJZ3vsxEbUZQK0IyrnADms=";
+    };
+    # remove t/04-key.t pulling in Mock::Sub, it'd get skipped anyways.
+    postPatch = ''
+      rm t/04-key.t
+    '';
+    propagatedBuildInputs = [
+      JSON
+      StringCRC32
+    ];
+    checkInputs = [
+      TestSharedFork
+    ];
+    meta = {
+      description = "Use shared memory backed variables across processes";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
       ];
     };
   };
@@ -31444,7 +31498,7 @@ with self;
       hash = "sha256-nkF6j42epiO+6i0TpHwNWmlvyGAsBQm4Js1F+Xt253g=";
     };
     meta = {
-      description = "sprintf-like string formatting capabilities with arbitrary format definitions";
+      description = "Sprintf-like string formatting capabilities with arbitrary format definitions";
       license = with lib.licenses; [ gpl2Only ];
     };
   };

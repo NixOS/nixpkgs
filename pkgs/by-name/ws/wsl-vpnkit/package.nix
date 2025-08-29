@@ -30,7 +30,7 @@ resholve.mkDerivation {
   src = fetchFromGitHub {
     owner = "sakai135";
     repo = "wsl-vpnkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Igbr3L2W32s4uBepllSz07bkbI3qwAKMZkBrXLqGrGA=";
   };
 

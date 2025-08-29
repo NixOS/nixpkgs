@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   bison,
@@ -134,6 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
+    # Backport fix amaranth code compilation
+    # TODO remove when updating to 0.56
+    # https://github.com/YosysHQ/yosys/pull/5182
+    (fetchpatch2 {
+      name = "treat-zero-width-constant-as-zero.patch";
+      url = "https://github.com/YosysHQ/yosys/commit/478b6a2b3fbab0fd4097b841914cbe8bb9f67268.patch";
+      hash = "sha256-KeLoZfkXMk2KIPN9XBQdqWqohywQONlWUIvrGwgphKs=";
+    })
     ./plugin-search-dirs.patch
     ./fix-clang-build.patch
   ];

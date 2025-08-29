@@ -43,6 +43,14 @@ stdenv.mkDerivation {
     libarchive
   ];
 
+  patches = [
+    # Fix corruption in hijack and zpoline libraries when building in parallel,
+    # because both hijack and zpoline share object files, which may result in
+    # missing symbols.
+    # https://github.com/lkl/linux/pull/612/commits/4ee5d9b78ca1425b4473ede98602b656f28027e8
+    ./fix-hijack-and-zpoline-parallel-builds.patch
+  ];
+
   postPatch = ''
     # Fix a /usr/bin/env reference in here that breaks sandboxed builds
     patchShebangs arch/lkl/scripts

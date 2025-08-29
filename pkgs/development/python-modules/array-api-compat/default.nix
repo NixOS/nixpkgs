@@ -45,9 +45,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  pytestFlagsArray = [
-    "-k"
-    "'not cupy'"
+  disabledTests = [
+    "cupy"
   ];
 
   meta = {

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     domain = "salsa.debian.org";
     owner = "games-team";
     repo = "pax-britannica";
-    rev = "00ccbac5";
+    rev = "00ccbac55fe6ff1217e0870d69ea403b05292c53";
     hash = "sha256-j69di+3P+vaFzv8Zke1MdABMkLtknTNvlfPk1YVUfmU=";
   };
 

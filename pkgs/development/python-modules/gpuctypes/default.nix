@@ -71,16 +71,15 @@ buildPythonPackage rec {
     ++ lib.optionals (!cudaSupport) [ "test/test_cuda.py" ];
 
   # Require GPU access to run (not available in the sandbox)
-  pytestFlagsArray =
+  disabledTests =
     lib.optionals (!testCudaRuntime) [
-      "-k"
-      "'not TestCUDADevice'"
+      "TestCUDADevice"
     ]
     ++ lib.optionals (!testRocmRuntime) [
-      "-k"
-      "'not TestHIPDevice'"
-    ]
-    ++ lib.optionals (testCudaRuntime || testOpenclRuntime || testRocmRuntime) [ "-v" ];
+      "TestHIPDevice"
+    ];
+
+  pytestFlags = lib.optionals (testCudaRuntime || testOpenclRuntime || testRocmRuntime) [ "-v" ];
 
   # Running these tests requires special configuration on the builder.
   # e.g. https://github.com/NixOS/nixpkgs/pull/256230 implements a nix

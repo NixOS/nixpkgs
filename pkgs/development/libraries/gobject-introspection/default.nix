@@ -160,11 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that we will delete before installation.
     mkdir -p $out/lib
-    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   postCheck = ''
-    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    rm $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   setupHook = ./setup-hook.sh;

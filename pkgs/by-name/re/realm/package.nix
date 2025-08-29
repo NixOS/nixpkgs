@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "realm";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
     rev = "v${version}";
-    hash = "sha256-vkLGfSDRYqvoqyVM/CWGJjpvXXPisEZxUSjLZGjNzno=";
+    hash = "sha256-7hOy+bqWoVyI2xGJ0eY7GvyIYykr6VP8d3ZYtY/jGPI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Oe64l16uYdU6NvTl7XrEm6dAtRFngI9yHC4fe4hpTNA=";
+  cargoHash = "sha256-yR+ayseoUYpK9lUFRP0OLrp1+LUrtPnxiPRvjDFSNgo=";
 
   env.RUSTC_BOOTSTRAP = 1;
 

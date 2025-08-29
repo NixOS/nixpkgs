@@ -61,3 +61,17 @@ This results in a key with the following semantics:
 ```
 <running-workflow>-<triggering-workflow>-<triggered-event>-<pull-request/fallback>
 ```
+
+## Required Status Checks
+
+The "Required Status Checks" branch ruleset is implemented in two top-level workflows: `pr.yml` and `merge-group.yml`.
+
+The PR workflow defines all checks that need to succeed to add a Pull Request to the Merge Queue.
+If no Merge Queue is set up for a branch, the PR workflow defines the checks required to merge into the target branch.
+
+The Merge Group workflow defines all checks that are run as part of the Merge Queue.
+Only when these pass, a Pull Request is finally merged into the target branch.
+They don't apply when no Merge Queue is set up.
+
+Both workflows work with the same `no PR failures` status check.
+This name can never be changed, because it's used in the branch ruleset for these rules.

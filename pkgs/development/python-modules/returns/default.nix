@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "returns" ];
 
-  pytestFlagsArray = [ "--ignore=typesafety" ];
+  disabledTestPaths = [ "typesafety" ];
 
   meta = with lib; {
     description = "Make your functions return something meaningful, typed, and safe";

@@ -9,19 +9,16 @@
   libxslt,
   shaka-packager,
   nix-update-script,
+  runCommand,
 }:
 
 let
   # dash-mpd-cli looks for a binary named `shaka-packager`, while
   # shaka-packager provides `packager`.
-  shaka-packager-wrapped = stdenvNoCC.mkDerivation {
-    name = "shaka-packager-wrapped";
-    phases = [ "installPhase" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
-    '';
-  };
+  shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
+    mkdir -p $out/bin
+    ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
+  '';
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
@@ -38,7 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./use-shaka-by-default.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ycHKgQFgl8THoXT+3ccV8AC56VudHzObyTCu333MmT4=";
 
   nativeBuildInputs = [

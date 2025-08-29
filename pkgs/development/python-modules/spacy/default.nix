@@ -106,13 +106,18 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = [ "-m 'slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # touches network
     "test_download_compatibility"
     "test_validate_compatibility_table"
     "test_project_assets"
+    "test_find_available_port"
+
+    # Tests for presence of outdated (and thus missing) spacy models
+    # https://github.com/explosion/spaCy/issues/13856
+    "test_registry_entries"
   ];
 
   pythonImportsCheck = [ "spacy" ];
@@ -137,12 +142,14 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
+  __darwinAllowLocalNetworking = true; # needed for test_find_available_port
+
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
 }

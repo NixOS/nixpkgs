@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  fetchpatch,
   fetchFromGitHub,
   autoreconfHook,
   buildPackages,
@@ -19,11 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-MsUReXFHlj15SgEZHOYhdSfAbSeVVl8LCi4NnUwvhpw=";
   };
-
-  patches = lib.optional (stdenv.targetPlatform.useLLVM or false) (fetchpatch {
-    url = "https://github.com/libunwind/libunwind/pull/770/commits/a69d0f14c9e6c46e82ba6e02fcdedb2eb63b7f7f.patch";
-    hash = "sha256-9oBZimCXonNN++jJs3emp9w+q1aj3eNzvSKPgh92itA=";
-  });
 
   postPatch =
     if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then

@@ -16,14 +16,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.17.6";
+  version = "3.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-JDTYqVzkdtMwMyMUyc+MABxzEKVsdRuQce9pMS2JnAE=";
+    hash = "sha256-tU5xDwqmeYFT+2byq2Qo/k29TncPfTQgYZF0JZUe/Iw=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -100,7 +100,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      appsforartists
       toast
     ];
     mainProgram = "hhd";

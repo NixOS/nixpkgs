@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.all;
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # AttributeError (fixes: https://github.com/opendatacube/odc-geo/pull/202)

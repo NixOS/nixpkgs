@@ -10,7 +10,7 @@
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2025.3-b151";
+  version = "2025.3-b153";
 
   arches = {
     aarch64-linux = "arm64";
@@ -20,8 +20,8 @@ let
   arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-pQ/AC50Ck7jVw5FTWgj8arDej0b0YXlEZ/vT43GWGoM=";
-    x64 = "sha256-mgiry7nGe7Ct1sXsztits2X2XJBj4kUBzjVRQQMLCyE=";
+    arm64 = "sha256-DKpNFv5nuxdIUjgM/+LyVweV0B6SfCojcWfsAkoMH6w=";
+    x64 = "sha256-9CSCJaISxdc7lwZUxyO8gmkxuuvKMb3I9G0ftYfYY7c=";
   };
 
   desktopItem = makeDesktopItem {

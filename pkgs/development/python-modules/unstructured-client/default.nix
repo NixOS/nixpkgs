@@ -62,10 +62,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # see test-unit in Makefile
+  # see test-unit in Makefile
+  enabledTestPaths = [
     "_test_unstructured_client"
-    "-k"
+  ];
+  enabledTests = [
     "unit"
   ];
 

@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     breeze-icons
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
-    maintainers = [ maintainers.symphorien ];
-    license = [ lib.licenses.gpl3Plus ];
+    maintainers = with lib.maintainers; [ symphorien ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "kcollectd";
   };

@@ -19,7 +19,6 @@ let
     inherit version src;
     pname = "blink-fuzzy-lib";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-QsVCugYWRri4qu64wHnbJQZBhy4tQrr+gCYbXtRBlqE=";
 
     nativeBuildInputs = [ gitMinimal ];

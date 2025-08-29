@@ -113,8 +113,7 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
+
     # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
     (fetchpatch2 {
       url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";

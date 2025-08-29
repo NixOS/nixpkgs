@@ -13,17 +13,13 @@
   libtiff,
   gst_all_1,
   libraw,
-  libsoup_2_4,
-  libsecret,
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  libchamplain,
   libjxl,
   librsvg,
   libwebp,
   libX11,
-  json-glib,
   lcms2,
   bison,
   flex,
@@ -33,8 +29,6 @@
   python3,
   desktop-file-utils,
   itstool,
-  withWebservices ? true,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,26 +64,23 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
-    libchamplain
     libheif
     libjpeg
     libjxl
     libraw
     librsvg
-    libsecret
-    libsoup_2_4
     libtiff
     libwebp
     libX11
-  ]
-  ++ lib.optional withWebservices webkitgtk_4_0;
+  ];
 
   mesonFlags = [
-    "-Dlibchamplain=true"
     "-Dlibjxl=true"
-    (lib.mesonBool "webservices" withWebservices)
+    # Depends on libsoup2.
+    # https://gitlab.gnome.org/GNOME/gthumb/-/issues/244
+    "-Dlibchamplain=false"
+    "-Dwebservices=false"
   ];
 
   postPatch = ''
@@ -119,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    maintainers = with maintainers; [
+      bobby285271
+      mimame
+    ];
   };
 })

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "5.5.0";
+  version = "5.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-eNca9+CBAGTQe6URMUYRaJR7TXFJA+dWcYIJdKyB3bw=";
+    hash = "sha256-jsDh9LhZ0uZuAe7VwHFZ5rgu1zHDxW7yVanCiYXXExs=";
   };
 
   postPatch = ''

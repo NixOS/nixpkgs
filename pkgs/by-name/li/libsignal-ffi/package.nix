@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9W7u0fZgU0J03hT6D4BJPpIKn3dwf9yckJiwwNkyqUA=";
 
   cargoBuildFlags = [

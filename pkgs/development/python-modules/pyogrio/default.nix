@@ -56,9 +56,9 @@ buildPythonPackage rec {
     python setup.py build_ext --inplace
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # disable tests which require network access
-    "-m 'not network'"
+    "network"
   ];
 
   pythonImportsCheck = [ "pyogrio" ];

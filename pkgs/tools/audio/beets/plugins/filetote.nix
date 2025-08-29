@@ -59,7 +59,11 @@ python3Packages.buildPythonApplication rec {
     dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ python3Packages.tox ];
   };
 
-  pytestFlagsArray = [ "-r fEs" ];
+  pytestFlags = [
+    # This is the same as:
+    #   -r fEs
+    "-rfEs"
+  ];
 
   disabledTestPaths = [
     "tests/test_cli_operation.py"

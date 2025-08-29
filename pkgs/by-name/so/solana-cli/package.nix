@@ -64,7 +64,6 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./crossbeam-epoch.patch ];
 
   cargoHash = "sha256-adzcLrOiUUYhz57gme/hEmD4E3kVcKCp0/jSoavZfjw=";
-  useFetchCargoVendor = true;
 
   strictDeps = true;
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;

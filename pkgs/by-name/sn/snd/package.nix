@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "25.4";
+  version = "25.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    hash = "sha256-lXcyeqLzd4a5HLm12Y6QMIzaFF3penyZri+yC2Iej4I=";
+    hash = "sha256-Q7JjLpGwGb36b0gWH6qKcM2mEzPYFq4eiY7/cYW+VIQ=";
   };
 
   nativeBuildInputs = [

@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "0x";
-  version = "unstable-2022-07-11";
+  version = "0-unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "mcy";

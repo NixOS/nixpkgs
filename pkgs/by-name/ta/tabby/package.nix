@@ -126,7 +126,6 @@ rustPlatform.buildRustPackage {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-yEns0QAARmuV697/na08K8uwJWZihY3pMyCZcERDlFM=";
 
   # Don't need to build llama-cpp-server (included in default build)

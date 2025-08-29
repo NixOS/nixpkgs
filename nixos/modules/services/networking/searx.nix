@@ -287,7 +287,6 @@ in
               ]
             )) "s"
           }://${cfg.domain}/";
-          ui.static_use_hash = true;
           valkey.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
         };
       };

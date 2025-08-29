@@ -7,18 +7,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (final: {
   pname = "evil-helix";
   version = "20250601";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
-    rev = "release-${version}";
+    tag = "release-${final.version}";
     hash = "sha256-bsl9ltPXEhkcnnHFAXQMyBCh1qd+UBV0XK2EcJOe+eg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-epI/Xvw0mgc1IoDXpACws7Lsbkj1Xdk7conzJlUqRxY=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -50,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hx";
     maintainers = with lib.maintainers; [ thiagokokada ];
   };
-}
+})

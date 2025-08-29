@@ -72,33 +72,6 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
-    # AssertionError on the version metadata
-    # https://github.com/pypa/hatch/issues/1877
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
-    "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
-    "--deselect=tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Dependency/versioning errors in the CLI tests, only seem to show up on Darwin
-    # https://github.com/pypa/hatch/issues/1893
-    "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_pip"
-    "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_uv"
-    "--deselect=tests/cli/project/test_metadata.py::TestBuildDependenciesMissing::test_no_compatibility_check_if_exists"
-    "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies"
-    "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies_from_tool_config"
-    "--deselect=tests/cli/run/test_run.py::test_dependency_hash_checking"
-    "--deselect=tests/cli/run/test_run.py::test_sync_dependencies"
-    "--deselect=tests/cli/run/test_run.py::test_sync_project_dependencies"
-    "--deselect=tests/cli/run/test_run.py::test_sync_project_features"
-    "--deselect=tests/cli/version/test_version.py::test_no_compatibility_check_if_exists"
-  ];
-
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
     "test_default"
@@ -154,6 +127,17 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/pypa/hatch/issues/1850
     "tests/backend/licenses/test_parse.py"
     "tests/backend/licenses/test_supported.py"
+
+    # AssertionError on the version metadata
+    # https://github.com/pypa/hatch/issues/1877
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
+    "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
+    "tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
@@ -162,6 +146,19 @@ python3Packages.buildPythonApplication rec {
     # != call('test hatch-test.py3.10', shell=True)
     "tests/cli/fmt/test_fmt.py"
     "tests/cli/test/test_test.py"
+
+    # Dependency/versioning errors in the CLI tests, only seem to show up on Darwin
+    # https://github.com/pypa/hatch/issues/1893
+    "tests/cli/env/test_create.py::test_sync_dependencies_pip"
+    "tests/cli/env/test_create.py::test_sync_dependencies_uv"
+    "tests/cli/project/test_metadata.py::TestBuildDependenciesMissing::test_no_compatibility_check_if_exists"
+    "tests/cli/run/test_run.py::TestScriptRunner::test_dependencies"
+    "tests/cli/run/test_run.py::TestScriptRunner::test_dependencies_from_tool_config"
+    "tests/cli/run/test_run.py::test_dependency_hash_checking"
+    "tests/cli/run/test_run.py::test_sync_dependencies"
+    "tests/cli/run/test_run.py::test_sync_project_dependencies"
+    "tests/cli/run/test_run.py::test_sync_project_features"
+    "tests/cli/version/test_version.py::test_no_compatibility_check_if_exists"
   ];
 
   passthru = {

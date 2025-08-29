@@ -2,32 +2,30 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
-  writeShellApplication,
-  cacert,
-  curl,
-  gnused,
-  jq,
-  nix-prefetch-github,
-  prefetch-npm-deps,
+  fetchpatch,
   gitUpdater,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.7";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAenod/w9BydYdYsOnuLj7kCQRcTnZ81tf4MhLUug6c=";
+    hash = "sha256-vO70olSAG6NaZjyERU22lc8MbVivyJFieGcy0xOErrc=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-otogkSsKJ5j1BY00y4SRhL9pm7CK9nmzVisvGCDIMlU=";
-  };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google-gemini/gemini-cli/pull/5336/commits/c1aef417d559237bf4d147c584449b74d6fbc1f8.patch";
+      name = "restore-missing-dependencies-fields.patch";
+      hash = "sha256-euRoLpbv075KIpYF9QPMba5FxG4+h/kxwLRetaay33s=";
+    })
+  ];
+
+  npmDepsHash = "sha256-8dn0i2laR4LFZk/sFDdvblvrHSnraGcLl3WAthCOKc0=";
 
   preConfigure = ''
     mkdir -p packages/generated
@@ -42,6 +40,8 @@ buildNpmPackage (finalAttrs: {
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
+    rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
     cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
 

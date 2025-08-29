@@ -65,9 +65,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "omegaconf" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

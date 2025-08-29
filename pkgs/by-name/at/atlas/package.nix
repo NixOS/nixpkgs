@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlas";
-  version = "0.36.0";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NmlE0Wr5A2tt0cWudOWxGgyYwqE4fmCeEU68yuQKARU=";
+    hash = "sha256-ApZbZuREKEUkxDNLzTB1ZK2aVDh/c9Tf7RGwURlkefQ=";
   };
 
   modRoot = "cmd/atlas";

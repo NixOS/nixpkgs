@@ -105,24 +105,14 @@ in
 {
   emacs30 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "30.1";
+    version = "30.2";
     variant = "mainline";
-    rev = "30.1";
-    hash = "sha256-wBuWLuFzwB77FqAYAUuNe3CuJFutjqp0XGt5srt7jAo=";
+    rev = "30.2";
+    hash = "sha256-3Lfb3HqdlXqSnwJfxe7npa4GGR9djldy8bKRpkQCdSA=";
     patches = fetchpatch: [
       (builtins.path {
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
-      })
-      (fetchpatch {
-        # bug#63288 and bug#76523
-        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=53a5dada413662389a17c551a00d215e51f5049f";
-        hash = "sha256-AEvsQfpdR18z6VroJkWoC3sBoApIYQQgeF/P2DprPQ8=";
-      })
-      (fetchpatch {
-        # bug#76573
-        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=05ecb2b8f0216aa3f391ee661aad4d61fd6aed0e";
-        hash = "sha256-fvnHMvuqwQseVrDpVpnzSaoWfXrR5tsjIib7+lhRGII=";
       })
     ];
   });

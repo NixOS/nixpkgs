@@ -220,7 +220,8 @@ in
         ++ optional cfg.unsafeTarget "--unsafe-target"
         ++ cfg.extraArguments;
     };
-
+  }
+  // lib.optionalAttrs (options ? systemd) {
     # refine the service
     systemd.service = {
       after = [ "network.target" ];
