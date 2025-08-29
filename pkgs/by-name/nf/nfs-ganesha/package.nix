@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "6.5";
+  version = "7.0";
 
   outputs = [
     "out"
@@ -35,10 +35,13 @@ stdenv.mkDerivation rec {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
+    hash = "sha256-aj6jJjLaxg7Uz8LYf9TXTJMn/9pjiElIphR2fyA5bR0=";
   };
 
-  patches = lib.optional useDbus ./0001-Allow-bypassing-dbus-pkg-config-test.patch;
+  patches = [
+    ./0002-Fix-build-with-system-ntirpc-when-MONITORING-enabled.patch
+  ]
+  ++ lib.optional useDbus ./0001-Allow-bypassing-dbus-pkg-config-test.patch;
 
   preConfigure = "cd src";
 
@@ -48,6 +51,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_VFS_POSIX_ACL=ON"
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_MAN_PAGE=ON"
   ]
   ++ lib.optionals useCeph [
@@ -92,7 +96,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
-    patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so.6.5
+    patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so
   ''
   + lib.optionalString useCeph ''
     patchelf --add-rpath $out/lib $out/bin/ganesha-rados-grace

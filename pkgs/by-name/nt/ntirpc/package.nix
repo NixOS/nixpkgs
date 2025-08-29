@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ntirpc";
-  version = "6.3";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${version}";
-    sha256 = "sha256-e4eF09xwX2Qf/y9YfOGy7p6yhDFnKGI5cnrQy3o8c98=";
+    sha256 = "sha256-c2ocQzuTkvvwavdWF/SUAT6ZgQChaN/OJ8iUiefG2Pk=";
+    fetchSubmodules = true;
   };
 
   outputs = [

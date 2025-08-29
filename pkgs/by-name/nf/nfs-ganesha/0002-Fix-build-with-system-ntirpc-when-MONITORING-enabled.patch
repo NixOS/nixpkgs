@@ -1,0 +1,26 @@
+From 31a507b5bfcdee667df86597d0c635229f634973 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dav=C3=AD=C3=B0=20Steinn=20Geirsson?= <david@dsg.is>
+Date: Fri, 29 Aug 2025 23:03:34 +0000
+Subject: [PATCH 2/2] Fix build with system ntirpc when MONITORING enabled
+
+---
+ src/CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 94027f5cb..0711cdebe 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1276,6 +1276,9 @@ if (USE_SYSTEM_NTIRPC)
+     set(NTIRPC_LIBRARY ${NTIRPC_LIBRARY} ${NTIRPC_LTTNG})
+     set(USE_LTTNG_NTIRPC ON)
+   endif (USE_LTTNG)
++  if (USE_MONITORING)
++    set(NTIRPC_LIBRARY ${NTIRPC_LIBRARY} "-lntirpcmonitoring")
++  endif (USE_MONITORING)
+ else (USE_SYSTEM_NTIRPC)
+   # Set options for submodule
+   set(USE_RPC_RDMA ${USE_NFS_RDMA} CACHE BOOL "Use RDMA")
+-- 
+2.50.1
+
