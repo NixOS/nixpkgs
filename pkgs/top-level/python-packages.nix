@@ -20360,6 +20360,8 @@ self: super: with self; {
 
   zict = callPackage ../development/python-modules/zict { };
 
+  ziggo-mediabox-xl = callPackage ../development/python-modules/ziggo-mediabox-xl { };
+
   zigpy = callPackage ../development/python-modules/zigpy { };
 
   zigpy-cc = callPackage ../development/python-modules/zigpy-cc { };
