@@ -12580,6 +12580,8 @@ self: super: with self; {
 
   pyinstrument = callPackage ../development/python-modules/pyinstrument { };
 
+  pyinterp = callPackage ../development/python-modules/pyinterp { };
+
   pyintesishome = callPackage ../development/python-modules/pyintesishome { };
 
   pyipma = callPackage ../development/python-modules/pyipma { };
