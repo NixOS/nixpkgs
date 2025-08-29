@@ -1,12 +1,25 @@
-{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, libupnpp, libnpupnp, curl, expat, libmpdclient, libmicrohttpd, jsoncpp
-, makeWrapper, python3
-, recoll
-, mutagen
+{
+  fetchgit,
+  stdenv,
+  lib,
+  autoreconfHook,
+  pkg-config,
+  libupnpp,
+  libnpupnp,
+  curl,
+  expat,
+  libmpdclient,
+  libmicrohttpd,
+  jsoncpp,
+  makeWrapper,
+  python3,
+  recoll,
+  mutagen,
 }:
 
 let
-  recoll'= recoll.override { python3Packages = python3.pkgs; };
-  mutagen'= python3.pkgs.mutagen;
+  recoll' = recoll.override { python3Packages = python3.pkgs; };
+  mutagen' = python3.pkgs.mutagen;
 in
 
 stdenv.mkDerivation rec {
@@ -19,8 +32,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ai41slMaJlVnENRevelYdDIR6x4XCjh7l6IVIZbUV+s=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libupnpp libnpupnp curl expat libmpdclient libmicrohttpd jsoncpp
-    makeWrapper python3 recoll'
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    libupnpp
+    libnpupnp
+    curl
+    expat
+    libmpdclient
+    libmicrohttpd
+    jsoncpp
+    makeWrapper
+    python3
+    recoll'
   ];
 
   enableParallelBuilding = true;
@@ -36,7 +60,7 @@ stdenv.mkDerivation rec {
 
     license = "BSD-style";
 
-    homepage = https://www.lesbonscomptes.com/upmpdcli;
+    homepage = "https://www.lesbonscomptes.com/upmpdcli";
     platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with pkgs;
 with lib;
@@ -33,14 +38,18 @@ let
 
   };
 
-  configuration = defaultConf // {
-    ### https://www.lesbonscomptes.com/upmpdcli/upmpdcli-manual.html#UPMPDCLI-CONFIGURATION
-    pkgdatadir = "${pkgs.upmpdcli}/share/upmpdcli";
+  configuration =
+    defaultConf
+    // {
+      ### https://www.lesbonscomptes.com/upmpdcli/upmpdcli-manual.html#UPMPDCLI-CONFIGURATION
+      pkgdatadir = "${pkgs.upmpdcli}/share/upmpdcli";
 
-  } // cfg.configuration;
+    }
+    // cfg.configuration;
 
-  upmpdcliConf = writeText "upmpdcli.conf" (lib.generators.toKeyValue {} configuration);
-in {
+  upmpdcliConf = writeText "upmpdcli.conf" (lib.generators.toKeyValue { } configuration);
+in
+{
 
   options = {
 
@@ -65,7 +74,10 @@ in {
   config = mkIf cfg.enable {
     systemd.services.upmpdcli = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
+      after = [
+        "network.target"
+        "sound.target"
+      ];
       description = "upmpdcli music player daemon";
       serviceConfig = {
         ExecStart = "${pkgs.upmpdcli}/bin/upmpdcli -c ${upmpdcliConf}";
@@ -81,7 +93,6 @@ in {
     };
 
     users.groups.upmpdcli.gid = gid;
-
 
   };
 

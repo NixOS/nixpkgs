@@ -1,4 +1,14 @@
-{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, curl, expat, libmicrohttpd, nix-update-script }:
+{
+  fetchgit,
+  stdenv,
+  lib,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  expat,
+  libmicrohttpd,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnpupnp";
@@ -10,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vQ9iai8gRxA9tZmcuXrvEanmHRQwa/rFxlbLdxIKUls=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config curl expat libmicrohttpd ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    curl
+    expat
+    libmicrohttpd
+  ];
 
   #hardeningDisable = [ "fortify" ];
 
