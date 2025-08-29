@@ -9,22 +9,23 @@
   chardet,
   click,
   click-option-group,
+  defusedxml,
   dogpile-cache,
-  enzyme,
   guessit,
-  srt,
-  pysubs2,
-  rarfile,
-  requests,
+  knowit,
   platformdirs,
-  setuptools,
-  stevedore,
-  tomli,
+  pysubs2,
+  requests,
+  srt,
+  tomlkit,
 
+  hatchling,
+  hatch-vcs,
+
+  colorama,
+  pypandoc,
   pytestCheckHook,
-  pytest-cov-stub,
   pytest-xdist,
-  mypy,
   sympy,
   vcrpy,
 }:
@@ -43,7 +44,10 @@ buildPythonPackage rec {
     hash = "sha256-eAXzD6diep28wCZjWLOZpOX1bnakEldhs2LX5CPu5OI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     babelfish
@@ -51,23 +55,22 @@ buildPythonPackage rec {
     chardet
     click
     click-option-group
+    defusedxml
     dogpile-cache
-    enzyme
     guessit
-    srt
-    pysubs2
-    rarfile
-    requests
+    knowit
     platformdirs
-    stevedore
-    tomli
+    pysubs2
+    requests
+    srt
+    tomlkit
   ];
 
   nativeCheckInputs = [
+    colorama
+    pypandoc
     pytestCheckHook
-    pytest-cov-stub
     pytest-xdist
-    mypy
     sympy
     vcrpy
   ];
@@ -76,9 +79,13 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "cli_cache"
+    "cli_download"
+    "opensubtitles"
+    "test_archives"
+    "test_hash"
     "test_refine"
     "test_scan"
-    "test_hash"
   ];
 
   meta = {
