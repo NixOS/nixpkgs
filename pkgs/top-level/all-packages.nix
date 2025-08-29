@@ -10387,6 +10387,7 @@ with pkgs;
     armTrustedFirmwareAllwinner
     armTrustedFirmwareAllwinnerH616
     armTrustedFirmwareAllwinnerH6
+    armTrustedFirmwareJ784S4
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
