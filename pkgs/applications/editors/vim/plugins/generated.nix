@@ -1492,6 +1492,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blame-nvim = buildVimPlugin {
+    pname = "blame.nvim";
+    version = "2025-04-16";
+    src = fetchFromGitHub {
+      owner = "FabijanZulj";
+      repo = "blame.nvim";
+      rev = "b87b8c820e4cec06fbbd2f946b7b35c45906ee0c";
+      sha256 = "0wx8n4nsk4dw1543d4plg4f8hzhrs8scpp7shrjgsn28ndkrx25z";
+    };
+    meta.homepage = "https://github.com/FabijanZulj/blame.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blamer-nvim = buildVimPlugin {
     pname = "blamer.nvim";
     version = "2023-09-19";
