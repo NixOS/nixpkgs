@@ -228,12 +228,12 @@ let
 
     nativeBuildInputs = [ undmg ];
 
-    sourceRoot = "Slack.app";
+    sourceRoot = ".";
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/Applications/Slack.app
-      cp -R . $out/Applications/Slack.app
+      mkdir -p $out/Applications
+      cp -a Slack.app $out/Applications
       runHook postInstall
     '';
   };
