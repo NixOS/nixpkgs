@@ -1,13 +1,19 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  makeWrapper,
-  testers,
-  television,
+  callPackage,
+  installShellFiles,
   nix-update-script,
-  extraPackages ? [ ],
+  testers,
+  targetPackages,
+  extraPackages ? null,
 }:
+
+assert lib.assertMsg (extraPackages == null)
+  "Overriding television with the 'extraPackages' attribute is deprecated. Please use `television.withPackages (p: [ p.fd ...])` instead.";
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";
   version = "0.13.2";
@@ -19,25 +25,51 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Ur6UTd3XsI2ZyVboQA9r3WDkl7hd1wQ0NCgTlYFF/C0=";
   };
 
+  strictDeps = true;
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   cargoHash = "sha256-LfaYRrJ4ZXoNVDsI650t+A7mWB9+2+znATp+mqDwTiE=";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postInstall = lib.optionalString (extraPackages != [ ]) ''
-    wrapProgram $out/bin/tv \
-      --prefix PATH : ${lib.makeBinPath extraPackages}
-  '';
 
   # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
   # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
   doCheck = false;
 
+  postInstall = ''
+    installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
+
+    installShellCompletion --cmd tv \
+      television/utils/shell/completion.bash \
+      television/utils/shell/completion.fish \
+      television/utils/shell/completion.nu \
+      television/utils/shell/completion.zsh
+  '';
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = television;
-      command = "XDG_DATA_HOME=$TMPDIR tv --version";
-    };
     updateScript = nix-update-script { };
+
+    withPackages =
+      f:
+      callPackage ./wrapper.nix {
+        television = finalAttrs.finalPackage;
+        extraPackages = f targetPackages;
+      };
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "XDG_DATA_HOME=$TMPDIR tv --version";
+      };
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withPackages (pkgs: [
+          pkgs.fd
+          pkgs.git
+        ]);
+
+        command = "XDG_DATA_HOME=$TMPDIR tv --version";
+      };
+    };
   };
 
   meta = {
