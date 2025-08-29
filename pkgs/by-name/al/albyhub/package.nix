@@ -96,3 +96,4 @@ buildGoModule (finalAttrs: {
     mainProgram = "albyhub";
   };
 })
+# nixpkgs-update: no auto update
