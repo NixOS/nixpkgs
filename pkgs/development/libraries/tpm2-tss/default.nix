@@ -113,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
         --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
     done
+    substituteInPlace src/tss2-fapi/ifapi_config.c \
+      --replace-fail 'SYSCONFDIR' '"/etc"'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang
