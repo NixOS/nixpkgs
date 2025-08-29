@@ -4310,6 +4310,8 @@ self: super: with self; {
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
+  doubles = callPackage ../development/python-modules/doubles { };
+
   dowhen = callPackage ../development/python-modules/dowhen { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
@@ -16186,6 +16188,8 @@ self: super: with self; {
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
 
   sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
+
+  saiph = callPackage ../development/python-modules/saiph { };
 
   salib = callPackage ../development/python-modules/salib { };
 
