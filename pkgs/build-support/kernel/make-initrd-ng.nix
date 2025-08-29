@@ -100,7 +100,8 @@ runCommand name
     ++ lib.optional makeUInitrd ubootTools;
   })
   ''
-    mkdir -p ./root/var/empty
+    mkdir -p ./root/{run,tmp,var/empty}
+    ln -s ../run ./root/var/run
     make-initrd-ng "$contentsPath" ./root
     mkdir "$out"
     (cd root && find . -exec touch -h -d '@1' '{}' +)

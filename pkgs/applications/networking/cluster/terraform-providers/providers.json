@@ -335,13 +335,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-kn9qUKvCV0vbOHDsgByO8MAJA/xwEzoBzRO9poWs0V0=",
+    "hash": "sha256-Zfsxcfi55RjG5Jq/MnDZ8yfOjg78ORrUMhK300EFxes=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.71.0",
+    "rev": "v3.72.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0aYkDyqpXzGXZR4ua4rru9Bwt5R+UjDdozO8ZnHm1xQ="
+    "vendorHash": "sha256-Zi1SyC2SdYBMO0r7QVYS51XOodRG1JHcuIrMu0JRkn0="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -1147,13 +1147,13 @@
     "vendorHash": "sha256-39OiEYntUmX2fJZh7G/LcCNFXFmHwdLgFGYz6BUEyOA="
   },
   "routeros": {
-    "hash": "sha256-q0ZRAip6mgHkdBcns8G7VlDnMNB+ux6ITKwcSL4WrcY=",
+    "hash": "sha256-XKKbw8tMtRkOU2lJEieK3CEokNAkiS1Wr1l5XnKW8qI=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.86.2",
+    "rev": "v1.86.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-et1xqcaCKTRz9bJjTlRnxhXBoc6PaeSwJgBI4pAzcdg="
+    "vendorHash": "sha256-Je7pWso3kDttP5Isn3Atryg3RZOlvj3g6nTTzuvpA5Y="
   },
   "rundeck": {
     "hash": "sha256-g8unbz8+UGLiAOJju6E2bLkygvZgHkv173PdMDefmrc=",
