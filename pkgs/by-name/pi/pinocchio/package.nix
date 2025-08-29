@@ -1,10 +1,14 @@
 {
+  autodiffSupport ? true,
   boost,
   casadi,
   casadiSupport ? true,
   cmake,
+  codegenSupport ? true,
   collisionSupport ? true,
   console-bridge,
+  cppad,
+  cppadcodegen,
   doxygen,
   eigen,
   example-robot-data,
@@ -52,6 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # silence matplotlib warning
     export MPLCONFIGDIR=$(mktemp -d)
+
+    # error: invalid use of incomplete type 'struct Eigen::internal::traits<double>'
+    # I guess it is an eigen version issue, as it is not happening on other package managers
+    substituteInPlace unittest/cppad/basic.cpp \
+      --replace-fail \
+        "ad_Y = ad_X.array().min(Scalar(0.));" \
+        "ad_Y = ad_X.array().min(CppAD::AD<double>(0.));" \
+      --replace-fail \
+        "ad_Y = ad_X.array().max(Scalar(0.));" \
+        "ad_Y = ad_X.array().max(CppAD::AD<double>(0.));"
   '';
 
   strictDeps = true;
@@ -71,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     jrl-cmakemodules
     urdfdom
   ]
+  ++ lib.optionals autodiffSupport [ cppad ]
+  ++ lib.optionals codegenSupport [ cppadcodegen ]
   ++ lib.optionals (!pythonSupport) [
     boost
     eigen
@@ -88,9 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_AUTODIFF_SUPPORT" autodiffSupport)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+    (lib.cmakeBool "BUILD_WITH_CODEGEN_SUPPORT" codegenSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     # Disable test that fails on darwin
     # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
