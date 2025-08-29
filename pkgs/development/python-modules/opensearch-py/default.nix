@@ -91,10 +91,13 @@ buildPythonPackage rec {
     "test_sniff_on_start_waits_for_sniff_to_complete"
     "test_sniff_on_start_close_unlocks_async_calls"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky tests: OSError: [Errno 48] Address already in use
     "test_redirect_failure_when_allow_redirect_false"
     "test_redirect_success_when_allow_redirect_true"
+
+    # Network access
+    "test_warns_if_using_non_default_ssl_kwargs_with_ssl_context"
   ];
 
   meta = {
