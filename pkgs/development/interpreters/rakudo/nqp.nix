@@ -6,22 +6,20 @@
   moarvm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nqp";
   version = "2025.06.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
-    owner = "raku";
+    owner = "Raku";
     repo = "nqp";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-zM3JilRBbx2r8s+dj9Yn8m2SQfQFnn1bxOUiz3Q7FT8=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ perl ];
-
-  configureScript = "${perl}/bin/perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
 
   # Fix for issue where nqp expects to find files from moarvm in the same output:
   # https://github.com/Raku/nqp/commit/e6e069507de135cc71f77524455fc6b03b765b2f
@@ -34,10 +32,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--backends=moar"
-    "--with-moar=${moarvm}/bin/moar"
+    "--with-moar=${lib.getExe moarvm}"
   ];
 
   doCheck = true;
+  nativeCheckInputs = [ perl ];
 
   meta = {
     description = "Lightweight Raku-like environment for virtual machines";
@@ -49,5 +48,6 @@ stdenv.mkDerivation rec {
       sgo
       prince213
     ];
+    mainProgram = "nqp";
   };
-}
+})
