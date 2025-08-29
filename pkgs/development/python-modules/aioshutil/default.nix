@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.5";
+  version = "1.6.a1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "kumaraditya303";
     repo = "aioshutil";
     tag = "v${version}";
-    hash = "sha256-hSUNx43sIUPs4YfQ+H39FXTpj3oCMUqRzDdHX2OdRdE=";
+    hash = "sha256-KoKIlliWSbU8KY92SgFm4Wams87O22KVlE41q18Sk3I=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
