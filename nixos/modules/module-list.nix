@@ -1467,6 +1467,7 @@
   ./services/security/pocket-id.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
+  ./services/security/ssh-tpm-agent.nix
   ./services/security/sshguard.nix
   ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
