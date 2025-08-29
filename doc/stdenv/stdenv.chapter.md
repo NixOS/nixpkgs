@@ -1018,7 +1018,7 @@ To make GDB find debug information for the `socat` package and its dependencies,
 
 ```nix
 {
-  pkgs ? import ./. {
+  pkgs ? import <nixpkgs> {
     config = { };
     overlays = [
       (final: prev: {
