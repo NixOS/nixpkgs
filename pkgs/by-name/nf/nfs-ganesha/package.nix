@@ -16,6 +16,8 @@
   flex,
   nfs-utils,
   acl,
+  useCeph ? false,
+  ceph,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +46,12 @@ stdenv.mkDerivation rec {
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DUSE_MAN_PAGE=ON"
+  ]
+  ++ lib.optionals useCeph [
+    "-DUSE_RADOS_RECOV=ON"
+    "-DRADOS_URLS=ON"
+    "-DUSE_FSAL_CEPH=ON"
+    "-DUSE_FSAL_RGW=ON"
   ];
 
   nativeBuildInputs = [
@@ -64,7 +72,8 @@ stdenv.mkDerivation rec {
     ntirpc
     liburcu
     nfs-utils
-  ];
+  ]
+  ++ lib.optional useCeph ceph;
 
   postPatch = ''
     substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
@@ -72,6 +81,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
+    patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so
+  ''
+  + lib.optionalString useCeph ''
+    patchelf --add-rpath $out/lib $out/bin/ganesha-rados-grace
+    patchelf --add-rpath $out/lib $out/lib/libganesha_rados_recov.so
+    patchelf --add-rpath $out/lib $out/lib/libganesha_rados_urls.so
   '';
 
   postInstall = ''
