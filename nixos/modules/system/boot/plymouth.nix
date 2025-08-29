@@ -192,6 +192,7 @@ in
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+              echo "The following themes exist: $(ls ${themesEnv}/share/plymouth/themes/)"
               exit 1
           fi
 
@@ -208,6 +209,7 @@ in
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+              echo "The following themes exist: $(ls ${themesEnv}/share/plymouth/themes/)"
               exit 1
           fi
 
@@ -290,6 +292,7 @@ in
       # Check if the actual requested theme is here
       if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
           echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+          echo "The following themes exist: $(ls ${themesEnv}/share/plymouth/themes/)"
           exit 1
       fi
 
