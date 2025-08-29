@@ -282,8 +282,57 @@ in
         );
       }
 
+      {
+        systemd.services."tpm2-udev-trigger" =
+          let
+            udevHash =
+              if cfg.applyUdevRules then (builtins.hashString "md5" (udevRules cfg.tssUser cfg.tssGroup)) else "";
+          in
+          {
+            description = "Trigger udev change for TPM devices";
+            wants = [ "systemd-udevd.service" ];
+            after = [
+              "tpm2.target"
+              "systemd-udevd.service"
+            ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = pkgs.writeShellScript "tpm2-udev-trigger.sh" ''
+                stateDir=/var/lib/tpm2-udev-trigger
+                mkdir -p $stateDir
+                newHash=${udevHash}
+                hashFile=$stateDir/hash.txt
+
+                # if file exists, read old hash
+                if [ -f $hashFile ]; then
+                  oldHash=$(cat $hashFile)
+                else
+                  oldHash=""
+                fi
+
+                if [ "$oldHash" != "$newHash" ]; then
+                  echo "TPM udev rules changed, triggering udev"
+                  for i in $(seq 0 9); do
+                    if [ -e /dev/tpm$i ]; then
+                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpm$i --action=change
+                      ${config.systemd.package}/bin/udevadm trigger --name-match=tpmrm$i --action=change
+                    fi
+                  done
+                  echo "$newHash" > $hashFile
+                else
+                  echo "TPM udev rules unchanged, not triggering udev"
+                fi
+              '';
+            };
+          };
+      }
+
       (lib.mkIf cfg.abrmd.enable {
         systemd.services."tpm2-abrmd" = {
+          wants = [ "tpm2-udev-trigger.service" ];
+          after = [ "tpm2-udev-trigger.service" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "dbus";
