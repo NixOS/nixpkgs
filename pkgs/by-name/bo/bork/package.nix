@@ -1,17 +1,15 @@
 {
-  callPackage,
   curl,
   fetchFromGitHub,
   lib,
   stdenvNoCC,
   zig_0_14,
 }:
-
 let
   zig = zig_0_14;
 in
-stdenvNoCC.mkDerivation {
-  name = "bork";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "bork";
   version = "0.4.0-unstable-2025-04-18";
 
   src = fetchFromGitHub {
@@ -21,6 +19,8 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-HAW5/FXgAwD+N48H+K2salN7o125i012GB1kB4CnXgQ=";
   };
 
+  patches = [ ./deps.patch ];
+
   nativeBuildInputs = [
     zig.hook
   ];
@@ -29,11 +29,17 @@ stdenvNoCC.mkDerivation {
     curl
   ];
 
-  zigBuildFlags = [ "--release=fast" ];
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-xFOhoumewGX/780HpSPLqTSi+b1hwZzHFxZ1y5Jytvw=";
+  };
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigBuildFlags = [ "--release=fast" ];
 
   meta = {
     description = "TUI chat client tailored for livecoding on Twitch";
@@ -44,4 +50,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "bork";
   };
-}
+})
