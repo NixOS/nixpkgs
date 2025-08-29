@@ -18,14 +18,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
-  version = "0.6.0";
+  version = "0.5.1";
   format = "other";
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
     rev = version;
-    hash = "sha256-x/um40sRD58d5LuuJlyietCV1Rw4H5VSO0I3ZwD5kO8=";
+    hash = "sha256-tZlBpDcwQ/aWroP2sFQBZcvmBD26PiY7q/8xFA8GnVc=";
   };
 
   postPatch = ''
