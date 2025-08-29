@@ -23,7 +23,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.1-unstable-2025-08-01";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
