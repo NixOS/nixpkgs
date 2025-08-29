@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index b70c562..b50808d 100755
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,6 @@
+ # The bmptst and pretst invocations are Bourne shell command lines.
+ SHELL = /bin/sh
+ # C compiler and flags.  Adjust to taste.
+-CC = gcc
+ CFLAGS = -O3 -Wall -ansi -fomit-frame-pointer
+ # Binary optimiser
+ STRIP = strip
