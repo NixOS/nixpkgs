@@ -6772,6 +6772,8 @@ self: super: with self; {
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
+  huawei-solar = callPackage ../development/python-modules/huawei-solar { };
+
   huepy = callPackage ../development/python-modules/huepy { };
 
   huey = callPackage ../development/python-modules/huey { };
