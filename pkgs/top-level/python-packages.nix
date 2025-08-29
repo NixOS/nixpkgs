@@ -2839,6 +2839,8 @@ self: super: with self; {
 
   colorzero = callPackage ../development/python-modules/colorzero { };
 
+  colossalai = callPackage ../development/python-modules/colossalai { };
+
   colour = callPackage ../development/python-modules/colour { };
 
   colout = callPackage ../development/python-modules/colout { };
