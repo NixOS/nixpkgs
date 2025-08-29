@@ -91,6 +91,7 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [
       mmahut
+      prince213
       teutat3s
     ];
     platforms = [
