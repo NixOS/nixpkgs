@@ -6,6 +6,7 @@
   setuptools,
   mpi,
   toPythonModule,
+  pytest-timeout,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
@@ -43,7 +44,15 @@ buildPythonPackage rec {
     pytestCheckHook
     mpiCheckPhaseHook
   ];
-  disabledTestPaths = lib.optionals (mpi.pname == "mpich") [
+  disabledTestPaths = [
+    # mpi4py.MPI.Exception: MPI_ERR_UNKNOWN: unknown error
+    "test/test_spawn.py"
+
+    # Hang indefinitely
+    "demo/futures/test_futures.py"
+    "test/test_util_pool.py"
+  ]
+  ++ lib.optionals (mpi.pname == "mpich") [
     # These tests from some reason cause pytest to crash, and therefor it is
     # hard to debug them. Upstream mentions these tests to raise issues in
     # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
