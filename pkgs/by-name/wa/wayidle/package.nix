@@ -4,15 +4,15 @@
   fetchFromSourcehut,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayidle";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "wayidle";
-    rev = "v${version}";
-    hash = "sha256-DgsktRIGWswSBYeij5OL4nJwWaURv+v+qzOdZnLKG/E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VZfoPD9bpHOQBtDBpG4My7/KJNTKcy5PjFNO2xKmqKg=";
   };
 
   cargoHash = "sha256-rpmMUrVobYa9mGERJnhGsvebzWbuL+51VeuXKUIFdwg=";
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wayidle";
     platforms = platforms.linux;
   };
-}
+})
