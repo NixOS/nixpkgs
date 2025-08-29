@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wayland C++ binding";
     mainProgram = "wayland-scanner++";
     homepage = "https://github.com/NilsBrause/waylandpp/";
