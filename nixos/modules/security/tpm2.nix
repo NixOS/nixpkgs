@@ -24,6 +24,27 @@ let
     }
   '';
 
+  fapiConfig = (
+    pkgs.writeText "fapi-config.json" (
+      builtins.toJSON (
+        {
+          profile_name = cfg.fapi.profileName;
+          profile_dir = cfg.fapi.profileDir;
+          user_dir = cfg.fapi.userDir;
+          system_dir = cfg.fapi.systemDir;
+          tcti = cfg.fapi.tcti;
+          system_pcrs = cfg.fapi.systemPcrs;
+          log_dir = cfg.fapi.logDir;
+          firmware_log_file = cfg.fapi.firmwareLogFile;
+          ima_log_file = cfg.fapi.imaLogFile;
+        }
+        // lib.optionalAttrs (cfg.fapi.ekCertLess != null) {
+          ek_cert_less = if cfg.fapi.ekCertLess then "yes" else "no";
+        }
+        // lib.optionalAttrs (cfg.fapi.ekFingerprint != null) { ek_fingerprint = cfg.fapi.ekFingerprint; }
+      )
+    )
+  );
 in
 {
   options.security.tpm2 = {
@@ -132,6 +153,97 @@ in
         default = "bus_name=com.intel.tss2.Tabrmd";
       };
     };
+
+    fapi = {
+      profileName = lib.mkOption {
+        description = ''
+          Name of the default cryptographic profile chosen from the profile_dir directory.
+        '';
+        type = lib.types.str;
+        default = "P_ECCP256SHA256";
+      };
+
+      profileDir = lib.mkOption {
+        description = ''
+          Directory that contains all cryptographic profiles known to FAPI.
+        '';
+        type = lib.types.str;
+        default = "${pkgs.tpm2-tss}/etc/tpm2-tss/fapi-profiles/";
+        defaultText = lib.literalExpression "\${pkgs.tpm2-tss}/etc/fapi-profiles/";
+      };
+
+      userDir = lib.mkOption {
+        description = ''
+          The directory where user objects are stored.
+        '';
+        type = lib.types.str;
+        default = "~/.local/share/tpm2-tss/user/keystore/";
+      };
+
+      systemDir = lib.mkOption {
+        description = ''
+          The directory where system objects, policies, and imported objects are stored.
+        '';
+        type = lib.types.str;
+        default = "/var/lib/tpm2-tss/keystore";
+      };
+
+      tcti = lib.mkOption {
+        description = ''
+          The TCTI interface which will be used.
+        '';
+        type = lib.types.str;
+        default = "";
+      };
+
+      systemPcrs = lib.mkOption {
+        description = ''
+          The PCR registers which are used by the system.
+        '';
+        type = lib.types.listOf lib.types.int;
+        default = [ ];
+      };
+
+      logDir = lib.mkOption {
+        description = ''
+          The directory for the event log.
+        '';
+        type = lib.types.str;
+        default = "/var/log/tpm2-tss/eventlog/";
+      };
+
+      ekCertLess = lib.mkOption {
+        description = ''
+          A switch to disable certificate verification.
+        '';
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
+      };
+
+      ekFingerprint = lib.mkOption {
+        description = ''
+          The fingerprint of the endorsement key.
+        '';
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+
+      firmwareLogFile = lib.mkOption {
+        description = ''
+          The binary bios measurements.
+        '';
+        type = lib.types.str;
+        default = "/sys/kernel/security/tpm0/binary_bios_measurements";
+      };
+
+      imaLogFile = lib.mkOption {
+        description = ''
+          The binary IMA measurements (Integrity Measurement Architecture).
+        '';
+        type = lib.types.str;
+        default = "/sys/kernel/security/ima/binary_runtime_measurements";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -186,6 +298,10 @@ in
 
         services.dbus.packages = lib.singleton cfg.abrmd.package;
       })
+
+      {
+        environment.etc."tpm2-tss/fapi-config.json".source = fapiConfig;
+      }
     ]
   );
 
