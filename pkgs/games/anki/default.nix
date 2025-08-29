@@ -34,11 +34,11 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.07.5";
+  version = "25.08b5";
   rev = "7172b2d26684c7ef9d10e249bd43dc5bf73ae00c";
 
-  srcHash = "sha256-nWxRr55Hm40V3Ijw+WetBKNoreLpcvRscgbOZa0REcY=";
-  cargoHash = "sha256-H/xwPPL6VupSZGLPEThhoeMcg12FvAX3fmNM6zYfqRQ=";
+  srcHash = "sha256-sc+AuHOv3QTOSeXg67BxUd45v5DdAye4TfEZD0HOGJI=";
+  cargoHash = "sha256-nzkHtw9e6Wuo0l/oYxKzlafFhauBI+1zZvUuhgI2O/s=";
   yarnHash = "sha256-adHnV345oDm20R8zGdEiEW+8/mTQAz4oxraybRfmwew=";
   pythonDeps = map (meta: {
     url = meta.url;
