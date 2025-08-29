@@ -286,8 +286,7 @@ in
             "log"
             "index"
           ];
-          apply = x:
-            concatStringsSep " " (map (v: "--skip-${v}") (if isList x then x else [ x ]));
+          apply = x: concatStringsSep " " (map (v: "--skip-${v}") (if isList x then x else [ x ]));
           description = ''
             Exclude data from dump.
           '';
@@ -853,7 +852,7 @@ in
         ExecStart =
           "${exe} dump --type ${cfg.dump.type}"
           + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}"
-          + optionalString (cfg.dump.skip != []) " ${cfg.dump.skip}";
+          + optionalString (cfg.dump.skip != [ ]) " ${cfg.dump.skip}";
         WorkingDirectory = cfg.dump.backupDir;
       };
     };
