@@ -3,24 +3,24 @@
 { fetchurl }:
 {
   aarch64-darwin = {
-    version = "4.45.64";
+    version = "4.45.69";
     src = fetchurl {
-      url = "https://downloads.slack-edge.com/desktop-releases/mac/arm64/4.45.64/Slack-4.45.64-macOS.dmg";
-      hash = "sha256-cop97sITSjFZG676IPaclDLEAM1iYYDMtV8tf0LLzIw=";
+      url = "https://downloads.slack-edge.com/desktop-releases/mac/arm64/4.45.69/Slack-4.45.69-macOS.dmg";
+      hash = "sha256-MaPwj0niehwNYiSl8GdzKSF1mezKtIFiAmZzBWbwq9A=";
     };
   };
   x86_64-darwin = {
-    version = "4.45.64";
+    version = "4.45.69";
     src = fetchurl {
-      url = "https://downloads.slack-edge.com/desktop-releases/mac/x64/4.45.64/Slack-4.45.64-macOS.dmg";
-      hash = "sha256-7SzSVM+2gtmsVwmoZUl3WQcI9si46nstbGUGXl+Yys8=";
+      url = "https://downloads.slack-edge.com/desktop-releases/mac/x64/4.45.69/Slack-4.45.69-macOS.dmg";
+      hash = "sha256-iO5hGzYYmrHoTznw++AEhGjTKiTngzA9/ho+oFGXVeI=";
     };
   };
   x86_64-linux = {
-    version = "4.45.64";
+    version = "4.45.69";
     src = fetchurl {
-      url = "https://downloads.slack-edge.com/desktop-releases/linux/x64/4.45.64/slack-desktop-4.45.64-amd64.deb";
-      hash = "sha256-fGr4arHVd4rskw1OfXe5+ZSKg6h+hFjoIdb56N/tGA8=";
+      url = "https://downloads.slack-edge.com/desktop-releases/linux/x64/4.45.69/slack-desktop-4.45.69-amd64.deb";
+      hash = "sha256-CwM8oEyRBkE5FSBO5rl4ygRuLtaRefVVZpAEHKxXKcw=";
     };
   };
 }
