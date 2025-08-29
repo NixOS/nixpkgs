@@ -6357,12 +6357,10 @@ with pkgs;
 
   inherit
     ({
-      spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix { };
       spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix { };
       spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix { };
       spidermonkey_140 = callPackage ../development/interpreters/spidermonkey/140.nix { };
     })
-    spidermonkey_91
     spidermonkey_115
     spidermonkey_128
     spidermonkey_140
