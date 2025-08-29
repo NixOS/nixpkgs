@@ -2,59 +2,58 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  writeText,
-  fontconfig,
   libX11,
-  libXft,
-  libXcursor,
-  libXcomposite,
-  conf ? null,
+  libGL,
+  libxcb,
+  libXmu,
+  xcbutilcursor,
+  xcbutil,
+  xcbutilwm,
+  xcbutilkeysyms,
+  libconfig,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ragnarwm";
-  version = "1.4";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "cococry";
     repo = "Ragnar";
-    rev = finalAttrs.version;
-    hash = "sha256-OZhIwrKEhTfkw9K8nZIwGZzxXBObseWS92Y+85HmdNs=";
+    rev = "76ea5f20b453dab5442a97719deae0c194912e24"; # no tags
+    hash = "sha256-ghqkZL9+PmINc0Vqmn4eywJr9yrVUH3lRhKUg4MBr+Q=";
   };
 
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace '/usr/bin' "$out/bin" \
-      --replace '/usr/share' "$out/share"
+  preBuild = ''
+    rm api/lib/{api.o,libragnar.a}
   '';
 
-  postPatch =
-    let
-      configFile =
-        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
-    in
-    lib.optionalString (conf != null) "cp ${configFile} config.h";
-
   buildInputs = [
-    fontconfig
+    libxcb
+    xcbutil
+    xcbutilkeysyms
+    libXmu
+    xcbutilcursor
     libX11
-    libXft
-    libXcursor
-    libXcomposite
+    xcbutilwm
+    libGL
+    libconfig
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+  ];
+
   enableParallelBuilding = true;
 
   preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
+    mkdir -p $out/{bin,share/{applications,xsessions}}
   '';
 
-  postInstall = ''
-    install -Dm644 $out/share/applications/ragnar.desktop $out/share/xsessions/ragnar.desktop
-  '';
+  # ragnarstart is a demo script
+  postInstall = "rm $out/bin/ragnarstart";
 
   passthru = {
     tests.ragnarwm = nixosTests.ragnarwm;
