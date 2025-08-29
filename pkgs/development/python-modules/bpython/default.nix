@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.25";
+  version = "0.26-dev";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bpython";
     repo = "bpython";
     tag = version;
-    hash = "sha256-p5+IQiHNRRazqr+WRdx3Yw+ImG25tdZGLXvMf7woD9w=";
+    hash = "sha256-HvPdCi2GO6YiV5igH3gRV5it2kdU4+YQMN78S1Xaw7c=";
   };
 
   postPatch = ''
