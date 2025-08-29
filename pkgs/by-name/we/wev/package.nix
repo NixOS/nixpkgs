@@ -10,15 +10,15 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wev";
-  version = "1.0.0-unstable-2022-09-14";
+  version = "1.1.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "wev";
-    rev = "83de8e931ab04ce3322a58b359d8effa7901b21c";
-    sha256 = "sha256-lNFgjRXO/ZbcXJF06DykPoJJ6/a8ZfVA6g95i+rNdWs=";
+    rev = finalAttrs.version;
+    hash = "sha256-0ZA44dMDuVYfplfutOfI2EdPNakE9KnOuRfk+CEDCRk=";
   };
 
   strictDeps = true;
@@ -51,4 +51,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     mainProgram = "wev";
   };
-}
+})
