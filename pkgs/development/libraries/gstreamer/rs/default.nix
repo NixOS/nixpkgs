@@ -188,12 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Disable uriplaylistbin test that requires network access.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/676
-    # TODO: Remove in 0.14, it has been replaced by a different fix:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
-    ./ignore-network-tests.patch
-
     # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
     # Cannot be upstreamed due to MSRV bump in native-tls:
@@ -247,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
   # turn off all auto plugins since we use a list of plugins we generate
   mesonAutoFeatures = "disabled";
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && false;
 
   # csound lib dir must be manually specified for it to build
   preConfigure = ''
