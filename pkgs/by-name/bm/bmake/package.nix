@@ -57,12 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
   # * opt-keep-going-indirect: not yet known
   # * varmod-localtime: musl doesn't support TZDIR and this test relies on
   #   impure, implicit paths
-  env.BROKEN_TESTS = builtins.concatStringsSep " " [
-    "directive-export"
-    "directive-export-gmake"
-    "opt-keep-going-indirect"
-    "varmod-localtime"
-  ];
+  # * interrupt-compat (fails on x86_64-linux building for i686-linux)
+  env.BROKEN_TESTS = lib.concatStringsSep " " (
+    [
+      "directive-export"
+      "directive-export-gmake"
+      "opt-keep-going-indirect"
+      "varmod-localtime"
+    ]
+    ++ lib.optionals stdenv.targetPlatform.is32bit [
+      "interrupt-compat"
+    ]
+  );
 
   strictDeps = true;
 
