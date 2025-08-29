@@ -17,14 +17,14 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "banking";
+  pname = "saldo";
   version = "0.6.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "tabos";
-    repo = "banking";
-    rev = version;
+    repo = "saldo";
+    tag = version;
     hash = "sha256-x/um40sRD58d5LuuJlyietCV1Rw4H5VSO0I3ZwD5kO8=";
   };
 
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     librsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     cryptography
     fints
     mt-940
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Banking application for small screens";
-    homepage = "https://tabos.gitlab.io/projects/banking/";
+    homepage = "https://www.tabos.org/projects/saldo/";
     license = licenses.gpl3Plus;
     mainProgram = "org.tabos.banking";
     maintainers = with maintainers; [ dotlambda ];
