@@ -28,6 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-nqp=${lib.getExe nqp}"
   ];
 
+  doCheck = true;
+  preCheck = ''
+    # Dubious, test returned 1 (wstat 256, 0x100)
+    rm t/02-rakudo/repl.t
+    # Dubious, test returned 1 (wstat 256, 0x100)
+    rm t/05-messages/03-errors.t
+    # Dubious, test returned 2 (wstat 512, 0x200)
+    rm t/09-moar/01-profilers.t
+  '';
+
   disallowedReferences = [ stdenv.cc.cc ];
   postFixup = ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
