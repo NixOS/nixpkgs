@@ -8828,8 +8828,6 @@ with pkgs;
     inherit (lomiri) cmake-extras;
   };
 
-  qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
-
   quarto = callPackage ../development/libraries/quarto { };
 
   quartoMinimal = callPackage ../development/libraries/quarto {
