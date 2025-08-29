@@ -2,7 +2,6 @@
   lib,
   stdenv,
   callPackage,
-  replaceVars,
   python312Packages,
   fetchFromGitHub,
   fetchurl,
@@ -78,11 +77,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     ./constants.patch
-
-    (replaceVars ./ffmpeg.patch {
-      ffmpeg = lib.getExe ffmpeg-headless;
-      ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
-    })
+    ./ffmpeg.patch
   ];
 
   postPatch = ''
@@ -205,6 +200,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3Packages; [
+    ffmpeg-headless
     pytestCheckHook
   ];
 

@@ -231,6 +231,17 @@ in
             };
           };
 
+          ffmpeg = {
+            path = mkOption {
+              type = coercedTo package toString str;
+              default = pkgs.ffmpeg-headless;
+              example = literalExpression "pkgs.ffmpeg-full";
+              description = ''
+                Package providing the ffmpeg and ffprobe executables below the bin/ directory.
+              '';
+            };
+          };
+
           mqtt = {
             enabled = mkEnableOption "MQTT support";
 
