@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cmudict,
   setuptools,
   pyphen,
   pytestCheckHook,
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     setuptools
     pyphen
+    cmudict
   ];
 
   pythonImportsCheck = [
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [
-    "test.py"
+    "tests/"
   ];
 
   meta = {
