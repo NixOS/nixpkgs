@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "9.0.0";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_web";
     inherit version;
-    hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
+    hash = "sha256-ajK29BsXQxhDkGNqt4HEPe8S/P1t14jzApY10/fWTHs=";
   };
 
   build-system = [ setuptools ];
