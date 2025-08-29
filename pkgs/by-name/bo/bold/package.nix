@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
   zig_0_14,
   versionCheckHook,
   gitUpdater,
@@ -31,9 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-SSP+wvSJm+lOKMnUfyh56ZUB0eP0gHRwz0qmMhvp7Rw=";
+  };
 
   nativeBuildInputs = [
     zig.hook
