@@ -12533,13 +12533,15 @@ self: super: with self; {
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
 
-  pybind11 = callPackage ../development/python-modules/pybind11 { };
+  pybind11 = pybind11_2;
 
   pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
 
   pybind11-protobuf = callPackage ../development/python-modules/pybind11-protobuf { };
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
+
+  pybind11_2 = callPackage ../development/python-modules/pybind11_2 { };
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
