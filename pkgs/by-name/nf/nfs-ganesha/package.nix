@@ -8,7 +8,6 @@
   krb5,
   xfsprogs,
   jemalloc,
-  dbus,
   libcap,
   ntirpc,
   liburcu,
@@ -17,7 +16,9 @@
   nfs-utils,
   acl,
   useCeph ? false,
-  ceph
+  ceph,
+  useDbus ? true,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
   };
 
+  patches = lib.optional useDbus ./0001-Allow-bypassing-dbus-pkg-config-test.patch;
+
   preConfigure = "cd src";
 
   cmakeFlags = [
@@ -46,11 +49,19 @@ stdenv.mkDerivation rec {
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DUSE_MAN_PAGE=ON"
-  ] ++ lib.optionals useCeph [
+  ]
+  ++ lib.optionals useCeph [
     "-DUSE_RADOS_RECOV=ON"
     "-DRADOS_URLS=ON"
     "-DUSE_FSAL_CEPH=ON"
     "-DUSE_FSAL_RGW=ON"
+  ]
+  ++ lib.optionals useDbus [
+    "-DUSE_DBUS=ON"
+    "-DDBUS_NO_PKGCONFIG=ON"
+    "-DDBUS_LIBRARY_DIRS=${dbus.lib}/lib"
+    "-DDBUS_INCLUDE_DIRS=${dbus.dev}/include/dbus-1.0\\;${dbus.lib}/lib/dbus-1.0/include"
+    "-DDBUS_LIBRARIES=dbus-1"
   ];
 
   nativeBuildInputs = [
@@ -59,7 +70,8 @@ stdenv.mkDerivation rec {
     bison
     flex
     sphinx
-  ];
+  ]
+  ++ lib.optional useDbus dbus.dev;
 
   buildInputs = [
     acl
@@ -71,7 +83,8 @@ stdenv.mkDerivation rec {
     ntirpc
     liburcu
     nfs-utils
-  ] ++ lib.optional useCeph ceph;
+  ]
+  ++ lib.optional useCeph ceph;
 
   postPatch = ''
     substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
@@ -80,7 +93,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
     patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so.6.5
-  '' + lib.optionalString useCeph ''
+  ''
+  + lib.optionalString useCeph ''
     patchelf --add-rpath $out/lib $out/bin/ganesha-rados-grace
     patchelf --add-rpath $out/lib $out/lib/libganesha_rados_recov.so
     patchelf --add-rpath $out/lib $out/lib/libganesha_rados_urls.so
@@ -88,6 +102,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
+  ''
+  + lib.optionalString useDbus ''
+    # Policy for D-Bus statistics interface
+    install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
 
   meta = with lib; {
