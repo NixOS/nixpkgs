@@ -4,7 +4,6 @@
   nix,
   lib,
   replaceVarsWith,
-  nuget-to-nix,
   nixfmt,
   nuget-to-json,
   cacert,
@@ -89,7 +88,6 @@ attrs
             isExecutable = true;
             replacements = {
               binPath = lib.makeBinPath [
-                nuget-to-nix
                 nixfmt
                 nuget-to-json
               ];
