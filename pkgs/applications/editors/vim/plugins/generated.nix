@@ -1492,6 +1492,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blame-nvim = buildVimPlugin {
+    pname = "blame.nvim";
+    version = "2025-04-16";
+    src = fetchFromGitHub {
+      owner = "FabijanZulj";
+      repo = "blame.nvim";
+      rev = "b87b8c820e4cec06fbbd2f946b7b35c45906ee0c";
+      sha256 = "0wx8n4nsk4dw1543d4plg4f8hzhrs8scpp7shrjgsn28ndkrx25z";
+    };
+    meta.homepage = "https://github.com/FabijanZulj/blame.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blamer-nvim = buildVimPlugin {
     pname = "blamer.nvim";
     version = "2023-09-19";
@@ -7197,6 +7210,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lensline-nvim = buildVimPlugin {
+    pname = "lensline.nvim";
+    version = "2025-08-28";
+    src = fetchFromGitHub {
+      owner = "oribarilan";
+      repo = "lensline.nvim";
+      rev = "e057fe1845d58ca52967c8805eb6ff8f4d16f3d7";
+      sha256 = "0ckwyvj6764npn836cjva7mmifzcnhz73a03kmq7p18r81sbrqgj";
+    };
+    meta.homepage = "https://github.com/oribarilan/lensline.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lessspace-vim = buildVimPlugin {
     pname = "lessspace.vim";
     version = "2023-02-13";
@@ -11735,6 +11761,19 @@ final: prev: {
       sha256 = "15sa9bmn1m3ddkhn1j1c8b3v2nkmb96sbivg6zz6z8kznr1qm1pw";
     };
     meta.homepage = "https://github.com/samjwill/nvim-unception/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-unity = buildVimPlugin {
+    pname = "nvim-unity";
+    version = "2025-08-22";
+    src = fetchFromGitHub {
+      owner = "apyra";
+      repo = "nvim-unity";
+      rev = "22aa4a977bbe4a9cd2c09617f43744eda76fb315";
+      sha256 = "0hxpj6nh6w73mz29p4jpfapfc4nrmsnpcrw2cyggcrblfmm844f8";
+    };
+    meta.homepage = "https://github.com/apyra/nvim-unity/";
     meta.hydraPlatforms = [ ];
   };
 
