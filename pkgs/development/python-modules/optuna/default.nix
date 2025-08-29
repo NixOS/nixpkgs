@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-S9F9xni1cnmIbWu5n7BFvUCvQmBP3iBYS1ntg6vQ8ZQ=";
+    hash = "sha256-qaCOpqKRepm/a1Nh98PV6RcRkadLK5E429pn1zaWQDA=";
   };
 
   build-system = [
@@ -137,6 +137,8 @@ buildPythonPackage rec {
     "test_target_is_none_and_study_is_multi_obj"
     "test_visualizations_with_single_objectives"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "optuna" ];
 

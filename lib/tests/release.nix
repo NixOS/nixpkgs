@@ -29,6 +29,9 @@ in
 pkgsBB.symlinkJoin {
   name = "nixpkgs-lib-tests";
   paths = map testWithNix nixVersions ++ [
+    (import ./nix-unit.nix {
+      inherit pkgs;
+    })
     (import ./maintainers.nix {
       inherit pkgs;
       lib = import ../.;
