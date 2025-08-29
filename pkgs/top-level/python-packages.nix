@@ -9144,6 +9144,8 @@ self: super: with self; {
 
   mesa = callPackage ../development/python-modules/mesa { };
 
+  mesa-viz-tornado = callPackage ../development/python-modules/mesa-viz-tornado { };
+
   meshcat = callPackage ../development/python-modules/meshcat { };
 
   meshio = callPackage ../development/python-modules/meshio { };
