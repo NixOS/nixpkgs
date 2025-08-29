@@ -173,7 +173,7 @@ in
           default = "mysql";
           description = ''
             Database engine to use.
-            Note that PGSQL is not well supported: https://github.com/pixelfed/pixelfed/issues/2727
+            Note that PGSQL is not well supported: <https://github.com/pixelfed/pixelfed/issues/2727>
           '';
         };
 

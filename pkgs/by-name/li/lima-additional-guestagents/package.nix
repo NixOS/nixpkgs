@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lima-additional-guestagents";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vrYsIYikoN4D3bxu/JTb9lMRcL5k9S6T473dl58SDW0=";
+    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
   };
 
   vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";

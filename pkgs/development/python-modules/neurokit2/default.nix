@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "neurokit2";
-  version = "0.2.10";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neuropsychology";
     repo = "NeuroKit";
     tag = "v${version}";
-    hash = "sha256-e/B1JvO6uYZ6iVskFvxZLSSXi0cPep9bBZ0JXZTVS28=";
+    hash = "sha256-gn02l0vYl+/7hXp4gFVlgblxC4dewXckW3JL3wPC89Y=";
   };
 
   postPatch = ''
@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Toolbox for Neurophysiological Signal Processing";
     homepage = "https://github.com/neuropsychology/NeuroKit";
-    changelog = "https://github.com/neuropsychology/NeuroKit/releases/tag/v${version}";
+    changelog = "https://github.com/neuropsychology/NeuroKit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };

@@ -29,7 +29,7 @@ in
         This allows Docker clients to connect with the equivalents of the Docker
         CLI `-H` and `--tls*` family of options.
 
-        For certificate setup, see https://docs.docker.com/engine/security/protect-access/
+        For certificate setup, see <https://docs.docker.com/engine/security/protect-access/>
 
         This option is independent of [](#opt-virtualisation.podman.dockerSocket.enable).
       '';

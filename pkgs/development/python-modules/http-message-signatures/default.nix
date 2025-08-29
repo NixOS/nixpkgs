@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "0.5.0";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
-    rev = "v${version}";
-    hash = "sha256-Jsivw4lNA/2oqsOGGx8D4gUPftzuys877A9RXyapnSQ=";
+    tag = "v${version}";
+    hash = "sha256-vPZeAS3hR7Bmj2FtME+V9WU3TViBndrBb9GLkdMVh2Q=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

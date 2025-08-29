@@ -190,6 +190,7 @@ let
     };
 
     meta = {
+      broken = (lib.versionOlder version "3.32") && useNixpkgsEngine;
       description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
       longDescription = ''
         Flutter is Google's SDK for crafting beautiful,

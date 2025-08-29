@@ -202,7 +202,15 @@ lib.extendMkDerivation {
             outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
             # in case an overlay clears passthru by accident, don't fail evaluation
           }).overrideAttrs
-            (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
+            (
+              let
+                pos = builtins.unsafeGetAttrPos "passthru" finalAttrs;
+                posString =
+                  if pos == null then "unknown" else "${pos.file}:${toString pos.line}:${toString pos.column}";
+              in
+              finalAttrs.passthru.overrideModAttrs
+                or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
+            );
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 

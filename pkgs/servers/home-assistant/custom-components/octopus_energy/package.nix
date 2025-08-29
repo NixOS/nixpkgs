@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";
   domain = "octopus_energy";
-  version = "16.0.2";
+  version = "16.2.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HomeAssistant-OctopusEnergy";
     tag = "v${version}";
-    hash = "sha256-/lhM00CNVPoZ8oohPuJ5j0pf0Dmxym3eycdkknlaAug=";
+    hash = "sha256-CSwf7hIVVUSewFRPszVJ1MzwLpU5IjFfTgo+oiJA4R0=";
   };
 
   dependencies = [ pydantic ];
@@ -34,17 +34,17 @@ buildHomeAssistantComponent rec {
     "tests/integration"
     "tests/local_integration"
 
-    # This unit test changes Home Assistant's default time zone to Europe/London
+    # These unit tests change Home Assistant's default time zone to Europe/London
     # without restoring it, which fails pytest-homeassistant-custom-component's
     # teardown
     "tests/unit/utils/test_get_off_peak_cost.py::test_when_rates_available_and_bst_then_off_peak_cost_returned"
+    "tests/unit/utils/test_dict_to_typed_dict.py::test_when_utc_datetime_is_present_during_bst_then_converted_to_correct_datetime"
   ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version-regex"
       # Ignore pre-release versions ("beta")
-      "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+      "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
     ];
   };
 

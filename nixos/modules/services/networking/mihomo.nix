@@ -31,13 +31,13 @@ in
 
         You can also use the following website:
         - metacubexd:
-          - https://d.metacubex.one
-          - https://metacubex.github.io/metacubexd
-          - https://metacubexd.pages.dev
+          - <https://d.metacubex.one>
+          - <https://metacubex.github.io/metacubexd>
+          - <https://metacubexd.pages.dev>
         - yacd:
-          - https://yacd.haishan.me
+          - <https://yacd.haishan.me>
         - clash-dashboard:
-          - https://clash.razord.top
+          - <https://clash.razord.top>
       '';
     };
 

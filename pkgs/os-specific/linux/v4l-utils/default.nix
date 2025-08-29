@@ -19,10 +19,10 @@
   withUtils ? true,
   withGUI ? true,
   alsa-lib,
-  qt5compat,
-  qtbase,
   libGLU,
-  wrapQtAppsHook,
+  qt6Packages,
+  linuxHeaders,
+  buildPackages,
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, QT)
@@ -66,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isGnu [
     (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # BPF support fail to cross compile, unable to find `linux/lirc.h`
+    (lib.mesonOption "bpf" "disabled")
   ];
 
   postFixup = ''
@@ -82,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     udevCheckHook
   ]
-  ++ lib.optional withQt wrapQtAppsHook;
+  ++ lib.optional withQt qt6Packages.wrapQtAppsHook;
 
   buildInputs = [
     json_c
@@ -93,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
   ++ lib.optionals withQt [
     alsa-lib
-    qt5compat
-    qtbase
+    qt6Packages.qt5compat
+    qt6Packages.qtbase
     libGLU
   ];
 
@@ -113,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace \
       meson.build \
       --replace-fail "get_option('datadir') / 'locale'" "get_option('localedir')"
+  '';
+
+  # Meson unable to find moc/uic/rcc in case of cross-compilation
+  # https://github.com/mesonbuild/meson/issues/13018
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export PATH=${buildPackages.qt6Packages.qtbase}/libexec:$PATH
   '';
 
   enableParallelBuilding = true;

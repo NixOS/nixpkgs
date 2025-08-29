@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  runCommand,
 
   # nativeBuildInputs
   cmake,
@@ -80,17 +79,6 @@
   gitUpdater,
 }:
 
-let
-  # Create a wrapper for saxon to provide saxon-xslt command
-  saxon-xslt = runCommand "saxon-xslt" { } ''
-    mkdir -p $out/bin
-    cat > $out/bin/saxon-xslt << 'EOF'
-    #!/bin/sh
-    exec ${saxon}/bin/saxon "$@"
-    EOF
-    chmod +x $out/bin/saxon-xslt
-  '';
-in
 stdenv.mkDerivation rec {
   version = "5.2.1";
   pname = "darktable";
@@ -109,7 +97,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     wrapGAppsHook3
-    saxon-xslt # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
+    saxon # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
   ];
 
   buildInputs = [

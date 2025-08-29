@@ -33,6 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-82eV76oY/exkHbhZt3OaifOoKxN2D6npstvfBDVgszw=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'Cython>=3,<3.1' 'Cython'
+  '';
+
   build-system = [
     cython
     poetry-core

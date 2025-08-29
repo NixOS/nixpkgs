@@ -1114,19 +1114,26 @@ in
     fromHexString "FF"
     => 255
 
-    fromHexString (builtins.hashString "sha256" "test")
+    fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
   */
   fromHexString =
-    value:
+    str:
     let
-      noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower value);
+      match = builtins.match "(0x)?([0-7]?[0-9A-Fa-f]{1,15})" str;
     in
-    let
-      parsed = builtins.fromTOML "v=0x${noPrefix}";
-    in
-    parsed.v;
+    if match != null then
+      (builtins.fromTOML "v=0x${builtins.elemAt match 1}").v
+    else
+      # TODO: Turn this into a `throw` in 26.05.
+      assert lib.warn "fromHexString: ${
+        lib.generators.toPretty { } str
+      } is not a valid input and will be rejected in 26.05" true;
+      let
+        noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
+      in
+      (builtins.fromTOML "v=0x${noPrefix}").v;
 
   /**
     Convert the given positive integer to a string of its hexadecimal

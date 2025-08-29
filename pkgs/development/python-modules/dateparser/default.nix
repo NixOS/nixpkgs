@@ -8,7 +8,7 @@
   pytz,
   regex,
   tzlocal,
-  hijri-converter,
+  hijridate,
   convertdate,
   fasttext,
   langdetect,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     calendars = [
-      hijri-converter
+      hijridate
       convertdate
     ];
     fasttext = [ fasttext ];

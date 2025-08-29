@@ -31,10 +31,7 @@ let
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
   }
   // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-    PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
-      name = "paperless_ngx_nltk_data";
-      paths = cfg.package.nltkData;
-    };
+    PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
   }
   // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
@@ -601,7 +598,7 @@ in
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.15.3/docker/compose/docker-compose.sqlite-tika.yml#L64-L69
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
           chromium.disableJavascript = true;
           extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
         };

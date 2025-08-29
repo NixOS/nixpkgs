@@ -421,7 +421,6 @@ with lib.maintainers;
       frlan
       leona
       osnyx
-      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -1023,7 +1022,6 @@ with lib.maintainers;
   php = {
     members = [
       aanderse
-      drupol
       ma27
       piotrkwiecinski
       talyz
@@ -1257,6 +1255,7 @@ with lib.maintainers;
       orzklv
       bahrom04
       bemeritus
+      shakhzodkudratov
     ];
     scope = "Maintain Uzbek Linux state & community packages and modules.";
     shortName = "Uzinfocom Open Source";

@@ -386,14 +386,25 @@ runTests {
     expected = 255;
   };
 
-  testFromHexStringSecondExample = {
-    expr = fromHexString (builtins.hashString "sha256" "test");
+  # Highest supported integer value in Nix.
+  testFromHexStringMaximum = {
+    expr = fromHexString "7fffffffffffffff";
     expected = 9223372036854775807;
   };
 
+  testFromHexStringLeadingZeroes = {
+    expr = fromHexString "00ffffffffffffff";
+    expected = 72057594037927935;
+  };
+
   testFromHexStringWithPrefix = {
-    expr = fromHexString "0Xf";
+    expr = fromHexString "0xf";
     expected = 15;
+  };
+
+  testFromHexStringMixedCase = {
+    expr = fromHexString "eEeEe";
+    expected = 978670;
   };
 
   testToBaseDigits = {

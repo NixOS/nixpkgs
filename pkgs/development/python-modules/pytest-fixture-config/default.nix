@@ -3,8 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  setuptools-git,
   pytest,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +24,16 @@ buildPythonPackage rec {
     cd pytest-fixture-config
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    setuptools-git
   ];
 
   buildInputs = [ pytest ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/man-group/pytest-plugins/blob/${src.tag}/CHANGES.md";

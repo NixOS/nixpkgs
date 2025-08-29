@@ -11,7 +11,7 @@
         Enable or disable TLS. If true (enabled) the key and
         certificate must be configured for nghttpx.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f>
         for more detail.
       '';
     };
@@ -24,7 +24,7 @@
         name received from the client is used instead of the request
         host. See --backend option about the pattern match.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f>
         for more detail.
       '';
     };
@@ -37,7 +37,7 @@
         dynamically modify nghttpx at run-time therefore this feature
         is disabled by default and should be turned on with care.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f>
         for more detail.
       '';
     };
@@ -49,7 +49,7 @@
         Make this frontend a health monitor endpoint. Any request
         received on this frontend is responded to with a 200 OK.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f>
         for more detail.
       '';
     };
@@ -60,7 +60,7 @@
       description = ''
         Accept PROXY protocol version 1 on frontend connection.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-f>
         for more detail.
       '';
     };

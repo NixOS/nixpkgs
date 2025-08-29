@@ -5,7 +5,6 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch,
   symlinkJoin,
   autoAddDriverRunpath,
 
@@ -45,6 +44,8 @@
   lm-format-enforcer,
   prometheus-fastapi-instrumentator,
   cupy,
+  cbor2,
+  pybase64,
   gguf,
   einops,
   importlib-metadata,
@@ -69,6 +70,8 @@
   bitsandbytes,
   flashinfer,
   py-libnuma,
+  setproctitle,
+  openai-harmony,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -92,13 +95,13 @@ let
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
-  # see CMakeLists.txt, grepping for GIT_TAG near cutlass
+  # see CMakeLists.txt, grepping for CUTLASS_REVISION
   # https://github.com/vllm-project/vllm/blob/v${version}/CMakeLists.txt
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.2";
-    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
+    tag = "v4.0.0";
+    hash = "sha256-HJY+Go1viPkSVZPEs/NyMtYJzas4mMLiIZF3kNX+WgA=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -111,8 +114,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "575f7724b9762f265bbee5889df9c7d630801845";
-      hash = "sha256-8WrKMl0olr0nYV4FRJfwSaJ0F5gWQpssoFMjr9tbHBk=";
+      rev = "0e43e774597682284358ff2c54530757b654b8d1";
+      hash = "sha256-wxL/jtq/lsLg1o+4392KNgfw5TYlW6lqEVbmR3Jl4/Q=";
     };
 
     dontConfigure = true;
@@ -138,8 +141,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "8798f27777fb57f447070301bf33a9f9c607f491";
-      hash = "sha256-UTUvATGN1NU/Bc8qo078q6bEgILLmlrjL7Yk2iAJhg4=";
+      rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
+      hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
     };
 
     dontConfigure = true;
@@ -161,7 +164,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.7.1/torch/utils/cpp_extension.py#L2343-L2345
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -231,6 +234,7 @@ let
     libcusolver # cusolverDn.h
     cuda_nvtx
     cuda_nvrtc
+    # cusparselt # cusparseLt.h
     libcublas
   ];
 
@@ -247,7 +251,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.9.1";
+  version = "0.10.1.1";
   pyproject = true;
 
   # https://github.com/vllm-project/vllm/issues/12083
@@ -259,23 +263,12 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-sp7rDpewTPXTVRBJHJMj+8pJDS6wAu0/OTJZwbPPqKc=";
+    hash = "sha256-lLNjBv5baER0AArX3IV4HWjDZ2jTGXyGIvnHupR8MGM=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "remove-unused-opentelemetry-semantic-conventions-ai-dep.patch";
-      url = "https://github.com/vllm-project/vllm/commit/6a5d7e45f52c3a13de43b8b4fa9033e3b342ebd2.patch";
-      hash = "sha256-KYthqu+6XwsYYd80PtfrMMjuRV9+ionccr7EbjE4jJE=";
-    })
-    (fetchpatch {
-      name = "fall-back-to-gloo-when-nccl-unavailable.patch";
-      url = "https://github.com/vllm-project/vllm/commit/aa131a94410683b0a02e74fed2ce95e6c2b6b030.patch";
-      hash = "sha256-jNlQZQ8xiW85JWyBjsPZ6FoRQsiG1J8bwzmQjnaWFBg=";
-    })
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
-    ./0004-drop-lsmod.patch
     ./0005-drop-intel-reqs.patch
   ];
 
@@ -354,6 +347,7 @@ buildPythonPackage rec {
     aioprometheus
     blake3
     cachetools
+    cbor2
     depyf
     fastapi
     llguidance
@@ -366,6 +360,7 @@ buildPythonPackage rec {
     prometheus-fastapi-instrumentator
     py-cpuinfo
     pyarrow
+    pybase64
     pydantic
     python-json-logger
     python-multipart
@@ -393,6 +388,8 @@ buildPythonPackage rec {
     opentelemetry-api
     opentelemetry-exporter-otlp
     bitsandbytes
+    setproctitle
+    openai-harmony
     # vLLM needs Torch's compiler to be present in order to use torch.compile
     torch.stdenv.cc
   ]
@@ -476,8 +473,5 @@ buildPythonPackage rec {
       # find_isa
       "x86_64-darwin"
     ];
-    # ValueError: 'aimv2' is already used by a Transformers config, pick another name.
-    # Version bump ongoing in https://github.com/NixOS/nixpkgs/pull/429117
-    broken = true;
   };
 }

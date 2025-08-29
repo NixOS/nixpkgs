@@ -3,6 +3,7 @@
   agate,
   buildPythonPackage,
   dbt-common,
+  dbt-protos,
   fetchPypi,
   hatchling,
   mashumaro,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.14.8";
+  version = "1.16.5";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_adapters";
     inherit version;
-    hash = "sha256-lowoP5Ny5kObKMuscecSUuqQXG7GxEDlbp8HQkLifBc=";
+    hash = "sha256-OAPGC88WvBy/3sGyDO4pAHLYYe2+k7l7PpKpNcV+IdM=";
   };
 
   build-system = [ hatchling ];
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   dependencies = [
     agate
     dbt-common
+    dbt-protos
     mashumaro
     protobuf
     pytz

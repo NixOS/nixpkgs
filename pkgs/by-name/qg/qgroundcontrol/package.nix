@@ -7,6 +7,7 @@
   gst_all_1,
   wayland,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -95,6 +96,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./disable-bad-message.patch
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";

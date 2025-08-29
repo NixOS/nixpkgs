@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mjpeg.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

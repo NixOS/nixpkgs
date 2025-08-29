@@ -12,7 +12,7 @@ package.elm-lang.org, as well as a cached bit of metadata
 (versions.dat).
 
 The makeDotElm function lets us retrieve these dependencies in the
-standard nix way. we have to copy them in (rather than symlink) and
+standard nix way. We have to copy them in (rather than symlink) and
 make them writable because the elm compiler writes other .dat files
 alongside the source code. versions.dat was produced during an
 impure build of this same code; the build complains that it can't

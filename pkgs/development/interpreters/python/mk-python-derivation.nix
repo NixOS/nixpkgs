@@ -10,7 +10,7 @@
   # Whether the derivation provides a Python module or not.
   toPythonModule,
   namePrefix,
-  update-python-libraries,
+  nix-update-script,
   setuptools,
   pypaBuildHook,
   pypaInstallHook,
@@ -399,14 +399,7 @@ let
         inherit disabled;
       }
       // {
-        updateScript =
-          let
-            filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
-          in
-          [
-            update-python-libraries
-            filename
-          ];
+        updateScript = nix-update-script { };
       }
       // optionalAttrs (dependencies != [ ]) {
         inherit dependencies;

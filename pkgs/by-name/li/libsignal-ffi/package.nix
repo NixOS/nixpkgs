@@ -21,14 +21,14 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.76.1";
+  version = "0.78.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${version}";
-    hash = "sha256-411+ANwyqqUX11rxCzFvPhjMWviJ0CcQlkAiqNWs32w=";
+    hash = "sha256-4buK92sJZj5yEwFyi55WonF+1LZ5PERZ9wJZdlFjPcg=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  cargoHash = "sha256-9W7u0fZgU0J03hT6D4BJPpIKn3dwf9yckJiwwNkyqUA=";
+  cargoHash = "sha256-eDerNFw8jtM7qIVh3Y837Iu11yeEpAcxgFVqZJTylEc=";
 
   cargoBuildFlags = [
     "-p"
@@ -51,6 +51,9 @@ rustPlatform.buildRustPackage rec {
     description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ pentane ];
+    maintainers = with maintainers; [
+      pentane
+      SchweGELBin
+    ];
   };
 }

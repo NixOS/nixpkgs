@@ -27,14 +27,14 @@ assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzel";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fuzzel";
     rev = finalAttrs.version;
-    hash = "sha256-42a8VF4EUTbyEKcfVSIbTXmPC55+cLq7FX+lRDZKXEM=";
+    hash = "sha256-sZycvHoKn9i+360XxDOEhieLEeicSiAqWVUJFb/VK4Y=";
   };
 
   depsBuildBuild = [

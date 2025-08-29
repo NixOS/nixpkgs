@@ -41,6 +41,8 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  pythonRelaxDeps = [ "azure-datalake-store" ];
+
   # Tests require a running Docker instance
   doCheck = false;
 

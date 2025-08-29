@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
-    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${version}";
+    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${src.tag}";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ kaction ];
   };

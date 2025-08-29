@@ -8,7 +8,7 @@
   googleapis-common-protos,
   h2,
   multidict,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0
     async-timeout
     faker
     googleapis-common-protos

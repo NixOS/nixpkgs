@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.31.2";
+  version = "20.33.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4QwKnQKDXlklIb5IszK2yu5oh/MywRGqeaCbnnnvwq8=";
+    hash = "sha256-G0RHjZ4mGz+4uqXnSgyjvA4F8hqjYWe/nL+FDlQnZbg=";
   };
 
   nativeBuildInputs = [
@@ -69,9 +69,12 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+    # https://github.com/pypa/virtualenv/issues/2933
+    # https://github.com/pypa/virtualenv/issues/2939
+    "test_py_info_cache_invalidation_on_py_info_change"
   ]
   ++ lib.optionals (pythonOlder "3.11") [ "test_help" ]
-  ++ lib.optionals (isPyPy) [
+  ++ lib.optionals isPyPy [
     # encoding problems
     "test_bash"
     # permission error

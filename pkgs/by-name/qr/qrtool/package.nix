@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    # Built by ./build.rs using `asciidoctor`
-    installManPage ./target/*/release/build/qrtool*/out/*.?
+    asciidoctor -b manpage docs/man/man1/*.1.adoc
+    installManPage docs/man/man1/*.1
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd qrtool \

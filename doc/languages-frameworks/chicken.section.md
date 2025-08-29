@@ -53,7 +53,7 @@ procedure for updating eggs.
 ## Override Scope {#sec-chicken-override-scope}
 
 The chicken package and its eggs, respectively, reside in a scope. This means,
-the scope can be overridden to effect other packages in it.
+the scope can be overridden to affect other packages in it.
 
 This example shows how to use a local copy of `srfi-180` and have it affect
 all the other eggs:
@@ -62,7 +62,7 @@ all the other eggs:
 let
   myChickenPackages = pkgs.chickenPackages.overrideScope (
     self: super: {
-      # The chicken package itself can be overridden to effect the whole ecosystem.
+      # The chicken package itself can be overridden to affect the whole ecosystem.
       # chicken = super.chicken.overrideAttrs {
       #   src = ...
       # };

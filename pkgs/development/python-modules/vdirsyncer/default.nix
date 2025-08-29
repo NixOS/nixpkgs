@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
   click,
   click-log,
@@ -37,6 +38,18 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-5DeFH+uYXew1RGVPj5z23RCbCwP34ZlWCGYDCS/+so8=";
   };
+
+  patches = [
+    (
+      # Fix event_loop missing
+      # TODO: remove it after vdirsyncer release 0.19.4
+      fetchpatch {
+        # https://github.com/pimutils/vdirsyncer/pull/1185
+        url = "https://github.com/pimutils/vdirsyncer/commit/164559ad7a95ed795ce4ae8d9b287bd27704742d.patch";
+        hash = "sha256-nUGvkBnHr8nVPpBuhQ5GjaRs3QSxokdZUEIsOrQ+lpo=";
+      }
+    )
+  ];
 
   nativeBuildInputs = [
     setuptools

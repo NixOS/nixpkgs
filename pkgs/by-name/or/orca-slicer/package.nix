@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   boost186,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     boost186.dev
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen

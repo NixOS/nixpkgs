@@ -12,7 +12,8 @@
   wheel,
   absl-py,
 
-  bazel_6,
+  #bazel_6,
+  bazel,
   cctools,
 
   # python package
@@ -60,7 +61,8 @@ let
       wheel
     ];
 
-    bazel = bazel_6;
+    #bazel = bazel_6;
+    bazel = bazel;
 
     bazelTargets = [ ":pip_pkg" ];
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
@@ -131,5 +133,7 @@ buildPythonPackage {
     changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # Needs update for Bazel 7.
+    broken = true;
   };
 }

@@ -424,9 +424,6 @@ rec {
       });
     });
 
-  # `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
-  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
-
   withDefaultHardeningFlags =
     defaultHardeningFlags: stdenv:
     let

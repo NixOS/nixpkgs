@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.0";
+  version = "6.5.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);

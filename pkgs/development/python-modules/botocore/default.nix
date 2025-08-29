@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.38.32"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.40.4"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "botocore";
     tag = version;
-    hash = "sha256-KW9EAeunL3+pccGsrFitonc5EHdm2Cd+7dM3kdvdkvM=";
+    hash = "sha256-VJAd9aCJkwSyurAWF/YAVRcSTR+9ZbkH7H6LZGvcXYY=";
   };
 
   build-system = [

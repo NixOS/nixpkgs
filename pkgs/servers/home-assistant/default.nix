@@ -138,6 +138,18 @@ let
         ];
       });
 
+      hassil = super.hassil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.3";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) repo owner;
+          tag = "v${version}";
+          hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+        };
+
+        disabledTestPaths = [ ];
+      });
+
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchFromGitHub {
@@ -201,6 +213,17 @@ let
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
         };
       });
+
+      py-madvr2 = super.py-madvr2.overridePythonAttrs rec {
+        version = "1.6.33";
+        src = fetchFromGitHub {
+          owner = "iloveicedgreentea";
+          repo = "py-madvr";
+          tag = "v${version}";
+          hash = "sha256-z+PVLz9eApGJ94I/Jp0MyqNpKQwIemk8j+OyqFmIbgI=";
+        };
+        pythonImportsCheck = [ "madvr" ];
+      };
 
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
@@ -341,7 +364,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.8.1";
+  hassVersion = "2025.8.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -362,13 +385,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-o1j1ejSMa6T18nNxrmvNcOSWAMbi8b11wgHKO+w5gHA=";
+    hash = "sha256-FiaRCXWEn1AsLaLH88hfZjMNeRcmP5uNJxxFvEW5K3c=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-6LyI3t/+wKIVIcVwCny9AIYEaONiwc4GFmbwqjv/9r8=";
+    hash = "sha256-X7G9SAN1t4OPLdyRu/Fwfq70JWu5k1F6Qgz8YgP4jis=";
   };
 
   build-system = with python.pkgs; [
@@ -541,6 +564,7 @@ python.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export HOME="$TEMPDIR"
+    export PYTHONASYNCIODEBUG=1
 
     # the tests require the existance of a media dir
     mkdir "$NIX_BUILD_TOP"/media

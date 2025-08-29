@@ -16,10 +16,10 @@ executables that are being called from managers.
  1 file changed, 8 insertions(+)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index 4c24ce5c98..3c944559fc 100644
+index 9577b89783..9cfd2798b9 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -4135,9 +4135,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
+@@ -4158,9 +4158,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
           * adjust generated units to that. Let's pass down some bits of information that are easy for us to
           * determine (but a bit harder for generator scripts to determine), as environment variables. */
  

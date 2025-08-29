@@ -4,7 +4,7 @@
   fetchFromGitHub,
   networkx,
   numpy,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "colormath" ];
 

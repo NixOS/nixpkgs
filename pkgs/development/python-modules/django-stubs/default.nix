@@ -5,12 +5,12 @@
   django,
   fetchFromGitHub,
   hatchling,
+  redis,
   mypy,
+  pytest-mypy-plugins,
   oracledb,
   pytestCheckHook,
-  pytest-mypy-plugins,
   pythonOlder,
-  redis,
   tomli,
   types-pytz,
   types-pyyaml,
@@ -22,8 +22,6 @@ buildPythonPackage rec {
   pname = "django-stubs";
   version = "5.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
@@ -56,12 +54,10 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  pythonImportsCheck = [ "django-stubs" ];
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
-    # AttributeError: module 'django.contrib.auth.forms' has no attribute
+    # AttributeError: module 'django.contrib.auth.forms' has no attribute 'SetUnusablePasswordMixin'
     "test_find_classes_inheriting_from_generic"
   ];
 
@@ -69,6 +65,8 @@ buildPythonPackage rec {
     # Skip type checking
     "tests/typecheck/"
   ];
+
+  pythonImportsCheck = [ "django-stubs" ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django";

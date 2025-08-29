@@ -86,15 +86,16 @@ index ee29c507..6bdfc1bd 100644
      # Folder location can be overriden by LRR_LOG_DIRECTORY
      if ( $ENV{LRR_LOG_DIRECTORY} ) {
 diff --git a/lib/LANraragi/Utils/TempFolder.pm b/lib/LANraragi/Utils/TempFolder.pm
-index 792b1c1b..f0eb341b 100644
+index a5ab8a83..64a56255 100644
 --- a/lib/LANraragi/Utils/TempFolder.pm
 +++ b/lib/LANraragi/Utils/TempFolder.pm
-@@ -20,7 +20,7 @@ our @EXPORT_OK = qw(get_temp get_tempsize clean_temp_full clean_temp_partial);
+@@ -13,7 +13,7 @@ our @EXPORT_OK = qw(get_temp);
  #Get the current tempfolder.
  #This can be called from any process safely as it uses FindBin.
  sub get_temp {
--    my $temp_folder = "$FindBin::Bin/../public/temp";
-+    my $temp_folder = "./public/temp";
+-    my $temp_folder = "$FindBin::Bin/../temp";
++    my $temp_folder = "./temp";
  
      # Folder location can be overriden by LRR_TEMP_DIRECTORY
      if ( $ENV{LRR_TEMP_DIRECTORY} ) {
+

@@ -2,20 +2,36 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwin";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "Jake-Shadle";
     repo = "xwin";
     tag = finalAttrs.version;
-    hash = "sha256-bow/TJ6aIXoNZDqCTlQYAMxEUiolby1axsKiLMk/jiA=";
+    hash = "sha256-od8QnUC0hU9GYE/gRB74BlQezlt9IZq2A4F331wHm7Q=";
   };
 
-  cargoHash = "sha256-S/3EjlG0Dr/KKAYSFaX/aFh/CIc19Bv+rKYzKPWC+MI=";
+  cargoHash = "sha256-77ArdZ9mOYEon4nzNUNSL0x0UlE1iVujFLwreAd9iMM=";
+
+  strictDeps = true;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "native-tls"
+  ];
 
   doCheck = true;
   # Requires network access

@@ -36,8 +36,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "81044ec13df7608d0d9d86aff2ef9805fc69bed1";
-      hash = "sha256-W0uonGzjDaN2RbY2U+Kl1a5/nrEZ9T9W426f+a7NUzY=";
+      rev = "4be7e6b4e0a82853e853c0c7c4ef72f395e1f497";
+      hash = "sha256-SOTQ9j8YCsEuxNULsulQ0bmtxOZJKF7zc4GZOQlrmdo=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -54,8 +54,8 @@ let
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "c7bee59d068a69f427b1273e71cdc5bc455a5bdd";
-      hash = "sha256-RnuaRrWMQ1rFfb/nxE0ukIoBf2AMG5pRyFmKmvsJ/U8=";
+      rev = "62ccc56af071eaa478bef6ed41fd7a55d3bb2d80";
+      hash = "sha256-kIxHtE0L/axV9WKnQzyFN0mxoIFAI33Z+MP0P/MtQPw=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
@@ -75,64 +75,18 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
-
-    tmd = stdenv.mkDerivation {
-      name = "TriangleMeshDistance";
-
-      src = fetchFromGitHub {
-        owner = "InteractiveComputerGraphics";
-        repo = "TriangleMeshDistance";
-        rev = "e55a15c20551f36242fd6368df099a99de71d43a";
-        hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
-      };
-
-      installPhase = ''
-        mkdir -p $out/include/tmd
-        cp TriangleMeshDistance/include/tmd/TriangleMeshDistance.h $out/include/tmd/
-      '';
+    trianglemeshdistance = fetchFromGitHub {
+      owner = "InteractiveComputerGraphics";
+      repo = "TriangleMeshDistance";
+      rev = "2cb643de1436e1ba8e2be49b07ec5491ac604457";
+      hash = "sha256-qG/8QKpOnUpUQJ1nLj+DFoLnUr+9oYkJPqUhwEQD2pc=";
     };
-
-    sdflib = stdenv.mkDerivation {
-      name = "SdfLib";
-
-      src = fetchFromGitHub {
-        owner = "UPC-ViRVIG";
-        repo = "SdfLib";
-        rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
-        hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
-      };
-
-      patches = [ ./sdflib-system-deps.patch ];
-
-      cmakeFlags = [
-        (lib.cmakeBool "SDFLIB_USE_ASSIMP" false)
-        (lib.cmakeBool "SDFLIB_USE_OPENMP" false)
-        (lib.cmakeBool "SDFLIB_USE_ENOKI" false)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_GLM" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_SPDLOG" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_CEREAL" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE" true)
-      ];
-
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [
-        pin.tmd
-
-        # Mainline. The otherwise pinned glm release from 2018 does
-        # not build due to test failures and missing files.
-        glm
-
-        spdlog
-        cereal_1_3_2
-      ];
-    };
-
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.3.4";
+  version = "3.3.5";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -140,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-nssmGJRrk1BECmeU4OEs/jLK3MdA6ytIJ9Yqaiuf0Aw=";
+    hash = "sha256-HykExdosK5XpAOQeic/jsc6yYxjdoiaP8rRkA/yAfuU=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -148,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    pin.sdflib
     glm
 
     # non-numerical
@@ -158,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "MUJOCO_USE_SYSTEM_sdflib" true)
     (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
     (lib.cmakeBool "MUJOCO_SAMPLES_USE_SYSTEM_GLFW" true)
   ];
@@ -175,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${pin.qhull} build/_deps/qhull-src
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
+    ln -s ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 

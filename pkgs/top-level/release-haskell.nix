@@ -384,7 +384,6 @@ let
         xmonadctl
         xmonad-with-packages
         yi
-        zsh-git-prompt
         ;
 
       # Members of the elmPackages set that are Haskell derivations
@@ -479,6 +478,26 @@ let
           };
 
       pkgsCross = {
+        aarch64-android-prebuilt.pkgsStatic =
+          removePlatforms
+            [
+              # Android NDK package doesn't support building on
+              "aarch64-darwin"
+              "aarch64-linux"
+
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit
+                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+            };
+
         ghcjs =
           removePlatforms
             [
@@ -512,14 +531,6 @@ let
                   ;
               };
 
-              haskell.packages.ghc910 = {
-                inherit (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.haskell.packages.ghc910)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-
               haskell.packages.ghcHEAD = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                   ghc
@@ -528,6 +539,14 @@ let
                   ;
               };
             };
+
+        ucrt64.haskell.packages.ghc912 = {
+          inherit (packagePlatforms pkgs.pkgsCross.ucrt64.haskell.packages.ghc912)
+            ghc
+            # hello # executables don't build yet
+            microlens
+            ;
+        };
 
         riscv64 = {
           # Cross compilation of GHC

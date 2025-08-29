@@ -10,6 +10,7 @@
   texinfo,
   texinfo6,
   yasm,
+  nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -108,6 +109,7 @@
   withNvdec ? withHeadlessDeps && withNvcodec,
   withNvenc ? withHeadlessDeps && withNvcodec,
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
+  withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
@@ -134,7 +136,7 @@
   withSrt ? withHeadlessDeps, # Secure Reliable Transport (SRT) protocol
   withSsh ? withHeadlessDeps, # SFTP protocol
   withSvg ? withFullDeps, # SVG protocol
-  withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
+  withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
   withTensorflow ? false, # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
   withTheora ? withHeadlessDeps, # Theora encoder
   withTwolame ? withFullDeps, # MP2 encoding
@@ -144,7 +146,7 @@
   withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
   withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW, # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
-  withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+  withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
   withVorbis ? withHeadlessDeps, # Vorbis de/encoding, native encoder exists
   withVpl ? withFullDeps && stdenv.hostPlatform.isLinux, # Hardware acceleration via intel libvpl
@@ -152,6 +154,7 @@
   withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin,
   withVvenc ? withFullDeps && lib.versionAtLeast version "7.1", # H.266/VVC encoding
   withWebp ? withHeadlessDeps, # WebP encoder
+  withWhisper ? withFullDeps && lib.versionAtLeast version "8.0", # Whisper speech recognition
   withX264 ? withHeadlessDeps && withGPL, # H.264/AVC encoder
   withX265 ? withHeadlessDeps && withGPL, # H.265/HEVC encoder
   withXavs ? withFullDeps && withGPL, # AVS encoder
@@ -206,7 +209,9 @@
   # https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991)
   buildAvresample ? withHeadlessDeps && lib.versionOlder version "5", # Build avresample library
   buildAvutil ? withHeadlessDeps, # Build avutil library
-  buildPostproc ? withHeadlessDeps, # Build postproc library
+  # Libpostproc is only available on versions lower than 8.0
+  # https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/8c920c4c396163e3b9a0b428dd550d3c986236aa
+  buildPostproc ? withHeadlessDeps && lib.versionOlder version "8.0", # Build postproc library
   buildSwresample ? withHeadlessDeps, # Build swresample library
   buildSwscale ? withHeadlessDeps, # Build swscale library
   withLib ?
@@ -313,6 +318,7 @@
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
   openal,
+  openapv,
   opencl-headers, # OpenCL headers
   opencore-amr,
   openh264,
@@ -338,6 +344,7 @@
   vulkan-headers,
   vulkan-loader,
   vvenc,
+  whisper-cpp,
   x264,
   x265,
   xavs,
@@ -570,7 +577,12 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature buildAvutil "avutil")
+    ]
+    ++ optionals (lib.versionOlder version "8.0") [
+      # FFMpeg >= 8 doesn't know about the flag anymore
       (enableFeature (buildPostproc && withGPL) "postproc")
+    ]
+    ++ [
       (enableFeature buildSwresample "swresample")
       (enableFeature buildSwscale "swscale")
     ]
@@ -678,6 +690,11 @@ stdenv.mkDerivation (
       (enableFeature withNvdec "nvdec")
       (enableFeature withNvenc "nvenc")
       (enableFeature withOpenal "openal")
+    ]
+    ++ optionals (versionAtLeast version "8.0") [
+      (enableFeature withOpenapv "liboapv")
+    ]
+    ++ [
       (enableFeature withOpencl "opencl")
       (enableFeature withOpencoreAmrnb "libopencore-amrnb")
       (enableFeature withOpencoreAmrwb "libopencore-amrwb")
@@ -742,6 +759,11 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature withWebp "libwebp")
+    ]
+    ++ optionals (versionAtLeast version "8.0") [
+      (enableFeature withWhisper "whisper")
+    ]
+    ++ [
       (enableFeature withX264 "libx264")
       (enableFeature withX265 "libx265")
       (enableFeature withXavs "libxavs")
@@ -803,8 +825,9 @@ stdenv.mkDerivation (
       addDriverRunpath
       perl
       pkg-config
-      yasm
     ]
+    # 8.0 is only compatible with nasm, and we don't want to rebuild all older ffmpeg builds at this moment.
+    ++ (if versionOlder version "8.0" then [ yasm ] else [ nasm ])
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     ++ optionals withCudaLLVM [ clang ]
@@ -874,6 +897,7 @@ stdenv.mkDerivation (
         cuda_nvcc
       ]
       ++ optionals withOpenal [ openal ]
+      ++ optionals withOpenapv [ openapv ]
       ++ optionals withOpencl [
         ocl-icd
         opencl-headers
@@ -928,6 +952,7 @@ stdenv.mkDerivation (
       ]
       ++ optionals withVvenc [ vvenc ]
       ++ optionals withWebp [ libwebp ]
+      ++ optionals withWhisper [ whisper-cpp ]
       ++ optionals withX264 [ x264 ]
       ++ optionals withX265 [ x265 ]
       ++ optionals withXavs [ xavs ]

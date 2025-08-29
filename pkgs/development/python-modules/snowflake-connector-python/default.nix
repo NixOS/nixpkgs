@@ -13,6 +13,7 @@
   filelock,
   idna,
   keyring,
+  numpy,
   packaging,
   pandas,
   platformdirs,
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.15.0";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-Dz5jxmbBfWThmd7H0MIO5+DfnjpDw9ADHg5Sc7P+DYs=";
+    hash = "sha256-mow8TxmkeaMkgPTLUpx5Gucn4347gohHPyiBYjI/cDs=";
   };
 
   build-system = [
@@ -87,6 +88,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    numpy
     pytest-xdist
     pytestCheckHook
   ];
@@ -125,7 +127,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

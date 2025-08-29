@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.4.4";
+  version = "6.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${version}";
-    hash = "sha256-crnWaThjymY0nbY4yvD+wX20vQcBkPrFAI+UkexNAbo=";
+    hash = "sha256-AB35kVgKizzPi3r4tDVQ7vI50Xsb2BeBp3rFh+UOXQc=";
   };
 
   postPatch = ''
@@ -34,6 +35,12 @@ buildPythonPackage rec {
   dependencies = lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ];
+
+  env =
+    { }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+    };
 
   nativeCheckInputs = [
     objgraph

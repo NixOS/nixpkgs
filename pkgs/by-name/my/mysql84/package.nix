@@ -119,7 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [
       orivej
-      shyim
     ];
     platforms = platforms.unix;
   };

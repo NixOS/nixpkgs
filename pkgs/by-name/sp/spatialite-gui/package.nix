@@ -20,17 +20,17 @@
   proj,
   sqlite,
   virtualpg,
-  wxGTK,
+  wxGTK32,
   xz,
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spatialite-gui";
   version = "2.1.0-beta1";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/spatialite-gui-sources/spatialite_gui-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/spatialite-gui-sources/spatialite_gui-${finalAttrs.version}.tar.gz";
     hash = "sha256-ukjZbfGM68P/I/aXlyB64VgszmL0WWtpuuMAyjwj2zM=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     proj
     sqlite
     virtualpg
-    wxGTK
+    wxGTK32
     xz
     zstd
   ];
@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     rm -fr $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for SpatiaLite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite_gui";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.geospatial ];
     mainProgram = "spatialite_gui";
   };
-}
+})

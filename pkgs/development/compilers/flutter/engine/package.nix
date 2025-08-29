@@ -18,7 +18,6 @@
   fetchgit,
   runCommand,
   llvmPackages,
-  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -217,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
     chmod -R u+w -- src/flutter/third_party/swiftshader
 
-    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+    ln -s ${llvmPackages.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
 
     mkdir -p src/flutter/buildtools/${constants.alt-platform}
     ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang

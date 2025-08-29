@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.12rc1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${version}";
-    hash = "sha256-uwAcICrFHZYYULfacWII5C3Y+Rs2Bf8ZLQEijfkldn8=";
+    hash = "sha256-lwv6PHm41HFylt7b0d5LHCrCIXNWFNGg59VQvPXYtVc=";
   };
 
   build-system = [

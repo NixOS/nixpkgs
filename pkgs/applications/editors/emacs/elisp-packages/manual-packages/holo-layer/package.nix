@@ -31,13 +31,13 @@ in
 melpaBuild {
 
   pname = "holo-layer";
-  version = "0-unstable-2025-06-13";
+  version = "0-unstable-2025-08-13";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "holo-layer";
-    rev = "464b6996268a81fa3b524ced02a60fcc266f8965";
-    hash = "sha256-uTxfnhtDybWx+Na4fj5TJuZh+tKoNuSZ03IR9ErvI7s=";
+    rev = "6584d8057a264f199e0cf6e90095fa63d36e6049";
+    hash = "sha256-80uGyQltHBtrEtG/hkhHP5qbBfShw5BDyfR3GUHlhJk=";
   };
 
   packageRequires = [

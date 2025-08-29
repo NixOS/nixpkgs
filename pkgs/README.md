@@ -1116,7 +1116,7 @@ Sample template for a package update review is provided below.
 ### New packages
 
 New packages are a common type of pull requests.
-These pull requests consists in adding a new nix-expression for a package.
+These pull requests consist in adding a new nix-expression for a package.
 
 Review process:
 
@@ -1131,7 +1131,7 @@ Review process:
   - Maintainers must be set.
     This can be the package submitter or a community member that accepts taking up maintainership of the package.
   - The `meta.mainProgram` must be set if a main executable exists.
-- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+- Ensure any special packaging choices and required context are documented in, i.e., the name of a patch or in a comment.
   - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
   - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
   - If any non-default build flags are set, document why.
@@ -1204,7 +1204,7 @@ Currently opened ones can be found using the following:
 
 [github.com/NixOS/nixpkgs/issues?q=is:issue+is:open+"Vulnerability+roundup"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+%22Vulnerability+roundup%22)
 
-Each issue correspond to a vulnerable version of a package; As a consequence:
+Each issue corresponds to a vulnerable version of a package; as a consequence:
 
 - One issue can contain several CVEs;
 - One CVE can be shared across several issues;

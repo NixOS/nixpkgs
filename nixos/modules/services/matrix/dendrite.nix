@@ -225,7 +225,7 @@ in
             description = ''
               The language most likely to be used on the server - used when indexing, to
               ensure the returned results match expectations. A full list of possible languages
-              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
+              can be found at <https://github.com/blevesearch/bleve/tree/master/analysis/lang>
             '';
           };
         };

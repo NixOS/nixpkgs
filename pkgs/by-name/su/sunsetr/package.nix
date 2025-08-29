@@ -2,27 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sunsetr";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "psi4j";
     repo = "sunsetr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kFIfNVA1UJrle/5udi8+9uDgq9fArUdudM/v8QpGuaM=";
+    hash = "sha256-XDa6kjhdEur8YDfQQNg+RpLRtfOeTklB6LwXJaPcG7c=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-Jsii8PkRIZgQ4yrQHZpK8bLhaW5jg6EKYw65rPRCtGQ=";
 
   checkFlags = [
     "--skip=config::tests::test_geo_toml_exists_before_config_creation"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "sunsetr";

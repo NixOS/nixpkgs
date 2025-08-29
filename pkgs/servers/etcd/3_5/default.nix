@@ -1,10 +1,12 @@
 {
-  lib,
+  applyPatches,
   buildGoModule,
   fetchFromGitHub,
-  symlinkJoin,
-  nixosTests,
+  fetchpatch,
   k3s,
+  lib,
+  nixosTests,
+  symlinkJoin,
 }:
 
 let
@@ -14,13 +16,21 @@ let
   etcdUtlVendorHash = "sha256-S2pje2fTDaZwf6jnyE2YXWcs/fgqF51nxCVfEwg0Gsw=";
   etcdCtlVendorHash = "sha256-lZ6o0oWUsc3WiCa87ynm7UAG6VxTf81a301QMSPOvW0=";
 
-  src = fetchFromGitHub {
-    owner = "etcd-io";
-    repo = "etcd";
-    rev = "v${version}";
-    hash = etcdSrcHash;
-  };
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "etcd-io";
+      repo = "etcd";
+      tag = "v${version}";
+      hash = etcdSrcHash;
+    };
 
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
+        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
+      })
+    ];
+  };
   env = {
     CGO_ENABLED = 0;
   };

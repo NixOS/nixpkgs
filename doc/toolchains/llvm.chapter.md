@@ -22,7 +22,7 @@ import <nixpkgs> {
 }
 ```
 
-Note that we set `linker` to `lld`. This is because LLVM has its own linker called "lld". By setting it, we utilize Clang and lld within this new instance of Nixpkgs. There is a shorthand method for building everything with LLVM: `pkgsLLVM`. This is easier to use with `nix-build` (or `nix build`):
+Note that we set `linker` to `lld`. This is because LLVM has its own linker, called "lld". By setting it, we utilize Clang and lld within this new instance of Nixpkgs. There is a shorthand method for building everything with LLVM: `pkgsLLVM`. This is easier to use with `nix-build` (or `nix build`):
 
 ```bash
 nix-build -A pkgsLLVM.hello

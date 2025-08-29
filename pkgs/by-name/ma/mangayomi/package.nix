@@ -13,13 +13,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.3";
+  version = "0.6.35";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-nlA5DLYSj9VVpDo7o5Umccoz8RAF+ac3LWV7108t2Ds=";
+    hash = "sha256-XSXFo0+rLTUJ0p3F5+CvKD85OmrShb2xrpQK0F6fo2U=";
   };
 
   metaCommon = {
@@ -51,7 +51,7 @@ flutter332.buildFlutterApplication {
   customSourceBuilders = {
     rust_lib_mangayomi =
       { version, src, ... }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation {
         pname = "rust_lib_mangayomi";
         inherit version src;
         inherit (src) passthru;
@@ -66,6 +66,45 @@ flutter332.buildFlutterApplication {
           in
           ''
             cp ${fakeCargokitCmake} rust_builder/cargokit/cmake/cargokit.cmake
+          '';
+
+        installPhase = ''
+          runHook preInstall
+
+          cp -r . "$out"
+
+          runHook postInstall
+        '';
+      };
+    flutter_discord_rpc_fork =
+      { version, src, ... }:
+      let
+        flutter_discord_rpc_fork-rs = rustPlatform.buildRustPackage {
+          pname = "flutter_discord_rpc_fork-rs";
+          inherit version src;
+
+          buildAndTestSubdir = "rust";
+
+          cargoHash = "sha256-vYVg5ZALQDrolDtbbXm/epE5MmSKpRJbSU15VDiKh4U=";
+
+          passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
+        };
+      in
+      stdenv.mkDerivation {
+        pname = "flutter_discord_rpc_fork";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch =
+          let
+            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+                set("''${target}_cargokit_lib" ${flutter_discord_rpc_fork-rs}/${flutter_discord_rpc_fork-rs.passthru.libraryPath} PARENT_SCOPE)
+              endfunction()
+            '';
+          in
+          ''
+            cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
           '';
 
         installPhase = ''

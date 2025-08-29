@@ -42,6 +42,12 @@ buildPgrxExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.tsl;
-    broken = lib.versionOlder postgresql.version "15";
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "1.21.0")
+          "Is postgresql18Packages.timescaledb_toolkit still broken?"
+          (lib.versionAtLeast postgresql.version "18");
   };
 })

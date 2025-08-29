@@ -8,7 +8,7 @@
 
 let
   pname = "gallery-dl";
-  version = "1.30.2";
+  version = "1.30.5";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${version}";
-    hash = "sha256-/z4ozgukl54/GdZbf3aF+JxPsp5Fh/2/JzsYHdDcT5c=";
+    hash = "sha256-RsYg3DSiB6DWVlwAJT7iN7rNxUJqT5EAIGNEuMuIm8Y=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication {
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
+      FlameFlag
       lucasew
     ];
   };

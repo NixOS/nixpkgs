@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "overpush";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "mrusme";
     repo = "overpush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6tSptrvlaljKMUawGD3Bk1LBwge/Awvvudpr+juuuQQ=";
+    hash = "sha256-2EIOCeW/PuZFDmLShexnPomvx3PtGzZ6jWNvoJSxO7Q=";
   };
 
   vendorHash = "sha256-KUfGc4vFfw59mwqR840cbL4ubBH1i+sIniHU0CDCKTg=";

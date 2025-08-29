@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.31";
+  version = "0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     tag = version;
-    hash = "sha256-AbrfQJQvKXpV4FrhkGZOLYX3px9dzr9whJZwzR/7UYM=";
+    hash = "sha256-nNG4rQHloOqcPZPnvw3hbw0+wCbB2XAdQ5/XnJtCHnE=";
   };
 
   pythonRelaxDeps = true;

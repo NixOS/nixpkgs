@@ -4,9 +4,6 @@
 name: Reviewers
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/reviewers.yml
   pull_request_target:
     types: [ready_for_review]
   workflow_call:
@@ -41,9 +38,17 @@ jobs:
       - name: Build the requestReviews derivation
         run: nix-build trusted/ci -A requestReviews
 
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
+      # For requesting reviewers, this job depends on a GitHub App with the following permissions:
+      # - Permissions:
+      #   - Repository > Administration: read-only
+      #   - Organization > Members: read-only
+      #   - Repository > Pull Requests: read-write
+      # - Install App on this repository, setting these variables:
+      #   - OWNER_APP_ID (variable)
+      #   - OWNER_APP_PRIVATE_KEY (secret)
+      #
+      # Can't use the token received from permissions above, because it can't get enough permissions.
+      - uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
         if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
         id: app-token
         with:
@@ -52,6 +57,28 @@ jobs:
           permission-administration: read
           permission-members: read
           permission-pull-requests: write
+
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Requesting code owner reviews
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+          # Don't do anything on draft PRs
+          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+        run: result/bin/request-code-owner-reviews.sh "$REPOSITORY" "$NUMBER" ci/OWNERS
+
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
 
       - name: Log current API rate limits (github.token)
         env:
@@ -68,7 +95,7 @@ jobs:
             const run_id = (await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'pr.yml',
+              workflow_id: context.eventName === 'pull_request' ? 'test.yml' : 'pr.yml',
               event: context.eventName,
               head_sha: context.payload.pull_request.head.sha
             })).data.workflow_runs[0].id

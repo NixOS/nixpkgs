@@ -12,6 +12,13 @@ python3Packages.buildPythonApplication {
   inherit (opensnitch) src version;
   sourceRoot = "${opensnitch.src.name}/ui";
 
+  patches = [
+    # https://github.com/evilsocket/opensnitch/pull/1413
+    # unicode-slugify has failing tests and is overall unmaintained and broken.
+    # python-slugify is a preferrable replacement
+    ./use_python_slugify.patch
+  ];
+
   postPatch = ''
     substituteInPlace opensnitch/utils/__init__.py \
       --replace-fail /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
@@ -38,7 +45,7 @@ python3Packages.buildPythonApplication {
     pyinotify
     pyqt5
     qt-material
-    unicode-slugify
+    python-slugify
     unidecode
   ];
 

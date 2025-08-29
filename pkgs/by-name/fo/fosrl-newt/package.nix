@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "newt";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = version;
-    hash = "sha256-rRieo1olWwTSx5p7HpDE0eMY4d2/GcU0o0wIFyXetzI=";
+    hash = "sha256-yfQ9w1PKLhdpakZQLnQEcOAxpA4LC4S2OFX4dYKgDKw=";
   };
 
   vendorHash = "sha256-PENsCO2yFxLVZNPgx2OP+gWVNfjJAfXkwWS7tzlm490=";

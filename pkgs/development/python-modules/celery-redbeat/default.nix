@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
-  version = "2.3.2";
+  version = "2.3.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
     tag = "v${version}";
-    hash = "sha256-nUVioETVIAjLPOmhBSf+bOUsYuV1C1VGwHz5KjbIjHc=";
+    hash = "sha256-bptEAOVxuwj9Y7LyBhtMU22Z1uCiJ4O4BZT2ytqQI80=";
   };
 
   propagatedBuildInputs = [

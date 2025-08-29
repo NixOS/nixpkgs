@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
-    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/v${version}";
+    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tjni ];
   };

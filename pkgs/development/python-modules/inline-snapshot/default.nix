@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.23.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {

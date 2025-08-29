@@ -10,10 +10,10 @@
   django-redis,
   fetchFromGitHub,
   hiredis,
-  pkgs,
   poetry-core,
   pytest-django,
   pytestCheckHook,
+  redisTestHook,
   stdenv,
 }:
 
@@ -49,30 +49,13 @@ buildPythonPackage rec {
     blessed
     croniter
     django-redis
-    # pyredis refuses to load with hiredis<3.0.0
-    (hiredis.overrideAttrs (
-      new: old: {
-        version = "3.1.0";
-        src = old.src.override {
-          tag = "v${new.version}";
-          hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
-        };
-      }
-    ))
+    hiredis
     pytest-django
     pytestCheckHook
+    redisTestHook
   ];
 
   pythonImportsCheck = [ "django_q" ];
-
-  preCheck = ''
-    ${pkgs.valkey}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
 
   env = {
     MONGO_HOST = "127.0.0.1";

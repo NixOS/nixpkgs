@@ -161,6 +161,8 @@ let
   configFile =
     (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
       ''
+        ${cfg.prependConfig}
+
         pid /run/nginx/nginx.pid;
         error_log ${cfg.logError};
         daemon off;
@@ -828,6 +830,18 @@ in
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
+        '';
+      };
+
+      prependConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration lines prepended to the generated Nginx
+          configuration file. Can for example be used to load modules.
+          {option}`prependConfig` can be specified more than once
+          and its value will be concatenated (contrary to {option}`config`
+          which can be set only once).
         '';
       };
 

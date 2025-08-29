@@ -7,6 +7,7 @@
   lib,
   proto-plus,
   protobuf,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -36,7 +37,10 @@ buildPythonPackage rec {
   ]
   ++ google-api-core.optional-dependencies.grpc;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.artifactregistry"

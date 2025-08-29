@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "signxml";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "XML-Security";
     repo = "signxml";
     tag = "v${version}";
-    hash = "sha256-yNxqU5sg2xANCKLkaWYn1sr1SWQLPVfu9Jg3VF6Qf28=";
+    hash = "sha256-oyDhJZVn08rIcR3ti9jsYxyBPgz6VaJSbBVYrTQkbVU=";
   };
 
   build-system = [

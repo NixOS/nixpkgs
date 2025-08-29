@@ -140,7 +140,7 @@ stdenv.mkDerivation {
 
 ### Switching the MPI implementation {#sec-overlays-alternatives-mpi}
 
-All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides two different MPI implementations:
+All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides the following MPI implementations:
 
 -   [Open MPI](https://www.open-mpi.org/) (default), attribute name
     `openmpi`

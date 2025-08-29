@@ -2,14 +2,14 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  cmake,
   extra-cmake-modules,
   doxygen,
   graphviz,
   qtbase,
   qtwebengine,
   mpir,
-  kdelibs4support,
-  plasma-framework,
+  libplasma,
   knewstuff,
   kpackage,
   wrapQtAppsHook,
@@ -27,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v5DfnnzOMsoCXr074ydXxBIrSsnbex6G/OqF6psTvPs=";
   };
 
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=1"
+  ];
+
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     doxygen
     graphviz
@@ -40,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qtwebengine
-    kdelibs4support
-    plasma-framework
+    libplasma
     knewstuff
     kpackage
   ];

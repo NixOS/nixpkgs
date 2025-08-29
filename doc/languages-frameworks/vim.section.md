@@ -192,7 +192,7 @@ If you want to update only certain plugins, you can specify them after the `upda
 nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "LazyVim"'
 ```
 
-## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}
+## How to maintain an out-of-tree overlay of vim plugins? {#vim-out-of-tree-overlays}
 
 You can use the updater script to generate basic packages out of a custom vim
 plugin list:

@@ -123,6 +123,7 @@ def main() -> None:
         and crate_manifest["lints"]["workspace"] is True
     ):
         crate_manifest["lints"] = workspace_manifest["lints"]
+        changed = True
 
     if not changed:
         return

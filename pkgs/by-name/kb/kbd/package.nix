@@ -8,35 +8,42 @@
   flex,
   check,
   pam,
+  bash,
   coreutils,
   gzip,
   bzip2,
   xz,
   zstd,
   gitUpdater,
+  withVlock ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8WfYmdkrVszxL29JNVFz+ThwqV8V2K7r9f3NKKYhrKg=";
+    hash = "sha256-AfWAbafR009ZS3sqauGrIyFTRM8QZOjtzTqQ/vl3ahE=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This
   # reduces closure size for most use cases.
   outputs = [
     "out"
-    "vlock"
     "dev"
+    "scripts"
+    "man"
+  ]
+  ++ lib.optionals withVlock [
+    "vlock"
   ];
 
   configureFlags = [
     "--enable-optional-progs"
     "--enable-libkeymap"
     "--disable-nls"
+    (lib.enableFeature withVlock "vlock")
   ]
   ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
@@ -74,23 +81,29 @@ stdenv.mkDerivation rec {
       src/vlock/Makefile.am
   '';
 
+  enableParallelBuilding = true;
+
   postInstall = ''
-    for i in $out/bin/unicode_{start,stop}; do
-      substituteInPlace "$i" \
-        --replace /usr/bin/tty ${coreutils}/bin/tty
+    for s in unicode_{start,stop}; do
+      substituteInPlace ''${!outputBin}/bin/$s \
+        --replace-fail /usr/bin/tty ${coreutils}/bin/tty
+      moveToOutput "bin/$s" "$scripts"
     done
   '';
 
   buildInputs = [
     check
-    pam
-  ];
+    bash
+  ]
+  ++ lib.optionals withVlock [ pam ];
+
   NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     flex
   ];
+  strictDeps = true;
 
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;

@@ -13,7 +13,7 @@
   withGoolm ? false,
 }:
 let
-  version = "0.2.2";
+  version = "0.2.3";
 in
 buildGoModule {
   pname = "mautrix-slack";
@@ -23,10 +23,10 @@ buildGoModule {
     owner = "mautrix";
     repo = "slack";
     tag = "v${version}";
-    hash = "sha256-Ha3Rwd9+2RFxOF+H5jG6wRlgqLfUbCcoZcaXehyr1m0=";
+    hash = "sha256-gR5D2uCNS+LiP0KXup/iIiOThWohzeBe4CD/oWak1BM=";
   };
 
-  vendorHash = "sha256-BjKEf4cG9kPcwuUefosBFzyCUpYhK7fm+w/GtG+oicg=";
+  vendorHash = "sha256-aukL6RThtWcznz/x25btTTvloYkRZ/vhAQj1hOdI1U4=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";

@@ -484,6 +484,7 @@
   ./services/cluster/patroni/default.nix
   ./services/cluster/rke2/default.nix
   ./services/cluster/spark/default.nix
+  ./services/cluster/temporal/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
   ./services/computing/slurm/slurm.nix
@@ -543,10 +544,6 @@
   ./services/desktops/blueman.nix
   ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
-  ./services/desktops/deepin/app-services.nix
-  ./services/desktops/deepin/dde-api.nix
-  ./services/desktops/deepin/dde-daemon.nix
-  ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/dleyna.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
@@ -641,6 +638,7 @@
   ./services/hardware/brltty.nix
   ./services/hardware/buffyboard.nix
   ./services/hardware/ddccontrol.nix
+  ./services/hardware/deepcool-digital-linux.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
@@ -810,6 +808,7 @@
   ./services/misc/clipcat.nix
   ./services/misc/clipmenu.nix
   ./services/misc/confd.nix
+  ./services/misc/conman.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/db-rest.nix
   ./services/misc/devmon.nix
@@ -1035,6 +1034,7 @@
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime-kuma.nix
   ./services/monitoring/uptime.nix
+  ./services/monitoring/vlagent.nix
   ./services/monitoring/vmagent.nix
   ./services/monitoring/vmalert.nix
   ./services/monitoring/vnstat.nix
@@ -1096,6 +1096,7 @@
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
+  ./services/networking/byedpi.nix
   ./services/networking/cato-client.nix
   ./services/networking/centrifugo.nix
   ./services/networking/cgit.nix
@@ -1156,7 +1157,6 @@
   ./services/networking/frp.nix
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
-  ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
@@ -1535,6 +1535,7 @@
   ./services/web-apps/audiobookshelf.nix
   ./services/web-apps/baikal.nix
   ./services/web-apps/bluemap.nix
+  ./services/web-apps/bluesky-pds.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
@@ -1653,7 +1654,6 @@
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/part-db.nix
-  ./services/web-apps/pds.nix
   ./services/web-apps/peering-manager.nix
   ./services/web-apps/peertube-runner.nix
   ./services/web-apps/peertube.nix

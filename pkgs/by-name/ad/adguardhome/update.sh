@@ -19,4 +19,4 @@ echo "got schema_version $schema_version"
 
 nix-update --subpackage dashboard adguardhome --version $version
 
-sed -i -r -e "s/schema_version\s*?=\s*?.*?;/schema_version = ${schema_version};/" "$dirname/default.nix"
+sed -i -r -e "s/schema_version\s*?=\s*?.*?;/schema_version = ${schema_version};/" "$dirname/package.nix"

@@ -18,21 +18,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.20.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BLEbEDZRh7fgcnkH/YUHPPdKM1FtZdjvsL1rJ57BP3w=";
+    hash = "sha256-lvBlwp2a2JPGgaCKt5HOxm9xoy+HyZeJGw6G5NiLgAw=";
   };
 
-  cargoHash = "sha256-1jLiCCZUj/rBHd1huqZdmgKayoSZoOt3tptyZlOcWJA=";
+  cargoHash = "sha256-PQ/Op567xD1u8J01r5quzDsDjGw7kxbGL4oaM4b6Obc=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-+n9P2P88G3neHJqmJi/VWpaQ/UkUzBtihfeKy5lju4U=";
+    hash = "sha256-iyLUKcxpq5G7P2TlQ/GmJdZtEbeX+/NkhdEQOi44s5I=";
   };
 
   npmRoot = "frontend";

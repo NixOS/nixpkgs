@@ -4,8 +4,8 @@
   fetchFromGitHub,
   flit-core,
   packaging,
-  pythonOlder,
   pytestCheckHook,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -13,32 +13,41 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
-
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "dependency-groups";
-    rev = version;
+    tag = version;
     hash = "sha256-suuSx3zf0Y45FJdH8Cb6N7hcvPnzleREpHhtdiG2CLg=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
 
-  dependencies = [ packaging ];
+  dependencies = [
+    packaging
+    tomli
+  ];
 
   optional-dependencies = {
-    cli = [ ];
+    cli = [
+      tomli
+    ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "dependency_groups" ];
+  pythonImportsCheck = [
+    "dependency_groups"
+  ];
 
   meta = {
-    description = "Standalone implementation of PEP 735 Dependency Groups";
+    description = "A standalone implementation of PEP 735 Dependency Groups";
     homepage = "https://github.com/pypa/dependency-groups";
-    changelog = "https://github.com/pypa/dependency-groups/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/pypa/dependency-groups/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -11,7 +11,6 @@
   langAda ? false,
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
-  langD ? false,
   langGo ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
@@ -49,11 +48,9 @@
     !enablePlugin
     || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   nukeReferences,
-  sanitiseHeaderPathsHook,
   callPackage,
   majorMinorVersion,
   apple-sdk,
-  cctools,
   darwin,
 }:
 
@@ -81,16 +78,8 @@ let
 
   majorVersion = versions.major version;
   atLeast14 = versionAtLeast version "14";
-  atLeast13 = versionAtLeast version "13";
-  atLeast12 = versionAtLeast version "12";
-  atLeast11 = versionAtLeast version "11";
-  atLeast10 = versionAtLeast version "10";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
-  is12 = majorVersion == "12";
-  is11 = majorVersion == "11";
-  is10 = majorVersion == "10";
-  is9 = majorVersion == "9";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -104,7 +93,7 @@ let
   #   "14.2.0" -> "14.2.0"
   baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
 
-  disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
+  disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
   targetConfig =
@@ -118,6 +107,10 @@ let
   crossNameAddon = optionalString (
     !lib.systems.equals targetPlatform hostPlatform
   ) "${targetPlatform.config}${stageNameAddon}-";
+
+  targetPrefix = lib.optionalString (
+    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
+  ) "${stdenv.targetPlatform.config}-";
 
   callFile = callPackageWith {
     # lets
@@ -159,7 +152,6 @@ let
       langAda
       langC
       langCC
-      langD
       langFortran
       langGo
       langJit
@@ -180,7 +172,6 @@ let
       pkgsBuildTarget
       profiledCompiler
       reproducibleBuild
-      sanitiseHeaderPathsHook
       staticCompiler
       stdenv
       targetPackages
@@ -199,10 +190,6 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
-
-# TODO: fixup D bootstrapping, probably by using gdc11 (and maybe other changes).
-#   error: GDC is required to build d
-assert atLeast12 -> !langD;
 
 # threadsCross is just for MinGW
 assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
@@ -227,7 +214,7 @@ pipe
             "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz"
           else
             "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-        ${if is10 || is11 || is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
+        ${if is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
       };
 
       inherit patches;
@@ -247,8 +234,7 @@ pipe
         "format"
         "pie"
         "stackclashprotection"
-      ]
-      ++ optionals (is11 && langAda) [ "fortify3" ];
+      ];
 
       postPatch = ''
         configureScripts=$(find . -name configure)
@@ -269,7 +255,7 @@ pipe
       # This should kill all the stdinc frameworks that gcc and friends like to
       # insert into default search paths.
       + optionalString hostPlatform.isDarwin ''
-        substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
+        substituteInPlace gcc/config/darwin-c.cc \
           --replace 'if (stdinc)' 'if (0)'
 
         substituteInPlace libgcc/config/t-slibgcc-darwin \
@@ -326,11 +312,9 @@ pipe
         depsTargetTarget
         ;
 
-      preConfigure =
-        (callFile ./common/pre-configure.nix { })
-        + optionalString atLeast10 ''
-          ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
-        '';
+      preConfigure = (callFile ./common/pre-configure.nix { }) + ''
+        ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+      '';
 
       dontDisableStatic = true;
 
@@ -340,28 +324,23 @@ pipe
         "target"
       ];
 
-      configureFlags = callFile ./common/configure-flags.nix { };
+      configureFlags = callFile ./common/configure-flags.nix { inherit targetPrefix; };
 
       inherit targetConfig;
 
       buildFlags =
         # we do not yet have Nix-driven profiling
-        assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
-        if atLeast11 then
-          let
-            target =
-              optionalString (profiledCompiler) "profiled"
-              + optionalString (
-                (lib.systems.equals targetPlatform hostPlatform)
-                && (lib.systems.equals hostPlatform buildPlatform)
-                && !disableBootstrap
-              ) "bootstrap";
-          in
-          optional (target != "") target
-        else
-          optional (
-            (lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform)
-          ) (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+        assert profiledCompiler -> !disableBootstrap;
+        let
+          target =
+            optionalString (profiledCompiler) "profiled"
+            + optionalString (
+              (lib.systems.equals targetPlatform hostPlatform)
+              && (lib.systems.equals hostPlatform buildPlatform)
+              && !disableBootstrap
+            ) "bootstrap";
+        in
+        optional (target != "") target;
 
       inherit (callFile ./common/strip-attributes.nix { })
         stripDebugList
@@ -372,45 +351,38 @@ pipe
       # https://gcc.gnu.org/PR109898
       enableParallelInstalling = false;
 
-      env = mapAttrs (_: v: toString v) (
-        {
+      env = mapAttrs (_: v: toString v) {
 
-          NIX_NO_SELF_RPATH = true;
+        NIX_NO_SELF_RPATH = true;
 
-          # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-          ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+        # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+        ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
-          # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-          # library headers and binaries, regardless of the language being compiled.
-          #
-          # The LTO code doesn't find zlib, so we just add it to $CPATH and
-          # $LIBRARY_PATH in this case.
-          #
-          # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-          # compiler (after the specs for the cross-gcc are created). Having
-          # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+        # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+        # library headers and binaries, regardless of the language being compiled.
+        #
+        # The LTO code doesn't find zlib, so we just add it to $CPATH and
+        # $LIBRARY_PATH in this case.
+        #
+        # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+        # compiler (after the specs for the cross-gcc are created). Having
+        # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-          CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
-            makeSearchPathOutput "dev" "include" ([ ] ++ optional (zlib != null) zlib)
-          );
+        CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
+          makeSearchPathOutput "dev" "include" ([ ] ++ optional (zlib != null) zlib)
+        );
 
-          LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
-            makeLibraryPath (optional (zlib != null) zlib)
-          );
+        LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
+          makeLibraryPath (optional (zlib != null) zlib)
+        );
 
-          NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
+        NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
 
-          inherit (callFile ./common/extra-target-flags.nix { })
-            EXTRA_FLAGS_FOR_TARGET
-            EXTRA_LDFLAGS_FOR_TARGET
-            ;
-        }
-        //
-          optionalAttrs (!atLeast12 && stdenv.cc.isClang && (!lib.systems.equals targetPlatform hostPlatform))
-            {
-              NIX_CFLAGS_COMPILE = "-Wno-register";
-            }
-      );
+        inherit (callFile ./common/extra-target-flags.nix { })
+          EXTRA_FLAGS_FOR_TARGET
+          EXTRA_LDFLAGS_FOR_TARGET
+          ;
+      };
 
       passthru = {
         inherit
@@ -421,21 +393,11 @@ pipe
           langAda
           langFortran
           langGo
-          langD
           version
           ;
         isGNU = true;
         hardeningUnsupportedFlags =
-          optional (!atLeast11) "zerocallusedregs"
-          ++ optionals (!atLeast12) [
-            "fortify3"
-            "trivialautovarinit"
-          ]
-          ++ optionals (!atLeast13) [
-            "strictflexarrays1"
-            "strictflexarrays3"
-          ]
-          ++ optional (
+          optional (
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
           ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
@@ -449,50 +411,34 @@ pipe
       inherit enableShared enableMultilib;
 
       meta = {
-        inherit (callFile ./common/meta.nix { })
+        inherit (callFile ./common/meta.nix { inherit targetPrefix; })
           homepage
           license
           description
           longDescription
           platforms
           teams
+          mainProgram
           ;
-      }
-      // optionalAttrs (!atLeast11) {
-        badPlatforms = [ "aarch64-darwin" ];
-      }
-      // optionalAttrs is10 {
-        badPlatforms =
-          if (!lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
       };
-    }
-    // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
-      # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
-      preBuild = ''
-        makeFlagsArray+=('STRIP=${getBin cctools}/bin/${stdenv.cc.targetPrefix}strip')
-      '';
     }
     // optionalAttrs enableMultilib {
       dontMoveLib64 = true;
     }
   ))
-  (
-    [
-      (callPackage ./common/libgcc.nix {
-        inherit
-          version
-          langC
-          langCC
-          langJit
-          targetPlatform
-          hostPlatform
-          withoutTargetLibc
-          enableShared
-          libcCross
-          ;
-      })
-    ]
-    ++ optionals atLeast11 [
-      (callPackage ./common/checksum.nix { inherit langC langCC; })
-    ]
-  )
+  ([
+    (callPackage ./common/libgcc.nix {
+      inherit
+        version
+        langC
+        langCC
+        langJit
+        targetPlatform
+        hostPlatform
+        withoutTargetLibc
+        enableShared
+        libcCross
+        ;
+    })
+    (callPackage ./common/checksum.nix { inherit langC langCC; })
+  ])

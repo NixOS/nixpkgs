@@ -5,10 +5,10 @@
   release_version,
   version,
   monorepoSrc ? null,
+  fetchpatch,
   langAda ? false,
   langC ? true,
   langCC ? true,
-  langD ? false,
   langFortran ? false,
   langGo ? false,
   langJava ? false,
@@ -50,9 +50,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (getVersionFile "gcc/0001-find_a_program-First-search-with-machine-prefix.patch")
-    (getVersionFile "gcc/0002-driver-for_each_pass-Pass-to-callback-whether-dir-is.patch")
-    (getVersionFile "gcc/0003-find_a_program-Only-search-for-prefixed-paths-in-und.patch")
+    (fetchpatch {
+      name = "for_each_path-functional-programming.patch";
+      url = "https://github.com/gcc-mirror/gcc/commit/f23bac62f46fc296a4d0526ef54824d406c3756c.diff";
+      hash = "sha256-J7SrypmVSbvYUzxWWvK2EwEbRsfGGLg4vNZuLEe6Xe0=";
+    })
+    (fetchpatch {
+      name = "find_a_program-separate-from-find_a_file.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-1-git@JohnEricson.me/raw";
+      hash = "sha256-0gaWaeFZq+a8q7Bcr3eILNjHh1LfzL/Lz4F+W+H6XIU=";
+    })
+    (fetchpatch {
+      name = "simplify-find_a_program-and-find_a_file.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-2-git@JohnEricson.me/raw";
+      hash = "sha256-ojdyszxLGL+njHK4eAaeBkxAhFTDI57j6lGuAf0A+N0=";
+    })
+    (fetchpatch {
+      name = "for_each_path-pass-machine-specific.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-3-git@JohnEricson.me/raw";
+      hash = "sha256-C5jUSyNchmZcE8RTXc2dHfCqNKuBHeiouLruK9UooSM=";
+    })
+    (fetchpatch {
+      name = "find_a_program-search-with-machine-prefix.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-4-git@JohnEricson.me/raw";
+      hash = "sha256-MwcO4OXPlcdaSYivsh5ru+Cfq6qybeAtgCgTEPGYg40=";
+    })
 
     (getVersionFile "gcc/fix-collect2-paths.diff")
   ];
@@ -176,7 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.intersperse "," (
           lib.optional langC "c"
           ++ lib.optional langCC "c++"
-          ++ lib.optional langD "d"
           ++ lib.optional langFortran "fortran"
           ++ lib.optional langJava "java"
           ++ lib.optional langAda "ada"

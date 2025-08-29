@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       arkivm
-      donteatoreo
+      FlameFlag
       stepbrobd
     ];
     mainProgram = "iina";

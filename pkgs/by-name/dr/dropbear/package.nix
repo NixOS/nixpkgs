@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_17,
+  llvmPackages_19,
   boost,
   cmake,
   spdlog,
@@ -20,7 +20,7 @@ let
   # ```
   #
   # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
-  llvmPackages = llvmPackages_17;
+  llvmPackages = llvmPackages_19;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";

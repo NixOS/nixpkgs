@@ -3,6 +3,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -18,7 +19,7 @@ buildDotnetModule rec {
   projectFile = "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";
   testProjectFile = "CredentialProvider.Microsoft.Tests/CredentialProvider.Microsoft.Tests.csproj";
   nugetDeps = ./deps.json;
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
   patchPhase = ''
     sed -i 's|<TargetFrameworks>.*</TargetFrameworks>|<TargetFramework>net8.0</TargetFramework>|' Build.props
   '';

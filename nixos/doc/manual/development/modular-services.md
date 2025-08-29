@@ -83,6 +83,12 @@ Moving their logic into separate Nix files may still be beneficial for the effic
 
 <!-- TODO example of a single-instance service -->
 
+## Writing and Reviewing a Modular Service {#modular-service-review}
+
+A typical service module consists of the following:
+
+For more details, refer to the contributor documentation in [`nixos/README-modular-services.md`](https://github.com/NixOS/nixpkgs/blob/master/nixos/README-modular-services.md).
+
 ## Portable Service Options {#modular-service-options-portable}
 
 ```{=include=} options

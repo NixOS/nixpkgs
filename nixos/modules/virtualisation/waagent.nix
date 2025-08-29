@@ -257,7 +257,7 @@ in
       type = settingsType;
       default = { };
       description = ''
-        The waagent.conf configuration, see https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux for documentation.
+        The waagent.conf configuration, see <https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux> for documentation.
       '';
     };
   };

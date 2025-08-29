@@ -10,7 +10,7 @@
   openssl,
   zlib,
   which,
-  libsForQt5,
+  kdePackages,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which
-        libsForQt5.kdialog
+        kdePackages.kdialog
       ]
     }
     mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps

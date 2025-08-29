@@ -201,7 +201,7 @@ Composer is not a package manager in the same sense as `Yum` or `Apt` are. Yes,
 it deals with "packages" or libraries, but it manages them on a per-project
 basis, installing them in a directory (e.g. `vendor`) inside your project. By
 default, it does not install anything globally. This idea is not new and
-Composer is strongly inspired by node's `npm` and ruby's `bundler`.
+Composer is strongly inspired by Node's `npm` and Ruby's `bundler`.
 
 Currently, there is no other PHP tool that offers the same functionality as
 Composer. Consequently, incorporating a helper in Nix to facilitate building

@@ -276,6 +276,7 @@ in
   blint = runTest ./blint.nix;
   blockbook-frontend = runTest ./blockbook-frontend.nix;
   blocky = runTest ./blocky.nix;
+  bluesky-pds = runTest ./bluesky-pds.nix;
   bookstack = runTest ./bookstack.nix;
   boot = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./boot.nix { };
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
@@ -422,7 +423,6 @@ in
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;
-  deepin = runTest ./deepin.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dependency-track = runTest ./dependency-track.nix;
@@ -539,10 +539,6 @@ in
     # used in `tested` job
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr;
-  };
-  firefox-esr-128 = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.firefox-esr-128;
   };
   firefox-esr-140 = runTest {
     imports = [ ./firefox.nix ];
@@ -741,6 +737,7 @@ in
   ifm = runTest ./ifm.nix;
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
+  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   incron = runTest ./incron.nix;
   incus = pkgs.recurseIntoAttrs (
@@ -771,6 +768,7 @@ in
   isso = runTest ./isso.nix;
   jackett = runTest ./jackett.nix;
   jellyfin = runTest ./jellyfin.nix;
+  jellyseerr = runTest ./jellyseerr.nix;
   jenkins = runTest ./jenkins.nix;
   jenkins-cli = runTest ./jenkins-cli.nix;
   jibri = runTest ./jibri.nix;
@@ -928,6 +926,7 @@ in
   modularService = pkgs.callPackage ../modules/system/service/systemd/test.nix {
     inherit evalSystem;
   };
+  modular-service-etc = runTest ./modular-service-etc/test.nix;
   molly-brown = runTest ./molly-brown.nix;
   mollysocket = runTest ./mollysocket.nix;
   monado = runTest ./monado.nix;
@@ -1085,6 +1084,7 @@ in
   ntpd-rs = runTest ./ntpd-rs.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
+  nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
   nzbhydra2 = runTest ./nzbhydra2.nix;
   ocis = runTest ./ocis.nix;
@@ -1136,6 +1136,7 @@ in
   packagekit = runTest ./packagekit.nix;
   paisa = runTest ./paisa.nix;
   pam-file-contents = runTest ./pam/pam-file-contents.nix;
+  pam-lastlog = runTest ./pam/pam-lastlog.nix;
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
@@ -1150,7 +1151,6 @@ in
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   pdns-recursor = runTest ./pdns-recursor.nix;
-  pds = runTest ./pds.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
@@ -1189,10 +1189,7 @@ in
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
   plantuml-server = runTest ./plantuml-server.nix;
-  plasma-bigscreen = runTest ./plasma-bigscreen.nix;
-  plasma5 = runTest ./plasma5.nix;
   plasma6 = runTest ./plasma6.nix;
-  plasma5-systemd-start = runTest ./plasma5-systemd-start.nix;
   plausible = runTest ./plausible.nix;
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;
@@ -1250,7 +1247,7 @@ in
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
   prometheus-exporters = handleTest ./prometheus-exporters.nix { };
-  prosody = handleTest ./xmpp/prosody.nix { };
+  prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   proxy = runTest ./proxy.nix;
   prowlarr = runTest ./prowlarr.nix;
@@ -1348,6 +1345,7 @@ in
   simple = runTest ./simple.nix;
   sing-box = runTest ./sing-box.nix;
   slimserver = runTest ./slimserver.nix;
+  slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
   snmpd = runTest ./snmpd.nix;
   smokeping = runTest ./smokeping.nix;
@@ -1491,6 +1489,7 @@ in
   teleport = handleTest ./teleport.nix { };
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix { };
+  temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   thanos = runTest ./thanos.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
@@ -1574,7 +1573,7 @@ in
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
-  victorialogs = runTest ./victorialogs.nix;
+  victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };

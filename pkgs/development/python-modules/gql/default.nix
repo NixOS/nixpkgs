@@ -11,7 +11,7 @@
   httpx,
   mock,
   parse,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-console-scripts,
   pytestCheckHook,
   pythonOlder,
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     aiofiles
     mock
     parse
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-console-scripts
     pytestCheckHook
     vcrpy

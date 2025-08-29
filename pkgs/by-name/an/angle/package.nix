@@ -13,6 +13,8 @@
   wayland,
   pciutils,
   libGL,
+  apple-sdk_15,
+  xcbuild,
 }:
 let
   llvmPackages = llvmPackages_21;
@@ -29,11 +31,21 @@ let
       llvmPackages.llvm
       llvmPackages.clang
     ];
-    postBuild = ''
-      mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/
-      ln -s $out/resource-root/lib/linux \
-        $out/lib/clang/${llvmMajorVersion}/lib/${triplet}
-    '';
+    postBuild =
+      if stdenv.isDarwin then
+        ''
+          mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/darwin
+          ln -s $out/resource-root/lib/darwin/libclang_rt.osx.a \
+            $out/lib/clang/${llvmMajorVersion}/lib/darwin/libclang_rt.osx.a
+          ln -s $out/resource-root/lib/darwin/libclang_rt.osx.a \
+            $out/lib/clang/${llvmMajorVersion}/lib/darwin/libclang_rt.osx-${arch}.a
+        ''
+      else
+        ''
+          mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/
+          ln -s $out/resource-root/lib/linux \
+            $out/lib/clang/${llvmMajorVersion}/lib/${triplet}
+        '';
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -51,18 +63,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     llvmPackages.bintools
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    xcbuild
   ];
 
-  buildInputs = [
-    glib
-    xorg.libxcb.dev
-    xorg.libX11.dev
-    xorg.libXext.dev
-    xorg.libXi
-    wayland.dev
-    pciutils
-    libGL
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      glib
+      xorg.libxcb.dev
+      xorg.libX11.dev
+      xorg.libXext.dev
+      xorg.libXi
+      wayland.dev
+      pciutils
+      libGL
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      apple-sdk_15
+    ];
 
   gnFlags = [
     "is_debug=false"
@@ -73,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
     "use_custom_libcxx=true"
     "angle_enable_swiftshader=false"
     "angle_enable_wgpu=false"
+    # On darwin during linking:
+    # clang++: error: argument unused during compilation: '-stdlib=libc++'
+    "treat_warnings_as_errors=false"
   ];
 
   patches = [
@@ -88,6 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
         "_dir = \"${triplet}\"
          _suffix = \"-${arch}\""
 
+    # Don't precompile Metal shaders, because the compiler is non-free.
+    substituteInPlace src/libANGLE/renderer/metal/metal_backend.gni \
+      --replace-fail \
+        "metal_internal_shader_compilation_supported =" \
+        "metal_internal_shader_compilation_supported = false &&"
+
     cat > build/config/gclient_args.gni <<EOF
     # Generated from 'DEPS'
     checkout_angle_internal = false
@@ -95,12 +123,17 @@ stdenv.mkDerivation (finalAttrs: {
     checkout_angle_restricted_traces = false
     generate_location_tags = false
     EOF
+
+    # For sandboxed build on darwin.
+    patchShebangs build/toolchain/apple
   '';
 
   installPhase = ''
     runHook preInstallPhase
 
-    install -v -m755 -D *.so *.so.1 -t "$out/lib"
+    install -v -m755 -D \
+      *${stdenv.hostPlatform.extensions.sharedLibrary}* \
+      -t "$out/lib"
     install -v -m755 -D \
       angle_shader_translator \
       gaussian_distribution_gentables \
@@ -154,6 +187,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

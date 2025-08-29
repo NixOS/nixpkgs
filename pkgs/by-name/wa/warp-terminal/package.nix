@@ -113,7 +113,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
     ];
     platforms = platforms.darwin ++ [

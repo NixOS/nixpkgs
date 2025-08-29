@@ -20,6 +20,7 @@
   ninja,
   pkg-config,
   rustc,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.glycinPathsPatch
   ];
 
+  cargoVendorDir = "vendor";
+
   nativeBuildInputs = [
     cargo
     gettext # for msgfmt
@@ -47,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
@@ -67,6 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  postPatch = ''
+    substituteInPlace loaders/meson.build \
+      --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
+  '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = gnome.updateScript {

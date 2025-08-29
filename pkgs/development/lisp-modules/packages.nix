@@ -86,6 +86,25 @@ let
 
       jzon = super.com_dot_inuoe_dot_jzon;
 
+      _40ants-routes = super._40ants-routes.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "40ants-routes/handler" ];
+      });
+
+      reblocks-ui2 = super.reblocks-ui2.overrideLispAttrs (o: {
+        systems = o.systems ++ [
+          "reblocks-ui2/themes/color"
+          "reblocks-ui2/themes/tailwind"
+          "reblocks-ui2/utils/padding"
+          "reblocks-ui2/utils/align"
+          "reblocks-ui2/card"
+          "reblocks-ui2/card/view"
+        ];
+      });
+
+      april = super.april.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "cape" ];
+      });
+
       cl-notify = build-asdf-system {
         pname = "cl-notify";
         version = "20080904-138ca7038";

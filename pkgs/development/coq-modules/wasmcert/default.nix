@@ -32,11 +32,12 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (isEq "8.20") (isEq "2.4") "2.1.0")
+        (case (isEq "8.20") (isEq "2.4") "2.2.0")
       ]
       null;
 
   release."2.1.0".sha256 = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
+  release."2.2.0".sha256 = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
 
   mlPlugin = true;
   useDune = true;

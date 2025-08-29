@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-functools";
-  version = "4.1.0";
+  version = "4.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jaraco_functools";
     inherit version;
-    hash = "sha256-cPfg4q4HZJjiElYjJegFIE/Akte0wX4OhslZ4klwGp0=";
+    hash = "sha256-vmNKv8yrzlb6MFP4x+vje2gmg6Tud5NnDO0XurAIc1M=";
   };
+
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
 
   build-system = [
     setuptools

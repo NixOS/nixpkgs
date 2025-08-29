@@ -26,6 +26,7 @@
   libXmu,
   libsodium,
   libICE,
+  wayland-scanner,
   vimPlugins,
   makeWrapper,
   wrapGAppsHook3,
@@ -33,6 +34,7 @@
   features ? "huge", # One of tiny, small, normal, big or huge
   wrapPythonDrv ? false,
   guiSupport ? config.vim.gui or (if stdenv.hostPlatform.isDarwin then "gtk2" else "gtk3"),
+  waylandSupport ? !stdenv.hostPlatform.isDarwin,
   luaSupport ? config.vim.lua or true,
   perlSupport ? config.vim.perl or false, # Perl interpreter
   pythonSupport ? config.vim.python or true, # Python interpreter
@@ -120,6 +122,7 @@ stdenv.mkDerivation {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
+    (lib.strings.enableFeature waylandSupport "wayland")
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
@@ -185,6 +188,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11
+  ++ lib.optional waylandSupport wayland-scanner
   ++ lib.optional luaSupport lua
   ++ lib.optional pythonSupport python3
   ++ lib.optional tclSupport tcl

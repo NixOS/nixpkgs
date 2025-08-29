@@ -7,7 +7,6 @@
   build,
   ruff,
   dill,
-  fastapi,
   granian,
   hatchling,
   httpx,
@@ -32,6 +31,7 @@
   rich,
   sqlmodel,
   starlette-admin,
+  stdenv,
   typer,
   typing-extensions,
   unzip,
@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.14";
+  version = "0.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-yuVBQYP0YlvAIWF/+oSfCLbfj1GLtnYajU3WoolyTjY=";
+    hash = "sha256-ieR+Wxj1bJp3dQpw6j2Wki1nm4MWtVZ+UOtDl+6ip7M=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -59,9 +59,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # needed
+    "click"
+    "starlette"
     "rich"
-    # preventative
-    "fastapi"
   ];
 
   build-system = [ hatchling ];
@@ -70,7 +70,6 @@ buildPythonPackage rec {
     alembic
     build # used in custom_components/custom_components.py
     dill # used in state.py
-    fastapi
     granian
     granian.optional-dependencies.reload
     httpx
@@ -126,8 +125,14 @@ buildPythonPackage rec {
     # tries to run bun or npm
     "test_output_system_info"
     # Comparison with magic string
-    # TODO Recheck on next update as it appears to be fixed in 8.0.x
     "test_background_task_no_block"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted (fails in sandbox)
+    "test_is_process_on_port_free_port"
+    "test_is_process_on_port_occupied_port"
+    "test_is_process_on_port_both_protocols"
+    "test_is_process_on_port_concurrent_access"
   ];
 
   disabledTestPaths = [

@@ -70,8 +70,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_xai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-xai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-xai==";
+    };
   };
 
   meta = {

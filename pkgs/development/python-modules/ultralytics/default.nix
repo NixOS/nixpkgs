@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "ultralytics";
-  version = "8.3.143";
+  version = "8.3.174";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${version}";
-    hash = "sha256-qpFQcGLTEQS7Bt9CvdXgv2JyNfOONS0Cf71dckCrlPw=";
+    hash = "sha256-wQ16e67ldrV8KwAXoLyxqzx9DG+LAmU5Mt+65dQzUkY=";
   };
 
   build-system = [ setuptools ];

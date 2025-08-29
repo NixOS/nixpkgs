@@ -39,7 +39,7 @@ Based on this, we align on the following policy for toolchain/builder upgrades:
 
     When an end-of-life toolchain is removed, builders that pin the EOL version (according to 3.) will automatically be bumped to the then oldest pinned builder (e.g. Go 1.22 is EOL, `buildGo122Module` is bumped to `buildGo123Module`).
 
-    If the package won't build with anymore with that builder, the package is marked broken.
+    If the package won't build with that builder anymore, the package is marked broken.
     It is the package maintainers responsibility to fix the package and get it working with a supported Go toolchain.
 
 [1]: http://go.dev/doc/go1compat

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
@@ -31,21 +31,21 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.4.9";
+  version = "0.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-7XV85/IN1hG9hYBSg73pymIwIWYAay/18NAsV6Jz4Ik=";
+    hash = "sha256-9CBEVe3FCpqUMtoTQKikgDmSvqqppTPWYrhElPh6UcA=";
   };
 
   sourceRoot = "${src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx

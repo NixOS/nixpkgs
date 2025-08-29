@@ -56,7 +56,7 @@ If you want to ensure that things keep working, consider [becoming a maintainer]
 
 ## &lt;pkg&gt;.overrideAttrs {#sec-pkg-overrideAttrs}
 
-The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the nixpkgs expression `pkgs`.
+The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the Nixpkgs expression `pkgs`.
 
 Example usages:
 
@@ -98,7 +98,7 @@ You should prefer `overrideAttrs` in almost all cases, see its documentation for
 Do not use this function in Nixpkgs as it evaluates a derivation before modifying it, which breaks package abstraction. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
 :::
 
-The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the nixpkgs expression, `pkgs`, have this function.
+The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the Nixpkgs expression, `pkgs`, have this function.
 
 Example usage:
 

@@ -10,16 +10,16 @@
 
 buildGo124Module rec {
   pname = "git-spice";
-  version = "0.15.2";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
     tag = "v${version}";
-    hash = "sha256-vpBQdkP5jC3glGykLCd3/df4Lhi0MeU0XLnlTNDp1bM=";
+    hash = "sha256-SILcEXyUo73c8gPDDESCkm/eQIh8elM850qwJqTyO6E=";
   };
 
-  vendorHash = "sha256-uh4GUkfWo12pYQD/Mpw+EWwmukHUpxOii7DTu6C84zo=";
+  vendorHash = "sha256-T6zSwQdDWYQqe8trIlhpU8dUQXtz8OGmnW5L5AVjGn8=";
 
   subPackages = [ "." ];
 
@@ -37,16 +37,7 @@ buildGo124Module rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    # timeout on both aarch64-darwin and x86_64-linux
-    rm testdata/script/issue725_pre_push_hook_worktree.txt
-
-    # failing on both aarch64-darwin and x86_64-linux
-    # TODO: check if this still fails after next release
-    rm testdata/script/branch_restack_conflict_no_edit.txt
-  ''
-
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     # timeout
     rm testdata/script/branch_submit_remote_prompt.txt
     rm testdata/script/branch_submit_multiple_pr_templates.txt

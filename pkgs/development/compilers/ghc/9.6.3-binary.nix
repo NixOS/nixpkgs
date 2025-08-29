@@ -274,7 +274,7 @@ stdenv.mkDerivation {
       for exe in $(find . -type f -executable); do
         isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
     ''
 
@@ -409,7 +409,7 @@ stdenv.mkDerivation {
       for exe in $(find "$out" -type f -executable); do
         isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
 
       for file in $(find "$out" -name setup-config); do

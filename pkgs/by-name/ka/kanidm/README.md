@@ -34,7 +34,7 @@ For example, when upgrading from 1.4 -> 1.5
 
 ## Remove release
 
-Kanidm versions are supported for 30 days after the release of new versions. Following the example above, 1.5.x superseding 1.4.x in 30 days, do the following near the end of the 30 day window
+Kanidm versions are supported for 30 days after the release of new versions. Following the example above, 1.5.x superseding 1.4.x in 30 days, do the following near the end of the 30-day window
 
 1. Update `pkgs/by-name/ka/kanidm/1_4.nix` by adding `unsupported = true;`
 1. Update `pkgs/top-level/release.nix` and add `kanidm_1_4-1.4.6` and `kanidmWithSecretProvisioning_1_4-1.4.6` to `permittedInsecurePackages`

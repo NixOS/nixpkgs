@@ -17,18 +17,18 @@
 }:
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.185.0";
+  version = "3.190.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${version}";
-    hash = "sha256-/7VaFeEQXVqF7g+CR2oTSmOWgWjw/LS9s0+VZcSlFvU=";
+    hash = "sha256-n4YjJJZNPRjvR5WuDO3+bCvKxDrmK7VBbS6E6RP0C84=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-aAxBVMLL7JRSJSVIR9/gNTNj8sZHg39ftv+ZAO8PS54=";
+  vendorHash = "sha256-ewVZNgnW7JbX0VOU14Ipo7EBkj8evOoXWjf9yLOmJF8=";
 
   sourceRoot = "${src.name}/pkg";
 

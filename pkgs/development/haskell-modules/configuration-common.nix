@@ -102,6 +102,9 @@ with haskellLib;
         cabalInstallOverlay = cself: csuper: {
           Cabal = cself.Cabal_3_14_2_0;
           Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
+
+          # Only needed for cabal2nix, hpack < 0.37 forbids Cabal >= 3.14
+          hpack = cself.hpack_0_38_1;
         };
       in
       {
@@ -166,11 +169,14 @@ with haskellLib;
           # May as well…
           (self.generateOptparseApplicativeCompletions [ "guardian" ])
         ];
+
+        cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
       }
     )
     cabal-install
     cabal-install-solver
     guardian
+    cabal2nix-unstable
     ;
 
   # Expected test output for these accidentally checks the absolute location of the source directory
@@ -309,10 +315,9 @@ with haskellLib;
     sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
   }) super.weeder;
 
-  # Version 2.1.1 is deprecated, but part of Stackage LTS at the moment.
-  # https://github.com/commercialhaskell/stackage/issues/7500
-  # https://github.com/yesodweb/shakespeare/issues/280
-  shakespeare = doDistribute self.shakespeare_2_1_0_1;
+  # Test suite doesn't find necessary test files when compiling
+  # https://github.com/yesodweb/shakespeare/issues/294
+  shakespeare = dontCheck super.shakespeare;
 
   # Work around -Werror failures until a more permanent solution is released
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
@@ -543,7 +548,7 @@ with haskellLib;
           name = "git-annex-${super.git-annex.version}-src";
           url = "git://git-annex.branchable.com/";
           rev = "refs/tags/" + super.git-annex.version;
-          sha256 = "0d968aciaxmblahk79x2m708rvbg19flj5naxzg0zdp9j2jwlcqf";
+          sha256 = "sha256-whpBFmOHBTm1clXoAwInsQw7mnxrQOyaUj7byogku5c=";
           # delete android and Android directories which cause issues on
           # darwin (case insensitive directory). Since we don't need them
           # during the build process, we can delete it to prevent a hash
@@ -558,18 +563,6 @@ with haskellLib;
           # TODO(@sternenseemann): submit upstreamable patch resolving this
           # (this should be possible by also taking PREFIX into account).
           ./patches/git-annex-no-usr-prefix.patch
-
-          # Pick fix for git 2.50 related test suite failures from 10.20250630
-          # https://git-annex.branchable.com/bugs/test_suite_fail_with_git_2.50/
-          (pkgs.fetchpatch {
-            name = "git-annex-workaround-for-git-2.50.patch";
-            url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=fb155b1e3e59cc1f9cf8a4fe7d47cba49d1c81af";
-            sha256 = "sha256-w6eXW0JqshXTd0/tNPZ0fOW2SVmA90G5eFhsd9y05BI=";
-            excludes = [
-              "doc/**"
-              "CHANGELOG"
-            ];
-          })
         ];
 
         postPatch = ''
@@ -1381,21 +1374,6 @@ with haskellLib;
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
   vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
 
-  # Support for vulkan-headers 1.4.313.0
-  # https://github.com/YoshikuniJujo/gpu-vulkan-middle/issues/10
-  gpu-vulkan-middle = overrideCabal (drv: {
-    version =
-      let
-        fixed = "0.1.0.76";
-      in
-      lib.warnIf (lib.versionAtLeast drv.version fixed)
-        "haskellPackages.gpu-vulkan-middle: default version ${drv.version} >= ${fixed}, consider dropping override"
-        fixed;
-    sha256 = "sha256-VQAVo/84qPBFkQSmY3pT4WXOK9zrFMpK7WN9/UdED6E=";
-    revision = null;
-    editedCabalFile = null;
-  }) super.gpu-vulkan-middle;
-
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
   # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring
@@ -1578,39 +1556,6 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  # Fixes bug in an Ord instance that was causing the test suite to fail
-  # https://github.com/fpringle/servant-routes/issues/33
-  servant-routes = appendPatches [
-    (pkgs.fetchpatch {
-      name = "servant-routes-fix-ord.patch";
-      url = "https://github.com/fpringle/servant-routes/commit/d1ef071f11c6a0810637beb8ea0b08f8e524b48a.patch";
-      sha256 = "1c2xpi7sz0621fj9r1010587d1l39j6mm8l4vqmz9pldccmcb0f2";
-    })
-  ] super.servant-routes;
-
-  # Fix test suite with text >= 2.1.2
-  servant-client =
-    appendPatches
-      [
-        (pkgs.fetchpatch {
-          name = "servant-client-text-2.1.2.patch";
-          url = "https://github.com/haskell-servant/servant/commit/9cda0cfb356a01ad402ee949e0b0d5c0494eace2.patch";
-          sha256 = "19vpn7h108wra9b84r642zxg0mii66rq4vjbqhi7ackkdb0mx9yn";
-          relative = "servant-client";
-          # patch to servant-client.cabal doesn't apply on 0.20.2
-          includes = [ "README.md" ];
-        })
-      ]
-      (
-        overrideCabal (drv: {
-          postPatch = super.postPatch or "" + ''
-            # Restore the symlink (to the file we patch) which becomes a regular file
-            # in the hackage tarball
-            ln -sf README.md README.lhs
-          '';
-        }) super.servant-client
-      );
-
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -1660,16 +1605,6 @@ with haskellLib;
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
       (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
-
-  # Downgrade persistent-test to a version that's compatible with
-  # persistent < 2.16 (which Stackage prescribed).  Unfortunately, the
-  # bad version of persistent-test slipped into Stackage LTS because
-  # PVP allows it and LTS doesn't continuously run test suites (contrary
-  # to nightly).
-  # See also https://github.com/yesodweb/persistent/pull/1584#issuecomment-2939756529
-  #          https://github.com/commercialhaskell/stackage/issues/7768
-  persistent-test_2_13_1_4 = dontDistribute super.persistent-test;
-  persistent-test = doDistribute self.persistent-test_2_13_1_3;
 
   # Needs matching lsp-types
   # Allow lens >= 5.3
@@ -2084,35 +2019,6 @@ with haskellLib;
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
-  cabal2nix-unstable = overrideCabal {
-    passthru = {
-      updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
-
-      # This is used by regenerate-hackage-packages.nix to supply the configuration
-      # values we can easily generate automatically without checking them in.
-      compilerConfig =
-        pkgs.runCommand "hackage2nix-${self.ghc.haskellCompilerName}-config.yaml"
-          {
-            nativeBuildInputs = [
-              self.ghc
-            ];
-          }
-          ''
-            cat > "$out" << EOF
-            # generated by haskellPackages.cabal2nix-unstable.compilerConfig
-            compiler: ${self.ghc.haskellCompilerName}
-
-            core-packages:
-            EOF
-
-            ghc-pkg list \
-              | tail -n '+2' \
-              | sed -e 's/[()]//g' -e 's/\s\+/  - /' \
-              >> "$out"
-          '';
-    };
-  } super.cabal2nix-unstable;
-
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
   ihaskell-display = doJailbreak super.ihaskell-display;
@@ -2194,7 +2100,7 @@ with haskellLib;
     self: super: {
       # stack needs to be built with the same hpack version that the upstream releases use.
       # https://github.com/NixOS/nixpkgs/issues/223390
-      hpack = self.hpack_0_38_0;
+      hpack = self.hpack_0_38_1;
     }
   );
 
@@ -3047,6 +2953,20 @@ with haskellLib;
   # https://github.com/snoyberg/http-client/pull/563
   http-client-tls = doJailbreak super.http-client-tls;
 
+  # agda2hs 1.3 is not compatible with Agda 2.8.0
+  agda2hs = lib.pipe super.agda2hs [
+    (warnAfterVersion "1.3")
+    (overrideSrc {
+      version = "1.3-unstable-2025-07-25";
+      src = pkgs.fetchFromGitHub {
+        owner = "agda";
+        repo = "agda2hs";
+        rev = "01cc0532b522f64223782617cbde1a6f21b8880e";
+        hash = "sha256-SXhnkZa8OmgpYRTb2IVTfebtX+GG5mkVcqKchl2Noic=";
+      };
+    })
+  ];
+
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
     (warnAfterVersion "0.0.0.4")
     # Last released in 2018
@@ -3318,9 +3238,352 @@ with haskellLib;
         src = amazonkaSrc + "/${dir}";
       })
         drv;
-    isAmazonkaService =
-      name: lib.hasPrefix "amazonka-" name && name != "amazonka-test" && name != "amazonka-s3-streaming";
-    amazonkaServices = lib.filter isAmazonkaService (lib.attrNames super);
+    # To get the list of amazonka services run:
+    # > nix eval --impure --expr 'builtins.attrNames (import ./. {}).haskellPackages' --json | jq '.[]' | grep '^"amazonka'
+    # NB: we exclude amazonka-test and amazonka-s3-streaming
+    amazonkaServices = [
+      "amazonka"
+      "amazonka-accessanalyzer"
+      "amazonka-account"
+      "amazonka-alexa-business"
+      "amazonka-amp"
+      "amazonka-amplify"
+      "amazonka-amplifybackend"
+      "amazonka-amplifyuibuilder"
+      "amazonka-apigateway"
+      "amazonka-apigatewaymanagementapi"
+      "amazonka-apigatewayv2"
+      "amazonka-appconfig"
+      "amazonka-appconfigdata"
+      "amazonka-appflow"
+      "amazonka-appintegrations"
+      "amazonka-application-autoscaling"
+      "amazonka-application-insights"
+      "amazonka-applicationcostprofiler"
+      "amazonka-appmesh"
+      "amazonka-apprunner"
+      "amazonka-appstream"
+      "amazonka-appsync"
+      "amazonka-arc-zonal-shift"
+      "amazonka-athena"
+      "amazonka-auditmanager"
+      "amazonka-autoscaling"
+      "amazonka-autoscaling-plans"
+      "amazonka-backup"
+      "amazonka-backup-gateway"
+      "amazonka-backupstorage"
+      "amazonka-batch"
+      "amazonka-billingconductor"
+      "amazonka-braket"
+      "amazonka-budgets"
+      "amazonka-certificatemanager"
+      "amazonka-certificatemanager-pca"
+      "amazonka-chime"
+      "amazonka-chime-sdk-identity"
+      "amazonka-chime-sdk-media-pipelines"
+      "amazonka-chime-sdk-meetings"
+      "amazonka-chime-sdk-messaging"
+      "amazonka-chime-sdk-voice"
+      "amazonka-cloud9"
+      "amazonka-cloudcontrol"
+      "amazonka-clouddirectory"
+      "amazonka-cloudformation"
+      "amazonka-cloudfront"
+      "amazonka-cloudhsm"
+      "amazonka-cloudhsmv2"
+      "amazonka-cloudsearch"
+      "amazonka-cloudsearch-domains"
+      "amazonka-cloudtrail"
+      "amazonka-cloudwatch"
+      "amazonka-cloudwatch-events"
+      "amazonka-cloudwatch-logs"
+      "amazonka-codeartifact"
+      "amazonka-codebuild"
+      "amazonka-codecommit"
+      "amazonka-codedeploy"
+      "amazonka-codeguru-reviewer"
+      "amazonka-codeguruprofiler"
+      "amazonka-codepipeline"
+      "amazonka-codestar"
+      "amazonka-codestar-connections"
+      "amazonka-codestar-notifications"
+      "amazonka-cognito-identity"
+      "amazonka-cognito-idp"
+      "amazonka-cognito-sync"
+      "amazonka-comprehend"
+      "amazonka-comprehendmedical"
+      "amazonka-compute-optimizer"
+      "amazonka-config"
+      "amazonka-connect"
+      "amazonka-connect-contact-lens"
+      "amazonka-connectcampaigns"
+      "amazonka-connectcases"
+      "amazonka-connectparticipant"
+      "amazonka-contrib-rds-utils"
+      "amazonka-controltower"
+      "amazonka-core"
+      "amazonka-cost-explorer"
+      "amazonka-cur"
+      "amazonka-customer-profiles"
+      "amazonka-databrew"
+      "amazonka-dataexchange"
+      "amazonka-datapipeline"
+      "amazonka-datasync"
+      "amazonka-detective"
+      "amazonka-devicefarm"
+      "amazonka-devops-guru"
+      "amazonka-directconnect"
+      "amazonka-discovery"
+      "amazonka-dlm"
+      "amazonka-dms"
+      "amazonka-docdb"
+      "amazonka-docdb-elastic"
+      "amazonka-drs"
+      "amazonka-ds"
+      "amazonka-dynamodb"
+      "amazonka-dynamodb-dax"
+      "amazonka-dynamodb-streams"
+      "amazonka-ebs"
+      "amazonka-ec2"
+      "amazonka-ec2-instance-connect"
+      "amazonka-ecr"
+      "amazonka-ecr-public"
+      "amazonka-ecs"
+      "amazonka-efs"
+      "amazonka-eks"
+      "amazonka-elastic-inference"
+      "amazonka-elasticache"
+      "amazonka-elasticbeanstalk"
+      "amazonka-elasticsearch"
+      "amazonka-elastictranscoder"
+      "amazonka-elb"
+      "amazonka-elbv2"
+      "amazonka-emr"
+      "amazonka-emr-containers"
+      "amazonka-emr-serverless"
+      "amazonka-evidently"
+      "amazonka-finspace"
+      "amazonka-finspace-data"
+      "amazonka-fis"
+      "amazonka-fms"
+      "amazonka-forecast"
+      "amazonka-forecastquery"
+      "amazonka-frauddetector"
+      "amazonka-fsx"
+      "amazonka-gamelift"
+      "amazonka-gamesparks"
+      "amazonka-glacier"
+      "amazonka-globalaccelerator"
+      "amazonka-glue"
+      "amazonka-grafana"
+      "amazonka-greengrass"
+      "amazonka-greengrassv2"
+      "amazonka-groundstation"
+      "amazonka-guardduty"
+      "amazonka-health"
+      "amazonka-healthlake"
+      "amazonka-honeycode"
+      "amazonka-iam"
+      "amazonka-iam-policy"
+      "amazonka-identitystore"
+      "amazonka-imagebuilder"
+      "amazonka-importexport"
+      "amazonka-inspector"
+      "amazonka-inspector2"
+      "amazonka-iot"
+      "amazonka-iot-analytics"
+      "amazonka-iot-dataplane"
+      "amazonka-iot-jobs-dataplane"
+      "amazonka-iot-roborunner"
+      "amazonka-iot1click-devices"
+      "amazonka-iot1click-projects"
+      "amazonka-iotdeviceadvisor"
+      "amazonka-iotevents"
+      "amazonka-iotevents-data"
+      "amazonka-iotfleethub"
+      "amazonka-iotfleetwise"
+      "amazonka-iotsecuretunneling"
+      "amazonka-iotsitewise"
+      "amazonka-iotthingsgraph"
+      "amazonka-iottwinmaker"
+      "amazonka-iotwireless"
+      "amazonka-ivs"
+      "amazonka-ivschat"
+      "amazonka-kafka"
+      "amazonka-kafkaconnect"
+      "amazonka-kendra"
+      "amazonka-keyspaces"
+      "amazonka-kinesis"
+      "amazonka-kinesis-analytics"
+      "amazonka-kinesis-firehose"
+      "amazonka-kinesis-video"
+      "amazonka-kinesis-video-archived-media"
+      "amazonka-kinesis-video-media"
+      "amazonka-kinesis-video-signaling"
+      "amazonka-kinesis-video-webrtc-storage"
+      "amazonka-kinesisanalyticsv2"
+      "amazonka-kms"
+      "amazonka-lakeformation"
+      "amazonka-lambda"
+      "amazonka-lex-models"
+      "amazonka-lex-runtime"
+      "amazonka-lexv2-models"
+      "amazonka-license-manager"
+      "amazonka-license-manager-linux-subscriptions"
+      "amazonka-license-manager-user-subscriptions"
+      "amazonka-lightsail"
+      "amazonka-location"
+      "amazonka-lookoutequipment"
+      "amazonka-lookoutmetrics"
+      "amazonka-lookoutvision"
+      "amazonka-m2"
+      "amazonka-macie"
+      "amazonka-maciev2"
+      "amazonka-managedblockchain"
+      "amazonka-marketplace-analytics"
+      "amazonka-marketplace-catalog"
+      "amazonka-marketplace-entitlement"
+      "amazonka-marketplace-metering"
+      "amazonka-mechanicalturk"
+      "amazonka-mediaconnect"
+      "amazonka-mediaconvert"
+      "amazonka-medialive"
+      "amazonka-mediapackage"
+      "amazonka-mediapackage-vod"
+      "amazonka-mediastore"
+      "amazonka-mediastore-dataplane"
+      "amazonka-mediatailor"
+      "amazonka-memorydb"
+      "amazonka-mgn"
+      "amazonka-migration-hub-refactor-spaces"
+      "amazonka-migrationhub"
+      "amazonka-migrationhub-config"
+      "amazonka-migrationhuborchestrator"
+      "amazonka-migrationhubstrategy"
+      "amazonka-ml"
+      "amazonka-mobile"
+      "amazonka-mq"
+      "amazonka-mtl"
+      "amazonka-mwaa"
+      "amazonka-neptune"
+      "amazonka-network-firewall"
+      "amazonka-networkmanager"
+      "amazonka-nimble"
+      "amazonka-oam"
+      "amazonka-omics"
+      "amazonka-opensearch"
+      "amazonka-opensearchserverless"
+      "amazonka-opsworks"
+      "amazonka-opsworks-cm"
+      "amazonka-organizations"
+      "amazonka-outposts"
+      "amazonka-panorama"
+      "amazonka-personalize"
+      "amazonka-personalize-events"
+      "amazonka-personalize-runtime"
+      "amazonka-pi"
+      "amazonka-pinpoint"
+      "amazonka-pinpoint-email"
+      "amazonka-pinpoint-sms-voice"
+      "amazonka-pinpoint-sms-voice-v2"
+      "amazonka-pipes"
+      "amazonka-polly"
+      "amazonka-pricing"
+      "amazonka-privatenetworks"
+      "amazonka-proton"
+      "amazonka-qldb"
+      "amazonka-qldb-session"
+      "amazonka-quicksight"
+      "amazonka-ram"
+      "amazonka-rbin"
+      "amazonka-rds"
+      "amazonka-rds-data"
+      "amazonka-redshift"
+      "amazonka-redshift-data"
+      "amazonka-redshift-serverless"
+      "amazonka-rekognition"
+      "amazonka-resiliencehub"
+      "amazonka-resource-explorer-v2"
+      "amazonka-resourcegroups"
+      "amazonka-resourcegroupstagging"
+      "amazonka-robomaker"
+      "amazonka-rolesanywhere"
+      "amazonka-route53"
+      "amazonka-route53-autonaming"
+      "amazonka-route53-domains"
+      "amazonka-route53-recovery-cluster"
+      "amazonka-route53-recovery-control-config"
+      "amazonka-route53-recovery-readiness"
+      "amazonka-route53resolver"
+      "amazonka-rum"
+      "amazonka-s3"
+      "amazonka-s3-encryption"
+      #"amazonka-s3-streaming"
+      "amazonka-s3outposts"
+      "amazonka-sagemaker"
+      "amazonka-sagemaker-a2i-runtime"
+      "amazonka-sagemaker-edge"
+      "amazonka-sagemaker-featurestore-runtime"
+      "amazonka-sagemaker-geospatial"
+      "amazonka-sagemaker-metrics"
+      "amazonka-sagemaker-runtime"
+      "amazonka-savingsplans"
+      "amazonka-scheduler"
+      "amazonka-schemas"
+      "amazonka-sdb"
+      "amazonka-secretsmanager"
+      "amazonka-securityhub"
+      "amazonka-securitylake"
+      "amazonka-serverlessrepo"
+      "amazonka-service-quotas"
+      "amazonka-servicecatalog"
+      "amazonka-servicecatalog-appregistry"
+      "amazonka-ses"
+      "amazonka-sesv2"
+      "amazonka-shield"
+      "amazonka-signer"
+      "amazonka-simspaceweaver"
+      "amazonka-sms"
+      "amazonka-sms-voice"
+      "amazonka-snow-device-management"
+      "amazonka-snowball"
+      "amazonka-sns"
+      "amazonka-sqs"
+      "amazonka-ssm"
+      "amazonka-ssm-contacts"
+      "amazonka-ssm-incidents"
+      "amazonka-ssm-sap"
+      "amazonka-sso"
+      "amazonka-sso-admin"
+      "amazonka-sso-oidc"
+      "amazonka-stepfunctions"
+      "amazonka-storagegateway"
+      "amazonka-sts"
+      "amazonka-support"
+      "amazonka-support-app"
+      "amazonka-swf"
+      "amazonka-synthetics"
+      #"amazonka-test"
+      "amazonka-textract"
+      "amazonka-timestream-query"
+      "amazonka-timestream-write"
+      "amazonka-transcribe"
+      "amazonka-transfer"
+      "amazonka-translate"
+      "amazonka-voice-id"
+      "amazonka-waf"
+      "amazonka-waf-regional"
+      "amazonka-wafv2"
+      "amazonka-wellarchitected"
+      "amazonka-wisdom"
+      "amazonka-workdocs"
+      "amazonka-worklink"
+      "amazonka-workmail"
+      "amazonka-workmailmessageflow"
+      "amazonka-workspaces"
+      "amazonka-workspaces-web"
+      "amazonka-xray"
+    ];
     amazonkaServiceOverrides = (
       lib.genAttrs amazonkaServices (
         name:

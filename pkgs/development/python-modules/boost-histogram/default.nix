@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.5.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-7E4y3P3RzVmIHb5mEoEYWZSwWnmL3LbGqYjGbnszM98=";
+    hash = "sha256-fWbvv9MiBZZiTZLu78tMR5Cx0/7xSuVIya3dkuahPE4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the C++14 Boost::Histogram library";
     homepage = "https://github.com/scikit-hep/boost-histogram";
-    changelog = "https://github.com/scikit-hep/boost-histogram/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/boost-histogram/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

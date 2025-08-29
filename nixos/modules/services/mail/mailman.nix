@@ -437,9 +437,9 @@ in
             for more info.
           '';
         }
-        (requirePostfixHash [ "config" "relay_domains" ] "postfix_domains")
-        (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
-        (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "relay_domains" ] "postfix_domains")
+        (requirePostfixHash [ "settings" "main" "transport_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "local_recipient_maps" ] "postfix_lmtp")
       ]);
 
     users.users.mailman = {

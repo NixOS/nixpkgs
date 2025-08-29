@@ -47,7 +47,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   pypaBuildFlags = [
-    "--config=cmake.define.USE_SYSTEM_LIBSOXR=ON"
+    "--config-setting=cmake.define.USE_SYSTEM_LIBSOXR=ON"
   ];
 
   build-system = [

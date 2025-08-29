@@ -115,7 +115,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start Chromium when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
         };
 
         disableJavascript = mkOption {
@@ -172,7 +172,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = "Automatically start LibreOffice when Gotenberg starts. If false, Chromium will start on the first conversion request that uses it.";
+          description = "Automatically start LibreOffice when Gotenberg starts. If false, LibreOffice will start on the first conversion request that uses it.";
         };
 
         disableRoutes = mkOption {
@@ -303,6 +303,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
+        # NOTE: disable to debug chromium crashes or otherwise no coredump is created and forbidden syscalls are not being logged
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs args}";
 
@@ -340,6 +341,8 @@ in
           "@sandbox"
           "@system-service"
           "@chown"
+          "@pkey" # required by chromium or it crashes
+          "mincore"
         ];
         SystemCallArchitectures = "native";
 

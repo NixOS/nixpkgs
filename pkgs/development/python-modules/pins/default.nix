@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.8.7";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
+    hash = "sha256-1NoJ2PA0ov9ZOWaZdlajV23UqTelRzfW7jESMsfOxkg=";
   };
 
   build-system = [
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to publishes data, models and other Python objects";
     homepage = "https://github.com/rstudio/pins-python";
-    changelog = "https://github.com/rstudio/pins-python/releases/tag/v${version}";
+    changelog = "https://github.com/rstudio/pins-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
