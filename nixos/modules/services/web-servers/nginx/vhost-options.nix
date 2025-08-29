@@ -320,6 +320,28 @@ with lib;
       '';
     };
 
+    plainRedirectExtraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        These lines go to the end of the vhost that added when `forceSSL`
+        is enabled verbatim. This is the vhost that redirects all plain HTTP
+        traffic to HTTPS. For example, this option can be used to configure
+        configure logging for individual sites like so:
+        ```nix
+        forceSSL = true;
+        extraConfig = '''
+          error_log /var/log/nginx/example.com_error.log;
+          access_log /var/log/nginx/example.com_access.log;
+        ''';
+        plainRedirectExtraConfig = '''
+          error_log /var/log/nginx/example.com_error.log;
+          access_log /var/log/nginx/example.com_access.log;
+        ''';
+        ```
+      '';
+    };
+
     globalRedirect = mkOption {
       type = types.nullOr types.str;
       default = null;
