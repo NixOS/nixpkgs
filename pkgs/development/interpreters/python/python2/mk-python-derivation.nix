@@ -4,6 +4,8 @@
   lib,
   config,
   python,
+  # Allow passing in a custom stdenv to buildPython*.override
+  stdenv,
   wrapPython,
   unzip,
   ensureNewerSourcesForZipFilesHook,
@@ -101,8 +103,6 @@
 }@attrs:
 
 let
-  inherit (python) stdenv;
-
   withDistOutput = lib.elem format [
     "pyproject"
     "setuptools"
