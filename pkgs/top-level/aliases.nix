@@ -53,7 +53,6 @@ let
       akonadi-search
       akonadiconsole
       akregator
-      alkimia
       alligator
       analitza
       angelfish
@@ -267,7 +266,6 @@ let
       messagelib
       milou
       minuet
-      nota
       okular
       oxygen
       oxygen-sounds
@@ -355,8 +353,6 @@ let
       ''
     );
 
-  plasma5Throws = lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages;
-
   # Make sure that we are not shadowing something from all-packages.nix.
   checkInPkgs =
     n: alias:
@@ -364,6 +360,8 @@ let
 
   mapAliases =
     aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
+
+  plasma5Throws = mapAliases (lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages);
 in
 
 mapAliases {
