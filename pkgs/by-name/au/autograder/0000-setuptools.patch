@@ -1,0 +1,15 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 89d2d21..131af0a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -12,3 +12,10 @@ dependencies = [
+     "tomlkit==0.11.1",
+     "urllib3==1.26.11",
+ ]
++
++[project.scripts]
++grade = "grade:main"
++
++[tool.setuptools]
++py-modules = ["grade"]
++packages = ["actions"]
