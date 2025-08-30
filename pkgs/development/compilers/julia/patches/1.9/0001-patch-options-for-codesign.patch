@@ -1,0 +1,22 @@
+From e6fd20b34a4674f851302424e4ca90e6edf11d67 Mon Sep 17 00:00:00 2001
+From: MilesCranmer <miles.cranmer@gmail.com>
+Date: Sun, 9 Jun 2024 23:57:23 +0100
+Subject: [PATCH] patch options for codesign
+
+---
+ contrib/codesign.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/contrib/codesign.sh b/contrib/codesign.sh
+index 03866c4bb1..4d3e5a9ccc 100755
+--- a/contrib/codesign.sh
++++ b/contrib/codesign.sh
+@@ -34,5 +34,5 @@ fi
+ echo "Codesigning with identity ${MACOS_CODESIGN_IDENTITY}"
+ for f in ${MACHO_FILES}; do
+     echo "Codesigning ${f}..."
+-    codesign -s "${MACOS_CODESIGN_IDENTITY}" --option=runtime ${ENTITLEMENTS} -vvv --timestamp --deep --force "${f}"
++    codesign -s "${MACOS_CODESIGN_IDENTITY}" ${ENTITLEMENTS} --force "${f}"
+ done
+--
+2.39.0
