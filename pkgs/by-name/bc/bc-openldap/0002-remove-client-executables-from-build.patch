@@ -1,0 +1,14 @@
+diff --git a/clients/tools/Makefile.in b/clients/tools/Makefile.in
+index 1fecb6156..9956da4af 100644
+--- a/clients/tools/Makefile.in
++++ b/clients/tools/Makefile.in
+@@ -31,9 +31,6 @@ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS) $(CLIENT_LIBS)
+ XSRCS	= ldsversion.c ldmversion.c lddversion.c ldrversion.c ldpversion.c \
+ 	ldwversion.c ldvversion.c ldcversion.c ldeversion.c lduversion.c
+ 
+-PROGRAMS = ldapsearch ldapmodify ldapdelete ldapmodrdn \
+-	ldappasswd ldapwhoami ldapvc ldapcompare ldapexop ldapurl
+-
+ 
+ ldapsearch:	ldsversion.o
+ 	$(LTLINK) -o $@ ldapsearch.o common.o ldsversion.o $(LIBS)
