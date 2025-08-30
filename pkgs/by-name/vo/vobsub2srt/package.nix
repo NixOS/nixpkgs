@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   libtiff,
+  makeWrapper,
   pkg-config,
   tesseract3,
 }:
@@ -24,9 +25,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
   buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract3 ];
+  postInstall = ''
+    wrapProgram $out/bin/vobsub2srt --add-flags "--tesseract-data ${tesseract3}/share/tessdata"
+  '';
 
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";
