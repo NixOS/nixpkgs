@@ -54,15 +54,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.02.00.85";
+  version = "02.02.01.60";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    tag = "v${version}";
-    hash = "sha256-JzZELCiP3Mmp3TWELG7lw3YioHgnsKCVxYaj9FAZobc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ttv0LwJ0GnDhmxofP7c3CJMawad8AhAToZFOvoK3Zow=";
   };
 
   nativeBuildInputs = [
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     opencv
   ]
   ++ lib.optionals withSystemd [ systemd ]
-  ++ checkInputs;
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -185,7 +185,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       zhaofengli
@@ -194,4 +194,4 @@ stdenv.mkDerivation rec {
     mainProgram = "bambu-studio";
     platforms = lib.platforms.linux;
   };
-}
+})
