@@ -53,7 +53,6 @@ let
       akonadi-search
       akonadiconsole
       akregator
-      alkimia
       alligator
       analitza
       angelfish
@@ -267,7 +266,6 @@ let
       messagelib
       milou
       minuet
-      nota
       okular
       oxygen
       oxygen-sounds
