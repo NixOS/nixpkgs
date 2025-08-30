@@ -625,9 +625,9 @@
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
   ],
-  ],
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
+  ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
   ],
