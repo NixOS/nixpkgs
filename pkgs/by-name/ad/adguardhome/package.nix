@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "adguardhome";
-  version = "0.107.64";
+  version = "0.107.65";
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "AdGuardHome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UmgWRei3qVkPLtusnXDGeaobxMy1a3Nlb1kBqkcmpxA=";
+    hash = "sha256-OOW77CJRR5vi5jHFOCyF/OyCXaQdTgEc8xZKPcF9vQE=";
   };
 
-  vendorHash = "sha256-EKQGbDLaEZGthdBr+Fj5pZ2TBCQ1Df+L9uuI0y/k7XU=";
+  vendorHash = "sha256-spBMVSZhiM0R5tf8dhZD+N4ucFZ9Wno9Y+BhZMdzQRM=";
 
   dashboard = buildNpmPackage {
     inherit (finalAttrs) src;
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    schema_version = 29;
+    schema_version = 30;
     tests.adguardhome = nixosTests.adguardhome;
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
