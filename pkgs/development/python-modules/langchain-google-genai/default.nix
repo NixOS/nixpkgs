@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-google-genai";
-  version = "2.1.9";
+  version = "2.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${version}";
-    hash = "sha256-9jXiX4WDx5YY39MytuzAWGuDzLkGmtq95ShAIW3zH0U=";
+    hash = "sha256-kqII8RG1ep+n5CqKLY1v7Mc+zJh6kl1rAjMmkomfeqM=";
   };
 
   sourceRoot = "${src.name}/libs/genai";
