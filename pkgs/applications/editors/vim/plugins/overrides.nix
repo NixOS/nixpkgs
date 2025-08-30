@@ -46,7 +46,6 @@
   sshfs,
   stylish-haskell,
   tabnine,
-  taskwarrior3,
   tmux,
   tup,
   typescript,
@@ -3331,11 +3330,6 @@ in
       maintainers = with lib.maintainers; [ fredeb ];
     };
   });
-  taskwarrior3 = buildVimPlugin {
-    inherit (taskwarrior3) version pname;
-    src = "${taskwarrior3.src}/scripts/vim";
-  };
-
   telekasten-nvim = super.telekasten-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
