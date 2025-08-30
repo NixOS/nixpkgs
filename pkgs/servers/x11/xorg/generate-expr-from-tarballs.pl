@@ -345,6 +345,7 @@ print OUT <<EOF;
   font-sun-misc,
   font-util,
   font-winitzki-cyrillic,
+  font-xfree86-type1,
   gccmakedep,
   ico,
   imake,
@@ -519,6 +520,7 @@ self: with self; {
   fontsunmisc = font-sun-misc;
   fontutil = font-util;
   fontwinitzkicyrillic = font-winitzki-cyrillic;
+  fontxfree86type1 = font-xfree86-type1;
   libAppleWM = libapplewm;
   libFS = libfs;
   libICE = libice;
