@@ -3,6 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  kustomize,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
@@ -39,6 +41,14 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/kustomize completion fish) \
       --zsh <($out/bin/kustomize completion zsh)
   '';
+
+  passthru.tests = {
+    versionCheck = testers.testVersion {
+      command = "${finalAttrs.meta.mainProgram} version";
+      version = "v${finalAttrs.version}";
+      package = kustomize;
+    };
+  };
 
   meta = {
     description = "Customization of kubernetes YAML configurations";
