@@ -1186,6 +1186,7 @@ in
   };
   phylactery = runTest ./web-apps/phylactery.nix;
   pict-rs = runTest ./pict-rs.nix;
+  pihole-ftl = import ./pihole-ftl { inherit runTest; };
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
   plantuml-server = runTest ./plantuml-server.nix;
