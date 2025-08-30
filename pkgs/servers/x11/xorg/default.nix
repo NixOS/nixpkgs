@@ -12,6 +12,7 @@
   font-bh-type1,
   font-encodings,
   font-mutt-misc,
+  font-schumacher-misc,
   font-util,
   gccmakedep,
   ico,
@@ -141,6 +142,7 @@ self: with self; {
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
+  fontschumachermisc = font-schumacher-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
@@ -1124,47 +1126,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz";
         sha256 = "1vcgc6lbc53fqaz8alhxcb6f231hhvj9hn2nkzg1mclbymhy7avr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontschumachermisc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-schumacher-misc";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-schumacher-misc-1.1.3.tar.xz";
-        sha256 = "0w40lr214n39al449fnm4k1bpyj3fjrhz2yxqd6a6m8yvc69z14b";
       };
       hardeningDisable = [
         "bindnow"
