@@ -377,7 +377,7 @@ let
 
         hashedPasswordFile = mkOption {
           type = with types; nullOr str;
-          default = cfg.users.${name}.passwordFile;
+          default = config.passwordFile;
           defaultText = literalExpression "null";
           description = ''
             The full path to a file that contains the hash of the user's
