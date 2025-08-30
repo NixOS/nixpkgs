@@ -21805,6 +21805,13 @@
     github = "s0me1newithhand7s";
     githubId = 117505144;
   };
+  s0ssh = {
+    name = "s0ssh";
+    email = "me@s0s.sh";
+    github = "s0ssh";
+    githubId = 168315776;
+    keys = [ { fingerprint = "1D34 4976 77AD 462C CA9F  D5F1 FF16 29B1 3E89 9C1A"; } ];
+  };
   s1341 = {
     email = "s1341@shmarya.net";
     matrix = "@s1341:matrix.org";
