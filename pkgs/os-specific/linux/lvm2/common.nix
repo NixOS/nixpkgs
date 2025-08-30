@@ -8,6 +8,8 @@
   coreutils,
   libuuid,
   libaio,
+  bash,
+  bashNonInteractive,
   replaceVars,
   enableCmdlib ? false,
   enableDmeventd ? false,
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString enableVDO "-with-vdo";
   inherit version;
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     urls = [
       "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
@@ -47,9 +51,12 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
   buildInputs = [
     libaio
+    bash
   ]
   ++ lib.optionals udevSupport [
     udev
@@ -70,12 +77,20 @@ stdenv.mkDerivation rec {
     "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
     "--with-default-profile-subdir=profile.d"
   ]
-  ++ lib.optionals (!enableCmdlib && !onlyLib) [
-    "--bindir=${placeholder "bin"}/bin"
-    "--sbindir=${placeholder "bin"}/bin"
-    "--libdir=${placeholder "lib"}/lib"
-    "--with-libexecdir=${placeholder "lib"}/libexec"
-  ]
+  ++ lib.optionals (!onlyLib) (
+    if enableCmdlib then
+      [
+        "--bindir=${placeholder "out"}/bin"
+        "--sbindir=${placeholder "out"}/bin"
+      ]
+    else
+      [
+        "--bindir=${placeholder "bin"}/bin"
+        "--sbindir=${placeholder "bin"}/bin"
+        "--libdir=${placeholder "lib"}/lib"
+        "--with-libexecdir=${placeholder "lib"}/libexec"
+      ]
+  )
   ++ lib.optional enableCmdlib "--enable-cmdlib"
   ++ lib.optionals enableDmeventd [
     "--enable-dmeventd"
@@ -92,6 +107,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableVDO [
     "--enable-vdo"
+    "--with-vdo-format=${vdo}/bin/vdoformat"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
@@ -173,15 +189,35 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!onlyLib) [
     "dev"
     "man"
+    "scripts"
   ]
   ++ lib.optionals (!onlyLib && !enableCmdlib) [
     "bin"
     "lib"
   ];
 
-  postInstall = lib.optionalString (enableCmdlib != true) ''
-    moveToOutput lib/libdevmapper.so $lib
-  '';
+  postInstall =
+    lib.optionalString (!onlyLib) ''
+      moveToOutput bin/fsadm $scripts
+      moveToOutput bin/blkdeactivate $scripts
+      moveToOutput bin/lvmdump $scripts
+      moveToOutput bin/lvm_import_vdo $scripts
+      moveToOutput libexec/lvresize_fs_helper $scripts/lib
+    ''
+    + lib.optionalString (!enableCmdlib) ''
+      moveToOutput lib/libdevmapper.so $lib
+    '';
+
+  outputChecks = lib.optionalAttrs (!stdenv.hostPlatform.isStatic && !enableVDO) {
+    out.disallowedRequisites = [
+      bash
+      bashNonInteractive
+    ];
+    lib.disallowedRequisites = [
+      bash
+      bashNonInteractive
+    ];
+  };
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;

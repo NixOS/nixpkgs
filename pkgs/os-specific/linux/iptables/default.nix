@@ -12,6 +12,8 @@
   libnfnetlink,
   libnftnl,
   libpcap,
+  bash,
+  bashNonInteractive,
   nftablesCompat ? true,
   gitUpdater,
 }:
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
   version = "1.8.11";
   pname = "iptables";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
     sha256 = "2HMD1V74ySvK1N0/l4sm0nIBNkKwKUJXdfW60QCf57I=";
@@ -27,9 +31,12 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "lib"
     "dev"
     "man"
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,6 +52,7 @@ stdenv.mkDerivation rec {
     libnfnetlink
     libnftnl
     libpcap
+    bash
   ];
 
   configureFlags = [
@@ -67,6 +75,11 @@ stdenv.mkDerivation rec {
     ln -sv xtables-nft-multi $out/bin/ip6tables-restore
     ln -sv xtables-nft-multi $out/bin/ip6tables-save
   '';
+
+  outputChecks.lib.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
 
   passthru = {
     updateScript = gitUpdater {

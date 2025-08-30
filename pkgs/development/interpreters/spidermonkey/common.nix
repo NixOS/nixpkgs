@@ -8,13 +8,14 @@
   fetchpatch,
 
   # build time
+  apple-sdk_14,
+  apple-sdk_15,
   buildPackages,
   cargo,
   m4,
   perl,
   pkg-config,
   python3,
-  python311,
   rust-cbindgen,
   rustPlatform,
   rustc,
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches =
-    lib.optionals (lib.versionAtLeast version "102" && lib.versionOlder version "128") [
+    lib.optionals (lib.versionOlder version "128") [
       # use pkg-config at all systems
       ./always-check-for-pkg-config.patch
       ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
@@ -56,16 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       ./always-check-for-pkg-config-128.patch
       ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
     ]
-    ++ lib.optionals (lib.versionAtLeast version "91" && stdenv.hostPlatform.system == "i686-linux") [
+    ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
       # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
       ./fix-float-i686.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "91" && lib.versionOlder version "102") [
-      # Fix 91 compatibility with python311
-      (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/mozjs91/raw/e3729167646775e60a3d8c602c0412e04f206baf/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
-        hash = "sha256-WgDIBidB9XNQ/+HacK7jxWnjOF8PEUt5eB0+Aubtl48=";
-      })
     ]
     ++ lib.optionals (lib.versionAtLeast version "140") [
       # mozjs-140.pc does not contain -DXP_UNIX on Linux
@@ -74,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
         hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
       })
+      # SDK 15.5 is not available in nixpkgs yet
+      ./140-relax-apple-sdk.patch
     ];
 
   nativeBuildInputs = [
@@ -81,9 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     m4
     perl
     pkg-config
-    # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
-    # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
-    (if lib.versionOlder version "115" then python311 else python3)
+    python3
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
@@ -105,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
+    (if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14)
   ];
 
   depsBuildBuild = [
@@ -125,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-readline"
     "--enable-release"
     "--enable-shared-js"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "91") [
     "--disable-debug"
   ]
   ++ lib.optionals (lib.versionAtLeast version "140") [
@@ -151,16 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postPatch = lib.optionalString (lib.versionOlder version "102") ''
-    # This patch is a manually applied fix of
-    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
-    # Once that bug is fixed, this can be removed.
-    # This is needed in, for example, `zeroad`.
-    substituteInPlace js/public/StructuredClone.h \
-         --replace "class SharedArrayRawBufferRefs {" \
-                   "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
-  '';
-
   preConfigure =
     lib.optionalString (lib.versionAtLeast version "128") ''
       export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
@@ -168,24 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       export LIBXUL_DIST=$out
       export PYTHON="${buildPackages.python3.interpreter}"
-    ''
-    + lib.optionalString (lib.versionAtLeast version "91") ''
       export M4=m4
       export AWK=awk
       export AS=$CC
       export AC_MACRODIR=$PWD/build/autoconf/
-
-    ''
-    + lib.optionalString (lib.versionAtLeast version "91" && lib.versionOlder version "115") ''
-      pushd js/src
-      sh ../../build/autoconf/autoconf.sh --localdir=$PWD configure.in > configure
-      chmod +x configure
-      popd
-    ''
-    + lib.optionalString (lib.versionAtLeast version "115") ''
       patchShebangs build/cargo-linker
-    ''
-    + ''
       # We can't build in js/src/, so create a build dir
       mkdir obj
       cd obj/
@@ -217,7 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
       catap
       bobby285271
     ];
-    broken = stdenv.hostPlatform.isDarwin; # 91 is broken, >=115 requires SDK 13.3 (see #242666).
+    # ERROR: Failed to find an adequate linker
+    broken = lib.versionOlder version "128" && stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
   };
 })

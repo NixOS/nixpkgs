@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.3";
+  version = "1.26.5";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-T94Zw8FEg0+MsFwso/FLOlDTlbrSA9F/mKbnDBZy8ro=";
+    hash = "sha256-Y9Rqjv+ooiXiWkZLp1OKzoU/4NwecDZrJ8IIE15UAc4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       cargoRoot
       ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-AgxvFMq37a8NuOHY1QIUGOAo8aSBt4HVeSCHNUYa1tQ=";
+    hash = "sha256-gU+SBvxwmrGiyeKXF3SA2ohIHNTS4ZBC+elB0u1QKRE=";
   };
 
   patches = [
