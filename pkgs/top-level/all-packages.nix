@@ -1567,8 +1567,6 @@ with pkgs;
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
-  arpack-mpi = arpack.override { useMpi = true; };
-
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
   authelia = callPackage ../servers/authelia {
