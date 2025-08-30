@@ -226,17 +226,10 @@ in
       Match host * exec "${pkgs.runtimeShell} -c '${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye >/dev/null 2>&1'"
     '';
 
-    environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
-      if [ -z "$SSH_AUTH_SOCK" ]; then
-        export SSH_AUTH_SOCK=$(${cfg.package}/bin/gpgconf --list-dirs agent-ssh-socket)
-      fi
-    '';
-
-    assertions = [
-      {
-        assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
-        message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
-      }
-    ];
+    environment.variables.SSH_AUTH_SOCK = lib.mkIf cfg.agent.enableSSHSupport (
+      builtins.addErrorContext "while setting SSH_AUTH_SOCK, did you enable another agent already?" (
+        lib.mkDefault "$(${cfg.package}/bin/gpgconf --list-dirs agent-ssh-socket)"
+      )
+    );
   };
 }
