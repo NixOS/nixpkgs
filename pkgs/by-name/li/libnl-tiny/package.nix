@@ -3,7 +3,6 @@
   lib,
   fetchgit,
   cmake,
-  pkg-config,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +17,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkg-config
   ];
 
   preConfigure = ''
