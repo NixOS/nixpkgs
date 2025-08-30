@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cppcheck,
   doxygen,
   graphviz,
   pkg-config,
@@ -32,23 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    cppcheck
     doxygen
     graphviz
     pkg-config
+    python3
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
   ];
-
-  nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
-  # Extract the version by matching the tag's prefix.
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=${versionPrefix}_([\\d\\.]+)" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CMake modules to build Gazebo projects";
