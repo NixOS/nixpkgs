@@ -1,19 +1,17 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchPypi,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "bashplotlib";
-  version = "2021-03-31";
+  version = "0.6.5";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "glamp";
-    repo = "bashplotlib";
-    rev = "db4065cfe65c0bf7c530e0e8b9328daf9593ad74";
-    sha256 = "sha256-0S6mgy6k7CcqsDR1kE5xcXGidF1t061e+M+ZuP2Gk3c=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-sbWb5J1iVKW9gIkZ4KI6dacDoC5+hEeO3adlcU4L+u4=";
   };
 
   build-system = with python3Packages; [
@@ -23,10 +21,10 @@ python3Packages.buildPythonApplication {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
-    maintainers = with maintainers; [ dtzWill ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ dtzWill ];
+    license = lib.licenses.mit;
   };
 }
