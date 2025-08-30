@@ -1,0 +1,32 @@
+From f4e07c57e29bed05acc89cb028a693317b5e1b31 Mon Sep 17 00:00:00 2001
+From: Val Packett <val@invisiblethingslab.com>
+Date: Thu, 28 Aug 2025 03:46:26 -0300
+Subject: [PATCH] vm_tools: sommelier: avoid broken dmabuf "fixup" that depends
+ on CrOS kernel
+
+Reported as https://issuetracker.google.com/u/2/issues/441537635
+---
+ vm_tools/sommelier/compositor/sommelier-linux-dmabuf.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/vm_tools/sommelier/compositor/sommelier-linux-dmabuf.cc b/vm_tools/sommelier/compositor/sommelier-linux-dmabuf.cc
+index 964c71643ec6..26bd06912403 100644
+--- a/compositor/sommelier-linux-dmabuf.cc
++++ b/compositor/sommelier-linux-dmabuf.cc
+@@ -176,11 +176,13 @@ bool sl_linux_dmabuf_fixup_plane0_params(gbm_device* gbm,
+     // Correct stride if we are able to get proper resource info.
+     if (!ret) {
+       is_virtgpu_buffer = true;
++#ifdef __THIS_SILENTLY_BREAKS_EVERYTHIHNG_ON_UPSTREAM_KERNELS__
+       if (info_arg.stride) {
+         *out_stride = info_arg.stride;
+         *out_modifier_hi = info_arg.format_modifier >> 32;
+         *out_modifier_lo = info_arg.format_modifier & 0xFFFFFFFF;
+       }
++#endif
+     }
+ 
+     // Always close the handle we imported.
+-- 
+2.49.0
+
