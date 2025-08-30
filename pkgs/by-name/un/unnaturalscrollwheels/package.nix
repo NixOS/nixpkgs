@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  _7zz,
+  undmg-hdiutil,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unnaturalscrollwheels";
@@ -12,10 +12,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://github.com/ther0n/UnnaturalScrollWheels/releases/download/${finalAttrs.version}/UnnaturalScrollWheels-${finalAttrs.version}.dmg";
     sha256 = "1c6vlf0kc7diz0hb1fmrqaj7kzzfvr65zcchz6xv5cxf0md4n70r";
   };
-  sourceRoot = ".";
 
-  # APFS format is unsupported by undmg
-  nativeBuildInputs = [ _7zz ];
+  # dmg is APFS formatted
+  nativeBuildInputs = [ undmg-hdiutil ];
 
   installPhase = ''
     runHook preInstall

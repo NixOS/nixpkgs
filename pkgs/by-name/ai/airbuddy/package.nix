@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  _7zz,
+  undmg-hdiutil,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -20,16 +20,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  # AirBuddy.dmg is APFS formatted, unpack with 7zz
-  nativeBuildInputs = [ _7zz ];
-
-  sourceRoot = "AirBuddy.app";
+  # dmg is APFS formatted
+  nativeBuildInputs = [ undmg-hdiutil ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/AirBuddy.app
-    cp -R . $out/Applications/AirBuddy.app
+    mkdir -p $out/Applications
+    cp -a AirBuddy.app $out/Applications
 
     runHook postInstall
   '';
