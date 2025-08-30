@@ -42,6 +42,7 @@ with pkgs.lib;
         config,
         pkgs,
         lib,
+        utils,
         ...
       }:
       let
@@ -51,24 +52,35 @@ with pkgs.lib;
         virtualisation.rootDevice = "/dev/vda";
         virtualisation.useDefaultFilesystems = false;
 
-        boot.initrd.availableKernelModules = [ "btrfs" ];
-        boot.supportedFilesystems = [ "btrfs" ];
+        boot.initrd.supportedFilesystems = [ "btrfs" ];
 
-        boot.initrd.postDeviceCommands = ''
-          FSTYPE=$(blkid -o value -s TYPE ${disk} || true)
-          if test -z "$FSTYPE"; then
-            modprobe btrfs
-            ${pkgs.btrfs-progs}/bin/mkfs.btrfs ${disk}
+        boot.initrd.systemd.enable = true;
+        boot.initrd.systemd.services.format = {
+          wantedBy = [ "initrd.target" ];
+          requires = [ "${utils.escapeSystemdPath disk}.device" ];
+          after = [ "${utils.escapeSystemdPath disk}.device" ];
+          before = [ "sysroot.mount" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            FSTYPE=$(blkid -o value -s TYPE ${disk} || true)
+            if test -z "$FSTYPE"; then
+              modprobe btrfs
+              mkfs.btrfs ${disk}
 
-            mkdir /nixos
-            mount -t btrfs ${disk} /nixos
+              mkdir /nixos
+              mount -t btrfs ${disk} /nixos
 
-            ${pkgs.btrfs-progs}/bin/btrfs subvolume create /nixos/root
-            ${pkgs.btrfs-progs}/bin/btrfs subvolume create /nixos/home
+              btrfs subvolume create /nixos/root
+              btrfs subvolume create /nixos/home
 
-            umount /nixos
-          fi
-        '';
+              umount /nixos
+            fi
+          '';
+        };
 
         virtualisation.fileSystems = {
           "/" = {

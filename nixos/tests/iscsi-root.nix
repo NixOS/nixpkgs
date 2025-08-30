@@ -141,6 +141,7 @@ in
           };
         };
 
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;

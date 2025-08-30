@@ -12,7 +12,7 @@ let
     mkdir $out
 
     ${
-      if config.boot.initrd.systemd.enable then
+      if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
         ''
           cp ${config.system.build.bootStage2} $out/prepare-root
           substituteInPlace $out/prepare-root --subst-var-by systemConfig $out

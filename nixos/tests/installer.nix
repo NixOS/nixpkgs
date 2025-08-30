@@ -2,7 +2,6 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1 ? false,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -41,8 +40,6 @@ let
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
-
-        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
@@ -689,11 +686,7 @@ let
                 ./common/auto-format-root-device.nix
               ];
 
-              # In systemdStage1, also automatically format the device backing the
-              # root filesystem.
-              virtualisation.fileSystems."/".autoFormat = systemdStage1;
-
-              boot.initrd.systemd.enable = systemdStage1;
+              virtualisation.fileSystems."/".autoFormat = true;
 
               # Use a small /dev/vdb as the root disk for the
               # installer. This ensures the target disk (/dev/vda) is
@@ -717,6 +710,7 @@ let
                   brotli
                   brotli.dev
                   brotli.lib
+                  chroot-realpath
                   desktop-file-utils
                   docbook5
                   docbook_xsl_ns
@@ -773,8 +767,7 @@ let
                   pkgs.mypy
                   config.boot.bootspec.package
                 ]
-                ++ optionals clevisTest [ pkgs.klibc ]
-                ++ optional systemdStage1 pkgs.chroot-realpath;
+                ++ optionals clevisTest [ pkgs.klibc ];
 
               nix.settings = {
                 substituters = mkForce [ ];
@@ -1020,16 +1013,7 @@ let
         boot.initrd.clevis.devices."crypt-root".secretFile = "/etc/nixos/clevis-secret.jwe";
       '';
       postBootCommands = optionalString fallback ''
-        ${
-          if systemdStage1 then
-            ''
-              target.wait_for_text("Please enter")
-            ''
-          else
-            ''
-              target.wait_for_text("Passphrase for")
-            ''
-        }
+        target.wait_for_text("Please enter")
         target.send_chars("password\n")
       '';
     };
@@ -1093,16 +1077,7 @@ let
             networking.hostId = "00000000";
           '';
         postBootCommands = optionalString fallback ''
-          ${
-            if systemdStage1 then
-              ''
-                target.wait_for_text("Enter key for rpool/root")
-              ''
-            else
-              ''
-                target.wait_for_text("Key load error")
-              ''
-          }
+          target.wait_for_text("Enter key for rpool/root")
           target.send_chars("password\n")
         '';
       };
@@ -1333,9 +1308,6 @@ in
           "mount LABEL=nixos /mnt",
       )
     '';
-    extraConfig = optionalString systemdStage1 ''
-      boot.initrd.services.lvm.enable = true;
-    '';
   };
 
   # Boot off an encrypted root partition with the default LUKS header format
@@ -1382,7 +1354,7 @@ in
         encrypted.enable = true;
         encrypted.blkDev = "/dev/vda3";
         encrypted.label = "crypt";
-        encrypted.keyFile = "/${if systemdStage1 then "sysroot" else "mnt-root"}/keyfile";
+        encrypted.keyFile = "/sysroot/keyfile";
       };
     '';
   };
@@ -1430,8 +1402,32 @@ in
     '';
     enableOCR = true;
     postBootCommands = ''
+      import time
       target.wait_for_text("Enter passphrase for")
-      target.send_chars("supersecret\n")
+      time.sleep(0.1)
+      target.send_chars("s")
+      time.sleep(0.1)
+      target.send_chars("u")
+      time.sleep(0.1)
+      target.send_chars("p")
+      time.sleep(0.1)
+      target.send_chars("e")
+      time.sleep(0.1)
+      target.send_chars("r")
+      time.sleep(0.1)
+      target.send_chars("s")
+      time.sleep(0.1)
+      target.send_chars("e")
+      time.sleep(0.1)
+      target.send_chars("c")
+      time.sleep(0.1)
+      target.send_chars("r")
+      time.sleep(0.1)
+      target.send_chars("e")
+      time.sleep(0.1)
+      target.send_chars("t")
+      time.sleep(0.1)
+      target.send_chars("\n")
     '';
   };
 
@@ -1724,8 +1720,7 @@ in
     parentDataset = true;
     fallback = true;
   };
-}
-// optionalAttrs systemdStage1 {
+
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
       installer.succeed(

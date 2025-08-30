@@ -963,6 +963,7 @@ stdenv.mkDerivation (finalAttrs: {
           }
         );
 
+        # TODO fix these
         # ... and here's all the individual tests.
         individualNixosTests = {
           inherit (nixosTests)

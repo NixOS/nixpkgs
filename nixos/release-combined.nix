@@ -167,6 +167,7 @@ rec {
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.initrd-network-ssh")
+        (onFullSupported "nixos.tests.systemd-initrd-networkd-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
