@@ -147,6 +147,13 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
+  _0xzer0x = {
+    name = "Youssef Fathy";
+    github = "0xzer0x";
+    githubId = 32334265;
+    email = "youssefessamasu@gmail.com";
+    keys = [ { fingerprint = "71C6 D036 2A29 9D24 B922  A32B 2193 3929 2935 0DDC"; } ];
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
