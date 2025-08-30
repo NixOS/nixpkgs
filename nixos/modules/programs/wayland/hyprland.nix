@@ -7,8 +7,6 @@
 
 let
   cfg = config.programs.hyprland;
-
-  wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
   options.programs.hyprland = {
@@ -28,7 +26,7 @@ in
       // {
         apply =
           p:
-          wayland-lib.genFinalPackage p {
+          lib.overridePossibleArgs p {
             enableXWayland = cfg.xwayland.enable;
           };
       };
