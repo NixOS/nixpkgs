@@ -17,9 +17,12 @@
   python3,
   re2,
   stdenv,
+  scipopt-scip,
   swig,
   unzip,
   zlib,
+
+  withScip ? true,
 }:
 
 let
@@ -87,9 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
     (lib.cmakeBool "USE_GLPK" true)
-    (lib.cmakeBool "USE_SCIP" false)
+    (lib.cmakeBool "USE_SCIP" withScip)
     (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
   ]
+  # scip code parts require setting this unfortunately…
+  ++ lib.optional withScip (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
   ];
@@ -127,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.setuptools
     python3.pkgs.wheel
     re2
+    scipopt-scip
     zlib
   ];
   propagatedBuildInputs = [
