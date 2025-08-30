@@ -2,6 +2,7 @@
   stdenv,
   lib,
   appstream,
+  blueprint-compiler,
   meson,
   ninja,
   vala,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     meson
     ninja
     pkg-config
