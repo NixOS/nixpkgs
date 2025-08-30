@@ -21,6 +21,7 @@
   grafana-opensearch-datasource = callPackage ./grafana-opensearch-datasource { };
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
+  grafana-sentry-datasource = callPackage ./grafana-sentry-datasource { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };
