@@ -61,6 +61,7 @@
   libGL,
   libXi,
   libX11,
+  libxkbcommon,
   libxml2,
 }:
 
@@ -106,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
+    })
+
+    # TODO(GNOME 49): drop on next bump
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/1132827ce94449e2812dc2339e282423217bbcc6.patch";
+      hash = "sha256-xXZqossCweCl+kwaqxbiOfe/JiOM8qgGzW+dDXg6v5c=";
     })
   ];
 
@@ -156,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
+    libxkbcommon
     libxml2
 
     # recording
@@ -185,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       src/data-to-c.py \
-      meson/generate-app-list.py
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
