@@ -7153,6 +7153,8 @@ self: super: with self; {
 
   iptools = callPackage ../development/python-modules/iptools { };
 
+  ipv8-rust-tunnels = callPackage ../development/python-modules/ipv8-rust-tunnels { };
+
   ipwhl = callPackage ../development/python-modules/ipwhl { };
 
   ipwhois = callPackage ../development/python-modules/ipwhois { };
@@ -13588,6 +13590,8 @@ self: super: with self; {
 
   pyosmium = callPackage ../development/python-modules/pyosmium { inherit (pkgs) lz4; };
 
+  pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
+
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
@@ -17788,6 +17792,8 @@ self: super: with self; {
     }
   );
 
+  syne-tune = callPackage ../development/python-modules/syne-tune { };
+
   synergy = callPackage ../development/python-modules/synergy { };
 
   synology-srm = callPackage ../development/python-modules/synology-srm { };
@@ -18529,6 +18535,7 @@ self: super: with self; {
         lib.filterAttrs (
           name: value:
           !(builtins.elem name [
+            "tree-sitter-go-template"
             "tree-sitter-sql"
             "tree-sitter-templ"
           ])

@@ -190,6 +190,7 @@ in
     checkInputs = with self; [
       lualine-nvim
       telescope-nvim
+      fzf-lua
     ];
   };
 
@@ -2902,7 +2903,6 @@ in
       (replaceVars ./patches/openscad.nvim/program_paths.patch {
         htop = lib.getExe htop;
         openscad = lib.getExe openscad;
-        zathura = lib.getExe zathura;
       })
     ];
   };
