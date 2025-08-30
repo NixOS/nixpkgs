@@ -12,31 +12,32 @@
   pytestCheckHook,
   python-dotenv,
   pytest-asyncio,
-  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "supabase";
-  version = "2.16.0";
+  version = "2.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     rev = "v${version}";
-    hash = "sha256-n+LVC4R9m/BKID9wLEMw/y/2I589TUXTygSIPfTZwB8=";
+    hash = "sha256-psfDs5BCtUjyPsfLwksNvzLmUKmYDvmxKIDPQE/NmQU=";
   };
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  # FIXME remove for supabase >= 2.18.0
+  pythonRelaxDeps = true;
+
+  dependencies = [
     postgrest-py
     realtime
     gotrue
     httpx
     storage3
     supafunc
-    pydantic
   ];
 
   nativeBuildInputs = [
@@ -46,8 +47,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "supabase" ];
-
-  doCheck = true;
 
   meta = {
     homepage = "https://github.com/supabase/supabase-py";
