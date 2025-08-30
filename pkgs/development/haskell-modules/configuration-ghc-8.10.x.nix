@@ -64,6 +64,36 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  # os-string >= 2 is incompatible with bytestring < 0.11
+  os-string = doDistribute self.os-string_1_0_0;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
+  # Becomes a core package in GHC >= 9.0
+  ghc-bignum = lib.pipe self.ghc-bignum_1_0 [
+    # ghc-bignum is not buildable if none of the three backends
+    # is explicitly enabled. We enable Native for now as it doesn't
+    # depend on anything else as opposed to GMP and FFI.
+    # Apply patch which fixes a compilation failure we encountered.
+    # Will need to be kept until we can drop ghc-bignum entirely,
+    # i. e. if GHC 8.10.* and 8.8.* have been removed.
+    (enableCabalFlag "Native")
+    # Fixes compilation failure
+    (appendPatches [
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
+        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
+        relative = "libraries/ghc-bignum";
+      })
+    ])
+    doDistribute
+  ];
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
@@ -76,19 +106,18 @@ self: super: {
   aeson = dontCheck super.aeson;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
-  # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
-  hashable =
+  # hashable >= 1.5 only supports GHC >= 9.6 / base >= 4.18
+  hashable = self.hashable_1_4_7_0;
+  hashable_1_4_7_0 =
+    # extra deps for GHC < 9.4
     addBuildDepends
       [
         self.data-array-byte
         self.base-orphans
       ]
-      (
-        super.hashable.override {
-          os-string = null;
-        }
-      );
+      # For GHC < 9.2, os-string is not required
+      (super.hashable_1_4_7_0.override { os-string = null; });
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
   # Needs base-orphans for GHC < 9.8 / base < 4.19
@@ -134,7 +163,7 @@ self: super: {
   hlint = self.hlint_3_4_1;
 
   # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+  hpack = dontCheck super.hpack;
 
   mime-string = disableOptimization super.mime-string;
 
