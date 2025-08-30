@@ -17,6 +17,7 @@
   gtk4,
   libadwaita,
   libcamera,
+  lcms2,
   libseccomp,
   pipewire,
   gnome,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libcamera # for the gstreamer plugin
+    lcms2
     libseccomp
     pipewire # for device provider
   ];
