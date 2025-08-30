@@ -15,6 +15,7 @@
   font-schumacher-misc,
   font-screen-cyrillic,
   font-sony-misc,
+  font-sun-misc,
   font-util,
   gccmakedep,
   ico,
@@ -147,6 +148,7 @@ self: with self; {
   fontschumachermisc = font-schumacher-misc;
   fontscreencyrillic = font-screen-cyrillic;
   fontsonymisc = font-sony-misc;
+  fontsunmisc = font-sun-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
@@ -1140,46 +1142,6 @@ self: with self; {
         pkg-config
         bdftopcf
         fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontsunmisc = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-sun-misc";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-sun-misc-1.0.4.tar.xz";
-        sha256 = "17yvhk1hlajm3q57r09q8830zz7cnckrg8hgzajgyyljdl8xv16x";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
         mkfontscale
       ];
       buildInputs = [ fontutil ];
