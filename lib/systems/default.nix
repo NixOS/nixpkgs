@@ -109,7 +109,8 @@ let
               )
               # if platform has gcc.arch defined but final doesn't, don't assume it can be executed
               || (platform ? gcc.arch -> !(final ? gcc.arch))
-          );
+          )
+          && (final.isDarwin -> (final.darwinPlatform == platform.darwinPlatform));
 
         isCompatible =
           _:
