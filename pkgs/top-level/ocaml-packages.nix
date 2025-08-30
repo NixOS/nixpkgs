@@ -145,6 +145,8 @@ let
 
         brr = callPackage ../development/ocaml-modules/brr { };
 
+        bstr = callPackage ../development/ocaml-modules/bstr { };
+
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
         bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
