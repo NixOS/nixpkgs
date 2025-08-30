@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
