@@ -22,7 +22,7 @@ lib.makeScope pkgs.newScope (
 
     lxrandr = throw "'lxrandr' has been moved to top-level."; # added 2025-08-31
 
-    lxsession = callPackage ./core/lxsession { };
+    lxsession = throw "'lxsession' has been moved to top-level."; # added 2025-08-31
 
     lxtask = callPackage ./core/lxtask { };
   }
