@@ -7,7 +7,7 @@
 lib.makeScope pkgs.newScope (
   self: with self; {
 
-    inherit (pkgs) gtk2-x11;
+    gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly."; # added 2025-08-31
 
     lxappearance = throw "'lxappearance' has been moved to top-level."; # added 2025-08-31
 
