@@ -4,8 +4,8 @@
   bleak,
   buildPythonPackage,
   ecpy,
+  fetchpatch,
   fetchPypi,
-  future,
   hidapi,
   nfcpy,
   pillow,
@@ -33,6 +33,14 @@ buildPythonPackage rec {
     hash = "sha256-6s2V8cXik6jEg8z3UK49qVwodPbwXMIkWk7iJ7OY0rM=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "ledgerblue-no-future.patch";
+      url = "https://github.com/LedgerHQ/blue-loader-python/commit/40a9904933bbf9d9bb50f20b942215725e2f8e2c.patch";
+      hash = "sha256-6FIHeB6ReqvMKX20K33DuKk39E/FPsq59ah2Zf3Nt8I=";
+    })
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -42,7 +50,6 @@ buildPythonPackage rec {
 
   dependencies = [
     ecpy
-    future
     hidapi
     nfcpy
     pillow
