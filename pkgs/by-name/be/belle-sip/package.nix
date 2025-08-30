@@ -10,17 +10,17 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "belle-sip";
-  version = "5.2.98";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "belle-sip";
-    rev = version;
-    hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
+    rev = finalAttrs.version;
+    hash = "sha256-OaPNDk3NewGXlwcoKZcCjZRzquvAxn/mwQz57YWwyHE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})

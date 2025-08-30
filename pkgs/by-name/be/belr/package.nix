@@ -6,17 +6,17 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "belr";
-  version = "5.2.98";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "belr";
-    rev = version;
-    hash = "sha256-4keVUAsTs1DAhOfV71VD28I0PEHnyvW95blplY690LY=";
+    rev = finalAttrs.version;
+    hash = "sha256-c8MYfMNRUSRvzZ+FtpKlP15MNeLCRPp7dsRCZhFs9QE=";
   };
 
   buildInputs = [ bctoolbox ];
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})
