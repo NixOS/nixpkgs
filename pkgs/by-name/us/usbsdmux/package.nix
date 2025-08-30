@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
-  version = "24.1.1";
+  version = "25.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OtGgToDGUr6pBu9+LS/DxaYw/9+Pd6jPhxVDAM22HB4=";
+    hash = "sha256-/hDDEUvpdpUpg3ZVw8NWcDOLOtLu087Ki7FmGrDh9Gg=";
   };
 
   # Remove the wrong GROUP=plugdev.
@@ -22,7 +22,10 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'TAG+="uaccess", GROUP="plugdev"' 'TAG+="uaccess"'
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     udevCheckHook
