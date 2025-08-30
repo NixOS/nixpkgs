@@ -9,11 +9,11 @@
 
   # dependencies
   certifi,
+  events,
   python-dateutil,
   requests,
-  six,
+  # six,
   urllib3,
-  events,
 
   # optional-dependencies
   aiohttp,
@@ -22,6 +22,7 @@
   botocore,
   mock,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
@@ -40,15 +41,15 @@ buildPythonPackage rec {
     hash = "sha256-IAEh+rB26Zqv7j5g2YIRZRCAtFbBngoh+w8Z4e2bY+M=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
+    events
     python-dateutil
     requests
-    six
+    # six
     urllib3
-    events
   ];
 
   optional-dependencies.async = [ aiohttp ];
@@ -57,10 +58,11 @@ buildPythonPackage rec {
     botocore
     mock
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
-    pyyaml
     pytz
+    pyyaml
   ]
   ++ optional-dependencies.async;
 
@@ -82,6 +84,12 @@ buildPythonPackage rec {
     # Failing tests, issue opened at https://github.com/opensearch-project/opensearch-py/issues/849
     "test_basicauth_in_request_session"
     "test_callable_in_request_session"
+
+    # fixture 'event_loop' not found
+    "test_sniff_after_n_seconds"
+    "test_sniff_on_start_close_unlocks_async_calls"
+    "test_sniff_on_start_error_if_no_sniffed_hosts"
+    "test_sniff_on_start_waits_for_sniff_to_complete"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) [
     # Flaky tests: OSError: [Errno 48] Address already in use
