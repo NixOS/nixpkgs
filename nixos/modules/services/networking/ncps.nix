@@ -27,6 +27,9 @@ let
         cfg.openTelemetry.grpcURL != null
       ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
     ))
+    ++ (lib.optionals cfg.prometheus.enable [
+      "--prometheus-enabled"
+    ])
   );
 
   serveFlags = lib.concatStringsSep " " (
@@ -75,6 +78,8 @@ in
           '';
         };
       };
+
+      prometheus.enable = lib.mkEnableOption "Enable Prometheus metrics endpoint at /metrics";
 
       logLevel = lib.mkOption {
         type = lib.types.enum logLevels;
