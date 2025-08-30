@@ -12,7 +12,6 @@
     lib.mapAttrs (_: set: recurseIntoAttrs set) {
       inherit (super)
         fusePackages
-        gns3Packages
         haskellPackages
         platformioPackages
         rPackages
