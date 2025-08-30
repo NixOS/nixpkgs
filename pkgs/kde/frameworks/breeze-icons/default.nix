@@ -12,6 +12,12 @@ mkKdeDerivation {
     libxml2
   ];
 
+  patches = [
+    # https://bugs.kde.org/show_bug.cgi?id=508718
+    # https://invent.kde.org/frameworks/breeze-icons/-/merge_requests/496
+    ./reproducible-builds.patch
+  ];
+
   # This package contains an SVG icon theme and an API forcing its use
   extraPropagatedBuildInputs = [
     qtsvg
