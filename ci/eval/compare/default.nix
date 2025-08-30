@@ -77,6 +77,7 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
 
+  changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
   removedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.removed;
 
@@ -116,7 +117,7 @@ let
     );
 
   maintainers = callPackage ./maintainers.nix { } {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
+    changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
     removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
     inherit byName;

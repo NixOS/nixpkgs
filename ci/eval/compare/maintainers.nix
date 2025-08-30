@@ -28,7 +28,7 @@ let
   }) (changedattrs ++ removedattrs);
 
   attrsWithPackages = builtins.map (
-    pkg: pkg // { package = lib.attrsets.attrByPath pkg.path null pkgs; }
+    pkg: pkg // { package = lib.getAttrFromPath pkg.path pkgs; }
   ) enrichedAttrs;
 
   attrsWithMaintainers = builtins.map (
