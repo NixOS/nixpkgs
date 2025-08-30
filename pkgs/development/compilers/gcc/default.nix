@@ -450,6 +450,7 @@ pipe
           longDescription
           platforms
           teams
+          identifiers
           ;
       }
       // optionalAttrs (!atLeast11) {
