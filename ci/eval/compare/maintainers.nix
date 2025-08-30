@@ -22,27 +22,18 @@ let
 
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (name: {
-    path = lib.splitString "." name;
-    name = name;
-  }) (changedattrs ++ removedattrs);
-
-  attrsWithPackages = builtins.map (
-    pkg: pkg // { package = lib.getAttrFromPath pkg.path pkgs; }
-  ) enrichedAttrs;
-
   attrsWithMaintainers = builtins.map (
-    pkg:
+    name:
     let
-      meta = pkg.package.meta or { };
+      package = lib.getAttrFromPath (lib.splitString "." name) pkgs;
     in
-    pkg
-    // {
+    {
+      inherit name package;
       # TODO: Refactor this so we can ping entire teams instead of the individual members.
       # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers = meta.maintainers or [ ];
+      maintainers = package.meta.maintainers or [ ];
     }
-  ) attrsWithPackages;
+  ) (changedattrs ++ removedattrs);
 
   relevantFilenames =
     drv:
