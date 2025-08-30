@@ -94,7 +94,6 @@ let
             # https://github.com/nix-community/nixd/blob/main/libnixf/src/Basic/diagnostic.py
             "--ignore=or-identifier"
             "--ignore=parse-redundant-paren"
-            "--ignore=empty-inherit"
             "--ignore=sema-extra-rec"
             "--ignore=sema-extra-with"
             "--ignore=sema-unused-def-lambda-noarg-formal"
