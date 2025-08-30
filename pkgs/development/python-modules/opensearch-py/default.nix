@@ -22,7 +22,7 @@
   # tests
   botocore,
   mock,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     botocore
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-mock
     pytestCheckHook
     pyyaml
