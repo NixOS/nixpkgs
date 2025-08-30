@@ -170,8 +170,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  listres = addMainProgram super.listres { };
-
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
     preConfigure =
@@ -323,9 +321,6 @@ self: super:
   });
 
   oclock = addMainProgram super.oclock { };
-  smproxy = addMainProgram super.smproxy { };
-
-  viewres = addMainProgram super.viewres { };
 
   x11perf = super.x11perf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [
@@ -851,30 +846,6 @@ self: super:
     ];
   });
 
-  twm = super.twm.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      bison
-      flex
-    ];
-    meta = attrs.meta // {
-      mainProgram = "twm";
-    };
-  });
-
-  xauth = super.xauth.overrideAttrs (attrs: {
-    doCheck = false; # fails
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xauth";
-    };
-  });
-
-  xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };

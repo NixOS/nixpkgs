@@ -365,14 +365,19 @@ print OUT <<EOF;
   libxxf86dga,
   libxxf86misc,
   libxxf86vm,
+  listres,
   lndir,
   luit,
   makedepend,
   mkfontscale,
   pixman,
   sessreg,
+  smproxy,
   transset,
   util-macros,
+  viewres,
+  xauth,
+  xbacklight,
   xbitmaps,
   xcb-proto,
   xcmsdb,
@@ -395,6 +400,7 @@ print OUT <<EOF;
   xorg-docs,
   xorgproto,
   xorg-sgml-doctools,
+  xorg-twm,
   xprop,
   xrandr,
   xrefresh,
@@ -416,13 +422,18 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    listres
     lndir
     luit
     makedepend
     mkfontscale
     pixman
     sessreg
+    smproxy
     transset
+    viewres
+    xauth
+    xbacklight
     xbitmaps
     xcmsdb
     xcursorgen
@@ -480,6 +491,7 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = xorg-twm;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xcbutilerrors = libxcb-errors;
