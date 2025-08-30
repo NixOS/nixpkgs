@@ -55,10 +55,10 @@ buildNodejs {
     ]
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+      ./use-nix-codesign.patch
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
