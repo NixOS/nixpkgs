@@ -175,6 +175,11 @@ let
       iptables -w -t nat -A nixos-nat-pre \
         -i ${toString cfg.externalInterface} -j DNAT \
         --to-destination ${cfg.dmzHost}
+      ${concatMapStrings (internalInterface: ''
+        iptables -w -t nat -A nixos-nat-pre \
+          -i ${toString internalInterface} -m addrtype --dst-type LOCAL \
+          -j DNAT --to-destination ${cfg.dmzHost}
+      '') cfg.internalInterfaces}
     ''}
 
     ${cfg.extraCommands}
