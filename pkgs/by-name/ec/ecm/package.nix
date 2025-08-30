@@ -26,8 +26,13 @@ stdenv.mkDerivation {
     substituteInPlace test.ecm --replace /bin/rm rm
   '';
 
-  # See https://trac.sagemath.org/ticket/19233
-  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
+  configureFlags = [
+    # Otherwise, gethostname is not available with c99 (the default) and gcc-15.
+    "CFLAGS=-std=gnu99"
+  ]
+  ++
+    # See https://trac.sagemath.org/ticket/19233
+    lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
 
   buildInputs = [
     m4
