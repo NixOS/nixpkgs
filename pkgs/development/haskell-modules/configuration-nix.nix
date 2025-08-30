@@ -512,7 +512,7 @@ builtins.intersectAttrs super {
       shouldUpgrade =
         pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
     in
-    lib.warnIf shouldUpgrade
+    lib.warnIf (shouldUpgrade && super.llvm-ffi.version != "${toString (chosenLlvmVersion + 1)}.0")
       "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
       lib.pipe
       super.llvm-ffi
