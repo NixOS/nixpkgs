@@ -28,12 +28,45 @@ in
         `nh os switch`. This behaviour can be overriden per-command with environment
         variables that will take priority.
 
-        - `NH_OS_FLAKE`: will take priority for `nh os` commands.
-        - `NH_HOME_FLAKE`: will take priority for `nh home` commands.
-        - `NH_DARWIN_FLAKE`: will take priority for `nh darwin` commands.
+        - `osFlake`: will take priority for `nh os` commands.
+        - `homeFlake`: will take priority for `nh home` commands.
+        - `darwinFlake`: will take priority for `nh darwin` commands.
 
         The formerly valid `FLAKE` is now deprecated by nh, and will cause hard errors
         in future releases if `NH_FLAKE` is not set.
+      '';
+    };
+
+    osFlake = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        The string that will be used for the `NH_OS_FLAKE` environment variable.
+
+        `NH_OS_FLAKE` is used by nh as the default flake for performing `nh os` actions,
+        such as `nh os switch`. Setting this will take priority over the `flake` option.
+      '';
+    };
+
+    homeFlake = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        The string that will be used for the `NH_HOME_FLAKE` environment variable.
+
+        `NH_HOME_FLAKE` is used by nh as the default flake for performing `nh home` actions,
+        such as `nh home switch`. Setting this will take priority over the `flake` option.
+      '';
+    };
+
+    darwinFlake = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        The string that will be used for the `NH_DARWIN_FLAKE` environment variable.
+
+        `NH_DARWIN_FLAKE` is used by nh as the default flake for performing `nh darwin` actions,
+        such as `nh darwin switch`. Setting this will take priority over the `flake` option.
       '';
     };
 
@@ -79,18 +112,39 @@ in
         assertion = cfg.clean.enable -> cfg.enable;
         message = "programs.nh.clean.enable requires programs.nh.enable";
       }
-
-      {
-        assertion = (cfg.flake != null) -> !(lib.hasSuffix ".nix" cfg.flake);
-        message = "nh.flake must be a directory, not a nix file";
-      }
+      map
+      (name: {
+        assertion = cfg.${name} != null -> !(lib.hasSuffix ".nix" cfg.${name});
+        message = "nh.${name} must be a directory, not a nix file";
+      })
+      [
+        "darwinFlake"
+        "flake"
+        "homeFlake"
+        "osFlake"
+      ]
     ];
 
     environment = lib.mkIf cfg.enable {
       systemPackages = [ cfg.package ];
-      variables = lib.mkIf (cfg.flake != null) {
-        NH_FLAKE = cfg.flake;
-      };
+      variables = lib.mkMerge [
+        (lib.mkIf (cfg.flake != null) {
+          NH_FLAKE = cfg.flake;
+        })
+        (map
+          (
+            name:
+            lib.mkIf (cfg."${nane}Flake" != null) {
+              "NH_${lib.toUpper name}_FLAKE" = cfg."${name}Flake";
+            }
+          )
+          [
+            "darwin"
+            "home"
+            "os"
+          ]
+        )
+      ];
     };
 
     systemd = lib.mkIf cfg.clean.enable {
