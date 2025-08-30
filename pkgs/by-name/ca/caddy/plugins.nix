@@ -87,16 +87,33 @@ caddy.overrideAttrs (
     installCheckPhase = ''
       runHook preInstallCheck
 
-      ${toShellVar "notfound" pluginsSorted}
+      ${toShellVar "notfound" (
+        map (
+          plugin:
+          let
+            result = lib.match "([^=]*)(=[^@]*)?@(.*)" plugin;
+            replacement = lib.elemAt result 1;
+          in
+          "${
+            if replacement == null then lib.head result else lib.substring 1 (-1) replacement
+          }@${lib.last result}"
+        ) pluginsSorted
+      )}
 
       while read kind module version; do
-        [[ "$kind" = "dep" ]] || continue
-        module="''${module}@''${version}"
-        for i in "''${!notfound[@]}"; do
-          if [[ ''${notfound[i]} = ''${module} ]]; then
-            unset 'notfound[i]'
-          fi
-        done
+        case $kind in
+        dep | '=>')
+          module=$module@$version
+          for i in "''${!notfound[@]}"; do
+            if [[ ''${notfound[i]} = "$module" ]]; then
+              unset 'notfound[i]'
+            fi
+          done
+          ;;
+        *)
+          continue
+          ;;
+        esac
       done < <($out/bin/caddy build-info)
 
       if (( ''${#notfound[@]} )); then
