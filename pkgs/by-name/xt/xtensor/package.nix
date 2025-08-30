@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtensor";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
     tag = finalAttrs.version;
-    hash = "sha256-gAGLb5NPT4jiIpXONqY+kalxKCFKFXlNqbM79x1lTKE=";
+    hash = "sha256-RvxjQXMKhgAsvCSprMKyAMETbOsg9Ek7yREXtaNa5Eo=";
   };
 
   nativeBuildInputs = [
