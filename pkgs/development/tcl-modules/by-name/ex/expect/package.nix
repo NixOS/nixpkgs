@@ -52,7 +52,7 @@ tcl.mkTclDerivation rec {
   strictDeps = true;
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -std=gnu17";
   };
 
   hardeningDisable = [ "format" ];

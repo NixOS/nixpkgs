@@ -3,6 +3,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
   static ? stdenv.hostPlatform.isStatic,
@@ -26,7 +27,16 @@ stdenv.mkDerivation rec {
   ];
 
   # Need to explicitly link to brotlicommon
-  patches = lib.optional static ./brotli-static.patch;
+  patches =
+    lib.optional static ./brotli-static.patch
+    # gcc=15 reshuffled c++ headers, and the code that assumed that some
+    # headers include some others broke.
+    ++ [
+      (fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/google/woff2/pull/176.patch";
+        hash = "sha256-3PXQk5dCIKrVxayNEZ3wrL+kZQjK+xuhR+w7EFYZTvo=";
+      })
+    ];
 
   nativeBuildInputs = [
     cmake
