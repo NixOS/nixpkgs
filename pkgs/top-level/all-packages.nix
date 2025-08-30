@@ -702,6 +702,7 @@ with pkgs;
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz { };
 
   fetchFromRadicle = callPackage ../build-support/fetchradicle { };
+  fetchRadiclePatch = callPackage ../build-support/fetchradiclepatch { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
