@@ -1,0 +1,14 @@
+diff --git a/gnome-session/leader-main.c b/gnome-session/leader-main.c
+index 511166d6..8bac2912 100644
+--- a/gnome-session/leader-main.c
++++ b/gnome-session/leader-main.c
+@@ -92,6 +92,9 @@ maybe_reexec_with_login_shell (GStrv argv)
+ 
+         g_debug ("Relaunching with login shell %s (%s)", login_shell, shell);
+ 
++        /* Make sure the shell actually sets up the environment */
++        g_unsetenv ("__NIXOS_SET_ENVIRONMENT_DONE");
++
+         /* First, we construct the command executed by the login shell */
+         builder = g_strv_builder_new ();
+         g_strv_builder_add (builder, "exec");
