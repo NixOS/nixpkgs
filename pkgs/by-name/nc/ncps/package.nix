@@ -22,7 +22,9 @@ let
     ];
 
     vendorHash = "sha256-5QpzU+cy14cdR5Oi2vwA+BbMSTPMXlhyq9RpzbMsRZQ=";
+
     doCheck = true;
+    checkFlags = [ "-race" ];
 
     nativeBuildInputs = [
       dbmate # used for testing
