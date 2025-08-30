@@ -3188,4 +3188,60 @@ rec {
             levenshtein ainfix binfix <= k;
       in
       f;
+
+  /* Parse string as an int with the specified base.
+
+     The base can be from 2 to 16, inclusive.
+
+     Case insensitive. Leading zeroes are allowed. A leading - or + sign is allowed. Base prefixes like 0x are not supported.
+
+     Type: int -> string -> int
+
+     Example:
+       toIntBase 10 "123"
+       => 123
+       toIntBase 16 "beef"
+       => 48879
+       toIntBase 8 "-777"
+       => -511
+       toIntBase 2 "10101010"
+       => 170
+       toIntBase 16 "0xABC"
+       => error: toIntBase: invalid character 'x' in base 16 integer string
+  */
+  toIntBase = base: str:
+    assert lib.assertMsg (base >= 2 && base <= 16) "toIntBase: invalid base: ${toString base}";
+    assert lib.assertMsg (builtins.stringLength str > 0) "toIntBase: empty string";
+    let
+      alphabet = { "0" = 0; "1" = 1; "2" = 2; "3" = 3; "4" = 4; "5" = 5; "6" = 6; "7" = 7; "8" = 8; "9" = 9; "a" = 10; "b" = 11; "c" = 12; "d" = 13; "e" = 14; "f" = 15; };
+
+      # Remove an optional leading -/+. Return a list of digit characters and a -1 or 1 depending on the sign.
+      processSign = str:
+        let list = stringToCharacters str;
+            first = builtins.elemAt list 0;
+        in
+          if first == "-" then { sign = -1; digits = lib.lists.drop 1 list; }
+            else if first == "+" then { sign = 1; digits = lib.lists.drop 1 list; }
+            else { sign = 1; digits = list; };
+
+      result = processSign (toLower str);
+      digits = result.digits;
+      sign = result.sign;
+      numDigits = builtins.length digits;
+      invalidCharErrorMsg = digit: "toIntBase: invalid character '${digit}' in base ${toString base} integer string";
+
+      go = i: n:
+        let
+          digit = builtins.elemAt digits i;
+          add = alphabet."${digit}" or (throw (invalidCharErrorMsg digit));
+        in
+        if i >= numDigits then n
+        else
+          assert lib.assertMsg (add < base) (invalidCharErrorMsg digit);
+          go (i + 1) (n * base + add);
+
+    in
+      assert lib.assertMsg (numDigits > 0) "toIntBase: invalid integer string";
+      sign * go 0 0;
+
 }
