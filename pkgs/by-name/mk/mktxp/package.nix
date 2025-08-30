@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.2.9";
+  version = "1.2.12";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-LPCx5UJuL22aRbRYD+GkDAQ/0RCi+WJwvsF86ZQ01JY=";
+    hash = "sha256-2aSRnfhOROFJWzqvltYaN2FLXrRjICV56SOOHf4wKtg=";
   };
 
   nativeBuildInputs = with python3Packages; [
