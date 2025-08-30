@@ -526,7 +526,11 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-## Merge conventions
+## Review and Merge conventions
+
+Comments on Pull Requests are considered non-blocking by default.
+Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
+All suggestions for change, blocking or not, should be responded to before merge.
 
 Pull requests should not be squash-merged, as this discards information including detail from commit messages and authorship.
 Many pull requests don't make sense as a single commit anyway.
