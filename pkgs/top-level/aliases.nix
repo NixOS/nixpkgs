@@ -1936,6 +1936,8 @@ mapAliases {
   trfl = throw "trfl has been removed, because it has not received an update for 3 years and was broken"; # Added 2024-07-25
   trezor_agent = trezor-agent; # Added 2024-01-07
   openai-triton-llvm = triton-llvm; # added 2024-07-18
+  trilium-next-desktop = trilium-desktop; # Added 2025-08-30
+  trilium-next-server = trilium-server; # Added 2025-08-30
   trust-dns = hickory-dns; # Added 2024-08-07
   tumpa = throw "tumpa has been removed, as it is broken"; # Added 2024-07-15
   turbogit = throw "turbogit has been removed as it is unmaintained upstream and depends on an insecure version of libgit2"; # Added 2024-08-25
