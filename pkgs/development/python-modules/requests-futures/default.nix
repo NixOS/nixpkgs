@@ -40,6 +40,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_futures" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Asynchronous Python HTTP Requests for Humans using Futures";
     homepage = "https://github.com/ross/requests-futures";
