@@ -40,7 +40,6 @@
   openscad,
   openssh,
   parinfer-rust,
-  phpactor,
   ranger,
   ripgrep,
   skim,
@@ -2967,19 +2966,6 @@ in
     dependencies = with self; [
       nvim-dap
     ];
-  };
-
-  phpactor = buildVimPlugin {
-    inherit (phpactor)
-      pname
-      src
-      meta
-      version
-      ;
-    postPatch = ''
-      substituteInPlace plugin/phpactor.vim \
-        --replace-fail "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
-    '';
   };
 
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
