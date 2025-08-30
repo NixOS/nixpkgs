@@ -104,6 +104,10 @@ buildPythonPackage rec {
     # Assertion error: Sparse operations take too long
     # (namely, load-sensitive test)
     "test_performance_with_large_vectors"
+
+    # NameError: name 'ParallelismConfig' is not defined
+    "test_hf_argument_parser"
+    "test_hf_argument_parser_incorrect_string_arguments"
   ];
 
   disabledTestPaths = [
