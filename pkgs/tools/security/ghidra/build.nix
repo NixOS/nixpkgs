@@ -183,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+
+    # Needed by the Ghidra Server NixOS module. Create a symlink in order to provide a stable path.
+    ln -s "$out/lib/ghidra/Ghidra/Features/GhidraServer/data/yajsw-stable-13.12" "$out/lib/ghidra/Ghidra/Features/GhidraServer/data/yajsw"
   '';
 
   passthru = {
