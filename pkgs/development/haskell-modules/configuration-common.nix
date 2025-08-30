@@ -2130,6 +2130,10 @@ with haskellLib;
   job = dontCheck super.job;
   scheduler = dontCheck super.scheduler;
 
+  # Flaky test suite
+  # https://github.com/minimapletinytools/linear-tests/issues/1
+  linear-tests = dontCheck super.linear-tests;
+
   # 2024-09-18: Make compatible with haskell-gi 0.26.10
   # https://github.com/owickstrom/gi-gtk-declarative/pull/118
   gi-gtk-declarative = warnAfterVersion "0.7.1" (
