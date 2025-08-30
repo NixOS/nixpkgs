@@ -3,7 +3,6 @@
   stdenv,
   # nixpkgs functions
   buildGoModule,
-  buildVimPlugin,
   callPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -33,7 +32,6 @@
   languagetool,
   libgit2,
   llvmPackages,
-  meson,
   neovim-unwrapped,
   nim1,
   nodejs,
@@ -41,19 +39,13 @@
   openscad,
   openssh,
   parinfer-rust,
-  phpactor,
   ranger,
   ripgrep,
-  skim,
   sqlite,
   sshfs,
-  statix,
   stylish-haskell,
   tabnine,
-  taskwarrior2,
-  taskwarrior3,
   tmux,
-  tup,
   typescript,
   typescript-language-server,
   vim,
@@ -134,12 +126,15 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
-  # ethersync vim plugin
-  ethersync,
 }:
 self: super:
 let
   luaPackages = neovim-unwrapped.lua.pkgs;
+
+  # Ensure the vim plugin builders are not used in this file.
+  # If they are used, these stubs will throw.
+  buildVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
+  buildNeoVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
 in
 {
   corePlugins = symlinkJoin {
@@ -1160,17 +1155,6 @@ in
     '';
   };
 
-  ethersync = buildVimPlugin rec {
-    inherit (ethersync)
-      pname
-      version
-      src
-      meta
-      ;
-
-    sourceRoot = "${src.name}/nvim-plugin";
-  };
-
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
@@ -1334,18 +1318,7 @@ in
   };
 
   fzf-vim = super.fzf-vim.overrideAttrs {
-    dependencies = [ self.fzfWrapper ];
-  };
-
-  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
-  # plugin, since part of the fzf vim plugin is included in the main fzf
-  # program.
-  fzfWrapper = buildVimPlugin {
-    inherit (fzf) src version;
-    pname = "fzf";
-    postInstall = ''
-      ln -s ${fzf}/bin/fzf $target/bin/fzf
-    '';
+    dependencies = [ self.fzf-wrapper ];
   };
 
   gen-nvim = super.gen-nvim.overrideAttrs {
@@ -1497,15 +1470,6 @@ in
 
   hunk-nvim = super.hunk-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
-  };
-
-  # https://hurl.dev/
-  hurl = buildVimPlugin {
-    pname = "hurl";
-    version = hurl.version;
-    # dontUnpack = true;
-
-    src = "${hurl.src}/contrib/vim";
   };
 
   hurl-nvim = super.hurl-nvim.overrideAttrs {
@@ -1949,12 +1913,6 @@ in
     checkInputs = [ self.lualine-nvim ];
   };
 
-  meson = buildVimPlugin {
-    inherit (meson) pname version src;
-    preInstall = "cd data/syntax-highlighting/vim";
-    meta.maintainers = with lib.maintainers; [ vcunat ];
-  };
-
   mind-nvim = super.mind-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1976,18 +1934,6 @@ in
 
     doInstallCheck = true;
     vimCommandCheck = "MinimapToggle";
-  };
-
-  minsnip-nvim = buildVimPlugin {
-    pname = "minsnip.nvim";
-    version = "2022-01-04";
-    src = fetchFromGitHub {
-      owner = "jose-elias-alvarez";
-      repo = "minsnip.nvim";
-      rev = "6ae2f3247b3a2acde540ccef2e843fdfcdfebcee";
-      sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
-    };
-    meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
   minuet-ai-nvim = super.minuet-ai-nvim.overrideAttrs {
@@ -3021,19 +2967,6 @@ in
     ];
   };
 
-  phpactor = buildVimPlugin {
-    inherit (phpactor)
-      pname
-      src
-      meta
-      version
-      ;
-    postPatch = ''
-      substituteInPlace plugin/phpactor.vim \
-        --replace-fail "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
-    '';
-  };
-
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
     dependencies = [ self.LibDeflate-nvim ];
   };
@@ -3211,12 +3144,6 @@ in
     ];
   };
 
-  skim = buildVimPlugin {
-    pname = "skim";
-    inherit (skim) version;
-    src = skim.vim;
-  };
-
   skim-vim = super.skim-vim.overrideAttrs {
     dependencies = [ self.skim ];
   };
@@ -3333,20 +3260,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  statix = buildVimPlugin rec {
-    inherit (statix) pname src meta;
-    version = "0.1.0";
-    postPatch = ''
-      # check that version is up to date
-      grep 'pname = "statix-vim"' -A 1 flake.nix \
-        | grep -F 'version = "${version}"'
-
-      cd vim-plugin
-      substituteInPlace ftplugin/nix.vim --replace-fail statix ${statix}/bin/statix
-      substituteInPlace plugin/statix.vim --replace-fail statix ${statix}/bin/statix
-    '';
-  };
-
   stylish-nvim = super.stylish-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace-fail xdotool ${xdotool}/bin/xdotool
@@ -3420,17 +3333,6 @@ in
       maintainers = with lib.maintainers; [ fredeb ];
     };
   });
-
-  taskwarrior2 = buildVimPlugin {
-    inherit (taskwarrior2) version pname;
-    src = "${taskwarrior2.src}/scripts/vim";
-  };
-
-  taskwarrior3 = buildVimPlugin {
-    inherit (taskwarrior3) version pname;
-    src = "${taskwarrior3.src}/scripts/vim";
-  };
-
   telekasten-nvim = super.telekasten-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3687,24 +3589,6 @@ in
   tssorter-nvim = super.tssorter-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
-
-  tup =
-    let
-      # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
-      ftdetect = builtins.toFile "tup.vim" ''
-        au BufNewFile,BufRead Tupfile,*.tup setf tup
-      '';
-    in
-    buildVimPlugin {
-      inherit (tup) pname version src;
-      preInstall = ''
-        mkdir -p vim-plugin/syntax vim-plugin/ftdetect
-        cp contrib/syntax/tup.vim vim-plugin/syntax/tup.vim
-        cp "${ftdetect}" vim-plugin/ftdetect/tup.vim
-        cd vim-plugin
-      '';
-      meta.maintainers = with lib.maintainers; [ enderger ];
-    };
 
   typescript-nvim = super.typescript-nvim.overrideAttrs {
     checkInputs = [
