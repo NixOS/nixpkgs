@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl2ClasspathPlus;
+    license = with lib.licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     mainProgram = "bluej";
     maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;

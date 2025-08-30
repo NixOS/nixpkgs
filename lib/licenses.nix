@@ -439,6 +439,11 @@ lib.mapAttrs mkLicense (
       fullName = "CeCILL-C Free Software License Agreement";
     };
 
+    classpathException20 = {
+      spdxId = "Classpath-exception-2.0";
+      fullName = "Classpath exception 2.0";
+    };
+
     cockroachdb-community-license = {
       fullName = "CockroachDB Community License Agreement";
       url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
@@ -645,16 +650,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v2.0 only";
     };
 
-    gpl2Classpath = {
-      spdxId = "GPL-2.0-with-classpath-exception";
-      fullName = "GNU General Public License v2.0 only (with Classpath exception)";
-    };
-
-    gpl2ClasspathPlus = {
-      fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
-    };
-
     gpl2UBDLPlus = {
       fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
       url = "https://spdx.org/licenses/UBDL-exception.html";
@@ -678,11 +673,6 @@ lib.mapAttrs mkLicense (
     gpl3Plus = {
       spdxId = "GPL-3.0-or-later";
       fullName = "GNU General Public License v3.0 or later";
-    };
-
-    gpl3ClasspathPlus = {
-      fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
     };
 
     giftware = {
