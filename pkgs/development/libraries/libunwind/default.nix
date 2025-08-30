@@ -45,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Without latex2man, no man pages are installed despite being
     # prebuilt in the source tarball.
     "LATEX2MAN=${buildPackages.coreutils}/bin/true"
-  ]
-  # See https://github.com/libunwind/libunwind/issues/693
-  ++ lib.optionals (with stdenv.hostPlatform; isAarch64 && isMusl && !isStatic) [
-    "CFLAGS=-mno-outline-atomics"
   ];
 
   propagatedBuildInputs = [ xz ];

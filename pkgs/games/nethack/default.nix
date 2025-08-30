@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
+      -e 's,/usr/bin/true,${coreutils}/bin/true,g' \
       -i sys/unix/hints/macosx10.14
     sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
@@ -193,7 +194,12 @@ stdenv.mkDerivation rec {
     for i in $out/games/lib/nethackdir/*; do
       ln -s \$i \$(basename \$i)
     done
-    $out/games/nethack
+    set +e
+    $out/games/nethack "\$@"
+    if [[ \$? -gt 128 ]]; then
+      echo "nethack exited abnormally, attempting to recover save file..."
+      ./recover -d . ?lock.0
+    fi
     EOF
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
