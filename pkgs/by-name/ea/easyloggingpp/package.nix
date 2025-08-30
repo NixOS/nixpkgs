@@ -22,11 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
-  cmakeFlags = [ (lib.cmakeBool "test" true) ];
+  cmakeFlags = [ (lib.cmakeBool "test" finalAttrs.doCheck) ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
+
+  doCheck = true;
+
+  env.GTEST_FILTER =
+    # https://github.com/abumq/easyloggingpp/issues/816
+    "-CommandLineArgsTest.LoggingFlagsArg";
 
   meta = {
     description = "C++ logging library";
