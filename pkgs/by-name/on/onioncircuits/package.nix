@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tails";
     repo = "onioncircuits";
     rev = version;
-    sha256 = "sha256-5VGOuvngZvUFQ+bubdt4YV3/IflOhBB1i+oEQaV4kr0=";
+    sha256 = "sha256-hk4pwPTtj4wt58Wn3NbGc5yQt/FJGdcZC9BbNgvaMqY=";
   };
 
   nativeBuildInputs = [
