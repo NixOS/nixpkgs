@@ -91,7 +91,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 1 as the PR's base branch.
-   Go through the [pull request template](#pull-request-template).
+   Go through the [pull request template][pr-template].
 
 7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
    Always keep it in a mergeable state.
