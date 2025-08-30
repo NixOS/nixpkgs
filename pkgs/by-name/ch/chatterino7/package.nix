@@ -17,8 +17,13 @@
         owner = "SevenTV";
         repo = "chatterino7";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-KrAr3DcQDjb+LP+vIf0qLSSgII0m5rNwhncLNHlLaC8=";
+        hash = "sha256-izkcHvWNZO9oeEt/n6Y/q8NJ7WuMYEntdAnRt6dZy7g=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          rm -rf $out/.git
+        '';
       };
 
       passthru.updateScript = gitUpdater {
