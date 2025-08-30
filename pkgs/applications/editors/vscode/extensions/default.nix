@@ -256,6 +256,8 @@ let
 
       amazonwebservices.amazon-q-vscode = callPackage ./amazonwebservices.amazon-q-vscode { };
 
+      anthropic.claude-code = callPackage ./anthropic.claude-code { };
+
       angular.ng-template = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ng-template";
