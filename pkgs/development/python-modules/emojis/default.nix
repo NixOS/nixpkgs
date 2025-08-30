@@ -1,23 +1,16 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  unittestCheckHook,
-  pandoc,
   lib,
+  pkgs,
+  setuptools,
+  unittestCheckHook,
 }:
-let
-  version = "0.7.0";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "emojis";
-  inherit version;
+  version = "0.7.0";
   pyproject = true;
-
-  build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "alexandrevicenzi";
@@ -26,9 +19,9 @@ buildPythonPackage {
     hash = "sha256-rr/BM39U1j8EL8b/YojclI4h0NnOCdoMlecR/1f9ISg=";
   };
 
-  nativeBuildInputs = [
-    pandoc
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pkgs.pandoc ];
 
   preBuild = ''
     make pandoc
@@ -41,7 +34,7 @@ buildPythonPackage {
   meta = {
     description = "Convert emoji names to emoji characters";
     homepage = "https://github.com/alexandrevicenzi/emojis";
-    changelog = "https://github.com/alexandrevicenzi/emojis/releases/tag/v${version}";
+    changelog = "https://github.com/alexandrevicenzi/emojis/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amadaluzia ];
   };
