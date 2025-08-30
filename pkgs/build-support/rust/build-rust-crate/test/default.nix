@@ -91,8 +91,17 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      untestedcrate = mkHostCrate (
+        builtins.removeAttrs (crateArgs // { buildTests = false; }) [ "expectedTestOutput" ]
+      );
       hasTests = crateArgs.buildTests or false;
+      crate =
+        if hasTests then
+          mkHostCrate (
+            builtins.removeAttrs (crateArgs // { testedCrate = untestedcrate; }) [ "expectedTestOutput" ]
+          )
+        else
+          untestedcrate;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
@@ -134,8 +143,9 @@ let
           ''
         else if stdenv.hostPlatform == stdenv.buildPlatform then
           ''
+            echo testing ${crate}
             for file in ${crate}/tests/*; do
-              $file 2>&1 >> $out
+              $file 2>&1 | tee -a $out
             done
             set -e
             ${lib.concatMapStringsSep "\n" (
@@ -407,6 +417,39 @@ rec {
             "test src_main ... ok"
             "test tests_foo ... ok"
             "test tests_bar ... ok"
+          ];
+        };
+        rustBinTestsEnvVar = {
+          src = symlinkJoin {
+            name = "rustBinTestsEnvVar";
+            paths = [
+              (mkFile "src/main.rs" "pub fn main() { std::process::exit(32); }")
+              (mkFile "src/bin/exe.rs" "pub fn main() { std::process::exit(33); }")
+              (mkFile "src/bin/exe-with-dash.rs" "pub fn main() { std::process::exit(34); }")
+              (mkFile "tests/foo.rs" ''
+                #[test]
+                fn test_main() {
+                  let mut cmd = std::process::Command::new(env!("CARGO_BIN_EXE_rustBinTestsEnvVar"));
+                  assert_eq!(cmd.status().unwrap().code().unwrap(), 32);
+                }
+                #[test]
+                fn test_exe() {
+                  let mut cmd = std::process::Command::new(env!("CARGO_BIN_EXE_exe"));
+                  assert_eq!(cmd.status().unwrap().code().unwrap(), 33);
+                }
+                #[test]
+                fn test_exe_with_dash() {
+                  let mut cmd = std::process::Command::new(env!("CARGO_BIN_EXE_exe-with-dash"));
+                  assert_eq!(cmd.status().unwrap().code().unwrap(), 34);
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test test_main ... ok"
+            "test test_exe ... ok"
+            "test test_exe_with_dash ... ok"
           ];
         };
         rustBinTestsSubdirCombined = {
