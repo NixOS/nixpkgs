@@ -12,7 +12,7 @@ generic: {
     hash = "sha256-FLdfMpurJ0xiW73Z1EcR3MlmoxdVWsH5G1vSfE31iAw=";
   };
   v60 = generic {
-    version = "6.0.36";
-    hash = "sha256-Ne0OY6NGzTYOn3sDVd+5tfawBu5VBjxNRtlxasubGCk=";
+    version = "6.0.40";
+    hash = "sha256-Blp0RTj/ePDXq/g5KxSa4jdh7f3Go9zGxHyMMydbM60=";
   };
 }
