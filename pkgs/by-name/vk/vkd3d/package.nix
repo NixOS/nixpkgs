@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ lgpl21Plus ];
     mainProgram = "vkd3d-compiler";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     inherit (wine.meta) platforms;
   };
 })
