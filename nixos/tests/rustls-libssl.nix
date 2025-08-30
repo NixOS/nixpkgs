@@ -64,7 +64,6 @@ in
     client =
       { pkgs, ... }:
       {
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
         networking = {
           interfaces.eth1 = {
             ipv4.addresses = [

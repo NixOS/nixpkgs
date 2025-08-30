@@ -249,7 +249,6 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
           pkgs.iproute2
         ];
 
@@ -308,7 +307,6 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
           pkgs.iproute2
         ];
 
@@ -368,8 +366,6 @@ in
         security.pki.certificates = [
           (builtins.readFile ./common/acme/server/ca.cert.pem)
         ];
-
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
 
         systemd.services.sing-box.serviceConfig.ExecStartPost = [
           "+${tproxyPost}/bin/exe"
