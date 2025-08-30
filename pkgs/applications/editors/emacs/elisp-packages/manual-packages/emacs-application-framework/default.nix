@@ -1,5 +1,6 @@
 {
   # Basic
+  stdenv,
   lib,
   melpaBuild,
   fetchFromGitHub,
@@ -13,6 +14,7 @@
   nodejs,
   wmctrl,
   xdotool,
+  useXdotool ? (!stdenv.hostPlatform.isDarwin),
   # Updater
   unstableGitUpdater,
   # Sub-applications in the framework
@@ -46,7 +48,7 @@ let
       git
       nodejs
       wmctrl
-      xdotool
+      (lib.optional useXdotool xdotool)
     ]
   ]
   ++ appOtherDeps;
