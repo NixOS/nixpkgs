@@ -330,6 +330,7 @@ print OUT <<EOF;
   font-mutt-misc,
   font-schumacher-misc,
   font-screen-cyrillic,
+  font-sony-misc,
   font-util,
   gccmakedep,
   ico,
@@ -461,6 +462,7 @@ self: with self; {
   fontmuttmisc = font-mutt-misc;
   fontschumachermisc = font-schumacher-misc;
   fontscreencyrillic = font-screen-cyrillic;
+  fontsonymisc = font-sony-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
