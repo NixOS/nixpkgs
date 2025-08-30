@@ -163,5 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C application programmer's interface to PostgreSQL";
     changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
     pkgConfigModules = [ "libpq" ];
+    knownVulnerabilities = [ "CVE-1234-5678" ];
   };
 })
