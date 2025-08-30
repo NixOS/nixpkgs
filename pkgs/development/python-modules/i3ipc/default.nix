@@ -5,6 +5,7 @@
   xorg,
   pytest,
   pytest-asyncio,
+  pytest-timeout,
   pytest-xvfb,
   i3,
   xlib,
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     pytest
     pytest-asyncio
     xdpyinfo
+    pytest-timeout
     pytest-xvfb
     xorg.xvfb
     i3
