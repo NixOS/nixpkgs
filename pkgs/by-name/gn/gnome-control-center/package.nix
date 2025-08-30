@@ -5,6 +5,7 @@
   replaceVars,
   accountsservice,
   adwaita-icon-theme,
+  blueprint-compiler,
   colord,
   colord-gtk4,
   cups,
@@ -18,7 +19,6 @@
   gcr_4,
   glibc,
   gnome-bluetooth,
-  gnome-color-manager,
   gnome-desktop,
   gnome-online-accounts,
   gnome-settings-daemon,
@@ -84,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./paths.patch {
-      gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     docbook-xsl-nons
     gettext
     libxslt
