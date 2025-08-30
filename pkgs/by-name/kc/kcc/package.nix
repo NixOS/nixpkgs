@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
 
   qt6,
   archiveSupport ? true,
@@ -23,7 +25,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-J4nuVY5eOmHziteLvoBf/+CAY0X/7wBbRtPoIgdd5MA=";
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   buildInputs = [ qt6.qtbase ];
 
@@ -57,9 +62,26 @@ python3.pkgs.buildPythonApplication rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/kcc-c2e";
 
+  postInstall = ''
+    install -Dm644 \
+      icons/comic2ebook.png \
+      "$out/share/icons/hicolor/256x256/apps/kcc.png"
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "kcc";
+      exec = "kcc";
+      icon = "kcc";
+      desktopName = "Kindle Comic Converter";
+      comment = "A comic and manga converter for ebook readers";
+      categories = [ "Graphics" ];
+    })
+  ];
 
   meta = {
     description = "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";
