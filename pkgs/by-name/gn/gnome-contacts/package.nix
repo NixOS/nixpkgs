@@ -3,6 +3,7 @@
   stdenv,
   gettext,
   fetchurl,
+  blueprint-compiler,
   evolution-data-server-gtk4,
   pkg-config,
   libxslt,
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
