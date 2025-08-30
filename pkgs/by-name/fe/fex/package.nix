@@ -5,12 +5,14 @@
   cmake,
   ninja,
   pkg-config,
-  qt5,
   python3,
   nix-update-script,
   xxHash,
   fmt,
+  catch2,
   nasm,
+  withQt ? true,
+  qt6,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +23,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-
     hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
 
     leaveDotGit = true;
@@ -37,8 +38,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         External/jemalloc_glibc \
         External/robin-map \
         External/vixl \
-        Source/Common/cpp-optparse \
-        External/Catch2
+        Source/Common/cpp-optparse
 
       find . -name .git -print0 | xargs -0 rm -rf
 
@@ -53,42 +53,39 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    qt5.wrapQtAppsHook
     llvmPackages.bintools
-
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
         setuptools
         libclang
       ]
     ))
-  ];
-
-  nativeCheckInputs = [ nasm ];
+  ]
+  ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
     xxHash
     fmt
   ]
-  ++ (with qt5; [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
-    qtquickcontrols2
-  ]);
+  ++ lib.optionals withQt [
+    qt6.qtbase
+    qt6.qtdeclarative
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
-    (lib.cmakeBool "ENABLE_LTO" true)
-    (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
   ];
 
   strictDeps = true;
 
   # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
   doCheck = true;
+
+  nativeCheckInputs = [ nasm ];
+  checkInputs = [ catch2 ];
 
   # List not exhaustive, e.g. because they depend on an x86 compiler or some
   # other difficult-to-build test binaries.
@@ -102,7 +99,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
   dontWrapQtApps = true;
-  preFixup = ''
+  preFixup = lib.optionalString withQt ''
     wrapQtApp $out/bin/FEXConfig
   '';
 
