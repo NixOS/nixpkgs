@@ -650,11 +650,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v2.0 only";
     };
 
-    gpl2Oss = {
-      fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-      url = "https://www.mysql.com/about/legal/licensing/foss-exception";
-    };
-
     gpl2Plus = {
       spdxId = "GPL-2.0-or-later";
       fullName = "GNU General Public License v2.0 or later";
