@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-resource-path";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
     rev = "v${version}";
-    sha256 = "1siv3pk4fsabz254fdzr7c0pxy124habnbw4ym66pfk883fr96g2";
+    sha256 = "sha256-9OBO9b02RrXilXUucerQQMTaQIRXtbcKCHqwwp9tBto=";
   };
 
   postPatch = ''
