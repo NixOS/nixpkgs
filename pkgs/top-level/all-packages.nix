@@ -3141,7 +3141,7 @@ with pkgs;
 
   hdf5-threadsafe = hdf5.override { threadsafe = true; };
 
-  heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack { };
+  heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
 
   headscale = callPackage ../servers/headscale { };
 
