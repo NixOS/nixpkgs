@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "june-analytics-python";
-  version = "unstable-2022-07-26";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
