@@ -25,76 +25,75 @@
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
+  faiss,
+  llvmPackages,
+  gtest,
 }:
 
 assert cudaSupport -> cudaPackages != { };
 
 let
-  boost_static = boost.override { enableStatic = true; };
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation rec {
-  version = "3.11.1";
+  version = "3.12.5";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
     rev = version;
-    hash = "sha256-xtA0lEAq38/AHI3C9FhvjV5JPfVawrFr1fga4J1pi/0=";
+    hash = "sha256-ngmEYCLeCh5pSNmXItV3siY6/DupEHK+dYZ56LWZbhg=";
   };
 
-  patches = [
-    ./0001-lib-PoissonRecon-fix-build-with-clang-19.patch
+  cmakeFlags = [
+    (lib.cmakeBool "DOWNLOAD_ENABLED" false)
+    (lib.cmakeBool "UNINSTALL_ENABLED" false)
+    (lib.cmakeBool "FETCH_POSELIB" false)
+    (lib.cmakeBool "FETCH_FAISS" false)
+    (lib.cmakeBool "TESTS_ENABLED" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
+      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
+    ))
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "FETCH_POSELIB" false)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeBool "CUDA_ENABLED" true)
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-        lib.strings.concatStringsSep ";" (map cudaPackages.cudaFlags.dropDots cudaCapabilities)
-      ))
-    ];
+  buildInputs = [
+    boost
+    ceres-solver
+    eigen
+    freeimage
+    glog
+    libGLU
+    glew
+    qt5.qtbase
+    flann
+    lz4
+    cgal
+    gmp
+    mpfr
+    xorg.libSM
+    poselib
+    faiss
+  ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ]
+  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
 
-  buildInputs =
-    [
-      boost_static
-      ceres-solver
-      eigen
-      freeimage
-      glog
-      libGLU
-      glew
-      qt5.qtbase
-      flann
-      lz4
-      cgal
-      gmp
-      mpfr
-      xorg.libSM
-      poselib
-    ]
-    ++ lib.optionals cudaSupport [
-      cudatoolkit
-      cudaPackages.cuda_cudart.static
-    ];
-
-  nativeBuildInputs =
-    [
-      cmake
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-    ];
-
-  enableParallelBuilding = true;
-  enableParallelInstalling = true;
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+    gtest
+  ]
+  ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
   passthru.updateScript = gitUpdater { };
 
