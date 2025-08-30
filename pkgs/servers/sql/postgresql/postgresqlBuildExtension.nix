@@ -68,15 +68,18 @@ lib.extendMkDerivation {
 
   excludeDrvArgNames = [
     "enableUpdateScript"
+    "requiredExtensions"
   ];
 
   extendDrvArgs =
     finalAttrs:
     {
       enableUpdateScript ? true,
+      requiredExtensions ? [],
       ...
     }@prevAttrs:
     {
+      inherit requiredExtensions;
       passthru =
         prevAttrs.passthru or { }
         // lib.optionalAttrs enableUpdateScript {
