@@ -32,6 +32,7 @@ python.pkgs.toPythonModule (
     pythonRelaxDeps = [
       "certifi"
       "flask"
+      "flask-babel"
       "httpx-socks"
       "lxml"
     ];
