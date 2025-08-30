@@ -13,18 +13,37 @@ In Nixpkgs, `zig` overrides the default build, check and install phases.
   zig,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   # . . .
 
   nativeBuildInputs = [ zig ];
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
 
   zigBuildFlags = [ "-Dman-pages=true" ];
 
   dontUseZigCheck = true;
 
   # . . .
-}
+})
 ```
+
+## Dependencies {#zig-dependencies}
+
+When packaging Zig applications, use the `fetchDeps` function that is available
+in the Zig compiler package, and set the `zigDeps` attribute to its result.
+
+Zig lazy dependencies are fetched at build time, and this is forbidden behavior
+inside of Nix. Zig versions >= 0.15.1 can deal with this properly, but versions
+before 0.15.1 may not fetch all lazy dependencies properly.
+
+To work around this, specify `manuallyFetchLazyDeps = true;` as an argument to
+`fetchDeps`. This may not work in all cases, such as when lazy dependencies rely
+on differing Zig versions. Updating the upstream Zig version to use a version
+past 0.15.1 can fix this issue.
 
 ## Variables controlling zig {#zig-variables-controlling}
 

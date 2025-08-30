@@ -2880,6 +2880,9 @@
     "index.html#zig-example-code-snippet",
     "index.html#zig-hook-example-code-snippet"
   ],
+  "zig-dependencies": [
+    "index.html#zig-dependencies"
+  ],
   "zig-variables-controlling": [
     "index.html#zig-variables-controlling",
     "index.html#zig-hook-variables-controlling"
