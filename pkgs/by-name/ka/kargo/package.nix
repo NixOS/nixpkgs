@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "kargo";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "akuity";
     repo = "kargo";
     tag = "v${version}";
-    hash = "sha256-bknGLvoI4N3d96+taeY9MAgFoo0PT7niAJJrp4NdirA=";
+    hash = "sha256-9hBSv/tr7qidedUikp6v2WbDb6VIFsSDCJPG3gpK/0Q=";
   };
 
   vendorHash = "sha256-zo3aEs0xrWbjj5nCtZ1GEfAYXy2cnaUCUbN5bjYFZ+Y=";
