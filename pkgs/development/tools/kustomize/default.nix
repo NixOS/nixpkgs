@@ -15,7 +15,7 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}.version=${version}"
+      "-X ${t}.version=v${version}" # add 'v' prefix to match official releases
       "-X ${t}.gitCommit=${src.rev}"
     ];
 
