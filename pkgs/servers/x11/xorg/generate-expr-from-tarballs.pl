@@ -398,6 +398,10 @@ print OUT <<EOF;
   xprop,
   xrandr,
   xrefresh,
+  xset,
+  xsetroot,
+  xsm,
+  xstdcmap,
   xtrans,
   xvinfo,
   xwininfo,
@@ -442,6 +446,10 @@ self: with self; {
     xprop
     xrandr
     xrefresh
+    xset
+    xsetroot
+    xsm
+    xstdcmap
     xtrans
     xvinfo
     xwininfo
