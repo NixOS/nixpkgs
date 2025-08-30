@@ -7,7 +7,7 @@ store_verity_type = "@NIX_STORE_VERITY@"  # replaced at import by Nix
 def extract_uki_cmdline_params(ukify_json: dict) -> dict[str, str]:
     """
     Return a dict of the parameters in the .cmdline section of the UKI
-    Exits early if "usrhash" is not included.
+    Exits early if "storehash" is not included.
     """
     cmdline = ukify_json.get(".cmdline", {}).get("text")
     if cmdline is None:
@@ -18,9 +18,9 @@ def extract_uki_cmdline_params(ukify_json: dict) -> dict[str, str]:
         key, val = param.partition("=")[::2]
         params[key] = val
 
-    if "usrhash" not in params:
+    if "storehash" not in params:
         print(
-            f"UKI cmdline does not contain a usrhash:\n{cmdline}"
+            f"UKI cmdline does not contain a storehash:\n{cmdline}"
         )
         exit(1)
 
@@ -45,12 +45,12 @@ def check_partitions(
     partitions: list[dict], uki_params: dict[str, str]
 ) -> bool:
     """
-    Checks if the usrhash from `uki_params` has a matching roothash
+    Checks if the storehash from `uki_params` has a matching roothash
     for the corresponding partition in `partitions`.
     """
     for part in partitions:
         if part.get("type") == store_verity_type:
-            expected = uki_params["usrhash"]
+            expected = uki_params["storehash"]
             return hashes_match(part, expected)
 
     return False
