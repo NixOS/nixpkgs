@@ -20,13 +20,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-xiTi4GrCeoI8hIEgYMAdzUPvJzYvXrvbo6MBq9my5Cw=";
+    hash = "sha256-wrzOszkqWDEylMDZYgtAqB837uWevWCwkhBhv9LGj4Y=";
   };
 
   bazelFlags = [
