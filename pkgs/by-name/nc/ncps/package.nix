@@ -8,13 +8,13 @@
 let
   finalAttrs = {
     pname = "ncps";
-    version = "0.2.0";
+    version = "0.3.0";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-CjiPn5godd8lT3eE9e7MnZ0/2hOEq+CG0bpgRtLtwHo=";
+      hash = "sha256-mBiasGQgwP8dRQqtn7z+tLKECDd1p0JE2nvCYLru0Ts=";
     };
 
     ldflags = [
@@ -23,7 +23,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-El3yvYYnase4ztG3u7xxcKE5ARy5Lvp/FVosBwOXzbU=";
+    vendorHash = "sha256-5QpzU+cy14cdR5Oi2vwA+BbMSTPMXlhyq9RpzbMsRZQ=";
     doCheck = true;
 
     nativeBuildInputs = [
