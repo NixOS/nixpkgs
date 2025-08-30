@@ -1453,7 +1453,7 @@ let
                       headError = {
                         message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
                       };
-                      value = abort "(t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that consumes a module system type.";
+                      value = mergeOneOption loc defs;
                     };
               in
               checkedAndMerged;
