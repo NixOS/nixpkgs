@@ -24,6 +24,7 @@ let
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
     libraries = with python3Packages; [
       requests
+      pysocks
     ];
     flakeIgnore = [
       "E501"
