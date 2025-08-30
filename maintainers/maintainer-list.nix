@@ -3039,6 +3039,13 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+  bearfm = {
+    name = "Bear";
+    github = "fmbearmf";
+    githubId = 77757734;
+    email = "close.line3633@fastmail.com";
+    keys = [ { fingerprint = "FAD9F10819FA179515CD1B9FAFD359B057CEEE04"; } ];
+  };
   beeb = {
     name = "Valentin Bersier";
     email = "hi@beeb.li";
@@ -28564,6 +28571,14 @@
     github = "zarelit";
     githubId = 3449926;
     name = "David Costa";
+  };
+  zatm8 = {
+    email = "maxis1191@gmail.com";
+    github = "mourogurt";
+    githubId = 4152680;
+    keys = [ { fingerprint = "51BB 531F 219E 43C6 66E6  DD65 C4AD 9641 7F72 5D42"; } ];
+    matrix = "@zatm8:zinzaguras.ru";
+    name = "ZatM8";
   };
   zauberpony = {
     email = "elmar@athmer.org";

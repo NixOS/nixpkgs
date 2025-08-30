@@ -24,13 +24,13 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.31.1";
+  version = "2.32.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-cFGIzB1452XVSkajHbD45Pxp8Hfu10q68nMnbE9dtzg=" "zip";
-    i686-linux = fetch "linux_386" "sha256-EckUFVr5MQ75XW4eHCxWt9vtcqzAFHLUDlmr//pcmf8=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-jPZxqaLrtBC42bGVOByKuORyl2YFicILlQDHkNuuJuc=" "zip";
+    aarch64-linux = fetch "linux_arm64" "sha256-7t8Ar6vF8lU3fPy5Gw9jtUkcx9gYKg6AFDB8/3QBvbk=" "zip";
+    i686-linux = fetch "linux_386" "sha256-+KSi87muDH/A8LNH7iDPQC/CnZhTpvFNSw1cuewqaXI=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-4I7lSey6I4mQ7dDtuOASnZzAItFYkIDZ8UMsqb0q5tE=" "zip";
     aarch64-darwin =
-      fetch "apple_universal" "sha256-B71apQ2JPyyVHhavMziKNtLNs+WfCDdUEtvfwGFkE+Y="
+      fetch "apple_universal" "sha256-PVSI/iYsjphNqs0DGQlzRhmvnwj4RHcNODE2nbQ8CO0="
         "pkg";
     x86_64-darwin = aarch64-darwin;
   };

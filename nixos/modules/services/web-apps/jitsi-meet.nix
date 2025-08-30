@@ -528,7 +528,7 @@ in
         ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
-        ProtectProc = true;
+        ProtectProc = "noaccess";
         ProtectKernelLogs = true;
         PrivateTmp = true;
         PrivateDevices = true;

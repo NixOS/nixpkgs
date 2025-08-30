@@ -2721,8 +2721,12 @@ with pkgs;
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
 
   inherit (import ../build-support/dlang/dub-support.nix { inherit callPackage; })
-    buildDubPackage
     dub-to-nix
+    importDubLock
+    buildDubPackage
+    dubSetupHook
+    dubBuildHook
+    dubCheckHook
     ;
 
   dvtm = callPackage ../tools/misc/dvtm {
@@ -7114,8 +7118,8 @@ with pkgs;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
-    llvmPackages = llvmPackages_18;
-    stdenv = llvmPackages_18.stdenv;
+    llvmPackages = llvmPackages_21;
+    stdenv = llvmPackages_21.stdenv;
   };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit { };
@@ -14459,6 +14463,8 @@ with pkgs;
 
   avogadro2 = libsForQt5.callPackage ../applications/science/chemistry/avogadro2 { };
 
+  libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
+
   molbar = with python3Packages; toPythonApplication molbar;
 
   nwchem = callPackage ../applications/science/chemistry/nwchem {
@@ -14477,6 +14483,75 @@ with pkgs;
   siesta = callPackage ../applications/science/chemistry/siesta { };
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
+
+  cp2k =
+    # CP2K requires all dependencies from the Grimme ecosystem to be build with
+    # CMake instead of Meson. Unfortunately most other consumers require meson
+    let
+      grimmeCmake = lib.makeScope pkgs.newScope (self: {
+        mctc-lib = pkgs.mctc-lib.override {
+          buildType = "cmake";
+          inherit (self) jonquil toml-f;
+        };
+
+        toml-f = pkgs.toml-f.override {
+          buildType = "cmake";
+          inherit (self) test-drive;
+        };
+
+        dftd4 = pkgs.dftd4.override {
+          buildType = "cmake";
+          inherit (self) mstore mctc-lib multicharge;
+        };
+
+        jonquil = pkgs.jonquil.override {
+          buildType = "cmake";
+          inherit (self) toml-f test-drive;
+        };
+
+        mstore = pkgs.mstore.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib;
+        };
+
+        multicharge = pkgs.multicharge.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib mstore;
+        };
+
+        test-drive = pkgs.test-drive.override { buildType = "cmake"; };
+
+        simple-dftd3 = pkgs.simple-dftd3.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib mstore toml-f;
+        };
+
+        tblite = pkgs.tblite.override {
+          buildType = "cmake";
+          inherit (self)
+            mctc-lib
+            mstore
+            toml-f
+            multicharge
+            dftd4
+            simple-dftd3
+            ;
+        };
+
+        sirius = pkgs.sirius.override {
+          inherit (self)
+            mctc-lib
+            toml-f
+            multicharge
+            dftd4
+            simple-dftd3
+            ;
+        };
+      });
+    in
+    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
+      libxc = pkgs.libxc_7;
+    };
 
   ### SCIENCE/GEOMETRY
 

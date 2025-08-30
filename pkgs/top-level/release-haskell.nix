@@ -383,7 +383,6 @@ let
         xmonadctl
         xmonad-with-packages
         yi
-        zsh-git-prompt
         ;
 
       # Members of the elmPackages set that are Haskell derivations

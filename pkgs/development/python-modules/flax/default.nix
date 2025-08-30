@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-XZ9a8wpT+XpRsg8va/OnlccSYhLVV57/kz/sVdWkE3E=";
+    hash = "sha256-b7x6M2qt0OL5xBwmuOFcIS5MhlwUvA6cO5hOJ2ZiOrI=";
   };
 
   build-system = [
@@ -105,6 +105,9 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: [Chex] Function 'add' is traced > 1 times!
     "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
   ];
 
   passthru = {

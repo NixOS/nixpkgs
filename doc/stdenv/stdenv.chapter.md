@@ -1017,8 +1017,8 @@ If set to `true`, the standard environment will enable debug information in C/C+
 To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
 
 ```nix
-let
-  pkgs = import ./. {
+{
+  pkgs ? import <nixpkgs> {
     config = { };
     overlays = [
       (final: prev: {
@@ -1026,21 +1026,15 @@ let
         readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
       })
     ];
-  };
-
-  myDebugInfoDirs = pkgs.symlinkJoin {
-    name = "myDebugInfoDirs";
-    paths = with pkgs; [
-      glibc.debug
-      ncurses.debug
-      openssl.debug
-      readline.debug
-    ];
-  };
-in
+  },
+}:
 pkgs.mkShell {
-
-  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = pkgs.lib.makeSearchPathOutput "debug" "lib/debug" [
+    pkgs.glibc
+    pkgs.ncurses
+    pkgs.openssl
+    pkgs.readline
+  ];
 
   packages = [
     pkgs.gdb
@@ -1048,16 +1042,16 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+    gdb socat
   '';
 }
 ```
 
 This setup works as follows:
 - Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
-- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
-- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
-- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use this variable for looking up debug symbols.
+  [`lib.makeSearchPathOutput`](#function-library-lib.strings.makeSearchPathOutput) constructs a colon-separated search path, pointing to the directories containing the debug symbols of the listed packages.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell).
 
 :::
 
