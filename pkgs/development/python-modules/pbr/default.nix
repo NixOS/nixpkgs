@@ -5,17 +5,16 @@
   distutils,
   fetchPypi,
   setuptools,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k+pyzmmJ6y7tmdD3VyFHT2mtiBKK/e9aw3freXxL92s=";
+    hash = "sha256-z0EnKYcj2vvOOv0Td1zPOIW+XTyENXUbhn+aahC3Gjk=";
   };
 
   build-system = [ setuptools ];
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   dependencies = [
     distutils # for distutils.command in pbr/packaging.py
     setuptools # for pkg_resources
-    six
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures
