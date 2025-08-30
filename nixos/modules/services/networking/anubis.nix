@@ -12,6 +12,24 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
+  optionalUnixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  settingsToUnixSocketAddrs =
+    settings:
+    builtins.filter (x: x != "") [
+      (optionalUnixAddr settings.BIND_NETWORK settings.BIND)
+      (optionalUnixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    ];
+
+  runtimeDirectoryPrefix = "/run/anubis/";
+  unixSocketAddrToRuntimeDirectory =
+    unixSocketAddr:
+    assert lib.assertMsg (lib.hasPrefix runtimeDirectoryPrefix unixSocketAddr)
+      "unix socket ${unixSocketAddr} must be located in ${runtimeDirectoryPrefix}";
+    lib.removePrefix "/run/" (builtins.dirOf unixSocketAddr);
+
+  settingsToRuntimeDirectory =
+    settings: lib.unique (map unixSocketAddrToRuntimeDirectory (settingsToUnixSocketAddrs settings));
+
   commonSubmodule =
     isDefault:
     let
@@ -276,20 +294,7 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
-          RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
-              "anubis"
-            else
-              null;
-
+          RuntimeDirectory = settingsToRuntimeDirectory instance.settings;
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;
