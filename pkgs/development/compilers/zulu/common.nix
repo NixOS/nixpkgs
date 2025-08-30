@@ -5,6 +5,7 @@
   setJavaClassPath,
   testers,
   enableJavaFX ? false,
+  earlyAccess ? false,
   dists,
   # minimum dependencies
   unzip,
@@ -68,7 +69,13 @@ let
     hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
-  javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
+  javaPackage =
+    if enableJavaFX then
+      "ca-fx-jdk"
+    else if earlyAccess then
+      "beta-jdk"
+    else
+      "ca-jdk";
 
   isJdk8 = lib.versions.major dist.jdkVersion == "8";
 
