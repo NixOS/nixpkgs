@@ -87,6 +87,10 @@ stdenv.mkDerivation {
     cp -r doc/html "$out/share/doc/libftdi1/"
   '';
 
+  preFixup = ''
+    substituteInPlace $out/lib/pkgconfig/libftdi1.pc --replace-fail "libdir=${placeholder "out"}/${placeholder "out"}/lib" "libdir=${placeholder "out"}/lib"
+  '';
+
   meta = with lib; {
     description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
