@@ -55,6 +55,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyvisa/pyvisa-py";
     changelog = "https://github.com/pyvisa/pyvisa-py/blob/${src.tag}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      xeniagda
+    ];
   };
 }
