@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     guile
+  ];
+  propagatedBuildInputs = [
     guile-fibers
     guile-gcrypt
     guile-gnutls
