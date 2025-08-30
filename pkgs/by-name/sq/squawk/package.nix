@@ -40,6 +40,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=parse::tests::test_parse_sql_query_json"
   ];
 
+  cargoBuildFlags = [
+    "-p squawk"
+  ];
+
   meta = {
     description = "Linter for PostgreSQL, focused on migrations";
     homepage = "https://squawkhq.com";
