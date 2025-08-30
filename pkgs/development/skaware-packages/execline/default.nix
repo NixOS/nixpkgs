@@ -96,4 +96,48 @@ skawarePackages.buildPackage {
         execlineb -W test.el
       '';
     };
+
+  # Flatten a command-line that uses lists for
+  # execline blocks into the quoted block format.
+  #
+  # Typically an execline script is parsed by the
+  # execlineb program which converts a multi-dimensional
+  # collection of blocks into a one-dimensional command line
+  # which it then launches into.
+  #
+  # This function is a pure-Nix replacement for execlineb in
+  # cases where no handling of positional arguments is needed.
+  #
+  # The resulting command-line is intended to be directly exec'ed,
+  # and not used within a shell.
+  #
+  # https://skarnet.org/software/execline/el_semicolon.html
+  passthru.quoteArgs =
+    let
+      f = builtins.foldl' (
+        acc: arg:
+        acc ++ (if builtins.isList arg then map (w: " ${w}") (f arg) ++ [ "" ] else [ (toString arg) ])
+      ) [ ];
+    in
+    f;
+
+  passthru.tests.quoteArgs = lib.assertMsg (
+    builtins.toJSON (
+      execline.passthru.quoteArgs [
+        "define"
+        "FOO"
+        ""
+        "foreground"
+        [
+          "echo"
+          "\${FOO}"
+          "rm"
+          "-rf"
+          "/"
+        ]
+        "echo"
+        1
+      ]
+    ) == ''["define","FOO","","foreground"," echo"," ''${FOO}"," rm"," -rf"," /","","echo","1"]''
+  ) "quoteArgs test failed";
 }
