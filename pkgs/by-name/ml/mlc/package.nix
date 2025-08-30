@@ -4,13 +4,13 @@
   fetchurl,
   patchelf,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (prevAttrs: {
   pname = "mlc";
-  version = "3.9a";
+  version = "3.11b";
 
   src = fetchurl {
-    url = "https://downloadmirror.intel.com/736634/mlc_v${version}.tgz";
-    sha256 = "EDa5V56qCPQxgCu4eddYiWDrk7vkYS0jisnG004L+jQ=";
+    url = "https://downloadmirror.intel.com/834254/mlc_v${prevAttrs.version}.tgz";
+    sha256 = "sha256-XVq9J9FFr1nVZMnFOTgwGgggXwdbm9QfL5K0yO/rKCQ=";
   };
 
   sourceRoot = "Linux";
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
     mainProgram = "mlc";
   };
-}
+})
