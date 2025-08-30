@@ -435,7 +435,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
+    inherit (rustc) targetPlatforms targetPlatformsWithHostTools badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
     }
@@ -451,7 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
       licenses.mit
       licenses.asl20
     ];
-    platforms = rustc.tier1TargetPlatforms;
+    platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;

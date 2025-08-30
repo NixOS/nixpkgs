@@ -76,7 +76,7 @@ rec {
     setupHooks = ./setup-hook.sh;
 
     passthru = rec {
-      tier1TargetPlatforms = [
+      targetPlatformsWithHostTools = [
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
         "x86_64-darwin"
@@ -104,7 +104,7 @@ rec {
         "i686-windows"
         "x86_64-windows"
       ];
-      targetPlatforms = tier1TargetPlatforms ++ [
+      targetPlatforms = targetPlatformsWithHostTools ++ [
         # Platforms without host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
         "armv5tel-linux"
