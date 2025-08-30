@@ -39,6 +39,7 @@
   libdrm,
   libgbm,
   libei,
+  libepoxy,
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
@@ -141,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libgbm
     libei
+    libepoxy
     libdisplay-info
     libGL
     libgudev
@@ -206,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "16"; # bumped each dev cycle
+    libmutter_api_version = "17"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
