@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dgibson/dtc/commit/ce1d8588880aecd7af264e422a16a8b33617cef7.patch";
       hash = "sha256-t1CxKnbCXUArtVcniAIdNvahOGXPbYhPCZiTynGLvfo=";
     })
+    # Make Meson use our Python version, not the one it was built with itself
+    ./python-path.patch
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
@@ -58,9 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libyaml ];
 
-  postPatch = ''
-    patchShebangs setup.py
-  '';
+  postPatch =
+    ''
+      patchShebangs setup.py
+    ''
+    + lib.optionalString pythonSupport ''
+      # This works together with python-path.patch
+      substituteInPlace meson.build --replace-fail '@PYTHON_BIN@' '${lib.getBin python}/bin/python'
+    '';
 
   # Required for installation of Python library and is innocuous otherwise.
   env.DESTDIR = "/";
