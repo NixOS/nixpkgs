@@ -17,6 +17,7 @@
   font-sony-misc,
   font-sun-misc,
   font-util,
+  font-winitzki-cyrillic,
   gccmakedep,
   ico,
   imake,
@@ -150,6 +151,7 @@ self: with self; {
   fontsonymisc = font-sony-misc;
   fontsunmisc = font-sun-misc;
   fontutil = font-util;
+  fontwinitzkicyrillic = font-winitzki-cyrillic;
   libAppleWM = libapplewm;
   libFS = libfs;
   libICE = libice;
@@ -1185,46 +1187,6 @@ self: with self; {
         freetype
         xorgproto
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontwinitzkicyrillic = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-winitzki-cyrillic";
-      version = "1.0.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.4.tar.xz";
-        sha256 = "1a4pz8f7hz6nn9xirz2k1j81ykl3lwrpi1ydmzipciy15l984v9v";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
