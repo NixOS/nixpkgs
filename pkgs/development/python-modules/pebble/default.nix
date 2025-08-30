@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -28,7 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  disabledTests = [
+    # Timing-sensitive
+    "test_process_pool_map_timeout_chunks"
+  ];
 
   pythonImportsCheck = [ "pebble" ];
 
