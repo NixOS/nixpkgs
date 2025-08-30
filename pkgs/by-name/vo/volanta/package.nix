@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/volanta.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=env APPIMAGE=true volanta'
     wrapProgram $out/bin/volanta \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --wayland-text-input-version=3}}"
   '';
 
   passthru = {
