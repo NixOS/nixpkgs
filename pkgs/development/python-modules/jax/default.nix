@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.6.2";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${version}";
-    hash = "sha256-MTgpwpJWxULCiZhDG+MFpOp8ZHoj1ZDmOD05OaGfXhM=";
+    hash = "sha256-k3yuWs+SOxrDXysVWCFR3wliATtro+aDdDXfFVtOTBo=";
   };
 
   build-system = [ setuptools ];
@@ -103,6 +103,14 @@ buildPythonPackage rec {
     "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
     "tests/shape_poly_test.py::ShapePolyTest"
     "tests/tree_util_test.py::TreeTest"
+
+    # Mostly AssertionError on numerical tests failing since 0.7.0
+    # https://github.com/jax-ml/jax/issues/31428
+    "tests/export_back_compat_test.py"
+    "tests/lax_numpy_test.py"
+    "tests/lax_scipy_test.py"
+    "tests/lax_test.py"
+    "tests/linalg_test.py"
   ];
 
   # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with

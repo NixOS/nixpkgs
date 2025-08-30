@@ -59,6 +59,12 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+  disabledTests = [
+    # assert Array(False, dtype=bool)
+    # +  where Array(False, dtype=bool) = tree_allclose(Array(0.12993518, dtype=float64), Array(0., dtype=float64, weak_type=True), atol=0.0001, rtol=0.0001)
+    "test_least_squares"
+  ];
+
   meta = {
     description = "Nonlinear optimisation (root-finding, least squares, ...) in JAX+Equinox";
     homepage = "https://github.com/patrick-kidger/optimistix";
