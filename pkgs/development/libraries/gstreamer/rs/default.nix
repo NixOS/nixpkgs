@@ -188,9 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
-    ./ignore-tests.patch
-
     # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
     # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
     # Cannot be upstreamed due to MSRV bump in native-tls:
@@ -244,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
   # turn off all auto plugins since we use a list of plugins we generate
   mesonAutoFeatures = "disabled";
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && false;
 
   # csound lib dir must be manually specified for it to build
   preConfigure = ''

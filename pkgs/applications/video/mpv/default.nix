@@ -314,7 +314,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fpletz
       globin
-      ma27
       SchweGELBin
     ];
     platforms = lib.platforms.unix;
