@@ -3,7 +3,6 @@
   stdenv,
   # nixpkgs functions
   buildGoModule,
-  buildVimPlugin,
   callPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -131,6 +130,11 @@
 self: super:
 let
   luaPackages = neovim-unwrapped.lua.pkgs;
+
+  # Ensure the vim plugin builders are not used in this file.
+  # If they are used, these stubs will throw.
+  buildVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
+  buildNeoVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
 in
 {
   corePlugins = symlinkJoin {
