@@ -197,7 +197,8 @@ in
 
               [node]
               nickname = ${settings.nickname}
-              tub.port = ${toString settings.tub.port}
+              # tcp6 means a tcp6 socket - those handle both, ipv4 and ipv6 connections.
+              tub.port = tcp6:${toString settings.tub.port}
               ${lib.optionalString (settings.tub.location != null) "tub.location = ${settings.tub.location}"}
             '';
           }
@@ -210,55 +211,62 @@ in
       #   (node: settings: settings.tub.port);
       systemd.services = lib.flip lib.mapAttrs' cfg.introducers (
         node: settings:
-        let
-          pidfile = "/run/tahoe.introducer-${node}.pid";
-          # This is a directory, but it has no trailing slash. Tahoe commands
-          # get antsy when there's a trailing slash.
-          nodedir = "/var/db/tahoe-lafs/introducer-${node}";
-        in
         lib.nameValuePair "tahoe.introducer-${node}" {
           description = "Tahoe LAFS node ${node}";
           documentation = [ "info:tahoe-lafs" ];
           wantedBy = [ "multi-user.target" ];
           path = [ settings.package ];
-          restartTriggers = [
-            config.environment.etc."tahoe-lafs/introducer-${node}.cfg".source
-          ];
+          restartTriggers = [ config.environment.etc."tahoe-lafs/introducer-${node}.cfg".source ];
           serviceConfig = {
             Type = "simple";
-            PIDFile = pidfile;
             # Believe it or not, Tahoe is very brittle about the order of
             # arguments to $(tahoe run). The node directory must come first,
             # and arguments which alter Twisted's behavior come afterwards.
+            #
+            #   --allow-stdin-close Do not exit when stdin closes ("tahoe run"
+            #   otherwise will exit).
+            #
+            #   --nodaemon makes twistd run in the foreground. Systemd works
+            #   best with child processes that remain in the foreground.
+            #
+            #   --pidfile= prevents twistd from writing a pidfile. A pidfile is
+            #   not necessary when Twisted runs as a foreground process.
+            #
             ExecStart = ''
-              ${settings.package}/bin/tahoe run ${lib.escapeShellArg nodedir} --pidfile=${lib.escapeShellArg pidfile}
+              ${settings.package}/bin/tahoe run --allow-stdin-close $STATE_DIRECTORY --nodaemon --pidfile=
             '';
+            StateDirectory = "tahoe-lafs/introducer-${node}";
+            User = "tahoe.introducer-${node}";
+            Group = "tahoe.introducer-${node}";
           };
           preStart = ''
-            if [ ! -d ${lib.escapeShellArg nodedir} ]; then
-              mkdir -p /var/db/tahoe-lafs
+            if [ ! -d $STATE_DIRECTORY/private ]; then
               # See https://github.com/NixOS/nixpkgs/issues/25273
               tahoe create-introducer \
                 --hostname="${config.networking.hostName}" \
-                ${lib.escapeShellArg nodedir}
+                $STATE_DIRECTORY
             fi
 
             # Tahoe has created a predefined tahoe.cfg which we must now
             # scribble over.
             # XXX I thought that a symlink would work here, but it doesn't, so
             # we must do this on every prestart. Fixes welcome.
-            # rm ${nodedir}/tahoe.cfg
-            # ln -s /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
-            cp /etc/tahoe-lafs/introducer-"${node}".cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
+            # rm $STATE_DIRECTORY/tahoe.cfg
+            # ln -s /etc/tahoe-lafs/introducer-${node}.cfg $STATE_DIRECTORY/tahoe.cfg
+            cp /etc/tahoe-lafs/introducer-"${node}".cfg $STATE_DIRECTORY/tahoe.cfg
           '';
         }
       );
       users.users = lib.flip lib.mapAttrs' cfg.introducers (
         node: _:
         lib.nameValuePair "tahoe.introducer-${node}" {
-          description = "Tahoe node user for introducer ${node}";
           isSystemUser = true;
+          group = "tahoe.introducer-${node}";
+          home = "/var/lib/tahoe-lafs/introducer-${node}";
         }
+      );
+      users.groups = lib.flip lib.mapAttrs' cfg.introducers (
+        node: _: lib.nameValuePair "tahoe.introducer-${node}" { }
       );
     })
     (lib.mkIf (cfg.nodes != { }) {
@@ -273,11 +281,11 @@ in
 
               [node]
               nickname = ${settings.nickname}
-              tub.port = ${toString settings.tub.port}
+              tub.port = tcp6:${toString settings.tub.port}
               ${lib.optionalString (settings.tub.location != null) "tub.location = ${settings.tub.location}"}
               # This is a Twisted endpoint. Twisted Web doesn't work on
               # non-TCP. ~ C.
-              web.port = tcp:${toString settings.web.port}
+              web.port = tcp6:${toString settings.web.port}
 
               [client]
               ${lib.optionalString (
@@ -322,53 +330,46 @@ in
       #   (node: settings: settings.tub.port);
       systemd.services = lib.flip lib.mapAttrs' cfg.nodes (
         node: settings:
-        let
-          pidfile = "/run/tahoe.${node}.pid";
-          # This is a directory, but it has no trailing slash. Tahoe commands
-          # get antsy when there's a trailing slash.
-          nodedir = "/var/db/tahoe-lafs/${node}";
-        in
         lib.nameValuePair "tahoe.${node}" {
           description = "Tahoe LAFS node ${node}";
           documentation = [ "info:tahoe-lafs" ];
           wantedBy = [ "multi-user.target" ];
           path = [ settings.package ];
-          restartTriggers = [
-            config.environment.etc."tahoe-lafs/${node}.cfg".source
-          ];
+          restartTriggers = [ config.environment.etc."tahoe-lafs/${node}.cfg".source ];
           serviceConfig = {
             Type = "simple";
-            PIDFile = pidfile;
-            # Believe it or not, Tahoe is very brittle about the order of
-            # arguments to $(tahoe run). The node directory must come first,
-            # and arguments which alter Twisted's behavior come afterwards.
+            # The comments for the introducer ExecStart config above apply here as well.
             ExecStart = ''
-              ${settings.package}/bin/tahoe run ${lib.escapeShellArg nodedir} --pidfile=${lib.escapeShellArg pidfile}
+              ${settings.package}/bin/tahoe run --allow-stdin-close $STATE_DIRECTORY --nodaemon --pidfile=
             '';
+            StateDirectory = "tahoe-lafs/${node}";
+            User = "tahoe.${node}";
+            Group = "tahoe.${node}";
           };
           preStart = ''
-            if [ ! -d ${lib.escapeShellArg nodedir} ]; then
-              mkdir -p /var/db/tahoe-lafs
-              tahoe create-node --hostname=localhost ${lib.escapeShellArg nodedir}
+            if [ ! -d $STATE_DIRECTORY/private ]; then
+              tahoe create-node --hostname=localhost $STATE_DIRECTORY
             fi
 
             # Tahoe has created a predefined tahoe.cfg which we must now
             # scribble over.
             # XXX I thought that a symlink would work here, but it doesn't, so
             # we must do this on every prestart. Fixes welcome.
-            # rm ${nodedir}/tahoe.cfg
-            # ln -s /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${nodedir}/tahoe.cfg
-            cp /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
+            # rm $STATE_DIRECTORY/tahoe.cfg
+            # ln -s /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg $STATE_DIRECTORY/tahoe.cfg
+            cp /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg $STATE_DIRECTORY/tahoe.cfg
           '';
         }
       );
       users.users = lib.flip lib.mapAttrs' cfg.nodes (
         node: _:
         lib.nameValuePair "tahoe.${node}" {
-          description = "Tahoe node user for node ${node}";
           isSystemUser = true;
+          group = "tahoe.${node}";
+          home = "/var/lib/tahoe-lafs/${node}";
         }
       );
+      users.groups = lib.flip lib.mapAttrs' cfg.nodes (node: _: lib.nameValuePair "tahoe.${node}" { });
     })
   ];
 }
