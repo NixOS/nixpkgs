@@ -182,7 +182,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
   };
 
-  meta = bluez-headers.meta // {
+  meta = {
     mainProgram = "btinfo";
+    inherit (bluez-headers.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      platforms
+      ;
   };
 })
