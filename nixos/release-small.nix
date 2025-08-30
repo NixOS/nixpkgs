@@ -99,6 +99,7 @@ rec {
       mariadb
       nginx
       nodejs
+      xz-after-bootstrap
       openssh
       opensshTest
       php
