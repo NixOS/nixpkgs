@@ -28,7 +28,7 @@ cd ../../../..
 
 if [[ "${1-default}" != "--deps-only" ]]; then
     SHA="$(nix-prefetch-git https://git.ryujinx.app/ryubing/ryujinx --rev "$NEW_VERSION" --quiet | jq -r '.sha256')"
-    SRI=$(nix --experimental-features nix-command hash to-sri "sha256:$SHA")
+    SRI=$(nix-hash --to-sri "sha256:$SHA")
     update-source-version ryubing "$NEW_VERSION" "$SRI"
 fi
 
