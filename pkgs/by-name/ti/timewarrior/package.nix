@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     tag = "v${version}";
-    hash = "sha256-s7R92AR7pCcXkgI0BKnRship4TkWKx7km1W0ZyAEmnc=";
+    hash = "sha256-wwuyXcLCrNvpDIQvoBt/OQlwoTMhPzGZ+WrZdTo6IPo=";
     fetchSubmodules = true;
   };
 
