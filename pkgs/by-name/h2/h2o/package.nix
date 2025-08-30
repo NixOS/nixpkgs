@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   cmake,
   makeWrapper,
@@ -32,16 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "6476496bd544c3c7f601d7ab2b07e378e8310e11";
     hash = "sha256-ZSBYg1HCuYifTyDmHyNIjEWab5N1TT+q/4m62mFFDJ0=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/h2o/h2o/security/advisories/GHSA-mrjm-qq9m-9mjq
-      # https://kb.cert.org/vuls/id/767506
-      name = "CVE-2025-8671.patch";
-      url = "https://github.com/h2o/h2o/commit/579ecfaca155d1f9f12bfd0cff6086dcda4b9692.patch";
-      hash = "sha256-bNnhx5RGBw6SmKmhlACHKPsnVUPzQUqHsunPdiayzv0=";
-    })
-  ];
 
   outputs = [
     "out"
