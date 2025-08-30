@@ -20,7 +20,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.0";
+  version = "6.5.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -128,7 +128,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [

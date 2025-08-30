@@ -7,7 +7,6 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  ...
 }:
 
 let

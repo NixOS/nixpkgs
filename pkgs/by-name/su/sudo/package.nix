@@ -8,6 +8,9 @@
   groff,
   sssd,
   nixosTests,
+  genericUpdater,
+  writeShellScript,
+  curl,
   sendmailPath ? "/run/wrappers/bin/sendmail",
   withInsults ? false,
   withSssd ? false,
@@ -72,7 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/share/doc/sudo/ChangeLog
   '';
 
-  passthru.tests = { inherit (nixosTests) sudo; };
+  passthru = {
+    tests = { inherit (nixosTests) sudo; };
+    updateScript = genericUpdater {
+      versionLister = writeShellScript "sudo-versionLister" ''
+        ${lib.getExe curl} -sL https://www.sudo.ws/dist | grep -Po 'href="sudo-\K[\w.]*(?=\.tar\.gz")'
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "Command to run commands as root";

@@ -3,10 +3,8 @@
   stdenv,
   fetchurl,
   kernel,
-  kernelModuleMakeFlags,
   elfutils,
   python3,
-  perl,
   newt,
   slang,
   asciidoc,
@@ -103,8 +101,9 @@ stdenv.mkDerivation {
     "prefix=$(out)"
     "WERROR=0"
     "ASCIIDOC8=1"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
-  ++ kernelModuleMakeFlags
   ++ lib.optional (!withGtk) "NO_GTK2=1"
   ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
   ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
@@ -137,7 +136,6 @@ stdenv.mkDerivation {
     openssl
     numactl
     python3
-    perl
     babeltrace
   ]
   ++ (
@@ -177,7 +175,7 @@ stdenv.mkDerivation {
   doCheck = false; # requires "sparse"
 
   installTargets = [
-    "install"
+    "install-tools" # don't install tests, as those depend on perl
     "install-man"
   ];
 

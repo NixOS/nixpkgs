@@ -206,7 +206,7 @@
   "amarok-history": {
     "description": "Amarok history",
     "name": "amarok-history",
-    "project_path": "multimedia/amarok/amarok-history",
+    "project_path": "historical/amarok-history",
     "repo_path": "historical/amarok-history"
   },
   "amor": {
@@ -638,7 +638,7 @@
   "calligra-history": {
     "description": "The home of inactive branches for Calligra Suite.",
     "name": "calligra-history",
-    "project_path": "calligra/calligra-history",
+    "project_path": "historical/calligra-history",
     "repo_path": "historical/calligra-history"
   },
   "calligraplan": {
@@ -797,6 +797,12 @@
     "project_path": "libs/cxx-kde-frameworks",
     "repo_path": "libraries/cxx-kde-frameworks"
   },
+  "cxx-rust-cssparser": {
+    "description": "Library for parsing CSS using the Rust cssparser crate",
+    "name": "cxx-rust-cssparser",
+    "project_path": "libraries/cxx-rust-cssparser",
+    "repo_path": "libraries/cxx-rust-cssparser"
+  },
   "cxx11-cmake-modules": {
     "description": "CMake modules for detecting C++11 features supported by the compiler",
     "name": "cxx11-cmake-modules",
@@ -836,7 +842,7 @@
   "digikam-doc": {
     "description": "Documentation for the digiKam photo management application",
     "name": "digikam-doc",
-    "project_path": "graphics/digikam/digikam-doc",
+    "project_path": "documentation/digikam-doc",
     "repo_path": "documentation/digikam-doc"
   },
   "digikam-software-compilation": {
@@ -1180,6 +1186,12 @@
     "name": "gwenview",
     "project_path": "kdegraphics/gwenview",
     "repo_path": "graphics/gwenview"
+  },
+  "hana": {
+    "description": "Application to capture thumbnails from video files",
+    "name": "hana",
+    "project_path": "multimedia/hana",
+    "repo_path": "multimedia/hana"
   },
   "haruna": {
     "description": "Open source video player built with Qt/QML and libmpv.",
@@ -1991,11 +2003,11 @@
     "project_path": "unmaintained/kdeexamples",
     "repo_path": "unmaintained/kdeexamples"
   },
-  "kdegraphics": {
+  "kdegraphics-collection": {
     "description": "Super-repository which holds the history of the kdegraphics toplevel files",
-    "name": "kdegraphics",
-    "project_path": "unmaintained/kdegraphics",
-    "repo_path": "unmaintained/kdegraphics"
+    "name": "kdegraphics-collection",
+    "project_path": "unmaintained/kdegraphics-collection",
+    "repo_path": "unmaintained/kdegraphics-collection"
   },
   "kdegraphics-mobipocket": {
     "description": "A collection of plugins to handle mobipocket files",
@@ -2564,7 +2576,7 @@
   "kglobalacceld": {
     "description": "Daemon providing Global Keyboard Shortcut (Accelerator) functionality",
     "name": "kglobalacceld",
-    "project_path": "base/kglobalacceld",
+    "project_path": "workspace/kglobalacceld",
     "repo_path": "plasma/kglobalacceld"
   },
   "kgoldrunner": {
@@ -3119,6 +3131,12 @@
     "project_path": "kdegames/knights",
     "repo_path": "games/knights"
   },
+  "knighttime": {
+    "description": "Helpers for scheduling the dark-light cycle",
+    "name": "knighttime",
+    "project_path": "workspace/knighttime",
+    "repo_path": "plasma/knighttime"
+  },
   "knipptasch": {
     "description": "Personal accounting application that aims to be the simplest for basic use",
     "name": "knipptasch",
@@ -3257,6 +3275,12 @@
     "project_path": "sdk/kommit",
     "repo_path": "sdk/kommit"
   },
+  "komodo": {
+    "description": "todo.txt Kirigami GUI application",
+    "name": "komodo",
+    "project_path": "utilities/komodo",
+    "repo_path": "utilities/komodo"
+  },
   "kompare": {
     "description": "Graphical File Differences Tool",
     "name": "kompare",
@@ -3298,6 +3322,12 @@
     "name": "kontactinterface",
     "project_path": "pim/kontactinterface",
     "repo_path": "pim/kontactinterface"
+  },
+  "kontainer": {
+    "description": "Qt DistroBox GUI",
+    "name": "kontainer",
+    "project_path": "sysadmin/kontainer",
+    "repo_path": "system/kontainer"
   },
   "kontaminuti": {
     "description": "Kontaminuti is a simple helper utility to time your activities according to the Pomodoro Technique.",
@@ -3622,6 +3652,12 @@
     "name": "kreport",
     "project_path": "libs/kreport",
     "repo_path": "libraries/kreport"
+  },
+  "kretro": {
+    "description": "Libretro Emulation Frontend for Plasma",
+    "name": "kretro",
+    "project_path": "games/kretro",
+    "repo_path": "games/kretro"
   },
   "kreversi": {
     "description": "KReversi is is a simple one player strategy game played against the computer",
@@ -4319,11 +4355,41 @@
     "project_path": "workspace/kwin",
     "repo_path": "plasma/kwin"
   },
+  "kwin-arhud-warping": {
+    "description": "KWin Effect to warp certain outputs for ArHUD",
+    "name": "kwin-arhud-warping",
+    "project_path": "automotive/kwin-arhud-warping",
+    "repo_path": "automotive/kwin-arhud-warping"
+  },
+  "kwin-blur-ng": {
+    "description": "Next generation Blur plugin for KWin",
+    "name": "kwin-blur-ng",
+    "project_path": "automotive/kwin-blur-ng",
+    "repo_path": "automotive/kwin-blur-ng"
+  },
+  "kwin-gamepad": {
+    "description": "KWin plugin to add support for gamepads",
+    "name": "kwin-gamepad",
+    "project_path": "automotive/kwin-gamepad",
+    "repo_path": "automotive/kwin-gamepad"
+  },
+  "kwin-sharedtextures": {
+    "description": "KWin support for Wayland shared textures",
+    "name": "kwin-sharedtextures",
+    "project_path": "automotive/kwin-sharedtextures",
+    "repo_path": "automotive/kwin-sharedtextures"
+  },
   "kwin-x11": {
     "description": "Easy to use, but flexible, X Window Manager",
     "name": "kwin-x11",
     "project_path": "workspace/kwin-x11",
     "repo_path": "plasma/kwin-x11"
+  },
+  "kwin-zones": {
+    "description": "Wayland ext-zones for KWin",
+    "name": "kwin-zones",
+    "project_path": "automotive/kwin-zones",
+    "repo_path": "automotive/kwin-zones"
   },
   "kwindowsaddons": {
     "description": "Runtime components for KDE software on Windows",
@@ -4652,13 +4718,13 @@
   "libstreamanalyzer": {
     "description": "Strigi libstreamanalyzer",
     "name": "libstreamanalyzer",
-    "project_path": "kdesupport/strigi/libstreamanalyzer",
+    "project_path": "unmaintained/libstreamanalyzer",
     "repo_path": "unmaintained/libstreamanalyzer"
   },
   "libstreams": {
     "description": "Strigi libstreams",
     "name": "libstreams",
-    "project_path": "kdesupport/strigi/libstreams",
+    "project_path": "unmaintained/libstreams",
     "repo_path": "unmaintained/libstreams"
   },
   "libtagaro": {
@@ -4912,6 +4978,12 @@
     "name": "mauiman",
     "project_path": "base/mauiman",
     "repo_path": "maui/mauiman"
+  },
+  "mbition-wayland-protocols": {
+    "description": "Non-standard Wayland protocols authored by Mbition",
+    "name": "mbition-wayland-protocols",
+    "project_path": "automotive/mbition-wayland-protocols",
+    "repo_path": "automotive/mbition-wayland-protocols"
   },
   "mbox-importer": {
     "description": "Wizard to assist with importing MBox email archives into Akonadi",
@@ -6368,8 +6440,8 @@
   "spectacle": {
     "description": "Screenshot capture utility",
     "name": "spectacle",
-    "project_path": "kdegraphics/spectacle",
-    "repo_path": "graphics/spectacle"
+    "project_path": "kdeworkspace/spectacle",
+    "repo_path": "plasma/spectacle"
   },
   "sprinter": {
     "description": "Multi-agent query parser and result generator",
@@ -6416,7 +6488,7 @@
   "strigi": {
     "description": "Strigi",
     "name": "strigi",
-    "project_path": "kdesupport/strigi/strigi",
+    "project_path": "unmaintained/strigi",
     "repo_path": "unmaintained/strigi"
   },
   "strigi-multimedia": {
@@ -6428,19 +6500,19 @@
   "strigiclient": {
     "description": "Strigi client",
     "name": "strigiclient",
-    "project_path": "kdesupport/strigi/strigiclient",
+    "project_path": "unmaintained/strigiclient",
     "repo_path": "unmaintained/strigiclient"
   },
   "strigidaemon": {
     "description": "Strigi daemon",
     "name": "strigidaemon",
-    "project_path": "kdesupport/strigi/strigidaemon",
+    "project_path": "unmaintained/strigidaemon",
     "repo_path": "unmaintained/strigidaemon"
   },
   "strigiutils": {
     "description": "Strigi utilities",
     "name": "strigiutils",
-    "project_path": "kdesupport/strigi/strigiutils",
+    "project_path": "unmaintained/strigiutils",
     "repo_path": "unmaintained/strigiutils"
   },
   "subtitlecomposer": {
@@ -7684,6 +7756,12 @@
     "name": "websites-kube-kde-org",
     "project_path": "websites/kube-kde-org",
     "repo_path": "websites/kube-kde-org"
+  },
+  "websites-l10n-kde-org": {
+    "description": "Main localization and internalization portal - l10n.kde.org",
+    "name": "websites-l10n-kde-org",
+    "project_path": "websites/l10n-kde-org",
+    "repo_path": "websites/l10n-kde-org"
   },
   "websites-lakademy-kde-org": {
     "description": "Website for LaKademy - lakademy.kde.org",

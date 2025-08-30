@@ -139,7 +139,7 @@ in
       default = defaultSettings;
       description = ''
         Configuration to be written to the libncf-nci configuration files.
-        To understand the configuration format, refer to https://github.com/NXPNFCLinux/linux_libnfc-nci/tree/master/conf.
+        To understand the configuration format, refer to <https://github.com/NXPNFCLinux/linux_libnfc-nci/tree/master/conf>.
       '';
       type = lib.types.attrs;
     };

@@ -4,7 +4,7 @@ Castopod is an open-source hosting platform made for podcasters who want to enga
 
 ## Quickstart {#module-services-castopod-quickstart}
 
-Configure ACME (https://nixos.org/manual/nixos/unstable/#module-security-acme).
+Configure ACME (<https://nixos.org/manual/nixos/unstable/#module-security-acme>).
 Use the following configuration to start a public instance of Castopod on `castopod.example.com` domain:
 
 ```nix

@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L4SQ29vUGTZs7xUWAyqwbQfMtYOe9UkF6EKkcmktQgQ=";
+    hash = "sha256-iB+3W7FlTtVdhgYLsGfyxxb44VX1e7c/1ETlNxOq/sg=";
   };
 
   build-system = [ setuptools ];

@@ -102,11 +102,10 @@ with lib;
     boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
     # To speed up installation a little bit, include the complete
-    # stdenv in the Nix store on the CD.
+    # stdenvNoCC in the Nix store on the CD.
     system.extraDependencies =
       with pkgs;
       [
-        stdenv
         stdenvNoCC # for runCommand
         busybox
         # For boot.initrd.systemd

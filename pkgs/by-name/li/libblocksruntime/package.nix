@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   checkPhase = ''
     runHook preCheck
     ./checktests
-    runHook postChck
+    runHook postCheck
   '';
 
   doCheck = false; # hasdescriptor.c test fails, hrm.

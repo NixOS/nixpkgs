@@ -80,7 +80,7 @@ in
           Path to a text file containing IPs to block.
           Useful to prevent DDoS/deanonymization attacks.
 
-          https://github.com/monero-project/meta/issues/1124
+          <https://github.com/monero-project/meta/issues/1124>
         '';
         example = lib.literalExpression ''
           builtins.fetchurl {
@@ -222,7 +222,7 @@ in
         default = false;
         description = ''
           Whether to prune the blockchain.
-          https://www.getmonero.org/resources/moneropedia/pruning.html
+          <https://www.getmonero.org/resources/moneropedia/pruning.html>
         '';
       };
 

@@ -91,6 +91,10 @@
     && !stdenv.hostPlatform.isStatic,
   elfutils,
 
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
+
   # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
   ghcFlavour ?
@@ -110,7 +114,7 @@
         # While split sections are now enabled by default in ghc 8.8 for windows,
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ];
+        ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
     in
     baseFlavour + lib.concatMapStrings (t: "+${t}") transformers,
 
@@ -248,6 +252,14 @@
             ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch
         )
       ]
+      ++ lib.optionals stdenv.targetPlatform.isWindows [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
+      ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
       # impossible to import an existing flavour in UserSettings, so patching
@@ -291,6 +303,11 @@
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
           sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
         })
+      ]
+
+      # Missing ELF symbols
+      ++ lib.optionals stdenv.targetPlatform.isAndroid [
+        ./ghc-define-undefined-elf-st-visibility.patch
       ];
 
     stdenv = stdenvNoCC;
@@ -329,7 +346,8 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert stdenv.buildPlatform == stdenv.hostPlatform;
+assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+  "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -407,6 +425,8 @@ let
           ld = cc.bintools;
           "ld.gold" = cc.bintools;
 
+          windres = cc.bintools;
+
           otool = cc.bintools.bintools;
 
           # GHC needs install_name_tool on all darwin platforms. The same one can
@@ -465,6 +485,7 @@ let
       gmp
       libffi
       ncurses
+      numactl
       ;
   };
 
@@ -649,6 +670,11 @@ stdenv.mkDerivation (
       "--with-libdw-includes=${lib.getDev targetLibs.elfutils}/include"
       "--with-libdw-libraries=${lib.getLib targetLibs.elfutils}/lib"
     ]
+    ++ lib.optionals enableNuma [
+      "--enable-numa"
+      "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+      "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
+    ]
     ++ lib.optionals targetPlatform.isDarwin [
       # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
       # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
@@ -715,8 +741,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage0:ghc (i.e. stage1) doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     hadrianFlags = [
       "--flavour=${ghcFlavour}"
@@ -819,6 +850,10 @@ stdenv.mkDerivation (
           else
             "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
         }"
+    ''
+    + lib.optionalString stdenv.targetPlatform.isWindows ''
+      ghc-settings-edit "$settingsFile" \
+      "windres command" "${toolPath "windres" installCC}"
     ''
     + ''
 

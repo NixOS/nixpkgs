@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
     fetchSubmodules = true;
   };

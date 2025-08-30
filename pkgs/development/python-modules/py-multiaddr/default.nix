@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "py-multiaddr";
-  version = "0.0.9";
+  version = "0.0.10";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = "py-multiaddr";
-    rev = "v${version}";
-    hash = "sha256-cGM7iYQPP+UOkbTxRhzuED0pkcydFCO8vpx9wTc0/HI=";
+    tag = "v${version}";
+    hash = "sha256-N46D2H3RG6rtdBrSyDjh8UxD+Ph/FXEa4FcEI2uz4y8=";
   };
 
   postPatch = ''

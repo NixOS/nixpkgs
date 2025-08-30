@@ -30,6 +30,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko
+    install -D system76-thelio-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-thelio-io.ko
   '';
 
   meta = {

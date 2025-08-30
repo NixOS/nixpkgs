@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  mesonFlags = [ "-Ddo_userdirs=enabled" ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
@@ -112,5 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       ylh
     ];
     mainProgram = "vkquake";
+    license = lib.licenses.gpl2Plus;
   };
 })

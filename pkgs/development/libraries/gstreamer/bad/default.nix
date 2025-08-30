@@ -115,7 +115,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.0";
+  version = "1.26.3";
 
   outputs = [
     "out"
@@ -124,21 +124,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Ch6hMX2Y2ilpQ2l+WmZSgLEfyAiD/4coxVBk+Za8hY=";
+    hash = "sha256-lcSNrK8UJ29OWV9MvKlLPP6/wiKF52XiqlbQpydddWE=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
     (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
-    })
-
-    # Fix Requires in gstreamer-analytics-1.0.pc
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bc93bbf5c87ec994ea136bb40accc09dfa35ae98.patch";
-      stripLen = 2;
-      hash = "sha256-QQDpHe363iPxTuthITRbLUKaAXS2F9s5zfCn/ps14WE=";
     })
   ];
 

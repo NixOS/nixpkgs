@@ -437,9 +437,9 @@ in
             for more info.
           '';
         }
-        (requirePostfixHash [ "config" "relay_domains" ] "postfix_domains")
-        (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
-        (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "relay_domains" ] "postfix_domains")
+        (requirePostfixHash [ "settings" "main" "transport_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "local_recipient_maps" ] "postfix_lmtp")
       ]);
 
     users.users.mailman = {
@@ -554,9 +554,9 @@ in
     ];
 
     services.postfix = lib.mkIf cfg.enablePostfix {
-      recipientDelimiter = "+"; # bake recipient addresses in mail envelopes via VERP
-      config = {
+      settings.main = {
         owner_request_special = "no"; # Mailman handles -owner addresses on its own
+        recipient_delimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       };
     };
 

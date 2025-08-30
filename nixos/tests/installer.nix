@@ -709,6 +709,10 @@ let
               system.extraDependencies =
                 with pkgs;
                 [
+                  # TODO: Remove this when we can install systems
+                  # without `stdenv`.
+                  stdenv
+
                   bintools
                   brotli
                   brotli.dev

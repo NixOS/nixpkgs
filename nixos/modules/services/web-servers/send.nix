@@ -27,8 +27,8 @@ in
             ])
           );
         description = ''
-          All the available config options and their defaults can be found here: https://github.com/timvisee/send/blob/master/server/config.js,
-          some descriptions can found here: https://github.com/timvisee/send/blob/master/docs/docker.md#environment-variables
+          All the available config options and their defaults can be found here: <https://github.com/timvisee/send/blob/master/server/config.js>,
+          some descriptions can found here: <https://github.com/timvisee/send/blob/master/docs/docker.md#environment-variables>
 
           Values under {option}`services.send.environment` will override the predefined values in the Send service.
             - Time/duration should be in seconds

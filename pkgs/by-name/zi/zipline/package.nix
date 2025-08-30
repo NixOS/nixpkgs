@@ -28,28 +28,49 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
+
+  vips' = vips.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "8.17.1";
+      src = fetchFromGitHub {
+        inherit (prevAttrs.src) owner repo;
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
+        postFetch = ''
+          rm -r $out/test/test-suite/images/
+        '';
+      };
+      outputs = lib.remove "devdoc" prevAttrs.outputs;
+      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
+    }
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.0";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zm2xNhWghg/Pa9LhLzV+AG/tfiSjAiSnGs8OMnC0Tpw=";
+    hash = "sha256-WyL/ItY/hvmBDRBB063QAIATPT51bPChkFKH7i32sz0=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git_head
+      rm -rf $out/.git
+    '';
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
+    hash = "sha256-LDLcde+p0wjy1BddiNxJwFLS/7O9jGpMNapojZIipeA=";
   };
 
   buildInputs = [
     openssl
-    vips
+    vips'
   ];
 
   nativeBuildInputs = [
@@ -80,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    pnpm prune --prod
+    find node_modules -xtype l -delete
+
     mkdir -p $out/{bin,share/zipline}
 
     cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
@@ -88,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
+        --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -117,8 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     homepage = "https://zipline.diced.sh/";
+    downloadPage = "https://github.com/diced/zipline";
+    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";

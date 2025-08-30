@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "ollo69";
   domain = "samsungtv_smart";
-  version = "0.13.6";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "ha-samsungtv-smart";
     tag = "v${version}";
-    hash = "sha256-4tBluCKt8e5tyUkv79t+pW/KNZUTEIeTY012x7CLN38=";
+    hash = "sha256-naogq/7yGj2OD93JayOH8kHZhyDsKkWa2v+lKL0FlPU=";
   };
 
   dependencies = [

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.13.2";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "typing_extensions";
     tag = version;
-    hash = "sha256-6wG+f0+sGI3sWy4EYeWDTffLicMiIkACHwrw0oP4Z1w=";
+    hash = "sha256-KzfxVUgPN1cLg73A3TC2zQjYfeLc8x9TtbLmOfmlOkY=";
   };
 
   nativeBuildInputs = [ flit-core ];

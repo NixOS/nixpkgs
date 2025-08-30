@@ -236,8 +236,8 @@ If your package is a compiler or language, and you’re not sure, ask @NixOS/dar
 
 You may see references to `darwin.apple_sdk.frameworks`.
 This is the legacy SDK pattern, and it is being phased out.
-All packages in `darwin.apple_sdk`, `darwin.apple_sdk_11_0`, and `darwin.apple_sdk_12_3` are stubs that do nothing.
-If your derivation references them, you can delete them. The default SDK should be enough to build your package.
+All packages in `darwin.apple_sdk`, `darwin.apple_sdk_11_0`, and `darwin.apple_sdk_12_3` have been removed.
+If your derivation references them, you should delete those references, as the default SDK should be enough to build your package.
 
 Note: the new SDK pattern uses the name `apple-sdk` to better align with Nixpkgs naming conventions.
 The legacy SDK pattern uses `apple_sdk`.
@@ -254,15 +254,14 @@ Some of them (such as Zig or `bindgen` for Rust) depend on it.
 #### Updating legacy SDK overrides {#sec-darwin-legacy-frameworks-overrides}
 
 The legacy SDK provided two ways of overriding the default SDK.
-These are both being phased out along with the legacy SDKs.
-They have been updated to set up the new SDK for you, but you should replace them with doing that directly.
+They have been removed along with the legacy SDKs.
 
 - `pkgs.darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the macOS 11 SDK.
   It is now the same as `callPackage`.
 - `overrideSDK` - this stdenv adapter would try to replace the frameworks used by your derivation and its transitive dependencies.
-  It now adds the `apple-sdk_12` package for `12.3` and does nothing for `11.0`.
-  If `darwinMinVersion` is specified, it will add `darwinMinVersionHook` with the specified minimum version.
-  No other SDK versions are supported.
+  It added the `apple-sdk_12` package for `12.3` and did nothing for `11.0`.
+  If `darwinMinVersion` is specified, it would add `darwinMinVersionHook` with the specified minimum version.
+  No other SDK versions were supported.
 
 ### Darwin Cross-Compilation {#sec-darwin-legacy-cross-compilation}
 

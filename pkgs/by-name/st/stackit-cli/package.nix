@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "stackit-cli";
-  version = "0.37.3";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
     rev = "v${version}";
-    hash = "sha256-nyNASYpZvao194rlKSyxNa74Ezo5CwiESNj54uBgUL4=";
+    hash = "sha256-a2EVUCLmIAgXmQeDLPIgEKqFFebwpu/p94OkwOuiBuc=";
   };
 
-  vendorHash = "sha256-iWGRFjCvXm03GRnmQlscP5Y5di9W4lW3jotyhDcE/x4=";
+  vendorHash = "sha256-C5BsCfekQGhPtVKTgZVSHbkyeH4i5QrfXxN6KRutNpo=";
 
   subPackages = [ "." ];
 

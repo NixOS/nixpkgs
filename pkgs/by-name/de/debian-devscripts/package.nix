@@ -30,14 +30,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.16";
+  version = "2.25.18";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "devscripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cbaG7yNZt+205fa6HGEjLOjLsW3HloLQHvcGGjmnXDM=";
+    hash = "sha256-POmUwNYKfdWda80T44S6x2Dg2TpezMirXuiI95Z077Q=";
   };
 
   patches = [
@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     IPCRun
     FileDirList
     FileTouch
+    IOString
   ]);
 
   preConfigure = ''

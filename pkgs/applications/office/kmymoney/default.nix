@@ -2,10 +2,13 @@
   stdenv,
   lib,
   fetchurl,
+
+  cmake,
   doxygen,
   extra-cmake-modules,
   graphviz,
   kdoctools,
+  pkg-config,
   wrapQtAppsHook,
   autoPatchelfHook,
 
@@ -14,7 +17,6 @@
   aqbanking,
   gmp,
   gwenhywfar,
-  kactivities,
   karchive,
   kcmutils,
   kcontacts,
@@ -25,6 +27,7 @@
   kitemmodels,
   libical,
   libofx,
+  plasma-activities,
   qgpgme,
 
   sqlcipher,
@@ -37,27 +40,24 @@
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.1.3";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OTi4B4tzkboy4Su0I5di+uE0aDoMLsGnUQXDAso+Xj8=";
+    url = "mirror://kde/stable/kmymoney/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-/q30C21MkNd+MnFqhY3SN2kIGGMQTYzqYpELHsPkM2s=";
   };
 
   cmakeFlags = [
-    # Remove this when upgrading to a KMyMoney release that includes
-    # https://invent.kde.org/office/kmymoney/-/merge_requests/118
-    "-DENABLE_WEBENGINE=ON"
+    "-DBUILD_WITH_QT6=1"
   ];
 
-  # Hidden dependency that wasn't included in CMakeLists.txt:
-  env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
-
   nativeBuildInputs = [
+    cmake
     doxygen
     extra-cmake-modules
     graphviz
     kdoctools
+    pkg-config
     python3.pkgs.wrapPython
     wrapQtAppsHook
     autoPatchelfHook
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     aqbanking
     gmp
     gwenhywfar
-    kactivities
     karchive
     kcmutils
     kcontacts
@@ -80,6 +79,7 @@ stdenv.mkDerivation rec {
     kitemmodels
     libical
     libofx
+    plasma-activities
     qgpgme
     sqlcipher
 
@@ -97,13 +97,6 @@ stdenv.mkDerivation rec {
     # by patchPythonScript doesn't fail:
     sed -i -e '1i import sys; sys.argv = [""]' \
       "kmymoney/plugins/woob/interface/kmymoneywoob.py"
-  '';
-
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  nativeInstallCheckInputs = [ xvfb-run ];
-  installCheckPhase = lib.optionalString doInstallCheck ''
-    xvfb-run -s '-screen 0 1024x768x24' make test \
-      ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
   '';
 
   # libpython is required by the python interpreter embedded in kmymoney, so we

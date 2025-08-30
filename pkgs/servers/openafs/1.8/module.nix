@@ -30,51 +30,83 @@ stdenv.mkDerivation {
   patches = [
     # LINUX: Refactor afs_linux_dentry_revalidate()
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16276/revisions/c1d074317e5c8cb8212e0b19a29f7d710bcabb32/patch";
-      decode = "base64 -d";
-      hash = "sha256-8ga9ks9pr6pWaV2t67v+FaG0yVExhqELkvkpdLvO8Nc=";
+      url = "https://github.com/openafs/openafs/commit/02603ec7bb2b6dadd9fc6f30f1d180732673f3d9.patch";
+      hash = "sha256-A5fM6v/WMzl7Jj1liHaPYqlZRa2/q2rxj6H3r25VpXY=";
     })
     # Linux-6.14: Handle dops.d_revalidate with parent
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16277/revisions/0051bd0ee82b05e8caacdc0596e5b62609bebd2e/patch";
-      decode = "base64 -d";
+      url = "https://github.com/openafs/openafs/commit/5f85032cdb7f0148dc6165773acb6d6ffe4b6914.patch";
       hash = "sha256-08jedwZ1KX1RSs8y9sh7BUvv5xK9tlzZ6uBOR4kS0Jo=";
     })
     # Linux: Add required MODULE_DESCRIPTION
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16372/revisions/39189eba45542376e668636bd79a93ae6a8a7cd2/patch";
-      decode = "base64 -d";
-      hash = "sha256-j5ckKQvybEvmlnFs5jX8g8Dfw37LYWGnfsl4hnZ3+A4=";
+      url = "https://github.com/openafs/openafs/commit/e76b520f1316e7059a7855078f117ce194734317.patch";
+      hash = "sha256-B3h2XLaRL3jaFFKl2naydVedugVo25A2PEK4ds5WHJo=";
     })
     # linux: inode_ops mkdir returns struct dentry *
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16373/revisions/769847e205d5908a0c430f7bcfbd2f48e19f8bf8/patch";
-      decode = "base64 -d";
-      hash = "sha256-znv5gunyPnJgi4SRFERJudtYFqiS+AVYDWfvr52Ku3s=";
-    })
-    # Linux: Use __filemap_get_folio()
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16374/revisions/f187add554da9e9c52752edbfa98f486f683cf25/patch";
-      decode = "base64 -d";
-      hash = "sha256-+ay87ThSn6QyPZcN0+oE01Wqbxmz0Z1KXYwocQCvYLg=";
-    })
-    # Linux: Use folio_wait_locked()
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16375/revisions/87a93f6488585553d833e1397e7f0dae0545cb7e/patch";
-      decode = "base64 -d";
-      hash = "sha256-MOVX2LFe8OBnvsQ2UdLvwKrwztOmnu1rdIou4CF+EBs=";
-    })
-    # cf: Introduce AC_CHECK_LINUX_SYMBOL
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16376/revisions/bab5968d7f4639d4a0cbe81aaa3e9716dda00632/patch";
-      decode = "base64 -d";
-      hash = "sha256-d6DZqDTW1uEKSB5PsomS4ix9fYYQzdQVmDATKl6n7x4=";
+      url = "https://github.com/openafs/openafs/commit/eeb4f7012ce8b22ff24d073e52e837ef36507afb.patch";
+      hash = "sha256-2LqB2QGTMoE4Z7fcW4XZV/R9OzR6BI6pD99ODtKQHk8=";
     })
     # cf: check for dentry flag macros/enums
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16377/revisions/f791d8ca4804486c656bc7c221076480df39b465/patch";
+      url = "https://github.com/openafs/openafs/commit/62e2df3182bea9ea7d5e86d4d3a0dfc955bc3753.patch";
+      hash = "sha256-d8zRwt/Wq3UmI/hW033ZyzEP/6her/jspzGTfbunGxw=";
+    })
+    # Linux: Use folio_wait_locked()
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/16070e998960f7fe0c15dfa13b88c7b1fa36dce2.patch";
+      hash = "sha256-GbqXEviQJUqzEOpRtUHP2iM0Gx6+PYkflmMDAd21t/Y=";
+    })
+    # Linux: Refactor afs_linux_write_end()/begin()
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/d946ce6f218a2013bc002fb44ad23b89f2d21212.patch";
+      hash = "sha256-9JxMasRbpbdsdcwkJdaiIbNmqqC7VF++/Dl1WmsnRkg=";
+    })
+    # Linux: Use __filemap_get_folio()
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/0c44e9f27fd0e058b59a9b63d755036829590e81.patch";
+      hash = "sha256-9/anvdp/Pw6Iy4+FC6qTZUTZ318gh88jTr7uDDtu2+Q=";
+    })
+    # LINUX: Use folio_page() to convert folio to page
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/39ce8f11df2d650bb4d86c76c127c292880a5c76.patch";
+      hash = "sha256-C0ESzTaYq2S41bcuz4Zkd35Sucw+8xrD0E9gx1lHeJ4=";
+    })
+    # LINUX: Remove test for DCACHE_NFSFS_RENAMED
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/78f5daf8bd79603c53630ba6eb712ab87ebc5dc5.patch";
+      hash = "sha256-CwKp+8toPsKlagcN0r6uafGH0M2bcpFJMbMjd0FsRr8=";
+    })
+    # linux: change lookup_one_len to lookup_noperm
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16435/revisions/d3c424dcaba6ed8415a7617f0ae3622fe84e988a/patch";
       decode = "base64 -d";
-      hash = "sha256-7B0VJE3FeSQU1ElvXI5zXCPq1JRLAycyhqIQuDdR7xE=";
+      hash = "sha256-AqLhS6A68E5M+3CyNnIgv7CB5jGC/hQ4PIqPv0zggq4=";
+    })
+    # linux: refactor afs_linux_writepage
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16436/revisions/1f488463969b436a882c656020d1f3b92c6df440/patch";
+      decode = "base64 -d";
+      hash = "sha256-Wx8Xx97Kox76sSFOdpqxjMzXFrA2IFqKptpYEsfRTac=";
+    })
+    # linux: convert aops->writepage to writepages
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16437/revisions/fd33425820589ed52dc712df63ea8d4b5944de87/patch";
+      decode = "base64 -d";
+      hash = "sha256-B011gge+vzGeUxkGOkKoK/jZn16pvGGc8DpAzzbjV+8=";
+    })
+    # Linux: Use __readahead_folio
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16438/revisions/8a2cbf0ba08097de4b8ab0c57fe2fddf83739b9b/patch";
+      decode = "base64 -d";
+      hash = "sha256-MDb7vOekq/lwBgELMq+VfuvAXiHQmd0vp04ToqIm3lI=";
+    })
+    # Linux: Rename page->index to page->__folio_index
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16439/revisions/9a5596a25618f153be7ae7eb17f29f3b7752d863/patch";
+      decode = "base64 -d";
+      hash = "sha256-OYlMcmnIkoC841E0ONNWtSCUKokyxOmd0d+AWcXwbAI=";
     })
   ];
 

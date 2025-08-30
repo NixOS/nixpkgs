@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyobjc-framework-Cocoa";
-  version = "11.0";
+  version = "11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ronaldoussoren";
     repo = "pyobjc";
     tag = "v${version}";
-    hash = "sha256-RhB0Ht6vyDxYwDGS+A9HZL9ySIjWlhdB4S+gHxvQQBg=";
+    hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
   };
 
   sourceRoot = "${src.name}/pyobjc-framework-Cocoa";
@@ -25,7 +25,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     darwin.libffi
-    darwin.DarwinTools
   ];
 
   nativeBuildInputs = [
@@ -37,7 +36,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyobjc_setup.py \
       --replace-fail "-buildversion" "-buildVersion" \
-      --replace-fail "-productversion" "-productVersion"
+      --replace-fail "-productversion" "-productVersion" \
+      --replace-fail "/usr/bin/sw_vers" "sw_vers" \
+      --replace-fail "/usr/bin/xcrun" "xcrun"
   '';
 
   dependencies = [ pyobjc-core ];
@@ -47,7 +48,13 @@ buildPythonPackage rec {
     "-Wno-error=unused-command-line-argument"
   ];
 
-  pythonImportsCheck = [ "Cocoa" ];
+  pythonImportsCheck = [
+    "Cocoa"
+    "CoreFoundation"
+    "Foundation"
+    "AppKit"
+    "PyObjCTools"
+  ];
 
   meta = with lib; {
     description = "PyObjC wrappers for the Cocoa frameworks on macOS";

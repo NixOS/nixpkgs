@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "setuptools-git-versioning";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfinus";
@@ -25,6 +25,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-Slf6tq83LajdTnr98SuCiFIdm/6auzftnARLAOBgyng=";
   };
+
+  postPatch = ''
+    # Because the .git dir is missing, it falls back to using version 0.0.1
+    # Instead we use the version specified in the derivation
+    substituteInPlace setup.py --replace-fail \
+      'version=version_from_git(root=here, dev_template="{tag}.post{ccount}")' \
+      "version='${version}'"
+  '';
 
   build-system = [
     setuptools

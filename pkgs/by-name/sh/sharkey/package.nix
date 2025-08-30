@@ -21,21 +21,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
-  version = "2025.4.3";
+  version = "2025.4.4";
 
   src = fetchFromGitLab {
     domain = "activitypub.software";
     owner = "TransFem-org";
     repo = "Sharkey";
     tag = finalAttrs.version;
-    hash = "sha256-B268bSR5VFyJ/TaWg3xxpnP4oRj07XUpikJZ2Tb9FEY=";
+    hash = "sha256-h6FkjwJ+TI5NZmGYOl/+yNP7gyc7FKmpdkfXmgqxh/s=";
     fetchSubmodules = true;
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-S8LxawbtguFOEZyYbS1FQWw/TcRm4Z6mG7dUhfXbf1c=";
+    fetcherVersion = 2;
+    hash = "sha256-34X8oJGkGXB9y7W4MquUkv8vY5yq2RoGIUCbjYppkIU=";
   };
 
   nativeBuildInputs = [
@@ -161,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sharkey";
-    maintainers = with lib.maintainers; [ srxl ];
+    maintainers = with lib.maintainers; [
+      srxl
+      tmarkus
+    ];
   };
 })

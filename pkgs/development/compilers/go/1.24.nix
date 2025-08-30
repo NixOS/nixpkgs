@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24.5";
+  version = "1.24.6";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-dP2wnyNS4rJbeUPlaDbJtHNj0o3sHItWxKlXDzC49Z8=";
+    hash = "sha256-4ctVgqq1iGaLwEwH3hhogHD2uMmyqvNh+CHhm9R8/b0=";
   };
 
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .

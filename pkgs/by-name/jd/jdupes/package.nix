@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdupes";
-  version = "1.28.0";
+  version = "1.29.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "jbruchon";
     repo = "jdupes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jRjVuN/FNDpKB+Ibi+Mkm+WhB16cz9c33dOOeiPdgr8=";
+    hash = "sha256-ddl1GCA96j5H6C9KTtJudQ4wSUeOGA6p4P8JPbsVr9o=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
@@ -27,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    # don't link with ../libjodycode
+    "IGNORE_NEARBY_JC=1"
+    # link with system libjodycode (this case is erroneously missing in v1.29.0)
+    "LDFLAGS_EXTRA=-ljodycode"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "ENABLE_DEDUPE=1"

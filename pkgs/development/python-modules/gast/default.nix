@@ -36,7 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/serge-sans-paille/gast/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      jyp
       cpcloud
     ];
   };

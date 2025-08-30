@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.18";
+  version = "0.6.25";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-1V9mOhO8jpr0HU0djLjKw6xDQMBmqie6Gte4xfg9PfQ=";
+    hash = "sha256-XB3cwxtcOVoAwGJroZuPT8XwaCo3wpkn2KIEuuXMeu4=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-bMqK9NvuTwqnhflGDfZTEkaFG8y34Qf94SgR0HMClrQ=";
+    npmDepsHash = "sha256-WL1kdXn7uAaBEwWiIJzzisMZ1uiaOVtFViWK/kW6lsY=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -161,6 +161,7 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
+      oracledb
       pandas
       passlib
       peewee
@@ -172,6 +173,7 @@ python3Packages.buildPythonApplication rec {
       posthog
       psutil
       psycopg2-binary
+      pyarrow
       pycrdt
       pydub
       pyjwt
@@ -244,7 +246,6 @@ python3Packages.buildPythonApplication rec {
     '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
-      drupol
       shivaraj-bh
     ];
   };

@@ -8,6 +8,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch2,
   fetchFromGitHub,
   fixDarwinDylibNames,
   autoconf,
@@ -42,7 +43,7 @@
   openssl,
   perl,
   pkg-config,
-  protobuf_29,
+  protobuf,
   python3,
   rapidjson,
   re2,
@@ -67,9 +68,6 @@
 }:
 
 let
-  # https://github.com/apache/arrow/issues/45807
-  protobuf = protobuf_29;
-
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
@@ -100,6 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
+
+  patches = [
+    (fetchpatch2 {
+      name = "protobuf-30-compat.patch";
+      url = "https://github.com/apache/arrow/pull/46136.patch";
+      hash = "sha256-WTpe/eT3himlCHN/R78w1sF0HG859mE2ZN70U+9N8Ag=";
+      stripLen = 1;
+    })
+  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt

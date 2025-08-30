@@ -8,6 +8,7 @@
   newScope,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   cmake,
   pkg-config,
 
@@ -46,6 +47,7 @@
   libgeotiff,
   laszip_2,
   gdal,
+  gdcm,
   pdal,
   alembic,
   imath,
@@ -136,11 +138,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = sourceSha256;
   };
 
+  postPatch =
+    let
+      vtk-dicom = fetchFromGitHub {
+        owner = "dgobbi";
+        repo = "vtk-dicom";
+        tag = "v0.8.17";
+        hash = "sha256-1lI2qsV4gymWqjeouEHZ5FRlmlh9vimH7J5rzA+eOds=";
+      };
+    in
+    ''
+      cp --no-preserve=mode -r ${vtk-dicom} ./Remote/vtkDICOM
+    '';
+
   nativeBuildInputs = [
     cmake
     pkg-config # required for finding MySQl
   ]
-  ++ lib.optional pythonSupport python3Packages.python
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonRecompileBytecodeHook
+  ]
   ++ lib.optional (
     pythonSupport && stdenv.buildPlatform == stdenv.hostPlatform
   ) python3Packages.pythonImportsCheckHook;
@@ -150,6 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgeotiff
     laszip_2
     gdal
+    (gdcm.override { enableVTK = false; })
     pdal
     alembic
     imath
@@ -286,12 +305,10 @@ stdenv.mkDerivation (finalAttrs: {
     # mpiSupport
     (lib.cmakeBool "VTK_USE_MPI" mpiSupport)
     (vtkBool "VTK_GROUP_ENABLE_MPI" mpiSupport)
-  ];
 
-  # byte-compile python modules since the CMake build does not do it
-  postInstall = lib.optionalString pythonSupport ''
-    python -m compileall -s $out $out/${python3Packages.python.sitePackages}
-  '';
+    # Remote module options
+    (lib.cmakeBool "USE_GDCM" true) # for vtkDicom
+  ];
 
   pythonImportsCheck = [ "vtk" ];
 

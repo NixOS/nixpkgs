@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "5.0";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-nBt+eGzUQaRO2IaEkvhdEZcVuKpZFEqIYSdVKSO1l4M=";
+    hash = "sha256-QOUCpmq89XrWJVHyqSFbFD3a4y9UNgeMVXSr2H8TBeY=";
   };
 
   patches = [

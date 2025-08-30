@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "zodb";
-  version = "6.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zodb";
     tag = version;
-    hash = "sha256-AFlRDci/OnRDGVNHAMAssefZshaGT0XlkhaO/Aee2Ao=";
+    hash = "sha256-2OK1ezHFEpOMOrpB8Nzf/6+4AlV3S7p11dQHkeMqhoo=";
   };
 
   # remove broken test

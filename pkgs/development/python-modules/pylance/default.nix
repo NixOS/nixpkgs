@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.32.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-hVWyZv978hDjAOdk4S9S9RJOkxqhOL0ZBpi4wGk0h1c=";
+    hash = "sha256-scK68o8OCmNFjdNRT2M2odeCfX8RyAic5odqbtTTquE=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-ZUNAZsOpLdpdsKhIp/6QD3Ys7MOeO6H3ve8au7g+riU=";
+    hash = "sha256-7bUPVVvRZFtQjdyyBd8VJHL5Rfc7KDXCV7x5ejofxMw=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +100,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    # Hangs indefinitely
+    "test_all_permutations"
+
     # Writes to read-only build directory
     "test_add_data_storage_version"
     "test_fix_data_storage_version"
@@ -129,6 +132,10 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
     "test_merge_insert_large"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Build hangs after all the tests are run due to a torch subprocess not exiting
+    "test_multiprocess_loading"
   ];
 
   meta = {

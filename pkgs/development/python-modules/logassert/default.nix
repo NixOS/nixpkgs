@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "logassert";
-  version = "8.5";
+  version = "8.6";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "facundobatista";
     repo = "logassert";
     tag = version;
-    hash = "sha256-77oP7NE1fK1pA6baTHoSbfR7kR4URSmSpZSCgFO5Pb4=";
+    hash = "sha256-dkBsR4FmiKjHzZc74Mt2cAffO7ZuIRnLOpFx60e9+so=";
   };
 
   build-system = [ setuptools ];

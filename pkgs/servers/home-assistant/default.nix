@@ -97,7 +97,7 @@ let
         };
       });
 
-      av = super.av.overridePythonAttrs (rec {
+      av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -105,16 +105,14 @@ let
           tag = "v${version}";
           hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
-      });
+      };
 
-      brother = super.brother.overridePythonAttrs (rec {
-        version = "4.3.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          tag = version;
-          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
-        };
+      imageio = super.imageio.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # broken by pyav pin
+          "test_keyframe_intervals"
+          "test_lagging_video_stream"
+        ];
       });
 
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
@@ -140,6 +138,18 @@ let
         ];
       });
 
+      hassil = super.hassil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.3";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) repo owner;
+          tag = "v${version}";
+          hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+        };
+
+        disabledTestPaths = [ ];
+      });
+
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchFromGitHub {
@@ -147,6 +157,10 @@ let
           tag = "v${version}";
           hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
+        pytestFlagsArray = [
+          "-W"
+          "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+        ];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
@@ -200,6 +214,17 @@ let
         };
       });
 
+      py-madvr2 = super.py-madvr2.overridePythonAttrs rec {
+        version = "1.6.33";
+        src = fetchFromGitHub {
+          owner = "iloveicedgreentea";
+          repo = "py-madvr";
+          tag = "v${version}";
+          hash = "sha256-z+PVLz9eApGJ94I/Jp0MyqNpKQwIemk8j+OyqFmIbgI=";
+        };
+        pythonImportsCheck = [ "madvr" ];
+      };
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -243,44 +268,6 @@ let
         };
       });
 
-      pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.12";
-        src = fetchFromGitHub {
-          owner = "rfleming71";
-          repo = "pyoctoprintapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      # snmp component does not support pysnmp 7.0+
-      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.6";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmp";
-          tag = "v${version}";
-          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
-        };
-      });
-
-      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmpcrypto";
-          tag = "v${version}";
-          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
-        };
-        build-system = with self; [ setuptools ];
-        postPatch = ''
-          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-          substituteInPlace setup.py --replace \
-            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-            "observed_version = [36, 2, 0]"
-        '';
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -289,6 +276,8 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
@@ -301,6 +290,27 @@ let
         };
         patches = [ ];
         doCheck = false;
+      });
+
+      python-roborock = super.python-roborock.overridePythonAttrs rec {
+        version = "2.18.2";
+
+        src = fetchFromGitHub {
+          owner = "Python-roborock";
+          repo = "python-roborock";
+          tag = "v${version}";
+          hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
+        };
+      };
+
+      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
+        version = "21.5";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
+        };
       });
 
       # Pinned due to API changes ~1.0
@@ -354,7 +364,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.7.4";
+  hassVersion = "2025.8.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -375,13 +385,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-2seMh1trP3PYnuQmWadTAiAPaI+v45+uzn9xkgUuGNE=";
+    hash = "sha256-FiaRCXWEn1AsLaLH88hfZjMNeRcmP5uNJxxFvEW5K3c=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-KwiwgQ8gAMlHLzpuYYdcLXabVrukhnfFlaODyFpuF88=";
+    hash = "sha256-X7G9SAN1t4OPLdyRu/Fwfq70JWu5k1F6Qgz8YgP4jis=";
   };
 
   build-system = with python.pkgs; [
@@ -554,6 +564,7 @@ python.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export HOME="$TEMPDIR"
+    export PYTHONASYNCIODEBUG=1
 
     # the tests require the existance of a media dir
     mkdir "$NIX_BUILD_TOP"/media

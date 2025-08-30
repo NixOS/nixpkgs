@@ -17,6 +17,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-umKMcQcQST0bBGf7ZXxNcWq/5/ht3jp+3JVjowBdeO0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"packaging~=24.1"' '"packaging"'
+  '';
+
   build-system = with python3Packages; [
     hatchling
     uv-dynamic-versioning

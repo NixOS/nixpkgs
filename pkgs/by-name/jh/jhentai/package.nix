@@ -14,13 +14,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "jhentai";
-  version = "8.0.8+295";
+  version = "8.0.10+297";
 
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
     tag = "v${version}";
-    hash = "sha256-GK+iceh/G3afLbhGXqXx5IwFHsQKoIQsf3ybogp9ZFo=";
+    hash = "sha256-/wmovLEjRzKU5mSM6yqWnPcT/Gt3kyLDHa/ssDx2xrc=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

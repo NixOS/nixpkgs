@@ -27,7 +27,7 @@ in
     config = lib.mkOption {
       default = { };
       description = ''
-        Additional config entries for the fw-fanctrl service (documentation: https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md)
+        Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
       '';
       type = lib.types.submodule {
         freeformType = configFormat.type;

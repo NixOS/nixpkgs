@@ -41,17 +41,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "9.0.1";
+  version = "9.1.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-3VurTHOM7FMRJzmQ5tBmW4E0mw7hePCnff0vhxPsKfE=";
+    hash = "sha256-tJ1BEGKthOUf//MM8GS712YEzkcr9w2LN1ejDbVOITU=";
   };
 
-  vendorHash = "sha256-7R42Aa04wCba90xLTX2p6oNX58OpfDDKegqwDw3Ycbk=";
+  vendorHash = "sha256-hdEpA7tG1uJOBRPQTaWst/D30Y9Uez4ecK2dkZCQITk=";
 
   # See upstream Makefile
   # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
@@ -93,7 +93,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
       adamcstephens

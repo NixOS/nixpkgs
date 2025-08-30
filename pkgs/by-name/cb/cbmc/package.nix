@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "CBMC is a Bounded Model Checker for C and C++ programs";
+    description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

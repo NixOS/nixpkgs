@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.8.0";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = "jq.py";
     tag = version;
-    hash = "sha256-rPc4qIs1lGfbv0ShxJ+uUfbTGchJ+Q0qWWRZVuABlU4=";
+    hash = "sha256-xzkOWIMvGBVJtdZWFFIQkfgTivMTxV+dze71E8S6SlM=";
   };
 
   env.JQPY_USE_SYSTEM_LIBS = 1;

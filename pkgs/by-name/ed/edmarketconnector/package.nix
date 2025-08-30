@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    runHook preInstallPhase
+    runHook preInstall
 
     mkdir -p $out/share/icons/hicolor/512x512/apps/
     ln -s ${finalAttrs.src}/io.edcd.EDMarketConnector.png $out/share/icons/hicolor/512x512/apps/io.edcd.EDMarketConnector.png
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
 
     makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
-      --add-flags "${finalAttrs.src}/EDMarketConnector.py $@"
+      --add-flags "${finalAttrs.src}/EDMarketConnector.py"
 
-    runHook postInstallPhase
+    runHook postInstall
   '';
 
   meta = {

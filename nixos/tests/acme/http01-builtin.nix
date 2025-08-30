@@ -37,6 +37,12 @@ in
           listenHTTP = ":80";
         };
 
+        systemd.targets."renew-triggered" = {
+          wantedBy = [ "acme-order-renew-${config.networking.fqdn}.service" ];
+          after = [ "acme-order-renew-${config.networking.fqdn}.service" ];
+          unitConfig.RefuseManualStart = true;
+        };
+
         specialisation = {
           renew.configuration = {
             # Pebble provides 5 year long certs,
@@ -177,17 +183,29 @@ in
           # old_hash will be used in the preservation tests later
           old_hash = hash
           builtin.succeed(f"systemctl start acme-{cert}.service")
+          builtin.succeed(f"systemctl start acme-order-renew-{cert}.service")
+          builtin.wait_for_unit("renew-triggered.target")
+
           hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
           assert hash == hash_after, "Certificate was unexpectedly changed"
 
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "renew")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_issuer(builtin, cert, "pebble")
           hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem | tee /dev/stderr")
           assert hash != hash_after, "Certificate was not renewed"
 
+          check_permissions(builtin, cert, "acme")
+
       with subtest("Handles email change correctly"):
           hash = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
+
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "accountchange")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_issuer(builtin, cert, "pebble")
           # Check that there are now 2 account directories
           builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
@@ -202,58 +220,101 @@ in
           # old_hash will be used in the preservation tests later
           old_hash = hash_after
 
+          check_permissions(builtin, cert, "acme")
+
       with subtest("Correctly implements OCSP stapling"):
           check_stapling(builtin, cert, "${caDomain}", fail=True)
+
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "ocsp_stapling")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_stapling(builtin, cert, "${caDomain}")
+          check_permissions(builtin, cert, "acme")
 
       with subtest("Handles keyType change correctly"):
           check_key_bits(builtin, cert, 256)
+
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "keytype")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_key_bits(builtin, cert, 384)
           # keyType is part of the accountHash, thus a new account will be created
           builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
+          check_permissions(builtin, cert, "acme")
 
       with subtest("Reuses generated, valid certs from previous configurations"):
           # Right now, the hash should not match due to the previous test
           hash = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem | tee /dev/stderr")
           assert hash != old_hash, "Expected certificate to differ"
+
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "preservation")
+          builtin.wait_for_unit("renew-triggered.target")
+
           hash = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem | tee /dev/stderr")
           assert hash == old_hash, "Expected certificate to match from older configuration"
+          check_permissions(builtin, cert, "acme")
 
       with subtest("Add a new cert, extend existing cert domains"):
           check_domain(builtin, cert, f"builtin-alt.{domain}", fail=True)
+
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "add_cert_and_domain")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_issuer(builtin, cert, "pebble")
           check_domain(builtin, cert, f"builtin-alt.{domain}")
           check_issuer(builtin, cert2, "pebble")
           check_domain(builtin, cert2, cert2)
           # There should not be a new account folder created
           builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
+          check_permissions(builtin, cert, "acme")
+          check_permissions(builtin, cert2, "acme")
 
       with subtest("Check account hashing compatibility with pre-24.05 settings"):
-          switch_to(builtin, "legacy_account_hash", fail=True)
-          builtin.succeed(f"stat {legacy_account_dir} > /dev/stderr && rm -rf {legacy_account_dir}")
+          builtin.succeed("systemctl stop renew-triggered.target")
+          switch_to(builtin, "legacy_account_hash"
+          )
+          builtin.wait_for_unit("renew-triggered.target")
 
-      with subtest("Ensure Concurrency limits work"):
+          builtin.succeed(f"stat {legacy_account_dir} > /dev/stderr && rm -rf {legacy_account_dir}")
+          check_permissions(builtin, cert, "acme")
+
+      with subtest("Ensure concurrency limits work"):
+          builtin.succeed("systemctl stop renew-triggered.target")
           switch_to(builtin, "concurrency")
+          builtin.wait_for_unit("renew-triggered.target")
+
           check_issuer(builtin, cert3, "pebble")
           check_domain(builtin, cert3, cert3)
+          check_permissions(builtin, cert, "acme")
+
+      with subtest("Can renew using a CSR"):
+          builtin.succeed(f"systemctl stop acme-{cert}.service")
+          builtin.succeed(f"systemctl clean acme-{cert}.service --what=state")
+
+          builtin.succeed("systemctl stop renew-triggered.target")
+          switch_to(builtin, "csr")
+          builtin.wait_for_unit("renew-triggered.target")
+
+          check_issuer(builtin, cert, "pebble")
 
       with subtest("Generate self-signed certs"):
+          acme.shutdown()
+
           check_issuer(builtin, cert, "pebble")
+
+          builtin.succeed(f"systemctl stop acme-{cert}.service")
           builtin.succeed(f"systemctl clean acme-{cert}.service --what=state")
-          builtin.succeed(f"systemctl start acme-selfsigned-{cert}.service")
+          builtin.succeed(f"systemctl start acme-{cert}.service")
+
           check_issuer(builtin, cert, "minica")
           check_domain(builtin, cert, cert)
 
       with subtest("Validate permissions (self-signed)"):
           check_permissions(builtin, cert, "acme")
 
-      with subtest("Can renew using a CSR"):
-          builtin.succeed(f"systemctl clean acme-{cert}.service --what=state")
-          switch_to(builtin, "csr")
-          check_issuer(builtin, cert, "pebble")
     '';
 }

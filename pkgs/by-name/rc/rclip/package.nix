@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "open_clip_torch"
     "pillow"
     "rawpy"
     "torch"

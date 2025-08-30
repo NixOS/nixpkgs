@@ -4,7 +4,7 @@
   fetchPypi,
   meson,
   meson-python,
-  cython_3_1,
+  cython,
   attrs,
   useful-types,
   pytestCheckHook,
@@ -28,7 +28,7 @@ buildPythonPackage {
   build-system = [
     meson
     meson-python
-    cython_3_1
+    cython
   ];
 
   dependencies = [

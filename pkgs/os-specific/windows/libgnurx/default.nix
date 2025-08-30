@@ -3,16 +3,13 @@
   stdenv,
   fetchurl,
 }:
-
-let
-  version = "2.5.1";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnurx";
-  inherit version;
+  version = "2.5.1";
+
   src = fetchurl {
-    url = "mirror://sourceforge/mingw/Other/UserContributed/regex/mingw-regex-${version}/mingw-${pname}-${version}-src.tar.gz";
-    sha256 = "0xjxcxgws3bblybw5zsp9a4naz2v5bs1k3mk8dw00ggc0vwbfivi";
+    url = "mirror://sourceforge/mingw/Other/UserContributed/regex/mingw-regex-${finalAttrs.version}/mingw-libgnurx-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-cUe3+AbsPQB4Q7OOGfQqW3xliUpX/8KXp2sNzV9nXXY=";
   };
 
   # file looks for libgnurx.a when compiling statically
@@ -27,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.windows;
     teams = [ lib.teams.windows ];
   };
-}
+})

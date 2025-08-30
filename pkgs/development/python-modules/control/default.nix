@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "control";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-control";
     repo = "python-control";
     tag = version;
-    hash = "sha256-wLDYPuLnsZ2+cXf7j3BxUbn4IjHPt09LE9cjQGXWrO0=";
+    hash = "sha256-E9RZDUK01hzjutq83XdLr3d97NwjmQzt65hqVg2TBGE=";
   };
 
   build-system = [

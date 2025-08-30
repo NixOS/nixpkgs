@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2025.2";
+  version = "2025.8";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-ijSUGiAowxSqYwH3OxSWiGvm99n88ETJxAFn5x4m/BE=";
+    hash = "sha256-Jtr1/MDR6pAaagVdhR2HZM91PTEPaQkDYMmALIWkHFU=";
   };
 
-  cargoHash = "sha256-j4lx3sSQZ7BKl+d5nFJQkMhgQWjn0xkNNCWMlbKLwVQ=";
+  cargoHash = "sha256-HseKOow4BjiPsGmwslZqBlvCoreY2BcnBu3BHg5965c=";
 
   nativeBuildInputs = [
     copyDesktopItems

@@ -30,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nramYYNS+ee3canTiuFjG17f7tbUAjPiQ+YC3fIZXno=";
   };
 
+  # Effectively a backport of https://github.com/OpenVPN/openvpn/commit/1d3c2b67a73a0aa011c13e62f876d24e49d41df0
+  # to fix build on linux-headers 6.16.
+  # FIXME: remove in next update
+  patches = [
+    ./dco.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ]

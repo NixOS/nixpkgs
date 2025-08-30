@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Library provides a thin wrapper around QApplication, QGuiApplication and QCoreApplication";
+    description = "Thin wrapper around QApplication, QGuiApplication and QCoreApplication";
     homepage = "https://gitlab.com/desktop-frameworks/applications";
     changelog = "https://gitlab.com/desktop-frameworks/applications/-/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;

@@ -135,7 +135,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
       # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-      services.postfix.config = {
+      services.postfix.settings.main = {
         smtp_dns_support_level = "dnssec";
         smtp_tls_security_level = "dane";
         smtp_tls_policy_maps =

@@ -30,7 +30,7 @@ buildDunePackage rec {
     js_of_ocaml-compiler
     nodejs
   ];
-  doCheck = lib.versionAtLeast ocaml.version "4.13";
+  doCheck = lib.versionAtLeast ocaml.version "4.13" && !(lib.versionAtLeast ppxlib.version "0.36");
 
   meta = {
     homepage = "https://github.com/LexiFi/gen_js_api";

@@ -39,6 +39,11 @@ buildPythonPackage rec {
     hash = "sha256-5NN6PBh+6HS9OCc9eC2TcBvkcwtI4DV8qXnz4tlaMXc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cython~=3.0.2" cython
+  '';
+
   build-system = [
     cython
     gdal # for gdal-config

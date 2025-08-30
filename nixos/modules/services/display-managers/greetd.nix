@@ -21,14 +21,14 @@ in
   options.services.greetd = {
     enable = lib.mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
-    package = lib.mkPackageOption pkgs [ "greetd" "greetd" ] { };
+    package = lib.mkPackageOption pkgs "greetd" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       example = lib.literalExpression ''
         {
           default_session = {
-            command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
+            command = "''${pkgs.greetd}/bin/agreety --cmd sway";
           };
         }
       '';
@@ -57,6 +57,16 @@ in
         Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
         because every greetd restart will trigger the autologin again.
+      '';
+    };
+
+    useTextGreeter = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether the greeter uses text-based user interfaces (For example, tuigreet).
+
+        When set to true, some systemd service configuration will be adjusted to avoid systemd boot messages interrupt TUI.
       '';
     };
   };
@@ -108,7 +118,19 @@ in
         KeyringMode = "shared";
 
         Type = "idle";
-      };
+      }
+      // (lib.optionalAttrs cfg.useTextGreeter {
+        StandardInput = "tty";
+        StandardOutput = "tty";
+        # Without this errors will spam on screen
+        StandardError = "journal";
+
+        # Without these bootlogs will spam on screen
+        TTYPath = "/dev/tty1";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+      });
 
       # Don't kill a user session when using nixos-rebuild
       restartIfChanged = false;

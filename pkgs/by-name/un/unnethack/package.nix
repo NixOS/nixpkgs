@@ -79,6 +79,6 @@ stdenv.mkDerivation {
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

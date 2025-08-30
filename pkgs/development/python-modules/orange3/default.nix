@@ -58,14 +58,14 @@
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.38.1";
+    version = "3.39.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
       tag = version;
-      hash = "sha256-bzF2rK8/cKAoe9Wzj+rQJatgBQTP3KVtT6xU+IzKYIY=";
+      hash = "sha256-P2e3Wq33UXnTmGSxkoW8kYYCBfYBB9Z50v4g7n//Fbw=";
     };
 
     build-system = [

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.20.0";
+  version = "2.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AgtuOEsjKO+Gg5CK2Oc96ewrm2L9lkVx6pV7uphBKYM=";
+    hash = "sha256-RQ/hO7jYao9OfXtfr853kRgco+fJLhW7xF37JYZuSLM=";
   };
 
   build-system = [ setuptools ];
@@ -81,6 +81,8 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
     # Fails in the sandbox
     "test_forward_remote"
+    # (2.21.0) SFTP copy ends up with an empty file
+    "test_copy_max_requests"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];

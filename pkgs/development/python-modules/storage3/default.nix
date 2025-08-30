@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "storage3";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "storage-py";
-    rev = "v${version}";
-    hash = "sha256-3Z+j9n/seL1ZuB1djOVpA6Qci/Ygi9g8g2lLQGKRUHM=";
+    tag = "v${version}";
+    hash = "sha256-Ef309CTnzbaqKAVMdvroUYAy9RImWZZqhsnwRdpGVkk=";
   };
 
   dependencies = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonImportCheck = [ "storage3" ];
+  pythonImportsCheck = [ "storage3" ];
 
   # tests fail due to mock server not starting
 

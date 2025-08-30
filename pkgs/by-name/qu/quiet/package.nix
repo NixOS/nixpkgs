@@ -56,13 +56,13 @@ let
     '';
 
     installPhase = ''
-      runHook preInstallPhase
+      runHook preInstall
 
       mkdir -p $out/{Applications,bin}
       mv Quiet.app $out/Applications
       makeWrapper $out/Applications/Quiet.app/Contents/MacOS/Quiet $out/bin/${pname}
 
-      runHook postInstallPhase
+      runHook postInstall
     '';
 
     meta = meta // {

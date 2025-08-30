@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   meta = with lib; {
-    description = ''The "Command Line Interactive Controller for Kubernetes"'';
+    description = "Command Line Interactive Controller for Kubernetes";
     homepage = "https://github.com/databricks/click";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mbode ];

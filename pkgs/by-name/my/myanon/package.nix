@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Myanon is a mysqldump anonymizer, reading a dump from stdin, and producing on the fly an anonymized version to stdout";
+    description = "mysqldump anonymizer, reading a dump from stdin, and producing on the fly an anonymized version to stdout";
     homepage = "https://ppomes.github.io/myanon/";
     license = lib.licenses.bsd3;
     mainProgram = "myanon";

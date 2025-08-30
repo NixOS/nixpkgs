@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-per-window-layout";
-  version = "2.14";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner = "coffebar";
     repo = "hyprland-per-window-layout";
     rev = version;
-    hash = "sha256-dYoHa4b7BZc/LGVLsNs/LTj4sSMaFel+QE0TUv5kGAk=";
+    hash = "sha256-+1gmLNWuV5DhXjC6aRD1rHIOpX+OCX1Ak45pi+ixIFw=";
   };
 
-  cargoHash = "sha256-wXPc3jAY8E0k8cn4Z2OIhCyrfszzlzFmhQZIZay16Ec=";
+  cargoHash = "sha256-k8YNGqKw5MPHdXye8loqGkexY75jjkJSnzaWmye945I=";
 
   meta = with lib; {
     description = "Per window keyboard layout (language) for Hyprland wayland compositor";

@@ -565,8 +565,8 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
 interpreter, which is currently CPython 3.13. The attribute `python` refers to
-CPython 2.7 for backwards-compatibility. It is also possible to refer to
-specific versions, e.g. `python313` refers to CPython 3.13, and `pypy` refers to
+CPython 2.7 for backwards compatibility. It is also possible to refer to
+specific versions, e.g., `python313` refers to CPython 3.13, and `pypy` refers to
 the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
@@ -725,7 +725,7 @@ The dot product of [1 2] and [3 4] is: 11
 
 If the dependencies are not available on the host where `foo.py` is executed, it
 will build or download them from a Nix binary cache prior to starting up, prior
-that it is executed on a machine with a multi-user nix installation.
+that it is executed on a machine with a multi-user Nix installation.
 
 This provides a way to ship a self bootstrapping Python script, akin to a
 statically linked binary, where it can be run on any machine (provided nix is
@@ -733,7 +733,7 @@ installed) without having to assume that `numpy` is installed globally on the
 system.
 
 By default it is pulling the import checkout of Nixpkgs itself from our nix
-channel, which is nice as it cache aligns with our other package builds, but we
+channel, which is nice as it cache-aligns with our other package builds, but we
 can make it fully reproducible by pinning the `nixpkgs` import:
 
 ```python
@@ -816,7 +816,7 @@ mkShell {
 
 This will create a unified environment that has not just our Python interpreter
 and its Python dependencies, but also tools like `black` or `mypy` and libraries
-like `libffi` the `openssl` in scope. This is generic and can span any number of
+like `libffi` and `openssl` in scope. This is generic and can span any number of
 tools or languages across the Nixpkgs ecosystem.
 
 ##### Installing environments globally on the system {#installing-environments-globally-on-the-system}
@@ -2123,12 +2123,8 @@ The following rules are desired to be respected:
   It does not need to be set explicitly unless the package requires a specific platform.
 * The file is formatted with `nixfmt-rfc-style`.
 * Commit names of Python libraries must reflect that they are Python
-  libraries (e.g. `python313Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
-* The current default version of python should be included
-  in commit messages to enable automatic builds by ofborg.
-  For example `python313Packages.numpy: 1.11 -> 1.12` should be used rather
-  than `python3Packages.numpy: 1.11 -> 1.12`.
-  Note that `pythonPackages` is an alias for `python27Packages`.
+  libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
+  See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means

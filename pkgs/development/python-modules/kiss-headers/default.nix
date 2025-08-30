@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "kiss-headers";
-  version = "2.4.3";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "kiss-headers";
     tag = version;
-    hash = "sha256-WeAzlC1yT+0nPSuB278z8T0XvPjbre051f/Rva5ujAk=";
+    hash = "sha256-h0e7kFbn6qxIeSG85qetBg6IeSi/2YAaZLGS0+JH2g8=";
   };
 
   nativeBuildInputs = [ hatchling ];

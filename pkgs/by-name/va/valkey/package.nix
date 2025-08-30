@@ -6,6 +6,7 @@
   lua,
   jemalloc,
   pkg-config,
+  nixosTests,
   tcl,
   which,
   ps,
@@ -97,12 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
+    CLIENTS="$NIX_BUILD_CORES"
+    if (( $CLIENTS > 4)); then
+      CLIENTS=4
+    fi
+
     # Skip some more flaky tests.
     # Skip test requiring custom jemalloc (unit/memefficiency).
     ./runtest \
       --no-latency \
       --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
+      --clients "$CLIENTS" \
       --tags -leaks \
       --skipunit unit/memefficiency \
       --skipunit integration/failover \
@@ -110,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
+
+  passthru = {
+    tests.redis = nixosTests.redis;
+    serverBin = "valkey-server";
+  };
 
   meta = with lib; {
     homepage = "https://valkey.io/";

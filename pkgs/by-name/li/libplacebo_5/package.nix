@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-YEefuEfJURi5/wswQKskA/J1UGzessQQkBpltJ0Spq8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python-compat.patch";
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/12509c0f1ee8c22ae163017f0a5e7b8a9d983a17.patch";
+      hash = "sha256-RrlFu0xgLB05IVrzL2EViTPuATYXraM1KZMxnZCvgrk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "groq";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
     tag = "v${version}";
-    hash = "sha256-URjfgZC+6YIY7SBfaOmDavQ73YWAqHf9KHunyvniy2E=";
+    hash = "sha256-6oTRqAt421WE0s5e2kqDtCgOLg1bSqTTQldQ5D05Flo=";
   };
 
   postPatch = ''

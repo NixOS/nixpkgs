@@ -260,12 +260,12 @@ in
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "0-unstable-2024-08-25";
+    version = "0-unstable-2025-07-27";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
-      hash = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
+      rev = "b04dcf14496ffda629d8aa3a2ac63e4e08d2fdc9";
+      hash = "sha256-lknfek9Fu/RDHbq5HMaiNqc24deni5phzExWOkYRS+o";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ pkgs.python3 ];
@@ -275,11 +275,13 @@ in
        wrapProgram $target/scripts/open.sh \
          --prefix PATH : ${
            with pkgs;
-           lib.makeBinPath [
-             fzf
-             xclip
-             wl-clipboard
-           ]
+           lib.makeBinPath (
+             [ fzf ]
+             ++ lib.optionals stdenv.hostPlatform.isLinux [
+               xclip
+               wl-clipboard
+             ]
+           )
          }
     '';
     meta = {
@@ -290,6 +292,7 @@ in
       maintainers = with lib.maintainers; [
         kidd
         fnune
+        deejayem
       ];
     };
   };
@@ -806,12 +809,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.5.3";
+    version = "1.6.6";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
-      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
+      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
@@ -1095,6 +1098,25 @@ in
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ o0th ];
+    };
+  };
+
+  tmux-toggle-popup = mkTmuxPlugin rec {
+    pluginName = "tmux-toggle-popup";
+    rtpFilePath = "toggle-popup.tmux";
+    version = "0.4.3";
+    src = fetchFromGitHub {
+      owner = "loichyan";
+      repo = "tmux-toggle-popup";
+      tag = "v${version}";
+      hash = "sha256-uQihpmQTJbjx5euXSGOFlekFgCTYXGu7SQYqyZjKLM8=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/loichyan/tmux-toggle-popup";
+      description = "Handy plugin to create toggleable popups";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ szaffarano ];
     };
   };
 }

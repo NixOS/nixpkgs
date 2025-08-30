@@ -7,12 +7,10 @@
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools-git,
   setuptools,
   twine,
   watchdog,
   webtest,
-  wheel,
   build,
   importlib-resources,
 }:
@@ -31,10 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-ODwDYAEAqel31+kR/BE1yBfgOZOtPz3iaCLg/d6jbb4=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"setuptools-git>=0.3",' ""
+  '';
+
   build-system = [
     setuptools
-    setuptools-git
-    wheel
   ];
 
   dependencies = [

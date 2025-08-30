@@ -106,12 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "302";
+  version = "303";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-PngiG+nPaPrGHt+uTeH7R+MlKjPXFxfkFiDo6+pssTw=";
+    hash = "sha256-kalURmsdYl0HOnzAkJ6aGRvYcjnb8BeWimokmpqE+Ds=";
   };
 
   outputs = [
@@ -304,6 +304,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_uimage.py"
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
+    # OSError: AF_UNIX path too long
+    "tests/comparators/test_sockets.py"
   ];
 
   passthru = {

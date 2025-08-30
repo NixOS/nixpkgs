@@ -10,18 +10,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "dotenv-cli";
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "entropitor";
     repo = "dotenv-cli";
     rev = "v${version}";
-    hash = "sha256-mpVObsilwVCq1V2Z11uqK1T7VgwpfTYng2vqrTqJZE4=";
+    hash = "sha256-prSGIEHf6wRqOFVsn3Ws25yG7Ga2YEbiU/IMP3QeLXU=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ak6QD9Z0tE0XgFVt3QkjZxk2kelUFPX9bEF855RiY2w=";
+    hash = "sha256-rbG1oM1mEZSB/eYp87YMi6v9ves5YR7u7rkQRlziz7I=";
   };
 
   nativeBuildInputs = [

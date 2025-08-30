@@ -49,7 +49,7 @@ buildGoModule (
       '';
 
       outputHashMode = "recursive";
-      outputHash = "sha256-4mmpiI2GhjMBp662/+DiM7SjEd1cPhF/A4YpyU04/Fs=";
+      outputHash = "sha256-o+Zt3rmTK7NmBQ9hDlbxZySUlCx6Ks7yQTtdm9+pJac=";
     };
 
     webui = buildNpmPackage {

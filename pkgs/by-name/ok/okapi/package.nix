@@ -21,11 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Okapi Library";
-    longDescription = ''
-      Collection of tools that support workflows for working
-      with authentic data and identity management
-    '';
+    description = "Collection of tools that support workflows for working with authentic data and identity management";
     homepage = "https://github.com/trinsic-id/okapi";
     license = licenses.asl20;
     maintainers = with maintainers; [ tmarkovski ];

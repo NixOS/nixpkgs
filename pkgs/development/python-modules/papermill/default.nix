@@ -95,6 +95,9 @@ buildPythonPackage rec {
   disabledTests = [
     # pytest 8 compat
     "test_read_with_valid_file_extension"
+
+    # azure datalake api compat issue
+    "test_create_adapter"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # might fail due to the sandbox

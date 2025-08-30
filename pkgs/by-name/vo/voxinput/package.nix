@@ -1,35 +1,51 @@
 {
-  lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
   makeWrapper,
-  testers,
+  pkg-config,
   libpulseaudio,
   dotool,
+  libGL,
+  xorg,
+  libxkbcommon,
+  wayland,
+  lib,
   stdenv,
+  nix-update-script,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "voxinput";
-  version = "0.4.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "richiejp";
     repo = "VoxInput";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kIKvgPojlkIpDjxaFsHXEvHX3txW9GbachRFksA/Ymg=";
+    hash = "sha256-04RLlE8e8W6vTOz7GF8yEkysp3cwTSOgE1Uk7qXG/ws=";
   };
 
-  vendorHash = "sha256-Qcc/Y7xRaERuu3SIvn/jwTtj+xKii4EZvFsewGG687Y=";
+  vendorHash = "sha256-0osfAJROLn8Iru576M5lq5dwFaw2PVBs6LBscZf3Vxw=";
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
     libpulseaudio
     dotool
+
+    libGL
+    xorg.libX11.dev
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXxf86vm
+    libxkbcommon
+    wayland
   ];
 
   # To take advantage of the udev rule something like `services.udev.packages = [ nixpkgs.voxinput ]`
@@ -44,7 +60,7 @@ buildGoModule (finalAttrs: {
     echo 'KERNEL=="uinput", GROUP="input", MODE="0620", OPTIONS+="static_node=uinput"' > $out/lib/udev/rules.d/99-voxinput.rules
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isElf ''
     patchelf $out/bin/.voxinput-wrapped \
       --add-rpath ${lib.makeLibraryPath [ libpulseaudio ]}
   '';

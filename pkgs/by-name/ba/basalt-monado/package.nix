@@ -60,13 +60,15 @@ stdenv.mkDerivation {
     opencv.cxxdev
     tbb
     xorg.libX11
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BASALT_INSTANTIATIONS_DOUBLE" false)
     (lib.cmakeBool "BUILD_TESTS" false)
     (lib.cmakeFeature "EIGEN_ROOT" "${eigen}/include/eigen3")
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   passthru.updateScript = nix-update-script { };

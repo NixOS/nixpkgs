@@ -85,6 +85,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../drivers/xgl";
 
+  cmakeFlags = [
+    # There is some incredibly cursed issue with
+    # `directx-shader-compiler` flagging up compiler errors only on
+    # `i686-linux` and only when it has been compiled with a recent
+    # GCC. Since few 32‐bit games are going to use ray tracing anyway,
+    # we just disable it for now. Arch has done this since 2022.
+    #
+    # See:
+    # * <https://github.com/NixOS/nixpkgs/issues/216294>
+    # * <https://github.com/GPUOpen-Drivers/gpurt/issues/5>
+    # * <https://gitlab.archlinux.org/archlinux/packaging/packages/lib32-amdvlk/-/commit/905d9bc2cf4a003b3d367537b5e120d9771cce16>
+    (lib.cmakeBool "VKI_RAY_TRACING" (!(stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit)))
+  ];
+
   installPhase = ''
     runHook preInstall
 

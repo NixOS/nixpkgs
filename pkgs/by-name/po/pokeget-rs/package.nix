@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "pokeget-rs";
-    rev = version;
+    tag = version;
     hash = "sha256-EtEmaA0ukLoK0vaX+s3d8xodB3pUwSb1EyeyMBF0+rc=";
     fetchSubmodules = true;
   };

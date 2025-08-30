@@ -69,4 +69,4 @@ in
 }
 ```
 
-See a full configuration in https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf.
+See a full configuration in <https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf>.

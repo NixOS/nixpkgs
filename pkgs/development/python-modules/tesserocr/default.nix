@@ -44,6 +44,9 @@ buildPythonPackage rec {
   # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
     sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesserocr/tesseract.pxd
+
+    substituteInPlace setup.py \
+      --replace-fail "Cython>=0.23,<3.1.0" Cython
   '';
 
   build-system = [

@@ -19,4 +19,6 @@ steam.buildRuntimeEnv {
     ln -s ${heroic-unwrapped}/share/applications $out/share
     ln -s ${heroic-unwrapped}/share/icons $out/share
   '';
+
+  privateTmp = false;
 }

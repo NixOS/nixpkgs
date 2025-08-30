@@ -1,6 +1,7 @@
 {
   stdenv,
-  bazel_5,
+  #bazel_5,
+  bazel,
   buildBazelPackage,
   lib,
   fetchFromGitHub,
@@ -111,7 +112,8 @@ let
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnnAttribute = "cudnn_8_6";
+  #cudnnAttribute = "cudnn_8_6";
+  cudnnAttribute = "cudnn";
   cudnnMerged = symlinkJoin {
     name = "cudnn-merged";
     paths = [
@@ -284,7 +286,8 @@ let
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
     name = "${pname}-${version}";
-    bazel = bazel_5;
+    #bazel = bazel_5;
+    bazel = bazel;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -581,10 +584,14 @@ let
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ abbradar ];
+      maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
       broken =
-        stdenv.hostPlatform.isDarwin
+        # Dependencies are EOL and have been removed; an update
+        # to a newer TensorFlow version will be required to fix the
+        # source build.
+        true
+        || stdenv.hostPlatform.isDarwin
         || !(xlaSupport -> cudaSupport)
         || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
         || !(cudaSupport -> cudaPackages ? cudatoolkit);

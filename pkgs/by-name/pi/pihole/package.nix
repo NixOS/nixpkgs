@@ -27,7 +27,6 @@
   systemd,
   util-linux,
   stateDir ? "/etc/pihole",
-  ...
 }:
 
 (resholve.mkDerivation rec {

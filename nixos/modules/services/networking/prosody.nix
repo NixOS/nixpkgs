@@ -182,7 +182,7 @@ let
 
     http_files = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Serve static files from a directory over HTTP";
     };
 
@@ -369,10 +369,10 @@ let
           kick other. Useful in jitsi-meet to kick ghosts.
         '';
       };
-      vcard_muc = mkOption {
+      moderation = mkOption {
         type = types.bool;
-        default = true;
-        description = "Adds the ability to set vCard for Multi User Chat rooms";
+        default = false;
+        description = "Allow rooms to be moderated";
       };
 
       # Extra parameters. Defaulting to prosody default values.
@@ -423,62 +423,58 @@ let
     };
   };
 
-  uploadHttpOpts = _: {
-    options = {
-      domain = mkOption {
-        type = types.nullOr types.str;
-        description = "Domain name for the http-upload service";
-      };
-      uploadFileSizeLimit = mkOption {
-        type = types.str;
-        default = "50 * 1024 * 1024";
-        description = "Maximum file size, in bytes. Defaults to 50MB.";
-      };
-      uploadExpireAfter = mkOption {
-        type = types.str;
-        default = "60 * 60 * 24 * 7";
-        description = "Max age of a file before it gets deleted, in seconds.";
-      };
-      userQuota = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        example = 1234;
-        description = ''
-          Maximum size of all uploaded files per user, in bytes. There
-          will be no quota if this option is set to null.
-        '';
-      };
-      httpUploadPath = mkOption {
-        type = types.str;
-        description = ''
-          Directory where the uploaded files will be stored when the http_upload module is used.
-          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
-        '';
-        default = "/var/lib/prosody";
+  httpFileShareOpts =
+    { config, options, ... }:
+    {
+      freeformType =
+        with types;
+        let
+          atom = oneOf [
+            int
+            bool
+            str
+            (listOf atom)
+          ];
+        in
+        attrsOf (nullOr atom)
+        // {
+          description = "int, bool, string or list of them";
+        };
+      options = {
+        domain = mkOption {
+          type = with types; nullOr str;
+          description = "Domain name for a http_file_share service.";
+        };
+        http_host = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            To avoid an additional DNS record and certificate, you may set this option to your primary domain (e.g. "example.com")
+            or use a reverse proxy to handle the HTTP for that domain.
+          '';
+        };
+        size_limit = mkOption {
+          type = types.int;
+          default = 10 * 1024 * 1024;
+          defaultText = "10 * 1024 * 1024";
+          description = "Maximum file size, in bytes.";
+        };
+        expires_after = mkOption {
+          type = types.str;
+          default = "1 week";
+          description = "Max age of a file before it gets deleted.";
+        };
+        daily_quota = mkOption {
+          type = types.nullOr types.int;
+          default = 10 * config.size_limit;
+          defaultText = lib.literalExpression "10 * ${options.size_limit}";
+          example = "100*1024*1024";
+          description = ''
+            Maximum size of daily uploaded files per user, in bytes.
+          '';
+        };
       };
     };
-  };
-
-  httpFileShareOpts = _: {
-    freeformType =
-      with types;
-      let
-        atom = oneOf [
-          int
-          bool
-          str
-          (listOf atom)
-        ];
-      in
-      attrsOf (nullOr atom)
-      // {
-        description = "int, bool, string or list of them";
-      };
-    options.domain = mkOption {
-      type = with types; nullOr str;
-      description = "Domain name for a http_file_share service.";
-    };
-  };
 
   vHostOpts = _: {
     options = {
@@ -510,15 +506,10 @@ let
 
   configFile =
     let
-      httpDiscoItems =
-        optional (cfg.uploadHttp != null) {
-          url = cfg.uploadHttp.domain;
-          description = "HTTP upload endpoint";
-        }
-        ++ optional (cfg.httpFileShare != null) {
-          url = cfg.httpFileShare.domain;
-          description = "HTTP file share endpoint";
-        };
+      httpDiscoItems = optional (cfg.httpFileShare != null) {
+        url = cfg.httpFileShare.domain;
+        description = "HTTP file share endpoint";
+      };
       mucDiscoItems = builtins.foldl' (
         acc: muc:
         [
@@ -546,7 +537,7 @@ let
       admins = ${toLua cfg.admins}
 
       modules_enabled = {
-
+        "admin_shell";  -- for prosodyctl
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
@@ -575,11 +566,13 @@ let
       http_ports = ${toLua cfg.httpPorts}
       https_ports = ${toLua cfg.httpsPorts}
 
+      mime_types_file = "${pkgs.mailcap}/etc/mime.types"
+
       ${cfg.extraConfig}
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";''} ${optionalString muc.allowners_muc ''"muc_allowners";''}  }
+            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''} }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
@@ -597,18 +590,12 @@ let
             ${muc.extraConfig}
       '') cfg.muc}
 
-      ${lib.optionalString (cfg.uploadHttp != null) ''
-        Component ${toLua cfg.uploadHttp.domain} "http_upload"
-            http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
-            http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
-            ${lib.optionalString (
-              cfg.uploadHttp.userQuota != null
-            ) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
-            http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
-      ''}
-
       ${lib.optionalString (cfg.httpFileShare != null) ''
         Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+          modules_disabled = { "s2s" }
+        ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
+          http_host = "${cfg.httpFileShare.http_host}"
+        ''}
         ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
       ''}
 
@@ -621,7 +608,6 @@ let
         '') cfg.virtualHosts
       )}
     '';
-
 in
 {
   options = {
@@ -777,7 +763,7 @@ in
           Force certificate authentication for server-to-server connections?
           This provides ideal security, but requires servers you communicate
           with to support encryption AND present valid, trusted certificates.
-          For more information see https://prosody.im/doc/s2s#security
+          For more information see <https://prosody.im/doc/s2s#security>
         '';
       };
 
@@ -817,20 +803,11 @@ in
         description = "Additional path in which to look find plugins/modules";
       };
 
-      uploadHttp = mkOption {
-        description = ''
-          Configures the old Prosody builtin HTTP server to handle user uploads.
-        '';
-        type = types.nullOr (types.submodule uploadHttpOpts);
-        default = null;
-        example = {
-          domain = "uploads.my-xmpp-example-host.org";
-        };
-      };
-
       httpFileShare = mkOption {
         description = ''
           Configures the http_file_share module to handle user uploads.
+
+          See <https://prosody.im/doc/modules/mod_http_file_share> for a full list of options.
         '';
         type = types.nullOr (types.submodule httpFileShareOpts);
         default = null;
@@ -903,7 +880,11 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional prosody configuration";
+        description = ''
+          Additional prosody configuration
+
+          The generated file is processed by `envsubst` to allow secrets to be passed securely via environment variables.
+        '';
       };
 
       log = mkOption {
@@ -918,6 +899,12 @@ in
       };
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "prosody" "uploadHttp" ]
+      "mod_http_upload has been obsoloted and been replaced by mod_http_file_share which can be configured with httpFileShare options."
+    )
+  ];
 
   config = mkIf cfg.enable {
     assertions =
@@ -941,10 +928,9 @@ in
             + genericErrMsg;
           }
           {
-            assertion = cfg.uploadHttp != null || cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
+            assertion = cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
             message = ''
-              You need to setup the http_upload or http_file_share modules through config.services.prosody.uploadHttp
-              or config.services.prosody.httpFileShare to comply with XEP-0423.
+              You need to setup http_file_share modules through config.services.prosody.httpFileShare to comply with XEP-0423.
             ''
             + genericErrMsg;
           }
@@ -953,6 +939,9 @@ in
       errors;
 
     environment.systemPackages = [ cfg.package ];
+
+    # prevent error if not all certs are configured by the user
+    environment.etc."prosody/certs/.dummy".text = "";
 
     environment.etc."prosody/prosody.cfg.lua".source =
       if cfg.checkConfig then
@@ -989,16 +978,24 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst -i ${
+          config.environment.etc."prosody/prosody.cfg.lua".source
+        } -o /run/prosody/prosody.cfg.lua
+      '';
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
-          Type = "forking";
-          RuntimeDirectory = [ "prosody" ];
+          Type = "simple";
+          RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
-          ExecStart = "${cfg.package}/bin/prosodyctl start";
+          Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
+          ExecStart = "${lib.getExe cfg.package} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "on-abnormal";
 
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateMounts = true;

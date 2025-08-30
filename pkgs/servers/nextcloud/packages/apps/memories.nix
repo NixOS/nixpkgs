@@ -14,9 +14,9 @@ let
   latestVersionForNc = {
     "31" = latestVersionForNc."30";
     "30" = {
-      version = "7.5.2";
-      appHash = "sha256-BfxJDCGsiRJrZWkNJSQF3rSFm/G3zzQn7C6DCETSzw4=";
-      srcHash = "sha256-imBO/64NW5MiozpufbMRcTI9WCaN8grnHlVo+fsUNlU=";
+      version = "7.6.1";
+      appHash = "sha256-uRZBTwhdNr3OUw021WvTnEBcLd49EQbVr9bvU97zblc=";
+      srcHash = "sha256-eKvdv3ng4YwPmFu7eapYvD8A2cliryAhPf6NDBJjX6c=";
     };
   };
   currentVersionInfo =
@@ -73,8 +73,9 @@ stdenv.mkDerivation rec {
     rm appinfo/signature.json
     rm -rf bin-ext/
 
+    sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
-      --replace-fail "EXIFTOOL_VER = '12.70'" "EXIFTOOL_VER = '${exiftool.version}'"
+      --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
   '';
 
   installPhase = ''

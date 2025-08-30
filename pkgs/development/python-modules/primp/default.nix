@@ -112,6 +112,6 @@ buildPythonPackage rec {
     description = "Python Requests IMPersonate, the fastest Python HTTP client that can impersonate web browsers";
     homepage = "https://github.com/deedy5/primp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -93,14 +93,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.7";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-c8Wp/bP5KHDN/i2bMyiOQgnHDw8tPbg4IZIQ5Ut4SIo=";
+    hash = "sha256-jzNeAsL4kMGRhD9MftOL1UrM7GX8AYCab+nosptsqLY=";
   };
 
   build-system = with python.pkgs; [
@@ -109,6 +109,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "posthog"
+    "wheel"
   ];
   dependencies =
     with python.pkgs;
@@ -176,15 +177,28 @@ python.pkgs.buildPythonApplication rec {
   ++ (with python.pkgs; [
     mcp
     pygls
+    pytest-asyncio
     pytestCheckHook
   ]);
   versionCheckProgramArg = "version";
 
   disabledTests = [
     # Require internet access
+    "test_chunked_add"
+    "test_chunked_add_empty_file"
+    "test_chunked_add_truncated"
+    "test_chunked_add_update_existing"
+    "test_chunked_add_with_existing"
     "test_get_embedding_function"
     "test_get_embedding_function_fallback"
+    "test_get_query_reranker_initialisation_error"
+    "test_get_query_result_chunks_with_query_exclude"
+    "test_get_query_result_files_include_chunk"
+    "test_get_query_result_files_multiple_queries"
+    "test_get_query_result_files_query_error"
+    "test_get_query_result_files_with_query_exclude"
     "test_get_reranker"
+    "test_query_tool_success"
     "test_supported_rerankers_initialization"
   ];
 

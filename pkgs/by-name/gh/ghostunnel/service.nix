@@ -1,8 +1,11 @@
+# Non-module dependencies (`importApply`)
+{ writeScript, runtimeShell }:
+
+# Service module
 {
   lib,
   config,
   options,
-  pkgs,
   ...
 }:
 let
@@ -25,6 +28,7 @@ in
     ghostunnel = {
       package = mkOption {
         description = "Package to use for ghostunnel";
+        defaultText = "The ghostunnel package that provided this module.";
         type = types.package;
       };
 
@@ -191,8 +195,8 @@ in
             cfg.cacert
           ])
           (
-            pkgs.writeScript "load-credentials" ''
-              #!${pkgs.runtimeShell}
+            writeScript "load-credentials" ''
+              #!${runtimeShell}
               exec $@ ${
                 concatStringsSep " " (
                   optional (cfg.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"

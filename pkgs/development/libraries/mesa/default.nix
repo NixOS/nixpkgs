@@ -26,6 +26,7 @@
   ninja,
   pkg-config,
   python3Packages,
+  runCommand,
   rust-bindgen,
   rust-cbindgen,
   rustPlatform,
@@ -44,41 +45,43 @@
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
 
+  # We enable as many drivers as possible here, to build cross tools
+  # and support emulation use cases (emulated x86_64 on aarch64, etc)
   galliumDrivers ? [
-    "asahi" # Apple AGX, built on non-aarch64 for cross tools
+    "asahi" # Apple AGX
+    "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
+    "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "i915" # Intel extra legacy
     "iris" # new Intel (Broadwell+)
+    "lima" # ARM Mali 4xx
     "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "panfrost" # ARM Mali Midgard and up (T/G series), built on non-ARM for cross tools
+    "panfrost" # ARM Mali Midgard and up (T/G series)
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
-    "virgl" # QEMU virtualized GPU (aka VirGL)
-    "zink" # generic OpenGL over Vulkan, experimental
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) [
-    "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
-    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-    "lima" # ARM Mali 4xx
-    "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "tegra" # Nvidia Tegra SoCs
     "v3d" # Broadcom VC5 (Raspberry Pi 4)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86 [
-    "crocus" # Intel legacy, x86 only
-    "i915" # Intel extra legacy, x86 only
+    "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    "virgl" # QEMU virtualized GPU (aka VirGL)
+    "zink" # generic OpenGL over Vulkan, experimental
   ],
   vulkanDrivers ? [
     "amd" # AMD (aka RADV)
-    "asahi" # Apple AGX, built on non-aarch64 for cross tools
+    "asahi" # Apple AGX
+    "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "gfxstream" # Android virtualized GPU
+    "imagination-experimental" # PowerVR Rogue (currently N/A)
+    "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
     "nouveau" # Nouveau (aka NVK)
+    "panfrost" # ARM Mali Midgard and up (T/G series)
     "swrast" # software renderer (aka Lavapipe)
   ]
   ++
@@ -88,16 +91,7 @@
         # QEMU virtualized GPU (aka VirGL)
         # Requires ATOMIC_INT_LOCK_FREE == 2.
         "virtio"
-      ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
-    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-    "imagination-experimental" # PowerVR Rogue (currently N/A)
-    "panfrost" # ARM Mali Midgard and up (T/G series)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86 [
-    "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
-  ],
+      ],
   eglPlatforms ? [
     "x11"
     "wayland"
@@ -115,40 +109,27 @@
 }:
 
 let
-  rustDeps = [
-    {
-      pname = "paste";
-      version = "1.0.14";
-      hash = "sha256-+J1h7New5MEclUBvwDQtTYJCHKKqAEOeQkuKy+g0vEc=";
-    }
-    {
-      pname = "proc-macro2";
-      version = "1.0.86";
-      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
-    }
-    {
-      pname = "quote";
-      version = "1.0.33";
-      hash = "sha256-VWRCZJO0/DJbNu0/V9TLaqlwMot65YjInWT9VWg57DY=";
-    }
-    {
-      pname = "syn";
-      version = "2.0.68";
-      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
-    }
-    {
-      pname = "unicode-ident";
-      version = "1.0.12";
-      hash = "sha256-KX8NqYYw6+rGsoR9mdZx8eT1HIPEUUyxErdk2H/Rlj8=";
-    }
+  rustDeps = lib.importJSON ./wraps.json;
+
+  fetchDep =
+    dep:
+    fetchCrate {
+      inherit (dep) pname version hash;
+      unpack = false;
+    };
+
+  toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
+
+  packageCacheCommand = lib.pipe rustDeps [
+    (builtins.map fetchDep)
+    (builtins.map toCommand)
+    (lib.concatStringsSep "\n")
   ];
 
-  copyRustDep = dep: ''
-    cp -R --no-preserve=mode,ownership ${fetchCrate dep} subprojects/${dep.pname}-${dep.version}
-    cp -R subprojects/packagefiles/${dep.pname}/* subprojects/${dep.pname}-${dep.version}/
+  packageCache = runCommand "mesa-rust-package-cache" { } ''
+    mkdir -p $out
+    ${packageCacheCommand}
   '';
-
-  copyRustDeps = lib.concatStringsSep "\n" (builtins.map copyRustDep rustDeps);
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -175,8 +156,6 @@ stdenv.mkDerivation {
         exit 42
       fi
     done
-
-    ${copyRustDeps}
   '';
 
   outputs = [
@@ -209,6 +188,8 @@ stdenv.mkDerivation {
     PATH=${lib.getDev llvmPackages.libllvm}/bin:$PATH
   '';
 
+  env.MESON_PACKAGE_CACHE_DIR = packageCache;
+
   mesonFlags = [
     "--sysconfdir=/etc"
 
@@ -223,22 +204,12 @@ stdenv.mkDerivation {
     (lib.mesonEnable "gbm" true)
     (lib.mesonBool "libgbm-external" true)
 
-    (lib.mesonBool "gallium-nine" false) # Direct3D9 in Wine, largely supplanted by DXVK
-
-    # Only used by xf86-video-vmware, which has more features than VMWare's KMS driver,
-    # so we're keeping it for now. Should be removed when that's no longer the case.
-    # See: https://github.com/NixOS/nixpkgs/pull/392492
-    (lib.mesonEnable "gallium-xa" true)
-
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
     # Enable all freedreno kernel mode drivers. (For example, virtio can be
     # used with a virtio-gpu device supporting drm native context.) This option
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
-
-    # Enable Intel RT stuff when available
-    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
 
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
@@ -247,15 +218,19 @@ stdenv.mkDerivation {
     (lib.mesonBool "gallium-rusticl" true)
     (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
-    # meson auto_features enables this, but we do not want it
-    (lib.mesonEnable "android-libbacktrace" false)
-    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
-
     # Enable more sensors in gallium-hud
     (lib.mesonBool "gallium-extra-hud" true)
 
     # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
+
+    # Enable Intel RT stuff when available
+    (lib.mesonEnable "intel-rt" (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+
+    # meson auto_features enables these, but we do not want them
+    (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
+    (lib.mesonEnable "android-libbacktrace" false) # Android only
+    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ]
   ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")

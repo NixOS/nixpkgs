@@ -138,38 +138,6 @@ let
 
     # SOURCE PACKAGES
 
-    MonoAddins = buildDotnetPackage rec {
-      pname = "Mono.Addins";
-      version = "1.2";
-
-      xBuildFiles = [
-        "Mono.Addins/Mono.Addins.csproj"
-        "Mono.Addins.Setup/Mono.Addins.Setup.csproj"
-        "Mono.Addins.Gui/Mono.Addins.Gui.csproj"
-        "Mono.Addins.CecilReflector/Mono.Addins.CecilReflector.csproj"
-      ];
-      outputFiles = [ "bin/*" ];
-
-      src = fetchFromGitHub {
-        owner = "mono";
-        repo = "mono-addins";
-        rev = "mono-addins-${version}";
-        sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
-      };
-
-      buildInputs = [ pkgs.gtk-sharp-2_0 ];
-
-      meta = {
-        description = "Generic framework for creating extensible applications";
-        homepage = "https://www.mono-project.com/Mono.Addins";
-        longDescription = ''
-          A generic framework for creating extensible applications,
-          and for creating libraries which extend those applications.
-        '';
-        license = lib.licenses.mit;
-      };
-    };
-
     NewtonsoftJson = fetchNuGet {
       pname = "Newtonsoft.Json";
       version = "11.0.2";

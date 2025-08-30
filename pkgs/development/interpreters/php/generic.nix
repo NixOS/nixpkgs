@@ -32,6 +32,8 @@ let
       common-updater-scripts,
       curl,
       jq,
+      coreutils,
+      formats,
 
       version,
       phpSrc ? null,
@@ -220,6 +222,7 @@ let
       };
     in
     stdenv.mkDerivation (
+      finalAttrs:
       let
         attrs = {
           pname = "php";
@@ -387,6 +390,15 @@ let
               in
               php;
             inherit ztsSupport;
+
+            services.default = {
+              imports = [
+                (lib.modules.importApply ./service.nix {
+                  inherit formats coreutils;
+                })
+              ];
+              php-fpm.package = lib.mkDefault finalAttrs.finalPackage;
+            };
           };
 
           meta = with lib; {

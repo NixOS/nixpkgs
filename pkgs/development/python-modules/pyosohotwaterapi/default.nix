@@ -8,23 +8,25 @@
   setuptools,
   unasync,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyosohotwaterapi";
-  version = "1.2.0";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
     tag = version;
-    hash = "sha256-GFjA1RtJC2bxSoH2TIZwEdSAvpteYBTbsS81hhp4Y3E=";
+    hash = "sha256-hpbmiSOLawKVSh7BGV70bRi45HCDKmdxEEhCOdJuIww=";
   };
 
   build-system = [
     setuptools
     unasync
+    writableTmpDirAsHomeHook
   ];
 
   dependencies = [
@@ -33,10 +35,6 @@ buildPythonPackage rec {
     numpy
     urllib3
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Module has no tests
   doCheck = false;

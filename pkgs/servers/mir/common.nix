@@ -13,6 +13,7 @@
   glib,
   glm,
   libapparmor,
+  libdisplay-info,
   libdrm,
   libepoxy,
   libevdev,
@@ -25,6 +26,7 @@
   yaml-cpp,
   lttng-ust,
   libgbm,
+  mesa,
   nettle,
   pixman,
   udev,
@@ -136,11 +138,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (lib.strings.versionAtLeast version "2.21.0") [
     pixman
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.22.0") [
+    libdisplay-info
   ];
 
   nativeCheckInputs = [
     dbus
     gobject-introspection
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.22.0") [
+    mesa.llvmpipeHook
   ];
 
   checkInputs = [
@@ -153,9 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_DOXYGEN" false)
     (lib.cmakeFeature "MIR_PLATFORM" (
       lib.strings.concatStringsSep ";" [
+        "atomic-kms"
         "gbm-kms"
-        "x11"
         "eglstream-kms"
+        "x11"
         "wayland"
       ]
     ))
@@ -164,10 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/canonical/mir/pull/1947#issuecomment-811810872
     (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
     (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (
-      lib.strings.concatStringsSep ";" [
-        # https://github.com/canonical/mir/issues/3716#issuecomment-2580698552
-        "UdevWrapperTest.UdevMonitorDoesNotTriggerBeforeEnabling"
-      ]
+      lib.strings.concatStringsSep ";" (
+        lib.optionals (lib.strings.versionOlder version "2.22.0") [
+          # https://github.com/canonical/mir/issues/3716#issuecomment-2580698552
+          "UdevWrapperTest.UdevMonitorDoesNotTriggerBeforeEnabling"
+        ]
+      )
     ))
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
@@ -176,16 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
     (lib.cmakeBool "MIR_USE_PRECOMPILED_HEADERS" false)
     (lib.cmakeFeature "MIR_COMPILER_QUIRKS" (
-      lib.strings.concatStringsSep ";" [
-        # https://github.com/canonical/mir/issues/3017 actually affects x86_64 as well
-        "test_touchspot_controller.cpp:array-bounds"
-      ]
+      lib.strings.concatStringsSep ";" (
+        lib.optionals (lib.strings.versionOlder version "2.22.0") [
+          # https://github.com/canonical/mir/issues/3017 actually affects x86_64 as well
+          "test_touchspot_controller.cpp:array-bounds"
+        ]
+      )
     ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
+    export HOME=$TMP # shader cache
     export XDG_RUNTIME_DIR=$TMP
   '';
 

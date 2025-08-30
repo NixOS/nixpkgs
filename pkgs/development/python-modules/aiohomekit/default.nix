@@ -13,6 +13,7 @@
   fetchFromGitHub,
   orjson,
   poetry-core,
+  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
@@ -50,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-aiohttp
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytestCheckHook
   ];
 

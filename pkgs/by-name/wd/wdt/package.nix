@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2025-07-23";
+  version = "1.27.1612021-unstable-2025-08-20";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "9294400cb0f5f7a0eef7fdf009cc01f00a5917c1";
-    sha256 = "sha256-uDsHdha8JA2oue/SBej4lYFWEtaKcsVeNBhtZZBEPZI=";
+    rev = "a1261138b955b3bf6fdd741ac9b82e0721bb0c84";
+    sha256 = "sha256-zux6b2XRIqr+VFvB61no30oS6om9GpWOKVczY+cUOOU=";
   };
 
   nativeBuildInputs = [ cmake ];

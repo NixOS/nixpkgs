@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "motor";
     tag = version;
-    hash = "sha256-O3MHVzL/ECO0vnzJItXTDmmMN8aicbvh0Sve/HlAlZw=";
+    hash = "sha256-ul2GKzSiAewwGEuCpQQ61h3cqrJikaJeKs5KlX+aAjo=";
   };
 
   build-system = [

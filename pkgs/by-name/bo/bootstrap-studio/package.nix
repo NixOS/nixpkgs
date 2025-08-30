@@ -6,10 +6,10 @@
 
 let
   pname = "bootstrap-studio";
-  version = "7.1.1";
+  version = "7.1.2";
   src = fetchurl {
     url = "https://releases.bootstrapstudio.io/${version}/Bootstrap%20Studio.AppImage";
-    sha256 = "sha256-R9cgCLJGFO8B1PB/7YHtWyXidElW84hJCwxRME5kYGc=";
+    sha256 = "sha256-tn5MkRSS2SLqVU5SQOH0WYN15wll7nREFA9rkXTPAtQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      abbradar
       obadz
     ];
   };

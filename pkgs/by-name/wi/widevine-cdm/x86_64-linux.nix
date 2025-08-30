@@ -9,7 +9,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.10.2891.0";
 
   src = fetchzip {
-    url = "https://dl.google.com/widevine-cdm/${finalAttrs.version}-linux-x64.zip";
+    # The download 404s
+    url = "https://web.archive.org/web/20250725071306/https://dl.google.com/widevine-cdm/4.10.2891.0-linux-x64.zip";
     hash = "sha256-ZO6FmqJUnB9VEJ7caJt58ym8eB3/fDATri3iOWCULRI=";
     stripRoot = false;
   };

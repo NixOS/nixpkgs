@@ -16,6 +16,7 @@
 
   # tests
   dm-haiku,
+  equinox,
   flax,
   funsor,
   graphviz,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-0X/ta2yfzjf3JnZYdUAzQmXvbsDpwFCJe/bArMSWQgU=";
+    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    equinox
     flax
     funsor
     graphviz

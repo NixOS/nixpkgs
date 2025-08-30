@@ -65,7 +65,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
-    description = "CrowdSec is a free, open-source and collaborative IPS";
+    description = "Free, open-source and collaborative IPS";
     longDescription = ''
       CrowdSec is a free, modern & collaborative behavior detection engine,
       coupled with a global IP reputation network. It stacks on fail2ban's

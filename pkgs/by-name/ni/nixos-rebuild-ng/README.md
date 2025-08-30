@@ -7,7 +7,7 @@ Work-in-Progress rewrite of
 
 The current state of `nixos-rebuild` is dire: it is one of the most critical
 pieces of code we have in NixOS, but it has tons of issues:
-- The code is written in Bash, and while this by itself is not necessary bad,
+- The code is written in Bash, and while this by itself is not necessarily bad,
   it means that it is difficult to do refactorings due to the lack of tooling
   for the language
 - The code itself is a hacky mess. Changing even one line of code can cause
@@ -18,7 +18,7 @@ pieces of code we have in NixOS, but it has tons of issues:
   builds Flakes inside a temporary directory and reads the resulting symlink
   since the code seems to predate `--print-out-paths` flag
 
-Given all of those above, improvements in the `nixos-rebuild` are difficult to
+Given all of the above, improvements in the `nixos-rebuild` are difficult to
 do. A full rewrite is probably the easier way to improve the situation since
 this can be done in a separate package that will not break anyone. So this is
 an attempt of the rewrite.
@@ -44,7 +44,7 @@ nix-build -A nixos-rebuild-ng -A nixos-rebuild-ng.tests.linters
 ```
 
 The command above will build, run the unit tests and linters, and also check if
-the code is formatted. However, sometimes is more convenient to run just a few
+the code is formatted. However, sometimes it's more convenient to run just a few
 tests to debug, in this case you can run:
 
 ```console
@@ -89,16 +89,15 @@ not possible to fix, please open an issue and we can discuss a solution.
   your password wrong, it will fail during activation (this can be improved
   though)
 - When `--build-host` and `--target-host` are used together, we will use `nix
-  copy` (or 2 `nix-copy-closure` if you're using Nix <2.18) instead of SSH'ing
-  to build host and using `nix-copy-closure --to target-host`. The reason for
-  this is documented in PR
+  copy` instead of SSH'ing to build host and using
+  `nix-copy-closure --to target-host`. The reason for this is documented in PR
   [#364698](https://github.com/NixOS/nixpkgs/pull/364698). If you do need the
   previous behavior, you can simulate it using `ssh build-host --
   nixos-rebuild-ng switch --target-host target-host`. If that is not the case,
   please open an issue
 - We do some additional validation of flags, like exiting with an error when
   `--build-host` or `--target-host` is used with `repl`, since the user could
-  assume that the `repl` would be run remotely while it always run the local
+  assume that the `repl` would be run remotely while it always runs the local
   machine. `nixos-rebuild` silently ignored those flags, so this
   [may cause some issues](https://github.com/NixOS/nixpkgs/pull/363922) for
   wrappers
@@ -109,7 +108,7 @@ not possible to fix, please open an issue and we can discuss a solution.
   may be difficult to fix, so right now I only recommend using
   `nixos-rebuild-ng` if you are testing in a VM or in a filesystem with
   snapshots like BTRFS or ZFS. Those bugs are unlikely to be unfixable but the
-  errors can be difficult to understand. If you want to go anyway,
+  errors can be difficult to understand. If you want to go on,
   `nix-collect-garbage -d` and `nix store repair` are your friends
 
 ## TODON'T
@@ -119,7 +118,7 @@ not possible to fix, please open an issue and we can discuss a solution.
   and there was a need to bootstrap a new version of Nix before evaluating the
   configuration (otherwise the new Nixpkgs version may have code that is only
   compatible with a newer version of Nix). Nixpkgs now has a policy to be
-  compatible with Nix 2.3, and even if this is bumped as long we don't do
+  compatible with Nix 2.18, and even if this is bumped as long we don't do
   drastic minimum version changes this should not be an issue. Also, the daemon
   itself always run with the previous version since even we can replace Nix in
   `PATH` (so Nix client), but we can't replace the daemon without switching to

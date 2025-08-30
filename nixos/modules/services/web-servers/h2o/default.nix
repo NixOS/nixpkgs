@@ -434,14 +434,13 @@ in
     systemd.services.h2o = {
       description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) acmeCertNames.all);
+      wants = lib.concatLists (map (certName: [ "acme-${certName}.service" ]) acmeCertNames.all);
       # Since H2O will be hosting the challenges, H2O must be started
-      before = builtins.map (certName: "acme-${certName}.service") acmeCertNames.dependent;
+      before = builtins.map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
       after = [
         "network.target"
       ]
-      ++ builtins.map (certName: "acme-selfsigned-${certName}.service") acmeCertNames.all
-      ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
+      ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.all;
 
       serviceConfig = {
         ExecStart = "${h2oExe} --mode 'master'";
@@ -490,16 +489,14 @@ in
 
     # This service waits for all certificates to be available before reloading
     # H2O configuration. `tlsTargets` are added to `wantedBy` + `before` which
-    # allows the `acme-finished-$cert.target` to signify the successful updating
+    # allows the `acme-order-renew-$cert.service` to signify the successful updating
     # of certs end-to-end.
     systemd.services.h2o-config-reload =
       let
-        tlsTargets = map (certName: "acme-${certName}.target") acmeCertNames.all;
-        tlsServices = map (certName: "acme-${certName}.service") acmeCertNames.all;
+        tlsServices = map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
       in
       mkIf (acmeCertNames.all != [ ]) {
         wantedBy = tlsServices ++ [ "multi-user.target" ];
-        before = tlsTargets;
         after = tlsServices;
         unitConfig = {
           ConditionPathExists = map (

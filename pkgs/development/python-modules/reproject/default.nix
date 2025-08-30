@@ -7,6 +7,7 @@
   cloudpickle,
   cython,
   dask,
+  extension-helpers,
   fetchPypi,
   fsspec,
   numpy,
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U8jqJ5uLVX8zoeQwr14FPNdHACRA4HK65q2TAtRr5Xk=";
+    hash = "sha256-l9pmxtXIGnl8T8fCsUp/5y3kReg3MXdaN0i2rpcEqE4=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     astropy-healpix
     cloudpickle
     dask
+    extension-helpers
     fsspec
     numpy
     scipy

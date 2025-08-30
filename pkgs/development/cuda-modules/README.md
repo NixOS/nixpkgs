@@ -1,4 +1,4 @@
-# Cuda modules
+# CUDA Modules
 
 > [!NOTE]
 > This document is meant to help CUDA maintainers understand the structure of
@@ -43,17 +43,17 @@ package set by [cuda-packages.nix](../../top-level/cuda-packages.nix).
 
 ## Distinguished packages
 
-### Cuda compatibility
+### CUDA Compatibility
 
-[Cuda Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/),
+[CUDA Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/),
 available as `cudaPackages.cuda_compat`, is a component which makes it possible
 to run applications built against a newer CUDA toolkit (for example CUDA 12) on
 a machine with an older CUDA driver (for example CUDA 11), which isn't possible
-out of the box. At the time of writing, Cuda Compatibility is only available on
+out of the box. At the time of writing, CUDA Compatibility is only available on
 the Nvidia Jetson architecture, but Nvidia might release support for more
 architectures in the future.
 
-As Cuda Compatibility strictly increases the range of supported applications, we
+As CUDA Compatibility strictly increases the range of supported applications, we
 try our best to enable it by default on supported platforms.
 
 #### Functioning
@@ -64,17 +64,17 @@ the other shared libraries of the default driver must still be accessible:
 `cuda_compat` isn't a complete drop-in replacement for the driver (and that's
 the point, otherwise, it would just be a newer driver).
 
-Nvidia's recommendation is to set `LD_LIBRARY_PATH` to points to `cuda_compat`'s
+Nvidia's recommendation is to set `LD_LIBRARY_PATH` to point to `cuda_compat`'s
 driver. This is fine for a manual, one-shot usage, but in general setting
 `LD_LIBRARY_PATH` is a red flag. This is global state which short-circuits most
-of other dynamic libraries resolution mechanisms and can break things in
+of other dynamic library resolution mechanisms and can break things in
 non-obvious ways, especially with other Nix-built software.
 
-#### Cuda compat with Nix
+#### CUDA Compat with Nix
 
 Since `cuda_compat` is a known derivation, the easy way to do this in Nix would
 be to add `cuda_compat` as a dependency of CUDA libraries and applications and
-let Nix does its magic by filling the `DT_RUNPATH` fields. However,
+let Nix do its magic by filling the `DT_RUNPATH` fields. However,
 `cuda_compat` itself depends on `libnvrm_mem` and `libnvrm_gpu` which are loaded
 dynamically at runtime from `/run/opengl-driver`. This doesn't please the Nix
 sandbox when building, which can't find those (a second minor issue is that

@@ -47,6 +47,7 @@ buildRustPackage rec {
       url = "https://github.com/tectonic-typesetting/tectonic/commit/fbb145cd079497b8c88197276f92cb89685b4d54.patch";
       hash = "sha256-6FW5MFkOWnqzYX8Eg5DfmLaEhVWKYVZwodE4SGXHKV0=";
     })
+    ./tectonic-0.15-fix-dangerous_implicit_autorefs.patch
   ];
 
   cargoPatches = [

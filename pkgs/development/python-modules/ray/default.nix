@@ -64,7 +64,7 @@
 
 let
   pname = "ray";
-  version = "2.48.0";
+  version = "2.49.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -85,28 +85,28 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-ZJ7ZRC3C05E1xZO2zww46DVRcLkmcjZat6PLyVjEJjQ=";
-          cp311 = "sha256-RtS0KlhJLex5yq0tViNEaJpPmagoruqBGgzSzWU1U+8=";
-          cp312 = "sha256-pC7TtkD0tZmj/IBnyD7mBJfA8D0HDXp98Co4j6F6VGs=";
-          cp313 = "sha256-JeS3n8yPhJ1y2xrMTwPzcAjFwLdF32PYowzTVna2VF4=";
+          cp310 = "sha256-bFQKbfqOWC4HJQV8E3JFzNP6DWl7R2SFMxdvWoqzCjA=";
+          cp311 = "sha256-Ja5MII3Hi0plPDEcsmuTx0QB5nYqGTztX6uqkQqBfYE=";
+          cp312 = "sha256-lShdI6MDsXTQcKaz6ocj6dq/B6QUegHLkzHV6t+MoLI=";
+          cp313 = "sha256-42mZ1Pgx8vIcqPtWnwWY+4DKjawPiDbErHXM2ltVi/s=";
         };
         aarch64-linux = {
-          cp310 = "sha256-+CCVC8RNewAMIjNC9cgAycCOf9iVJCARJTiOohHKrRo=";
-          cp311 = "sha256-JKcPQW7AvhS5dfFgBEgFzLSMxrxQ3mMpg+uPCo4WaCs=";
-          cp312 = "sha256-8c8z0mAxb5L3dVgYXxw2/DVQbXbuf9/tn1tw+cS9un8=";
-          cp313 = "sha256-Yi5rzbeNmAQNh76pTmXQu2zMCuG0MpTGvWn1Qr8o4JI=";
+          cp310 = "sha256-jFWnpGKgzese1Y+jYQ9S46KEzk4MVVZjWb0RWKloP0Q=";
+          cp311 = "sha256-KnXS/YvKsahQkeow5ZMsXiiXxxIq4j+SH0+v7sIsOCg=";
+          cp312 = "sha256-NjVn9WES86FRjs2NDjoM5PBTcFzI9NQ+kzyvafs1lxw=";
+          cp313 = "sha256-/Wu+DBhvHWpJ31NTKyGSH9Bf+ZPLVG9mW3GAmGIPY8U=";
         };
         x86_64-darwin = {
-          cp310 = "sha256-M72kdTrQrNK1JMkVgInUNIbNRMxZ/pcEZkNbwpaP3i0=";
-          cp311 = "sha256-uUUA/i0X5JH+LpvUo79i3yF+IajyhFAzw1PU0uokD3M=";
-          cp312 = "sha256-Wm9XEm6sndMoYongfpHoewVHkvlpi298yriLYkgWtUI=";
-          cp313 = "sha256-V0K3KlFK/l1g9BMwIAzVCDduFsZQ9pYuYjN6pILWoMY=";
+          cp310 = "sha256-6Qjm97RkKdJvRZRXlFgpiETRpIXCiM/liRT6eilP06Q=";
+          cp311 = "sha256-5CpBh6kOiXr7lVF8uKpPwMJHGL1Ci97AsmCqLRjs5sg=";
+          cp312 = "sha256-FvsQ5YuuSDECZ16Cnq0afQpHjcVfmf8GuDKnicogi6k=";
+          cp313 = "sha256-LhOphUj78ujX8JY8YK/1HZtT01naDO9QoHGpUMT85Uo=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-bKK5zkWtNgy+KZaYL7Imkez+ZVPsj5eiVIKV8PlqrHg=";
-          cp311 = "sha256-S5uSrCljX1Ve80E0fZpj2/ArfZRjRyOa88CeNkvEXPg=";
-          cp312 = "sha256-jeeZ87CJb0jTBtXkoE/GA3oIxJXUX5x5k1NE5Wk+PPg=";
-          cp313 = "sha256-p6bYMNncWui7FW/N6aGtq39O2wBPA5GKck2IXs64Jk0=";
+          cp310 = "sha256-seRUvxTQCGfaXslF4L4IfWhFfyQbqmClDLccBBosTfw=";
+          cp311 = "sha256-VKipsP5qnLFagvNxwufWhCD540/+OKi+PD3UvlQFHGY=";
+          cp312 = "sha256-+UOpwq4EljaxJqGUBH/fkQEGCpmF0dthSxeycGH46fM=";
+          cp313 = "sha256-9CDvy2n6ZDAf8su3YR10rwEguu6OhAhtjzuV6BVTD5M=";
         };
       };
     in

@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-camera-app";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-camera-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rGWIcaU3iFZIse69DUVjCebWH18yVrqWHcGoXItGX3k=";
+    hash = "sha256-NRdZLBN+06/YCa+4L1elrmP2nQm/6DNg1EmRY73B+RQ=";
   };
 
   patches = [

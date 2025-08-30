@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgsql-http";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "pramsey";
     repo = "pgsql-http";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ij8BaNj2SOwDfjgLxrpLFvvPCzSahXyyckRPGmcqKtE=";
+    hash = "sha256-tgmty8ZYpSEccwQouI/Ho2M495k6DizbMaaJ0+aW03Q=";
   };
 
   buildInputs = [ curl ];

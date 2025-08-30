@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
+  fetchpatch,
   pythonOlder,
   python,
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # build-time dependencies
   gettext,
@@ -41,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.9.0";
+  version = "65.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,12 +53,23 @@ buildPythonPackage rec {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-gusA9TnsgSSnWBPwHsNYeESD9nX5DWh4HqMgcsoJRw0=";
+    hash = "sha256-pwWrdWk3bARM4dKbEnUWXuyjw/rTcOjk3YXowDa+Hm8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "dj-rest-auth-compat.patch";
+      url = "https://github.com/pennersr/django-allauth/commit/d50a9b09bada6753b52e52571d0830d837dc08ee.patch";
+      hash = "sha256-cFj9HEAlAITbRcR23ptzUYamoLmdtFEUVkDtv4+BBY0=";
+    })
+  ];
 
   nativeBuildInputs = [ gettext ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asgiref
@@ -68,6 +81,7 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib
       pyjwt

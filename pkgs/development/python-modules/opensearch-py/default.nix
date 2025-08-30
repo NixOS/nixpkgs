@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.8.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     tag = "v${version}";
-    hash = "sha256-rPHpGKEIINAEUu2UkJwAM60i0hTzXd1ec6WD50RrgL8=";
+    hash = "sha256-IAEh+rB26Zqv7j5g2YIRZRCAtFbBngoh+w8Z4e2bY+M=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -92,7 +92,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python low-level client for OpenSearch";
     homepage = "https://github.com/opensearch-project/opensearch-py";
-    changelog = "https://github.com/opensearch-project/opensearch-py/releases/tag/v${version}";
+    changelog = "https://github.com/opensearch-project/opensearch-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
   };

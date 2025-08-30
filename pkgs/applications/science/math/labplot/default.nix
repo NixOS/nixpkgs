@@ -33,7 +33,7 @@
   netcdf,
   cfitsio,
   libcerf,
-  cantor,
+  # cantor,
   zlib,
   lz4,
   readstat,
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     netcdf
     cfitsio
     libcerf
-    cantor
+    # cantor
     zlib
     lz4
     readstat

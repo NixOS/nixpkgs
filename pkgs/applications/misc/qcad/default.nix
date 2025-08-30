@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.32.3.1";
+  version = "3.32.3.4";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    hash = "sha256-YK5x0TbmJYOvciDZGj4rHN4bo89oS1t2Zulk9kJscj8=";
+    hash = "sha256-6incOmg4AilVfoPu+crbvm/SFek3yptxrfHn7RGFF4o=";
   };
 
   patches = [

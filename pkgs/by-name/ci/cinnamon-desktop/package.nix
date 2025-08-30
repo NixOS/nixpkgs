@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x install-scripts/meson_install_schemas.py # patchShebangs requires executable file
     patchShebangs install-scripts/meson_install_schemas.py
-    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon-common/share/cinnamon
+    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
   meta = with lib; {

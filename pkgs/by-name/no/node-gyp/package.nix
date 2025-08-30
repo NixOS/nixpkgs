@@ -8,16 +8,16 @@
 
 (buildNpmPackage.override { inherit nodejs; }) rec {
   pname = "node-gyp";
-  version = "11.2.0";
+  version = "11.4.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "node-gyp";
     tag = "v${version}";
-    hash = "sha256-NOVswjTByrQ+2z4H9wYd4YIWKhWIdgxpz2pE0dOK6qc=";
+    hash = "sha256-8vhnWFkr0kQFgvk3F7FYayyKZfIhaX9OIhvXvSW8sNc=";
   };
 
-  npmDepsHash = "sha256-emCYKqe6Bn1hmUq9jPDo5Nu9n43s4kb0E8lQndVtmlQ=";
+  npmDepsHash = "sha256-cT8ifS0PFg3J9m0aoDgzhGrW7F06amgho3QnTUYEPEs=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json

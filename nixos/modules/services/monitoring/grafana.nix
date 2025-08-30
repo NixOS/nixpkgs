@@ -1320,6 +1320,16 @@ in
                     type = types.int;
                   };
 
+                  prune = mkOption {
+                    default = false;
+                    type = types.bool;
+                    description = ''
+                      When `true`, provisioned datasources from this file will be deleted
+                      automatically when removed from
+                      {option}`services.grafana.provision.datasources.settings.datasources`.
+                    '';
+                  };
+
                   datasources = mkOption {
                     description = "List of datasources to insert/update.";
                     default = [ ];

@@ -1,0 +1,14 @@
+diff --git a/third_party/nvidia/backend/driver.py b/third_party/nvidia/backend/driver.py
+index d088ec092..625de2db8 100644
+--- a/third_party/nvidia/backend/driver.py
++++ b/third_party/nvidia/backend/driver.py
+@@ -23,6 +23,9 @@ def libcuda_dirs():
+     if env_libcuda_path:
+         return [env_libcuda_path]
+ 
++    if os.path.exists("@libcudaStubsDir@"):
++        return ["@libcudaStubsDir@"]
++
+     libs = subprocess.check_output(["/sbin/ldconfig", "-p"]).decode()
+     # each line looks like the following:
+     # libcuda.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libcuda.so.1

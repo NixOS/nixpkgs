@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gambit-project";
-  version = "16.3.0";
+  version = "16.3.1";
 
   src = fetchFromGitHub {
     owner = "gambitproject";
     repo = "gambit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-waRGnkykkKqOs7G1nlkL+eO4QRmerhGrZ7wjRgBsZc0=";
+    hash = "sha256-yGA8w7Mz8D96Cci+LO1KUvTZDVc9V5b/0t7Q+UndHXI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;

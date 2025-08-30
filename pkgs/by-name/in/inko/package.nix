@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  llvm_17,
+  llvm,
   libffi,
   libz,
   libxml2,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    llvm_17
+    llvm
     makeWrapper
   ];
 
@@ -61,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       simple = callPackage ./test.nix { };
     };
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Language for building concurrent software with confidence";

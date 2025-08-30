@@ -66,7 +66,6 @@ let
       libportal
       xdg-desktop-portal
       libsForQt5.qtwayland
-      libsForQt5.xwaylandvideobridge
       opencv4WithoutCuda
       pipewire
       xorg.libXdamage

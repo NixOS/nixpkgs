@@ -273,7 +273,7 @@ buildNpmPackage' {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich;
+      inherit (nixosTests) immich immich-vectorchord-migration;
     };
 
     machine-learning = immich-machine-learning;

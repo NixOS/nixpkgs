@@ -1,31 +1,37 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   electron,
   python3,
-  stdenv,
   copyDesktopItems,
   nodejs,
   pnpm,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xaHYNfW5ZLYiaeJ0F32NQ87woMh6K4Ea9rjgNOyabck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+PCDA7lHaUQw9DhODRsEScyJC+9v8UPiZ1W8w2h/Ljg=";
   };
+
+  patches = [
+    # MPRIS's DesktopEntry property needs to match the desktop entry basename
+    ./fix-mpris-desktop-entry.patch
+  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-xIQyTetHU37gTxCcQp4VCqzGdIfVQGy/aORCVba6YQ0=";
+    fetcherVersion = 2;
+    hash = "sha256-b5I0n3CedA6qCL68lePU3pwyGp1JlQHzUpfCvhqw2qI=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -51,6 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
         -c.electronVersion=${electron.version}
     '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.github.th_ch.youtube_music";
+      exec = "youtube-music %u";
+      icon = "youtube-music";
+      desktopName = "YouTube Music";
+      startupWMClass = "com.github.th_ch.youtube_music";
+      categories = [ "AudioVideo" ];
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -58,11 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv pack/mac*/YouTube\ Music.app $out/Applications
-    makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
+    ln -s "$out/Applications/YouTube Music.app/Contents/MacOS/YouTube Music" $out/bin/youtube-music
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p "$out/share/lib/youtube-music"
-    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
+    mkdir -p "$out/share/youtube-music"
+    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/youtube-music"
 
     pushd assets/generated/icons/png
     for file in *.png; do
@@ -77,37 +94,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
-      --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags $out/share/youtube-music/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
 
-  patches = [
-    # MPRIS's DesktopEntry property needs to match the desktop entry basename
-    ./fix-mpris-desktop-entry.patch
-  ];
+  passthru.updateScript = nix-update-script { };
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "com.github.th_ch.youtube_music";
-      exec = "youtube-music %u";
-      icon = "youtube-music";
-      desktopName = "YouTube Music";
-      startupWMClass = "com.github.th_ch.youtube_music";
-      categories = [ "AudioVideo" ];
-    })
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${
-      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.rev
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.tag
     }";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aacebedo
       SuperSandro2000
     ];

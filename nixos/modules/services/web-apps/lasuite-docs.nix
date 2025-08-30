@@ -194,7 +194,7 @@ in
         description = ''
           Configuration options of collaboration server.
 
-          See https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md
+          See <https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md>
         '';
       };
     };
@@ -327,7 +327,7 @@ in
       description = ''
         Configuration options of docs.
 
-        See https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md
+        See <https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md>
 
         `REDIS_URL` and `CELERY_BROKER_URL` are set if `services.lasuite-docs.redis.createLocally` is true.
         `DB_HOST` is set if `services.lasuite-docs.postgresql.createLocally` is true.

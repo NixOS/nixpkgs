@@ -30,8 +30,7 @@
         enable = true;
         settings.server.HTTP_PORT = 3000;
       };
-      # Uncomment the next line to lint service scripts (Note: breaks VM startup; see #373166)
-      #systemd.enableStrictShellChecks = true;
+      systemd.enableStrictShellChecks = true;
     };
 
   testScript = ''

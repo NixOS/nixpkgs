@@ -278,7 +278,7 @@ in
         The content of the system-wide ALSA configuration (/etc/asound.conf).
 
         Documentation of the configuration language and examples can be found
-        in the unofficial ALSA wiki: https://alsa.opensrc.org/Asoundrc
+        in the unofficial ALSA wiki: <https://alsa.opensrc.org/Asoundrc>
       '';
     };
 

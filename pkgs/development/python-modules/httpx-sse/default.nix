@@ -2,44 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  setuptools-scm,
-  wheel,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+  setuptools-scm,
+  setuptools,
   sse-starlette,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-sse";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "httpx-sse";
     tag = version;
-    hash = "sha256-nU8vkmV/WynzQrSrq9+FQXtfAJPVLpMsRSuntU0HWrE=";
+    hash = "sha256-bSozSZmbRU5sc3jvVUOAXQWVBA8GhzM2R26uPdabS+w=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/florimondmanca/httpx-sse/commit/643938c805e671fa20adcf314b447f862b77bcda.patch?full_index=1";
-      hash = "sha256-V2PyTlleyoLa0DuvdlU8zGNsI9C8bTjMUcLjx81/e5k=";
-    })
-  ];
-
-  # pytest-cov configuration is not necessary for packaging
-  postPatch = ''
-    rm setup.cfg
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   dependencies = [ httpx ];
@@ -48,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     sse-starlette
   ];

@@ -57,6 +57,15 @@ lib.makeOverridable (
       ++ attrs.extraNativeBuildInputs or [ ];
       buildInputs = compatIfNeeded;
 
+      preBuild =
+        lib.optionalString (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) ''
+          export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
+        ''
+        + lib.optionalString (versionData.major == 13) ''
+          export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
+        ''
+        + (attrs.preBuild or "");
+
       makeFlags = [
         "STRIP=-s" # flag to install, not command
       ]
@@ -77,6 +86,13 @@ lib.makeOverridable (
 
         # don't set filesystem flags that require root
         NO_FSCHG = "yes";
+
+        HAVE_LLVM = lib.optionalString stdenv'.cc.isClang or false (
+          lib.versions.major (lib.getVersion stdenv'.cc.cc)
+        );
+        HAVE_GCC = lib.optionalString stdenv'.cc.isGNU or false (
+          lib.versions.major (lib.getVersion stdenv'.cc.cc)
+        );
       }
       // lib.optionalAttrs stdenv'.hasCC {
         # TODO should CC wrapper set this?
@@ -87,12 +103,6 @@ lib.makeOverridable (
       }
       // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) { BOOTSTRAPPING = true; }
       // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
-      // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-        HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-      }
-      // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-        HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-      }
       // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
       // (attrs.env or { });
 
@@ -113,15 +123,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // (builtins.removeAttrs attrs [ "env" ])
-    // lib.optionalAttrs (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) {
-      preBuild = ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
-      ''
-      + lib.optionalString (versionData.major == 13) ''
-        export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
-      ''
-      + (attrs.preBuild or "");
-    }
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (

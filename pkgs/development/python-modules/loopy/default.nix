@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "loopy";
-  version = "2025.1";
+  version = "2025.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "inducer";
     repo = "loopy";
     tag = "v${version}";
-    hash = "sha256-3Ebnje+EBw2Jdp2xLqffWx592OoUrSdRDXQkw6FpEzc=";
+    hash = "sha256-VgsUOMCIg61mYNDMcGpMs5I1CkobhUFVjoQFdD8Vchs=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };
 

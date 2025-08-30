@@ -26,7 +26,7 @@ let
   src = fetchurl {
     urls = [
       "https://download.typora.io/linux/typora_${version}_amd64.deb"
-      "https://download2.typoraio.cn/linux/typora_${version}_amd64.deb"
+      "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
     ];
     hash = "sha256-7auxTtdVafvM2fIpQVvEey1Q6eLVG3mLdjdZXcqSE/Q=";
   };

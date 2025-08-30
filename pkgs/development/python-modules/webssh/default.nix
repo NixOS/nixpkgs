@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "webssh";
-  version = "1.6.2";
+  version = "1.6.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mRestRJukaf7ti3vIs/MM/R+zpGmK551j5HAM2chBsE=";
+    hash = "sha256-K85buvIGrTRZEMfk3IAks8QY5oHJ9f8JjxgCvv924QA=";
   };
 
   patches = [

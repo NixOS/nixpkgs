@@ -71,6 +71,7 @@ in
         [
           counter
           pkgs.mitmproxy
+          pkgs.mitmproxy2swagger
         ];
     };
 
@@ -130,5 +131,17 @@ in
       machine.succeed("mitmdump -C /root/replay")
 
       t.assertEqual("2", curl("http://localhost:8000/counter"))
+
+      # create a OpenAPI 3.0 spec from captured flow
+      # https://github.com/alufers/mitmproxy2swagger
+
+      # create a initial spec
+      machine.succeed("mitmproxy2swagger -i /root/replay -f flow -o /root/spec -p http://localhost:8000")
+      # don't ignore any endpoint
+      machine.succeed("sed -i -e 's/- ignore:/- /' /root/spec")
+      # generate the actual spec
+      machine.succeed("mitmproxy2swagger -i /root/replay -f flow -o /root/spec -p http://localhost:8000")
+      # check for endpoint /counter
+      machine.succeed("grep '/counter:' /root/spec")
     '';
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     tag = "v${version}";
-    hash = "sha256-JLkDFciDsfjfrA7BiIq3js+UtLRA/lzcdFvqPhUJyB8=";
+    hash = "sha256-DEuIoVpRDJTd9qXBeHa5jrBscmGgosCKAluqCuUBzuU=";
   };
 
   build-system = [ setuptools ];

@@ -13,7 +13,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gnustep";
     repo = "libobjc2";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+NP214bbisk7dCFAHaxnhNOfC/0bZLp8Dd2A9F2vK+s=";
     fetchSubmodules = true;
   };

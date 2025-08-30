@@ -52,8 +52,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-text-splitters==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-text-splitters==";
+    };
   };
 
   meta = {

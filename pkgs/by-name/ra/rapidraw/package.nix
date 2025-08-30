@@ -34,16 +34,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.2.12";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KF7HXkR6Iuwxh/S3M3BojzAau/tVE+3Lycp4SYI1GG4=";
+    hash = "sha256-j9Mpg3o90/PdKlSpJEePcnXZoO2BfnGtJEielM/5/uQ=";
   };
 
-  cargoHash = "sha256-3YeAK7FaBs70DqAoQQlCoqakgPUehE83+bedCwFGFVk=";
+  cargoHash = "sha256-emwlK16NgeTYyQevWD4baHUxMP5xWJsKpQp/q5krAhQ=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -109,13 +109,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # needs to be declared twice annoyingly
   ORT_STRATEGY = "system";
 
+  postInstall = ''
+    # Patch the .desktop file to set the Categories field
+    sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
+
+    # Ensure the resources directory exists before linking
+    mkdir -p $out/lib/RapidRAW/resources
+
+    # link the .so file
+    ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
+
+    # remove the .dylib file
+    rm -rf $out/lib/RapidRAW/resources/libonnxruntime.dylib
+  '';
+
   postFixup = ''
     wrapGApp $out/bin/rapidraw \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
       --set ORT_STRATEGY "system" \
       --set ORT_DYLIB_PATH "${onnxruntime}/lib/libonnxruntime.so"
-
-    rm -rf $out/lib/RapidRAW/resources
   '';
 
   meta = {

@@ -17,6 +17,8 @@
   nixpkgs-review,
   nix-direnv,
   nix-fast-build,
+  haskell,
+  nix-serve-ng,
   colmena,
 
   storeDir ? "/nix/store",
@@ -109,6 +111,15 @@ let
           nix-fast-build = nix-fast-build.override {
             inherit (self) nix-eval-jobs;
           };
+
+          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+            (haskell.lib.compose.enableCabalFlag "lix")
+            (haskell.lib.compose.overrideCabal (drv: {
+              # https://github.com/aristanetworks/nix-serve-ng/issues/46
+              # Resetting (previous) broken flag since it may be related to C++ Nix
+              broken = lib.versionAtLeast self.lix.version "2.93";
+            }))
+          ];
 
           colmena = colmena.override {
             nix = self.lix;
@@ -271,29 +282,27 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250704_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20250807_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "362bfd827f522b57062e4ebcb465bb51941632a4";
-        hash = "sha256-4CVRbeYExqIDpFH+QMZb5IeUGkP6kA/zHSuExYoZygk=";
+        rev = "8bbd5e1d0df9c31b4d86ba07bc85beb952e42ccb";
+        hash = "sha256-P+WiN95OjCqHhfygglS/VOFTSj7qNdL5XQDo2wxhQqg=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-${version}";
         inherit src;
-        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+        hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
       };
     };
   };
 
   latest = self.lix_2_93;
 
-  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
-  # See: https://git.lix.systems/lix-project/lix/issues/662
-  stable = self.lix_2_91;
+  stable = self.lix_2_93;
 
   # Previously, `nix-eval-jobs` was not packaged here, so we export an
   # attribute with the previously-expected structure for compatibility. This

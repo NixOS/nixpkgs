@@ -26,7 +26,7 @@ in
           "raft"
           "crdt"
         ];
-        description = "Consensus protocol - 'raft' or 'crdt'. https://cluster.ipfs.io/documentation/guides/consensus/";
+        description = "Consensus protocol - 'raft' or 'crdt'. <https://cluster.ipfs.io/documentation/guides/consensus/>";
       };
 
       dataDir = lib.mkOption {
@@ -44,7 +44,7 @@ in
       openSwarmPort = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Open swarm port, secured by the cluster secret. This does not expose the API or proxy. https://cluster.ipfs.io/documentation/guides/security/";
+        description = "Open swarm port, secured by the cluster secret. This does not expose the API or proxy. <https://cluster.ipfs.io/documentation/guides/security/>";
       };
 
       secretFile = lib.mkOption {

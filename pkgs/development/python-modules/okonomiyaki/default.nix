@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "enthought";
     repo = "okonomiyaki";
     tag = version;
-    hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
+    hash = "sha256-xAF9Tdr+IM3lU+mcNcAWATJLZOVvbx0llqznqHLVqDc=";
   };
 
   postPatch = ''
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     homepage = "https://github.com/enthought/okonomiyaki";
-    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${version}";
+    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
   };

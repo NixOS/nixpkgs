@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "(concrete or symbolic) implementation of IEEE-754 / SMT-LIB floating-point";
+    description = "Implementation of SMT-LIB / IEEE-754 operations in terms of bit-vector operations";
     homepage = "https://github.com/martin-cs/symfpu";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

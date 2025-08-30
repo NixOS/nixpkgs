@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sby";
-  version = "0.52";
+  version = "0.56";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     tag = "v${version}";
-    hash = "sha256-E/je1lHvYCpmRlwM17PWTQemSnz8azviKiz4t9z17UM=";
+    hash = "sha256-uKndGUoLbG7SBhsOSYyM/v9g33pq7zFFajzvTUYa7NY=";
   };
 
   nativeCheckInputs = [

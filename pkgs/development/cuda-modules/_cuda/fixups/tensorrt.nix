@@ -96,7 +96,6 @@ finalAttrs: prevAttrs: {
     '';
 
   passthru = prevAttrs.passthru or { } // {
-    useCudatoolkitRunfile = strings.versionOlder cudaMajorMinorVersion "11.3.999";
     # The CUDNN used with TensorRT.
     # If null, the default cudnn derivation will be used.
     # If a version is specified, the cudnn derivation with that version will be used,

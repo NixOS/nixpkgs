@@ -246,7 +246,7 @@ in
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
       #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
-      gateone = 207;
+      #gateone = 207; # removed 2025-08-21
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;# dynamically allocated as of 2021-09-03
@@ -582,7 +582,7 @@ in
       subsonic = 204;
       # riak = 205;#unused, removed 2022-06-22
       #shout = 206; #unused
-      gateone = 207;
+      #gateone = 207; #removed 2025-08-21
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;

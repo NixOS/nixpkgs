@@ -33,7 +33,7 @@ let
 in
 buildPythonPackage rec {
   pname = "imagededup";
-  version = "0.3.2";
+  version = "03.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "idealo";
     repo = "imagededup";
     tag = "v${version}";
-    hash = "sha256-B2IuNMTZnzBi6IxrHBoMDsmIcqGQpznd/2f1XKo1Oa4=";
+    hash = "sha256-tm6WGf74xu3CcwpyeA7+rvO5wemO0daXpj/jvYrH19E=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://idealo.github.io/imagededup/";
-    changelog = "https://github.com/idealo/imagededup/releases/tag/v${version}";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/${src.tag}";
     description = "Finding duplicate images made easy";
     license = licenses.asl20;
     maintainers = with maintainers; [ stunkymonkey ];

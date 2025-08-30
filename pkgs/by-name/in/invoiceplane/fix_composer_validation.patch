@@ -1,0 +1,34 @@
+From e404c835ae6681287f0d0ba005e43732becf8e9e Mon Sep 17 00:00:00 2001
+From: Jonas Heinrich <onny@project-insanity.org>
+Date: Sun, 17 Aug 2025 09:54:41 +0200
+Subject: [PATCH] composer.json omit version string
+
+---
+ composer.json | 1 -
+ composer.lock | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/composer.json b/composer.json
+index 4ae0b32b7..241d59be9 100644
+--- a/composer.json
++++ b/composer.json
+@@ -1,6 +1,5 @@
+ {
+     "name": "invoiceplane/invoiceplane",
+-    "version": "1.6.3-rc1",
+     "description": "InvoicePlane is a self-hosted open source application for managing your invoices, clients and payments",
+     "homepage": "https://invoiceplane.com",
+     "license": "MIT",
+diff --git a/composer.lock b/composer.lock
+index 46fae450e..cf4aa24c1 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "6920f42f5773c5e01f9f107ebcedb891",
++    "content-hash": "16ec29d674456761958ca1c78513c3c5",
+     "packages": [
+         {
+             "name": "bacon/bacon-qr-code",

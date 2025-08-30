@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -10,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "discordo";
-  version = "0-unstable-2025-06-26";
+  version = "0-unstable-2025-08-06";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = "discordo";
-    rev = "d701e7d15ba07457aa41ab1d1d02ce2c565c7736";
-    hash = "sha256-E8Et8w8ebDjNKPnPIFHC+Ut2IfOCnNJKRwVFUVNf7+8=";
+    rev = "cdd97ff900a099ca520e5a720c547780dd6de162";
+    hash = "sha256-dJwinbkSVXxcNV9zXZaNnyZi1XorfNBITuYb9D987Vk=";
   };
 
-  vendorHash = "sha256-X1/NjLI16U9+UyXMDmogRfIvuYNmWgIJ40uYo7VeTP0=";
+  vendorHash = "sha256-6JpLXLoozkPWl7z0KGFIgr78bMR4DegvyEWODBKuWpE=";
 
   env.CGO_ENABLED = 0;
 
@@ -28,9 +29,11 @@ buildGoModule (finalAttrs: {
   ];
 
   # Clipboard support on X11 and Wayland
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    makeWrapper
+  ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/discordo \
       --prefix PATH : ${
         lib.makeBinPath [

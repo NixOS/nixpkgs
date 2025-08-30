@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "Internet communications engine";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

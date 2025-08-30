@@ -464,9 +464,9 @@ in
       initrdBin = [
         pkgs.bashInteractive
         pkgs.coreutils
-        cfg.package.kmod
         cfg.package
-      ];
+      ]
+      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod;
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -481,7 +481,6 @@ in
       settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents = {
-        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
@@ -489,10 +488,6 @@ in
           [Manager]
           ${attrsToSection cfg.settings.Manager}
         '';
-
-        "/lib".source = "${config.system.build.modulesClosure}/lib";
-
-        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you
@@ -507,11 +502,8 @@ in
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
-
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
-        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+        "/usr/bin".source = "${initrdBinEnv}/bin";
+        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
@@ -522,6 +514,16 @@ in
       }
       // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
+      }
+      // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+        "/lib".source = "${config.system.build.modulesClosure}/lib";
+
+        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
       };
 
       storePaths = [

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Zoom";
   };

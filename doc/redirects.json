@@ -130,6 +130,15 @@
   "minor-ghc-deprecation": [
     "index.html#minor-ghc-deprecation"
   ],
+  "modules": [
+    "index.html#modules"
+  ],
+  "modules-generic": [
+    "index.html#modules-generic"
+  ],
+  "modules-generic-meta-maintainers": [
+    "index.html#modules-generic-meta-maintainers"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -486,6 +495,9 @@
   ],
   "module-system-lib-evalModules-return-value-_configurationClass": [
     "index.html#module-system-lib-evalModules-return-value-_configurationClass"
+  ],
+  "module-system-lib-evalModules-return-value-graph": [
+    "index.html#module-system-lib-evalModules-return-value-graph"
   ],
   "part-stdenv": [
     "index.html#part-stdenv"
@@ -1653,6 +1665,9 @@
   ],
   "fetchfromsourcehut": [
     "index.html#fetchfromsourcehut"
+  ],
+  "fetchfromradicle": [
+    "index.html#fetchfromradicle"
   ],
   "requirefile": [
     "index.html#requirefile"

@@ -15,13 +15,13 @@ assert !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "libMBD";
-  version = "0.12.8";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "libmbd";
     repo = "libMBD";
     rev = version;
-    hash = "sha256-ctUaBLPaZHoV1rU3u1idvPLGbvC9Z17YBxYKCaL7EMk=";
+    hash = "sha256-mSKD/pNluumKP3SCubD68uak2Vya/1tyIh42UxRgSXY=";
   };
 
   preConfigure = ''

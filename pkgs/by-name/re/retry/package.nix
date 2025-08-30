@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/minfrin/retry";
-    description = "Retry a command until the command succeeds";
+    description = "Command wrapper that retries until the command succeeds";
     license = licenses.asl20;
     maintainers = with maintainers; [ gfrascadorio ];
     platforms = platforms.all;

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ORwhKOp5Nog366UkLbuWpjz/6sJhxUO6+SkoJGH+3fE=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;

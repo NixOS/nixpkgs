@@ -47,23 +47,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "7.2.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I53LCCtB8iNGuABgvhRjUfxocasXCv4TV7jXtHVpMnU=";
+    hash = "sha256-vbjQoysm5ERY6kG3JhG6z/zKxVlmWmRXQyUnCrVgjFk=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-PMU6ZMcT+9Z3Y6+085e3hRnvs4Xii5FIkkOPvsltfMY=";
+    hash = "sha256-baQgvzJ3W5lULrdukwM9niovtzAI0yvc2c7mqhtCDxk=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/client/yarn.lock";
-    hash = "sha256-AWUnxC/cwtKCa70MKmHeOr6ussMYyQ5awQAnWYzCA1s=";
+    hash = "sha256-Y1boUDDegqCRt9fQaP+svIKYFz+gowGyV6sV7vq8vMA=";
   };
 
   yarnOfflineCacheAppsCli = fetchYarnDeps {

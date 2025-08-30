@@ -232,15 +232,9 @@ lib.mapAttrs mkLicense (
       fullName = "Lawrence Berkeley National Labs BSD variant license";
     };
 
-    bsd3TheodoreTso = {
-      fullName = "BSD 3 Clause Theodore Tso Variant";
-      # TODO: if the license gets accepted to spdx then
-      #   add spdxId
-      # else
-      #   remove license
-      #   && replace all references with bsd3
-      # https://tools.spdx.org/app/license_requests/442/
-      # https://github.com/spdx/license-list-XML/issues/2702
+    bsd3ClauseTso = {
+      spdxId = "BSD-3-Clause-Tso";
+      fullName = "BSD 3-Clause Tso variant";
     };
 
     bsdAxisNoDisclaimerUnmodified = {
@@ -717,6 +711,16 @@ lib.mapAttrs mkLicense (
     hpndSellVariant = {
       fullName = "Historical Permission Notice and Disclaimer - sell variant";
       spdxId = "HPND-sell-variant";
+    };
+
+    hpndDoc = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation variant";
+      spdxId = "HPND-doc";
+    };
+
+    hpndDocSell = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+      spdxId = "HPND-doc-sell";
     };
 
     hpndUc = {
@@ -1309,6 +1313,14 @@ lib.mapAttrs mkLicense (
       #
       # Sincerly
       # Marc Weber (small nix contributor)
+    };
+
+    tekHvcLicense = {
+      fullName = "TekHVC License";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/7f8305c779ac6948d7261764f5ffb8ae9aa975b1/COPYING#L138-171";
+      # TODO: add spdxId when it gets accepted to spdx
+      # https://tools.spdx.org/app/license_requests/458
+      # https://github.com/spdx/license-list-XML/issues/2757
     };
 
     tsl = {

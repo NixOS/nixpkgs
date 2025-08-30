@@ -27,14 +27,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.5.17";
+  version = "3.6.2";
   format = "setuptools";
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-2/8Iww89eRYZImI4WKWztoo/uo7hdH1q9BvEumjz1YI=";
+    hash = "sha256-F06ld2qR0Ds13VYRiJlg4PVFHp0KvqSr/IwL5qhTd9A=";
   };
 
   patches = [

@@ -2,15 +2,14 @@ diff --git i/src/main/index.ts w/src/main/index.ts
 index 23ea0d6..1ef465f 100644
 --- i/src/main/index.ts
 +++ w/src/main/index.ts
-@@ -32,7 +32,9 @@ if (process.platform === "linux") {
- if (IS_DEV) {
-     require("source-map-support").install();
- } else {
+@@ -22,7 +22,9 @@ import { isDeckGameMode } from "./utils/steamOS";
+ 
+ if (!IS_DEV) {
 -    autoUpdater.checkForUpdatesAndNotify();
 +    console.log("Update checking is disabled. Skipping...");
 +    // autoUpdater.checkForUpdatesAndNotify();
 +
  }
  
- // Make the Vencord files use our DATA_DIR
+ console.log("Equibop v" + app.getVersion());
 

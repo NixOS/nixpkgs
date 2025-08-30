@@ -13,14 +13,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lxqt-panel-profiles";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "MrReplikant";
     repo = "lxqt-panel-profiles";
-    rev = version;
-    hash = "sha256-V76R3mWF/PgweMaDYTr6eJ3IDBsSJ8BSP5MYpKAWxM8=";
+    rev = "v${version}";
+    hash = "sha256-mI/Rg3YeK64R3cCn+xz4+CHZldGteZ4Id4h/YUcreW4=";
   };
 
   postPatch = ''
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace usr/bin/lxqt-panel-profiles \
     --replace-fail "/bin/bash" "${bash}/bin/bash" \
-    --replace-fail "/usr/share/" "$out/share/" \
+    --replace-fail "/usr/lib/" "$out/lib/" \
     --replace-fail "python3" "${pythonWithPyqt6}/bin/python"
 
-    substituteInPlace usr/share/lxqt-panel-profiles/lxqt-panel-profiles.py \
+    substituteInPlace usr/lib/lxqt-panel-profiles/lxqt-panel-profiles.py \
     --replace-fail "qdbus6" "${qt6.qttools}/bin/qdbus"
   '';
 

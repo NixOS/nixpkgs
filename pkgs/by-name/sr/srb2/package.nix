@@ -5,7 +5,6 @@
   fetchFromGitHub,
   cmake,
   curl,
-  nasm,
   libopenmpt,
   miniupnpc,
   game-music-emu,
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    nasm
     makeWrapper
     copyDesktopItems
   ];

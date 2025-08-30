@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   buildPackages,
+  python3Packages,
   pkg-config,
   cairo,
   imagemagick,
@@ -23,6 +24,8 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-GYBnMpSUDNjAOZtbRPSmbW39TWP5ljEMukQRwq4J9U4=";
   };
 
+  strictDeps = true;
+
   depsBuildBuild = [
     buildPackages.stdenv.cc
     pkg-config
@@ -35,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     nototools
     pngquant
     which
-    buildPackages.python3.pkgs.fonttools
+    python3Packages.fonttools
   ];
 
   postPatch = ''

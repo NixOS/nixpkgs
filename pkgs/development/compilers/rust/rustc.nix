@@ -82,13 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  # The Rust pkg-config crate does not support prefixed pkg-config executables[1],
-  # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
-  # environment variables.
-  # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings [ "-" ] [ "_" ] stdenv.buildPlatform.rust.rustcTarget}" =
-    "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
-
   NIX_LDFLAGS = toString (
     # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
     # This doesn't apply to cross-building for FreeBSD because the host
@@ -118,9 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
       cxxPrefixForStdenv =
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
-      setBuild = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
-      setHost = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
-      setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTarget}\"";
+      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTarget}\"";
+      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTarget}\"";
       ccForBuild = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       cxxForBuild = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       ccForHost = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
@@ -301,6 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
         python ./x.py --keep-stage=0 --stage=1 install library/std
         mkdir -v $out/bin $doc $man
         ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+        ln -s ${rustc.unwrapped}/libexec $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
         ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components

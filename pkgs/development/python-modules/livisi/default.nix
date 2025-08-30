@@ -4,20 +4,21 @@
   colorlog,
   fetchFromGitHub,
   lib,
+  python-dateutil,
   setuptools,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "livisi";
-  version = "0.0.25";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "planbnet";
     repo = "livisi";
     tag = "v${version}";
-    hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
+    hash = "sha256-5TRJfI4irg2/ZxpfgzShXE08HWU2aWLR8zGbrZKpwbc=";
   };
 
   pythonRelaxDeps = [ "colorlog" ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     colorlog
+    python-dateutil
     websockets
   ];
 

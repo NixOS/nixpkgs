@@ -232,5 +232,5 @@ in
     users.groups."${defaultGroup}" = lib.mkIf (cfg.group == defaultGroup) { };
   };
 
-  meta.maintainers = [ lib.maintainers.drupol ];
+  meta.maintainers = [ ];
 }

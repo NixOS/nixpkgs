@@ -30,7 +30,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "OBS-cli is a command-line remote control for OBS";
+    description = "Command-line remote control for OBS";
     homepage = "https://github.com/muesli/obs-cli";
     changelog = "https://github.com/muesli/obs-cli/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.14.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
     tag = "v${version}";
-    hash = "sha256-IyRi5kXePnDv2q6SrXLtdltQ1/2/zQ3EBx5phtuX8sE=";
+    hash = "sha256-6hAsKIlwycZtLZn1vkcu4fR85uACA4FSkT5e/wos17A=";
   };
 
   build-system = [

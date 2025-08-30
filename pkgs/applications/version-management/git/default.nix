@@ -96,18 +96,23 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [ "format" ];
-
   enableParallelBuilding = true;
   enableParallelInstalling = true;
 
   patches = [
+    # This patch does two things: (1) use the right name for `docbook2texi',
+    # and (2) make sure `gitman.info' isn't produced since it's broken
+    # (duplicate node names).
     ./docbook2texi.patch
+    # Fix references to gettext.sh at runtime: hard-code it to
+    # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
     ./git-sh-i18n.patch
+    # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
-    ./installCheck-path.patch
   ]
   ++ lib.optionals withSsh [
+    # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
+    # searching in $PATH
     ./ssh-path.patch
   ];
 
@@ -476,9 +481,6 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t1301-shared-repo
     # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
-
-    # Our patched gettext never fallbacks
-    disable_test t0201-gettext-fallbacks
   ''
   + lib.optionalString (!sendEmailSupport) ''
     # Disable sendmail tests

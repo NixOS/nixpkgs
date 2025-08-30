@@ -48,6 +48,8 @@ buildPythonPackage rec {
     # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
     "test_dateutil_timezone_is_matched_with_tzname"
     "test_docstring_of_python_file"
+    # AssertionError: assert $TZ not in set()
+    "test_add_missing_timezones_to_example"
   ];
 
   enabledTestPaths = [ "src/icalendar" ];

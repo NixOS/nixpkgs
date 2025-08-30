@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   boost186,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -35,7 +35,7 @@
   pcre,
   systemd,
   tbb_2021,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   libnoise,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     boost186.dev
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb
     pcre
     tbb_2021
-    webkitgtk_4_0
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
     opencv.cxxdev

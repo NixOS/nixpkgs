@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "10.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2QPg1RJivw+HgoQc8W6qbX4+HxLq41q0HC4xiDfGY38=";
+    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [

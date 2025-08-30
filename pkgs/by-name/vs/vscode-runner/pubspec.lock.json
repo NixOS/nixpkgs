@@ -4,31 +4,31 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "dc27559385e905ad30838356c5f5d574014ba39872d732111cd07ac0beff4c57",
+        "sha256": "e55636ed79578b9abca5fecf9437947798f5ef7456308b5cb85720b793eac92f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "80.0.0"
+      "version": "82.0.0"
     },
     "analyzer": {
       "dependency": "transitive",
       "description": {
         "name": "analyzer",
-        "sha256": "192d1c5b944e7e53b24b5586db760db934b177d4147c42fbca8c8c5f1eb8d11e",
+        "sha256": "904ae5bb474d32c38fb9482e2d925d5454cda04ddd0e55d2e6826bc72f6ba8c0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "7.3.0"
+      "version": "7.4.5"
     },
     "args": {
       "dependency": "transitive",
       "description": {
         "name": "args",
-        "sha256": "bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6",
+        "sha256": "d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.6.0"
+      "version": "2.7.0"
     },
     "async": {
       "dependency": "transitive",
@@ -49,6 +49,16 @@
       },
       "source": "hosted",
       "version": "2.1.2"
+    },
+    "cli_config": {
+      "dependency": "transitive",
+      "description": {
+        "name": "cli_config",
+        "sha256": "ac20a183a07002b700f0c25e61b7ee46b23c309d76ab7b7640a028f18e4d99ec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
     },
     "collection": {
       "dependency": "transitive",
@@ -74,11 +84,11 @@
       "dependency": "transitive",
       "description": {
         "name": "coverage",
-        "sha256": "e3493833ea012784c740e341952298f1cc77f1f01b1bbc3eb4eecf6984fb7f43",
+        "sha256": "802bd084fb82e55df091ec8ad1553a7331b61c08251eef19a508b6f3f3a9858d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.11.1"
+      "version": "1.13.1"
     },
     "crypto": {
       "dependency": "transitive",
@@ -234,11 +244,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c",
+        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.17.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -264,11 +274,11 @@
       "dependency": "transitive",
       "description": {
         "name": "package_config",
-        "sha256": "92d4488434b520a62570293fbd33bb556c7d49230791c1b4bbd973baf6d2dc67",
+        "sha256": "f096c55ebb7deb7e384101542bfba8c52696c1b56fca2eb62827989ef2353bbc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.1"
+      "version": "2.2.0"
     },
     "path": {
       "dependency": "transitive",
@@ -304,11 +314,11 @@
       "dependency": "transitive",
       "description": {
         "name": "pub_semver",
-        "sha256": "7b3cfbf654f3edd0c6298ecd5be782ce997ddf0e00531b9464b55245185bbbbd",
+        "sha256": "5bfcf68ca79ef689f8990d1160781b4bad40a3bd5e5218ad4076ddb7f4081585",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.5"
+      "version": "2.2.0"
     },
     "shelf": {
       "dependency": "transitive",
@@ -384,11 +394,11 @@
       "dependency": "direct main",
       "description": {
         "name": "sqlite3",
-        "sha256": "32b632dda27d664f85520093ed6f735ae5c49b5b75345afb8b19411bc59bb53d",
+        "sha256": "310af39c40dd0bb2058538333c9d9840a2725ae0b9f77e4fd09ad6696aa8f66e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.7.4"
+      "version": "2.7.5"
     },
     "stack_trace": {
       "dependency": "transitive",
@@ -434,31 +444,31 @@
       "dependency": "direct dev",
       "description": {
         "name": "test",
-        "sha256": "301b213cd241ca982e9ba50266bd3f5bd1ea33f1455554c5abb85d1be0e2d87e",
+        "sha256": "65e29d831719be0591f7b3b1a32a3cda258ec98c58c7b25f7b84241bc31215bb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.25.15"
+      "version": "1.26.2"
     },
     "test_api": {
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "fb31f383e2ee25fbbfe06b40fe21e1e458d14080e3c67e7ba0acfde4df4e0bbd",
+        "sha256": "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.4"
+      "version": "0.7.6"
     },
     "test_core": {
       "dependency": "transitive",
       "description": {
         "name": "test_core",
-        "sha256": "84d17c3486c8dfdbe5e12a50c8ae176d15e2a771b96909a9442b40173649ccaa",
+        "sha256": "80bf5a02b60af04b09e14f6fe68b921aad119493e26e490deaca5993fef1b05a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.6.8"
+      "version": "0.6.11"
     },
     "typed_data": {
       "dependency": "transitive",
@@ -504,21 +514,21 @@
       "dependency": "transitive",
       "description": {
         "name": "web_socket",
-        "sha256": "3c12d96c0c9a4eec095246debcea7b86c0324f22df69893d538fcc6f1b8cce83",
+        "sha256": "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.6"
+      "version": "1.0.1"
     },
     "web_socket_channel": {
       "dependency": "transitive",
       "description": {
         "name": "web_socket_channel",
-        "sha256": "0b8e2457400d8a859b7b2030786835a28a8e80836ef64402abef392ff4f1d0e5",
+        "sha256": "d645757fb0f4773d602444000a8131ff5d48c9e47adfe9772652dd1a4f2d45c8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.2"
+      "version": "3.0.3"
     },
     "webkit_inspection_protocol": {
       "dependency": "transitive",

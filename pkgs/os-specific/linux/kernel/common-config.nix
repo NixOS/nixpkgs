@@ -37,7 +37,7 @@ let
   whenPlatformHasEBPFJit = lib.mkIf (
     stdenv.hostPlatform.isAarch32
     || stdenv.hostPlatform.isAarch64
-    || stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isx86
     || (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit)
     || (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit)
   );
@@ -111,6 +111,7 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -321,7 +322,7 @@ let
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
-      NET_SCH_BPF = whenAtLeast "6.16" yes;
+      NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
       L2TP_V3 = yes;
       L2TP_IP = module;
       L2TP_ETH = module;
@@ -329,7 +330,7 @@ let
       BONDING = module;
       NET_L3_MASTER_DEV = option yes;
       NET_FOU_IP_TUNNELS = option yes;
-      IP_NF_TARGET_REDIRECT = module;
+      IP_NF_TARGET_REDIRECT = whenOlder "6.17" module;
       NETKIT = whenAtLeast "6.7" yes;
 
       PPP_MULTILINK = yes; # PPP multilink support
@@ -526,7 +527,9 @@ let
         DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
           whenBetween "5.11" "6.4" yes
         );
-        DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
+        # Not available when using clang
+        # See: https://github.com/torvalds/linux/blob/172a9d94339cea832d89630b89d314e41d622bd8/drivers/gpu/drm/amd/display/Kconfig#L14
+        DRM_AMD_DC_FP = lib.mkIf (!stdenv.cc.isClang) (whenAtLeast "6.4" yes);
         DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
         DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
 
@@ -1090,7 +1093,9 @@ let
         HOLTEK_FF = yes;
         INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
+        LOGITECH_FF = yes;
         LOGIG940_FF = yes;
+        LOGIWHEELS_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
         NVIDIA_SHIELD_FF = whenAtLeast "6.5" yes;
         PLAYSTATION_FF = whenAtLeast "5.12" yes;

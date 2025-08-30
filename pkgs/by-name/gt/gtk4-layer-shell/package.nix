@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
-  version = "1.1.1";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wmww";
     repo = "gtk4-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5TBQKy58o/BdAwfaY2Ss/xcn5kkVFedgiNKfGj7x5gM=";
+    hash = "sha256-1FRP75KDr0wvlByKwEK7d2wbEH52wnC0e7LIZ/GHsdQ=";
   };
 
   strictDeps = true;
