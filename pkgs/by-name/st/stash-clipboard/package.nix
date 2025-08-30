@@ -16,11 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-gEGuSe/WyxvwYic4BfnCFpRCnMN44n6DX3s0Aer4zBI=";
 
-  postInstall = ''
-    mkdir -p $out
-    install -Dm755 ${finalAttrs.src}/vendor/stash.service $out/share/stash-clipboard.service
-  '';
-
   meta = {
     description = "Wayland clipboard manager with fast persistent history and multi-media support";
     homepage = "https://github.com/NotAShelf/stash";
