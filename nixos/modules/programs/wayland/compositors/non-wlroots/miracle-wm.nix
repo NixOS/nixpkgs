@@ -29,7 +29,7 @@ in
         services.displayManager.sessionPackages = [ pkgs.miracle-wm ];
       }
 
-      (import ./wayland-session.nix {
+      (import ../wayland-session.nix {
         inherit lib pkgs;
         # Hardcoded path in Mir, not really possible to disable
         enableXWayland = true;
