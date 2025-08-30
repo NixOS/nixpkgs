@@ -12,6 +12,7 @@
 
 let
   cfg = config.services.displayManager.cosmic-greeter;
+  cfgCosmic = config.services.desktopManager.cosmic;
   cfgAutoLogin = config.services.displayManager.autoLogin;
 in
 
@@ -21,6 +22,18 @@ in
   options.services.displayManager.cosmic-greeter = {
     enable = lib.mkEnableOption "COSMIC greeter";
     package = lib.mkPackageOption pkgs "cosmic-greeter" { };
+
+    loginSessionCommand = lib.mkOption {
+      type = lib.types.str;
+      default = lib.optionalString cfgCosmic.enable ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-greeter ${lib.getExe pkgs.cosmic-comp} ${lib.getExe cfg.package}'';
+      example = lib.literalExpression ''"${lib.getExe config.programs.hyprland.package}"'';
+    };
+
+    autologinSessionCommand = lib.mkOption {
+      type = lib.types.str;
+      default = lib.optionalString cfgCosmic.enable ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-session ${lib.getExe' pkgs.cosmic-session "start-cosmic"}'';
+      example = lib.literalExpression ''"${lib.getExe config.programs.hyprland.package}"'';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,11 +42,11 @@ in
       settings = {
         default_session = {
           user = "cosmic-greeter";
-          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-greeter ${lib.getExe pkgs.cosmic-comp} ${lib.getExe cfg.package}'';
+          command = cfg.loginSessionCommand;
         };
         initial_session = lib.mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           user = cfgAutoLogin.user;
-          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-session ${lib.getExe' pkgs.cosmic-session "start-cosmic"}'';
+          command = cfg.autologinSessionCommand;
         };
       };
     };
