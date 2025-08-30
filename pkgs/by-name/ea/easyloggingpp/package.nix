@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtest ];
   cmakeFlags = [ "-Dtest=ON" ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
-  postInstall = ''
-    mkdir -p $out/include
-    cp ../src/easylogging++.cc $out/include
-  '';
   meta = {
     description = "C++ logging library";
     homepage = "https://github.com/amrayn/easyloggingpp";
