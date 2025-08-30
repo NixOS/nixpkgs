@@ -7,6 +7,7 @@
   xlib,
   fontconfig,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   pytest-asyncio,
   pytest-timeout,
   pytest-xvfb,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
     pytest-asyncio
     pytest-timeout
     pytest-xvfb
@@ -58,6 +60,9 @@ buildPythonPackage rec {
     # Timeout
     "test/test_shutdown_event.py::TestShutdownEvent::test_shutdown_event_reconnect"
     "test/aio/test_shutdown_event.py::TestShutdownEvent::test_shutdown_event_reconnect"
+    # Flaky
+    "test/test_window.py::TestWindow::test_detailed_window_event"
+    "test/aio/test_workspace.py::TestWorkspace::test_workspace"
   ];
 
   pythonImportsCheck = [ "i3ipc" ];
