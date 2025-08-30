@@ -8605,6 +8605,7 @@ with pkgs;
   nssTools = nss.tools;
 
   nuspell = callPackage ../development/libraries/nuspell { };
+  nuspell-man = nuspell.man;
   nuspellWithDicts =
     dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
