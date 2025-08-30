@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inclyc";
     repo = "nixf-diagnose";
-    tag = finalAttrs.version;
-    hash = "sha256-8kcA2/ZMREKtXUM5rlAWRQL/C8+JNocZegq2ZHqbiSA=";
+    rev = "ac95d9e0877b1c2b58882d16c7a578b216ffb5b4";
+    hash = "sha256-6rqnhkbI1Z9ytsJtfu9AiqEj0dcbEZHw2s5sQe+jQ8Q=";
   };
 
   env.NIXF_TIDY_PATH = lib.getExe nixf;
 
-  cargoHash = "sha256-9rWQfoaMXFs83cYHtJPL0ogA9hPh7q3mK1DG4Q4CCq0=";
+  cargoHash = "sha256-LutCktLHpfl5aMvN9RW0IL9nojcq4j2kjc9zfeePCMg=";
 
   passthru.updateScript = nix-update-script { };
 
