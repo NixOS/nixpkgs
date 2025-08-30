@@ -6,12 +6,19 @@
   confusable-homoglyphs,
   coverage,
   django,
+  fetchFromGitHub,
+  nox,
+  pdm-backend,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-registration";
   version = "5.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "ubernostrum";
@@ -24,11 +31,13 @@ buildPythonPackage rec {
 
   dependencies = [
     confusable-homoglyphs
+    django
   ];
 
   nativeCheckInputs = [
     coverage
     django
+    nox
   ];
 
   installCheckPhase = ''
