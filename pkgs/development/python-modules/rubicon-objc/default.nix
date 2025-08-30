@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rubicon-objc";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "beeware";
     repo = "rubicon-objc";
     tag = "v${version}";
-    hash = "sha256-HnPp7VUrcTfkl5XdXYasydMqxhp7eb7r5RW/7yRWmko=";
+    hash = "sha256-ahlsY4eU9n+BRexE4wNVXMcgSiGW7pU25zJif9lGTUs=";
   };
 
   postPatch = ''
