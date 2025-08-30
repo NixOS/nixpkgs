@@ -6,7 +6,7 @@
   pkgsTargetTarget,
 }:
 
-rec {
+{
   # These environment variables must be set when using `cargo-c` and
   # several other tools which do not deal well with cross
   # compilation.  The symptom of the problem they fix is errors due

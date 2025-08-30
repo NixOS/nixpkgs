@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duti";
   version = "1.5.5pre";
   src = fetchFromGitHub {

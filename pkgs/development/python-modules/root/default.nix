@@ -7,7 +7,7 @@
 let
   unwrapped = root.override { python3 = python; };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   # ROOT builds the C++ libraries and CPython extensions in one package and
   # python versions must never be mixed
   passthru = {

@@ -19,7 +19,7 @@
   brightnessctl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "avizo";
   version = "1.3-unstable-2024-11-03";
 
