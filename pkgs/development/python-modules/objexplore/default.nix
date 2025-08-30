@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "objexplore";
-  version = "1.6.2";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
