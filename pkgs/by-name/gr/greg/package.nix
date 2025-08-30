@@ -1,16 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  pythonPackages,
+  python3Packages,
 }:
 
-with pythonPackages;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "greg";
   version = "0.4.8";
   format = "setuptools";
-
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "manolomartinez";
@@ -19,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools
     feedparser
   ];
