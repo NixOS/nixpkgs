@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "solarlog-cli";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dontinelli";
     repo = "solarlog_cli";
     tag = "v${version}";
-    hash = "sha256-G7DZHFg0NH3rY/tbWpXDchYHkrvG8dUvINNxBIUKnzk=";
+    hash = "sha256-MMn03i4Uu0auEzUiQHWCNfJyp32P+68pd4fDMy2GqnA=";
   };
 
   build-system = [ hatchling ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dontinelli/solarlog_cli/releases/tag/v${version}";
+    changelog = "https://github.com/dontinelli/solarlog_cli/releases/tag/${src.tag}";
     description = "Python library to access the Solar-Log JSON interface";
     homepage = "https://github.com/dontinelli/solarlog_cli";
     license = lib.licenses.gpl3Plus;
