@@ -1,6 +1,10 @@
 {
   lib,
+  bash,
   buildGoModule,
+  git,
+  makeWrapper,
+  nixosTests,
   fetchFromGitHub,
   versionCheckHook,
 }:
@@ -27,8 +31,22 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeBuildInputs = [ makeWrapper ];
+  postFixup = ''
+    wrapProgram $out/bin/atlantis \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          git
+        ]
+      }
+  '';
   versionCheckProgram = "${placeholder "out"}/bin/atlantis";
   versionCheckProgramArg = "version";
+
+  passthru.tests = {
+    inherit (nixosTests) atlantis;
+  };
 
   meta = {
     homepage = "https://github.com/runatlantis/atlantis";
