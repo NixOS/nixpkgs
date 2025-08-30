@@ -1669,6 +1669,9 @@
   "fetchfromradicle": [
     "index.html#fetchfromradicle"
   ],
+  "fetchradiclepatch": [
+    "index.html#fetchradiclepatch"
+  ],
   "requirefile": [
     "index.html#requirefile"
   ],
