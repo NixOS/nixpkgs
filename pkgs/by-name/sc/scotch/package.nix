@@ -10,6 +10,7 @@
   stdenv,
   zlib,
   xz,
+  withPtScotch ? !stdenv.hostPlatform.isMusl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,27 +25,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AtpaBxgV9EamkAlvH9psp+K0o923EhSu6LQA89qyG3w=";
   };
 
+  patches = [
+    ./musl.patch
+  ];
+
   outputs = [
     "bin"
     "dev"
     "out"
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_PTSCOTCH" withPtScotch)
+  ];
 
   nativeBuildInputs = [
     cmake
     gfortran
+    bison
+    flex
+  ]
+  ++ lib.optionals withPtScotch [
+    mpi
   ];
 
   buildInputs = [
-    bison
     bzip2
-    mpi
-    flex
     xz
     zlib
   ];
+
+  strictDeps = true;
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";

@@ -1,0 +1,32 @@
+diff --git a/src/libscotch/common.h b/src/libscotch/common.h
+index 5694da3..d94a76f 100644
+--- a/src/libscotch/common.h
++++ b/src/libscotch/common.h
+@@ -80,6 +80,11 @@
+ #endif /* COMMON_TIMING_OLD */
+ #endif /* COMMON_OS_MACOS */
+ 
++#ifdef COMMON_PTHREAD_AFFINITY_LINUX
++#define _GNU_SOURCE
++#include <sched.h>
++#endif /* COMMON_PTHREAD_AFFINITY_LINUX */
++
+ #ifdef COMMON_OS_WINDOWS
+ #include            <io.h>                        /* For _pipe ()              */
+ #include            <fcntl.h>                     /* Fow Windows _pipe () call */
+diff --git a/src/libscotch/common_thread.c b/src/libscotch/common_thread.c
+index 1134a2c..53ad285 100644
+--- a/src/libscotch/common_thread.c
++++ b/src/libscotch/common_thread.c
+@@ -51,11 +51,6 @@
+ 
+ #define SCOTCH_COMMON_THREAD
+ 
+-#ifdef COMMON_PTHREAD_AFFINITY_LINUX
+-#define _GNU_SOURCE
+-#include <sched.h>
+-#endif /* COMMON_PTHREAD_AFFINITY_LINUX */
+-
+ #include "module.h"
+ #include "common.h"
+ #include "common_thread.h"
