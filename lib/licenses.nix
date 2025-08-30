@@ -1444,8 +1444,8 @@ lib.mapAttrs mkLicense (
       fullName = "Do What The F*ck You Want To Public License";
     };
 
-    wxWindows = {
-      spdxId = "wxWindows";
+    wxWindowsException31 = {
+      spdxId = "WxWindows-exception-3.1";
       fullName = "wxWindows Library Licence, Version 3.1";
     };
 
