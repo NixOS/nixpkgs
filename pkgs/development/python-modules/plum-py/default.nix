@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "plum-py";
-  version = "0.8.6";
+  version = "0.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dangass";
     repo = "plum";
     rev = "refs/tags/${version}";
-    hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
+    hash = "sha256-q9UNRZYBLBm0mf/r3cktGnGG9LzmTDrSVgXDgGDBMok=";
   };
 
   postPatch = ''
