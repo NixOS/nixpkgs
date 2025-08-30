@@ -2597,6 +2597,9 @@
   "zig-hook": [
     "index.html#zig-hook"
   ],
+  "zig-hook-dependencies": [
+    "index.html#zig-hook-dependencies"
+  ],
   "zig-hook-example-code-snippet": [
     "index.html#zig-hook-example-code-snippet"
   ],
@@ -2605,6 +2608,9 @@
   ],
   "zig-hook-exclusive-variables": [
     "index.html#zig-hook-exclusive-variables"
+  ],
+  "zig-deps": [
+    "index.html#zig-deps"
   ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
