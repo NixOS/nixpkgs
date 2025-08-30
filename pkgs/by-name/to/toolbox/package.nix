@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "toolbox";
-  version = "0.0.99.3";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "toolbox";
-    rev = version;
-    hash = "sha256-9HiWgEtaMypLOwXJ6Xg3grLSZOQ4NInZtcvLPV51YO8=";
+    tag = version;
+    hash = "sha256-0RSnCZQP0KzsrX5L7I8kwCxqTICbpixByQOdq3+pYPY=";
   };
 
   patches = [ ./glibc.patch ];
 
-  vendorHash = "sha256-k79TcC9voQROpJnyZ0RsqxJnBT83W5Z+D+D3HnuQGsI=";
+  vendorHash = "sha256-q7CN9uNxGMNggMyuDmAchQBSOMH+cxiO11qU6W5p3C8=";
 
   postPatch = ''
     substituteInPlace src/cmd/create.go --subst-var-by glibc ${glibc}
