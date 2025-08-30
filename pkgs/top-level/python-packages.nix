@@ -17790,6 +17790,8 @@ self: super: with self; {
     }
   );
 
+  syne-tune = callPackage ../development/python-modules/syne-tune { };
+
   synergy = callPackage ../development/python-modules/synergy { };
 
   synology-srm = callPackage ../development/python-modules/synology-srm { };
