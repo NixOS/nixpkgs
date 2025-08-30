@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(nix build:*)",
+      "Bash(cargo:*)",
+      "Bash(nix eval:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git remote add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(nix-build:*)",
+      "Bash(mv:*)",
+      "Bash(nix-instantiate:*)",
+      "Bash(nix fmt:*)"
+    ],
+    "deny": []
+  }
+}
