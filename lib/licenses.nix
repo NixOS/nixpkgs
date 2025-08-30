@@ -650,11 +650,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v2.0 only";
     };
 
-    gpl2UBDLPlus = {
-      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
-      url = "https://spdx.org/licenses/UBDL-exception.html";
-    };
-
     gpl2Oss = {
       fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
       url = "https://www.mysql.com/about/legal/licensing/foss-exception";
@@ -1324,6 +1319,11 @@ lib.mapAttrs mkLicense (
     tost = {
       fullName = "Tomorrow Open Source Technology License 1.0";
       url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+    };
+
+    ubdlException = {
+      spdxId = "UBDL-exception";
+      fullName = "Unmodified Binary Distribution exception";
     };
 
     ucd = {
