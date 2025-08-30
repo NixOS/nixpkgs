@@ -690,7 +690,27 @@ let
                   cpe = (makeCPE guessedParts);
                 }
               ) possibleCPEPartsFuns;
-          v1 = { inherit cpeParts cpe possibleCPEs; };
+
+          purlParts = {
+            type = null;
+            spec = null;
+          }
+          // attrs.meta.identifiers.purlParts or { };
+          purl =
+            if all (x: !isNull x) (attrValues purlParts) then
+              "pkg:${purlParts.type}/${purlParts.spec}"
+            else
+              null;
+
+          v1 = {
+            inherit
+              cpeParts
+              cpe
+              possibleCPEs
+              purlParts
+              purl
+              ;
+          };
         in
         v1
         // {
