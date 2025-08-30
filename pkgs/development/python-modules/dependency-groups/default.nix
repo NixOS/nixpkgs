@@ -48,6 +48,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/dependency-groups";
     changelog = "https://github.com/pypa/dependency-groups/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [
+      hexa
+      jemand771
+    ];
   };
 }
