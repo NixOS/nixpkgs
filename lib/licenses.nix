@@ -410,9 +410,8 @@ lib.mapAttrs mkLicense (
     };
 
     cc-sa-10 = {
-      shortName = "CC-SA-1.0";
+      spdxId = "CC-SA-1.0";
       fullName = "Creative Commons Share Alike 1.0";
-      url = "https://creativecommons.org/licenses/sa/1.0";
     };
 
     cddl = {
@@ -588,14 +587,14 @@ lib.mapAttrs mkLicense (
 
     fsl11Mit = {
       fullName = "Functional Source License, Version 1.1, MIT Future License";
-      url = "https://fsl.software/FSL-1.1-MIT.template.md";
+      spdxId = "FSL-1.1-MIT";
       free = false;
       redistributable = true;
     };
 
     fsl11Asl20 = {
       fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
-      url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+      spdxId = "FSL-1.1-ALv2";
       free = false;
       redistributable = true;
     };
@@ -1235,9 +1234,8 @@ lib.mapAttrs mkLicense (
     };
 
     smail = {
-      shortName = "smail";
+      spdxId = "SMAIL-GPL";
       fullName = "SMAIL General Public License";
-      url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
     };
 
     smlnj = {
@@ -1246,9 +1244,8 @@ lib.mapAttrs mkLicense (
     };
 
     sspl = {
-      shortName = "SSPL";
+      spdxId = "SSPL-1.0";
       fullName = "Server Side Public License";
-      url = "https://www.mongodb.com/licensing/server-side-public-license";
       free = false;
       # NOTE Debatable.
       # The license a slightly modified AGPL but still considered unfree by the
@@ -1269,9 +1266,8 @@ lib.mapAttrs mkLicense (
     };
 
     sustainableUse = {
-      shortName = "sustainable";
+      spdxId = "SUL-1.0";
       fullName = "Sustainable Use License";
-      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
       free = false;
       redistributable = false; # only free to redistribute "for non-commercial purposes"
     };
