@@ -47,26 +47,72 @@ let
     "--set ROCM_PATH $out"
   ];
   amdclang = writeShellScriptBin "amdclang" ''
-    exec clang "$@"
+    exec ${hipClang}/bin/clang "$@"
   '';
   amdclangxx = writeShellScriptBin "amdclang++" ''
-    exec clang++ "$@"
+    exec ${hipClang}/bin/clang++ "$@"
   '';
+  # Fallback mappings for when a -generic target is requested but the lib doesn't support them yet
+  genericTargets = {
+    "gfx9-generic" = [
+      "gfx900"
+      "gfx906"
+      "gfx908"
+      "gfx90a"
+    ];
+    "gfx9-4-generic" = [
+      "gfx942" # 7.x "gfx950"
+    ];
+    "gfx10-1-generic" = [
+      "gfx1010"
+      # ISA compat patches treat these all as 1010 so can skip:
+      # "gfx1011"
+      # "gfx1012"
+      # "gfx1013"
+    ];
+    "gfx10-3-generic" = [
+      "gfx1030"
+      # ISA compat patches treat these all as 1030 so can skip:
+      # "gfx1031"
+      # "gfx1032"
+      # "gfx1033"
+      # "gfx1034"
+      # "gfx1035"
+      # "gfx1036"
+    ];
+    "gfx11-generic" = [
+      "gfx1100"
+      "gfx1101"
+      "gfx1102"
+      # 7.x "gfx1103"
+      # 7.x "gfx1150"
+      "gfx1151"
+    ];
+    "gfx12-generic" = [
+      "gfx1200"
+      "gfx1201"
+    ];
+  };
+  expandFallbackTargets =
+    targets: lib.unique (lib.flatten (map (target: genericTargets.${target} or [ target ]) targets));
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.3.3";
+  version = "6.4.2";
 
   outputs = [
     "out"
     "icd"
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-4qjfnn0kto2sNaSumXxHRHFrf3a3RZILOdhVSxkEs1I=";
+    hash = "sha256-DOAAuC9TN1//v56GXyUMJwQHgOuctC+WsC5agrgL+QM=";
   };
 
   nativeBuildInputs = [
@@ -99,8 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
     rocminfo
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_POLICY_DEFAULT_CMP0072=NEW" # Prefer newer OpenGL libraries
     "-DCLR_BUILD_HIP=ON"
     "-DCLR_BUILD_OCL=ON"
@@ -124,27 +172,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./cmake-find-x11-libgl.patch
-
     (fetchpatch {
-      # Fix handling of old fatbin version https://github.com/ROCm/clr/issues/99
-      sha256 = "sha256-CK/QwgWJQEruiG4DqetF9YM0VEWpSiUMxAf1gGdJkuA=";
-      url = "https://src.fedoraproject.org/rpms/rocclr/raw/rawhide/f/0001-handle-v1-of-compressed-fatbins.patch";
+      # [PATCH] improve rocclr isa compatibility check
+      sha256 = "sha256-oj1loBEuqzuMihOKoN0wR92Wo25AshN5MpBuTq/9TMw=";
+      url = "https://github.com/GZGavinZhao/clr/commit/f675b9b46d9f7bb8e003f4f47f616fa86a0b7a5e.patch";
     })
     (fetchpatch {
-      # improve rocclr isa compatibility check
-      sha256 = "sha256-wUrhpYN68AbEXeFU5f366C6peqHyq25kujJXY/bBJMs=";
-      url = "https://github.com/GZGavinZhao/clr/commit/22c17a0ac09c6b77866febf366591f669a1ed133.patch";
-    })
-    (fetchpatch {
-      # [PATCH] Improve hipamd compat check
-      sha256 = "sha256-uZQ8rMrWH61CCbxwLqQGggDmXFmYTi6x8OcgYPrZRC8=";
-      url = "https://github.com/GZGavinZhao/clr/commit/63c6ee630966744d4199fdfb854e98d2da9e1122.patch";
-    })
-    (fetchpatch {
-      # [PATCH] SWDEV-504340 - Move cast of cl_mem inside the condition
-      # Fixes crash due to UB in KernelBlitManager::setArgument
-      sha256 = "sha256-nL4CZ7EOXqsTVUtYhuu9DLOMpnMeMRUhkhylEQLTg9I=";
-      url = "https://github.com/ROCm/clr/commit/fa63919a6339ea2a61111981ba2362c97fbdf743.patch";
+      # [PATCH] improve hipamd isa compatibility check
+      sha256 = "sha256-E3ERoVjUVWCiYHuE1GaVY5jMrAVx3B1cAVHM4/HPuaQ=";
+      url = "https://github.com/GZGavinZhao/clr/commit/aec0fc56ee2d10a2bc269c418fa847da2ee9969a.patch";
     })
     (fetchpatch {
       # [PATCH] SWDEV-507104 - Removes alignment requirement for Semaphore class to resolve runtime misaligned memory issues
@@ -207,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${rocm-core}/.info/ $out/.info
 
     ln -s ${hipClang} $out/llvm
+    ln -s ${hipClang}/bin/{ld.lld,lld,clang-offload-bundler,llvm-objcopy,clang,clang++} $out/bin/
   '';
 
   disallowedRequisites = [
@@ -217,28 +254,37 @@ stdenv.mkDerivation (finalAttrs: {
     # All known and valid general GPU targets
     # We cannot use this for each ROCm library, as each defines their own supported targets
     # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
-    # Generic targets are not yet available in rocm-6.3.1 llvm
     gpuTargets = lib.forEach [
-      # "9-generic"
-      "900" # MI25, Vega 56/64
-      "906" # MI50/60, Radeon VII
-      "908" # MI100
-      "90a" # MI210 / MI250
-      # "9-4-generic"
+      "9-generic" # will handle all Vega variants
+      # "900" # MI25, Vega 56/64
+      # "902" # Vega 8
+      # "909" # Renoir Vega APU
+      # "90c" # Renoir Vega APU
+      # Past this point cards need their own kernels for perf despite gfx9-generic compat
+      "906" # MI50/60, Radeon VII - adds dot product & mixed precision FMA ops
+      "908" # MI100 - adds MFMA (matrix fused multiply-add) ops
+      "90a" # MI210/MI250 - additional MFMA variants
+      # "9-4-generic" - since only 942 is valid for 6.4 target it directly
       # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
-      "942" # MI300
-      # "10-1-generic"
-      "1010"
-      "1012"
-      # "10-3-generic"
-      "1030" # W6800, various Radeon cards
-      # "11-generic"
-      "1100"
-      "1101"
-      "1102"
-      "1200" # RX 9070
-      "1201" # RX 9070 XT
+      "942" # MI300A/X, MI325X
+      # "950" #  MI350X TODO: Expected in ROCm 7.x
+      "10-1-generic" # fine for all RDNA1 cards
+      # "1010"
+      # "1012"
+      "10-3-generic"
+      # "1030" # W6800, various Radeon cards
+      "11-generic" # will handle 7600, hopefully ryzen AI series iGPUs
+      # "1100"
+      # "1101"
+      # "1102"
+      # "1150"
+      # "1151" # strix halo
+      "12-generic" # will handle 9060
+      # "1200" # RX 9060
+      # "1201" # RX 9070 + XT
     ] (target: "gfx${target}");
+
+    gpuTargetsWithGenericFallback = expandFallbackTargets finalAttrs.passthru.gpuTargets;
 
     inherit hipClangPath;
 
@@ -268,6 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs (localGpuTargets != null) {
     inherit localGpuTargets;
+    localGpuTargetsWithGenericFallback = expandFallbackTargets localGpuTargets;
     gpuArchSuffix = "-" + (builtins.concatStringsSep "-" localGpuTargets);
     selectGpuTargets =
       {

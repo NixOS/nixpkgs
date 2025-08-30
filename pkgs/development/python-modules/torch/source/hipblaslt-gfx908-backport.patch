@@ -1,0 +1,44 @@
+This backport also fixes a missing trailing comma that will become a problem
+for ROCm >6.4, causing "gfx1201" "gfx950"
+From 1fced0c7d51cf03e0bb6b40a1db7b24e9d7ff5aa Mon Sep 17 00:00:00 2001
+From: Jeff Daily <jeff.daily@amd.com>
+Date: Fri, 25 Jul 2025 03:54:30 +0000
+Subject: [PATCH] [ROCm] enable hipblaslt on gfx908 for ROCm >= 6.3 (#159092)
+
+Fixes #159030.
+
+Pull Request resolved: https://github.com/pytorch/pytorch/pull/159092
+Approved by: https://github.com/jeffdaily
+
+Co-authored-by: Jeff Daily <jeff.daily@amd.com>
+---
+ aten/src/ATen/Context.cpp          | 2 +-
+ aten/src/ATen/native/cuda/Blas.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/aten/src/ATen/Context.cpp b/aten/src/ATen/Context.cpp
+index ded7743c4d86..93ee9658ae8f 100644
+--- a/aten/src/ATen/Context.cpp
++++ b/aten/src/ATen/Context.cpp
+@@ -518,7 +518,7 @@ at::BlasBackend Context::blasPreferredBackend() {
+       static const std::vector<std::string> archs = {
+           "gfx90a", "gfx942",
+ #if ROCM_VERSION >= 60300
+-          "gfx1100", "gfx1101", "gfx1200", "gfx1201"
++          "gfx1100", "gfx1101", "gfx1200", "gfx1201", "gfx908",
+ #endif
+ #if ROCM_VERSION >= 60500
+           "gfx950"
+diff --git a/aten/src/ATen/native/cuda/Blas.cpp b/aten/src/ATen/native/cuda/Blas.cpp
+index c993c22956f0..1961df5c79b7 100644
+--- a/aten/src/ATen/native/cuda/Blas.cpp
++++ b/aten/src/ATen/native/cuda/Blas.cpp
+@@ -302,7 +302,7 @@ static bool isSupportedHipLtROCmArch(int index) {
+     static const std::vector<std::string> archs = {
+         "gfx90a", "gfx942",
+ #if ROCM_VERSION >= 60300
+-        "gfx1100", "gfx1101", "gfx1200", "gfx1201"
++        "gfx1100", "gfx1101", "gfx1200", "gfx1201", "gfx908",
+ #endif
+ #if ROCM_VERSION >= 60500
+         "gfx950"

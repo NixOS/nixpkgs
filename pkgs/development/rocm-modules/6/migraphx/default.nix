@@ -28,6 +28,7 @@
   docutils,
   ghostscript,
   python3Packages,
+  writableTmpDirAsHomeHook,
   buildDocs ? false,
   buildTests ? false,
   gpuTargets ? clr.gpuTargets,
@@ -63,7 +64,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "6.3.3";
+  version = "6.4.2";
 
   outputs = [
     "out"
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-h9cTbrMwHeRGVJS/uHQnCXplNcrBqxbhwz2AcAEso0M=";
+    hash = "sha256-DI77FUBs5fhlDTp2DjjhNT+LpM8L2oppRlEsja9FR1c=";
   };
 
   nativeBuildInputs = [
@@ -97,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ghostscript
     python3Packages.sphinx-rtd-theme
     python3Packages.breathe
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -136,9 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     # migraphxs relies on miopen which relies on current composable_kernel
     # impossible to build with this ON; we can't link both of them even if we package both
     "-DMIGRAPHX_USE_COMPOSABLEKERNEL=OFF"
-    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -166,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Unfortunately, it seems like we have to call make on this manually
   preInstall = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
     make -j$NIX_BUILD_CORES doc
     cd ../doc/pdf
     make -j$NIX_BUILD_CORES
