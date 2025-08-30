@@ -1,25 +1,28 @@
-{ pkgs, lib, ... }:
+{ ... }:
 
 let
   port = 3142;
-  username = "alice";
-  password = "correcthorsebatterystaple";
   defaultPort = 8080;
-  defaultUsername = "admin";
-  defaultPassword = "password";
-  adminCredentialsFile = pkgs.writeText "admin-credentials" ''
-    ADMIN_USERNAME=${defaultUsername}
-    ADMIN_PASSWORD=${defaultPassword}
-  '';
-  customAdminCredentialsFile = pkgs.writeText "admin-credentials" ''
-    ADMIN_USERNAME=${username}
-    ADMIN_PASSWORD=${password}
-  '';
-  postgresPassword = "correcthorsebatterystaple";
-  postgresPasswordFile = pkgs.writeText "pgpass" ''
-    *:*:*:*:${postgresPassword}
-  '';
 
+  customUsername = "alice";
+  customUsernameFile = "/run/secrets/miniflux/custom-username";
+  customPassword = "correcthorsebatterystaple";
+  customPasswordFile = "/run/secrets/miniflux/custom-password";
+  defaultUsername = "admin";
+  defaultUsernameFile = "/run/secrets/miniflux/default-username";
+  defaultPassword = "password";
+  defaultPasswordFile = "/run/secrets/miniflux/default-password";
+  postgresPassword = "correcthorsebatterystaple";
+  pgpassFile = "/run/secrets/psql/pgpass";
+  secretsModule = {
+    systemd.tmpfiles.settings.secrets = {
+      ${defaultUsernameFile}.f.argument = defaultUsername;
+      ${defaultPasswordFile}.f.argument = defaultPassword;
+      ${customUsernameFile}.f.argument = customUsername;
+      ${customPasswordFile}.f.argument = customPassword;
+      ${pgpassFile}.f.argument = "*:*:*:*:${postgresPassword}";
+    };
+  };
 in
 {
   name = "miniflux";
@@ -29,20 +32,24 @@ in
     default =
       { ... }:
       {
+        imports = [ secretsModule ];
         security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
-          inherit adminCredentialsFile;
+          adminUsernameFile = defaultUsernameFile;
+          adminPasswordFile = defaultPasswordFile;
         };
       };
 
     withoutSudo =
       { ... }:
       {
+        imports = [ secretsModule ];
         security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
-          inherit adminCredentialsFile;
+          adminUsernameFile = defaultUsernameFile;
+          adminPasswordFile = defaultPasswordFile;
         };
         security.sudo.enable = false;
       };
@@ -50,6 +57,7 @@ in
     customized =
       { ... }:
       {
+        imports = [ secretsModule ];
         security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
@@ -57,7 +65,8 @@ in
             CLEANUP_FREQUENCY = "48";
             LISTEN_ADDR = "localhost:${toString port}";
           };
-          adminCredentialsFile = customAdminCredentialsFile;
+          adminUsernameFile = customUsernameFile;
+          adminPasswordFile = customPasswordFile;
         };
       };
 
@@ -88,20 +97,18 @@ in
     externalDb =
       { ... }:
       {
+        imports = [ secretsModule ];
         security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           createDatabaseLocally = false;
-          inherit adminCredentialsFile;
+          adminUsernameFile = defaultUsernameFile;
+          adminPasswordFile = defaultPasswordFile;
+          pgpassFile = pgpassFile;
           config = {
             DATABASE_URL = "user=miniflux host=postgresTcp dbname=miniflux sslmode=disable";
-            PGPASSFILE = "/run/miniflux/pgpass";
           };
         };
-        systemd.services.miniflux.preStart = ''
-          cp ${postgresPasswordFile} /run/miniflux/pgpass
-          chmod 600 /run/miniflux/pgpass
-        '';
       };
   };
   testScript = ''
@@ -121,7 +128,7 @@ in
 
     runTest(default, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
     runTest(withoutSudo, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
-    runTest(customized, ${toString port}, "${username}:${password}")
+    runTest(customized, ${toString port}, "${customUsername}:${customPassword}")
 
     postgresTcp.wait_for_unit("postgresql.target")
     externalDb.start()
