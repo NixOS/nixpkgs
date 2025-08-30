@@ -19,7 +19,28 @@ evalConfigArgs@{
   # !!! what do we gain by making this configurable?
   #     we can add modules that are included in specialisations, regardless
   #     of inheritParentConfig.
-  baseModules ? import ../modules/module-list.nix,
+  baseModules ? (
+    let
+      pkgsModule = rec {
+        _file = ./eval-config.nix;
+        key = _file;
+        config = lib.mkMerge (
+          (lib.optional (system != null) {
+            # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+            # this.  Since the latter defaults to the former, the former should
+            # default to the argument. That way this new default could propagate all
+            # they way through, but has the last priority behind everything else.
+            nixpkgs.system = lib.mkDefault system;
+          })
+          ++ (lib.optional (pkgs != null) {
+            # This should be default priority, so it conflicts with any user-defined pkgs.
+            nixpkgs.pkgs = pkgs;
+          })
+        );
+      };
+    in
+    import ../modules/module-list.nix ++ [ pkgsModule ]
+  ),
   # !!! See comment about args in lib/modules.nix
   extraArgs ? { },
   # !!! See comment about args in lib/modules.nix
@@ -57,9 +78,7 @@ evalConfigArgs@{
         e
     ),
 }:
-
 let
-  inherit (lib) optional;
 
   evalModulesMinimal =
     (import ./default.nix {
@@ -67,24 +86,6 @@ let
       # Implicit use of feature is noted in implementation.
       featureFlags.minimalModules = { };
     }).evalModules;
-
-  pkgsModule = rec {
-    _file = ./eval-config.nix;
-    key = _file;
-    config = lib.mkMerge (
-      (optional (system != null) {
-        # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
-        # this.  Since the latter defaults to the former, the former should
-        # default to the argument. That way this new default could propagate all
-        # they way through, but has the last priority behind everything else.
-        nixpkgs.system = lib.mkDefault system;
-      })
-      ++ (optional (pkgs != null) {
-        # This should be default priority, so it conflicts with any user-defined pkgs.
-        nixpkgs.pkgs = pkgs;
-      })
-    );
-  };
 
   withWarnings =
     x:
@@ -135,7 +136,6 @@ let
       baseModules
       ++ extraModules
       ++ [
-        pkgsModule
         modulesModule
       ];
   });
