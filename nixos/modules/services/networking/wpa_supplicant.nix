@@ -60,6 +60,7 @@ let
     ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig
+    ++ [ "" ]
   );
 
   configIsGenerated = with cfg; networks != { } || extraConfig != "" || userControlled.enable;
@@ -108,11 +109,23 @@ let
       deviceUnit = optional (
         iface != null
       ) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
-      configStr =
-        if cfg.allowAuxiliaryImperativeNetworks then
-          "-c /etc/wpa_supplicant.conf -I ${configFile}"
+      allConfigFiles = lib.unique (
+        (lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant.conf")
+        ++ [ configFile ]
+        ++ cfg.additionalConfigFiles
+      );
+      mainConfig = builtins.head allConfigFiles;
+      additionalConfigFiles = builtins.tail allConfigFiles;
+      generateAdditionalConfigFile = builtins.length additionalConfigFiles > 1;
+      additionalConfig =
+        if additionalConfigFiles == [ ] then
+          null
+        else if generateAdditionalConfigFile then
+          "/run/wpa_supplicant/generated_config.conf"
         else
-          "-c ${configFile}";
+          builtins.head additionalConfigFiles;
+      configStr =
+        if additionalConfig != null then "-c ${mainConfig} -I ${additionalConfig}" else "-c ${mainConfig}";
     in
     {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
@@ -142,6 +155,11 @@ let
         # ensure wpa_supplicant.conf exists, or the daemon will fail to start
         ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
           touch /etc/wpa_supplicant.conf
+        ''}
+
+        ${optionalString generateAdditionalConfigFile ''
+          # concatenate additional configuration files together
+          cat ${lib.escapeShellArgs additionalConfigFiles} > "/run/wpa_supplicant/generated_config.conf"
         ''}
 
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
@@ -514,6 +532,15 @@ in
           See
           {manpage}`wpa_supplicant.conf(5)`
           for available options.
+        '';
+      };
+
+      additionalConfigFiles = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        description = ''
+          Additional configuration files to load. This can be used to keep entire parts of the
+          wpa_supplicant configuration in secrets files.
         '';
       };
     };
