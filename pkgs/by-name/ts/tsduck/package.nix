@@ -18,17 +18,19 @@
   librist,
   openssl,
   srt,
+  editline,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.40-4165";
+  version = "3.41-4299";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
+    sha256 = "sha256-nBPYKzb6GeBC7tTZgHLp1nAQM9SKpGhU/nHUJqT5TrY=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    editline
     glibcLocales
     jdk
     libedit
     librist
     openssl
     srt
+    zlib
   ];
 
   enableParallelBuilding = true;
@@ -67,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     "NOVATEK=1"
     "SYSPREFIX=/"
     "SYSROOT=${placeholder "out"}"
+    "RIST_DONE=1"
+    "SRT_DONE=1"
   ];
 
   # remove tests which break the sandbox
