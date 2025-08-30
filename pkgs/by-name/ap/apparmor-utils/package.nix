@@ -12,10 +12,12 @@
   buildPackages,
 
   # apparmor deps
-  libapparmor,
   apparmor-parser,
   apparmor-teardown,
 }:
+let
+  inherit (python3Packages) libapparmor;
+in
 python3Packages.buildPythonApplication {
   pname = "apparmor-utils";
   inherit (libapparmor) version src;
