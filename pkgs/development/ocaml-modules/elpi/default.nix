@@ -32,21 +32,21 @@ in
 
 let
   fetched = coqPackages.metaFetch ({
-    release."3.0.1".sha256 = "sha256-r4B0xn6UCVslVW4dHiqq8NBMGfNz44kZy48KDWeGquc=";
-    release."2.0.7".sha256 = "sha256-gCM+vZK6vWlhSO1VMjiWHse23mvxVwRarhxwkIQK7e0=";
-    release."2.0.6".sha256 = "sha256-tRUYXQZ0VXrjIZBZ1skdzieUsww4rSNEe5ik+iKpk3U=";
-    release."2.0.5".sha256 = "sha256-cHgERFqrfSg5WtUX3UxR6L+QkzS7+t6n4V+wweiEacc=";
-    release."2.0.3".sha256 = "sha256-t2z0sWPiFgp6LuR6CsH/Zk9qfxW+3QjjFcYrB6qSPgc=";
-    release."1.20.0".sha256 = "sha256-lctZAIQgOg5d+LfILtWsBVcsemV3zTZYfJfDlCxHtcA=";
-    release."1.19.2".sha256 = "sha256-dBj5Ek7PWq/8Btq/dggJUqa8cUtfvbi6EWo/lJEDOU4=";
-    release."1.18.2".sha256 = "sha256-usOYukHQ/h4YBxlhYrAkMTVjNm97hq4IArI9bvDzy/k=";
-    release."1.18.1".sha256 = "sha256-rrIv/mVC0Ez3nU7fpnzwduIC3tI6l73DjgAbv1gd2v0=";
-    release."1.17.0".sha256 = "sha256-J8FJBeaB+2HtHjrkgNzOZJngZ2AcYU+npL9Y1HNPnzo=";
-    release."1.15.2".sha256 = "sha256-+sQYQiN3n+dlzXzi5opOjhkJZqpkNwlHZcUjaUM6+xQ=";
-    release."1.15.0".sha256 = "sha256-vpQzbkDqJPCmaBmXcBnzlWGS7djW9wWv8xslkIlXgP0=";
-    release."1.13.7".sha256 = "sha256-0QbOEnrRCYA2mXDGRKe+QYCXSESLJvLzRW0Iq+/3P9Y=";
-    release."1.12.0".sha256 = "sha256-w4JzLZB8jcxw7nA7AfgU9jTZTr6IYUxPU5E2vNIFC4Q=";
-    release."1.11.4".sha256 = "sha256-dyzEpzokgffsF9lt+FZgUlcZEuAb70vGuHfGUtjZYIM=";
+    release."3.0.1".hash = "sha256-UY1Xti4i6RY9Xh+6T9Uxdoul02/ndvIN1e2eClwegPU=";
+    release."2.0.7".hash = "sha256-ccixsjyW8RH1CgE2iv//cYrGnQCKFL//KLCGIGER3Rs=";
+    release."2.0.6".hash = "sha256-DOBfFe9a7Mk+gqvi3Gy3N86C48TGvpeGNie/Ff3O7Ic=";
+    release."2.0.5".hash = "sha256-UfFoDQM5ImYPRw3XFjKLU+zu4bEkHXatg6sbkfJHw3s=";
+    release."2.0.3".hash = "sha256-s1cYZsxVWQQfJsqHXUOGbT7PnX5ngq8rjm7mO++A+Tk=";
+    release."1.20.0".hash = "sha256-7d+5W4t40qERnbJYrY/X63EriIQ+p8WMahV8XleMk0o=";
+    release."1.19.2".hash = "sha256-B9ppaWUTBxpVtJGsPYoLjWhbtGacFTVC5H+7fqm+pj8=";
+    release."1.18.2".hash = "sha256-cmEs/N7+Ir7G0pUD3pFEjkeO9hI6qO8lDv4ua9NuzTU=";
+    release."1.18.1".hash = "sha256-NgRCFgzxOM7MCpMdnwxY/yYcoA8WKo+ZJrKJy1bWo0U=";
+    release."1.17.0".hash = "sha256-4EEXQSnYtaX2YT3t5EIT0yVZYAkx/UW7tGeUOzn+anM=";
+    release."1.15.2".hash = "sha256-TAWdtjbJcpVxog3urBiWlPzsK9gscKSmma/si48F4sk=";
+    release."1.15.0".hash = "sha256-HUHnRF9BfsgmOQXI14HP0I4yE+qiXJPZedFhECzhbDA=";
+    release."1.13.7".hash = "sha256-/m4q9SrjBxiP8tPnGymxPHGL+/e29kalb3TMLmDge+A=";
+    release."1.12.0".hash = "sha256-QmpqyKi0/9xTe/TNZg0z2gRPifc1k1U/L/W2yRwXo38=";
+    release."1.11.4".hash = "sha256-gZ1KPMaAe0+ABYo38drsMoQuky1EzgYh3ydIUb64ssI=";
     releaseRev = v: "v${v}";
     releaseArtifact = v: if lib.versionAtLeast v "1.13.8" then "elpi-${v}.tbz" else "elpi-v${v}.tbz";
     location = {

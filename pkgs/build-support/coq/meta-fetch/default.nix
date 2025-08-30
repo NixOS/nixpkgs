@@ -12,7 +12,7 @@ let
 
   inherit (lib)
     attrNames
-    fakeSha256
+    fakeHash
     filter
     findFirst
     head
@@ -29,6 +29,7 @@ let
     switch-if
     versionOlder
     versions
+    warnIf
     ;
 
   inherit (lib.strings) match split;
@@ -40,35 +41,22 @@ let
       repo,
       rev,
       name ? "source",
-      sha256 ? null,
+      hash, # will never be empty, set at call site
       artifact ? null,
       ...
     }@args:
     let
+      fetchfun = fetchzip;
       kind =
-        switch-if
-          [
-            {
-              cond = artifact != null;
-              out = {
-                ext = "tbz";
-                fmt = "tbz";
-                fetchfun = fetchurl;
-              };
-            }
-            {
-              cond = args ? sha256;
-              out = {
-                ext = "zip";
-                fmt = "zip";
-                fetchfun = fetchzip;
-              };
-            }
-          ]
+        if artifact != null then
+          {
+            ext = "tbz";
+            fmt = "tbz";
+          }
+        else
           {
             ext = "tar.gz";
             fmt = "tarball";
-            fetchfun = builtins.fetchTarball;
           };
     in
     with kind;
@@ -96,9 +84,8 @@ let
           out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";
         }
       ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-      fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x);
     in
-    fetch { inherit url; };
+    fetchfun { inherit url hash; };
 in
 {
   fetcher ? default-fetcher,
@@ -140,10 +127,22 @@ switch arg [
     out =
       let
         v = if isVersion arg then arg else shortVersion arg;
-        given-sha256 = release.${v}.sha256 or "";
-        sha256 = if given-sha256 == "" then fakeSha256 else given-sha256;
+        hash = switch-if [
+          {
+            cond = release.${v} ? hash && release.${v}.hash != "";
+            out = release.${v}.hash;
+          }
+          {
+            cond =
+              warnIf (release.${v} ? sha256) ''
+                Rocq's default fetcher now uses `hash` instead of `sha256` (deprecated).
+                Support for `sha256` will be removed in 26.05 release.
+              '' release.${v}.sha256 != "";
+            out = release.${v}.sha256;
+          }
+        ] fakeHash;
         rv = release.${v} // {
-          inherit sha256;
+          inherit hash;
         };
       in
       {
