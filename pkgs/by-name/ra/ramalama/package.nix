@@ -13,14 +13,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-Hozyf0yfB0XhxWeA3SS24BPfDDXYa2AXY8/gLh8ZFcU=";
+    hash = "sha256-BFJoM9MEprCdCANQntb4IIuWhtUXvCnK/mE7vOdf2PM=";
   };
 
   build-system = with python3.pkgs; [
@@ -28,8 +28,9 @@ python3.pkgs.buildPythonApplication rec {
     wheel
   ];
 
-  dependencies = [
-    python3.pkgs.argcomplete
+  dependencies = with python3.pkgs; [
+    argcomplete
+    pyyaml
   ];
 
   nativeBuildInputs = [
