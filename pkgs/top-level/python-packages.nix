@@ -11918,7 +11918,7 @@ self: super: with self; {
 
   posix-ipc = callPackage ../development/python-modules/posix-ipc { };
 
-  postgrest-py = callPackage ../development/python-modules/postgrest-py { };
+  postgrest = callPackage ../development/python-modules/postgrest { };
 
   posthog = callPackage ../development/python-modules/posthog { };
 

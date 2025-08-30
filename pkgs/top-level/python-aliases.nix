@@ -516,6 +516,7 @@ mapAliases ({
   Polygon3 = polygon3; # Added 2023-08-08
   posix_ipc = posix-ipc; # added 2024-01-07
   poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
+  postgrest-py = postgrest; # added 2024-08-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11

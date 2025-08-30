@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "postgrest-py";
+  pname = "postgrest";
   version = "1.1.1";
   pyproject = true;
 

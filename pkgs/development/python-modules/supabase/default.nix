@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   gotrue,
-  postgrest-py,
+  postgrest,
   realtime,
   storage3,
   supafunc,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
 
   dependencies = [
-    postgrest-py
+    postgrest
     realtime
     gotrue
     httpx
