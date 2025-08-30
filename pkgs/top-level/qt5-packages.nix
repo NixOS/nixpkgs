@@ -143,6 +143,8 @@ makeScopeWithSplicing' {
           qt = qt5;
         };
 
+        osgqt = pkgs.osgqt.override { qt6Support = false; };
+
         phonon = callPackage ../development/libraries/phonon { };
 
         phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
