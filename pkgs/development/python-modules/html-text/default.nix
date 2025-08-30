@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "html-text";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zytedata";
     repo = "html-text";
     tag = version;
-    hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
+    hash = "sha256-QLQcrd2lIrfR/2TAom8ANX7LNdfj/cQP+X2t2cjMgzU=";
   };
 
   build-system = [ setuptools ];
