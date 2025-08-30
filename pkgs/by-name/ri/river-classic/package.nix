@@ -12,19 +12,20 @@
   pkg-config,
   scdoc,
   udev,
+  versionCheckHook,
   wayland,
   wayland-protocols,
   wayland-scanner,
   wlroots_0_19,
   xwayland,
-  zig_0_14,
+  zig_0_15,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.11";
+  version = "0.3.12";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-7LC5nxan9jmjjt29afkps9H/sfhfIqpvBxvCKb0zvNM=";
+    hash = "sha256-ZYJYQINv6aNj8jyPOtMh5kf/HweIweTztWUStbr/9Zc=";
     tag = "v${finalAttrs.version}";
   };
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_14.hook
+    zig_0_15.hook
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -71,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   passthru = {
     providedSessions = [ "river" ];
