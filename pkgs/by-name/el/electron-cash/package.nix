@@ -76,14 +76,19 @@ python3Packages.buildPythonApplication rec {
   # 2. The code should be compatible with python-dateutil 2.10 which is the
   # version we have in nixpkgs. Changelog:
   # <https://dateutil.readthedocs.io/en/latest/changelog.html#version-2-9-0-post0-2024-03-01>
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "(share_dir" '("share"'
-    substituteInPlace electroncash/secp256k1.py \
-      --replace-fail "libsecp256k1.so.0" "${secp256k1}/lib/libsecp256k1.so.5"
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace-fail "python-dateutil<2.9" "python-dateutil<2.10"
-  '';
+  postPatch =
+    let
+      libsecp256k1_name =
+        if stdenv.hostPlatform.isDarwin then "libsecp256k1.0.dylib" else "libsecp256k1.so.0";
+    in
+    ''
+      substituteInPlace setup.py \
+        --replace-fail "(share_dir" '("share"'
+      substituteInPlace electroncash/secp256k1.py \
+        --replace-fail "${libsecp256k1_name}" "${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}"
+      substituteInPlace contrib/requirements/requirements.txt \
+        --replace-fail "python-dateutil<2.9" "python-dateutil<2.10"
+    '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
