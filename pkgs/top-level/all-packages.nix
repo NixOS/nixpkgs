@@ -10312,7 +10312,9 @@ with pkgs;
   postgresql18Packages = recurseIntoAttrs postgresql_18.pkgs;
 
   postgres-websockets = haskellPackages.postgres-websockets.bin;
-  postgrest = haskellPackages.postgrest.bin;
+  postgrest = haskellPackages.postgrest.overrideAttrs {
+    pname = "postgrest-modified";
+  };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
