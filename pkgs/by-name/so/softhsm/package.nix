@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   botan2,
   sqlite,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +12,16 @@ stdenv.mkDerivation rec {
   pname = "softhsm";
   version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
-    hash = "sha256-YSSUcwVLzRgRUZ75qYmogKe9zDbTF8nCVFf8YU30dfI=";
+  src = fetchFromGitHub {
+    owner = "softhsm";
+    repo = "SoftHSMv2";
+    rev = "${version}";
+    hash = "sha256-sx0ceVY795JbtKbQGAVFllB9UJfTdgd242d6c+s1tBw=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   configureFlags = [
     "--with-crypto-backend=botan"
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/var";
 
   meta = with lib; {
-    homepage = "https://www.opendnssec.org/softhsm";
+    homepage = "https://www.softhsm.org/";
     description = "Cryptographic store accessible through a PKCS #11 interface";
     longDescription = "
       SoftHSM provides a software implementation of a generic
