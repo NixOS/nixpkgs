@@ -586,15 +586,6 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # 2025-08-22: allow data-class-default >= 0.2
-  mysql-haskell = appendPatches [
-    (pkgs.fetchpatch {
-      name = "mysql-haskell-data-default-class-0.2.patch";
-      url = "https://github.com/winterland1989/mysql-haskell/commit/06adc8d0b6be15204f5fb5663991722ce6a42638.patch";
-      sha256 = "sha256-9WP58688YuEe/W+RcwMBqMBMlG2ib93EA2uj7wRR3Vo=";
-    })
-  ] super.mysql-haskell;
-
   # Test data missing
   # https://github.com/FPtje/GLuaFixer/issues/165
   glualint = dontCheck super.glualint;
