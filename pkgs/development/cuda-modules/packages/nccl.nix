@@ -20,8 +20,8 @@ let
     cudaAtLeast
     flags
     ;
-  version = "2.27.6-1";
-  hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
+  version = "2.28.1-1";
+  hash = "sha256-OowHuNbXns2Ggqx9mfC93Mm3WhqU4I1cWtwicXLdszI=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
