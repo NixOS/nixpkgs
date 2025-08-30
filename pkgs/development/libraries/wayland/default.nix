@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin; # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     maintainers = with maintainers; [
       codyopel
       qyliss
