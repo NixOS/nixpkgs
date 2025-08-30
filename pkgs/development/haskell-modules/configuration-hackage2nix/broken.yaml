@@ -5994,7 +5994,6 @@ broken-packages:
   - tag-bits # failure in job https://hydra.nixos.org/build/233245196 at 2023-09-02
   - tagged-exception-core # failure in job https://hydra.nixos.org/build/233227946 at 2023-09-02
   - tagged-timers # failure in job https://hydra.nixos.org/build/233238738 at 2023-09-02
-  - taggy-lens # failure in job https://hydra.nixos.org/build/233253920 at 2023-09-02
   - taglib-api # failure in job https://hydra.nixos.org/build/233259216 at 2023-09-02
   - tagshare # failure in job https://hydra.nixos.org/build/252729876 at 2024-03-16
   - tagsoup-ht # failure in job https://hydra.nixos.org/build/233233672 at 2023-09-02

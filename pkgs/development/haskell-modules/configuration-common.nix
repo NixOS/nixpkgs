@@ -2966,6 +2966,9 @@ with haskellLib;
     })
   ] (doJailbreak super.http2-client);
 
+  # doctests are failing https://github.com/alpmestan/taggy-lens/issues/8
+  taggy-lens = dontCheck super.taggy-lens;
+
   # https://github.com/snoyberg/http-client/pull/563
   http-client-tls = doJailbreak super.http-client-tls;
 
