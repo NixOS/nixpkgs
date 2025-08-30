@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kustomize";
   version = "5.7.1";
 
@@ -15,14 +15,14 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}.version=v${version}" # add 'v' prefix to match official releases
-      "-X ${t}.gitCommit=${src.rev}"
+      "-X ${t}.version=v${finalAttrs.version}" # add 'v' prefix to match official releases
+      "-X ${t}.gitCommit=${finalAttrs.src.rev}"
     ];
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "kustomize/v${version}";
+    repo = "kustomize";
+    rev = "kustomize/v${finalAttrs.version}";
     hash = "sha256-eLj9OQlHZph/rI3om6S5/0sYxjgYloUWag2mS0hEpCE=";
   };
 
@@ -40,7 +40,7 @@ buildGoModule rec {
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customization of kubernetes YAML configurations";
     mainProgram = "kustomize";
     longDescription = ''
@@ -49,8 +49,8 @@ buildGoModule rec {
       as is.
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
       periklis
@@ -59,4 +59,4 @@ buildGoModule rec {
       saschagrunert
     ];
   };
-}
+})
