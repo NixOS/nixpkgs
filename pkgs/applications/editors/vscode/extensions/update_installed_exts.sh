@@ -3,7 +3,11 @@
 # shellcheck shell=bash
 set -eu -o pipefail
 
-# can be added to your configuration with the following command and snippet:
+# Optional EXCLUDE env var can be set to a string with a space-separated list
+# of extensions to exclude from the output, e.g.:
+# $ EXCLUDE="pub1.foo pub2.bar" ./update_installed_exts.sh
+#
+# Can be added to your configuration with the following command and snippet:
 # $ ./pkgs/applications/editors/vscode/extensions/update_installed_exts.sh > extensions.nix
 #
 # packages = with pkgs;
@@ -78,13 +82,16 @@ trap clean_up SIGINT
 # Begin the printing of the nix expression that will house the list of extensions.
 printf '{ extensions = [\n'
 
-# Note that we are only looking to update extensions that are already installed.
-for i in $($CODE --list-extensions)
+# Note that we are only looking to update extensions that are already
+# installed. Some vscode wrappers will output info to stderr so we ignore that.
+for i in $($CODE --list-extensions 2> /dev/null)
 do
-    OWNER=$(echo "$i" | cut -d. -f1)
-    EXT=$(echo "$i" | cut -d. -f2)
+    if ! echo "${EXCLUDE:-}" | grep -w -q $i; then
+        OWNER=$(echo "$i" | cut -d. -f1)
+        EXT=$(echo "$i" | cut -d. -f2)
 
-    get_vsixpkg "$OWNER" "$EXT"
+        get_vsixpkg "$OWNER" "$EXT"
+    fi
 done
 # Close off the nix expression.
 printf '];\n}'
