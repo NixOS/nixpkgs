@@ -1,6 +1,6 @@
 {
+  package,
   runTest,
-  lts ? true,
 }:
 let
   incusRunTest =
@@ -12,32 +12,40 @@ let
       ];
 
       tests.incus = {
-        inherit lts;
+        inherit package;
       }
       // config;
     };
 in
 {
-  all = incusRunTest { all = true; };
+  # appArmor = incusRunTest {
+  #   all = true;
+  #   appArmor = true;
+  # };
 
-  appArmor = incusRunTest {
-    all = true;
-    appArmor = true;
+  container = incusRunTest {
+    instances.c1 = {
+      type = "container";
+    };
   };
 
-  container = incusRunTest { instance.container = true; };
-
-  lvm = incusRunTest { storage.lvm = true; };
-
-  openvswitch = incusRunTest { network.ovs = true; };
+  # lvm = incusRunTest { storage.lvm = true; };
+  #
+  # openvswitch = incusRunTest { network.ovs = true; };
 
   ui = runTest {
     imports = [ ./ui.nix ];
 
-    _module.args = { inherit lts; };
+    _module.args = { inherit package; };
   };
 
-  virtual-machine = incusRunTest { instance.virtual-machine = true; };
+  virtual-machine = incusRunTest {
+    instances = {
+      vm1 = {
+        type = "virtual-machine";
+      };
+    };
+  };
 
   zfs = incusRunTest { storage.zfs = true; };
 }

@@ -1,7 +1,7 @@
 {
   pkgs,
   lib,
-  lts ? true,
+  package,
   ...
 }:
 {
@@ -17,7 +17,7 @@
 
       virtualisation.incus = {
         enable = true;
-        package = if lts then pkgs.incus-lts else pkgs.incus;
+        inherit package;
 
         preseed.config."core.https_address" = ":8443";
         ui.enable = true;

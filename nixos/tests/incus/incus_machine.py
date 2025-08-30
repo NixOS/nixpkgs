@@ -87,6 +87,6 @@ class IncusHost(Machine):
             .strip()
             .split(" ")[-1]
         )
-        assert (
-            "1" == sysctl
-        ), f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
+        assert "1" == sysctl, (
+            f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
+        )
