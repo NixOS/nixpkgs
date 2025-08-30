@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-hoverxref";
-  version = "1.3.0";
+  version = "1.5.0";
   format = "pyproject";
   outputs = [
     "out"
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "readthedocs";
     repo = "sphinx-hoverxref";
     rev = version;
-    hash = "sha256-DJ+mHu9IeEYEyf/SD+nDNtWpTf6z7tQzG0ogaECDpkU=";
+    hash = "sha256-JHNJGUkO/HXnnnROYBd1pAcoAEYo6b7eK4tyC+ujc+A=";
   };
 
   postPatch = ''
