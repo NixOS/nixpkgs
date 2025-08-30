@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "breathe";
-  version = "4.35.0-unstable-2025-01-16";
+  version = "5.0.0a5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
