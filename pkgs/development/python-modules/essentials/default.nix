@@ -36,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "essentials" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Neoteroi/essentials";
     description = "General purpose classes and functions";
     changelog = "https://github.com/Neoteroi/essentials/releases/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];
