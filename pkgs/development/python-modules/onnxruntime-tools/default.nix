@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # dependencies
   coloredlogs,
   numpy,
   onnx,
@@ -41,6 +43,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "onnxruntime_tools" ];
+
+  # no tests
+  doCheck = false;
 
   meta = {
     description = "Transformers Model Optimization Tool of ONNXRuntime";
