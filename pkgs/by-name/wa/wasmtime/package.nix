@@ -6,6 +6,8 @@
   cmake,
   versionCheckHook,
   nix-update-script,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
@@ -58,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       moveToOutput lib $dev
+      ${lib.optionalString (!enableShared) "rm $dev/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm $dev/lib/*.a"}
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
