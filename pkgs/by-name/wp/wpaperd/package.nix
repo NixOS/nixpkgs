@@ -11,15 +11,15 @@
   scdoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wpaperd";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
     repo = "wpaperd";
-    rev = version;
-    hash = "sha256-mBdrOmS+e+Npei5+RmtbTkBCGR8L5O83hulNU1z0Akk=";
+    tag = finalAttrs.version;
+    hash = "sha256-6XVpjTdo/wI65Lzd02fjqir7a28EEBBp3794zLgxayY=";
   };
 
   cargoHash = "sha256-d8jzoNCn9J36SE4tQZ1orgOfFGbhVtHaaO940b3JxmQ=";
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
       installManPage ${targetDir}/man/*.1 man/*.5
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal wallpaper daemon for Wayland";
     longDescription = ''
       It allows the user to choose a different image for each output (aka for each monitor)
@@ -63,12 +63,12 @@ rustPlatform.buildRustPackage rec {
       displayed will be changed with another random one.
     '';
     homepage = "https://github.com/danyspin97/wpaperd";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       DPDmancul
       fsnkty
     ];
     mainProgram = "wpaperd";
   };
-}
+})
