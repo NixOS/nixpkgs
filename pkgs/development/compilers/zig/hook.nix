@@ -1,5 +1,6 @@
 {
   lib,
+  targetPackages,
   makeSetupHook,
   zig,
   stdenv,
@@ -47,7 +48,12 @@ makeSetupHook {
           else
             "-Drelease-safe=true";
       in
-      [
+      lib.optionals (stdenv.hostPlatform.zigTarget != stdenv.targetPlatform.zigTarget) [
+        # FIXME: These break DT_RUNPATH for some reason
+        "-Dtarget=${stdenv.targetPlatform.zigTarget}"
+        "-Ddynamic-linker=$(echo ${targetPackages.stdenv.cc.bintools.dynamicLinker})" # Expands wildcard
+      ]
+      ++ [
         "-Dcpu=baseline"
         releaseType
       ];
