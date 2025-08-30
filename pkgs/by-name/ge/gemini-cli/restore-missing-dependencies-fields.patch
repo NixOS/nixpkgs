@@ -1,18 +1,36 @@
-From c1aef417d559237bf4d147c584449b74d6fbc1f8 Mon Sep 17 00:00:00 2001
-From: ljxfstorm <ljxf.storm@live.cn>
-Date: Fri, 1 Aug 2025 10:23:11 +0800
-Subject: [PATCH] build(deps): restore missing `resolved` and `integrity` of
- some dependencies
-
----
- package-lock.json | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
 diff --git a/package-lock.json b/package-lock.json
-index 3938c5e32b..99590b8a9b 100644
+index 74cfbfef..4131aa2b 100644
 --- a/package-lock.json
 +++ b/package-lock.json
-@@ -11738,6 +11738,8 @@
+@@ -58,8 +58,7 @@
+         "@lydell/node-pty-darwin-x64": "1.1.0",
+         "@lydell/node-pty-linux-x64": "1.1.0",
+         "@lydell/node-pty-win32-arm64": "1.1.0",
+-        "@lydell/node-pty-win32-x64": "1.1.0",
+-        "node-pty": "^1.0.0"
++        "@lydell/node-pty-win32-x64": "1.1.0"
+       }
+     },
+     "node_modules/@alcalzone/ansi-tokenize": {
+@@ -8604,17 +8603,6 @@
+         "url": "https://opencollective.com/node-fetch"
+       }
+     },
+-    "node_modules/node-pty": {
+-      "version": "1.0.0",
+-      "resolved": "https://registry.npmjs.org/node-pty/-/node-pty-1.0.0.tgz",
+-      "integrity": "sha512-wtBMWWS7dFZm/VgqElrTvtfMq4GzJ6+edFI0Y0zyzygUSZMgZdraDUMUhCIvkjhJjme15qWmbyJbtAx4ot4uZA==",
+-      "hasInstallScript": true,
+-      "license": "MIT",
+-      "optional": true,
+-      "dependencies": {
+-        "nan": "^2.17.0"
+-      }
+-    },
+     "node_modules/normalize-package-data": {
+       "version": "6.0.2",
+       "resolved": "https://registry.npmjs.org/normalize-package-data/-/normalize-package-data-6.0.2.tgz",
+@@ -12535,6 +12523,8 @@
      },
      "packages/cli/node_modules/@testing-library/dom": {
        "version": "10.4.0",
@@ -21,7 +39,7 @@ index 3938c5e32b..99590b8a9b 100644
        "dev": true,
        "license": "MIT",
        "peer": true,
-@@ -11773,6 +11775,8 @@
+@@ -12570,6 +12560,8 @@
      },
      "packages/cli/node_modules/@testing-library/react": {
        "version": "16.3.0",
@@ -30,7 +48,7 @@ index 3938c5e32b..99590b8a9b 100644
        "dev": true,
        "license": "MIT",
        "dependencies": {
-@@ -11824,6 +11828,8 @@
+@@ -12621,6 +12613,8 @@
      },
      "packages/cli/node_modules/aria-query": {
        "version": "5.3.0",
@@ -39,7 +57,7 @@ index 3938c5e32b..99590b8a9b 100644
        "dev": true,
        "license": "Apache-2.0",
        "peer": true,
-@@ -11833,6 +11839,8 @@
+@@ -12630,6 +12624,8 @@
      },
      "packages/cli/node_modules/emoji-regex": {
        "version": "10.4.0",
@@ -48,7 +66,7 @@ index 3938c5e32b..99590b8a9b 100644
        "license": "MIT"
      },
      "packages/cli/node_modules/react-is": {
-@@ -11845,6 +11853,8 @@
+@@ -12642,6 +12638,8 @@
      },
      "packages/cli/node_modules/string-width": {
        "version": "7.2.0",
@@ -57,7 +75,17 @@ index 3938c5e32b..99590b8a9b 100644
        "license": "MIT",
        "dependencies": {
          "emoji-regex": "^10.3.0",
-@@ -11942,6 +11952,8 @@
+@@ -12715,8 +12713,7 @@
+         "@lydell/node-pty-darwin-x64": "1.1.0",
+         "@lydell/node-pty-linux-x64": "1.1.0",
+         "@lydell/node-pty-win32-arm64": "1.1.0",
+-        "@lydell/node-pty-win32-x64": "1.1.0",
+-        "node-pty": "^1.0.0"
++        "@lydell/node-pty-win32-x64": "1.1.0"
+       }
+     },
+     "packages/core/node_modules/ajv": {
+@@ -12751,6 +12748,8 @@
      },
      "packages/core/node_modules/ignore": {
        "version": "7.0.5",
@@ -66,4 +94,16 @@ index 3938c5e32b..99590b8a9b 100644
        "license": "MIT",
        "engines": {
          "node": ">= 4"
-
+diff --git a/package.json b/package.json
+index aba2aa98..57c79274 100644
+--- a/package.json
++++ b/package.json
+@@ -100,7 +100,6 @@
+     "@lydell/node-pty-darwin-x64": "1.1.0",
+     "@lydell/node-pty-linux-x64": "1.1.0",
+     "@lydell/node-pty-win32-arm64": "1.1.0",
+-    "@lydell/node-pty-win32-x64": "1.1.0",
+-    "node-pty": "^1.0.0"
++    "@lydell/node-pty-win32-x64": "1.1.0"
+   }
+ }

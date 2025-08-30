@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
     ./restore-missing-dependencies-fields.patch
   ];
 
-  npmDepsHash = "sha256-0j6kXlnWg7N23cnmMialZVqyZTAzgPn0VGAqSeYIVZM=";
+  npmDepsHash = "sha256-i4Z/zM4jRf9Orisu0xHHa3yJsDjYSmHieF2WIKU/1iY=";
 
   preConfigure = ''
     mkdir -p packages/generated
