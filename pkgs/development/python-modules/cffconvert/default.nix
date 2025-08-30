@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cffconvert";
-  version = "2.0.0-unstable-2024-02-12";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
