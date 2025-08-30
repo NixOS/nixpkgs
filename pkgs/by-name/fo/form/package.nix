@@ -1,20 +1,26 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   gmp,
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.3.1";
   pname = "form";
 
-  # This tarball is released by author, it is not downloaded from tag, so can't use fetchFromGitHub
-  src = fetchurl {
-    url = "https://github.com/vermaseren/form/releases/download/v4.3.1/form-4.3.1.tar.gz";
-    sha256 = "sha256-8fUS3DT+m71rGfLf7wX8uZEt+0PINop1t5bsRy7ou84=";
+  src = fetchFromGitHub {
+    owner = "form-dev";
+    repo = "form";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZWpfPeTekHEALqXVF/nLkcNsrkt17AKm2B/uydUBfvo=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = [
     gmp
@@ -28,4 +34,4 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.veprbl ];
     platforms = platforms.unix;
   };
-}
+})
