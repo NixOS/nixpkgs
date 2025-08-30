@@ -184,7 +184,7 @@ in
   config = lib.mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
     services.fwupd.daemonSettings = {
-      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+      EspLocation = lib.mkDefault config.boot.loader.efi.efiSysMountPoint;
     };
 
     environment.systemPackages = [ cfg.package ];
