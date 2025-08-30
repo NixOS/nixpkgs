@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  phases = [
-    "unpackPhase"
-    "installPhase"
-  ];
-
   installPhase = ''
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
