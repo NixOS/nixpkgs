@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   zig_0_14,
-  callPackage,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,19 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-jt7KJEg5300IuO7m7FiC8zejmymqMqdT7FtoVhTR05M=";
   };
-  postPatch = ''
-    ln -s ${
-      callPackage ./build.zig.zon.nix {
-        zig = zig_0_14;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
 
   nativeBuildInputs = [
     zig_0_14.hook
   ];
 
-  passthru.updateScript = ./update.sh;
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-jVJdvqQO8svMi170WdJ6oh9UUU2YpwOeLp8FOgg/z+Q=";
+  };
+
+  passthru.updateScript = nix-update-script { };
 
   env.VERSION = finalAttrs.version;
 

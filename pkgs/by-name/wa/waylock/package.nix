@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitea,
   libxkbcommon,
   pam,
@@ -11,6 +10,7 @@
   wayland-scanner,
   wayland-protocols,
   zig_0_14,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build.zig --replace-fail "1.4.0-dev" "1.4.0"
   '';
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig_0_14.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-QU+YW38wIFKiQtKolgYgzXbXW4aKvJTHDBIqgitVutg=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -47,15 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     "-Dman-pages"
-    "--system"
-    "${finalAttrs.deps}"
   ];
 
   preBuild = ''
     substituteInPlace pam.d/waylock --replace-fail "system-auth" "login"
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://codeberg.org/ifreund/waylock";
