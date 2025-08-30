@@ -61,10 +61,16 @@ $pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
+$pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xfont"} = "libXfont";
+$pcMap{"xfont2"} = "libXfont2";
+$pcMap{"xft"} = "libXft";
+$pcMap{"xi"} = "libXi";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
 $pcMap{"xpm"} = "libXpm";
@@ -350,11 +356,17 @@ print OUT <<EOF;
   libxcb-render-util,
   libxcb-util,
   libxcb-wm,
-  libxcvt,
+  libxcomposite,
   libxcursor,
+  libxcvt,
+  libxdamage,
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
+  libxft,
+  libxi,
   libxmu,
   libxpm,
   libxrandr,
@@ -466,10 +478,16 @@ self: with self; {
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
+  libXdamage = libxdamage;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
+  libXft = libxft;
+  libXi = libxi;
   libXmu = libxmu;
   libXpm = libxpm;
   libXrandr = libxrandr;
