@@ -493,9 +493,12 @@ if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
             SHOULD_REEXEC=1
         fi
     else
-        runCmd nix "${flakeFlags[@]}" build --out-link "${tmpDir}/nixos-rebuild" "$flake#$flakeAttr.config.system.build.nixos-rebuild" "${extraBuildFlags[@]}" "${lockFlags[@]}"
-        if p=$(readlink -e "${tmpDir}/nixos-rebuild"); then
-            SHOULD_REEXEC=1
+        targetSystem=$(runCmd nix eval --raw "$flake#$flakeAttr.pkgs.system")
+        if [[ $(runCmd nix show-config --json | jq -r '.system.value') == $targetSystem ]]; then
+            runCmd nix "${flakeFlags[@]}" build --out-link "${tmpDir}/nixos-rebuild" "$flake#$flakeAttr.config.system.build.nixos-rebuild" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            if p=$(readlink -e "${tmpDir}/nixos-rebuild"); then
+                SHOULD_REEXEC=1
+            fi
         fi
     fi
 
