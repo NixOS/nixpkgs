@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "otf2bdf";
-  version = "3.1";
+  version = "3.1_p1";
 
   # Original site http://sofia.nmsu.edu/~mleisher/Software/otf2bdf/ unreachable,
   # This is a mirror.
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jirutka";
     repo = "otf2bdf";
     rev = "v${version}";
-    hash = "sha256-HK9ZrnwKhhYcBvSl+3RwFD7m/WSaPkGKX6utXnk5k+A=";
+    hash = "sha256-8z1uqUhUPK+fMW3PLkvF3eSlSJpo0x+6NQ6vYsEMqoM=";
   };
 
   buildInputs = [ freetype ];
