@@ -10,13 +10,13 @@
   which,
   gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "v4l2-relayd";
   version = "0.1.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/v4l2-relayd";
-    tag = "upstream/${version}";
+    tag = "upstream/${finalAttrs.version}";
     hash = "sha256-D+OWkny+TYNJt08X+nl7EYs5tp51vjvig/vuID6lkmg=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ betaboon ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
