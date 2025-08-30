@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-config";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-config";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5HejuluCTsRsnHuaMCTnCPkbFvT/IcLkfNGjnXnZjJ0=";
+    hash = "sha256-WcGt6yl2LpLnAOVtiCyMyWsoMAUMG1MYhvW/m2DDMX4=";
   };
 
   nativeBuildInputs = [
