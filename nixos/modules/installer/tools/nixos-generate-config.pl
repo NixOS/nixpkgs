@@ -306,7 +306,7 @@ if ($virt eq "microsoft") {
 
 # Pull in NixOS configuration for containers.
 if ($virt eq "systemd-nspawn") {
-    push @attrs, "boot.isContainer = true;";
+    push @attrs, "boot.isNspawnContainer = true;";
 }
 
 
