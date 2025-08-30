@@ -80,12 +80,7 @@ in
   stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
   # 2025-08-10: Tests fail, but fix is not released yet https://github.com/clash-lang/ghc-typelits-natnormalise/issues/89
-  ghc-typelits-natnormalise = appendPatch (pkgs.fetchpatch {
-    name = "ghc-typelits-natnormalise-0.7.11-test-fix.patch";
-    url = "https://github.com/clash-lang/ghc-typelits-natnormalise/commit/a133c7e4dc38834e0cd913eeb7a10d501642dc26.patch";
-    sha256 = "sha256-HqGLrbIcLJ8DP0Qe1jU4p4Tt8bykOd7qqskdNwXVcPs=";
-    includes = [ "tests/ErrorTests.hs" ];
-  }) (doJailbreak (doDistribute super.ghc-typelits-natnormalise_0_7_12));
+  ghc-typelits-natnormalise = doDistribute (doJailbreak self.ghc-typelits-natnormalise_0_7_12);
 
   #
   # Jailbreaks
