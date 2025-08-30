@@ -14421,8 +14421,6 @@ with pkgs;
 
   ### DESKTOPS/LXDE
 
-  lxde = recurseIntoAttrs (callPackage ../desktops/lxde { });
-
   lxappearance-gtk2 = callPackage ../by-name/lx/lxappearance/package.nix {
     gtk2 = gtk2-x11;
     withGtk3 = false;
