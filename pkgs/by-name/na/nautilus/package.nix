@@ -12,6 +12,7 @@
   wayland-scanner,
   wrapGAppsHook4,
   gtk4,
+  icu,
   libadwaita,
   libportal-gtk4,
   gnome,
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-user-share
     gst_all_1.gst-plugins-base
     gtk4
+    icu
     libadwaita
     libportal-gtk4
     libexif
