@@ -27,7 +27,6 @@
   python3,
   robin-map,
   SDL2,
-  spirv-headers,
   soundtouch,
   stdenv,
   vulkan-headers,
@@ -102,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     soundtouch
     SDL2
-    spirv-headers
     vulkan-headers
     xbyak
 
@@ -145,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
     (cmakeBool "DISABLE_SYSTEM_ZSTD" true)
+    (cmakeBool "DISABLE_SYSTEM_SPIRV_HEADERS" true)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
