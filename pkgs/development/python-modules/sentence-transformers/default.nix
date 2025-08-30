@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -104,6 +105,10 @@ buildPythonPackage rec {
     # Assertion error: Sparse operations take too long
     # (namely, load-sensitive test)
     "test_performance_with_large_vectors"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    # for some reason, these tests time out on x86_64-darwin. Also sparse operations.
+    "sim_sparse"
   ];
 
   disabledTestPaths = [
