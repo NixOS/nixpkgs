@@ -2,6 +2,7 @@
   stdenv,
   fetchzip,
   kernel,
+  kernelModuleMakeFlags,
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
   strictDeps = true;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERS=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=$(out)"

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-kmd";
@@ -16,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
