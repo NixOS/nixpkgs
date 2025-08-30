@@ -165,14 +165,27 @@ rec {
       _noEval = throw _noEvalMessage;
     };
 
-  # Coerce a value to a fileset, erroring when the value cannot be coerced.
-  # The string gives the context for error messages.
-  # Type: String -> (fileset | Path) -> fileset
-  _coerce =
+  # Coerce a value to a fileset. Return a set containing the attribute `success`
+  # indicating whether coercing succeeded, and either `value` when `success ==
+  # true`, or an error `message` when `success == false`. The string gives the
+  # context for error messages.
+  #
+  # Type: String -> (fileset | Path) -> { success :: Bool, value :: fileset } ] -> { success :: Bool, message :: String }
+  _coerceResult =
+    let
+      ok = value: {
+        success = true;
+        inherit value;
+      };
+      error = message: {
+        success = false;
+        inherit message;
+      };
+    in
     context: value:
     if value._type or "" == "fileset" then
       if value._internalVersion > _currentVersion then
-        throw ''
+        error ''
           ${context} is a file set created from a future version of the file set library with a different internal representation:
               - Internal version of the file set: ${toString value._internalVersion}
               - Internal version of the library: ${toString _currentVersion}
@@ -184,27 +197,37 @@ rec {
             _currentVersion - value._internalVersion
           ) migrations;
         in
-        foldl' (value: migration: migration value) value migrationsToApply
+        ok (foldl' (value: migration: migration value) value migrationsToApply)
       else
-        value
+        ok value
     else if !isPath value then
       if value ? _isLibCleanSourceWith then
-        throw ''
+        error ''
           ${context} is a `lib.sources`-based value, but it should be a file set or a path instead.
               To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
               Note that this only works for sources created from paths.''
       else if isStringLike value then
-        throw ''
+        error ''
           ${context} ("${toString value}") is a string-like value, but it should be a file set or a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
-        throw ''${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
+        error ''${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if !pathExists value then
-      throw ''
+      error ''
         ${context} (${toString value}) is a path that does not exist.
             To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.''
     else
-      _singleton value;
+      ok (_singleton value);
+
+  # Coerce a value to a fileset, erroring when the value cannot be coerced.
+  # The string gives the context for error messages.
+  # Type: String -> (fileset | Path) -> fileset
+  _coerce =
+    context: value:
+    let
+      result = _coerceResult context value;
+    in
+    if result.success then result.value else throw result.message;
 
   # Coerce many values to filesets, erroring when any value cannot be coerced,
   # or if the filesystem root of the values doesn't match.
