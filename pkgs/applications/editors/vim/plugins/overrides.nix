@@ -1938,18 +1938,6 @@ in
     vimCommandCheck = "MinimapToggle";
   };
 
-  minsnip-nvim = buildVimPlugin {
-    pname = "minsnip.nvim";
-    version = "2022-01-04";
-    src = fetchFromGitHub {
-      owner = "jose-elias-alvarez";
-      repo = "minsnip.nvim";
-      rev = "6ae2f3247b3a2acde540ccef2e843fdfcdfebcee";
-      sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
-    };
-    meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
-  };
-
   minuet-ai-nvim = super.minuet-ai-nvim.overrideAttrs {
     checkInputs = [
       # optional cmp integration

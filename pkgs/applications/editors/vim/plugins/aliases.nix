@@ -95,6 +95,7 @@ mapAliases (
     ipython = vim-ipython;
     latex-live-preview = vim-latex-live-preview;
     maktaba = vim-maktaba;
+    minsnip-nvim = throw "the upstream repository got deleted"; # added 2025-08-30
     multiple-cursors = vim-multiple-cursors;
     necoGhc = neco-ghc; # backwards compat, added 2014-10-18
     neocomplete = neocomplete-vim;
