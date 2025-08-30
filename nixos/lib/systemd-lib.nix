@@ -361,12 +361,13 @@ rec {
     }:
     let
       typeDir =
-        ({
+        {
           system = "system";
           initrd = "system";
           user = "user";
           nspawn = "nspawn";
-        }).${type};
+        }
+        .${type};
     in
     pkgs.runCommand "${type}-units"
       {
