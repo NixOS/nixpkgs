@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "polenum";
-  version = "1.6.1-unstable-2024-07-30";
+  version = "1.7";
   format = "other";
 
   src = fetchFromGitHub {
