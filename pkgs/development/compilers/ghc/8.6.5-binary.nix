@@ -250,7 +250,7 @@ stdenv.mkDerivation rec {
     haskellCompilerName = "ghc-${version}";
   };
 
-  meta = rec {
+  meta = {
     license = lib.licenses.bsd3;
     platforms = [
       "x86_64-linux"

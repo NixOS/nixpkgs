@@ -27,7 +27,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ase";
   version = "3.25.0-unstable-2025-06-24";
   pyproject = true;

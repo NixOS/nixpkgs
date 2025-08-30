@@ -90,7 +90,7 @@ in
       description = "Home directory for writable storage";
     };
 
-    database = mkOption rec {
+    database = mkOption {
       type =
         with types;
         attrsOf (oneOf [
