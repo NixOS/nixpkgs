@@ -1,5 +1,5 @@
 # This is a modified version of mescc-tools-extra/mescc-tools-extra.kaem
-# https://github.com/oriansj/mescc-tools-extra/blob/ec53af69d6d2119b47b369cd0ec37ac806e7ad60/mescc-tools-extra.kaem
+# https://github.com/oriansj/mescc-tools-extra/blob/56e6b8df3e95f4bc04f8b420a4cd8c82c70b9efa/mescc-tools-extra.kaem
 # - Paths to build inputs have been changed for nix
 # - Added additional step to create $out directory
 
@@ -32,8 +32,10 @@ CC mkdir.c -o ${out}/bin/mkdir
 CC untar.c -o ${out}/bin/untar
 CC ungz.c -o ${out}/bin/ungz
 CC unbz2.c -o ${out}/bin/unbz2
+CC unxz.c -o ${out}/bin/unxz
 CC catm.c -o ${out}/bin/catm
 CC cp.c -o ${out}/bin/cp
 CC chmod.c -o ${out}/bin/chmod
 CC rm.c -o ${out}/bin/rm
 CC replace.c -o ${out}/bin/replace
+CC wrap.c -o ${out}/bin/wrap
