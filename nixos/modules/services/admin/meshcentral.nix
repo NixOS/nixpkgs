@@ -2,12 +2,12 @@
   config,
   pkgs,
   lib,
+  utils,
   ...
 }:
 let
   cfg = config.services.meshcentral;
   configFormat = pkgs.formats.json { };
-  configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
 in
 with lib;
 {
@@ -22,6 +22,10 @@ with lib;
         - [simple sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config.json)
         - [complex sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json)
         - [Old homepage with documentation link](https://www.meshcommander.com/meshcentral2)
+
+        Options containing secret data should be set to an attribute set
+        containing the attribute `_secret` - a string pointing to a file
+        containing the value the option should be set to.
       '';
       type = types.submodule {
         freeformType = configFormat.type;
@@ -43,10 +47,16 @@ with lib;
     systemd.services.meshcentral = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile ${configFile}";
+        # Run ExecStartPre as root to ensure access to secret files given dynamic user is turned on
+        ExecStartPre = "+${pkgs.writeShellScript "meshcentral-pre-start" (utils.genJqSecretsReplacementSnippet cfg.settings "/run/meshcentral/config.json")}";
+        ExecStart = "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile /run/meshcentral/config.json";
         DynamicUser = true;
         StateDirectory = "meshcentral";
+        StateDirectoryMode = "0700";
         CacheDirectory = "meshcentral";
+        CacheDirectoryMode = "0700";
+        RuntimeDirectory = "meshcentral";
+        RuntimeDirectoryMode = "0700";
       };
     };
   };
