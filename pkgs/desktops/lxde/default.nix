@@ -24,6 +24,6 @@ lib.makeScope pkgs.newScope (
 
     lxsession = throw "'lxsession' has been moved to top-level."; # added 2025-08-31
 
-    lxtask = callPackage ./core/lxtask { };
+    lxtask = throw "'lxtask' has been moved to top-level."; # added 2025-08-31
   }
 )
