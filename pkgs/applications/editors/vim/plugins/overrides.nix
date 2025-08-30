@@ -1474,15 +1474,6 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  # https://hurl.dev/
-  hurl = buildVimPlugin {
-    pname = "hurl";
-    version = hurl.version;
-    # dontUnpack = true;
-
-    src = "${hurl.src}/contrib/vim";
-  };
-
   hurl-nvim = super.hurl-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
