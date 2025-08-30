@@ -1,0 +1,22 @@
+diff --git a/public/js/extra.js b/public/js/extra.js
+index d4d8ad7bf..ad631a822 100644
+--- a/public/js/extra.js
++++ b/public/js/extra.js
+@@ -187,7 +187,7 @@ export function isValidURL (str) {
+ export function parseMeta (md, edit, view, toc, tocAffix) {
+   let lang = null
+   let dir = null
+-  let breaks = true
++  let breaks = false
+   if (md && md.meta) {
+     const meta = md.meta
+     lang = meta.lang
+@@ -997,7 +997,7 @@ function highlightRender (code, lang) {
+ 
+ export const md = markdownit('default', {
+   html: true,
+-  breaks: true,
++  breaks: false,
+   langPrefix: '',
+   linkify: true,
+   typographer: true,
