@@ -9,20 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdbm";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/gdbm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0C2zxZJu2Hf4gXuBzR+S9T73TKjG21Q/u6AnGzTzk+w=";
+    hash = "sha256-aiRQShTeSnRBA9y5Nr6Xbfb76IzP8mBl5UwcR5RvSl4=";
   };
 
-  patches = [
-    # Remove on next release.
-    ./upstream-darwin-clock-nanosleep-fix.patch
-    ./upstream-lockwait-test-fixes.patch
-    ./upstream-musl-ssize_t-fix.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
     ./freebsd-patch-src-lock-c.patch
   ];
 
