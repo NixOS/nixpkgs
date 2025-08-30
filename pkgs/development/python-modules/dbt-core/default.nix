@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.10.9";
+  version = "1.9.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     tag = "v${version}";
-    hash = "sha256-4K00EVTOTTUHWwTpBlXKoHGof/s/H2acoWZPJ9FmBuk=";
+    hash = "sha256-4lVuocNIjA7Sf9uSJYEqiC2ZxDQtqShP8lRNjQyz778=";
   };
 
   sourceRoot = "${src.name}/core";
