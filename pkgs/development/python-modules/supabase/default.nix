@@ -16,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "supabase-py";
+  pname = "supabase";
   version = "2.16.0";
   pyproject = true;
 
