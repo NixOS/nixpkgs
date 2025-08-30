@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "pulseaudio-dlna";
-  version = "unstable-2021-11-09";
+  version = "pulseaudio-dlna-0.6.6-1";
   format = "setuptools";
 
   src = fetchFromGitHub {
