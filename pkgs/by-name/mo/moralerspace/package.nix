@@ -34,10 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       extraArgs = [ "--version=skip" ];
     })
     (nix-update-script {
-      attrPath = "moralerspace-hwnf";
-      extraArgs = [ "--version=skip" ];
-    })
-    (nix-update-script {
       attrPath = "moralerspace-jpdoc";
       extraArgs = [ "--version=skip" ];
     })
