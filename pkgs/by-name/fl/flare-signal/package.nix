@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchFromGitLab,
+  runCommand,
   cargo,
   meson,
   ninja,
@@ -14,31 +16,56 @@
   gtksourceview5,
   rustPlatform,
   rustc,
-  appstream-glib,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
 }:
 
+let
+  presage = fetchFromGitHub {
+    owner = "whisperfish";
+    repo = "presage";
+    # match with commit from Cargo.toml
+    rev = "123c1f926e359c21b34d099279ee8a92462ce96d";
+    hash = "sha256-qKpPbK5ToFnWucujDlV8qxeT+XrRGYYnm7jp8UOXgZ0=";
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.16.3";
+  # NOTE: also update presage commit
+  version = "0.17.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-uUEeARhKhI6SvzZHLAvDgBjOxw82Yp88c6U0cHeRKoc=";
+    hash = "sha256-Zdzs9ZLvrI5rGhC1K0SLPsv/xMtJEu5vFRnH3+z/keA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-bQiQrl+yqKDGFXN7VfS7VEWKAcT1LtoRZjWq/BwHgKw=";
-  };
+  cargoDeps =
+    let
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = "sha256-XBUpFQy68qwrKgsKi5TeoakalNLTqolv6z5YfyiaEZI=";
+      };
+    in
+    runCommand "${finalAttrs.pname}-${finalAttrs.version}-vendor-patched" { inherit cargoDeps; }
+      # https://github.com/flathub/de.schmidhuberj.Flare/commit/b1352087beaf299569c798bc69e31660712853db
+      # bash
+      ''
+        mkdir $out
+        find $cargoDeps -maxdepth 1 -exec sh -c "ln -s {} $out/\$(basename {})" \;
+        rm $out/presage-store-sqlite-*
+        cp -r $cargoDeps/presage-store-sqlite-* $out
+        chmod +w $out/presage-store-sqlite-*
+        ln -s ${presage}/.sqlx $out/presage-store-sqlite-*
+      '';
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream # for appstream-util
     blueprint-compiler
     desktop-file-utils # for update-desktop-database
     meson
