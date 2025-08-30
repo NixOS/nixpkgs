@@ -4,6 +4,7 @@
   fetchFromGitHub,
   xorg,
   pytest,
+  pytest-asyncio,
   pytest-xvfb,
   i3,
   xlib,
@@ -23,12 +24,21 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "13bzs9dcv27czpnnbgz7a037lm8h991c8gk0qzzk5mq5yak24715";
   };
+
+  patches = [
+    # Upstream expects a very old version of pytest-asyncio. This patch correctly
+    # decorates async fixtures using pytest-asyncio and configures `loop_scope`
+    # where needed.
+    ./fix-async-tests.patch
+  ];
+
   propagatedBuildInputs = [ xlib ];
 
   fontsConf = makeFontsConf { fontDirectories = [ ]; };
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
   nativeCheckInputs = [
     pytest
+    pytest-asyncio
     xdpyinfo
     pytest-xvfb
     xorg.xvfb
