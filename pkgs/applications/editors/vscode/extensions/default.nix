@@ -3989,18 +3989,6 @@ let
         };
       };
 
-      richie5um2.snake-trail = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "snake-trail";
-          publisher = "richie5um2";
-          version = "0.6.0";
-          sha256 = "0wkpq9f48hplrgabb0v1ij6fc4sb8h4a93dagw4biprhnnm3qx49";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
-
       rioj7.commandonallfiles = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "commandOnAllFiles";
@@ -5621,6 +5609,7 @@ let
     mgt19937.typst-preview = throw "The features of 'typst-preview' have been consolidated to 'tinymist', an all-in-one language server for typst"; # Added 2024-07-07
     ms-vscode.go = throw "ms-vscode.go is deprecated in favor of golang.go"; # Added 2024-05-29
     ms-vscode.PowerShell = throw "ms-vscode.PowerShell is deprecated in favor of super.ms-vscode.powershell"; # Added 2024-05-29
+    richie5um2.snake-trail = throw "richie5um2.snake-trail is deprecated"; # Added 2025-08-30
     rioj7.commandOnAllFiles = throw "rioj7.commandOnAllFiles is deprecated in favor of rioj7.commandonallfiles"; # Added 2024-05-29
     WakaTime.vscode-wakatime = throw "WakaTime.vscode-wakatime is deprecated in favor of wakatime.vscode-wakatime"; # Added 2024-05-29
   };
