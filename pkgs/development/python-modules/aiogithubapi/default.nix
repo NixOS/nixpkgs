@@ -11,6 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   sigstore,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   version = "25.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -28,8 +29,6 @@ buildPythonPackage rec {
   };
 
   __darwinAllowLocalNetworking = true;
-
-  pythonRelaxDeps = [ "async-timeout" ];
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
@@ -53,13 +52,12 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Need sigstore is an optional dependencies and need <2
     rm -rf tests/test_helper.py
   '';
