@@ -1,15 +1,19 @@
 {
   lib,
   runCommand,
-  rustc-unwrapped,
+  package,
   sysroot ? null,
+  flavor ? "rustc",
+  makeWrapper,
+  rustc,
+  cargo,
 }:
 
-runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
+runCommand "${package.pname}-wrapper-${package.version}"
   {
     preferLocalBuild = true;
     strictDeps = true;
-    inherit (rustc-unwrapped) outputs;
+    inherit (package) outputs;
 
     env = {
       sysroot = lib.optionalString (sysroot != null) "--sysroot ${sysroot}";
@@ -31,12 +35,14 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
       # because rustc does not support +crt-static host platforms
       # anyway.
       defaultArgs = lib.optionalString (
-        with rustc-unwrapped.stdenv.targetPlatform; isMusl && !isStatic
+        with package.stdenv.targetPlatform; isMusl && !isStatic
       ) "-C target-feature=-crt-static";
     };
 
+    depsBuildBuild = lib.optionals (flavor == "clippy") [ makeWrapper ];
+
     passthru = {
-      inherit (rustc-unwrapped)
+      inherit (package)
         pname
         version
         src
@@ -46,24 +52,50 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
         targetPlatforms
         badTargetPlatforms
         ;
-      unwrapped = rustc-unwrapped;
+      unwrapped = package;
     };
 
-    meta = rustc-unwrapped.meta // {
-      description = "${rustc-unwrapped.meta.description} (wrapper script)";
+    meta = package.meta // {
+      description = "${package.meta.description} (wrapper script)";
       priority = 10;
     };
   }
-  ''
-    mkdir -p $out/bin
-    ln -s ${rustc-unwrapped}/bin/* $out/bin
-    rm $out/bin/{rustc,rustdoc}
-    prog=${rustc-unwrapped}/bin/rustc extraFlagsVar=NIX_RUSTFLAGS \
-        substituteAll ${./rustc-wrapper.sh} $out/bin/rustc
-    prog=${rustc-unwrapped}/bin/rustdoc extraFlagsVar=NIX_RUSTDOCFLAGS \
-        substituteAll ${./rustc-wrapper.sh} $out/bin/rustdoc
-    chmod +x $out/bin/{rustc,rustdoc}
-    ${lib.concatMapStrings (output: "ln -s ${rustc-unwrapped.${output}} \$${output}\n") (
-      lib.remove "out" rustc-unwrapped.outputs
-    )}
-  ''
+  (
+    if flavor == "rustc" then
+      ''
+        mkdir -p $out/bin
+        ln -s ${package}/bin/* $out/bin
+        rm $out/bin/{rustc,rustdoc}
+        prog=${package}/bin/rustc extraFlagsVar=NIX_RUSTFLAGS \
+            substituteAll ${./rustc-wrapper.sh} $out/bin/rustc
+        prog=${package}/bin/rustdoc extraFlagsVar=NIX_RUSTDOCFLAGS \
+            substituteAll ${./rustc-wrapper.sh} $out/bin/rustdoc
+        chmod +x $out/bin/{rustc,rustdoc}
+        ${lib.concatMapStrings (output: "ln -s ${package.${output}} \$${output}\n") (
+          lib.remove "out" package.outputs
+        )}
+      ''
+    else if flavor == "clippy" then
+      ''
+        mkdir -p $out/bin
+        prog=${package}/bin/clippy-driver extraFlagsVar=NIX_CLIPPY_DRIVERFLAGS \
+            substituteAll ${./clippy-wrapper.sh} $out/bin/clippy-driver
+
+        chmod +x $out/bin/clippy-driver
+
+        makeWrapper ${package}/bin/cargo-clippy $out/bin/cargo-clippy \
+            --set CLIPPY_DRIVER $out/bin/clippy-driver \
+            --prefix PATH : ${
+              lib.makeBinPath [
+                rustc
+                cargo
+              ]
+            }
+
+        ${lib.concatMapStrings (output: "ln -s ${package.${output}} \$${output}\n") (
+          lib.remove "out" package.outputs
+        )}
+      ''
+    else
+      throw "Invalid rustc flavor: ${flavor}"
+  )
