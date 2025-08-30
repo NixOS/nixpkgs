@@ -9,12 +9,9 @@ lib.makeScope pkgs.newScope (
 
     inherit (pkgs) gtk2-x11;
 
-    lxappearance = callPackage ./core/lxappearance { };
+    lxappearance = throw "'lxappearance' has been moved to top-level."; # added 2025-08-31
 
-    lxappearance-gtk2 = callPackage ./core/lxappearance {
-      gtk2 = gtk2-x11;
-      withGtk3 = false;
-    };
+    lxappearance-gtk2 = throw "'lxappearance-gtk2' has been moved to top-level."; # added 2025-08-31
 
     lxmenu-data = throw "'lxmenu-data' has been moved to top-level."; # added 2025-08-31
 

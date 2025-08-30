@@ -14422,11 +14422,11 @@ with pkgs;
   ### DESKTOPS/LXDE
 
   lxde = recurseIntoAttrs (callPackage ../desktops/lxde { });
-  # Backwards compatibility aliases
-  inherit (lxde)
-    lxappearance
-    lxappearance-gtk2
-    ;
+
+  lxappearance-gtk2 = callPackage ../by-name/lx/lxappearance/package.nix {
+    gtk2 = gtk2-x11;
+    withGtk3 = false;
+  };
 
   lxqt = recurseIntoAttrs (
     import ../desktops/lxqt {
