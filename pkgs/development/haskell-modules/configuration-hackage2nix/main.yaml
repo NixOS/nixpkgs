@@ -385,6 +385,7 @@ package-maintainers:
     - warp-systemd
     - amazonka
     - libssh2
+    - sitemap
   ncfavier:
     - Agda
     - irc-client
