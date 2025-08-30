@@ -1,0 +1,1320 @@
+{
+  "collectx_bringup": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_cccl": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_crt": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_ctadvisor": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_cudart": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_culibos": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    }
+  },
+  "cuda_cuobjdump": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_cupti": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": true,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": true,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": true,
+        "static": false
+      }
+    }
+  },
+  "cuda_cuxxfilt": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_documentation": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_gdb": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nsight": {
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvcc": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvdisasm": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvml_dev": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvprune": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvrtc": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_nvtx": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_opencl": {
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_profiler_api": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "cuda_sandbox_dev": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    }
+  },
+  "cuda_sanitizer_api": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "driver_assistant": {
+    "linux-all": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "fabricmanager": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "imex": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libcublas": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libcufft": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libcufile": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    }
+  },
+  "libcurand": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libcusolver": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libcusparse": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnpp": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvfatbin": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvidia_nscq": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvjitlink": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvjpeg": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvptxcompiler": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvsdm": {
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "libnvvm": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "mft": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "mft_autocomplete": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "mft_oem": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nsight_compute": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nsight_systems": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nsight_vse": {
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nvidia_driver": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": true,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nvidia_fs": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "nvlsm": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": false
+      }
+    }
+  },
+  "visual_studio_integration": {
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": false,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  }
+}
