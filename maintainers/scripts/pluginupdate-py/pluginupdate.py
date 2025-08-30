@@ -504,13 +504,14 @@ class Editor:
         )
         _prefetch = functools.partial(prefetch, cache=cache)
 
+        to_update_for_filter = [x.replace(".", "-") for x in to_update]
         plugins_to_update = (
             current_plugin_specs
             if len(to_update) == 0
             else [
                 description
                 for description in current_plugin_specs
-                if self.filter_plugins_to_update(description, to_update)
+                if self.filter_plugins_to_update(description, to_update_for_filter)
             ]
         )
 

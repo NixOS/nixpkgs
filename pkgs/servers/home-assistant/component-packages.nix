@@ -4319,7 +4319,8 @@
       ];
     "osoenergy" =
       ps: with ps; [
-      ]; # missing inputs: pyosoenergyapi
+        pyosoenergyapi
+      ];
     "osramlightify" =
       ps: with ps; [
         lightify
@@ -7530,6 +7531,7 @@
     "opnsense"
     "opower"
     "oralb"
+    "osoenergy"
     "otbr"
     "otp"
     "ourgroceries"

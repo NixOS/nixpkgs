@@ -13590,6 +13590,8 @@ self: super: with self; {
 
   pyosmium = callPackage ../development/python-modules/pyosmium { inherit (pkgs) lz4; };
 
+  pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
+
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
@@ -18533,6 +18535,7 @@ self: super: with self; {
         lib.filterAttrs (
           name: value:
           !(builtins.elem name [
+            "tree-sitter-go-template"
             "tree-sitter-sql"
             "tree-sitter-templ"
           ])

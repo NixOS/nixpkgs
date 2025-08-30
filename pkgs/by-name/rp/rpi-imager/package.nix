@@ -10,7 +10,7 @@
   qt6,
   wrapGAppsHook4,
   testers,
-  util-linux,
+  writeShellScriptBin,
   xz,
   gnutls,
   zstd,
@@ -20,27 +20,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.4";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
+    hash = "sha256-HJLl0FOseZgW3DMi8M3SqIN/UHBDkIc09vKcenhSnO8=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  # By default, the builder checks for JSON support in lsblk by running "lsblk --json",
-  # but that throws an error, as /sys/dev doesn't exist in the sandbox.
-  # This patch removes the check.
-  # remove-vendoring.patch from
-  # https://gitlab.archlinux.org/archlinux/packaging/packages/rpi-imager/-/raw/main/remove-vendoring.patch
-  patches = [ ./remove-vendoring-and-lsblk-check.patch ];
+  patches = [ ./remove-vendoring.patch ];
 
   postPatch = ''
-    substituteInPlace ../debian/org.raspberrypi.rpi-imager.desktop \
+    substituteInPlace debian/org.raspberrypi.rpi-imager.desktop \
       --replace-fail "/usr/bin/" ""
+  '';
+
+  preConfigure = ''
+    cd src
   '';
 
   nativeBuildInputs = [
@@ -48,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
     wrapGAppsHook4
-    util-linux
+    # Fool upstream's cmake lsblk check a bit
+    (writeShellScriptBin "lsblk" ''
+      echo "our lsblk has --json support but it doesn't work in our sandbox"
+    '')
   ];
 
   buildInputs = [
@@ -67,16 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  cmakeFlags =
-    # Disable vendoring
-    [
-      (lib.cmakeBool "ENABLE_VENDORING" false)
-    ]
-    # Disable telemetry and update check.
-    ++ lib.optionals (!enableTelemetry) [
-      (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
-      (lib.cmakeBool "ENABLE_TELEMETRY" false)
-    ];
+  cmakeFlags = [
+    # Isn't relevant for Nix
+    (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
+    (lib.cmakeBool "ENABLE_TELEMETRY" enableTelemetry)
+  ];
 
   qtWrapperArgs = [
     "--unset QT_QPA_PLATFORMTHEME"
@@ -105,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
       ymarkus
       anthonyroussel
     ];
-    platforms = lib.platforms.all;
-    # does not build on darwin
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # could not find xz
+    badPlatforms = lib.platforms.darwin;
   };
 })

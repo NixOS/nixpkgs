@@ -20,7 +20,7 @@ let
   nixosBreezePlymouth = pkgs.kdePackages.breeze-plymouth.override {
     logoFile = cfg.logo;
     logoName = "nixos";
-    osName = "NixOS";
+    osName = config.system.nixos.distroName;
     osVersion = config.system.nixos.release;
   };
 
