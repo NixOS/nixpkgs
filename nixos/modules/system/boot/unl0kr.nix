@@ -55,7 +55,7 @@ in
     ];
 
     warnings = lib.mkMerge [
-      (lib.mkIf (config.hardware.amdgpu.initrd.enable) [
+      (lib.mkIf (config.hardware.amdgpu.kernelModule.inInitrd) [
         ''Use early video loading at your risk. It's not guaranteed to work with unl0kr.''
       ])
       (lib.mkIf (config.boot.plymouth.enable) [
