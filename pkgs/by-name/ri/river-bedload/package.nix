@@ -6,7 +6,7 @@
   lib,
   pkg-config,
   stdenv,
-  river,
+  river-classic,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ adamcstephens ];
     mainProgram = "river-bedload";
-    inherit (river.meta) platforms;
+    inherit (river-classic.meta) platforms;
   };
 })
