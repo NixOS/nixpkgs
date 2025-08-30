@@ -33,7 +33,6 @@
   languagetool,
   libgit2,
   llvmPackages,
-  meson,
   neovim-unwrapped,
   nim1,
   nodejs,
@@ -1947,12 +1946,6 @@ in
   material-vim = super.material-vim.overrideAttrs {
     # Optional integration
     checkInputs = [ self.lualine-nvim ];
-  };
-
-  meson = buildVimPlugin {
-    inherit (meson) pname version src;
-    preInstall = "cd data/syntax-highlighting/vim";
-    meta.maintainers = with lib.maintainers; [ vcunat ];
   };
 
   mind-nvim = super.mind-nvim.overrideAttrs {
