@@ -13,6 +13,8 @@
   libXext,
   libXmu,
   libXi,
+  vtk,
+  withVtk ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +35,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Open-Cascade-SAS/OCCT/commit/7236e83dcc1e7284e66dc61e612154617ef715d6.diff";
       hash = "sha256-NoC2mE3DG78Y0c9UWonx1vmXoU4g5XxFUT3eVXqLU60=";
     })
-  ];
+  ]
+  ++ lib.optional (withVtk && lib.versionOlder version "7.9.0") ./vtk-draw-conditional-glx.patch;
 
   nativeBuildInputs = [
     cmake
@@ -49,10 +52,19 @@ stdenv.mkDerivation rec {
     libXmu
     libXi
     rapidjson
-  ];
+  ]
+  ++ lib.optional withVtk vtk;
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
-  cmakeFlags = [ "-DUSE_RAPIDJSON=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_RAPIDJSON" true)
+    # Enable exception handling for release builds.
+    (lib.cmakeBool "BUILD_RELEASE_DISABLE_EXCEPTIONS" false)
+  ]
+  ++ lib.optionals withVtk [
+    (lib.cmakeBool "USE_VTK" true)
+    (lib.cmakeFeature "3RDPARTY_VTK_INCLUDE_DIR" "${lib.getDev vtk}/include/vtk")
+  ];
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
