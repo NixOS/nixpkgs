@@ -27,25 +27,9 @@ let
     name = name;
   }) (changedattrs ++ removedattrs);
 
-  validPackageAttributes = builtins.filter (
-    pkg:
-    if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
-      (
-        let
-          value = lib.attrsets.attrByPath pkg.path null pkgs;
-        in
-        if (builtins.tryEval value).success then
-          if value != null then true else builtins.trace "${pkg.name} exists but is null" false
-        else
-          builtins.trace "Failed to access ${pkg.name} even though it exists" false
-      )
-    else
-      builtins.trace "Failed to locate ${pkg.name}." false
-  ) enrichedAttrs;
-
   attrsWithPackages = builtins.map (
     pkg: pkg // { package = lib.attrsets.attrByPath pkg.path null pkgs; }
-  ) validPackageAttributes;
+  ) enrichedAttrs;
 
   attrsWithMaintainers = builtins.map (
     pkg:
