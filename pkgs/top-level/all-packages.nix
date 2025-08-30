@@ -13039,7 +13039,7 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
+  skrooge = kdePackages.callPackage ../applications/office/skrooge { };
 
   soci = callPackage ../development/libraries/soci { };
 
