@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nixf,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.NIXF_TIDY_PATH = lib.getExe nixf;
 
   cargoHash = "sha256-nrr2/lTWPyH7MsG2hSMJjbFCpHsKWINEP8jwSYPhocg=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI wrapper for nixf-tidy with fancy diagnostic output";
