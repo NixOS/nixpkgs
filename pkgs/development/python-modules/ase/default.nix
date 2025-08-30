@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.25.0-unstable-2025-06-24";
+  version = "3.26.0";
   pyproject = true;
 
   src = fetchFromGitLab {
