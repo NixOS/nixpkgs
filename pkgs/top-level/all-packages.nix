@@ -3700,8 +3700,6 @@ with pkgs;
     nomad_1_10
     ;
 
-  nomacs-qt6 = nomacs.override { qtVersion = 6; };
-
   nth = with python3Packages; toPythonApplication name-that-hash;
 
   nvchecker =
