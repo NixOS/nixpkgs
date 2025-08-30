@@ -1,0 +1,12 @@
+From: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pdf2htmlex
+--- a/glib/poppler-private.h	2020-05-28 05:23:59.000000000 +0800
++++ b/glib/poppler-private.h	2022-06-07 21:57:01.848597082 +0800
+@@ -154,7 +154,7 @@
+ GType                                                                                 \
+ type_name##_get_type (void)                                                           \
+ {                                                                                     \
+-        static volatile gsize g_define_type_id__volatile = 0;                         \
++        static gsize g_define_type_id__volatile = 0;                         \
+ 	if (g_once_init_enter (&g_define_type_id__volatile)) {                        \
+ 	        GType g_define_type_id =                                              \
+ 		    g_boxed_type_register_static (g_intern_static_string (#TypeName), \

@@ -1,0 +1,16 @@
+diff --git a/pdf2htmlEX/CMakeLists.txt b/pdf2htmlEX/CMakeLists.txt
+index b5cb520..dad760e 100644
+--- a/pdf2htmlEX/CMakeLists.txt
++++ b/pdf2htmlEX/CMakeLists.txt
+@@ -227,6 +227,11 @@ set(PDF2HTMLEX_SRC ${PDF2HTMLEX_SRC}
+ add_executable(pdf2htmlEX ${PDF2HTMLEX_SRC})
+ target_link_libraries(pdf2htmlEX ${PDF2HTMLEX_LIBS})
+ 
++if(APPLE)
++  target_link_libraries(pdf2htmlEX PRIVATE iconv)
++  target_link_libraries(pdf2htmlEX PRIVATE "-framework CoreServices" "-framework CoreFoundation")
++endif()
++
+ add_custom_target(pdf2htmlEX_resources ALL DEPENDS
+     ${CMAKE_SOURCE_DIR}/share/base.min.css
+     ${CMAKE_SOURCE_DIR}/share/fancy.min.css

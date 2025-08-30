@@ -1,0 +1,16 @@
+diff --git a/pdf2htmlEX/CMakeLists.txt b/pdf2htmlEX/CMakeLists.txt
+index dad760e..767992e 100644
+--- a/pdf2htmlEX/CMakeLists.txt
++++ b/pdf2htmlEX/CMakeLists.txt
+@@ -232,6 +232,11 @@ if(APPLE)
+   target_link_libraries(pdf2htmlEX PRIVATE "-framework CoreServices" "-framework CoreFoundation")
+ endif()
+ 
++pkg_check_modules(GLIB REQUIRED glib-2.0 gio-2.0 gobject-2.0)
++target_include_directories(pdf2htmlEX PRIVATE ${GLIB_INCLUDE_DIRS})
++link_directories(${GLIB_LIBRARY_DIRS})
++target_link_libraries(pdf2htmlEX PRIVATE ${GLIB_LIBRARIES})
++
+ add_custom_target(pdf2htmlEX_resources ALL DEPENDS
+     ${CMAKE_SOURCE_DIR}/share/base.min.css
+     ${CMAKE_SOURCE_DIR}/share/fancy.min.css
