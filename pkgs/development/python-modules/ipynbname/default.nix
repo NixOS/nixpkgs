@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ipynbname";
-  version = "2024.1.0.0";
+  version = "2025.8.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HTxpze6Kl4FPRWpyBOnMGVtLu0ueRcvnV3lrFiST9gY=";
+    hash = "sha256-3Mg2fGTEqfC6pqzqPlCf1mlr9dgcmrzrOG4q1u/KyTU=";
   };
 
   build-system = [ setuptools ];
