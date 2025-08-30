@@ -33,11 +33,13 @@ let
         owner = mkOption {
           type = types.str;
           default = "${cfg.user}";
+          defaultText = literalExpression "config.services.rspamd.user";
           description = "Owner to set on unix socket";
         };
         group = mkOption {
           type = types.str;
           default = "${cfg.group}";
+          defaultText = literalExpression "config.services.rspamd.group";
           description = "Group to set on unix socket";
         };
         rawEntry = mkOption {
