@@ -38,7 +38,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_1;
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
