@@ -18,6 +18,7 @@
   font-sun-misc,
   font-util,
   font-winitzki-cyrillic,
+  font-xfree86-type1,
   gccmakedep,
   ico,
   imake,
@@ -152,6 +153,7 @@ self: with self; {
   fontsunmisc = font-sun-misc;
   fontutil = font-util;
   fontwinitzkicyrillic = font-winitzki-cyrillic;
+  fontxfree86type1 = font-xfree86-type1;
   libAppleWM = libapplewm;
   libFS = libfs;
   libICE = libice;
@@ -1187,44 +1189,6 @@ self: with self; {
         freetype
         xorgproto
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontxfree86type1 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-xfree86-type1";
-      version = "1.0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-xfree86-type1-1.0.5.tar.xz";
-        sha256 = "0ds8xbgxy9h0bqn2p38vylfzn8cqkp7n51kwmw1c18ayi9w2qg59";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
