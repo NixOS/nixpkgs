@@ -405,6 +405,10 @@ let
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
               "test-wasi"
             ]
+            ++ lib.optionals stdenv.hostPlatform.isMusl [
+              # Doesn't work in sandbox on x86_64.
+              "test-dns-set-default-order"
+            ]
             ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
               # These tests fail on x86_64-darwin (even without sandbox).
               # TODO: revisit at a later date.
