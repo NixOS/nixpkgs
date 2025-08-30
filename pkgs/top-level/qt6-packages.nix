@@ -134,6 +134,10 @@ makeScopeWithSplicing' {
         suffix = "qt6";
       };
 
+      python-qt = callPackage ../development/libraries/python-qt {
+        qt6Support = true;
+      };
+
       sailfish-access-control-plugin =
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
