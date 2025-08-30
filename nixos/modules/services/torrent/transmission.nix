@@ -387,7 +387,7 @@ in
         RuntimeDirectoryMode = "755";
         # This is for BindPaths= and BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
-        UMask = "0066";
+        UMask = cfg.settings.umask;
         # Using RootDirectory= makes it possible
         # to use the same paths download-dir/incomplete-dir
         # (which appear in user's interfaces) without requiring cfg.user
