@@ -16,7 +16,7 @@ lib.makeScope pkgs.newScope (
       withGtk3 = false;
     };
 
-    lxmenu-data = callPackage ./core/lxmenu-data { };
+    lxmenu-data = throw "'lxmenu-data' has been moved to top-level."; # added 2025-08-31
 
     lxpanel = throw "'lxpanel' has been moved to top-level."; # added 2025-08-31
 

@@ -14426,7 +14426,6 @@ with pkgs;
   inherit (lxde)
     lxappearance
     lxappearance-gtk2
-    lxmenu-data
     ;
 
   lxqt = recurseIntoAttrs (
