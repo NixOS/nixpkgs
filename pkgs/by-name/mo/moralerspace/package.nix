@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "moralerspace";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchzip {
     url = "https://github.com/yuru7/moralerspace/releases/download/v${finalAttrs.version}/Moralerspace_v${finalAttrs.version}.zip";
-    hash = "sha256-sItgkidfmOPKtMx8+eaVFn8hK9cRxYShIsNXTh5dJfk=";
+    hash = "sha256-RWpJt59Yvt/nhu6xeyR3eJKRaw+477ZXAPztt7Clt7Q=";
   };
 
   installPhase = ''
