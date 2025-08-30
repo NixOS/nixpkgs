@@ -21,6 +21,9 @@ let
         abi = lib.systems.parse.abis.llvm;
       }
     );
+
+  toolchainAttrs = lib.attrNames (builtins.removeAttrs lib.systems.toolchain [ "chooseComponent" ]);
+  hostPlatform = builtins.removeAttrs stdenv.hostPlatform toolchainAttrs;
 in
 self: super: {
   pkgsLLVM = nixpkgsFun {
@@ -33,7 +36,7 @@ self: super: {
     # Bootstrap a cross stdenv using the LLVM toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
-    crossSystem = stdenv.hostPlatform // {
+    crossSystem = hostPlatform // {
       useLLVM = true;
       linker = "lld";
     };
@@ -49,7 +52,7 @@ self: super: {
     # Bootstrap a cross stdenv using the Aro C compiler.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
-    crossSystem = stdenv.hostPlatform // {
+    crossSystem = hostPlatform // {
       useArocc = true;
       linker = "lld";
     };
@@ -65,7 +68,7 @@ self: super: {
     # Bootstrap a cross stdenv using the Zig toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
-    crossSystem = stdenv.hostPlatform // {
+    crossSystem = hostPlatform // {
       useZig = true;
       linker = "lld";
     };
