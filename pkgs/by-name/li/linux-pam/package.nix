@@ -21,7 +21,7 @@
   docbook_xsl_ns,
   nix-update-script,
   withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  withAudit ? lib.meta.availableOn stdenv.hostPlatform audit,
+  withAudit ? lib.meta.availableOn stdenv.hostPlatform audit && !stdenv.buildPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
