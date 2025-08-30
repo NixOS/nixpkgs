@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-Dv4I50LQcr8fOaCCdaKkz+pHIG05UBQAdDs7gGngm4Y=";
+    hash = "sha256-TssyKO5v3xqSDjS3DYIlO7iOx/zzS3E9O88V9R7S5Ac=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ buildGoModule rec {
     ./kernel-module-path.patch
   ];
 
-  vendorHash = "sha256-QFDQkl1QuIc0fUK0raVxmPT7AF6fsKlQ4F0dzOM9fcw=";
+  vendorHash = "sha256-tRpylYpEGF6XqtBl7ESYlXKEEAt+Jws4x4VlUVW8SNI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
