@@ -121,11 +121,6 @@ buildPythonPackage rec {
     "network"
   ];
 
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
