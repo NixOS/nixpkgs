@@ -117,7 +117,6 @@ buildGoModule (finalAttrs: {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      vrifox
       saturn745
       loc
     ];
