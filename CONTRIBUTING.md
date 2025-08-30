@@ -526,7 +526,15 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-## Merge conventions
+## Review and Merge conventions
+
+Comments on Pull Requests are considered non-blocking by default.
+Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
+A reviewer who submits a blocking review should be available for discussion and re-review.
+An abandoned review may be dismissed after reasonable time was given at the discretion of the merger.
+
+All suggestions for change, blocking or not, should be acknowledged before merge.
+This can happen implicitly by applying the suggestion, or explicitly by rejecting it.
 
 To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [checkout the PR](https://cli.github.com/manual/gh_pr_checkout) and push directly to the contributor's branch before merging.
 Committers will carefully weigh the cost of another review cycle against the feelings of the contributor when pushing to their branch.
