@@ -6,21 +6,12 @@
   extra-cmake-modules,
   pkg-config,
   httplib,
-  qtbase,
-  qtimageformats,
-  qtwebengine,
-  qtx11extras,
   libarchive,
   libXdmcp,
   libpthreadstubs,
-  wrapQtAppsHook,
   xcbutilkeysyms,
+  qt6,
 }:
-
-let
-  isQt5 = lib.versions.major qtbase.version == "5";
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
   version = "0.7.2";
@@ -36,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -44,12 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     libXdmcp
     libarchive
     libpthreadstubs
-    qtbase
-    qtimageformats
-    qtwebengine
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtwebengine
     xcbutilkeysyms
-  ]
-  ++ lib.optionals isQt5 [ qtx11extras ];
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
@@ -68,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
       peterhoeg
     ];
     mainProgram = "zeal";
-    inherit (qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
   };
 })

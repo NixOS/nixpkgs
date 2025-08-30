@@ -11922,12 +11922,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
-  zeal = zeal-qt5;
-  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
-    qtx11extras = null; # Because it does not exist in qt6
-  };
-
   ### APPLICATIONS / GIS
 
   qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
