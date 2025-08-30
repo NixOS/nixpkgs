@@ -38,6 +38,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = lib.licenses.mit;
     mainProgram = "pricehist";
-    maintainers = with lib.maintainers; [ chrpinedo ];
   };
 }
