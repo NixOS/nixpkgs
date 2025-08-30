@@ -5,9 +5,9 @@ let
 in
 {
   sublime-merge = common {
-    buildVersion = "2110";
-    aarch64sha256 = "lG95VgRsicSRjve7ESTamU9dp/xBjR6yyLL+1wh6BXg=";
-    x64sha256 = "v5CFqS+bB0Oe0fZ+vP0zxrJ2SUctNXKqODmB8M9XMIY=";
+    buildVersion = "2112";
+    aarch64sha256 = "XtJ4bAKiCZnBEG1ssXhViuyOsLNdeahHAkWZqqCRmvU=";
+    x64sha256 = "rzk3PlGpGXDh3Ig3gKb9WSER6PzPKmp1PJJiD0sGVS4=";
   } { };
 
   sublime-merge-dev = common {
