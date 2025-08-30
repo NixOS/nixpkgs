@@ -134,16 +134,10 @@
   withFonts ? false,
   withHelp ? true,
   kdeIntegration ? false,
-  qtbase ? null,
-  qtx11extras ? null,
-  qtwayland ? null,
-  ki18n ? null,
-  kconfig ? null,
-  kcoreaddons ? null,
-  kio ? null,
-  kwindowsystem ? null,
   variant ? "fresh",
   debugLogging ? variant == "still",
+  qt6,
+  kdePackages,
   symlinkJoin,
   libpq,
   makeFontsConf,
@@ -164,24 +158,6 @@
   lp_solve,
   xmlsec,
   libcmis,
-  # The rest are used only in passthru, for the wrapper
-  kauth ? null,
-  kcompletion ? null,
-  kconfigwidgets ? null,
-  kglobalaccel ? null,
-  kitemviews ? null,
-  knotifications ? null,
-  ktextwidgets ? null,
-  kwidgetsaddons ? null,
-  kxmlgui ? null,
-  phonon ? null,
-  qtdeclarative ? null,
-  qtmultimedia ? null,
-  qtquickcontrols ? null,
-  qtsvg ? null,
-  qttools ? null,
-  solid ? null,
-  sonnet ? null,
 }:
 
 assert builtins.elem variant [
@@ -272,8 +248,6 @@ let
     help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
-  qtMajor = lib.versions.major qtbase.version;
-
   # See `postPatch` for details
   kdeDeps = symlinkJoin {
     name = "libreoffice-kde-dependencies-${version}";
@@ -284,14 +258,13 @@ let
           (getLib e)
         ])
         [
-          qtbase
-          qtmultimedia
-          qtx11extras
-          kconfig
-          kcoreaddons
-          ki18n
-          kio
-          kwindowsystem
+          qt6.qtbase
+          qt6.qtmultimedia
+          kdePackages.kconfig
+          kdePackages.kcoreaddons
+          kdePackages.ki18n
+          kdePackages.kio
+          kdePackages.kwindowsystem
         ]
     );
   };
@@ -402,7 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
     zip
   ]
   ++ optionals kdeIntegration [
-    qtbase
+    qt6.qtbase
   ];
 
   buildInputs =
@@ -503,10 +476,9 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ optionals kdeIntegration [
-      qtbase
-      qtx11extras
-      kcoreaddons
-      kio
+      qt6.qtbase
+      kdePackages.kcoreaddons
+      kdePackages.kio
     ];
 
   preConfigure = ''
@@ -534,10 +506,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
     # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
     # add the missing dependencies to it).
-    export QT${qtMajor}INC=${kdeDeps}/include
-    export QT${qtMajor}LIB=${kdeDeps}/lib
-    export KF${qtMajor}INC="${kdeDeps}/include ${kdeDeps}/include/KF${qtMajor}"
-    export KF${qtMajor}LIB=${kdeDeps}/lib
+    export QT6INC=${kdeDeps}/include
+    export QT6LIB=${kdeDeps}/lib
+    export KF6INC="${kdeDeps}/include ${kdeDeps}/include/KF6"
+    export KF6LIB=${kdeDeps}/lib
   '';
 
   configureFlags = [
@@ -619,11 +591,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-zxcvbn"
   ]
   ++ optionals kdeIntegration [
-    "--enable-kf${qtMajor}"
-    "--enable-qt${qtMajor}"
-  ]
-  ++ optionals (kdeIntegration && qtMajor == "5") [
-    "--enable-gtk3-kde5"
+    "--enable-kf6"
+    "--enable-qt6"
   ]
   ++ (
     if variant == "fresh" || variant == "collabora" then
@@ -657,9 +626,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  # Disable tests for the Qt5 build, as they seem even more flaky
-  # than usual, and we will drop the Qt5 build after 24.11 anyway.
-  doCheck = !(kdeIntegration && qtMajor == "5");
+  doCheck = true;
 
   preCheck = ''
     export HOME=$(pwd)
@@ -715,7 +682,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gtk3;
     # Although present in qtPackages, we need qtbase.qtPluginPrefix and
     # qtbase.qtQmlPrefix
-    inherit qtbase;
+    inherit (qt6) qtbase;
     gst_packages = with gst_all_1; [
       gst-libav
       gst-plugins-bad
@@ -725,35 +692,34 @@ stdenv.mkDerivation (finalAttrs: {
       gstreamer
     ];
     qmlPackages = [
-      ki18n
-      knotifications
-      qtdeclarative
-      qtmultimedia
-      qtquickcontrols
-      qtwayland
-      solid
-      sonnet
+      kdePackages.ki18n
+      kdePackages.knotifications
+      qt6.qtdeclarative
+      qt6.qtmultimedia
+      qt6.qtwayland
+      kdePackages.solid
+      kdePackages.sonnet
     ];
     qtPackages = [
-      kauth
-      kcompletion
-      kconfigwidgets
-      kglobalaccel
-      ki18n
-      kio
-      kitemviews
-      ktextwidgets
-      kwidgetsaddons
-      kwindowsystem
-      kxmlgui
-      phonon
-      qtbase
-      qtdeclarative
-      qtmultimedia
-      qtsvg
-      qttools
-      qtwayland
-      sonnet
+      kdePackages.kauth
+      kdePackages.kcompletion
+      kdePackages.kconfigwidgets
+      kdePackages.kglobalaccel
+      kdePackages.ki18n
+      kdePackages.kio
+      kdePackages.kitemviews
+      kdePackages.ktextwidgets
+      kdePackages.kwidgetsaddons
+      kdePackages.kwindowsystem
+      kdePackages.kxmlgui
+      kdePackages.phonon
+      qt6.qtbase
+      qt6.qtdeclarative
+      qt6.qtmultimedia
+      qt6.qtsvg
+      qt6.qttools
+      qt6.qtwayland
+      kdePackages.sonnet
     ];
   };
 
