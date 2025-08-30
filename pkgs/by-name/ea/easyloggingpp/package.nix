@@ -8,25 +8,32 @@
   cmake,
   gtest,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyloggingpp";
   version = "9.97.1";
+
   src = fetchFromGitHub {
-    owner = "amrayn";
+    owner = "abumq";
     repo = "easyloggingpp";
-    rev = "v${version}";
-    sha256 = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ gtest ];
-  cmakeFlags = [ "-Dtest=ON" ];
+
+  cmakeFlags = [ (lib.cmakeBool "test" true) ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
+
   meta = {
     description = "C++ logging library";
-    homepage = "https://github.com/amrayn/easyloggingpp";
+    homepage = "https://github.com/abumq/easyloggingpp";
+    changelog = "https://github.com/abumq/easyloggingpp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ acowley ];
     platforms = lib.platforms.all;
   };
-}
+})
