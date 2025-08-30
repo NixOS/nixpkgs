@@ -16,18 +16,22 @@
   ffmpeg,
   cacert,
   zlib,
+  writeShellScript,
+  nix-update,
 }:
 
 let
-  version = "1.1.0";
+  version = "1.3.0";
   withSubprojects = stdenv.mkDerivation {
-    name = "sources-with-subprojects";
+    pname = "sources-with-subprojects";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "vivictorg";
       repo = "vivictpp";
-      rev = "v${version}";
-      hash = "sha256-ScuCOmcK714YXEHncizwj6EWdiNIJA1xRMn5gfmg4K4=";
+      tag = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-yzUgLZbqEzyJINWQUTC/j33XbjSXP1vpDlgiKv6Jx9Q=";
     };
 
     nativeBuildInputs = [
@@ -45,7 +49,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-/6nuTKjQEXfJlHkTkeX/A4PeGb8SOk6Q801gjx1SB6M=";
+    outputHash = "sha256-PtOb47QOffGje1U8Tle9AQon7ZCgMp/lITPAfM9/wr4=";
   };
 in
 stdenv.mkDerivation {
@@ -76,6 +80,11 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     patchShebangs .
+  '';
+
+  passthru.updateScript = writeShellScript "update-vivictpp" ''
+    ${lib.getExe nix-update} vivictpp.src
+    ${lib.getExe nix-update} vivictpp --version skip
   '';
 
   meta = with lib; {
