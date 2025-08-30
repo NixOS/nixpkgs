@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.3.5";
+  version = "2.4.1";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.9";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
-    hash = "sha256-zhTDr4GyE4jridK3ee8ae3v5behMbuo86q9WdrBVqQg=";
+    hash = "sha256-nzhhtnKKOHA+Cw1y+BpYsyQklzkDnmFRKGIfaJ/dmaQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
