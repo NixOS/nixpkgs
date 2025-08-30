@@ -13,7 +13,7 @@
 #
 {
   system ? builtins.currentSystem,
-  nixpkgs ? null,
+  nixpkgs ? ./.,
 }:
 let
   inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
