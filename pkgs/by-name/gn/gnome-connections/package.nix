@@ -17,6 +17,8 @@
   libxml2,
   gtk-vnc,
   gtk-frdp,
+  spice-gtk,
+  spice-protocol,
   gnome,
 }:
 
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libxml2
     gtk-frdp
+    spice-gtk
+    spice-protocol
   ];
 
   passthru = {
