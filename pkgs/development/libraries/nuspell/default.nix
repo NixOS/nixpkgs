@@ -10,14 +10,14 @@
   enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuspell";
   version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.lgpl3Plus;
-    changelog = "https://github.com/nuspell/nuspell/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nuspell/nuspell/blob/${finalAttrs.src.tag}/CHANGELOG.md";
   };
-}
+})
