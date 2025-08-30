@@ -14190,6 +14190,8 @@ self: super: with self; {
 
   pysrt = callPackage ../development/python-modules/pysrt { };
 
+  pysrs = callPackage ../development/python-modules/pysrs { };
+
   pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystac = callPackage ../development/python-modules/pystac { };
