@@ -16,7 +16,6 @@
   nixosTests,
   python3,
   makeWrapper,
-  runtimeShell,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -36,6 +35,7 @@
   vfkit,
   testers,
   podman,
+  man-db,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -103,6 +103,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     go-md2man
+    man-db
     installShellFiles
     makeWrapper
     python3
@@ -124,7 +125,6 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
