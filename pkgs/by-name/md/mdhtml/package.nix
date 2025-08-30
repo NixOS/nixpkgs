@@ -23,7 +23,6 @@ buildGoModule rec {
     homepage = "https://codeberg.org/Tomkoid/mdhtml";
     license = licenses.mit;
     changelog = "https://codeberg.org/Tomkoid/mdhtml/releases";
-    maintainers = with maintainers; [ tomkoid ];
     mainProgram = "mdhtml";
   };
 }

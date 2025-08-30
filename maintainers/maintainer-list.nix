@@ -26078,10 +26078,6 @@
     github = "tomjnixon";
     githubId = 178226;
   };
-  tomkoid = {
-    email = "tomaszierl@outlook.com";
-    name = "Tomkoid";
-  };
   Tommimon = {
     name = "Tommaso Montanari";
     email = "sefymw7q8@mozmail.com";
