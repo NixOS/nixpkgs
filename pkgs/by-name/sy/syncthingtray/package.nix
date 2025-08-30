@@ -2,21 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  qtwebengine,
-  qtdeclarative,
-  extra-cmake-modules,
   cpp-utilities,
-  qtutilities,
-  qtforkawesome,
   boost,
-  wrapQtAppsHook,
   cmake,
-  kio,
-  plasma-framework,
-  qttools,
+  kdePackages,
   iconv,
   cppunit,
   syncthing,
@@ -44,42 +33,46 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OtAHejLNHumlZUPy3HRKF/lne3y2VXul1FlAMyrz6dc=";
   };
 
   buildInputs = [
+    cpp-utilities
+    boost
+  ]
+  ++ (with kdePackages; [
     qtbase
     qtsvg
-    cpp-utilities
     qtutilities
-    boost
     qtforkawesome
-  ]
+  ])
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ iconv ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
-  ++ lib.optionals webviewSupport [ qtwebengine ]
-  ++ lib.optionals jsSupport [ qtdeclarative ]
-  ++ lib.optionals kioPluginSupport [ kio ]
-  ++ lib.optionals plasmoidSupport [ plasma-framework ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ kdePackages.qtwayland ]
+  ++ lib.optionals webviewSupport [ kdePackages.qtwebengine ]
+  ++ lib.optionals jsSupport [ kdePackages.qtdeclarative ]
+  ++ lib.optionals kioPluginSupport [ kdePackages.kio ]
+  ++ lib.optionals plasmoidSupport [ kdePackages.libplasma ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
     cmake
-    qttools
     # Although these are test dependencies, we add them anyway so that we test
     # whether the test units compile. On Darwin we don't run the tests but we
     # still build them.
     cppunit
     syncthing
   ]
-  ++ lib.optionals plasmoidSupport [ extra-cmake-modules ];
+  ++ (with kdePackages; [
+    wrapQtAppsHook
+    qttools
+  ])
+  ++ lib.optionals plasmoidSupport [ kdePackages.extra-cmake-modules ];
 
   # syncthing server seems to hang on darwin, causing tests to fail.
   doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin kdePackages.qtbase}/${kdePackages.qtbase.qtPluginPrefix}"
   '';
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # put the app bundle into the proper place /Applications instead of /bin
@@ -94,14 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   cmakeFlags = [
-    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
-    "-DKF_PACKAGE_PREFIX=KF${lib.versions.major qtbase.version}"
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major kdePackages.qtbase.version}"
+    "-DKF_PACKAGE_PREFIX=KF${lib.versions.major kdePackages.qtbase.version}"
     "-DBUILD_TESTING=ON"
     # See https://github.com/Martchus/syncthingtray/issues/208
     "-DEXCLUDE_TESTS_FROM_ALL=OFF"
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
-    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}"
     "-DBUILD_SHARED_LIBS=ON"
   ]
   ++ lib.optionals (!plasmoidSupport) [ "-DNO_PLASMOID=ON" ]
@@ -113,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Martchus/syncthingtray";
     description = "Tray application and Dolphin/Plasma integration for Syncthing";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "syncthingtray";
   };
 })

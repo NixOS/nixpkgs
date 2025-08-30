@@ -1,28 +1,13 @@
 {
   buildGo124Module,
   cmake,
-  extra-cmake-modules,
   fetchFromGitHub,
   git,
   go_1_24,
-  kconfig,
-  kcoreaddons,
-  kdbusaddons,
-  kguiaddons,
-  ki18n,
-  kirigami,
-  kirigami-addons,
-  knotifications,
-  kwindowsystem,
   lib,
   nlohmann_json,
-  qqc2-desktop-style,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qtwayland,
   stdenv,
-  wrapQtAppsHook,
+  kdePackages,
 }:
 
 let
@@ -31,7 +16,7 @@ let
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mKkHp6ZRTTepg/wo/1jeWBERRezT6hz0EL3ZDlS7nGk=";
   };
 
@@ -63,36 +48,42 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     git
     go_1_24
+  ]
+  ++ (with kdePackages; [
     wrapQtAppsHook
-  ];
+    extra-cmake-modules
+  ]);
 
-  buildInputs = [
-    kconfig
-    kcoreaddons
-    kdbusaddons
-    kguiaddons
-    ki18n
-    kirigami
-    kirigami-addons
-    knotifications
-    kwindowsystem
-    nlohmann_json
-    qqc2-desktop-style
-    qtbase
-    qtdeclarative
-    qtsvg
-    qtwayland
-  ];
+  buildInputs =
+    with kdePackages;
+    [
+      kconfig
+      kcoreaddons
+      kdbusaddons
+      kguiaddons
+      ki18n
+      kirigami
+      kirigami-addons
+      knotifications
+      kwindowsystem
+      qtbase
+      qtdeclarative
+      qtsvg
+      qtwayland
+      qqc2-desktop-style
+    ]
+    ++ [
+      nlohmann_json
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI to monitor and manage Tailscale on your Linux desktop";
     homepage = "https://github.com/f-koehler/KTailctl";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ k900 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "ktailctl";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
