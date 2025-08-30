@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   perl,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moarvm";
-  version = "2025.06";
+  version = "2025.08";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
-    owner = "moarvm";
-    repo = "moarvm";
-    rev = version;
-    hash = "sha256-QtJ8cLAbsFJ26wkfQCbIMVU1ArWlAXjsQ/RJbQ0wRNo=";
+    owner = "MoarVM";
+    repo = "MoarVM";
+    tag = finalAttrs.version;
+    hash = "sha256-e7X2Mqe63+kGSWRY3UesfOXe6Pf4uNd5WcDIpluAR3A=";
     fetchSubmodules = true;
   };
 
@@ -30,10 +31,10 @@ stdenv.mkDerivation rec {
       --replace '`sw_vers -productVersion`' '"11.0"'
   '';
 
-  buildInputs = [ perl ];
-  doCheck = false; # MoarVM does not come with its own test suite
+  configureScript = "${lib.getExe perl} ./Configure.pl";
 
-  configureScript = "${perl}/bin/perl ./Configure.pl";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
@@ -47,4 +48,4 @@ stdenv.mkDerivation rec {
     mainProgram = "moar";
     platforms = lib.platforms.unix;
   };
-}
+})
