@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   fetchYarnDeps,
   lib,
@@ -72,7 +72,7 @@ let
     dontFixup = true;
   });
 in
-buildGo123Module {
+buildGoModule {
   inherit
     pname
     src

@@ -147,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals x11Support [
       xorg.libX11
+      xorg.libxcb
       xorg.libXScrnSaver
       xorg.libXcursor
       xorg.libXext

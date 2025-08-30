@@ -18294,9 +18294,14 @@ self: super: with self; {
 
   tivars = callPackage ../development/python-modules/tivars { };
 
-  tkinter = callPackage ../development/python-modules/tkinter {
-    py = python.override (lib.optionalAttrs (!python.isPyPy) { x11Support = true; });
-  };
+  tkinter =
+    if isPyPy then
+      null
+    else
+      callPackage ../development/python-modules/tkinter {
+        tcl = pkgs.tcl-9_0;
+        tk = pkgs.tk-9_0;
+      };
 
   tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
 
@@ -18754,6 +18759,8 @@ self: super: with self; {
   typer = callPackage ../development/python-modules/typer { };
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
+
+  typer-slim = self.typer.override { package = "typer-slim"; };
 
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 

@@ -17,6 +17,7 @@
   wayland-scanner,
   nix-update-script,
   libX11,
+  libxcb,
   libXcursor,
   libXi,
   libXrandr,
@@ -65,6 +66,7 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libX11
+    libxcb
     libXcursor
     libXi
     libXrandr

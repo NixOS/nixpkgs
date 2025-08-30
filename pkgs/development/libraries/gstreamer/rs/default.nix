@@ -127,17 +127,6 @@ let
       ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
-
-  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or [ ]) ++ [
-      (fetchpatch {
-        name = "cargo-c-test-rlib-fix.patch";
-        url = "https://github.com/lu-zero/cargo-c/commit/dd02009d965cbd664785149a90d702251de747b3.diff";
-        hash = "sha256-Az0WFF9fc5+igcV8C/QFhq5GE4PAyGEO84D9ECxx3v0=";
-      })
-    ];
-  });
 in
 assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
@@ -207,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
-    cargo-c'
+    cargo-c
     nasm
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

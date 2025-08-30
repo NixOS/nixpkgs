@@ -347,10 +347,6 @@ with pkgs;
 
   cup-docker-noserver = cup-docker.override { withServer = false; };
 
-  deck = callPackage ../by-name/de/deck/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -1206,9 +1202,9 @@ with pkgs;
 
   # The full-featured Git.
   gitFull = git.override {
-    svnSupport = true;
+    svnSupport = stdenv.buildPlatform == stdenv.hostPlatform;
     guiSupport = true;
-    sendEmailSupport = true;
+    sendEmailSupport = stdenv.buildPlatform == stdenv.hostPlatform;
     withSsh = true;
     withLibsecret = !stdenv.hostPlatform.isDarwin;
   };
@@ -1664,9 +1660,7 @@ with pkgs;
 
   inherit (cue) writeCueValidator;
 
-  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod {
-    buildGoModule = buildGo123Module;
-  };
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
 
   dazel = python3Packages.callPackage ../development/tools/dazel { };
 
@@ -4593,9 +4587,7 @@ with pkgs;
   };
   bashInteractiveFHS = bashFHS;
 
-  carapace = callPackage ../shells/carapace {
-    buildGoModule = buildGo123Module;
-  };
+  carapace = callPackage ../shells/carapace { };
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
@@ -6210,42 +6202,6 @@ with pkgs;
     pythonAttr = "python27Full";
     x11Support = true;
   };
-  python3Full = python3.override {
-    self = python3Full;
-    pythonAttr = "python3Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
-  python310Full = python310.override {
-    self = python310Full;
-    pythonAttr = "python310Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
-  python311Full = python311.override {
-    self = python311Full;
-    pythonAttr = "python311Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
-  python312Full = python312.override {
-    self = python312Full;
-    pythonAttr = "python312Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
-  python313Full = python313.override {
-    self = python313Full;
-    pythonAttr = "python313Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
-  python314Full = python314.override {
-    self = python314Full;
-    pythonAttr = "python314Full";
-    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
-    x11Support = true;
-  };
 
   # https://py-free-threading.github.io
   python313FreeThreading = python313.override {
@@ -6369,12 +6325,10 @@ with pkgs;
 
   inherit
     ({
-      spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix { };
       spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix { };
       spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix { };
       spidermonkey_140 = callPackage ../development/interpreters/spidermonkey/140.nix { };
     })
-    spidermonkey_91
     spidermonkey_115
     spidermonkey_128
     spidermonkey_140
@@ -8784,7 +8738,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_31;
+  protobuf = protobuf_32;
 
   inherit
     ({
@@ -9361,16 +9315,11 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_24;
-  buildGoModule = buildGo124Module;
+  go = go_1_25;
+  buildGoModule = buildGo125Module;
 
   go_latest = go_1_25;
   buildGoLatestModule = buildGo125Module;
-
-  go_1_23 = callPackage ../development/compilers/go/1.23.nix { };
-  buildGo123Module = callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_23;
-  };
 
   go_1_24 = callPackage ../development/compilers/go/1.24.nix { };
   buildGo124Module = callPackage ../build-support/go/module.nix {
@@ -9493,14 +9442,6 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.4"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_5_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.5"; };
     faslExt = "fasl";
@@ -9509,7 +9450,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_5;
+  sbcl_2_5_7 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.7"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_5_7;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -10769,7 +10718,6 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
-    withIptables = false;
     withLibBPF = false;
     withLibidn2 = false;
     withLocaled = false;
@@ -11751,8 +11699,6 @@ with pkgs;
     })
     freeoffice
     ;
-
-  inherit (xorg) xlsfonts;
 
   gimp3 = callPackage ../applications/graphics/gimp {
     lcms = lcms2;
@@ -15684,10 +15630,6 @@ with pkgs;
 
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
-  };
-
-  openfreebuds = callPackage ../by-name/op/openfreebuds/package.nix {
-    python3Packages = python3Full.pkgs;
   };
 
   davis = callPackage ../by-name/da/davis/package.nix {

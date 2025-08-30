@@ -178,6 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
     ZSTD_ROOT = zstd.dev;
   };
 
+  # fails tests on glibc with this enabled
+  hardeningDisable = [ "glibcxxassertions" ];
+
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \

@@ -1,10 +1,11 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "gowitness";
   version = "3.0.5";
 
@@ -21,6 +22,10 @@ buildGo123Module rec {
     "-s"
     "-w"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "Web screenshot utility";

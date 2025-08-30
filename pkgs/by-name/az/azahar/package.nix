@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     qt6.qtwayland
     xorg.libX11
+    xorg.libxcb
     xorg.libXext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
