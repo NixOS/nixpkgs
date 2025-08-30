@@ -10403,6 +10403,8 @@ self: super: with self; {
 
   nglview = callPackage ../development/python-modules/nglview { };
 
+  ngs-tools = callPackage ../development/python-modules/ngs-tools { };
+
   nh3 = callPackage ../development/python-modules/nh3 { };
 
   nhc = callPackage ../development/python-modules/nhc { };
