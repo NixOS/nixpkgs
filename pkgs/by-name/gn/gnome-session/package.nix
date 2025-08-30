@@ -10,7 +10,7 @@
   gobject-introspection,
   adwaita-icon-theme,
   glib,
-  gtk3,
+  gtk4,
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
@@ -20,7 +20,7 @@
   libICE,
   xmlto,
   docbook_xsl,
-  docbook_xml_dtd_412,
+  docbook_xml_dtd_45,
   python3,
   libxslt,
   gettext,
@@ -28,7 +28,7 @@
   xorg,
   libepoxy,
   gnome-session-ctl,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,15 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
     libxslt
     docbook_xsl
-    docbook_xml_dtd_412
+    docbook_xml_dtd_45
     python3
     dbus # for DTD
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     libICE
     gnome-desktop
     json-glib
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --suffix XDG_DATA_DIRS : "${gnome-shell}/share" \
+      --suffix XDG_DATA_DIRS : "${gnome-shell}/share"
       --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
     )
   '';
@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
     providedSessions = [
       "gnome"
-      "gnome-xorg"
     ];
   };
 
