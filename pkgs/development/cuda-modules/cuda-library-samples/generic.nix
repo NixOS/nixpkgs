@@ -8,7 +8,7 @@
   cuda_cudart ? null,
   cuda_nvcc ? null,
   cudatoolkit,
-  cusparselt ? null,
+  libcusparse_lt ? null,
   cutensor ? null,
   fetchFromGitHub,
   lib,
@@ -101,7 +101,7 @@ in
       nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [
         cmake
         addDriverRunpath
-        (lib.getDev cusparselt)
+        (lib.getDev libcusparse_lt)
         (lib.getDev libcusparse)
         cuda_nvcc
         (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
@@ -110,8 +110,8 @@ in
 
       postPatch = prevAttrs.postPatch or "" + ''
         substituteInPlace CMakeLists.txt \
-          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
-          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib libcusparse_lt}/lib/libcusparseLt.so" \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic libcusparse_lt}/lib/libcusparseLt_static.a"
       '';
 
       postInstall = prevAttrs.postInstall or "" + ''
@@ -121,12 +121,12 @@ in
       '';
 
       CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
-      CUSPARSELT_PATH = lib.getLib cusparselt;
+      CUSPARSELT_PATH = lib.getLib libcusparse_lt;
 
       meta = prevAttrs.meta or { } // {
         broken =
           # Base dependencies
-          cusparselt == null
+          libcusparse_lt == null
           || libcusparse == null
           || cuda_nvcc == null
           || cuda_cudart == null

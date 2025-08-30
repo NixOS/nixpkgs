@@ -1,0 +1,101 @@
+{
+    "release_date": "2025-04-01",
+    "release_label": "25.1.1",
+    "release_product": "nvpl",
+    "nvpl_blas": {
+        "name": "NVPL BLAS",
+        "license": "NVPL",
+        "license_path": "nvpl_blas/LICENSE.txt",
+        "version": "0.4.0.1",
+        "linux-sbsa": {
+            "relative_path": "nvpl_blas/linux-sbsa/nvpl_blas-linux-sbsa-0.4.0.1-archive.tar.xz",
+            "sha256": "6655898327ed36afd0242719075447058c3c89640b5b9bbfeb5af4dd5c101174",
+            "md5": "83ddc20099da4fdb465c52f40a6936ba",
+            "size": "754052"
+        }
+    },
+    "nvpl_common": {
+        "name": "NVPL Common",
+        "license": "NVPL",
+        "license_path": "nvpl_common/LICENSE.txt",
+        "version": "0.3.2",
+        "linux-sbsa": {
+            "relative_path": "nvpl_common/linux-sbsa/nvpl_common-linux-sbsa-0.3.2-archive.tar.xz",
+            "sha256": "66c4d3d2772b10f40e5d92fa2bf92b68d33db58d4c448bfbb9f94bfe5ab94720",
+            "md5": "5d7b3e8835797efb380aa3ce222f722d",
+            "size": "9440"
+        }
+    },
+    "nvpl_fft": {
+        "name": "NVPL FFT",
+        "license": "NVPL",
+        "license_path": "nvpl_fft/LICENSE.txt",
+        "version": "0.4.1",
+        "linux-sbsa": {
+            "relative_path": "nvpl_fft/linux-sbsa/nvpl_fft-linux-sbsa-0.4.1-archive.tar.xz",
+            "sha256": "b7d114a795841f28109fcc1508a6848b33ab779bef01bacf143d3ea47a0fd0a1",
+            "md5": "95bcf05cdfc8d249cd86f90b4ec98c38",
+            "size": "18679000"
+        }
+    },
+    "nvpl_lapack": {
+        "name": "NVPL LAPACK",
+        "license": "NVPL",
+        "license_path": "nvpl_lapack/LICENSE.txt",
+        "version": "0.3.0",
+        "linux-sbsa": {
+            "relative_path": "nvpl_lapack/linux-sbsa/nvpl_lapack-linux-sbsa-0.3.0-archive.tar.xz",
+            "sha256": "41cc18fc52f6869747b4185a96e34de93a53eb9d6aa95aab07082958055161b0",
+            "md5": "8933daa8bf39fc5796599b2d3639b542",
+            "size": "4684444"
+        }
+    },
+    "nvpl_rand": {
+        "name": "NVPL RAND",
+        "license": "NVPL",
+        "license_path": "nvpl_rand/LICENSE.txt",
+        "version": "0.5.1",
+        "linux-sbsa": {
+            "relative_path": "nvpl_rand/linux-sbsa/nvpl_rand-linux-sbsa-0.5.1-archive.tar.xz",
+            "sha256": "4a75b8256d46d22fc00f4ef3bb8d0d7c5055034e587cb04bd56365a396bc281b",
+            "md5": "6b44db321d4bf43a1b84c64ea5b464a5",
+            "size": "34024644"
+        }
+    },
+    "nvpl_scalapack": {
+        "name": "NVPL SCALAPACK",
+        "license": "NVPL",
+        "license_path": "nvpl_scalapack/LICENSE.txt",
+        "version": "0.2.1",
+        "linux-sbsa": {
+            "relative_path": "nvpl_scalapack/linux-sbsa/nvpl_scalapack-linux-sbsa-0.2.1-archive.tar.xz",
+            "sha256": "dada4d1ecf044d90609b9e62750b383d11be9b22c87e109414bcc07dce3c83c9",
+            "md5": "03ca26912a024e32fb752728e9027f8e",
+            "size": "4645316"
+        }
+    },
+    "nvpl_sparse": {
+        "name": "NVPL SPARSE",
+        "license": "NVPL",
+        "license_path": "nvpl_sparse/LICENSE.txt",
+        "version": "0.4.0",
+        "linux-sbsa": {
+            "relative_path": "nvpl_sparse/linux-sbsa/nvpl_sparse-linux-sbsa-0.4.0-archive.tar.xz",
+            "sha256": "2d88d7c280c05d9fef98736d133f71e26e8f6affd3c555378e6092a26a6d32e9",
+            "md5": "11daa2f582a4a4573e728b89881383ee",
+            "size": "554808"
+        }
+    },
+    "nvpl_tensor": {
+        "name": "NVPL TENSOR",
+        "license": "NVPL",
+        "license_path": "nvpl_tensor/LICENSE.txt",
+        "version": "0.3.0",
+        "linux-sbsa": {
+            "relative_path": "nvpl_tensor/linux-sbsa/nvpl_tensor-linux-sbsa-0.3.0-archive.tar.xz",
+            "sha256": "dd0e0f3d89a428a184dbb79b14d545803e82d4cb3ad0397729e03e3530a15350",
+            "md5": "0733814017da7698d8a344d26100bf76",
+            "size": "2321368"
+        }
+    }
+}
