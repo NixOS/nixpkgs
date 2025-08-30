@@ -8,20 +8,22 @@
   libX11,
   glew,
   openal,
-  scons,
+  cmake,
+  pkg-config,
   libmad,
   libuuid,
+  minizip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.10.12";
+  version = "0.10.14";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     tag = "v${version}";
-    hash = "sha256-cT/bklRGQnS9Nm8J0oH1mG20JQOe58FAAHToNDpvPpQ=";
+    hash = "sha256-/jW9TXmK2xgHUQe6H+WSCHPQthxvoNepdkdnOD3sXXo=";
   };
 
   patches = [
@@ -33,17 +35,14 @@ stdenv.mkDerivation rec {
     # endless sky naively joins the paths with string concatenation
     # so it's essential that there be a trailing slash on the resources path
     substituteInPlace source/Files.cpp \
-      --replace '%NIXPKGS_RESOURCES_PATH%' "$out/share/games/endless-sky/"
-  '';
-
-  preBuild = ''
-    export AR="${stdenv.cc.targetPrefix}gcc-ar"
+      --replace-fail '%NIXPKGS_RESOURCES_PATH%' "$out/share/games/endless-sky/"
   '';
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    scons
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
@@ -55,9 +54,8 @@ stdenv.mkDerivation rec {
     openal
     libmad
     libuuid
+    minizip
   ];
-
-  prefixKey = "PREFIX=";
 
   meta = with lib; {
     description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
@@ -69,7 +67,10 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ _360ied ];
+    maintainers = with maintainers; [
+      _360ied
+      lilacious
+    ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }
