@@ -130,7 +130,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       --no-directory-urls
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace-fail \

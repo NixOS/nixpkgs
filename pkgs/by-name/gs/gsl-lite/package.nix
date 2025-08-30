@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Building tests is broken on Darwin.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Single-file header-only version of ISO C++ GSL";
