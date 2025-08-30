@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  pandoc,
   runCommand,
   nix-update-script,
 }:
@@ -21,13 +22,22 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-mG9rKla2ZSEbOvSlV6jl7MBoo0dDI//CMcR2hLET4K4=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+    pandoc
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yq \
       --bash <($out/bin/yq shell-completion bash) \
       --fish <($out/bin/yq shell-completion fish) \
       --zsh <($out/bin/yq shell-completion zsh)
+
+    patchShebangs ./scripts/generate-man-page*
+    export MAN_HEADER="yq (https://github.com/mikefarah/yq/) version ${finalAttrs.version}"
+    ./scripts/generate-man-page-md.sh
+    ./scripts/generate-man-page.sh
+    installManPage yq.1
   '';
 
   passthru = {

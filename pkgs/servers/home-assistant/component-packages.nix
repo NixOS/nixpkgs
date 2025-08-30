@@ -5927,7 +5927,9 @@
       ];
     "tellstick" =
       ps: with ps; [
-      ]; # missing inputs: tellcore-net tellcore-py
+        tellcore-net
+        tellcore-py
+      ];
     "telnet" =
       ps: with ps; [
       ];
@@ -6881,7 +6883,8 @@
       ];
     "ziggo_mediabox_xl" =
       ps: with ps; [
-      ]; # missing inputs: ziggo-mediabox-xl
+        ziggo-mediabox-xl
+      ];
     "zimi" =
       ps: with ps; [
         zcc-helper

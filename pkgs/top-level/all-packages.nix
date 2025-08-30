@@ -7384,6 +7384,7 @@ with pkgs;
     boost186
     boost187
     boost188
+    boost189
     ;
 
   boost = boost187;
@@ -8817,8 +8818,6 @@ with pkgs;
   qmenumodel = libsForQt5.callPackage ../development/libraries/qmenumodel {
     inherit (lomiri) cmake-extras;
   };
-
-  qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   quarto = callPackage ../development/libraries/quarto { };
 

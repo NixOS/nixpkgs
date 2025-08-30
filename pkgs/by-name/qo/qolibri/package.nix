@@ -1,12 +1,10 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
   cmake,
+  fetchFromGitHub,
+  lib,
   ninja,
-  qttools,
-  qtwebengine,
-  wrapQtAppsHook,
+  qt6Packages,
+  stdenv,
 }:
 stdenv.mkDerivation {
   pname = "qolibri";
@@ -22,12 +20,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
-    qttools
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtwebengine
+    qt6Packages.qt5compat
+    qt6Packages.qtmultimedia
+    qt6Packages.qtwebengine
   ];
 
   cmakeFlags = [
