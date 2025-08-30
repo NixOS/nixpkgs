@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "real-logic";
     repo = "aeron";
-    rev = version;
+    tag = version;
     hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
   };
 
@@ -113,15 +113,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aeron Messaging C++ Library";
     homepage = "https://aeron.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "aeronmd";
-    maintainers = [ maintainers.vaci ];
-    sourceProvenance = [
-      sourceTypes.fromSource
-      sourceTypes.binaryBytecode
+    maintainers = with lib.maintainers; [ vaci ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
     ];
   };
 }

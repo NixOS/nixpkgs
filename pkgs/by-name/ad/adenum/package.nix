@@ -2,10 +2,10 @@
   lib,
   fetchFromGitHub,
   john,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "adenum";
   version = "0-unstable-2022-04-01";
   format = "other";
@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-8s4Kmt4ZjYbQGGVDWKfuRZ6kthcL8FiQytoq9Koy7Kc=";
   };
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  dependencies =
+    with python3Packages;
     [
       impacket
       pwntools
@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find misconfiguration through LDAP";
     mainProgram = "adenum";
     homepage = "https://github.com/SecuProject/ADenum";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
