@@ -22,7 +22,7 @@ lib.makeScope pkgs.newScope (
       gtk2 = gtk2-x11;
     };
 
-    lxrandr = callPackage ./core/lxrandr { };
+    lxrandr = throw "'lxrandr' has been moved to top-level."; # added 2025-08-31
 
     lxsession = callPackage ./core/lxsession { };
 

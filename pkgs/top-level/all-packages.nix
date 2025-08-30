@@ -14428,7 +14428,6 @@ with pkgs;
     lxappearance-gtk2
     lxmenu-data
     lxpanel
-    lxrandr
     lxsession
     lxtask
     ;
