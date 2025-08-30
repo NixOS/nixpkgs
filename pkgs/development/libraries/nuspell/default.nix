@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source C++ spell checking library";
     mainProgram = "nuspell";
     homepage = "https://nuspell.github.io/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.lgpl3Plus;
     changelog = "https://github.com/nuspell/nuspell/blob/${finalAttrs.src.tag}/CHANGELOG.md";
   };
 })
