@@ -11394,6 +11394,11 @@
     github = "jackrosenberg";
     githubId = 56937175;
   };
+  jackwilsdon = {
+    github = "jackwilsdon";
+    githubId = 1843197;
+    name = "Jack Wilsdon";
+  };
   jacobkoziej = {
     name = "Jacob Koziej";
     email = "jacobkoziej@gmail.com";
