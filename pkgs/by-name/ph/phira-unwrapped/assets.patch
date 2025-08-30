@@ -1,0 +1,19 @@
+diff --git a/prpr/src/core.rs b/prpr/src/core.rs
+index 7f9d4db..33c44bb 100644
+--- a/prpr/src/core.rs
++++ b/prpr/src/core.rs
+@@ -68,6 +68,14 @@ thread_local! {
+ }
+ 
+ pub fn init_assets() {
++    if let Ok(root_path) = std::env::var("PHIRA_ROOT") {
++        let path = std::path::Path::new(&root_path);
++        if path.exists() {
++            std::env::set_current_dir(path).unwrap();
++            set_pc_assets_folder("assets");
++            return;
++        }
++    }
+     if let Ok(mut exe) = std::env::current_exe() {
+         while exe.pop() {
+             if exe.join("assets").exists() {
