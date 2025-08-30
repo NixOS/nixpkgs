@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   darwin,
@@ -33,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
   };
+
+  patches = [
+    # Fix the tests on Darwin when the build directory is outside of
+    # `/tmp`, as on Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
+    #
+    # Remove on next release.
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/8aad181416c289bdf5afb221ff24f55c5f39039b.patch";
+      hash = "sha256-9+cYyQrS3wBHpW598AtSw5WMBwfl/Mycw7P4HpX9DRQ=";
+    })
+  ];
 
   outputs = [
     "out"
