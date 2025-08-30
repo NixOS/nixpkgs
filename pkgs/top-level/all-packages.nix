@@ -10472,7 +10472,7 @@ with pkgs;
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = dontRecurseIntoAttrs (
+  fusePackages = recurseIntoAttrs (
     callPackage ../os-specific/linux/fuse {
       util-linux = util-linuxMinimal;
     }
