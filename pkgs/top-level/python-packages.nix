@@ -18530,6 +18530,7 @@ self: super: with self; {
         lib.filterAttrs (
           name: value:
           !(builtins.elem name [
+            "tree-sitter-go-template"
             "tree-sitter-sql"
             "tree-sitter-templ"
           ])
