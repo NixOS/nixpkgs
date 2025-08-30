@@ -22,20 +22,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
     tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-ZmHj1BSyoMBCuxI5hrRiBEb5pDUsGzis+T5FSX27UN8=";
+    hash = "sha256-E+O5NbDX1ycDJTht6kW8JzYnhEL6Wd1xp0rcLpdm2HQ=";
   };
-
-  patches = [
-    # Patches to fix compiling on LLVM 19 from https://github.com/ukoethe/vigra/pull/592
-    ./fix-llvm-19-1.patch
-    ./fix-llvm-19-2.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
