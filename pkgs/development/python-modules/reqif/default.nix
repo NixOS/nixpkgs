@@ -1,6 +1,5 @@
 {
   lib,
-  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -8,7 +7,6 @@
   lxml,
   pytestCheckHook,
   python,
-  pythonOlder,
   xmlschema,
 }:
 
@@ -16,8 +14,6 @@ buildPythonPackage rec {
   pname = "reqif";
   version = "0.0.46";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
@@ -32,15 +28,15 @@ buildPythonPackage rec {
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
+  dependencies = with python.pkgs; [
     lxml
     jinja2
     xmlschema
+    openpyxl
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
