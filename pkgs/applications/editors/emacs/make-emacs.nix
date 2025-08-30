@@ -45,7 +45,6 @@
   libtiff,
   libwebp,
   libxml2,
-  llvmPackages_14,
   m17n_lib,
   mailcap,
   mailutils,
@@ -139,12 +138,8 @@ let
   ++ lib.optionals (stdenv.cc ? cc.lib.libgcc) [
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
-
-  inherit (if variant == "macport" then llvmPackages_14.stdenv else stdenv)
-    mkDerivation
-    ;
 in
-mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname =
     pname
     + (
@@ -430,7 +425,7 @@ mkDerivation (finalAttrs: {
     // lib.optionalAttrs (variant == "macport") {
       # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
       # See https://github.com/NixOS/nixpkgs/issues/127902
-      NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
+      NIX_CFLAGS_COMPILE = "-isystem ${./macport-noescape-noop}";
     };
 
   enableParallelBuilding = true;
