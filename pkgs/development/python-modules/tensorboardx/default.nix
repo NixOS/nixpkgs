@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.6.2";
+  version = "2.6.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     tag = "v${version}";
-    hash = "sha256-m7RLDOMuRNLacnIudptBGjhcTlMk8+v/onz6Amqxb90=";
+    hash = "sha256-4eMkjya0B+r/DMQobeFJCfYHwnTOWrb+aNkkW2XvoqY=";
   };
 
   nativeBuildInputs = [
