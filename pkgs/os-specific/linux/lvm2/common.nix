@@ -14,9 +14,6 @@
   udevSupport ? !stdenv.hostPlatform.isStatic,
   udev,
   udevCheckHook,
-  onlyLib ? stdenv.hostPlatform.isStatic,
-  # Otherwise we have a infinity recursion during static compilation
-  enableUtilLinux ? !stdenv.hostPlatform.isStatic,
   util-linux,
   enableVDO ? false,
   vdo,
@@ -54,7 +51,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals udevSupport [
     udev
   ]
-  ++ lib.optionals (!onlyLib) [
+  ++ [
     libuuid
   ]
   ++ lib.optionals enableVDO [
@@ -70,7 +67,7 @@ stdenv.mkDerivation rec {
     "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
     "--with-default-profile-subdir=profile.d"
   ]
-  ++ lib.optionals (!enableCmdlib && !onlyLib) [
+  ++ lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
@@ -120,7 +117,7 @@ stdenv.mkDerivation rec {
       in
       {
         inherit coreutils;
-        util_linux = optionalTool enableUtilLinux util-linux;
+        util_linux = util-linux;
         mdadm = optionalTool enableMdadm mdadm;
         multipath_tools = optionalTool enableMultipath multipath-tools;
         vdo = optionalTool enableVDO vdo;
@@ -133,13 +130,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root
   doInstallCheck = true;
 
-  makeFlags =
-    lib.optionals udevSupport [
-      "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
-    ]
-    ++ lib.optionals onlyLib [
-      "libdm.device-mapper"
-    ];
+  makeFlags = lib.optionals udevSupport [
+    "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
+  ];
 
   enableParallelBuilding = true;
 
@@ -160,27 +153,22 @@ stdenv.mkDerivation rec {
     "install_tmpfiles_configuration"
   ];
 
-  installPhase = lib.optionalString onlyLib ''
-    make -C libdm install_${if stdenv.hostPlatform.isStatic then "static" else "dynamic"}
-    make -C libdm install_include
-    make -C libdm install_pkgconfig
-  '';
+  # TODO remove in staging
+  installPhase = "";
 
   # only split bin and lib out from out if cmdlib isn't enabled
   outputs = [
     "out"
-  ]
-  ++ lib.optionals (!onlyLib) [
     "dev"
     "man"
   ]
-  ++ lib.optionals (!onlyLib && !enableCmdlib) [
+  ++ lib.optionals (!enableCmdlib) [
     "bin"
     "lib"
   ];
 
   postInstall = lib.optionalString (enableCmdlib != true) ''
-    moveToOutput lib/libdevmapper.so $lib
+    moveToOutput lib/libdevmapper${stdenv.hostPlatform.extensions.library} $lib
   '';
 
   passthru.tests = {
