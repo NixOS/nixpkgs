@@ -7153,6 +7153,8 @@ self: super: with self; {
 
   iptools = callPackage ../development/python-modules/iptools { };
 
+  ipv8-rust-tunnels = callPackage ../development/python-modules/ipv8-rust-tunnels { };
+
   ipwhl = callPackage ../development/python-modules/ipwhl { };
 
   ipwhois = callPackage ../development/python-modules/ipwhois { };
