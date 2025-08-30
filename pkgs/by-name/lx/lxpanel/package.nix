@@ -10,7 +10,7 @@
   libxmlxx,
   keybinder,
   keybinder3,
-  gtk2,
+  gtk2-x11,
   gtk3,
   libX11,
   libfm,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (if withGtk3 then keybinder3 else keybinder)
-    (if withGtk3 then gtk3 else gtk2)
+    (if withGtk3 then gtk3 else gtk2-x11)
     libX11
     (libfm.override { inherit withGtk3; })
     (if withGtk3 then libwnck else libwnck2)

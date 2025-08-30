@@ -18,9 +18,7 @@ lib.makeScope pkgs.newScope (
 
     lxmenu-data = callPackage ./core/lxmenu-data { };
 
-    lxpanel = callPackage ./core/lxpanel {
-      gtk2 = gtk2-x11;
-    };
+    lxpanel = throw "'lxpanel' has been moved to top-level."; # added 2025-08-31
 
     lxrandr = throw "'lxrandr' has been moved to top-level."; # added 2025-08-31
 
