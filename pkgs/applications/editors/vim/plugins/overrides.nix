@@ -42,7 +42,6 @@
   parinfer-rust,
   ranger,
   ripgrep,
-  skim,
   sqlite,
   sshfs,
   statix,
@@ -3143,12 +3142,6 @@ in
       fd
       sad
     ];
-  };
-
-  skim = buildVimPlugin {
-    pname = "skim";
-    inherit (skim) version;
-    src = skim.vim;
   };
 
   skim-vim = super.skim-vim.overrideAttrs {
