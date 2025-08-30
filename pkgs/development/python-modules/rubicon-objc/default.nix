@@ -23,9 +23,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.7.0" "setuptools" \
-      --replace-fail "setuptools_scm==8.1.0" "setuptools_scm"
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+    sed -i 's/"setuptools_scm==.*"/"setuptools_scm"/' pyproject.toml
   '';
 
   build-system = [
