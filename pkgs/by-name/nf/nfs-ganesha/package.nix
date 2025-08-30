@@ -8,7 +8,6 @@
   krb5,
   xfsprogs,
   jemalloc,
-  dbus,
   libcap,
   ntirpc,
   liburcu,
@@ -16,11 +15,15 @@
   flex,
   nfs-utils,
   acl,
+  useCeph ? false,
+  ceph,
+  useDbus ? true,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "6.5";
+  version = "7.0";
 
   outputs = [
     "out"
@@ -32,8 +35,13 @@ stdenv.mkDerivation rec {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
+    hash = "sha256-aj6jJjLaxg7Uz8LYf9TXTJMn/9pjiElIphR2fyA5bR0=";
   };
+
+  patches = [
+    ./0002-Fix-build-with-system-ntirpc-when-MONITORING-enabled.patch
+  ]
+  ++ lib.optional useDbus ./0001-Allow-bypassing-dbus-pkg-config-test.patch;
 
   preConfigure = "cd src";
 
@@ -43,7 +51,21 @@ stdenv.mkDerivation rec {
     "-DENABLE_VFS_POSIX_ACL=ON"
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_MAN_PAGE=ON"
+  ]
+  ++ lib.optionals useCeph [
+    "-DUSE_RADOS_RECOV=ON"
+    "-DRADOS_URLS=ON"
+    "-DUSE_FSAL_CEPH=ON"
+    "-DUSE_FSAL_RGW=ON"
+  ]
+  ++ lib.optionals useDbus [
+    "-DUSE_DBUS=ON"
+    "-DDBUS_NO_PKGCONFIG=ON"
+    "-DDBUS_LIBRARY_DIRS=${dbus.lib}/lib"
+    "-DDBUS_INCLUDE_DIRS=${dbus.dev}/include/dbus-1.0\\;${dbus.lib}/lib/dbus-1.0/include"
+    "-DDBUS_LIBRARIES=dbus-1"
   ];
 
   nativeBuildInputs = [
@@ -52,7 +74,8 @@ stdenv.mkDerivation rec {
     bison
     flex
     sphinx
-  ];
+  ]
+  ++ lib.optional useDbus dbus.dev;
 
   buildInputs = [
     acl
@@ -64,7 +87,8 @@ stdenv.mkDerivation rec {
     ntirpc
     liburcu
     nfs-utils
-  ];
+  ]
+  ++ lib.optional useCeph ceph;
 
   postPatch = ''
     substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
@@ -72,10 +96,20 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
+    patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so
+  ''
+  + lib.optionalString useCeph ''
+    patchelf --add-rpath $out/lib $out/bin/ganesha-rados-grace
+    patchelf --add-rpath $out/lib $out/lib/libganesha_rados_recov.so
+    patchelf --add-rpath $out/lib $out/lib/libganesha_rados_urls.so
   '';
 
   postInstall = ''
     install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
+  ''
+  + lib.optionalString useDbus ''
+    # Policy for D-Bus statistics interface
+    install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
 
   meta = with lib; {
