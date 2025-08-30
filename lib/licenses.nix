@@ -410,9 +410,8 @@ lib.mapAttrs mkLicense (
     };
 
     cc-sa-10 = {
-      shortName = "CC-SA-1.0";
+      spdxId = "CC-SA-1.0";
       fullName = "Creative Commons Share Alike 1.0";
-      url = "https://creativecommons.org/licenses/sa/1.0";
     };
 
     cddl = {
@@ -438,6 +437,11 @@ lib.mapAttrs mkLicense (
     cecill-c = {
       spdxId = "CECILL-C";
       fullName = "CeCILL-C Free Software License Agreement";
+    };
+
+    classpathException20 = {
+      spdxId = "Classpath-exception-2.0";
+      fullName = "Classpath exception 2.0";
     };
 
     cockroachdb-community-license = {
@@ -588,14 +592,14 @@ lib.mapAttrs mkLicense (
 
     fsl11Mit = {
       fullName = "Functional Source License, Version 1.1, MIT Future License";
-      url = "https://fsl.software/FSL-1.1-MIT.template.md";
+      spdxId = "FSL-1.1-MIT";
       free = false;
       redistributable = true;
     };
 
     fsl11Asl20 = {
       fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
-      url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+      spdxId = "FSL-1.1-ALv2";
       free = false;
       redistributable = true;
     };
@@ -646,26 +650,6 @@ lib.mapAttrs mkLicense (
       fullName = "GNU General Public License v2.0 only";
     };
 
-    gpl2Classpath = {
-      spdxId = "GPL-2.0-with-classpath-exception";
-      fullName = "GNU General Public License v2.0 only (with Classpath exception)";
-    };
-
-    gpl2ClasspathPlus = {
-      fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
-    };
-
-    gpl2UBDLPlus = {
-      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
-      url = "https://spdx.org/licenses/UBDL-exception.html";
-    };
-
-    gpl2Oss = {
-      fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-      url = "https://www.mysql.com/about/legal/licensing/foss-exception";
-    };
-
     gpl2Plus = {
       spdxId = "GPL-2.0-or-later";
       fullName = "GNU General Public License v2.0 or later";
@@ -679,11 +663,6 @@ lib.mapAttrs mkLicense (
     gpl3Plus = {
       spdxId = "GPL-3.0-or-later";
       fullName = "GNU General Public License v3.0 or later";
-    };
-
-    gpl3ClasspathPlus = {
-      fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
-      url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
     };
 
     giftware = {
@@ -1235,9 +1214,8 @@ lib.mapAttrs mkLicense (
     };
 
     smail = {
-      shortName = "smail";
+      spdxId = "SMAIL-GPL";
       fullName = "SMAIL General Public License";
-      url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
     };
 
     smlnj = {
@@ -1246,9 +1224,8 @@ lib.mapAttrs mkLicense (
     };
 
     sspl = {
-      shortName = "SSPL";
+      spdxId = "SSPL-1.0";
       fullName = "Server Side Public License";
-      url = "https://www.mongodb.com/licensing/server-side-public-license";
       free = false;
       # NOTE Debatable.
       # The license a slightly modified AGPL but still considered unfree by the
@@ -1269,9 +1246,8 @@ lib.mapAttrs mkLicense (
     };
 
     sustainableUse = {
-      shortName = "sustainable";
+      spdxId = "SUL-1.0";
       fullName = "Sustainable Use License";
-      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
       free = false;
       redistributable = false; # only free to redistribute "for non-commercial purposes"
     };
@@ -1338,6 +1314,11 @@ lib.mapAttrs mkLicense (
     tost = {
       fullName = "Tomorrow Open Source Technology License 1.0";
       url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+    };
+
+    ubdlException = {
+      spdxId = "UBDL-exception";
+      fullName = "Unmodified Binary Distribution exception";
     };
 
     ucd = {
@@ -1448,8 +1429,8 @@ lib.mapAttrs mkLicense (
       fullName = "Do What The F*ck You Want To Public License";
     };
 
-    wxWindows = {
-      spdxId = "wxWindows";
+    wxWindowsException31 = {
+      spdxId = "WxWindows-exception-3.1";
       fullName = "wxWindows Library Licence, Version 3.1";
     };
 

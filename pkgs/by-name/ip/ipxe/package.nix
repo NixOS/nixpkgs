@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       bsd3
       gpl2Only
-      gpl2UBDLPlus
+      ubdlException
       isc
       mit
       mpl11

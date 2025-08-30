@@ -258,7 +258,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy
+/lib/licenses.nix @alyssais @emilazy @jopejoe1
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
