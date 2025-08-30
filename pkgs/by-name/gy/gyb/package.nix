@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gyb";
-  version = "1.82";
+  version = "1.90";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "got-your-back";
     tag = "v${version}";
-    hash = "sha256-eKeT2tVBK2DcTOEC6Tvo+igPXPOD1wy66+kr0ltnMIU=";
+    hash = "sha256-BKto9hzVMs18g9CyNXymTOO3pC3qcsfjFPXu0FgKRI4=";
   };
 
   dependencies = with python3.pkgs; [
