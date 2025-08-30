@@ -5,6 +5,7 @@
 {
   changedattrs,
   changedpathsjson,
+  removedattrs,
   byName ? false,
 }:
 let
@@ -24,7 +25,7 @@ let
   enrichedAttrs = builtins.map (name: {
     path = lib.splitString "." name;
     name = name;
-  }) changedattrs;
+  }) (changedattrs ++ removedattrs);
 
   validPackageAttributes = builtins.filter (
     pkg:
