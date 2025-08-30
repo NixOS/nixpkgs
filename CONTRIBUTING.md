@@ -526,8 +526,13 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-Pull requests should not be squash-merged, as this discards information including detail from commit messages, GPG signatures, and authorship.
+## Merge conventions
+
+Pull requests should not be squash-merged, as this discards information including detail from commit messages and authorship.
 Many pull requests don't make sense as a single commit anyway.
+To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [push directly to the contributor's branch](https://cli.github.com/manual/gh_pr_checkout) before merging.
+Contributors should be given reasonable time to resolve those issues themselves before doing so.
+If a contributor does not want committers to push to their branch, they have to uncheck the "Allow edits and access to secrets by maintainers" box explicitly.
 
 ## Code conventions
 [code-conventions]: #code-conventions
