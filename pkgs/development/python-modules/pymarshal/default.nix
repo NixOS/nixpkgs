@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pymarshal";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stargateaudio";
     repo = "pymarshal";
     rev = version;
-    hash = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
+    hash = "sha256-o+eWa3XFDFn+fyVxWOI9LbKqBUVsYR8O7J4sFbSGvEg=";
   };
 
   postPatch = ''
