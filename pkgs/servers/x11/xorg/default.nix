@@ -13,6 +13,7 @@
   font-encodings,
   font-mutt-misc,
   font-schumacher-misc,
+  font-screen-cyrillic,
   font-util,
   gccmakedep,
   ico,
@@ -143,6 +144,7 @@ self: with self; {
   fontbhtype1 = font-bh-type1;
   fontmuttmisc = font-mutt-misc;
   fontschumachermisc = font-schumacher-misc;
+  fontscreencyrillic = font-screen-cyrillic;
   fontutil = font-util;
   libAppleWM = libapplewm;
   libFS = libfs;
@@ -1136,46 +1138,6 @@ self: with self; {
         pkg-config
         bdftopcf
         fontutil
-        mkfontscale
-      ];
-      buildInputs = [ fontutil ];
-      configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-      postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontscreencyrillic = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      fontutil,
-      bdftopcf,
-      mkfontscale,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-screen-cyrillic";
-      version = "1.0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-screen-cyrillic-1.0.5.tar.xz";
-        sha256 = "1h75zn1rp7bdv6av4cnrajpaq6fkd7dx1lc7aijpw32qrnw8nxcg";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        bdftopcf
         mkfontscale
       ];
       buildInputs = [ fontutil ];
