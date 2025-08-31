@@ -152,9 +152,7 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php { });
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // {
-    __recurseIntoDerivationForReleaseJobs = true;
-  };
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });

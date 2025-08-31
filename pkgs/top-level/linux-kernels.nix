@@ -789,7 +789,6 @@ in
       linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
       linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
-      __recurseIntoDerivationForReleaseJobs = true;
     }
     // lib.optionalAttrs config.allowAliases {
 
