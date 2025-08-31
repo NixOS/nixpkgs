@@ -8,6 +8,7 @@ REPO="yandex-music-linux"
 URL="https://api.github.com/repos/$OWNER/$REPO"
 RAW="https://raw.githubusercontent.com/$OWNER/$REPO"
 
+pname="yandex-music"
 latest_release="$(curl --silent "$URL/releases/latest")"
 latest_tag="$(curl --silent "$URL/tags?per_page=1")"
 commit_hash="$(jq -r '.[0].commit.sha' <<<"$latest_tag")"
@@ -19,8 +20,23 @@ date=$(jq -r '.created_at' <<<"$latest_release")
 # truncate time
 date=${date%T*}
 
+importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
+
+oldVersion=$(nix-instantiate --eval -E "with $importTree; $pname.version" | tr -d '"')
+oldVersionRc="${oldVersion##*rc}"
+if [ "$oldVersionRc" == "$oldVersion" ]; then
+  oldVersionRc="0"
+fi
+oldVersion="${oldVersion%%rc*}"
+
+rc=""
+
+if [ "$version" == "$oldVersion" ]; then
+  rc="rc$((oldVersionRc + 1))";
+fi
+
 # update version; otherwise fail
-update-source-version yandex-music "$version" --ignore-same-hash
+update-source-version "$pname" "$version$rc" --ignore-same-hash --rev="$commit_hash"
 
 # set yandex-music dir
 dir="pkgs/by-name/ya/yandex-music"
