@@ -50,11 +50,18 @@ let
   };
 
   paths = [
-    # I am not entirely sure why these three packages end up in
-    # the Hydra jobset.  But they do, and they don't meet the
-    # criteria above, so at the moment they are special-cased.
+    # Some of the following are based on variants, which are disabled with `attrNamesOnly = true`.
+    # Until these have been removed from release.nix / hydra, we manually add them to the list.
     [
       "pkgsLLVM"
+      "stdenv"
+    ]
+    [
+      "pkgsArocc"
+      "stdenv"
+    ]
+    [
+      "pkgsZig"
       "stdenv"
     ]
     [
