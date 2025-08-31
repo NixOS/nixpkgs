@@ -28,9 +28,9 @@ in
         `nh os switch`. This behaviour can be overriden per-command with environment
         variables that will take priority.
 
-        - `osFlake`: will take priority for `nh os` commands.
-        - `homeFlake`: will take priority for `nh home` commands.
-        - `darwinFlake`: will take priority for `nh darwin` commands.
+        - `NH_OS_FLAKE`: will take priority for `nh os` commands.
+        - `NH_HOME_FLAKE`: will take priority for `nh home` commands.
+        - `NH_DARWIN_FLAKE`: will take priority for `nh darwin` commands.
 
         The formerly valid `FLAKE` is now deprecated by nh, and will cause hard errors
         in future releases if `NH_FLAKE` is not set.
@@ -112,17 +112,18 @@ in
         assertion = cfg.clean.enable -> cfg.enable;
         message = "programs.nh.clean.enable requires programs.nh.enable";
       }
-      map
-      (name: {
-        assertion = cfg.${name} != null -> !(lib.hasSuffix ".nix" cfg.${name});
-        message = "nh.${name} must be a directory, not a nix file";
-      })
-      [
-        "darwinFlake"
-        "flake"
-        "homeFlake"
-        "osFlake"
-      ]
+      (map
+        (name: {
+          assertion = cfg.${name} != null -> !(lib.hasSuffix ".nix" cfg.${name});
+          message = "nh.${name} must be a directory, not a nix file";
+        })
+        [
+          "darwinFlake"
+          "flake"
+          "homeFlake"
+          "osFlake"
+        ]
+      )
     ];
 
     environment = lib.mkIf cfg.enable {
