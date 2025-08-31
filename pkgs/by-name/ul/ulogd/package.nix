@@ -21,12 +21,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.9";
   pname = "ulogd";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/pub/ulogd/ulogd-${version}.tar.xz";
+    url = "https://www.netfilter.org/pub/ulogd/ulogd-${finalAttrs.version}.tar.xz";
     hash = "sha256-UjplH+Cp8lsM2H1dNfw32Tgufuz89h5I1VBf88+A7aU=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ulogd.8 --replace "/usr/share/doc" "$doc/share/doc"
+    substituteInPlace ulogd.8 --replace-fail "/usr/share/doc" "$doc/share/doc"
   '';
 
   postBuild = ''
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} ulogd.conf doc/ulogd.txt doc/ulogd.html README doc/*table
-    install -Dm444 -t $out/share/doc/${pname}-mysql doc/mysql*.sql
-    install -Dm444 -t $out/share/doc/${pname}-pgsql doc/pgsql*.sql
+    install -Dm444 -t $out/share/doc/ulogd ulogd.conf doc/ulogd.txt doc/ulogd.html README doc/*table
+    install -Dm444 -t $out/share/doc/ulogd-mysql doc/mysql*.sql
+    install -Dm444 -t $out/share/doc/ulogd-pgsql doc/pgsql*.sql
   '';
 
   buildInputs = [
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-h ];
   };
-}
+})
