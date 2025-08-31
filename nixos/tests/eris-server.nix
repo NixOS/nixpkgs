@@ -1,7 +1,6 @@
 { pkgs, lib, ... }:
 {
   name = "eris-server";
-  meta.maintainers = with lib.maintainers; [ ehmry ];
 
   nodes.server = {
     environment.systemPackages = [

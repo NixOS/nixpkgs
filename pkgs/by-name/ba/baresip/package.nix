@@ -185,7 +185,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baresip/baresip";
     maintainers = with lib.maintainers; [
       raskin
-      ehmry
       rnhmjoj
     ];
     mainProgram = "baresip";
