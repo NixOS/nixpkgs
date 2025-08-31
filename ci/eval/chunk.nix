@@ -1,5 +1,4 @@
-# This file works in tandem with ../../ci/eval/default.nix
-# It turns ./release-outpaths.nix into chunks of a fixed size
+# This turns ./outpaths.nix into chunks of a fixed size.
 {
   lib ? import ../../lib,
   path ? ../..,
@@ -16,7 +15,7 @@ let
   attrpaths = lib.importJSON attrpathFile;
   myAttrpaths = lib.sublist (chunkSize * myChunk) chunkSize attrpaths;
 
-  unfiltered = import ./release-outpaths.nix {
+  unfiltered = import ./outpaths.nix {
     inherit path;
     inherit checkMeta includeBroken systems;
   };
