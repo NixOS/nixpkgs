@@ -773,10 +773,10 @@ in
                 || any (x: x.basicSecretFile != null) (attrValues (filterPresent cfg.provision.systems.oauth2))
               )
             )
-            -> cfg.package.enableSecretProvisioning;
+            -> cfg.package.pname == "kanidm-with-secret-provisioning";
           message = ''
             Specifying an admin account password or oauth2 basicSecretFile requires kanidm to be built with the secret provisioning patches.
-            You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
+            You may want to set `services.kanidm.package = pkgs.kanidmWithSecretProvisioning_1_x;`.
           '';
         }
         # Entity names must be globally unique:
