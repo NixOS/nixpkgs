@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   poetry-core,
@@ -36,6 +37,15 @@ buildPythonPackage rec {
   outputs = [
     "out"
     "doc"
+  ];
+
+  patches = [
+    # Fix list-translations() ordering in tests
+    # https://github.com/python-babel/flask-babel/pull/242
+    (fetchpatch {
+      url = "https://github.com/python-babel/flask-babel/pull/242/commits/999735d825ee2f94701da29bcf819ad70ee03499.patch";
+      hash = "sha256-vhP/aSWaWpy1sVOJAcrLHJN/yrB+McWO9pkXDI9GeQ4=";
+    })
   ];
 
   nativeBuildInputs = [
