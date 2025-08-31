@@ -30,10 +30,13 @@ buildPythonPackage rec {
     hash = "sha256-yOLnfuGQW+j0nHy4MRlwurZMpeRHTGmQ9eLmihcAGoQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    samtools
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    samtools
   ];
 
   buildInputs = [
@@ -73,11 +76,13 @@ buildPythonPackage rec {
     "pysam.libchtslib"
     "pysam.libcutils"
     "pysam.libcvcf"
+    "pysam.libcsamtools"
   ];
 
   meta = {
     description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
+    changelog = "https://github.com/pysam-developers/pysam/releases/tag/${src.tag}";
     homepage = "https://pysam.readthedocs.io";
     maintainers = with lib.maintainers; [ unode ];
     license = lib.licenses.mit;
