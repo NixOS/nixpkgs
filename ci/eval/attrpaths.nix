@@ -2,7 +2,7 @@
 # *superset* of all attrpaths of derivations which might be
 # part of a release on *any* platform.
 #
-# Both this expression and what ofborg uses (release-outpaths.nix)
+# Both this expression and what ofborg uses (outpaths.nix)
 # are essentially single-threaded (under the current cppnix
 # implementation).
 #
@@ -19,7 +19,7 @@
 #
 # To dump the attrnames:
 #
-#   nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names
+#   nix-instantiate --eval --strict --json ci/eval/attrpaths.nix -A names
 #
 {
   lib ? import (path + "/lib"),
@@ -81,7 +81,7 @@ let
     in
     if !trace then result else lib.trace "** ${lib.concatStringsSep "." path}" result;
 
-  releaseOutpaths = import ./release-outpaths.nix {
+  outpaths = import ./outpaths.nix {
     inherit checkMeta;
     attrNamesOnly = true;
     inherit path;
@@ -104,7 +104,7 @@ let
       "stdenv"
     ]
   ]
-  ++ justAttrNames [ ] releaseOutpaths;
+  ++ justAttrNames [ ] outpaths;
 
   names = map (path: (lib.concatStringsSep "." path)) paths;
 

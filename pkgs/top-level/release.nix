@@ -57,12 +57,10 @@
   # resulting tree of attributes to *not* have a ".${system}"
   # suffixed upon every job name like Hydra expects.
   #
-  # This flag exists mainly for use by
-  # pkgs/top-level/release-attrnames-superset.nix; see that file for
-  # full details.  The exact behavior of this flag may change; it
-  # should be considered an internal implementation detail of
-  # pkgs/top-level/.
-  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
   attrNamesOnly ? false,
 }:
 
