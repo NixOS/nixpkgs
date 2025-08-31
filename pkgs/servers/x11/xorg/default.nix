@@ -63,6 +63,7 @@
   libxfont_2,
   libxft,
   libxi,
+  libxinerama,
   libxmu,
   libxp,
   libxpm,
@@ -234,6 +235,7 @@ self: with self; {
   libXfont = libxfont_1;
   libXft = libxft;
   libXi = libxi;
+  libXinerama = libxinerama;
   libXmu = libxmu;
   libXp = libxp;
   libXpm = libxpm;
@@ -942,44 +944,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXinerama = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXext,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXinerama";
-      version = "1.1.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXinerama-1.1.5.tar.xz";
-        sha256 = "0p08q8q1wg0sixhizl2l1i935bk6x3ckj3bdd6qqr0n1zkqd352h";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libXext
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xinerama" ];
         platforms = lib.platforms.unix;
       };
     })
