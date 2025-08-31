@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   makeWrapper,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "ugm";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
     rev = "v${version}";
-    hash = "sha256-JgdOoMH8TAUc+23AhU3tZe4SH8GKFeyjSeKm8U7qvpo=";
+    hash = "sha256-AkiAF9zLgyzXRC6efjQ+eeAL3mOSQM94B8nr09pcY5M=";
   };
 
-  vendorHash = "sha256-Dgnh+4bUNyqD8/bj+iUITPB/SBtQPYrB5XC6/M6Zs6k=";
+  vendorHash = "sha256-W9v52cxhXdNyW5RGk+SoA1u7Yid+63YYdd9YaGKEWDs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
