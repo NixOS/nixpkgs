@@ -1,21 +1,27 @@
 {
   lib,
+  asdf,
   astropy,
-  astropy-extension-helpers,
   astropy-healpix,
   buildPythonPackage,
-  cloudpickle,
   cython,
   dask,
   extension-helpers,
   fetchPypi,
   fsspec,
+  gwcs,
   numpy,
+  pillow,
+  pyavm,
   pytest-astropy,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   scipy,
+  setuptools,
   setuptools-scm,
+  shapely,
+  tqdm,
   zarr,
 }:
 
@@ -36,36 +42,35 @@ buildPythonPackage rec {
       --replace "cython==" "cython>="
   '';
 
-  nativeBuildInputs = [
-    astropy-extension-helpers
-    cython
-    numpy
+  build-system = [
+    setuptools
     setuptools-scm
+    cython
+    extension-helpers
+    numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     astropy-healpix
-    cloudpickle
     dask
-    extension-helpers
     fsspec
     numpy
+    pillow
+    pyavm
     scipy
     zarr
   ]
   ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
-    pytest-astropy
     pytestCheckHook
-  ];
-
-  pytestFlags = [
-    # Avoid failure due to user warning: Distutils was imported before Setuptools
-    "-pno:warnings"
-    # prevent "'filterwarnings' not found in `markers` configuration option" error
-    "-omarkers=filterwarnings"
+    pytest-astropy
+    pytest-xdist
+    asdf
+    gwcs
+    shapely
+    tqdm
   ];
 
   enabledTestPaths = [
