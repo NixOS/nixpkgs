@@ -111,6 +111,7 @@ python3Packages.buildPythonApplication rec {
     "out"
     "doc"
     "man"
+    "lib"
   ];
 
   inherit src;
@@ -262,10 +263,13 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    uv pip install out/wheels/*.whl --prefix $out
+    mkdir -p $lib $out
+    uv pip install out/wheels/*.whl --prefix $lib
     # remove non-anki bins from dependencies
-    find $out/bin -type f ! -name "anki*" -delete
+    find $lib/bin -type f ! -name "anki*" -delete
+    # and put bin into $out so people can access it. Leave $lib separate to avoid collisions, see
+    # https://github.com/NixOS/nixpkgs/issues/438598
+    mv $lib/bin $out/bin
 
     install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
@@ -280,6 +284,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
+      --prefix PYTHONPATH ':' "$lib/lib/python${python3.pythonVersion}/site-packages"
     )
   '';
 
