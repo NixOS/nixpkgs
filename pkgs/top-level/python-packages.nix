@@ -12727,6 +12727,8 @@ self: super: with self; {
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
+  pycolmap = callPackage ../development/python-modules/pycolmap { };
+
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
 
   pycomfoconnect = callPackage ../development/python-modules/pycomfoconnect { };
