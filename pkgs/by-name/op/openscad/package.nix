@@ -74,6 +74,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openscad/openscad/commit/cc49ad8dac24309f5452d5dea9abd406615a52d9.patch";
       hash = "sha256-B3i+o6lR5osRcVXTimDZUFQmm12JhmbFgG9UwOPebF4=";
     })
+    (fetchpatch {
+      name = "fix-application-icon-not-shown-on-wayland.patch";
+      url = "https://github.com/openscad/openscad/commit/5ea83e5117f5f3ac2197c63db69f523721b8fa85.patch";
+      hash = "sha256-nfeUv0R+J95fyqnVC0HNeBVZnxVoisY1pcdII82qUSU=";
+
+      # upstream's formatting conventions changed between 2021 and this patch
+      postFetch = ''
+        sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
+      '';
+    })
   ];
 
   postPatch = ''

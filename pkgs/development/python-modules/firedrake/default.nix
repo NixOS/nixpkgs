@@ -57,14 +57,14 @@ let
 in
 buildPythonPackage rec {
   pname = "firedrake";
-  version = "20250331.0";
+  version = "2025.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
-    tag = "Firedrake_${version}";
-    hash = "sha256-J0oAZWkzcrgbry5OTG8hKrIgHcwJtzaDw8staOLM9u4=";
+    tag = version;
+    hash = "sha256-bAGmXoHPAdMYJMMQYVq98LYro1Vd+o9pfvXC3BsQUf0=";
   };
 
   postPatch =
@@ -170,6 +170,9 @@ buildPythonPackage rec {
   '';
 
   passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       mpich = firedrake.override {
         petsc4py = petsc4py.override { mpi = mpich; };

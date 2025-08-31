@@ -88,6 +88,8 @@ let
       ffmpeg-full = linux;
       firefox = linux;
       firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
       gimp = linux;
       gimp3 = linux;
       gpu-screen-recorder = linux;

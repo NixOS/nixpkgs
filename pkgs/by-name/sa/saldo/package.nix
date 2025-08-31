@@ -3,6 +3,7 @@
   fetchFromGitLab,
   python3,
   appstream-glib,
+  blueprint-compiler,
   desktop-file-utils,
   glib,
   libxml2,
@@ -14,18 +15,19 @@
   libadwaita,
   librsvg,
   gtk4,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "banking";
-  version = "0.6.0";
-  format = "other";
+  pname = "saldo";
+  version = "0.8.0";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "tabos";
-    repo = "banking";
-    rev = version;
-    hash = "sha256-x/um40sRD58d5LuuJlyietCV1Rw4H5VSO0I3ZwD5kO8=";
+    repo = "saldo";
+    tag = version;
+    hash = "sha256-L4xx9tYDiAoykoiqvXhkbnayYQyTVl1qgi3LBNDoWjg=";
   };
 
   postPatch = ''
@@ -34,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
+    blueprint-compiler
     desktop-file-utils # for desktop-file-validate
     glib # for glib-compile-resources
     libxml2 # for xmllint
@@ -50,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     librsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     cryptography
     fints
     mt-940
@@ -59,11 +62,13 @@ python3.pkgs.buildPythonApplication rec {
     schwifty
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     description = "Banking application for small screens";
-    homepage = "https://tabos.gitlab.io/projects/banking/";
+    homepage = "https://www.tabos.org/projects/saldo/";
     license = licenses.gpl3Plus;
-    mainProgram = "org.tabos.banking";
+    mainProgram = "org.tabos.saldo";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

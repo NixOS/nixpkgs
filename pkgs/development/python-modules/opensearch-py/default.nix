@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -39,6 +40,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-IAEh+rB26Zqv7j5g2YIRZRCAtFbBngoh+w8Z4e2bY+M=";
   };
+
+  patches = [
+    # Remove delete event_loop fixture to fix test with pytest-asyncio 1.x
+    (fetchpatch {
+      name = "remove-delete-event-loop-fixture.patch";
+      url = "https://github.com/opensearch-project/opensearch-py/commit/2f9eeaad3f7bd38518b23a59659ccf02fff19577.patch";
+      hash = "sha256-ljg9GiXPOokrIRS+gF+W9DnZ71AzH8WmLeb3G7rLeK8=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -83,7 +93,7 @@ buildPythonPackage rec {
     "test_basicauth_in_request_session"
     "test_callable_in_request_session"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky tests: OSError: [Errno 48] Address already in use
     "test_redirect_failure_when_allow_redirect_false"
     "test_redirect_success_when_allow_redirect_true"

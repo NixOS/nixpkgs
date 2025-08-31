@@ -1,55 +1,17 @@
 {
-  stdenv,
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  # python requirements
-  beautifulsoup4,
-  boto3,
-  faker,
-  fonttools,
-  h5py,
-  importlib-metadata,
-  lxml,
-  matplotlib,
-  numpy,
-  odfpy,
-  openpyxl,
-  pandas,
-  pdfminer-six,
-  praw,
-  psutil,
-  psycopg2,
-  pyarrow,
-  pyshp,
-  pypng,
-  msgpack,
-  brotli,
-  python-dateutil,
-  pyyaml,
-  requests,
-  seaborn,
-  setuptools,
-  sh,
-  tabulate,
-  urllib3,
-  vobject,
-  wcwidth,
-  xlrd,
-  xlwt,
-  zstandard,
-  zulip,
   # other
   gitMinimal,
   withPcap ? true,
-  dpkt,
-  dnslib,
   withXclip ? stdenv.hostPlatform.isLinux,
   xclip,
   testers,
   visidata,
+  stdenv,
 }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "visidata";
   version = "3.2";
   format = "setuptools";
@@ -61,64 +23,69 @@ buildPythonApplication rec {
     hash = "sha256-kOg9OypWNGStNYFctPIwzVa1CsZBySY2IpA3eDrS7eY=";
   };
 
-  propagatedBuildInputs = [
-    # from visidata/requirements.txt
-    # packages not (yet) present in nixpkgs are commented
-    python-dateutil
-    pandas
-    requests
-    lxml
-    openpyxl
-    xlrd
-    xlwt
-    h5py
-    psycopg2
-    boto3
-    pyshp
-    #mapbox-vector-tile
-    pypng
-    #pyconll
-    msgpack
-    brotli
-    #fecfile
-    fonttools
-    #sas7bdat
-    #xport
-    #savReaderWriter
-    pyyaml
-    #namestand
-    #datapackage
-    pdfminer-six
-    #tabula
-    vobject
-    tabulate
-    wcwidth
-    zstandard
-    odfpy
-    urllib3
-    pyarrow
-    seaborn
-    matplotlib
-    sh
-    psutil
-    numpy
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      # from visidata/requirements.txt
+      # packages not (yet) present in nixpkgs are commented
+      python-dateutil
+      pandas
+      requests
+      lxml
+      openpyxl
+      xlrd
+      xlwt
+      h5py
+      psycopg2
+      boto3
+      pyshp
+      #mapbox-vector-tile
+      pypng
+      #pyconll
+      msgpack
+      brotli
+      #fecfile
+      fonttools
+      #sas7bdat
+      #xport
+      #savReaderWriter
+      pyyaml
+      #namestand
+      #datapackage
+      pdfminer-six
+      #tabula
+      vobject
+      tabulate
+      wcwidth
+      zstandard
+      odfpy
+      urllib3
+      pyarrow
+      seaborn
+      matplotlib
+      sh
+      psutil
+      numpy
 
-    #requests_cache
-    beautifulsoup4
+      #requests_cache
+      beautifulsoup4
 
-    faker
-    praw
-    zulip
-    #pyairtable
+      faker
+      praw
+      zulip
+      #pyairtable
 
-    setuptools
-    importlib-metadata
-  ]
-  ++ lib.optionals withPcap [
-    dpkt
-    dnslib
-  ]
-  ++ lib.optional withXclip xclip;
+      setuptools
+      importlib-metadata
+    ]
+    ++ lib.optionals withPcap (
+      with python3Packages;
+      [
+        dpkt
+        dnslib
+      ]
+    )
+    ++ lib.optional withXclip xclip;
 
   nativeCheckInputs = [
     gitMinimal
