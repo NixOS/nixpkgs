@@ -43,11 +43,8 @@ buildPythonPackage rec {
 
   patches = [
     # Remove delete event_loop fixture to fix test with pytest-asyncio 1.x
-    (fetchpatch {
-      name = "remove-delete-event-loop-fixture.patch";
-      url = "https://github.com/opensearch-project/opensearch-py/commit/2f9eeaad3f7bd38518b23a59659ccf02fff19577.patch";
-      hash = "sha256-ljg9GiXPOokrIRS+gF+W9DnZ71AzH8WmLeb3G7rLeK8=";
-    })
+    # reference: https://github.com/opensearch-project/opensearch-py/pull/936
+    ./remove-delete-event-loop-fixture.patch
   ];
 
   nativeBuildInputs = [ setuptools ];
