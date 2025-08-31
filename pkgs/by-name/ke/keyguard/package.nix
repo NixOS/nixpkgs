@@ -15,6 +15,8 @@
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
+  libglvnd,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     gradle
     jdk17
     copyDesktopItems
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -65,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     lcms2
     alsa-lib
+    libglvnd
   ];
 
   doCheck = false;
