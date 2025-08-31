@@ -4,11 +4,9 @@
   autoPatchelfHook,
   copyDesktopItems,
   makeDesktopItem,
-  writeText,
 
   fetchFromGitHub,
   buildNimPackage,
-  nim-1_0,
   callPackage,
 
   libX11,
@@ -21,22 +19,9 @@
   libpulseaudio,
 }:
 let
-  buildNimPackage' = buildNimPackage.override {
-    nim2 = nim-1_0; # Intended for Nim 1, but resolves to Nim 2 because of "nim >= 1.6.2" in animdustry.nimble
-  };
-
-  fau = callPackage ./fau.nix { buildNimPackage = buildNimPackage'; };
-  fauLock = builtins.fromJSON (builtins.readFile ./fau-lock.json);
-  partialLock = builtins.fromJSON (builtins.readFile ./package-lock-partial.json);
-  lockFile = writeText "package-lock.json" (
-    builtins.toJSON {
-      depends = fauLock.depends ++ partialLock.depends;
-    }
-  );
+  fau = callPackage ./fau.nix { };
 in
-buildNimPackage' (finalAttrs: {
-  inherit lockFile;
-
+buildNimPackage (finalAttrs: {
   pname = "animdustry";
   version = "1.2";
 
@@ -59,7 +44,7 @@ buildNimPackage' (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    fau.package
+    fau
 
     autoPatchelfHook
     copyDesktopItems
@@ -76,6 +61,8 @@ buildNimPackage' (finalAttrs: {
 
     "-d:NimblePkgVersion=${finalAttrs.version}"
   ];
+  requiredNimVersion = 1;
+  lockFile = ./lock.json;
 
   installPhase = ''
     runHook preInstall

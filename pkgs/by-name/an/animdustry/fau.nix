@@ -2,7 +2,10 @@
   fetchFromGitHub,
   buildNimPackage,
 }:
-let
+buildNimPackage {
+  pname = "fau";
+  version = "0-unstable-2022-05-14";
+
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "fau";
@@ -10,16 +13,7 @@ let
     hash = "sha256-9zwmFinDJV4+R/aiVVOQ/Bv30jX7NHJyufzMNWHGA+k=";
     fetchSubmodules = true;
   };
-in
-{
-  inherit src;
 
-  package = buildNimPackage {
-    inherit src;
-
-    pname = "fau";
-    version = "0-unstable-2022-05-14";
-
-    lockFile = ./fau-lock.json;
-  };
+  requiredNimVersion = 1;
+  lockFile = ./lock.json;
 }

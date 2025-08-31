@@ -2,6 +2,18 @@
   "depends": [
     {
       "method": "fetchzip",
+      "path": "/nix/store/3qxib3f1pglhdymz3kbc4dg361vlfz3a-source",
+      "rev": "f4cc097ca9694f17feced9f82994f583ef7911fe",
+      "sha256": "041cshfzgb4fb1xhamyhrx22dvib74d86y7qnbp6rm1n56mkqpkq",
+      "url": "https://github.com/jangko/msgpack4nim/archive/f4cc097ca9694f17feced9f82994f583ef7911fe.tar.gz",
+      "ref": "v0.4.4",
+      "packages": [
+        "msgpack4nim"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
       "path": "/nix/store/fahrda7s5h7nw5nla0rhlm14vnz3nl7k-source",
       "rev": "987eb0d2270e998f9db317840e3f3608527274ee",
       "sha256": "0ihx7y0yny7ziq56mczzhkyjvkpgr4rbzfw7qqn2kizahv0y7wv3",
