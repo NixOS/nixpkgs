@@ -7,14 +7,14 @@
   validatePkgConfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urdfdom-headers";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom_headers";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-K05pVi+s3x7trzQRPHLuxSMK5FRnmcPArkDsZ19BwWo=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lopsided98 ];
     platforms = platforms.all;
   };
-}
+})
