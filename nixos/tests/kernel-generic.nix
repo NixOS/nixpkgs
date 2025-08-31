@@ -36,7 +36,6 @@ let
   kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
       linux_6_12_hardened
-      linux_6_15_hardened
       linux_rt_5_4
       linux_rt_5_10
       linux_rt_5_15
