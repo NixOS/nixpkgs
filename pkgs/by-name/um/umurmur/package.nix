@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "umurmur";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "umurmur";
     repo = "umurmur";
-    rev = version;
-    sha256 = "sha256-q5k1Lv+/Kz602QFcdb/FoWWaH9peAQIf7u1NTCWKTBM=";
+    tag = "v${version}";
+    hash = "sha256-pJRGyfG5y5wdB+zoWiJ1+2O1L3TThC6IairVDlE76tA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,14 +26,6 @@ stdenv.mkDerivation rec {
     openssl
     protobufc
     libconfig
-  ];
-
-  patches = [
-    # https://github.com/umurmur/umurmur/issues/175
-    (fetchpatch {
-      url = "https://github.com/umurmur/umurmur/commit/2c7353eaabb88544affc0b0d32d2611994169159.patch";
-      hash = "sha256-Ws4Eqb6yI5Vnwfeu869hDtisi8NcobEK6dC7RWnWSJA=";
-    })
   ];
 
   configureFlags = [
