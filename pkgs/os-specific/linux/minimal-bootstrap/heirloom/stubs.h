@@ -28,15 +28,6 @@ int mkstemp(char *t)
   return fd;
 }
 
-int putenv(char *string)
-{
-  return 0;
-}
-
-char* realpath (char* path, char* resolved) {
-  return NULL;
-}
-
 #define strncasecmp(a,b,n) strncmp(strupr(a),strupr(b),n)
 
 
