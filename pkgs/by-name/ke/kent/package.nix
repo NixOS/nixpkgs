@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  writableTmpDirAsHomeHook,
   libpng,
   libuuid,
   zlib,
@@ -16,16 +17,18 @@
   jq,
   nix-update,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kent";
   version = "486";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = "kent";
-    rev = "v${version}_base";
+    tag = "v${finalAttrs.version}_base";
     hash = "sha256-NffQ04+5rMtG/VI7YFK4Ff39DDhdh9Wlc0i1iVbg8Js=";
   };
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   buildInputs = [
     libpng
@@ -40,10 +43,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
-      --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+      --replace-fail "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
   '';
 
   buildPhase = ''
@@ -53,7 +56,6 @@ stdenv.mkDerivation rec {
     export CFLAGS="-fPIC"
     export MYSQLINC=$(mysql_config --include | sed -e 's/^-I//g')
     export MYSQLLIBS=$(mysql_config --libs)
-    export HOME=$TMPDIR
     export DESTBINDIR=$HOME/bin
 
     mkdir -p $HOME/lib $HOME/bin/${stdenv.hostPlatform.parsed.cpu.name}
@@ -96,9 +98,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     homepage = "http://genome.ucsc.edu";
-    changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${version}_base";
+    changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${finalAttrs.version}_base";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ scalavision ];
     platforms = lib.platforms.linux;
   };
-}
+})
