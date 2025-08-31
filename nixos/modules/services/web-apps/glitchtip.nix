@@ -58,6 +58,12 @@ in
         default = 8000;
       };
 
+      stateDir = lib.mkOption {
+        type = lib.types.path;
+        description = "State directory of glitchtip.";
+        default = "/var/lib/glitchtip";
+      };
+
       settings = lib.mkOption {
         description = ''
           Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
@@ -189,7 +195,7 @@ in
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
           WorkingDirectory = "${pkg}/lib/glitchtip";
-          BindPaths = [ "/var/lib/glitchtip/uploads:${pkg}/lib/glitchtip/uploads" ];
+          BindPaths = [ "${cfg.stateDir}/uploads:${pkg}/lib/glitchtip/uploads" ];
 
           # hardening
           AmbientCapabilities = "";
@@ -281,7 +287,7 @@ in
 
     users.groups = lib.mkIf (cfg.group == "glitchtip") { glitchtip = { }; };
 
-    systemd.tmpfiles.settings.glitchtip."/var/lib/glitchtip/uploads".d = { inherit (cfg) user group; };
+    systemd.tmpfiles.settings.glitchtip."${cfg.stateDir}/uploads".d = { inherit (cfg) user group; };
 
     environment.systemPackages =
       let
