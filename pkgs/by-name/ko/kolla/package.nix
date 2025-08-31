@@ -13,8 +13,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
+    tag = version;
     hash = "sha256-vVP9EwxAY2NBSciPSOvVaoCu85QVdFduY5aXPUI03XI=";
-    rev = version;
   };
 
   postPatch = ''
