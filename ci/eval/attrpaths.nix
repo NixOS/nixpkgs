@@ -36,11 +36,13 @@ let
   # attrnames of derivations (!).  We should probably restructure
   # the job tree so that this is not the case.
   #
+  # TODO: Use mapAttrsToListRecursiveCond when this PR lands:
+  # https://github.com/NixOS/nixpkgs/pull/395160
   justAttrNames =
     path: value:
     let
       result =
-        if path == [ "AAAAAASomeThingsFailToEvaluate" ] then
+        if path == [ "AAAAAASomeThingsFailToEvaluate" ] || !(lib.isAttrs value) then
           [ ]
         else if
           lib.isDerivation value
@@ -49,27 +51,22 @@ let
             !(value.__recurseIntoDerivationForReleaseJobs or false)
         then
           [ path ]
-
-        else if !(lib.isAttrs value) then
-          [ ]
         else
           lib.pipe value [
-            (builtins.mapAttrs (
+            (lib.mapAttrsToList (
               name: value:
-              builtins.addErrorContext "while evaluating package set attribute path '${
+              lib.addErrorContext "while evaluating package set attribute path '${
                 lib.showAttrPath (path ++ [ name ])
               }'" (justAttrNames (path ++ [ name ]) value)
             ))
-            builtins.attrValues
-            builtins.concatLists
+            lib.concatLists
           ];
     in
-    if !trace then result else lib.trace "** ${lib.concatStringsSep "." path}" result;
+    lib.traceIf trace "** ${lib.showAttrPath path}" result;
 
   outpaths = import ./outpaths.nix {
-    inherit checkMeta;
+    inherit checkMeta path;
     attrNamesOnly = true;
-    inherit path;
   };
 
   paths = [
@@ -91,7 +88,7 @@ let
   ]
   ++ justAttrNames [ ] outpaths;
 
-  names = map (path: (lib.concatStringsSep "." path)) paths;
+  names = map lib.showAttrPath paths;
 
 in
 {
