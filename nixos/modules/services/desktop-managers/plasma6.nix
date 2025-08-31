@@ -160,9 +160,6 @@ in
           kate
           ktexteditor # provides elevated actions for kate
           khelpcenter
-          dolphin
-          baloo-widgets # baloo information in Dolphin
-          dolphin-plugins
           spectacle
           ffmpegthumbs
           krdp
@@ -253,6 +250,7 @@ in
       serif = [ "Noto Serif" ];
     };
 
+    programs.dolphin.enable = mkDefault true;
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
     programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
