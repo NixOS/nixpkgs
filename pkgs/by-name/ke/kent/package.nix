@@ -12,6 +12,9 @@
   bash,
   fetchFromGitHub,
   which,
+  writeShellScript,
+  jq,
+  nix-update,
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
@@ -83,6 +86,11 @@ stdenv.mkDerivation rec {
     cp -r $HOME/inc/* $out/inc/
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeShellScript "update-kent" ''
+    latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ucscGenomeBrowser/kent/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '(?<=v)\d+')
+    ${lib.getExe nix-update} kent --version $latestVersion
   '';
 
   meta = {
