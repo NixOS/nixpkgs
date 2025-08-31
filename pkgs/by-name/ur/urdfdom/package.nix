@@ -10,14 +10,14 @@
   urdfdom-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urdfdom";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Df7njCd1W373R2XU6Jh15HlfFHhHM+ErivGiK/95Aak=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lopsided98 ];
     platforms = platforms.all;
   };
-}
+})
