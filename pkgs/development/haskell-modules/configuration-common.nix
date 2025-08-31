@@ -547,6 +547,16 @@ with haskellLib;
       url = "https://github.com/jgm/gitit/commit/efaee62bc32c558e618ad34458fa2ef85cb8eb1e.patch";
       sha256 = "1ghky3afnib56w102mh09cz2alfyq743164mnjywwfl6a6yl6i5h";
     })
+    (pkgs.fetchpatch {
+      name = "gitit-pandoc-3.7.patch";
+      url = "https://github.com/jgm/gitit/commit/211631ffdd8b520f368220e5cfbd8d64a28b43b6.patch";
+      hash = "sha256-eVjwiGNfEKmeamsUfTNCxJm7OJ7N9xuYHfFllwtwRi0=";
+    })
+    (pkgs.fetchpatch {
+      name = "gitit-xml-conduit-1.10.patch";
+      url = "https://github.com/jgm/gitit/commit/88d1a91795e08ea573d50f4f24e2e1c5d6da5002.patch";
+      hash = "sha256-LrP51+Uxp1VPKrDkIhVlm3kSAnYkodiENtLbWHxV3B4=";
+    })
   ] super.gitit;
 
   # Cut off infinite recursion via test suites:
