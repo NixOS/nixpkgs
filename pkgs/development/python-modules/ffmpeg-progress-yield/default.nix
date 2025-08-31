@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   tqdm,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   ffmpeg,
@@ -31,14 +32,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     ffmpeg
     procps
-  ];
-
-  disabledTests = [
-    "test_quit"
-    "test_quit_gracefully"
   ];
 
   enabledTestPaths = [ "test/test.py" ];
