@@ -143,6 +143,9 @@ buildPythonPackage rec {
     homepage = "https://wiki.fysik.dtu.dk/gpaw/index.html";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    badPlatforms = [
+      "aarch64-darwin" # linker failure
+    ];
     maintainers = [ maintainers.sheepforce ];
   };
 }
