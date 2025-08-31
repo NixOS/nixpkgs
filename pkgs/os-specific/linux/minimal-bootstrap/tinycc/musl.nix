@@ -1,7 +1,6 @@
 {
   lib,
   fetchurl,
-  callPackage,
   bash,
   tinycc-bootstrappable,
   musl,
