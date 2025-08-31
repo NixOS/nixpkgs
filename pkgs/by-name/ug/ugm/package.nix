@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGo125Module rec {
+buildGo125Module (finalAttrs: {
   pname = "ugm";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AkiAF9zLgyzXRC6efjQ+eeAL3mOSQM94B8nr09pcY5M=";
   };
 
@@ -29,13 +29,13 @@ buildGo125Module rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based UNIX user and group browser";
     homepage = "https://github.com/ariasmn/ugm";
-    changelog = "https://github.com/ariasmn/ugm/releases/tag/${src.rev}";
-    license = licenses.mit;
+    changelog = "https://github.com/ariasmn/ugm/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
     mainProgram = "ugm";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})
