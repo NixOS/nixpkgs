@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for unpacking archives easily";
     homepage = "https://packages.qa.debian.org/u/unp.html";
-    license = with licenses; [ gpl2Only ];
-    maintainers = [ maintainers.timor ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = [ lib.maintainers.timor ];
+    platforms = lib.platforms.all;
   };
 })
