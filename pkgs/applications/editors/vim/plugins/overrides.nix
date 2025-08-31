@@ -9,7 +9,6 @@
   fetchurl,
   neovimUtils,
   replaceVars,
-  symlinkJoin,
   # Language dependencies
   fetchYarnDeps,
   mkYarnModules,
@@ -137,36 +136,6 @@ let
   buildNeoVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
 in
 {
-  corePlugins = symlinkJoin {
-    name = "core-vim-plugins";
-    paths = with self; [
-      # plugin managers
-      lazy-nvim
-      mini-deps
-      packer-nvim
-      vim-plug
-
-      # core dependencies
-      plenary-nvim
-
-      # popular plugins
-      mini-nvim
-      nvim-cmp
-      nvim-lspconfig
-      nvim-treesitter
-      vim-airline
-      vim-fugitive
-      vim-surround
-    ];
-
-    meta = {
-      description = "Collection of popular vim plugins (for internal testing purposes)";
-    };
-  };
-
-  #######################
-  # Regular overrides
-
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
       snacks-nvim
