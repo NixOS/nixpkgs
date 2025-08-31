@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  gnumake,
   libnetfilter_acct,
   libnetfilter_conntrack,
   libnetfilter_log,
@@ -23,12 +22,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.8";
+  version = "2.0.9";
   pname = "ulogd";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-Tq1sOXDD9X+h6J/i18xIO6b+K9GwhwFSHgs6/WZ98pE=";
+    url = "https://www.netfilter.org/pub/ulogd/ulogd-${version}.tar.xz";
+    hash = "sha256-UjplH+Cp8lsM2H1dNfw32Tgufuz89h5I1VBf88+A7aU=";
   };
 
   outputs = [
