@@ -1,41 +1,42 @@
-commit e798ff19cd36daaed68b86edc7ebdb9dcfe1c057
+commit 448e265ad3fef9a5ef0ff57593dd5a9164118852
 Author: r-vdp <ramses@well-founded.dev>
 Date:   Tue Oct 15 11:46:38 2024 +0200
 
     Add option for installation sysconfdir
 
 diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
-index b0ff5b106..29b60a3be 100644
+index 3f1cb3574..acbdccb61 100644
 --- a/data/bios-settings.d/meson.build
 +++ b/data/bios-settings.d/meson.build
-@@ -1,5 +1,5 @@
+@@ -1,6 +1,6 @@
  if build_standalone and host_machine.system() == 'linux'
  install_data('README.md',
+   install_tag: 'doc',
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'bios-settings.d')
 +  install_dir: join_paths(datadir, 'fwupd', 'bios-settings.d')
  )
  endif
 diff --git a/data/meson.build b/data/meson.build
-index 9db5cd756..cf3181c8b 100644
+index 78f54bd83..aae01ed56 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -27,7 +27,7 @@ endif
- 
+@@ -28,7 +28,7 @@ endif
  if build_standalone
    install_data(['fwupd.conf'],
+     install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'fwupd'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd'),
      install_mode: 'rw-r-----',
    )
    plugin_quirks += files([
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index 686064195..72ae401bd 100644
+index 9b1e6b372..5c80ba564 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
-@@ -7,13 +7,13 @@ install_data([
-     'GPG-KEY-Linux-Foundation-Firmware',
+@@ -8,14 +8,14 @@ install_data([
      'GPG-KEY-Linux-Vendor-Firmware-Service',
    ],
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'pki', 'fwupd')
 +  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd')
  )
@@ -43,120 +44,130 @@ index 686064195..72ae401bd 100644
      'GPG-KEY-Linux-Foundation-Metadata',
      'GPG-KEY-Linux-Vendor-Firmware-Service',
    ],
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata')
 +  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
  )
  endif
  
-@@ -21,11 +21,11 @@ if supported_pkcs7
- install_data([
+@@ -24,12 +24,12 @@ install_data([
      'LVFS-CA.pem',
    ],
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'pki', 'fwupd')
 +  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd')
  )
  install_data([
      'LVFS-CA.pem',
    ],
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata')
 +  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
  )
  endif
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index 10201bc9a..fba712491 100644
+index 77285cafa..7d2cb8f58 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
-@@ -11,14 +11,14 @@ if build_standalone and get_option('lvfs') != 'false'
-     output: 'lvfs.conf',
+@@ -12,7 +12,7 @@ if build_standalone and get_option('lvfs') != 'false'
      configuration: con3,
      install: true,
+     install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
    )
    configure_file(
      input: 'lvfs-testing.conf',
-     output: 'lvfs-testing.conf',
+@@ -20,7 +20,7 @@ if build_standalone and get_option('lvfs') != 'false'
      configuration: con3,
      install: true,
+     install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
    )
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
-@@ -52,12 +52,12 @@ configure_file(
-   output: 'vendor.conf',
+@@ -58,7 +58,7 @@ configure_file(
    configuration: con2,
    install: get_option('vendor_metadata'),
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
  configure_file(
    input: 'vendor-directory.conf',
-   output: 'vendor-directory.conf',
+@@ -66,5 +66,5 @@ configure_file(
    configuration: con2,
    install: true,
+   install_tag: 'runtime',
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/docs/meson.build b/docs/meson.build
-index 5693edcc8..181c359a4 100644
+index c1e483f4f..684ec3fbe 100644
 --- a/docs/meson.build
 +++ b/docs/meson.build
-@@ -124,7 +124,7 @@ if build_docs
-     ],
+@@ -127,7 +127,7 @@ if build_docs
      build_by_default: true,
      install: true,
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc'),
 +    install_dir: join_paths(sysconfdir_install, 'doc'),
    )
  
    subdir('hsi-tests.d')
-@@ -182,7 +182,7 @@ if build_docs
-     ],
+@@ -186,7 +186,7 @@ if build_docs
      build_by_default: true,
      install: true,
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc'),
 +    install_dir: join_paths(sysconfdir_install, 'doc'),
    )
    man_cmd = []
    foreach man: man_md
-@@ -196,7 +196,7 @@ if build_docs
-       man_cmd,
+@@ -201,31 +201,31 @@ if build_docs
      ],
      install: true,
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc', 'fwupd')
 +    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd')
    )
    if hsi
      install_data(['hsi.html'],
-@@ -204,18 +204,18 @@ if build_docs
+       install_tag: 'doc',
+-      install_dir : join_paths(datadir, 'doc', 'fwupd')
++      install_dir : join_paths(sysconfdir_install, 'doc', 'fwupd')
      )
    endif
    install_data(['urlmap_fwupd.js'],
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc', 'libfwupd')
 +    install_dir: join_paths(sysconfdir_install, 'doc', 'libfwupd')
    )
    install_data(['urlmap_fwupdplugin.js'],
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc', 'libfwupdplugin')
 +    install_dir: join_paths(sysconfdir_install, 'doc', 'libfwupdplugin')
    )
    #make devhelp work
    install_symlink('libfwupd',
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc', 'fwupd'),
 +    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
      pointing_to: join_paths('..', 'libfwupd'),
    )
    install_symlink('libfwupdplugin',
+     install_tag: 'doc',
 -    install_dir: join_paths(datadir, 'doc', 'fwupd'),
 +    install_dir: join_paths(sysconfdir_install, 'doc', 'fwupd'),
      pointing_to: join_paths('..', 'libfwupdplugin'),
    )
  endif
 diff --git a/meson.build b/meson.build
-index 2ceaf531c..e4e764b97 100644
+index 4faedcc0b..980f9bb0c 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -201,6 +201,12 @@ endif
+@@ -212,6 +212,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -167,10 +178,10 @@ index 2ceaf531c..e4e764b97 100644
 +endif
 +
  diffcmd = find_program('diff')
- gio = dependency('gio-2.0', version: '>= 2.72.0')
- giounix = dependency('gio-unix-2.0', version: '>= 2.72.0', required: false)
+ gio = dependency('gio-2.0', version: '>= 2.68.0') # limited by RHEL-9, which has v2.68.4
+ giounix = dependency('gio-unix-2.0', version: '>= 2.68.0', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index a4a211fbb..6197fe502 100644
+index 63c8d288d..04f6651e6 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -7,6 +7,11 @@ option('bluez',
@@ -186,22 +197,22 @@ index a4a211fbb..6197fe502 100644
    type: 'combo',
    choices: [
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
-index 2dfc4d2f0..e5ac73edd 100644
+index 647ace53e..4ee0192df 100644
 --- a/plugins/uefi-capsule/meson.build
 +++ b/plugins/uefi-capsule/meson.build
-@@ -20,7 +20,7 @@ if host_machine.system() == 'linux'
-     output: '35_fwupd',
+@@ -23,7 +23,7 @@ if host_machine.system() == 'linux'
      configuration: con2,
      install: true,
+     install_tag: 'runtime',
 -    install_dir: join_paths(sysconfdir, 'grub.d')
 +    install_dir: join_paths(sysconfdir_install, 'grub.d')
    )
  elif host_machine.system() == 'freebsd'
-   backend_srcs += 'fu-uefi-backend-freebsd.c'
-@@ -93,7 +93,7 @@ if get_option('plugin_uefi_capsule_splash')
-       '--out', '@OUTPUT@',
+   backend_srcs += 'fu-uefi-capsule-backend-freebsd.c'
+@@ -98,7 +98,7 @@ if get_option('plugin_uefi_capsule_splash')
      ],
      install: true,
+     install_tag: 'runtime',
 -    install_dir: join_paths(datadir, 'fwupd'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd'),
    )
