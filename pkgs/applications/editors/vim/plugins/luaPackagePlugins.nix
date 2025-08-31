@@ -9,6 +9,7 @@ let
 
   luarocksPackageNames = [
     "fidget-nvim"
+    "fzf-lua"
     "gitsigns-nvim"
     "grug-far-nvim"
     "image-nvim"

@@ -1275,8 +1275,7 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  fzf-lua = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.fzf-lua;
+  fzf-lua = super.fzf-lua.overrideAttrs {
     runtimeDeps = [ fzf ];
     nvimSkipModules = [
       "fzf-lua.shell_helper"
