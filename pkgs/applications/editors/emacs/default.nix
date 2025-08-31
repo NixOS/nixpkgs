@@ -13,7 +13,7 @@ lib.makeScope pkgs.newScope (
       inherit lib;
       inherit (pkgs)
         fetchFromBitbucket
-        fetchurl
+        fetchzip
         ;
     };
 

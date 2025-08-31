@@ -4597,10 +4597,10 @@ with self;
 
   CGISimple = buildPerlPackage {
     pname = "CGI-Simple";
-    version = "1.280";
+    version = "1.282";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.280.tar.gz";
-      hash = "sha256-GOAen/uBTl5O6neshImyBp/oNlGFUPN/bCIT61Wcar8=";
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.282.tar.gz";
+      hash = "sha256-xX8PPjLN2AYSZFFVwbgptMy+TO1lXegzq5MAWYnCfy8=";
     };
     buildInputs = [
       TestException
@@ -14749,10 +14749,10 @@ with self;
 
   GitAutofixup = buildPerlPackage {
     pname = "App-Git-Autofixup";
-    version = "0.004001";
+    version = "0.004007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004001.tar.gz";
-      hash = "sha256-WroBPI3hOZD1iRoOKjnJcHTQcnvjZTIMLGrxnTbF3aw=";
+      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004007.tar.gz";
+      hash = "sha256-2pe/dnKAlbO27nHaGfC/GUMBsvRd9HietU23Tt0hCjs=";
     };
     nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

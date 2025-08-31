@@ -55,7 +55,6 @@ let
   # If additional modifications to the build process are required,
   # add to ./overrides.nix.
   overrides = callPackage ./overrides.nix {
-    inherit buildVimPlugin;
     inherit llvmPackages;
   };
 

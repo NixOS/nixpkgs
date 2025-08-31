@@ -19,7 +19,7 @@ This function will place them into [`outputBin`](#outputbin).
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the file has an undersirable name. It should be renamed before
+  # Sometimes the file has an undesirable name. It should be renamed before
   # being installed via installBin
   postInstall = ''
     mv a.out delmar
@@ -42,7 +42,7 @@ The manpages must have a section suffix, and may optionally be compressed (with
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the manpage file has an undersirable name; e.g. it conflicts with
+  # Sometimes the manpage file has an undesirable name; e.g., it conflicts with
   # another software with an equal name. It should be renamed before being
   # installed via installManPage
   postInstall = ''

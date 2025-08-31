@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
 
   # bazel wheel
   buildBazelPackage,
@@ -52,6 +53,18 @@ let
       rev = "refs/tags/v${version}";
       hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
+
+    patches = [
+      # AttributeError: jax.interpreters.xla.pytype_aval_mappings was deprecated in JAX v0.5.0 and
+      # removed in JAX v0.7.0. jax.core.pytype_aval_mappings can be used as a replacement in most cases.
+      # TODO: remove when updating to the next release
+      (fetchpatch2 {
+        name = "future-proof-reference-to-deprecated-pytype_aval_mappings";
+        url = "https://github.com/tensorflow/probability/commit/135080b6b1ac5724fc1731b0a9ca6f2010b1aea5.patch";
+        hash = "sha256-27yWIw5pI86KcUz0TsYwRFyLDoeiqmxgsRMBXaauzVw=";
+      })
+    ];
+
     nativeBuildInputs = [
       absl-py
       # needed to create the output wheel in installPhase

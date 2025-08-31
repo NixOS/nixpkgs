@@ -67,6 +67,10 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
 
+  pythonRelaxDeps = [
+    "rapidfuzz"
+  ];
+
   dependencies =
     with python.pkgs;
     [

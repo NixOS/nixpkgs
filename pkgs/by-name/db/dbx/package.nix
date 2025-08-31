@@ -33,6 +33,12 @@ let
         # Tests require langchain-openai which is incompatible with pydantic_1
         doCheck = false;
       });
+
+      versioningit = super.versioningit.overridePythonAttrs (old: {
+        # Tests fail with pydantic_1
+        # AttributeError: type object 'CaseDetails' has no attribute 'model_validate_...
+        doCheck = false;
+      });
     };
   };
 in
@@ -129,8 +135,13 @@ python.pkgs.buildPythonApplication rec {
     # Fails because of dbfs CLI wrong call
     "test_dbfs_unknown_user"
     "test_dbfs_no_root"
+
     # Requires pylint, prospector, pydocstyle
     "test_python_basic_sanity_check"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmph3veuluv...
+    "test_load_file"
+    "test_storage_serde"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

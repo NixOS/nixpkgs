@@ -24,7 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Lt6CzSzppu5ULhzYN5FTCWtWK3AA4/8jRzXgQkU4Tco=";
   };
 
-  cargoHash = "sha256-1opQaR3vbm/DpDY5oQ1VgA4nf0nCBknxfgOSPZQbtV4=";
+  cargoPatches = [
+    # Upgrade wasmer to 6.1.0-rc.3 to fix build failure with Rust ≥ 1.89.0
+    # https://github.com/dprint/dprint/pull/1021
+    ./upgrade-wasmer.patch
+  ];
+
+  cargoHash = "sha256-RUWyR1Yr9G2xBMigDa9+LQyaU5on85xkRQYTLH9JOPg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

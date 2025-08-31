@@ -5,13 +5,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
+
+  # build-system
+  scikit-build-core,
   setuptools,
+
+  # dependencies
   scipy,
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.46.1";
+  version = "0.47.0";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -57,7 +62,7 @@ buildPythonPackage {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-CAGKp8aFp1GjJ1uR+O1Ptxr8wfz1zECCEWhWMYs3zEQ=";
+    hash = "sha256-iUAeiNbPa3Q5jJ4lK2G0WvTKuipb0zO1mNe+wcRdnqs=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
@@ -82,6 +87,7 @@ buildPythonPackage {
   ];
 
   build-system = [
+    scikit-build-core
     setuptools
   ];
 

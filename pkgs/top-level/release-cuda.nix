@@ -86,6 +86,10 @@ let
       colmap = linux;
       ctranslate2 = linux;
       ffmpeg-full = linux;
+      firefox = linux;
+      firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
       gimp = linux;
       gimp3 = linux;
       gpu-screen-recorder = linux;
@@ -112,6 +116,8 @@ let
       saga = linux;
       suitesparse = linux;
       sunshine = linux;
+      thunderbird = linux;
+      thunderbird-unwrapped = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581

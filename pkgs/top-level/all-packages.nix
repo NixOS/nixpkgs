@@ -2721,8 +2721,12 @@ with pkgs;
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
 
   inherit (import ../build-support/dlang/dub-support.nix { inherit callPackage; })
-    buildDubPackage
     dub-to-nix
+    importDubLock
+    buildDubPackage
+    dubSetupHook
+    dubBuildHook
+    dubCheckHook
     ;
 
   dvtm = callPackage ../tools/misc/dvtm {
@@ -4175,8 +4179,6 @@ with pkgs;
   # aka., pgp-tools
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
 
-  sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
-
   sks = callPackage ../servers/sks {
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
@@ -4384,8 +4386,6 @@ with pkgs;
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
   vimwiki-markdown = python3Packages.callPackage ../tools/misc/vimwiki-markdown { };
-
-  visidata = python3Packages.callPackage ../applications/misc/visidata { };
 
   vkbasalt = callPackage ../tools/graphics/vkbasalt {
     vkbasalt32 = pkgsi686Linux.vkbasalt;
@@ -6790,12 +6790,6 @@ with pkgs;
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
-  cmake-language-server =
-    python3Packages.callPackage ../development/tools/misc/cmake-language-server
-      {
-        inherit cmake cmake-format;
-      };
-
   # Does not actually depend on Qt 5
   inherit (plasma5Packages) extra-cmake-modules;
 
@@ -7131,8 +7125,8 @@ with pkgs;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
-    llvmPackages = llvmPackages_18;
-    stdenv = llvmPackages_18.stdenv;
+    llvmPackages = llvmPackages_21;
+    stdenv = llvmPackages_21.stdenv;
   };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit { };
@@ -7398,6 +7392,7 @@ with pkgs;
     boost186
     boost187
     boost188
+    boost189
     ;
 
   boost = boost187;
@@ -8571,6 +8566,7 @@ with pkgs;
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   mpich = callPackage ../development/libraries/mpich {
+    automake = automake116x;
     ch4backend = libfabric;
   };
 
@@ -8831,8 +8827,6 @@ with pkgs;
   qmenumodel = libsForQt5.callPackage ../development/libraries/qmenumodel {
     inherit (lomiri) cmake-extras;
   };
-
-  qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   quarto = callPackage ../development/libraries/quarto { };
 
@@ -10384,9 +10378,12 @@ with pkgs;
     fftw = fftwFloat;
   };
 
+  buildArmTrustedFirmware =
+    callPackage ../misc/arm-trusted-firmware/build-arm-trusted-firmware.nix
+      { };
+
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
-    buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
     armTrustedFirmwareAllwinnerH616
@@ -11628,10 +11625,6 @@ with pkgs;
 
   fclones = callPackage ../tools/misc/fclones { };
 
-  feh = callPackage ../applications/graphics/feh {
-    imlib2 = imlib2Full;
-  };
-
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
@@ -11851,10 +11844,6 @@ with pkgs;
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
   };
-
-  gnunet = callPackage ../applications/networking/p2p/gnunet { };
-
-  gnunet-gtk = callPackage ../applications/networking/p2p/gnunet/gtk.nix { };
 
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
@@ -13862,18 +13851,6 @@ with pkgs;
 
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
-  slade = callPackage ../games/doom-ports/slade {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
-  sladeUnstable = callPackage ../games/doom-ports/slade/git.nix {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
   zandronum = callPackage ../games/doom-ports/zandronum { };
 
   zandronum-server = zandronum.override {
@@ -14496,6 +14473,8 @@ with pkgs;
 
   avogadro2 = libsForQt5.callPackage ../applications/science/chemistry/avogadro2 { };
 
+  libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
+
   molbar = with python3Packages; toPythonApplication molbar;
 
   nwchem = callPackage ../applications/science/chemistry/nwchem {
@@ -14514,6 +14493,75 @@ with pkgs;
   siesta = callPackage ../applications/science/chemistry/siesta { };
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
+
+  cp2k =
+    # CP2K requires all dependencies from the Grimme ecosystem to be build with
+    # CMake instead of Meson. Unfortunately most other consumers require meson
+    let
+      grimmeCmake = lib.makeScope pkgs.newScope (self: {
+        mctc-lib = pkgs.mctc-lib.override {
+          buildType = "cmake";
+          inherit (self) jonquil toml-f;
+        };
+
+        toml-f = pkgs.toml-f.override {
+          buildType = "cmake";
+          inherit (self) test-drive;
+        };
+
+        dftd4 = pkgs.dftd4.override {
+          buildType = "cmake";
+          inherit (self) mstore mctc-lib multicharge;
+        };
+
+        jonquil = pkgs.jonquil.override {
+          buildType = "cmake";
+          inherit (self) toml-f test-drive;
+        };
+
+        mstore = pkgs.mstore.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib;
+        };
+
+        multicharge = pkgs.multicharge.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib mstore;
+        };
+
+        test-drive = pkgs.test-drive.override { buildType = "cmake"; };
+
+        simple-dftd3 = pkgs.simple-dftd3.override {
+          buildType = "cmake";
+          inherit (self) mctc-lib mstore toml-f;
+        };
+
+        tblite = pkgs.tblite.override {
+          buildType = "cmake";
+          inherit (self)
+            mctc-lib
+            mstore
+            toml-f
+            multicharge
+            dftd4
+            simple-dftd3
+            ;
+        };
+
+        sirius = pkgs.sirius.override {
+          inherit (self)
+            mctc-lib
+            toml-f
+            multicharge
+            dftd4
+            simple-dftd3
+            ;
+        };
+      });
+    in
+    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
+      libxc = pkgs.libxc_7;
+    };
 
   ### SCIENCE/GEOMETRY
 

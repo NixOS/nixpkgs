@@ -25,6 +25,7 @@
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
+  mixTarget ? "host",
   removeConfig ? true,
   # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
@@ -51,6 +52,8 @@ let
         inherit version src;
 
         MIX_ENV = mixEnv;
+        MIX_TARGET = mixTarget;
+        MIX_BUILD_PREFIX = (if mixTarget == "host" then "" else "${mixTarget}_") + "${mixEnv}";
         MIX_DEBUG = if enableDebugInfo then 1 else 0;
         HEX_OFFLINE = 1;
 
@@ -122,7 +125,7 @@ let
 
             # Some packages like db_connection will use _build/shared instead of
             # honoring the $MIX_ENV variable.
-            for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
+            for reldir in _build/{$MIX_BUILD_PREFIX,shared}/lib/${name}/{src,ebin,priv,include} ; do
               if test -d $reldir ; then
                 # Some builds produce symlinks (eg: phoenix priv dircetory). They must
                 # be followed with -H flag.

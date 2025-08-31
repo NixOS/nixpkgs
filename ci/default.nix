@@ -147,7 +147,7 @@ rec {
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    nix_2_24 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_24; };
+    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
   tarball = import ../pkgs/top-level/make-tarball.nix {

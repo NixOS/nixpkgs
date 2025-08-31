@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.23";
+  version = "0.11.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-bP6gkHxbWraXCjnSPntYKFCU0qjT9trXwnrP9pI/93k=";
+    hash = "sha256-B01m7jnmkxe2/VHhi+U0XDCwPornTi34v8cY/BBpftg=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -106,6 +106,10 @@ buildPythonPackage rec {
     # Description from first occurrence: Number of processes to use.
     # https://github.com/google/orbax/issues/1580
     "orbax/checkpoint/experimental/emergency/"
+
+    # E   FileNotFoundError: [Errno 2] No such file or directory:
+    # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'
+    "orbax/checkpoint/_src/path/snapshot/snapshot_test.py"
 
     # Circular dependency flax
     "orbax/checkpoint/_src/metadata/empty_values_test.py"

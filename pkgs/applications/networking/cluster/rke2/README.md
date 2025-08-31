@@ -24,7 +24,7 @@ release channel tied to each Kubernetes minor version, e.g. `v1.32`.
 Nixpkgs follows active minor version release channels (typically 4 at a time) and sets aliases for
 `rke2_stable` and `rke2_latest` accordingly.
 
-Patch releases should be backported to to the latest stable release branch, however, new minor
+Patch releases should be backported to the latest stable release branch; however, new minor
 versions are not backported.
 
 For further information visit the

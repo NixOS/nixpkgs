@@ -110,7 +110,7 @@ foo.override { bar = baz; }
 
 ## Limitations
 
-There's some limitations as to which packages can be defined using this structure:
+There are some limitations as to which packages can be defined using this structure:
 
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.

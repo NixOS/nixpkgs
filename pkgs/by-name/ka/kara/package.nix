@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   kdePackages,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kara";

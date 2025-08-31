@@ -25,17 +25,16 @@
   python3Packages,
   haskellPackages,
   testers,
-  zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zstd";
   version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
   };
 
@@ -122,13 +121,19 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
+
+      # Reverse dependencies
+
       inherit libarchive rocksdb arrow-cpp;
       libzip = libzip.override { withZstd = true; };
       curl = curl.override { zstdSupport = true; };
       python-zstd = python3Packages.zstd;
       haskell-zstd = haskellPackages.zstd;
       haskell-hs-zstd = haskellPackages.hs-zstd;
-      pkg-config = testers.hasPkgConfigModules { package = zstd; };
+
+      # Package tests (coherent with overrides)
+
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
   };
 
@@ -151,4 +156,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
     pkgConfigModules = [ "libzstd" ];
   };
-}
+})

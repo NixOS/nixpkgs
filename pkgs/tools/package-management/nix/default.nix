@@ -5,7 +5,6 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
-  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -17,21 +16,6 @@
   confDir ? "/etc",
 }:
 let
-
-  # Called for Nix < 2.26
-  commonAutoconf =
-    args:
-    nixDependencies.callPackage
-      (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
-      {
-        inherit
-          storeDir
-          stateDir
-          confDir
-          ;
-        inherit (nixDependencies) aws-sdk-cpp;
-      };
-
   # Called for Nix == 2.28. Transitional until we always use
   # per-component packages.
   commonMeson =
@@ -43,13 +27,6 @@ let
         confDir
         ;
     };
-
-  # https://github.com/NixOS/nix/pull/7585
-  patch-monitorfdhup = fetchpatch2 {
-    name = "nix-7585-monitor-fd-hup.patch";
-    url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
-    hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
-  };
 
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
@@ -142,17 +119,17 @@ let
       nixComponentsAttributeName
     ];
 
+  maintainers = [
+    lib.maintainers.lovesegfault
+    lib.maintainers.artturin
+  ];
+  teams = [ lib.teams.nix ];
+
 in
 lib.makeExtensible (
   self:
   (
     {
-      nix_2_24 = commonAutoconf {
-        version = "2.24.15";
-        hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
-        self_attribute_name = "nix_2_24";
-      };
-
       nix_2_28 = commonMeson {
         version = "2.28.4";
         hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
@@ -161,7 +138,7 @@ lib.makeExtensible (
 
       nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
         version = "2.29.1";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -175,7 +152,7 @@ lib.makeExtensible (
 
       nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.30.2";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -189,7 +166,7 @@ lib.makeExtensible (
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.31pre20250712_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -218,6 +195,7 @@ lib.makeExtensible (
       )
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";
         nix_2_26 = throw "nix_2_26 has been removed. use nix_2_28.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";

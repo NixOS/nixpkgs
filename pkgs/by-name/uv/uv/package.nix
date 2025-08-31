@@ -81,5 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       prince213
     ];
     mainProgram = "uv";
+
+    # Builds on 32-bit platforms fails with "out of memory" since at least 0.8.6.
+    # We don't place this in `badPlatforms` because cross-compilation on 64-bit
+    # machine may work, e.g. `pkgsCross.gnu32.uv`.
+    broken = stdenv.buildPlatform.is32bit;
   };
 })

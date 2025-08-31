@@ -5,7 +5,6 @@
   ninja,
   sphinx,
   python3Packages,
-  ...
 }:
 
 pkgs.stdenv.mkDerivation {

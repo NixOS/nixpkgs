@@ -18,7 +18,6 @@
   cloudpickle,
   dm-tree,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

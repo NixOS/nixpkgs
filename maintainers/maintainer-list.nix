@@ -4,13 +4,12 @@
    handle = {
      # Required
      name = "Your name";
-
-     # Optional, but at least one of email, matrix or githubId must be given
-     email = "address@example.org";
-     matrix = "@user:example.org";
      github = "GithubUsername";
      githubId = your-github-id;
 
+     # Optional
+     email = "address@example.org";
+     matrix = "@user:example.org";
      keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
      }];
@@ -21,16 +20,16 @@
 
    - `handle` is the handle you are going to use in nixpkgs expressions,
    - `name` is a name that people would know and recognize you by,
-   - `email` is your maintainer email address,
-   - `matrix` is your Matrix user ID,
    - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
    - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
+   - `email` is your maintainer email address,
+   - `matrix` is your Matrix user ID,
    - `keys` is a list of your PGP/GPG key fingerprints.
 
-   Specifying a GitHub account ensures that you automatically:
-   - get invited to the @NixOS/nixpkgs-maintainers team ;
-   - once you are part of the @NixOS org, OfBorg will request you review
-     pull requests that modify a package for which you are a maintainer.
+   Specifying a GitHub account is required, because:
+   - you will get invited to the @NixOS/nixpkgs-maintainers team;
+   - once you are part of the @NixOS org, you can be requested for review;
+   - once you can be requested for review, CI will request you review pull requests that modify a package for which you are a maintainer.
 
    `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
@@ -3039,6 +3038,13 @@
     email = "nixpkgs@beardhatcode.be";
     github = "beardhatcode";
     githubId = 662538;
+  };
+  bearfm = {
+    name = "Bear";
+    github = "fmbearmf";
+    githubId = 77757734;
+    email = "close.line3633@fastmail.com";
+    keys = [ { fingerprint = "FAD9F10819FA179515CD1B9FAFD359B057CEEE04"; } ];
   };
   beeb = {
     name = "Valentin Bersier";
@@ -9792,6 +9798,11 @@
     githubId = 28863828;
     name = "guserav";
   };
+  guttermonk = {
+    github = "guttermonk";
+    githubId = 4753752;
+    name = "guttermonk";
+  };
   guyonvarch = {
     github = "guyonvarch";
     githubId = 6768842;
@@ -11526,6 +11537,12 @@
     github = "jansol";
     githubId = 2588851;
     name = "Jan Solanti";
+  };
+  janTatesa = {
+    email = "taduradnik@gmail.com";
+    github = "janTatesa";
+    githubId = 100917739;
+    name = "Tatesa Uradnik";
   };
   jappie = {
     email = "jappieklooster@hotmail.com";
@@ -14362,6 +14379,8 @@
   };
   lenny = {
     name = "Lenny.";
+    github = "LennyPenny";
+    githubId = 4027243;
     matrix = "@lenny:flipdot.org";
     keys = [ { fingerprint = "6D63 2D4D 0CFE 8D53 F5FD  C7ED 738F C800 6E9E A634"; } ];
   };
@@ -18569,6 +18588,14 @@
     githubId = 30374463;
     name = "Michal S.";
   };
+  Notarin = {
+    name = "Notarin Steele";
+    email = "424c414e4b@gmail.com";
+    github = "Notarin";
+    githubId = 25104390;
+    keys = [ { fingerprint = "4E15 9433 48D9 7BA7 E8B8  B0FF C38F D346 AE36 36FB"; } ];
+    matrix = "@notarin:matrix.org";
+  };
   NotAShelf = {
     name = "NotAShelf";
     email = "raf@notashelf.dev";
@@ -19035,12 +19062,6 @@
     github = "OleMussmann";
     githubId = 14004859;
     name = "Ole Mussmann";
-  };
-  olifloof = {
-    email = "benmoreosm@gmail.com";
-    github = "olifloof";
-    githubId = 35699052;
-    name = "oli";
   };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";
@@ -21504,6 +21525,15 @@
     githubId = 337811;
     name = "Rehno Lindeque";
   };
+  rein = {
+    email = "rein@rein.icu";
+    github = "re1n0";
+    githubId = 227051429;
+    name = "rein";
+    keys = [
+      { fingerprint = "66A8 1706 2227 9BD9 586A  CEDD 5B29 A881 3F47 65C4"; }
+    ];
+  };
   relrod = {
     email = "ricky@elrod.me";
     github = "relrod";
@@ -22352,6 +22382,12 @@
     githubId = 2660;
     name = "Russell Sim";
   };
+  RustyNova = {
+    email = "rusty.nova.jsb@gmail.com";
+    github = "RustyNova016";
+    githubId = 50844553;
+    name = "RustyNova";
+  };
   rutherther = {
     name = "Rutherther";
     email = "rutherther@proton.me";
@@ -22702,6 +22738,12 @@
     github = "Samyak2";
     githubId = 34161949;
     keys = [ { fingerprint = "155C F413 0129 C058 9A5F  5524 3658 73F2 F0C6 153B"; } ];
+  };
+  sandarukasa = {
+    name = "Sandaru Kasa";
+    email = "SandaruKasa+nix@ya.ru";
+    github = "SandaruKasa";
+    githubId = 50824690;
   };
   sander = {
     email = "s.vanderburg@tudelft.nl";
@@ -28552,6 +28594,14 @@
     github = "zarelit";
     githubId = 3449926;
     name = "David Costa";
+  };
+  zatm8 = {
+    email = "maxis1191@gmail.com";
+    github = "mourogurt";
+    githubId = 4152680;
+    keys = [ { fingerprint = "51BB 531F 219E 43C6 66E6  DD65 C4AD 9641 7F72 5D42"; } ];
+    matrix = "@zatm8:zinzaguras.ru";
+    name = "ZatM8";
   };
   zauberpony = {
     email = "elmar@athmer.org";
