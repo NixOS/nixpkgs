@@ -3,11 +3,11 @@
   stdenv,
   python3,
   fetchFromGitHub,
-  qt5,
+  qt6,
   nix-update-script,
 }:
 let
-  version = "2.6.3";
+  version = "2.7.4";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,22 +18,22 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     rev = "v${version}";
-    hash = "sha256-262YMVqxSZv8G82amdRnHiW/5gnxkYyFSQDiS5gOdBE=";
+    hash = "sha256-um8D5wqAe8KYQBG8XPKKS6iYnHsPLxSHpW710winDkY=";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    pyqt5
+    pyqt6
     pyenchant
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   preBuild = ''
-    export QT_QPA_PLATFORM_PLUGIN_PATH=${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins/platforms
+    export QT_QPA_PLATFORM_PLUGIN_PATH=${qt6.qtbase}/lib/qt-${qt6.qtbase.version}/plugins/platforms
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
