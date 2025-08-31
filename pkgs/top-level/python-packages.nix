@@ -17577,6 +17577,8 @@ self: super: with self; {
 
   stp = toPythonModule (pkgs.stp.override { python3 = self.python; });
 
+  stqdm = callPackage ../development/python-modules/stqdm { };
+
   stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
