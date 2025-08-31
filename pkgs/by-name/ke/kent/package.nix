@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
-  version = "468";
+  version = "486";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = "kent";
     rev = "v${version}_base";
-    hash = "sha256-OM/noraW2X8WV5wqWEFiI5/JPOBmsp0fTeDdcZoXxAA=";
+    hash = "sha256-NffQ04+5rMtG/VI7YFK4Ff39DDhdh9Wlc0i1iVbg8Js=";
   };
 
   buildInputs = [
