@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "devpi-ldap";
-  version = "2.1.1-unstable-2023-11-28";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
