@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
     description = "Graphical APRS client";
     homepage = "https://github.com/xastir/xastir";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.ehmry ];
     platforms = lib.platforms.linux;
   };
 }

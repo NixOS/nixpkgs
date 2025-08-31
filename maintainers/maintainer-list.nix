@@ -7306,12 +7306,6 @@
     githubId = 20847625;
     name = "Elizabeth Paź";
   };
-  ehmry = {
-    email = "ehmry@posteo.net";
-    github = "ehmry";
-    githubId = 537775;
-    name = "Emery Hemingway";
-  };
   eigengrau = {
     email = "seb@schattenkopie.de";
     name = "Sebastian Reuße";

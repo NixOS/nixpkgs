@@ -346,7 +346,6 @@ with lib.maintainers;
   dhall = {
     members = [
       Gabriella439
-      ehmry
     ];
     scope = "Maintain Dhall and related packages.";
     shortName = "Dhall";

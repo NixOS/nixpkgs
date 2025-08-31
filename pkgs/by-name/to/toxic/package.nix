@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     mainProgram = "toxic";
     homepage = "https://github.com/TokTok/toxic";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }
