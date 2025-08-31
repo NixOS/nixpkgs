@@ -8,14 +8,14 @@
 
 buildPythonApplication rec {
   pname = "pandoc-imagine";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "imagine";
     owner = "hertogp";
     rev = version;
-    sha256 = "1wpnckc7qyrf6ga5xhr6gv38k1anpy9nx888n7n3rh6nixzcz2dw";
+    sha256 = "sha256-IJAXrJakKjROF2xi9dsLvGzyGIyB+GDnx/Z7BRlwSqc=";
   };
 
   propagatedBuildInputs = [
