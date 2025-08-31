@@ -81,7 +81,6 @@ let
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize ? 5000,
-      checkMeta ? true,
 
       # Don't try to eval packages marked as broken.
       includeBroken ? false,
@@ -113,7 +112,6 @@ let
           --arg myChunk "$myChunk" \
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
-          --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \

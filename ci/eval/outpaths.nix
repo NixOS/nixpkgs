@@ -1,9 +1,8 @@
 #!/usr/bin/env nix-shell
 # When using as a callable script, passing `--argstr path some/path` overrides $PWD.
-#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path --arg checkMeta true -f ci/eval/outpaths.nix"
+#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path -f ci/eval/outpaths.nix"
 
 {
-  checkMeta,
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
   path ? ./../..,
 
@@ -28,7 +27,7 @@ let
             allowUnfree = true;
             allowInsecurePredicate = x: true;
             allowVariants = !attrNamesOnly;
-            checkMeta = checkMeta;
+            checkMeta = true;
 
             handleEvalIssue =
               reason: errormsg:

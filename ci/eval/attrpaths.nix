@@ -17,7 +17,6 @@
 {
   lib ? import (path + "/lib"),
   trace ? false,
-  checkMeta ? true,
   path ? ./../..,
 }:
 let
@@ -65,7 +64,7 @@ let
     lib.traceIf trace "** ${lib.showAttrPath path}" result;
 
   outpaths = import ./outpaths.nix {
-    inherit checkMeta path;
+    inherit path;
     attrNamesOnly = true;
   };
 

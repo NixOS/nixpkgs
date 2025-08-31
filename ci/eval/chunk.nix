@@ -6,7 +6,6 @@
   attrpathFile,
   chunkSize,
   myChunk,
-  checkMeta,
   includeBroken,
   systems,
 }:
@@ -17,7 +16,7 @@ let
 
   unfiltered = import ./outpaths.nix {
     inherit path;
-    inherit checkMeta includeBroken systems;
+    inherit includeBroken systems;
   };
 
   # Turns the unfiltered recursive attribute set into one that is limited to myAttrpaths
