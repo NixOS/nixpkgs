@@ -1961,6 +1961,13 @@ runTests {
       x_foo = "y_baz";
     };
   };
+  testGenAttrs'ConflictingName = {
+    # c.f. warning of genAttrs'
+    expr = attrsets.genAttrs' [ "foo" "bar" "baz" ] (s: nameValuePair "foo" s);
+    expected = {
+      foo = "foo";
+    };
+  };
 
   testConcatMapAttrs = {
     expr =

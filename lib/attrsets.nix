@@ -1221,6 +1221,10 @@ rec {
   /**
     Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
     The applied function should return both the new name and value as a `nameValuePair`.
+    ::: {.warning}
+    In case of attribute name collision the first entry determines the value,
+    all subsequent conflicting entries for the same name are silently ignored.
+    :::
 
     # Inputs
 
