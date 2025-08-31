@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
     tag = finalAttrs.version;
-    hash = "sha256-Ur6UTd3XsI2ZyVboQA9r3WDkl7hd1wQ0NCgTlYFF/C0=";
+    hash = "sha256-5keGAP6/C1kWjD+Wo+v6rFUll5y+uKGDFn3wN14IUuc=";
   };
 
-  cargoHash = "sha256-LfaYRrJ4ZXoNVDsI650t+A7mWB9+2+znATp+mqDwTiE=";
+  cargoHash = "sha256-kb2v4uVQy7m3JVnazbtPjgYyal0mBu97X1ivg4L7wxg=";
 
   nativeBuildInputs = [ makeWrapper ];
 
