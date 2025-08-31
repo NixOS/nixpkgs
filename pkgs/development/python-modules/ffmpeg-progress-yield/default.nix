@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.11.3";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "slhck";
     repo = "ffmpeg-progress-yield";
     tag = "v${version}";
-    hash = "sha256-o5PlL6Ggo0Mrs/ujdnTV5GMAVeG2wpBoBDfxTVic3mA=";
+    hash = "sha256-tX4CioyhZvHNe5PItNwCF68ZQhs4fpG1ZrloGtei07I=";
   };
 
   build-system = [ setuptools ];
