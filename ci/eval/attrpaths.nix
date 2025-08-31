@@ -21,20 +21,6 @@
 }:
 let
 
-  # The intended semantics are that an attrpath rooted at pkgs is
-  # part of the (unfiltered) release jobset iff both of the following
-  # are true:
-  #
-  # 1. The attrpath leads to a value for which lib.isDerivation is true
-  #
-  # 2. Any proper prefix of the attrpath at which lib.isDerivation
-  #    is true also has __recurseIntoDerivationForReleaseJobs=true.
-  #
-  # The second condition is unfortunately necessary because there are
-  # Hydra release jobnames which have proper prefixes which are
-  # attrnames of derivations (!).  We should probably restructure
-  # the job tree so that this is not the case.
-  #
   # TODO: Use mapAttrsToListRecursiveCond when this PR lands:
   # https://github.com/NixOS/nixpkgs/pull/395160
   justAttrNames =
@@ -43,12 +29,7 @@ let
       result =
         if path == [ "AAAAAASomeThingsFailToEvaluate" ] || !(lib.isAttrs value) then
           [ ]
-        else if
-          lib.isDerivation value
-          &&
-            # in some places we have *derivations* with jobsets as subattributes, ugh
-            !(value.__recurseIntoDerivationForReleaseJobs or false)
-        then
+        else if lib.isDerivation value then
           [ path ]
         else
           lib.pipe value [
