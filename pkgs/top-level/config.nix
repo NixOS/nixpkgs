@@ -332,7 +332,7 @@ let
       licenses.nvidiaCuda
       licenses.nvidiaCudaRedist
     ]
-    ++ builtins.attrNames (import ../development/cuda-modules/_cuda/lib/licenses.nix);
+    ++ builtins.attrValues (import ../development/cuda-modules/_cuda/lib/licenses.nix);
 
 in
 {
