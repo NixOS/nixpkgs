@@ -1,9 +1,9 @@
 {
-  runCommand,
-  buildEnv,
-  makeWrapper,
   lib,
-  python311,
+  python,
+  buildEnv,
+  runCommand,
+  makeWrapper,
   writeShellScript,
 }:
 let
@@ -36,7 +36,7 @@ let
     if builtins.isString pyt then
       pyt
     else if builtins.isFunction pyt then
-      "${(python311.withPackages pyt)}/lib/python3.11/site-packages"
+      "${(python.withPackages pyt)}/${python.sitePackages}"
     else
       throw "Expected string or function as python paths for freecad"
   );

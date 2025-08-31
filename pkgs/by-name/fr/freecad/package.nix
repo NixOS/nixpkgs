@@ -1,59 +1,65 @@
 {
   lib,
-  callPackage,
-  cmake,
-  coin3d,
-  doxygen,
-  eigen,
-  fetchFromGitHub,
-  fetchpatch,
-  fmt,
-  gfortran,
-  gts,
-  hdf5,
-  libGLU,
-  libredwg,
-  libspnav,
-  libXmu,
-  medfile,
-  ninja,
-  ode,
-  opencascade-occt,
-  pkg-config,
-  python3Packages,
-  spaceNavSupport ? stdenv.hostPlatform.isLinux,
   stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+  pkg-config,
   swig,
-  vtk,
-  wrapGAppsHook3,
+  doxygen,
+
+  # buildInputs
+  fmt,
+  gts,
+  zlib,
+  eigen,
   xercesc,
   yaml-cpp,
-  zlib,
+  coin3d,
+  libGLU,
+  libXmu,
+  libspnav,
+  ode,
+  hdf5,
+  medfile,
+  opencascade-occt,
+  microsoft-gsl,
   qt6,
-  nix-update-script,
-  gmsh,
+  python3Packages,
+
+  # extra command-line utilities in PATH
   which,
+  gmsh,
+  libredwg,
+
+  # passthru attr
+  callPackage,
+  nix-update-script,
 }:
 let
-  pythonDeps = with python3Packages; [
-    boost
-    gitpython # for addon manager
-    ifcopenshell
-    matplotlib
-    opencamlib
-    pivy
-    ply # for openSCAD file support
-    py-slvs
-    pybind11
-    pycollada
-    pyside6
-    python
-    pyyaml # (at least for) PyrateWorkbench
-    scipy
-    shiboken6
-  ];
-
-  freecad-utils = callPackage ./freecad-utils.nix { };
+  pythonDeps =
+    ps: with ps; [
+      boost
+      gitpython # for addon manager
+      ifcopenshell
+      matplotlib
+      opencamlib
+      pivy
+      ply # for openSCAD file support
+      py-slvs
+      pycollada
+      pyside6
+      pyyaml # (at least for) PyrateWorkbench
+      scipy
+      shiboken6
+      vtk
+      netgen-mesher
+    ];
+  pyenv = python3Packages.python.withPackages pythonDeps;
+  freecad-utils = python3Packages.callPackage ./freecad-utils.nix { };
 in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
@@ -72,43 +78,44 @@ freecad-utils.makeCustomizable (
       cmake
       ninja
       pkg-config
-      gfortran
       swig
       doxygen
-      wrapGAppsHook3
       qt6.wrapQtAppsHook
     ];
 
     buildInputs = [
-      coin3d
-      eigen
       fmt
       gts
-      hdf5
-      libGLU
-      libXmu
-      medfile
-      ode
-      vtk
+      zlib
+      eigen
       xercesc
       yaml-cpp
-      zlib
+      coin3d
+      libGLU
+      libXmu
+      libspnav
+      ode
+      hdf5
+      medfile
       opencascade-occt
+      microsoft-gsl
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
       qt6.qtwayland
       qt6.qtwebengine
+      python3Packages.python
+      python3Packages.pybind11
     ]
-    ++ pythonDeps
-    ++ lib.optionals spaceNavSupport [ libspnav ];
+    ++ pythonDeps python3Packages;
 
     patches = [
-      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-      ./0002-FreeCad-OndselSolver-pkgconfig.patch
-
       # https://github.com/FreeCAD/FreeCAD/pull/21710
-      ./0003-FreeCad-fix-font-load-crash.patch
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/f5db34501c2ab1ffe6dae34e928bed4bc249e1ac.patch?full_index=1";
+        hash = "sha256-BAoRFp0YXfYt+L89Fr7Ioy5cy4kREvdGODUW1MhWHM8=";
+      })
+      # https://github.com/FreeCAD/FreeCAD/pull/17660
       (fetchpatch {
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
@@ -121,60 +128,47 @@ freecad-utils.makeCustomizable (
       })
     ];
 
+    # uncheck 'Legacy Netgen' as it is known broken on linux platform
+    # https://github.com/FreeCAD/FreeCAD/pull/23387
     postPatch = ''
-      substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
-        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+      substituteInPlace src/Mod/Fem/Gui/Resources/ui/DlgSettingsNetgen.ui \
+        --replace-fail "true" "false"
     '';
 
     cmakeFlags = [
-      "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_DRAWING=ON"
-      "-DBUILD_FLAT_MESH:BOOL=ON"
-      "-DINSTALL_TO_SITEPACKAGES=OFF"
-      "-DFREECAD_USE_PYBIND11=ON"
-      "-DBUILD_QT5=OFF"
-      "-DBUILD_QT6=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken6}/include"
-      "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
-      (
-        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside6}/include"
-        + ";${python3Packages.pyside6}/include/PySide6/QtCore"
-        + ";${python3Packages.pyside6}/include/PySide6/QtWidgets"
-        + ";${python3Packages.pyside6}/include/PySide6/QtGui"
-      )
-      "-DPYSIDE_LIBRARY=PySide6::pyside6"
+      (lib.cmakeBool "BUILD_DRAWING" true)
+      (lib.cmakeBool "INSTALL_TO_SITEPACKAGES" false)
+
+      # can be removed once sumodule OndselSolver support absolute cmake path
+      (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+      (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     ];
-
-    # This should work on both x86_64, and i686 linux
-    preBuild = ''
-      export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
-    '';
-
-    dontWrapGApps = true;
 
     qtWrapperArgs =
       let
         binPath = lib.makeBinPath [
+          which
+          gmsh
           libredwg
-          which # for locating tools
         ];
       in
       [
-        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
-        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-        "\${gappsWrapperArgs[@]}"
+        "--add-flags"
+        "--python-path=${pyenv}/${python3Packages.python.sitePackages}"
       ];
 
     postFixup = ''
-      mv $out/share/doc $out
-      ln -s $out/doc $out/share/doc
       ln -s $out/bin/FreeCAD $out/bin/freecad
       ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
     '';
 
     passthru = {
-      tests = callPackage ./tests { };
+      tests = lib.packagesFromDirectoryRecursive {
+        inherit callPackage;
+        directory = ./tests;
+      };
       updateScript = nix-update-script {
         extraArgs = [
           "--version-regex"
