@@ -7,7 +7,7 @@
   cython,
   dask,
   extension-helpers,
-  fetchPypi,
+  fetchFromGitHub,
   fsspec,
   gwcs,
   numpy,
@@ -32,9 +32,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l9pmxtXIGnl8T8fCsUp/5y3kReg3MXdaN0i2rpcEqE4=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "reproject";
+    tag = "v${version}";
+    hash = "sha256-gv5LOxXTNdHSx4Q4ydi/QBHhc7/E/DXJD7WuPBAH0dE=";
   };
 
   postPatch = ''
