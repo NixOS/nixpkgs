@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for buffering data streams with a large set of unique features";
     homepage = "https://www.maier-komor.de/mbuffer.html";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux; # Maybe other non-darwin Unix
     mainProgram = "mbuffer";
   };

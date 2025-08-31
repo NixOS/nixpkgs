@@ -24,6 +24,5 @@ buildGoModule rec {
     mainProgram = "papeer";
     homepage = "https://papeer.tech/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

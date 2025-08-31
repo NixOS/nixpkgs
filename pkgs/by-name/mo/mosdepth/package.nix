@@ -33,7 +33,6 @@ buildNimPackage (finalAttrs: {
     homepage = "https://github.com/brentp/mosdepth";
     maintainers = with maintainers; [
       jbedo
-      ehmry
     ];
     platforms = platforms.linux;
   };

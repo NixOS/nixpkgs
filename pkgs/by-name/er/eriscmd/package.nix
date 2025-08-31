@@ -35,7 +35,6 @@ buildNimPackage (
     meta = final.src.meta // {
       homepage = "https://codeberg.org/eris/nim-eris";
       license = lib.licenses.unlicense;
-      maintainers = with lib.maintainers; [ ehmry ];
       mainProgram = "eriscmd";
       badPlatforms = lib.platforms.darwin;
     };

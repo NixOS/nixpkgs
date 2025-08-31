@@ -36,7 +36,6 @@ stdenv.mkDerivation {
     mainProgram = "ratox";
     homepage = "http://ratox.2f30.org/";
     license = licenses.isc;
-    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
 }

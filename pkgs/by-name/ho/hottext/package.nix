@@ -37,7 +37,6 @@ buildNimPackage (finalAttrs: {
     description = "Simple RSVP speed-reading utility";
     license = lib.licenses.unlicense;
     homepage = "https://git.sr.ht/~ehmry/hottext";
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "hottext";
   };
 })
