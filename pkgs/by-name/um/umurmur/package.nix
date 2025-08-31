@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   openssl,
   protobufc,
@@ -10,14 +9,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umurmur";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "umurmur";
     repo = "umurmur";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pJRGyfG5y5wdB+zoWiJ1+2O1L3TThC6IairVDlE76tA=";
   };
 
@@ -49,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "umurmurd";
   };
-}
+})
