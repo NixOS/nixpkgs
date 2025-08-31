@@ -7,7 +7,6 @@
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
-  neovimUtils,
   replaceVars,
   # Language dependencies
   fetchYarnDeps,
@@ -61,7 +60,6 @@
   codeium,
   # command-t dependencies
   getconf,
-  ruby,
   # cornelis dependencies
   cornelis,
   # cpsm dependencies
@@ -105,7 +103,6 @@
   # hurl dependencies
   hurl,
   # must be lua51Packages
-  luajitPackages,
   aider-chat,
   # typst-preview dependencies
   tinymist,
