@@ -233,6 +233,18 @@ let
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
       ./qtwebkit-cstdint.patch
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/qtwebkit-icu76.patch";
+        sha256 = "sha256-Z+ot7R5Dy+F08FbcXzN4MB2ttxLg0I0P8uVErpbFiu4=";
+      })
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/webkit-offlineasm-warnings-ruby27.patch";
+        sha256 = "sha256-g+qkAJD78lPdZzZZ910SZqk0yJlJIBZh9ue4ClRD5L4=";
+      })
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/84f3c61c46bce99bfbd70d8c202e022d62f2ea9a/f/qtwebkit-fix-build-gcc14.patch";
+        sha256 = "sha256-K7TgGux34dMN0Mnm4EsJhNKLdy1VdKTAE3HGRD8KARU=";
+      })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
