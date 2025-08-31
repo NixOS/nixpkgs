@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${version}";
-    hash = "sha256-iiFpX4w6vdsRxjhRcxXTTtSAb8WPwg1afqwgBpzjhoA=";
+    hash = "sha256-x3n/Hv0hRx6d16qvIP40jFAOj6kli6u+5W95qGXvxuA=";
   };
 
   outputs = [
@@ -132,7 +132,12 @@ stdenv.mkDerivation rec {
       incus = nixosTests.incus-lts.openvswitch;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(3\\.5\\.[0-9]+)$"
+      ];
+    };
   };
 
   meta = with lib; {
