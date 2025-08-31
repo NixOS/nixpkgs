@@ -16,7 +16,6 @@
   pytest-astropy,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools,
   setuptools-scm,
@@ -30,19 +29,12 @@ buildPythonPackage rec {
   version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "reproject";
     tag = "v${version}";
     hash = "sha256-gv5LOxXTNdHSx4Q4ydi/QBHhc7/E/DXJD7WuPBAH0dE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "cython==" "cython>="
-  '';
 
   build-system = [
     setuptools
@@ -86,12 +78,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reproject" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
-    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    changelog = "https://github.com/astropy/reproject/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }
