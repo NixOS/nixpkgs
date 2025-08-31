@@ -6,8 +6,7 @@
   systemd,
   lxml,
   psutil,
-  pytest,
-  mock,
+  pytestCheckHook,
   pkg-config,
   cython,
 }:
@@ -44,16 +43,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    # pytestCheckHook doesn't work
-    pytest tests
-    runHook postCheck
+  # Having the source root in `sys.path` causes import issues
+  preCheck = ''
+    cd tests
   '';
+
+  disabledTestPaths = [
+    "test_version.py" # Requires cstq which is not in nixpkgs
+  ];
 
   pythonImportsCheck = [ "pystemd" ];
 
