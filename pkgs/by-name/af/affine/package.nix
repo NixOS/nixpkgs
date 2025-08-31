@@ -33,6 +33,16 @@ let
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
   binName = lib.toLower productName;
+  electron-dist-zip = stdenvNoCC.mkDerivation {
+    pname = "electron-dist-zip";
+    version = electron.version;
+    src = electron.dist;
+    nativeBuildInputs = [ zip ];
+    buildPhase = ''
+      zip --recurse-paths - . > $out
+    '';
+    dontInstall = true;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
@@ -49,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-tRDc7Rky59Rh08QTNiG3yopErHJzARxN8BZGrSUECLE=";
   };
+
+  # keep yarnOfflineCache same output style with offlineCache = yarn-berry.fetchYarnBerryDeps { inherit (finalAttrs) src missingHashes; hash = "" };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
     inherit (finalAttrs) src;
@@ -63,13 +75,31 @@ stdenv.mkDerivation (finalAttrs: {
       let
         supportedArchitectures = builtins.toJSON {
           os = [
+            "aix"
+            "android"
             "darwin"
+            "freebsd"
             "linux"
+            "netbsd"
+            "openbsd"
+            "sunos"
+            "win32"
           ];
           cpu = [
-            "x64"
-            "ia32"
+            "arm"
             "arm64"
+            "ia32"
+            "loong64"
+            "mips"
+            "mipsel"
+            "mips64el"
+            "powerpc64le"
+            "ppc64"
+            "riscv64"
+            "s390"
+            "s390x"
+            "wasm32"
+            "x64"
           ];
           libc = [
             "glibc"
@@ -80,19 +110,20 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runHook preBuild
 
-        mkdir -p $out
+        mkdir -p $out/cache
         yarn config set enableTelemetry false
-        yarn config set cacheFolder $out
+        yarn config set cacheFolder $out/cache
         yarn config set enableGlobalCache false
         yarn config set supportedArchitectures --json '${supportedArchitectures}'
 
         yarn install --immutable --mode=skip-build
+        cp yarn.lock $out/yarn.lock
 
         runHook postBuild
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-U2FGvdtGiM97aXmbfNIfi87hvwDkd1dvlAABYiDgAGI=";
+    outputHash = "sha256-t0pjYu11gNw2/cTXbpYAgCjPKrg7Mj47G+TbPk1ZDWc=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
@@ -134,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo "$BACKEND_SERVER_PACKAGE_JSON" > packages/backend/server/package.json
   '';
 
+  # FIXME: use `yarn config set cacheFolder $offlineCache/cache`
   configurePhase = ''
     runHook preConfigurePhase
 
@@ -145,14 +177,13 @@ stdenv.mkDerivation (finalAttrs: {
     # yarn config
     yarn config set enableTelemetry false
     yarn config set enableGlobalCache false
-    yarn config set cacheFolder $yarnOfflineCache
+    yarn config set cacheFolder $yarnOfflineCache/cache
 
     # electron config
     ELECTRON_VERSION_IN_LOCKFILE=$(yarn why electron --json | tail --lines 1 | jq --raw-output '.children | to_entries | first | .key ' | cut -d : -f 2)
-    rsync --archive --chmod=u+w "${electron.dist}/" $HOME/.electron-prebuilt-zip-tmp
     export ELECTRON_FORGE_ELECTRON_ZIP_DIR=$PWD/.electron_zip_dir
     mkdir -p $ELECTRON_FORGE_ELECTRON_ZIP_DIR
-    (cd $HOME/.electron-prebuilt-zip-tmp && zip --recurse-paths - .) > $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
+    cat ${electron-dist-zip} > $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
     runHook postConfigurePhase
