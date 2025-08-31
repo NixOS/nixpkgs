@@ -189,6 +189,7 @@ in
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
           WorkingDirectory = "${pkg}/lib/glitchtip";
+          BindPaths = [ "/var/lib/glitchtip/uploads:${pkg}/lib/glitchtip/uploads" ];
 
           # hardening
           AmbientCapabilities = "";
@@ -220,6 +221,7 @@ in
             "@system-service"
             "~@privileged"
             "~@resources"
+            "@chown"
           ];
           UMask = "0077";
         };
@@ -271,7 +273,6 @@ in
 
     users.users = lib.mkIf (cfg.user == "glitchtip") {
       glitchtip = {
-        home = "/var/lib/glitchtip";
         group = cfg.group;
         extraGroups = lib.optionals cfg.redis.createLocally [ "redis-glitchtip" ];
         isSystemUser = true;
@@ -279,6 +280,8 @@ in
     };
 
     users.groups = lib.mkIf (cfg.group == "glitchtip") { glitchtip = { }; };
+
+    systemd.tmpfiles.settings.glitchtip."/var/lib/glitchtip/uploads".d = { inherit (cfg) user group; };
 
     environment.systemPackages =
       let
