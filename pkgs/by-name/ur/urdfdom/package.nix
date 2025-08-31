@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   validatePkgConfig,
@@ -13,21 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "4.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom";
     rev = version;
-    hash = "sha256-t1ff5aRHE7LuQdCXuooWPDUgPWjyYyQmQUB1RJmte1w=";
+    hash = "sha256-Df7njCd1W373R2XU6Jh15HlfFHhHM+ErivGiK/95Aak=";
   };
 
   patches = [
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom/pull/142)
-    (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/61a7e35cd5abece97259e76aed8504052b2f5b53.patch";
-      hash = "sha256-b3bEbbaSUDkwTEHJ8gVPEb+AR/zuWwLqiAW5g1T1dPU=";
-    })
+    ./cmake-install-absolute.patch
   ];
 
   nativeBuildInputs = [
