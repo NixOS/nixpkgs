@@ -1,7 +1,7 @@
 {
-  buildPythonPackage,
   lib,
-  fetchPypi,
+  buildPythonPackage,
+  fetchFromGitHub,
   setuptools,
   systemd,
   lxml,
@@ -16,15 +16,12 @@ buildPythonPackage rec {
   version = "0.13.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8G1OWyGIGnyRAEkuYMzC9LZOULTWt3c8lAE9LG8aANs=";
+  src = fetchFromGitHub {
+    owner = "systemd";
+    repo = "pystemd";
+    tag = "v${version}";
+    hash = "sha256-Ph0buiyH2cLRXyqgA8DmpE9crb/x8OaerIoZuv8hjMI=";
   };
-
-  postPatch = ''
-    # remove cythonized sources, build them anew to support more python version
-    rm pystemd/*.c
-  '';
 
   buildInputs = [ systemd ];
 
