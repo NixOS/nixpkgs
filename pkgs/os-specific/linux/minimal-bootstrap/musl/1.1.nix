@@ -54,12 +54,8 @@ let
       url = "${liveBootstrap}/patches/sigsetjmp.patch";
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
     })
-    # FIXME: this patch causes the build to fail
-    # (fetchurl {
-    #   url = "${liveBootstrap}/patches/stdio_flush_on_exit.patch";
-    #   hash = "sha256-/z5ze3h3QTysay8nRvyvwPv3pmTcKptdkBIaMCoeLDg=";
-    # })
     # HACK: always flush stdio immediately
+    # Do not remove atm, gcc 4.6 does not build without this patch applied.
     ./always-flush.patch
     (fetchurl {
       url = "${liveBootstrap}/patches/va_list.patch";
