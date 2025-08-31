@@ -37,6 +37,7 @@ let
     "rest-nvim"
     "rocks-config-nvim"
     "rocks-nvim"
+    "rustaceanvim"
     "rtp-nvim"
     "telescope-manix"
     "telescope-nvim"

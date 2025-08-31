@@ -3069,12 +3069,11 @@ in
 
   });
 
-  rustaceanvim = neovimUtils.buildNeovimPlugin {
+  rustaceanvim = super.rustaceanvim.overrideAttrs {
     checkInputs = [
       # Optional integration
       self.neotest
     ];
-    luaAttr = luaPackages.rustaceanvim;
   };
 
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
