@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   version = "0-unstable-2023-06-05";
 
   src = fetchFromGitHub {
-    owner = "NerdyPepper";
+    owner = "oppiliappan";
     repo = "taizen";
     rev = "5486cd4f4c5aa4e0abbcee180ad2ec22839abd31";
     hash = "sha256-pGcD3+3Ds3U8NuNySaDnz0zzAvZlSDte1jRPdM5qrZA=";
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Curses-based mediawiki browser";
-    homepage = "https://github.com/nerdypepper/taizen";
+    homepage = "https://github.com/oppiliappan/taizen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "taizen";
