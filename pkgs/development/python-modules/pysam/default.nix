@@ -15,9 +15,9 @@
   zlib,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pysam";
-  version = "0.22.1-unstable-2024-10-30";
+  version = "0.23.3";
   pyproject = true;
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
@@ -26,8 +26,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    rev = "0eae5be21ac3ab3ac7aa770a3931e2977e37b909";
-    hash = "sha256-i8glYSpuCRNhNtK4i6eUrerz8daiMfY/YgDwgSuELbc=";
+    tag = "v${version}";
+    hash = "sha256-yOLnfuGQW+j0nHy4MRlwurZMpeRHTGmQ9eLmihcAGoQ=";
   };
 
   nativeBuildInputs = [
