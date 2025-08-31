@@ -4,12 +4,14 @@
   fetchPypi,
   bash,
   coreutils,
+  debtcollector,
   eventlet,
   fasteners,
   fixtures,
   iana-etc,
   libredirect,
   oslo-config,
+  oslo-i18n,
   oslo-utils,
   oslotest,
   pbr,
@@ -19,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_concurrency";
     inherit version;
-    hash = "sha256-34qHf4ACsH1p8dDnDbzvSSDTkkmqpi5Hj60haz3UFMs=";
+    hash = "sha256-Fg6BTIVJ9qRk53oEJl7ZltWBvdP9O9Tr8xHTRGu34ao=";
   };
 
   postPatch = ''
@@ -43,8 +45,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    debtcollector
     fasteners
     oslo-config
+    oslo-i18n
     oslo-utils
     pbr
   ];
