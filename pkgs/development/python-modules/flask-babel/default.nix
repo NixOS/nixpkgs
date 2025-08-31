@@ -25,7 +25,12 @@
 buildPythonPackage rec {
   pname = "flask-babel";
   version = "4.1.0";
-  format = "pyproject";
+  pyproject = true;
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "python-babel";
@@ -33,11 +38,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-NcwcMLGabWrjbFZhDU1MVWpqAm0prBlqHfTdLV7EqoI=";
   };
-
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   patches = [
     # Fix list-translations() ordering in tests
@@ -50,11 +50,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     furo
-    poetry-core
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     babel
     flask
     jinja2
