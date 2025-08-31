@@ -3206,7 +3206,7 @@ in
     }
   );
 
-  ssr = super.ssr-nvim.overrideAttrs {
+  ssr-nvim = super.ssr-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
 
