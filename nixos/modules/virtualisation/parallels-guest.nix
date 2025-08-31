@@ -81,44 +81,16 @@ in
       };
     };
 
-    systemd.user.services = {
-      prlcc = {
-        description = "Parallels Control Center";
-        wantedBy = [ "graphical-session.target" ];
-        path = [ prl-tools ];
-        serviceConfig = {
-          ExecStart = "${prl-tools}/bin/prlcc";
-          WorkingDirectory = "${prl-tools}/bin";
-        };
-      };
-      prldnd = {
-        description = "Parallels Drag And Drop Tool";
-        wantedBy = [ "graphical-session.target" ];
-        path = [ prl-tools ];
-        serviceConfig = {
-          ExecStart = "${prl-tools}/bin/prldnd";
-          WorkingDirectory = "${prl-tools}/bin";
-        };
-      };
-      prlcp = {
-        description = "Parallels Copy Paste Tool";
-        wantedBy = [ "graphical-session.target" ];
-        path = [ prl-tools ];
-        serviceConfig = {
-          ExecStart = "${prl-tools}/bin/prlcp";
-          Restart = "always";
-          WorkingDirectory = "${prl-tools}/bin";
-        };
-      };
-      prlshprof = {
-        description = "Parallels Shared Profile Tool";
-        wantedBy = [ "graphical-session.target" ];
-        path = [ prl-tools ];
-        serviceConfig = {
-          ExecStart = "${prl-tools}/bin/prlshprof";
-          WorkingDirectory = "${prl-tools}/bin";
-        };
+    systemd.user.services.prlcc = {
+      description = "Parallels Control Center";
+      wantedBy = [ "graphical-session.target" ];
+      path = [ prl-tools ];
+      serviceConfig = {
+        ExecStart = "${prl-tools}/bin/prlcc";
+        WorkingDirectory = "${prl-tools}/bin";
       };
     };
   };
+
+  meta.maintainers = with maintainers; [ codgician ];
 }

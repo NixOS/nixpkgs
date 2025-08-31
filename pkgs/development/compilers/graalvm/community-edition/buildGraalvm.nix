@@ -258,7 +258,8 @@ let
             description = "High-Performance Polyglot VM";
             license = with licenses; [
               upl
-              gpl2Classpath
+              gpl2
+              classpathException20
               bsd3
             ];
             sourceProvenance = with sourceTypes; [ binaryNativeCode ];

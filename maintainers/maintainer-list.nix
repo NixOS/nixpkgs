@@ -6263,6 +6263,12 @@
     githubId = 21953890;
     name = "Tim Digel";
   };
+  despsyched = {
+    email = "priyanshu.tripathi@deshaw.com";
+    github = "despsyched";
+    githubId = 196187334;
+    name = "Priyanshu Tripathi";
+  };
   desttinghim = {
     email = "opensource@louispearson.work";
     matrix = "@desttinghim:matrix.org";
@@ -7299,12 +7305,6 @@
     github = "ehllie";
     githubId = 20847625;
     name = "Elizabeth Paź";
-  };
-  ehmry = {
-    email = "ehmry@posteo.net";
-    github = "ehmry";
-    githubId = 537775;
-    name = "Emery Hemingway";
   };
   eigengrau = {
     email = "seb@schattenkopie.de";
@@ -20993,7 +20993,7 @@
     email = "nix@dev.quantenzitrone.eu";
     github = "quantenzitrone";
     githubId = 74491719;
-    matrix = "@quantenzitrone:matrix.org";
+    matrix = "@zitrone:utwente.io";
     name = "quantenzitrone";
   };
   qubasa = {
