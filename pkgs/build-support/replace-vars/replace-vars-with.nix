@@ -82,6 +82,25 @@ let
     preferLocalBuild = true;
     allowSubstitutes = false;
 
+    # Due to NixOS/nix#12361 the placeholder paths of content-addressed derivations
+    # do not follow the expected format, it lacks the `storeDir` and (more importantly)
+    # the `name`.
+    # This breaks assumptions of some downstream users of replaceVars, notably being able
+    # to filter out patches using their name:
+    #   $ nix build -f. rocmPackages.clang --arg config '{ contentAddressedByDefault = true; }'
+    #   [...]
+    #   > applying patch /nix/store/8va99vng26z2pqlhvsva787rkqnqw8j4-clang-at-least-16-LLVMgold-path.patch
+    #   > patching file lib/Driver/ToolChains/CommonArgs.cpp
+    #   > Hunk #1 succeeded at 775 (offset 186 lines).
+    #   [...]
+    #   > applying patch /nix/store/8va99vng26z2pqlhvsva787rkqnqw8j4-clang-at-least-16-LLVMgold-path.patch
+    #   > patching file lib/Driver/ToolChains/CommonArgs.cpp
+    #   > Reversed (or previously applied) patch detected!  Assume -R? [n]
+    #   > Apply anyway? [n]
+    #   > Skipping patch.
+    #   > 1 out of 1 hunk ignored -- saving rejects to file lib/Driver/ToolChains/CommonArgs.cpp.rej
+    __contentAddressed = false;
+
     buildPhase = ''
       runHook preBuild
 
