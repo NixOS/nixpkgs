@@ -25,7 +25,7 @@ in
         # To make a cardboard session available for certain DMs like SDDM
         services.displayManager.sessionPackages = [ cfg.package ];
       }
-      (import ./wayland-session.nix { inherit lib pkgs; })
+      (import ../wayland-session.nix { inherit lib pkgs; })
     ]
   );
 }

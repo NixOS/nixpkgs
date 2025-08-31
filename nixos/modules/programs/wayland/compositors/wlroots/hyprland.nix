@@ -8,7 +8,7 @@
 let
   cfg = config.programs.hyprland;
 
-  wayland-lib = import ./lib.nix { inherit lib; };
+  wayland-lib = import ../lib.nix { inherit lib; };
 in
 {
   options.programs.hyprland = {
@@ -112,7 +112,9 @@ in
         services.displayManager.sessionPackages = [ cfg.package ];
       })
 
-      (import ./wayland-session.nix {
+      (import ./wlroots.nix { inherit lib pkgs; })
+
+      (import ../wayland-session.nix {
         inherit lib pkgs;
         enableXWayland = cfg.xwayland.enable;
         enableWlrPortal = false; # Hyprland has its own portal, wlr is not needed
