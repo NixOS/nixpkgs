@@ -44,6 +44,7 @@ The following parameters are specific to `buildNimPackage`:
 * `nimFlags ? []`: A list of command line arguments to pass to the Nim compiler.
   Use this to specify defines with arguments in the form of `-d:${name}=${value}`.
 * `nimDoc` ? false`: Build and install HTML documentation.
+* `requiredNimVersion ? 2`: Nim compiler version, either 1 or 2.
 
 ### Lockfiles {#nim-lockfiles}
 Nim lockfiles are created with the `nim_lk` utility.
