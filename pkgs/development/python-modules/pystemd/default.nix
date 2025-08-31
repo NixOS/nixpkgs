@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     psutil
   ];
@@ -59,7 +59,8 @@ buildPythonPackage rec {
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way
     '';
-    homepage = "https://github.com/facebookincubator/pystemd/";
+    homepage = "https://github.com/facebookincubator/pystemd";
+    changelog = "https://github.com/systemd/pystemd/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ flokli ];
   };
