@@ -75,11 +75,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.43.4";
+  version = "1.43.5";
 
   src = fetchurl {
     url = "https://www.recoll.org/${pname}-${version}.tar.gz";
-    hash = "sha256-QsciFCPPThcOlMoAx24ykigfHSEopnUtViquHf1kNMs=";
+    hash = "sha256-Px3uK7I/MkrJbAOmV2ipVct/+p05SST6TLTYoDaLNdQ=";
   };
 
   mesonFlags = [
