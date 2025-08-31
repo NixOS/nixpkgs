@@ -34,7 +34,8 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-fWbvv9MiBZZiTZLu78tMR5Cx0/7xSuVIya3dkuahPE4=";
+    hash = "sha256-kduE5v1oQT76MRxMuGo+snCBdJ+yOjkOJFO45twcUIs=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
