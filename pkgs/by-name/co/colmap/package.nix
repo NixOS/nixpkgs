@@ -11,11 +11,11 @@
   glog,
   libGLU,
   glew,
-  flann,
   cgal,
   gmp,
   mpfr,
   poselib,
+  sqlite,
   lz4,
   autoAddDriverRunpath,
   config,
@@ -34,6 +34,30 @@ assert cudaSupport -> cudaPackages != { };
 
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  # These deps are also needed by pycolmap.
+  pythonDeps = [
+    boost
+    eigen
+    ceres-solver
+    freeimage
+    glog
+    libGLU
+    glew
+    cgal
+    poselib
+    faiss
+    sqlite
+    gmp
+    mpfr
+    lz4
+    qt5.qtbase
+  ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ]
+  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
@@ -63,28 +87,9 @@ stdenv'.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
-    ceres-solver
-    eigen
-    freeimage
-    glog
-    libGLU
-    glew
-    qt5.qtbase
-    flann
-    lz4
-    cgal
-    gmp
-    mpfr
     xorg.libSM
-    poselib
-    faiss
   ]
-  ++ lib.optionals cudaSupport [
-    cudatoolkit
-    cudaPackages.cuda_cudart.static
-  ]
-  ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
+  ++ pythonDeps;
 
   nativeBuildInputs = [
     cmake
@@ -96,6 +101,7 @@ stdenv'.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater { };
+  passthru.pythonDeps = pythonDeps;
 
   meta = with lib; {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
