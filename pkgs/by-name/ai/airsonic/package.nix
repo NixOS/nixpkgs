@@ -19,8 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/airsonic.war"
   '';
 
-  passthru.tests = {
-    airsonic-starts = nixosTests.airsonic;
+  stdenv = {
+    tests = {
+      airsonic-starts = nixosTests.airsonic;
+    };
   };
 
   meta = {

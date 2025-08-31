@@ -7,6 +7,7 @@
   swtpm,
   openssl,
   age,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -38,9 +39,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  passthru.tests = {
-    encrypt = callPackage ./tests/encrypt.nix { };
-    decrypt = nixosTests.age-plugin-tpm-decrypt;
+  stdenv = {
+    tests = {
+      encrypt = callPackage ./tests/encrypt.nix { };
+      decrypt = nixosTests.age-plugin-tpm-decrypt;
+    };
   };
 
   meta = {
