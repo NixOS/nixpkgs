@@ -1226,7 +1226,7 @@ rec {
 
     `xs`
 
-    : A list of strings used as generator.
+    : A list of strings `s` used as generator.
 
     `f`
 
