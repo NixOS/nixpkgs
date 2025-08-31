@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
   libkiwix,
@@ -10,10 +10,11 @@
   qtwebengine,
   qtsvg,
   qtimageformats,
+  wrapQtAppsHook,
   aria2,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kiwix";
   version = "2.4.1";
 
@@ -35,6 +36,7 @@ mkDerivation rec {
     qtwebengine
     qtsvg
     qtimageformats
+    wrapQtAppsHook
   ];
 
   qtWrapperArgs = [
