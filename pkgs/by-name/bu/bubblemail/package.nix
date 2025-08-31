@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
-  version = "1.9";
+  version = "1.8";
   format = "pyproject";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "razer";
     repo = "bubblemail";
     rev = "v${version}";
-    sha256 = "sha256-eXEFBLo7CbLRlnI2nr7qWAdLUKe6PLQJ78Ho8MP9ShY=";
+    sha256 = "sha256-/42eToKHqStJrHZlidABYw/Is9LGI9f9RubWUBZlHyo=";
   };
 
   buildInputs = [
