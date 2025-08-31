@@ -158,13 +158,24 @@ To add a package to Nixpkgs:
    You may want to add the flag `-K` to keep the temporary build directory in case something fails.
    If the build succeeds, a symlink `./result` to the package in the Nix store is created.
 
-6. If you want to install the package into your profile (optional), do
+6. Install the package:
 
-   ```ShellSession
-   $ nix-env -f . -iA libfoo
-   ```
+   - (Recommended) Within a VM that has the same configuration as your system but with all packages at the latest version specified within your nixpkgs fork.
+     1. (Optional) Load the `kvm-intel` or `kvm-amd` kernel modules to use hardware virtualization support to get an improved experience.
+     2. Ensure you've either `users.users.your-user.initialHashedPassword` or `users.users.your-user.initialPassword` within your `configuration.nix` (or create a separate version for testing).
+     3. If you need specific group memberships for your tests also ensure `users.users.your-user.group` is specified.
+     4. Build your testing VM `nixos-rebuild -I nixpkgs=/path/to/your/nixpkgs/checkout build-vm` should you've created a separate `configuration.nix` then ensure to point `nix-rebuild` that way by adding `-I nixos-config=/path/to/testing/configuration.nix` to the command.
+     5. Run the testing VM `./result/bin/run-*-vm`. **NOTE**: After changing your `configuration.nix` you'll have to delete the qcow2 file within your repo to rebuild the VM.
+   - Should you have a dedicated testing system (NOT recommended otherwise) then the quick and dirty way is to use `nix-env -f . -iA libfoo` to install it into your profile directly.
+      **Warning**: Using `nix-env` permanently modifies a local profile of installed packages. This must be updated and maintained by the user in the same way as with a traditional package manager, foregoing many of the benefits that make Nix uniquely powerful. Using `nix-shell` or a NixOS configuration is recommended instead.
+   - Temporarily install into your profile using the new experimental `nix profile install` (`nix profile add` after NixOS 25.05):
+     - To install: `nix --extra-experimental-features flakes --extra-experimental-features nix-command profile install -I . .#libfoo`
+     - To list everything installed this way: `nix --extra-experimental-features flakes --extra-experimental-features nix-command profile list`
+     - To remove: `nix --extra-experimental-features flakes --extra-experimental-features nix-command profile remove libfoo`
+       **Warning**: Most of the concers of `nix-env` also apply here too, but this approach has the benefit of being able to easily remove the package again and thereby allow to only temporarily be out of sync with your `configuration.nix`.
+   - Using `nixos-rebuild -I nixpkgs=/path/to/your/nixpkgs/checkout test`: First check which git commit your system is running on using `nixos-version --hash`. If you developed your changes ontop of a different commit than what is shown, then running `nixos-rebuild` against your nixpkgs fork will rebuild more than just your changes. To avoid this you'll have to rebase your changes within a temporary branch ontop of the commit your system uses.
 
-7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
+8. Open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
 ## Commit conventions
 
@@ -719,8 +730,7 @@ To run the main types of tests locally:
 - Note: Some packages contain [links to specific NixOS tests](#Linking-NixOS-module-tests-to-a-package). To run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) individually use `nix-build --attr nixosTests.NAME`. For the full list see [`nixos/tests/all-tests.nix`](../nixos/tests/all-tests.nix).
 - For some packages a global test may exist within [`pkgs/test/default.nix`](../pkgs/test/default.nix). They can be run like this: `nix-build --attr tests.PACKAGE`
 - For some libraries more tests may be defined in [`lib/tests/`](../lib/tests), where the filename is equal to the name of the libraries package followed by `.nix`. Have a look into this `.nix`-file for more specific testing instructions.
-- Try building the package similar to the instructions in the [add new package](#quick-start-to-adding-a-package) section with: `nix-build -A some-package`
-- Try run your package `sudo nixos-rebuild -I nixpkgs=/home/user/git/nixpkgs test` or in case your current system is not currently using the same 
+- Try building the package. See [add new package](#quick-start-to-adding-a-package) for details.
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
