@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
