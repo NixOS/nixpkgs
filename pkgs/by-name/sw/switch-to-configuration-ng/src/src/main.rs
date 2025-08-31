@@ -16,6 +16,7 @@ use std::{
 
 use anyhow::{anyhow, bail, Context, Result};
 use dbus::{
+    arg::Variant,
     blocking::{stdintf::org_freedesktop_dbus::Properties, LocalConnection, Proxy},
     Message,
 };
@@ -59,6 +60,22 @@ use crate::{
 };
 
 type UnitInfo = HashMap<String, HashMap<String, Vec<String>>>;
+
+#[derive(Debug)]
+enum SystemdMarker {
+    NeedsReload,
+    NeedsRestart,
+}
+
+impl From<SystemdMarker> for String {
+    fn from(val: SystemdMarker) -> Self {
+        (match val {
+            SystemdMarker::NeedsReload => "needs-reload",
+            SystemdMarker::NeedsRestart => "needs-restart",
+        })
+        .to_string()
+    }
+}
 
 const SYSINIT_REACTIVATION_TARGET: &str = "sysinit-reactivation.target";
 
@@ -865,8 +882,7 @@ static ACTION: OnceLock<Action> = OnceLock::new();
 #[derive(Debug)]
 enum Job {
     Start,
-    Restart,
-    Reload,
+    RestartOrReload,
     Stop,
 }
 
@@ -877,8 +893,7 @@ impl std::fmt::Display for Job {
             "{}",
             match self {
                 Job::Start => "start",
-                Job::Restart => "restart",
-                Job::Reload => "reload",
+                Job::RestartOrReload => "restart or reload",
                 Job::Stop => "stop",
             }
         )
@@ -1714,7 +1729,7 @@ won't take effect until you reboot the system.
     match systemd.restart_unit(SYSINIT_REACTIVATION_TARGET, "replace") {
         Ok(job_path) => {
             let mut jobs = submitted_jobs.borrow_mut();
-            jobs.insert(job_path, Job::Restart);
+            jobs.insert(job_path, Job::RestartOrReload);
         }
         Err(err) => {
             eprintln!("Failed to restart {SYSINIT_REACTIVATION_TARGET}: {err}");
@@ -1759,20 +1774,20 @@ won't take effect until you reboot the system.
         eprintln!("reloading the following units: {}", units.join(", "));
 
         for unit in units {
-            match systemd.reload_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs
-                        .borrow_mut()
-                        .insert(job_path.clone(), Job::Reload);
-                }
-                Err(err) => {
-                    eprintln!("Failed to reload {unit}: {err}");
-                    exit_code = 4;
-                }
+            if let Err(err) = systemd.set_unit_properties(
+                unit,
+                true, // runtime
+                vec![(
+                    "Markers",
+                    Variant(Box::<Vec<String>>::new(vec![
+                        SystemdMarker::NeedsReload.into()
+                    ])),
+                )],
+            ) {
+                eprintln!("Failed to mark unit {unit} with needs-reload: {err}");
+                exit_code = 4;
             }
         }
-
-        block_on_jobs(&dbus_conn, &submitted_jobs);
 
         remove_file_if_exists(RELOAD_LIST_FILE)
             .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
@@ -1788,23 +1803,32 @@ won't take effect until you reboot the system.
         eprintln!("restarting the following units: {}", units.join(", "));
 
         for unit in units {
-            match systemd.restart_unit(unit, "replace") {
-                Ok(job_path) => {
-                    let mut jobs = submitted_jobs.borrow_mut();
-                    jobs.insert(job_path, Job::Restart);
-                }
-                Err(err) => {
-                    eprintln!("Failed to restart {unit}: {err}");
-                    exit_code = 4;
-                }
+            if let Err(err) = systemd.set_unit_properties(
+                unit,
+                true, // runtime
+                vec![(
+                    "Markers",
+                    Variant(Box::<Vec<String>>::new(vec![
+                        SystemdMarker::NeedsRestart.into()
+                    ])),
+                )],
+            ) {
+                eprintln!("Failed to mark unit {unit} with needs-restart: {err}");
+                exit_code = 4;
             }
         }
-
-        block_on_jobs(&dbus_conn, &submitted_jobs);
 
         remove_file_if_exists(RESTART_LIST_FILE)
             .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
     }
+
+    let marked_jobs = systemd.enqueue_marked_jobs()?;
+    for job_path in marked_jobs {
+        let mut jobs = submitted_jobs.borrow_mut();
+        jobs.insert(job_path, Job::RestartOrReload);
+    }
+
+    block_on_jobs(&dbus_conn, &submitted_jobs);
 
     // Start all active targets, as well as changed units we stopped above. The latter is necessary
     // because some may not be dependencies of the targets (i.e., they were manually started).
