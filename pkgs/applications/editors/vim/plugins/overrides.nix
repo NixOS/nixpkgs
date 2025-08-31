@@ -2663,8 +2663,6 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
-  nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
-
   nvim-treesitter-pyfold = super.nvim-treesitter-pyfold.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
