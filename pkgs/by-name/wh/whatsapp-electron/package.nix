@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     npmHooks.npmConfigHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
