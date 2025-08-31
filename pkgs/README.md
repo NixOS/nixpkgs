@@ -715,10 +715,12 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 
 To run the main types of tests locally:
 
-- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
-- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTests.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
-- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
-- See `lib/tests/NAME.nix` for instructions on running specific library tests
+- Run package-internal tests (when defined within the specified package) with `nix-build --attr pkgs.PACKAGE.passthru.tests`.
+- Note: Some packages contain [links to specific NixOS tests](#Linking-NixOS-module-tests-to-a-package). To run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) individually use `nix-build --attr nixosTests.NAME`. For the full list see [`nixos/tests/all-tests.nix`](../nixos/tests/all-tests.nix).
+- For some packages a global test may exist within [`pkgs/test/default.nix`](../pkgs/test/default.nix). They can be run like this: `nix-build --attr tests.PACKAGE`
+- For some libraries more tests may be defined in [`lib/tests/`](../lib/tests), where the filename is equal to the name of the libraries package followed by `.nix`. Have a look into this `.nix`-file for more specific testing instructions.
+- Try building the package similar to the instructions in the [add new package](#quick-start-to-adding-a-package) section with: `nix-build -A some-package`
+- Try run your package `sudo nixos-rebuild -I nixpkgs=/home/user/git/nixpkgs test` or in case your current system is not currently using the same 
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
@@ -732,6 +734,25 @@ The following types of tests exists:
 * The **`checkPhase` of a package**, which should execute the unit tests that are included in the source code of a package.
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
+
+### Running package tests
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A phoronix-test-suite.tests
+```
+
+### Examples of package tests
+
+Here are examples of package tests:
+
+- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
+- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
+- [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
+- [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
+- [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 
 ### Writing inline package tests
 
@@ -842,25 +863,6 @@ runCommand "${pname}-tests" { meta.timeout = 60; } ''
   touch $out
 ''
 ```
-
-### Running package tests
-
-You can run these tests with:
-
-```ShellSession
-$ cd path/to/nixpkgs
-$ nix-build -A phoronix-test-suite.tests
-```
-
-### Examples of package tests
-
-Here are examples of package tests:
-
-- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
-- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
-- [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
-- [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
-- [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 
 ### Linking NixOS module tests to a package
 
