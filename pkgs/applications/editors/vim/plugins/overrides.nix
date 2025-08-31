@@ -1401,10 +1401,9 @@ in
     dependencies = [ self.luasnip ];
   };
 
-  haskell-tools-nvim = neovimUtils.buildNeovimPlugin {
+  haskell-tools-nvim = super.haskell-tools-nvim.overrideAttrs {
     # Optional integrations
     checkInputs = [ self.telescope-nvim ];
-    luaAttr = luaPackages.haskell-tools-nvim;
   };
 
   helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {

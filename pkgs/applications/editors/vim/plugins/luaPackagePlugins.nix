@@ -12,6 +12,7 @@ let
     "fzf-lua"
     "gitsigns-nvim"
     "grug-far-nvim"
+    "haskell-tools-nvim"
     "image-nvim"
     "lsp-progress-nvim"
     "lualine-nvim"
