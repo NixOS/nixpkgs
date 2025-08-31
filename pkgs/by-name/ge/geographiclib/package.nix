@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://geographiclib.sourceforge.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
 }
