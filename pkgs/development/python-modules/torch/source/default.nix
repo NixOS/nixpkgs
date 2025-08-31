@@ -4,7 +4,7 @@
   pkgs,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -301,10 +301,10 @@ buildPythonPackage rec {
 
     # Do not override PYTHONPATH, otherwise, the build fails with:
     # ModuleNotFoundError: No module named 'typing_extensions'
-    (fetchpatch2 {
+    (fetchpatch {
       name = "cmake-build-preserve-PYTHONPATH";
       url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
-      hash = "sha256-7f9qtr7ljqjKdj3DqpcCTS0/Hr2AwOzOl/HA88yU3zI=";
+      hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
     })
   ]
   ++ lib.optionals cudaSupport [
