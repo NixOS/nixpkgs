@@ -3058,20 +3058,16 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  rocks-nvim =
-    (neovimUtils.buildNeovimPlugin {
-      luaAttr = luaPackages.rocks-nvim;
-    }).overrideAttrs
-      (oa: {
-        passthru = oa.passthru // {
-          initLua = ''
-            vim.g.rocks_nvim = {
-              luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
-              }
-          '';
-        };
+  rocks-nvim = super.rocks-nvim.overrideAttrs (oa: {
+    passthru = oa.passthru // {
+      initLua = ''
+        vim.g.rocks_nvim = {
+          luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
+          }
+      '';
+    };
 
-      });
+  });
 
   rustaceanvim = neovimUtils.buildNeovimPlugin {
     checkInputs = [
