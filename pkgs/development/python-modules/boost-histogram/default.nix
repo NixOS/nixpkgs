@@ -23,6 +23,9 @@
   # tests
   pytestCheckHook,
   pytest-benchmark,
+  pytest-xdist,
+  cloudpickle,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -57,6 +60,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-benchmark
+    pytest-xdist
+    cloudpickle
+    hypothesis
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
