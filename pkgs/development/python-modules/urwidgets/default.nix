@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ urwid ];
 
+  pythonRelaxDeps = [ "urwid" ];
+
   pythonImportsCheck = [ "urwidgets" ];
 
   meta = with lib; {
