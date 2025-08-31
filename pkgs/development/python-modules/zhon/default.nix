@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zhon";
-  version = "2.0.2";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsroten";
     repo = "zhon";
     tag = "v${version}";
-    hash = "sha256-LFuEXu0IPJ6UFHhJKqQHp829wndNypmmhO0yZ1WEAXg=";
+    hash = "sha256-ghZp+5YXmTWf1EJKvdSlqccnxnaLliYR5HxX5DcWXiw=";
   };
 
   build-system = [ hatchling ];
