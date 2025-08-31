@@ -522,6 +522,11 @@
     githubId = 1375043;
     name = "Marius Kleidl";
   };
+  aceroph = {
+    name = "Aceroph";
+    github = "Aceroph";
+    githubId = 109217147;
+  };
   acesyde = {
     name = "Pierre-Emmanuel Mercier";
     email = "acesyde@gmail.com";
