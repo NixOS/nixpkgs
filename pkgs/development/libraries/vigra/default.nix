@@ -77,7 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    maintainers = with lib.maintainers; [
+      ShamrockLee
+      kyehn
+    ];
     platforms = lib.platforms.unix;
   };
 })
