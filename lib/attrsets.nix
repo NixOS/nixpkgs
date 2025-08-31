@@ -1230,7 +1230,7 @@ rec {
 
     `f`
 
-    : A function, given the a string s from the list xs, returns a new `nameValuePair`.
+    : A function, given a string `s` from the list `xs`, returns a new `nameValuePair`.
 
     # Type
 
