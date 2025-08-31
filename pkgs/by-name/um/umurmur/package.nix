@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic Murmur (Mumble server)";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/umurmur/umurmur";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
