@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visualboyadvance-m";
-  version = "2.1.11";
+  version = "2.2.2";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
+    hash = "sha256-N/NGEOH0StP3cDVhsgfdjE3cHTdrhuCVfuSviLZ3axA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gsettings-desktop-schemas
   ];
+
+  postPatch = ''
+    cp ${./FindFFMPEG.cmake} cmake/FindFFMPEG.cmake
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_FFMPEG" true)
