@@ -11,6 +11,7 @@
   mock,
   protobuf,
   pytestCheckHook,
+  pytest-asyncio,
   pythonOlder,
   requests,
   setuptools,
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     google-cloud-testutils
     mock
     pytestCheckHook
+    pytest-asyncio
   ];
 
   enabledTestPaths = [
