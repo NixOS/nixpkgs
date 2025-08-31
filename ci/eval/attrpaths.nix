@@ -2,19 +2,12 @@
 # *superset* of all attrpaths of derivations which might be
 # part of a release on *any* platform.
 #
-# Both this expression and what ofborg uses (outpaths.nix)
-# are essentially single-threaded (under the current cppnix
-# implementation).
-#
-# This expression runs much, much, much faster and uses much, much
-# less memory than the ofborg script by skipping the
-# platform-relevance checks.  The ofborg outpaths.nix script takes
-# half an hour on a 3ghz core and peaks at 60gbytes of memory; this
-# expression runs on the same machine in 44 seconds with peak memory
-# usage of 5gbytes.
+# This expression runs single-threaded under all current Nix
+# implementations, but much faster and with much less memory
+# used than ./outpaths.nix itself.
 #
 # Once you have the list of attrnames you can split it up into
-# $NUM_CORES batches and run the platform checks separately for each
+# $NUM_CORES batches and evaluate the outpaths separately for each
 # batch, in parallel.
 #
 # To dump the attrnames:
