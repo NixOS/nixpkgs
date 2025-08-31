@@ -128,12 +128,22 @@ self: super:
 let
   luaPackages = neovim-unwrapped.lua.pkgs;
 
-  # Ensure the vim plugin builders are not used in this file.
-  # If they are used, these stubs will throw.
-  buildVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
-  buildNeoVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
+  # Ensures new attributes are not added in this file.
+  assertNoAdditions =
+    overrides:
+    let
+      prevNames = lib.attrNames super;
+      definedNames = lib.attrNames overrides;
+      addedNames = lib.subtractLists prevNames definedNames;
+    in
+    lib.throwIfNot (addedNames == [ ])
+      "vimPlugins: the following attributes should not be defined in overrides.nix:${
+        lib.concatMapStrings (name: "\n- ${name}") addedNames
+      }"
+      overrides;
 in
-{
+
+assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
       snacks-nvim
