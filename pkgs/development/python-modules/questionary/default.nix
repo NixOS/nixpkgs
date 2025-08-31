@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tmbo";
     repo = "questionary";
     tag = version;
-    hash = "sha256-HiQsOkG3oK+hnyeFjebnVASxpZhUPGBGz69JvPO43fM=";
+    hash = "sha256-r7F5y6KD6zonQGtO/9OuCTMTWdkCdd9aqTgKg6eWp08=";
   };
 
   pythonRelaxDeps = [ "prompt_toolkit" ];
