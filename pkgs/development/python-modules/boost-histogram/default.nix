@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_numpy_conversion_4"
   ];
 
+  pythonImportsCheck = [ "boost_histogram" ];
+
   meta = {
     description = "Python bindings for the C++14 Boost::Histogram library";
     homepage = "https://github.com/scikit-hep/boost-histogram";
