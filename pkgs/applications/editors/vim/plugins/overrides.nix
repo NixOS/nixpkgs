@@ -36,7 +36,6 @@
   nodejs,
   openscad,
   openssh,
-  parinfer-rust,
   ranger,
   ripgrep,
   sqlite,
@@ -2866,8 +2865,6 @@ in
   package-info-nvim = super.package-info-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
-
-  inherit parinfer-rust;
 
   parpar-nvim = super.parpar-nvim.overrideAttrs {
     dependencies = with self; [
