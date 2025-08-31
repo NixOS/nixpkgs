@@ -186,6 +186,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Needed by the Ghidra Server NixOS module. Create a symlink in order to provide a stable path.
     ln -s "$out/lib/ghidra/Ghidra/Features/GhidraServer/data/yajsw-stable-13.12" "$out/lib/ghidra/Ghidra/Features/GhidraServer/data/yajsw"
+
+    # TODO: description
+    substituteInPlace "$out/lib/ghidra/server/ghidraSvr" \
+      --replace-fail "\''${SCRIPT_DIR}/server.conf" "/etc/ghidra-server.conf"
+
+    # TODO: description
+    substituteInPlace "$out/lib/ghidra/server/svrAdmin" \
+      --replace-fail "\''${SCRIPT_DIR}/server.conf" "/etc/ghidra-server.conf"
   '';
 
   passthru = {
