@@ -34,7 +34,6 @@
   neovim-unwrapped,
   nim1,
   nodejs,
-  notmuch,
   openscad,
   openssh,
   parinfer-rust,
@@ -2305,8 +2304,6 @@ in
 
   NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
   };
-
-  notmuch-vim = notmuch.vim;
 
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
