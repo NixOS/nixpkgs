@@ -8,6 +8,7 @@
   gettext,
   ninja,
   audit,
+  linuxHeaders,
   libxcrypt,
   nixosTests,
   meson,
@@ -21,7 +22,10 @@
   docbook_xsl_ns,
   nix-update-script,
   withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  withAudit ? lib.meta.availableOn stdenv.hostPlatform audit,
+  withAudit ?
+    lib.meta.availableOn stdenv.hostPlatform audit
+    # cross-compilation only works from platforms with linux headers
+    && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
