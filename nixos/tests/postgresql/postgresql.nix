@@ -66,6 +66,7 @@ let
             enable = true;
             databases = lib.optional (!backupAll) "postgres";
             pgdumpOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            pgdumpAllOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           };
         };
 
