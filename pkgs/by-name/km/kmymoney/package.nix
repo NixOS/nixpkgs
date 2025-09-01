@@ -2,34 +2,18 @@
   stdenv,
   lib,
   fetchurl,
-
   cmake,
   doxygen,
-  extra-cmake-modules,
   graphviz,
-  kdoctools,
   pkg-config,
-  wrapQtAppsHook,
   autoPatchelfHook,
-
-  akonadi,
+  kdePackages,
   alkimia,
   aqbanking,
   gmp,
   gwenhywfar,
-  karchive,
-  kcmutils,
-  kcontacts,
-  qtwebengine,
-  kdiagram,
-  kholidays,
-  kidentitymanagement,
-  kitemmodels,
   libical,
   libofx,
-  plasma-activities,
-  qgpgme,
-
   sqlcipher,
 
   # Needed for running tests:
@@ -38,12 +22,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmymoney";
   version = "5.2.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/kmymoney/${finalAttrs.version}/kmymoney-${finalAttrs.version}.tar.xz";
     hash = "sha256-/q30C21MkNd+MnFqhY3SN2kIGGMQTYzqYpELHsPkM2s=";
   };
 
@@ -54,21 +38,28 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     doxygen
-    extra-cmake-modules
     graphviz
-    kdoctools
     pkg-config
     python3.pkgs.wrapPython
+  ]
+  ++ (with kdePackages; [
+    extra-cmake-modules
     wrapQtAppsHook
+    kdoctools
     autoPatchelfHook
-  ];
+  ]);
 
   buildInputs = [
-    akonadi
     alkimia
     aqbanking
     gmp
     gwenhywfar
+    libical
+    libofx
+    sqlcipher
+  ]
+  ++ (with kdePackages; [
+    akonadi
     karchive
     kcmutils
     kcontacts
@@ -77,12 +68,10 @@ stdenv.mkDerivation rec {
     kholidays
     kidentitymanagement
     kitemmodels
-    libical
-    libofx
     plasma-activities
     qgpgme
-    sqlcipher
-
+  ])
+  ++ [
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
     python3.pkgs.woob
@@ -117,4 +106,4 @@ stdenv.mkDerivation rec {
       das-g
     ];
   };
-}
+})
