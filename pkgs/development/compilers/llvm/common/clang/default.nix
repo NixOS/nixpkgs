@@ -28,12 +28,12 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } (''
+        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
           mkdir -p "$out"
           cp -r ${monorepoSrc}/cmake "$out"
           cp -r ${monorepoSrc}/clang "$out"
           cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        '')
+        ''
       else
         src;
 

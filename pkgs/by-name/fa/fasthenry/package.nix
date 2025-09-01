@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.fastfieldsolvers.com/fasthenry2.htm";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fbeffa ];
-    platforms = with lib.platforms; lib.intersectLists (linux) (x86_64 ++ x86);
+    platforms = with lib.platforms; lib.intersectLists linux (x86_64 ++ x86);
     mainProgram = "fasthenry";
   };
 })

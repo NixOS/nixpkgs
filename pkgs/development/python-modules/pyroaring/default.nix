@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    (cython.overrideAttrs (rec {
+    (cython.overrideAttrs rec {
       name = "cython";
       version = "3.0.12";
       src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
         tag = version;
         hash = "sha256-clJXjQb6rVECirKRUGX0vD5a6LILzPwNo7+6KKYs2pI=";
       };
-    }))
+    })
     setuptools
   ];
 

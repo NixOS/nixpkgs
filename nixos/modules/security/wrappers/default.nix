@@ -294,11 +294,11 @@ in
         where = parentWrapperDir;
         what = "tmpfs";
         type = "tmpfs";
-        options = lib.concatStringsSep "," ([
+        options = lib.concatStringsSep "," [
           "nodev"
           "mode=755"
           "size=${config.security.wrapperDirSize}"
-        ]);
+        ];
       }
     ];
 
