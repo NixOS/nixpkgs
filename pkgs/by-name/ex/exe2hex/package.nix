@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "exe2hex";
-  version = "1.5.2-unstable-2020-04-27";
+  version = "1.5.1";
   pyproject = false;
 
   src = fetchFromGitHub {
