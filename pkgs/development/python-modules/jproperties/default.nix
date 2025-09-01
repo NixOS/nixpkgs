@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jproperties";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Tblue";
     repo = "python-jproperties";
     rev = "v${version}";
-    hash = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
+    hash = "sha256-wnhEcPWAFUXR741/LZT3TXqxrU70JZe+90AkVEA3A+k=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
