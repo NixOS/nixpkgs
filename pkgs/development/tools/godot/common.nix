@@ -114,7 +114,7 @@ let
             version = dottedVersion;
           };
         }
-        // lib.optionalAttrs (editor) (
+        // lib.optionalAttrs editor (
           let
             project-src =
               runCommand "${pkg.name}-project-src"
@@ -337,7 +337,7 @@ let
         outputs = [
           "out"
         ]
-        ++ lib.optional (editor) "man";
+        ++ lib.optional editor "man";
         separateDebugInfo = true;
 
         # Set the build name which is part of the version. In official downloads, this

@@ -299,7 +299,7 @@ stdenv.mkDerivation (
       )
       +
         # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
           # fails when run in sandbox
           (
             ''
@@ -346,7 +346,7 @@ stdenv.mkDerivation (
                 rm test/tools/dsymutil/ARM/obfuscated.test
               ''
           )
-        )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''

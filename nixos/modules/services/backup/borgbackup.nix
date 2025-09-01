@@ -206,14 +206,13 @@ let
       {
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
-      (
 
-        ''
-          makeWrapper "${original}" "$out/bin/${name}" \
-            ${lib.concatStringsSep " \\\n " (
-              lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
-            )}
-        '');
+      ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${lib.concatStringsSep " \\\n " (
+            lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
+          )}
+      '';
 
   # Returns a singleton list, due to usage of lib.optional
   mkBorgWrapper =

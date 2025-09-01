@@ -354,7 +354,7 @@ in
       ];
     })
 
-    (lib.mkIf cfg.web.enable ({
+    (lib.mkIf cfg.web.enable {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -415,7 +415,7 @@ in
       };
 
       environment.systemPackages = [ pkgs.python3Packages.graphite-web ];
-    }))
+    })
 
     (lib.mkIf cfg.seyren.enable {
       systemd.services.seyren = {

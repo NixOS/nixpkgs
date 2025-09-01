@@ -241,7 +241,7 @@ in
               Invalid machine specifications:
           ''
           + "      "
-          + (concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
+          + (concatStringsSep "\n      " (map (m: m.hostName) (filter badMachine cfg.buildMachines)));
         }
       ];
 

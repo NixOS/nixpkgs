@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
-    lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
+    lib.optional qrcodegenSupport "-DUSE_QRCODEGEN=ON"
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
   # https://github.com/dankamongmen/notcurses/issues/2661

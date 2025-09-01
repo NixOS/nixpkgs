@@ -167,7 +167,7 @@ let
       rm -rf csrc/cutlass
       ln -sf ${cutlass} csrc/cutlass
     ''
-    + lib.optionalString (rocmSupport) ''
+    + lib.optionalString rocmSupport ''
       rm -rf csrc/composable_kernel;
       ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
     '';
