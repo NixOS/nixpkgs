@@ -1226,7 +1226,44 @@ rec {
 
     :::
   */
-  genAttrs = names: f: listToAttrs (map (n: nameValuePair n (f n)) names);
+  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
+
+  /**
+    Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
+    The applied function should return both the new name and value as a `nameValuePair`.
+    ::: {.warning}
+    In case of attribute name collision the first entry determines the value,
+    all subsequent conflicting entries for the same name are silently ignored.
+    :::
+
+    # Inputs
+
+    `xs`
+
+    : A list of strings `s` used as generator.
+
+    `f`
+
+    : A function, given a string `s` from the list `xs`, returns a new `nameValuePair`.
+
+    # Type
+
+    ```
+    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.genAttrs'` usage example
+
+    ```nix
+    genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s))
+    => { x_foo = "y_foo"; x_bar = "y_bar"; }
+    ```
+
+    :::
+  */
+  genAttrs' = xs: f: listToAttrs (map f xs);
 
   /**
     Check whether the argument is a derivation. Any set with
