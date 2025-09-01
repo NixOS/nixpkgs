@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   hatchling,
+  uv-dynamic-versioning,
   pytestCheckHook,
   pytest-localserver,
   numpy,
@@ -25,14 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-ZxeZiCw8I5+Bf266PQ6WQA8mBRC7K3/kZrmuW4l6kQU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "uv-dynamic-versioning"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
-
   build-system = [
     hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [

@@ -5,20 +5,24 @@
   buildGoModule,
   installShellFiles,
   nix-update-script,
+  scdoc,
 }:
 buildGoModule (finalAttrs: {
   pname = "optnix";
-  version = "0.2.0";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "water-sucks";
     repo = "optnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CI0D70oP4usQXh39wm2z+s9QKQaaHFB6og3B/VHaAiY=";
+    hash = "sha256-kPCRCnjuKZd6RE5pkQJMYWpexnMyhUy9jrBFSztkiLM=";
   };
 
-  vendorHash = "sha256-/rV21mX6VrJj39M6dBw4ubp6+O47hxeLn0ZcsG6Ujno=";
+  vendorHash = "sha256-g/H91PiHWSRRQOkaobw2wAYX/07DFxWTCTlKzf7BT1Y=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   env = {
     CGO_ENABLED = 0;
@@ -27,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    make all
+    make all man
     runHook postBuild
   '';
 
@@ -35,6 +39,9 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     install -Dm755 ./optnix -t $out/bin
+
+    install -Dm755 ./optnix.1 -t $out/share/man/man1
+    install -Dm755 ./optnix.toml.5 -t $out/share/man/man5
 
     runHook postInstall
   '';

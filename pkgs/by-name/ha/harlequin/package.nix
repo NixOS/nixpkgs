@@ -6,6 +6,7 @@
   nix-update-script,
   glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
@@ -25,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     "numpy"
     "pyarrow"
     "textual"
+    "tree-sitter"
     "tree-sitter-sql"
   ];
 
@@ -65,14 +67,11 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [

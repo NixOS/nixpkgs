@@ -5,6 +5,7 @@
 {
   changedattrs,
   changedpathsjson,
+  removedattrs,
   byName ? false,
 }:
 let
@@ -21,43 +22,18 @@ let
 
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (name: {
-    path = lib.splitString "." name;
-    name = name;
-  }) changedattrs;
-
-  validPackageAttributes = builtins.filter (
-    pkg:
-    if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
-      (
-        let
-          value = lib.attrsets.attrByPath pkg.path null pkgs;
-        in
-        if (builtins.tryEval value).success then
-          if value != null then true else builtins.trace "${pkg.name} exists but is null" false
-        else
-          builtins.trace "Failed to access ${pkg.name} even though it exists" false
-      )
-    else
-      builtins.trace "Failed to locate ${pkg.name}." false
-  ) enrichedAttrs;
-
-  attrsWithPackages = builtins.map (
-    pkg: pkg // { package = lib.attrsets.attrByPath pkg.path null pkgs; }
-  ) validPackageAttributes;
-
   attrsWithMaintainers = builtins.map (
-    pkg:
+    name:
     let
-      meta = pkg.package.meta or { };
+      package = lib.getAttrFromPath (lib.splitString "." name) pkgs;
     in
-    pkg
-    // {
+    {
+      inherit name package;
       # TODO: Refactor this so we can ping entire teams instead of the individual members.
       # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers = meta.maintainers or [ ];
+      maintainers = package.meta.maintainers or [ ];
     }
-  ) attrsWithPackages;
+  ) (changedattrs ++ removedattrs);
 
   relevantFilenames =
     drv:
