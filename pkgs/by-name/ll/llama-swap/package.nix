@@ -7,6 +7,8 @@
   versionCheckHook,
 
   callPackage,
+
+  nixosTests,
 }:
 
 let
@@ -86,6 +88,8 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgramArg = "-version";
+
+  passthru.tests.nixos = nixosTests.llama-swap;
 
   meta = {
     homepage = "https://github.com/mostlygeek/llama-swap";
