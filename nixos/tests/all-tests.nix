@@ -846,6 +846,7 @@ in
   litellm = runTest ./litellm.nix;
   litestream = runTest ./litestream.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
+  llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
