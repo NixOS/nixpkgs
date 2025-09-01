@@ -613,6 +613,17 @@ in
     '';
   };
 
+  pomodoro-plus = mkTmuxPlugin {
+    pluginName = "pomodoro-plus";
+    version = "unstable-2025-03-12";
+    src = fetchFromGitHub {
+      owner = "olimorris";
+      repo = "tmux-pomodoro-plus";
+      rev = "f1b76b760157f4521d5c05ec64ac70ecd34cfb46";
+      hash = "sha256-pWnfq2yAy9PkXatxto9eRPczoyrNEpA6l9683Q0gWQA=";
+    };
+  };
+
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
