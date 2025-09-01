@@ -3323,6 +3323,8 @@ self: super: with self; {
 
   dask-yarn = callPackage ../development/python-modules/dask-yarn { };
 
+  databackend = callPackage ../development/python-modules/databackend { };
+
   databases = callPackage ../development/python-modules/databases { };
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };

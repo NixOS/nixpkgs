@@ -57,6 +57,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "Dynamic versioning based on VCS tags for uv/hatch project";
     homepage = "https://github.com/ninoseki/uv-dynamic-versioning";

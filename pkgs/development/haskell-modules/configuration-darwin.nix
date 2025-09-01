@@ -328,6 +328,19 @@ self: super:
       __darwinAllowLocalNetworking = true;
     });
 
+    # 2025-08-04: Some RNG tests fail only on Darwin
+    botan-low = overrideCabal (drv: {
+      testFlags =
+        drv.testFlags or [ ]
+        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
+          # botan-low-rng-tests
+          "/rdrand/rngInit/"
+          "/rdrand/rngGet/"
+          "/rdrand/rngReseed/"
+          "/rdrand/rngReseedFromRNGCtx/"
+          "/rdrand/rngAddEntropy/"
+        ]);
+    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
