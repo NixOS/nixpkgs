@@ -7,19 +7,19 @@
 
 buildDotnetModule rec {
   pname = "BinaryObjectScanner";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "SabreTools";
     repo = "BinaryObjectScanner";
     tag = version;
-    hash = "sha256-5kah3O8qAfke8beAi5AhBrK/T23Tv+OZjpbdpmHaVtU=";
+    hash = "sha256-FiSBJO4ic/KjokUEP0uB1WNfFRcOWH/x0y9yJMKnl4Q=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = [
     "ProtectionScan/ProtectionScan.csproj"
