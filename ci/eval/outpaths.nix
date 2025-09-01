@@ -14,7 +14,8 @@
 }:
 let
   lib = import (path + "/lib");
-  hydraJobs =
+
+  nixpkgsJobs =
     import (path + "/pkgs/top-level/release.nix")
       # Compromise: accuracy vs. resources needed for evaluation.
       {
@@ -59,9 +60,15 @@ let
           __allowFileset = false;
         };
       };
+
+  nixosJobs = import (path + "/nixos/release.nix") {
+    inherit attrNamesOnly;
+    supportedSystems = if systems == null then [ builtins.currentSystem ] else systems;
+  };
+
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
-  # hydraJobs leaves recurseForDerivations as empty attrmaps;
+  # release-lib leaves recurseForDerivations as empty attrmaps;
   # that would break nix-env and we also need to recurse everywhere.
   tweak = lib.mapAttrs (
     name: val:
@@ -87,4 +94,9 @@ let
   ];
 
 in
-tweak (builtins.removeAttrs hydraJobs blacklist)
+tweak (
+  (builtins.removeAttrs nixpkgsJobs blacklist)
+  // {
+    nixosTests.simple = nixosJobs.tests.simple;
+  }
+)
