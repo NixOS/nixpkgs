@@ -42,11 +42,9 @@ buildNpmPackage (finalAttrs: {
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
-    runHook postInstall
-  '';
-
-  postInstall = ''
     chmod +x "$out/bin/gemini"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -55,7 +53,9 @@ buildNpmPackage (finalAttrs: {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
+      xiaoxiangmoe
       FlameFlag
       taranarmo
     ];
