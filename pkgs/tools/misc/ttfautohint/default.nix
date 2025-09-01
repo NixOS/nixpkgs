@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Automatic hinter for TrueType fonts";
     mainProgram = "ttfautohint";
     longDescription = ''
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
       information given by FreeType’s auto-hinting module.
     '';
     homepage = "https://www.freetype.org/ttfautohint";
-    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
