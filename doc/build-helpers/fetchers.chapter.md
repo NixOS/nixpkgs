@@ -416,7 +416,7 @@ fetchurl {
 }
 ```
 
-After building the package, the file will be downloaded and place into the Nix store:
+After building the package, the file will be downloaded and placed into the Nix store:
 
 ```shell
 $ nix-build

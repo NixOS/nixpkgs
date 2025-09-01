@@ -98,7 +98,7 @@ It has two modes:
 
 : The path to the files to check.
 
-`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+`remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
   The values should be strings, derivations, or path values.

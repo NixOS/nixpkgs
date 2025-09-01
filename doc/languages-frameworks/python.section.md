@@ -1018,7 +1018,7 @@ that we introduced with the `let` expression.
 #### Handling dependencies {#handling-dependencies}
 
 Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
-[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+[`buildPythonPackage`](#buildpythonpackage-function) uses the following arguments in the following circumstances:
 
 - `dependencies` - For Python runtime dependencies.
 - `build-system` - For Python build-time requirements.
