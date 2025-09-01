@@ -11551,6 +11551,12 @@
     githubId = 6789916;
     name = "Jason Odoom";
   };
+  jasonxue1 = {
+    email = "jason@xuechunxi.com";
+    github = "jasonxue1";
+    githubId = 103628493;
+    name = "jasonxue";
+  };
   jaspersurmont = {
     email = "jasper@surmont.dev";
     github = "jaspersurmont";
