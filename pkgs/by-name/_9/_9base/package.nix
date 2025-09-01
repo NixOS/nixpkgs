@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     # workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: diffio.o:(.bss+0x16): multiple definition of `bflag'; diffdir.o:(.bss+0x6): first defined here
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     "-D_DEFAULT_SOURCE"
     # error: call to undeclared function 'p9mbtowc'; ISO C99 and later do not support implicit function declarations
     "-Wno-error=implicit-function-declaration"
-  ]);
+  ];
   env.LDFLAGS = lib.optionalString enableStatic "-static";
   makeFlags = [
     "PREFIX=${placeholder "out"}"

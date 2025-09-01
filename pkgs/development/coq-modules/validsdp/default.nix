@@ -81,7 +81,7 @@ let
       ] package;
       pname = package;
 
-      derivation = mkCoqDerivation ({
+      derivation = mkCoqDerivation {
         inherit
           version
           pname
@@ -113,7 +113,7 @@ let
         };
 
         passthru = lib.mapAttrs (package: deps: validsdp_ package) packages;
-      });
+      };
     in
     derivation;
 in

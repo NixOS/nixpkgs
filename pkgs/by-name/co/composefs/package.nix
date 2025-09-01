@@ -63,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional fuseSupport fuse3
-  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     libcap
-  ]);
+  ];
 
   doCheck = true;
   nativeCheckInputs = [

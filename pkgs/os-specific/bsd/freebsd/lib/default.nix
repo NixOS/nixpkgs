@@ -110,9 +110,9 @@
               prefixedPath = builtins.elemAt (builtins.split " |\t" (builtins.elemAt patchLines 1)) 2;
               unfixedPath = lib.path.subpath.join (lib.lists.drop 1 (lib.path.subpath.components prefixedPath));
             in
-            lib.lists.any (included: lib.path.hasPrefix (/. + ("/" + included)) (/. + ("/" + unfixedPath))) (
-              paths
-            );
+            lib.lists.any (
+              included: lib.path.hasPrefix (/. + ("/" + included)) (/. + ("/" + unfixedPath))
+            ) paths;
           filteredLines = builtins.filter filterFunc partitionedPatches;
           derive = patchLines: writeText "freebsd-patch" (lib.concatLines patchLines);
           derivedPatches = builtins.map derive filteredLines;

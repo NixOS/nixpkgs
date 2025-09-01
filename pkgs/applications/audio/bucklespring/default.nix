@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     openal
     alure
   ]
-  ++ optionals (legacy) [
+  ++ optionals legacy [
     libXtst
     libX11
   ]

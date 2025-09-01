@@ -114,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (firewallType == "iptables") [ iptables ]
   ++ optionals (firewallType == "nftables") [ libnftnl ]
-  ++ optionals (enableOpenconnect) [ openconnect ]
-  ++ optionals (enablePolkit) [ polkit ]
-  ++ optionals (enablePptp) [
+  ++ optionals enableOpenconnect [ openconnect ]
+  ++ optionals enablePolkit [ polkit ]
+  ++ optionals enablePptp [
     pptp
     ppp
   ];

@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       # don't forget to disable the fix (and if the next release does
       # not fix the problem the test failure will be a reminder to
       # extend the set of versions requiring the workaround).
-      noSoftVDB = lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8") (
-        # do not use /proc primitives to track dirty bits; see:
-        # https://github.com/bdwgc/bdwgc/issues/479#issuecomment-1279687537
-        # https://github.com/bdwgc/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
-        "NO_SOFT_VDB"
-      );
+      noSoftVDB =
+        lib.optional (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8")
+          # do not use /proc primitives to track dirty bits; see:
+          # https://github.com/bdwgc/bdwgc/issues/479#issuecomment-1279687537
+          # https://github.com/bdwgc/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+          "NO_SOFT_VDB";
 
       initialMarkStackSizeFlag = lib.optionals (initialMarkStackSize != null) [
         "INITIAL_MARK_STACK_SIZE=${toString initialMarkStackSize}"

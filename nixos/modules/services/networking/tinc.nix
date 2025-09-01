@@ -376,11 +376,11 @@ in
           network: data:
           flip mapAttrs' data.hosts (
             host: text:
-            nameValuePair ("tinc/${network}/hosts/${host}") ({
+            nameValuePair "tinc/${network}/hosts/${host}" {
               mode = "0644";
               user = "tinc-${network}";
               inherit text;
-            })
+            }
           )
           // {
             "tinc/${network}/tinc.conf" = {
@@ -399,7 +399,7 @@ in
 
       systemd.services = flip mapAttrs' cfg.networks (
         network: data:
-        nameValuePair ("tinc.${network}") (
+        nameValuePair "tinc.${network}" (
           let
             version = getVersion data.package;
           in
@@ -481,11 +481,11 @@ in
 
       users.users = flip mapAttrs' cfg.networks (
         network: _:
-        nameValuePair ("tinc-${network}") ({
+        nameValuePair "tinc-${network}" {
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
           group = "tinc-${network}";
-        })
+        }
       );
       users.groups = flip mapAttrs' cfg.networks (network: _: nameValuePair "tinc-${network}" { });
     }

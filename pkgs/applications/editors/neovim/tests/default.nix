@@ -70,9 +70,9 @@ let
     (wrapNeovimUnstable neovim-unwrapped {
       luaRcContent = "this is an invalid lua statement to break the build";
     }).overrideAttrs
-      ({
+      {
         doCheck = true;
-      });
+      };
 
   nvimAutoDisableWrap = makeNeovimConfig { };
 
@@ -101,10 +101,10 @@ let
   runTest =
     neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}"
-      ({
+      {
         nativeBuildInputs = [ ];
         meta.platforms = neovim-drv.meta.platforms;
-      })
+      }
       (
         ''
           source ${nmt}/bash-lib/assertions.sh
@@ -128,7 +128,7 @@ let
     }
   );
 in
-pkgs.recurseIntoAttrs (rec {
+pkgs.recurseIntoAttrs rec {
 
   inherit nmt;
 
@@ -213,14 +213,14 @@ pkgs.recurseIntoAttrs (rec {
     wrapRc = true;
   });
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs ({
+  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
     plugins = [
       pkgs.vimPlugins.hex-nvim
     ];
     autowrapRuntimeDeps = true;
     # legacy wrapper sets it to false
     wrapRc = true;
-  });
+  };
 
   nvim_with_ftplugin =
     let
@@ -424,4 +424,4 @@ pkgs.recurseIntoAttrs (rec {
   '';
 
   inherit (vimPlugins) corePlugins;
-})
+}

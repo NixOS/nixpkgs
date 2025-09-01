@@ -140,7 +140,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   inherit pname;
   version = buildVersion;
 
@@ -182,4 +182,4 @@ stdenv.mkDerivation ({
       "i686-linux"
     ];
   };
-})
+}

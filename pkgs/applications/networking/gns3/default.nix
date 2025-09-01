@@ -6,11 +6,11 @@
 let
   mkGui =
     args:
-    callPackage (import ./gui.nix (args)) {
+    callPackage (import ./gui.nix args) {
       inherit (libsForQt5) wrapQtAppsHook;
     };
 
-  mkServer = args: callPackage (import ./server.nix (args)) { };
+  mkServer = args: callPackage (import ./server.nix args) { };
 in
 {
   guiStable = mkGui {

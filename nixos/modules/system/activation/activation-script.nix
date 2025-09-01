@@ -68,7 +68,7 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${textClosureMap id (withDrySnippets) (attrNames withDrySnippets)}
+      ${textClosureMap id withDrySnippets (attrNames withDrySnippets)}
 
     ''
     + optionalString (!onlyDry) ''
@@ -220,7 +220,7 @@ in
               set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
               withHeadlines = addAttributeName set';
             in
-            textClosureMap id (withHeadlines) (attrNames withHeadlines)
+            textClosureMap id withHeadlines (attrNames withHeadlines)
           }
 
           exit $_status

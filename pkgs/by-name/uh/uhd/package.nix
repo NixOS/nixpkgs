@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3.pkgs.numpy
       python3.pkgs.setuptools
     ]
-    ++ optionals (enableUtils) [
+    ++ optionals enableUtils [
       python3.pkgs.requests
       python3.pkgs.six
 
@@ -168,11 +168,11 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       libusb1
     ]
-    ++ optionals (enableExamples) [
+    ++ optionals enableExamples [
       ncurses
       ncurses.dev
     ]
-    ++ optionals (enableDpdk) [
+    ++ optionals enableDpdk [
       dpdk
     ];
 

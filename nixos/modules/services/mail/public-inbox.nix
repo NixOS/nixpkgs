@@ -605,7 +605,7 @@ in
           ];
         }
       )
-      ({
+      {
         public-inbox-init =
           let
             PI_CONFIG = gitIni.generate "public-inbox.ini" (
@@ -674,7 +674,7 @@ in
               };
             }
           ];
-      })
+      }
     ];
     environment.systemPackages = [ cfg.package ];
   };

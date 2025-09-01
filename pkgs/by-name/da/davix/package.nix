@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     rapidjson
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
-  ++ lib.optional (enableThirdPartyCopy) gsoap;
+  ++ lib.optional enableThirdPartyCopy gsoap;
 
   # using the url below since the github release page states
   # "please ignore the GitHub-generated tarballs, as they are incomplete"

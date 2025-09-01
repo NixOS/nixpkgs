@@ -46,7 +46,7 @@ buildPgrxExtension (finalAttrs: {
     ./0002-add-feature-flags.diff
   ];
 
-  buildInputs = lib.optionals (useSystemJemalloc) [
+  buildInputs = lib.optionals useSystemJemalloc [
     rust-jemalloc-sys'
   ];
 

@@ -57,7 +57,7 @@ let
       ;
   };
   helloDrvSimpleSrc = srcOnly helloDrvSimple;
-  helloDrvSimpleSrcFreeform = srcOnly ({
+  helloDrvSimpleSrcFreeform = srcOnly {
     inherit (helloDrvSimple)
       name
       pname
@@ -66,7 +66,7 @@ let
       patches
       stdenv
       ;
-  });
+  };
 
   # Test the issue reported in https://github.com/NixOS/nixpkgs/issues/269539
   stdenvAdapterDrv =
