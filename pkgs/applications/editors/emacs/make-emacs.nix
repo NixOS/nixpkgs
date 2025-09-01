@@ -130,7 +130,7 @@ assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk || withNS || variant == "macport");
-# XXX: The upstream --with-xwidgets flag is enabled only when Emacs is built with GTK3 or with Cocoa (including the withNS and MacPorts variants).
+# XXX: The upstream --with-xwidgets flag is enabled only when Emacs is built with GTK3 or with Cocoa (including the withNS and macport variant).
 
 let
   libGccJitLibraryPaths = [
