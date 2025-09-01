@@ -1,0 +1,81 @@
+From 627de4bd148229a1feb327262b9f0b2a75077ed3 Mon Sep 17 00:00:00 2001
+From: Mitchell Skaggs <skaggsm333@gmail.com>
+Date: Mon, 1 Sep 2025 19:02:19 -0500
+Subject: [PATCH] update `@tauri-apps/api` and `@tauri-apps/plugin-shell` to
+ match Cargo versions
+
+In Tauri *CLI* versions >=2.8.0, the build fails if NPM and Cargo versions
+are not aligned. This is not a new requirement, this merely verifies an
+existing requirement. The CLI version in Nixpkgs was updated and now
+detects this already-existing error.
+
+This pulls the NPM versions up to match the existing Cargo versions
+without touching any other dependencies.
+---
+ package-lock.json | 18 +++++++++---------
+ package.json      |  4 ++--
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/package-lock.json b/package-lock.json
+index 3affe19..ebe27e7 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -9,8 +9,8 @@
+       "version": "0.29.0",
+       "dependencies": {
+         "@catppuccin/palette": "^1.0.3",
+-        "@tauri-apps/api": "^2.0.0-beta.0",
+-        "@tauri-apps/plugin-shell": "^2.0.0-beta.0",
++        "@tauri-apps/api": "^2.4.1",
++        "@tauri-apps/plugin-shell": "2.2.1",
+         "feather-icons": "^4.29.1",
+         "modern-normalize": "^2.0.0"
+       },
+@@ -793,9 +793,9 @@
+       }
+     },
+     "node_modules/@tauri-apps/api": {
+-      "version": "2.1.1",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.1.1.tgz",
+-      "integrity": "sha512-fzUfFFKo4lknXGJq8qrCidkUcKcH2UHhfaaCNt4GzgzGaW2iS26uFOg4tS3H4P8D6ZEeUxtiD5z0nwFF0UN30A==",
++      "version": "2.4.1",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/api/-/api-2.4.1.tgz",
++      "integrity": "sha512-5sYwZCSJb6PBGbBL4kt7CnE5HHbBqwH+ovmOW6ZVju3nX4E3JX6tt2kRklFEH7xMOIwR0btRkZktuLhKvyEQYg==",
+       "license": "Apache-2.0 OR MIT",
+       "funding": {
+         "type": "opencollective",
+@@ -1002,9 +1002,9 @@
+       }
+     },
+     "node_modules/@tauri-apps/plugin-shell": {
+-      "version": "2.0.1",
+-      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.0.1.tgz",
+-      "integrity": "sha512-akU1b77sw3qHiynrK0s930y8zKmcdrSD60htjH+mFZqv5WaakZA/XxHR3/sF1nNv9Mgmt/Shls37HwnOr00aSw==",
++      "version": "2.2.1",
++      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-shell/-/plugin-shell-2.2.1.tgz",
++      "integrity": "sha512-G1GFYyWe/KlCsymuLiNImUgC8zGY0tI0Y3p8JgBCWduR5IEXlIJS+JuG1qtveitwYXlfJrsExt3enhv5l2/yhA==",
+       "license": "MIT OR Apache-2.0",
+       "dependencies": {
+         "@tauri-apps/api": "^2.0.0"
+@@ -2054,4 +2054,4 @@
+       "license": "ISC"
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/package.json b/package.json
+index 6000620..9d61871 100644
+--- a/package.json
++++ b/package.json
+@@ -14,8 +14,8 @@
+   },
+   "dependencies": {
+     "@catppuccin/palette": "^1.0.3",
+-    "@tauri-apps/api": "^2.0.0-beta.0",
+-    "@tauri-apps/plugin-shell": "^2.0.0-beta.0",
++    "@tauri-apps/api": "^2.4.1",
++    "@tauri-apps/plugin-shell": "2.2.1",
+     "feather-icons": "^4.29.1",
+     "modern-normalize": "^2.0.0"
+   },
