@@ -279,7 +279,6 @@
       ++
         lib.optionals
           (lib.elem version [
-            "9.8.1"
             "9.8.2"
           ])
           [
