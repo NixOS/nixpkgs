@@ -23,7 +23,7 @@ let
       buildVersion
   );
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tensorrt";
   version = wheelVersion;
 

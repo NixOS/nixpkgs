@@ -10,7 +10,7 @@ import ./make-test-python.nix (
           assets:cash                -250$
     '';
   in
-  rec {
+  {
     name = "hledger-web";
     meta.maintainers = with lib.maintainers; [ marijanp ];
 

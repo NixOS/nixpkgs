@@ -35,7 +35,7 @@ import ./make-test-python.nix (
 
   in
 
-  rec {
+  {
     name = "quake3";
     meta = with lib.maintainers; {
       maintainers = [ domenkozar ];

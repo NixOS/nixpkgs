@@ -8,7 +8,7 @@
   python3,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "check-sieve";
   version = "0.10-unstable-2025-05-06";
 

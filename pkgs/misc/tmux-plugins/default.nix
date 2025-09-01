@@ -378,7 +378,7 @@ in
     };
   };
 
-  kanagawa = mkTmuxPlugin rec {
+  kanagawa = mkTmuxPlugin {
     pluginName = "kanagawa";
     version = "0-unstable-2025-02-10";
     src = fetchFromGitHub {
@@ -408,7 +408,7 @@ in
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
     version = "unstable-2021-10-01";
     src = fetchFromGitHub {

@@ -99,7 +99,7 @@ let
         "lomiri-shell.service"
       ];
     in
-    rec {
+    {
       description = "Set Lomiri wallpaper to something OCR-able";
       wantedBy = lomiriServices;
       before = lomiriServices;

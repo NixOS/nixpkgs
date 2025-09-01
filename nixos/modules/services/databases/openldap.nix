@@ -12,7 +12,7 @@ let
   ldapValueType =
     let
       # Can't do types.either with multiple non-overlapping submodules, so define our own
-      singleLdapValueType = lib.mkOptionType rec {
+      singleLdapValueType = lib.mkOptionType {
         name = "LDAP";
         # TODO: It would be nice to define a { secret = ...; } option, using
         # systemd's LoadCredentials for secrets. That would remove the last

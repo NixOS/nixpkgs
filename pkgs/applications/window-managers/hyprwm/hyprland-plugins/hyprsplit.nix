@@ -7,7 +7,7 @@
   mkHyprlandPlugin,
   nix-update-script,
 }:
-mkHyprlandPlugin hyprland rec {
+mkHyprlandPlugin hyprland {
   pluginName = "hyprsplit";
   version = "0.48.1-unstable-2025-05-03";
 
