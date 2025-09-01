@@ -4733,8 +4733,6 @@ self: super: with self; {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
-  eris = callPackage ../development/python-modules/eris { };
-
   es-client = callPackage ../development/python-modules/es-client { };
 
   escapism = callPackage ../development/python-modules/escapism { };
