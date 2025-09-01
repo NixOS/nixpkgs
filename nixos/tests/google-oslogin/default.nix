@@ -15,7 +15,7 @@ import ../make-test-python.nix (
   in
   {
     name = "google-oslogin";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "zsh-history";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

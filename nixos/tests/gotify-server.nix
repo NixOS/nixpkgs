@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, lib, ... }:
   {
     name = "gotify-server";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

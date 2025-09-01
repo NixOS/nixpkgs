@@ -947,7 +947,7 @@ in
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
-            with pkgs;
+
             lib.makeBinPath ([
               pkgs.fzf
               pkgs.zoxide

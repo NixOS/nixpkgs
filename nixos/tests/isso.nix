@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "isso";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

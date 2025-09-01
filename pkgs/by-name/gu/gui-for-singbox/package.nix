@@ -30,7 +30,7 @@ let
     description = "SingBox GUI program developed by vue3 + wails";
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 

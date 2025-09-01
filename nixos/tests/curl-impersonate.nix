@@ -134,7 +134,7 @@ import ./make-test-python.nix (
   {
     name = "curl-impersonate";
 
-    meta = with lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

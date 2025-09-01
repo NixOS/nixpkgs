@@ -99,7 +99,7 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     copyDesktopItems
     libsForQt5.wrapQtAppsHook
   ];

@@ -23,7 +23,7 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   options.services.earlyoom = {

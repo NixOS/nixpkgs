@@ -7,7 +7,7 @@ import ./make-test-python.nix (
 
   {
     name = "login";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 

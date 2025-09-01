@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     description = "Next-gen Pipewire audio routing tool";
     homepage = "https://codeberg.org/sonusmix/sonusmix";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

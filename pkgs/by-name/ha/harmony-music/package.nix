@@ -92,7 +92,7 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://github.com/anandnet/Harmony-Music";
     mainProgram = "harmonymusic";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     homepage = "https://www.netacad.com/courses/packet-tracer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

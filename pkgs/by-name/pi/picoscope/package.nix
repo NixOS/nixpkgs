@@ -93,9 +93,8 @@ let
          runHook postInstall
       '';
       meta =
-        with lib;
-        shared_meta lib
-        // {
+
+        shared_meta lib // {
           description = "library for picotech oscilloscope ${name} series";
         };
     };

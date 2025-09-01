@@ -88,7 +88,7 @@ let
               matthewbauer
               panchoh
             ];
-            "macport" = with lib.maintainers; [ ];
+            "macport" = [ ];
           }
           .${variant};
         platforms =

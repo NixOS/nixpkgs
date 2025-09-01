@@ -34,7 +34,7 @@
   enableMiscellaneous ? true,
   enableOpenMP ? false,
   enablePython ? true,
-  extraPythonPackages ? ps: with ps; [ ],
+  extraPythonPackages ? ps: [ ],
   enableRemote ? true,
   enableShark ? true,
   enableSAR ? true,

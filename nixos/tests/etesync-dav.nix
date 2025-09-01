@@ -3,7 +3,7 @@ import ./make-test-python.nix (
   {
 
     name = "etesync-dav";
-    meta = with pkgs.lib.maintainers; {
+    meta = {
       maintainers = [ ];
     };
 
