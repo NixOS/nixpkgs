@@ -52,6 +52,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
     description = "Simple visual front end for XRandR";
     homepage = "https://christian.amsuess.com/tools/arandr/";
     license = lib.licenses.gpl3;
