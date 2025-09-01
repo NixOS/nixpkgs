@@ -50,7 +50,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
+  pname = "compiler-rt${lib.optionalString haveLibc "-libc"}";
   inherit version;
 
   src =
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
   ]
-  ++ lib.optionals (noSanitizers) [
+  ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
   ]
   ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
@@ -212,12 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!haveLibc) [
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
   ]
-  ++ lib.optionals (useLLVM) [
+  ++ lib.optionals useLLVM [
     (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
   ]
-  ++ lib.optionals (bareMetal) [
+  ++ lib.optionals bareMetal [
     (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) (

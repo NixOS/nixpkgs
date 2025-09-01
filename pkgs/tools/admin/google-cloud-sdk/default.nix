@@ -49,7 +49,7 @@ let
       numpy
       grpcio
     ]
-    ++ lib.optional (with-gce) google-compute-engine
+    ++ lib.optional with-gce google-compute-engine
   );
 
   data = import ./data.nix { };

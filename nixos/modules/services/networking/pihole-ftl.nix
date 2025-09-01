@@ -178,7 +178,7 @@ in
     };
 
     queryLogDeleter = {
-      enable = mkEnableOption ("Pi-hole FTL DNS query log deleter");
+      enable = mkEnableOption "Pi-hole FTL DNS query log deleter";
 
       age = mkOption {
         type = types.int;

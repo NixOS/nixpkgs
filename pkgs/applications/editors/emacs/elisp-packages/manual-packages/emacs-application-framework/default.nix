@@ -50,7 +50,7 @@ let
     ]
   ]
   ++ appOtherDeps;
-  otherPkgs = builtins.concatLists (otherPackageLists);
+  otherPkgs = builtins.concatLists otherPackageLists;
 
   appsDrv = symlinkJoin {
     name = "emacs-application-framework-apps";

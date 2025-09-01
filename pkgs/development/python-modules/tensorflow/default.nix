@@ -498,7 +498,7 @@ let
       # workaround for https://github.com/bazelbuild/bazel/issues/15359
       "--spawn_strategy=sandboxed"
     ]
-    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
+    ++ lib.optionals mklSupport [ "--config=mkl" ];
 
     bazelTargets = [
       "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow"

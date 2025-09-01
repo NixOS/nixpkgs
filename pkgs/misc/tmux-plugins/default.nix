@@ -579,7 +579,7 @@ in
       wrapProgram $target/scripts/main.sh \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             findutils
             fzf
             gnugrep
@@ -587,7 +587,7 @@ in
             ncurses
             pkgs.pass
             tmux
-          ])
+          ]
         }
     '';
 
@@ -743,13 +743,13 @@ in
       wrapProgram $target/bin/t \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             fzf
             zoxide
             coreutils
             gnugrep
             gnused
-          ])
+          ]
         }
     '';
   };
@@ -991,10 +991,10 @@ in
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
 
-            lib.makeBinPath ([
+            lib.makeBinPath [
               pkgs.fzf
               pkgs.zoxide
-            ])
+            ]
           }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'

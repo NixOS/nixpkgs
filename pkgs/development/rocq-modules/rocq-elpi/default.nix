@@ -38,7 +38,7 @@ let
       lib.switch rocq-core.rocq-version [
         (case (range "9.0" "9.1") "3.0.0")
         (case (range "9.0" "9.1") "2.6.0")
-        (case ("9.0") "2.5.2")
+        (case "9.0" "2.5.2")
       ] null;
     release."3.0.0".sha256 = "sha256-YMe2is7duGcvAHjM4joUE90EloibjSxqfZThsJhstdU=";
     release."2.6.0".sha256 = "sha256-23BHq1NFUkI3ayXnGUwiGFySLyY3EuH4RyMgAhQqI4g=";
