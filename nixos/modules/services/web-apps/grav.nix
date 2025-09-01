@@ -69,7 +69,7 @@ in
       '';
     };
 
-    phpPackage = mkPackageOption pkgs "php" { };
+    phpPackage = mkPackageOption pkgs "php83" { };
 
     maxUploadSize = mkOption {
       type = types.str;
