@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pQiCQ+iO/jCY8XIIVecHF25zVa2H0dIOKwMpf10V0b4=";
+    hash = "sha256-oEMf5bP52Vt+miDgV4lnK8czwXPZmJ3J1RW6awubagg=";
   };
 
   build-system = [ hatchling ];
