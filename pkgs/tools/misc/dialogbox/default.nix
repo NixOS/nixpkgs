@@ -42,7 +42,7 @@ mkDerivation rec {
     homepage = "https://github.com/martynets/dialogbox/";
     description = "Qt-based scriptable engine providing GUI dialog boxes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "dialogbox";
   };

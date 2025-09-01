@@ -97,7 +97,6 @@ let
             # https://github.com/nix-community/nixd/blob/main/libnixf/src/Basic/diagnostic.py
             # TODO: Remove the following and fix things.
             "--ignore=parse-redundant-paren"
-            "--ignore=sema-extra-with"
             "--ignore=sema-unused-def-lambda-noarg-formal"
             "--ignore=sema-unused-def-lambda-witharg-arg"
             "--ignore=sema-unused-def-lambda-witharg-formal"
@@ -106,6 +105,10 @@ let
             "--ignore=or-identifier"
           ];
           excludes = [
+            # Auto-generated; violates sema-extra-with
+            # Can only sensibly be removed when --auto-fix supports multiple fixes at once:
+            # https://github.com/inclyc/nixf-diagnose/issues/13
+            "pkgs/servers/home-assistant/component-packages.nix"
             # https://github.com/nix-community/nixd/issues/708
             "nixos/maintainers/scripts/azure-new/examples/basic/system.nix"
           ];

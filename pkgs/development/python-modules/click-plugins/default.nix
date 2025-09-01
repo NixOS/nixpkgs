@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Extension module for click to enable registering CLI commands";
     homepage = "https://github.com/click-contrib/click-plugins";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

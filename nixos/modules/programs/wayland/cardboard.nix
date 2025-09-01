@@ -9,7 +9,7 @@ let
   cfg = config.programs.cardboard;
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   options.programs.cardboard = {
     enable = lib.mkEnableOption "cardboard";

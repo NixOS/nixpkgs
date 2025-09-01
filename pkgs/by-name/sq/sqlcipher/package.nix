@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlcipher";
     homepage = "https://www.zetetic.net/sqlcipher/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

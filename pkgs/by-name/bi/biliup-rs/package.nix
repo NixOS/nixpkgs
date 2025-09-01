@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool for uploading videos to Bilibili";
     homepage = "https://biliup.github.io/biliup-rs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "biliup";
     platforms = lib.platforms.all;
   };

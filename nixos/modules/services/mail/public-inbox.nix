@@ -676,7 +676,7 @@ in
           ];
       })
     ];
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
   };
   meta.maintainers = with lib.maintainers; [
     julm

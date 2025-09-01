@@ -10,7 +10,7 @@ mkCoqDerivation {
   owner = "coq";
   inherit version;
   defaultVersion =
-    with lib.versions;
+
     lib.switch coq.coq-version [
       {
         case = "8.10";

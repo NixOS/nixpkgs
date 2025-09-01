@@ -23,7 +23,7 @@ let
       fontFile = "joypixels-android.ttf";
     };
 
-  joypixels-free-license = with systemSpecific; {
+  joypixels-free-license = {
     spdxId = "LicenseRef-JoyPixels-Free";
     fullName = "JoyPixels Free License Agreement";
     url = "https://cdn.joypixels.com/free-license.pdf";

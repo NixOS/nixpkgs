@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake-extras
     lomiri-schemas # lomiri schema
   ])
-  ++ (with mate; [
+  ++ ([
     mate.marco # marco schema
     mate.mate-settings-daemon # mate mouse schema
   ]);

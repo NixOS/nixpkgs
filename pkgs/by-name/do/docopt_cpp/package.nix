@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
       boost
     ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

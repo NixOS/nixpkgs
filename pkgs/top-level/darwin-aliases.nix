@@ -20,8 +20,6 @@ lib: self: super: pkgs:
 
 # pkgs is provided to allow packages to be moved out of the darwin attrset.
 
-with self;
-
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute set
   # to appear while listing all the packages available.

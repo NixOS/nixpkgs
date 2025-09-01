@@ -80,6 +80,6 @@ python3'.pkgs.buildPythonApplication {
     homepage = "https://github.com/natarajan-chidambaram/RABBIT";
     license = lib.licenses.asl20;
     mainProgram = "rabbit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

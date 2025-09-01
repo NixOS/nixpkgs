@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Generates HTML from scdoc source files";
     homepage = "https://git.sr.ht/~bitfehler/scd2html";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "scd2html";
   };

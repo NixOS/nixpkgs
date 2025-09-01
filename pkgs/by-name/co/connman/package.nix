@@ -192,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/about/";
     license = lib.licenses.gpl2Only;
     mainProgram = "connmanctl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

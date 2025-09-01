@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/noriokanisawa/HachiMaruPop";
     description = "Cute, Japanese font";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

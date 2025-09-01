@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     description = "Django/Jinja template indenter";
     changelog = "https://github.com/rtts/djhtml/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "djhtml";
   };
 }

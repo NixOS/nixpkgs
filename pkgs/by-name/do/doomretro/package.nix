@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "doomretro";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

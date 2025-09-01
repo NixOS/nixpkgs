@@ -81,6 +81,6 @@ flutter335.buildFlutterApplication {
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

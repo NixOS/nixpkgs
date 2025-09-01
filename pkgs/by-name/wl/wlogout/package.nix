@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
     mainProgram = "wlogout";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
     license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

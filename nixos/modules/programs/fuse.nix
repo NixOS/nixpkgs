@@ -9,7 +9,7 @@ let
   cfg = config.programs.fuse;
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   options.programs.fuse = {
     enable = lib.mkEnableOption "fuse" // {

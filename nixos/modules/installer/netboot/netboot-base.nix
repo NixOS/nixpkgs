@@ -3,8 +3,6 @@
 
 { lib, ... }:
 
-with lib;
-
 {
   imports = [
     ./netboot.nix

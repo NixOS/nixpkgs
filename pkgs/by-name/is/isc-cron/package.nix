@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Daemon for running commands at specific times";
     license = lib.licenses.bsd0;
     mainProgram = "cron";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

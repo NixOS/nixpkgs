@@ -2,7 +2,7 @@
 { lib, pkgs, ... }:
 {
   name = "docker-rootless";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

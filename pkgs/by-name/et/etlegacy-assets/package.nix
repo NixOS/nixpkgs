@@ -51,7 +51,7 @@ stdenv.mkDerivation {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

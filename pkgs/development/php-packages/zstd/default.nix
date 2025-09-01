@@ -30,6 +30,6 @@ buildPecl {
     description = "Zstd Extension for PHP";
     license = licenses.mit;
     homepage = "https://github.com/kjdev/php-ext-zstd";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

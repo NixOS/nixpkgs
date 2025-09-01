@@ -37,7 +37,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jaksi/sshesame";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "sshesame";
   };
 }

@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/cruegge/pam-gnupg";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

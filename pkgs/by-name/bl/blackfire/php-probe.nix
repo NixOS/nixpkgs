@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Blackfire Profiler PHP module";
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

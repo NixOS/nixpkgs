@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/resvg";
     changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "resvg";
   };
 }

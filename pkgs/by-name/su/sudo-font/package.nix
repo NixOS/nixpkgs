@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.kutilek.de/sudo-font/";
     changelog = "https://github.com/jenskutilek/sudo-font/raw/v${version}/sudo/FONTLOG.txt";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }
