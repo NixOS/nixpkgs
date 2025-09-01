@@ -35,7 +35,7 @@
   xxHash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
   version = "1.9.8";
 
@@ -126,4 +126,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "chiaki";
   };
-}
+})
