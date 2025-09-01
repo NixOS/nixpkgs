@@ -3580,9 +3580,6 @@ with pkgs;
     };
   };
   mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
-  mailpit = callPackage ../servers/mail/mailpit {
-    libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
-  };
 
   man = man-db;
 
