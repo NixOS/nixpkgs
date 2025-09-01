@@ -5683,10 +5683,6 @@ with pkgs;
     );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
-  cargo-flamegraph = callPackage ../by-name/ca/cargo-flamegraph/package.nix {
-    inherit (linuxPackages) perf;
-  };
-
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
@@ -7126,7 +7122,6 @@ with pkgs;
   pycritty = with python3Packages; toPythonApplication pycritty;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
-    inherit (linuxPackages) perf;
     llvmPackages = llvmPackages_21;
     stdenv = llvmPackages_21.stdenv;
   };

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  kernel,
+  linux_latest,
   elfutils,
   python3,
   newt,
@@ -21,9 +21,7 @@
   libiberty,
   audit,
   libbfd,
-  libbfd_2_38,
   libopcodes,
-  libopcodes_2_38,
   libpfm,
   libtraceevent,
   openssl,
@@ -57,43 +55,28 @@ in
 
 stdenv.mkDerivation {
   pname = "perf-linux";
-  inherit (kernel) version src;
+  inherit (linux_latest) version src;
 
   strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  patches =
-    lib.optionals (lib.versionAtLeast kernel.version "5.10" && lib.versionOlder kernel.version "6.13")
-      [
-        # fix wrong path to dmesg
-        ./fix-dmesg-path.diff
-      ];
-
   postPatch = ''
     # Linux scripts
     patchShebangs scripts
     patchShebangs tools/perf/check-headers.sh
-  ''
-  + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
     # perf-specific scripts
     patchShebangs tools/perf/pmu-events
-  ''
-  + ''
     cd tools/perf
 
     for x in util/build-id.c util/dso.c; do
       substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
     done
 
-  ''
-  + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
     substituteInPlace scripts/python/flamegraph.py \
       --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
       "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
 
-  ''
-  + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
     patchShebangs pmu-events/jevents.py
   '';
 
@@ -137,33 +120,15 @@ stdenv.mkDerivation {
     numactl
     python3
     babeltrace
+    libbfd
+    libopcodes
+    libpfm
+    python3.pkgs.setuptools
   ]
-  ++ (
-    if (lib.versionAtLeast kernel.version "5.19") then
-      [
-        libbfd
-        libopcodes
-      ]
-    else
-      [
-        libbfd_2_38
-        libopcodes_2_38
-      ]
-  )
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap-unwrapped) systemtap-unwrapped
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
-  ++ lib.optional withLibcap libcap
-  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
-  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
-  ++
-    lib.optional
-      (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12")
-      [
-        python3.pkgs.distutils
-        python3.pkgs.packaging
-      ];
+  ++ lib.optional withLibcap libcap;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -206,6 +171,5 @@ stdenv.mkDerivation {
     mainProgram = "perf";
     maintainers = with maintainers; [ tobim ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5";
   };
 }
