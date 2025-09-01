@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = package;
-  version = "0.16.0";
+  version = "0.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-WB9PIxagTHutfk3J+mNTVK8bC7TMDJquu3GLBQgaras=";
+    hash = "sha256-ir4RL1Cdq0ENr0ojiJvrdFaZHb4bF8q4rLcKeowliR0=";
   };
 
   env.TIANGOLO_BUILD_PACKAGE = package;
