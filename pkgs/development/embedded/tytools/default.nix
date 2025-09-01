@@ -6,14 +6,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tytools";
   version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "Koromix";
     repo = "rygel";
-    tag = "tytools/${version}";
+    tag = "tytools/${finalAttrs.version}";
     hash = "sha256-nQZaNYOTkx79UC0RHencKIQFSYUnQ9resdmmWTmgQxA=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ ahuzik ];
   };
-}
+})
