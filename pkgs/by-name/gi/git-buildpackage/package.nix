@@ -1,10 +1,11 @@
 {
   lib,
+  stdenv,
 
   coreutils,
   fetchFromGitHub,
+  nix-update-script,
   python3Packages,
-  stdenv,
 
   # nativeCheckInputs
   debian-devscripts,
@@ -76,6 +77,13 @@ python3Packages.buildPythonApplication rec {
     # [Errno 30] Read-only file system: '/does'
     "tests.doctests.test_GitRepository.test_create_noperm"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "debian/(.*)"
+    ];
+  };
 
   meta = {
     description = "Suite to help with maintaining Debian packages in Git repositories";
