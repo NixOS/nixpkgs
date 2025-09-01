@@ -82,7 +82,6 @@ mapAliases ({
   ansible-navigator = throw "ansible-navigator has been promoted to a top-level attribute name: pkgs.ansible-navigator"; # Added 2024-08-07
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   apache-airflow = throw "apache-airflow has been moved out of pythonPackages and is available as a standalone package"; # added 2023-06-05
-  apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   argon2_cffi = argon2-cffi; # added 2022-05-09
   arnparse = throw "arnparse has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   APScheduler = apscheduler; # added 2023-02-19
@@ -110,7 +109,6 @@ mapAliases ({
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bip_utils = bip-utils; # 2023-10-08
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
-  bjoern = throw "'bjoern' has been removed, as the upstream repository was unmaintained and it was using libraries with severe security issues."; # Added 2025-09-01
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   blessings = throw "blessings has been removed in favor of blessed, as it was unmaintained"; # added 2024-08-20
   BlinkStick = blinkstick; # added 2023-02-19
@@ -149,7 +147,6 @@ mapAliases ({
   chia-rs = throw "chia-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   class-registry = phx-class-registry; # added 2021-10-05
   cirq-ft = throw "cirq-ft is not longer provieded by cirq upstream"; # added 2024-08-31
-  cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   ciscoconfparse = throw "ciscoconfparse was archived by upstream, use ciscoconfparse2"; # added 2025-03-08
   cld2-cffi = throw "cld2-cffi has been removed, as the last release was in 2016"; # added 2024-05-20
   clvm = throw "clvm has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
@@ -161,7 +158,6 @@ mapAliases ({
   codespell = throw "codespell has been promoted to a top-level attribute name: `pkgs.codespell`"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
   command_runner = command-runner; # added 2024-03-06
-  commitizen = throw "commitizen has been promoted to a top-level attribute name: `pkgs.commitizen`"; # added 2025-09-14
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   configshell = configshell-fb; # added 2025-03-14
@@ -245,7 +241,6 @@ mapAliases ({
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   enum-compat = throw "enum-compat is a virtual package providing enum34, which does not do anything since Python 3.4"; # added 2025-02-15
   enum34 = throw "enum34 is no longer needed since Python 3.4"; # added 2025-03-06
-  eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   et_xmlfile = et-xmlfile; # added 2023-10-16
   etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
@@ -337,7 +332,6 @@ mapAliases ({
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
-  heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   hglib = python-hglib; # added 2023-10-13
   hijri-converter = hijridate; # added 2025-08-07
   hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
@@ -446,7 +440,6 @@ mapAliases ({
   mistune_2_0 = mistune; # added 2022-08-12
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
   mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
-  mkdocs-macros = mkdocs-macros-plugin; # added 2025-09-02
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mne-python = mne; # added 2025-05-02
   modestmaps = throw "modestmaps is unmaintained and was never enabled for anything except Python27"; # Added 2025-03-23
@@ -496,7 +489,6 @@ mapAliases ({
   openai-triton-cuda = triton-cuda; # added 2024-07-18
   openai-triton-no-cuda = triton-no-cuda; # added 2024-07-18
   openapi-schema-pydantic = throw "openapi-schema-pydantic has been removed, since it is no longer maintained"; # added 2023-10-30
-  openbabel-bindings = openbabel; # added 2025-09-17
   opencv3 = throw "opencv3 has been removed as it is obsolete"; # added 2023-10-12
   openllm = throw "openllm has moved to pkgs.openllm"; # added 2021-12-31
   openllm-client = throw "openllm-client has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
@@ -504,7 +496,6 @@ mapAliases ({
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
   opentracing = throw "The opentracing Python module was removed due to being unmaintained upstream. Use OpenTelemetry instead."; # Added 2024-12-09
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
-  orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   paho-mqtt_1 = throw "paho-mqtt_1 was removed because no package depends on it anymore"; # added 2025-03-05
   paho-mqtt_2 = paho-mqtt; # added 2025-03-05
@@ -528,7 +519,6 @@ mapAliases ({
   Polygon3 = polygon3; # Added 2023-08-08
   posix_ipc = posix-ipc; # added 2024-01-07
   poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
-  postgrest-py = postgrest; # added 2024-08-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11
@@ -569,7 +559,6 @@ mapAliases ({
   pycontracts = throw "pycontracts has been removed, since upstream is no longer active and it is broken on modern Python versions."; # added 2024-08-09
   pydns = py3dns; # added 2024-10-25
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
-  pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyephember = throw "pyephember was removed because Home Assistant switched to pyephember2"; # added 2025-05-07
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11
   pyjet = throw "pyjet is deprecated, use fastjet instead"; # added 2023-05-10
@@ -578,7 +567,6 @@ mapAliases ({
   pygbm = throw "pygbm has been removed, since it is abandoned and broken"; # added 2023-06-20
   PyGithub = pygithub; # added 2023-02-19
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
-  pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pychef = throw "pychef has been removed because it's been archived upstream and abandoned since 2017."; # added 2022-11-14
   PyChromecast = pychromecast; # added 2023-02-19
@@ -736,14 +724,12 @@ mapAliases ({
   retworkx = rustworkx; # added 2023-05-14
   rig = throw "rig has been removed because it was pinned to python 2.7 and 3.5, failed to build and is otherwise unmaintained"; # added 2022-11-28
   rising = throw "rising has been removed because it was abandoned and archived by upstream"; # added 2024-11-15
-  rki-covid-parser = throw "rki-covid-parser has been removed because it is unmaintained and broken"; # added 2025-09-20
   rl-coach = "rl-coach was removed because the project is discontinued and was archived by upstream"; # added 2023-05-03
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
   ronin = throw "ronin has been removed because it was unmaintained since 2018"; # added 2024-08-21
   ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   rtslib = rtslib-fb; # added 2025-03-14
-  rtsp-to-webrtc = throw "rtsp-to-webrtc has been removed because it is unmaintained"; # added 2025-09-20
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
@@ -757,7 +743,6 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   scikit-optimize = throw "scikit-optimize has been removed because it is abandoned"; # added 2024-09-30
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
-  seaserv = throw "seaserv has been removed as it is unmaintained"; # Added 2025-08-21
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   sentry-sdk_2 = sentry-sdk; # added 2025-04-20
@@ -783,7 +768,6 @@ mapAliases ({
   spacy_models = spacy-models; # added 2024-04-21
   SPARQLWrapper = sparqlwrapper;
   spark_parser = spark-parser; # added 2024-01-07
-  sparsezoo = throw "sparsezoo has been removed since it is abandonned"; # added 2025-09-01
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
   sphinx_pypi_upload = throw "sphinx_pypi_upload has been removed since it is abandoned."; # added 2023-10-11
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
@@ -860,7 +844,6 @@ mapAliases ({
   vega_datasets = vega-datasets; # added 2023-11-04
   ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
-  vulcan-api = throw "vulcan-api has been removed. Their API has changed and they don't allow access from unofficial software anymore."; # added 2025-09-05
   Wand = wand; # added 2022-11-13
   wasm = throw "wasm has been removed because it no longer builds and is unmaintained"; # added 2023-05-20
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29

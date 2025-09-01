@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       mlatus
       th0rgal
-      wineee
+      rewine
       pokon548
     ];
   };

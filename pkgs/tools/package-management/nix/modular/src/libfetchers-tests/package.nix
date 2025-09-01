@@ -3,7 +3,6 @@
   buildPackages,
   stdenv,
   mkMesonExecutable,
-  writableTmpDirAsHomeHook,
 
   nix-fetchers,
   nix-fetchers-c,
@@ -48,13 +47,18 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-            buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          ''
-            export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-            touch $out
-          '';
+          (
+            lib.optionalString stdenv.hostPlatform.isWindows ''
+              export HOME="$PWD/home-dir"
+              mkdir -p "$HOME"
+            ''
+            + ''
+              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              touch $out
+            ''
+          );
     };
   };
 

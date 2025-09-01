@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
       Play multiplayer games against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [
+      wackbyte
+      huantian
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };

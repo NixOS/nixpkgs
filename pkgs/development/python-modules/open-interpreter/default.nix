@@ -57,7 +57,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "anthropic"
     "google-generativeai"
-    "html2text"
     "psutil"
     "rich"
     "starlette"

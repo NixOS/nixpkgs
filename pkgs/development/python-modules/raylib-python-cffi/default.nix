@@ -5,7 +5,7 @@
   setuptools,
   cffi,
   pkg-config,
-  glfw3,
+  glfw,
   libffi,
   raylib,
   physac,
@@ -17,27 +17,26 @@
 
 buildPythonPackage rec {
   pname = "raylib-python-cffi";
-  version = "5.5.0.3";
+  version = "5.5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
     tag = "v${version}";
-    hash = "sha256-VsdUOk26xXEwha7kGYHy4Cgwrr3yOiSlJg4nYn+ZYYs=";
+    hash = "sha256-Ls+9+iByGQJQJdJiW4WOmKPGbrWJDisXZ1ZYqvAj+3o=";
   };
 
   build-system = [ setuptools ];
   dependencies = [ cffi ];
 
-  patches = [ ./use-direct-pkg-config-name.patch ];
+  patches = [
+    # This patch fixes to the builder script function to call pkg-config
+    # using the library name rather than searching only through raylib
+    ./fix_pyray_builder.patch
 
-  buildInputs = [
-    glfw3
-    libffi
-    raylib
-    physac
-    raygui
+    # use get_lib_flags() instead of linking to libraylib.a directly
+    ./fix_macos_raylib.patch
   ];
 
   nativeBuildInputs = [
@@ -49,6 +48,14 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pyray" ];
+
+  buildInputs = [
+    glfw
+    libffi
+    raylib
+    physac
+    raygui
+  ];
 
   passthru.tests = import ./passthru-tests.nix {
     inherit src raylib-python-cffi writers;

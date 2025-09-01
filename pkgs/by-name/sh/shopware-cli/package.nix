@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -30,7 +29,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Ckn6+DzHPX+UG5YxYqvkdaio/elRQssbDSR+zAfxzdE=";
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd shopware-cli \
       --bash <($out/bin/shopware-cli completion bash) \
       --zsh <($out/bin/shopware-cli completion zsh) \
@@ -47,8 +46,6 @@ buildGoModule rec {
     "-w"
     "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Command line tool for Shopware 6";

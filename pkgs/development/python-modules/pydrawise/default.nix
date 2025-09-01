@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "pydrawise";
-  version = "2025.9.0";
+  version = "2025.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";
     tag = version;
-    hash = "sha256-eHy3pdzgN5CvKfsoa5ZdT9lor4AiZr8K1g/8qyzP3eo=";
+    hash = "sha256-bHdGHg+TxGf+evJdGUou7UXMVcGSgDXHx1GCAzTl7U0=";
   };
 
   build-system = [

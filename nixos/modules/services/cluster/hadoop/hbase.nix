@@ -178,12 +178,12 @@ in
       let
         ports = port: infoPort: {
           port = lib.mkOption {
-            type = lib.types.port;
+            type = lib.types.int;
             default = port;
             description = "RPC port";
           };
           infoPort = lib.mkOption {
-            type = lib.types.port;
+            type = lib.types.int;
             default = infoPort;
             description = "web UI port";
           };

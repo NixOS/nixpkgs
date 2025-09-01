@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  setuptools,
 
   # dependencies
   absl-py,
@@ -22,23 +22,18 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.91";
+  version = "0.1.90";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
     tag = "v${version}";
-    hash = "sha256-lJ9+kvG7dRtfDVgvkcJ9/jtnX0lMfxY4mmZ290y/74U=";
+    hash = "sha256-nZYfkK73p3HpUOMPyqkV4YR3BDGrpdZrl36dmfZt7Bk=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "typing_extensions"
-  ];
   dependencies = [
     absl-py
     jax

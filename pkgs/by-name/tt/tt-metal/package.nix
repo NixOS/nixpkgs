@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";
-  version = "0.62.2";
+  version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-metal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZIUjZLifRVmpWpG8Ty+I+pwgpIf5r9gJkI8ULTau4OE=";
+    hash = "sha256-iDO9q79gurIpIR+6swywlxTe3XI/2ToZxz11EuXc0gI=";
   };
 
   cpm = fetchurl {
@@ -65,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p $out/include
     cp -r ../build/_deps/tt-logger-src/include/tt-logger $out/include/tt-logger
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/pkgconfig/magic_enum.pc \
+      --replace-fail 'includedir=''${prefix}/' "includedir="
   '';
 
   enableParallelBuilding = true;

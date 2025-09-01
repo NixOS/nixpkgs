@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.5";
+  version = "5.0.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-+QqmZsBFmYRwaAFqRyMBxVFFrjZGBDdMaW4YD/7D2gU=";
+    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
   };
 
   outputs = [
@@ -94,9 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      # Not bumped for 5.0.5: https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/9
-      # Try again on next bump.
-      versionCheck = finalAttrs.version != "5.0.5";
+      versionCheck = true;
     };
     updateScript = gitUpdater { };
   };

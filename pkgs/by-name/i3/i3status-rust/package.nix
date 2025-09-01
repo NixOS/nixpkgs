@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  installShellFiles,
   dbus,
   libpulseaudio,
   notmuch,
@@ -13,7 +12,6 @@
   lm_sensors,
   iw,
   iproute2,
-  pandoc,
   pipewire,
   withICUCalendar ? false,
   withPipewire ? true,
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "greshake";
-    repo = "i3status-rust";
+    repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-E0HGF7oyffBWUT61fQZ+tjwDi7q9IhtV6DiF8TGeVsU=";
   };
@@ -36,8 +34,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    installShellFiles
-    pandoc
   ]
   ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
@@ -63,14 +59,9 @@ rustPlatform.buildRustPackage rec {
       --replace "/usr/share/i3status-rust" "$out/share"
   '';
 
-  postBuild = ''
-    cargo xtask generate-manpage
-  '';
-
   postInstall = ''
     mkdir -p $out/share
     cp -R examples files/* $out/share
-    installManPage man/*
   '';
 
   postFixup = ''

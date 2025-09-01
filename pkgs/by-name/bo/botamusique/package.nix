@@ -80,7 +80,6 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3Packages; [
-    audioop-lts
     flask
     magic
     mutagen

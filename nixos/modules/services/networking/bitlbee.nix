@@ -123,7 +123,7 @@ in
       libpurple_plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = lib.literalExpression "[ pkgs.purple-discord ]";
+        example = lib.literalExpression "[ pkgs.purple-matrix ]";
         description = ''
           The list of libpurple plugins to install.
         '';

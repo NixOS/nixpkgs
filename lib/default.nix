@@ -127,7 +127,6 @@ let
         bitXor
         bitNot
         boolToString
-        boolToYesNo
         mergeAttrs
         flip
         defaultTo
@@ -207,8 +206,6 @@ let
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
-        mapAttrsToListRecursive
-        mapAttrsToListRecursiveCond
         genAttrs
         genAttrs'
         isDerivation
@@ -571,9 +568,6 @@ let
         ;
       inherit (self.versions)
         splitVersion
-        ;
-      inherit (self.network.ipv6)
-        mkEUI64Suffix
         ;
     }
   );

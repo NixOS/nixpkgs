@@ -6,16 +6,16 @@
 }:
 let
   pname = "xremap";
-  version = "0.13.0";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "xremap";
     repo = "xremap";
     tag = "v${version}";
-    hash = "sha256-h2vufEy4/Z3rSZFxXMDpqAkl16duSqwwmcUmVZ2owFo=";
+    hash = "sha256-ghGlyjBqW9UyXno1l4+a6AzgIJx7RNuJEVCQkae2pww=";
   };
 
-  cargoHash = "sha256-AH3K7xmDxoit6i4/KWfyyL7rQS0nRkXuwuwmkfdojpU=";
+  cargoHash = "sha256-xP1UC8ViAS3/EXmvZjerDexH96Esj5vfRPx1GRzcICI=";
 
   buildXremap =
     {

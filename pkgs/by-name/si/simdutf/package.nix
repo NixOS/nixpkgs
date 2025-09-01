@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ wineee ];
+    maintainers = with maintainers; [ rewine ];
     mainProgram = "simdutf";
     platforms = platforms.all;
   };

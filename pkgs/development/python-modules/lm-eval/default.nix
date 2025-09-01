@@ -136,8 +136,6 @@ buildPythonPackage rec {
     # zeno, gptqmodel, japanese_leaderboard; all = [...];
   };
 
-  pythonRelaxDeps = [ "datasets" ];
-
   pythonImportsCheck = [ "lm_eval" ];
 
   nativeCheckInputs = [

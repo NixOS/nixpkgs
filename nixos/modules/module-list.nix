@@ -228,6 +228,7 @@
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
+  ./programs/goldwarden.nix
   ./programs/gpaste.nix
   ./programs/gphoto2.nix
   ./programs/gpu-screen-recorder.nix
@@ -1055,6 +1056,7 @@
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/drbd.nix
+  ./services/network-filesystems/eris-server.nix
   ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/ipfs-cluster.nix
   ./services/network-filesystems/kbfs.nix
@@ -1131,6 +1133,7 @@
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy.nix
+  ./services/networking/dnscrypt-proxy2.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/dnsproxy.nix
@@ -1332,6 +1335,7 @@
   ./services/networking/scion/scion-ip-gateway.nix
   ./services/networking/scion/scion-router.nix
   ./services/networking/scion/scion.nix
+  ./services/networking/seafile.nix
   ./services/networking/searx.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
@@ -1927,6 +1931,8 @@
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
+  ./virtualisation/lxd-agent.nix
+  ./virtualisation/lxd.nix
   ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix

@@ -1,26 +1,28 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  meson,
-  ninja,
+  fetchsvn,
+  autoconf,
+  automake,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "spawn-fcgi";
-  version = "1.6.6";
+  version = "1.6.4";
 
-  src = fetchurl {
-    url = "https://download.lighttpd.net/spawn-fcgi/releases-1.6.x/spawn-fcgi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yWI0XuzwVT7dm/XPYe5F59EYN/NANwZ/vaFlz0rdzhg=";
+  src = fetchsvn {
+    url = "svn://svn.lighttpd.net/spawn-fcgi/tags/spawn-fcgi-${version}";
+    sha256 = "07r6nwbg4881mdgp0hqh80c4x9wb7jg6cgc84ghwhfbd2abc2iq5";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    automake
+    autoconf
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   meta = with lib; {
     homepage = "https://redmine.lighttpd.net/projects/spawn-fcgi";
@@ -30,4 +32,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = with platforms; unix;
   };
-})
+}

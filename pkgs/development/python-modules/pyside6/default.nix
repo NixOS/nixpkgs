@@ -36,7 +36,6 @@ let
     qtsvg
     qtwebchannel
     qtwebsockets
-    qtwebview
     qtpositioning
     qtlocation
     qtshadertools

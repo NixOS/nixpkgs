@@ -10,6 +10,7 @@
   cirq-google,
   cirq-ionq,
   cirq-pasqal,
+  cirq-rigetti,
   cirq-web,
 
   # tests
@@ -29,6 +30,7 @@ buildPythonPackage {
     cirq-google
     cirq-ionq
     cirq-pasqal
+    cirq-rigetti
     cirq-web
   ];
 
@@ -42,6 +44,7 @@ buildPythonPackage {
     "cirq-google"
     "cirq-ionq"
     "cirq-pasqal"
+    "cirq-rigetti"
     "cirq-web"
     "dev_tools"
   ];

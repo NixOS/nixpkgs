@@ -4,14 +4,13 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  pyjwt,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.13.1";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pymill";
     tag = version; # https://github.com/Danielhiversen/pymill/issues/87
-    hash = "sha256-fdKMX85uo5L/1ko5aXHzLcWbr24StzRV38jjEbeRRkw=";
+    hash = "sha256-DGMG6LabfKGmQ6MDm/skqeQuOhSlr1ssZ2Z7fItzOt0=";
   };
 
   build-system = [ setuptools ];
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     async-timeout
-    pyjwt
   ];
 
   # Project has no tests

@@ -140,7 +140,7 @@ in
             sftpd.enable = lib.mkEnableOption "SFTP service";
             sftpd.port = lib.mkOption {
               default = null;
-              type = lib.types.nullOr lib.types.port;
+              type = lib.types.nullOr lib.types.int;
               description = ''
                 The port on which the SFTP server will listen.
 

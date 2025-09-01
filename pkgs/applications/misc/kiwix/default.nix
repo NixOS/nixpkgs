@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  mkDerivation,
   fetchFromGitHub,
   nix-update-script,
   libkiwix,
@@ -10,11 +10,10 @@
   qtwebengine,
   qtsvg,
   qtimageformats,
-  wrapQtAppsHook,
   aria2,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kiwix";
   version = "2.4.1";
 
@@ -28,7 +27,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
-    wrapQtAppsHook
   ];
 
   buildInputs = [

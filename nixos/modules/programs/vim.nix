@@ -10,7 +10,7 @@ let
 in
 {
   options.programs.vim = {
-    enable = lib.mkEnableOption "Vi IMproved, an advanced text editor";
+    enable = lib.mkEnableOption "Vi IMproved, an advanced text";
 
     defaultEditor = lib.mkEnableOption "vim as the default editor";
 

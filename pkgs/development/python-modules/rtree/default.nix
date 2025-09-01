@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rtree";
-  version = "1.4.1";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Toblerity";
     repo = "rtree";
     tag = version;
-    hash = "sha256-ilhHBAYa4GaKUt8CmmJRS569D9INHZmWS6lK/+AIiqY=";
+    hash = "sha256-swFvo57EUy69OInJNQzOzhjmfEIGL0aJSvYhzcmSzSs=";
   };
 
   postPatch = ''

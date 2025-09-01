@@ -4,6 +4,7 @@
   lib,
   fetchFromGitLab,
   fetchgit,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -62,18 +63,25 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.7.0";
+  version = "8.6.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9t6tXrege3A5x5caUEfho23Pin7dON+e6x94rXC8XYE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CMyvNOAlIqD6OeqUquQ+/sOiBXmEowZe3/qmaXxh0X0=";
   };
 
   patches = [
     ./disable-tests-download.patch
+
+    # Fix build with Qt 6.9
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/digikam/-/commit/325b19fc7f0d04cdc1308f235c207c1ab43e945d.patch";
+      hash = "sha256-bsxaNuLuU9MyDRmenOqO4JuzsbpUvfKQwcSCDfLHoWQ=";
+    })
   ];
 
   strictDeps = true;
@@ -96,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   # build inputs.
 
   buildInputs = [
-    opencv.cxxdev
+    opencv
     libtiff
     libpng
     # TODO: Figure out how on earth to get it to pick up libjpeg8 for

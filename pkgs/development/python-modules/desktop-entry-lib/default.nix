@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://codeberg.org/JakobDev/desktop-entry-lib";
     changelog = "https://codeberg.org/JakobDev/desktop-entry-lib/releases/tag/${version}";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ Madouura ];
   };
 }

@@ -116,6 +116,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nequissimus ];
     platforms = with lib.platforms; linux ++ darwin;
     changelog = "https://invisible-island.net/xterm/xterm.log.html";
-    mainProgram = "xterm";
   };
 }

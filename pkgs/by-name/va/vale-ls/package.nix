@@ -9,15 +9,15 @@
   vale,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "vale-ls";
-  version = "0.4.0";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale-ls";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lRRKRQTxgXF4E+XghJ5AOp+mtWtiCT13EcsPVydn4Uo=";
+    tag = "v${version}";
+    hash = "sha256-+2peLqj3/ny0hDwJVKEp2XS68VO50IvpCB2fvZoEdJo=";
   };
 
   nativeBuildInputs = [
@@ -49,14 +49,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --suffix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LSP implementation for the Vale command-line tool";
     homepage = "https://github.com/errata-ai/vale-ls";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "vale-ls";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       foo-dogsquared
       jansol
     ];
   };
-})
+}

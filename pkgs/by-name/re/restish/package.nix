@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "restish";
-  version = "0.21.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
     tag = "v${version}";
-    hash = "sha256-eLbeH6i+QbW59DMOHf83olrO8R7Ji975KkJKs621Xi0=";
+    hash = "sha256-a0ObgFgWEsLYjGmCCi/py2PADAWJ0By+AZ4wh+Yeam4=";
   };
 
-  vendorHash = "sha256-bO0z+LCiF/Dp0hKNulBmCgk16NzCCoY32P2/Ieq8y+c=";
+  vendorHash = "sha256-qeArar0WnMACUnKBlC+PcFeJPzofwbK440A4M/rQ04U=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libX11
@@ -41,7 +41,6 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = restish;
-    command = "HOME=$(mktemp -d) restish --version";
   };
 
   meta = {

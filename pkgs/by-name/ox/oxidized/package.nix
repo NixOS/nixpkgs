@@ -3,7 +3,6 @@
   ruby,
   bundlerApp,
   bundlerUpdateScript,
-  defaultGemConfig,
   nixosTests,
 }:
 
@@ -18,22 +17,17 @@ bundlerApp {
     "oxs"
   ];
 
-  gemConfig = defaultGemConfig;
-
   passthru = {
     tests = nixosTests.oxidized;
     updateScript = bundlerUpdateScript "oxidized";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Network device configuration backup tool. It's a RANCID replacement";
     homepage = "https://github.com/ytti/oxidized";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nicknovitski
-      liberodark
-    ];
-    teams = with lib.teams; [ wdz ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nicknovitski ];
+    teams = [ teams.wdz ];
+    platforms = platforms.linux;
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
@@ -31,7 +30,7 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     $out/bin/pop man > pop.1
     installManPage pop.1
     installShellCompletion --cmd pop \

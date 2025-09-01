@@ -1,24 +1,22 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromGitLab,
   autoreconfHook,
   guile,
   pkg-config,
   texinfo,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "guile-hoot";
-  version = "0.6.1";
+  version = "0.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromGitLab {
     owner = "spritely";
-    repo = "hoot";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3UWKSjJQnYh+06p+Oi0Fa0ul2T8QWemgNm9A0su5WQ=";
+    repo = "guile-hoot";
+    rev = "v${version}";
+    hash = "sha256-xPU4uLyh3gd2ubyGednCqB3uzKrabhXQhs6vBc8z0ps=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  passthru.updateScript = nix-update-script { };
+  configureFlags = [
+    "--with-guile-site-dir=$(out)/${guile.siteDir}"
+    "--with-guile-site-ccache-dir=$(out)/${guile.siteCcacheDir}"
+  ];
 
   meta = {
     description = "Scheme to WebAssembly compiler backend for GNU Guile and a general purpose WASM toolchain";
-    homepage = "https://codeberg.org/spritely/hoot";
+    homepage = "https://gitlab.com/spritely/guile-hoot";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jinser ];
     platforms = lib.platforms.unix;
   };
-})
+}

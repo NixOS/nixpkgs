@@ -6,7 +6,6 @@
   libGL,
   libGLU,
   libX11,
-  libxcb,
   libXext,
   libgbm,
   mesa,
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libglut
     libX11
-    libxcb
     libXext
     libGL
     libGLU

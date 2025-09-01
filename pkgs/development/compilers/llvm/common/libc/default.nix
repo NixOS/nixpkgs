@@ -18,19 +18,14 @@
 let
   pname = "libc";
 
-  src' = runCommand "${pname}-src-${version}" { } (
-    ''
-      mkdir -p "$out"
-      cp -r ${monorepoSrc}/cmake "$out"
-      cp -r ${monorepoSrc}/runtimes "$out"
-      cp -r ${monorepoSrc}/llvm "$out"
-      cp -r ${monorepoSrc}/compiler-rt "$out"
-      cp -r ${monorepoSrc}/${pname} "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "21") ''
-      cp -r ${monorepoSrc}/third-party "$out"
-    ''
-  );
+  src' = runCommand "${pname}-src-${version}" { } (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/runtimes "$out"
+    cp -r ${monorepoSrc}/llvm "$out"
+    cp -r ${monorepoSrc}/compiler-rt "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '');
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version patches;
@@ -42,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python3
-    ninja
   ]
+  ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
   ++ (lib.optional isFullBuild python3Packages.pyyaml);
 
   buildInputs = lib.optional isFullBuild linuxHeaders;

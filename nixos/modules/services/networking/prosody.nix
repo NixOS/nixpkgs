@@ -708,7 +708,7 @@ in
 
       # HTTP server-related options
       httpPorts = mkOption {
-        type = types.listOf types.port;
+        type = types.listOf types.int;
         description = "Listening HTTP ports list for this service.";
         default = [ 5280 ];
       };
@@ -723,7 +723,7 @@ in
       };
 
       httpsPorts = mkOption {
-        type = types.listOf types.port;
+        type = types.listOf types.int;
         description = "Listening HTTPS ports list for this service.";
         default = [ 5281 ];
       };

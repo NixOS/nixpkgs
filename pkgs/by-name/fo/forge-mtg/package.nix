@@ -123,7 +123,9 @@ maven.buildMavenPackage {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=forge-(.*)" ];
+  };
 
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";

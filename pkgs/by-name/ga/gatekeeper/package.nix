@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/gator" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd gator \
       --bash <($out/bin/gator completion bash) \
       --fish <($out/bin/gator completion fish) \

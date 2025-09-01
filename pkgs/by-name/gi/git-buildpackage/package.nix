@@ -1,11 +1,10 @@
 {
   lib,
-  stdenv,
 
   coreutils,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
+  stdenv,
 
   # nativeCheckInputs
   debian-devscripts,
@@ -17,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-buildpackage";
-  version = "0.9.38";
+  version = "0.9.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agx";
     repo = "git-buildpackage";
     tag = "debian/${version}";
-    hash = "sha256-dZ/uJLcDPkpwIz+Y6WInJ4XlSJ5zzDY65li/xghsJTQ=";
+    hash = "sha256-0gfryd1GrVfL11u/IrtLSJAABRsTpFfPOGxWfVdYtgE=";
     fetchSubmodules = true;
   };
 
@@ -40,8 +39,6 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     python-dateutil
-    pyyaml
-    rpm
   ];
 
   pythonImportsCheck = [
@@ -59,6 +56,8 @@ python3Packages.buildPythonApplication rec {
     coverage
     pytest-cov
     pytestCheckHook
+    pyyaml
+    rpm
   ]);
 
   disabledTests = [
@@ -77,13 +76,6 @@ python3Packages.buildPythonApplication rec {
     # [Errno 30] Read-only file system: '/does'
     "tests.doctests.test_GitRepository.test_create_noperm"
   ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "debian/(.*)"
-    ];
-  };
 
   meta = {
     description = "Suite to help with maintaining Debian packages in Git repositories";

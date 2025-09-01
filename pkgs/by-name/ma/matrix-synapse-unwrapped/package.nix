@@ -14,25 +14,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.138.0";
+  version = "1.137.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-mzBX5cLXF52p3SIq4rSvERbjyD07wRKVxL4yGsYNUaw=";
+    hash = "sha256-jnbW1p5JK00Of6XqoDfWs/4SqIztafjkvXUDWhMTm30=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-aUZUg8+1UlDzsxJN87Bk/DjD5WFcvHGVBRf1rIXKOZ4=";
+    hash = "sha256-qpgDErV1VVzaUHHQX4ReXCPihdrSKI/4HtbDeQIblR8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3"
-  '';
 
   build-system = with python3Packages; [
     poetry-core

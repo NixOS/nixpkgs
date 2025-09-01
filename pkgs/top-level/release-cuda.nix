@@ -90,8 +90,6 @@ let
       firefox-unwrapped = linux;
       firefox-beta = linux;
       firefox-beta-unwrapped = linux;
-      firefox-devedition = linux;
-      firefox-devedition-unwrapped = linux;
       gimp = linux;
       gimp3 = linux;
       gpu-screen-recorder = linux;

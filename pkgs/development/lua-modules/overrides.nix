@@ -154,8 +154,7 @@ in
     # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
     # fzf-lua throws `address already in use` on darwin
     # Previewer transient failure
-    # UI tests fail either transiently or consistently in certain software/hardware configurations
-    doCheck = false;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     checkInputs = [
       fd
       fzf
@@ -184,8 +183,7 @@ in
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-files_spec.lua---files---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "  99" "101" \
-        --replace-fail "99" "101"
+        --replace-fail "96" "98"
 
       make test
 
@@ -783,11 +781,6 @@ in
     checkPhase = ''
       runHook preCheck
       export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
-
-      # TODO: Investigate if test infra issue or upstream issue
-      # Remove failing subprocess tests that require channel functionality
-      rm tests/unit/lib/subprocess_spec.lua
-
       nvim --headless -i NONE \
         --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory tests/ {sequential = true}"

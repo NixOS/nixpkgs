@@ -47,7 +47,7 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@a809471b5c7c913aa67bec8f459a11a0decc3fce # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Load supported versions
         id: versions
@@ -92,7 +92,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@a809471b5c7c913aa67bec8f459a11a0decc3fce # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -153,8 +153,8 @@ jobs:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
           nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.diff \
-            --arg beforeDir ./target \
-            --arg afterDir ./merged \
+            --arg beforeDir "$(readlink ./target)" \
+            --arg afterDir "$(readlink ./merged)" \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --out-link diff
 
@@ -190,7 +190,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@a809471b5c7c913aa67bec8f459a11a0decc3fce # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Combine all output paths and eval stats
         run: |
@@ -207,7 +207,7 @@ jobs:
 
           # Use the target branch to get accurate maintainer info
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
-            --arg combinedDir ./combined \
+            --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
             --argstr githubAuthorId "$AUTHOR_ID" \
             --out-link comparison
@@ -222,7 +222,7 @@ jobs:
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             const { readFile } = require('node:fs/promises')
@@ -263,7 +263,7 @@ jobs:
           path: versions
 
       - name: Add version comparison table to job summary
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
           SYSTEMS: ${{ inputs.systems }}
           VERSIONS: ${{ needs.versions.outputs.versions }}
@@ -350,7 +350,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@a809471b5c7c913aa67bec8f459a11a0decc3fce # v31
+        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
 
       - name: Run misc eval tasks in parallel
         run: |

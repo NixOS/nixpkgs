@@ -75,7 +75,7 @@ in
       };
 
       port = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.ints.unsigned;
         default = 7125;
         description = "The port to listen on.";
       };

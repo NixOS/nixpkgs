@@ -1,10 +1,12 @@
 diff --git a/forge-gui-desktop/pom.xml b/forge-gui-desktop/pom.xml
+index dfe902e6b9..6fe3382f27 100644
 --- a/forge-gui-desktop/pom.xml
 +++ b/forge-gui-desktop/pom.xml
-@@ -71,62 +71,6 @@
+@@ -70,62 +70,6 @@
+                     </execution>
                  </executions>
              </plugin>
-             <plugin>
+-            <plugin>
 -                <groupId>com.akathist.maven.plugins.launch4j</groupId>
 -                <artifactId>launch4j-maven-plugin</artifactId>
 -                <version>2.5.1</version>
@@ -60,17 +62,18 @@ diff --git a/forge-gui-desktop/pom.xml b/forge-gui-desktop/pom.xml
 -                    </execution>
 -                </executions>
 -            </plugin>
--            <plugin>
+             <plugin>
                  <groupId>com.google.code.maven-replacer-plugin</groupId>
                  <artifactId>replacer</artifactId>
-                 <version>1.5.3</version>
 diff --git a/forge-gui-mobile-dev/pom.xml b/forge-gui-mobile-dev/pom.xml
+index 168ecba1dc..748dbf47b7 100644
 --- a/forge-gui-mobile-dev/pom.xml
 +++ b/forge-gui-mobile-dev/pom.xml
-@@ -61,57 +61,6 @@
+@@ -60,57 +60,6 @@
+                     <target>17</target>
                  </configuration>
              </plugin>
-             <plugin>
+-            <plugin>
 -                <groupId>com.akathist.maven.plugins.launch4j</groupId>
 -                <artifactId>launch4j-maven-plugin</artifactId>
 -                <version>2.5.1</version>
@@ -121,8 +124,6 @@ diff --git a/forge-gui-mobile-dev/pom.xml b/forge-gui-mobile-dev/pom.xml
 -                    <!--extra-->
 -                </executions>
 -            </plugin>
--            <plugin>
+             <plugin>
                  <groupId>com.google.code.maven-replacer-plugin</groupId>
                  <artifactId>replacer</artifactId>
-                 <version>1.5.3</version>
-

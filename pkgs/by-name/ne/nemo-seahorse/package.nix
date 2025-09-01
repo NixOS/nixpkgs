@@ -8,12 +8,14 @@
   glib,
   gtk3,
   nemo,
+  cmake,
   dbus-glib,
   libcryptui,
   gcr,
   libnotify,
   gnupg,
   gpgme,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,11 +31,13 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/nemo-seahorse";
 
+  patches = [ ./fix-schemas.patch ];
+
   nativeBuildInputs = [
-    glib
     meson
     pkg-config
     ninja
+    cmake
   ];
 
   buildInputs = [
@@ -48,11 +52,9 @@ stdenv.mkDerivation rec {
     gnupg
   ];
 
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
+  PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
 
-  env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-seahorse";

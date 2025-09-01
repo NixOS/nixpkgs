@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   # Build and Runtime
   pbr,
@@ -36,14 +36,11 @@ buildPythonPackage rec {
   version = "11.6.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "openstack";
-    repo = "python-neutronclient";
-    tag = version;
-    hash = "sha256-nz7KiFe8IWJypGCjFgrEgGTEsC0xlW3YG/QRNJUzcpc=";
+  src = fetchPypi {
+    pname = "python_neutronclient";
+    inherit version;
+    hash = "sha256-PGlYCI0YyGdqEKv52UuNvxqYR0HLuYhVTyFogHl+By8=";
   };
-
-  env.PBR_VERSION = version;
 
   build-system = [
     setuptools

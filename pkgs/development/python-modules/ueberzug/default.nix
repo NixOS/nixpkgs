@@ -50,13 +50,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ueberzug" ];
 
-  meta = {
+  meta = with lib; {
     description = "Alternative for w3mimgdisplay";
     homepage = "https://github.com/ueber-devel/ueberzug";
     changelog = "https://github.com/ueber-devel/ueberzug/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     mainProgram = "ueberzug";
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

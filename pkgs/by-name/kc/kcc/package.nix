@@ -30,10 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtwayland
-  ];
+  buildInputs = [ qt6.qtbase ];
 
   build-system = with python3.pkgs; [ setuptools ];
 

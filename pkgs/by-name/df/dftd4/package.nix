@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   buildType ? "meson",
   cmake,

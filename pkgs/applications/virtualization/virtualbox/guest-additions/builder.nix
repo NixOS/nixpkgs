@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r src/libs/zlib*/
   '';
 
+  # Apply fix for: https://www.virtualbox.org/ticket/22397
+  patches = lib.optional stdenv.hostPlatform.isAarch64 ./guest-additions-aarch64-fix.patch;
+
   postPatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \

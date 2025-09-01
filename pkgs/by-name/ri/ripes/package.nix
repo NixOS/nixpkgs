@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "Ripes";
-    maintainers = with maintainers; [ wineee ];
+    maintainers = with maintainers; [ rewine ];
   };
 }

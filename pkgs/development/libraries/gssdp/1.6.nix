@@ -7,6 +7,8 @@
   pkg-config,
   gobject-introspection,
   vala,
+  buildPackages,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
   gi-docgen,
   python3,
   libsoup_3,
@@ -42,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     python3
-  ];
+  ]
+  ++ lib.optionals enableManpages [ buildPackages.pandoc ];
 
   buildInputs = [
     libsoup_3
@@ -55,8 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dsniffer=false"
-    # This packages only has manpages for gssdp-device-sniffer, which we disabled above.
-    "-Dmanpages=false"
+    (lib.mesonBool "manpages" enableManpages)
   ];
 
   # On Darwin: Failed to bind socket, Operation not permitted

@@ -9,7 +9,6 @@
   bison,
   bc,
   opensnitch,
-  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,18 +58,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) opensnitch;
-  };
-
   meta = with lib; {
     description = "eBPF process monitor module for OpenSnitch";
     homepage = "https://github.com/evilsocket/opensnitch";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      onny
-      grimmauld
-    ];
+    maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
   };
 }

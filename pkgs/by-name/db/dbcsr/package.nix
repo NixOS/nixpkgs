@@ -38,11 +38,6 @@ stdenv.mkDerivation rec {
       --replace 'COMMAND ''${Python_EXECUTABLE} ''${FYPP_EXECUTABLE}' 'COMMAND ''${FYPP_EXECUTABLE}'
   '';
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   nativeBuildInputs = [
     gfortran
     python3

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "clusterctl";
-  version = "1.11.1";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
     rev = "v${version}";
-    hash = "sha256-rm88e5GmWpP9lwtVT9mCrQuxilC2R+f73/yHEPbpMsk=";
+    hash = "sha256-MMwM1hWZd1DdiymRAJrcFD4YoLqP0wrgDV5oIv7Lkxo=";
   };
 
-  vendorHash = "sha256-UcvdN9t8+YD3eQ4BdV905xwtaHsHTTisIsqPgZhMCnU=";
+  vendorHash = "sha256-YFtlu9ml7ZHG+m8se4K229+kzbiBZ4+dcJhFFIH7XgA=";
 
   subPackages = [ "cmd/clusterctl" ];
 
@@ -35,7 +34,7 @@ buildGoModule rec {
       "-X ${t}.gitVersion=v${version}"
     ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     # errors attempting to write config to read-only $HOME
     export HOME=$TMPDIR
 

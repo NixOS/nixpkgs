@@ -8,6 +8,9 @@
 
   # dependencies
   pydantic,
+  requests,
+  tqdm,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +29,9 @@ buildPythonPackage rec {
 
   dependencies = [
     pydantic
+    requests
+    tqdm
+    typer
   ];
 
   doCheck = false; # majority of tests require Docker and/or network access

@@ -1,7 +1,8 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   makeBinaryWrapper,
+  runtimeShell,
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
@@ -9,18 +10,11 @@
   jdk23,
   dpkg,
   writeShellScript,
+  bash,
   tor,
   zip,
   gnupg,
   coreutils,
-
-  # Used by the bundled webcam-app
-  libv4l,
-
-  # Used by the testing package bisq2-webcam-app
-  callPackage,
-  socat,
-  unzip,
 }:
 
 let
@@ -50,18 +44,8 @@ let
       hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
     };
   };
-
-  binPath = lib.makeBinPath [
-    coreutils
-    tor
-  ];
-
-  libraryPath = lib.makeLibraryPath [
-    stdenv.cc.cc
-    libv4l
-  ];
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenvNoCC.mkDerivation rec {
   inherit version;
 
   pname = "bisq2";
@@ -153,11 +137,21 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
-    wrapProgram $out/bin/bisq2 --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
+    wrapProgram $out/bin/bisq2 --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
-    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
+    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -167,15 +161,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     runHook postInstall
   '';
-
-  # The bisq2.webcam-app package is for maintainers to test scanning QR codes.
-  passthru.webcam-app = callPackage ./webcam-app.nix {
-    inherit
-      jdk
-      libraryPath
-      ;
-    bisq2 = finalAttrs.finalPackage.out;
-  };
 
   meta = {
     description = "Decentralized bitcoin exchange network";
@@ -191,4 +176,4 @@ stdenv.mkDerivation (finalAttrs: rec {
       "aarch64-linux"
     ];
   };
-})
+}

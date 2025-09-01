@@ -33,16 +33,13 @@ Note that 16GB memory is the recommended minimum, while with less than 8GB memor
 To compare two commits locally, first run the following on the baseline commit:
 
 ```
-nix-build ci -A eval.baseline --out-link baseline
+BASELINE=$(nix-build ci -A eval.baseline --no-out-link)
 ```
 
 Then, on the commit with your changes:
 
 ```
-nix-build ci -A eval.full --arg baseline ./baseline
+nix-build ci -A eval.full --arg baseline $BASELINE
 ```
 
 Keep in mind to otherwise pass the same set of arguments for both commands (`evalSystems`, `quickTest`, `chunkSize`).
-Running this command will evaluate the difference between the baseline statistics and the ones at the time of running the command.
-From that difference, it will produce a human-readable report in `$out/step-summary.md`.
-If no packages were added or removed, then performance statistics will also be generated as part of this report.

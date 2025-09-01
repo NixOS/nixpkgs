@@ -21,13 +21,10 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   procps,
-
-  # typer or typer-slim
-  package ? "typer",
 }:
 
 buildPythonPackage rec {
-  pname = package;
+  pname = "typer";
   version = "0.16.0";
   pyproject = true;
 
@@ -38,17 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-WB9PIxagTHutfk3J+mNTVK8bC7TMDJquu3GLBQgaras=";
   };
 
-  env.TIANGOLO_BUILD_PACKAGE = package;
-
   build-system = [ pdm-backend ];
 
   dependencies = [
     click
     typing-extensions
+    # Build includes the standard optional by default
+    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
   ]
-  # typer includes the standard optional by default
-  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
-  ++ lib.optionals (package == "typer") optional-dependencies.standard;
+  ++ optional-dependencies.standard;
 
   optional-dependencies = {
     standard = [
@@ -56,8 +51,6 @@ buildPythonPackage rec {
       shellingham
     ];
   };
-
-  doCheck = package == "typer"; # tests expect standard dependencies
 
   nativeCheckInputs = [
     coverage # execs coverage in tests

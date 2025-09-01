@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   go,
   buildGoModule,
   fetchFromGitHub,
@@ -46,7 +45,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd updatecli \
       --bash <($out/bin/updatecli completion bash) \
       --fish <($out/bin/updatecli completion fish) \

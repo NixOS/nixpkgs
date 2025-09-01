@@ -21,7 +21,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "regex"
     "wyoming"
   ];
 

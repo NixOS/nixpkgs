@@ -25,29 +25,29 @@
   makeWrapper,
   replaceVars,
   nixosTests,
-  bintools,
 }:
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-09-14";
+  version = "0-unstable-2025-07-14";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "9de91586994af5078decda17db92ce50c5673951";
-    hash = "sha256-iRjP++WzLsV7oDGNdF3m9JJJS7zLrG5W46U3h39H5uk=";
+    rev = "828f779c4f7170f608047c500d6d3b64b480df7f";
+    hash = "sha256-1KYZWlzES3tbskqvA8qSQCegE0uLTLCq4q2CX6uix4o=";
   };
 
   patches = [
+    (replaceVars ./configure-art-path.patch {
+      artStandalonePackageDir = "${art-standalone}";
+    })
+
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
     # Patch custon Dex install dir
     ./configure-dex-install-dir.patch
-
-    # Patch atl to load microg apk from custom path
-    ./configure-microg-path.patch
   ];
 
   postPatch = ''
@@ -82,20 +82,9 @@ stdenv.mkDerivation {
     webkitgtk_6_0
   ];
 
-  postInstall = ''
-    install -D $src/com.google.android.gms.apk $out/share/com.google.android.gms.apk
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
-      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          art-standalone # dex2oat
-          bintools # addr2line
-        ]
-      } \
-      --set MICROG_APK_PATH "$out/share/com.google.android.gms.apk"
+      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art
   '';
 
   passthru.tests = {

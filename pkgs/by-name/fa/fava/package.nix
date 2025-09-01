@@ -8,17 +8,17 @@
 let
   src = buildNpmPackage (finalAttrs: {
     pname = "fava-frontend";
-    version = "1.30.6";
+    version = "1.30.5";
 
     src = fetchFromGitHub {
       owner = "beancount";
       repo = "fava";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-AMbKGIfR/URu7RpyBKSR3lzfIliRWjnUNNjLvu9KmfM=";
+      hash = "sha256-46ze+1sdgXq9Unhu1ec4buXbH3s/PCcfCx+rmYc+fZw=";
     };
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-geou0+Ges0jjrlXG9m3u1GMdf0Qt2pTd8vRGh9gAWJ4=";
+    npmDepsHash = "sha256-ImBNqccAd61c9ASzklcooQyh7BYdgJW9DTcQRmFHqho=";
     makeCacheWritable = true;
 
     preBuild = ''
@@ -34,7 +34,7 @@ let
 in
 python3Packages.buildPythonApplication {
   pname = "fava";
-  version = "1.30.6";
+  version = "1.30.5";
   pyproject = true;
 
   inherit src;

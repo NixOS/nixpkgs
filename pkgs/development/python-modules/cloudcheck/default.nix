@@ -24,10 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-z2KJ6EaqQLc2oQBZCfKMejPlTdgYGzmDPm/rGLHXCQA=";
   };
 
-  pythonRelaxDeps = [
-    "radixtarget"
-    "regex"
-  ];
+  pythonRelaxDeps = [ "radixtarget" ];
 
   build-system = [
     poetry-core

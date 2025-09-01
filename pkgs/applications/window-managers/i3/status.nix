@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
   };
 
-  separateDebugInfo = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
     homepage = "https://i3wm.org";
-    maintainers = with lib.maintainers; [ stapelberg ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     mainProgram = "i3status";

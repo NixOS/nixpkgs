@@ -13,7 +13,6 @@
   python3Packages,
   triton-llvm,
   openmpi,
-  stdenv,
   rocmGpuArches ? [ ],
 }:
 
@@ -84,7 +83,7 @@ let
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
 
-      aotriton = self.callPackage ./aotriton { inherit stdenv; };
+      aotriton = self.callPackage ./aotriton { };
 
       hipify = self.callPackage ./hipify {
         inherit (llvm)
@@ -498,7 +497,6 @@ outer
     "gfx1100"
     "gfx1101"
     "gfx1102"
-    "gfx1151"
   ];
   gfx12 = scopeForArches [
     "gfx1200"

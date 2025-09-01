@@ -47,13 +47,14 @@
   libgeotiff,
   laszip_2,
   gdal,
+  gdcm,
   pdal,
   alembic,
   imath,
   openvdb,
   c-blosc,
   unixODBC,
-  libpq,
+  postgresql,
   libmysqlclient,
   ffmpeg,
   libjpeg,
@@ -82,10 +83,11 @@
   libXcursor,
   gl2ps,
   libGL,
+  qt5,
   qt6,
 
   # custom options
-  withQt6 ? false,
+  qtVersion ? null,
   # To avoid conflicts between the propagated vtkPackages.hdf5
   # and the input hdf5 used by most downstream packages,
   # we set mpiSupport to false by default.
@@ -96,6 +98,15 @@
   testers,
 }:
 let
+  qtPackages =
+    if (isNull qtVersion) then
+      null
+    else if (qtVersion == "6") then
+      qt6
+    else if (qtVersion == "5") then
+      qt5
+    else
+      throw ''qtVersion must be "5", "6" or null'';
   vtkPackages = lib.makeScope newScope (self: {
     inherit
       tbb
@@ -127,6 +138,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = sourceSha256;
   };
 
+  postPatch =
+    let
+      vtk-dicom = fetchFromGitHub {
+        owner = "dgobbi";
+        repo = "vtk-dicom";
+        tag = "v0.8.17";
+        hash = "sha256-1lI2qsV4gymWqjeouEHZ5FRlmlh9vimH7J5rzA+eOds=";
+      };
+    in
+    ''
+      cp --no-preserve=mode -r ${vtk-dicom} ./Remote/vtkDICOM
+    '';
+
   nativeBuildInputs = [
     cmake
     pkg-config # required for finding MySQl
@@ -144,12 +168,13 @@ stdenv.mkDerivation (finalAttrs: {
     libgeotiff
     laszip_2
     gdal
+    (gdcm.override { enableVTK = false; })
     pdal
     alembic
     imath
     c-blosc
     unixODBC
-    libpq
+    postgresql
     libmysqlclient
     ffmpeg
     opencascade-occt
@@ -164,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrender
     libXcursor
   ]
-  ++ lib.optional withQt6 qt6.qttools
+  ++ lib.optional (!(isNull qtPackages)) qtPackages.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -225,6 +250,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # wrapper script calls qmlplugindump, crashes due to lack of minimal platform plugin
+  # Could not find the Qt platform plugin "minimal" in ""
+  preConfigure = lib.optionalString (qtVersion == "5") ''
+    export QT_PLUGIN_PATH=${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
+  '';
+
   env = {
     CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
     NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
@@ -260,8 +291,8 @@ stdenv.mkDerivation (finalAttrs: {
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenVR" false) # openvr
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingAnari" false) # anari
 
-    # withQt6
-    (vtkBool "VTK_GROUP_ENABLE_Qt" withQt6)
+    # qtSupport
+    (vtkBool "VTK_GROUP_ENABLE_Qt" (!(isNull qtPackages)))
     (lib.cmakeFeature "VTK_QT_VERSION" "Auto") # will search for Qt6 first
 
     # pythonSupport
@@ -274,6 +305,9 @@ stdenv.mkDerivation (finalAttrs: {
     # mpiSupport
     (lib.cmakeBool "VTK_USE_MPI" mpiSupport)
     (vtkBool "VTK_GROUP_ENABLE_MPI" mpiSupport)
+
+    # Remote module options
+    (lib.cmakeBool "USE_GDCM" true) # for vtkDicom
   ];
 
   pythonImportsCheck = [ "vtk" ];
@@ -309,9 +343,9 @@ stdenv.mkDerivation (finalAttrs: {
 
         package = finalAttrs.finalPackage;
 
-        nativeBuildInputs = lib.optionals withQt6 [
-          qt6.qttools
-          qt6.wrapQtAppsHook
+        nativeBuildInputs = lib.optionals (!(isNull qtPackages)) [
+          qtPackages.qttools
+          qtPackages.wrapQtAppsHook
         ];
       };
     };

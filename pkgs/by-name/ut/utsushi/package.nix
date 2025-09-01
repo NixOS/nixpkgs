@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "utsushi";
-    repo = "imagescan";
+    repo = pname;
     rev = version;
     hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };

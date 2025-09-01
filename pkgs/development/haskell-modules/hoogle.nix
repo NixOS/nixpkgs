@@ -23,9 +23,18 @@ let
   packages = selectPackages haskellPackages;
 
   wrapper = ./hoogle-local-wrapper.sh;
-  haddockExe = "haddock";
-  ghcDocLibDir = ghc.doc + "/share/doc/ghc*/html/libraries";
-  prologue = "${ghcDocLibDir}/prologue.txt";
+  isGhcjs = ghc.isGhcjs or false;
+  opts = lib.optionalString;
+  haddockExe = if !isGhcjs then "haddock" else "haddock-ghcjs";
+  ghcDocLibDir = if !isGhcjs then ghc.doc + "/share/doc/ghc*/html/libraries" else ghc + "/doc/lib";
+  # On GHCJS, use a stripped down version of GHC's prologue.txt
+  prologue =
+    if !isGhcjs then
+      "${ghcDocLibDir}/prologue.txt"
+    else
+      writeText "ghcjs-prologue.txt" ''
+        This index includes documentation for many Haskell modules.
+      '';
 
   docPackages =
     lib.closePropagation
@@ -75,6 +84,7 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     echo importing builtin packages
     for docdir in ${ghcDocLibDir}"/"*; do
       name="$(basename $docdir)"
+      ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
         ln -sfn $docdir $out/share/doc/hoogle/$name
       fi

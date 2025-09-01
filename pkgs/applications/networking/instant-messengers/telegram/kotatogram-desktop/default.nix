@@ -13,11 +13,7 @@
 }:
 
 let
-  telegram-desktop = libsForQt5.callPackage ../telegram-desktop {
-    inherit stdenv;
-    # N/A on Qt5
-    kimageformats = null;
-  };
+  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
   version = "1.4.9";
   tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
     version = "0-unstable-2024-06-15";

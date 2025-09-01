@@ -9,7 +9,6 @@
   click-default-group,
   click-repl,
   dict2xml,
-  hatchling,
   jinja2,
   more-itertools,
   requests,
@@ -22,7 +21,7 @@
 buildPythonPackage rec {
   pname = "greynoise";
   version = "3.0.1";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -33,11 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-wJDO666HC3EohfR+LbG5F0Cp/eL7q4kXniWhJfc7C3s=";
   };
 
-  build-system = [
-    hatchling
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     click
     ansimarkup
     cachetools

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
-  electron_37,
+  electron_35,
   yarnConfigHook,
   copyDesktopItems,
   vips,
@@ -15,7 +15,7 @@
   imagemagick,
 }:
 let
-  electron = electron_37;
+  electron = electron_35;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       yuka
-      iedame
     ];
     platforms = lib.platforms.all;
   };

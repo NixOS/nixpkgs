@@ -14,12 +14,12 @@
   gtest,
 
   # dependencies
-  ml-dtypes,
   numpy,
   typing-extensions,
 
   # tests
   google-re2,
+  ml-dtypes,
   nbval,
   parameterized,
   pillow,
@@ -33,14 +33,14 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.19.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${version}";
-    hash = "sha256-dDc7ugzQHcArf9TRcF9Ofv16jc3gqhMWCZrYKJ7Udfw=";
+    hash = "sha256-UhtF+CWuyv5/Pq/5agLL4Y95YNP63W2BraprhRqJOag=";
   };
 
   build-system = [
@@ -56,9 +56,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    ml-dtypes
-    numpy
     protobuf
+    numpy
     typing-extensions
   ];
 
@@ -72,6 +71,13 @@ buildPythonPackage rec {
     tabulate
     writableTmpDirAsHomeHook
   ];
+
+  postPatch = ''
+    rm -r third_party
+
+    chmod +x tools/protoc-gen-mypy.sh.in
+    patchShebangs tools/protoc-gen-mypy.sh.in
+  '';
 
   preConfigure = ''
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set

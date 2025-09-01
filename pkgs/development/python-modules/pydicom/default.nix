@@ -10,7 +10,6 @@
   # optional/test dependencies
   gdcm,
   pillow,
-  pyjpegls,
   pylibjpeg-libjpeg,
   writableTmpDirAsHomeHook,
 }:
@@ -45,9 +44,9 @@ buildPythonPackage rec {
   optional-dependencies = {
     pixeldata = [
       pillow
-      pyjpegls
+      #pyjpegls # not in nixpkgs
       #pylibjpeg.optional-dependencies.openjpeg # infinite recursion
-      #pylibjpeg.optional-dependencies.rle # infinite recursion
+      #pylibjpeg.optional-dependencies.rle # not in nixpkgs
       pylibjpeg-libjpeg
       gdcm
     ];

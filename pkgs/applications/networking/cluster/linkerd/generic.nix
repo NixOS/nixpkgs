@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -52,8 +51,6 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/linkerd
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd linkerd \
       --bash <($out/bin/linkerd completion bash) \
       --zsh <($out/bin/linkerd completion zsh) \

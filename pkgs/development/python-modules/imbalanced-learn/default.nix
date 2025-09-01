@@ -14,12 +14,13 @@
   tensorflow,
   threadpoolctl,
   pytestCheckHook,
+  sklearn-compat,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.14.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";
     tag = version;
-    hash = "sha256-1R7jHOkTO3zK9bkUvvOPQ420ofqIO7J1rqixFEbApR0=";
+    hash = "sha256-osmALi5vTV+3kgldY/VhYkNvpXX11KwJ/dIX/5E7Uhc=";
   };
 
   build-system = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     threadpoolctl
+    sklearn-compat
   ];
 
   optional-dependencies = {
@@ -80,7 +82,6 @@ buildPythonPackage rec {
   disabledTests = [
     # Broken upstream test https://github.com/scikit-learn-contrib/imbalanced-learn/issues/1131
     "test_estimators_compatibility_sklearn"
-    "test_balanced_bagging_classifier_with_function_sampler"
   ];
 
   meta = {

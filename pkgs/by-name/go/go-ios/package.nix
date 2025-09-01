@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -28,7 +27,7 @@ buildGoModule rec {
     "restapi"
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
     substituteInPlace ncm/linux_commands.go \
       --replace-fail "ip " "${lib.getExe' iproute2 "ip"} "
 

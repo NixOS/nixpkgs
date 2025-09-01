@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdrhistogram_c";
-  version = "0.11.9";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "HdrHistogram";
     repo = "HdrHistogram_c";
     tag = finalAttrs.version;
-    hash = "sha256-9Xp+gPqJpB7xZr5dzyc9Via9gxG9q/EriCx3cm++0kU=";
+    hash = "sha256-TFlrC4bgK8o5KRZcLMlYU5EO9Oqaqe08PjJgmsUl51M=";
   };
 
   buildInputs = [ zlib ];

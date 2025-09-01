@@ -11,11 +11,13 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
+  tomli,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.12.0";
+  version = "1.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "setuptools_rust";
     inherit version;
-    hash = "sha256-2UqT8Ml3UcFwFFZfB73DJL7kXTls0buoPY56+SuUXww=";
+    hash = "sha256-favEOSJSztMUuAUNYyduBf3F0yOY/H08zh9qasNbdsA=";
   };
 
   build-system = [

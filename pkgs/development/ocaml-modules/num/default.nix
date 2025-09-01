@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   ocaml,
   findlib,
   withStatic ? false,
@@ -9,21 +10,22 @@
 
 stdenv.mkDerivation (
   rec {
-    version = "1.6";
+    version = "1.1";
     pname = "ocaml${ocaml.version}-num";
     src = fetchFromGitHub {
       owner = "ocaml";
       repo = "num";
-      tag = "v${version}";
-      hash = "sha256-JWn0WBsbKpiUlxRDaXmwXVbL2WhqQIDrXiZk1aXeEtQ=";
+      rev = "v${version}";
+      sha256 = "0a4mhxgs5hi81d227aygjx35696314swas0vzy3ig809jb7zq4h0";
     };
 
-    patches = lib.optional withStatic ./enable-static.patch;
-
-    postPatch = ''
-      substituteInPlace num.opam --replace-fail '1.7~dev' "${version}"
-      substituteInPlace src/Makefile --replace-fail "cp META.num META" "mv META.num META"
-    '';
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/ocaml/num/commit/6d4c6d476c061298e6385e8a0864f083194b9307.patch";
+        sha256 = "18zlvb5n327q8y3c52js5dvyy29ssld1l53jqng8m9w1k24ypi0b";
+      })
+    ]
+    ++ lib.optional withStatic ./enable-static.patch;
 
     nativeBuildInputs = [
       ocaml
@@ -33,8 +35,6 @@ stdenv.mkDerivation (
     strictDeps = true;
 
     createFindlibDestdir = true;
-
-    installTargets = "findlib-install";
 
     meta = {
       description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";

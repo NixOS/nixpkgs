@@ -13,6 +13,8 @@ in
 
 self: super: {
 
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+
   # Disable GHC 9.2.x core libraries.
   array = null;
   base = null;

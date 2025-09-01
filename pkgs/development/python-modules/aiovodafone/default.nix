@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   beautifulsoup4,
-  colorlog,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "1.2.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${version}";
-    hash = "sha256-i4zsOHauKPq2b9LfWd4HYe04oOambbibHfNrJLiSSYw=";
+    hash = "sha256-xz5NilxPN5KyC4NYmx4Ax0L3khtD2oo3s7gxXWclCI4=";
   };
 
   build-system = [ poetry-core ];
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     beautifulsoup4
-    colorlog
   ];
 
   nativeCheckInputs = [

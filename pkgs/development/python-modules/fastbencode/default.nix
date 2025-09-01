@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.3.6";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "fastbencode";
     tag = "v${version}";
-    hash = "sha256-Vn9NcJQaSF+k2TyRTAA9yMWiV+kYrfw6RIbIe99CCsg=";
+    hash = "sha256-E02MASmHsXWIqVQuFVwXK0MRocrA7LSga7o42au1gGE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

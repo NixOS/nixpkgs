@@ -7,7 +7,6 @@
   extra-cmake-modules,
   dbus,
   libX11,
-  libxcb,
   libXi,
   libXtst,
   libnotify,
@@ -81,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libXi
     libXtst
     libX11
-    libxcb
     xclip
     xdotool
   ];

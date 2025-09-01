@@ -1,15 +1,17 @@
 {
   lib,
-  anyio,
   buildPythonPackage,
-  dirty-equals,
   fetchFromGitHub,
+
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
-  pytestCheckHook,
+
   tenacity,
   typing-extensions,
+
+  anyio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,24 +26,23 @@ buildPythonPackage rec {
     hash = "sha256-TehGqR3vbjLNByHZE2+Ytq52dpEpiL6+7TRUKwXcC1M=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     tenacity
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    anyio
-    dirty-equals
-    pytestCheckHook
-  ];
-
   pythonImportsCheck = [ "stamina" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    anyio
+  ];
 
   meta = with lib; {
     description = "Production-grade retries for Python";

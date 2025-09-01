@@ -6,7 +6,7 @@
 
   # nativeBuildInputs
   cmake,
-  qt6,
+  libsForQt5,
   pkg-config,
 
   # buildInputs
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qt6.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     pkg-config
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     libXt
     libpcap
-    qt6.qtbase
+    libsForQt5.qtbase
     libusb1
     nanoflann
   ]

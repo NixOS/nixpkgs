@@ -17,13 +17,15 @@
 
 buildPythonPackage rec {
   pname = "nitrokey";
-  version = "0.4.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m351pDLMuZaddbUqJz5r/ljz/vVq+RBDGk4xskc3HCk=";
+    hash = "sha256-uZ3KF+8PUwVjwf73buFpq/6Fu+fqkfIecP3A33FmtKk=";
   };
+
+  disabled = pythonOlder "3.9";
 
   pythonRelaxDeps = [ "protobuf" ];
 

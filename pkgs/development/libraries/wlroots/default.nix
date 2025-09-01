@@ -131,7 +131,7 @@ let
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [
           synthetica
-          wineee
+          rewine
         ];
         pkgConfigModules = [
           (

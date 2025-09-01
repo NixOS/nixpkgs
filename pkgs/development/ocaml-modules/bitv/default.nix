@@ -6,14 +6,14 @@
 
 buildDunePackage rec {
   pname = "bitv";
-  version = "2.1";
+  version = "2.0";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "backtracking";
     repo = "bitv";
     tag = version;
-    hash = "sha256-jlpVMqYOiKxoU6wuVeYlOC5wRtF4aakljKpop6dfu8w=";
+    hash = "sha256-llfbdrvxrz6323G2LBAtKaXOrHQriFzaz3ulvFVhH6s=";
   };
 
   meta = {

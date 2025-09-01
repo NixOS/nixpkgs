@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
     description = "Highly optimized library for processing RAW images";
     homepage = "https://github.com/CarVac/librtprocess";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      returntoreality
-    ];
+    maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.unix;
   };
 }

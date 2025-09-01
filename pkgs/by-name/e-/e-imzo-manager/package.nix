@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-imzo-manager";
-  version = "1.0.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "xinux-org";
-    repo = "e-imzo-manager";
+    repo = "e-imzo";
     tag = finalAttrs.version;
-    hash = "sha256-JXALTSgxIULDHdw90RjxlNQiLT+GKrzpkqPlMY0h+8c=";
+    hash = "sha256-uDaqkz2VDvqTgi+k8EGGKjLkjoH93xXHQcgUc1NVo30=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-x9V0FHrSpM1pIWjDjcTuhPz4p0blXxKDJVvT0I0Op9M=";
+    hash = "sha256-rulWG4L/uN6+JBk+SzC0y57Pdw5N0Q1dJlpXGVo+vbQ=";
   };
 
   strictDeps = true;
@@ -72,10 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/xinux-org/e-imzo-manager";
+    homepage = "https://github.com/xinux-org/e-imzo";
     mainProgram = "E-IMZO-Manager";
     description = "GTK application for managing E-IMZO keys";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.uzinfocom ];
   };

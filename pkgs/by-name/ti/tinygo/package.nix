@@ -144,6 +144,7 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [
+      Madouura
       muscaln
     ];
   };

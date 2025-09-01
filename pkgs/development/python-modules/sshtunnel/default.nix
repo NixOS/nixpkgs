@@ -35,8 +35,6 @@ buildPythonPackage rec {
     "test_get_keys"
     "connect_via_proxy"
     "read_ssh_config"
-    # Test doesn't work with paramiko < 4.0.0 and the patch above
-    "test_read_private_key_file"
   ];
 
   meta = with lib; {

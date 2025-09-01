@@ -1,29 +1,27 @@
 {
   lib,
-  flutter335,
+  flutter332,
   fetchFromGitHub,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
   runCommand,
-  yq-go,
+  venera,
+  yq,
   _experimental-update-script-combinators,
   gitUpdater,
 }:
 
-let
-  version = "1.5.0";
+flutter332.buildFlutterApplication rec {
+  pname = "venera";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-LhPtoMD7IjxbTFTSzP+vtflDUixUoN9eqE1AQyWhJzg=";
+    hash = "sha256-WGzgx+QbAurv9yOJjO40R8t4WtSt/iIkkBuBizT94lQ=";
   };
-in
-flutter335.buildFlutterApplication {
-  pname = "venera";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -52,7 +50,7 @@ flutter335.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -D --mode=0644 debian/gui/venera.png $out/share/icons/hicolor/1024x1024/apps/venera.png
+    install -Dm0644 debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
   extraWrapProgramArgs = ''
@@ -63,11 +61,11 @@ flutter335.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
-          nativeBuildInputs = [ yq-go ];
+          buildInputs = [ yq ];
+          inherit (venera) src;
         }
         ''
-          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+          cat $src/pubspec.lock | yq > $out
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })

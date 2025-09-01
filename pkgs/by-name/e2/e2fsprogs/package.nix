@@ -14,15 +14,11 @@
   e2fsprogs,
   runCommand,
   libarchive,
-  bash,
-  bashNonInteractive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
   version = "1.47.3";
-
-  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
@@ -46,11 +42,8 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "info"
-    "scripts"
   ]
   ++ lib.optionals withFuse [ "fuse2fs" ];
-
-  strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -61,7 +54,6 @@ stdenv.mkDerivation rec {
     libuuid
     gettext
     libarchive
-    bash
   ]
   ++ lib.optionals withFuse [ fuse3 ];
 
@@ -94,11 +86,6 @@ stdenv.mkDerivation rec {
     if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
       mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
     fi
-
-    moveToOutput bin/mk_cmds "$scripts"
-    moveToOutput bin/compile_et "$scripts"
-    moveToOutput sbin/e2scrub "$scripts"
-    moveToOutput sbin/e2scrub_all "$scripts"
   ''
   + lib.optionalString withFuse ''
     mkdir -p $fuse2fs/bin
@@ -106,18 +93,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  # non-glibc gettext has issues with this
-  outputChecks = lib.optionalAttrs stdenv.hostPlatform.isGnu {
-    bin.disallowedRequisites = [
-      bash
-      bashNonInteractive
-    ];
-    out.disallowedRequisites = [
-      bash
-      bashNonInteractive
-    ];
-  };
 
   passthru.tests = {
     simple-filesystem = runCommand "e2fsprogs-create-fs" { } ''

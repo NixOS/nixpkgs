@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.9.4";
+  version = "2025.8.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -177,7 +177,6 @@
       ];
     "aladdin_connect" =
       ps: with ps; [
-        genie-partner-sdk
       ];
     "alarm_control_panel" =
       ps: with ps; [
@@ -329,6 +328,9 @@
         aprslib
         geopy
       ];
+    "aps" =
+      ps: with ps; [
+      ];
     "apsystems" =
       ps: with ps; [
         apsystems-ez1
@@ -425,7 +427,7 @@
     "asuswrt" =
       ps: with ps; [
         aioasuswrt
-        asusrouter
+        pyasuswrt
       ];
     "atag" =
       ps: with ps; [
@@ -444,18 +446,6 @@
       ];
     "august" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
-        ha-ffmpeg
-        hass-nabucasa
-        hassil
-        home-assistant-intents
-        mutagen
-        pymicro-vad
-        pyspeex-noise
-        python-matter-server
-        pyturbojpeg
-        securetar
         yalexs
         yalexs-ble
       ];
@@ -957,7 +947,7 @@
     "coinbase" =
       ps: with ps; [
         coinbase-advanced-py
-      ];
+      ]; # missing inputs: coinbase
     "color_extractor" =
       ps: with ps; [
         colorthief
@@ -1487,7 +1477,6 @@
       ];
     "emoncms_history" =
       ps: with ps; [
-        pyemoncms
       ];
     "emonitor" =
       ps: with ps; [
@@ -2503,7 +2492,6 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
-        gardena-bluetooth
         ha-ffmpeg
         habluetooth
         hassil
@@ -3283,6 +3271,10 @@
     "linak" =
       ps: with ps; [
       ];
+    "linear_garage_door" =
+      ps: with ps; [
+        linear-garage-door
+      ];
     "linkedgo" =
       ps: with ps; [
       ];
@@ -3570,6 +3562,9 @@
         zeroconf
       ];
     "meraki" =
+      ps: with ps; [
+      ];
+    "mercury_nz" =
       ps: with ps; [
       ];
     "message_bird" =
@@ -4554,10 +4549,6 @@
       ps: with ps; [
         pypoint
       ];
-    "pooldose" =
-      ps: with ps; [
-        python-pooldose
-      ];
     "poolsense" =
       ps: with ps; [
         poolsense
@@ -5453,9 +5444,6 @@
       ps: with ps; [
         slack-sdk
       ];
-    "sleep_as_android" =
-      ps: with ps; [
-      ];
     "sleepiq" =
       ps: with ps; [
         asyncsleepiq
@@ -5850,6 +5838,7 @@
       ps: with ps; [
         ifaddr
         systembridgeconnector
+        systembridgemodels
         zeroconf
       ];
     "system_health" =
@@ -6134,18 +6123,6 @@
       ps: with ps; [
         todoist-api-python
       ];
-    "togrill" =
-      ps: with ps; [
-        aiousbwatcher
-        bleak
-        bleak-retry-connector
-        bluetooth-adapters
-        bluetooth-auto-recovery
-        bluetooth-data-tools
-        dbus-fast
-        habluetooth
-        pyserial
-      ]; # missing inputs: togrill-bluetooth
     "tolo" =
       ps: with ps; [
         tololib
@@ -6518,6 +6495,10 @@
     "volvooncall" =
       ps: with ps; [
         volvooncall
+      ];
+    "vulcan" =
+      ps: with ps; [
+        vulcan-api
       ];
     "vultr" =
       ps: with ps; [
@@ -7061,7 +7042,6 @@
     "cloud"
     "cloudflare"
     "co2signal"
-    "coinbase"
     "color_extractor"
     "comelit"
     "comfoconnect"
@@ -7142,7 +7122,6 @@
     "elmax"
     "elvia"
     "emoncms"
-    "emoncms_history"
     "emonitor"
     "emulated_hue"
     "emulated_kasa"
@@ -7387,6 +7366,7 @@
     "life360"
     "lifx"
     "light"
+    "linear_garage_door"
     "linkplay"
     "litejet"
     "litterrobot"
@@ -7585,7 +7565,6 @@
     "plugwise"
     "plum_lightpad"
     "point"
-    "pooldose"
     "poolsense"
     "powerfox"
     "powerwall"
@@ -7704,7 +7683,6 @@
     "sky_remote"
     "skybell"
     "slack"
-    "sleep_as_android"
     "sleepiq"
     "slide_local"
     "slimproto"
@@ -7874,6 +7852,7 @@
     "volumio"
     "volvo"
     "volvooncall"
+    "vulcan"
     "vultr"
     "wake_on_lan"
     "wake_word"

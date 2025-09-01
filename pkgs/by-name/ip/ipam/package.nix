@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ipam \
       --bash <($out/bin/ipam completion bash) \
       --fish <($out/bin/ipam completion fish) \

@@ -15,9 +15,10 @@ buildDunePackage rec {
     hash = "sha256-tetCmVg27/WHZ+HMwKZVHCrHTzWAlKwkAjNDibB1+6g=";
   };
 
-  buildInputs = [ dune-configurator ];
-
-  propagatedBuildInputs = [ czmq ];
+  buildInputs = [
+    czmq
+    dune-configurator
+  ];
 
   meta = {
     description = "ZeroMQ bindings for OCaml";

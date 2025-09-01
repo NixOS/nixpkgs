@@ -1,124 +1,76 @@
 {
   lib,
-  python3Packages,
+  stdenv,
   fetchFromGitHub,
 
   # build time
+  cmake,
   pkg-config,
 
   # runtime
-  espeak-ng,
+  fmt,
+  onnxruntime,
+  pcaudiolib,
+  piper-phonemize,
+  spdlog,
 
-  # extras
-  withTrain ? true,
-  withHTTP ? true,
-  withAlignment ? true,
+  # tests
+  piper-train,
 }:
 
-let
-  # https://github.com/OHF-Voice/piper1-gpl/blob/v1.3.0/CMakeLists.txt#L33-L40
-  espeak-ng' = espeak-ng.override {
-    asyncSupport = false;
-    klattSupport = false;
-    mbrolaSupport = false;
-    pcaudiolibSupport = false;
-    sonicSupport = false;
-    speechPlayerSupport = false;
-  };
-in
-
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piper-tts";
-  version = "1.3.0";
-  pyproject = true;
+  version = "2023.11.14-2";
 
   src = fetchFromGitHub {
-    owner = "OHF-Voice";
-    repo = "piper1-gpl";
-    tag = "v${version}";
-    hash = "sha256-WDMIXsbUzJ5XnA/KUVUPQKZzkqrXagzAOrhFtLR4fGk=";
+    owner = "rhasspy";
+    repo = "piper";
+    tag = finalAttrs.version;
+    hash = "sha256-3ynWyNcdf1ffU3VoDqrEMrm5Jo5Zc5YJcVqwLreRCsI=";
   };
 
-  patches = [
-    # https://github.com/OHF-Voice/piper1-gpl/pull/17
-    ./cmake-system-libs.patch
-  ];
-
-  build-system =
-    with python3Packages;
-    [
-      cmake
-      ninja
-      scikit-build
-      setuptools
-    ]
-    ++ lib.optionals withTrain [
-      cython
-      distutils
-    ];
-
   nativeBuildInputs = [
+    cmake
     pkg-config
   ];
 
-  dontUseCmakeConfigure = true;
-
-  env.CMAKE_ARGS = toString [
-    (lib.cmakeFeature "UCD_STATIC_LIB" "${espeak-ng'.ucd-tools}/libucd.a")
+  cmakeFlags = [
+    "-DFMT_DIR=${fmt}"
+    "-DSPDLOG_DIR=${spdlog.src}"
+    "-DPIPER_PHONEMIZE_DIR=${piper-phonemize}"
   ];
 
   buildInputs = [
-    espeak-ng'
+    onnxruntime
+    pcaudiolib
+    piper-phonemize
+    piper-phonemize.espeak-ng
+    spdlog
   ];
 
-  postBuild = lib.optionalString withTrain ''
-    cythonize --inplace src/piper/train/vits/monotonic_align/core.pyx
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    "-isystem ${lib.getDev piper-phonemize}/include/piper-phonemize"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    install -m 0755 piper $out/bin
+
+    runHook postInstall
   '';
 
-  dependencies = [
-    python3Packages.onnxruntime
-  ]
-  ++ lib.optionals withTrain optional-dependencies.train
-  ++ lib.optionals withHTTP optional-dependencies.http
-  ++ lib.optionals withAlignment optional-dependencies.alignment;
-
-  optional-dependencies = {
-    train =
-      with python3Packages;
-      [
-        jsonargparse
-        librosa
-        lightning
-        pathvalidate
-        pysilero-vad
-        tensorboard
-        tensorboardx
-        torch
-      ]
-      ++ jsonargparse.optional-dependencies.signatures;
-    http = with python3Packages; [
-      flask
-    ];
-    alignment = with python3Packages; [
-      onnx
-    ];
+  passthru.tests = {
+    inherit piper-train;
   };
 
-  postInstall = ''
-    ln -s ${espeak-ng'}/share/espeak-ng-data $out/${python3Packages.python.sitePackages}/piper/
-  ''
-  + lib.optionalString withTrain ''
-    train=$out/${python3Packages.python.sitePackages}/piper/train/vits
-    rm -v src/piper/train/vits/monotonic_align/{Makefile,setup.py,core.c,core.pyx}
-    cp -Rv src/piper/train/vits $train/
-  '';
-
   meta = {
-    changelog = "https://github.com/OHF-Voice/piper1-gpl/releases/tag/v${version}";
+    changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
     description = "Fast, local neural text to speech system";
-    homepage = "https://github.com/OHF-Voice/piper1-gpl";
-    license = lib.licenses.gpl3Only;
+    homepage = "https://github.com/rhasspy/piper";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "piper";
   };
-}
+})

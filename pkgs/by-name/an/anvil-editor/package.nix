@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo123Module,
   fetchzip,
   pkg-config,
   copyDesktopItems,
@@ -15,7 +15,7 @@
   buildPackages,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo123Module (finalAttrs: {
   pname = "anvil-editor";
   version = "0.6";
 
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-1oFBV7D7JgOt5yYAxVvC4vL4ccFv3JrNngZbo+5pzrk=";
 
-  anvilExtras = buildGoModule {
+  anvilExtras = buildGo123Module {
     pname = "anvil-editor-extras";
     inherit (finalAttrs) version src meta;
     vendorHash = "sha256-4pfk5XuwDbCWFZIF+1l+dy8NfnGNjgHmSg9y6/RnTSo=";
@@ -51,7 +51,6 @@ buildGoModule (finalAttrs: {
     vulkan-headers
     libGL
     xorg.libX11
-    xorg.libxcb
     xorg.libXcursor
     xorg.libXfixes
   ];
@@ -94,9 +93,5 @@ buildGoModule (finalAttrs: {
     mainProgram = "anvil";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = with lib.platforms; unix ++ windows;
-    # Doesn't build with >buildGo123Module.
-    # Multiple errors like the following:
-    # '> vendor/gioui.org/internal/vk/vulkan.go:1916:9: cannot define new methods on non-local type SurfaceCapabilities'
-    broken = true;
   };
 })

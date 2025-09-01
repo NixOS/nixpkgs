@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   fetchFromGitLab,
   python3,
 }:
@@ -15,21 +14,6 @@ let
           inherit version;
           hash = "sha256-cBqMmXXEq8ReXROQarFJ+Vn4EoaRBjRzI6P4msDoKmI=";
         };
-        dependencies = oldAttrs.dependencies ++ [
-          python3.pkgs.attrs
-          python3.pkgs.colorama
-        ];
-        doCheck = false;
-      });
-
-      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
-        };
-        build-system = with self; [ setuptools ];
         doCheck = false;
       });
     };
@@ -40,12 +24,12 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = "expliot";
-    tag = version;
+    rev = version;
     hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
@@ -58,9 +42,10 @@ buildPythonApplication rec {
     "zeroconf"
   ];
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiocoap
     awsiotpythonsdk
     bluepy
@@ -82,10 +67,13 @@ buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "expliot" ];
+  pythonImportsCheck = [
+    "expliot"
+  ];
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";
+    mainProgram = "expliot";
     longDescription = ''
       EXPLIoT is a Framework for security testing and exploiting IoT
       products and IoT infrastructure. It provides a set of plugins
@@ -95,8 +83,7 @@ buildPythonApplication rec {
       purpose of the framework i.e. IoT exploitation.
     '';
     homepage = "https://expliot.readthedocs.io/";
-    license = licenses.agpl3Plus;
+    license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "expliot";
   };
 }

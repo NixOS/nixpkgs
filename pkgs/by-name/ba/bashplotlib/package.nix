@@ -2,12 +2,11 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "bashplotlib";
-  version = "0.6.5-unstable-2021-03-31";
+  version = "2021-03-31";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -21,15 +20,13 @@ python3Packages.buildPythonApplication {
     setuptools
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   # No tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
-    maintainers = with lib.maintainers; [ dtzWill ];
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ dtzWill ];
+    license = licenses.mit;
   };
 }

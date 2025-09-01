@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sunsetr";
-  version = "0.9.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "psi4j";
     repo = "sunsetr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DbTEHJjYcxzr+ELlN4qgcQpZS/r5P2rcPPnPT8Qkbok=";
+    hash = "sha256-XDa6kjhdEur8YDfQQNg+RpLRtfOeTklB6LwXJaPcG7c=";
   };
 
-  cargoHash = "sha256-jRDa7wSJLXP+jv0lbCiVzgAhdh9eJfq314Gpw0npRos=";
+  cargoHash = "sha256-Jsii8PkRIZgQ4yrQHZpK8bLhaW5jg6EKYw65rPRCtGQ=";
 
   checkFlags = [
     "--skip=config::tests::test_geo_toml_exists_before_config_creation"
@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Automatic blue light filter for Hyprland, Niri, and everything Wayland";
     homepage = "https://github.com/psi4j/sunsetr";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.DoctorDalek1963 ];
   };
 })

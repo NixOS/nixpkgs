@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "1.8.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-GUCc6GK1yhVbk3Ss1XnT23wtz22uTgdSSDfEdr4mMpA=";
+    hash = "sha256-lfTZN3csxMQGMxf0kfl1hkC47T5XT0sSKIwIMwmS9CQ=";
   };
 
   metaCommon = {
@@ -29,7 +29,7 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-7SPTMeaHvqTZJQYPoGUGRudNRTcsEl/8AKgI6W/XCJQ=";
+    vendorHash = "sha256-rJriTQF4tf7sZXcEDS6yZXk3xUI8Cav8OC7o4egpfIw=";
 
     buildPhase = ''
       runHook preBuild

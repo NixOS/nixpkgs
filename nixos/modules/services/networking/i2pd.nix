@@ -417,7 +417,7 @@ in
       };
 
       port = mkOption {
-        type = with types; nullOr port;
+        type = with types; nullOr int;
         default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
@@ -667,7 +667,7 @@ in
           description = "Upstream outproxy bind address.";
         };
         outproxyPort = mkOption {
-          type = types.port;
+          type = types.int;
           default = 4444;
           description = "Upstream outproxy bind port.";
         };
@@ -686,7 +686,7 @@ in
             {
               options = {
                 destinationPort = mkOption {
-                  type = with types; nullOr port;
+                  type = with types; nullOr int;
                   default = null;
                   description = "Connect to particular port at destination.";
                 };
@@ -711,7 +711,7 @@ in
             {
               options = {
                 inPort = mkOption {
-                  type = types.port;
+                  type = types.int;
                   default = 0;
                   description = "Service port. Default to the tunnel's listen port.";
                 };

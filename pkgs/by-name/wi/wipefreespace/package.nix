@@ -1,48 +1,55 @@
 {
-  lib,
   stdenv,
-  fetchFromGitHub,
-  gettext,
-  texinfo,
-  xfsprogs,
+  lib,
+  fetchurl,
   e2fsprogs,
-  libcap,
   ntfs3g,
+  xfsprogs,
+  reiser4progs,
+  libaal,
+  jfsutils,
+  libuuid,
+  texinfo,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wipefreespace";
-  version = "3.0";
+  version = "2.6";
 
-  src = fetchFromGitHub {
-    owner = "bogdro";
-    repo = "wipefreespace";
-    tag = finalAttrs.version;
-    hash = "sha256-zWjMCWQNPPly8xJ7jQraGHi4OLuNrnpNVQC2CRyHUlw=";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/wipefreespace/wipefreespace/${version}/wipefreespace-${version}.tar.gz";
+    hash = "sha256-Pt6MDQ9wSJbL4tW/qckTpFsvE9FdXIkp/QmnYSlWR/M=";
   };
 
   nativeBuildInputs = [
-    gettext
     texinfo
-    xfsprogs
   ];
 
   # missed: Reiser3 FAT12/16/32 MinixFS HFS+ OCFS
   buildInputs = [
     e2fsprogs
-    libcap
     ntfs3g
     xfsprogs
+    reiser4progs
+    libaal
+    jfsutils
+    libuuid
   ];
 
   strictDeps = true;
 
-  meta = {
+  preConfigure = ''
+    export PATH=$PATH:${xfsprogs}/bin
+    export CFLAGS=-I${jfsutils}/include
+    export LDFLAGS="-L${jfsutils}/lib -L${reiser4progs}/lib"
+  '';
+
+  meta = with lib; {
     description = "Program which will securely wipe the free space";
     homepage = "https://wipefreespace.sourceforge.io";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kyehn ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ catap ];
     mainProgram = "wipefreespace";
   };
-})
+}

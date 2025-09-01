@@ -4,7 +4,6 @@
   runCommand,
   runCommandWith,
   runCommandCC,
-  writeText,
   bintools,
   hello,
   debian-devscripts,
@@ -40,17 +39,6 @@ let
   f3exampleWithStdEnv = writeCBinWithStdenv ./fortify3-example.c;
 
   flexArrF2ExampleWithStdEnv = writeCBinWithStdenv ./flex-arrays-fortify-example.c;
-
-  checkGlibcxxassertionsWithStdEnv =
-    expectDefined:
-    writeCBinWithStdenv (
-      writeText "main.cpp" ''
-        #if${if expectDefined then "n" else ""}def _GLIBCXX_ASSERTIONS
-        #error "Expected _GLIBCXX_ASSERTIONS to be ${if expectDefined then "" else "un"}defined"
-        #endif
-        int main() {}
-      ''
-    );
 
   # for when we need a slightly more complicated program
   helloWithStdEnv =
@@ -514,10 +502,6 @@ nameDrvAfterAttrName (
       hardeningEnable = [ "shadowstack" ];
     }) false;
 
-    glibcxxassertionsExplicitEnabled = checkGlibcxxassertionsWithStdEnv true stdenv {
-      hardeningEnable = [ "glibcxxassertions" ];
-    };
-
     bindNowExplicitDisabled =
       checkTestBin
         (f2exampleWithStdEnv stdenv {
@@ -712,10 +696,6 @@ nameDrvAfterAttrName (
     shadowStackExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
       hardeningDisable = [ "shadowstack" ];
     }) true;
-
-    glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
-      hardeningDisable = [ "glibcxxassertions" ];
-    };
 
     # most flags can't be "unsupported" by compiler alone and
     # binutils doesn't have an accessible hardeningUnsupportedFlags
@@ -915,12 +895,6 @@ nameDrvAfterAttrName (
         {
           ignoreStackProtector = false;
           expectFailure = true;
-        };
-
-    glibcxxassertionsStdenvUnsupp =
-      checkGlibcxxassertionsWithStdEnv false (stdenvUnsupport [ "glibcxxassertions" ])
-        {
-          hardeningEnable = [ "glibcxxassertions" ];
         };
 
     fortify3EnabledEnvEnablesFortify1 =
@@ -1133,10 +1107,6 @@ nameDrvAfterAttrName (
       allExplicitDisabledShadowStack = shadowStackTest (f1exampleWithStdEnv stdenv {
         hardeningDisable = [ "all" ];
       }) true;
-
-      glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
-        hardeningDisable = [ "all" ];
-      };
     }
   )
 )

@@ -112,7 +112,7 @@ buildGoModule rec {
       $out/bin/alloy
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd alloy \
       --bash <($out/bin/alloy completion bash) \
       --fish <($out/bin/alloy completion fish) \

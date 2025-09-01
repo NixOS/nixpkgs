@@ -44,7 +44,7 @@ in
         description = "Path to config file.";
       };
       port = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.ints.u16;
         default = 8081;
         description = "Port to bind to.";
       };

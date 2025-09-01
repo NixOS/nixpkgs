@@ -10,8 +10,9 @@ let
   hasWarning = lib.versionAtLeast coq.ocamlPackages.ocaml.version "4.08";
 in
 
-(mkCoqDerivation {
+mkCoqDerivation {
   pname = "dpdgraph";
+  owner = "Karmaki";
   repo = "coq-dpdgraph";
   inherit version;
   defaultVersion =
@@ -19,7 +20,6 @@ in
       case = case: out: { inherit case out; };
     in
     lib.switch coq.coq-version [
-      (case "9.0" "1.0+9.0")
       (case "8.20" "1.0+8.20")
       (case "8.19" "1.0+8.19")
       (case "8.18" "1.0+8.18")
@@ -36,7 +36,6 @@ in
       (case "8.7" "0.6.2")
     ] null;
 
-  release."1.0+9.0".sha256 = "sha256-gXy70fj2bAkE0did4gI0wTyWp9AIvOo4xTTihaFIpZ0=";
   release."1.0+8.20".sha256 = "sha256-szfH/OksCH3SCbcFjwEvLwHE5avmHp1vYiJM6KAXFqs=";
   release."1.0+8.19".sha256 = "sha256-L1vjEydYiwDFTXES3sgfdaO/D50AbTJKBXUKUCgbpto=";
   release."1.0+8.18".sha256 = "sha256-z14MI1VSYzPqmF1PqDXzymXWRMYoTlQAfR/P3Pdf7fI=";
@@ -59,12 +58,15 @@ in
   release."0.6".sha256 = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   releaseRev = v: "v${v}";
 
+  nativeBuildInputs = [ autoreconfHook ];
   mlPlugin = true;
-  buildInputs = with coq.ocamlPackages; [
-    ocaml
-    findlib
-    ocamlgraph
-  ];
+  buildInputs = [ coq.ocamlPackages.ocamlgraph ];
+
+  # dpd_compute.ml uses deprecated Pervasives.compare
+  # Versions prior to 0.6.5 do not have the WARN_ERR build flag
+  preConfigure = lib.optionalString hasWarning ''
+    substituteInPlace Makefile.in --replace "-warn-error +a " ""
+  '';
 
   buildFlags = lib.optional hasWarning "WARN_ERR=";
 
@@ -79,16 +81,4 @@ in
     license = licenses.lgpl21;
     maintainers = with maintainers; [ vbgl ];
   };
-}).overrideAttrs
-  (
-    o:
-    lib.optionalAttrs (o.version != "dev" && lib.versions.isLe "1.0+9.0" o.version) {
-      nativeBuildInputs = [ autoreconfHook ];
-
-      # dpd_compute.ml uses deprecated Pervasives.compare
-      # Versions prior to 0.6.5 do not have the WARN_ERR build flag
-      preConfigure = lib.optionalString hasWarning ''
-        substituteInPlace Makefile.in --replace "-warn-error +a " ""
-      '';
-    }
-  )
+}

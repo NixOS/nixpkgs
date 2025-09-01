@@ -12,9 +12,8 @@
   },
   patches ? [ ],
   maintainers ? [
-    lib.maintainers.artturin
-    lib.maintainers.philiptaron
     lib.maintainers.lovesegfault
+    lib.maintainers.artturin
   ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,

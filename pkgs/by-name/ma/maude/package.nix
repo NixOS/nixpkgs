@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "maude";
-  version = "3.5.1";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "maude-lang";
     repo = "Maude";
     tag = "Maude${finalAttrs.version}";
-    hash = "sha256-NluckH48G4Y79exEQM+hB4oMujA2jcHUFgG3qe+9fGw=";
+    hash = "sha256-1no5K3+0N4MCg2Nr+9FgwWH6G9Inwh2MIYuA/auZhys=";
   };
 
   # Always enabled in CVC4 1.8: https://github.com/CVC4/CVC4/pull/4519

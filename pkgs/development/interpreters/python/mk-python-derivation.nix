@@ -377,8 +377,8 @@ let
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
       doInstallCheck = attrs.doCheck or true;
-      nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
-      installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
+      nativeInstallCheckInputs = nativeCheckInputs;
+      installCheckInputs = checkInputs;
 
       inherit dontWrapPythonPrograms;
 

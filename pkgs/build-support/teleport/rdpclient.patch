@@ -17,6 +17,6 @@ index 4357d7aa1..7e21a0076 100644
 +#cgo LDFLAGS: -L${SRCDIR}/../../../../../lib -lpthread -ldl -lm -lssl -lcrypto
 +#cgo linux LDFLAGS: -l:librdp_client.a
 +#cgo darwin LDFLAGS: -framework CoreFoundation -framework Security -lrdp_client
- #include <librdpclient.h>
+ #include <librdprs.h>
  */
  import "C"

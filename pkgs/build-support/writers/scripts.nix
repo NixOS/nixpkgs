@@ -330,9 +330,9 @@ rec {
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bash}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to bash

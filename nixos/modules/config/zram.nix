@@ -49,7 +49,7 @@ in
 
       memoryPercent = lib.mkOption {
         default = 50;
-        type = lib.types.ints.positive;
+        type = lib.types.int;
         description = ''
           Maximum total amount of memory that can be stored in the zram swap devices
           (as a percentage of your total memory). Defaults to 1/2 of your total

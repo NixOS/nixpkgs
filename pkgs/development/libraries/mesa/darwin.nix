@@ -48,7 +48,6 @@ stdenv.mkDerivation {
     xorg.libX11
     xorg.libXext
     xorg.libXfixes
-    xorg.libxcb
     zlib
   ];
 

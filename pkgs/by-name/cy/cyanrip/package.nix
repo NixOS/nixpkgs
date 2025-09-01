@@ -8,7 +8,7 @@
   ffmpeg-headless,
   libcdio,
   libcdio-paranoia,
-  libmusicbrainz,
+  libmusicbrainz5,
   curl,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg-headless
     libcdio
     libcdio-paranoia
-    libmusicbrainz
+    libmusicbrainz5
     curl
   ];
 

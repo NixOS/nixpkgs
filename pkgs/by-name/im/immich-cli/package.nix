@@ -1,52 +1,26 @@
 {
   lib,
   immich,
-  jq,
+  buildNpmPackage,
   nodejs,
   makeWrapper,
-  stdenv,
 }:
-
-let
-  inherit (immich) pnpm;
-in
-stdenv.mkDerivation rec {
+buildNpmPackage {
   pname = "immich-cli";
-  version = "2.2.90";
-  inherit (immich) src pnpmDeps;
+  src = "${immich.src}/cli";
+  inherit (immich.sources.components.cli) version npmDepsHash;
 
-  postPatch = ''
-    local -r cli_version="$(jq -r .version cli/package.json)"
-    test "$cli_version" = ${version} \
-      || (echo "error: update immich-cli version to $cli_version" && exit 1)
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
-  nativeBuildInputs = [
-    jq
-    makeWrapper
-    nodejs
-    pnpm
-    pnpm.configHook
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm --filter @immich/sdk build
-    pnpm --filter @immich/cli build
-
-    runHook postBuild
-  '';
+  inherit (immich.web) preBuild;
 
   installPhase = ''
     runHook preInstall
 
-    local -r packageOut="$out/lib/node_modules/@immich/cli"
+    mkdir -p $out
+    mv package.json package-lock.json node_modules dist $out/
 
-    pnpm --filter @immich/cli deploy --prod --no-optional "$packageOut"
-
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich" \
-      --add-flags "$packageOut/dist/index.js"
+    makeWrapper ${lib.getExe nodejs} $out/bin/immich --add-flags $out/dist/index.js
 
     runHook postInstall
   '';

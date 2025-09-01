@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
-  version = "0-unstable-2025-09-03";
+  version = "0-unstable-2025-07-09";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "art_standalone";
-    rev = "10d60509c9073791f9eca1d2b8443d40a40edc05";
-    hash = "sha256-Xg6s58jymma1sNb6P7pwWFpYq1O6GoynrgPeLZRD+rI=";
+    rev = "1eee3dce3ba6f324bb7a32a170b2da14889af39d";
+    hash = "sha256-OAO0k/LkQ+MKqR4HkFXD18LSXQZNPogjjRot4UVoE5A=";
   };
 
   patches = [
@@ -40,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x dalvik/dx/etc/{dx,dexmerger}
     patchShebangs .
-    substituteInPlace build/core/config.mk build/core/main.mk \
-      --replace-fail "/bin/bash" "${runtimeShell}"
+    sed -i "s|/bin/bash|${runtimeShell}|" build/core/config.mk build/core/main.mk
   '';
 
   enableParallelBuilding = true;
@@ -69,14 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [
         "--enable-jni"
       ];
-      # Disable failing tests when jni enabled
-      postPatch = oldAttrs.postPatch or "" + ''
-        sed -i '/TEST_DECL(test_wolfSSL_Tls13_ECH)/d;
-                /TEST_DECL(test_wolfSSL_Tls13_ECH_HRR)/d;
-                /TEST_DECL(test_TLSX_CA_NAMES_bad_extension)/d' tests/api.c
-        sed -i '/quic/d' tests/include.am
-        sed -i '300,305d' tests/unit.c
-      '';
     }))
     xz
     zlib
@@ -99,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/android_translation_layer/art_standalone";
     # No license specified yet
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ onny ];
   };
 })

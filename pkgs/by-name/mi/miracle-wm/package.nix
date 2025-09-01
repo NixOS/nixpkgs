@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  unstableGitUpdater,
   nixosTests,
   boost,
   cmake,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.7.0";
+  version = "0.6.2-unstable-2025-08-27";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-SAeQ7nFsr37I8XncV3eMT8JCb74CdM+xPrNBX+qf8Bc=";
+    rev = "0a55a023adf511b042f922aeba666744805be988";
+    hash = "sha256-yf7knY1tNFeCwePsfTAMAxIma+ZeZUvqpMJe7ABahEw=";
   };
 
   postPatch = ''
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
     providedSessions = [ "miracle-wm" ];
     tests.vm = nixosTests.miracle-wm;
   };

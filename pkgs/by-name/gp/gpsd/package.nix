@@ -74,10 +74,7 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  pythonPath = [
-    python3Packages.pyserial
-  ]
-  ++ lib.optionals guiSupport [
+  pythonPath = lib.optionals guiSupport [
     python3Packages.pygobject3
     python3Packages.pycairo
   ];

@@ -21,7 +21,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide-govplan";
-  version = "0-unstable-2025-07-14";
+  version = "0-unstable-2025-06-25";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,8 +29,8 @@ python.pkgs.buildPythonApplication rec {
     repo = "froide-govplan";
     # No tagged release yet
     # https://github.com/okfde/froide-govplan/issues/15
-    rev = "7d304ae0e34e44f3bc34dce2b7e5f3c62bd64299";
-    hash = "sha256-/0KASLvKWgXBrhYkPeOkWfovNLAuKB5m0PVkQvC6w7s=";
+    rev = "9c325e70a84f26fea37b5a34f24d19fd82ea62ff";
+    hash = "sha256-OD4vvKt0FLuiAVGwpspWLB2ZuM1UJkZdv2YcbKKYk9A=";
   };
 
   patches = [
@@ -80,11 +80,17 @@ python.pkgs.buildPythonApplication rec {
     django-tinymce
     django-treebeard
     djangocms-alias
-    # Patch froide to avoid loading account module
+    # Downgrade to last working version
     (toPythonModule (
       froide.overridePythonAttrs (prev: {
-        patches = prev.patches ++ [ ./froide_avoid_loading_account_module.patch ];
+        nativeBuildInputs = [ makeBinaryWrapper ];
+        postBuild = "";
         doCheck = false;
+        pnpmDeps = null;
+        src = prev.src.override {
+          rev = "a78a4054f9f37b0a5109a6d8cfbbda742f86a8ca";
+          hash = "sha256-gtOssbsVf3nG+pmLPgvh4685vHh2x+jlXiTjU+JhQa8=";
+        };
       })
     ))
     nh3

@@ -2,48 +2,43 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  libpulseaudio,
   libappindicator,
   gobject-introspection,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   callPackage,
   bash,
-  pipewire,
-  gtk4,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pulsemeeter";
-  version = "2.0.0";
+  version = "1.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theRealCarneiro";
     repo = "pulsemeeter";
     tag = "v${version}";
-    hash = "sha256-hmQI+E6WmYOK7oN7zTmshFZgJ0UiN2KdZ6ZiXwxRpNs=";
+    hash = "sha256-QTXVE5WvunsjLS8I1rgX34BW1mT1UY+cRxURwXiQp5A=";
   };
 
   build-system = with python3Packages; [
     setuptools
-    babel
   ];
 
   dependencies = with python3Packages; [
-    pygobject3
-    pydantic
     pulsectl
-    pulsectl-asyncio
+    pygobject3
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook4
+    wrapGAppsHook3
     gobject-introspection
   ];
 
   buildInputs = [
     libappindicator
-    pipewire
+    libpulseaudio
     bash
-    gtk4
   ];
 
   makeWrapperArgs = [
@@ -57,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   passthru.tests.version = callPackage ./version-test.nix { inherit version; };
 
   meta = {
-    description = "Pulseaudio and pipewire audio mixer inspired by voicemeeter";
+    description = "Frontend of pulseaudio's routing capabilities, mimicking voicemeeter's workflow";
     license = lib.licenses.mit;
     homepage = "https://github.com/theRealCarneiro/pulsemeeter";
     maintainers = with lib.maintainers; [

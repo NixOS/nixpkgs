@@ -6,10 +6,9 @@
 
 let
   requireXcode =
-    release: sha256:
+    version: sha256:
     let
-      xip = "Xcode_" + release + ".xip";
-      version = lib.removeSuffix "_Universal" (lib.removeSuffix "_Apple_silicon" release);
+      xip = "Xcode_" + version + ".xip";
 
       unxip =
         if stdenv.buildPlatform.isDarwin then
@@ -43,9 +42,8 @@ let
         '';
       };
       meta = with lib; {
-        homepage = "https://developer.apple.com/xcode/";
-        description = "Apple's Xcode developer tools";
-        maintainers = with lib.maintainers; [ DimitarNestorov ];
+        homepage = "https://developer.apple.com/downloads/";
+        description = "Apple's XCode SDK";
         license = licenses.unfree;
         platforms = platforms.darwin ++ platforms.linux;
         hydraPlatforms = [ ];
@@ -107,8 +105,6 @@ lib.makeExtensible (self: {
   xcode_16_2 = requireXcode "16.2" "sha256-wQjNuFZu/cN82mEEQbC1MaQt39jLLDsntsbnDidJFEs=";
   xcode_16_3 = requireXcode "16.3" "sha256-hkIlRYUc1SD2lBwhRtqBGJapUIa+tdOyPKG19Su5OUU=";
   xcode_16_4 = requireXcode "16.4" "sha256-voCEZlKrp9NYGmXAsf1FHxO69EgWZHDIWtQZ2qEzElA=";
-  xcode_26 = requireXcode "26_Universal" "sha256-p4INqf85CSIzd7xHRCS9tCigQkOQPKnS/+D5nue3PsY=";
-  xcode_26_Apple_silicon = requireXcode "26_Apple_silicon" "sha256-dlfZ2sM6a9pUPdukoMoqvQAj7EEUyj0a/VkXKwkkFT8=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

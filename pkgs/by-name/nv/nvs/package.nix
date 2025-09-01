@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nvs";
-  version = "1.10.7";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "y3owk1n";
     repo = "nvs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rmTSM4xoUn+Jk6nPPg2XQ094WFnUVzqdICjucNCwhZM=";
+    hash = "sha256-hqIauWbAsWbD7P58BGnj6NlLtfuaR5YxOLgPOrpN++w=";
   };
 
   vendorHash = "sha256-l2FdnXA+vKVRekcIKt1R+MxppraTsmo0b/B7RNqnxjA=";
@@ -30,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
     writableTmpDirAsHomeHook
   ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd nvs \
       --bash <($out/bin/nvs completion bash) \
       --fish <($out/bin/nvs completion fish) \

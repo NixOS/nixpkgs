@@ -6,8 +6,9 @@
   rustPlatform,
   cargo,
   rustc,
+  autoPatchelfHook,
   pkg-config,
-  llvmPackages,
+  llvmPackages_15,
   libxml2,
   ncurses,
   zlib,
@@ -15,26 +16,26 @@
 
 buildPythonPackage rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2025-07-21";
+  version = "1.0.0";
   pyproject = true;
 
-  stdenv = llvmPackages.stdenv;
-
   src = fetchFromGitHub {
-    owner = "OpenVAF";
-    repo = "OpenVAF-Reloaded";
-    rev = "d878f5519b1767b64c6ebeb4d67e29e7cd46e60b";
-    hash = "sha256-TDE2Ewokhm2KSKe+sunUbV8KD3kaTSd5dB3CLCWGJ9U=";
+    owner = "pascalkuthe";
+    repo = "OpenVAF";
+    rev = "VerilogAE-v${version}";
+    hash = "sha256-TILKKmgSyhyxp88sdflDXAoH++iP6CMpdoXN1/1fsjU=";
   };
 
   postPatch = ''
+    substituteInPlace openvaf/llvm/src/initialization.rs \
+      --replace-fail "i8" "libc::c_char"
     substituteInPlace openvaf/osdi/build.rs \
       --replace-fail "-fPIC" ""
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-5SLrVL3h6+tptHv3GV7r8HUTrYQC9VdF68O2/Uct3xA=";
+    hash = "sha256-/gSqaxqOZUkUmJJ5PGMkAG/5PSeAjwDjT2ce+tL7xmY";
   };
 
   nativeBuildInputs = [
@@ -43,13 +44,15 @@ buildPythonPackage rec {
     rustPlatform.bindgenHook
     cargo
     rustc
+    autoPatchelfHook
     pkg-config
-    llvmPackages.llvm
+    llvmPackages_15.clang
+    llvmPackages_15.llvm
   ];
 
   buildInputs = [
     libxml2.dev
-    llvmPackages.libclang
+    llvmPackages_15.libclang
     ncurses
     zlib
   ];
@@ -68,7 +71,7 @@ buildPythonPackage rec {
       jasonodoom
       jleightcap
     ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }

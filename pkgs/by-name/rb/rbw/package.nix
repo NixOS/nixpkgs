@@ -24,14 +24,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.14.1";
+  version = "1.13.2";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    hash = "sha256-4wNDDMaz9zjNYahOZXARDbNdGKl0kS0pF3qQuM7fK4s=";
+    hash = "sha256-ebLbdIF+BybK7ssNtZacGWmAEwdNZh8b94QYgvcwzmM=";
   };
 
-  cargoHash = "sha256-H1DSP3Kyklv8ncn7zDP0njDlwB8Qh+h7mqWRAJcpWrE=";
+  cargoHash = "sha256-xDb4shDHCbd0yuTSAt80i1aqyuhpkfd/fYF98CfXdcM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -77,10 +77,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      albakham
-      jasonxue1
-    ];
+    maintainers = with lib.maintainers; [ albakham ];
     mainProgram = "rbw";
   };
 }

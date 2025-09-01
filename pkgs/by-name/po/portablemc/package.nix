@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   # Note: Tests use networking, so we don't run them
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd portablemc \
         --bash <($out/bin/portablemc show completion bash) \
         --zsh <($out/bin/portablemc show completion zsh)

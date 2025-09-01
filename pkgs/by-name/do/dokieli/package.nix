@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   nix-update-script,
-  serve,
+  nodePackages,
   stdenv,
   xsel,
   yarn-berry_4,
@@ -42,11 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
-  postFixup = ''
-    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
-      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
-      --chdir $out
-  '';
+  postFixup =
+    let
+      serve = lib.getExe' nodePackages.serve "serve";
+    in
+    ''
+      makeWrapper ${serve} $out/bin/dokieli \
+        --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+        --chdir $out
+    '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

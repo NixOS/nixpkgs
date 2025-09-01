@@ -7,20 +7,20 @@
   wrapGAppsHook3,
   gtk3,
   gst_all_1,
+  gtksourceview,
   writableTmpDirAsHomeHook,
-  gtksourceview4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pychess";
-  version = "1.0.6";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pychess";
     repo = "pychess";
-    rev = version;
-    hash = "sha256-1FJgwdZTyyZBswXFnUowSXlEXzL86C4uK2qDdseqzLs=";
+    rev = "${version}";
+    hash = "sha256-hxc+vYvCeiM0+oOu1peI9qkZg5PeIsDMCiydJQAuzOk=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     gst_all_1.gst-plugins-base
-    gtksourceview4
+    gtksourceview
   ];
 
   build-system = with python3Packages; [ setuptools ];

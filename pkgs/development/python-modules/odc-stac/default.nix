@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  hatchling,
 
   # dependencies
   affine,
@@ -16,7 +16,6 @@
   pystac,
   rasterio,
   toolz,
-  typing-extensions,
   xarray,
 
   # optional-dependencies
@@ -41,7 +40,9 @@ buildPythonPackage rec {
     hash = "sha256-Ekyavcin13B4DAxv0/XG5QTBuLE7PRospAXe40fHeX0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     affine
@@ -53,7 +54,6 @@ buildPythonPackage rec {
     pystac
     rasterio
     toolz
-    typing-extensions
     xarray
   ];
 
@@ -81,7 +81,9 @@ buildPythonPackage rec {
     "test_output_geobox"
   ];
 
-  pythonImportsCheck = [ "odc.stac" ];
+  pythonImportsCheck = [
+    "odc.stac"
+  ];
 
   meta = {
     description = "Load STAC items into xarray Datasets";

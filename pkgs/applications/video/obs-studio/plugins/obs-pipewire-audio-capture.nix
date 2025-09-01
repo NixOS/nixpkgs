@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "obs-pipewire-audio-capture";
-  version = "1.2.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
+    sha256 = "sha256-nkd/AoMsEUUxQQH5CjbnPbNwAwkd1y6j2nCa1GIAFPs=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
       fazzi
     ];
     license = licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

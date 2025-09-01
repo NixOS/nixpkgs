@@ -8,7 +8,6 @@
   rocm-merged-llvm,
   clr,
   rocminfo,
-  python3,
   hipify,
   gitMinimal,
   gtest,
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     clr
     hipify
     zstd
-    python3
   ];
 
   buildInputs = [

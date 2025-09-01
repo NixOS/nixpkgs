@@ -11,7 +11,7 @@
   parmetis,
   hdf5-fortran-mpi,
   mpiCheckPhaseHook,
-  python312Packages,
+  python3,
 }:
 
 let
@@ -31,7 +31,6 @@ let
       {
         withMetis = true;
         withParmetis = true;
-        python3Packages = python312Packages;
       };
 in
 stdenv.mkDerivation (finalAttrs: {

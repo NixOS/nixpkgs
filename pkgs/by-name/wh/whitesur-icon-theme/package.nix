@@ -6,6 +6,7 @@
   hicolor-icon-theme,
   jdupes,
   boldPanelIcons ? false,
+  blackPanelIcons ? false,
   alternativeIcons ? false,
   themeVariants ? [ ],
 }:
@@ -64,6 +65,7 @@ lib.checkListOfEnum "${pname}: theme variants"
         --theme ${builtins.toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
+        ${lib.optionalString blackPanelIcons "--black"}
 
       jdupes --link-soft --recurse $out/share
 

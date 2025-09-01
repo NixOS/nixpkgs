@@ -87,7 +87,6 @@
   withFrei0r ? withFullDeps && withGPL, # frei0r video filtering
   withFribidi ? withHeadlessDeps, # Needed for drawtext filter
   withGme ? withFullDeps, # Game Music Emulator
-  withGmp ? withHeadlessDeps && withVersion3, # rtmp(t)e support
   withGnutls ? withHeadlessDeps,
   withGsm ? withFullDeps, # GSM de/encoder
   withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1", # Needed for drawtext filter
@@ -125,7 +124,7 @@
   withQuirc ? withFullDeps && lib.versionAtLeast version "7", # QR decoding
   withRav1e ? withFullDeps, # AV1 encoder (focused on speed and safety)
   withRist ? withHeadlessDeps, # Reliable Internet Stream Transport (RIST) protocol
-  withRtmp ? false, # RTMP[E] support via librtmp
+  withRtmp ? withFullDeps, # RTMP[E] support
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
@@ -260,7 +259,6 @@
   frei0r,
   fribidi,
   game-music-emu,
-  gmp,
   gnutls,
   gsm,
   harfbuzz,
@@ -652,7 +650,6 @@ stdenv.mkDerivation (
       (enableFeature withFrei0r "frei0r")
       (enableFeature withFribidi "libfribidi")
       (enableFeature withGme "libgme")
-      (enableFeature withGmp "gmp")
       (enableFeature withGnutls "gnutls")
       (enableFeature withGsm "libgsm")
     ]
@@ -877,7 +874,6 @@ stdenv.mkDerivation (
       ++ optionals withFrei0r [ frei0r ]
       ++ optionals withFribidi [ fribidi ]
       ++ optionals withGme [ game-music-emu ]
-      ++ optionals withGmp [ gmp ]
       ++ optionals withGnutls [ gnutls ]
       ++ optionals withGsm [ gsm ]
       ++ optionals withHarfbuzz [ harfbuzz ]

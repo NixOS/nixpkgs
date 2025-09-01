@@ -58,7 +58,12 @@ in
         Trusted Platform 2 userspace resource manager daemon
       '';
 
-      package = lib.mkPackageOption pkgs "tpm2-abrmd" { };
+      package = lib.mkOption {
+        description = "tpm2-abrmd package to use";
+        type = lib.types.package;
+        default = pkgs.tpm2-abrmd;
+        defaultText = lib.literalExpression "pkgs.tpm2-abrmd";
+      };
     };
 
     pkcs11 = {

@@ -1,7 +1,6 @@
 {
   lib,
-  stdenv,
-  fetchFromGitea,
+  fetchFromGitHub,
   rustPlatform,
   cairo,
   pango,
@@ -10,25 +9,20 @@
   blueprint-compiler,
   wrapGAppsHook4,
   gsettings-desktop-schemas,
-  just,
 }:
 
-let
-  version = "2.7.4";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "turnon";
-  version = version;
+  version = "2.6.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromGitHub {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-RTLFajUMJHZoXKhy83G3c7a2fZ+P6CZXadFpbcPFLY8=";
+    hash = "sha256-fRDyfgS+jLGFJTYIEXJ27cCM9knfbIjlGpYNU4OyoJ0=";
   };
 
-  cargoHash = "sha256-8vqsQPbl3c2++8T5bjDjAWzm00qSDogT1YaumOC7qzk=";
+  cargoHash = "sha256-Bg3+PX5/BlqeN3EEFzBX42Dw4BbyKHlN1dnQSHnEz+c=";
 
   doCheck = true;
 
@@ -45,7 +39,6 @@ rustPlatform.buildRustPackage {
     pkg-config
     blueprint-compiler
     wrapGAppsHook4
-    just
   ];
 
   buildInputs = [
@@ -55,23 +48,20 @@ rustPlatform.buildRustPackage {
 
   strictDeps = true;
 
-  postPatch = ''
-    substituteInPlace justfile \
-        --replace-fail "version := \`git describe\`" "version := \"${version}\"" \
-        --replace-fail "DESTPREFIX := '/app'" "DESTPREFIX := '$out'" \
-        --replace-fail "just --list" "just compile" # Replacing the default recipe with the compile command as just-hook-buildPhase runs the default recipe to compile the package.
-  '';
-
-  postBuild = ''
-    cargo build --release
-  '';
+  postInstall =
+    # The build.rs compiles the settings schema and writes the compiled file next to the .xml file.
+    # This copies the compiled file to a path that can be detected by gsettings-desktop-schemas
+    ''
+      mkdir -p "$out/share/glib-2.0/schemas"
+      cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
+    '';
 
   meta = {
     description = "Turn on devices in your local network";
-    homepage = "https://codeberg.org/swsnr/turnon";
-    license = lib.licenses.eupl12;
+    homepage = "https://github.com/swsnr/turnon";
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ mksafavi ];
-    mainProgram = "de.swsnr.turnon";
+    mainProgram = "turnon";
     platforms = lib.platforms.linux;
   };
 }

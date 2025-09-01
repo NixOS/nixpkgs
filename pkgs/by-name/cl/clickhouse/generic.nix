@@ -10,7 +10,6 @@
   stdenv,
   llvmPackages_19,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   python3,
@@ -21,17 +20,14 @@
   darwin,
   findutils,
   libiconv,
-  removeReferencesTo,
   rustSupport ? true,
   rustc,
   cargo,
   rustPlatform,
   nix-update-script,
 }:
-let
-  llvmStdenv = llvmPackages_19.stdenv;
-in
-llvmStdenv.mkDerivation (finalAttrs: {
+
+llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "clickhouse" + lib.optionalString lts "-lts";
   inherit version;
 
@@ -73,7 +69,6 @@ llvmStdenv.mkDerivation (finalAttrs: {
     python3
     perl
     llvmPackages_19.lld
-    removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
@@ -94,33 +89,23 @@ llvmStdenv.mkDerivation (finalAttrs: {
 
   dontCargoSetupPostUnpack = true;
 
-  patches =
-    lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
-      # Disable building WASM lexer
-      url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
-    })
-    ++
-
-      lib.optional (lib.versions.majorMinor version == "25.8" && stdenv.hostPlatform.isDarwin)
-        (fetchpatch {
-          # Do not intercept memalign on darwin
-          url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        });
-
   postPatch = ''
     patchShebangs src/ utils/
+
+    sed -i 's|/usr/bin/env perl|"${lib.getExe perl}"|' contrib/openssl-cmake/CMakeLists.txt
+
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
+  ''
+  + lib.optionalString (lib.versions.majorMinor version <= "25.6") ''
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+       --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/tools.cmake \
       --replace-fail 'gfind' 'find' \
       --replace-fail 'ggrep' 'grep' \
       --replace-fail '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
-
-    substituteInPlace utils/list-licenses/list-licenses.sh \
-      --replace-fail 'gfind' 'find' \
-      --replace-fail 'ggrep' 'grep'
   ''
   # Rust is handled by cmake
   + lib.optionalString rustSupport ''
@@ -158,11 +143,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>" \
       --replace-fail "<level>trace</level>" "<level>warning</level>"
-    remove-references-to -t ${llvmStdenv.cc} $out/bin/clickhouse
   '';
-
-  # canary for the remove-references-to hook failing
-  disallowedReferences = [ llvmStdenv.cc ];
 
   # Basic smoke test
   doCheck = true;

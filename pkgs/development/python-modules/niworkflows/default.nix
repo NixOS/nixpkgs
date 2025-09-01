@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.14.1";
+  version = "1.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     tag = version;
-    hash = "sha256-NvUIVH6CFv2DMr6bV4bV/VXM/fOqiatFp9YOL0/UEdw=";
+    hash = "sha256-Q43IXlzmCO7m9y/tRlJJ2Dz4wNeK+kXtLLLrthO+n58=";
   };
 
   pythonRelaxDeps = [ "traits" ];
@@ -102,7 +102,6 @@ buildPythonPackage rec {
     "test_GenerateCifti"
     "test_SimpleShowMaskRPT"
     "test_cifti_surfaces_plot"
-    "test_brain_extraction_wf_smoketest"
   ];
 
   disabledTestPaths = [

@@ -4,42 +4,27 @@
   lib,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage rec {
   pname = "promptfoo";
-  version = "0.117.4";
+  version = "0.79.0";
 
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
-    tag = finalAttrs.version;
-    hash = "sha256-0QF6sJ0SI6NA0yBdB7a4+ae8CcD0IiWYuFJNteZxvN8=";
+    rev = "${version}";
+    hash = "sha256-sMBgjxPzG3SJ7RS4oTtOq7hJ1MYaKW3/6FF8Pn5l89c=";
   };
 
-  # npm error code ENOTCACHED
-  # npm error request to https://registry.npmjs.org/undici-types failed: cache mode is 'only-if-cached' but no cached response is available
-  # deleted package-lock.json and ran `npm update` to get a new lock file
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
-  npmDepsHash = "sha256-sRTnIZqXbtiwk/jSTLIWLYwsNbR5nOL2d8Qsa3iF/Sg=";
+  npmDepsHash = "sha256-tnzeEFEc/BMN/VsoNHWJIWDOvupHfddqI6020Q4M0RM=";
 
-  # don't fetch playwright binary
-  env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
-
-  # cleanup dangling symlinks for workspaces
-  preFixup = ''
-    rm -rf $out/lib/node_modules/promptfoo/node_modules/app $out/lib/node_modules/promptfoo/node_modules/promptfoo-docs
-  '';
+  dontNpmBuild = true;
 
   meta = {
     description = "Test your prompts, models, RAGs. Evaluate and compare LLM outputs, catch regressions, and improve prompt quality";
     mainProgram = "promptfoo";
     homepage = "https://www.promptfoo.dev/";
-    changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      nathanielbrough
-      jk
-    ];
+    maintainers = [ lib.maintainers.nathanielbrough ];
   };
-})
+}

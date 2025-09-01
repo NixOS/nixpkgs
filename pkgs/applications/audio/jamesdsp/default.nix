@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       pasqui23
-      wineee
+      rewine
     ];
     platforms = lib.platforms.linux;
   };

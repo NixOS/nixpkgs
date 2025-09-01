@@ -113,7 +113,7 @@ in
       };
 
       listeningPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 0;
         example = 44444;
         description = ''
@@ -139,7 +139,7 @@ in
       };
 
       downloadLimit = mkOption {
-        type = types.ints.unsigned;
+        type = types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -148,7 +148,7 @@ in
       };
 
       uploadLimit = mkOption {
-        type = types.ints.unsigned;
+        type = types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -166,7 +166,7 @@ in
       };
 
       httpListenPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 9000;
         description = ''
           HTTP port to bind on.

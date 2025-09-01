@@ -14,13 +14,13 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.8.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U8LP85Qpl6G1O2UcmlXxOTohPUts0IcmTLWNYOHrTlY=";
+    hash = "sha256-FFJiw2OE5mTFyjOdMoau8Ix8Q+id5hIpCeQaUua1IKg=";
   };
 
   vendorHash = null;
@@ -91,7 +91,7 @@ buildGoModule (finalAttrs: {
       rm v1/server/server_bench_test.go
     '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd opa \
       --bash <($out/bin/opa completion bash) \
       --fish <($out/bin/opa completion fish) \

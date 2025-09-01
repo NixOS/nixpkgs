@@ -336,7 +336,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.port;
+                      type = types.nullOr types.int;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -894,19 +894,14 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart =
-            let
-              args = lib.escapeShellArgs (
-                (lib.cli.toGNUCommandLine { } {
-                  "no-browser" = true;
-                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
-                  "config" = cfg.configDir;
-                  "data" = cfg.databaseDir;
-                })
-                ++ cfg.extraFlags
-              );
-            in
-            "${lib.getExe cfg.package} ${args}";
+          ExecStart = ''
+            ${cfg.package}/bin/syncthing \
+              -no-browser \
+              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
+              -config=${cfg.configDir} \
+              -data=${cfg.databaseDir} \
+              ${escapeShellArgs cfg.extraFlags}
+          '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

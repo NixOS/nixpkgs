@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hugo";
-  version = "0.150.0";
+  version = "0.148.2";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWBwF/GPNPLNSEBmG0wVvqY+mgQpZk2MiQoLxB+dBuU=";
+    hash = "sha256-6ILQRihdVkDrL5sEITfGzzMzXFmvYpO39s/QeUAVW6o=";
   };
 
-  vendorHash = "sha256-/jbShK+wEybD8hh5+1+Qd+NJkmp3w+BYf2UsTPEgwhw=";
+  vendorHash = "sha256-vckvhw1kpcI2SXSNjUR6u5o21qz9ZcWw+namDglpwxc=";
 
   checkFlags =
     let
@@ -84,6 +84,7 @@ buildGoModule (finalAttrs: {
       schneefux
       Br1ght0ne
       Frostman
+      federicoschonborn
     ];
   };
 })

@@ -5,20 +5,16 @@ import requests
 import subprocess
 
 from bs4 import BeautifulSoup
-from collections import namedtuple
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from textwrap import indent, dedent
 
 
-Arch = namedtuple('Architecture', ['os', 'name', 'ext'])
 ARCH_MAP = {
-    'x86_64-linux': Arch(os='Linux', name='x86_64', ext='tgz'),
-    'i686-linux': Arch(os='Linux', name='i386', ext='tgz'),
-    'aarch64-linux': Arch(os='Linux', name='arm64', ext='tgz'),
-    'armv7l-linux': Arch(os='Linux', name='arm', ext='tgz'),
-    'aarch64-darwin': Arch(os='MacOSX', name='arm64', ext='pkg'),
-    'x86_64-darwin': Arch(os='MacOSX', name='x86_64', ext='pkg'),
+    'x86_64-linux': 'x86_64',
+    'i686-linux': 'i386',
+    'aarch64-linux': 'arm64',
+    'armv7l-linux': 'arm',
 }
 
 
@@ -41,11 +37,7 @@ def find_latest_jlink_version() -> str:
     return version.removeprefix('V').replace('.', '')
 
 
-def nar_hash(version: str, arch: Arch) -> str:
-    '''
-    Return the nar hash of 'version' for 'source'.
-    '''
-    url = f"https://www.segger.com/downloads/jlink/JLink_{arch.os}_V{version}_{arch.name}.{arch.ext}"
+def nar_hash(url: str) -> str:
     try:
         response = requests.post(url, data={'accept_license_agreement': 'accepted'})
         response.raise_for_status()
@@ -64,15 +56,21 @@ def nar_hash(version: str, arch: Arch) -> str:
     return output.strip()
 
 
-def update_source(version: str):
+def calculate_package_hashes(version: str) -> list[tuple[str, str, str]]:
+    result = []
+    for (arch_nix, arch_web) in ARCH_MAP.items():
+        url = f"https://www.segger.com/downloads/jlink/JLink_Linux_V{version}_{arch_web}.tgz";
+        nhash = nar_hash(url)
+        result.append((arch_nix, arch_web, nhash))
+    return result
+
+
+def update_source(version: str, package_hashes: list[tuple[str, str, str]]):
     content = f'version = "{version}";\n'
-    for arch_nix, arch in ARCH_MAP.items():
-        nhash = nar_hash(version, arch)
+    for arch_nix, arch_web, nhash in package_hashes:
         content += dedent(f'''
         {arch_nix} = {{
-          os = "{arch.os}";
-          name = "{arch.name}";
-          ext = "{arch.ext}";
+          name = "{arch_web}";
           hash = "{nhash}";
         }};''').strip() + '\n'
 
@@ -83,4 +81,7 @@ def update_source(version: str):
 
 
 if __name__ == '__main__':
-    update_source(find_latest_jlink_version())
+    version = find_latest_jlink_version()
+    package_hashes = calculate_package_hashes(version)
+    update_source(version, package_hashes)
+

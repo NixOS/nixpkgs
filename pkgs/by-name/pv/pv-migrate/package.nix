@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -33,7 +32,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd pv-migrate \
       --bash <($out/bin/pv-migrate completion bash) \
       --fish <($out/bin/pv-migrate completion fish) \

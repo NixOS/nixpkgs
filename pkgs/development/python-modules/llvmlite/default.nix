@@ -8,25 +8,17 @@
 
   setuptools,
 
-  cmake,
-  ninja,
-
-  llvm_20,
-  libxml2,
-
   # tests
   pytestCheckHook,
+  llvm,
+  libxml2,
 
   withStaticLLVM ? true,
 }:
 
-let
-  llvm = llvm_20;
-in
-
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.45.0";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = isPyPy || pythonAtLeast "3.14";
@@ -35,28 +27,28 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-xONYpDGsx6lhbAjAqwFx5Vo3PxeFsblhZxkxTSjMWOE=";
+    hash = "sha256-ZIA/JfK9ZP00Zn6SZuPus30Xw10hn3DArHCkzBZAUV0=";
   };
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
-
   buildInputs = [ llvm ] ++ lib.optionals withStaticLLVM [ libxml2.dev ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  postPatch = lib.optionalString withStaticLLVM ''
+    substituteInPlace ffi/build.py --replace-fail "--system-libs --libs all" "--system-libs --libs --link-static all"
+  '';
 
-  dontUseCmakeConfigure = true;
+  # Set directory containing llvm-config binary
+  env.LLVM_CONFIG = "${llvm.dev}/bin/llvm-config";
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     cd $out
   '';
 
-  env.LLVMLITE_SHARED = !withStaticLLVM;
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [ "/usr/lib/libm.dylib" ];
 
   passthru = lib.optionalAttrs (!withStaticLLVM) { inherit llvm; };
 

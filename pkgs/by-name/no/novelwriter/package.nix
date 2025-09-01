@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "2.7.5";
+  version = "2.7.4";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     tag = "v${version}";
-    hash = "sha256-qCbtQwV+dU/ypnb5UruTsXas9XUqlJweaxnfqTHsT+I=";
+    hash = "sha256-um8D5wqAe8KYQBG8XPKKS6iYnHsPLxSHpW710winDkY=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication {
   dependencies = with python3.pkgs; [
     pyqt6
     pyenchant
-    qt6.qtsvg
   ];
 
   # See setup/debian/install

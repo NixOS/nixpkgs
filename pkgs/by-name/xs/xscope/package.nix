@@ -4,7 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   autoreconfHook,
-  util-macros,
+  xorg-autoconf,
   xorg,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    util-macros
+    xorg-autoconf
   ];
 
   buildInputs = [

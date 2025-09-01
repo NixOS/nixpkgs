@@ -20,6 +20,7 @@
   file,
   which,
   zip,
+  perl,
   zlib,
   cups,
   freetype,
@@ -47,7 +48,6 @@
 
   liberation_ttf,
   cacert,
-  jre-generate-cacerts,
 
   nixpkgs-openjdk-updater,
 
@@ -255,6 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!atLeast11) [
     lndir
+    # Certificates generated using perl in `installPhase`
+    perl
   ]
   ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Certificates generated using keytool in `installPhase`
@@ -512,7 +514,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libfontmanager}.so
+          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
           rm $out/lib/openjdk/jre/bin/policytool
           rm $out/lib/openjdk/bin/{policytool,appletviewer}
         ''
@@ -553,7 +555,7 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       cd $jre/lib/openjdk/jre/lib/security
       rm cacerts
-      ${jre-generate-cacerts} ${
+      perl ${./8/generate-cacerts.pl} ${
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$jre/lib/openjdk/jre/bin/keytool"
         else

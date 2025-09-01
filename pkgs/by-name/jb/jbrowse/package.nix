@@ -6,11 +6,11 @@
 
 let
   pname = "jbrowse";
-  version = "3.6.5";
+  version = "3.6.4";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-aCmNpZX8TBZm7nbS13GBUG4a/X4kvwWRHvwWWykoLwU=";
+    sha256 = "sha256-oSxSW6kZ68iQBdR4Uxd9yiU2S/8bLamXje9FDgahuv4=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -36,7 +36,7 @@ appimageTools.wrapType2 {
     mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ benwbooth ];
     platforms = [ "x86_64-linux" ];
   };
 }

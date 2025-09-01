@@ -16,6 +16,13 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+  # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+  # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+  # backend. The latter is a normal cross compilation backend and needs little
+  # special accommodation.
+  outputsJS = ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs;
+
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
   # https://github.com/haskell/cabal/issues/6466 for details.
@@ -40,7 +47,7 @@ in
 
 {
   pname,
-  dontStrip ? stdenv.hostPlatform.isGhcjs,
+  dontStrip ? outputsJS,
   version,
   revision ? null,
   sha256 ? null,
@@ -73,7 +80,7 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  enableLibraryProfiling ? !outputsJS,
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
@@ -83,7 +90,7 @@ in
     && (ghc.enableShared or false)
     && !stdenv.hostPlatform.useAndroidPrebuilt, # TODO: figure out why /build leaks into RPATH
   enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
-  # Disabling this for JS prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
+  # Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
   enableStaticLibraries ?
     !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs),
   enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows,
@@ -221,12 +228,13 @@ let
     optionalAttrs
     ;
 
+  isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
 
   # GHC used for building Setup.hs
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
-  # same version.
+  # same version, or ghcjs, in which case its the ghc used to build ghcjs.
   nativeGhc = buildHaskellPackages.ghc;
 
   # the target dir for haddock documentation
@@ -349,6 +357,9 @@ let
     (enableFeature enableDeadCodeElimination "split-sections")
     (enableFeature (!dontStrip) "library-stripping")
     (enableFeature (!dontStrip) "executable-stripping")
+  ]
+  ++ optionals isGhcjs [
+    "--ghcjs"
   ]
   ++ optionals isCross (
     [
@@ -479,7 +490,7 @@ let
 
   setupCommand = "./Setup";
 
-  ghcCommand' = "ghc";
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
 
   ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
@@ -508,7 +519,9 @@ let
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 
+  # On old ghcjs, the jsexe directories are the output but on the js backend they seem to be treated as intermediates
   jsexe = rec {
+    shouldUseNode = isGhcjs;
     shouldAdd = stdenv.hostPlatform.isGhcjs && isExecutable;
     shouldCopy = shouldAdd && !doInstallIntermediates;
     shouldSymlink = shouldAdd && doInstallIntermediates;
@@ -836,7 +849,15 @@ lib.fix (
             ''
         }
 
-
+        ${optionalString jsexe.shouldUseNode ''
+          for exeDir in "${binDir}/"*.jsexe; do
+            exe="''${exeDir%.jsexe}"
+            printWords '#!${nodejs}/bin/node' > "$exe"
+            echo >> "$exe"
+            cat "$exeDir/all.js" >> "$exe"
+            chmod +x "$exe"
+          done
+        ''}
         ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
 
         ${optionalString jsexe.shouldCopy ''
@@ -957,7 +978,7 @@ lib.fix (
         #   # and with python:
         #
         #   > nix-shell -E 'with (import <nixpkgs> {}); \
-        #   >    haskellPackages.hello.envFunc { buildInputs = [ python ]; }'
+        #   >    haskell.packages.ghc865.hello.envFunc { buildInputs = [ python ]; }'
         envFunc =
           {
             withHoogle ? false,

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   installShellFiles,
@@ -73,7 +72,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pynitrokey" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ${mainProgram} \
       --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
       --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
@@ -90,6 +89,7 @@ buildPythonPackage {
     ];
     maintainers = with maintainers; [
       frogamic
+      raitobezarius
     ];
     inherit mainProgram;
   };

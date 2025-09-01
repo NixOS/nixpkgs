@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  pythonOlder,
   pytestCheckHook,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous-serialize";
-  version = "2.7.0";
-  pyproject = true;
+  version = "2.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voluptuous-serialize";
     tag = version;
-    hash = "sha256-vmBK4FJr15wOYHtH14OqeyY/vgVOSrpo0Sd9wqu4zgo=";
+    hash = "sha256-vvreXSQDkA3JkZpOKZqJgMRyObJX/cSR8r+A26h9fNE=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ voluptuous ];
+  propagatedBuildInputs = [ voluptuous ];
 
   pythonImportsCheck = [ "voluptuous_serialize" ];
 

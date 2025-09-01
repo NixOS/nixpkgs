@@ -24,6 +24,10 @@ in
     storageLvm = true;
   };
 
+  lxd-to-incus = import ./lxd-to-incus.nix {
+    inherit lts pkgs system;
+  };
+
   openvswitch = incusTest {
     inherit lts pkgs system;
     networkOvs = true;

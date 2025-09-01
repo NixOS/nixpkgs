@@ -23,7 +23,6 @@
   python3,
   ruby,
   zip,
-  luajit,
 }:
 oldTlpdb:
 let
@@ -546,7 +545,9 @@ lib.recursiveUpdate orig rec {
   '';
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
-  luajittex.binfiles = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.binfiles;
+  luajittex.binfiles = lib.optionals (
+    !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV
+  ) orig.luajittex.binfiles;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";

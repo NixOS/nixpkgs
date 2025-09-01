@@ -9,7 +9,6 @@
   ffmpeg-headless,
   jemalloc,
   makeWrapper,
-  nix-update-script,
   nodejs,
   pango,
   pixman,
@@ -154,8 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.sharkey = nixosTests.sharkey;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sharkish microblogging platform";

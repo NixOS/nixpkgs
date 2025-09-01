@@ -3,40 +3,41 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pydantic,
+  python-dateutil,
   typing-extensions,
   websockets,
   aiohttp,
-  pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
 }:
 
 buildPythonPackage rec {
   pname = "realtime-py";
-  version = "2.7.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "realtime-py";
-    tag = "v${version}";
-    hash = "sha256-cWWgVs+ZNRvBje3kuDQS5L5utkY3z7MluGFNmjf9LFc=";
+    rev = "v${version}";
+    hash = "sha256-NFxWcnt/zpgDehacqK7QlXhmjrh6JoA6xh+sFjD/tt0=";
   };
 
   dependencies = [
-    pydantic
+    python-dateutil
     typing-extensions
     websockets
+    aiohttp
   ];
 
   pythonRelaxDeps = [
     "websockets"
+    "aiohttp"
+    "typing-extensions"
   ];
 
-  nativeCheckInputs = [
-    aiohttp
-    pytest-asyncio
+  # Can't run all the tests due to infinite loop in pytest-asyncio
+  nativeBuildInputs = [
     pytestCheckHook
     python-dotenv
   ];
@@ -45,11 +46,9 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  # requires running Supabase
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/supabase/realtime-py/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/supabase/realtime-py";
     license = lib.licenses.mit;
     description = "Python Realtime Client for Supabase";

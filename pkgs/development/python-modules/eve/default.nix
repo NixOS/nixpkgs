@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "eve";
-  version = "2.2.3";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pyeve";
     repo = "eve";
     tag = "v${version}";
-    hash = "sha256-SnypLhUGAw3e0KQ2CjP6NHTIypMJdN18zzzYAG14m7Y=";
+    hash = "sha256-TZeRvuJflht36PvctkfuQL1hMPqjtWDUxqk06DRFfyM=";
   };
 
   pythonRelaxDeps = [ "events" ];

@@ -5,7 +5,6 @@
   blurhash,
   cryptography,
   decorator,
-  grapheme,
   http-ece,
   python-dateutil,
   python-magic,
@@ -20,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "2.1.3";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
     tag = "v${version}";
-    hash = "sha256-aLoAuuUvesXu5D261MTcexixUxZST12fm1kKB/JChWY=";
+    hash = "sha256-Sqvn7IIzkGnIjMGek1QS4pLXI+LoKykJsVnr/X1QH7U=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     blurhash = [ blurhash ];
-    grapheme = [ grapheme ];
     webpush = [
       http-ece
       cryptography
@@ -56,14 +54,14 @@ buildPythonPackage rec {
     pytest-vcr
     requests-mock
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  # disabledTests = [
-  #   "test_notifications_dismiss_pre_2_9_2"
-  #   "test_status_card_pre_2_9_2"
-  #   "test_stream_user_direct"
-  #   "test_stream_user_local"
-  # ];
+  disabledTests = [
+    "test_notifications_dismiss_pre_2_9_2"
+    "test_status_card_pre_2_9_2"
+    "test_stream_user_direct"
+    "test_stream_user_local"
+  ];
 
   pythonImportsCheck = [ "mastodon" ];
 

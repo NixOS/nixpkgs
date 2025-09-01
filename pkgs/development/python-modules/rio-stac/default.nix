@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "rio-stac";
-  version = "0.11.2";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "rio-stac";
     tag = version;
-    hash = "sha256-N7P1kuUwT1r6eAx4TGbu3YmskvfR8N5GYrHqtpjab1Y=";
+    hash = "sha256-3MAqBhekkjJOQnE1B7GxZiFcjkbhhsON01ciKPvGa4g=";
   };
 
   build-system = [ flit ];

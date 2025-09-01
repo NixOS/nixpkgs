@@ -135,7 +135,7 @@ in
       };
 
       port = lib.mkOption {
-        type = lib.types.nullOr lib.types.port;
+        type = lib.types.nullOr lib.types.int;
         default = null;
         description = ''
           Port number to bind to.

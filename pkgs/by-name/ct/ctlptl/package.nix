@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ctlptl \
       --bash <($out/bin/ctlptl completion bash) \
       --fish <($out/bin/ctlptl completion fish) \

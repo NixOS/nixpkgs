@@ -2,20 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  poetry-core,
-  cython,
   # Check inputs
   pytestCheckHook,
-  pytest-cov-stub,
-  tomli,
-  pep440,
 }:
 
 buildPythonPackage rec {
   pname = "python-constraint";
   version = "2.4.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-constraint";
@@ -24,22 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Vi+dD/QmHfUrL0l5yTb7B1ILuXj3HYfT0QINdyfoqFo=";
   };
 
-  build-system = [
-    setuptools
-    poetry-core
-    cython
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-    tomli
-    pep440
-  ];
-
-  disabledTestPaths = [
-    "tests/test_util_benchmark.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Constraint Solving Problem resolver for Python";

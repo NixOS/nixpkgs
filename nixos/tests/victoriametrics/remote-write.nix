@@ -22,8 +22,10 @@ in
         networking.firewall.allowedTCPPorts = [ 8428 ];
         services.victoriametrics = {
           enable = true;
-          basicAuthUsername = username;
-          basicAuthPasswordFile = toString passwordFile;
+          extraOptions = [
+            "-httpAuth.username=${username}"
+            "-httpAuth.password=file://${toString passwordFile}"
+          ];
         };
       };
 

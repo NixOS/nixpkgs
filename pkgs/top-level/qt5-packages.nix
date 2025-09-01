@@ -33,7 +33,6 @@ makeScopeWithSplicing' {
         let
           mkFrameworks = import ../development/libraries/kde-frameworks;
           attrs = {
-            inherit config;
             inherit libsForQt5;
             inherit (pkgs) lib fetchurl;
           };
@@ -100,13 +99,19 @@ makeScopeWithSplicing' {
 
         kproperty = callPackage ../development/libraries/kproperty { };
 
+        kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
+
         kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
+        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
+
         ldutils = callPackage ../development/libraries/ldutils { };
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
+
+        libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
         libiodata = callPackage ../development/libraries/libiodata { };
 
@@ -163,11 +168,15 @@ makeScopeWithSplicing' {
 
         qcoro = callPackage ../development/libraries/qcoro { };
 
+        qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
+
         qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
         qjson = callPackage ../development/libraries/qjson { };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+
+        qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
         qoauth = callPackage ../development/libraries/qoauth { };
 
@@ -220,6 +229,10 @@ makeScopeWithSplicing' {
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
+
+        # Not a library, but we do want it to be built for every qt version there
+        # is, to allow users to choose the right build if needed.
+        sddm = callPackage ../applications/display-managers/sddm { };
 
         signond = callPackage ../development/libraries/signond { };
 

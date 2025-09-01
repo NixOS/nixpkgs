@@ -9,7 +9,8 @@
 with lib;
 
 let
-  cfg = config.services.xserver.desktopManager.lxqt;
+  xcfg = config.services.xserver;
+  cfg = xcfg.desktopManager.lxqt;
 
 in
 
@@ -20,27 +21,16 @@ in
 
   options = {
 
-    services.xserver.desktopManager.lxqt.enable = mkEnableOption "the LXQt desktop manager";
-
-    services.xserver.desktopManager.lxqt.iconThemePackage =
-      lib.mkPackageOption pkgs [ "kdePackages" "breeze-icons" ] { }
-      // {
-        description = "The package that provides a default icon theme.";
-      };
-
-    services.xserver.desktopManager.lxqt.extraPackages = lib.mkOption {
-      type = with lib.types; listOf package;
-      default = [ ];
-      defaultText = lib.literalExpression "[ ]";
-      example = lib.literalExpression "with pkgs; [ xscreensaver ]";
-      description = "Extra packages to be installed system wide.";
+    services.xserver.desktopManager.lxqt.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the LXQt desktop manager";
     };
 
     environment.lxqt.excludePackages = mkOption {
-      type = with lib.types; listOf package;
       default = [ ];
-      defaultText = lib.literalExpression "[ ]";
-      example = lib.literalExpression "with pkgs; [ lxqt.qterminal ]";
+      example = literalExpression "[ pkgs.lxqt.qterminal ]";
+      type = types.listOf types.package;
       description = "Which LXQt packages to exclude from the default environment";
     };
 
@@ -71,9 +61,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages
       ++ pkgs.lxqt.corePackages
-      ++ [ cfg.iconThemePackage ]
-      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages)
-      ++ cfg.extraPackages;
+      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
@@ -81,7 +69,7 @@ in
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
-    services.gvfs.enable = mkDefault true;
+    services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
 

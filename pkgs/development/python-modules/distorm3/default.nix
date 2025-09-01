@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "distorm3";
-  version = "3.5.2b";
+  version = "3.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gdabah";
     repo = "distorm";
     tag = version;
-    hash = "sha256-2ftEV3TMS3HT7f96k+Pwt3Mm31fVEXcHpcbbz05jycU=";
+    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
 
   build-system = [

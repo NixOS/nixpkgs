@@ -2,32 +2,31 @@
   lib,
   authlib,
   buildPythonPackage,
-  deprecation,
-  fastapi,
   fetchFromGitHub,
-  flask,
+  grpcio,
   grpcio-health-checking,
   grpcio-tools,
-  grpcio,
-  h5py,
   httpx,
-  litestar,
-  numpy,
-  pandas,
-  polars,
   pydantic,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytestCheckHook,
   pythonOlder,
   requests,
   setuptools-scm,
   validators,
+  pytestCheckHook,
+  numpy,
+  pytest-httpserver,
+  pandas,
+  polars,
+  h5py,
+  litestar,
+  pytest-asyncio,
+  flask,
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.16.10";
+  version = "4.16.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-wI/lbMFxxh5Kl30hf42o5FnFiXmANl69/ll9d3ZQC70=";
+    hash = "sha256-AjZZ9kmVxePlomX6bXUohZZXl2IXMbrjG00qNlGdjRc=";
   };
 
   pythonRelaxDeps = [
@@ -49,20 +48,19 @@ buildPythonPackage rec {
 
   dependencies = [
     authlib
-    deprecation
-    fastapi
-    flask
     grpcio
+    flask
     grpcio-health-checking
     grpcio-tools
     h5py
     httpx
-    litestar
-    numpy
-    pandas
-    polars
     pydantic
+    numpy
+    litestar
+    fastapi
+    polars
     requests
+    pandas
     validators
   ];
 
@@ -82,15 +80,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Need network
-    "test_auth_header_with_catchall_proxy"
     "test_bearer_token"
-    "test_client_with_extra_options"
-    "test_integration_config"
-    "test_refresh_async"
-    "test_refresh_of_refresh_async"
-    "test_refresh_of_refresh"
+    "test_auth_header_with_catchall_proxy"
     "test_token_refresh_timeout"
     "test_with_simple_auth_no_oidc_via_api_key"
+    "test_client_with_extra_options"
   ];
 
   enabledTestPaths = [

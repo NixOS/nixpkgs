@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "triggercmd";
-  version = "0.0.36";
+  version = "0.0.27";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ky6U0iAoxQMewh+gB7gBG61PuxUnOONe92io6iygGQU=";
+    hash = "sha256-4MTRtDo4kD/1Bifw8wx++TZ3K2M4TMVRyvwqGL5cHC8=";
   };
 
   build-system = [ setuptools ];

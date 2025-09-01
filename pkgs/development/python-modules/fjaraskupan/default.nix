@@ -1,7 +1,6 @@
 {
   lib,
   bleak,
-  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-mock,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fjaraskupan";
-  version = "2.3.3";
+  version = "2.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,15 +20,12 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "fjaraskupan";
     tag = version;
-    hash = "sha256-xu5u3hvtD1gbN1f1UuxDQVIHF5pyCOWVwUq36vAgW/Y=";
+    hash = "sha256-IKi2kaypwHdK9w+FZlWrreUXBgBgg4y3D8bSJhKHSYo=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    bleak
-    bleak-retry-connector
-  ];
+  dependencies = [ bleak ];
 
   nativeCheckInputs = [
     pytest-mock

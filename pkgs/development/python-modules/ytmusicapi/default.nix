@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   requests,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "1.11.1";
+  version = "1.11.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sigma67";
     repo = "ytmusicapi";
     tag = version;
-    hash = "sha256-ZgzrXVBvITAW01hgFfFw13BcEVLxxhOzgrJSs+Bn3wg=";
+    hash = "sha256-7GaxWLGmyxy5RlLoqXXmTM67eoIDf9IB3qjohZcNupU=";
   };
 
   build-system = [ setuptools-scm ];

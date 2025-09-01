@@ -105,7 +105,6 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css_inline"
     "cssutils"
-    "defusedcsv"
     "defusedxml"
     "django-compressor"
     "django-csp"

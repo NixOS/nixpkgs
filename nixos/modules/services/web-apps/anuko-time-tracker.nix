@@ -225,7 +225,7 @@ in
         };
 
         smtpPort = lib.mkOption {
-          type = lib.types.port;
+          type = lib.types.int;
           description = "MTA port.";
           default = 25;
         };
@@ -399,5 +399,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = with lib.maintainers; [ michaelshmitty ];
 }

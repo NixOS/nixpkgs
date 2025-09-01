@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   libX11,
-  libxcb,
   lndir,
   makeBinaryWrapper,
   spotify,
@@ -24,10 +23,7 @@ stdenv.mkDerivation {
     lndir
   ];
 
-  buildInputs = [
-    libX11
-    libxcb
-  ];
+  buildInputs = [ libX11 ];
 
   installPhase = ''
     runHook preInstall

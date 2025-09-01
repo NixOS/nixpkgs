@@ -128,8 +128,6 @@ stdenv.mkDerivation (
             "-Dlibpth=\"\""
             "-Dglibpth=\"\""
             "-Ddefault_inc_excludes_dot"
-            # https://github.com/arsv/perl-cross/issues/158
-            "-Dd_gnulibc=define"
           ]
         else
           (

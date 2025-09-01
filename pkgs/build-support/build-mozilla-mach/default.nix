@@ -90,7 +90,6 @@ in
   nspr,
   nss_esr,
   nss_3_114,
-  nss_3_115,
   nss_latest,
   onnxruntime,
   pango,
@@ -574,14 +573,12 @@ buildStdenv.mkDerivation {
       xorg.xorgproto
       zlib
       (
-        if (lib.versionAtLeast version "144") then
+        if (lib.versionAtLeast version "143") then
           nss_latest
-        else if (lib.versionAtLeast version "143") then
-          nss_3_115
-        else if (lib.versionAtLeast version "141") then
+        else if (lib.versionAtLeast version "129") then
           nss_3_114
         else
-          nss_esr
+          nss_esr # 3.90
       )
     ]
     ++ lib.optional alsaSupport alsa-lib

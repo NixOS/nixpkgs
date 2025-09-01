@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -59,7 +58,7 @@ buildGoModule rec {
   # There are no tests for cmd/fetchit.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     for i in bash fish zsh; do
       installShellCompletion --cmd fetchit \
         --$i <($out/bin/fetchit completion $i)

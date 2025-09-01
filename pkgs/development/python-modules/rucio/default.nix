@@ -1,13 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
-  packaging,
   setuptools,
-  wheel,
 
   # dependencies
   alembic,
@@ -27,64 +25,50 @@
   python-magic,
   redis,
   requests,
-  rich,
   sqlalchemy,
   statsd,
   stomp-py,
   tabulate,
-  typing-extensions,
   urllib3,
 
   # tests
   pytestCheckHook,
 }:
 
-let
-  version = "38.2.0";
+buildPythonPackage rec {
+  pname = "rucio";
+  version = "37.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-HYHiW/izKSkn08xLY7gJfuYK1C/ArOQ2DAwleSkcZ/I=";
+    hash = "sha256-PZ6g/ILs1ed+lxcH2GyV1YJyJqLgYb5/xQ31OXiXnBU=";
   };
-in
-buildPythonPackage {
-  pname = "rucio";
-  inherit version src;
-  pyproject = true;
-
-  # future-1.0.0 not supported for interpreter python3.13
-  disabled = pythonAtLeast "3.13";
 
   pythonRelaxDeps = [
     "alembic"
     "argcomplete"
+    "boto3"
     "dogpile.cache"
     "flask"
     "geoip2"
     "google-auth"
     "jsonschema"
     "oic"
-    "packaging"
     "paramiko"
     "prometheus_client"
     "python-dateutil"
     "redis"
     "requests"
-    "rich"
     "sqlalchemy"
     "stomp.py"
-    "typing_extensions"
     "urllib3"
   ];
 
-  pythonRemoveDeps = [ "boto" ];
-
   build-system = [
-    packaging
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -98,7 +82,6 @@ buildPythonPackage {
     google-auth
     jsonschema
     oic
-    packaging
     paramiko
     prometheus-client
     pymemcache
@@ -106,12 +89,10 @@ buildPythonPackage {
     python-magic
     redis
     requests
-    rich
     sqlalchemy
     statsd
     stomp-py
     tabulate
-    typing-extensions
     urllib3
   ];
 

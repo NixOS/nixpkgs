@@ -861,7 +861,7 @@ in
           default = "localhost";
         };
         port = lib.mkOption {
-          type = lib.types.port;
+          type = lib.types.int;
           description = "Port for the MySQL database.";
           default = 3306;
         };
@@ -901,7 +901,7 @@ in
           default = "localhost";
         };
         port = lib.mkOption {
-          type = lib.types.port;
+          type = lib.types.int;
           description = "Port for the Postgres database.";
           default = 5432;
         };

@@ -26,9 +26,8 @@
   libgcrypt,
   libgpg-error,
   ninja,
-  writableTmpDirAsHomeHook,
 
-  util-linuxMinimal,
+  util-linux,
   libselinux,
   libsepol,
   libthai,
@@ -52,6 +51,7 @@
 
   stable,
   testing,
+  baseName,
   kicadSrc,
   kicadVersion,
   withNgspice,
@@ -69,16 +69,11 @@ assert testing -> !stable -> throw "testing implies stable and cannot be used wi
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  inherit (lib)
-    cmakeBool
-    cmakeFeature
-    optionals
-    optionalString
-    ;
+  inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "kicad-base";
-  version = if stable then kicadVersion else builtins.substring 0 10 finalAttrs.src.rev;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
 
   src = kicadSrc;
 
@@ -94,34 +89,46 @@ stdenv.mkDerivation (finalAttrs: {
   # nix removes .git, so its approximated here
   postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
-      --replace-fail "unknown" "${builtins.substring 0 10 finalAttrs.src.rev}"
+      --replace "unknown" "${builtins.substring 0 10 src.rev}"
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
-      --replace-fail "0000000000000000000000000000000000000000" "${finalAttrs.src.rev}"
+      --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
-  preConfigure = optionalString debug ''
+  preConfigure = optional (debug) ''
     export CFLAGS="''${CFLAGS:-} -Og -ggdb"
     export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
   '';
 
   cmakeFlags = [
-    (cmakeBool "KICAD_USE_EGL" true)
-    (cmakeFeature "OCC_INCLUDE_DIR" "${opencascade-occt}/include/opencascade")
+    "-DKICAD_USE_EGL=ON"
+    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     # https://gitlab.com/kicad/code/kicad/-/issues/17133
-    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;qa_spice")
-    (cmakeBool "KICAD_USE_CMAKE_FINDPROTOBUF" false)
-    (cmakeBool "KICAD_SCRIPTING_WXPYTHON" withScripting)
-    (cmakeBool "KICAD_BUILD_I18N" withI18n)
-    (cmakeBool "KICAD_BUILD_QA_TESTS" (!finalAttrs.doInstallCheck))
-    (cmakeBool "KICAD_STDLIB_DEBUG" debug)
-    (cmakeBool "KICAD_USE_VALGRIND" debug)
-    (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
-    (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
-    (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
+    "-DKICAD_USE_CMAKE_FINDPROTOBUF=OFF"
   ]
-  ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
+  ++ optional (
+    stdenv.hostPlatform.system == "aarch64-linux"
+  ) "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
+  ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
+  ++ optionals (!withScripting) [
+    "-DKICAD_SCRIPTING_WXPYTHON=OFF"
+  ]
+  ++ optionals (withI18n) [
+    "-DKICAD_BUILD_I18N=ON"
+  ]
+  ++ optionals (!doInstallCheck) [
+    "-DKICAD_BUILD_QA_TESTS=OFF"
+  ]
+  ++ optionals (debug) [
+    "-DKICAD_STDLIB_DEBUG=ON"
+    "-DKICAD_USE_VALGRIND=ON"
+  ]
+  ++ optionals (sanitizeAddress) [
+    "-DKICAD_SANITIZE_ADDRESS=ON"
+  ]
+  ++ optionals (sanitizeThreads) [
+    "-DKICAD_SANITIZE_THREADS=ON"
   ];
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -140,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
   ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linuxMinimal
+    util-linux
     libselinux
     libsepol
     libthai
@@ -179,12 +186,18 @@ stdenv.mkDerivation (finalAttrs: {
     # This would otherwise cause a linking requirement for mbedtls.
     (nng.override { mbedtlsSupport = false; })
   ]
-  ++ optionals withScripting [ wxPython ]
-  ++ optionals withNgspice [ libngspice ]
-  ++ optionals debug [ valgrind ];
+  ++ optional (withScripting) wxPython
+  ++ optional (withNgspice) libngspice
+  ++ optional (debug) valgrind;
+
+  # some ngspice tests attempt to write to $HOME/.cache/
+  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
+  # but failing tests still attempt to create $HOME
+  # and the newer CLI tests seem to also use $HOME...
+  HOME = "$TMP";
 
   # debug builds fail all but the python test
-  doInstallCheck = !debug;
+  doInstallCheck = !(debug);
   installCheckTarget = "test";
 
   nativeInstallCheckInputs = [
@@ -196,7 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
         pytest-image-diff
       ]
     ))
-    writableTmpDirAsHomeHook
   ];
 
   dontStrip = debug;
@@ -211,4 +223,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}

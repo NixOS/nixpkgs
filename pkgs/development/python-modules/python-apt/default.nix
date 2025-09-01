@@ -35,11 +35,7 @@ buildPythonPackage rec {
     description = "Python bindings for APT";
     homepage = "https://launchpad.net/python-apt";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
-      adhityaravi
-      bepri
-      dstathis
-    ];
+    maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;
   };
 }

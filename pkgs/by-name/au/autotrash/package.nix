@@ -35,7 +35,6 @@ python3Packages.buildPythonPackage rec {
   postInstall = "installManPage doc/autotrash.1";
 
   pythonImportsCheck = [ "autotrash" ];
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = {
     description = "Tool to automatically purge old trashed files";

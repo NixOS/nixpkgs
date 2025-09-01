@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.12.1";
+  version = "2.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "venth";
     repo = "aws-adfs";
     tag = "v${version}";
-    hash = "sha256-U1ptI/VynHArJ1SwX4LanHB0f4U38YZO9XDCXcLBu+s=";
+    hash = "sha256-TYfKeLe1zp6d5/JPURAcCAfjtaiWHkkmP1+zE+PiiR4=";
   };
 
   build-system = [
@@ -37,8 +37,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "configparser"
-    "fido2"
-    "lxml"
     "requests-kerberos"
   ];
 

@@ -34,16 +34,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.4.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
     tag = "v${version}";
-    sha256 = "sha256-4f6+o1xOopmBZEcQfC6A9VS9lcntKiWsB1iAzdRxYno=";
+    sha256 = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
   };
 
-  cargoHash = "sha256-hVV3zPGpCBTR56MiSpnMf/ESSHFdMQ0x0IKOa/qzUn8=";
+  cargoHash = "sha256-cgSr1GHQUF4ccVd9w3TT0+EI+lqQpDzfXHdRWr75eDE=";
 
   env = {
     # Get openssl-sys to use pkg-config
@@ -103,6 +103,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lapce/lapce";
     changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ elliot ];
     mainProgram = "lapce";
   };
 }

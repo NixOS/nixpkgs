@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+      yuu
       matthiasbeyer
     ];
   };

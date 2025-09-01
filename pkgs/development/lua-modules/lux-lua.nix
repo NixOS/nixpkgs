@@ -9,7 +9,6 @@
   lux-cli,
   nix,
   openssl,
-  perl,
   pkg-config,
   rustPlatform,
 }:
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
-    perl
     pkg-config
   ];
 
@@ -81,9 +79,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Lua API for the Lux package manager";
-    homepage = "https://lux.lumen-labs.org/";
-    changelog = "https://github.com/lumen-oss/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.lgpl3Plus;
+    homepage = "https://nvim-neorocks.github.io/";
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];

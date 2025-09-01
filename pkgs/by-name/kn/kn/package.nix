@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   getent,
@@ -9,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.19.2";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-zp+4JcC4AB3Yp6muYxnOPddchB77VitU1VKv/mAVkKk=";
+    hash = "sha256-nTWY6R8t14Z1xLvarAUqEWiQoBnQLCBQwglEX+hJpIE=";
   };
 
-  vendorHash = "sha256-CUuNlu6zoKAYu5+mtDEfiGi588qbCT81XSolfiUYL8k=";
+  vendorHash = "sha256-ep9BkF2+pqFjDwY7mXuRVcPJyVyBv489zBhSp2MQxU4=";
 
   env.GOWORK = "off";
 
@@ -28,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-X knative.dev/client/pkg/commands/version.Version=v${finalAttrs.version}" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kn \
       --bash <($out/bin/kn completion bash) \
       --zsh <($out/bin/kn completion zsh)

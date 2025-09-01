@@ -14,34 +14,18 @@
   pyxdg,
   pyzmq,
   wurlitzer,
-
-  # tests
-  anyio,
-  django,
-  flaky,
-  h5py,
-  numpy,
-  pandas,
-  pillow,
-  polars,
-  pyarrow,
-  pydicom,
-  pytestCheckHook,
-  scipy,
-  writableTmpDirAsHomeHook,
-  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "3.1.0b1";
+  version = "3.1.0a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
     tag = "v${version}";
-    hash = "sha256-bYpNWE6KHDD9CkDmTDIX3gZumLOhAyxITCGyWuSU2+o=";
+    hash = "sha256-7WFHvFf2L5/m/H0CNwkZHdJZd/jrEAXmmTcfRWQ+++w=";
   };
 
   build-system = [ setuptools ];
@@ -60,36 +44,8 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
-  nativeCheckInputs = [
-    anyio
-    django
-    flaky
-    h5py
-    numpy
-    pandas
-    pillow
-    polars
-    pyarrow
-    pydicom
-    pytestCheckHook
-    scipy
-    writableTmpDirAsHomeHook
-    xarray
-  ];
-
-  disabledTests = [
-    "test_umr_reload_modules"
-    # OSError: Kernel failed to start
-    "test_debug_namespace"
-    "test_enter_debug_after_interruption"
-    "test_global_message"
-    "test_interrupt_long_sleep"
-    "test_interrupt_short_loop"
-    "test_matplotlib_inline"
-    "test_multiprocessing"
-    "test_np_threshold"
-    "test_runfile"
-  ];
+  # No tests
+  doCheck = false;
 
   pythonImportsCheck = [ "spyder_kernels" ];
 

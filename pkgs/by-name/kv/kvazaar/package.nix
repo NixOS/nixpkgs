@@ -5,37 +5,25 @@
   gitUpdater,
   testers,
   cmake,
-  libtool,
-  ffmpeg-headless,
-  hm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvazaar";
-  version = "2.3.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "ultravideo";
     repo = "kvazaar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Th30XO3m4GVeDvdb/RIwKT6+To9C/YU7y8s8hm7vPi0=";
+    hash = "sha256-d/OkX18nyHSQXJgNhBtiCLb/Fe8Y/MpddXxLpNMZiXI=";
   };
 
   # https://github.com/ultravideo/kvazaar/pull/426
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail 'NOT LINUX' 'NOT LINUX AND NOT BSD'
-
-    substituteInPlace tests/util.sh --replace-fail '../libtool' '${lib.getExe libtool}'
-    substituteInPlace tests/util.sh --replace-fail 'TAppDecoderStatic' '${lib.getExe' hm "TAppDecoder"}'
-
-    chmod +x tests/util.sh
   '';
 
   nativeBuildInputs = [ cmake ];
-
-  nativeCheckInputs = [
-    ffmpeg-headless
-  ];
 
   outputs = [
     "out"
@@ -43,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "man"
   ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

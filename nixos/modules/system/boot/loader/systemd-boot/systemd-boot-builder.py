@@ -258,8 +258,6 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
         bootspec = get_bootspec(gen.profile, gen.generation)
         known_paths.append(copy_from_file(bootspec.kernel, True).name)
         known_paths.append(copy_from_file(bootspec.initrd, True).name)
-        if bootspec.devicetree is not None:
-            known_paths.append(copy_from_file(bootspec.devicetree, True).name)
     for path in (BOOT_MOUNT_POINT / "loader/entries").glob("nixos*-generation-[1-9]*.conf", case_sensitive=False):
         if rex_profile.match(path.name):
             prof = rex_profile.sub(r"\1", path.name)
@@ -362,7 +360,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         available_version = available_match.group(1)
 
         if installed_version < available_version:
-            print("updating systemd-boot from %s to %s" % (installed_version, available_version), file=sys.stderr)
+            print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             run(
                 [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"]
                 + bootctl_flags

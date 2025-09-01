@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "qreactor-unstable";
-  version = "0.6.1";
+  version = "2018-09-29";
   format = "setuptools";
 
   src = fetchFromGitHub {

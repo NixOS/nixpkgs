@@ -44,8 +44,8 @@
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_6-1.6.4"
-        "kanidmWithSecretProvisioning_1_6-1.6.4"
+        "kanidm_1_5-1.5.0"
+        "kanidmWithSecretProvisioning_1_5-1.5.0"
       ];
     };
 
@@ -57,10 +57,12 @@
   # resulting tree of attributes to *not* have a ".${system}"
   # suffixed upon every job name like Hydra expects.
   #
-  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
-  # that file for full details.  The exact behavior of this flag
-  # may change; it should be considered an internal implementation
-  # detail of ci/eval.
+  # This flag exists mainly for use by
+  # pkgs/top-level/release-attrnames-superset.nix; see that file for
+  # full details.  The exact behavior of this flag may change; it
+  # should be considered an internal implementation detail of
+  # pkgs/top-level/.
+  #
   attrNamesOnly ? false,
 }:
 
@@ -357,24 +359,27 @@ let
         if attrNamesOnly then id else release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
+        haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+        haskellPackages = packagePlatforms pkgs.haskellPackages;
         # Build selected packages (HLS) for multiple Haskell compilers to rebuild
         # the cache after a staging merge
-        haskell = packagePlatforms pkgs.haskell // {
-          packages =
-            genAttrs
-              [
-                "ghc94"
-                "ghc96"
-                "ghc98"
-                "ghc910"
-                "ghc912"
-              ]
-              (compilerName: {
-                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
-                  haskell-language-server
-                  ;
-              });
-        };
+        haskell.packages =
+          genAttrs
+            [
+              # TODO: share this list between release.nix and release-haskell.nix
+              "ghc90"
+              "ghc92"
+              "ghc94"
+              "ghc96"
+              "ghc98"
+              "ghc910"
+              "ghc912"
+            ]
+            (compilerName: {
+              inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+                haskell-language-server
+                ;
+            });
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"

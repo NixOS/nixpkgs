@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -18,18 +17,18 @@
   libopenmpt,
   game-music-emu,
   SDL2,
-  icu,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.9.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
-    tag = "v" + finalAttrs.version;
-    hash = "sha256-549AtdldAPFengQsVXMnZI0mVzUwgKgUKAfR0Ro3s2I=";
+    rev = "v" + finalAttrs.version;
+    hash = "sha256-pkzBuJkZs76m7I/9FPt5GxGa8v2CDNR8QAHaIAuKN4w=";
   };
 
   buildInputs = [
@@ -39,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtwayland
     taglib
     ffmpeg
-    icu
     kdsingleapplication
     # output plugins
     alsa-lib
@@ -68,21 +66,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "INSTALL_FHS" true)
   ];
 
-  env.LANG = "C.UTF-8";
-
   # Remove after next release
   patches = [
     (fetchpatch {
-      name = "multi-track-fix.patch";
-      url = "https://github.com/fooyin/fooyin/commit/cffe88058e96c44e563e927d8a4a903e28246020.patch";
-      hash = "sha256-qNAR3xHZHzI/4RCWKzBbv1mX39xs7KMo/TpaDUYvSvc=";
+      name = "qbrush.patch";
+      url = "https://github.com/fooyin/fooyin/commit/e44e08abb33f01fe85cc896170c55dbf732ffcc9.patch";
+      hash = "sha256-soDj/SFctxxsnkePv4dZgyDHYD2eshlEziILOZC4ddM=";
     })
   ];
+
+  env.LANG = "C.UTF-8";
 
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
-    changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     downloadPage = "https://github.com/fooyin/fooyin";
     mainProgram = "fooyin";
     license = lib.licenses.gpl3Only;

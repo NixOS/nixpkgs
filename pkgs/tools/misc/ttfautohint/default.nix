@@ -4,51 +4,50 @@
   fetchurl,
   pkg-config,
   autoreconfHook,
-  perl,
   freetype,
   harfbuzz,
-  libsForQt5,
+  libiconv,
+  qtbase,
   enableGUI ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "1.8.4";
+stdenv.mkDerivation rec {
+  version = "1.8.3";
   pname = "ttfautohint";
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/ttfautohint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iodhF/puv9L/4bNoKpqYyALA9HGJ9X09tLmXdCBoMuE=";
+    url = "mirror://savannah/freetype/ttfautohint-${version}.tar.gz";
+    sha256 = "0zpqgihn3yh3v51ynxwr8asqrijvs4gv686clwv7bm8sawr4kfw7";
   };
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      echo "${finalAttrs.version}" > VERSION
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace-fail "macx-g++" "macx-clang"
-    '';
+  postAutoreconf = ''
+    substituteInPlace configure --replace "macx-g++" "macx-clang"
+  '';
 
   nativeBuildInputs = [
     pkg-config
-    perl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoreconfHook ]
-  ++ lib.optionals enableGUI [ libsForQt5.qt5.wrapQtAppsHook ];
+    autoreconfHook
+  ];
 
   buildInputs = [
     freetype
     harfbuzz
+    libiconv
   ]
-  ++ lib.optionals enableGUI [ libsForQt5.qt5.qtbase ];
+  ++ lib.optional enableGUI qtbase;
 
-  configureFlags = [
-    ''--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}''
-  ]
-  ++ lib.optionals (!enableGUI) [ "--without-doc" ];
+  configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
+
+  # workaround https://github.com/NixOS/nixpkgs/issues/155458
+  preBuild = lib.optionalString stdenv.cc.isClang ''
+    rm version
+  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Automatic hinter for TrueType fonts";
     mainProgram = "ttfautohint";
     longDescription = ''
@@ -58,8 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       information given by FreeType’s auto-hinting module.
     '';
     homepage = "https://www.freetype.org/ttfautohint";
-    license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-})
+
+}

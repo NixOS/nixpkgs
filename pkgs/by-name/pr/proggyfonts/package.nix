@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/bluescan/proggyfonts";
+    homepage = "https://www.upperbounds.net";
     description = "Set of fixed-width screen fonts that are designed for code listings";
     license = licenses.mit;
     platforms = platforms.all;

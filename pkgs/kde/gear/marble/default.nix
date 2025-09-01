@@ -21,10 +21,6 @@
 mkKdeDerivation {
   pname = "marble";
 
-  # breaks with split outputs
-  # FIXME: track this down
-  outputs = [ "out" ];
-
   extraNativeBuildInputs = [
     perl
     pkg-config

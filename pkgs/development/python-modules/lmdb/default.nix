@@ -26,15 +26,16 @@ buildPythonPackage rec {
 
   buildInputs = [ lmdb ];
 
-  nativeBuildInputs = [ cffi ];
-
   env.LMDB_FORCE_SYSTEM = 1;
 
   dependencies = [ patch-ng ];
 
   pythonImportsCheck = [ "lmdb" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    cffi
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Universal Python binding for the LMDB 'Lightning' Database";

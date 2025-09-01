@@ -36,14 +36,9 @@
 
     with subtest("Manage script works"):
         # "shell" sucommand should succeed, needs python in PATH.
-        t.assertIn(
-          "\nfoo\n",
-          machine.succeed("echo 'print(\"foo\")' | sudo -u healthchecks healthchecks-manage shell")
-        )
+        assert "foo\n" == machine.succeed("echo 'print(\"foo\")' | sudo -u healthchecks healthchecks-manage shell")
+
         # Shouldn't fail if not called by healthchecks user
-        t.assertIn(
-          "\nfoo\n",
-          machine.succeed("echo 'print(\"foo\")' | healthchecks-manage shell")
-        )
+        assert "foo\n" == machine.succeed("echo 'print(\"foo\")' | healthchecks-manage shell")
   '';
 }

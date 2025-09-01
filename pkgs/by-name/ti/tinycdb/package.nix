@@ -12,12 +12,12 @@ let
   ar = if !isCross then "ar" else "${cross}-ar";
   ranlib = if !isCross then "ranlib" else "${cross}-ranlib";
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,set --, set -x; set --,' Makefile
   '';
   pname = "tinycdb";
-  version = "0.81";
+  version = "0.80";
   # In general, static library (.a) goes to "dev", shared (.so) to
   # "lib". In case of static build, there is no .so library, so "lib"
   # output is useless and empty.
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $dev/lib $out/bin
     mv $out/lib/libcdb.a $dev/lib
-    rm --recursive $out/lib
+    rmdir $out/lib
   ''
   + (
     if static then
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   src = fetchurl {
-    url = "https://www.corpit.ru/mjt/tinycdb/tinycdb-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Rp3i1EW/VIgPZS9LbclcfN9vVQLDVSSkWyEi1w1H68I=";
+    url = "http://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
+    sha256 = "sha256-wyG5BekCwsqZo/+Kjd39iCMkf+Ht7IpLuF+Dhpxjn7g=";
   };
 
-  meta = {
+  meta = with lib; {
 
     description = "Utility to manipulate constant databases (cdb)";
     mainProgram = "cdb";
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.corpit.ru/mjt/tinycdb.html";
-    license = lib.licenses.publicDomain;
-    platforms = lib.platforms.linux;
+    license = licenses.publicDomain;
+    platforms = platforms.linux;
   };
-})
+}

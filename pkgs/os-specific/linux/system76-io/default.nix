@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kernelModuleMakeFlags,
 }:
 let
   version = "1.0.4";
@@ -24,8 +23,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

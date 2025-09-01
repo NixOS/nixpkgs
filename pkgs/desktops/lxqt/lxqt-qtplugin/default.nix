@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   libdbusmenu-lxqt,
+  libdbusmenu ? null,
   libfm-qt,
   libqtxdg,
   lxqt-build-tools,
@@ -12,17 +13,23 @@
   qtsvg,
   qttools,
   wrapQtAppsHook,
+  version ? "2.2.0",
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-qtplugin";
-  version = "2.2.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-qXadz9JBk4TURAWj6ByP/lGV1u0Z6rNJ/VraBh5zY+Q=";
+    hash =
+      {
+        "1.4.1" = "sha256-sp/LvQNfodMYQ4kNbBv4PTNfs38XjYLezuxRltZd4kc=";
+        "2.2.0" = "sha256-qXadz9JBk4TURAWj6ByP/lGV1u0Z6rNJ/VraBh5zY+Q=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libdbusmenu-lxqt
+    (if lib.versionAtLeast version "2.0.0" then libdbusmenu-lxqt else libdbusmenu)
     libfm-qt
     libqtxdg
     qtbase

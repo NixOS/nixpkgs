@@ -80,7 +80,7 @@ clangStdenv.mkDerivation rec {
 
   meta = {
     description = "Extensive set of frameworks which form a complete Web application server environment";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.publicDomain;
     homepage = "https://github.com/Alinto/sope";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];

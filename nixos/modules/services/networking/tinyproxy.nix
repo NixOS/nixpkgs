@@ -70,7 +70,7 @@ in
                 '';
               };
               Port = mkOption {
-                type = types.port;
+                type = types.int;
                 default = 8888;
                 description = ''
                   Specify which port to listen to.

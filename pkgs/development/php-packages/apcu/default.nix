@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "5.1.27";
+  version = "5.1.26";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "krakjoe";
     repo = "apcu";
     rev = "v${version}";
-    sha256 = "sha256-kf1d+WLpwhzQVn9pnkXtPPTXI5XaAuIAReI6rDGypB8=";
+    sha256 = "sha256-zJTrFckl7caKAF5/IL9RpVhbwsFZiol6w2GVpNdDdPg=";
   };
 
   buildInputs = [ pcre2 ];

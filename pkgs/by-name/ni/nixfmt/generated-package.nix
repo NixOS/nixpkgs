@@ -23,10 +23,10 @@
 }:
 mkDerivation {
   pname = "nixfmt";
-  version = "1.0.1";
+  version = "1.0.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/v1.0.1.tar.gz";
-    sha256 = "00ra92pq3926vr96wjzn9109zljbv1qy64nv9p2vgabnwwhx5nll";
+    url = "https://github.com/nixos/nixfmt/archive/v1.0.0.tar.gz";
+    sha256 = "0iy2p893b2b5y4mvhy0d62675a7nd8fc6jm9mr32v9h2baj9ii3p";
   };
   isLibrary = true;
   isExecutable = true;

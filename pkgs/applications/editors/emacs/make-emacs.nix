@@ -45,6 +45,7 @@
   libtiff,
   libwebp,
   libxml2,
+  llvmPackages_14,
   m17n_lib,
   mailcap,
   mailutils,
@@ -57,11 +58,12 @@
   sigtool,
   sqlite,
   replaceVars,
-  systemdLibs,
+  systemd,
   tree-sitter,
   texinfo,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  writeText,
   zlib,
 
   # Boolean flags
@@ -87,18 +89,17 @@
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
   withSQLite3 ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,
   withTreeSitter ? true,
   withWebP ? true,
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
   withXinput2 ? withX,
   withXwidgets ?
-    !noGui
-    && (withGTK3 || withPgtk || withNS || variant == "macport")
-    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
-  # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
-  # XXX: - Apple_SDK WebKit is compatible with Emacs.
+    !stdenv.hostPlatform.isDarwin
+    && !noGui
+    && (withGTK3 || withPgtk)
+    && (lib.versionOlder version "30"), # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -128,8 +129,7 @@ assert withGpm -> stdenv.hostPlatform.isLinux;
 assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
-assert withXwidgets -> !noGui && (withGTK3 || withPgtk || withNS || variant == "macport");
-# XXX: The upstream --with-xwidgets flag is enabled only when Emacs is built with GTK3 or with Cocoa (including the withNS and macport variant).
+assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
 
 let
   libGccJitLibraryPaths = [
@@ -139,8 +139,12 @@ let
   ++ lib.optionals (stdenv.cc ? cc.lib.libgcc) [
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
+
+  inherit (if variant == "macport" then llvmPackages_14.stdenv else stdenv)
+    mkDerivation
+    ;
 in
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation (finalAttrs: {
   pname =
     pname
     + (
@@ -321,7 +325,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals withSystemd [
-    systemdLibs
+    systemd
   ]
   ++ lib.optionals withTreeSitter [
     tree-sitter
@@ -349,7 +353,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withXinput2 [
     libXi
   ]
-  ++ lib.optionals (withXwidgets && stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals withXwidgets [
     webkitgtk_4_0
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -426,7 +430,7 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs (variant == "macport") {
       # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
       # See https://github.com/NixOS/nixpkgs/issues/127902
-      NIX_CFLAGS_COMPILE = "-isystem ${./macport-noescape-noop}";
+      NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
     };
 
   enableParallelBuilding = true;

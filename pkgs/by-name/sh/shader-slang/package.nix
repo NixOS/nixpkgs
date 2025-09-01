@@ -10,8 +10,7 @@
   libxml2,
   libX11,
   glslang,
-  unordered_dense,
-  llvmPackages,
+  llvmPackages_14,
   versionCheckHook,
   gitUpdater,
 
@@ -28,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.16.1";
+  version = "2025.15.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9kCqE/jwnQrwbKXdcY3rp8YoPju+/ZupH1HBc5qu53o=";
+    hash = "sha256-PBsBLzQ1+7+4Uw18OOhxkMZC5+YiUJlfHfIp7wUM5Rk=";
     fetchSubmodules = true;
   };
 
@@ -67,14 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
     miniz
     lz4
     libxml2
-    unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
   ]
   ++ lib.optionals withLLVM [
-    llvmPackages.llvm
-    llvmPackages.libclang
+    # Slang only supports LLVM 14:
+    # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
+    llvmPackages_14.llvm
+    llvmPackages_14.libclang
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -109,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
-    (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
     "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
     # slang-rhi tries to download headers and precompiled binaries for these backends
     "-DSLANG_RHI_ENABLE_OPTIX=OFF"
@@ -148,8 +147,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
-    # Slang only supports LLVM 14:
-    # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
-    broken = withLLVM;
   };
 })

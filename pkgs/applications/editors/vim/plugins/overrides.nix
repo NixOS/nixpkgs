@@ -143,13 +143,13 @@ in
 assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
-      fzf-lua
       snacks-nvim
-      telescope-nvim
     ];
     dependencies = with self; [
+      telescope-nvim
       vim-fugitive
       vim-rhubarb
+      fzf-lua
       plenary-nvim
     ];
   };
@@ -401,25 +401,6 @@ assertNoAdditions {
     ];
   };
 
-  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs {
-    dependencies = with self; [
-      claudecode-nvim
-      fzf-lua
-    ];
-    # Failed to build help tags!
-    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
-    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
-    preInstall = ''
-      rm -r doc
-    '';
-  };
-
-  claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs {
-    dependencies = with self; [
-      fzf-lua
-    ];
-  };
-
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
@@ -657,9 +638,6 @@ assertNoAdditions {
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
-      # Address in use error from fzf-lua on darwin
-      # https://github.com/NixOS/nixpkgs/issues/431458
-      "codecompanion.providers.actions.fzf_lua"
       # Test
       "minimal"
     ];
@@ -818,8 +796,6 @@ assertNoAdditions {
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
       "conjure-spec.client.fennel.nfnl_spec"
-      # No parser for fennel
-      "conjure.client.fennel.def-str-util"
     ];
   };
 
@@ -1128,11 +1104,11 @@ assertNoAdditions {
   easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
+      telescope-nvim
     ];
     checkInputs = with self; [
-      # Pickers, can use telescope, fzf-lua, or snacks
+      # Pickers, can use telescope or fzf-lua
       fzf-lua
-      telescope-nvim
     ];
   };
 
@@ -1249,7 +1225,7 @@ assertNoAdditions {
     ];
     # Patch libgit2 library dependency
     postPatch = ''
-      substituteInPlace lua/fugit2/core/libgit2.lua \
+      substituteInPlace lua/fugit2/libgit2.lua \
         --replace-fail \
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
@@ -1649,13 +1625,11 @@ assertNoAdditions {
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
-    checkInputs = with self; [
-      snacks-nvim
-      telescope-nvim
-    ];
+    checkInputs = [ self.snacks-nvim ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
+      telescope-nvim
     ];
 
     doInstallCheck = true;
@@ -2208,14 +2182,11 @@ assertNoAdditions {
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
-    checkInputs = with self; [
-      # Optional picker integration
-      telescope-nvim
-    ];
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
+      telescope-nvim
     ];
     # Unit test assert
     nvimSkipModules = "neotest-playwright-assertions";
@@ -2304,6 +2275,13 @@ assertNoAdditions {
       # FIXME: propagate `neo-tree` dependencies
       nui-nvim
       plenary-nvim
+    ];
+  };
+
+  neuron-nvim = super.neuron-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
     ];
   };
 
@@ -2655,10 +2633,14 @@ assertNoAdditions {
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+
     checkInputs = [
       gitMinimal
-      # interactive staging support
-      self.telescope-nvim
+      # transitive dependency (telescope-nvim) not properly propagated to the test environment
+      self.plenary-nvim
     ];
   };
 
@@ -2787,10 +2769,6 @@ assertNoAdditions {
     dependencies = with self; [
       plenary-nvim
     ];
-  };
-
-  oil-git-nvim = super.oil-git-nvim.overrideAttrs {
-    dependencies = [ self.oil-nvim ];
   };
 
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
@@ -2929,6 +2907,14 @@ assertNoAdditions {
         deno = lib.getExe deno;
       })
     ];
+  });
+
+  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
+    dependencies = [ gperf ];
+
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ fredeb ];
+    };
   });
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
@@ -3621,6 +3607,9 @@ assertNoAdditions {
   };
 
   uv-nvim = super.uv-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
     runtimeDeps = [ uv ];
   };
 
@@ -3963,13 +3952,6 @@ assertNoAdditions {
     };
   });
 
-  vim-textobj-line = super.vim-textobj-line.overrideAttrs (old: {
-    dependencies = [ self.vim-textobj-user ];
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ llakala ];
-    };
-  });
-
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
@@ -4024,12 +4006,9 @@ assertNoAdditions {
   };
 
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
-    checkInputs = [
-      # Optional telescope integration
-      self.telescope-nvim
-    ];
-    dependencies = [
-      self.plenary-nvim
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
     ];
   };
 
@@ -4132,17 +4111,10 @@ assertNoAdditions {
   });
 
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
-    checkInputs = with self; [
-      # Optional lush-nvim integration
-      lush-nvim
-    ];
     nvimSkipModules = [
       # Requires global variable set
       "randombones"
       "randombones.palette"
-      "randombones_dark.palette"
-      "randombones_light"
-      "randombones_light.palette"
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
@@ -4154,7 +4126,33 @@ assertNoAdditions {
       "zenbones.shipwright.runners.vim"
       "zenbones.shipwright.runners.wezterm"
       "zenbones.shipwright.runners.windows_terminal"
-      "randombones_dark"
+      # Optional lush-nvim integration
+      "duckbones"
+      "duckbones.palette"
+      "forestbones"
+      "forestbones.palette"
+      "kanagawabones"
+      "kanagawabones.palette"
+      "neobones"
+      "neobones.palette"
+      "nordbones"
+      "nordbones.palette"
+      "rosebones"
+      "rosebones.palette"
+      "seoulbones"
+      "seoulbones.palette"
+      "tokyobones"
+      "tokyobones.palette"
+      "vimbones"
+      "vimbones.palette"
+      "zenbones"
+      "zenbones.palette"
+      "zenbones.specs.dark"
+      "zenbones.specs.light"
+      "zenburned"
+      "zenburned.palette"
+      "zenwritten"
+      "zenwritten.palette"
     ];
   };
 

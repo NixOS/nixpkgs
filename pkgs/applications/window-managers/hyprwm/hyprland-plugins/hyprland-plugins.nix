@@ -10,19 +10,20 @@ let
             lib,
             cmake,
             fetchFromGitHub,
+            hyprland,
             mkHyprlandPlugin,
           }:
           let
-            version = "0.51.0";
+            version = "0.50.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               tag = "v${version}";
-              hash = "sha256-6jAtMjnWq8kty/dpPbIKxIupUG+WAE2AKMIKhxdLYNo=";
+              hash = "sha256-XJJ+frO4NOxVkoSGc1Mag8ESumzx2FmVRspOgFlMqF8=";
             };
           in
-          mkHyprlandPlugin {
+          mkHyprlandPlugin hyprland {
             pluginName = name;
             inherit version;
 
@@ -33,6 +34,7 @@ let
               description = "Hyprland ${description} plugin";
               license = lib.licenses.bsd3;
               teams = [ lib.teams.hyprland ];
+              inherit (hyprland.meta) platforms;
             };
           }
         )

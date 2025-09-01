@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.1.11";
+  version = "4.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,8 +25,16 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-C7J2G5Go5y1iXjEPS6uIB38C8SAkEWfn9K1cnUhi+8k=";
+    hash = "sha256-E04ETXfrh+1OY8WsNNJEeYlnqQcHWR3CX/E7SOd7/24=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail ">=" " #"
+
+    substituteInPlace systembridgeconnector/_version.py \
+      --replace-fail ", dev=0" ""
+  '';
 
   build-system = [
     incremental
@@ -53,11 +61,6 @@ buildPythonPackage rec {
   disabledTests = [
     "test_get_data"
     "test_wait_for_response_timeout"
-  ];
-
-  disabledTestPaths = [
-    # https://github.com/timmo001/system-bridge-connector/commit/18da51bd67e6d2a83d08f0c19c904326863264ca
-    "tests/test__version.py"
   ];
 
   pytestFlags = [ "--snapshot-warn-unused" ];

@@ -9,7 +9,6 @@
   libdrm,
   minimal ? false,
   libX11,
-  libxcb,
   libXext,
   libXfixes,
   wayland,
@@ -55,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!minimal) [
     libX11
-    libxcb
     libXext
     libXfixes
     wayland

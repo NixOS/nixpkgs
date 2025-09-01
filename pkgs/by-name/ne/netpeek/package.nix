@@ -15,14 +15,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "netpeek";
-  version = "0.2.4";
+  version = "0.2.3.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";
     tag = "v${version}";
-    hash = "sha256-mouXMFYhCBEUTyPfuaw570ZC40TJuprldiSiP0Il0KA=";
+    hash = "sha256-3PbGK8e/W4pHlXwIvW6kmyeBMvzBIS2DrV0pxafgJOY=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     ping3
-    python-nmap
   ];
 
   dontWrapGApps = true;

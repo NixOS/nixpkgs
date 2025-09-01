@@ -20,9 +20,8 @@
 
 buildPythonPackage rec {
   pname = "sphinx-hoverxref";
-  version = "1.5.0";
-  pyproject = true;
-
+  version = "1.3.0";
+  format = "pyproject";
   outputs = [
     "out"
     "doc"
@@ -32,37 +31,35 @@ buildPythonPackage rec {
     owner = "readthedocs";
     repo = "sphinx-hoverxref";
     rev = version;
-    hash = "sha256-JHNJGUkO/HXnnnROYBd1pAcoAEYo6b7eK4tyC+ujc+A=";
+    hash = "sha256-DJ+mHu9IeEYEyf/SD+nDNtWpTf6z7tQzG0ogaECDpkU=";
   };
 
   postPatch = ''
     substituteInPlace docs/conf.py --replace-fail "sphinx-prompt" "sphinx_prompt"
   '';
 
-  build-system = [
-    flit-core
-  ];
-
   nativeBuildInputs = [
+    flit-core
+
     sphinxHook
-    sphinx-autoapi
+    sphinx-notfound-page
+    sphinx-prompt
     sphinx-rtd-theme
     sphinx-tabs
-    sphinx-prompt
     sphinx-version-warning
-    sphinx-notfound-page
+    sphinx-autoapi
     sphinxcontrib-bibtex
     sphinxemoji
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     sphinx
     sphinxcontrib-jquery
   ];
 
   pythonImportsCheck = [ "hoverxref" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx extension for creating tooltips on the cross references of the documentation";
     longDescription = ''
       sphinx-hoverxref is a Sphinx extension to show a floating window
@@ -73,7 +70,7 @@ buildPythonPackage rec {
       in there.
     '';
     homepage = "https://github.com/readthedocs/sphinx-hoverxref";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kaction ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
   };
 }

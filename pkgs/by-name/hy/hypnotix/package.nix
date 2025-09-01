@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "5.3";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
-    tag = version;
-    hash = "sha256-KJqGdBqeNtXYO3XOQvRJs4ie8jK4Hyv+YS86PB0dnOM=";
+    rev = version;
+    hash = "sha256-QOUCpmq89XrWJVHyqSFbFD3a4y9UNgeMVXSr2H8TBeY=";
   };
 
   patches = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3.pkgs; [
+    cinemagoer
     pygobject3
     requests
     setproctitle
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "IPTV streaming application";
     homepage = "https://github.com/linuxmint/hypnotix";
-    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.tag}/debian/changelog";
+    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dotlambda

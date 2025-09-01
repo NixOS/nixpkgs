@@ -4,12 +4,11 @@
   installShellFiles,
   kubectl,
   lib,
-  stdenv,
 }:
 
 buildGoModule rec {
   pname = "litmusctl";
-  version = "1.18.0";
+  version = "1.17.0";
 
   nativeBuildInputs = [
     installShellFiles
@@ -23,12 +22,12 @@ buildGoModule rec {
     owner = "litmuschaos";
     repo = "litmusctl";
     rev = "${version}";
-    hash = "sha256-lfR4Nk9n6mpfQVrVoI2iaCYkJelgGi5QLdZN9n0qPVQ=";
+    hash = "sha256-mb80r3cY9NJLSvwwfWNgbwnuIY8+w1bIrFZ5h2oSo34=";
   };
 
   vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd litmusctl \
       --bash <($out/bin/litmusctl completion bash) \
       --fish <($out/bin/litmusctl completion fish) \

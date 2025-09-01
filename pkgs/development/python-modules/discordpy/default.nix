@@ -14,7 +14,7 @@
 
 let
   pname = "discord.py";
-  version = "2.6.3";
+  version = "2.5.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "Rapptz";
     repo = "discord.py";
     tag = "v${version}";
-    hash = "sha256-OEU09pdV2H/RxhvxWNIrg8mPh7yiv6ItKNwvhMKKhco=";
+    hash = "sha256-xaZeOkfOhm1CL5ceu9g/Vlas4jpYoQDlGMEtACFY7PE=";
   };
 
   build-system = [ setuptools ];

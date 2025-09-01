@@ -10,12 +10,11 @@
   pylibjpeg-data,
   pylibjpeg-libjpeg,
   pylibjpeg-openjpeg,
-  pylibjpeg-rle,
 }:
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
-  version = "2.1.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,22 +23,18 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg";
     tag = "v${version}";
-    hash = "sha256-jMdNzruzr2VgEntFF5BBoK3yrq0VegtJNXAkCpHjsks=";
+    hash = "sha256-MA1A/hTIx95MYZ2LGOifnHn77wbv0ydAgQSzNZRykVg=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [ numpy ];
 
-  optional-dependencies =
-    let
-      extras = {
-        libjpeg = [ pylibjpeg-libjpeg ];
-        openjpeg = [ pylibjpeg-openjpeg ];
-        rle = [ pylibjpeg-rle ];
-      };
-    in
-    extras // { all = lib.concatLists (lib.attrValues extras); };
+  optional-dependencies = {
+    libjpeg = [ pylibjpeg-libjpeg ];
+    openjpeg = [ pylibjpeg-openjpeg ];
+    #rle = [ pylibjpeg-rle ]; # not in Nixpkgs
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

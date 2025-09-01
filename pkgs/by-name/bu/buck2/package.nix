@@ -81,10 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     installShellFiles
-    zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+    zstd
   ];
 
   buildInputs = [

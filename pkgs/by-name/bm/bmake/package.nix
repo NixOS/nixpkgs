@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20250804";
+  version = "20250707";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C0kDdkSyUyBtLnENRuMoWeYt/ixsjnIYrkOfLvUN6K0=";
+    hash = "sha256-phJApAZdkMOSXdd0+Po9c97sGnMiiobulfzYIGPSiwg=";
   };
 
   patches = [
@@ -57,18 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
   # * opt-keep-going-indirect: not yet known
   # * varmod-localtime: musl doesn't support TZDIR and this test relies on
   #   impure, implicit paths
-  # * interrupt-compat (fails on x86_64-linux building for i686-linux)
-  env.BROKEN_TESTS = lib.concatStringsSep " " (
-    [
-      "directive-export"
-      "directive-export-gmake"
-      "opt-keep-going-indirect"
-      "varmod-localtime"
-    ]
-    ++ lib.optionals stdenv.targetPlatform.is32bit [
-      "interrupt-compat"
-    ]
-  );
+  env.BROKEN_TESTS = builtins.concatStringsSep " " [
+    "directive-export"
+    "directive-export-gmake"
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
 
   strictDeps = true;
 

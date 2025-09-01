@@ -28,7 +28,6 @@
   efiSupport ? false,
   zfsSupport ? false,
   xenSupport ? false,
-  xenPvhSupport ? false,
   kbdcompSupport ? false,
   ckbcomp,
 }:
@@ -66,11 +65,6 @@ let
     x86_64-linux.target = "x86_64";
   };
 
-  xenPvhSystemsBuild = {
-    i686-linux.target = "i386";
-    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
-  };
-
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
   gnulib = fetchgit {
@@ -90,8 +84,7 @@ let
 in
 
 assert zfsSupport -> zfs != null;
-assert !(efiSupport && (xenSupport || xenPvhSupport));
-assert !(xenSupport && xenPvhSupport);
+assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
@@ -616,10 +609,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
     "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
-  ]
-  ++ lib.optionals xenPvhSupport [
-    "--with-platform=xen_pvh"
-    "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
   ];
 
   # save target that grub is compiled for
@@ -671,8 +660,6 @@ stdenv.mkDerivation rec {
         lib.attrNames efiSystemsBuild
       else if xenSupport then
         lib.attrNames xenSystemsBuild
-      else if xenPvhSupport then
-        lib.attrNames xenPvhSystemsBuild
       else
         platforms.gnu ++ platforms.linux;
 

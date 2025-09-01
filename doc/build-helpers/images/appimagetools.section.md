@@ -110,12 +110,12 @@ appimageTools.wrapType2 {
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/irccloud-${version} $out/bin/irccloud
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
     substituteInPlace $out/share/applications/irccloud.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=irccloud'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 }
 ```
@@ -125,16 +125,11 @@ appimageTools.wrapType2 {
 The argument passed to `extract` can also contain a `postExtract` attribute, which allows you to execute additional commands after the files are extracted from the AppImage.
 `postExtract` must be a string with commands to run.
 
-:::{.warning}
-When specifying `postExtract`, you should use `appimageTools.wrapAppImage` instead of `appimageTools.wrapType2`.
-Otherwise `wrapType2` will extract the AppImage contents without respecting the `postExtract` instructions.
-:::
-
 :::{.example #ex-extracting-appimage-with-postextract}
 
 # Extracting an AppImage to install extra files, using `postExtract`
 
-This is a rewrite of [](#ex-extracting-appimage) to use `postExtract` and `wrapAppImage`.
+This is a rewrite of [](#ex-extracting-appimage) to use `postExtract`.
 
 ```nix
 { appimageTools, fetchurl }:
@@ -150,26 +145,21 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=irccloud'
+      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
   };
 in
-appimageTools.wrapAppImage {
-  inherit pname version;
-
-  src = appimageContents;
+appimageTools.wrapType2 {
+  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/irccloud-${version} $out/bin/irccloud
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
   '';
-
-  # specify src archive for nix-update
-  passthru.src = src;
 }
 ```
 

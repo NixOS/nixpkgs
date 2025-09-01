@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Command-line interface to various pastebins";
     mainProgram = "wgetpaste";
     homepage = "https://github.com/zlin/wgetpaste";
-    license = lib.licenses.mit;
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [
       qknight
     ];

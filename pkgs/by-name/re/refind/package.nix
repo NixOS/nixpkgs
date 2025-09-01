@@ -9,7 +9,6 @@
   withSbsigntool ? false, # currently, cross compiling sbsigntool is broken, so default to false
   sbsigntool,
   makeWrapper,
-  installShellFiles,
 }:
 
 let
@@ -46,11 +45,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
-  outputs = [
-    "out"
-    "man"
-  ];
-
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
@@ -59,11 +53,7 @@ stdenv.mkDerivation rec {
     ./0002-preserve-dates.patch
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    installShellFiles
-  ];
-
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gnu-efi_3 ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -121,7 +111,6 @@ stdenv.mkDerivation rec {
     # docs
     install -D -m0644 docs/refind/* $out/share/refind/docs/html/
     install -D -m0644 docs/Styles/* $out/share/refind/docs/Styles/
-    installManPage docs/man/*.8
     install -D -m0644 README.txt $out/share/refind/docs/README.txt
     install -D -m0644 NEWS.txt $out/share/refind/docs/NEWS.txt
     install -D -m0644 BUILDING.txt $out/share/refind/docs/BUILDING.txt
@@ -163,7 +152,6 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     uefiCdrom = nixosTests.boot.uefiCdrom;
-    inherit (nixosTests) refind;
   };
 
   meta = with lib; {
@@ -184,10 +172,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [
-      johnrtitor
-      RossComputerGuy
-    ];
+    maintainers = with maintainers; [ johnrtitor ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

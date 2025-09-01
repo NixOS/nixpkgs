@@ -1,6 +1,5 @@
 {
   cmake,
-  docutils,
   fetchurl,
   lib,
   libbsd,
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
-  version = "4.1.3";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
-    sha256 = "sha256-4El3GmfP5UDJOsDxyU5z/s3JKw0jlMb8EB/hvtywwVs=";
+    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
   };
 
   buildInputs = [
@@ -24,10 +23,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  nativeBuildInputs = [
-    cmake
-    docutils
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "'top' like tool for PostgreSQL";

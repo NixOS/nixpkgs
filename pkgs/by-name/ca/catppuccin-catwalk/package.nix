@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
   ];
   buildInputs = [ libwebp ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd catwalk \
       --bash <("$out/bin/catwalk" completion bash) \
       --zsh <("$out/bin/catwalk" completion zsh) \

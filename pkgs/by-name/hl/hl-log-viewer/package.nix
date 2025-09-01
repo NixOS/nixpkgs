@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   installShellFiles,
   fetchFromGitHub,
@@ -22,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd hl \
       --bash <($out/bin/hl --shell-completions bash) \
       --fish <($out/bin/hl --shell-completions fish) \

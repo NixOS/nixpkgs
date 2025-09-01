@@ -3,17 +3,17 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  hatchling,
+  pytestCheckHook,
 
   # dependencies
   beancount-black,
   beancount-parser,
   beanhub-forms,
   beanhub-import,
-  beanhub-inbox,
   click,
   fastapi,
   jinja2,
+  poetry-core,
   pydantic-settings,
   pydantic,
   pyyaml,
@@ -31,11 +31,10 @@
   tomli,
 
   # tests
+  pytest,
   pytest-asyncio,
-  pytest-factoryboy,
   pytest-httpx,
   pytest-mock,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,16 +51,17 @@ buildPythonPackage rec {
     hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "rich"
+  ];
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     beancount-black
     beancount-parser
     beanhub-forms
     beanhub-import
-    beanhub-inbox
     click
     fastapi
     jinja2
@@ -95,7 +95,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-factoryboy
     pytest-httpx
     pytest-mock
     pytestCheckHook
@@ -106,10 +105,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Command line tools for BeanHub or Beancount users";
+    mainProgram = "bh";
     homepage = "https://github.com/LaunchPlatform/beanhub-cli/";
     changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
-    mainProgram = "bh";
   };
 }

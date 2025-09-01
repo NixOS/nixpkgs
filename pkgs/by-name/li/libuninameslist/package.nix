@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libuninameslist";
-  version = "20250909";
+  version = "20250714";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "libuninameslist";
     rev = version;
-    hash = "sha256-jLl9UY24wIBkMxr/zq/yXRcKgwlHFG8zmoyo3YKqq9A=";
+    hash = "sha256-2SC8hu4yHbSbmQL17bfF4BwPLzBhUvF8iGqEtueUZaU=";
   };
 
   nativeBuildInputs = [

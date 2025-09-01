@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "python-editor";
-  version = "1.0.4";
+  version = "1.0.4-unstable-2023-10-11";
   format = "setuptools";
 
   src = fetchFromGitHub {

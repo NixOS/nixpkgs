@@ -27,5 +27,6 @@ buildGoModule rec {
       cc-by-sa-30
     ];
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gm6k ];
   };
 }

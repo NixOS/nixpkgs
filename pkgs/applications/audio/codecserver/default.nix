@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     description = "Modular audio codec server";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    teams = [ teams.c3d2 ];
     mainProgram = "codecserver";
   };
 }

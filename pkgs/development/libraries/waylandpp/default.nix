@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   makeFontsConf,
   pkg-config,
@@ -15,22 +16,34 @@
   graphviz,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "waylandpp";
-  version = "1.0.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "NilsBrause";
-    repo = "waylandpp";
-    tag = finalAttrs.version;
-    hash = "sha256-vKYKUXq5lmjQcZ0rD+b2O7N1iCVnpkpKd8Z/RTI083g=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-Dw2RnLLyhykikHps1in+euHksO+ERbATbfmbUFOJklg=";
   };
 
+  patches = [
+    # Pull fixes for gcc-13 compatibility:
+    #   https://github.com/NilsBrause/waylandpp/pull/71
+    # Without the change `kodi` fails to find `uint32_t` in `waylandpp`
+    # headers.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NilsBrause/waylandpp/commit/3c441910aa25f57df2a4db55f75f5d99cea86620.patch";
+      hash = "sha256-bxHMP09zCwUKD0M63C1FqQySAN9hr+7t/DyFDRwdtCo=";
+    })
+  ];
+
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" (placeholder "dev"))
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    (lib.cmakeFeature "WAYLAND_SCANNERPP" "${buildPackages.waylandpp}/bin/wayland-scanner++")
+    "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
   # Complains about not being able to find the fontconfig config file otherwise
@@ -69,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME="$(mktemp -d)"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Wayland C++ binding";
     mainProgram = "wayland-scanner++";
     homepage = "https://github.com/NilsBrause/waylandpp/";
@@ -78,6 +91,5 @@ stdenv.mkDerivation (finalAttrs: {
       hpnd
     ];
     maintainers = with lib.maintainers; [ minijackson ];
-    platforms = lib.platforms.linux;
   };
-})
+}

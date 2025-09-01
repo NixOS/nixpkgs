@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "screenly";
     maintainers = with lib.maintainers; [
+      jnsgruk
       vpetersson
     ];
   };

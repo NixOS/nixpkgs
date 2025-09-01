@@ -3,7 +3,6 @@
   stdenv,
   fetchzip,
   jdk24,
-  unzip,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -14,9 +13,6 @@ let
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
-    "aarch64-linux" = "linux-aarch64";
-    "x86_64-darwin" = "macosx-x86-64";
-    "aarch64-darwin" = "macosx-aarch64";
   };
 
 in
@@ -31,10 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ]
-  ++ lib.optional stdenv.isDarwin unzip;
+  nativeBuildInputs = [ copyDesktopItems ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -67,17 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-  ''
-  + lib.optionalString stdenv.isLinux ''
+
     mkdir -p $out/share/{applications,pixmaps}
+
     mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis.app $out/Applications/
-  ''
-  + ''
+
     runHook postInstall
   '';
 
@@ -91,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       epl20
     ];
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";
   };
 })

@@ -19,7 +19,6 @@
   pytest,
   pytest-benchmark,
   hypothesis,
-  fsspec,
 
   # tests
   pytestCheckHook,
@@ -82,7 +81,6 @@ buildPythonPackage rec {
       pytest
       pytest-benchmark
       hypothesis
-      fsspec
     ];
     all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
     dev = self.all;
@@ -93,7 +91,6 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     torch
-    fsspec
   ];
 
   enabledTestPaths = [ "tests" ];

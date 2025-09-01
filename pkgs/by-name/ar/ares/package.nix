@@ -121,6 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = lib.licenses.isc;
     mainProgram = "ares";
+    maintainers = with lib.maintainers; [
+      Madouura
+    ];
     platforms = lib.platforms.unix;
   };
 })

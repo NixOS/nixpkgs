@@ -13,7 +13,12 @@ in
 {
   options = {
     services.xserver.windowManager.nimdow.enable = mkEnableOption "nimdow";
-    services.xserver.windowManager.nimdow.package = mkPackageOption pkgs "nimdow" { };
+    services.xserver.windowManager.nimdow.package = mkOption {
+      type = types.package;
+      default = pkgs.nimdow;
+      defaultText = "pkgs.nimdow";
+      description = "nimdow package to use";
+    };
   };
 
   config = mkIf cfg.enable {

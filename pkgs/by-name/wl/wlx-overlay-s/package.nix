@@ -6,7 +6,6 @@
   lib,
   libGL,
   libX11,
-  libxcb,
   libXext,
   libXrandr,
   libxkbcommon,
@@ -63,7 +62,6 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libGL
     libX11
-    libxcb
     libXext
     libXrandr
     libxkbcommon

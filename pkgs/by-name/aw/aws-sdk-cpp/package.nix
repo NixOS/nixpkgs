@@ -14,8 +14,6 @@
   apis ? [ "*" ],
   # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true,
-  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
-  requiredSystemFeatures ? [ "big-parallel" ],
 }:
 
 let
@@ -118,7 +116,8 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  inherit requiredSystemFeatures;
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
     tests = {

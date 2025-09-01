@@ -23,7 +23,6 @@
   luajitPackages,
   libpulseaudio,
   features ? [ ],
-  systemd,
 }:
 
 let
@@ -31,16 +30,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.17.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-8Ol/EvG7BPNyrJ3SdwSYtJcTLCr4TRmsMczKXD6Wuws=";
+    hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
   };
 
-  cargoHash = "sha256-nBoe4Xq1MAKNUyf61WSA2r83nNJeZiBXL0PJRc+XXpc=";
+  cargoHash = "sha256-l+Y/ntuqaasDL0cEHSwscFxAs1jC0bm9oTU0J/K60AY=";
 
   buildInputs = [
     gtk3
@@ -53,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     hicolor-icon-theme
     gsettings-desktop-schemas
     libxkbcommon
-    systemd
   ]
   ++ lib.optionals (hasFeature "http") [ openssl ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]

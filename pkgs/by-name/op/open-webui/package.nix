@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.30";
+  version = "0.6.25";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-0gQlzqHFVcayN1/Z5Ou1Gv1+VQMMwk7QrvVXV92EFp0=";
+    hash = "sha256-XB3cwxtcOVoAwGJroZuPT8XwaCo3wpkn2KIEuuXMeu4=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.2";
+    pyodideVersion = "0.28.0";
     pyodide = fetchurl {
-      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
+      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-AYChUMU8vLNaJPfIbX1SThx01uV3V6QpN6OjYrerg5U=";
+    npmDepsHash = "sha256-WL1kdXn7uAaBEwWiIJzzisMZ1uiaOVtFViWK/kW6lsY=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -85,6 +85,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
+  pythonRemoveDeps = [
+    "docker"
+    "pytest"
+    "pytest-docker"
+  ];
+
   dependencies =
     with python3Packages;
     [
@@ -107,10 +113,12 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       chromadb
+      colbert-ai
       cryptography
       ddgs
       docx2txt
       einops
+      elasticsearch
       extract-msg
       fake-useragent
       fastapi
@@ -118,6 +126,7 @@ python3Packages.buildPythonApplication rec {
       firecrawl-py
       fpdf2
       ftfy
+      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
@@ -130,9 +139,11 @@ python3Packages.buildPythonApplication rec {
       langchain
       langchain-community
       langdetect
+      langfuse
       ldap3
       loguru
       markdown
+      moto
       nltk
       onnxruntime
       openai
@@ -157,12 +168,18 @@ python3Packages.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
+      pinecone-client
+      playwright
+      posthog
       psutil
+      psycopg2-binary
       pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
+      pymilvus
+      pymongo
       pymysql
       pypandoc
       pypdf
@@ -173,6 +190,7 @@ python3Packages.buildPythonApplication rec {
       python-socketio
       pytube
       pyxlsb
+      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -191,29 +209,7 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ pyjwt.optional-dependencies.crypto;
-
-  optional-dependencies = with python3Packages; rec {
-    postgres = [
-      pgvector
-      psycopg2-binary
-    ];
-
-    all = [
-      colbert-ai
-      elasticsearch
-      moto
-      gcp-storage-emulator
-      playwright
-      oracledb
-      pinecone-client
-      pymilvus
-      pymongo
-      qdrant-client
-    ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
-  };
+    ++ moto.optional-dependencies.s3;
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -251,7 +247,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
       shivaraj-bh
-      codgician
     ];
   };
 }

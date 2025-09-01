@@ -34,10 +34,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-    "packaging"
-  ];
+  pythonRelaxDeps = [ "numpy" ];
 
   dependencies = [
     libusb-package

@@ -706,7 +706,12 @@ in
         };
       };
 
-      package = lib.mkPackageOption pkgs "mastodon" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.mastodon;
+        defaultText = lib.literalExpression "pkgs.mastodon";
+        description = "Mastodon package to use.";
+      };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
@@ -1075,7 +1080,7 @@ in
               proxyWebsockets = true;
             };
 
-            locations."/api/v1/streaming" = {
+            locations."/api/v1/streaming/" = {
               proxyPass = "http://mastodon-streaming";
               proxyWebsockets = true;
             };

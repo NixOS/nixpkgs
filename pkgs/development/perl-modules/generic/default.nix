@@ -35,8 +35,6 @@
 
   env ? { },
 
-  postPatch ? "patchShebangs .",
-
   ...
 }@attrs:
 
@@ -68,7 +66,6 @@ lib.throwIf (attrs ? name)
             doCheck
             checkTarget
             enableParallelBuilding
-            postPatch
             ;
           env = {
             inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;

@@ -507,38 +507,27 @@ builtins.intersectAttrs super {
   # LLVM input that llvm-ffi declares.
   llvm-ffi =
     let
-      currentDefaultVersion = lib.versions.major pkgs.llvmPackages.llvm.version;
-      latestSupportedVersion = lib.versions.major super.llvm-ffi.version;
+      chosenLlvmVersion = 20;
+      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
+      shouldUpgrade =
+        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
     in
-    lib.pipe super.llvm-ffi (
+    lib.warnIf shouldUpgrade
+      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
+      lib.pipe
+      super.llvm-ffi
       [
+        # ATTN: There is no matching flag for the latest supported LLVM version,
+        # so you may need to remove this when updating chosenLlvmVersion
+        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
         (addBuildDepends [
-          pkgs.llvmPackages.llvm.lib
-          pkgs.llvmPackages.llvm.dev
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
         ])
-      ]
-      # There is no matching flag for the latest supported LLVM version.
-      ++ lib.optional (currentDefaultVersion != latestSupportedVersion) (
-        enableCabalFlag "LLVM${currentDefaultVersion}00"
-      )
-    );
+      ];
 
-  # Forces the LLVM backend; upstream signalled intent to remove this
-  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
-  spaceprobe = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace spaceprobe.cabal \
-        --replace-fail '-fllvm ' ""
-    '';
-  }) super.spaceprobe;
-
-  # Forces the LLVM backend.
-  GlomeVec = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace GlomeVec.cabal \
-        --replace-fail '-fllvm ' ""
-    '';
-  }) super.GlomeVec;
+  # Needs help finding LLVM.
+  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
@@ -649,9 +638,15 @@ builtins.intersectAttrs super {
   tasty = overrideCabal (drv: {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [ ])
-      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)) [
-        self.unbounded-delays
-      ];
+      ++
+        lib.optionals
+          (
+            !(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)
+            || (self.ghc.isGhcjs or false)
+          )
+          [
+            self.unbounded-delays
+          ];
   }) super.tasty;
 
   tasty-discover = overrideCabal (drv: {

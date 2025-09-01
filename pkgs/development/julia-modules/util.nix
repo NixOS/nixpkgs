@@ -1,6 +1,5 @@
 {
   gitMinimal,
-  lib,
   runCommand,
 }:
 
@@ -11,10 +10,7 @@
   # See https://github.com/NixOS/nixpkgs/pull/97467#issuecomment-689315186
   addPackagesToPython =
     python: packages:
-    # TODO: this stopped working because "env" ended up being a key of the base
-    # derivation like "python3" as well. Is there a robust way to determine if
-    # this Python is already wrapped?
-    if python ? "env" && lib.isDerivation python.env then
+    if python ? "env" then
       python.override (old: {
         extraLibs = old.extraLibs ++ packages;
       })

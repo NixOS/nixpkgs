@@ -2,7 +2,6 @@
   lib,
   stdenv,
   callPackage,
-  fetchpatch,
   cmake,
   ninja,
   useSwift ? true,
@@ -32,15 +31,7 @@ stdenv.mkDerivation {
     swift
   ];
 
-  patches = [
-    # Fix the build with modern Clang.
-    (fetchpatch {
-      url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
-      hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
-    })
-
-    ./disable-swift-overlay.patch
-  ];
+  patches = [ ./disable-swift-overlay.patch ];
 
   cmakeFlags = lib.optional useSwift "-DENABLE_SWIFT=ON";
 

@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "fw-fanctrl";
-  version = "1.0.4";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TamtamHero";
     repo = "fw-fanctrl";
     tag = "v${version}";
-    hash = "sha256-lwuBbyJnWUAXkKemhsdx73fAzO2QX2n81az074hGkzI=";
+    hash = "sha256-TDVULNb/oH66/UX20mC89NSx8YPe8mPwNCB9+phavP4=";
   };
 
   build-system = [ python3Packages.setuptools ];
