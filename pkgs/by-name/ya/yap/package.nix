@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-tabling=yes" ];
 
+  postPatch = ''
+    # readline has renamed the type name
+    substituteInPlace os/pl-rl.c \
+      --replace-fail Function rl_hook_func_t
+  '';
+
   # -fcommon: workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: libYap.a(pl-dtoa.o):/build/yap-6.3.3/H/pl-yap.h:230: multiple definition of `ATOM_';
