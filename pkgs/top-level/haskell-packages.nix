@@ -121,24 +121,6 @@ in
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc98 = compiler.ghc984;
-      ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
-            # it seems like the GHC 9.6.* bindists are built with a different
-            # toolchain than we are using (which I'm guessing from the fact
-            # that 9.6.4 bindists pass linker flags our ld doesn't support).
-            # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-            # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc967
-          else
-            bb.packages.ghc963Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
-      };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
           if stdenv.buildPlatform.isDarwin then
@@ -284,11 +266,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
       };
       ghc98 = packages.ghc984;
-      ghc9101 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc9101;
-        ghc = bh.compiler.ghc9101;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
-      };
       ghc9102 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9102;
         ghc = bh.compiler.ghc9102;
