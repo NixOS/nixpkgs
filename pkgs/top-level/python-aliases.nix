@@ -768,6 +768,7 @@ mapAliases ({
   spacy_models = spacy-models; # added 2024-04-21
   SPARQLWrapper = sparqlwrapper;
   spark_parser = spark-parser; # added 2024-01-07
+  sparsezoo = throw "sparsezoo has been removed since it is abandonned"; # added 2025-09-01
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
   sphinx_pypi_upload = throw "sphinx_pypi_upload has been removed since it is abandoned."; # added 2023-10-11
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
