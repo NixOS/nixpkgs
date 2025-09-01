@@ -66,7 +66,6 @@ let
     ghc8107
     ghc902
     ghc928
-    ghc947
     ghc948
     ghc963
     ghc964
@@ -590,7 +589,6 @@ let
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc928
-        compilerNames.ghc947
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [

@@ -158,25 +158,6 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
       ghc92 = compiler.ghc928;
-      ghc947 = callPackage ../development/compilers/ghc/9.4.7.nix {
-        bootPkgs =
-          # Building with 9.2 is broken due to
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-
-          # No suitable bindists for powerpc64le
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc902
-          else
-            bb.packages.ghc902Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 10 && < 14
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
           # Building with 9.2 is broken due to
@@ -561,11 +542,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       };
       ghc92 = packages.ghc928;
-      ghc947 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc947;
-        ghc = bh.compiler.ghc947;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
-      };
       ghc948 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc948;
         ghc = bh.compiler.ghc948;
