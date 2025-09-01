@@ -10,6 +10,8 @@
 let
   # These are attributes in compiler that support integer-simple.
   integerSimpleIncludes = [
+    "ghc82"
+    "ghc822"
     "ghc88"
     "ghc884"
     "ghc810"
@@ -114,6 +116,20 @@ in
         llvmPackages = pkgs.llvmPackages_15;
       };
 
+      ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
+        bootPkgs =
+          # to my (@OPNA2608) knowledge there are no newer official binaries for this platform
+          bb.packages.ghc801Binary;
+        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+        python3 = buildPackages.python311; # so that we don't have two of them
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+      ghc82 = compiler.ghc822;
       ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
         bootPkgs =
           # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -556,6 +572,12 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
+      ghc822 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc822;
+        ghc = bh.compiler.ghc822;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      };
+      ghc82 = packages.ghc822;
       ghc8107 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc8107;
         ghc = bh.compiler.ghc8107;
