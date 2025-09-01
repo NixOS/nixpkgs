@@ -29,6 +29,7 @@
   unstableGitUpdater,
   apple-sdk_14,
   libtommath,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -142,6 +143,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.updateScript = unstableGitUpdater { };
+
+  postFixup = ''
+    wrapProgram $out/bin/Ladybird \
+      --set LD_LIBRARY_PATH ${
+        lib.makeLibraryPath [
+          libGL
+        ]
+      }
+  '';
 
   meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
