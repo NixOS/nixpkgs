@@ -40,7 +40,7 @@ flutter332.buildFlutterApplication {
           nativeBuildInputs = [ yq-go ];
         }
         ''
-          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+          yq eval --output-format=json --prettyPrint $src/app/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater {
