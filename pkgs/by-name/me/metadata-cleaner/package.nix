@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python312Packages,
   fetchFromGitLab,
   appstream,
   desktop-file-utils,
@@ -18,7 +18,7 @@
   wrapGAppsHook4,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "metadata-cleaner";
   version = "2.5.6";
   pyproject = false;
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     poppler_gi
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python312Packages; [
     mat2
     pygobject3
   ];
