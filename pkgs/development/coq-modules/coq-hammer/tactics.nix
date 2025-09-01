@@ -10,7 +10,7 @@ let
   owner = "lukaszcz";
   repo = "coqhammer";
   defaultVersion =
-    with lib.versions;
+
     lib.switch coq.coq-version [
       {
         case = "8.20";

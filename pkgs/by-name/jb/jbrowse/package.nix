@@ -36,7 +36,7 @@ appimageTools.wrapType2 {
     mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

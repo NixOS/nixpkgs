@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "convfont";
   };

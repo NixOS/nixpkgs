@@ -33,6 +33,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "bingo";
     homepage = "https://github.com/bwplotka/bingo";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

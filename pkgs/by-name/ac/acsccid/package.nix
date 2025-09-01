@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://acsccid.sourceforge.net";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

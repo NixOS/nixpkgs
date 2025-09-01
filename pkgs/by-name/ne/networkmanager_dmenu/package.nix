@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small script to manage NetworkManager connections with dmenu instead of nm-applet";
     mainProgram = "networkmanager_dmenu";
     homepage = "https://github.com/firecat53/networkmanager-dmenu";

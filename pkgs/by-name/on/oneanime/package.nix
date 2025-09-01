@@ -188,7 +188,7 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://github.com/Predidit/oneAnime";
     mainProgram = "oneanime";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

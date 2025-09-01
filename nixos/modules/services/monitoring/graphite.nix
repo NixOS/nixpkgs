@@ -51,10 +51,9 @@ let
     ];
   };
 
-  carbonOpts =
-    name: with config.ids; ''
-      --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
-    '';
+  carbonOpts = name: ''
+    --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
+  '';
 
   carbonEnv = {
     PYTHONPATH =

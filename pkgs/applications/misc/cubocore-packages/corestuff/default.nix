@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corestuff";
     homepage = "https://gitlab.com/cubocore/coreapps/corestuff";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     # Address boundary error
     broken = true;
