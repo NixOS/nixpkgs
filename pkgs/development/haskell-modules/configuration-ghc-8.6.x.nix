@@ -56,6 +56,12 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
 
+  # Module ‘GHC.Exts’ does not export ‘word32ToInt32#’
+  alex = overrideCabal (drv: {
+    version = "3.5.1.0";
+    sha256 = "01rax51p8p91a5jv5i56fny4lzmwgvjlxh767gh9x5gbz23gwbn9";
+  }) super.alex;
+
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
   # These core package only exist for GHC >= 9.4. The best we can do is feign
@@ -86,6 +92,13 @@ self: super: {
 
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+
+  # happy-lib.cabal:0:0: Unsupported cabal-version.
+  happy = overrideCabal (drv: {
+    version = "1.20.1.1";
+    sha256 = "06w8g3lfk2ynrfhqznhp1mnp8a5b64lj6qviixpndzf5lv2psklb";
+  }) super.happy;
+  happy-lib = null;
 
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
