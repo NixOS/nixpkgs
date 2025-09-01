@@ -1,10 +1,9 @@
-{ 
-  lib,
-  stdenv, 
-  fetchurl, 
-  gmp, 
-  flex, 
-  bison 
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, flex
+, bison
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GCdaNnKDB3uv419EMgBJnjsZxKN1SVPaKhsvDWtZItw=";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     gmp
   ];
-  nativeBuildInputs = [ 
-    bison 
-    flex 
+  nativeBuildInputs = [
+    bison
+    flex
   ];
 
   strictDeps = true;

@@ -6,11 +6,11 @@
   search of your editor. ;)
   Hint: ### starts category names.
 */
-{
-  lib,
-  noSysDirs,
-  config,
-  overlays,
+{ lib
+, noSysDirs
+, config
+, overlays
+,
 }:
 res: pkgs: super:
 
@@ -57,17 +57,17 @@ with pkgs;
 
   stdenvNoLibs =
     if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform then
-      # We cannot touch binutils or cc themselves, because that will cause
-      # infinite recursion. So instead, we just choose a libc based on the
-      # current platform. That means we won't respect whatever compiler was
-      # passed in with the stdenv stage argument.
-      #
-      # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
-      # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
-      # as part of the stage. Then we would never be tempted to override a later
-      # thing to to create an earlier thing (leading to infinite recursion) and
-      # we also would still respect the stage arguments choices for these
-      # things.
+    # We cannot touch binutils or cc themselves, because that will cause
+    # infinite recursion. So instead, we just choose a libc based on the
+    # current platform. That means we won't respect whatever compiler was
+    # passed in with the stdenv stage argument.
+    #
+    # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
+    # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
+    # as part of the stage. Then we would never be tempted to override a later
+    # thing to to create an earlier thing (leading to infinite recursion) and
+    # we also would still respect the stage arguments choices for these
+    # things.
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
@@ -155,11 +155,12 @@ with pkgs;
 
   # See also allTestsForSystem in nixos/release.nix
   nixosTests =
-    import ../../nixos/tests/all-tests.nix {
-      inherit pkgs;
-      system = stdenv.hostPlatform.system;
-      callTest = config: config.test;
-    }
+    import ../../nixos/tests/all-tests.nix
+      {
+        inherit pkgs;
+        system = stdenv.hostPlatform.system;
+        callTest = config: config.test;
+      }
     // {
       # for typechecking of the scripts and evaluation of
       # the nodes, without running VMs.
@@ -191,12 +192,15 @@ with pkgs;
     in
     recurseIntoAttrs arrayUtilitiesPackages;
 
-  addBinToPathHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "add-bin-to-path-hook";
-    } ../build-support/setup-hooks/add-bin-to-path.sh
-  ) { };
+  addBinToPathHook = callPackage
+    (
+      { makeSetupHook }:
+      makeSetupHook
+        {
+          name = "add-bin-to-path-hook";
+        } ../build-support/setup-hooks/add-bin-to-path.sh
+    )
+    { };
 
   aider-chat-with-playwright = aider-chat.withOptional { withPlaywright = true; };
 
@@ -208,24 +212,27 @@ with pkgs;
 
   aider-chat-full = aider-chat.withOptional { withAll = true; };
 
-  autoreconfHook = callPackage (
-    {
-      makeSetupHook,
-      autoconf,
-      automake,
-      gettext,
-      libtool,
-    }:
-    makeSetupHook {
-      name = "autoreconf-hook";
-      propagatedBuildInputs = [
-        autoconf
-        automake
-        gettext
-        libtool
-      ];
-    } ../build-support/setup-hooks/autoreconf.sh
-  ) { };
+  autoreconfHook = callPackage
+    (
+      { makeSetupHook
+      , autoconf
+      , automake
+      , gettext
+      , libtool
+      ,
+      }:
+      makeSetupHook
+        {
+          name = "autoreconf-hook";
+          propagatedBuildInputs = [
+            autoconf
+            automake
+            gettext
+            libtool
+          ];
+        } ../build-support/setup-hooks/autoreconf.sh
+    )
+    { };
 
   autoreconfHook269 = autoreconfHook.override {
     autoconf = autoconf269;
@@ -234,25 +241,27 @@ with pkgs;
     autoconf = autoconf271;
   };
 
-  autoPatchelfHook = makeSetupHook {
-    name = "auto-patchelf-hook";
-    propagatedBuildInputs = [
-      auto-patchelf
-      bintools
-    ];
-    substitutions = {
-      hostPlatform = stdenv.hostPlatform.config;
-    };
-  } ../build-support/setup-hooks/auto-patchelf.sh;
+  autoPatchelfHook = makeSetupHook
+    {
+      name = "auto-patchelf-hook";
+      propagatedBuildInputs = [
+        auto-patchelf
+        bintools
+      ];
+      substitutions = {
+        hostPlatform = stdenv.hostPlatform.config;
+      };
+    } ../build-support/setup-hooks/auto-patchelf.sh;
 
   appimageTools = callPackage ../build-support/appimage { };
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
 
-  stripJavaArchivesHook = makeSetupHook {
-    name = "strip-java-archives-hook";
-    propagatedBuildInputs = [ strip-nondeterminism ];
-  } ../build-support/setup-hooks/strip-java-archives.sh;
+  stripJavaArchivesHook = makeSetupHook
+    {
+      name = "strip-java-archives-hook";
+      propagatedBuildInputs = [ strip-nondeterminism ];
+    } ../build-support/setup-hooks/strip-java-archives.sh;
 
   ensureNewerSourcesHook =
     { year }:
@@ -295,20 +304,22 @@ with pkgs;
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
 
-  updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
-    name = "update-autotools-gnu-config-scripts-hook";
-    substitutions = {
-      gnu_config = gnu-config;
-    };
-  } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
+  updateAutotoolsGnuConfigScriptsHook = makeSetupHook
+    {
+      name = "update-autotools-gnu-config-scripts-hook";
+      substitutions = {
+        gnu_config = gnu-config;
+      };
+    } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
-  gogUnpackHook = makeSetupHook {
-    name = "gog-unpack-hook";
-    propagatedBuildInputs = [
-      innoextract
-      file-rename
-    ];
-  } ../build-support/setup-hooks/gog-unpack.sh;
+  gogUnpackHook = makeSetupHook
+    {
+      name = "gog-unpack-hook";
+      propagatedBuildInputs = [
+        innoextract
+        file-rename
+      ];
+    } ../build-support/setup-hooks/gog-unpack.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
@@ -416,9 +427,10 @@ with pkgs;
 
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
-  dieHook = makeSetupHook {
-    name = "die-hook";
-  } ../build-support/setup-hooks/die.sh;
+  dieHook = makeSetupHook
+    {
+      name = "die-hook";
+    } ../build-support/setup-hooks/die.sh;
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -560,19 +572,21 @@ with pkgs;
   repoRevToNameMaybe = lib.repoRevToName config.fetchedSourceNameDefault;
 
   fetchpatch =
-    callPackage ../build-support/fetchpatch {
-      # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
-      patchutils = __splicedPackages.patchutils_0_3_3;
-    }
+    callPackage ../build-support/fetchpatch
+      {
+        # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
+        patchutils = __splicedPackages.patchutils_0_3_3;
+      }
     // {
       tests = pkgs.tests.fetchpatch;
       version = 1;
     };
 
   fetchpatch2 =
-    callPackage ../build-support/fetchpatch {
-      patchutils = __splicedPackages.patchutils_0_4_2;
-    }
+    callPackage ../build-support/fetchpatch
+      {
+        patchutils = __splicedPackages.patchutils_0_4_2;
+      }
     // {
       tests = pkgs.tests.fetchpatch2;
       version = 2;
@@ -716,19 +730,22 @@ with pkgs;
       inherit url;
     };
 
-  ld-is-cc-hook = makeSetupHook {
-    name = "ld-is-cc-hook";
-  } ../build-support/setup-hooks/ld-is-cc-hook.sh;
+  ld-is-cc-hook = makeSetupHook
+    {
+      name = "ld-is-cc-hook";
+    } ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
-  copyDesktopItems = makeSetupHook {
-    name = "copy-desktop-items-hook";
-  } ../build-support/setup-hooks/copy-desktop-items.sh;
+  copyDesktopItems = makeSetupHook
+    {
+      name = "copy-desktop-items-hook";
+    } ../build-support/setup-hooks/copy-desktop-items.sh;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
-  copyPkgconfigItems = makeSetupHook {
-    name = "copy-pkg-config-items-hook";
-  } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
+  copyPkgconfigItems = makeSetupHook
+    {
+      name = "copy-pkg-config-items-hook";
+    } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
 
   makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
@@ -745,33 +762,34 @@ with pkgs;
 
   makeWrapper = makeShellWrapper;
 
-  makeShellWrapper = makeSetupHook {
-    name = "make-shell-wrapper-hook";
-    propagatedBuildInputs = [ dieHook ];
-    substitutions = {
-      # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
-      shell =
-        if targetPackages ? runtimeShell then
-          targetPackages.runtimeShell
-        else
-          throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
-    };
-    passthru = {
-      tests = tests.makeWrapper;
-    };
-  } ../build-support/setup-hooks/make-wrapper.sh;
+  makeShellWrapper = makeSetupHook
+    {
+      name = "make-shell-wrapper-hook";
+      propagatedBuildInputs = [ dieHook ];
+      substitutions = {
+        # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
+        shell =
+          if targetPackages ? runtimeShell then
+            targetPackages.runtimeShell
+          else
+            throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
+      };
+      passthru = {
+        tests = tests.makeWrapper;
+      };
+    } ../build-support/setup-hooks/make-wrapper.sh;
 
   compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
 
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure =
-    {
-      kernel,
-      firmware,
-      rootModules,
-      allowMissing ? false,
-      extraFirmwarePaths ? [ ],
+    { kernel
+    , firmware
+    , rootModules
+    , allowMissing ? false
+    , extraFirmwarePaths ? [ ]
+    ,
     }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit
@@ -806,18 +824,20 @@ with pkgs;
     patchRcPathPosix
     ;
 
-  pruneLibtoolFiles = makeSetupHook {
-    name = "prune-libtool-files";
-  } ../build-support/setup-hooks/prune-libtool-files.sh;
+  pruneLibtoolFiles = makeSetupHook
+    {
+      name = "prune-libtool-files";
+    } ../build-support/setup-hooks/prune-libtool-files.sh;
 
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
-  shortenPerlShebang = makeSetupHook {
-    name = "shorten-perl-shebang-hook";
-    propagatedBuildInputs = [ dieHook ];
-  } ../build-support/setup-hooks/shorten-perl-shebang.sh;
+  shortenPerlShebang = makeSetupHook
+    {
+      name = "shorten-perl-shebang-hook";
+      propagatedBuildInputs = [ dieHook ];
+    } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
   sile = callPackage ../by-name/si/sile/package.nix {
     lua = luajit;
@@ -832,11 +852,11 @@ with pkgs;
   replaceDependencies = callPackage ../build-support/replace-dependencies.nix { };
 
   replaceDependency =
-    {
-      drv,
-      oldDependency,
-      newDependency,
-      verbose ? true,
+    { drv
+    , oldDependency
+    , newDependency
+    , verbose ? true
+    ,
     }:
     replaceDependencies {
       inherit drv verbose;
@@ -874,63 +894,73 @@ with pkgs;
 
   inherit (lib.systems) platforms;
 
-  setJavaClassPath = makeSetupHook {
-    name = "set-java-classpath-hook";
-  } ../build-support/setup-hooks/set-java-classpath.sh;
-
-  fixDarwinDylibNames = callPackage (
+  setJavaClassPath = makeSetupHook
     {
-      lib,
-      targetPackages,
-      makeSetupHook,
-    }:
-    makeSetupHook {
-      name = "fix-darwin-dylib-names-hook";
-      substitutions = { inherit (targetPackages.stdenv.cc) targetPrefix; };
-      meta.platforms = lib.platforms.darwin;
-    } ../build-support/setup-hooks/fix-darwin-dylib-names.sh
-  ) { };
+      name = "set-java-classpath-hook";
+    } ../build-support/setup-hooks/set-java-classpath.sh;
+
+  fixDarwinDylibNames = callPackage
+    (
+      { lib
+      , targetPackages
+      , makeSetupHook
+      ,
+      }:
+      makeSetupHook
+        {
+          name = "fix-darwin-dylib-names-hook";
+          substitutions = { inherit (targetPackages.stdenv.cc) targetPrefix; };
+          meta.platforms = lib.platforms.darwin;
+        } ../build-support/setup-hooks/fix-darwin-dylib-names.sh
+    )
+    { };
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
-  desktopToDarwinBundle = makeSetupHook {
-    name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [
-      writeDarwinBundle
-      librsvg
-      imagemagick
-      (onlyBin python3Packages.icnsutil)
-    ];
-  } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
+  desktopToDarwinBundle = makeSetupHook
+    {
+      name = "desktop-to-darwin-bundle-hook";
+      propagatedBuildInputs = [
+        writeDarwinBundle
+        librsvg
+        imagemagick
+        (onlyBin python3Packages.icnsutil)
+      ];
+    } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
-  keepBuildTree = makeSetupHook {
-    name = "keep-build-tree-hook";
-  } ../build-support/setup-hooks/keep-build-tree.sh;
+  keepBuildTree = makeSetupHook
+    {
+      name = "keep-build-tree-hook";
+    } ../build-support/setup-hooks/keep-build-tree.sh;
 
-  moveBuildTree = makeSetupHook {
-    name = "move-build-tree-hook";
-  } ../build-support/setup-hooks/move-build-tree.sh;
+  moveBuildTree = makeSetupHook
+    {
+      name = "move-build-tree-hook";
+    } ../build-support/setup-hooks/move-build-tree.sh;
 
-  enableGCOVInstrumentation = makeSetupHook {
-    name = "enable-gcov-instrumentation-hook";
-  } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
+  enableGCOVInstrumentation = makeSetupHook
+    {
+      name = "enable-gcov-instrumentation-hook";
+    } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
 
-  makeGCOVReport = makeSetupHook {
-    name = "make-gcov-report-hook";
-    propagatedBuildInputs = [
-      lcov
-      enableGCOVInstrumentation
-    ];
-  } ../build-support/setup-hooks/make-coverage-analysis-report.sh;
+  makeGCOVReport = makeSetupHook
+    {
+      name = "make-gcov-report-hook";
+      propagatedBuildInputs = [
+        lcov
+        enableGCOVInstrumentation
+      ];
+    } ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
-  findXMLCatalogs = makeSetupHook {
-    name = "find-xml-catalogs-hook";
-  } ../build-support/setup-hooks/find-xml-catalogs.sh;
+  findXMLCatalogs = makeSetupHook
+    {
+      name = "find-xml-catalogs-hook";
+    } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
   wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
     isGraphical = true;
@@ -945,32 +975,39 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
-  separateDebugInfo = makeSetupHook {
-    name = "separate-debug-info-hook";
-  } ../build-support/setup-hooks/separate-debug-info.sh;
+  separateDebugInfo = makeSetupHook
+    {
+      name = "separate-debug-info-hook";
+    } ../build-support/setup-hooks/separate-debug-info.sh;
 
-  setupDebugInfoDirs = makeSetupHook {
-    name = "setup-debug-info-dirs-hook";
-  } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
+  setupDebugInfoDirs = makeSetupHook
+    {
+      name = "setup-debug-info-dirs-hook";
+    } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
 
-  writableTmpDirAsHomeHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "writable-tmpdir-as-home-hook";
-    } ../build-support/setup-hooks/writable-tmpdir-as-home.sh
-  ) { };
+  writableTmpDirAsHomeHook = callPackage
+    (
+      { makeSetupHook }:
+      makeSetupHook
+        {
+          name = "writable-tmpdir-as-home-hook";
+        } ../build-support/setup-hooks/writable-tmpdir-as-home.sh
+    )
+    { };
 
-  useOldCXXAbi = makeSetupHook {
-    name = "use-old-cxx-abi-hook";
-  } ../build-support/setup-hooks/use-old-cxx-abi.sh;
+  useOldCXXAbi = makeSetupHook
+    {
+      name = "use-old-cxx-abi-hook";
+    } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
-  validatePkgConfig = makeSetupHook {
-    name = "validate-pkg-config";
-    propagatedBuildInputs = [
-      findutils
-      pkg-config
-    ];
-  } ../build-support/setup-hooks/validate-pkg-config.sh;
+  validatePkgConfig = makeSetupHook
+    {
+      name = "validate-pkg-config";
+      propagatedBuildInputs = [
+        findutils
+        pkg-config
+      ];
+    } ../build-support/setup-hooks/validate-pkg-config.sh;
 
   #package writers
   writers = callPackage ../build-support/writers { };
@@ -1216,13 +1253,15 @@ with pkgs;
   # Git with SVN support, but without GUI.
   gitSVN = lowPrio (git.override { svnSupport = true; });
 
-  git-doc = lib.addMetaAttrs {
-    description = "Additional documentation for Git";
-    longDescription = ''
-      This package contains additional documentation (HTML and text files) that
-      is referenced in the man pages of Git.
-    '';
-  } gitFull.doc;
+  git-doc = lib.addMetaAttrs
+    {
+      description = "Additional documentation for Git";
+      longDescription = ''
+        This package contains additional documentation (HTML and text files) that
+        is referenced in the man pages of Git.
+      '';
+    }
+    gitFull.doc;
 
   gitMinimal = git.override {
     withManual = false;
@@ -1375,9 +1414,11 @@ with pkgs;
 
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
-  mame-tools = lib.addMetaAttrs {
-    description = mame.meta.description + " (tools only)";
-  } (lib.getOutput "tools" mame);
+  mame-tools = lib.addMetaAttrs
+    {
+      description = mame.meta.description + " (tools only)";
+    }
+    (lib.getOutput "tools" mame);
 
   ppsspp-sdl =
     let
@@ -1434,9 +1475,11 @@ with pkgs;
   # includes only cores for platform with free licenses
   retroarch-free = retroarch.withCores (
     cores:
-    lib.filter (
-      c: (c ? libretroCore) && (lib.meta.availableOn stdenv.hostPlatform c) && (!c.meta.unfree)
-    ) (lib.attrValues cores)
+    lib.filter
+      (
+        c: (c ? libretroCore) && (lib.meta.availableOn stdenv.hostPlatform c) && (!c.meta.unfree)
+      )
+      (lib.attrValues cores)
   );
 
   # includes all cores for platform (including ones with non-free licenses)
@@ -1589,10 +1632,11 @@ with pkgs;
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
   freshBootstrapTools =
     if stdenv.hostPlatform.isDarwin then
-      callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
-        localSystem = stdenv.buildPlatform;
-        crossSystem = if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
-      }
+      callPackage ../stdenv/darwin/make-bootstrap-tools.nix
+        {
+          localSystem = stdenv.buildPlatform;
+          crossSystem = if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
+        }
     else if stdenv.hostPlatform.isLinux then
       callPackage ../stdenv/linux/make-bootstrap-tools.nix { }
     else if stdenv.hostPlatform.isFreeBSD then
@@ -3554,8 +3598,7 @@ with pkgs;
 
   inherit
     ({
-      limesuite = callPackage ../applications/radio/limesuite {
-      };
+      limesuite = callPackage ../applications/radio/limesuite { };
       limesuiteWithGui = limesuite.override {
         withGui = true;
       };
@@ -4295,9 +4338,11 @@ with pkgs;
       pkgs = lib.filterAttrs (name: _: lib.hasPrefix "thelounge-" name) nodePackages;
       getPackagesWithPrefix =
         prefix:
-        lib.mapAttrs' (
-          name: pkg: lib.nameValuePair (lib.removePrefix ("thelounge-" + prefix + "-") name) pkg
-        ) (lib.filterAttrs (name: _: lib.hasPrefix ("thelounge-" + prefix + "-") name) pkgs);
+        lib.mapAttrs'
+          (
+            name: pkg: lib.nameValuePair (lib.removePrefix ("thelounge-" + prefix + "-") name) pkg
+          )
+          (lib.filterAttrs (name: _: lib.hasPrefix ("thelounge-" + prefix + "-") name) pkgs);
     in
     lib.recurseIntoAttrs {
       plugins = lib.recurseIntoAttrs (getPackagesWithPrefix "plugin");
@@ -4820,14 +4865,15 @@ with pkgs;
   wrapNonDeterministicGcc =
     stdenv: ccWrapper:
     if ccWrapper.isGNU then
-      ccWrapper.overrideAttrs (old: {
-        env = old.env // {
-          cc = old.env.cc.override {
-            reproducibleBuild = false;
-            profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
+      ccWrapper.overrideAttrs
+        (old: {
+          env = old.env // {
+            cc = old.env.cc.override {
+              reproducibleBuild = false;
+              profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
+            };
           };
-        };
-      })
+        })
     else
       ccWrapper;
 
@@ -4949,7 +4995,7 @@ with pkgs;
         meta = prevAttrs.meta // {
           badPlatforms =
             (prevAttrs.meta.badPlatforms or [ ])
-            ++ lib.optionals (stdenv.targetPlatform == stdenv.hostPlatform) [ stdenv.hostPlatform.system ];
+              ++ lib.optionals (stdenv.targetPlatform == stdenv.hostPlatform) [ stdenv.hostPlatform.system ];
         };
       });
 
@@ -5086,14 +5132,15 @@ with pkgs;
     ;
 
   gccgo = wrapCC (
-    gcc.cc.override {
-      name = "gccgo";
-      langCC = true; # required for go.
-      langC = true;
-      langGo = true;
-      langJit = true;
-      profiledCompiler = false;
-    }
+    gcc.cc.override
+      {
+        name = "gccgo";
+        langCC = true; # required for go.
+        langC = true;
+        langGo = true;
+        langJit = true;
+        profiledCompiler = false;
+      }
     // {
       # not supported on darwin: https://github.com/golang/go/issues/463
       meta.broken = stdenv.hostPlatform.isDarwin;
@@ -5101,14 +5148,15 @@ with pkgs;
   );
 
   gccgo13 = wrapCC (
-    gcc13.cc.override {
-      name = "gccgo";
-      langCC = true; # required for go.
-      langC = true;
-      langGo = true;
-      langJit = true;
-      profiledCompiler = false;
-    }
+    gcc13.cc.override
+      {
+        name = "gccgo";
+        langCC = true; # required for go.
+        langC = true;
+        langGo = true;
+        langJit = true;
+        profiledCompiler = false;
+      }
     // {
       # not supported on darwin: https://github.com/golang/go/issues/463
       meta.broken = stdenv.hostPlatform.isDarwin;
@@ -5116,14 +5164,15 @@ with pkgs;
   );
 
   gccgo14 = wrapCC (
-    gcc14.cc.override {
-      name = "gccgo";
-      langCC = true; # required for go.
-      langC = true;
-      langGo = true;
-      langJit = true;
-      profiledCompiler = false;
-    }
+    gcc14.cc.override
+      {
+        name = "gccgo";
+        langCC = true; # required for go.
+        langC = true;
+        langGo = true;
+        langJit = true;
+        profiledCompiler = false;
+      }
     // {
       # not supported on darwin: https://github.com/golang/go/issues/463
       meta.broken = stdenv.hostPlatform.isDarwin;
@@ -5131,14 +5180,15 @@ with pkgs;
   );
 
   gccgo15 = wrapCC (
-    gcc15.cc.override {
-      name = "gccgo";
-      langCC = true; # required for go.
-      langC = true;
-      langGo = true;
-      langJit = true;
-      profiledCompiler = false;
-    }
+    gcc15.cc.override
+      {
+        name = "gccgo";
+        langCC = true; # required for go.
+        langC = true;
+        langGo = true;
+        langJit = true;
+        profiledCompiler = false;
+      }
     // {
       # not supported on darwin: https://github.com/golang/go/issues/463
       meta.broken = stdenv.hostPlatform.isDarwin;
@@ -5192,21 +5242,21 @@ with pkgs;
   # plain, cross-compiled compiler (which is only theoretical at the moment).
   ghc =
     targetPackages.haskellPackages.ghc or
-    # Prefer native-bignum to avoid linking issues with gmp
-    # Use 9.4 for static over broken 9.6
-    (
-      if stdenv.targetPlatform.isStatic then
-        haskell.compiler.native-bignum.ghc94
-      # JS backend can't use GMP
-      else if stdenv.targetPlatform.isGhcjs then
-        haskell.compiler.native-bignum.ghc98
-      # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
-      # FIXME: remove when fixed
-      else if stdenv.hostPlatform.isi686 then
-        haskell.compiler.ghc96
-      else
-        haskell.compiler.ghc98
-    );
+      # Prefer native-bignum to avoid linking issues with gmp
+      # Use 9.4 for static over broken 9.6
+      (
+        if stdenv.targetPlatform.isStatic then
+          haskell.compiler.native-bignum.ghc94
+        # JS backend can't use GMP
+        else if stdenv.targetPlatform.isGhcjs then
+          haskell.compiler.native-bignum.ghc98
+        # ICEs horribly on i686, see https://gitlab.haskell.org/ghc/ghc/-/issues/25904
+        # FIXME: remove when fixed
+        else if stdenv.hostPlatform.isi686 then
+          haskell.compiler.ghc96
+        else
+          haskell.compiler.ghc98
+      );
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -5265,8 +5315,7 @@ with pkgs;
   );
 
   inherit
-    (callPackage ../development/compilers/haxe {
-    })
+    (callPackage ../development/compilers/haxe { })
     haxe_4_3
     haxe_4_1
     haxe_4_0
@@ -5615,7 +5664,7 @@ with pkgs;
     ;
 
   inherit (ocamlPackages)
-    ocamlformat # latest version
+    ocamlformat# latest version
     ocamlformat_0_27_0
     ;
 
@@ -5670,9 +5719,12 @@ with pkgs;
       targetAlreadyIncluded = lib.elem stdenv.hostPlatform.rust.rustcTarget (
         lib.splitString "," (
           lib.removePrefix "--target=" (
-            lib.elemAt (lib.filter (
-              f: lib.hasPrefix "--target=" f
-            ) pkgsBuildBuild.rustc.unwrapped.configureFlags) 0
+            lib.elemAt
+              (lib.filter
+                (
+                  f: lib.hasPrefix "--target=" f
+                )
+                pkgsBuildBuild.rustc.unwrapped.configureFlags) 0
           )
         )
       );
@@ -5708,8 +5760,7 @@ with pkgs;
   rustup = callPackage ../development/tools/rust/rustup { };
   rustup-toolchain-install-master =
     callPackage ../development/tools/rust/rustup-toolchain-install-master
-      {
-      };
+      { };
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
@@ -5771,9 +5822,8 @@ with pkgs;
   vyper = with python3Packages; toPythonApplication vyper;
 
   wrapCCWith =
-    {
-      cc,
-      # This should be the only bintools runtime dep with this sort of logic. The
+    { cc
+    , # This should be the only bintools runtime dep with this sort of logic. The
       # Others should instead delegate to the next stage's choice with
       # `targetPackages.stdenv.cc.bintools`. This one is different just to
       # provide the default choice, avoiding infinite recursion.
@@ -5781,17 +5831,19 @@ with pkgs;
       # a default here, since eval will hit this function when bootstrapping
       # stdenv where the bintools attribute doesn't exist, but will never actually
       # be evaluated -- callPackage ends up being too eager.
-      bintools ? pkgs.bintools,
-      libc ? bintools.libc,
-      # libc++ from the default LLVM version is bound at the top level, but we
+      bintools ? pkgs.bintools
+    , libc ? bintools.libc
+    , # libc++ from the default LLVM version is bound at the top level, but we
       # want the C++ library to be explicitly chosen by the caller, and null by
       # default.
-      libcxx ? null,
-      extraPackages ? lib.optional (
-        cc.isGNU or false && stdenv.targetPlatform.isMinGW
-      ) targetPackages.threads.package,
-      nixSupport ? { },
-      ...
+      libcxx ? null
+    , extraPackages ? lib.optional
+        (
+          cc.isGNU or false && stdenv.targetPlatform.isMinGW
+        )
+        targetPackages.threads.package
+    , nixSupport ? { }
+    , ...
     }@extraArgs:
     callPackage ../build-support/cc-wrapper (
       let
@@ -5827,10 +5879,9 @@ with pkgs;
     };
 
   wrapBintoolsWith =
-    {
-      bintools,
-      libc ? targetPackages.libc or pkgs.libc,
-      ...
+    { bintools
+    , libc ? targetPackages.libc or pkgs.libc
+    , ...
     }@extraArgs:
     callPackage ../build-support/bintools-wrapper (
       let
@@ -6700,8 +6751,7 @@ with pkgs;
 
   buildkite-test-collector-rust =
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
-      {
-      };
+      { };
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
@@ -6858,12 +6908,14 @@ with pkgs;
   #       '';
   #     };
   #
-  distccWrapper = makeOverridable (
-    {
-      extraConfig ? "",
-    }:
-    wrapCC (distcc.links extraConfig)
-  ) { };
+  distccWrapper = makeOverridable
+    (
+      { extraConfig ? ""
+      ,
+      }:
+      wrapCC (distcc.links extraConfig)
+    )
+    { };
   distccStdenv = lowPrio (overrideCC stdenv buildPackages.distccWrapper);
 
   distccMasquerade =
@@ -7307,10 +7359,11 @@ with pkgs;
       if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
   };
 
-  xcbuildHook = makeSetupHook {
-    name = "xcbuild-hook";
-    propagatedBuildInputs = [ xcbuild ];
-  } ../by-name/xc/xcbuild/setup-hook.sh;
+  xcbuildHook = makeSetupHook
+    {
+      name = "xcbuild-hook";
+      propagatedBuildInputs = [ xcbuild ];
+    } ../by-name/xc/xcbuild/setup-hook.sh;
 
   xcodebuild = xcbuild;
 
@@ -7791,19 +7844,21 @@ with pkgs;
   # Only supported on Linux and only on glibc
   glibcLocales =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
-      callPackage ../development/libraries/glibc/locales.nix {
-        stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
-        withLinuxHeaders = !stdenv.cc.isGNU;
-      }
+      callPackage ../development/libraries/glibc/locales.nix
+        {
+          stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
+          withLinuxHeaders = !stdenv.cc.isGNU;
+        }
     else
       null;
   glibcLocalesUtf8 =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
-      callPackage ../development/libraries/glibc/locales.nix {
-        stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
-        withLinuxHeaders = !stdenv.cc.isGNU;
-        allLocales = false;
-      }
+      callPackage ../development/libraries/glibc/locales.nix
+        {
+          stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
+          withLinuxHeaders = !stdenv.cc.isGNU;
+          allLocales = false;
+        }
     else
       null;
 
@@ -8049,8 +8104,7 @@ with pkgs;
     if !stdenv.hostPlatform.isDarwin then
       callPackage ../development/libraries/irrlicht { }
     else
-      callPackage ../development/libraries/irrlicht/mac.nix {
-      };
+      callPackage ../development/libraries/irrlicht/mac.nix { };
 
   iso-flags-png-320x240 = iso-flags.overrideAttrs (oldAttrs: {
     buildFlags = [ "png-country-320x240-fancy" ];
@@ -8746,8 +8800,7 @@ with pkgs;
   pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
 
   inherit
-    (callPackage ../development/libraries/physfs {
-    })
+    (callPackage ../development/libraries/physfs { })
     physfs_2
     physfs
     ;
@@ -9115,8 +9168,7 @@ with pkgs;
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
 
   inherit
-    (callPackage ../development/libraries/sqlite/tools.nix {
-    })
+    (callPackage ../development/libraries/sqlite/tools.nix { })
     sqlite-analyzer
     sqldiff
     sqlite-rsync
@@ -9307,13 +9359,14 @@ with pkgs;
 
   darwinMinVersionHook =
     deploymentTarget:
-    makeSetupHook {
-      name = "darwin-deployment-target-hook-${deploymentTarget}";
-      substitutions = {
-        darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
-        deploymentTarget = lib.escapeShellArg deploymentTarget;
-      };
-    } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
+    makeSetupHook
+      {
+        name = "darwin-deployment-target-hook-${deploymentTarget}";
+        substitutions = {
+          darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
+          deploymentTarget = lib.escapeShellArg deploymentTarget;
+        };
+      } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
 
   ### DEVELOPMENT / TESTING TOOLS
 
@@ -10237,8 +10290,7 @@ with pkgs;
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-wireguard-exporter =
     callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix
-      {
-      };
+      { };
   prometheus-zfs-exporter = callPackage ../servers/monitoring/prometheus/zfs-exporter.nix { };
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
@@ -10667,8 +10719,7 @@ with pkgs;
   nushell = callPackage ../shells/nushell { };
 
   nushellPlugins = recurseIntoAttrs (
-    callPackage ../shells/nushell/plugins {
-    }
+    callPackage ../shells/nushell/plugins { }
   );
 
   net-tools =
@@ -11785,12 +11836,13 @@ with pkgs;
   kemai = qt6Packages.callPackage ../applications/misc/kemai { };
 
   jetbrains = (
-    recurseIntoAttrs (
-      callPackages ../applications/editors/jetbrains {
-        vmopts = config.jetbrains.vmopts or null;
-        jdk = jetbrains.jdk;
-      }
-    )
+    recurseIntoAttrs
+      (
+        callPackages ../applications/editors/jetbrains {
+          vmopts = config.jetbrains.vmopts or null;
+          jdk = jetbrains.jdk;
+        }
+      )
     // {
       jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk {
         jdk = jdk21;
@@ -12090,8 +12142,7 @@ with pkgs;
   );
 
   imagemagick = lowPrio (
-    callPackage ../applications/graphics/ImageMagick {
-    }
+    callPackage ../applications/graphics/ImageMagick { }
   );
 
   imagemagickBig = lowPrio (
@@ -12781,8 +12832,7 @@ with pkgs;
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
-    {
-    }
+    { }
     // (config.profanity or { })
   );
 
@@ -13198,8 +13248,7 @@ with pkgs;
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 
   inherit
-    (callPackage ../applications/graphics/tesseract {
-    })
+    (callPackage ../applications/graphics/tesseract { })
     tesseract3
     tesseract4
     tesseract5
@@ -13341,8 +13390,7 @@ with pkgs;
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vim = vimUtils.makeCustomizable (
-    callPackage ../applications/editors/vim {
-    }
+    callPackage ../applications/editors/vim { }
   );
 
   macvim =
@@ -14340,8 +14388,7 @@ with pkgs;
   bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix { };
 
   inherit
-    (callPackage ../games/quake2/yquake2 {
-    })
+    (callPackage ../games/quake2/yquake2 { })
     yquake2
     yquake2-ctf
     yquake2-ground-zero
@@ -15623,9 +15670,10 @@ with pkgs;
 
   fts = if stdenv.hostPlatform.isMusl then musl-fts else null;
 
-  bsdSetupHook = makeSetupHook {
-    name = "bsd-setup-hook";
-  } ../os-specific/bsd/setup-hook.sh;
+  bsdSetupHook = makeSetupHook
+    {
+      name = "bsd-setup-hook";
+    } ../os-specific/bsd/setup-hook.sh;
 
   freebsd = callPackage ../os-specific/bsd/freebsd { };
 
@@ -15694,8 +15742,7 @@ with pkgs;
   davis = callPackage ../by-name/da/davis/package.nix {
     php = php83; # https://github.com/tchapi/davis/issues/195
   };
-	
-	pbc = callPackage ../development/libraries/pbc {
-	};
+
+  pbc = callPackage ../development/libraries/pbc { };
 }
 
