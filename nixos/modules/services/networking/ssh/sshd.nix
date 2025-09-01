@@ -21,7 +21,7 @@ let
     let
       # reports boolean as yes / no
       mkValueString =
-        with lib;
+
         v:
         if lib.isInt v then
           toString v

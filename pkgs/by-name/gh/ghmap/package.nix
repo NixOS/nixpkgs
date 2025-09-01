@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     description = "Python tool for mapping GitHub events to contributor activities";
     homepage = "https://github.com/uhourri/ghmap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ghmap";
   };
 }

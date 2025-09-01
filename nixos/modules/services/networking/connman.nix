@@ -16,7 +16,7 @@ let
   enableIwd = cfg.wifi.backend == "iwd";
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])

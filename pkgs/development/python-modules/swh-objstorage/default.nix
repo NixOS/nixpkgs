@@ -113,6 +113,6 @@ buildPythonPackage rec {
     description = "Content-addressable object storage for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

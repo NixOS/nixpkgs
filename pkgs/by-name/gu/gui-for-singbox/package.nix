@@ -28,7 +28,7 @@ let
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {

@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-social-auth/social-app-django";
     changelog = "https://github.com/python-social-auth/social-app-django/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

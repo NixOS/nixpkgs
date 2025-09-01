@@ -5,7 +5,7 @@ let
       { pkgs, lib, ... }:
       {
         name = "opensearch";
-        meta.maintainers = with pkgs.lib.maintainers; [ ];
+        meta.maintainers = [ ];
 
         nodes.machine = lib.mkMerge [
           {

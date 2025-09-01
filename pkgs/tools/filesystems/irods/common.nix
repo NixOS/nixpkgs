@@ -94,7 +94,7 @@
     patchShebangs ./packaging ./scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Integrated Rule-Oriented Data System (iRODS)";
     longDescription = ''
       The Integrated Rule-Oriented Data System (iRODS) is open source data management

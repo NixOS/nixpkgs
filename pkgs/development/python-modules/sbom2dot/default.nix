@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/anthonyharrison/sbom2dot";
     license = lib.licenses.asl20;
     mainProgram = "sbom2dot";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

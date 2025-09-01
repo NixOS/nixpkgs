@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Arc from The Browser Company";
     homepage = "https://arc.net/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     knownVulnerabilities = [ "unmaintained" ];
     platforms = [
       "aarch64-darwin"
