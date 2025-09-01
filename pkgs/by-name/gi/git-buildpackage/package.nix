@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-buildpackage";
-  version = "0.9.37";
+  version = "0.9.38";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agx";
     repo = "git-buildpackage";
     tag = "debian/${version}";
-    hash = "sha256-0gfryd1GrVfL11u/IrtLSJAABRsTpFfPOGxWfVdYtgE=";
+    hash = "sha256-dZ/uJLcDPkpwIz+Y6WInJ4XlSJ5zzDY65li/xghsJTQ=";
     fetchSubmodules = true;
   };
 
