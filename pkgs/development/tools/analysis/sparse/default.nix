@@ -14,7 +14,7 @@
 let
   GCC_BASE = "${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.uname.processor}-unknown-linux-gnu/${stdenv.cc.cc.version}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sparse";
   version = "0.6.4-unstable-2024-02-03";
 

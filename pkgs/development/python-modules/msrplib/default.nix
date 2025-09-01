@@ -6,7 +6,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "msrplib";
   version = "0.20.1-unstable-2021-06-01";
   pyproject = true;
