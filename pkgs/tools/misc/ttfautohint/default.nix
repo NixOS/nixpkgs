@@ -11,17 +11,17 @@
   enableGUI ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.4";
   pname = "ttfautohint";
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/ttfautohint-${version}.tar.gz";
+    url = "mirror://savannah/freetype/ttfautohint-${finalAttrs.version}.tar.gz";
     hash = "sha256-iodhF/puv9L/4bNoKpqYyALA9HGJ9X09tLmXdCBoMuE=";
   };
 
   postPatch = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   '';
 
   postAutoreconf = ''
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
