@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "escrotum";
-  version = "unstable-2020-12-07";
+  version = "1.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
