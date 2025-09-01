@@ -1,4 +1,5 @@
 {
+  aiohttp,
   appdirs,
   appnope,
   black,
@@ -11,6 +12,7 @@
   cryptography,
   diskcache,
   fetchFromGitHub,
+  fetchpatch,
   glib,
   gn,
   googleapis-common-protos,
@@ -70,14 +72,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.9.0";
+  version = "2025.4.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
-    rev = version;
+    tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-T0G6mxb/5wFOxPLL92Ay34oP+9Xvk9w0YV9VSzWJuzw=";
+    hash = "sha256-20dqVXHPgSxBveTxlbHEjTtp9NI1oVCVpBTDbjDI2QA=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -127,6 +129,19 @@ stdenv.mkDerivation rec {
     libnl
   ];
 
+  patches = [
+    (fetchpatch {
+      # Fix building with newer gn version
+      name = "pw_protobuf_compiler-Create-a-new-includes.txt-for-each-toolchain.patch";
+      # https://pigweed-review.googlesource.com/c/pigweed/pigweed/+/300272
+      url = "https://pigweed.googlesource.com/pigweed/pigweed/+/b66729b90fcb9df2ee4818f6d4fff59385cdbc80^!?format=TEXT";
+      decode = "base64 -d";
+      stripLen = 1;
+      extraPrefix = "connectedhomeip/third_party/pigweed/repo/";
+      hash = "sha256-6ss3j8j69w7EMio9mFP/EL2oPqQ2sLh67eWsJjHdDa8=";
+    })
+  ];
+
   postPatch = ''
     cd connectedhomeip
     export HOME=$(mktemp -d)
@@ -172,6 +187,7 @@ stdenv.mkDerivation rec {
   env.PIP_FIND_LINKS =
     let
       dependencies = [
+        aiohttp
         appdirs
         appnope
         black
@@ -277,9 +293,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python wheels for APIs and tools related to CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
-    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
 }

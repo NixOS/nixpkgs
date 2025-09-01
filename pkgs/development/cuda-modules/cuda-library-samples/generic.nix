@@ -1,23 +1,31 @@
 {
-  lib,
-  backendStdenv,
-  fetchFromGitHub,
-  cmake,
   addDriverRunpath,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
+  backendStdenv,
+  cmake,
+  cuda_cccl ? null,
+  cuda_cudart ? null,
+  cuda_nvcc ? null,
   cudatoolkit,
-  cutensor,
+  cusparselt ? null,
+  cutensor ? null,
+  fetchFromGitHub,
+  lib,
+  libcusparse ? null,
+  setupCudaHook,
 }:
 
 let
-  rev = "5aab680905d853bce0dbad4c488e4f7e9f7b2302";
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "CUDALibrarySamples";
-    inherit rev;
-    sha256 = "0gwgbkq05ygrfgg5hk07lmap7n7ampxv0ha1axrv8qb748ph81xs";
-  };
-  commonAttrs = {
-    version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
+  base = backendStdenv.mkDerivation (finalAttrs: {
+    src = fetchFromGitHub {
+      owner = "NVIDIA";
+      repo = "CUDALibrarySamples";
+      rev = "e57b9c483c5384b7b97b7d129457e5a9bdcdb5e1";
+      sha256 = "0g17afsmb8am0darxchqgjz1lmkaihmnn7k1x4ahg5gllcmw8k3l";
+    };
+    version =
+      lib.strings.substring 0 7 finalAttrs.src.rev + "-" + lib.versions.majorMinor cudatoolkit.version;
     nativeBuildInputs = [
       cmake
       addDriverRunpath
@@ -37,50 +45,93 @@ let
       '';
       license = lib.licenses.bsd3;
       platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+      teams = [ lib.teams.cuda ];
     };
-  };
+  });
 in
 
 {
-  cublas = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cublas = base.overrideAttrs (
+    finalAttrs: _: {
       pname = "cuda-library-samples-cublas";
-
-      src = "${src}/cuBLASLt";
+      sourceRoot = "${finalAttrs.src.name}/cuBLASLt";
     }
   );
 
-  cusolver = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cusolver = base.overrideAttrs (
+    finalAttrs: _: {
       pname = "cuda-library-samples-cusolver";
-
-      src = "${src}/cuSOLVER";
-
-      sourceRoot = "cuSOLVER/gesv";
+      sourceRoot = "${finalAttrs.src.name}/cuSOLVER/gesv";
     }
   );
 
-  cutensor = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cutensor = base.overrideAttrs (
+    finalAttrs: prevAttrs: {
       pname = "cuda-library-samples-cutensor";
 
-      src = "${src}/cuTENSOR";
+      sourceRoot = "${finalAttrs.src.name}/cuTENSOR";
 
-      buildInputs = [ cutensor ];
+      buildInputs = prevAttrs.buildInputs or [ ] ++ [ cutensor ];
 
-      cmakeFlags = [ "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin" ];
+      cmakeFlags = prevAttrs.cmakeFlags or [ ] ++ [
+        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
+      ];
 
       # CUTENSOR_ROOT is double escaped
-      postPatch = ''
+      postPatch = prevAttrs.postPatch or "" + ''
         substituteInPlace CMakeLists.txt \
-          --replace-fail "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
       '';
 
       CUTENSOR_ROOT = cutensor;
+
+      meta = prevAttrs.meta or { } // {
+        broken = cutensor == null;
+      };
+    }
+  );
+
+  cusparselt = base.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      pname = "cuda-library-samples-cusparselt";
+
+      sourceRoot = "${finalAttrs.src.name}/cuSPARSELt/matmul";
+
+      nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [
+        cmake
+        addDriverRunpath
+        (lib.getDev cusparselt)
+        (lib.getDev libcusparse)
+        cuda_nvcc
+        (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
+        cuda_cccl # <nv/target>
+      ];
+
+      postPatch = prevAttrs.postPatch or "" + ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+      '';
+
+      postInstall = prevAttrs.postInstall or "" + ''
+        mkdir -p $out/bin
+        cp matmul_example $out/bin/
+        cp matmul_example_static $out/bin/
+      '';
+
+      CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
+      CUSPARSELT_PATH = lib.getLib cusparselt;
+
+      meta = prevAttrs.meta or { } // {
+        broken =
+          # Base dependencies
+          cusparselt == null
+          || libcusparse == null
+          || cuda_nvcc == null
+          || cuda_cudart == null
+          || cuda_cccl == null;
+      };
     }
   );
 }

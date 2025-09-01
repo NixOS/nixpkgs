@@ -7,7 +7,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  fs,
   lxml,
   brotli,
   brotlicffi,
@@ -27,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.55.2";
+  version = "4.59.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256:1y2sxzl9is3k1gmf9rvvxk9294dwbma1sh2ip56h7q1073346bv3";
+    hash = "sha256-f3iedVwwh98XkFzPJ/+XZ2n4pcDXDoPlQki+neGVuXE=";
   };
 
   build-system = [
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   optional-dependencies =
     let
       extras = {
-        ufo = [ fs ];
+        ufo = [ ];
         lxml = [ lxml ];
         woff = [
           (if isPyPy then brotlicffi else brotli)
@@ -68,25 +67,24 @@ buildPythonPackage rec {
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
-  nativeCheckInputs =
-    [
-      # test suite fails with pytest>=8.0.1
-      # https://github.com/fonttools/fonttools/issues/3458
-      pytest7CheckHook
-    ]
-    ++ lib.concatLists (
-      lib.attrVals (
-        [
-          "woff"
-          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-          "ufo"
-        ]
-        ++ lib.optionals (!skia-pathops.meta.broken) [
-          "pathops" # broken
-        ]
-        ++ [ "repacker" ]
-      ) optional-dependencies
-    );
+  nativeCheckInputs = [
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    pytest7CheckHook
+  ]
+  ++ lib.concatLists (
+    lib.attrVals (
+      [
+        "woff"
+        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+        "ufo"
+      ]
+      ++ lib.optionals (!skia-pathops.meta.broken) [
+        "pathops" # broken
+      ]
+      ++ [ "repacker" ]
+    ) optional-dependencies
+  );
 
   pythonImportsCheck = [ "fontTools" ];
 
@@ -103,23 +101,10 @@ buildPythonPackage rec {
     "test_ttcompile_timestamp_calcs"
   ];
 
-  disabledTestPaths = [
-    # avoid test which depend on fs and matplotlib
-    # fs and matplotlib were removed to prevent strong cyclic dependencies
-    "Tests/misc/plistlib_test.py"
-    "Tests/pens"
-    "Tests/ufoLib"
-
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    "Tests/ttLib/woff2_test.py"
-    "Tests/ttx/ttx_test.py"
-  ];
-
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

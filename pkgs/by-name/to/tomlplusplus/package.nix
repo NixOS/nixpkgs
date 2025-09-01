@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dbuild_examples=true"
   ];
 

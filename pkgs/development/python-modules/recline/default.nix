@@ -1,5 +1,6 @@
 {
   lib,
+  argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
   pudb,
@@ -9,17 +10,28 @@
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2024.7.1";
-  format = "pyproject";
+  version = "2025.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
     tag = "v${version}";
-    sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
+    sha256 = "sha256-WBMt5jDPCBmTgVdYDN662uU2HVjB1U3GYJwn0P56WsI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    # based on https://github.com/NetApp/recline/pull/21
+    ./devendor.patch
+  ];
+
+  postPatch = ''
+    rm -r recline/vendor/argcomplete
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ argcomplete ];
 
   nativeCheckInputs = [
     pudb

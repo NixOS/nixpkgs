@@ -43,8 +43,14 @@ def replace_key(
             if merged_features:
                 final["features"] = merged_features
 
-            local_default_features = local_dep.pop("default-features", None)
-            workspace_default_features = workspace_dep.get("default-features")
+            local_default_features = local_dep.pop(
+                "default-features",
+                local_dep.pop("default_features", None)
+            )
+            workspace_default_features = workspace_dep.get(
+                "default-features",
+                workspace_dep.get("default_features")
+            )
 
             if not workspace_default_features and local_default_features:
                 final["default-features"] = True
@@ -52,6 +58,9 @@ def replace_key(
             optional = local_dep.pop("optional", False)
             if optional:
                 final["optional"] = True
+
+            if "package" in local_dep:
+                final["package"] = local_dep.pop("package")
 
             if local_dep:
                 raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
@@ -114,6 +123,7 @@ def main() -> None:
         and crate_manifest["lints"]["workspace"] is True
     ):
         crate_manifest["lints"] = workspace_manifest["lints"]
+        changed = True
 
     if not changed:
         return

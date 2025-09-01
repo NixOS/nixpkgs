@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   fetchzip,
-  fetchpatch,
   autoreconfHook,
 }:
 

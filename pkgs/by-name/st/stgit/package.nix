@@ -19,15 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.5.1";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    hash = "sha256-p6qEzkiRAuzvaPrUXtE+Ixdcu7W0aQFY2NQUyO+kESo=";
+    hash = "sha256-Tsh2VKnJUwxsrsSOKxJwcFIY8UZ9F7Ebi9lwe03fJZs=";
   };
-  cargoHash = "sha256-whFBUqKervY/mfogA1VffA8vhM01wySkqRdIpwMXV8M=";
+
+  cargoHash = "sha256-RiPLBK7CiotCduaYYbS3vkb9ezNwfbbx+QC4DGd3diU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,15 +42,14 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ curl ];
 
-  nativeCheckInputs =
-    [
-      git
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.system_cmds
-      libiconv
-    ];
+  nativeCheckInputs = [
+    git
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.system_cmds
+    libiconv
+  ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do

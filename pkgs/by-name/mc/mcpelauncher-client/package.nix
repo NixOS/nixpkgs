@@ -3,7 +3,6 @@
   clangStdenv,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   openssl,
@@ -21,12 +20,13 @@
   fetchzip,
   zenity,
   xdg-utils,
+  sdl3,
 }:
 
-# gcc doesn't support __has_feature
+# Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.1.2-qt6";
+  version = "1.4.0-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -34,70 +34,54 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PmCq6Zgtp17UV0kIbNouFwj/DMiTqwE31+tTb2LUp5o=";
+    hash = "sha256-2YmsxcR4EipnBIBqoM8g6hOCCh1WKooukqXhP/1X6tU=";
   };
 
-  patches = [
-    ./dont_download_glfw_client.patch
-    # These are upcoming changes that have been merged upstream. Once these get in a release, remove these patches.
-    (fetchpatch {
-      url = "https://github.com/minecraft-linux/game-window/commit/feea8c0e0720eea7093ed95745c17f36d6c40671.diff";
-      hash = "sha256-u4uveoKwwklEooT+i+M9kZ0PshjL1IfWhlltmulsQJo=";
-      stripLen = 1;
-      extraPrefix = "game-window/";
-    })
-    (fetchpatch {
-      url = "https://github.com/minecraft-linux/mcpelauncher-client/commit/db9c31e46d7367867c85a0d0aba42c8144cdf795.diff";
-      hash = "sha256-za/9oZYwKCYyZ1BXQ/zeEjRy81B1NpTlPHEfWAOtzHk=";
-      stripLen = 1;
-      extraPrefix = "mcpelauncher-client/";
-    })
-  ];
+  patches = [ ./dont_download_glfw_client.patch ];
 
   # Path hard-coded paths.
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
       --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
-      --replace-fail /usr/bin/zenity ${zenity}/bin/zenity
+      --replace-fail /usr/bin/zenity ${lib.getExe zenity}
 
     substituteInPlace file-picker/src/file_picker_zenity.cpp \
-      --replace-fail /usr/bin/zenity ${zenity}/bin/zenity
+      --replace-fail 'EXECUTABLE_NAME = "zenity"' 'EXECUTABLE_NAME = "${lib.getExe zenity}"'
   '';
 
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-      libpng
-      libglvnd
-      xorg.libX11
-      xorg.libXi
-      xorg.libXtst
-      libevdev
-      curl
-      pulseaudio
-      glfw
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.qtbase
-      qt6.qttools
-      qt6.qtwayland
-    ]
-    ++ lib.optionals withQtWebview [
-      qt6.qtwebengine
-    ];
+  buildInputs = [
+    openssl
+    zlib
+    libpng
+    libglvnd
+    xorg.libX11
+    xorg.libXi
+    xorg.libXtst
+    libevdev
+    curl
+    pulseaudio
+    glfw
+    sdl3
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebview [
+    qt6.qtwebengine
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
@@ -125,6 +109,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aleksana
       morxemplum
+      phanirithvij
     ];
     mainProgram = "mcpelauncher-client";
     platforms = lib.platforms.unix;

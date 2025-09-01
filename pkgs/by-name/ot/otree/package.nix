@@ -6,19 +6,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "otree";
-  version = "v0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "fioncat";
     repo = "otree";
-    rev = version;
-    hash = "sha256-WvoiTu6erNI5Cb9PSoHgL6+coIGWLe46pJVXBZHOLTE=";
+    tag = "v${version}";
+    hash = "sha256-Pz9iAN5GMJeYYQ7T0QWUfRwvSfreRF8pJR8ctPVFAmA=";
   };
 
-  cargoHash = "sha256-2eFGTpI4yevcxtgtGH+AufMDqsuhOH9CiyXUpjtdTDE=";
+  cargoHash = "sha256-Uz4oA8maAiUye+FRoVBRuMHoPytr5y8DUfPA4CuMSe4=";
 
   meta = {
-    description = "Command line tool to view objects (json/yaml/toml) in TUI tree widget";
+    description = "Command line tool to view objects (JSON/YAML/TOML/XML) in TUI tree widget";
     homepage = "https://github.com/fioncat/otree";
     changelog = "https://github.com/fioncat/otree/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -39,6 +39,11 @@ buildPythonPackage rec {
     hash = "sha256-5NN6PBh+6HS9OCc9eC2TcBvkcwtI4DV8qXnz4tlaMXc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cython~=3.0.2" cython
+  '';
+
   build-system = [
     cython
     gdal # for gdal-config
@@ -69,16 +74,17 @@ buildPythonPackage rec {
     pytz
     shapely
     snuggs
-  ] ++ optional-dependencies.s3;
+  ]
+  ++ optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # Tests with gdal marker do not test the functionality of Fiona,
     # but they are used to check GDAL driver capabilities.
-    "-m 'not gdal'"
+    "gdal"
   ];
 
   disabledTests = [
@@ -101,6 +107,6 @@ buildPythonPackage rec {
     mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

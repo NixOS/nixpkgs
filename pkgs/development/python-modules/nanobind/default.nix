@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -22,21 +21,21 @@
   tensorflow-bin,
   jax,
   jaxlib,
+
+  nanobind,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.4.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
     tag = "v${version}";
-    hash = "sha256-9OpDsjFEeJGtbti4Q9HHl78XaGf8M3lG4ukvHCMzyMU=";
     fetchSubmodules = true;
+    hash = "sha256-GGYnyO8eILYNu7va2tMB0QJkBCRDMIfRQO4a9geV49Y=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     cmake
@@ -49,30 +48,31 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
-  preCheck = ''
-    # TODO: added 2.2.0, re-enable on next bump
-    # https://github.com/wjakob/nanobind/issues/754
-    # "generated stubs do not match their references"
-    # > -import tensorflow.python.framework.ops
-    # > +import tensorflow
-    rm tests/test_ndarray_ext.pyi.ref
+  # nanobind check requires heavy dependencies such as tensorflow
+  # which are less than ideal to be imported in children packages that
+  # use it as build-system parameter.
+  doCheck = false;
 
+  preCheck = ''
     # build tests
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      numpy
-      scipy
-      torch
-    ]
-    ++ lib.optionals (!(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms)) [
-      tensorflow-bin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+    torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
+  ];
+
+  passthru.tests = {
+    pytest = nanobind.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";

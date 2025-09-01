@@ -4,26 +4,27 @@
   fetchFromGitHub,
   makeWrapper,
   cargo,
-  llvm_16,
+  llvm,
   stdenv,
   libffi,
   libz,
   libxml2,
   ncurses,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttr: {
   pname = "ivm";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "inko-lang";
     repo = "ivm";
-    rev = "v${version}";
-    hash = "sha256-z0oo1JUZbX3iT8N9+14NcqUzalpARImcbtUiQYS4djA=";
+    tag = "v${finalAttr.version}";
+    hash = "sha256-pqqUvHK6mPrK1Mir2ILANxtih9OrAKDJPE0nRWc5JOY=";
   };
 
-  cargoHash = "sha256-EP3fS4lAGOaXJXAM22ZCn4+9Ah8TM1+wvNerKCKByo0=";
+  cargoHash = "sha256-voUucoSLsKn0QhCpr52U8x9K4ykkx7iQ3SsHfjrXu+Q=";
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${
         lib.makeBinPath [
           cargo
-          llvm_16.dev
+          llvm.dev
           stdenv.cc
         ]
       } \
@@ -52,12 +53,15 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Cross-platform Inko version manager";
     homepage = "https://github.com/inko-lang/ivm";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "ivm";
   };
-}
+})

@@ -1,27 +1,27 @@
-{ fetchzip
-, lib
-, stdenvNoCC
-, copyDesktopItems
-, imagemagick
-, makeDesktopItem
-, jre
+{
+  fetchzip,
+  lib,
+  stdenvNoCC,
+  copyDesktopItems,
+  imagemagick,
+  makeDesktopItem,
+  jre,
 }:
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2024.9-b163";
+  version = "2025.3-b154";
 
   arches = {
     aarch64-linux = "arm64";
     x86_64-linux = "x64";
   };
 
-  arch =
-    arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
+  arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-H24OOHCQC8X1QlJ1wclzriN2uPU+IHh25vTkDriKi9E=";
-    x64 = "sha256-nm3C76sGJmtujHuo3/OAPwOfknTzfaUUKyB2I25hBNc=";
+    arm64 = "sha256-X9YQy12rfTWOVKX2ufmS4GxLGp/I6jhZAZyRBfLuOuk=";
+    x64 = "sha256-BuEfpMEgkOcbUra6eT/sTiVhXpheMaCe55M/CuG0kHE=";
   };
 
   desktopItem = makeDesktopItem {
@@ -30,7 +30,11 @@ let
     type = "Application";
     exec = "yourkit-java-profiler %f";
     icon = "yourkit-java-profiler";
-    categories = [ "Development" "Java" "Profiling" ];
+    categories = [
+      "Development"
+      "Java"
+      "Profiling"
+    ];
     terminal = false;
     startupWMClass = "YourKit Java Profiler";
   };
@@ -45,7 +49,10 @@ stdenvNoCC.mkDerivation {
     hash = hashes.${arch};
   };
 
-  nativeBuildInputs = [ copyDesktopItems imagemagick ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick
+  ];
 
   buildInputs = [ jre ];
 

@@ -43,7 +43,7 @@
 }:
 
 let
-  libupnp' = libupnp.overrideAttrs (super: rec {
+  libupnp' = libupnp.overrideAttrs (super: {
     cmakeFlags = super.cmakeFlags or [ ] ++ [
       "-Dblocking_tcp_connections=OFF"
       "-Dreuseaddr=ON"
@@ -121,13 +121,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-bqqD6juae0+plX6kEtHhWYgMd0KDz/1N7jJf7F6dMgQ=";
+    sha256 = "sha256-3X8/8ewqXy9tvy4S9frmPENhsYTwaW6SydtJeiyVH1I=";
   };
 
   postPatch =
@@ -145,7 +145,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # systemd service will be generated alongside the service
     "-DWITH_SYSTEMD=OFF"
-  ] ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
+  ]
+  ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
 
   nativeBuildInputs = [
     cmake
@@ -161,11 +162,12 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     fmt_11
-  ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+  ]
+  ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
   passthru.tests = { inherit (nixosTests) mediatomb; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.gerbera.io/";
     changelog = "https://github.com/gerbera/gerbera/releases/tag/v${version}";
     description = "UPnP Media Server for 2024";
@@ -174,9 +176,9 @@ stdenv.mkDerivation rec {
       It allows to stream your digital media through your home network and consume it on all kinds
       of UPnP supporting devices.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ardumont ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ardumont ];
+    platforms = lib.platforms.linux;
     mainProgram = "gerbera";
   };
 }

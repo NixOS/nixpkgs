@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "macmon";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "macmon";
     rev = "v${version}";
-    hash = "sha256-Uc+UjlCeG7W++l7d/3tSkIVbUi8IbNn3A5fqyshG+xE=";
+    hash = "sha256-GiSF5PBRUcKZzd9vWf9MmKKZbtqchnu0DjFgbXmp7bg=";
   };
 
-  cargoHash = "sha256-mE6PGWjaCFpqVoE1zISOqwt6o5SakjJM4sPRtU90lPA=";
+  cargoHash = "sha256-b9CpHSC3/kj7lHs+QhDqnRZfda9rtJJEs3j24NDZSPQ=";
 
   meta = {
     homepage = "https://github.com/vladkens/macmon";

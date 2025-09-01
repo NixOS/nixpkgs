@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   buildPackages,
   fetchurl,
   meson,
@@ -38,24 +38,24 @@
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "47.2";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HrdYhi6Ij1WghpGTCH8c+8x6EWNlTmMAmf9DQt0/alo=";
+    hash = "sha256-OGCi6iFNy8tmAK56HjNYpTiSFQh7w+SkfO4/h7ruBi4=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
     ./add-gnome-session-ctl-option.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit tzdata;
     })
   ];
@@ -77,43 +77,42 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     wrapGAppsHook3
     python3
+    udevCheckHook
   ];
 
-  buildInputs =
-    [
-      gtk3
-      glib
-      gsettings-desktop-schemas
-      modemmanager
-      networkmanager
-      libnotify
-      libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-      gnome-desktop
-      libpulseaudio
-      alsa-lib
-      libcanberra-gtk3
-      upower
-      colord
-      libgweather
-      polkit
-      geocode-glib_2
-      geoclue2
-      libgudev
-      libwacom
-      gcr_4
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    modemmanager
+    networkmanager
+    libnotify
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    gnome-desktop
+    libpulseaudio
+    alsa-lib
+    libcanberra-gtk3
+    upower
+    colord
+    libgweather
+    polkit
+    geocode-glib_2
+    geoclue2
+    libgudev
+    libwacom
+    gcr_4
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
-  mesonFlags =
-    [
-      "-Dudev_dir=${placeholder "out"}/lib/udev"
-      (lib.mesonBool "systemd" withSystemd)
-    ]
-    ++ lib.optionals withSystemd [
-      "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
-    ];
+  mesonFlags = [
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "systemd" withSystemd)
+  ]
+  ++ lib.optionals withSystemd [
+    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
+  ];
 
   # Default for release buildtype but passed manually because
   # we're using plain
@@ -126,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  doInstallCheck = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-settings-daemon";
@@ -134,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

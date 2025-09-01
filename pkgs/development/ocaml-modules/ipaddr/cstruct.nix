@@ -4,7 +4,7 @@
   cstruct,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ipaddr-cstruct";
 
   inherit (ipaddr) version src;

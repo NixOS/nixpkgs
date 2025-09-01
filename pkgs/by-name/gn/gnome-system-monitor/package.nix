@@ -7,6 +7,7 @@
   gtkmm4,
   libxml2,
   bash,
+  catch2_3,
   gtk4,
   libadwaita,
   glib,
@@ -23,13 +24,13 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-system-monitor";
-  version = "47.0";
+  version = "48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/gnome-system-monitor-${version}.tar.xz";
-    hash = "sha256-7ee5JetxTYs8K/v3QFobcUSU/kfgLwrwj1g3s+JWVH8=";
+    url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major finalAttrs.version}/gnome-system-monitor-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Ezw6bihjZuZZ/S2AWCQJp71e2uRW5jxPacz2btb8Zjg=";
   };
 
   patches = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
+    catch2_3
     gtk4
     libadwaita
     glib
@@ -74,8 +76,8 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/SystemMonitor/";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
     mainProgram = "gnome-system-monitor";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+})

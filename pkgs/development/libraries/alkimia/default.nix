@@ -1,32 +1,42 @@
 {
-  mkDerivation,
-  fetchurl,
   lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
   extra-cmake-modules,
   doxygen,
   graphviz,
   qtbase,
   qtwebengine,
   mpir,
-  kdelibs4support,
-  plasma-framework,
+  libplasma,
   knewstuff,
   kpackage,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alkimia";
-  version = "8.1.2";
+  version = "8.2.1";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/alkimia/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-z4Ru6HucxjD1jgvdIzNCloELo7zBdR/i9HIhYYl+4zo=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "office";
+    repo = "alkimia";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-v5DfnnzOMsoCXr074ydXxBIrSsnbex6G/OqF6psTvPs=";
   };
 
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=1"
+  ];
+
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     doxygen
     graphviz
+    wrapQtAppsHook
   ];
 
   # qtwebengine is not a mandatory dependency, but it adds some features
@@ -35,11 +45,11 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebengine
-    kdelibs4support
-    plasma-framework
+    libplasma
     knewstuff
     kpackage
   ];
+
   propagatedBuildInputs = [ mpir ];
 
   meta = {
@@ -55,4 +65,4 @@ mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = qtbase.meta.platforms;
   };
-}
+})

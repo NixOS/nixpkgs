@@ -5,8 +5,6 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
   gradle_8,
   gradle_7,
   perl,
@@ -38,11 +36,13 @@
   jdk17_headless,
   jdk21_headless,
   jdk23_headless,
+  jdk24_headless,
   jdk-bootstrap ?
     {
       "17" = jdk17_headless;
       "21" = jdk21_headless;
       "23" = jdk23_headless;
+      "24" = jdk24_headless;
     }
     .${featureVersion},
 }:
@@ -190,8 +190,11 @@ stdenv.mkDerivation {
   meta = {
     description = "Next-generation Java client toolkit";
     homepage = "https://openjdk.org/projects/openjfx/";
-    license = lib.licenses.gpl2Classpath;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = with lib.licenses; [
+      gpl2
+      classpathException20
+    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

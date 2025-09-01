@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objax" ];
 
-  # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
+  # This is necessary to ignore the presence of two protobufs version (tensorflow is bringing an
   # older version).
   catchConflicts = false;
 
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   disabledTests = [
     # Test requires internet access for prefetching some weights

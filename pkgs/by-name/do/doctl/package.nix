@@ -1,8 +1,15 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
+}:
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.120.2";
+  version = "1.141.0";
 
   vendorHash = null;
 
@@ -10,12 +17,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/doctl" ];
 
-  ldflags = let t = "github.com/digitalocean/doctl"; in [
-    "-X ${t}.Major=${lib.versions.major version}"
-    "-X ${t}.Minor=${lib.versions.minor version}"
-    "-X ${t}.Patch=${lib.versions.patch version}"
-    "-X ${t}.Label=release"
-  ];
+  ldflags =
+    let
+      t = "github.com/digitalocean/doctl";
+    in
+    [
+      "-X ${t}.Major=${lib.versions.major version}"
+      "-X ${t}.Minor=${lib.versions.minor version}"
+      "-X ${t}.Patch=${lib.versions.patch version}"
+      "-X ${t}.Label=release"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,15 +41,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "doctl";
-    rev = "v${version}";
-    sha256 = "sha256-zIpwR9tgv1vO2xI5DaLTY/eFuv91G4tlQAtJBi0pXfA=";
+    tag = "v${version}";
+    hash = "sha256-IZ/CP9xdupwkiOihZuf/MXEP2cnoJ/lqYUEsFDf/ITk=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for DigitalOcean services";
     mainProgram = "doctl";
     homepage = "https://github.com/digitalocean/doctl";
-    license = licenses.asl20;
-    maintainers = [ maintainers.siddharthist ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.siddharthist ];
   };
 }

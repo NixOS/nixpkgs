@@ -55,32 +55,23 @@ supported through the rocmPackages.clr.icd package. Adding this package to
 enables OpenCL support:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    rocmPackages.clr.icd
-  ];
-}
+{ hardware.graphics.extraPackages = [ rocmPackages.clr.icd ]; }
 ```
 
 ### Intel {#sec-gpu-accel-opencl-intel}
 
-[Intel Gen8 and later
-GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8)
-are supported by the Intel NEO OpenCL runtime that is provided by the
-intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
-the intel-ocl package, is an alternative for Gen7 GPUs.
+[Intel Gen12 and later GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen12)
+are supported by the Intel NEO OpenCL runtime that is provided by the `intel-compute-runtime` package.
+The previous generations (8,9 and 11), have been moved to the `intel-compute-runtime-legacy1` package.
+The proprietary Intel OpenCL runtime, in the `intel-ocl` package, is an alternative for Gen7 GPUs.
 
-The intel-compute-runtime or intel-ocl package can be added to
+Both `intel-compute-runtime` packages, as well as the `intel-ocl` package can be added to
 [](#opt-hardware.graphics.extraPackages)
-to enable OpenCL support. For example, for Gen8 and later GPUs, the following
+to enable OpenCL support. For example, for Gen12 and later GPUs, the following
 configuration can be used:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-compute-runtime
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-compute-runtime ]; }
 ```
 
 ## Vulkan {#sec-gpu-accel-vulkan}
@@ -146,20 +137,15 @@ A specific driver can be forced as follows:
 
 ```nix
 {
-  hardware.graphics.extraPackages = [
-    pkgs.amdvlk
-  ];
+  hardware.graphics.extraPackages = [ pkgs.amdvlk ];
 
   # To enable Vulkan support for 32-bit applications, also add:
-  hardware.graphics.extraPackages32 = [
-    pkgs.driversi686Linux.amdvlk
-  ];
+  hardware.graphics.extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
 
   # Force radv
   environment.variables.AMD_VULKAN_ICD = "RADV";
   # Or
-  environment.variables.VK_ICD_FILENAMES =
-    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  environment.variables.VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 }
 ```
 
@@ -184,21 +170,13 @@ $ nix-shell -p libva-utils --run vainfo
 Modern Intel GPUs use the iHD driver, which can be installed with:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-media-driver
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-media-driver ]; }
 ```
 
 Older Intel GPUs use the i965 driver, which can be installed with:
 
 ```nix
-{
-  hardware.graphics.extraPackages = [
-    intel-vaapi-driver
-  ];
-}
+{ hardware.graphics.extraPackages = [ intel-vaapi-driver ]; }
 ```
 
 ## Common issues {#sec-gpu-accel-common-issues}

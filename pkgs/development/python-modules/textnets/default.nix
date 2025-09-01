@@ -1,57 +1,59 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  cairocffi,
-  cython,
-  en_core_web_sm,
   fetchFromGitHub,
+
+  # build-system
+  cython_0,
+  pdm-backend,
+  setuptools,
+
+  # dependencies
   igraph,
   leidenalg,
+  matplotlib,
   pandas,
-  poetry-core,
   pyarrow,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
-  setuptools,
-  spacy-lookups-data,
   spacy,
+  spacy-lookups-data,
   toolz,
   tqdm,
   wasabi,
+
+  # tests
+  en_core_web_sm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.5";
+  version = "0.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jboynyc";
     repo = "textnets";
     tag = "v${version}";
-    hash = "sha256-MdKPxIshSx6U2EFGDTUS4EhoByyuVf0HKqvm9cS2KNY=";
+    hash = "sha256-BK0bBoe6GrZpVL4HvTwzRlXRWXfKdYJDhLD2UQctTjc=";
   };
 
   build-system = [
-    cython
-    poetry-core
+    cython_0
+    pdm-backend
     setuptools
   ];
 
   pythonRelaxDeps = [
-    "igraph"
-    "leidenalg"
     "pyarrow"
     "toolz"
   ];
 
   dependencies = [
-    cairocffi
     igraph
     leidenalg
+    matplotlib
     pandas
     pyarrow
     scipy
@@ -63,27 +65,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     en_core_web_sm
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "textnets" ];
 
-  # Enables the package to find the cythonized .so files during testing. See #255262
+  # Enable the package to find the cythonized .so files during testing. See #255262
+  # Set MPLBACKEND=agg for headless matplotlib on darwin. See #350784
   preCheck = ''
     rm -r textnets
+    export MPLBACKEND=agg
   '';
 
-  disabledTests = [
-    # Test fails: Throws a UserWarning asking the user to install `textnets[fca]`.
-    "test_context"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Text analysis with networks";
     homepage = "https://textnets.readthedocs.io";
     changelog = "https://github.com/jboynyc/textnets/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

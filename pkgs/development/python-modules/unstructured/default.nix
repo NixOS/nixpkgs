@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # core networking and async dependencies
   anyio,
   backoff,
@@ -30,9 +33,9 @@
   olefile,
   orderly-set,
   python-dateutil,
-  # python-iso639,
+  python-iso639,
   python-magic,
-  # python-oxmsg,
+  python-oxmsg,
   rapidfuzz,
   regex,
   soupsieve,
@@ -65,7 +68,7 @@
   pypandoc,
   pypdf,
   python-docx,
-  # unstructured-client,
+  unstructured-client,
   # unstructured-pytesseract,
   # optional dependencies
   # csv
@@ -113,21 +116,23 @@
   grpcio,
 }:
 let
-  version = "0.16.15";
+  version = "0.18.13";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "unstructured";
   inherit version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-Wp51LOgM/zE81324Qzu83XGupUMAzz2wn+COmNq95H8=";
+    hash = "sha256-6q5radXIY0Ox5U6xvVb5xmc4HjY5G2VbFiAPWNoMYHQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     # Base dependencies
     anyio
     backoff
@@ -163,9 +168,9 @@ buildPythonPackage {
     pycparser
     pypdf
     python-dateutil
-    # python-iso639
+    python-iso639
     python-magic
-    # python-oxmsg
+    python-oxmsg
     rapidfuzz
     regex
     requests
@@ -176,7 +181,7 @@ buildPythonPackage {
     tqdm
     typing-extensions
     typing-inspect
-    # unstructured-client
+    unstructured-client
     urllib3
     webencodings
     wrapt
@@ -273,7 +278,7 @@ buildPythonPackage {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
-    changelog = "https://github.com/Unstructured-IO/unstructured/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Unstructured-IO/unstructured/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
   };

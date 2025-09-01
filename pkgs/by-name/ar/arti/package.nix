@@ -10,20 +10,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.3.2";
+  version = "1.4.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     group = "tpo";
     owner = "core";
     repo = "arti";
-    tag = "arti-v${version}";
-    hash = "sha256-vypPQjTr3FsAz1AyS1J67MF35+HzMLNu5B9wkkEI30A=";
+    tag = "arti-v${finalAttrs.version}";
+    hash = "sha256-4HEJiA7FLM3NGV0dcx5aEwky8UTzVLR092b/0HTGCvY=";
   };
 
-  cargoHash = "sha256-XhEHjF5M7KL5qzbaoFVZtRAb1uHoZwS7W7CLXb5gO+k=";
+  cargoHash = "sha256-ke58MnRYL2ZRck5UKCsGCqiiAZtnOZFTOaoQneP6tV0=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -47,22 +47,22 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 
   meta = {
     description = "Implementation of Tor in Rust";
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
-    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ rapiteanu ];
   };
-}
+})

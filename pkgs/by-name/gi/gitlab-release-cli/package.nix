@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gitlab-release-cli";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "release-cli";
     rev = "v${version}";
-    hash = "sha256-jdgCRH5Jq/WZujV6es6J7AyLVtvX1oVegCeTXoV5TTM=";
+    hash = "sha256-ivOyDctjDfA4iGhZ0UxHTQYQGSQuQYDxndSn+IpOaJQ=";
   };
 
   vendorHash = "sha256-UwDMRsWbk8rEv2d5FssIzCLby68YZULoxd3/JGLsCQU=";

@@ -53,7 +53,6 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      domenkozar
       prikhi
     ];
   };

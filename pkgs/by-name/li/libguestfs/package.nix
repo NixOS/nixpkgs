@@ -11,8 +11,6 @@
   cpio,
   gperf,
   cdrkit,
-  flex,
-  bison,
   qemu,
   pcre2,
   augeas,
@@ -29,12 +27,12 @@
   db,
   gmp,
   readline,
-  file,
   numactl,
   libapparmor,
-  jansson,
+  json_c,
   getopt,
   perlPackages,
+  python3,
   ocamlPackages,
   libtirpc,
   appliance ? null,
@@ -47,44 +45,42 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-
-  version = "1.54.0";
+  version = "1.56.2";
 
   src = fetchurl {
-    url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-tK+g+P1YAgXqVUjUaLxuQ8O+y5leL2DmMmVSemMFQkY=";
+    url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
+    hash = "sha256-u0SJGnleC3khPO4sSRSVpt1ksh9ydEVZFzDX94kBaJo=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      removeReferencesTo
-      bison
-      cdrkit
-      cpio
-      flex
-      getopt
-      gperf
-      makeWrapper
-      pkg-config
-      qemu
-      zstd
-    ]
-    ++ (with perlPackages; [
-      perl
-      libintl-perl
-      GetoptLong
-      ModuleBuild
-    ])
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
+  nativeBuildInputs = [
+    autoreconfHook
+    removeReferencesTo
+    cdrkit
+    cpio
+    getopt
+    gperf
+    makeWrapper
+    pkg-config
+    python3
+    python3.pkgs.pycodestyle
+    qemu
+    zstd
+  ]
+  ++ (with perlPackages; [
+    perl
+    libintl-perl
+    GetoptLong
+    ModuleBuild
+  ])
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
   buildInputs = [
     libxcrypt
     ncurses
-    jansson
+    json_c
     pcre2
     augeas
     libxml2
@@ -98,20 +94,20 @@ stdenv.mkDerivation (finalAttrs: {
     libvirt
     gmp
     readline
-    file
     hivex
     db
     numactl
     libapparmor
     perlPackages.ModuleBuild
+    python3
     libtirpc
     zstd
     ocamlPackages.ocamlbuild
     ocamlPackages.ocaml_libvirt
-    ocamlPackages.ounit
     ocamlPackages.augeas
     ocamlPackages.ocamlbuild
-  ] ++ lib.optional javaSupport jdk;
+  ]
+  ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     patchShebangs .
@@ -121,11 +117,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-install-daemon"
     "--disable-appliance"
     "--with-distro=NixOS"
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
     "--with-readline"
     "CPPFLAGS=-I${lib.getDev libxml2}/include/libxml2"
     "INSTALL_OCAMLLIB=${placeholder "out"}/lib/ocaml"
     "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
-  ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
+  ]
+  ++ lib.optionals (!javaSupport) [ "--without-java" ];
 
   patches = [
     ./libguestfs-syms.patch
@@ -190,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     homepage = "https://libguestfs.org/";
+    changelog = "https://libguestfs.org/guestfs-release-notes-${lib.versions.majorMinor finalAttrs.version}.1.html";
     maintainers = with lib.maintainers; [
       offline
       lukts30

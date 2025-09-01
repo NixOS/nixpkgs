@@ -1,31 +1,38 @@
 {
   stdenv,
   lib,
-  darwin,
+  apple-sdk_13,
+  darwinMinVersionHook,
   rustPlatform,
   fetchFromGitHub,
-  jq,
-  moreutils,
   versionCheckHook,
   nix-update-script,
+  writeShellScriptBin,
   withCmd ? false,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
-    repo = pname;
+    repo = "kanata";
     rev = "v${version}";
-    sha256 = "sha256-cG9so0x0y8CbTxLOxSQwn5vG72KxHJzzTIH4lQA4MvE=";
+    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VKvle1hQae+0Vbvd7Epq3cDqG8OV5J2mowF5lue59oc=";
+  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_13
+    (darwinMinVersionHook "13.0")
+  ];
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: 13.0'
+    '')
+  ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
@@ -52,6 +59,5 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.unix;
     mainProgram = "kanata";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

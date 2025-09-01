@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pcimem";
-  version = "unstable-2018-08-29";
+  version = "0-unstable-2018-08-29";
 
   src = fetchFromGitHub {
     owner = "billfarrow";
-    repo = pname;
+    repo = "pcimem";
     rev = "09724edb1783a98da2b7ae53c5aaa87493aabc9b";
     sha256 = "0zlbvcl5q4hgna11p3w00px1p8qgn8ga79lh6a2m7d597g86kbq3";
   };

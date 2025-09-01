@@ -34,53 +34,52 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
-  version = "6.4.0";
+  version = "7.0.2";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
     ];
-    hash = "sha256-yGzTqbv3SQT6V/DcY8GvRDXilYrZXVsmQOnqy/5+ev8=";
+    hash = "sha256-qE49rV/QPYkbyAppDML/n6brzmiA93w47bDOwiKDuUo=";
   };
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      dbus
-      harfbuzz
-      libz
-      stdenv.cc.cc
-      pango
-      libGLU
-      libGL
-      minizip
-      freetype
-      fontconfig
-      polkit
-      polkit_gnome
-      pulseaudio
-    ]
-    ++ (with xorg; [
-      libxcb
-      libxkbfile
-      libX11
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXmu
-      libXrandr
-      libXtst
-      libXt
-      libICE
-      libSM
-      libXrender
-    ]);
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    dbus
+    harfbuzz
+    libz
+    stdenv.cc.cc
+    pango
+    libGLU
+    libGL
+    minizip
+    freetype
+    fontconfig
+    polkit
+    polkit_gnome
+    pulseaudio
+  ]
+  ++ (with xorg; [
+    libxcb
+    libxkbfile
+    libX11
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXmu
+    libXrandr
+    libXtst
+    libXt
+    libICE
+    libSM
+    libXrender
+  ]);
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -144,8 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
-      shyim
-    ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

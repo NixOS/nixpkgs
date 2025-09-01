@@ -4,11 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
-  postgresql,
+  libpq,
   setuptools,
 
   # propagates
@@ -29,24 +28,24 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
+  postgresql,
   postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.2.3";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = pname;
+    repo = "psycopg";
     tag = version;
-    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
+    hash = "sha256-mMhfULdvqphwdEqynLNq+7XCNmqmf+zi1SGumC/6qAc=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
-      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./ctypes.patch {
+      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -69,18 +68,20 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "Cython >= 3.0.0, < 3.1.0" "Cython"
     '';
 
     nativeBuildInputs = [
       cython
-      # needed to find pg_config with strictDeps
-      postgresql
+      libpq.pg_config
       setuptools
       tomli
     ];
 
     buildInputs = [
-      postgresql
+      libpq
     ];
 
     # tested in psycopg
@@ -117,12 +118,12 @@ in
 
 buildPythonPackage rec {
   inherit pname version src;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     "doc"
   ];
 
@@ -142,11 +143,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    furo
     setuptools
-    shapely
+  ]
+  # building the docs fails with the following error when cross compiling
+  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    furo
     sphinx-autodoc-typehints
     sphinxHook
+    shapely
   ];
 
   propagatedBuildInputs = [
@@ -165,17 +170,16 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs =
-    [
-      anyio
-      pproxy
-      pytest-randomly
-      pytestCheckHook
-      postgresql
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
-    ++ optional-dependencies.c
-    ++ optional-dependencies.pool;
+  nativeCheckInputs = [
+    anyio
+    pproxy
+    pytest-randomly
+    pytestCheckHook
+    postgresql
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
+  ++ optional-dependencies.c
+  ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -183,18 +187,19 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck =
-    ''
-      cd ..
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-    '';
+  preCheck = ''
+    cd ..
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+  '';
 
   disabledTests = [
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
+    # expects timeout, but we have no route in the sandbox
+    "test_connect_error_multi_hosts_each_message_preserved"
   ];
 
   disabledTestPaths = [
@@ -204,22 +209,20 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
-    # https://github.com/psycopg/psycopg/pull/915
-    "tests/test_notify.py"
-    "tests/test_notify_async.py"
   ];
 
-  pytestFlagsArray = [
-    "-o cache_dir=.cache"
-    "-m"
-    "'not refcount and not timing and not flakey'"
-    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
-    "-W"
-    "ignore::pytest.PytestRemovedIn9Warning"
+  pytestFlags = [
+    "-ocache_dir=.cache"
+  ];
+
+  disabledTestMarks = [
+    "refcount"
+    "timing"
+    "flakey"
   ];
 
   postCheck = ''
-    cd ${pname}
+    cd psycopg
   '';
 
   passthru = {

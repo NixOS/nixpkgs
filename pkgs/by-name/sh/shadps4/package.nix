@@ -18,12 +18,14 @@
   libusb1,
   magic-enum,
   libgbm,
+  pipewire,
   pkg-config,
   pugixml,
   qt6,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
   sndio,
   stb,
   vulkan-headers,
@@ -32,25 +34,20 @@
   xorg,
   xxHash,
   zlib-ng,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.5.0-unstable-2025-01-20";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "95a30b2b3e1aa4e20c3db632955cc67bbded0fb1";
-    hash = "sha256-52BhGKSUv+9asACNkppxiNm3Gja7r3LcXOIwhQR5ALs=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-0wvxvKw2XHhnXiM5DiiiY+nWPoze0fvNCJeTsKzoCn0=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix controls without a numpad
-    ./laptop-controls.patch
-  ];
 
   buildInputs = [
     alsa-lib
@@ -69,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     magic-enum
     libgbm
+    pipewire
     pugixml
     qt6.qtbase
     qt6.qtdeclarative
@@ -78,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     renderdoc
     robin-map
+    sdl3
     sndio
     stb
     vulkan-headers
@@ -120,9 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = unstableGitUpdater {
-      tagFormat = "v.*";
-      tagPrefix = "v.";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
     };
   };
 

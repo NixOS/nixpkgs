@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2023-12-18";
+  version = "0-unstable-2025-07-23";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "6339204c212b2c3506554a8842030df5ec6fe9c6";
-    hash = "sha256-QgpORITt6MYgfzUpaI2T0Ge2a0iVHjDhdYI/nZ2HbJ8=";
+    rev = "49056d178f42da98048a5d4c23f83a6f6bc6dd80";
+    hash = "sha256-sk5r18M0hJ+8CrC2G/rb+XqUmUGer2VBrVbuReHj1dM=";
   };
 
   cmakeFlags = [
@@ -30,8 +30,11 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [ json_c ] ++ lib.optional with_lua lua5_1 ++ lib.optional with_ustream_ssl ustream-ssl;
+  buildInputs = [
+    json_c
+  ]
+  ++ lib.optional with_lua lua5_1
+  ++ lib.optional with_ustream_ssl ustream-ssl;
 
   postInstall = lib.optionalString with_ustream_ssl ''
     for fin in $(find ${ustream-ssl} -type f); do
@@ -53,6 +56,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       fpletz
       mkg20001
+      dvn0
     ];
     mainProgram = "jshn";
     platforms = platforms.all;

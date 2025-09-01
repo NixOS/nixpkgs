@@ -5,10 +5,10 @@
   ncurses,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "swaglyrics";
   version = "unstable-2021-06-17";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
@@ -19,10 +19,12 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorama
     flask

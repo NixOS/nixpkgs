@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kevinlekiller";
     repo = "amdctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2wBk/9aAD7ARMGbcVxk+CzEvUf8U4RS4ZwTCj8cHNNo=";
   };
 

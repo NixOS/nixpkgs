@@ -5,7 +5,6 @@
   makeWrapper,
   rustPlatform,
   rustc,
-  Security,
   asNightly ? false,
 }:
 
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     rustc.llvm
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   # rustfmt uses the rustc_driver and std private libraries, and Rust's build process forces them to have
   # an install name of `@rpath/...` [0] [1] instead of the standard on macOS, which is an absolute path

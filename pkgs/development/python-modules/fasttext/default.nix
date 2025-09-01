@@ -6,7 +6,7 @@
   pybind11,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (pkgs.fasttext) pname version src;
 
   format = "setuptools";

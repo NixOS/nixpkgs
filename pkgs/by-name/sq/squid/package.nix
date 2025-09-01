@@ -14,56 +14,54 @@
   pkg-config,
   systemd,
   cppunit,
-  esi ? false,
   ipv6 ? true,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.12";
+  version = "7.0.1";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8986uyYDpRMmbySl1Gmanw12ufVU0YSLZ/nFHNOzy1A=";
+    url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/squid-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Bw3Y5iGtItRdcAYF6xnSysG2zae3PwTzRXjTw/2N35s=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      perl
-      openldap
-      db
-      cyrus_sasl
-      expat
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      pam
-      systemd
-    ];
+  buildInputs = [
+    perl
+    openldap
+    db
+    cyrus_sasl
+    expat
+    libxml2
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    pam
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--disable-strict-error-checking"
-      "--disable-arch-native"
-      "--with-openssl"
-      "--enable-ssl-crtd"
-      "--enable-storeio=ufs,aufs,diskd,rock"
-      "--enable-removal-policies=lru,heap"
-      "--enable-delay-pools"
-      "--enable-x-accelerator-vary"
-      "--enable-htcp"
-    ]
-    ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
-    ++ lib.optional (!esi) "--disable-esi"
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
-    ) "--enable-linux-netfilter";
+  configureFlags = [
+    "--disable-strict-error-checking"
+    "--disable-arch-native"
+    "--with-openssl"
+    "--enable-ssl-crtd"
+    "--enable-storeio=ufs,aufs,diskd,rock"
+    "--enable-removal-policies=lru,heap"
+    "--enable-delay-pools"
+    "--enable-x-accelerator-vary"
+    "--enable-htcp"
+  ]
+  ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
+  ++ lib.optional (
+    stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+  ) "--enable-linux-netfilter";
 
   doCheck = true;
   nativeCheckInputs = [ cppunit ];
@@ -79,6 +77,21 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "$(type -P true)" "$(realpath fake-true)" \
         --replace "/bin/true" "$(realpath fake-true)"
     done
+
+    cd test-suite/
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/libexec $out/etc $out/share
+    cd ..
+    cp src/squid $out/bin
+    cp src/unlinkd $out/libexec
+    cp src/mime.conf.default $out/etc/mime.conf
+    cp src/log/file/log_file_daemon $out/libexec
+    cp -r icons $out/share
+    cp -r errors $out/share
+    runHook postInstall
   '';
 
   passthru.tests.squid = nixosTests.squid;
@@ -89,8 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-    knownVulnerabilities = [
-      "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/"
-    ];
+    # In the past, it has been brought up that Squid had many security vulnerabilities
+    # (see https://megamansec.github.io/Squid-Security-Audit/). As of version 7.0,
+    # all of them have been solved, as tracked in their GitHub Security page:
+    # https://github.com/squid-cache/squid/security
+    knownVulnerabilities = [ ];
   };
 })

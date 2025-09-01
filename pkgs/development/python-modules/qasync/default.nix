@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CabbageDevelopment";
-    repo = pname;
+    repo = "qasync";
     tag = "v${version}";
     hash = "sha256-oXzwilhJ1PhodQpOZjnV9gFuoDy/zXWva9LhhK3T00g=";
   };

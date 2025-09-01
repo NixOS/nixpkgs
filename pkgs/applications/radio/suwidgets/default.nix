@@ -9,7 +9,7 @@
   fftwSinglePrec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "suwidgets";
   version = "unstable-2022-04-03";
 

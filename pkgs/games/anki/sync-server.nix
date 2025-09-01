@@ -10,7 +10,12 @@
 
 rustPlatform.buildRustPackage {
   pname = "anki-sync-server";
-  inherit (anki) version src cargoDeps;
+  inherit (anki)
+    version
+    src
+    cargoDeps
+    patches
+    ;
 
   # only build sync server
   cargoBuildFlags = [
@@ -33,6 +38,8 @@ rustPlatform.buildRustPackage {
   ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Standalone official anki sync server";

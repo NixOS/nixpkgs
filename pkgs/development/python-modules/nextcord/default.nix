@@ -5,58 +5,64 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ffmpeg,
   libopus,
   aiohttp,
   aiodns,
   audioop-lts,
   brotli,
-  faust-cchardet,
   orjson,
+  poetry-core,
+  poetry-dynamic-versioning,
   pynacl,
-  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.6.1";
+  version = "3.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nextcord";
     repo = "nextcord";
     tag = "v${version}";
-    hash = "sha256-bv4I+Ol/N4kbp/Ch7utaUpo0GmF+Mpx4zWmHL7uIveM=";
+    hash = "sha256-ex6amnB51Jla5ia2HVaMOZsDOEtgJ8RB1eNTLpXNzSY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
       libopus = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
+  postPatch = ''
+    # disable dynamic versioning
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail 'enable = true' 'enable = false'
+  '';
+
   build-system = [
-    setuptools
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  dependencies =
-    [
-      aiodns
-      aiohttp
-      brotli
-      faust-cchardet
-      orjson
-      pynacl
-      setuptools # for pkg_resources, remove with next release
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      audioop-lts
-    ];
+  dependencies = [
+    aiodns
+    aiohttp
+    brotli
+    orjson
+    pynacl
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
+  ];
 
   # upstream has no tests
   doCheck = false;
@@ -68,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/nextcord/nextcord/blob/${src.rev}/docs/whats_new.rst";
+    changelog = "https://github.com/nextcord/nextcord/blob/${src.tag}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
     license = licenses.mit;

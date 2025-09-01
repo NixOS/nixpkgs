@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.0.12";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
-    rev = "23ec6488eddaa9f5b370b53b0198ba7b656ffa3d";
-    hash = "sha256-aA1iRXoVgJ1wVQMxFZm7/GqB7G/IjcLXifAk6B8odCs=";
+    tag = version;
+    hash = "sha256-qjnQTkQiufHPEwMH+F+XE+VBc/DSTX6d0vxot35xbUc=";
   };
 
   postPatch = ''
@@ -42,5 +42,8 @@ stdenv.mkDerivation rec {
       racci
     ];
     platforms = lib.platforms.linux;
+
+    # Broken due to missing linux/minmax.h
+    broken = kernel.kernelOlder "5.10";
   };
 }

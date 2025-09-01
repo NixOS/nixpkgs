@@ -19,27 +19,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "system-syzygy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "mdsteele";
     repo = "syzygy";
-    rev = "5ba148fed7aae14bf35108d7303e4194e8ffe5e8";
-    sha256 = "07mzwx8ql33q865snnw4gm3dgf0mnm60lnq1f5fgas2yjy9g9vwa";
+    tag = "v${version}";
+    hash = "sha256-wxe9+r3tWRXiznvjvxsmTgUC7YVKgbt+I3Q8A/WtcN0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ahi-0.1.0" = "sha256-EliAObznLP1wkk8r3c3hhB300HYnEd9N6CJW+xG6bxE=";
-      "itersynth-0.1.0" = "sha256-dXQ+uBFchcnOjKF/CcS+AwhzFzejk2JCvvKMfS64RRQ=";
-      "sdl2-0.31.0" = "sha256-wTam0hwiajdw/ub2yM6q7+50Y3AueStcK5HLa65Y2XQ=";
-      "winres-0.1.6" = "sha256-7jYrgc3BV2UmzfACc/xyYsTkaXBPfn+bLmwdrcBe1O0=";
-    };
-  };
+  cargoHash = "sha256-H/iG6vsmtpBGYBBqNQG5EpyZaUtfXfVaHv4fkxwqrD0=";
 
   postInstall = ''
     mkdir -p $out/share/syzygy/

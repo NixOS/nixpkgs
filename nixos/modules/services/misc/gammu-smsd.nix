@@ -238,7 +238,7 @@ in
 
       wants =
         with cfg.backend;
-        [ ] ++ lib.optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
+        [ ] ++ lib.optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.target" ];
 
       preStart =
         with cfg.backend;

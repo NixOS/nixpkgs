@@ -2,27 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmi";
-  version = "0.31.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "wasmi";
-    rev = "v${version}";
-    hash = "sha256-chLWrZ+OLUTSFmTu+qKpjApXDmJFhS68N2RKjaql75U=";
+    tag = "v${version}";
+    hash = "sha256-mPArNkPrTW3RikLlQNkAjIUEfRot2nRaqceNopGmZDo=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-7L2XQ4E+1wyNMu2IEgqvKuY84k7kQ07m/dXbyDYN/VU=";
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Efficient WebAssembly interpreter";

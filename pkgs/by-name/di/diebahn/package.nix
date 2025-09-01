@@ -18,25 +18,24 @@
   libadwaita,
   pango,
   gettext,
-  darwin,
   blueprint-compiler,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.2";
+  version = "2.8.2";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     tag = version;
-    hash = "sha256-jk2Pn/kqjMx5reMkIL8nLMWMZylwdoVq4FmnzaohnjU=";
+    hash = "sha256-pPjOl46R8hBpyKdwq/gwHv/qCtFkI0LVDsqxcQOgtkU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-WiFW+xz5kxFKe9y8vHaFD9xW7f9iHc9hyCBWW4uMquU=";
+    hash = "sha256-kxt6z2RaSnlso/Jz36B9VNwti2o3b8+Ggd4zDIjFf2c=";
   };
 
   nativeBuildInputs = [
@@ -51,24 +50,15 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      cairo
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      openssl
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Foundation
-        Security
-      ]
-    );
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    openssl
+    pango
+  ];
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.
@@ -83,17 +73,15 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.tag}/CHANGELOG.md";
     description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";
-    maintainers =
-      with lib.maintainers;
-      [
-        dotlambda
-        lilacious
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      lilacious
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

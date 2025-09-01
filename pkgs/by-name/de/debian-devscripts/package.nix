@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   fetchpatch,
   xz,
   dpkg,
@@ -18,6 +18,7 @@
   pkg-config,
   bash-completion,
   help2man,
+  nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
@@ -27,13 +28,16 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in
-stdenv.mkDerivation rec {
-  version = "2.23.5";
+stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
+  version = "2.25.15+deb13u1";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "devscripts";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-szyVLpeIQozPXwBgL4nIYog4znUzweIt8q7nczo5q+g=";
   };
 
   patches = [
@@ -45,43 +49,50 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
-    substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    substituteInPlace scripts/debrebuild.pl \
+      --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
-  '';
+  ''
+  +
+    # Remove man7 target to avoid missing *.7 file error
+    ''
+      substituteInPlace doc/Makefile \
+        --replace-fail " install_man7" ""
+    '';
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
   ];
-  buildInputs =
-    [
-      xz
-      dpkg
-      libxslt
-      python
-      setuptools
-      curl
-      gnupg
-      diffutils
-      bash-completion
-      help2man
-    ]
-    ++ (with perlPackages; [
-      perl
-      CryptSSLeay
-      LWP
-      TimeDate
-      DBFile
-      FileDesktopEntry
-      ParseDebControl
-      LWPProtocolHttps
-      Moo
-      FileHomeDir
-      IPCRun
-      FileDirList
-      FileTouch
-    ]);
+
+  buildInputs = [
+    xz
+    dpkg
+    libxslt
+    python
+    setuptools
+    curl
+    gnupg
+    diffutils
+    bash-completion
+    help2man
+  ]
+  ++ (with perlPackages; [
+    perl
+    CryptSSLeay
+    LWP
+    TimeDate
+    DBFile
+    FileDesktopEntry
+    ParseDebControl
+    LWPProtocolHttps
+    Moo
+    FileHomeDir
+    IPCRun
+    FileDirList
+    FileTouch
+    IOString
+  ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -89,11 +100,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find lib po4a scripts -type f -exec sed -r \
-      -e "s@/usr/bin/gpg(2|)@${gnupg}/bin/gpg@g" \
+      -e "s@/usr/bin/gpg(2|)@${lib.getExe' gnupg "gpg"}@g" \
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
-      -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
-      -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
-      -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
+      -e "s@/usr/bin/diff@${lib.getExe' diffutils "diff"}@g" \
+      -e "s@/usr/bin/gpgv(2|)@${lib.getExe' gnupg "gpgv"}@g" \
+      -e "s@(command -v|/usr/bin/)curl@${lib.getExe curl}@g" \
       -e "s@sensible-editor@${sensible-editor}@g" \
       -e "s@(^|\W)/bin/bash@\1${stdenv.shell}@g" \
       -i {} +
@@ -121,15 +132,16 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
-    ln -s cvs-debi $out/bin/cvs-debc
     ln -s debchange $out/bin/dch
     ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Debian package maintenance scripts";
-    license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

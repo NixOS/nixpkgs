@@ -15,7 +15,7 @@
   gcc,
 
   dfVersion,
-  df-hashes,
+  dfVersions,
 }:
 
 let
@@ -35,15 +35,9 @@ let
     ;
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
-  # Other srcs are avilable like 32-bit mac & win, but I have only
-  # included the ones most likely to be needed by Nixpkgs users.
   platforms = {
     x86_64-linux = "linux";
-    i686-linux = "linux32";
-    x86_64-darwin = "osx";
-    i686-darwin = "osx32";
-    x86_64-cygwin = "win";
-    i686-cygwin = "win32";
+    x86_64-darwin = "darwin";
   };
 
   dfVersionTuple = splitVersion dfVersion;
@@ -62,8 +56,8 @@ let
     && (dwarf-fortress-unfuck.dfVersion or null) == dfVersion;
 
   game =
-    if hasAttr dfVersion df-hashes then
-      getAttr dfVersion df-hashes
+    if hasAttr dfVersion dfVersions.game.versions then
+      (getAttr dfVersion dfVersions.game.versions).df
     else
       throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dfPlatform =
@@ -71,9 +65,9 @@ let
       getAttr stdenv.hostPlatform.system platforms
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 =
-    if hasAttr dfPlatform game then
-      getAttr dfPlatform game
+  url =
+    if hasAttr dfPlatform game.urls then
+      getAttr dfPlatform game.urls
     else
       throw "Unsupported dfPlatform: ${dfPlatform}";
   exe =
@@ -88,8 +82,8 @@ stdenv.mkDerivation {
   version = dfVersion;
 
   src = fetchurl {
-    url = "https://www.bay12games.com/dwarves/df_${toString baseVersion}_${toString patchVersion}_${dfPlatform}.tar.bz2";
-    inherit sha256;
+    inherit (url) url;
+    hash = url.outputHash;
   };
 
   sourceRoot = ".";
@@ -119,52 +113,51 @@ stdenv.mkDerivation {
     ++ optional enableUnfuck dwarf-fortress-unfuck
     ++ [ (lib.getLib stdenv.cc.cc) ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      exe=$out/${exe}
-      mkdir -p $out
-      cp -r * $out
+    exe=$out/${exe}
+    mkdir -p $out
+    cp -r * $out
 
-      # Clean up OS X detritus in the tarball.
-      find $out -type f -name '._*' -exec rm -rf {} \;
+    # Clean up OS X detritus in the tarball.
+    find $out -type f -name '._*' -exec rm -rf {} \;
 
-      # Lots of files are +x in the newer releases...
-      find $out -type d -exec chmod 0755 {} \;
-      find $out -type f -exec chmod 0644 {} \;
-      chmod +x $exe
-      [ -f $out/df ] && chmod +x $out/df
-      [ -f $out/run_df ] && chmod +x $out/run_df
+    # Lots of files are +x in the newer releases...
+    find $out -type d -exec chmod 0755 {} \;
+    find $out -type f -exec chmod 0644 {} \;
+    chmod +x $exe
+    [ -f $out/df ] && chmod +x $out/df
+    [ -f $out/run_df ] && chmod +x $out/run_df
 
-      # We don't need any of these since they will just break autoPatchelf on <version 50.
-      [ -d $out/libs ] && rm -rf $out/libs/*.so $out/libs/*.so.* $out/libs/*.dylib
+    # We don't need any of these since they will just break autoPatchelf on <version 50.
+    [ -d $out/libs ] && rm -rf $out/libs/*.so $out/libs/*.so.* $out/libs/*.dylib
 
-      # Store the original hash
-      md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
-      echo "Original MD5: $(<$out/hash.md5.orig)" >&2
-    ''
-    + optionalString stdenv.hostPlatform.isDarwin ''
-      # My custom unfucked dwarfort.exe for macOS. Can't use
-      # absolute paths because original doesn't have enough
-      # header space. Someone plz break into Tarn's house & put
-      # -headerpad_max_install_names into his LDFLAGS.
+    # Store the original hash
+    md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
+    echo "Original MD5: $(<$out/hash.md5.orig)" >&2
+  ''
+  + optionalString stdenv.hostPlatform.isDarwin ''
+    # My custom unfucked dwarfort.exe for macOS. Can't use
+    # absolute paths because original doesn't have enough
+    # header space. Someone plz break into Tarn's house & put
+    # -headerpad_max_install_names into his LDFLAGS.
 
-      ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
-      ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
-      ln -s ${getLib gcc.cc}/lib/libgcc_s.1.dylib $out/libs
-      ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
+    ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
+    ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
+    ln -s ${getLib gcc.cc}/lib/libgcc_s.1.dylib $out/libs
+    ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
 
-      install_name_tool \
-        -change /usr/lib/libncurses.5.4.dylib \
-                @executable_path/libs/libncurses.dylib \
-        -change /usr/local/lib/x86_64/libstdc++.6.dylib \
-                @executable_path/libs/libstdc++.6.dylib \
-        $exe
-    ''
-    + ''
-      runHook postInstall
-    '';
+    install_name_tool \
+      -change /usr/lib/libncurses.5.4.dylib \
+              @executable_path/libs/libncurses.dylib \
+      -change /usr/local/lib/x86_64/libstdc++.6.dylib \
+              @executable_path/libs/libstdc++.6.dylib \
+      $exe
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   preFixup = ''
     recompute_hash() {
@@ -185,7 +178,11 @@ stdenv.mkDerivation {
       dfVersion
       exe
       ;
-    updateScript = ./update.sh;
+    updateScript = {
+      command = [ ./update.rb ];
+      attrPath = "dwarf-fortress-packages";
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   meta = {
@@ -197,7 +194,6 @@ stdenv.mkDerivation {
       a1russell
       robbinch
       roconnor
-      abbradar
       numinit
       shazow
       ncfavier

@@ -5,6 +5,7 @@
   extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -15,29 +16,28 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.3.4";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "vercel";
-    repo = "turbo";
-    tag = "v${version}";
-    hash = "sha256-cvwYBdvBxkntCXA4FJMc54Rca+zoZEjyWZUQoMH9Qdc=";
+    repo = "turborepo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3J5uctVOfjzBkoTPlHdzzpso82Yulyr6RZwqVV8z1Qw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-e9xq3xc8Rtuq3e/3IEwj9eR9SEj5N4bvsu4PFubm8mM=";
+  cargoHash = "sha256-MINBqzs+MpHDqAMCNBzOBHfOTv6dKJA58dVEr7MxQBg=";
 
-  nativeBuildInputs =
-    [
-      capnproto
-      extra-cmake-modules
-      pkg-config
-      protobuf
-    ]
-    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  nativeBuildInputs = [
+    capnproto
+    extra-cmake-modules
+    installShellFiles
+    pkg-config
+    protobuf
+  ]
+  # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs = [
     fontconfig
@@ -54,6 +54,13 @@ rustPlatform.buildRustPackage rec {
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
+
   env = {
     # nightly features are used
     RUSTC_BOOTSTRAP = 1;
@@ -63,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'v(\\d+\\.\\d+\\.\\d+)'"
+        "v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
   };
@@ -71,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
-    changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
+    changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
@@ -79,4 +86,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "turbo";
   };
-}
+})

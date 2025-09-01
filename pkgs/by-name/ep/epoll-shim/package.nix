@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_PKGCONFIGDIR=${placeholder "out"}/lib/pkgconfig"
     "-DBUILD_TESTING=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isFreeBSD) [
+    # fails in cross configurations for not being able to detect this value
+    "-DALLOWS_ONESHOT_TIMERS_WITH_TIMEOUT_ZERO=YES"
   ];
 
   # https://github.com/jiixyj/epoll-shim/issues/41

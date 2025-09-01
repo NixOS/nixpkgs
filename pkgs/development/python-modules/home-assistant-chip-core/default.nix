@@ -44,7 +44,8 @@ buildPythonPackage rec {
     deprecation
     mobly
     pygobject3
-  ] ++ home-assistant-chip-wheels.propagatedBuildInputs;
+  ]
+  ++ home-assistant-chip-wheels.propagatedBuildInputs;
 
   pythonNamespaces = [
     "chip"
@@ -68,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
     changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

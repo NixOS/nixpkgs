@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libguestfs-appliance";
-  version = "1.54.0";
+  version = "1.56.0";
 
   src = fetchurl {
     url = "http://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
-    hash = "sha256-D7f4Cnjx+OmLfqQWmauyXZiSjayG9TCmxftj0iOPFso=";
+    hash = "sha256-YbJlNaogMyutdtc7d+etyJvdd//yE8tedsZfkGXJr54=";
   };
 
   installPhase = ''

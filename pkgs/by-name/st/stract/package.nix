@@ -13,18 +13,17 @@
 
 rustPlatform.buildRustPackage {
   pname = "stract";
-  version = "0-unstable-2024-12-11";
+  version = "0-unstable-2025-03-24";
 
   src = fetchFromGitHub {
     owner = "StractOrg";
     repo = "stract";
-    rev = "ecb495a66cf6c2f66d817803df38385a3001a38d";
-    hash = "sha256-UeIziIihDCjGoz2IdfROnO9/N82S4yextnF4Sbtrn24=";
+    rev = "8ac40b023e0a49f55cdd5b599841ea46d0503ec9";
+    hash = "sha256-HrZ70RuBToa5m2DJN3KDHFoWae2YqHGpy1imwi+xvCo=";
     fetchSubmodules = true;
   };
 
   cargoHash = "sha256-UArPGrcEfFZBOZ4Tv7NraqPzdMtyJXVFsfUM32eSGic=";
-  useFetchCargoVendor = true;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -69,11 +68,9 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/StractOrg/stract";
     license = lib.licenses.agpl3Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        ailsa-sun
-      ]
-      ++ lib.teams.ngi.members;
+    maintainers = with lib.maintainers; [
+      ailsa-sun
+    ];
+    teams = [ lib.teams.ngi ];
   };
 }

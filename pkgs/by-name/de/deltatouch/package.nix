@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.10.2";
+  version = "1.14.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QcrBo7lrMYkOZGSyS5fLAwNxZwKFrylU5P5my2Jl93k=";
+    hash = "sha256-vumMAMm9+dKlmi5a6ehIDePpQKkco/smYSM1K/QiXu4=";
   };
 
   nativeBuildInputs = [

@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.5.0";
+  version = "1.0.1";
 in
 buildGoModule {
   pname = "yoink";
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "MrMarble";
     repo = "yoink";
     rev = "v${version}";
-    hash = "sha256-9ftlAECywF4khH279h2qcSvKRDQX2I7GDQ7EYcEybL0=";
+    hash = "sha256-yI3koHVeZWkujpiO0qLj1i4m5l5BiZNZE5ix+IKFwyc=";
   };
 
-  vendorHash = "sha256-cnfh2D/k4JP9BNlI+6FVLBFyk5XMIYG/DotUdAZaY0Q=";
+  vendorHash = "sha256-P1bkugMaVKCvVx7y8g/elsEublHPA0SgeKzWiQCi4vs=";
 
   meta = {
     homepage = "https://github.com/MrMarble/yoink";

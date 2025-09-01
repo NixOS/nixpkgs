@@ -36,7 +36,8 @@ buildPythonPackage rec {
     distro
     click
     typing-extensions
-  ] ++ requests.optional-dependencies.security;
+  ]
+  ++ requests.optional-dependencies.security;
 
   nativeCheckInputs = [
     matrix-nio

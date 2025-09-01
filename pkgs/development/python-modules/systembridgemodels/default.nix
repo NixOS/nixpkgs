@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "test_update"
   ];
 
-  pytestFlagsArray = [ "--snapshot-warn-unused" ];
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-models/releases/tag/${version}";

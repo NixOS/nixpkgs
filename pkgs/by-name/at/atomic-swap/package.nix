@@ -40,12 +40,12 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
     changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${version}";
     description = "ETH-XMR atomic swap implementation";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [
       happysalada
       lord-valen
     ];

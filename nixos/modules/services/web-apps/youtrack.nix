@@ -88,7 +88,7 @@ in
       type = with lib.types; listOf str;
       description = ''
         General configuration parameters and other JVM options.
-        See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#general-parameters
+        See <https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#general-parameters>
         for more information.
       '';
       example = lib.literalExpression ''
@@ -124,7 +124,7 @@ in
       };
       description = ''
         Environmental configuration parameters, set imperatively. The values doesn't get removed, when removed in Nix.
-        See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#environmental-parameters
+        See <https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#environmental-parameters>
         for more information.
       '';
       example = lib.literalExpression ''

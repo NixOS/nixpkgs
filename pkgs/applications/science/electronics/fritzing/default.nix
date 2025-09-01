@@ -50,6 +50,11 @@ stdenv.mkDerivation {
     hash = "sha256-a/bWAUeDPj3g8BECOlXuqyCi4JgGLLs1605m380Drt0=";
   };
 
+  patches = [
+    # Fix build with Qt >= 6.9
+    ./fix-stricter-types.patch
+  ];
+
   nativeBuildInputs = [
     qmake
     pkg-config
@@ -57,21 +62,20 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qtserialport
-      qt5compat
-      boost
-      libgit2
-      quazip
-      libngspice
-      clipper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtserialport
+    qt5compat
+    boost
+    libgit2
+    quazip
+    libngspice
+    clipper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice
@@ -86,6 +90,9 @@ stdenv.mkDerivation {
 
     substituteInPlace phoenix.pro \
       --replace-fail "6.5.10" "${qtbase.version}"
+
+    substituteInPlace src/simulation/ngspice_simulator.cpp \
+      --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
 
     mkdir parts
     cp -a ${parts}/* parts/

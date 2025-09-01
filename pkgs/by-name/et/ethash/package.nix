@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ethash";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chfast";
     repo = "ethash";
     rev = "v${version}";
-    sha256 = "sha256-BjgfWDn72P4NJhzq0ySW8bvZI3AQB9jOaRqFIeCfJ8k=";
+    sha256 = "sha256-sLa+lXC+UvqFEoC/ZfoRlotkNhUaqhLtDKHtbH2xa/k=";
   };
 
   nativeBuildInputs = [

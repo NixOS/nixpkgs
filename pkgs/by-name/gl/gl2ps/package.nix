@@ -8,7 +8,6 @@
   libGL,
   libGLU,
   libglut,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,19 +23,15 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-      libpng
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      libglut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
+  buildInputs = [
+    zlib
+    libpng
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libglut
+  ];
 
   meta = with lib; {
     homepage = "http://geuz.org/gl2ps";

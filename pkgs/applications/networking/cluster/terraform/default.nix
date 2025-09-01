@@ -45,6 +45,16 @@ let
           "-X 'github.com/hashicorp/terraform/version.dev=no'"
         ];
 
+        postPatch = ''
+          # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
+          # similar one was added.
+          # https://github.com/golang/go/issues/72111
+          # The setting is configured upstream due to the following timeouts caused by
+          # the TLS handshake using post-quantum crypto with servers that don't support it
+          # https://tldr.fail/
+          substituteInPlace go.mod \
+            --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
+        '';
         postConfigure = ''
           # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
           substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -65,12 +75,12 @@ let
 
         subPackages = [ "." ];
 
-        meta = with lib; {
+        meta = {
           description = "Tool for building, changing, and versioning infrastructure";
           homepage = "https://www.terraform.io/";
           changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-          license = licenses.bsl11;
-          maintainers = with maintainers; [
+          license = lib.licenses.bsl11;
+          maintainers = with lib.maintainers; [
             Chili-Man
             kalbasit
             timstott
@@ -184,9 +194,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.10.5";
-    hash = "sha256-6Y9r3VxL3DRvUaU6hLE+SdqjfIF+PAlXEYBPBc571QE=";
-    vendorHash = "sha256-xyFguSjqUweZyoO97nkjLfJWS+eifNV7hpJUjh/6Z54=";
+    version = "1.13.1";
+    hash = "sha256-PuC2wOEEMFaiR9eyF3yI6PLSkqnT/MWdy6RZo6B9zWM=";
+    vendorHash = "sha256-UcsB5cTae55meJ945fvgowch4EBdaTET2+t5KWvpPQ8=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma";
-  version = "6.3.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     rev = finalAttrs.version;
-    hash = "sha256-Buu+E0xxjcrPOyEHkQTp7IVS9kymmR1PTegeOXxb2PA=";
+    hash = "sha256-ts7HvQbbBFzLRr7uamo95rDnJuDHsAu2CE/pKkJwcX4=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rAEUkk3uWVuUDrSRz6d2Ewr3vi4rzYmO0yLTCl21qZ4=";
+    fetcherVersion = 1;
+    hash = "sha256-dhEpn0oaqZqeiRMfcSiaqhud/RsKd6Wm5RR5iyQp1I8=";
   };
 
   patchPhase = ''
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     deps=$(jq -r '[.. | strings | select(startswith("link:../")) | sub("^link:../"; "")] | unique[]' <<< "$deps_json")
 
     # Remove unnecessary external dependencies
-    rm -rf node_modules
+    find . -name node_modules -type d -prune -exec rm -rf {} +
     pnpm install --offline --ignore-scripts --frozen-lockfile --prod
     cp -r node_modules $out/lib/prisma
 
@@ -72,9 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     for package in cli $deps; do
       filename=$(npm pack --json ./packages/$package | jq -r '.[].filename')
       mkdir -p $out/lib/prisma/packages/$package
-      cp -r packages/$package/node_modules $out/lib/prisma/packages/$package
+      [ -d "packages/$package/node_modules" ] && \
+        cp -r packages/$package/node_modules $out/lib/prisma/packages/$package
       tar xf $filename --strip-components=1 -C $out/lib/prisma/packages/$package
     done
+
+    # Remove dangling symlinks to packages we didn't copy to $out
+    find $out/lib/prisma/node_modules/.pnpm/node_modules -type l -exec test ! -e {} \; -delete
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/prisma" \
       --add-flags "$out/lib/prisma/packages/cli/build/index.js" \

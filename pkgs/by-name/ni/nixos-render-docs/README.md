@@ -40,7 +40,7 @@ The chosen design is a trade-off between speed, repository size, and contributor
     - It would also require keeping an impure or otherwise continuously updated reference to those other revisions.
     - The static mapping acts like a semi-automatically updated cache that we drag along with version history.
     - Other setups, such as a dedicated service to cache a history of moved content, are more complicated and would still be impure.
-- Checking in large amounts of data that is touched often, bears a risk of more merge conflicts or related build failures.
+- Checking in large amounts of data that is touched often bears a risk of more merge conflicts or related build failures.
 
 The solution picked here is to have a static mapping of the historical locations checked into the Git tree, such that it can be read during the build process.
 This also ensures that an improper redirect mapping will cause `nixos-render-docs` to fail the build and thus enforce that redirects stay up-to-date with every commit.
@@ -61,7 +61,7 @@ Here's an overview of this mapping:
 
 - The keys of this mapping _must_ be an exhaustive list of all identifiers in the source files.
 - The first element of the value of this mapping _must_ be the current output location (path and anchor) of the content signified by the identifier in the mapping key.
-  - While the order of the remaining elements is unconstrained, please only prepend to this list when the content under the indentifier moves in order to keep the diffs readable.
+  - While the order of the remaining elements is unconstrained, please only prepend to this list when the content under the identifier moves in order to keep the diffs readable.
 
 In case this identifier is renamed, the mapping would change into:
 
@@ -75,3 +75,17 @@ In case this identifier is renamed, the mapping would change into:
   ]
 }
 ```
+
+## Rendering multiple pages
+
+The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered to. We can use this argument to set up multipage rendering of the manuals.
+
+For example
+
+~~~
+```{=include=} appendix html:into-file=//release-notes.html
+release-notes/release-notes.md
+```
+~~~
+
+will render the release notes into a `release-notes.html` file, instead of making it a section within the default `index.html`.

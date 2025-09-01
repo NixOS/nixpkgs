@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plasmusic-toolbar";
-  version = "2.1.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "ccatterina";
     repo = "plasmusic-toolbar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dQG6YOILsTsxbMfdrThodokixM2PrXPd5nB7+NWxFXg=";
+    hash = "sha256-Kjzutah8CIHN3NZcxGB1FXlCNn5dnTQxJITUptaXNrs=";
   };
 
   installPhase = ''
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "KDE Plasma widget that shows currently playing song information and provide playback controls.";
+    description = "KDE Plasma widget that shows currently playing song information and provide playback controls";
     homepage = "https://github.com/ccatterina/plasmusic-toolbar";
     changelog = "https://github.com/ccatterina/plasmusic-toolbar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;

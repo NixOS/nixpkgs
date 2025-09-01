@@ -1,35 +1,33 @@
 {
   lib,
   buildGraalvmNativeImage,
-  graalvmPackages,
   fetchurl,
 }:
 
-buildGraalvmNativeImage rec {
+buildGraalvmNativeImage (finalAttrs: {
   pname = "clj-kondo";
-  version = "2025.01.16";
+  version = "2025.07.28";
 
   src = fetchurl {
-    url = "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-3MWDrtEWBOxhZ3iD/7buszEMNHgbjY0k973VUOMBgu8=";
+    url = "https://github.com/clj-kondo/clj-kondo/releases/download/v${finalAttrs.version}/clj-kondo-${finalAttrs.version}-standalone.jar";
+    sha256 = "sha256-ioKRFkm+zBAAM7oyR4F6rTHEhViuRNuMXcr1xwnjcms=";
   };
-
-  graalvmDrv = graalvmPackages.graalvm-ce;
 
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "--no-fallback"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
-    changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
+    changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       jlesquembre
       bandresen
     ];
+    mainProgram = "clj-kondo";
   };
-}
+})

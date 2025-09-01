@@ -4,23 +4,24 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  dbus,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "upcloud-cli";
-  version = "3.14.0";
+  version = "3.21.0";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-cli";
-    tag = "v${version}";
-    hash = "sha256-zKPoJFfgqi6ZIeZKJy7YeYuqHWVPH0LXvWpOYCEM7dE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GN/GIqppSXDexe2KRH1RoVpm8HUkvsnul3H+q4OcjOA=";
   };
 
-  vendorHash = "sha256-76bLk4zten9SGXbt/M8VKPSylCwQqclyscSVQQaAtbA=";
+  vendorHash = "sha256-Z2Eumhsn/YmHopgpKBFGs4HmDdUl/cr+R6bRaeCFQtE=";
 
   ldflags = [
-    "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${version}"
+    "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -28,23 +29,29 @@ buildGoModule rec {
     "internal/*"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ dbus ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestConfig_LoadKeyring" # Not equal: expected: "unittest_password" actual  : ""
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/upctl";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/UpCloudLtd/upcloud-cli/blob/refs/tags/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/UpCloudLtd/upcloud-cli/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command-line tool for managing UpCloud services";
     homepage = "https://github.com/UpCloudLtd/upcloud-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lu1a ];
     mainProgram = "upctl";
   };
-}
+})

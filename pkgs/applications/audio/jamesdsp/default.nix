@@ -1,6 +1,7 @@
 {
   copyDesktopItems,
   fetchFromGitHub,
+  fetchpatch,
   glibmm,
   gst_all_1,
   lib,
@@ -42,23 +43,31 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      glibmm
-      libarchive
-      qtbase
-      qtsvg
-      qtwayland
-    ]
-    ++ lib.optionals usePipewire [
-      pipewire
-    ]
-    ++ lib.optionals usePulseaudio [
-      pulseaudio
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gstreamer
-    ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Audio4Linux/JDSP4Linux/pull/241.patch";
+      hash = "sha256-RtVKlw2ca8An4FodeD0RN95z9yHDHBgAxsEwLAmW7co=";
+      name = "fix-build-with-new-pipewire.patch";
+    })
+    ./fix-build-on-qt6_9.diff
+  ];
+
+  buildInputs = [
+    glibmm
+    libarchive
+    qtbase
+    qtsvg
+    qtwayland
+  ]
+  ++ lib.optionals usePipewire [
+    pipewire
+  ]
+  ++ lib.optionals usePulseaudio [
+    pulseaudio
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+  ];
 
   preFixup = lib.optionalString usePulseaudio ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

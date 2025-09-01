@@ -1,15 +1,17 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   ffmpeg-headless,
   rtmpdump,
   atomicparsley,
+  pandoc,
+  installShellFiles,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
-  update-python-libraries,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,17 +19,26 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.1.26";
+  version = "2025.08.27";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "yt_dlp";
-    hash = "sha256-HJc4JmkhrUPFaK0BrDNi+3x69Uknb77JK9cvFA2hYkA=";
+  src = fetchFromGitHub {
+    owner = "yt-dlp";
+    repo = "yt-dlp";
+    tag = version;
+    hash = "sha256-E8++/gK/SpY93UW/9U266Qj1Kkn6CeNou7bKTqpCgFw=";
   };
 
-  build-system = with python3Packages; [
-    hatchling
+  postPatch = ''
+    substituteInPlace yt_dlp/version.py \
+      --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
+  '';
+
+  build-system = with python3Packages; [ hatchling ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
   ];
 
   # expose optional-dependencies, but provide all features
@@ -52,6 +63,21 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "websockets" ];
 
+  preBuild = ''
+    python devscripts/make_lazy_extractors.py
+  '';
+
+  postBuild = ''
+    python devscripts/prepare_manpage.py yt-dlp.1.temp.md
+    pandoc -s -f markdown-smart -t man yt-dlp.1.temp.md -o yt-dlp.1
+    rm yt-dlp.1.temp.md
+
+    mkdir -p completions/{bash,fish,zsh}
+    python devscripts/bash-completion.py completions/bash/yt-dlp
+    python devscripts/zsh-completion.py completions/zsh/_yt-dlp
+    python devscripts/fish-completion.py completions/fish/yt-dlp.fish
+  '';
+
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
@@ -68,33 +94,30 @@ python3Packages.buildPythonApplication rec {
       ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
     ];
 
-  setupPyBuildFlags = [
-    "build_lazy_extractors"
-  ];
-
   # Requires network
   doCheck = false;
 
-  # curl-cffi 0.7.2 and 0.7.3 are broken, but 0.7.4 is fixed
-  # https://github.com/lexiforest/curl_cffi/issues/394
-  postPatch = ''
-    substituteInPlace yt_dlp/networking/_curlcffi.py \
-      --replace-fail "(0, 7, 0) <= curl_cffi_version < (0, 7, 2)" \
-        "((0, 7, 0) <= curl_cffi_version < (0, 7, 2)) or curl_cffi_version >= (0, 7, 4)"
-  '';
+  postInstall = ''
+    installManPage yt-dlp.1
 
-  postInstall = lib.optionalString withAlias ''
+    installShellCompletion \
+      --bash completions/bash/yt-dlp \
+      --fish completions/fish/yt-dlp.fish \
+      --zsh completions/zsh/_yt-dlp
+
+    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+  ''
+  + lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = [
-    update-python-libraries
-    (toString ./.)
-  ];
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://github.com/yt-dlp/yt-dlp/";
+  meta = {
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    homepage = "https://github.com/yt-dlp/yt-dlp/";
+    license = lib.licenses.unlicense;
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 
@@ -103,12 +126,10 @@ python3Packages.buildPythonApplication rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
-      SuperSandro2000
-      donteatoreo
-    ];
     mainProgram = "yt-dlp";
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      FlameFlag
+    ];
   };
 }

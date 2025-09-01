@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, unzip, dotnetCorePackages, roslyn }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  glibcLocales,
+  mono,
+  unzip,
+  dotnetCorePackages,
+  roslyn,
+}:
 
 let
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
@@ -11,15 +21,17 @@ let
 
   inherit (stdenv.hostPlatform.extensions) sharedLibrary;
 
-  mkPackage = attrs: stdenv.mkDerivation (finalAttrs:
-    dotnetCorePackages.addNuGetDeps
-      {
+  mkPackage =
+    attrs:
+    stdenv.mkDerivation (
+      finalAttrs:
+      dotnetCorePackages.addNuGetDeps {
         nugetDeps = ./deps.json;
         overrideFetchAttrs = a: {
           dontBuild = false;
         };
-      }
-      attrs finalAttrs);
+      } attrs finalAttrs
+    );
 
 in
 
@@ -45,8 +57,7 @@ mkPackage rec {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString stdenv.hostPlatform.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString stdenv.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
     # not patchShebangs, there is /bin/bash in the body of the script as well
@@ -72,7 +83,7 @@ mkPackage rec {
     # The provided libhostfxr.dylib is for x86_64-darwin, so we remove it
     rm artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/libhostfxr.dylib
 
-    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet/host -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
 
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
@@ -99,42 +110,42 @@ mkPackage rec {
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
-    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet/host -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;
 
   # https://docs.microsoft.com/cs-cz/visualstudio/msbuild/walkthrough-creating-an-msbuild-project-file-from-scratch?view=vs-2019
   installCheckPhase = ''
-    cat > Helloworld.cs <<EOF
-using System;
+        cat > Helloworld.cs <<EOF
+    using System;
 
-class HelloWorld
-{
-    static void Main()
+    class HelloWorld
     {
-#if DebugConfig
-        Console.WriteLine("WE ARE IN THE DEBUG CONFIGURATION");
-#endif
+        static void Main()
+        {
+    #if DebugConfig
+            Console.WriteLine("WE ARE IN THE DEBUG CONFIGURATION");
+    #endif
 
-        Console.WriteLine("Hello, world!");
+            Console.WriteLine("Hello, world!");
+        }
     }
-}
-EOF
+    EOF
 
-    cat > Helloworld.csproj <<EOF
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Compile Include="Helloworld.cs" />
-  </ItemGroup>
-  <Target Name="Build">
-    <Csc Sources="@(Compile)"/>
-  </Target>
-</Project>
-EOF
+        cat > Helloworld.csproj <<EOF
+    <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <ItemGroup>
+        <Compile Include="Helloworld.cs" />
+      </ItemGroup>
+      <Target Name="Build">
+        <Csc Sources="@(Compile)"/>
+      </Target>
+    </Project>
+    EOF
 
-    $out/bin/msbuild Helloworld.csproj -t:Build
-    ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
+        $out/bin/msbuild Helloworld.csproj -t:Build
+        ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
   '';
 
   meta = with lib; {
@@ -143,7 +154,7 @@ EOF
     homepage = "https://github.com/mono/msbuild";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # dependencies
+      binaryNativeCode # dependencies
     ];
     license = licenses.mit;
     maintainers = with maintainers; [ jdanek ];

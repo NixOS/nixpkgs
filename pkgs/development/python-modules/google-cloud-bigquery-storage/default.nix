@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.27.0";
+  version = "2.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_storage";
     inherit version;
-    hash = "sha256-Ui+rqaaL6n6YVwccM/r85e5SC3sXXaAEiQFyQq3o7Cc=";
+    hash = "sha256-6UT19DhfC+J+BJ5z5NzPVIt3NIMBZjp3O10Dq9vUniA=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage rec {
   dependencies = [
     google-api-core
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     fastavro = [ fastavro ];

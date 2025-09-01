@@ -3,7 +3,7 @@
   stdenv,
   auditwheel,
   buildPythonPackage,
-  git,
+  gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
@@ -22,15 +22,15 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.48.0";
+  version = "1.54.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
-    hash = "sha256-ZWVySGehR5r6s0y6qCZuFI8SobYbjWP+A6Rgfug2JEE=";
+    hash = "sha256-xyuofDL0hWL8Gn4sYNLKte8q/4bMo+3aSbYaf5iWiBk=";
   };
 
   patches = [
@@ -51,18 +51,11 @@ buildPythonPackage rec {
     git config --global user.name "nixpkgs"
     git commit -m "workaround setuptools-scm"
 
-    substituteInPlace setup.py \
-      --replace "setuptools-scm==8.1.0" "setuptools-scm" \
-      --replace-fail "wheel==0.42.0" "wheel"
+    sed -i -e 's/requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]/requires = ["setuptools", "setuptools-scm", "wheel"]/' pyproject.toml
 
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.1.0", "wheel==0.42.0", "auditwheel==5.4.0"]' \
-                'requires = ["setuptools", "setuptools-scm", "wheel"]'
-
-    # Skip trying to download and extract the driver.
+    # setup.py downloads and extracts the driver.
     # This is done manually in postInstall instead.
-    substituteInPlace setup.py \
-      --replace "self._download_and_extract_local_driver(base_wheel_bundles)" ""
+    rm setup.py
 
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \
@@ -71,10 +64,11 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [
     "greenlet"
@@ -97,14 +91,16 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests =
-      {
-        driver = playwright-driver;
-        browsers = playwright-driver.browsers;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) playwright-python;
-      };
+    tests = {
+      driver = playwright-driver;
+      browsers = playwright-driver.browsers;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) playwright-python;
+    };
+    # Package and playwright driver versions are tightly coupled.
+    # Use the update script to ensure synchronized updates.
+    skipBulkUpdate = true;
     updateScript = ./update.sh;
   };
 

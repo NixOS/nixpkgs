@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "40.0.0";
+  version = "40.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Wy0tfFAe2JA7vIEE4ojO9MKd7m9Yu2Yrx0vYvgPVmsI=";
+    hash = "sha256-xucuPUaMi3ECi+vPR3MFcE74F95eTWlGS/CNIoi+gSU=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ] ++ optional-dependencies.plot;
+  ]
+  ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 

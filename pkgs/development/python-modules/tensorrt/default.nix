@@ -10,10 +10,11 @@
 
 let
   pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
+  buildVersion = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
 in
 buildPythonPackage rec {
   pname = "tensorrt";
-  version = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
+  version = buildVersion;
 
   src = cudaPackages.tensorrt.src;
 
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   preUnpack = ''
     mkdir -p dist
     tar --strip-components=2 -xf "$src" --directory=dist \
-      "TensorRT-${version}/python/tensorrt-${version}-cp${pyVersion}-none-linux_x86_64.whl"
+      "TensorRT-${buildVersion}/python/tensorrt-${buildVersion}-cp${pyVersion}-none-linux_x86_64.whl"
   '';
 
   sourceRoot = ".";

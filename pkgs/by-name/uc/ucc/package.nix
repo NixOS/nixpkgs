@@ -24,7 +24,7 @@ let
     cuda_cudart
     cuda_nvcc
     cuda_nvml_dev
-    cudaFlags
+    flags
     nccl
     ;
 
@@ -40,13 +40,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xcJLYktkxNK2ewWRgm8zH/dMaIoI+9JexuswXi7MpAU=";
+    hash = "sha256-8tUhwZNW39/J9Uz/b4arE1oWPaV0R3s4x12QqI8ovEA=";
   };
 
   outputs = [
@@ -70,16 +70,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
-  ] ++ optionals enableCuda [ cuda_nvcc ];
+  ]
+  ++ optionals enableCuda [ cuda_nvcc ];
 
-  buildInputs =
-    [ ucx ]
-    ++ optionals enableCuda [
-      cuda_cccl
-      cuda_cudart
-      cuda_nvml_dev
-      nccl
-    ];
+  buildInputs = [
+    ucx
+  ]
+  ++ optionals enableCuda [
+    cuda_cccl
+    cuda_cudart
+    cuda_nvml_dev
+    nccl
+  ];
 
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
@@ -101,7 +103,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals enableAvx [ "--with-avx" ]
     ++ optionals enableCuda [
       "--with-cuda=${cuda_nvcc}"
-      "--with-nvcc-gencode=${concatStringsSep " " cudaFlags.gencode}"
+      "--with-nvcc-gencode=${concatStringsSep " " flags.gencode}"
     ];
 
   postInstall = ''
@@ -112,6 +114,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Collective communication operations API";
+    homepage = "https://openucx.github.io/ucc/";
     mainProgram = "ucc_info";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];

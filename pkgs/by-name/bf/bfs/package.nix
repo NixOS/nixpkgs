@@ -11,23 +11,24 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "4.0.5";
+  version = "4.1";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-vYK3lQsHE3GD8mFCZLxJN+TrJZJGwq9+kNm6y0zAa2U=";
+    hash = "sha256-+hGxdsk9MU5MVvvx3C2cqomboNxD0UZ5y7t84fAwfqs=";
   };
 
-  buildInputs =
-    [ oniguruma ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      libcap
-      liburing
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+    libcap
+    liburing
+  ];
 
   configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];

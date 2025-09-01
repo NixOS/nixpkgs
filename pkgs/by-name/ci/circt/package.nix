@@ -19,12 +19,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.103.0";
+  version = "1.128.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-MpNsGioHd7VstuHlzI7SUvrvGcSpViULzAyL0CzMFgw=";
+    hash = "sha256-pIuBIl1iZRuqjy7CPfsTnR82Fq7iH22TtpbSk4oBshQ=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
           "CIRCT :: circt-as-dis/.*\\.mlir"
           "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
+          "CIRCT :: firld/.*\\.mlir"
         ]
         ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
@@ -104,12 +105,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
 
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    echo moving libarc-jit-env.dylib to '$lib' before check because archilator links to the output path
-    mkdir -pv $lib/lib
-    cp -v ./lib/libarc-jit-env.dylib $lib/lib
-  '';
-
   outputs = [
     "out"
     "lib"
@@ -125,6 +120,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput lib "$lib"
+    moveToOutput lib/cmake "$dev"
+
+    substituteInPlace $dev/lib/cmake/circt/CIRCTConfig.cmake \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib/cmake/mlir" "${circt-llvm.dev}/lib/cmake/mlir" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib/cmake/circt" "$dev/lib/cmake/circt" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/include" "$dev/include" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib" "$lib/lib" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/bin" "$out/bin" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}" "$out"
+    substituteInPlace $dev/lib/cmake/circt/CIRCTTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$lib/lib"
   '';
 
   passthru = {

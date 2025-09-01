@@ -1,47 +1,49 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  isPyPy,
+  # dependencies
   eth-hash,
   eth-typing,
   cytoolz,
-  hypothesis,
-  isPyPy,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
   toolz,
+  pydantic,
+  # nativeCheckInputs
+  hypothesis,
   mypy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "5.1.0";
+  version = "5.3.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-utils";
-    rev = "v${version}";
-    hash = "sha256-uPzg1gUEsulQL2u22R/REHWx1ZtbMxvcXf6UgWqkDF4=";
+    tag = "v${version}";
+    hash = "sha256-VWNQyLfOEQTusdNHO/8/fWyGVFVwr1Cg1IfyNMSsfGQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs =
-    [
-      eth-hash
-      eth-typing
-    ]
-    ++ lib.optional (!isPyPy) cytoolz
-    ++ lib.optional isPyPy toolz;
+  propagatedBuildInputs = [
+    eth-hash
+    eth-typing
+  ]
+  ++ lib.optional (!isPyPy) cytoolz
+  ++ lib.optional isPyPy toolz;
 
   nativeCheckInputs = [
     hypothesis
-    pytestCheckHook
     mypy
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+    pytestCheckHook
+    pydantic
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_utils" ];
 

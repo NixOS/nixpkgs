@@ -5,9 +5,9 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libzra";
-  version = "unstable-2020-09-11";
+  version = "0-unstable-2020-09-11";
 
   src = fetchFromGitHub {
     owner = "zraorg";

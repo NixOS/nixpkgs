@@ -6,16 +6,16 @@
 let
   self = buildGoModule {
     pname = "reader";
-    version = "0.4.5";
+    version = "0.5.0";
 
     src = fetchFromGitHub {
       owner = "mrusme";
       repo = "reader";
-      rev = "v${self.version}";
-      hash = "sha256-9hZ7ZS+p6PoLKcuHS2re537wxojN2SzhOm5gBuRX9Xc=";
+      tag = "v${self.version}";
+      hash = "sha256-qu48ikqm4EmoeL9j67tGkX3EFBd1JdrLWhhmoElCoJY=";
     };
 
-    vendorHash = "sha256-obYdifg3WrTyxgN/VtzgpL31ZOyPNtVT8UDQts0WodQ=";
+    vendorHash = "sha256-8IjN7hm5Rg9ItkxE9pbnkVr5t+tG95W9vvXyGaWmEIA=";
 
     meta = {
       description = "Lightweight tool offering better readability of web pages on the CLI";

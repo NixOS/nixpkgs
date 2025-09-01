@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.11.4";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_logging";
     inherit version;
-    hash = "sha256-MjBdmJMj88WGAwROKsXZzyPpRl7eURu+kLQwknDTGVw=";
+    hash = "sha256-Nu/II5hQVbIDkE6D4cj5+ZmzxkJwvNo51XOGyk7/1ng=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,8 @@ buildPythonPackage rec {
     opentelemetry-api
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     django

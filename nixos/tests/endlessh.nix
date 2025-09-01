@@ -1,52 +1,50 @@
-import ./make-test-python.nix (
-  { lib, pkgs, ... }:
-  {
-    name = "endlessh";
-    meta.maintainers = with lib.maintainers; [ azahi ];
+{ lib, pkgs, ... }:
+{
+  name = "endlessh";
+  meta.maintainers = with lib.maintainers; [ azahi ];
 
-    nodes = {
-      server =
-        { ... }:
-        {
-          services.endlessh = {
-            enable = true;
-            openFirewall = true;
-          };
-
-          specialisation = {
-            unprivileged.configuration.services.endlessh.port = 2222;
-
-            privileged.configuration.services.endlessh.port = 22;
-          };
+  nodes = {
+    server =
+      { ... }:
+      {
+        services.endlessh = {
+          enable = true;
+          openFirewall = true;
         };
 
-      client =
-        { pkgs, ... }:
-        {
-          environment.systemPackages = with pkgs; [
-            curl
-            netcat
-          ];
+        specialisation = {
+          unprivileged.configuration.services.endlessh.port = 2222;
+
+          privileged.configuration.services.endlessh.port = 22;
         };
-    };
+      };
 
-    testScript = ''
-      def activate_specialisation(name: str):
-          server.succeed(f"/run/booted-system/specialisation/{name}/bin/switch-to-configuration test >&2")
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          curl
+          netcat
+        ];
+      };
+  };
 
-      start_all()
+  testScript = ''
+    def activate_specialisation(name: str):
+        server.succeed(f"/run/booted-system/specialisation/{name}/bin/switch-to-configuration test >&2")
 
-      with subtest("Unprivileged"):
-          activate_specialisation("unprivileged")
-          server.wait_for_unit("endlessh.service")
-          server.wait_for_open_port(2222)
-          client.succeed("nc -dvW5 server 2222")
+    start_all()
 
-      with subtest("Privileged"):
-          activate_specialisation("privileged")
-          server.wait_for_unit("endlessh.service")
-          server.wait_for_open_port(22)
-          client.succeed("nc -dvW5 server 22")
-    '';
-  }
-)
+    with subtest("Unprivileged"):
+        activate_specialisation("unprivileged")
+        server.wait_for_unit("endlessh.service")
+        server.wait_for_open_port(2222)
+        client.succeed("nc -dvW5 server 2222")
+
+    with subtest("Privileged"):
+        activate_specialisation("privileged")
+        server.wait_for_unit("endlessh.service")
+        server.wait_for_open_port(22)
+        client.succeed("nc -dvW5 server 22")
+  '';
+}

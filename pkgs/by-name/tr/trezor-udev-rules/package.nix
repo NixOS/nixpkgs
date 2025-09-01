@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,12 @@ stdenv.mkDerivation rec {
     url = "https://raw.githubusercontent.com/trezor/trezor-firmware/68a3094b0a8e36b588b1bcb58c34a2c9eafc0dca/common/udev/51-trezor.rules";
     sha256 = "0vlxif89nsqpbnbz1vwfgpl1zayzmq87gw1snskn0qns6x2rpczk";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
 

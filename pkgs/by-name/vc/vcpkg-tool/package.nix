@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2024-07-10";
+  version = "2025-07-21";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-P/ARKMfZdrfO+24rBrRm9k8tkBPSJJBqH509+iarNkw=";
+    hash = "sha256-Q2CLqlHItNr4H4xFcuGd0BqootxsInZQ3unTZ7vtz8E=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
         unzip
         zip
         zstd
-      ] ++ extraRuntimeDeps;
+      ]
+      ++ extraRuntimeDeps;
 
       # Apart from adding the runtime dependencies to $PATH,
       # the wrapper will also override these arguments by default.
@@ -175,9 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.optionalAttrs doWrap {
     testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
       export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
+      export VCPKG_ROOT=.
       vcpkg --x-packages-root="test" --x-install-root="test2" contact > "$out"
 
       cat "$out" | head -n 4 | diff - ${writeText "vcpkg-tool-test-wrapper-expected" ''

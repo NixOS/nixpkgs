@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   ipython,
   mock,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   sh,
 }:
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "1.0.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.8";
+  version = "1.1.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4yTukKAj2AjxlZxGvLwERGoQztJ3eD3G7gmYfDfsEMo=";
+  src = fetchFromGitHub {
+    owner = "theskumar";
+    repo = "python-dotenv";
+    tag = "v${version}";
+    hash = "sha256-GeN6/pnqhm7TTP+H9bKhJat6EwEl2EPl46mNSJWwFKk=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ setuptools ];
+
+  dependencies = [ click ];
 
   nativeCheckInputs = [
     ipython

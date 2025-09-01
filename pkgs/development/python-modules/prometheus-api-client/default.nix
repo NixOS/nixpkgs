@@ -8,22 +8,25 @@
   matplotlib,
   numpy,
   pandas,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-api-client";
-  version = "0.5.5";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
     tag = "v${version}";
-    hash = "sha256-tUu0+ZUOFxBCj//lHhNm88rhFbS01j1x508+nqIkCfQ=";
+    hash = "sha256-Xi3n1Ha6bpfp4KfCh/Zky7bBrXOojuR6BVzPNQ3a18Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dateparser
     matplotlib
     numpy
@@ -47,8 +50,8 @@ buildPythonPackage rec {
       and performing various aggregation operations on the time series data.
     '';
     homepage = "https://github.com/4n4nd/prometheus-api-client-python";
-    changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

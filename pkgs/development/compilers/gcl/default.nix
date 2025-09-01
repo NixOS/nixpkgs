@@ -19,11 +19,6 @@
   libXmu,
 }:
 
-assert stdenv ? cc;
-assert stdenv.cc.isGNU;
-assert stdenv.cc ? libc;
-assert stdenv.cc.libc != null;
-
 stdenv.mkDerivation rec {
   pname = "gcl";
   version = "2.6.14";
@@ -58,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
     mainProgram = "gcl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     license = licenses.gpl2;
     platforms = platforms.linux;
     broken = true; # 2025-01-21; to check after 2.7.0 is tagged

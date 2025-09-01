@@ -1,31 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   xorg,
-  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xvfbwrapper";
-  version = "0.2.9";
-  format = "setuptools";
+  version = "0.2.13";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
+  src = fetchFromGitHub {
+    owner = "cgoldberg";
+    repo = "xvfbwrapper";
+    tag = version;
+    sha256 = "sha256-8JO5NMRawqFmGEmjeVed8dd9b2JD/n547rM9fp7A8L8=";
   };
-  propagatedBuildInputs = [ xorg.xvfb ];
 
-  # See: https://github.com/cgoldberg/xvfbwrapper/issues/30
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ mock ];
+  dependencies = [ xorg.xvfb ];
 
-  meta = with lib; {
-    description = "Run headless display inside X virtual framebuffer (Xvfb)";
+  nativeCheckInputs = [
+    pytestCheckHook
+    xorg.xvfb
+  ];
+
+  meta = {
+    description = "Run headless displays inside X virtual framebuffers (Xvfb)";
     homepage = "https://github.com/cgoldberg/xvfbwrapper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

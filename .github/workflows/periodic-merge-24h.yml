@@ -11,10 +11,14 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Merge every 24 hours
-    - cron:  '0 0 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions: {}
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   periodic-merge:
@@ -27,14 +31,16 @@ jobs:
       max-parallel: 1
       matrix:
         pairs:
-          - from: release-24.11
-            into: staging-next-24.11
-          - from: staging-next-24.11
-            into: staging-24.11
-          - from: master staging
+          - from: release-25.05
+            into: staging-next-25.05
+          - from: staging-next-25.05
+            into: staging-25.05
+          - name: merge-base(master,staging) → haskell-updates
+            from: master staging
             into: haskell-updates
     uses: ./.github/workflows/periodic-merge.yml
     with:
       from: ${{ matrix.pairs.from }}
       into: ${{ matrix.pairs.into }}
+    name: ${{ matrix.pairs.name || format('{0} → {1}', matrix.pairs.from, matrix.pairs.into) }}
     secrets: inherit

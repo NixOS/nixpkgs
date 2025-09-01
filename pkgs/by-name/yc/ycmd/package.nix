@@ -1,28 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, python
-, withGodef ? true
-, godef
-, withGopls ? true
-, gopls
-, withRustAnalyzer ? true
-, rust-analyzer
-, withTypescript ? true
-, typescript
-, abseil-cpp
-, boost
-, llvmPackages
-, fixDarwinDylibNames
-, Cocoa
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  python3,
+  withGodef ? true,
+  godef,
+  withGopls ? true,
+  gopls,
+  withRustAnalyzer ? true,
+  rust-analyzer,
+  withTypescript ? true,
+  typescript,
+  abseil-cpp,
+  boost,
+  llvmPackages,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "unstable-2023-11-06";
-  disabled = !python.isPy3k;
+  version = "0-unstable-2023-11-06";
+  disabled = !python3.isPy3k;
 
   # required for third_party directory creation
   src = fetchFromGitHub {
@@ -33,15 +33,29 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = with python.pkgs; with llvmPackages; [ abseil-cpp boost libllvm.all libclang.all ]
-    ++ [ jedi jedi-language-server pybind11 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs =
+    with python3.pkgs;
+    with llvmPackages;
+    [
+      abseil-cpp
+      boost
+      libllvm.all
+      libclang.all
+    ]
+    ++ [
+      jedi
+      jedi-language-server
+      pybind11
+    ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
-    ${python.pythonOnBuildForHost.interpreter} build.py --system-libclang --clang-completer --ninja
+    ${python3.pythonOnBuildForHost.interpreter} build.py --system-libclang --clang-completer --ninja
   '';
 
   dontConfigure = true;
@@ -61,7 +75,7 @@ stdenv.mkDerivation {
     find third_party -type d -name "test" -exec rm -rf {} +
 
     chmod +x ycmd/__main__.py
-    sed -i "1i #!${python.interpreter}\
+    sed -i "1i #!${python3.interpreter}\
     " ycmd/__main__.py
 
     mkdir -p $out/lib/ycmd
@@ -76,19 +90,23 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/ycmd/third_party
     cp -r third_party/* $out/lib/ycmd/third_party/
 
-  '' + lib.optionalString withGodef ''
+  ''
+  + lib.optionalString withGodef ''
     TARGET=$out/lib/ycmd/third_party/godef
     mkdir -p $TARGET
     ln -sf ${godef}/bin/godef $TARGET
-  '' + lib.optionalString withGopls ''
+  ''
+  + lib.optionalString withGopls ''
     TARGET=$out/lib/ycmd/third_party/go/bin
     mkdir -p $TARGET
     ln -sf ${gopls}/bin/gopls $TARGET
-  '' + lib.optionalString withRustAnalyzer ''
+  ''
+  + lib.optionalString withRustAnalyzer ''
     TARGET=$out/lib/ycmd/third_party/rust-analyzer
     mkdir -p $TARGET
     ln -sf ${rust-analyzer} $TARGET
-  '' + lib.optionalString withTypescript ''
+  ''
+  + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${typescript} $TARGET
   '';
@@ -105,7 +123,11 @@ stdenv.mkDerivation {
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rasendubi lnl7 mel ];
+    maintainers = with maintainers; [
+      rasendubi
+      lnl7
+      mel
+    ];
     platforms = platforms.all;
   };
 }

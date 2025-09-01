@@ -1,23 +1,23 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  llvmPackages,
-  buildNpmPackage,
+  callPackage,
+  cargo,
   cmake,
+  fetchFromGitHub,
+  lib,
+  llvmPackages_19,
+  makeRustPlatform,
+  makeWrapper,
   nodejs,
-  unzip,
   python3,
-  pkg-config,
-  libsecret,
+  rustc,
+  stdenv,
+  unzip,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.10.0";
+  version = "1.11.4";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -25,23 +25,25 @@ let
 
   src = fetchFromGitHub {
     owner = "vadimcn";
-    repo = "vscode-lldb";
+    repo = "codelldb";
     rev = "v${version}";
-    hash = "sha256-ExSS5HxDmJJtYypRYJNz7nY0D50gjoDBc4CnJMfgVw8=";
+    hash = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
   };
 
-  # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub llvmPackages; });
+  lldb = llvmPackages_19.lldb;
 
   adapter = (
-    import ./adapter.nix {
-      inherit
-        lib
-        lldb
-        makeWrapper
-        rustPlatform
-        stdenv
+    callPackage ./adapter.nix {
+      # The adapter is meant to be compiled with clang++,
+      # based on the provided CMake toolchain files.
+      # <https://github.com/vadimcn/codelldb/tree/master/cmake>
+      rustPlatform = makeRustPlatform {
+        stdenv = llvmPackages_19.libcxxStdenv;
+        inherit cargo rustc;
+      };
+      stdenv = llvmPackages_19.libcxxStdenv;
 
+      inherit
         pname
         src
         version
@@ -50,13 +52,8 @@ let
   );
 
   nodeDeps = (
-    import ./node_deps.nix {
+    callPackage ./node_deps.nix {
       inherit
-        buildNpmPackage
-        libsecret
-        pkg-config
-        python3
-
         pname
         src
         version
@@ -64,14 +61,6 @@ let
     }
   );
 
-  # debugservers on macOS require the 'com.apple.security.cs.debugger'
-  # entitlement which nixpkgs' lldb-server does not yet provide; see
-  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
-  lldbServer =
-    if stdenv.hostPlatform.isDarwin then
-      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-    else
-      "${lldb.out}/bin/lldb-server";
 in
 stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -94,20 +83,18 @@ stdenv.mkDerivation {
 
   patches = [ ./patches/cmake-build-extension-only.patch ];
 
-  postPatch = ''
-    # temporary patch for forgotten version updates
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "1.9.2" ${version}
+  # Make devDependencies available to tools/prep-package.js
+  preConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
   '';
 
-  postConfigure =
-    ''
-      cp -r ${nodeDeps}/lib/node_modules .
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export HOME="$TMPDIR/home"
-      mkdir $HOME
-    '';
+  postConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
+  '';
 
   cmakeFlags = [
     # Do not append timestamp to version.
@@ -125,12 +112,12 @@ stdenv.mkDerivation {
 
     unzip ./codelldb-bootstrap.vsix 'extension/*' -d ./vsix-extracted
 
-    mkdir -p $ext/{adapter,formatters}
+    mkdir -p $ext/adapter
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
+      --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -153,7 +140,7 @@ stdenv.mkDerivation {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = [ lib.licenses.mit ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.r4v3n6101 ];
     platforms = lib.platforms.all;
   };
 }

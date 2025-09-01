@@ -11,6 +11,8 @@
   common-updater-scripts,
   jq,
   buildPackages,
+
+  tde2eOnly ? false,
 }:
 
 let
@@ -35,8 +37,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "tdlib";
-  version = "1.8.44";
+  pname = if tde2eOnly then "tde2e" else "tdlib";
+  version = "1.8.52";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -45,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "28c6f2e9c045372d50217919bf5768b7fbbe0294";
-    hash = "sha256-IZ/VplO7PSzYVYmUa6nhJdI4kni8x5TZ7XWkf8JcmYI=";
+    rev = "4269f54e16b9cf564efc2db5bcd29743a2eec6ee";
+    hash = "sha256-LAI2MWKawGZ+iuhizBrqUXLU1n50s6YIyci6zepYTz0=";
   };
 
   buildInputs = [
@@ -73,19 +75,22 @@ stdenv.mkDerivation {
     cmake --build native-build -j $NIX_BUILD_CORES
   '';
 
+  cmakeFlags = [
+    (lib.cmakeBool "TD_E2E_ONLY" tde2eOnly)
+  ];
+
   # https://github.com/tdlib/td/issues/1974
-  postPatch =
-    ''
-      substituteInPlace CMake/GeneratePkgConfig.cmake \
-        --replace 'function(generate_pkgconfig' \
-                  'include(GNUInstallDirs)
-                   function(generate_pkgconfig' \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      sed -i "/vptr/d" test/CMakeLists.txt
-    '';
+  postPatch = ''
+    substituteInPlace CMake/GeneratePkgConfig.cmake \
+      --replace 'function(generate_pkgconfig' \
+                'include(GNUInstallDirs)
+                 function(generate_pkgconfig' \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    sed -i "/vptr/d" test/CMakeLists.txt
+  '';
 
   passthru.updateScript = lib.getExe updateScript;
 

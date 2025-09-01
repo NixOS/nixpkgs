@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.18";
+  version = "3.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "flow.record";
     tag = version;
-    hash = "sha256-tEKmwDZOoGIXfJqxIat6WTbEv4EkiwkJGMpNxfv2Zd0=";
+    hash = "sha256-3jXxKA+MHjKfzKqOuP0EJxVD5QPvwjWE3N4qhIEFNvM=";
   };
 
   build-system = [
@@ -57,7 +57,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     elastic-transport
     pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "flow.record" ];
 
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
-    changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

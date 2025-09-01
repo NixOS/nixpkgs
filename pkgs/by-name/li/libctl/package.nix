@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "libctl";
     rev = "v${version}";
     sha256 = "uOydBWYPXSBUi+4MM6FNx6B5l2to7Ny9Uc1MMTV9bGA=";
   };
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     mainProgram = "gen-ctl-io";
     homepage = "https://github.com/NanoComp/libctl";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ carpinchomug ];
+    maintainers = [ ];
   };
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  pytest-cov-stub,
   lxml,
   matplotlib,
   networkx,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyxnat";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "pyxnat";
     repo = "pyxnat";
     tag = version;
-    hash = "sha256-21nTIYbIYlFWNJTxqsuijamqRunpdc7/VBawvrWadWI=";
+    hash = "sha256-peyQQ1fc+0O1I9LztYSgk2VBC17Y3UlOZGR2WSYKVTk=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +38,11 @@ buildPythonPackage rec {
   # pathlib is installed part of python38+ w/o an external package
   prePatch = ''
     substituteInPlace setup.py --replace-fail "pathlib>=1.0" ""
-    sed -i '/--cov/d' setup.cfg
   '';
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     matplotlib
     networkx
     pandas
@@ -49,7 +50,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PYXNAT_SKIP_NETWORK_TESTS=1
   '';
-  pytestFlagsArray = [ "pyxnat" ];
+  enabledTestPaths = [ "pyxnat" ];
   disabledTestPaths = [
     # require a running local XNAT instance e.g. in a docker container:
     "pyxnat/tests/attributes_test.py"
@@ -77,7 +78,7 @@ buildPythonPackage rec {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     mainProgram = "sessionmirror.py";
-    changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${version}";
+    changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

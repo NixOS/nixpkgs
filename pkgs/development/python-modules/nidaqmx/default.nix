@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.0.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    rev = "${version}";
-    hash = "sha256-rf5cGq3Iv6ucURSUFuFANQzaGeufBZ+adjKlg4B5DRY=";
+    tag = version;
+    hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
   };
 
   disabled = pythonOlder "3.8";
@@ -44,19 +44,18 @@ buildPythonPackage rec {
       --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
   '';
 
-  dependencies =
-    [
-      numpy
-      deprecation
-      hightime
-      tzlocal
-      python-decouple
-      click
-      requests
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      distro
-    ];
+  dependencies = [
+    numpy
+    deprecation
+    hightime
+    tzlocal
+    python-decouple
+    click
+    requests
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    distro
+  ];
 
   passthru.optional-dependencies = {
     docs = [
@@ -76,7 +75,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nidaqmx" ];
 
   meta = {
-    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/v${version}";
+    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/${src.tag}";
     description = "API for interacting with the NI-DAQmx driver";
     homepage = "https://github.com/ni/nidaqmx-python";
     license = lib.licenses.mit;

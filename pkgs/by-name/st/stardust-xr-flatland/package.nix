@@ -18,20 +18,14 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "stardust-xr-0.44.0" = "sha256-Gu/P78nFFVSpgwCcbMwyoqdEZO8zIcvP1ovU7Y0sXqg=";
-      "stardust-xr-molecules-0.44.0" = "sha256-TpgsmQnaAbtcp+veclGaht7f9hwEWEzMOpEIvdICTbc=";
-    };
-  };
+  cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
   };
 
   meta = {
-    description = "A flat window for Stardust XR";
+    description = "Flat window for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "flatland";

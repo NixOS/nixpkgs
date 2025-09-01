@@ -152,6 +152,7 @@ def main():
         all_kernels[branch] = {
             "version": kernel.version,
             "hash": get_hash(kernel),
+            "lts": kernel.nature == KernelNature.LONGTERM,
         }
 
         with VERSIONS_FILE.open("w") as fd:

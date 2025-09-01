@@ -6,64 +6,66 @@
   chardet,
   django,
   django-contrib-comments,
-  fetchPypi,
+  fetchFromGitHub,
   filebrowser-safe,
-  future,
   grappelli-safe,
   isPyPy,
-  pep8,
   pillow,
-  pyflakes,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-django,
   pythonOlder,
   pytz,
   requests,
   requests-oauthlib,
+  requirements-parser,
+  setuptools,
   tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "mezzanine";
-  version = "6.0.0";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7" || isPyPy;
 
-  src = fetchPypi {
-    pname = "Mezzanine";
-    inherit version;
-    hash = "sha256-R/PB4PFQpVp6jnCasyPszgC294SKjLzq2oMkR2qV86s=";
+  src = fetchFromGitHub {
+    owner = "stephenmcd";
+    repo = "mezzanine";
+    tag = "v${version}";
+    hash = "sha256-TdGWlquS4hsnxIM0bhbWR7C0X4wyUcqC+YrBDSShRhg=";
   };
 
-  buildInputs = [
-    pyflakes
-    pep8
+  patches = [
+    # drop git requirement from tests and fake stable branch
+    ./tests-no-git.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     bleach
     chardet
     django
     django-contrib-comments
     filebrowser-safe
-    future
     grappelli-safe
     pillow
     pytz
     requests
     requests-oauthlib
     tzlocal
-  ] ++ bleach.optional-dependencies.css;
+  ]
+  ++ bleach.optional-dependencies.css;
 
-  # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
-  doCheck = false;
-
-  # sed calls will be unnecessary in v3.1.11+
-  preConfigure = ''
-    sed -i 's/==/>=/' setup.py
-  '';
-
-  LC_ALL = "en_US.UTF-8";
+  nativeCheckInputs = [
+    pytest-django
+    pytest-cov-stub
+    pytestCheckHook
+    requirements-parser
+  ];
 
   meta = with lib; {
     description = "Content management platform built using the Django framework";

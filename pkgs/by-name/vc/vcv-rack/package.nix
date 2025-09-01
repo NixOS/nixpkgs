@@ -88,7 +88,7 @@ let
     rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
     sha256 = "0c6qpigyr0ppvra20hcy1fdcmqa212jckb9wkx4f6fgdby7565wv";
   };
-  vcv-rtaudio = stdenv.mkDerivation rec {
+  vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
     version = "unstable-2020-01-30";
 
@@ -120,7 +120,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vcv-rack";
-  version = "2.5.1";
+  version = "2.6.0";
 
   desktopItems = [
     (makeDesktopItem {
@@ -143,8 +143,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
-    rev = "v${version}";
-    sha256 = "1q2bwjfn6crk9lyd6m3py0v754arw1xgpv5kkj6ka1bc2yz839qh";
+    tag = "v${version}";
+    hash = "sha256-leI0wwhYiA8qktJFe6DuZjs6q5tMFQ4WFLD4Ivom5+E=";
   };
 
   patches = [

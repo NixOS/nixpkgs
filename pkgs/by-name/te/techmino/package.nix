@@ -15,7 +15,7 @@
 
 let
   pname = "techmino";
-  description = "A modern Tetris clone with many features";
+  description = "Modern Tetris clone with many features";
 
   desktopItem = makeDesktopItem {
     name = pname;

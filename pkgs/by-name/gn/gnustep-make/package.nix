@@ -8,11 +8,11 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-9UDfnw4drrPSOwjhSyBLKkbx0KQAXLFxyVMjQTgG5OE=";
+    sha256 = "sha256-k8oyC3BieevKU3YNqJ1MPyu8VH9HI5ZxQKNDRtnwTCQ=";
   };
 
   configureFlags = [

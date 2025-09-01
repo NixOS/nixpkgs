@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyperf";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7xA+IaTQSZkxUAMCai1lnEinz85eFEDwPW5yWRQAcTo=";
+    hash = "sha256-2+D+747BpGXfGRu6JXYUl2LRWoyZhcn+qTq2Jdh1w2I=";
   };
 
   nativeBuildInputs = [ setuptools ];

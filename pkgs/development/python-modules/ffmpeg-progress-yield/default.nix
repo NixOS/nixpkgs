@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  colorama,
+  fetchFromGitHub,
+  setuptools,
   tqdm,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   ffmpeg,
@@ -12,33 +13,32 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-n6zHi6M9SyrNm8MhQ9xvBo2OIzoQYJ4yhgujW5C6QWY=";
+  src = fetchFromGitHub {
+    owner = "slhck";
+    repo = "ffmpeg-progress-yield";
+    tag = "v${version}";
+    hash = "sha256-tX4CioyhZvHNe5PItNwCF68ZQhs4fpG1ZrloGtei07I=";
   };
 
-  propagatedBuildInputs = [
-    colorama
+  build-system = [ setuptools ];
+
+  dependencies = [
     tqdm
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     ffmpeg
     procps
   ];
 
-  disabledTests = [
-    "test_quit"
-    "test_quit_gracefully"
-  ];
-
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 

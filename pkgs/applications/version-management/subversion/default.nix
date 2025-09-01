@@ -16,8 +16,6 @@
   openssl,
   lz4,
   utf8proc,
-  CoreServices,
-  Security,
   autoconf,
   libtool,
   apacheHttpd ? null,
@@ -37,10 +35,6 @@ assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
-  # Update libtool for macOS 11 support
-  needsAutogen =
-    stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11";
-
   common =
     {
       version,
@@ -64,33 +58,28 @@ let
           "man"
         ];
 
-        nativeBuildInputs = lib.optionals needsAutogen [
+        nativeBuildInputs = [
           autoconf
           libtool
           python3
         ];
 
-        buildInputs =
-          [
-            zlib
-            apr
-            aprutil
-            sqlite
-            openssl
-            lz4
-            utf8proc
-          ]
-          ++ lib.optional httpSupport serf
-          ++ lib.optionals pythonBindings [
-            python3
-            py3c
-          ]
-          ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            CoreServices
-            Security
-          ];
+        buildInputs = [
+          zlib
+          apr
+          aprutil
+          sqlite
+          openssl
+          lz4
+          utf8proc
+        ]
+        ++ lib.optional httpSupport serf
+        ++ lib.optionals pythonBindings [
+          python3
+          py3c
+        ]
+        ++ lib.optional perlBindings perl
+        ++ lib.optional saslSupport sasl;
 
         patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -105,34 +94,25 @@ let
         # "-P" CPPFLAG is needed to build Python bindings and subversionClient
         CPPFLAGS = [ "-P" ];
 
-        env = lib.optionalAttrs stdenv.cc.isClang {
-          NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-            "-Wno-error=implicit-function-declaration"
-            "-Wno-error=implicit-int"
-            "-Wno-int-conversion"
-          ];
-        };
-
-        preConfigure = lib.optionalString needsAutogen ''
+        preConfigure = ''
           ./autogen.sh
         '';
 
-        configureFlags =
-          [
-            (lib.withFeature bdbSupport "berkeley-db")
-            (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-            (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-            (lib.withFeatureAs saslSupport "sasl" sasl)
-            (lib.withFeatureAs httpSupport "serf" serf)
-            "--with-zlib=${zlib.dev}"
-            "--with-sqlite=${sqlite.dev}"
-            "--with-apr=${apr.dev}"
-            "--with-apr-util=${aprutil.dev}"
-          ]
-          ++ lib.optionals javahlBindings [
-            "--enable-javahl"
-            "--with-jdk=${jdk}"
-          ];
+        configureFlags = [
+          (lib.withFeature bdbSupport "berkeley-db")
+          (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+          (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+          (lib.withFeatureAs saslSupport "sasl" sasl)
+          (lib.withFeatureAs httpSupport "serf" serf)
+          "--with-zlib=${zlib.dev}"
+          "--with-sqlite=${sqlite.dev}"
+          "--with-apr=${apr.dev}"
+          "--with-apr-util=${aprutil.dev}"
+        ]
+        ++ lib.optionals javahlBindings [
+          "--enable-javahl"
+          "--with-jdk=${jdk}"
+        ];
 
         preBuild = ''
           makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)

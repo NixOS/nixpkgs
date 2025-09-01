@@ -1,30 +1,31 @@
-{ lib
-, python3Packages
-, fetchPypi
-, pkg-config
-, librsvg
-, gobject-introspection
-, atk
-, gtk3
-, gtkspell3
-, adwaita-icon-theme
-, glib
-, goocanvas2
-, gdk-pixbuf
-, pango
-, fontconfig
-, freetype
-, wrapGAppsHook3
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  pkg-config,
+  librsvg,
+  gobject-introspection,
+  atk,
+  gtk3,
+  gtkspell3,
+  adwaita-icon-theme,
+  glib,
+  goocanvas2,
+  gdk-pixbuf,
+  pango,
+  fontconfig,
+  freetype,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.4.2";
+  version = "7.6.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-488WOXQLZfbjlEE7aTQun9/qGWVvtJ+qJGUPgrOETOY=";
+    hash = "sha256-nnXq29ostjbpWmHLbpifzIFB8vBc7O3XRDq4Odp4HNk=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -81,6 +82,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ johbo udono ];
+    maintainers = with maintainers; [
+      johbo
+      udono
+    ];
   };
 }

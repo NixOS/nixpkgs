@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyedflib";
-  version = "0.1.39";
+  version = "0.1.42";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holgern";
     repo = "pyedflib";
     tag = "v${version}";
-    hash = "sha256-NHjeaNLbOxTPzTbQ9owFkessQY/QnxBSC8G93JahMGg=";
+    hash = "sha256-KbySCsDjiS94U012KASRgHR2fuX090HlKUuPgsLC+xQ=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to read/write EDF+/BDF+ files based on EDFlib";
     homepage = "https://github.com/holgern/pyedflib";
-    changelog = "https://github.com/holgern/pyedflib/releases/tag/v${version}";
+    changelog = "https://github.com/holgern/pyedflib/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

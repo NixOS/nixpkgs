@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.12.0";
+  version = "1.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = "netutils";
     tag = "v${version}";
-    hash = "sha256-LslE/ROfr/2gU5VPiLKgaTxd4miM+Bvrh9OdY06zkr0=";
+    hash = "sha256-w+31rv/0EgAT8gv/Oqlbq/djbHIgK3YF792sxBDXHEQ=";
   };
 
   build-system = [ poetry-core ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kobzol";
-    repo = pname;
+    repo = "cargo-pgo";
     rev = "v${version}";
     hash = "sha256-FmZllibhesZY/8kIMnx4VfQrYF6+/cai7Gozda/3bMY=";
   };
 
-  cargoHash = "sha256-LxsUoujk6wwI67Y1XMVnZiJRKyLZupPX0JNFPUz9p30=";
+  cargoHash = "sha256-uOwWCSXxxnMCFS0+aFPUHSiSWSwNZPtL8NJVCCCDzAc=";
 
   # Integration tests do not run in Nix build environment due to needing to
   # create and build Cargo workspaces.

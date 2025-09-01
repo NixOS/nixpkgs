@@ -8,9 +8,9 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "owl";
-  version = "unstable-2022-01-30";
+  version = "0-unstable-2022-01-30";
 
   src = fetchFromGitHub {
     owner = "seemoo-lab";

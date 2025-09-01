@@ -6,34 +6,35 @@
   gnupg,
   coreutils,
   nixosTests,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "pass-secret-service";
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "unstable-2022-07-18";
+  version = "0-unstable-2023-12-16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdellweg";
     repo = "pass_secret_service";
-    rev = "fadc09be718ae1e507eeb8719f3a2ea23edb6d7a";
-    hash = "sha256-lrNU5bkG4/fMu5rDywfiI8vNHyBsMf/fiWIeEHug03c=";
+    rev = "6335c85d9a790a6472e3de6eff87a15208caa5dc";
+    hash = "sha256-SSmI3HJCUWuwFXCu3Zg66X18POlzp3ADRj7HeE8GRio=";
   };
 
   # Need to specify session.conf file for tests because it won't be found under
   # /etc/ in check phase.
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
-      --replace '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)' \
-      --replace 'pytest-3' 'pytest'
+      --replace-fail "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
+      --replace-fail '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)'
 
     substituteInPlace systemd/org.freedesktop.secrets.service \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
     substituteInPlace systemd/dbus-org.freedesktop.secrets.service \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''
@@ -42,7 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     cp systemd/dbus-org.freedesktop.secrets.service "$out/lib/systemd/user/"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     cryptography
     dbus-next
@@ -65,7 +70,14 @@ python3.pkgs.buildPythonApplication rec {
 
   checkTarget = "test";
 
-  passthru.tests.pass-secret-service = nixosTests.pass-secret-service;
+  pythonImportsCheck = [ "pass_secret_service" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+    tests.pass-secret-service = nixosTests.pass-secret-service;
+  };
 
   meta = {
     description = "Libsecret D-Bus API with pass as the backend";

@@ -9,6 +9,7 @@
   gobject-introspection,
   cairo,
   colord,
+  docutils,
   lcms2,
   pango,
   libstartup_notification,
@@ -36,6 +37,7 @@
   libXau,
   libinput,
   libdrm,
+  libgbm,
   libei,
   libdisplay-info,
   gsettings-desktop-schemas,
@@ -50,7 +52,7 @@
   libwacom,
   libSM,
   xwayland,
-  mesa,
+  mesa-gl-headers,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -63,13 +65,14 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
+  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "47.4";
+  version = "48.4";
 
   outputs = [
     "out"
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9TH8AObsbbtXCzv5QrZJD3qT35HEwmepGLTSr+khG9o=";
+    hash = "sha256-EYnPfmPMh8/dHzqG6PFNl8M9ap2iVPI+gWVVSbbFDZM=";
   };
 
   mesonFlags = [
@@ -101,11 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
-    mesa  # actually uses eglmesaext
+    mesa-gl-headers
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
+    docutils # for rst2man
     gettext
     glib
     libxcvt
@@ -114,11 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
+    python3.pkgs.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
     xorgserver
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -133,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libgbm
     libei
     libdisplay-info
     libGL
@@ -168,6 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXinerama
     libXau
+
+    # for gdctl shebang
+    (python3.withPackages (pp: [
+      pp.pygobject3
+      pp.argcomplete
+    ]))
   ];
 
   postPatch = ''
@@ -181,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-15/doc" "$devdoc"
+    moveToOutput "share/mutter-${finalAttrs.passthru.libmutter_api_version}/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -190,8 +203,11 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   strictDeps = true;
 
+  doInstallCheck = true;
+
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
+    libmutter_api_version = "16"; # bumped each dev cycle
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''
@@ -214,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     changelog = "https://gitlab.gnome.org/GNOME/mutter/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

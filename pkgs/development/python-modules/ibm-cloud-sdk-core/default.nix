@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.22.1";
+  version = "3.24.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "IBM";
     repo = "python-sdk-core";
     tag = "v${version}";
-    hash = "sha256-wXffw+/esHvWxrNdlnYLTPflgOaRyIdf0hxI4M12Xdc=";
+    hash = "sha256-xw7jEDr/5Qmd4+riAqFzTTFfmX/gQdlbzNZ8pua0hIs=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -41,33 +41,24 @@ buildPythonPackage rec {
     responses
   ];
 
-  disabledTests =
-    [
-      # Various tests try to access credential files which are not included with the source distribution
-      "test_configure_service"
-      "test_cp4d_authenticator"
-      "test_cwd"
-      "test_files_dict"
-      "test_files_duplicate_parts"
-      "test_files_list"
-      "test_get_authenticator"
-      "test_gzip_compression_external"
-      "test_iam"
-      "test_read_external_sources_2"
-      "test_retry_config_external"
-      # assertion error due to requests brotli support
-      "test_http_client"
-      # Tests require network access
-      "test_tls_v1_2"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # Tests are blocking or failing
-      "test_abstract_class_instantiation"
-      "test_abstract_class_instantiation"
-    ];
+  disabledTests = [
+    # Various tests try to access credential files which are not included with the source distribution
+    "test_configure_service"
+    "test_cp4d_authenticator"
+    "test_cwd"
+    "test_files_dict"
+    "test_files_duplicate_parts"
+    "test_files_list"
+    "test_get_authenticator"
+    "test_gzip_compression_external"
+    "test_iam"
+    "test_read_external_sources_2"
+    "test_retry_config_external"
+    # Tests require network access
+    "test_tls_v1_2"
+  ];
 
   disabledTestPaths = [
-    "test/test_container_token_manager.py"
     # Tests require credentials
     "test_integration/"
   ];
@@ -75,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
-    changelog = "https://github.com/IBM/python-sdk-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin ];
   };

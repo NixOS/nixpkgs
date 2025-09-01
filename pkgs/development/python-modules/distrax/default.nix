@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   chex,
   jaxlib,
   numpy,
@@ -23,6 +24,30 @@ buildPythonPackage rec {
     hash = "sha256-A1aCL/I89Blg9sNmIWQru4QJteUTN6+bhgrEJPmCrM0=";
   };
 
+  patches = [
+    # TODO: remove at the next release (already on master)
+    (fetchpatch2 {
+      name = "fix-jax-0.6.0-compat";
+      url = "https://github.com/google-deepmind/distrax/commit/c02708ac46518fac00ab2945311e0f2ee32c672c.patch";
+      hash = "sha256-hFNXKoA1b5I6dzhwTRXp/SnkHv89GI6tYwlnBBHwG78=";
+    })
+    # https://github.com/google-deepmind/distrax/pull/289
+    (fetchpatch2 {
+      name = "fix-jax-0.7.0-compat";
+      url = "https://github.com/google-deepmind/distrax/commit/7fc5bd7efff4a7144d175199159f115c3e68a3cf.patch";
+      hash = "sha256-TiD72YIb6ajpaCO1yOGl/+JCuaikQ879Zcpaf2wzMq4=";
+    })
+  ];
+
+  # TODO: remove at the next release (already on master)
+  # https://github.com/google-deepmind/distrax/pull/293
+  postPatch = ''
+    substituteInPlace distrax/_src/utils/transformations.py \
+      --replace-fail \
+        "jax.experimental.pjit.pjit_p" \
+        "jex.core.primitives.jit_p"
+  '';
+
   dependencies = [
     chex
     jaxlib
@@ -39,6 +64,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
+    # Flaky: AssertionError: 1 not less than 0.7000000000000001
+    "test_von_mises_sample_uniform_ks_test"
+
+    # Flaky: AssertionError: Not equal to tolerance
+    "test_composite_methods_are_consistent__with_jit"
+
     # NotImplementedError: Primitive 'square' does not have a registered inverse.
     "test_against_tfp_bijectors_square"
     "test_log_dets_square__with_device"
@@ -65,6 +96,10 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Since jax 0.6.0:
+    # TypeError: <lambda>() got an unexpected keyword argument 'accuracy'
+    "distrax/_src/bijectors/lambda_bijector_test.py"
+
     # TypeErrors
     "distrax/_src/bijectors/tfp_compatible_bijector_test.py"
     "distrax/_src/distributions/distribution_from_tfp_test.py"

@@ -9,7 +9,7 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "asha-pipewire-sink";
   version = "0-unstable-2024-10-22";
 

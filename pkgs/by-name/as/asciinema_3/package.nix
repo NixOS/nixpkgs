@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
   python3,
   rustPlatform,
   testers,
@@ -9,19 +10,30 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0-rc.3";
+    version = "3.0.0-rc.5";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-TYJ17uVj8v1u630MTb033h0X3aYRXY9d89GjAxG8muk=";
+      hash = "sha256-CxssC3ftnXgxdvRO7CrVgBSVkh7DPjXRNRet4fB2BKc=";
     };
 
-    cargoHash = "sha256-CYDy0CedwG/ThTV+XOfOg8ncxF3tdTEGakmu4MXfiE4=";
+    cargoHash = "sha256-OsynIQeGjXHD1E9iDH4P7Jksr1APtGZkchzZB0DawIw=";
+
+    env.ASCIINEMA_GEN_DIR = "gendir";
 
     nativeCheckInputs = [ python3 ];
+    nativeBuildInputs = [ installShellFiles ];
+
+    postInstall = ''
+      installManPage gendir/man/*
+      installShellCompletion --cmd asciinema \
+        --bash gendir/completion/asciinema.bash \
+        --fish gendir/completion/asciinema.fish \
+        --zsh gendir/completion/_asciinema
+    '';
 
     checkFlags = [
       # ---- pty::tests::exec_quick stdout ----
@@ -55,7 +67,10 @@ let
       '';
       license = with lib.licenses; [ gpl3Plus ];
       mainProgram = "asciinema";
-      maintainers = with lib.maintainers; [ jiriks74 ];
+      maintainers = with lib.maintainers; [
+        jiriks74
+        llakala
+      ];
     };
   };
 in

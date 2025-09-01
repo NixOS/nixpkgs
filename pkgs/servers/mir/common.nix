@@ -13,6 +13,7 @@
   glib,
   glm,
   libapparmor,
+  libdisplay-info,
   libdrm,
   libepoxy,
   libevdev,
@@ -25,7 +26,9 @@
   yaml-cpp,
   lttng-ust,
   libgbm,
+  mesa,
   nettle,
+  pixman,
   udev,
   wayland,
   wayland-scanner,
@@ -59,31 +62,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch =
-    ''
-      # Fix scripts that get run in tests
-      patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
+  postPatch = ''
+    # Fix scripts that get run in tests
+    patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
 
-      # Fix LD_PRELOADing in tests
-      substituteInPlace \
-        cmake/MirCommon.cmake \
-        tests/umock-acceptance-tests/CMakeLists.txt \
-        tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
-        tests/unit-tests/CMakeLists.txt \
-        --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
-        --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
+    # Fix LD_PRELOADing in tests
+    substituteInPlace \
+      cmake/MirCommon.cmake \
+      tests/umock-acceptance-tests/CMakeLists.txt \
+      tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
+      tests/unit-tests/CMakeLists.txt \
+      --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
+      --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
 
-      # Fix Xwayland default
-      substituteInPlace src/miral/x11_support.cpp \
-        --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
-    ''
-    + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
+    # Fix Xwayland default
+    substituteInPlace src/miral/x11_support.cpp \
+      --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+  ''
+  + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
 
-      # Fix paths for generating drm-formats
-      substituteInPlace src/platform/graphics/CMakeLists.txt \
-        --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
-        --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-    '';
+    # Fix paths for generating drm-formats
+    substituteInPlace src/platform/graphics/CMakeLists.txt \
+      --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
+      --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
+  '';
 
   strictDeps = true;
 
@@ -130,11 +132,23 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXcursor
     xorg.xorgproto
     xwayland
-  ] ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [ libapparmor ];
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
+    libapparmor
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.21.0") [
+    pixman
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.22.0") [
+    libdisplay-info
+  ];
 
   nativeCheckInputs = [
     dbus
     gobject-introspection
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.22.0") [
+    mesa.llvmpipeHook
   ];
 
   checkInputs = [
@@ -147,9 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_DOXYGEN" false)
     (lib.cmakeFeature "MIR_PLATFORM" (
       lib.strings.concatStringsSep ";" [
+        "atomic-kms"
         "gbm-kms"
-        "x11"
         "eglstream-kms"
+        "x11"
         "wayland"
       ]
     ))
@@ -158,10 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/canonical/mir/pull/1947#issuecomment-811810872
     (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
     (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (
-      lib.strings.concatStringsSep ";" [
-        # https://github.com/canonical/mir/issues/3716#issuecomment-2580698552
-        "UdevWrapperTest.UdevMonitorDoesNotTriggerBeforeEnabling"
-      ]
+      lib.strings.concatStringsSep ";" (
+        lib.optionals (lib.strings.versionOlder version "2.22.0") [
+          # https://github.com/canonical/mir/issues/3716#issuecomment-2580698552
+          "UdevWrapperTest.UdevMonitorDoesNotTriggerBeforeEnabling"
+        ]
+      )
     ))
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
@@ -170,16 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
     (lib.cmakeBool "MIR_USE_PRECOMPILED_HEADERS" false)
     (lib.cmakeFeature "MIR_COMPILER_QUIRKS" (
-      lib.strings.concatStringsSep ";" [
-        # https://github.com/canonical/mir/issues/3017 actually affects x86_64 as well
-        "test_touchspot_controller.cpp:array-bounds"
-      ]
+      lib.strings.concatStringsSep ";" (
+        lib.optionals (lib.strings.versionOlder version "2.22.0") [
+          # https://github.com/canonical/mir/issues/3017 actually affects x86_64 as well
+          "test_touchspot_controller.cpp:array-bounds"
+        ]
+      )
     ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
+    export HOME=$TMP # shader cache
     export XDG_RUNTIME_DIR=$TMP
   '';
 
@@ -191,7 +211,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    } // lib.optionalAttrs (!pinned) { inherit (nixosTests) miriway miracle-wm; };
+    }
+    // lib.optionalAttrs (!pinned) { inherit (nixosTests) miriway miracle-wm; };
     providedSessions = lib.optionals (lib.strings.versionOlder version "2.16.0") [
       # More of an example than a fully functioning shell, some notes for the adventurous:
       # - ~/.config/miral-shell.config is one possible user config location,
@@ -202,7 +223,8 @@ stdenv.mkDerivation (finalAttrs: {
       #   does not know about preferred terminal
       "mir-shell"
     ];
-  } // lib.optionalAttrs (!pinned) { updateScript = ./update.sh; };
+  }
+  // lib.optionalAttrs (!pinned) { updateScript = ./update.sh; };
 
   meta = {
     description = "Display server and Wayland compositor developed by Canonical";
@@ -214,23 +236,22 @@ stdenv.mkDerivation (finalAttrs: {
       OPNA2608
     ];
     platforms = lib.platforms.linux;
-    pkgConfigModules =
-      [
-        "miral"
-        "mircommon"
-        "mircore"
-        "miroil"
-        "mirplatform"
-        "mir-renderer-gl-dev"
-        "mirrenderer"
-        "mirserver"
-        "mirtest"
-        "mirwayland"
-      ]
-      ++ lib.optionals (lib.strings.versionOlder version "2.17.0") [ "mircookie" ]
-      ++ lib.optionals (lib.strings.versionAtLeast version "2.17.0") [
-        "mircommon-internal"
-        "mirserver-internal"
-      ];
+    pkgConfigModules = [
+      "miral"
+      "mircommon"
+      "mircore"
+      "miroil"
+      "mirplatform"
+      "mir-renderer-gl-dev"
+      "mirrenderer"
+      "mirserver"
+      "mirtest"
+      "mirwayland"
+    ]
+    ++ lib.optionals (lib.strings.versionOlder version "2.17.0") [ "mircookie" ]
+    ++ lib.optionals (lib.strings.versionAtLeast version "2.17.0") [
+      "mircommon-internal"
+      "mirserver-internal"
+    ];
   };
 })

@@ -1,8 +1,8 @@
-diff --git a/craft_providers/base.py b/craft_providers/base.py
-index 3c914a2..d9c2cf9 100644
---- a/craft_providers/base.py
-+++ b/craft_providers/base.py
-@@ -655,37 +655,22 @@ class Base(ABC):
+diff --git i/craft_providers/base.py w/craft_providers/base.py
+index 00f56ec..302f359 100644
+--- i/craft_providers/base.py
++++ w/craft_providers/base.py
+@@ -655,40 +655,24 @@ class Base(ABC):
                      ),
                  )
  
@@ -21,6 +21,9 @@ index 3c914a2..d9c2cf9 100644
 -                            f" channel {snap.channel!r} in target environment."
 -                        ),
 -                        details=error.details,
+-                        resolution=(
+-                            "Check Snap store status at https://status.snapcraft.io"
+-                        ),
 -                    ) from error
 -            else:
 -                try:
@@ -38,20 +41,22 @@ index 3c914a2..d9c2cf9 100644
 -                        details=error.details,
 -                    ) from error
 +            try:
-+                channel = "latest/beta"
 +                snap_installer.install_from_store(
 +                    executor=executor,
 +                    snap_name=snap.name,
-+                    channel=channel,
++                    channel=snap.channel,
 +                    classic=snap.classic,
 +                )
 +            except SnapInstallationError as error:
 +                raise BaseConfigurationError(
 +                    brief=(
 +                        f"failed to install snap {snap.name!r} from store"
-+                        f" channel {channel!r} in target environment."
++                        f" channel {snap.channel!r} in target environment."
 +                    ),
 +                    details=error.details,
++                    resolution=(
++                        "Check Snap store status at https://status.snapcraft.io"
++                    ),
 +                ) from error
  
      def wait_until_ready(self, executor: Executor) -> None:

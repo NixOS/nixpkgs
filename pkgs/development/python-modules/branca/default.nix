@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "branca";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
-    repo = pname;
+    repo = "branca";
     tag = "v${version}";
     hash = "sha256-Gnr3ONqWpUNOGiOlyq77d9PxcDT8TjqTHYBGxH+V+xc=";
   };
@@ -28,9 +28,9 @@ buildPythonPackage rec {
     rm setup.cfg
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ jinja2 ];
+  dependencies = [ jinja2 ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Some tests require a browser
     "tests/test_utilities.py"
+    "tests/test_iframe.py"
   ];
 
   disabledTests = [

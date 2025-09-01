@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libbsd ];
 
-  cargoHash = "sha256-W6LvdjR3jTf08X75wPWloLx7FUYTpboB3E5f0g75M5g=";
+  cargoHash = "sha256-+GbbCAdEkxhyQoe8g4me2jlsuHx4R5vibd2PQLmqNM4=";
 
   postInstall = ''
     installManPage inputplug.1

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.31.0";
+  version = "1.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LE8YnPnMjwDIAEX2bTm3wPPtRYc/09Hyr58i2y4S/0s=";
+    hash = "sha256-g2rYD6o+JafXEBXJkM5h9wSocyix5zvLsGI6GMvxdRA=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,8 @@ buildPythonPackage rec {
     cryptography
     pyjwt
     requests
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   # Tests assume Network Connectivity:
   # https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/e2958961e8ec16d0af4199f60c36c3f913497e48/tests/test_authority.py#L73

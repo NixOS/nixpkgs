@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "p11-glue";
-    repo = pname;
-    rev = version;
+    repo = "p11-kit";
+    tag = version;
     hash = "sha256-2xDUvXGsF8x42uezgnvOXLVUdNNHcaE042HDDEJeplc=";
     fetchSubmodules = true;
   };
@@ -95,6 +95,11 @@ stdenv.mkDerivation rec {
       "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
     ];
     platforms = platforms.all;
+    badPlatforms = [
+      # https://github.com/p11-glue/p11-kit/issues/355#issuecomment-778777141
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     license = licenses.bsd3;
+    mainProgram = "p11-kit";
   };
 }

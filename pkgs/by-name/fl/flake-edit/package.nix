@@ -4,10 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
   installShellFiles,
   nix-update-script,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,19 +19,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7n8WANm9AijZYI5nlnevLI+aZtV55teroeQIEld7tkE=";
   };
 
-  cargoHash = "sha256-LyASAwyiBiPZkrA1R0zgQbNbSeOmMDEydLk2YiGq2fM=";
+  cargoHash = "sha256-hK79yHSneD9OFm+M+RPSfu6HW1MmdpcMLysPIKlFDv8=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   env.ASSET_DIR = "target/assets";
 

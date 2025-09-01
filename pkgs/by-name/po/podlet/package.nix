@@ -15,14 +15,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-STkYCaXBoQSmFKpMdsKzqFGXHh9s0jeGi5K2itj8jmc=";
   };
 
-  cargoHash = "sha256-G+X9b4PAQ+1TkzGIs1g+qz7HYjwPJ/CvaHMiOAn3dV8=";
+  cargoHash = "sha256-FeYGNyBtMCiufeX9Eik3QXPxqOGEW/ZbvwFn50mTag8=";
 
   meta = {
     description = "Generate Podman Quadlet files from a Podman command, compose file, or existing object";
     homepage = "https://github.com/containers/podlet";
     changelog = "https://github.com/containers/podlet/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ qwqawawow ];
+    maintainers = with lib.maintainers; [ eihqnh ];
     mainProgram = "podlet";
   };
 }

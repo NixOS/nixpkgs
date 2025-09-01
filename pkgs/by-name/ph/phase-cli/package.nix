@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "phase-cli";
-  version = "1.18.6";
+  version = "1.19.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phasehq";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-4DvvTIXTV10euFSFpULcomrAhfZbOBZ0MKb5oR9GX64=";
+    hash = "sha256-SOFMTetw5kEduV7ufY1v2vnv3exDEmnCFBr9q83YVTo=";
   };
 
   build-system = with python3Packages; [
@@ -38,19 +38,19 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/*.py"
   ];
 
   pythonRelaxDeps = true;
 
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Securely manage and sync environment variables with Phase";
     homepage = "https://github.com/phasehq/cli";
-    changelog = "https://github.com/phasehq/cli/releases/tag/v${version}";
+    changelog = "https://github.com/phasehq/cli/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "phase";

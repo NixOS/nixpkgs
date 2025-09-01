@@ -22,13 +22,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.18.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
-    repo = pname;
+    repo = "syncstorage-rs";
     tag = version;
-    hash = "sha256-YIj9yoZrVRMcWFczyy5RR2Djwhu1/CyQuumzPoApp3I=";
+    hash = "sha256-K4oVobACVLc99WNageaXrkJDeNAn8JQNykhcLZdNYck=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +47,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-xKLSsTI7Uo1MdTMxp04PW31Fai4tmPLMR3IgiGZD45U=";
 
   # almost all tests need a DB to test against
   doCheck = false;

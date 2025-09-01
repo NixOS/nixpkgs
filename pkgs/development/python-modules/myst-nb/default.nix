@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "1.1.2";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "myst_nb";
-    hash = "sha256-lhtABWVwKcqJiSpMde2/CFbFTOr2FyNotGv3Z2wfdwA=";
+    hash = "sha256-3zzUaA9Rpa9nP9RrOLVivjVZrvFHXpBu0PLmbkWHzks=";
   };
 
   nativeBuildInputs = [ flit-core ];

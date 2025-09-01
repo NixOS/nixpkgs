@@ -28,6 +28,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
+  # nixpkgs-update: no auto update
   version = "1.11.2";
 
   src = fetchFromGitHub {

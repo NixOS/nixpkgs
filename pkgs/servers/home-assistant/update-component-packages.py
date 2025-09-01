@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt-rfc-style
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -44,9 +44,7 @@ PKG_PREFERENCES = {
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
-    "paho-mqtt": "paho-mqtt_1",
-    "pyhive-integration": "pyhiveapi", # https://github.com/home-assistant/core/pull/135482
-    "pysuezV2": "pysuez",
+    "paho-mqtt": "paho-mqtt",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
@@ -99,7 +97,7 @@ def parse_components(version: str = "master"):
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
         ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
+            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp, filter="data")
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
 

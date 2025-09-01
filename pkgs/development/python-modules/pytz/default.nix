@@ -3,18 +3,25 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  tzdata,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2024.2";
+  version = "2025.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KqNVCDxQoPk/pYFwnerAya1lzKip6b6sZgrcvUk8eYo=";
+    hash = "sha256-NguePbtJognCGtYYCcf7RTZD4EiziSTHZYE1RnRugcM=";
   };
+
+  postPatch = ''
+    # Use our system-wide zoneinfo dir instead of the bundled one
+    rm -rf pytz/zoneinfo
+    ln -snvf ${tzdata}/share/zoneinfo pytz/zoneinfo
+  '';
 
   build-system = [ setuptools ];
 
@@ -32,6 +39,9 @@ buildPythonPackage rec {
     description = "World timezone definitions, modern and historical";
     homepage = "https://pythonhosted.org/pytz";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [
+      dotlambda
+      jherland
+    ];
   };
 }

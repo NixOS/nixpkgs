@@ -1,41 +1,66 @@
-{ stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, bubblewrap, Foundation
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  getconf,
+  ocaml,
+  unzip,
+  ncurses,
+  curl,
+  bubblewrap,
 }:
 
 assert lib.versionAtLeast ocaml.version "4.08.0";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opam";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml/opam/releases/download/${finalAttrs.version}/opam-full-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UGunaGXcMVtn35qonnq9XBqJen8KkteyaUl0/cUys0Y=";
+    hash = "sha256-xNBTApeTxxTk5zQLEVdCjA+QeDWF+xfzUVgkemQEZ9k=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
-  buildInputs = [ ncurses getconf ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    ocaml
+    curl
+  ];
+  buildInputs = [
+    ncurses
+    getconf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
 
   patches = [ ./opam-shebangs.patch ];
 
-  preConfigure = ''
-    # Fix opam sandboxing on nixos. Remove after opam >= 2.4.0 is released
-    substituteInPlace src/state/shellscripts/bwrap.sh \
-      --replace-fail 'for dir in /*; do' 'for dir in /{*,run/current-system/sw}; do'
-  '';
+  configureFlags = [
+    "--with-vendored-deps"
+    "--with-mccs"
+  ];
 
-  configureFlags = [ "--with-vendored-deps" "--with-mccs" ];
-
-  outputs = [ "out" "installer" ];
+  outputs = [
+    "out"
+    "installer"
+  ];
   setOutputFlags = false;
 
   postInstall = ''
     wrapProgram $out/bin/opam \
-      --suffix PATH : ${lib.makeBinPath ([ curl getconf unzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ])}
+      --suffix PATH : ${
+        lib.makeBinPath (
+          [
+            curl
+            getconf
+            unzip
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ]
+        )
+      }
     $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';
 

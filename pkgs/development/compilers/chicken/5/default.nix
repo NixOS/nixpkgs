@@ -37,10 +37,10 @@ lib.makeScope newScope (self: {
           ...
         }:
         self.eggDerivation {
-          name = "${pname}-${version}";
+          inherit pname version;
           src = self.fetchegg (eggData // { inherit pname; });
           buildInputs = map (x: eggself.${x}) dependencies;
-          meta.homepage = "https://code.call-cc.org/cgi-bin/gitweb.cgi?p=eggs-5-latest.git;a=tree;f=${pname}/${version}";
+          meta.homepage = "https://wiki.call-cc.org/eggref/5/${pname}";
           meta.description = synopsis;
           meta.license =
             (

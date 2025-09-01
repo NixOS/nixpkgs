@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mbrlabs/Lorien";
-    description = "An infinite canvas drawing/note-taking app";
+    description = "Infinite canvas drawing/note-taking app";
     longDescription = ''
       An infinite canvas drawing/note-taking app that is focused on performance,
       small savefiles and simplicity

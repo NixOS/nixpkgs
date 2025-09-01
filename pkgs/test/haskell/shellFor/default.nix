@@ -16,11 +16,6 @@
   # `extraDependencies` that are not in the closure of `packages`.
   extraDependencies = p: { libraryHaskellDepends = [ p.conduit ]; };
   nativeBuildInputs = [ cabal-install ];
-  phases = [
-    "unpackPhase"
-    "buildPhase"
-    "installPhase"
-  ];
   unpackPhase = ''
     sourceRoot=$(pwd)/scratch
     mkdir -p "$sourceRoot"
@@ -68,4 +63,8 @@
         maintainers = allMaintainers;
         inherit (cabal-install.meta) platforms;
       };
+    # `shellFor` adds a `buildCommand` (via `envFunc -> runCommandCC`), which
+    # overrides custom phases. To ensure this test's phases run, we remove
+    # that `buildCommand` from the derivation.
+    buildCommand = null;
   })

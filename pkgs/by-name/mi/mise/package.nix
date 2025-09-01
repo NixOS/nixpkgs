@@ -1,18 +1,17 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
   coreutils,
   bash,
   direnv,
   git,
   pkg-config,
   openssl,
-  Security,
-  SystemConfiguration,
+  cacert,
   usage,
   mise,
   testers,
@@ -22,27 +21,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.1.6";
+  version = "2025.8.20";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-eMKrRrthV37ndsF47jjNxigsJ5WDsCDCit9J88l5dHE=";
+    hash = "sha256-zjb0ND6U/fe/1h+0LdTDYLIpsSPTvGhWOhFOb4vmiT0=";
   };
 
-  cargoHash = "sha256-Mh7vyIVkQ0N1dYD4KVue0eiBm+z0JFPt89qYpu+wVd0=";
+  cargoHash = "sha256-kebXsDAtQjEtAVCD76n5/A9hB1Sj+ww9MoHcfm/ucBs=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs --build \
@@ -65,11 +60,16 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
+  nativeCheckInputs = [ cacert ];
+
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-    # requires https://github.com/rbenv/ruby-build
-    "--skip=plugins::core::ruby::tests::test_list_versions_matching"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # started failing mid-April 2025
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -87,12 +87,17 @@ rustPlatform.buildRustPackage rec {
       --bash ./completions/mise.bash \
       --fish ./completions/mise.fish \
       --zsh ./completions/_mise
+
+    mkdir -p $out/lib/mise
+    touch $out/lib/mise/.disable-self-update
   '';
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      version = testers.testVersion { package = mise; };
+      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
+      });
       usageCompat =
         # should not crash
         runCommand "mise-usage-compatibility"

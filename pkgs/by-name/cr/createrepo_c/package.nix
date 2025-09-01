@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "createrepo_c";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "createrepo_c";
     tag = version;
-    hash = "sha256-IWn1in1AMN4brekerj+zu1OjTl+PE7fthU5+gcBzVU0=";
+    hash = "sha256-2mvU2F9rvG4FtDgq+M9VXWg+c+AsW/+tDPaEj7zVmQ0=";
   };
 
   postPatch = ''
@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rpm-software-management.github.io/createrepo_c/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

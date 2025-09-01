@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withDocs "devdoc";
+  ]
+  ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
     url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
@@ -43,31 +44,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      vala
-      gobject-introspection
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withDocs [
-      gtk-doc
-      docbook-xsl-nons
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    vala
+    gobject-introspection
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withDocs [
+    gtk-doc
+    docbook-xsl-nons
+  ];
 
-  buildInputs =
-    [
-      libvirt
-      libxml2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap_ng
-    ];
+  buildInputs = [
+    libvirt
+    libxml2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap_ng
+  ];
 
   strictDeps = true;
 
@@ -81,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Library for working with virtual machines";
+    description = "Wrapper library of libvirt for glib-based applications";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better
       suited for glib-based applications, via three libraries:

@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.7";
+  version = "9.2.11";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-i3UTqOO3gQezL2HmQllJa+hwy03tJViyOOflW2iXBAM=";
+    hash = "sha256-WFABr7+JsUbQagLFK0OXZ20t4QCuYrozeaV4fKO/c2s=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -63,63 +63,60 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      makeWrapper
-      pkg-config
-      file
-      python3
-    ]
-    ++ (with perlPackages; [
-      perl
-      ExtUtilsMakeMaker
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+    file
+    python3
+  ]
+  ++ (with perlPackages; [
+    perl
+    ExtUtilsMakeMaker
+  ])
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
-  buildInputs =
-    [
-      openssl
-      pcre
-      perlPackages.perl
-    ]
-    ++ lib.optional withBrotli brotli
-    ++ lib.optional withCap libcap
-    ++ lib.optional withCjose cjose
-    ++ lib.optional withCurl curl
-    ++ lib.optional withGeoIP geoip
-    ++ lib.optional withHiredis hiredis
-    ++ lib.optional withHwloc hwloc
-    ++ lib.optional withImageMagick imagemagick
-    ++ lib.optional withJansson jansson
-    ++ lib.optional withKyotoCabinet kyotocabinet
-    ++ lib.optional withCurses ncurses
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional withUnwind libunwind
-    ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs = [
+    openssl
+    pcre
+    perlPackages.perl
+  ]
+  ++ lib.optional withBrotli brotli
+  ++ lib.optional withCap libcap
+  ++ lib.optional withCjose cjose
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGeoIP geoip
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withHwloc hwloc
+  ++ lib.optional withImageMagick imagemagick
+  ++ lib.optional withJansson jansson
+  ++ lib.optional withKyotoCabinet kyotocabinet
+  ++ lib.optional withCurses ncurses
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional withUnwind libunwind
+  ++ lib.optional withMaxmindDB libmaxminddb;
 
   outputs = [
     "out"
     "man"
   ];
 
-  postPatch =
-    ''
-      patchShebangs \
-        iocore/aio/test_AIO.sample \
-        src/traffic_via/test_traffic_via \
-        src/traffic_logstats/tests \
-        tools/check-unused-dependencies
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace configure.ac \
-        --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # 'xcrun leaks' probably requires non-free XCode
-      substituteInPlace iocore/net/test_certlookup.cc \
-        --replace-fail 'xcrun leaks' 'true'
-    '';
+  postPatch = ''
+    patchShebangs \
+      iocore/aio/test_AIO.sample \
+      src/traffic_via/test_traffic_via \
+      src/traffic_logstats/tests \
+      tools/check-unused-dependencies
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace configure.ac \
+      --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # 'xcrun leaks' probably requires non-free XCode
+    substituteInPlace iocore/net/test_certlookup.cc \
+      --replace-fail 'xcrun leaks' 'true'
+  '';
 
   configureFlags = [
     "--enable-layout=NixOS"
@@ -184,7 +181,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) trafficserver; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trafficserver.apache.org";
     changelog = "https://raw.githubusercontent.com/apache/trafficserver/${version}/CHANGELOG-${version}";
     description = "Fast, scalable, and extensible HTTP caching proxy server";
@@ -197,8 +194,8 @@ stdenv.mkDerivation rec {
       enterprises, Internet service providers (ISPs), backbone providers, and
       large intranets by maximizing existing and available bandwidth.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ midchildan ];
+    platforms = lib.platforms.unix;
   };
 }

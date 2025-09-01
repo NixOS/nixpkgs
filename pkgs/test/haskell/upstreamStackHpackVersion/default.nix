@@ -46,7 +46,7 @@ let
       --retry 3
       --disable-epsv
       --cookie-jar cookies
-      --user-agent "curl "
+      --user-agent "nixpkgs stack version test/1.0"
       --insecure
     )
 
@@ -136,16 +136,15 @@ stdenv.mkDerivation {
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-  buildCommand =
-    ''
-      # Make sure curl can access HTTPS sites, like GitHub.
-      #
-      # Note that we absolutely don't want the Nix store path of the cacert
-      # derivation in the testScript, because we don't want to rebuild this
-      # derivation when only the cacert derivation changes.
-      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-    ''
-    + testScript;
+  buildCommand = ''
+    # Make sure curl can access HTTPS sites, like GitHub.
+    #
+    # Note that we absolutely don't want the Nix store path of the cacert
+    # derivation in the testScript, because we don't want to rebuild this
+    # derivation when only the cacert derivation changes.
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  ''
+  + testScript;
 
   meta = with lib; {
     description = "Test that the stack in Nixpkgs uses the same version of Hpack as the upstream stack release";

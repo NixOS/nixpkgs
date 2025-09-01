@@ -70,7 +70,7 @@ in
               };
 
               noiseScale = mkOption {
-                type = numbers.between 0.0 1.0;
+                type = float;
                 default = 0.667;
                 description = ''
                   Generator noise value.
@@ -79,7 +79,7 @@ in
               };
 
               noiseWidth = mkOption {
-                type = numbers.between 0.0 1.0;
+                type = float;
                 default = 0.333;
                 description = ''
                   Phoneme width noise value.
@@ -88,12 +88,16 @@ in
               };
 
               lengthScale = mkOption {
-                type = numbers.between 0.0 1.0;
+                type = float;
                 default = 1.0;
                 description = ''
                   Phoneme length value.
                 '';
                 apply = toString;
+              };
+
+              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
+                default = true;
               };
 
               extraArgs = mkOption {
@@ -158,13 +162,16 @@ in
                 "--noise-w"
                 options.noiseWidth
               ]
+              ++ lib.optionals options.streaming [
+                "--streaming"
+              ]
               ++ options.extraArgs
             );
             CapabilityBoundingSet = "";
             DeviceAllow = "";
             DevicePolicy = "closed";
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = false; # required for onnxruntime
             PrivateDevices = true;
             PrivateUsers = true;
             ProtectHome = true;

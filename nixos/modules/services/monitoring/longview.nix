@@ -30,7 +30,7 @@ in
         example = "01234567-89AB-CDEF-0123456789ABCDEF";
         description = ''
           Longview API key. To get this, look in Longview settings which
-          are found at https://manager.linode.com/longview/.
+          are found at <https://manager.linode.com/longview/>.
 
           Warning: this secret is stored in the world-readable Nix store!
           Use {option}`apiKeyFile` instead.
@@ -44,7 +44,7 @@ in
         description = ''
           A file containing the Longview API key.
           To get this, look in Longview settings which
-          are found at https://manager.linode.com/longview/.
+          are found at <https://manager.linode.com/longview/>.
 
           {option}`apiKeyFile` takes precedence over {option}`apiKey`.
         '';
@@ -116,30 +116,29 @@ in
       serviceConfig.ExecReload = "-${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.PIDFile = "${runDir}/longview.pid";
       serviceConfig.ExecStart = "${pkgs.longview}/bin/longview";
-      preStart =
-        ''
-          umask 077
-          mkdir -p ${configsDir}
-        ''
-        + (lib.optionalString (cfg.apiKeyFile != null) ''
-          cp --no-preserve=all "${cfg.apiKeyFile}" ${runDir}/longview.key
-        '')
-        + (lib.optionalString (cfg.apacheStatusUrl != "") ''
-          cat > ${configsDir}/Apache.conf <<EOF
-          location ${cfg.apacheStatusUrl}?auto
-          EOF
-        '')
-        + (lib.optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
-          cat > ${configsDir}/MySQL.conf <<EOF
-          username ${cfg.mysqlUser}
-          password `head -n1 "${cfg.mysqlPasswordFile}"`
-          EOF
-        '')
-        + (lib.optionalString (cfg.nginxStatusUrl != "") ''
-          cat > ${configsDir}/Nginx.conf <<EOF
-          location ${cfg.nginxStatusUrl}
-          EOF
-        '');
+      preStart = ''
+        umask 077
+        mkdir -p ${configsDir}
+      ''
+      + (lib.optionalString (cfg.apiKeyFile != null) ''
+        cp --no-preserve=all "${cfg.apiKeyFile}" ${runDir}/longview.key
+      '')
+      + (lib.optionalString (cfg.apacheStatusUrl != "") ''
+        cat > ${configsDir}/Apache.conf <<EOF
+        location ${cfg.apacheStatusUrl}?auto
+        EOF
+      '')
+      + (lib.optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
+        cat > ${configsDir}/MySQL.conf <<EOF
+        username ${cfg.mysqlUser}
+        password `head -n1 "${cfg.mysqlPasswordFile}"`
+        EOF
+      '')
+      + (lib.optionalString (cfg.nginxStatusUrl != "") ''
+        cat > ${configsDir}/Nginx.conf <<EOF
+        location ${cfg.nginxStatusUrl}
+        EOF
+      '');
     };
 
     warnings =

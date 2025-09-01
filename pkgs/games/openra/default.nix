@@ -1,12 +1,13 @@
 { callPackage }:
 
 let
-  buildOpenRAEngine = callPackage ./build-engine.nix { };
+  openRaUpdater = callPackage ./updater.nix { };
+  buildOpenRAEngine = callPackage ./build-engine.nix { inherit openRaUpdater; };
   callPackage' = path: callPackage path { inherit buildOpenRAEngine; };
 in
 {
   engines = {
     release = callPackage' ./engines/release;
-    devtest = callPackage' ./engines/devtest;
+    bleed = callPackage' ./engines/bleed;
   };
 }

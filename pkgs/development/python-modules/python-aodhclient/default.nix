@@ -13,7 +13,6 @@
   osprofiler,
   pbr,
   pyparsing,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "python-aodhclient";
-  version = "3.6.0";
+  version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
     tag = version;
-    hash = "sha256-FArXBkDOY0Weu3Fm/M0Qgg0XHTy95MqlUidZ/hUZfB8=";
+    hash = "sha256-ymOMCHhntoWr3mROI1M/PN7oWWaDTN58Z9xb97qnP+w=";
   };
 
   env.PBR_VERSION = version;
@@ -73,10 +70,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aodhclient" ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/python-aodhclient";
+    homepage = "https://github.com/openstack/python-aodhclient";
     description = "Client library for OpenStack Aodh API";
     license = lib.licenses.asl20;
     mainProgram = "aodh";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.3.1";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     rev = version;
-    sha256 = "sha256-W06J+QqouoZBWGm/w5aBuL009IO4odmSKHoeJkXnVpA=";
+    sha256 = "sha256-B/VEVS1dJQGJ8+gqgJ/mb3+r29ZPtCSSlur/CAr6BJg=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.terminal";
   };
 }

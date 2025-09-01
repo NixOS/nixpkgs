@@ -7,8 +7,6 @@
   swiftpm2nix,
   Foundation,
   XCTest,
-  CryptoKit,
-  LocalAuthentication,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -27,15 +25,10 @@ stdenv.mkDerivation {
     swift
     swiftpm
   ];
-  buildInputs =
-    [
-      Foundation
-      XCTest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CryptoKit
-      LocalAuthentication
-    ];
+  buildInputs = [
+    Foundation
+    XCTest
+  ];
 
   configurePhase = generated.configure;
 
@@ -66,6 +59,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-docc";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

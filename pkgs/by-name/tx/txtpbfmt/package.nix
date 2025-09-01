@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "txtpbfmt";
-  version = "0-unstable-2024-11-12";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "txtpbfmt";
-    rev = "20d2c9ebc01daa87ca2b7b697a757613012b104d";
-    hash = "sha256-gCGJQldwTa6Lq7Fvc4NAVRpmMs204qeKEsNFEjErTMA=";
+    rev = "f293424e46b51a8dc295a0edf0fe7217ebda2660";
+    hash = "sha256-0fFQbzj4CZ78P7A3iTwNA6LHUDM0nwYM/mPwDOlV2Zo=";
   };
 
-  vendorHash = "sha256-IdD+R8plU4/e9fQaGSM5hJxyMECb6hED0Qg8afwHKbY=";
+  vendorHash = "sha256-iWY0b6PAw9BhA8WrTEECnVAKWTGXuIiGvOi9uhJO4PI=";
 
   ldflags = [
     "-s"

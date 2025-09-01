@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Tool to run a PostreSQL query and output the result as CSV";
     homepage = "https://github.com/fphilipe/psql2csv";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
     mainProgram = "psql2csv";
   };

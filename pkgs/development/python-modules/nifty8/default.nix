@@ -21,13 +21,14 @@
 
   # test
   pytestCheckHook,
+  pytest-xdist,
   mpiCheckPhaseHook,
   openssh,
 }:
 
 buildPythonPackage rec {
   pname = "nifty8";
-  version = "8.5.4";
+  version = "8.5.7";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -35,8 +36,17 @@ buildPythonPackage rec {
     owner = "ift";
     repo = "nifty";
     tag = "v${version}";
-    hash = "sha256-Q42ZhQ/T8JmkG75BexevbvVKQqfDmMG6+oTYR0Ze718=";
+    hash = "sha256-5KPmM1UaXnS/ZEsnyFyxvDk4Nc4m6AT5FDgmCG6U6YU=";
   };
+
+  # nifty8.re is the jax-backed version of nifty8 (the regular one uses numpy).
+  # It is not compatible with the latest jax update:
+  # https://gitlab.mpcdf.mpg.de/ift/nifty/-/issues/414
+  # While the issue is being fixed by upstream, we completely remove this package from the source and the tests.
+  postPatch = ''
+    rm -r src/re
+    rm -r test/test_re
+  '';
 
   build-system = [ setuptools ];
 
@@ -55,28 +65,42 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
     mpiCheckPhaseHook
     openssh
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test_optimize_kl_domain_expansion"
+    "test_plot_priorsamples"
+  ];
 
-    python3 -m pytest test
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test/test_plot.py"
+  ];
 
-    if [ "${stdenv.buildPlatform.system}" != "aarch64-linux" ] && \
-       [ "${stdenv.buildPlatform.system}" != "x86_64-darwin" ]; then
-    ${mpi}/bin/mpiexec -n 2 --bind-to none python3 -m pytest test/test_mpi
-    fi
-
-    runHook postCheck
-  '';
+  __darwinAllowLocalNetworking = true;
+  postCheck =
+    lib.optionalString
+      (
+        # Fails on aarch64-linux with:
+        # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
+        # All nodes which are allocated for this job are already filled.
+        !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      )
+      ''
+        ${lib.getExe' mpi "mpirun"} -n 2 --bind-to none python3 -m pytest test/test_mpi
+      '';
 
   pythonImportsCheck = [ "nifty8" ];
 
   meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/ift/nifty";
-    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/${src.tag}/ChangeLog.md";
+    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/v${version}/ChangeLog.md";
     description = "Bayesian Imaging library for high-dimensional posteriors";
     longDescription = ''
       NIFTy, "Numerical Information Field Theory", is a Bayesian imaging library.

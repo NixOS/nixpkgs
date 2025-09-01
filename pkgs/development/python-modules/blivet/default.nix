@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.11.0";
+  version = "3.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-X5U6XFmcsTfetpxwH0ONSnTasnwh2USukYtx+8HwVGc=";
+    hash = "sha256-ppX2rd1rFkRhca7F56JVQUDEQzW7Cg8ifV60URs2IMY=";
   };
 
   postPatch = ''
@@ -91,10 +91,6 @@ buildPythonPackage rec {
   # Even unit tests require a system D-Bus.
   # TODO: Write a NixOS VM test?
   doCheck = false;
-
-  # Fails with: TypeError: don't know how to make test from:
-  # <blivet.static_data.luks_data.LUKS_Data object at 0x7ffff4a34b90>
-  dontUseSetuptoolsCheck = true;
 
   meta = {
     description = "Python module for system storage configuration";

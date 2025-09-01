@@ -6,17 +6,15 @@
   pkg-config,
   ncurses,
   openssl,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "taizen";
-  version = "unstable-2023-06-05";
+  version = "0-unstable-2023-06-05";
 
   src = fetchFromGitHub {
-    owner = "NerdyPepper";
-    repo = pname;
+    owner = "oppiliappan";
+    repo = "taizen";
     rev = "5486cd4f4c5aa4e0abbcee180ad2ec22839abd31";
     hash = "sha256-pGcD3+3Ds3U8NuNySaDnz0zzAvZlSDte1jRPdM5qrZA=";
   };
@@ -30,22 +28,18 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-bE7GZOQgAg4XdWCmnicPK4H4Y+T1snISCe/uGjoQATo=";
+  cargoHash = "sha256-kK9na2Pk3Hl4TYYVVUfeBv6DDDkrD7mIv7eVHXkS5QY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    ncurses
+    openssl
+  ];
 
   meta = with lib; {
-    description = "curses based mediawiki browser";
-    homepage = "https://github.com/nerdypepper/taizen";
+    description = "Curses-based mediawiki browser";
+    homepage = "https://github.com/oppiliappan/taizen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "taizen";

@@ -9,13 +9,13 @@
 }:
 mkLibretroCore {
   core = "parallel-n64";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2025-08-05";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "parallel-n64";
-    rev = "e372c5e327dcd649e9d840ffc3d88480b6866eda";
-    hash = "sha256-q4octB5XDdl4PtLYVZfBgydVBNaOwzu9dPBY+Y68lVo=";
+    rev = "50d3ddd55b5774da643d90d7ad1e3cbd2c618883";
+    hash = "sha256-l42EKrZH1JwTxpkjl8vTrMsd2NJCeKV9Owgj+EB81eM=";
   };
 
   extraBuildInputs = [
@@ -38,5 +38,11 @@ mkLibretroCore {
     description = "Parallel Mupen64plus rewrite for libretro";
     homepage = "https://github.com/libretro/parallel-n64";
     license = lib.licenses.gpl3Only;
+    badPlatforms = [
+      # ./mupen64plus-core/src/r4300/new_dynarec/arm64/linkage_aarch64.o: in function `.E12':
+      # (.text+0x5b4): relocation truncated to fit: R_AARCH64_CONDBR19 against symbol `invalidate_block' defined in .text section in ./mupen64plus-core/src/r4300/new_dynarec/new_dynarec_64.o
+      # collect2: error: ld returned 1 exit status
+      "aarch64-linux"
+    ];
   };
 }

@@ -1,29 +1,42 @@
 { version, hash }:
 
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, coreutils
-, libuuid
-, libaio
-, replaceVars
-, enableCmdlib ? false
-, enableDmeventd ? false
-, udevSupport ? !stdenv.hostPlatform.isStatic, udev
-, onlyLib ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  coreutils,
+  libuuid,
+  libaio,
+  replaceVars,
+  enableCmdlib ? false,
+  enableDmeventd ? false,
+  udevSupport ? !stdenv.hostPlatform.isStatic,
+  udev,
+  udevCheckHook,
+  onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have a infinity recursion during static compilation
-, enableUtilLinux ? !stdenv.hostPlatform.isStatic, util-linux
-, enableVDO ? false, vdo
-, enableMdadm ? false, mdadm
-, enableMultipath ? false, multipath-tools
-, nixosTests
+  enableUtilLinux ? !stdenv.hostPlatform.isStatic,
+  util-linux,
+  enableVDO ? false,
+  vdo,
+  enableMdadm ? false,
+  mdadm,
+  enableMultipath ? false,
+  multipath-tools,
+  nixosTests,
+  buildFHSEnv,
+  recurseIntoAttrs,
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
 assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd" + lib.optionalString enableVDO "-with-vdo";
+  pname =
+    "lvm2"
+    + lib.optionalString enableDmeventd "-with-dmeventd"
+    + lib.optionalString enableVDO "-with-vdo";
   inherit version;
 
   src = fetchurl {
@@ -34,14 +47,17 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
   buildInputs = [
     libaio
-  ] ++ lib.optionals udevSupport [
+  ]
+  ++ lib.optionals udevSupport [
     udev
-  ] ++ lib.optionals (!onlyLib) [
+  ]
+  ++ lib.optionals (!onlyLib) [
     libuuid
-  ] ++ lib.optionals enableVDO [
+  ]
+  ++ lib.optionals enableVDO [
     vdo
   ];
 
@@ -52,25 +68,32 @@ stdenv.mkDerivation rec {
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
-  ] ++ lib.optionals (!enableCmdlib && !onlyLib) [
+    "--with-default-profile-subdir=profile.d"
+  ]
+  ++ lib.optionals (!enableCmdlib && !onlyLib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
     "--with-libexecdir=${placeholder "lib"}/libexec"
-  ] ++ lib.optional enableCmdlib "--enable-cmdlib"
+  ]
+  ++ lib.optional enableCmdlib "--enable-cmdlib"
   ++ lib.optionals enableDmeventd [
     "--enable-dmeventd"
     "--with-dmeventd-pidfile=/run/dmeventd/pid"
     "--with-default-dm-run-dir=/run/dmeventd"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-  ] ++ lib.optionals udevSupport [
+  ]
+  ++ lib.optionals udevSupport [
     "--enable-udev_rules"
     "--enable-udev_sync"
-  ] ++ lib.optionals enableVDO [
+  ]
+  ++ lib.optionals enableVDO [
     "--enable-vdo"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
   ];
 
@@ -91,32 +114,47 @@ stdenv.mkDerivation rec {
 
   patches = [
     # fixes paths to and checks for tools
-    (replaceVars ./fix-blkdeactivate.patch (let
-      optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
-    in {
-      inherit coreutils;
-      util_linux = optionalTool enableUtilLinux util-linux;
-      mdadm = optionalTool enableMdadm mdadm;
-      multipath_tools = optionalTool enableMultipath multipath-tools;
-      vdo = optionalTool enableVDO vdo;
-      SBINDIR = null; # part of original source code in the patch's context
-    }))
+    (replaceVars ./fix-blkdeactivate.patch (
+      let
+        optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
+      in
+      {
+        inherit coreutils;
+        util_linux = optionalTool enableUtilLinux util-linux;
+        mdadm = optionalTool enableMdadm mdadm;
+        multipath_tools = optionalTool enableMultipath multipath-tools;
+        vdo = optionalTool enableVDO vdo;
+        SBINDIR = null; # part of original source code in the patch's context
+      }
+    ))
     ./fix-stdio-usage.patch
   ];
 
   doCheck = false; # requires root
+  doInstallCheck = true;
 
-  makeFlags = lib.optionals udevSupport [
-    "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
-  ] ++ lib.optionals onlyLib [
-    "libdm.device-mapper"
-  ];
+  makeFlags =
+    lib.optionals udevSupport [
+      "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
+    ]
+    ++ lib.optionals onlyLib [
+      "libdm.device-mapper"
+    ];
+
+  enableParallelBuilding = true;
 
   # To prevent make install from failing.
-  installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
+  installFlags = [
+    "OWNER="
+    "GROUP="
+    "confdir=$(out)/etc"
+  ];
 
   # Install systemd stuff.
-  installTargets = [ "install" ] ++ lib.optionals udevSupport [
+  installTargets = [
+    "install"
+  ]
+  ++ lib.optionals udevSupport [
     "install_systemd_generators"
     "install_systemd_units"
     "install_tmpfiles_configuration"
@@ -131,10 +169,12 @@ stdenv.mkDerivation rec {
   # only split bin and lib out from out if cmdlib isn't enabled
   outputs = [
     "out"
-  ] ++ lib.optionals (!onlyLib) [
+  ]
+  ++ lib.optionals (!onlyLib) [
     "dev"
     "man"
-  ] ++ lib.optionals (!onlyLib && !enableCmdlib) [
+  ]
+  ++ lib.optionals (!onlyLib && !enableCmdlib) [
     "bin"
     "lib"
   ];
@@ -145,14 +185,27 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     installer = nixosTests.installer.lvm;
-    lvm2 = nixosTests.lvm2;
+    lvm2 = recurseIntoAttrs nixosTests.lvm2;
+
+    # https://github.com/NixOS/nixpkgs/issues/369732
+    lvm2-fhs-env = buildFHSEnv {
+      name = "lvm2-fhs-env-test";
+      targetPkgs = p: [ p.lvm2 ];
+    };
   };
 
   meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
-    license = with licenses; [ gpl2Only bsd2 lgpl21 ];
-    maintainers = with maintainers; [ raskin ajs124 ];
+    license = with licenses; [
+      gpl2Only
+      bsd2
+      lgpl21
+    ];
+    maintainers = with maintainers; [
+      raskin
+      ajs124
+    ];
   };
 }

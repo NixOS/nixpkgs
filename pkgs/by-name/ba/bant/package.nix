@@ -3,9 +3,10 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   nix-update-script,
+  cctools,
 }:
 
 let
@@ -13,35 +14,39 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "40bc9ad53e5a59d596935839e7c072679e706266";
-    hash = "sha256-CL0YMQd1ck6/dlvJCLxt9jYyqDuk+iAWfdBOMj864u8=";
+    rev = "b03f4f95d8ba67873843eae80a73fef8ebf1522e";
+    hash = "sha256-gJr5bJ6Kj7jiUhnCC+YOUh3ChFR/55eUbwpP2srsVvM=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.11";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-vqZGHMIs4t1TP+9r2hvtFXN5B5GXZerC18l8gQA9cmQ=";
+    hash = "sha256-xiTi4GrCeoI8hIEgYMAdzUPvJzYvXrvbo6MBq9my5Cw=";
   };
 
   bazelFlags = [
     "--registry"
     "file://${registry}"
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs scripts/create-workspace-status.sh
   '';
 
+  removeRulesCC = false;
+
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-M6LMaqPli71YvJS/4iwvowCyVaf+qe8WSICR3CgdU34=";
-        x86_64-linux = "sha256-iBxAzbSriYkkgDDkSjSSSVeWGBygxKAfruh8T5drUFw=";
+        aarch64-linux = "sha256-1iy2S0mmXksfwucks+HOZ2/HUGaVBqk7VlR+kO6iYZE=";
+        x86_64-linux = "sha256-YOIwwlCYlNINlYbm/vq3Jjhe+/zgrtECdMRl+vE8FgI=";
+        aarch64-darwin = "sha256-7g1deAihrjpwAxNbG7rv9dDs3FjOCuRIFieLbENKmbw=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -49,7 +54,7 @@ buildBazelPackage rec {
   nativeBuildInputs = [
     jdk
   ];
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   bazelBuildFlags = [ "-c opt" ];
   bazelTestTargets = [ "//..." ];
@@ -66,11 +71,10 @@ buildBazelPackage rec {
   meta = {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       hzeller
       lromor
     ];
-    platforms = lib.platforms.linux;
   };
 }

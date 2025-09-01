@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
-    rev = version;
+    tag = version;
     hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
     fetchSubmodules = true;
   };
@@ -161,44 +161,43 @@ stdenv.mkDerivation rec {
       --subst-var-by srcHash "`basename $out`"
   '';
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      glib
-      libjpeg
-      libselinux
-      libsepol
-      mp4v2
-      libmysqlclient
-      mariadb
-      pcre
-      perl
-      polkit
-      x264
-      zlib
-      util-linuxMinimal # for libmount
-    ]
-    ++ (with perlPackages; [
-      # build-time dependencies
-      DateManip
-      DBI
-      DBDmysql
-      LWP
-      SysMmap
-      # run-time dependencies not checked at build-time
-      ClassStdFast
-      DataDump
-      DeviceSerialPort
-      JSONMaybeXS
-      LWPProtocolHttps
-      NumberBytesHuman
-      SysCPU
-      SysMemInfo
-      TimeDate
-      CryptEksblowfish
-      DataEntropy # zmupdate.pl
-    ]);
+  buildInputs = [
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb
+    pcre
+    perl
+    polkit
+    x264
+    zlib
+    util-linuxMinimal # for libmount
+  ]
+  ++ (with perlPackages; [
+    # build-time dependencies
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
+    # run-time dependencies not checked at build-time
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
+  ]);
 
   nativeBuildInputs = [
     cmake
@@ -246,6 +245,6 @@ stdenv.mkDerivation rec {
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

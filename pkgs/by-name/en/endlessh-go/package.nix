@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -19,18 +20,21 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) endlessh-go;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of endlessh exporting Prometheus metrics";
     homepage = "https://github.com/shizunge/endlessh-go";
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "endlessh-go";
   };
 }

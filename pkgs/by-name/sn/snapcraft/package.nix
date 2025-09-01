@@ -5,15 +5,16 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python312Packages,
   squashfsTools,
+  cacert,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.5.1";
+  version = "8.10.2";
 
   pyproject = true;
 
@@ -21,19 +22,20 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-7kIVWbVj5qse3JIdlCvRtVUfSa/rSjn4e8HJdVY3sOA=";
+    hash = "sha256-klG+cT2vXo9v9tIJhJNCeGTiuV5C+oed0Vi9310PnqQ=";
   };
 
   patches = [
+    # We're using a later version of `craft-cli` than expected, which
+    # adds an extra deprecation warning to the CLI output, meaning that
+    # an expected error message looks slightly different. This patch corrects
+    # that by checking for the updated error message and can be dropped in a
+    # later release of snapcraft.
+    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
     ./lxd-socket-path.patch
-    # In certain places, Snapcraft expects an /etc/os-release file to determine
-    # host info which doesn't exist in our test environment. This is a
-    # relatively naive patch which helps the test suite pass - without it *many*
-    # of the tests fail. This patch will likely never be accepted upstream.
-    ./os-platform.patch
     # Snapcraft will try to inject itself as a snap *from the host system* into
     # the build system. This patch short-circuits that logic and ensures that
     # Snapcraft is installed on the build system from the snap store - because
@@ -48,15 +50,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"' \
-      --replace-fail 'gnupg' 'python-gnupg'
-
-    substituteInPlace requirements.txt \
-      --replace-fail 'gnupg==2.3.1' 'python-gnupg'
-
-    substituteInPlace snapcraft/__init__.py \
-      --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
+    substituteInPlace snapcraft/__init__.py --replace-fail "dev" "${version}"
 
     substituteInPlace snapcraft_legacy/__init__.py \
       --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
@@ -65,13 +59,12 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' ""
+    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     attrs
     catkin-pkg
     click
@@ -115,12 +108,16 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python312Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "click"
+    "craft-parts"
+    "cryptography"
     "docutils"
     "jsonschema"
     "pygit2"
+    "requests"
     "urllib3"
     "validators"
   ];
@@ -129,8 +126,13 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
+  preCheck = ''
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
   nativeCheckInputs =
-    with python3Packages;
+    with python312Packages;
     [
       pytest-check
       pytest-cov-stub
@@ -146,7 +148,7 @@ python3Packages.buildPythonApplication rec {
       squashfsTools
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"
@@ -173,7 +175,8 @@ python3Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

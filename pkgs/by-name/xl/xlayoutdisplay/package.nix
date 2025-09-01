@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
-    repo = pname;
+    repo = "xlayoutdisplay";
     rev = "v${version}";
     hash = "sha256-A37jFhVTW/3QNEf776Oi3ViRK+ebOPRTsEQqdmNhA7E=";
   };

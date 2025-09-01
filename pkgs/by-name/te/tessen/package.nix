@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
-    repo = pname;
+    repo = "tessen";
     rev = "v${version}";
     sha256 = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://sr.ht/~ayushnix/tessen";
+    homepage = "https://git.sr.ht/~ayushnix/tessen";
     description = "Interactive menu to autotype and copy Pass and GoPass data";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

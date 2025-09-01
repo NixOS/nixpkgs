@@ -1,0 +1,31 @@
+Index: include/msieve.h
+===================================================================
+--- a/include/msieve.h
++++ b/include/msieve.h
+@@ -100,9 +100,9 @@
+ 	HANDLE file_handle;
+ 	uint32 read_size;
+ 	uint32 eof;
+ #else
+-	gzFile *fp;
++	gzFile fp;
+ 	char isCompressed;
+ 	char is_a_FILE;
+ #endif
+ 	char *name;
+
+Index: common/savefile.c
+===================================================================
+--- a/common/savefile.c
++++ b/common/savefile.c
+@@ -151,9 +151,9 @@
+ 			   so we will fopen a FILE to append plainly */
+ 			fclose(fp);
+ 		}
+ 		if (s->is_a_FILE) {
+-			s->fp = (gzFile *)fopen(s->name, "a");
++			s->fp = (gzFile)fopen(s->name, "a");
+ 		} else {
+ 			s->fp = gzopen(s->name, "a");
+ 			s->isCompressed = 1;
+ 		}

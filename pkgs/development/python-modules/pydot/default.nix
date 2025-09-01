@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  substituteAll,
+  replaceVars,
   graphviz,
   pytestCheckHook,
   chardet,
@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "3.0.2";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kYDaVAtRs6oJ+/gRQLPt++IxXXeOhYmn0KSmnEEzK64=";
+    hash = "sha256-whSPaBxKM+CL8OJqnl+OQJmoLg4qBoCY8yzoZXc2StU=";
   };
 
   build-system = [
@@ -37,13 +37,12 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       inherit graphviz;
     })
   ];
 
-  pytestFlagsArray = [ "test/test_pydot.py" ];
+  enabledTestPaths = [ "test/test_pydot.py" ];
 
   pythonImportsCheck = [ "pydot" ];
 

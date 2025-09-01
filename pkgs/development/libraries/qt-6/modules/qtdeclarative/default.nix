@@ -3,11 +3,14 @@
   qtbase,
   qtlanguageserver,
   qtshadertools,
+  qtsvg,
   openssl,
+  darwin,
   stdenv,
   lib,
   pkgsBuildBuild,
   replaceVars,
+  fetchpatch,
 }:
 
 qtModule {
@@ -17,9 +20,14 @@ qtModule {
     qtbase
     qtlanguageserver
     qtshadertools
+    qtsvg
     openssl
   ];
   strictDeps = true;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+  ];
 
   patches = [
     # invalidates qml caches created from nix applications at different
@@ -30,6 +38,11 @@ qtModule {
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+    # This should make it into the 6.9.2 release.
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/672e6777e8e6a8fd.diff";
+      hash = "sha256-nPczX6SHZPcdg7AqpRIwPCrcS3PId+Ibb0iPSiHUdaw=";
+    })
   ];
 
   preConfigure =
@@ -43,16 +56,15 @@ qtModule {
       echo "QTDHASH:''${out:${storePrefixLen}:32}" > .tag
     '';
 
-  cmakeFlags =
-    [
-      "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
-      # for some reason doesn't get found automatically on Darwin
-      "-DPython_EXECUTABLE=${lib.getExe pkgsBuildBuild.python3}"
-    ]
-    # Conditional is required to prevent infinite recursion during a cross build
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
-    ];
+  cmakeFlags = [
+    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
+    # for some reason doesn't get found automatically on Darwin
+    "-DPython_EXECUTABLE=${lib.getExe pkgsBuildBuild.python3}"
+  ]
+  # Conditional is required to prevent infinite recursion during a cross build
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
+  ];
 
   meta.maintainers = with lib.maintainers; [
     nickcao

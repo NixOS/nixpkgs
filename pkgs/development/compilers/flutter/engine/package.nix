@@ -18,7 +18,6 @@
   fetchgit,
   runCommand,
   llvmPackages,
-  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -37,8 +36,7 @@
   pkg-config,
   ninja,
   python312,
-  python39,
-  git,
+  gitMinimal,
   version,
   flutterVersion,
   dartSdkVersion,
@@ -58,7 +56,7 @@ let
 
   constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 
-  python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
+  python3 = python312;
 
   src = callPackage ./source.nix {
     inherit
@@ -165,29 +163,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = [
     "-I${finalAttrs.toolchain}/include"
-  ] ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+  ]
+  ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE"
+  ++ lib.optionals (lib.versionAtLeast flutterVersion "3.35") [
+    "-Wno-macro-redefined"
+    "-Wno-error=macro-redefined"
+  ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
     openbox
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      (tools.vpython python3)
-      git
-      pkg-config
-      ninja
-      dart
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      darwin.system_cmds
-      darwin.xcode
-      tools.xcode-select
-    ]
-    ++ lib.optionals (stdenv.cc.libc ? bin) [ stdenv.cc.libc.bin ];
+  nativeBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        pyyaml
+      ]
+    ))
+    (tools.vpython python3)
+    gitMinimal
+    pkg-config
+    ninja
+    dart
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    darwin.system_cmds
+    darwin.xcode
+    tools.xcode-select
+  ]
+  ++ lib.optionals (stdenv.cc.libc ? bin) [ stdenv.cc.libc.bin ];
 
   buildInputs = [ gtk3 ];
 
@@ -199,7 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
     dartPath
     "flutter"
     "."
-  ] ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
+  ]
+  ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
 
   postUnpack = ''
     pushd ${src.name}
@@ -209,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
     chmod -R u+w -- src/flutter/third_party/swiftshader
 
-    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+    ln -s ${llvmPackages.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
 
     mkdir -p src/flutter/buildtools/${constants.alt-platform}
     ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
@@ -250,50 +257,61 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     popd
+  ''
+  # error: 'close_range' is missing exception specification 'noexcept(true)'
+  + lib.optionalString (lib.versionAtLeast flutterVersion "3.35") ''
+    substituteInPlace src/flutter/third_party/dart/runtime/bin/process_linux.cc \
+      --replace-fail "(unsigned int first, unsigned int last, int flags)" "(unsigned int first, unsigned int last, int flags) noexcept(true)"
+  ''
+  + ''
     popd
   '';
 
-  configureFlags =
-    [
-      "--no-prebuilt-dart-sdk"
-      "--embedder-for-target"
-      "--no-goma"
-    ]
-    ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
-      "--linux"
-      "--linux-cpu ${constants.alt-arch}"
-    ]
-    ++ lib.optional (!isOptimized) "--unoptimized"
-    ++ lib.optional (runtimeMode == "debug") "--no-stripped"
-    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
-    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
+  configureFlags = [
+    "--no-prebuilt-dart-sdk"
+    "--embedder-for-target"
+    "--no-goma"
+  ]
+  ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
+    "--linux"
+    "--linux-cpu ${constants.alt-arch}"
+  ]
+  ++ lib.optional (!isOptimized) "--unoptimized"
+  ++ lib.optional (runtimeMode == "debug") "--no-stripped"
+  ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
+  ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
-  configurePhase =
-    ''
-      runHook preConfigure
+  configurePhase = ''
+    runHook preConfigure
 
-      export PYTHONPATH=$src/src/build
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
-    ''
-    + ''
-      python3 ./src/flutter/tools/gn $configureFlags \
-        --runtime-mode $runtimeMode \
-        --out-dir $out \
-        --target-sysroot $toolchain \
-        --target-dir $outName \
-        --target-triple ${stdenv.targetPlatform.config} \
-        --enable-fontconfig
+    export PYTHONPATH=$src/src/build
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
+  ''
+  + ''
+    python3 ./src/flutter/tools/gn $configureFlags \
+      --runtime-mode $runtimeMode \
+      --out-dir $out \
+      --target-sysroot $toolchain \
+      --target-dir $outName \
+      --target-triple ${stdenv.targetPlatform.config} \
+      --enable-fontconfig
 
-      runHook postConfigure
-    '';
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild
 
     export TERM=dumb
+
+    ${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      # ValueError: ZIP does not support timestamps before 1980
+      substituteInPlace src/flutter/build/zip.py \
+        --replace-fail "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED)" "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False)"
+    ''}
 
     ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 
@@ -309,41 +327,38 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/out/run_tests.log
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
-      rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
-      find $out/out/$outName -name '*_unittests' -delete
-      find $out/out/$outName -name '*_benchmarks' -delete
-    ''
-    + lib.optionalString (finalAttrs.doCheck) ''
-      rm $out/out/$outName/{display_list_rendertests,flutter_tester}
-    ''
-    + ''
-      runHook postInstall
-    '';
+    rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
+    find $out/out/$outName -name '*_unittests' -delete
+    find $out/out/$outName -name '*_benchmarks' -delete
+  ''
+  + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru = {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta =
-    with lib;
-    {
-      # Very broken on Darwin
-      broken = stdenv.hostPlatform.isDarwin;
-      description = "The Flutter engine";
-      homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    }
-    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta = {
+    # Very broken on Darwin
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Flutter engine";
+    homepage = "https://flutter.dev";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  }
+  // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

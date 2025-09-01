@@ -22,7 +22,7 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pulseview";
   version = "0.4.2-unstable-2024-03-14";
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     pcre
     python3
     qtsvg
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";

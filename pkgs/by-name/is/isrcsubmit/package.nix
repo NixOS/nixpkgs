@@ -2,30 +2,54 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  nix-update-script,
+  withKeyring ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "isrcsubmit";
-  version = "2.1.0";
+  version = "2.1.0-unstable-2023-08-10";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "JonnyJD";
     repo = "musicbrainz-isrcsubmit";
-    rev = "v${version}";
-    sha256 = "1lqs4jl2xv1zxmf0xsihk9rxzx2awq87g51vd7y3cq1vhj1icxqa";
+    rev = "8f4c3b9f9b8f983443d58fba381baaa3a74edad7";
+    hash = "sha256-6SJt0wtXC49Eh6g7DBy73MeCueF7CRuCvYC27es1qAM=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    musicbrainzngs
-    discid
+  postPatch = ''
+    # Change binary name to isrcsubmit so that `import isrcsubmit` in the wrapper doesn't fail
+    substituteInPlace setup.py --replace-fail "'isrcsubmit.py=isrcsubmit:main'," "'isrcsubmit=isrcsubmit:main',"
+    # Set default argument for main, which is set `if __name__ == '__main__'` upstream
+    substituteInPlace isrcsubmit.py --replace-fail "main(argv):" "main(argv=sys.argv):"
+  '';
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
-  meta = with lib; {
-    # drutil is required on Darwin, which does not seem to be available in nixpkgs
-    broken = true; # 2022-11-16
+  dependencies =
+    with python3Packages;
+    [
+      musicbrainzngs
+      discid
+    ]
+    ++ lib.optional withKeyring [
+      keyring
+    ];
+
+  pythonImportsCheck = [ "isrcsubmit" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Script to submit ISRCs from disc to MusicBrainz";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "http://jonnyjd.github.io/musicbrainz-isrcsubmit/";
     maintainers = [ ];
+    mainProgram = "isrcsubmit";
   };
 }

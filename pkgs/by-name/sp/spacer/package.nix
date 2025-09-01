@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spacer";
-  version = "0.3.1";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "samwho";
     repo = "spacer";
     rev = "v${version}";
-    hash = "sha256-gEJUHNtoLurBMhSMoJUiJMm6xLjUJNjTejPwkgltf2U=";
+    hash = "sha256-GG9v6N7bJN7kYEQRqRIDgPPT0gGJ6LSSr8NWBDKsajo=";
   };
 
-  cargoHash = "sha256-/laEbJ1kev7CpDZ4ygrZr1jMI9n6QtVPOwf22NFOZGU=";
+  cargoHash = "sha256-sWE0nFFVAUcCgW6R3BWBdSqn1QMRI8tKnuxX4gpRdvA=";
 
   meta = with lib; {
     description = "CLI tool to insert spacers when command output stops";

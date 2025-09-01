@@ -9,7 +9,6 @@
   wayland-scanner,
   wayland,
   xorg,
-  darwin,
   nix-update-script,
   alsa-lib,
   openssl,
@@ -36,18 +35,16 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi
-      wayland-protocols
-      wayland
-      xorg.libX11
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi
+    wayland-protocols
+    wayland
+    xorg.libX11
+    alsa-lib
+  ];
 
   cmakeBuildType = "MinSizeRel";
 

@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version;
     # TODO: Use srcOnly instead
     src = applyPatches {
       inherit (finalAttrs) src patches;
     };
-    hash = "sha256-zWaw6K2H67PEmFISDNce5jDUXKV39qu35SO+Ai0DP90=";
+    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
   };
 
   nativeBuildInputs = [
@@ -106,9 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/gabmus/envision";
     license = lib.licenses.agpl3Only;
     mainProgram = "envision";
+    # More maintainers needed!
+    # envision (wrapped) requires frequent updates to the dependency list;
+    # the more people that can help with this, the better.
     maintainers = with lib.maintainers; [
       pandapip1
       Scrumplex
+      txkyel
     ];
     platforms = lib.platforms.linux;
   };

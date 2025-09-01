@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dragon-lang";
-    repo = pname;
+    repo = "rund";
     rev = "v${version}";
     sha256 = "10x6f1nn294r5qnpacrpcbp348dndz5fv4nz6ih55c61ckpkvgcf";
   };
 
   buildInputs = [ dcompiler ];
   buildPhase = ''
-    for candidate in dmd ldmd2 gdmd; do
+    for candidate in dmd ldmd2; do
       echo Checking for DCompiler $candidate ...
       dc=$(type -P $candidate || echo "")
       if [ ! "$dc" == "" ]; then

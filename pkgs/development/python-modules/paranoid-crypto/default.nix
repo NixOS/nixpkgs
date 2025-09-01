@@ -14,7 +14,7 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "paranoid-crypto";
   version = "unstable-20220819";
   format = "setuptools";

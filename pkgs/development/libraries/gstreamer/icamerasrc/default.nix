@@ -8,9 +8,10 @@
   ipu6-camera-hal,
   libdrm,
   libva,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
   version = "unstable-2024-09-29";
 
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
     ipu6-camera-hal
     libdrm
     libva
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   NIX_CFLAGS_COMPILE = [

@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   pkg-config,
   autoAddDriverRunpath,
@@ -40,22 +40,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.12.1";
+  version = "20.14.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     tag = "v${version}";
-    fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-T7KyGZwnJ9t4Bh8KFy190IV3igWCG+yn+OW9a6mgmYI=";
+    fetchSubmodules = true; # TODO devendor openvr
+    hash = "sha256-9fckUhUPAbcmbqOdUO8RlwuK8/nf1fc7XQBrAu5YaR4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DE88nMC6qpbPJsBpdyITv6igMgwy4g40VCgFQQuRRTA=";
+  cargoHash = "sha256-OTCMWrlwnfpUhm6ssOE133e/3DaQFnOU+NunN2c1N+g=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-finding-libs.patch;
+    (replaceVars ./fix-finding-libs.patch {
       ffmpeg = lib.getDev ffmpeg;
       x264 = lib.getDev x264;
     })
@@ -137,13 +135,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
     homepage = "https://github.com/alvr-org/ALVR/";
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      luNeder
+      jopejoe1
+    ];
+    platforms = lib.platforms.linux;
   };
 }

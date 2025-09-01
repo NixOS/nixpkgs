@@ -6,15 +6,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-composite-blur";
-  version = "1.1.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-composite-blur";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-icn0X+c7Uf0nTFaVDVTPi26sfWTSeoAj7+guEn9gi9Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wT49bCxik8mrg+YleNelOPQQzqcYQR7ZSnzvPXA5D3g=";
   };
 
   buildInputs = [
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     rm -rf "$out/obs-plugins" "$out/data"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive blur plugin for OBS that provides several different blur algorithms, and proper compositing";
     homepage = "https://github.com/FiniteSingularity/obs-composite-blur";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ GaetanLepage ];
-    mainProgram = "obs-composite-blur";
-    platforms = platforms.linux;
+    changelog = "https://github.com/FiniteSingularity/obs-composite-blur/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.linux;
   };
-}
+})

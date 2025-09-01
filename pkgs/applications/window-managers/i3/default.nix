@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   # xvfb-run is available only on Linux
   doCheck = stdenv.hostPlatform.isLinux;
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     xorgserver
     xvfb-run
     xdotool

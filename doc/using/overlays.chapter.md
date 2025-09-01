@@ -48,12 +48,8 @@ Overlays are Nix functions which accept two arguments, conventionally called `se
 self: super:
 
 {
-  boost = super.boost.override {
-    python = self.python3;
-  };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
-  };
+  boost = super.boost.override { python = self.python3; };
+  rr = super.callPackage ./pkgs/rr { stdenv = self.stdenv_32bit; };
 }
 ```
 
@@ -99,13 +95,9 @@ Introduced in [PR #83888](https://github.com/NixOS/nixpkgs/pull/83888), we are a
 self: super:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.mkl;
-  };
+  blas = super.blas.override { blasProvider = self.mkl; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.mkl;
-  };
+  lapack = super.lapack.override { lapackProvider = self.mkl; };
 }
 ```
 
@@ -123,20 +115,21 @@ To override `blas` and `lapack` with its reference implementations (i.e. for dev
 self: super:
 
 {
-  blas = super.blas.override {
-    blasProvider = self.lapack-reference;
-  };
+  blas = super.blas.override { blasProvider = self.lapack-reference; };
 
-  lapack = super.lapack.override {
-    lapackProvider = self.lapack-reference;
-  };
+  lapack = super.lapack.override { lapackProvider = self.lapack-reference; };
 }
 ```
 
 For BLAS/LAPACK switching to work correctly, all packages must depend on `blas` or `lapack`. This ensures that only one BLAS/LAPACK library is used at one time. There are two versions of BLAS/LAPACK currently in the wild, `LP64` (integer size = 32 bits) and `ILP64` (integer size = 64 bits). The attributes `blas` and `lapack` are `LP64` by default. Their `ILP64` version are provided through the attributes `blas-ilp64` and `lapack-ilp64`. Some software needs special flags or patches to work with `ILP64`. You can check if `ILP64` is used in Nixpkgs with `blas.isILP64` and `lapack.isILP64`. Some software does NOT work with `ILP64`, and derivations need to specify an assertion to prevent this. You can prevent `ILP64` from being used with the following:
 
 ```nix
-{ stdenv, blas, lapack, ... }:
+{
+  stdenv,
+  blas,
+  lapack,
+  ...
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -147,7 +140,7 @@ stdenv.mkDerivation {
 
 ### Switching the MPI implementation {#sec-overlays-alternatives-mpi}
 
-All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides two different MPI implementations:
+All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides the following MPI implementations:
 
 -   [Open MPI](https://www.open-mpi.org/) (default), attribute name
     `openmpi`

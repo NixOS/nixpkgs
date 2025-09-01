@@ -1,4 +1,12 @@
-{ pkgs, buildEnv, runCommand, lib, stdenv, freebsd, binlore }:
+{
+  pkgs,
+  buildEnv,
+  runCommand,
+  lib,
+  stdenv,
+  freebsd,
+  binlore,
+}:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -20,41 +28,50 @@ let
 
   version = "1003.1-2008";
 
-  singleBinary = cmd: providers: let
+  singleBinary =
+    cmd: providers:
+    let
       provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manDir = "${getOutput "man" provider}/share/man";
-    in runCommand "${cmd}-${provider.name}" {
-      meta = {
-        mainProgram = cmd;
-        priority = 10;
-        platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
-      };
-      passthru = { inherit provider; } // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
-        binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
-      };
-      preferLocalBuild = true;
-    } ''
-      if ! [ -x ${bin} ]; then
-        echo Cannot find command ${cmd}
-        exit 1
-      fi
+    in
+    runCommand "${cmd}-${provider.name}"
+      {
+        meta = {
+          mainProgram = cmd;
+          priority = 10;
+          platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
+        };
+        passthru = {
+          inherit provider;
+          inherit (provider) version;
+        }
+        // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+          binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+        };
+        preferLocalBuild = true;
+      }
+      ''
+        if ! [ -x ${bin} ]; then
+          echo Cannot find command ${cmd}
+          exit 1
+        fi
 
-      mkdir -p $out/bin
-      ln -s ${bin} $out/bin/${cmd}
+        mkdir -p $out/bin
+        ln -s ${bin} $out/bin/${cmd}
 
-      if [ -d ${manDir} ]; then
-        manpages=($(cd ${manDir} ; find . -name '${cmd}*'))
-        for manpage in "''${manpages[@]}"; do
-          mkdir -p $out/share/man/$(dirname $manpage)
-          ln -s ${manDir}/$manpage $out/share/man/$manpage
-        done
-      fi
-    '';
+        if [ -d ${manDir} ]; then
+          manpages=($(cd ${manDir} ; find . -name '${cmd}*'))
+          for manpage in "''${manpages[@]}"; do
+            mkdir -p $out/share/man/$(dirname $manpage)
+            ln -s ${manDir}/$manpage $out/share/man/$manpage
+          done
+        fi
+      '';
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${pkgs.less.name}" {} ''
+  more_compat = runCommand "more-${pkgs.less.name}" { } ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';
@@ -62,7 +79,7 @@ let
   bins = mapAttrs singleBinary {
     # singular binaries
     arp = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.arp;
     };
@@ -78,8 +95,7 @@ let
       linux = pkgs.util-linux;
     };
     getconf = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
-              else pkgs.netbsd.getconf;
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.libc else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
       # I don't see any obvious arg exec in the doc/manpage
       binlore = ''
@@ -87,8 +103,7 @@ let
       '';
     };
     getent = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
-              else pkgs.netbsd.getent;
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.libc.getent else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
       freebsd = pkgs.freebsd.getent;
       openbsd = pkgs.openbsd.getent;
@@ -107,17 +122,17 @@ let
       darwin = pkgs.darwin.diskdev_cmds;
     };
     hexdump = {
-      linux = pkgs.util-linux;
+      linux = pkgs.util-linuxMinimal;
       darwin = pkgs.darwin.shell_cmds;
     };
     hostname = {
-      linux = pkgs.nettools;
+      linux = pkgs.hostname-debian;
       darwin = pkgs.darwin.shell_cmds;
       freebsd = pkgs.freebsd.bin;
       openbsd = pkgs.openbsd.hostname;
     };
     ifconfig = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.ifconfig;
       openbsd = pkgs.openbsd.ifconfig;
@@ -157,7 +172,7 @@ let
       '';
     };
     netstat = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.netstat;
     };
@@ -183,7 +198,7 @@ let
       darwin = pkgs.darwin.diskdev_cmds;
     };
     route = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.route;
       openbsd = pkgs.openbsd.route;
@@ -227,9 +242,9 @@ let
 
       # watch is the only command from procps that builds currently on
       # Darwin/FreeBSD. Unfortunately no other implementations exist currently!
-      darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
-      freebsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
-      openbsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      darwin = pkgs.callPackage ../os-specific/linux/procps-ng { };
+      freebsd = pkgs.callPackage ../os-specific/linux/procps-ng { };
+      openbsd = pkgs.callPackage ../os-specific/linux/procps-ng { };
     };
     write = {
       linux = pkgs.util-linux;
@@ -242,7 +257,8 @@ let
     };
   };
 
-  makeCompat = pname: paths:
+  makeCompat =
+    pname: paths:
     buildEnv {
       name = "${pname}-${version}";
       inherit paths;
@@ -250,10 +266,35 @@ let
 
   # Compatibility derivations
   # Provided for old usage of these commands.
-  compat = with bins; mapAttrs makeCompat {
-    procps = [ ps sysctl top watch ];
-    util-linux = [ fsck fdisk getopt hexdump mount
-                  script umount whereis write col column ];
-    nettools = [ arp hostname ifconfig netstat route ];
-  };
-in bins // compat
+  compat =
+    with bins;
+    mapAttrs makeCompat {
+      procps = [
+        ps
+        sysctl
+        top
+        watch
+      ];
+      util-linux = [
+        fsck
+        fdisk
+        getopt
+        hexdump
+        mount
+        script
+        umount
+        whereis
+        write
+        col
+        column
+      ];
+      net-tools = [
+        arp
+        hostname
+        ifconfig
+        netstat
+        route
+      ];
+    };
+in
+bins // compat

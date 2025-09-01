@@ -15,7 +15,7 @@ function calc_hash () {
     local arch=$2
     url="https://releases.hashicorp.com/vault/${version}/vault_${version}_${arch}.zip"
     zip_hash=$(nix-prefetch-url --unpack $url)
-    nix hash to-sri --type sha256 "$zip_hash"
+    nix --extra-experimental-features nix-command hash to-sri --type sha256 "$zip_hash"
 }
 
 replace_sha() {

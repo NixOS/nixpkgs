@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6WNXsRvbldEjAykMn1DCiuKctBrsTHGv1fJuRXBblu0=";
   };
 
-  cargoHash = "sha256-5kJ0MK0rUzyJvLZH/3nje+gTAM6et0mNE3sxVoK1L5s=";
+  cargoHash = "sha256-VC8wiMdg7BnE92m57pKSrtv7vmbRNwV1yyy3f+1e+cY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A command-line implementation of WCHISPTool, for flashing ch32 MCUs";
+    description = "Command-line implementation of WCHISPTool, for flashing ch32 MCUs";
     homepage = "https://ch32-rs.github.io/wchisp/";
     changelog = "https://github.com/ch32-rs/wchisp/releases/tag/v${version}";
     license = with lib.licenses; [ gpl2Only ];

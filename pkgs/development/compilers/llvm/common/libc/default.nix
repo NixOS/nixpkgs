@@ -23,43 +23,32 @@ let
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/runtimes "$out"
     cp -r ${monorepoSrc}/llvm "$out"
+    cp -r ${monorepoSrc}/compiler-rt "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
   '');
-
-  stdenv' =
-    if stdenv.cc.isClang then
-      stdenv.override {
-        cc = stdenv.cc.override {
-          nixSupport = stdenv.cc.nixSupport // {
-            cc-cflags = lib.remove "-lunwind" stdenv.cc.nixSupport.cc-cflags;
-          };
-        };
-      }
-    else
-      stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version patches;
 
   src = src';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ (lib.optional isFullBuild python3Packages.pyyaml);
+  nativeBuildInputs = [
+    cmake
+    python3
+  ]
+  ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
+  ++ (lib.optional isFullBuild python3Packages.pyyaml);
 
   buildInputs = lib.optional isFullBuild linuxHeaders;
 
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
   postUnpack = lib.optionalString isFullBuild ''
-    patchShebangs $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
-    chmod +x $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
+    chmod +w $sourceRoot/../$pname/utils/hdrgen
+    patchShebangs $sourceRoot/../$pname/utils/hdrgen/main.py
+    chmod +x $sourceRoot/../$pname/utils/hdrgen/main.py
   '';
 
   prePatch = ''
@@ -71,15 +60,30 @@ stdenv'.mkDerivation (finalAttrs: {
     cd ../runtimes
   '';
 
-  postInstall = lib.optionalString (!isFullBuild) ''
-    substituteAll ${./libc-shim.so} $out/lib/libc.so
-  '';
+  postInstall =
+    lib.optionalString (!isFullBuild) ''
+      substituteAll ${./libc-shim.tpl} $out/lib/libc.so
+    ''
+    # LLVM libc doesn't recognize static vs dynamic yet.
+    # Treat LLVM libc as a static libc, requires this symlink until upstream fixes it.
+    + lib.optionalString (isFullBuild && stdenv.hostPlatform.isLinux) ''
+      ln $out/lib/crt1.o $out/lib/Scrt1.o
+    '';
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;
 
   cmakeFlags = [
     (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
-    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc")
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc;compiler-rt")
+    # Tests requires the host to have a libc.
+    (lib.cmakeBool "LLVM_INCLUDE_TESTS" (stdenv.cc.libc != null))
+  ]
+  ++ lib.optionals (isFullBuild && stdenv.cc.libc == null) [
+    # CMake runs a check to see if the compiler works.
+    # This includes including headers which requires a libc.
+    # Skip these checks because a libc cannot be used when one doesn't exist.
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
   ];
 
   # For the update script:
@@ -89,6 +93,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = llvm_meta // {
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://libc.llvm.org/";
     description = "Standard C library for LLVM";
   };

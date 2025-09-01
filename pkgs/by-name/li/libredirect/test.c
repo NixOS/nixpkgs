@@ -92,11 +92,15 @@ int main(int argc, char *argv[])
 
     assert(access(TESTPATH, X_OK) == 0);
 
-    assert(stat(TESTPATH, &testsb) != -1);
+    // On EOVERFLOW checks below: when TESTPATH lands on a filesystem
+    // that requires 64-bit inode values (like btrfs used for a while)
+    // it will fail on 32-bit systems.
+
+    assert(stat(TESTPATH, &testsb) != -1 || errno == EOVERFLOW);
 #ifdef __GLIBC__
     assert(stat64(TESTPATH, &testsb64) != -1);
 #endif
-    assert(fstatat(123, TESTPATH, &testsb, 0) != -1);
+    assert(fstatat(123, TESTPATH, &testsb, 0) != -1 || errno == EOVERFLOW);
 #ifdef __GLIBC__
     assert(fstatat64(123, TESTPATH, &testsb64, 0) != -1);
 #endif

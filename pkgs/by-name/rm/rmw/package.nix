@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   ncurses,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
     fetchSubmodules = true;
   };
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+
+  # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
+  mesonFlags = [
+    "-Dcanfigger:b_sanitize=none"
   ];
 
   meta = with lib; {

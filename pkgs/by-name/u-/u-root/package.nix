@@ -10,7 +10,7 @@
   linux_latest,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "u-root";
   version = "0.14.0-unstable-2024-09-26";
 
@@ -55,7 +55,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A fully Go userland with Linux bootloaders";
+    description = "Fully Go userland with Linux bootloaders";
     longDescription = ''
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 
@@ -63,10 +63,10 @@ buildGoModule rec {
     '';
     homepage = "https://u-root.org/";
     downloadPage = "https://github.com/u-root/u-root";
-    changelog = "https://github.com/u-root/u-root/blob/${src.rev}/RELEASES";
+    changelog = "https://github.com/u-root/u-root/blob/${finalAttrs.src.rev}/RELEASES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "u-root";
     platforms = lib.platforms.linux;
   };
-}
+})

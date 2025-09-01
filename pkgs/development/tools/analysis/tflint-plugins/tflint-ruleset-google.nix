@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-google";
-  version = "0.30.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eE1KSfbMbNuHlzEi7+zTRdxq548+pB8p01iIWoE2NAQ=";
+    hash = "sha256-7olOS0vYfYaEIr4Tba3Cp5cc7fmJU+TJjom6ZvWIYzc=";
   };
 
-  vendorHash = "sha256-nuucBbqS+D12JEPoS/QHHTcPKaTjsD4oxnVLDMmLwNA=";
+  vendorHash = "sha256-9WI3mPZIM2+EEisliRWtq6ZKLjOVFWpLTYD7jwvataY=";
 
   # upstream Makefile also does a go test $(go list ./... | grep -v integration)
   preCheck = ''
@@ -25,8 +25,14 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   postInstall = ''
+    # allow use as a versioned dependency, i.e., with `source = ...` and
+    # `version = ...` in `.tflintrc`:
     mkdir -p $out/github.com/terraform-linters/${pname}/${version}
     mv $out/bin/${pname} $out/github.com/terraform-linters/${pname}/${version}/
+
+    # allow use as an unversioned dependency, e.g., if one wants `.tflintrc` to
+    # solely rely on Nix to pin versions:
+    ln -s $out/github.com/terraform-linters/${pname}/${version}/${pname} $out/
   '';
 
   meta = with lib; {

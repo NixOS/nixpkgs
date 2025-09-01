@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, libuuid
-, seafile-shared
-, jansson
-, libsearpc
-, withShibboleth ? true
-, qtwebengine
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qttools,
+  libuuid,
+  seafile-shared,
+  jansson,
+  libsearpc,
+  withShibboleth ? true,
+  qtwebengine,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.11";
+  version = "9.0.14";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "sha256-qiJ/GDbwCei51tsa5MNbjsWQWZNxONFj20QEss/jbRE=";
+    hash = "sha256-ZMhU0uXAC3tH1e3ktiHhC5YCDwFOnILretPgjYYa9DQ=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     seafile-shared
     jansson
     libsearpc
-  ] ++ lib.optional withShibboleth qtwebengine;
+  ]
+  ++ lib.optional withShibboleth qtwebengine;
 
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
@@ -49,7 +51,9 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ schmittlauch greizgh ];
+    maintainers = with maintainers; [
+      schmittlauch
+    ];
     mainProgram = "seafile-applet";
   };
 }

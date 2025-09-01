@@ -6,7 +6,7 @@
   cryptography,
   ifaddr,
   freezegun,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "3.5.0";
+  version = "3.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknx";
     tag = version;
-    hash = "sha256-kpGT1UcpKL8LJvFkw3RYZcbXcLla95QB4exG7kA8+BQ=";
+    hash = "sha256-68Vt5jwtEND2Ej6JP10Rp+kqYc2qu9XbmgZgPOmkWWw=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +31,12 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ];
 
@@ -43,7 +44,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Test requires network access
+    "test_routing_indication_multicast"
     "test_scan_timeout"
+    "test_start_secure_routing_explicit_keyring"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
     # RuntimeError: Event loop is closed
@@ -65,7 +68,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/XKNX/xknx";
     changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };

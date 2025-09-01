@@ -4,33 +4,23 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 rustPlatform.buildRustPackage {
   pname = "ringfairy";
-  version = "0.1.2-unstable-2024-05-11";
+  version = "0.1.3-unstable-2024-06-03";
 
   src = fetchFromGitHub {
     owner = "k3rs3d";
     repo = "ringfairy";
-    rev = "966fe129c72a7ff09f55f22273c1c291780d40cd";
-    hash = "sha256-1soTvSjoBSIQBUK21COSmw8EKYcMUBjNs+FNs3jzy/E=";
+    rev = "bce9dce450d9fa8406f12f64045ca21f9f548942";
+    hash = "sha256-dyqmjjhX3aehxoziV1C8Xsh/tNR2mhMBgcziPPNqqkA=";
   };
 
-  cargoHash = "sha256-cmW+y57AAK1NNBJ6xE2EvHsSoKddLWgdtnAmSjzAN0k=";
+  cargoHash = "sha256-Sa8vGQkE31r8hr53q46FzfEievlLJvBTvvOzqHyZEFY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   meta = {
     description = "Static webring generator in Rust";

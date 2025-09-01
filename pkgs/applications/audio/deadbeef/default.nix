@@ -70,7 +70,7 @@ assert gtk2Support || gtk3Support;
 let
   inherit (lib) optionals;
 
-  version = "1.9.6";
+  version = "1.10.0";
 in
 clangStdenv.mkDerivation {
   pname = "deadbeef";
@@ -81,94 +81,92 @@ clangStdenv.mkDerivation {
     repo = "deadbeef";
     fetchSubmodules = true;
     rev = version;
-    hash = "sha256-Q6hL4fOFPHn26ZqvrebgTMTgQZrhbXCEhM4ZFzNeyJE=";
+    hash = "sha256-qa0ULmE15lV2vkyXPNW9kSISQZEANrjwJwykTiifk5Q=";
   };
 
-  buildInputs =
-    [
-      jansson
-      swift-corelibs-libdispatch
-    ]
-    ++ optionals gtk2Support [
-      gtk2
-    ]
-    ++ optionals gtk3Support [
-      gtk3
-      gsettings-desktop-schemas
-    ]
-    ++ optionals vorbisSupport [
-      libvorbis
-    ]
-    ++ optionals mp123Support [
-      libmad
-    ]
-    ++ optionals flacSupport [
-      flac
-    ]
-    ++ optionals wavSupport [
-      libsndfile
-    ]
-    ++ optionals cdaSupport [
-      libcdio
-      libcddb
-    ]
-    ++ optionals aacSupport [
-      faad2
-    ]
-    ++ optionals opusSupport [
-      opusfile
-    ]
-    ++ optionals zipSupport [
-      libzip
-    ]
-    ++ optionals ffmpegSupport [
-      ffmpeg
-    ]
-    ++ optionals apeSupport [
-      yasm
-    ]
-    ++ optionals artworkSupport [
-      imlib2
-    ]
-    ++ optionals hotkeysSupport [
-      libX11
-    ]
-    ++ optionals osdSupport [
-      dbus
-    ]
-    ++ optionals alsaSupport [
-      alsa-lib
-    ]
-    ++ optionals pulseSupport [
-      libpulseaudio
-    ]
-    ++ optionals pipewireSupport [
-      pipewire
-    ]
-    ++ optionals resamplerSupport [
-      libsamplerate
-    ]
-    ++ optionals overloadSupport [
-      zlib
-    ]
-    ++ optionals wavpackSupport [
-      wavpack
-    ]
-    ++ optionals remoteSupport [
-      curl
-    ];
+  buildInputs = [
+    jansson
+    swift-corelibs-libdispatch
+  ]
+  ++ optionals gtk2Support [
+    gtk2
+  ]
+  ++ optionals gtk3Support [
+    gtk3
+    gsettings-desktop-schemas
+  ]
+  ++ optionals vorbisSupport [
+    libvorbis
+  ]
+  ++ optionals mp123Support [
+    libmad
+  ]
+  ++ optionals flacSupport [
+    flac
+  ]
+  ++ optionals wavSupport [
+    libsndfile
+  ]
+  ++ optionals cdaSupport [
+    libcdio
+    libcddb
+  ]
+  ++ optionals aacSupport [
+    faad2
+  ]
+  ++ optionals opusSupport [
+    opusfile
+  ]
+  ++ optionals zipSupport [
+    libzip
+  ]
+  ++ optionals ffmpegSupport [
+    ffmpeg
+  ]
+  ++ optionals apeSupport [
+    yasm
+  ]
+  ++ optionals artworkSupport [
+    imlib2
+  ]
+  ++ optionals hotkeysSupport [
+    libX11
+  ]
+  ++ optionals osdSupport [
+    dbus
+  ]
+  ++ optionals alsaSupport [
+    alsa-lib
+  ]
+  ++ optionals pulseSupport [
+    libpulseaudio
+  ]
+  ++ optionals pipewireSupport [
+    pipewire
+  ]
+  ++ optionals resamplerSupport [
+    libsamplerate
+  ]
+  ++ optionals overloadSupport [
+    zlib
+  ]
+  ++ optionals wavpackSupport [
+    wavpack
+  ]
+  ++ optionals remoteSupport [
+    curl
+  ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      intltool
-      libtool
-      pkg-config
-    ]
-    ++ optionals gtk3Support [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    intltool
+    libtool
+    pkg-config
+  ]
+  ++ optionals gtk3Support [
+    wrapGAppsHook3
+  ];
 
   enableParallelBuilding = true;
 
@@ -193,6 +191,6 @@ clangStdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

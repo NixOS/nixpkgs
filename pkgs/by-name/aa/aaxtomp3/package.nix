@@ -23,8 +23,8 @@ resholve.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "krumpetpirate";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aaxtomp3";
+    tag = "v${version}";
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
@@ -70,10 +70,10 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Convert Audible's .aax filetype to MP3, FLAC, M4A, or OPUS";
     homepage = "https://krumpetpirate.github.io/AAXtoMP3";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

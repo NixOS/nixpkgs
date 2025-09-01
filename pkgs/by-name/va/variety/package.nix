@@ -1,5 +1,6 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
   gexiv2,
   gobject-introspection,
@@ -8,7 +9,6 @@
   intltool,
   libnotify,
   librsvg,
-  python3,
   runtimeShell,
   wrapGAppsHook3,
   fehSupport ? false,
@@ -17,17 +17,19 @@
   imagemagick,
   appindicatorSupport ? true,
   libayatana-appindicator,
+  bash,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.12";
+  version = "0.8.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
     tag = version;
-    hash = "sha256-FjnhV7vzRPVDCgUNK8CHo3arKXuwe+3xH/5AxCVgeIY=";
+    hash = "sha256-7CTJ3hWddbOX/UfZ1qX9rPNGTfkxQ4pxu23sq9ulgv4=";
   };
 
   nativeBuildInputs = [
@@ -42,10 +44,13 @@ python3.pkgs.buildPythonApplication rec {
     hicolor-icon-theme
     libnotify
     librsvg
-  ] ++ lib.optional appindicatorSupport libayatana-appindicator;
+  ]
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies =
+    with python3Packages;
     [
       beautifulsoup4
       configobj
@@ -73,14 +78,19 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
-      --replace "__variety_data_directory__ = \"../data\"" \
+      --replace-fail "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
     substituteInPlace variety/VarietyWindow.py \
-      --replace '[script,' '["${runtimeShell}", script,' \
-      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+      --replace-fail '[script,' '["${runtimeShell}", script,' \
+      --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+    substituteInPlace data/variety-autostart.desktop.template \
+      --replace-fail "/bin/bash" "${lib.getExe bash}" \
+      --replace-fail "{VARIETY_PATH}" "variety"
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "variety" ];
+
+  meta = {
     homepage = "https://github.com/varietywalls/variety";
     description = "Wallpaper manager for Linux systems";
     mainProgram = "variety";
@@ -96,8 +106,8 @@ python3.pkgs.buildPythonApplication rec {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
     ];

@@ -35,9 +35,6 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
-  # This is mostly for breaking infinite recursion where dependencies
-  # of nix-prefetch-git use fetchCargoVendor.
-  allowGitDependencies ? true,
   ...
 }@args:
 
@@ -56,15 +53,16 @@ let
     {
       name = "${name}-vendor-staging";
 
-      nativeBuildInputs =
-        [
-          fetchCargoVendorUtil
-          cacert
-        ]
-        ++ lib.optionals allowGitDependencies [
-          nix-prefetch-git
-        ]
-        ++ nativeBuildInputs;
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
+      nativeBuildInputs = [
+        fetchCargoVendorUtil
+        cacert
+        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+        (nix-prefetch-git.override { git-lfs = null; })
+      ]
+      ++ nativeBuildInputs;
 
       buildPhase = ''
         runHook preBuild
@@ -78,6 +76,9 @@ let
         runHook postBuild
       '';
 
+      strictDeps = true;
+
+      dontConfigure = true;
       dontInstall = true;
       dontFixup = true;
 

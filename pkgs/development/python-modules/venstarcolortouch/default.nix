@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "venstarcolortouch";
-  version = "0.19";
+  version = "0.21";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QjcoF46GrBH7ExGQno8xDgtOSGNxhAP+NycJb22hL+E=";
+    hash = "sha256-M+Sbpue6Z8+pvxzhq3teM84ect+pilwmlRe9PJYDzPU=";
   };
 
   propagatedBuildInputs = [ requests ];

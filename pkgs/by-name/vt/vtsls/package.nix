@@ -4,18 +4,20 @@
   fetchFromGitHub,
   nodejs_22,
   gitMinimal,
+  gitSetupHook,
   pnpm_8,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.6";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
-    rev = "server-v${finalAttrs.version}";
-    hash = "sha256-HCi9WLh4IEfhgkQNUVk6IGkQfYagg805Rix78zG6xt0=";
+    tag = "server-v${finalAttrs.version}";
+    hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
     fetchSubmodules = true;
   };
 
@@ -23,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs_22
     # patches are applied with git during build
     gitMinimal
+    gitSetupHook
     pnpm_8.configHook
   ];
 
@@ -37,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       version
       ;
-    hash = "sha256-4XxQ0Z2atTBItrD9iY7q5rJaCmb1EeDBvQ5+L3ceRXI=";
+    fetcherVersion = 1;
+    hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
@@ -48,10 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-
-    # During build vtsls needs a working git installation.
-    git config --global user.name nixbld
-    git config --global user.email nixbld@example.com
 
     # during build this sha is used as a marker to skip applying patches and
     # copying files, which doesn't matter in this case
@@ -82,8 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    description = "LSP wrapper for typescript extension of vscode.";
+    description = "LSP wrapper for typescript extension of vscode";
     homepage = "https://github.com/yioneko/vtsls";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kuglimon ];

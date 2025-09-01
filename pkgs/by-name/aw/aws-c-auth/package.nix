@@ -16,13 +16,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
   # nixpkgs-update: no auto update
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
     rev = "v${version}";
-    hash = "sha256-wVHTfiAejAra8LnytxSJijUXHDmEwAj5D+wXOKq32B4=";
+    hash = "sha256-HzDUINTmgjW7rNEe+5iwZBv6ayxNKmGAJy+Lg4tp1t0=";
   };
 
   nativeBuildInputs = [

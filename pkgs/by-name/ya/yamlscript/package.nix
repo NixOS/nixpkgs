@@ -1,15 +1,17 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+}:
 
-buildGraalvmNativeImage rec {
+buildGraalvmNativeImage (finalAttrs: {
   pname = "yamlscript";
-  version = "0.1.89";
+  version = "0.2.2";
 
   src = fetchurl {
-    url = "https://github.com/yaml/yamlscript/releases/download/${version}/yamlscript.cli-${version}-standalone.jar";
-    hash = "sha256-SSgiAjPRow4R1cLl7POUzC+TeQ4Oq+8QeFh410IsgdA=";
+    url = "https://github.com/yaml/yamlscript/releases/download/${finalAttrs.version}/yamlscript.cli-${finalAttrs.version}-standalone.jar";
+    hash = "sha256-JGtslASDw/jZxmM936uBW0xcHR3QQSDB99WjwYXim1Q=";
   };
-
-  executable = "ys";
 
   extraNativeImageBuildArgs = [
     "--native-image-info"
@@ -26,15 +28,19 @@ buildGraalvmNativeImage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/ys  -e 'say: (+ 1 2)' | fgrep 3
+    runHook preInstallCheck
+
+    $out/bin/ys -e 'say: (+ 1 2)' | fgrep 3
+
+    runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming in YAML";
     homepage = "https://github.com/yaml/yamlscript";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
     mainProgram = "ys";
-    maintainers = with maintainers; [ sgo ];
+    maintainers = with lib.maintainers; [ sgo ];
   };
-}
+})

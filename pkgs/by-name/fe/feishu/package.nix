@@ -7,7 +7,6 @@
   autoPatchelfHook,
   cairo,
   cups,
-  curl,
   dbus,
   dpkg,
   expat,
@@ -66,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/18b9e5d0/Feishu-linux_x64-7.32.11.deb";
-      sha256 = "sha256-gU+fNiUE2kCE3407vdjQqE7oLgR9vXynaBNuV3EZrqc=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/72e0cee3/Feishu-linux_x64-7.46.12.deb";
+      sha256 = "sha256-qdaWx4vQQWJtEX+3xo6oGp82sblsWb1jB96w8djc7wM=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8946d4de/Feishu-linux_arm64-7.32.11.deb";
-      sha256 = "sha256-gYIQysbII9Ud1a7eXqQRtOsBA2rI29+xnxntAumFUdk=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/ea20b00e/Feishu-linux_arm64-7.46.12.deb";
+      sha256 = "sha256-zh65+v9JWRv631hQDSnKwH1C8I35ddRpq8kcnhRe4wo=";
     };
   };
 
@@ -87,7 +86,6 @@ let
     atk
     cairo
     cups
-    curl
     dbus
     expat
     fontconfig
@@ -135,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.32.11";
+  version = "7.46.12";
   pname = "feishu";
 
   src =
@@ -154,7 +152,6 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    curl
     libXdamage
     libXtst
     libdrm
@@ -199,12 +196,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
-
-    # feishu comes with a bundled libcurl.so
-    # and has many dependencies that are hard to satisfy
-    # e.g. openldap version 2.4
-    # so replace it with our own libcurl.so
-    ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
   passthru = {
@@ -226,18 +217,19 @@ stdenv.mkDerivation {
         update_link=$(echo $package_info | jq -r '.data.download_link' | sed 's/lf[0-9]*-ug-sign.feishucdn.com/sf3-cn.feishucdn.com\/obj/;s/?.*$//')
         new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
         sha256_hash=$(nix-prefetch-url $update_link)
-        sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
+        sri_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $sha256_hash)
         update-source-version feishu $new_version $sri_hash $update_link --system=$platform --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one collaboration suite";
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = supportedPlatforms;
-    maintainers = with maintainers; [ billhuang ];
+    maintainers = with lib.maintainers; [ billhuang ];
+    mainProgram = "bytedance-feishu";
   };
 }

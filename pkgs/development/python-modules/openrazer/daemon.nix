@@ -13,6 +13,7 @@
   wrapGAppsNoGuiHook,
   notify2,
   glib,
+  libnotify,
 }:
 
 let
@@ -33,6 +34,9 @@ buildPythonPackage (
     postPatch = ''
       substituteInPlace openrazer_daemon/daemon.py \
         --replace-fail "plugdev" "openrazer"
+      patchShebangs run_openrazer_daemon.py
+      substituteInPlace run_openrazer_daemon.py \
+        --replace-fail "/usr/share" "$out/share"
     '';
 
     nativeBuildInputs = [
@@ -46,13 +50,14 @@ buildPythonPackage (
       gtk3
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       daemonize
       dbus-python
       pygobject3
       pyudev
       setproctitle
       notify2
+      libnotify
     ];
 
     postInstall = ''

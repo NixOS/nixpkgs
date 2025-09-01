@@ -1,39 +1,43 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
+  autoreconfHook,
+  autoconf-archive,
   pkg-config,
-  glib,
-  libXaw,
-  libX11,
-  libXext,
-  libDSKSupport ? true,
-  libdsk,
-  motifSupport ? false,
-  lesstif,
+  wrapGAppsHook3,
+  libepoxy,
 }:
 
 stdenv.mkDerivation rec {
-  version = "20070122";
+  version = "0.52.1";
   pname = "xcpc";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xcpc/${pname}-${version}.tar.gz";
-    sha256 = "0hxsbhmyzyyrlidgg0q8izw55q0z40xrynw5a1c3frdnihj9jf7n";
+  src = fetchFromGitHub {
+    owner = "ponceto";
+    repo = "xcpc-emulator";
+    rev = "xcpc-${version}";
+    hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    wrapGAppsHook3
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      glib
-      libdsk
-      libXaw
-      libX11
-      libXext
-    ]
-    ++ lib.optional libDSKSupport libdsk
-    ++ lib.optional motifSupport lesstif;
+  buildInputs = [ libepoxy ];
+
+  passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
+      "$out/bin/" ""
+    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
+      "$out/share/pixmaps/" ""
+  '';
 
   meta = with lib; {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";

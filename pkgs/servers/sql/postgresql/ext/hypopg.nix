@@ -1,21 +1,20 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  postgresql,
   gitUpdater,
-  buildPostgresqlExtension,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "hypopg";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "HypoPG";
     repo = "hypopg";
-    rev = version;
-    hash = "sha256-88uKPSnITRZ2VkelI56jZ9GWazG/Rn39QlyHKJKSKMM=";
+    tag = finalAttrs.version;
+    hash = "sha256-J1ltvNHB2v2I9IbYjM8w2mhXvBX31NkMasCL0O7bV8w=";
   };
 
   passthru = {
@@ -24,11 +23,12 @@ buildPostgresqlExtension rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hypothetical Indexes for PostgreSQL";
     homepage = "https://hypopg.readthedocs.io";
-    license = licenses.postgresql;
+    changelog = "https://github.com/HypoPG/hypopg/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

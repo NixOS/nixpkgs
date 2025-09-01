@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_FLATBUFFERS_LIBS=ON"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   preConfigure = ''
     rm -rf external/flatbuffers
   '';

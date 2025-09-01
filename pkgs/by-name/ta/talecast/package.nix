@@ -1,12 +1,10 @@
 {
   lib,
   fetchCrate,
-  darwin,
   rustPlatform,
   pkg-config,
   openssl,
   nix-update-script,
-  stdenv,
   testers,
   talecast,
 }:
@@ -20,13 +18,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RwB+X+i3CEcTyKac81he9/cT2aQ4M7AqgqSDBEvhFJU=";
   };
 
-  cargoHash = "sha256-mIzrYlAqHYrK2bb/ZUzqIwhPJKcTQpNpqijpEuwLc5A=";
+  cargoHash = "sha256-mRoFg1UUPCKWiPxZg+8o2+2K6R+88RI/pdO8OLM4jFk=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

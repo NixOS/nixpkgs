@@ -10,14 +10,14 @@
 
 buildGoModule rec {
   pname = "manifest-tool";
-  version = "2.1.9";
+  version = "2.2.0";
   modRoot = "v2";
 
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
-    rev = "v${version}";
-    hash = "sha256-tehdgYH73tmzjhJmTQuMWvciGYIyc6VeIMS2fFO7YP4=";
+    tag = "v${version}";
+    hash = "sha256-tEUsqrJGRhyirI8TEgG6r9crHX58webHO5v7JLLRQ30=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
@@ -29,17 +29,16 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X main.version=${version}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-linkmode=external"
-      "-extldflags"
-      "-static"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
+  ];
 
   preConfigure = ''
     export ldflags+=" -X main.gitCommit=$(cat .git-revision)"

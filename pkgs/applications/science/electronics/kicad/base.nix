@@ -1,68 +1,71 @@
-{ lib
-, stdenv
-, cmake
-, libGLU
-, libGL
-, zlib
-, wxGTK
-, gtk3
-, libX11
-, gettext
-, glew
-, glm
-, cairo
-, curl
-, openssl
-, boost
-, pkg-config
-, doxygen
-, graphviz
-, pcre
-, libpthreadstubs
-, libXdmcp
-, unixODBC
-, libgit2
-, libsecret
-, libgcrypt
-, libgpg-error
+{
+  lib,
+  stdenv,
+  cmake,
+  libGLU,
+  libGL,
+  zlib,
+  wxGTK,
+  gtk3,
+  libX11,
+  gettext,
+  glew,
+  glm,
+  cairo,
+  curl,
+  openssl,
+  boost,
+  pkg-config,
+  doxygen,
+  graphviz,
+  libpthreadstubs,
+  libXdmcp,
+  unixODBC,
+  libgit2,
+  libsecret,
+  libgcrypt,
+  libgpg-error,
+  ninja,
 
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, libepoxy
-, dbus
-, at-spi2-core
-, libXtst
-, pcre2
-, libdeflate
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  dbus,
+  at-spi2-core,
+  libXtst,
+  pcre2,
+  libdeflate,
 
-, swig
-, python
-, wxPython
-, opencascade-occt_7_6
-, libngspice
-, valgrind
+  swig,
+  python,
+  wxPython,
+  opencascade-occt_7_6,
+  libngspice,
+  valgrind,
+  protobuf_29,
+  nng,
 
-, stable
-, testing
-, baseName
-, kicadSrc
-, kicadVersion
-, withNgspice
-, withScripting
-, withI18n
-, debug
-, sanitizeAddress
-, sanitizeThreads
+  stable,
+  testing,
+  baseName,
+  kicadSrc,
+  kicadVersion,
+  withNgspice,
+  withScripting,
+  withI18n,
+  debug,
+  sanitizeAddress,
+  sanitizeThreads,
 }:
 
-assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
-  "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
-assert testing -> !stable
-  -> throw "testing implies stable and cannot be used with stable = false";
+assert lib.assertMsg (
+  !(sanitizeAddress && sanitizeThreads)
+) "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+assert testing -> !stable -> throw "testing implies stable and cannot be used with stable = false";
 
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -92,16 +95,21 @@ stdenv.mkDerivation rec {
       --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
-  makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
+  preConfigure = optional (debug) ''
+    export CFLAGS="''${CFLAGS:-} -Og -ggdb"
+    export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
+  '';
 
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     # https://gitlab.com/kicad/code/kicad/-/issues/17133
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
+    "-DKICAD_USE_CMAKE_FINDPROTOBUF=OFF"
   ]
-  ++ optional (stdenv.hostPlatform.system == "aarch64-linux")
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
+  ++ optional (
+    stdenv.hostPlatform.system == "aarch64-linux"
+  ) "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
@@ -127,6 +135,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     doxygen
     graphviz
     pkg-config
@@ -158,7 +167,6 @@ stdenv.mkDerivation rec {
     libX11
     wxGTK
     gtk3
-    pcre
     libXdmcp
     gettext
     glew
@@ -173,6 +181,10 @@ stdenv.mkDerivation rec {
     unixODBC
     libdeflate
     opencascade-occt
+    protobuf_29
+
+    # This would otherwise cause a linking requirement for mbedtls.
+    (nng.override { mbedtlsSupport = false; })
   ]
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
@@ -189,12 +201,14 @@ stdenv.mkDerivation rec {
   installCheckTarget = "test";
 
   nativeInstallCheckInputs = [
-    (python.withPackages(ps: with ps; [
-      numpy
-      pytest
-      cairosvg
-      pytest-image-diff
-    ]))
+    (python.withPackages (
+      ps: with ps; [
+        numpy
+        pytest
+        cairosvg
+        pytest-image-diff
+      ]
+    ))
   ];
 
   dontStrip = debug;
@@ -207,5 +221,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kicad.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  icu,
+  icu74,
   pkg-config,
   enableUnicodeHelp ? true,
 }:
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aOF3owz7SIV4trJY0PnMtIcwqoUpDbB3tNxZcsl9dzM=";
   };
 
-  buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];
+  buildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
   cmakeFlags = [
     "-DCXXOPTS_BUILD_EXAMPLES=OFF"
-  ] ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
+  ]
+  ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
   nativeBuildInputs = [ cmake ] ++ lib.optionals enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;

@@ -1,20 +1,20 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "nexttrace";
-  version = "1.3.5";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-32QFgmvXQ+8ix1N9I6pJaIJGWOT67/FG0VVEhftwQQw=";
+    sha256 = "sha256-Etz/MXTFpcHbpha8WEmbhHtvyrrVhlLZDfc+J3j6o6M=";
   };
-  vendorHash = "sha256-WRH9doQavcdH1sd2fS8QoFSmlirBMZgSzB/sj1q6cUQ=";
+  vendorHash = "sha256-jJJXQIv91IkUhIIyMlZUxnx6LzPEtgbjizhDGUu9ZZE=";
 
   doCheck = false; # Tests require a network connection.
 
@@ -22,6 +22,7 @@ buildGo122Module rec {
     "-s"
     "-w"
     "-X github.com/nxtrace/NTrace-core/config.Version=v${version}"
+    "-checklinkname=0" # refers to https://github.com/nxtrace/NTrace-core/issues/247
   ];
 
   postInstall = ''

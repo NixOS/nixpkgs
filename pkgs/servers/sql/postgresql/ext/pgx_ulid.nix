@@ -1,13 +1,15 @@
 {
-  lib,
   buildPgrxExtension,
+  cargo-pgrx_0_12_6,
   fetchFromGitHub,
+  lib,
   nix-update-script,
   postgresql,
   util-linux,
 }:
-buildPgrxExtension rec {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "pgx_ulid";
   version = "0.2.0";
@@ -15,11 +17,11 @@ buildPgrxExtension rec {
   src = fetchFromGitHub {
     owner = "pksunkara";
     repo = "pgx_ulid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VdLWwkUA0sVs5Z/Lyf5oTRhcHVzPmhgnYQhIM8MWJ0c=";
   };
 
-  cargoHash = "sha256-Gn+SjzGaxnGKJYI9+WyE1+TzlF/2Ne43aKbXrSzfQKM=";
+  cargoHash = "sha256-OyrfwLMHn2aihfijHxE5oaz+XQC1HFlYbTp8Sw8RcK0=";
 
   postInstall = ''
     # Upstream renames the extension when packaging
@@ -38,11 +40,19 @@ buildPgrxExtension rec {
 
   meta = {
     # Support for PostgreSQL 13 was removed in 0.2.0: https://github.com/pksunkara/pgx_ulid/blob/084778c3e2af08d16ec5ec3ef4e8f345ba0daa33/CHANGELOG.md?plain=1#L6
-    broken = lib.versionOlder postgresql.version "14";
+    broken =
+      lib.versionOlder postgresql.version "14"
+      ||
+        # PostgreSQL 18 support issue upstream: https://github.com/pksunkara/pgx_ulid/issues/65
+        # Note: already fixed on `master` branch.
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "0.2.0") "Is postgresql18Packages.pgx_ulid still broken?" (
+          lib.versionAtLeast postgresql.version "18"
+        );
     description = "ULID Postgres extension written in Rust";
     homepage = "https://github.com/pksunkara/pgx_ulid";
-    changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myypo ];
   };
-}
+})

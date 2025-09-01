@@ -22,22 +22,24 @@ stdenv.mkDerivation (finalAttrs: {
       arch = stdenv.hostPlatform.uname.processor;
     in
     ''
-      tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" finalAttrs.version)}/other/${arch}/desktopvideo-${finalAttrs.version}-${arch}.tar.gz
-      moduleRoot=$NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}-${stdenv.hostPlatform.uname.processor}/usr/src
+      tar xf Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/other/${arch}/desktopvideo-${finalAttrs.version}*-${arch}.tar.gz
+      bmVersion=$(ls -d $NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}*-${arch}/usr/src | sed -e 's/.*desktopvideo-\([[:digit:]\.a-z]\+\).*/\1/')
+
+      moduleRoot=$NIX_BUILD_TOP/desktopvideo-$bmVersion-${arch}/usr/src
       sourceRoot=$moduleRoot
     '';
 
   buildPhase = ''
     runHook preBuild
-    make -C $moduleRoot/blackmagic-${finalAttrs.version} -j$NIX_BUILD_CORES
-    make -C $moduleRoot/blackmagic-io-${finalAttrs.version} -j$NIX_BUILD_CORES
+    make -C $moduleRoot/blackmagic-$bmVersion -j$NIX_BUILD_CORES
+    make -C $moduleRoot/blackmagic-io-$bmVersion -j$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    make -C $KERNELDIR M=$moduleRoot/blackmagic-${finalAttrs.version} modules_install
-    make -C $KERNELDIR M=$moduleRoot/blackmagic-io-${finalAttrs.version} modules_install
+    make -C $KERNELDIR M=$moduleRoot/blackmagic-$bmVersion modules_install
+    make -C $KERNELDIR M=$moduleRoot/blackmagic-io-$bmVersion modules_install
     runHook postInstall
   '';
 

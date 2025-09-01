@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.6";
+  version = "5.1.7";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-9XRYhedCDWtNPjAKzK4lOprHwbJjOgF6HN2MZnlZ9IE=";
+    hash = "sha256-GpjWo2+AsT0hD3CJJ8Pf/K5TbWtG0ZE2tIpH/UEGTws=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -56,7 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/opt $out/bin
     # Since FileBot has dependencies on relative paths between files, all required files are copied to the same location as is.
-    cp -r filebot.sh lib/ jar/ $out/opt/
+    cp -r filebot.sh jar/ $out/opt/
+    # Copy lib based on platform and force filebot to use libmediainfo.so from nix
+    local platformDir
+    case "${stdenv.hostPlatform.system}" in
+      "x86_64-linux")
+        platformDir="Linux-x86_64"
+        ;;
+      "aarch64-linux")
+        platformDir="Linux-aarch64"
+        ;;
+    esac
+    if [ -n "$platformDir" ]; then
+      mkdir -p "$out/opt/lib"
+      cp -r "lib/$platformDir" "$out/opt/lib/"
+      rm "$out/opt/lib/$platformDir/libmediainfo.so"
+      ln -s "${libmediainfo}/lib/libmediainfo.so" "$out/opt/lib/$platformDir/"
+    fi
     # Filebot writes to $APP_DATA, which fails due to read-only filesystem. Using current user .local directory instead.
     substituteInPlace $out/opt/filebot.sh \
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \

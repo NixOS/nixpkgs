@@ -18,8 +18,7 @@
   # copy the config for nixos-rebuild
   system.activationScripts.config =
     let
-      config = pkgs.substituteAll {
-        src = ./lxd-virtual-machine-image-inner.nix;
+      config = pkgs.replaceVars ./lxd-virtual-machine-image-inner.nix {
         stateVersion = lib.trivial.release;
       };
     in

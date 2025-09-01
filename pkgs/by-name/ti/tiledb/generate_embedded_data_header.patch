@@ -1,0 +1,14 @@
+--- a/tiledb/sm/misc/generate_embedded_data_header.script.cmake
++++ b/tiledb/sm/misc/generate_embedded_data_header.script.cmake
+@@ -40,11 +40,7 @@
+ string(MAKE_C_IDENTIFIER ${INPUT_FILENAME} INPUT_VARIABLE)
+
+ message(DEBUG "Compressing ${INPUT_FILE} to ${compressed_file}")
+-file(ARCHIVE_CREATE OUTPUT "${compressed_file}" PATHS ${INPUT_FILE} FORMAT raw COMPRESSION Zstd
+-    # Level 12 was found to have the best balance between compression ratio and speed
+-    # but is available in CMake 3.26+.
+-    COMPRESSION_LEVEL 9
+-)
++execute_process(COMMAND zstd -9 -c "${INPUT_FILE}" OUTPUT_FILE "${compressed_file}")
+ file(SIZE ${compressed_file} COMPRESSED_SIZE)
+ message(DEBUG "Compressed size: ${COMPRESSED_SIZE} bytes")

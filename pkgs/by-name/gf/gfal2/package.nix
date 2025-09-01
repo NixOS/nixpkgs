@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfal2";
-  version = "2.23.0";
+  version = "2.23.2";
 
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LEvmjd3A+7JHfUOAnyRyXMsJd/8JO2rVpcIT7QGSJoo=";
+    hash = "sha256-gyEmz0sNHyxjvJA/3uSzLW42PQ3UVKx6nptNYl/3ExM=";
   };
 
   passthru.enablePluginStatus = {

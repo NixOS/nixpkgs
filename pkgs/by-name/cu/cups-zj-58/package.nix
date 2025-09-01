@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "klirichek";
     repo = "zj-58";
-    rev = "e4212cd";
+    rev = "e4212cd702113a4bd4d7013744291c9f60bc5273";
     sha256 = "1w2qkspm4qqg5h8n6gmakzhiww7gag64chvy9kf89xsl3wsyp6pi";
   };
 

@@ -1,35 +1,40 @@
-{ lib
-, gitUpdater
-, fetchFromGitHub
-, qt6Packages
-, stdenv
-, cmake
-, extra-cmake-modules
-, inotify-tools
-, kdePackages
-, libcloudproviders
-, librsvg
-, libsecret
-, openssl
-, pcre
-, pkg-config
-, sphinx
-, sqlite
-, xdg-utils
-, libsysprof-capture
+{
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  qt6Packages,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  inotify-tools,
+  kdePackages,
+  libcloudproviders,
+  libp11,
+  librsvg,
+  libsecret,
+  openssl,
+  pcre,
+  pkg-config,
+  sphinx,
+  sqlite,
+  xdg-utils,
+  libsysprof-capture,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.15.3";
+  version = "3.17.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-48iqLd1S84ZElibdgwEXl3LZeYruo9r34LPn7BzYpdk=";
+    hash = "sha256-HXi3DDjOFLY9G+aK+QrkmLvLwL6s9lAT+8jVpG87eNM=";
   };
 
   patches = [
@@ -37,6 +42,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"''${SYSTEMD_USER_UNIT_DIR}"' "\"$out/lib/systemd/user\""
+
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
         --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
@@ -56,6 +64,7 @@ stdenv.mkDerivation rec {
     inotify-tools
     kdePackages.kio
     libcloudproviders
+    libp11
     libsecret
     openssl
     pcre
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-    # make xdg-open overrideable at runtime
+    # make xdg-open overridable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
@@ -83,10 +92,6 @@ stdenv.mkDerivation rec {
     "-DMIRALL_VERSION_SUFFIX=" # remove git suffix from version
   ];
 
-  postBuild = ''
-    make doc-man
-  '';
-
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
@@ -94,7 +99,10 @@ stdenv.mkDerivation rec {
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kranzes SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      kranzes
+      SuperSandro2000
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };

@@ -10,15 +10,15 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neovim-qt-unwrapped";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "equalsraf";
     repo = "neovim-qt";
-    rev = "v${version}";
-    hash = "sha256-BitFHHwL2aqBUpY/8eHaZIFvnDCeABC6w33Vmbx0z2g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r77tg3xVemHW/zDNA6dYerFjFaYDDeHsD68WhMfI70Q=";
   };
 
   cmakeFlags = [
@@ -32,17 +32,16 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      neovim.unwrapped # only used to generate help tags at build time
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-    ]
-    ++ (with python3Packages; [
-      jinja2
-      python
-      msgpack
-    ]);
+  buildInputs = [
+    neovim.unwrapped # only used to generate help tags at build time
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+  ]
+  ++ (with python3Packages; [
+    jinja2
+    python
+    msgpack
+  ]);
 
   preCheck = ''
     # The GUI tests require a running X server, disable them
@@ -51,12 +50,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Neovim client library and GUI, in Qt5";
     homepage = "https://github.com/equalsraf/neovim-qt";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     mainProgram = "nvim-qt";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+    ];
     inherit (neovim.meta) platforms;
   };
-}
+})

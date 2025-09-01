@@ -2,45 +2,52 @@
   lib,
   buildPythonPackage,
   dbt-core,
-  fetchFromGitHub,
+  fetchPypi,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  hatchling,
   snowflake-connector-python,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.8.4";
+  version = "1.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitHub {
-    owner = "dbt-labs";
-    repo = "dbt-snowflake";
-    tag = "v${version}";
-    hash = "sha256-XUHXyxAoIBHXmH2xXOGrCO2+WMwwJ7oVYt4+m/fT/Ko=";
+  # missing tags on GitHub
+  src = fetchPypi {
+    pname = "dbt_snowflake";
+    inherit version;
+    hash = "sha256-Y5H7ATm8bntl4YaF5l9DZiRhHt2q2/XaICp+PR9ywIw=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [
+    "certifi"
+  ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     dbt-core
     snowflake-connector-python
-  ] ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
+  ]
+  ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
+
+  pytestFlagsArray = [
+    # pyproject.toml specifies -n auto which only pytest-xdist understands
+    "--override-ini addopts=''"
+  ];
 
   pythonImportsCheck = [ "dbt.adapters.snowflake" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin enabling dbt to work with Snowflake";
-    homepage = "https://github.com/dbt-labs/dbt-snowflake";
-    changelog = "https://github.com/dbt-labs/dbt-snowflake/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    homepage = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake";
+    changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tjni ];
   };
 }

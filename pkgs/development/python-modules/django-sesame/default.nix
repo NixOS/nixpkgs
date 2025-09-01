@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aaugustin";
     repo = "django-sesame";
     tag = version;
-    hash = "sha256-8jbYhD/PfPnutJZonmdrqLIQdXiUHF12w0M9tuyyDz0=";
+    hash = "sha256-JpbmcV5hAZkW15cizsAJhmTda4xtML0EY/PJdVSInUs=";
   };
 
   nativeBuildInputs = [ poetry-core ];

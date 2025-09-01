@@ -7,7 +7,7 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gasket";
   version = "1.0-18-unstable-2024-04-25";
 
@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
       name = "linux-6.12-compat.patch";
       url = "https://github.com/google/gasket-driver/commit/4b2a1464f3b619daaf0f6c664c954a42c4b7ce00.patch";
       hash = "sha256-UOoOSEnpUMa4QXWVFpGFxBoF5szXaLEfcWtfKatO5XY=";
+    })
+    (fetchpatch2 {
+      # https://github.com/google/gasket-driver/issues/39
+      # https://github.com/google/gasket-driver/pull/40
+      name = "linux-6.13-compat.patch";
+      url = "https://github.com/google/gasket-driver/commit/6fbf8f8f8bcbc0ac9c9bef7a56f495a2c9872652.patch";
+      hash = "sha256-roCo0/ETWuDVtZfbpFbrmy/icNI12A/ozOGQNLTtBUs=";
     })
   ];
 

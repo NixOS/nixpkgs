@@ -4,10 +4,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0vxlfda4mgff9kindrmr47xvn6b591hzvzzsx2y88zq20sn340vy";
+      sha256 = "1h8lj3g5q6cg6lf5axnbw4bpvml3xkf3ipbviw5mg1jh9r3apk5m";
       type = "gem";
     };
-    version = "3.5.0";
+    version = "3.7.0";
   };
   fusuma-plugin-appmatcher = {
     dependencies = [

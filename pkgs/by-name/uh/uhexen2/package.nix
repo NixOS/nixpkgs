@@ -3,13 +3,15 @@
   fetchgit,
   SDL,
   stdenv,
+  alsa-lib,
+  libGL,
   libogg,
   libvorbis,
   libmad,
   xdelta,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhexen2";
   version = "1.5.9";
 
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL
+    alsa-lib
+    libGL
     libogg
     libvorbis
     libmad

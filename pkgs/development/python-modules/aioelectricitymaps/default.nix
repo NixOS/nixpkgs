@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioelectricitymaps";
-  version = "1.0.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "aioelectricitymaps";
     tag = "v${version}";
-    hash = "sha256-l6D5Cr2d89n+Ac5V5geBUY0sOiEO3sci9244K0MI+dc=";
+    hash = "sha256-6d9StqUMOGWyK5KAY+S0QE0c6Mi+XDUUAyzRt9RG52Q=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioelectricitymaps" ];
 
   # https://github.com/jpbede/aioelectricitymaps/pull/415
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module for interacting with Electricity maps";

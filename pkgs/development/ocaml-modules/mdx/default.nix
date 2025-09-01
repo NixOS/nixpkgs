@@ -1,7 +1,23 @@
-{ lib, fetchurl, buildDunePackage, ocaml, findlib
-, alcotest
-, astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  findlib,
+  alcotest,
+  astring,
+  cmdliner,
+  cppo,
+  fmt,
+  logs,
+  ocaml-version,
+  camlp-streams,
+  lwt,
+  re,
+  result,
+  csexp,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
@@ -17,13 +33,29 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs csexp ocaml-version camlp-streams re findlib
+    astring
+    fmt
+    logs
+    csexp
+    cmdliner
+    ocaml-version
+    camlp-streams
+    re
+    result
+    findlib
   ];
-  checkInputs = [ alcotest lwt ];
+  checkInputs = [
+    alcotest
+    lwt
+  ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  outputs = [ "bin" "lib" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
 
   installPhase = ''
     runHook preInstall

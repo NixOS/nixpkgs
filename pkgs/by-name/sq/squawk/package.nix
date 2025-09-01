@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   libiconv,
@@ -11,36 +10,26 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "1.5.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-gKYoTdGaonnLEnaoFlniD9nA5+TM5ITjyL/elOM7gZI=";
+    hash = "sha256-wAcoSnWbWhoT4FaGWH8zQRBwc0udJPCni4ZUecmRX4c=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-z0ZZnXUH834f6FPYhAcmjmtLEYMvbT97UPgn6ddlxdY=";
+  cargoHash = "sha256-ptUskdXoKLqqtFDUszJvEbvha01M6OgGJFV9mRLI2gw=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-      ]
-    );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libiconv
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -49,6 +38,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # depends on the PostgreSQL version
     "--skip=parse::tests::test_parse_sql_query_json"
+  ];
+
+  cargoBuildFlags = [
+    "-p squawk"
   ];
 
   meta = {

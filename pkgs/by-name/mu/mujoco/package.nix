@@ -18,14 +18,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "4447c7562e3bc702ade25105912dce503f0c4010";
-      hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
+      rev = "76bb24329e8bf5f39704eb10d21b9a80befa7c81";
+      hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
-      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
+      rev = "049f6e79cc3e8636cec21bbd94ed185b4a5f2653";
+      hash = "sha256-VmSKKCsBvmvXSnFbw6GJRgiGjlne8rw22+RCLBV/kD4=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,26 +36,26 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "7f2377859377da6f22152015c28b12c04752af77";
-      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
+      rev = "4be7e6b4e0a82853e853c0c7c4ef72f395e1f497";
+      hash = "sha256-SOTQ9j8YCsEuxNULsulQ0bmtxOZJKF7zc4GZOQlrmdo=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "b514bdc898e2951020cbdca1304b75f5950d1f59";
-      hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
+      rev = "52eb8108c5bdec04579160ae17225d66034bd723";
+      hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
     };
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
-      hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
+      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
+      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
-      hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
+      rev = "62ccc56af071eaa478bef6ed41fd7a55d3bb2d80";
+      hash = "sha256-kIxHtE0L/axV9WKnQzyFN0mxoIFAI33Z+MP0P/MtQPw=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
@@ -66,8 +66,8 @@ let
     tinyxml2 = fetchFromGitHub {
       owner = "leethomason";
       repo = "tinyxml2";
-      rev = "9a89766acc42ddfa9e7133c7d81a5bda108a0ade";
-      hash = "sha256-YGAe4+Ttv/xeou+9FoJjmQCKgzupTYdDhd+gzvtz/88=";
+      rev = "e6caeae85799003f4ca74ff26ee16a789bc2af48";
+      hash = "sha256-GpFFWl7/1XF1vTOxUrEo27T4Kc6oaUMvhGp9xLQfmWg=";
     };
     marchingcubecpp = fetchFromGitHub {
       owner = "aparis69";
@@ -75,72 +75,26 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
-
-    tmd = stdenv.mkDerivation rec {
-      name = "TriangleMeshDistance";
-
-      src = fetchFromGitHub {
-        owner = "InteractiveComputerGraphics";
-        repo = name;
-        rev = "e55a15c20551f36242fd6368df099a99de71d43a";
-        hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
-      };
-
-      installPhase = ''
-        mkdir -p $out/include/tmd
-        cp ${name}/include/tmd/${name}.h $out/include/tmd/
-      '';
+    trianglemeshdistance = fetchFromGitHub {
+      owner = "InteractiveComputerGraphics";
+      repo = "TriangleMeshDistance";
+      rev = "2cb643de1436e1ba8e2be49b07ec5491ac604457";
+      hash = "sha256-qG/8QKpOnUpUQJ1nLj+DFoLnUr+9oYkJPqUhwEQD2pc=";
     };
-
-    sdflib = stdenv.mkDerivation rec {
-      name = "SdfLib";
-
-      src = fetchFromGitHub {
-        owner = "UPC-ViRVIG";
-        repo = name;
-        rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
-        hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
-      };
-
-      patches = [ ./sdflib-system-deps.patch ];
-
-      cmakeFlags = [
-        "-DSDFLIB_USE_ASSIMP=OFF"
-        "-DSDFLIB_USE_OPENMP=OFF"
-        "-DSDFLIB_USE_ENOKI=OFF"
-        "-DSDFLIB_USE_SYSTEM_GLM=ON"
-        "-DSDFLIB_USE_SYSTEM_SPDLOG=ON"
-        "-DSDFLIB_USE_SYSTEM_CEREAL=ON"
-        "-DSDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE=ON"
-      ];
-
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [
-        pin.tmd
-
-        # Mainline. The otherwise pinned glm realease from 2018 does
-        # not build due to test failures and missing files.
-        glm
-
-        spdlog
-        cereal_1_3_2
-      ];
-    };
-
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.2.7";
+  version = "3.3.5";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    tag = version;
-    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
+    tag = finalAttrs.version;
+    hash = "sha256-HykExdosK5XpAOQeic/jsc6yYxjdoiaP8rRkA/yAfuU=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -148,7 +102,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    pin.sdflib
     glm
 
     # non-numerical
@@ -158,9 +111,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMUJOCO_USE_SYSTEM_sdflib=ON"
-    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
-    "-DMUJOCO_SAMPLES_USE_SYSTEM_GLFW=ON"
+    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
+    (lib.cmakeBool "MUJOCO_SAMPLES_USE_SYSTEM_GLFW" true)
   ];
 
   # Move things into place so that cmake doesn't try downloading dependencies.
@@ -175,6 +127,7 @@ stdenv.mkDerivation rec {
     ln -s ${pin.qhull} build/_deps/qhull-src
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
+    ln -s ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 
@@ -184,13 +137,14 @@ stdenv.mkDerivation rec {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };
 
   meta = {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
-    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
+    changelog = "https://mujoco.readthedocs.io/en/${finalAttrs.version}/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -199,4 +153,4 @@ stdenv.mkDerivation rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

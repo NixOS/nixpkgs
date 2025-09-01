@@ -13,12 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "edeneast";
-    repo = pname;
+    repo = "tuxmux";
     rev = "v${version}";
     hash = "sha256-WcHsFKpYexBEg382837NqGgNMTKzVUG3XIER9aa1zK8=";
   };
 
-  cargoHash = "sha256-ZftnJ6SYfPzwgsS44YgL9tbwL8Y+7PahI0EfFbKdlqA=";
+  cargoHash = "sha256-ceEF9ySxcU9vVZdNIogSiHbN/xYjudAoohy7jyeKrBU=";
 
   buildInputs = [ libiconv ];
   nativeBuildInputs = [

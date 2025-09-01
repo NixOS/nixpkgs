@@ -1,9 +1,10 @@
 {
+  lib,
+  stdenv,
   runCommand,
   R,
   rstudio,
   makeWrapper,
-  wrapQtAppsHook,
   recommendedPackages,
   packages,
   fontconfig,
@@ -14,16 +15,15 @@ runCommand (rstudio.name + "-wrapper")
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    nativeBuildInputs = [ (if rstudio.server then makeWrapper else wrapQtAppsHook) ];
+    nativeBuildInputs = [ makeWrapper ];
     dontWrapQtApps = true;
 
-    buildInputs =
-      [
-        R
-        rstudio
-      ]
-      ++ recommendedPackages
-      ++ packages;
+    buildInputs = [
+      R
+      rstudio
+    ]
+    ++ recommendedPackages
+    ++ packages;
 
     # rWrapper points R to a specific set of packages by using a wrapper
     # (as in https://nixos.org/nixpkgs/manual/#r-packages) which sets
@@ -55,8 +55,14 @@ runCommand (rstudio.name + "-wrapper")
         ''
       else
         ''
-          ln -s ${rstudio}/share $out
-          makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
+          ${lib.optionalString stdenv.hostPlatform.isLinux ''
+            # symlink files from unwrapped rstudio so that the desktop file and the icons
+            # are also installed when using the wrapped version
+            # TODO: figure out how to handle darwin .app structures
+            ln -s ${rstudio}/share $out
+          ''}
+
+          makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
             --set R_PROFILE_USER $out/$fixLibsR
         ''
     )

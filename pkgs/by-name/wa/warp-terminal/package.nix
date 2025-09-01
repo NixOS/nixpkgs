@@ -66,22 +66,22 @@ let
       xorg.libxcb
       xorg.libXcursor
       xorg.libXi
-    ] ++ lib.optionals waylandSupport [ wayland ];
+    ]
+    ++ lib.optionals waylandSupport [ wayland ];
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        mkdir $out
-        cp -r opt usr/* $out
+      mkdir $out
+      cp -r opt usr/* $out
 
-      ''
-      + lib.optionalString waylandSupport ''
-        wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
-      ''
-      + ''
-        runHook postInstall
-      '';
+    ''
+    + lib.optionalString waylandSupport ''
+      wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
+    ''
+    + ''
+      runHook postInstall
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -112,9 +112,8 @@ let
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
-      emilytrau
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
     ];
     platforms = platforms.darwin ++ [

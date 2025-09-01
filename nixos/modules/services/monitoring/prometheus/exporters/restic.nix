@@ -140,10 +140,12 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     serviceConfig = {
+      CacheDirectory = "restic-exporter";
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
       LoadCredential = [
         "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
-      ] ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
+      ]
+      ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
     };
     environment =
       let
@@ -156,6 +158,7 @@ in
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
+        RESTIC_CACHE_DIR = "$CACHE_DIRECTORY";
       }
       // (mapAttrs' (
         name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)

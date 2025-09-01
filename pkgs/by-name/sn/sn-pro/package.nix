@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sn-pro";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
     rev = version;
-    hash = "sha256-bagirVJtpGZOB3rULKemniGj1BkN9SQYpFhTm4ZX/is=";
+    hash = "sha256-H8YG7FMn03tiBxz5TZDzowicqtewfX6rYd03pdTPYSo=";
   };
 
   installPhase = ''

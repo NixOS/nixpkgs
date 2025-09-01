@@ -1,0 +1,108 @@
+diff --git a/dyld/Tracing.h b/dyld/Tracing.h
+index 1e6e3027d9..bac62cf72d 100644
+--- a/dyld/Tracing.h
++++ b/dyld/Tracing.h
+@@ -31,29 +31,25 @@
+ #include <mach-o/loader.h>
+ #include <TargetConditionals.h>
+ #include "Defines.h"
+-#if TARGET_OS_EXCLAVEKIT
+-  #define KDBG_CODE(a, b, c) (c)
+-  #define DBG_DYLD_UUID (5)
+-  #define DBG_DYLD_UUID_MAP_A             (0)
+-  #define DBG_DYLD_UUID_MAP_B             (1)
+-  #define DBG_DYLD_UUID_MAP_32_A          (2)
+-  #define DBG_DYLD_UUID_MAP_32_B          (3)
+-  #define DBG_DYLD_UUID_MAP_32_C          (4)
+-  #define DBG_DYLD_UUID_UNMAP_A           (5)
+-  #define DBG_DYLD_UUID_UNMAP_B           (6)
+-  #define DBG_DYLD_UUID_UNMAP_32_A        (7)
+-  #define DBG_DYLD_UUID_UNMAP_32_B        (8)
+-  #define DBG_DYLD_UUID_UNMAP_32_C        (9)
+-  #define DBG_DYLD_UUID_SHARED_CACHE_A    (10)
+-  #define DBG_DYLD_UUID_SHARED_CACHE_B    (11)
+-  #define DBG_DYLD_UUID_SHARED_CACHE_32_A (12)
+-  #define DBG_DYLD_UUID_SHARED_CACHE_32_B (13)
+-  #define DBG_DYLD_UUID_SHARED_CACHE_32_C (14)
+-  #define DBG_DYLD_AOT_UUID_MAP_A         (15)
+-  #define DBG_DYLD_AOT_UUID_MAP_B         (16)
+-#else
+-  #include <sys/kdebug_private.h>
+-#endif
++#define KDBG_CODE(a, b, c) (c)
++#define DBG_DYLD_UUID (5)
++#define DBG_DYLD_UUID_MAP_A             (0)
++#define DBG_DYLD_UUID_MAP_B             (1)
++#define DBG_DYLD_UUID_MAP_32_A          (2)
++#define DBG_DYLD_UUID_MAP_32_B          (3)
++#define DBG_DYLD_UUID_MAP_32_C          (4)
++#define DBG_DYLD_UUID_UNMAP_A           (5)
++#define DBG_DYLD_UUID_UNMAP_B           (6)
++#define DBG_DYLD_UUID_UNMAP_32_A        (7)
++#define DBG_DYLD_UUID_UNMAP_32_B        (8)
++#define DBG_DYLD_UUID_UNMAP_32_C        (9)
++#define DBG_DYLD_UUID_SHARED_CACHE_A    (10)
++#define DBG_DYLD_UUID_SHARED_CACHE_B    (11)
++#define DBG_DYLD_UUID_SHARED_CACHE_32_A (12)
++#define DBG_DYLD_UUID_SHARED_CACHE_32_B (13)
++#define DBG_DYLD_UUID_SHARED_CACHE_32_C (14)
++#define DBG_DYLD_AOT_UUID_MAP_A         (15)
++#define DBG_DYLD_AOT_UUID_MAP_B         (16)
+ 
+ #include "Defines.h"
+ 
+@@ -111,24 +107,10 @@
+     uint64_t value() const { return _value; }
+ private:
+     void prepare(uint32_t code) {
+-#if !TARGET_OS_EXCLAVEKIT
+-        if (_str) {
+-            _value = kdebug_trace_string(code, 0, _str);
+-            if (_value == (uint64_t)-1) _value = 0;
+-        }
+-#endif
+     }
+     void destroy(uint32_t code) {
+-#if !TARGET_OS_EXCLAVEKIT
+-        if (_str && _value) {
+-            kdebug_trace_string(code, _value, nullptr);
+-        }
+-#endif
+     }
+     friend class ScopedTimer;
+-    friend uint64_t kdebug_trace_dyld_duration_start(uint32_t code, kt_arg data1, kt_arg data2, kt_arg data3);
+-    friend void kdebug_trace_dyld_duration_end(uint64_t pair_id, uint32_t code, kt_arg data4, kt_arg data5, kt_arg data6);
+-    friend void kdebug_trace_dyld_marker(uint32_t code, kt_arg data1, kt_arg data2, kt_arg data3, kt_arg data4);
+     uint64_t _value;
+     const char* _str;
+ };
+@@ -168,29 +150,6 @@
+     uint64_t current_trace_id = 0;
+ };
+ 
+-#if !TARGET_OS_EXCLAVEKIT
+-VIS_HIDDEN
+-void kdebug_trace_dyld_image(const uint32_t code, const char* path, const uuid_t* uuid_bytes,
+-                             const fsobj_id_t fsobjid, const fsid_t fsid, const void* load_addr,
+-                             uint32_t cpusubtype);
+-#endif
+-
+-VIS_HIDDEN
+-void kdebug_trace_dyld_cache(uint64_t fsobjid, uint64_t fsid, uint64_t sharedCacheBaseAddress,
+-                             const uint8_t sharedCacheUUID[16]);
+-
+-VIS_HIDDEN
+-bool kdebug_trace_dyld_enabled(uint32_t code);
+-
+-VIS_HIDDEN
+-void kdebug_trace_dyld_marker(uint32_t code, kt_arg data1, kt_arg data2, kt_arg data3, kt_arg data4);
+-
+-VIS_HIDDEN
+-uint64_t kdebug_trace_dyld_duration_start(uint32_t code, kt_arg data1, kt_arg data2, kt_arg data3);
+-
+-VIS_HIDDEN
+-void kdebug_trace_dyld_duration_end(uint64_t trace_id, uint32_t code, kt_arg data4, kt_arg data5, kt_arg data6);
+-
+ VIS_HIDDEN
+ void syntheticBacktrace(const char *reason, bool enableExternally=false);
+ 

@@ -4,18 +4,18 @@
   fetchurl,
   getopt,
   ksh,
-  pkgsMusl,
+  pkgsMusl ? { },
   stdenv,
   tzdata,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20241124";
+  version = "20250707";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T2ZAYJHC+F6pZLI41p649xq0uqydykaHpxiDum3k3bI=";
+    hash = "sha256-phJApAZdkMOSXdd0+Po9c97sGnMiiobulfzYIGPSiwg=";
   };
 
   patches = [
@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./004-unconditional-ksh-test.diff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     getopt
@@ -36,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bc
     tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh
   ];
 
@@ -103,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      bmakeMusl = pkgsMusl.bmake;
+      bmakeMusl = pkgsMusl.bmake or null;
     };
   };
 
@@ -112,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable version of NetBSD 'make'";
     license = lib.licenses.bsd3;
     mainProgram = "bmake";
-    maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.unix;
     # requires strip
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

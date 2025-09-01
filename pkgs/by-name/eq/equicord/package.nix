@@ -3,31 +3,36 @@
   git,
   lib,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   stdenv,
   nix-update-script,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";
-  version = "1.10.8";
+  # Upstream discourages inferring the package version from the package.json found in
+  # the Equicord repository. Dates as tags (and automatic releases) were the compromise
+  # we came to with upstream. Please do not change the version schema (e.g., to semver)
+  # unless upstream changes the tag schema from dates.
+  version = "2025-08-24";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kbK9tnu0G/nLy4A06xvd2yvlc6UhQfKiC6I9qmJeIwc=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-BK0Mvy0Bp0Q6wj4aECEtyGsW56hqbLkkELZ9yN+QRw8=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HAKNc8ZyIGEkrNbqQSycR1wePPOisF8nc4/E+KmKyYU=";
+    fetcherVersion = 1;
+    hash = "sha256-xVnryPA7+gnRvpMzuFJl4YeEPOky2+iOu76V3Rf6bow=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
   ];
 
   env = {
@@ -52,10 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d{4}-\\d{2}-\\d{2})$"
+    ];
+  };
 
   meta = {
-    description = "The other cutest Discord client mod";
+    description = "Other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;

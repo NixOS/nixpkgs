@@ -3,10 +3,12 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
   versionCheckHook,
   bacon,
+  buildPackages,
   nix-update-script,
 
   withSound ? false,
@@ -23,32 +25,46 @@ let
     ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.9.1";
+  version = "3.18.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    tag = "v${version}";
-    hash = "sha256-TniEPcY3mK5LO9CBXi5kgnUQkOeDwF9n1K0kSn4ucKk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YdlNJWsKGkXvpcA8un3eNfLVBlU6nalVyO/dhDAQF9k=";
   };
 
-  cargoHash = "sha256-5pY43PH2I4L/QsNnJffBGiRtuZrnLVCxjo0YseLsEMc=";
+  cargoHash = "sha256-vGrWs8OkoqPO/oEiGZXrMxIKVA3u4gsaXgF1QUQT3kw=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
   ];
 
-  nativeBuildInputs = lib.optionals withSound [
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withSound [
     pkg-config
   ];
 
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  postInstall =
+    let
+      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd bacon \
+        --bash <(COMPLETE=bash ${bacon}) \
+        --fish <(COMPLETE=fish ${bacon}) \
+        --zsh <(COMPLETE=zsh ${bacon})
+    '';
 
   passthru = {
     tests = {
@@ -61,11 +77,11 @@ rustPlatform.buildRustPackage rec {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen
       matthiasbeyer
     ];
   };
-}
+})

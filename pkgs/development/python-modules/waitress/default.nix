@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -26,16 +27,20 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  doCheck = !stdenv.hostPlatform.isDarwin;
   disabledTests = [
     # access to socket
     "test_service_port"
   ];
+
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://github.com/Pylons/waitress";
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

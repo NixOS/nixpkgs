@@ -1,41 +1,41 @@
 {
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  perl,
-  libxml2,
-  postgresql,
-  postgresqlTestHook,
-  geos,
-  proj,
-  gdalMinimal,
-  json_c,
-  pkg-config,
-  file,
-  protobufc,
-  libiconv,
-  libxslt,
-  docbook5,
-  cunit,
-  pcre2,
-  postgresqlTestExtension,
-  jitSupport,
-  llvm,
-  buildPostgresqlExtension,
   autoconf,
   automake,
+  cunit,
+  docbook5,
+  fetchFromGitHub,
+  gdalMinimal,
+  geos,
+  jitSupport,
+  json_c,
+  lib,
+  libiconv,
   libtool,
+  libxml2,
+  libxslt,
+  llvm,
+  pcre2,
+  perl,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  postgresqlTestHook,
+  proj,
+  protobufc,
+  stdenv,
   which,
-  sfcgal,
+
   withSfcgal ? false,
+  sfcgal,
 }:
 
 let
   gdal = gdalMinimal;
 in
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.2";
+  version = "3.5.3";
 
   outputs = [
     "out"
@@ -45,40 +45,43 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postgis";
     repo = "postgis";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
+    tag = finalAttrs.version;
+    hash = "sha256-rJxIZGsQhh8QAacgkepBzzC79McVhY9wFphQIVRQHA8=";
   };
 
-  buildInputs =
-    [
-      libxml2
-      geos
-      proj
-      gdal
-      json_c
-      protobufc
-      pcre2.dev
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-    ++ lib.optional withSfcgal sfcgal;
+  buildInputs = [
+    geos
+    proj
+    gdal
+    json_c
+    protobufc
+    pcre2.dev
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional withSfcgal sfcgal;
+
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    libxml2
     perl
     pkg-config
+    protobufc
     which
-  ] ++ lib.optional jitSupport llvm;
+  ]
+  ++ lib.optional jitSupport llvm;
+
   dontDisableStatic = true;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     cunit
     libxslt
   ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
-  failureHook = "postgresqlStop";
 
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
@@ -88,11 +91,19 @@ buildPostgresqlExtension (finalAttrs: {
     ./autogen.sh
   '';
 
-  configureFlags = [
-    "--with-gdalconfig=${gdal}/bin/gdal-config"
-    "--with-jsondir=${json_c.dev}"
-    "--disable-extension-upgrades-install"
-  ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
+  configureFlags =
+    let
+      isCross = stdenv.hostPlatform.config != stdenv.buildPlatform.config;
+    in
+    [
+      (lib.enableFeature false "extension-upgrades-install")
+      (lib.withFeatureAs true "pgconfig" "${postgresql.pg_config}/bin/pg_config")
+      (lib.withFeatureAs true "gdalconfig" "${gdal}/bin/gdal-config")
+      (lib.withFeatureAs true "jsondir" (lib.getDev json_c))
+      (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+      (lib.withFeatureAs withSfcgal "sfcgal" "${sfcgal}/bin/sfcgal-config")
+      (lib.withFeature (!isCross) "json") # configure: error: cannot check for file existence when cross compiling
+    ];
 
   makeFlags = [
     "PERL=${perl}/bin/perl"
@@ -118,51 +129,47 @@ buildPostgresqlExtension (finalAttrs: {
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
-    sql =
-      let
-        expectedVersion = "${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1";
-      in
-      ''
-        CREATE EXTENSION postgis;
-        CREATE EXTENSION postgis_raster;
-        CREATE EXTENSION postgis_topology;
-        select postgis_version();
-        do $$
-        begin
-          if postgis_version() <> '${expectedVersion}' then
-            raise '"%" does not match "${expectedVersion}"', postgis_version();
-          end if;
-        end$$;
-        -- st_makepoint goes through c code
-        select st_makepoint(1, 1);
-      ''
-      + lib.optionalString withSfcgal ''
-        CREATE EXTENSION postgis_sfcgal;
-        do $$
-        begin
-          if postgis_sfcgal_version() <> '${sfcgal.version}' then
-            raise '"%" does not match "${sfcgal.version}"', postgis_sfcgal_version();
-          end if;
-        end$$;
-        CREATE TABLE geometries (
-          name varchar,
-          geom geometry(PolygonZ) NOT NULL
-        );
+    sql = ''
+      CREATE EXTENSION postgis;
+      CREATE EXTENSION postgis_raster;
+      CREATE EXTENSION postgis_topology;
+      -- st_makepoint goes through c code
+      select st_makepoint(1, 1);
+    ''
+    + lib.optionalString withSfcgal ''
+      CREATE EXTENSION postgis_sfcgal;
+      CREATE TABLE geometries (
+        name varchar,
+        geom geometry(PolygonZ) NOT NULL
+      );
 
-        INSERT INTO geometries(name, geom) VALUES
-          ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
-          ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
+      INSERT INTO geometries(name, geom) VALUES
+        ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
+        ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
 
-        SELECT name from geometries where cg_isplanar(geom);
-      '';
+      SELECT name from geometries where cg_isplanar(geom);
+    '';
+    asserts = [
+      {
+        query = "postgis_version()";
+        expected = "'${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1'";
+        description = "postgis_version() returns correct values.";
+      }
+    ]
+    ++ lib.optional withSfcgal {
+      query = "postgis_sfcgal_version()";
+      expected = "'${sfcgal.version}'";
+      description = "postgis_sfcgal_version() returns correct value.";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ marcweber ];
+    teams = [ lib.teams.geospatial ];
     inherit (postgresql.meta) platforms;
   };
 })

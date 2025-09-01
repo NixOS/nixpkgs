@@ -27,7 +27,7 @@ in
       description = ''
         Specify the configuration for Tempo in Nix.
 
-        See https://grafana.com/docs/tempo/latest/configuration/ for available options.
+        See <https://grafana.com/docs/tempo/latest/configuration/> for available options.
       '';
     };
 

@@ -1,34 +1,44 @@
-{ lib
-, fetchzip
-, ddcutil
-, easyeffects
-, gjs
-, glib
-, nautilus
-, gobject-introspection
-, gsound
-, hddtemp
-, libgda6
-, libgtop
-, libhandy
-, liquidctl
-, lm_sensors
-, netcat-gnu
-, nvme-cli
-, procps
-, smartmontools
-, replaceVars
-, touchegg
-, util-linux
-, vte
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  fetchFromGitLab,
+  cpio,
+  ddcutil,
+  easyeffects,
+  gjs,
+  glib,
+  gnome-menus,
+  nautilus,
+  gobject-introspection,
+  hddtemp,
+  libgtop,
+  libhandy,
+  liquidctl,
+  lm_sensors,
+  netcat-gnu,
+  nvme-cli,
+  procps,
+  smartmontools,
+  replaceVars,
+  stdenvNoCC,
+  touchegg,
+  util-linux,
+  vte,
+  wrapGAppsHook3,
+  xdg-utils,
+  gtk4,
+  desktop-file-utils,
+  xdg-user-dirs,
 }:
 let
   # Helper method to reduce redundancy
-  patchExtension = name: override: super: (super // {
-    ${name} = super.${name}.overrideAttrs override;
-  });
+  patchExtension =
+    name: override: super:
+    (
+      super
+      // {
+        ${name} = super.${name}.overrideAttrs override;
+      }
+    );
 in
 # A set of overrides for automatically packaged extensions that require some small fixes.
 # The input must be an attribute set with the extensions' UUIDs as keys and the extension
@@ -36,7 +46,19 @@ in
 #
 # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
 # the upstream repository's sources.
-super: lib.trivial.pipe super [
+super:
+lib.trivial.pipe super [
+  (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (replaceVars
+        ./extensionOverridesPatches/apps-menu_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+        }
+      )
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
@@ -46,8 +68,15 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
-    nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
-    buildInputs = [ vte libhandy gjs ];
+    nativeBuildInputs = [
+      gobject-introspection
+      wrapGAppsHook3
+    ];
+    buildInputs = [
+      vte
+      libhandy
+      gjs
+    ];
     postFixup = ''
       patchShebangs "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
@@ -81,7 +110,13 @@ super: lib.trivial.pipe super [
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
       (replaceVars ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch {
-        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        inherit
+          hddtemp
+          liquidctl
+          lm_sensors
+          procps
+          smartmontools
+          ;
         netcat = netcat-gnu;
         nvmecli = nvme-cli;
       })
@@ -105,30 +140,53 @@ super: lib.trivial.pipe super [
         inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
+        gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
+        update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
   }))
 
-  (patchExtension "pano@elhan.io" (final: prev: {
-    version = "v23-alpha3";
-    src = fetchzip {
-      url = "https://github.com/oae/gnome-shell-pano/releases/download/${final.version}/pano@elhan.io.zip";
-      hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
-      stripRoot = false;
-    };
-    preInstall = ''
-      substituteInPlace extension.js \
-        --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
-        --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
-    '';
-  }))
+  (patchExtension "lunarcal@ailin.nemui" (
+    old:
+    let
+      chinese-calendar = stdenvNoCC.mkDerivation (finalAttrs: {
+        pname = "chinese-calendar";
+        version = "20240107";
+        nativeBuildInputs = [
+          cpio # used in install.sh
+        ];
+        src = fetchFromGitLab {
+          domain = "gitlab.gnome.org";
+          owner = "Nei";
+          repo = "ChineseCalendar";
+          tag = finalAttrs.version;
+          hash = "sha256-z8Af9e70bn3ztUZteIEt/b3nJIFosbnoy8mwKMM6Dmc=";
+        };
+        installPhase = ''
+          runHook preInstall
+          HOME=$out ./install.sh
+          runHook postInstall
+        '';
+      });
+    in
+    {
+      patches = [
+        (replaceVars ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch {
+          chinese_calendar_path = chinese-calendar;
+        })
+      ];
+    }
+  ))
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
-      (replaceVars ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch {
-        gtop_path = "${libgtop}/lib/girepository-1.0";
-      })
+      (replaceVars
+        ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gtop_path = "${libgtop}/lib/girepository-1.0";
+        }
+      )
     ];
   }))
 
@@ -157,4 +215,18 @@ super: lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "pwcalc@thilomaurer.de" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm settings-importexport.ui
+    '';
+  })
+
+  (patchExtension "TeaTimer@zener.sbg.at" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm utilities-teatime.svg
+    '';
+  })
 ]

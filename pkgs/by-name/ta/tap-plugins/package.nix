@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tap-plugins";
-  version = "unstable-2020-12-09";
+  version = "0-unstable-2020-12-09";
 
   src = fetchFromGitHub {
     owner = "tomscii";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       TubeWarmth, TAP Vibrato.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

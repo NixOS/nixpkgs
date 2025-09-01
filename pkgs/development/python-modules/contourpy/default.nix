@@ -1,11 +1,9 @@
 {
   lib,
-  buildPackages,
   buildPythonPackage,
   fetchFromGitHub,
   python,
   pythonOlder,
-  python3,
 
   # build
   meson,
@@ -33,7 +31,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.0";
+    version = "1.3.3";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -42,7 +40,7 @@ let
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
+      hash = "sha256-/tE+F1wH7YkqfgenXwtcfkjxUR5FwfgoS4NYC6n+/2M=";
     };
 
     # prevent unnecessary references to the build python when cross compiling
@@ -90,12 +88,11 @@ let
 
     # remove references to buildPackages.python3, which is not allowed for cross builds.
     preFixup = ''
-      nuke-refs -e "${buildPackages.python3}" \
-        $out/${python3.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
+      nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
     '';
 
     meta = with lib; {
-      changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";
+      changelog = "https://github.com/contourpy/contourpy/releases/tag/${src.tag}";
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
       license = licenses.bsd3;

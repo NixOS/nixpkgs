@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "drf-writable-nested";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "drf-writable-nested";
     tag = "v${version}";
-    hash = "sha256-+I5HsqkjCrkF9MV90NGQuUhmLcDVsv20QIyDK9WxwdQ=";
+    hash = "sha256-VkQ3Di3vXxQAmvuMP8KpGVVdx7LMYcQFEF4ZsuA9KeA=";
   };
 
   propagatedBuildInputs = [

@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elf-info";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "kevin-lesenechal";
     repo = "elf-info";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wbFVuoarOoxV9FqmuHJ9eZlG4rRqy1rsnuqbGorC2Rk=";
   };
 
-  cargoHash = "sha256-r4GcJhQn9x5c2hbL+813mS3HbIg8OwNDsMg/fHQoL9Y=";
+  cargoHash = "sha256-JSCdMGScpeA5q6++veuQ8li3qVTuB0XdJ1yacsqgBDg=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ viperML ];
     mainProgram = "elf";
   };
-}
+})

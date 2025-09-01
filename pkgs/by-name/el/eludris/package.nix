@@ -12,12 +12,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "eludris";
-    repo = pname;
+    repo = "eludris";
     rev = "v${version}";
     hash = "sha256-TVYgimkGUSITB3IaMlMd10PWomqyJRvONvJwiW85U4M=";
   };
 
-  cargoHash = "sha256-5B9D19jFh5+eNTjiho22CFsn51nmwLry08zSDWvs1OU=";
+  cargoHash = "sha256-JpXjnkZHz12YxgTSqTcWdQTkrMugP7ZGw48145BeBZk=";
 
   cargoBuildFlags = [ "-p eludris" ];
   cargoTestFlags = [ "-p eludris" ];

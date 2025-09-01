@@ -1,24 +1,40 @@
-{ lib, stdenv, fetchurl, xorg, ncurses, freetype, fontconfig
-, pkg-config, makeWrapper, nixosTests, gitUpdater
-, enableDecLocator ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+  ncurses,
+  freetype,
+  fontconfig,
+  pkg-config,
+  makeWrapper,
+  nixosTests,
+  pkgsCross,
+  gitUpdater,
+  enableDecLocator ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "396";
+  version = "401";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-Q/lLbQ7stCGamfRjUudG8qtVWOQNki1BGs/5bMd4pqU=";
+    hash = "sha256-PaK15ky0mwOqEwV9heYuHy5k98dEcZwA0zjRHNPmyho=";
   };
 
   patches = [ ./sixel-256.support.patch ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    fontconfig
+  ];
 
   buildInputs = [
     xorg.libXaw
@@ -46,12 +62,14 @@ stdenv.mkDerivation rec {
     "--enable-mini-luit"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
-  ] ++ lib.optional enableDecLocator "--enable-dec-locator";
+  ]
+  ++ lib.optional enableDecLocator "--enable-dec-locator";
 
   env = {
     # Work around broken "plink.sh".
     NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
-  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
     NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
   };
@@ -64,6 +82,8 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do
@@ -78,6 +98,7 @@ stdenv.mkDerivation rec {
     tests = {
       customTest = nixosTests.xterm;
       standardTest = nixosTests.terminal-emulators.xterm;
+      musl = pkgsCross.musl64.xterm;
     };
 
     updateScript = gitUpdater {

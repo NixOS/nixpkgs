@@ -6,34 +6,35 @@
   makeWrapper,
   valgrind,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.2.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     tag = version;
-    sha256 = "sha256-yUCDKklkfK+2n+THH4QlHb+FpeWfObXpmp4VozsFiUM=";
+    sha256 = "sha256-oLnvDie6PUW5MVEMIcqfmwNkkfz25l+NABSKih4eSpI=";
   };
 
-  cargoHash = "sha256-6vcTsernIVkemGhMBT9LMTsBsJ4u1Sd12BgIp4Zn3vg=";
+  cargoHash = "sha256-L927ViGgb5LchJRMd6cBks6K41xOYLNI1Q2kTKdYBgg=";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    valgrind # for tests where the executable is not wrapped yet
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/cargo-valgrind --prefix PATH : ${lib.makeBinPath [ valgrind ]}
   '';
 
   checkFlags = [
-    "--skip examples_are_runnable"
     "--skip tests_are_runnable"
-    "--skip issue74"
+    "--skip default_cargo_project_reports_no_violations"
   ];
 
   meta = with lib; {

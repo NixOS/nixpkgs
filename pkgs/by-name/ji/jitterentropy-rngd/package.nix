@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
-    repo = pname;
+    repo = "jitterentropy-rngd";
     rev = "v${version}";
     hash = "sha256-LDym636ss3B1G/vrqatu9g5vbVEeDX0JQcxZ/IxGeY0=";
   };
@@ -26,16 +26,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = ''A random number generator, which injects entropy to the kernel'';
+  meta = {
+    description = "Random number generator, which injects entropy to the kernel";
     homepage = "https://github.com/smuellerDD/jitterentropy-rngd";
     changelog = "https://github.com/smuellerDD/jitterentropy-rngd/releases/tag/v${version}";
     license = [
-      licenses.gpl2Only
-      licenses.bsd3
+      lib.licenses.gpl2Only
+      lib.licenses.bsd3
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ thillux ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thillux ];
     mainProgram = "jitterentropy-rngd";
   };
 }

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "11.4.1";
+  version = "12.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fd0lG2ItSQ/lfXhIeFXcn02VsbsRNgfoH9N3A3oTPVo=";
+    hash = "sha256-zSuOcSFrau1dwem15vZYteIdaaYNRPuMCPQeH3vd7dA=";
   };
 
   build-system = [ setuptools ];

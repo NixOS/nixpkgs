@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  gnu-efi,
+  gnu-efi_3,
   nixosTests,
   efibootmgr,
   openssl,
@@ -54,24 +54,23 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gnu-efi ];
+  buildInputs = [ gnu-efi_3 ];
 
   hardeningDisable = [ "stackprotector" ];
 
-  makeFlags =
-    [
-      "prefix="
-      "EFIINC=${gnu-efi}/include/efi"
-      "EFILIB=${gnu-efi}/lib"
-      "GNUEFILIB=${gnu-efi}/lib"
-      "EFICRT0=${gnu-efi}/lib"
-      "HOSTARCH=${hostarch}"
-      "ARCH=${hostarch}"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isAarch64 [
-      # aarch64 is special for GNU-EFI, see BUILDING.txt
-      "GNUEFI_ARM64_TARGET_SUPPORT=y"
-    ];
+  makeFlags = [
+    "prefix="
+    "EFIINC=${gnu-efi_3}/include/efi"
+    "EFILIB=${gnu-efi_3}/lib"
+    "GNUEFILIB=${gnu-efi_3}/lib"
+    "EFICRT0=${gnu-efi_3}/lib"
+    "HOSTARCH=${hostarch}"
+    "ARCH=${hostarch}"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 [
+    # aarch64 is special for GNU-EFI, see BUILDING.txt
+    "GNUEFI_ARM64_TARGET_SUPPORT=y"
+  ];
 
   buildFlags = [
     "gnuefi"
@@ -173,7 +172,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ chewblacka ];
+    maintainers = with maintainers; [ johnrtitor ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

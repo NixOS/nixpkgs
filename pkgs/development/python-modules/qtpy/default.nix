@@ -15,15 +15,14 @@
 
 buildPythonPackage rec {
   pname = "qtpy";
-  version = "2.4.1";
+  version = "2.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "QtPy";
-    inherit version;
-    hash = "sha256-paFf/VGVUKE2G9xW/8B/2lamr3KS8Xx7OV1Ag69jKYc=";
+    inherit pname version;
+    hash = "sha256-23RPeDLm09qQVoumzLyj7is7SokMPW+7xjFC9uTN9bs=";
   };
 
   propagatedBuildInputs = [ packaging ];

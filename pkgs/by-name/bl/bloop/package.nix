@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "2.0.8";
+  version = "2.0.13";
 
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
   };
 
-  bloop-binary = fetchurl rec {
+  bloop-binary = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-        "sha256-ItPt5qjfRgtPNg6a/Zlc0ASfdvGXMMKV7SqNEOQ9u28="
+        "sha256-d6Fz87qvjIHhcU3sL6PalZGbkt1hZIMJEbiqJtRb2/0="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        "sha256-zUSDUwZY1id/WFuC87Wa4eB48X4rmXvVC1/b2v5bhw4="
+        "sha256-LuX8LFYNzrcqJl9RTLLjQTDsdQg2KmJ+ijKwmi34E3A="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        "sha256-1wsGL1G8/+xMvYNwe7EOyqEuEKDKiwA7yyyjfbGgxJQ="
+        "sha256-jH7zHVns7pDlrRRAGO2nZ5VW71Wyuz0a0oBmXZ4fOAA="
       else
         throw "unsupported platform";
   };
@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     zlib

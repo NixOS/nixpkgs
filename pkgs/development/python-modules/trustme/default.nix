@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7SJk+0bDVFnm3p5FTtS6tzvkS2oqJq1Bf5toVK67ZEo=";
+    hash = "sha256-ZSi6K7x/LbQfM4JcjdE+Pj650zS6D5CXE8jDE59K5H8=";
   };
 
   build-system = [ hatchling ];

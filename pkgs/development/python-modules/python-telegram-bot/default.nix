@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.10";
+  version = "22.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     tag = "v${version}";
-    hash = "sha256-iiKdEYCQgYehiyM6/rWrm76n6m2q7ok2OIfkkWztBSs=";
+    hash = "sha256-mckCkz5DBRjO4iFvRpkqLa7H8GBE/Lwi9CQ902pQ1nQ=";
   };
 
   build-system = [
@@ -65,7 +65,8 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "telegram" ];
 
@@ -134,7 +135,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
-    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/${src.tag}/CHANGES.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
       veprbl

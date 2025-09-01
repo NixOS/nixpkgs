@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "parallel";
-  version = "20250122";
+  version = "20250822";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/parallel-${version}.tar.bz2";
-    hash = "sha256-A8eeWzRuMwz55TgcjlpDX8vN0IRIlkZ2tC8E4Zm8jbM=";
+    hash = "sha256-AZ0yhyKGfP/pGMRJNkMIwN8EhFbGkpm5FFGj5vrJFno=";
   };
 
   outputs = [

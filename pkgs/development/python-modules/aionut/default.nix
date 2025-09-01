@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aionut";
-  version = "4.3.3";
+  version = "4.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aionut";
     tag = "v${version}";
-    hash = "sha256-DCWfa5YfrB7MTf78AeSHDgiZzLNXoiNLnty9a+Sr9tQ=";
+    hash = "sha256-mpWAxv6RUTecGp6Zdka+gC+12JWcPQaKgJlqGgEINu0=";
   };
 
   build-system = [ poetry-core ];

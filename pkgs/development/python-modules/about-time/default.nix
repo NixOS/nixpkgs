@@ -1,24 +1,28 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "about-time";
-  version = "4.2.1";
-  format = "setuptools";
+  version = "4.2.2";
+  pyproject = true;
 
-  # PyPi release does not contain test files, but the repo has no release tags,
-  # so while having no tests is not ideal, follow the PyPi releases for now
-  # TODO: switch to fetchFromGitHub once this issue is fixed:
-  # https://github.com/rsalmei/about-time/issues/15
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-alOIYtM85n2ZdCnRSZgxDh2/2my32bv795nEcJhH/s4=";
+  src = fetchFromGitHub {
+    owner = "rsalmei";
+    repo = "about-time";
+    tag = "v${version}";
+    hash = "sha256-a7jFVrxUvdR5UdeNNXSTsXC/Q76unedMLmcu0iTS3Tk=";
   };
 
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=75.3" setuptools
+  '';
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "about_time" ];
 

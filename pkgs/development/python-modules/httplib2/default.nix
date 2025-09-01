@@ -6,6 +6,7 @@
   fetchFromGitHub,
   mock,
   pyparsing,
+  pytest-cov-stub,
   pytest-forked,
   pytest-randomly,
   pytest-timeout,
@@ -20,21 +21,18 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "httplib2";
+    repo = "httplib2";
     rev = "v${version}";
     hash = "sha256-76gdiRbF535CEaNXwNqsVeVc0dKglovMPQpGsOkbd/4=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [
     cryptography
     mock
+    pytest-cov-stub
     pytest-forked
     pytest-randomly
     pytest-timeout
@@ -47,25 +45,24 @@ buildPythonPackage rec {
   # Don't run tests for older Pythons
   doCheck = pythonAtLeast "3.9";
 
-  disabledTests =
-    [
-      # ValueError: Unable to load PEM file.
-      # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
-      "test_client_cert_password_verified"
+  disabledTests = [
+    # ValueError: Unable to load PEM file.
+    # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
+    "test_client_cert_password_verified"
 
-      # improper pytest marking
-      "test_head_301"
-      "test_303"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
-      "test_connection_close"
-      # fails with HTTP 408 Request Timeout, instead of expected 200 OK
-      "test_timeout_subsequent"
-      "test_connection_close"
-    ];
+    # improper pytest marking
+    "test_head_301"
+    "test_303"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
+    "test_connection_close"
+    # fails with HTTP 408 Request Timeout, instead of expected 200 OK
+    "test_timeout_subsequent"
+    "test_connection_close"
+  ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  disabledTestPaths = [ "python2" ];
 
   pythonImportsCheck = [ "httplib2" ];
 
