@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "scikit-fuzzy";
-  version = "0.4.2-unstable-2023-09-14";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
