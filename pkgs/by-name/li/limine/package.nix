@@ -95,11 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       asl20 # cc-runtime
       bsd0 # freestanding-headers, freestanding-toolchain
-      bsd2 # limine, flanterm, libfdt, nyu-efi
-      bsd2Patent # nyu-efi
-      bsd3 # nyu-efi
-      bsdAxisNoDisclaimerUnmodified # nyu-efi
-      mit # nyu-efi, stb_image
+      bsd2 # limine, flanterm, libfdt, PicoEFI
+      bsd2Patent # PicoEFI
+      bsd3 # PicoEFI
+      bsdAxisNoDisclaimerUnmodified # PicoEFI
+      mit # PicoEFI, stb_image
       zlib # tinf
     ];
     maintainers = with lib.maintainers; [
