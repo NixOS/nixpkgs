@@ -1,11 +1,8 @@
 {
   lib,
-  fetchgit,
-  pkg-config,
-  gettext,
   runCommand,
   makeWrapper,
-  cpio,
+  systemtap-unwrapped,
   elfutils,
   kernel,
   gnumake,
@@ -15,32 +12,7 @@
 }:
 
 let
-  ## fetchgit info
-  url = "git://sourceware.org/git/systemtap.git";
-  rev = "release-${version}";
-  hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
-  version = "5.2";
-
   inherit (kernel) stdenv;
-
-  ## stap binaries
-  stapBuild = stdenv.mkDerivation {
-    pname = "systemtap";
-    inherit version;
-    src = fetchgit { inherit url rev hash; };
-    nativeBuildInputs = [
-      pkg-config
-      cpio
-      python3
-      python3.pkgs.setuptools
-    ];
-    buildInputs = [
-      elfutils
-      gettext
-      python3
-    ];
-    enableParallelBuilding = true;
-  };
 
   ## symlink farm for --sysroot flag
   sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
@@ -53,17 +25,12 @@ let
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in
-runCommand "systemtap-${version}"
+runCommand "systemtap-${systemtap-unwrapped.version}"
   {
-    inherit stapBuild;
+    stapBuild = systemtap-unwrapped;
     nativeBuildInputs = [ makeWrapper ];
     passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
-    meta = {
-      homepage = "https://sourceware.org/systemtap/";
-      description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
-      license = lib.licenses.gpl2;
-      platforms = lib.systems.inspect.patterns.isGnu;
-    };
+    inherit (systemtap-unwrapped) meta;
   }
   (
     ''
