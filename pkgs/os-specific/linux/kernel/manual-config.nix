@@ -540,6 +540,13 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
+          identifiers.cpeParts = {
+            part = "o";
+            vendor = "linux";
+            product = "linux_kernel";
+            inherit version;
+            update = "*";
+          };
         }
         // extraMeta;
       };
