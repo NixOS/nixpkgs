@@ -1,0 +1,18 @@
+diff --git a/win32/xmingw32/libtheoradec-all.def b/win32/xmingw32/libtheoradec-all.def
+index 566eeb3..4a2e766 100644
+--- a/win32/xmingw32/libtheoradec-all.def
++++ b/win32/xmingw32/libtheoradec-all.def
+@@ -1,4 +1,3 @@
+-EXPORTS
+ ; Old alpha API
+ 	theora_version_string @ 1
+ 	theora_version_number @ 2
+diff --git a/win32/xmingw32/libtheoraenc-all.def b/win32/xmingw32/libtheoraenc-all.def
+index 36d2dad..d1da2f4 100644
+--- a/win32/xmingw32/libtheoraenc-all.def
++++ b/win32/xmingw32/libtheoraenc-all.def
+@@ -1,4 +1,3 @@
+-EXPORTS
+ ; Old alpha API
+ 	theora_encode_init @ 1
+ 	theora_encode_YUVin @ 2

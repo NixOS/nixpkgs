@@ -1,0 +1,16 @@
+diff --git a/bin/collector b/bin/collector
+index 4bdce08178..5edc0a4aee 100755
+--- a/bin/collector
++++ b/bin/collector
+@@ -3,9 +3,11 @@
+
+ Process.setproctitle("discourse prometheus-collector")
+
++# We need the ABI version {MAJOR}.{MINOR}.0 here.
++abi_version = ENV['GEM_PATH'].split("/")[-1]
+ spec_file =
+   File.expand_path(
+-    "../../gems/#{RUBY_VERSION}/specifications/#{"prometheus_exporter-#{ENV["PROMETHEUS_EXPORTER_VERSION"]}"}.gemspec",
++    "../../gems/#{abi_version}/specifications/#{"prometheus_exporter-#{ENV["PROMETHEUS_EXPORTER_VERSION"]}"}.gemspec",
+     __FILE__,
+   )

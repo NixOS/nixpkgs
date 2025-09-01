@@ -1,0 +1,12 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 37fd471..d0a9e56 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -18,7 +18,6 @@ import { Settings, State } from "./settings";
+ import { isDeckGameMode } from "./utils/steamOS";
+
+ if (!IS_DEV) {
+-    autoUpdater.checkForUpdatesAndNotify();
+ }
+
+ console.log("Vesktop v" + app.getVersion());

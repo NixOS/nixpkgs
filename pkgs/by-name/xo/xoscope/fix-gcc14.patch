@@ -1,0 +1,15 @@
+--- a/configure
++++ b/configure
+@@ -7054,9 +7054,10 @@
+ 	   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
++#include <stddef.h>
+ #include <comedilib.h>
+-main() {
+-       comedi_get_cmd_generic_timed(NULL, NULL, NULL, 0, 0);
++void main() {
++       comedi_get_cmd_generic_timed(NULL, 0, NULL, 0, 0);
+ }
+ _ACEOF
+ if ac_fn_c_try_compile "$LINENO"; then :

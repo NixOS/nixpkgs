@@ -1,0 +1,13 @@
+{
+  "flet_ads": "sha256-uvfhwfuhw0by5CN9Z9VAUKrH9s2S4ltOf/93PDdGGKM=",
+  "flet_audio": "sha256-3xr0pYUylBNvswNvRath10A/EuCr4mTrTFjvlUAVgJQ=",
+  "flet_audio_recorder": "sha256-gOgd+6XZ0KJUG7bvxqyr5IjsNL/dy9RsJ0wbtMVr3bM=",
+  "flet_flashlight": "sha256-a/WnJdrSjM0FrYm/HghbocyGTMpT2xfa90z/Zv+Bp1Y=",
+  "flet_geolocator": "sha256-ZXt9rYWHr27FBzlQT1uxg5/l2E7JX1tDI3WgChx9DAs=",
+  "flet_lottie": "sha256-tpoMiI+rpD5HSqIsDvo0QNkwN4nifG3rJkUlVSHWNzM=",
+  "flet_map": "sha256-k42GK37MGdMI/QM04GuF0LQ6AAaL7mrZ6z9IGObYhYM=",
+  "flet_permission_handler": "sha256-Lj0bHcERjdfgUAbvPW7z58fAWT/BfKEJkBhNUrNVG9o=",
+  "flet_rive": "sha256-X8MRlnktjd5v0dfi9wvPvgl8lTgexfocgf5/ja7UpWk=",
+  "flet_video": "sha256-IfUkld4TZgtkIL1l1vmWFoCAzgVOEtALosmvkBZVq1M=",
+  "flet_webview": "sha256-wvypCJx5OuNYWcJMiW3L05PQI9ZY1tONebujI+EJu4E="
+}

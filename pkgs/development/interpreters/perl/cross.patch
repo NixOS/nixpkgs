@@ -1,0 +1,250 @@
+From: =?UTF-8?q?Christian=20K=C3=B6gler?= <ck3d@gmx.de>
+Date: Mon, 10 Apr 2023 22:12:24 +0200
+Subject: [PATCH] miniperl compatible modules
+
+CPAN::Meta
+ExtUtils::MakeMaker
+JSON::PP
+Data::Dumper
+
+Updated for perl v5.38.0 by stig@stig.io
+
+---
+
+diff --git a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
+index b0e83b0d2d..dab4907704 100644
+--- a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
++++ b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements.pm
+@@ -86,21 +86,7 @@ sub new {
+ # from version::vpp
+ sub _find_magic_vstring {
+   my $value = shift;
+-  my $tvalue = '';
+-  require B;
+-  my $sv = B::svref_2object(\$value);
+-  my $magic = ref($sv) eq 'B::PVMG' ? $sv->MAGIC : undef;
+-  while ( $magic ) {
+-    if ( $magic->TYPE eq 'V' ) {
+-      $tvalue = $magic->PTR;
+-      $tvalue =~ s/^v?(.+)$/v$1/;
+-      last;
+-    }
+-    else {
+-      $magic = $magic->MOREMAGIC;
+-    }
+-  }
+-  return $tvalue;
++  return version::->parse($value)->stringify;
+ }
+ 
+ # safe if given an unblessed reference
+diff --git a/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm b/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
+index 746abd63bc..c55d7cd2d0 100644
+--- a/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
++++ b/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
+@@ -1,6 +1,7 @@
+ use 5.008001; # sane UTF-8 support
+ use strict;
+ use warnings;
++no warnings 'experimental::builtin';
+ package CPAN::Meta::YAML; # git description: v1.68-2-gcc5324e
+ # XXX-INGY is 5.8.1 too old/broken for utf8?
+ # XXX-XDG Lancaster consensus was that it was sufficient until
+@@ -650,27 +651,29 @@ sub _dump_string {
+     join '', map { "$_\n" } @lines;
+ }
+ 
+-sub _has_internal_string_value {
++# taken from cpan/JSON-PP/lib/JSON/PP.pm
++sub _looks_like_number {
+     my $value = shift;
+-    my $b_obj = B::svref_2object(\$value);  # for round trip problem
+-    return $b_obj->FLAGS & B::SVf_POK();
++    no warnings 'numeric';
++    # if the utf8 flag is on, it almost certainly started as a string
++    return if utf8::is_utf8($value);
++    # detect numbers
++    # string & "" -> ""
++    # number & "" -> 0 (with warning)
++    # nan and inf can detect as numbers, so check with * 0
++    return unless length((my $dummy = "") & $value);
++    return unless 0 + $value eq $value;
++    return 1 if $value * 0 == 0;
++    return -1; # inf/nan
+ }
+ 
+ sub _dump_scalar {
+     my $string = $_[1];
+     my $is_key = $_[2];
+-    # Check this before checking length or it winds up looking like a string!
+-    my $has_string_flag = _has_internal_string_value($string);
+     return '~'  unless defined $string;
+     return "''" unless length  $string;
+-    if (Scalar::Util::looks_like_number($string)) {
+-        # keys and values that have been used as strings get quoted
+-        if ( $is_key || $has_string_flag ) {
+-            return qq['$string'];
+-        }
+-        else {
+-            return $string;
+-        }
++    if (_looks_like_number($string)) {
++        return qq['$string'];
+     }
+     if ( $string =~ /[\x00-\x09\x0b-\x0d\x0e-\x1f\x7f-\x9f\'\n]/ ) {
+         $string =~ s/\\/\\\\/g;
+@@ -800,9 +803,6 @@ sub errstr {
+ # Helper functions. Possibly not needed.
+ 
+ 
+-# Use to detect nv or iv
+-use B;
+-
+ # XXX-INGY Is flock CPAN::Meta::YAML's responsibility?
+ # Some platforms can't flock :-(
+ # XXX-XDG I think it is.  When reading and writing files, we ought
+@@ -822,35 +822,8 @@ sub _can_flock {
+     }
+ }
+ 
+-
+-# XXX-INGY Is this core in 5.8.1? Can we remove this?
+-# XXX-XDG Scalar::Util 1.18 didn't land until 5.8.8, so we need this
+-#####################################################################
+-# Use Scalar::Util if possible, otherwise emulate it
+-
+-use Scalar::Util ();
+ BEGIN {
+-    local $@;
+-    if ( eval { Scalar::Util->VERSION(1.18); } ) {
+-        *refaddr = *Scalar::Util::refaddr;
+-    }
+-    else {
+-        eval <<'END_PERL';
+-# Scalar::Util failed to load or too old
+-sub refaddr {
+-    my $pkg = ref($_[0]) or return undef;
+-    if ( !! UNIVERSAL::can($_[0], 'can') ) {
+-        bless $_[0], 'Scalar::Util::Fake';
+-    } else {
+-        $pkg = undef;
+-    }
+-    "$_[0]" =~ /0x(\w+)/;
+-    my $i = do { no warnings 'portable'; hex $1 };
+-    bless $_[0], $pkg if defined $pkg;
+-    $i;
+-}
+-END_PERL
+-    }
++    *refaddr = *builtin::refaddr;
+ }
+ 
+ delete $CPAN::Meta::YAML::{refaddr};
+diff --git a/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm b/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm
+index 3604eae402..991f69d275 100644
+--- a/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm
++++ b/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm
+@@ -1,12 +1,13 @@
+ use strict;
+ use warnings;
++no warnings 'experimental::builtin';
+ 
+ package CPAN::Meta::Merge;
+ 
+ our $VERSION = '2.150010';
+ 
+ use Carp qw/croak/;
+-use Scalar::Util qw/blessed/;
++use builtin qw/blessed/;
+ use CPAN::Meta::Converter 2.141170;
+ 
+ sub _is_identical {
+diff --git a/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm b/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm
+index d4e93fd8a5..809da68d02 100644
+--- a/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm
++++ b/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm
+@@ -1,6 +1,7 @@
+ use 5.006;
+ use strict;
+ use warnings;
++no warnings 'experimental::builtin';
+ package CPAN::Meta::Prereqs;
+ 
+ our $VERSION = '2.150010';
+@@ -14,7 +15,6 @@ our $VERSION = '2.150010';
+ #pod =cut
+ 
+ use Carp qw(confess);
+-use Scalar::Util qw(blessed);
+ use CPAN::Meta::Requirements 2.121;
+ 
+ #pod =method new
+@@ -168,7 +168,12 @@ sub types_in {
+ sub with_merged_prereqs {
+   my ($self, $other) = @_;
+ 
+-  my @other = blessed($other) ? $other : @$other;
++  eval 'require Scalar::Util';
++  my @other = unless($@){
++    Scalar::Util::blessed($other) ? $other : @$other;
++  }else{
++    builtin::blessed($other) ? $other : @$other;
++  }
+ 
+   my @prereq_objs = ($self, @other);
+ 
+diff --git a/cpan/JSON-PP/lib/JSON/PP.pm b/cpan/JSON-PP/lib/JSON/PP.pm
+index fc8fcbc8f0..cda7b90c65 100644
+--- a/cpan/JSON-PP/lib/JSON/PP.pm
++++ b/cpan/JSON-PP/lib/JSON/PP.pm
+@@ -4,6 +4,7 @@ package JSON::PP;
+ 
+ use 5.008;
+ use strict;
++no warnings 'experimental::builtin';
+ 
+ use Exporter ();
+ BEGIN { our @ISA = ('Exporter') }
+diff --git a/dist/Data-Dumper/Dumper.pm b/dist/Data-Dumper/Dumper.pm
+index bb6d3caedb..0c2fde4743 100644
+--- a/dist/Data-Dumper/Dumper.pm
++++ b/dist/Data-Dumper/Dumper.pm
+@@ -11,6 +11,7 @@ package Data::Dumper;
+ 
+ use strict;
+ use warnings;
++no warnings 'experimental::builtin';
+ 
+ #$| = 1;
+ 
+@@ -125,8 +126,7 @@ sub new {
+ # Packed numeric addresses take less memory. Plus pack is faster than sprintf
+ 
+ sub format_refaddr {
+-    require Scalar::Util;
+-    pack "J", Scalar::Util::refaddr(shift);
++    pack "J", builtin::refaddr(shift);
+ };
+ 
+ #
+@@ -282,9 +282,8 @@ sub _dump {
+       warn "WARNING(Freezer method call failed): $@" if $@;
+     }
+ 
+-    require Scalar::Util;
+-    my $realpack = Scalar::Util::blessed($val);
+-    my $realtype = $realpack ? Scalar::Util::reftype($val) : ref $val;
++    my $realpack = builtin::blessed($val);
++    my $realtype = $realpack ? builtin::reftype($val) : ref $val;
+     $id = format_refaddr($val);
+ 
+     # Note: By this point $name is always defined and of non-zero length.
+@@ -576,7 +575,7 @@ sub _dump {
+     # here generates a different result. So there are actually "three" different
+     # implementations of Data::Dumper (kind of sort of) but we only test two.
+     elsif (!defined &_vstring
+-       and ref $ref eq 'VSTRING' || eval{Scalar::Util::isvstring($val)}) {
++       and ref $ref eq 'VSTRING') {
+       $out .= sprintf "v%vd", $val;
+     }
+     # \d here would treat "1\x{660}" as a safe decimal number

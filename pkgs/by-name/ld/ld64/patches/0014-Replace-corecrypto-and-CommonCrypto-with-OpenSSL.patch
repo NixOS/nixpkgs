@@ -1,0 +1,341 @@
+From b2cfb2019b79e674a507a8b428bba4b82b2276d0 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 14/18] Replace corecrypto and CommonCrypto with OpenSSL
+
+---
+ src/ld/LinkEdit.hpp                           |  2 -
+ src/ld/OutputFile.cpp                         | 78 ++++++++++++----
+ subprojects/libcodedirectory/cs_blobs.h       |  1 +
+ .../libcodedirectory/libcodedirectory.c       | 90 +++++++++++++------
+ 4 files changed, 126 insertions(+), 45 deletions(-)
+
+diff --git a/src/ld/LinkEdit.hpp b/src/ld/LinkEdit.hpp
+index 4a6d5fe..818fcdf 100644
+--- a/src/ld/LinkEdit.hpp
++++ b/src/ld/LinkEdit.hpp
+@@ -30,8 +30,6 @@
+ #include <errno.h>
+ #include <limits.h>
+ #include <unistd.h>
+-#include <CommonCrypto/CommonDigest.h>
+-#include <CommonCrypto/CommonDigestSPI.h>
+ 
+ #include <vector>
+ #include <unordered_map>
+diff --git a/src/ld/OutputFile.cpp b/src/ld/OutputFile.cpp
+index 2a175a7..69b476f 100644
+--- a/src/ld/OutputFile.cpp
++++ b/src/ld/OutputFile.cpp
+@@ -43,10 +43,6 @@
+ #include <mach-o/dyld.h>
+ #include <mach-o/fat.h>
+ #include <dispatch/dispatch.h>
+-#include <os/lock_private.h>
+-extern "C" {
+-    #include <corecrypto/ccsha2.h>
+-}
+ 
+ #include <mutex>
+ #include <string>
+@@ -56,9 +52,10 @@ extern "C" {
+ #include <iostream>
+ #include <fstream>
+ 
+-#include <CommonCrypto/CommonDigest.h>
+ #include <AvailabilityMacros.h>
+ 
++#include <openssl/err.h>
++#include <openssl/evp.h>
+ 
+ #include "ExportsTrie.h"
+ 
+@@ -79,6 +76,17 @@ uint32_t sAdrpNA = 0;
+ uint32_t sAdrpNoped = 0;
+ uint32_t sAdrpNotNoped = 0;
+ 
++static void
++EVP_MD_cleanup(EVP_MD** digest) {
++	EVP_MD_free(*digest);
++	*digest = nullptr;
++}
++
++static void
++EVP_MD_CTX_cleanup(EVP_MD_CTX** context) {
++	EVP_MD_CTX_free(*context);
++	*context = nullptr;
++}
+ 
+ 
+ OutputFile::OutputFile(const Options& opts, ld::Internal& state) 
+@@ -3834,7 +3842,7 @@ void OutputFile::computeContentUUID(ld::Internal& state, uint8_t* wholeBuffer)
+ {
+ 	const bool log = false;
+ 	if ( (_options.outputKind() != Options::kObjectFile) || state.someObjectFileHasDwarf ) {
+-		uint8_t digest[CCSHA256_OUTPUT_SIZE];
++		uint8_t digest[CS_SHA256_LEN];
+ 		std::vector<std::pair<uint64_t, uint64_t>> excludeRegions;
+ 		uint64_t bitcodeCmdOffset;
+ 		uint64_t bitcodeCmdEnd;
+@@ -3902,18 +3910,27 @@ void OutputFile::computeContentUUID(ld::Internal& state, uint8_t* wholeBuffer)
+ 			excludeRegions.emplace_back(std::pair<uint64_t, uint64_t>(symbolTableCmdOffset, symbolTableCmdOffset+symbolTableCmdSize));
+ 			if ( log ) fprintf(stderr, "linkedit SegCmdOffset=0x%08llX, size=0x%08llX\n", symbolTableCmdOffset, symbolTableCmdSize);
+ 		}
+-		const ccdigest_info* di = ccsha256_di();
+-		ccdigest_di_decl(di, ctx);
+-		ccdigest_init(di, ctx);
++
++		[[gnu::cleanup(EVP_MD_cleanup)]] EVP_MD* sha256_digest = EVP_MD_fetch(nullptr, "SHA-256", nullptr);
++		[[gnu::cleanup(EVP_MD_CTX_cleanup)]] EVP_MD_CTX* context = EVP_MD_CTX_new();
++
++		if ( !EVP_DigestInit_ex2(context, sha256_digest, nullptr) ) {
++			ERR_print_errors_fp(stderr);
++			abort();
++		}
++
+ 		// rdar://problem/19487042 include the output leaf file name in the hash
+ 		const char* lastSlash = strrchr(_options.outputFilePath(), '/');
+-		if ( lastSlash !=  NULL ) {
+-			ccdigest_update(di, ctx, strlen(lastSlash), lastSlash);
++		if ( lastSlash !=  NULL && !EVP_DigestUpdate(context, lastSlash, strlen(lastSlash)) ) {
++			ERR_print_errors_fp(stderr);
++			abort();
+ 		}
++
+ 		// <rdar://problem/38679559> use train name when calculating a binary's UUID
+ 		const char* buildName = _options.buildContextName();
+-		if ( buildName != NULL ) {
+-			ccdigest_update(di, ctx, strlen(buildName), buildName);
++		if ( buildName != NULL && !EVP_DigestUpdate(context, buildName, strlen(buildName)) ) {
++			ERR_print_errors_fp(stderr);
++			abort();
+ 		}
+ 
+ 		if ( !excludeRegions.empty() ) {
+@@ -3937,22 +3954,47 @@ void OutputFile::computeContentUUID(ld::Internal& state, uint8_t* wholeBuffer)
+ 			// Measure the ranges we want in parallel
+ 			struct Digest
+ 			{
+-				uint8_t digest[CCSHA256_OUTPUT_SIZE];
++				uint8_t digest[CS_SHA256_LEN];
+ 			};
+ 			__block std::vector<Digest> digests(regionsToMeasure.size());
+ 			dispatch_apply(regionsToMeasure.size(), DISPATCH_APPLY_AUTO, ^(size_t index) {
+ 				uint64_t startOffset = regionsToMeasure[index].first;
+ 				uint64_t size = regionsToMeasure[index].second;
+-				CCDigest(kCCDigestSHA256, &wholeBuffer[startOffset], size, digests[index].digest);
++
++				[[gnu::cleanup(EVP_MD_cleanup)]] EVP_MD* sha256_digest = EVP_MD_fetch(nullptr, "SHA-256", nullptr);
++				[[gnu::cleanup(EVP_MD_CTX_cleanup)]] EVP_MD_CTX* context = EVP_MD_CTX_new();
++
++				if (!EVP_DigestInit_ex2(context, sha256_digest, nullptr)) {
++					ERR_print_errors_fp(stderr);
++					abort();
++				}
++				if (!EVP_DigestUpdate(context, &wholeBuffer[startOffset], size)) {
++					ERR_print_errors_fp(stderr);
++					abort();
++				}
++				if (!EVP_DigestFinal_ex(context, digests[index].digest, nullptr)) {
++					ERR_print_errors_fp(stderr);
++					abort();
++				}
+ 			});
+ 
+ 			// Merge the resuls in serial
+-			ccdigest_update(di, ctx, digests.size() * sizeof(Digest), digests.data());
++			if ( !EVP_DigestUpdate(context, digests.data(), digests.size() * sizeof(Digest)) ) {
++			   ERR_print_errors_fp(stderr);
++			   abort();
++		    }
+ 		} else {
+-			ccdigest_update(di, ctx, _fileSize, wholeBuffer);
++			if ( !EVP_DigestUpdate(context, wholeBuffer, _fileSize) ) {
++			   ERR_print_errors_fp(stderr);
++			   abort();
++			}
++		}
++
++		if ( !EVP_DigestFinal_ex(context, digest, nullptr) ) {
++			ERR_print_errors_fp(stderr);
++			abort();
+ 		}
+ 
+-		ccdigest_final(di, ctx, digest);
+ 		if ( log ) fprintf(stderr, "uuid=%02X, %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", digest[0], digest[1], digest[2],
+ 							 digest[3], digest[4], digest[5], digest[6],  digest[7]);
+ 
+diff --git a/subprojects/libcodedirectory/cs_blobs.h b/subprojects/libcodedirectory/cs_blobs.h
+index 899a6a2..ce9cac6 100644
+--- a/subprojects/libcodedirectory/cs_blobs.h
++++ b/subprojects/libcodedirectory/cs_blobs.h
+@@ -129,6 +129,7 @@ enum {
+ 	CS_SHA1_LEN = 20,
+ 	CS_SHA256_LEN = 32,
+ 	CS_SHA256_TRUNCATED_LEN = 20,
++	CS_SHA384_LEN = 48,
+ 
+ 	CS_CDHASH_LEN = 20,                                             /* always - larger hashes are truncated */
+ 	CS_HASH_MAX_SIZE = 48, /* max size of the hash we'll support */
+diff --git a/subprojects/libcodedirectory/libcodedirectory.c b/subprojects/libcodedirectory/libcodedirectory.c
+index 583ac96..02e31b1 100644
+--- a/subprojects/libcodedirectory/libcodedirectory.c
++++ b/subprojects/libcodedirectory/libcodedirectory.c
+@@ -14,10 +14,6 @@
+ #include <sys/mman.h>
+ #include <sys/queue.h>
+ 
+-#include <corecrypto/ccdigest.h>
+-#include <corecrypto/ccsha1.h>
+-#include <corecrypto/ccsha2.h>
+-
+ #define LIBCD_HAS_PLATFORM_VERSION 1
+ #include "libcodedirectory.h"
+ 
+@@ -46,6 +42,21 @@
+ #include <sysexits.h>
+ #endif
+ 
++#include <openssl/err.h>
++#include <openssl/evp.h>
++
++static void
++EVP_MD_cleanup(EVP_MD** digest) {
++    EVP_MD_free(*digest);
++    *digest = NULL;
++}
++
++static void
++EVP_MD_CTX_cleanup(EVP_MD_CTX** context) {
++    EVP_MD_CTX_free(*context);
++    *context = NULL;
++}
++
+ #define MIN(a, b) (((a) < (b)) ? (a) : (b))
+ #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+ 
+@@ -459,17 +470,17 @@ void libcd_set_exec_seg (libcd *s, uint64_t base, uint64_t limit, uint64_t flags
+ 
+ struct _hash_info {
+     size_t hash_len;
+-    const struct ccdigest_info *(*di)(void);
++    const char* name;
+ };
+ 
+ static const struct _hash_info _known_hash_types[] = {
+     { 0, NULL },
+-    { CS_SHA1_LEN, ccsha1_di }, // CS_HASHTYPE_SHA1
+-    { CS_SHA256_LEN, ccsha256_di }, // CS_HASHTYPE_SHA256
+-    // { 0, NULL }, // CS_HASHTYPE_SHA256_TRUNCATED, unsupported
+-    // { 0, NULL }, // CS_HASHTYPE_SHA384, unsupported
++    { CS_SHA1_LEN, "SHA-1" }, // CS_HASHTYPE_SHA1
++    { CS_SHA256_LEN, "SHA-256" }, // CS_HASHTYPE_SHA256
++    { CS_HASHTYPE_SHA256_TRUNCATED, "SHA-256" }, // CS_HASHTYPE_SHA256_TRUNCATED
++    { CS_SHA384_LEN, "SHA-384" }, // CS_HASHTYPE_SHA384
+ };
+-static const size_t _max_known_hash_len = CS_SHA256_LEN;
++static const size_t _max_known_hash_len = CS_SHA384_LEN;
+ static const int _known_hash_types_count = sizeof(_known_hash_types)/sizeof(_known_hash_types[0]);
+ 
+ static struct _hash_info const *
+@@ -781,8 +792,8 @@ _libcd_hash_page(libcd *s,
+     uint8_t page_hash[_max_known_hash_len] = {0};
+     const unsigned int page_no = (unsigned int)page_idx;
+ 
+-    struct ccdigest_info const *di = hi->di();
+-    ccdigest_di_decl(di, ctx);
++    [[gnu::cleanup(EVP_MD_cleanup)]] EVP_MD* digest = EVP_MD_fetch(NULL, hi->name, NULL);
++    [[gnu::cleanup(EVP_MD_CTX_cleanup)]] EVP_MD_CTX* context = EVP_MD_CTX_new();
+ 
+     const size_t pos = page_idx * _cs_page_bytes;
+     uint8_t page[_cs_page_bytes] = {0};
+@@ -794,9 +805,18 @@ _libcd_hash_page(libcd *s,
+         return LIBCD_SERIALIZE_READ_PAGE_ERROR;
+     }
+ 
+-    ccdigest_init(di, ctx);
+-    ccdigest_update(di, ctx, read_bytes, page);
+-    ccdigest_final(di, ctx, page_hash);
++    if (!EVP_DigestInit_ex2(context, digest, NULL)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
++    if (!EVP_DigestUpdate(context, page, read_bytes)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
++    if (!EVP_DigestFinal_ex(context, page_hash, NULL)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
+ 
+     memcpy(hash_destination, page_hash, hi->hash_len);
+ 
+@@ -894,16 +914,25 @@ _libcd_serialize_cd (libcd *s, uint32_t hash_type)
+     //// code directory hashes
+     {
+         if (s->special_slot_count > 0) {
+-            struct ccdigest_info const *di = hi->di();
+-            ccdigest_di_decl(di, ctx);
++            [[gnu::cleanup(EVP_MD_cleanup)]] EVP_MD* digest = EVP_MD_fetch(NULL, hi->name, NULL);
++            [[gnu::cleanup(EVP_MD_CTX_cleanup)]] EVP_MD_CTX* context = EVP_MD_CTX_new();
+ 
+             uint8_t *special_slot_buf = calloc(s->special_slot_count, hi->hash_len);
+ 
+             struct _sslot_data *sslot = NULL;
+             SLIST_FOREACH(sslot, &s->sslot_data, entries) {
+-                ccdigest_init(di, ctx);
+-                ccdigest_update(di, ctx, sslot->len, sslot->data);
+-                ccdigest_final(di, ctx, special_slot_buf + (s->special_slot_count-sslot->slot)*hi->hash_len);
++                if (!EVP_DigestInit_ex2(context, digest, NULL)) {
++                    ERR_print_errors_fp(stderr);
++                    abort();
++                }
++                if (!EVP_DigestUpdate(context, sslot->data, sslot->len)) {
++                    ERR_print_errors_fp(stderr);
++                    abort();
++                }
++                if (!EVP_DigestFinal_ex(context, special_slot_buf + (s->special_slot_count-sslot->slot)*hi->hash_len, NULL)) {
++                    ERR_print_errors_fp(stderr);
++                    abort();
++                }
+             }
+             memcpy(cursor, special_slot_buf, s->special_slot_count*hi->hash_len);
+             cursor += s->special_slot_count*hi->hash_len;
+@@ -949,17 +978,28 @@ _libcd_serialize_cd (libcd *s, uint32_t hash_type)
+ 
+     //Record the cdhash for this codedirectory
+     {
+-        struct ccdigest_info const *di = hi->di();
+-        ccdigest_di_decl(di, ctx);
++        [[gnu::cleanup(EVP_MD_cleanup)]] EVP_MD* digest = EVP_MD_fetch(NULL, hi->name, NULL);
++        [[gnu::cleanup(EVP_MD_CTX_cleanup)]] EVP_MD_CTX* context = EVP_MD_CTX_new();
++
+         uint8_t *cdhash_buf = calloc(1, hi->hash_len);
+         if (cdhash_buf == NULL) {
+             _libcd_err("Failed to allocated memory for cdhash");
+             free(cd_mem);
+             return LIBCD_SERIALIZE_NO_MEM;
+         }
+-        ccdigest_init(di, ctx);
+-        ccdigest_update(di, ctx, cd_size, cd_mem);
+-        ccdigest_final(di, ctx, cdhash_buf);
++
++        if (!EVP_DigestInit_ex2(context, digest, NULL)) {
++            ERR_print_errors_fp(stderr);
++            abort();
++        }
++        if (!EVP_DigestUpdate(context, cd_mem, cd_size)) {
++            ERR_print_errors_fp(stderr);
++            abort();
++        }
++        if (!EVP_DigestFinal_ex(context, cdhash_buf, NULL)) {
++            ERR_print_errors_fp(stderr);
++            abort();
++        }
+ 
+         for (size_t i = 0; i < s->hash_types_count; i++) {
+             if (s->cdhashes[i].set) {
+-- 
+2.47.2
+

@@ -1,0 +1,55 @@
+diff --git a/apps/desktop/desktop_native/napi/index.js b/apps/desktop/desktop_native/napi/index.js
+index acfd0df..31a0c6a 100644
+--- a/apps/desktop/desktop_native/napi/index.js
++++ b/apps/desktop/desktop_native/napi/index.js
+@@ -17,6 +17,7 @@ function loadFirstAvailable(localFiles, nodeModule) {
+   require(nodeModule);
+ }
+ 
++/*
+ switch (platform) {
+   case "android":
+     switch (arch) {
+@@ -121,6 +122,8 @@ switch (platform) {
+   default:
+     throw new Error(`Unsupported OS: ${platform}, architecture: ${arch}`);
+ }
++*/
++nativeBinding = require('./desktop_napi.node')
+ 
+ if (!nativeBinding) {
+   if (loadError) {
+diff --git a/apps/desktop/desktop_native/napi/package.json b/apps/desktop/desktop_native/napi/package.json
+index d557ccf..2e47c79 100644
+--- a/apps/desktop/desktop_native/napi/package.json
++++ b/apps/desktop/desktop_native/napi/package.json
+@@ -3,7 +3,7 @@
+   "version": "0.1.0",
+   "description": "",
+   "scripts": {
+-    "build": "napi build --platform --js false",
++    "build": "napi build --js false",
+     "test": "cargo test"
+   },
+   "author": "",
+diff --git a/apps/desktop/electron-builder.json b/apps/desktop/electron-builder.json
+index 2922035..6497a38 100644
+--- a/apps/desktop/electron-builder.json
++++ b/apps/desktop/electron-builder.json
+@@ -18,7 +18,7 @@
+     "**/*",
+     "!**/node_modules/@bitwarden/desktop-napi/**/*",
+     "**/node_modules/@bitwarden/desktop-napi/index.js",
+-    "**/node_modules/@bitwarden/desktop-napi/desktop_napi.${platform}-${arch}*.node"
++    "**/node_modules/@bitwarden/desktop-napi/desktop_napi.node"
+   ],
+   "electronVersion": "34.0.0",
+   "generateUpdatesFilesForAllChannels": true,
+@@ -68,7 +68,6 @@
+       "CFBundleDevelopmentRegion": "en"
+     },
+     "provisioningProfile": "bitwarden_desktop_developer_id.provisionprofile",
+-    "singleArchFiles": "node_modules/@bitwarden/desktop-napi/desktop_napi.darwin-*.node",
+     "extraFiles": [
+       {
+         "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}",

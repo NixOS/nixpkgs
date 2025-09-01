@@ -1,0 +1,12 @@
+Raise the deployment target of IndexStoreDB so it can link against our XCTest.
+
+--- a/Package.swift
++++ b/Package.swift
+@@ -4,6 +4,7 @@ import PackageDescription
+
+ let package = Package(
+   name: "IndexStoreDB",
++  platforms: [.macOS("10.12")],
+   products: [
+     .library(
+       name: "IndexStoreDB",

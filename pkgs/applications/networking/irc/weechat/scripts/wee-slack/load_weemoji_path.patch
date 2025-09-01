@@ -1,0 +1,25 @@
+diff --git a/wee_slack.py b/wee_slack.py
+index e4716b4..ffd122d 100644
+--- a/wee_slack.py
++++ b/wee_slack.py
+@@ -6092,19 +6092,7 @@ def create_slack_debug_buffer():
+ 
+ def load_emoji():
+     try:
+-        weechat_dir = w.info_get("weechat_data_dir", "") or w.info_get(
+-            "weechat_dir", ""
+-        )
+-        weechat_sharedir = w.info_get("weechat_sharedir", "")
+-        local_weemoji, global_weemoji = (
+-            "{}/weemoji.json".format(path) for path in (weechat_dir, weechat_sharedir)
+-        )
+-        path = (
+-            global_weemoji
+-            if os.path.exists(global_weemoji) and not os.path.exists(local_weemoji)
+-            else local_weemoji
+-        )
+-        with open(path, "r") as ef:
++        with open("@out@/share/wee-slack/weemoji.json", "r") as ef:
+             emojis = json.loads(ef.read())
+             if "emoji" in emojis:
+                 print_error(

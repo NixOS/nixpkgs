@@ -1,0 +1,20 @@
+--- a/daemon/gdm-wayland-session.c
++++ b/daemon/gdm-wayland-session.c
+@@ -285,6 +285,7 @@ spawn_session (State        *state,
+                                                     "WAYLAND_DISPLAY",
+                                                     "WAYLAND_SOCKET",
+                                                     "GNOME_SHELL_SESSION_MODE",
++                                                    "__NIXOS_SET_ENVIRONMENT_DONE",
+                                                     NULL };
+ 
+         g_debug ("Running wayland session");
+--- a/daemon/gdm-x-session.c
++++ b/daemon/gdm-x-session.c
+@@ -610,6 +610,7 @@ spawn_session (State        *state,
+                                                      "WAYLAND_DISPLAY",
+                                                      "WAYLAND_SOCKET",
+                                                      "GNOME_SHELL_SESSION_MODE",
++                                                     "__NIXOS_SET_ENVIRONMENT_DONE",
+                                                      NULL };
+ 
+         g_debug ("Running X session");

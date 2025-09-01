@@ -1,0 +1,10 @@
+--- jfsutils-1.1.15/configure.in.orig	2018-11-27 20:46:55.830242385 +0300
++++ jfsutils-1.1.15/configure.in	2018-11-27 20:47:00.596307630 +0300
+@@ -15,6 +15,7 @@
+ AC_PATH_PROG(LN, ln, ln)
+ AC_PROG_LN_S
+ AC_PROG_RANLIB
++AM_PROG_AR
+ 
+ dnl Checks for header files.
+ AC_HEADER_STDC

@@ -1,0 +1,16 @@
+diff --git a/ch9344.c b/ch9344.c
+index 36402c0..cb3efc2 100644
+--- a/ch9344.c
++++ b/ch9344.c
+@@ -1251,7 +1251,11 @@ static void ch9344_port_shutdown(struct tty_port *port)
+ 	struct ch9344 *ch9344 = tty_get_portdata(ttyport);
+ 	int portnum = ttyport->portnum;
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
++	timer_delete(&ttyport->timer);
++#else
+ 	del_timer(&ttyport->timer);
++#endif
+ 	ch9344_set_control(ch9344, portnum, 0x00);
+ 	ch9344_set_control(ch9344, portnum, 0x10);
+ 	ttyport->isopen = false;

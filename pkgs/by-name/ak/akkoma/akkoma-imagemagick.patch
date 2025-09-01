@@ -1,0 +1,60 @@
+From c48f5d57b6e57f42b668c0c6b8744e4620c77320 Mon Sep 17 00:00:00 2001
+From: Mikael Voss <mvs@nyantec.com>
+Date: Tue, 19 Nov 2024 20:47:27 +0100
+Subject: [PATCH] Use magick command from ImageMagick
+
+With ImageMagick version 7 the convert command has been deprecated in
+favour of magick. Calling convert instead results in the logs being
+spammed with warning messages.
+
+The mogrify Elixir wrapper also runs magick with the mogrify argument
+in current releases.
+---
+ lib/pleroma/application_requirements.ex | 8 ++++----
+ lib/pleroma/helpers/media_helper.ex     | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/lib/pleroma/application_requirements.ex b/lib/pleroma/application_requirements.ex
+index c3777d8f1..55ee674a2 100644
+--- a/lib/pleroma/application_requirements.ex
++++ b/lib/pleroma/application_requirements.ex
+@@ -166,10 +166,10 @@ defp check_system_commands!(:ok) do
+     filter_commands_statuses = [
+       check_filter(Pleroma.Upload.Filter.Exiftool.StripMetadata, "exiftool"),
+       check_filter(Pleroma.Upload.Filter.Exiftool.ReadDescription, "exiftool"),
+-      check_filter(Pleroma.Upload.Filter.Mogrify, "mogrify"),
+-      check_filter(Pleroma.Upload.Filter.Mogrifun, "mogrify"),
+-      check_filter(Pleroma.Upload.Filter.AnalyzeMetadata, "mogrify"),
+-      check_filter(Pleroma.Upload.Filter.AnalyzeMetadata, "convert"),
++      check_filter(Pleroma.Upload.Filter.Mogrify, "magick"),
++      check_filter(Pleroma.Upload.Filter.Mogrifun, "magick"),
++      check_filter(Pleroma.Upload.Filter.AnalyzeMetadata, "magick"),
++      check_filter(Pleroma.Upload.Filter.AnalyzeMetadata, "magick"),
+       check_filter(Pleroma.Upload.Filter.AnalyzeMetadata, "ffprobe")
+     ]
+ 
+diff --git a/lib/pleroma/helpers/media_helper.ex b/lib/pleroma/helpers/media_helper.ex
+index cb95d0e68..17cd9629d 100644
+--- a/lib/pleroma/helpers/media_helper.ex
++++ b/lib/pleroma/helpers/media_helper.ex
+@@ -12,7 +12,7 @@ defmodule Pleroma.Helpers.MediaHelper do
+   require Logger
+ 
+   def missing_dependencies do
+-    Enum.reduce([imagemagick: "convert", ffmpeg: "ffmpeg"], [], fn {sym, executable}, acc ->
++    Enum.reduce([imagemagick: "magick", ffmpeg: "ffmpeg"], [], fn {sym, executable}, acc ->
+       if Pleroma.Utils.command_available?(executable) do
+         acc
+       else
+@@ -22,7 +22,7 @@ def missing_dependencies do
+   end
+ 
+   def image_resize(url, options) do
+-    with executable when is_binary(executable) <- System.find_executable("convert"),
++    with executable when is_binary(executable) <- System.find_executable("magick"),
+          {:ok, args} <- prepare_image_resize_args(options),
+          {:ok, env} <- HTTP.get(url, [], []),
+          {:ok, fifo_path} <- mkfifo() do
+-- 
+2.43.0
+
