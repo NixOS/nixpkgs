@@ -120,10 +120,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath ([
+      libs = lib.makeLibraryPath [
         vulkan-loader
         shaderc
-      ]);
+      ];
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 

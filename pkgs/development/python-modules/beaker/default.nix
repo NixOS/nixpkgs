@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pycrypto
     cryptography
   ]
-  ++ lib.optionals (isPy27) [
+  ++ lib.optionals isPy27 [
     funcsigs
     pycryptopp
   ];
