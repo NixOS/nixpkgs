@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sockdump";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [
-      ehmry
       picnoir
     ];
   };

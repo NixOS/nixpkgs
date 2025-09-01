@@ -170,7 +170,6 @@ stdenv.mkDerivation {
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
     maintainers = with lib.maintainers; [
       dandellion
-      ehmry
     ];
     license = lib.licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [ ];

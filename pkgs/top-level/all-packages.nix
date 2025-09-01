@@ -6439,6 +6439,10 @@ with pkgs;
 
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix { };
 
+  vcsh = callPackage ../by-name/vc/vcsh/package.nix {
+    automake = automake116x;
+  };
+
   ### DEVELOPMENT / TOOLS
 
   inherit (callPackage ../development/tools/alloy { })
@@ -6709,6 +6713,7 @@ with pkgs;
   #     ccacheWrapper = pkgs.ccacheWrapper.override {
   #       extraConfig = ''
   #         export CCACHE_COMPRESS=1
+  #         export CCACHE_SLOPPINESS=random_seed
   #         export CCACHE_DIR=/var/cache/ccache
   #         export CCACHE_UMASK=007
   #       '';
@@ -11169,12 +11174,6 @@ with pkgs;
   xkeyboard_config = xkeyboard-config;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
-
-  zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
-  zeal = zeal-qt5;
-  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
-    qtx11extras = null; # Because it does not exist in qt6
-  };
 
   ### APPLICATIONS / GIS
 

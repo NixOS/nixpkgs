@@ -326,6 +326,7 @@ with lib.maintainers;
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       de11n
+      despsyched
       invokes-su
     ];
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
@@ -345,7 +346,6 @@ with lib.maintainers;
   dhall = {
     members = [
       Gabriella439
-      ehmry
     ];
     scope = "Maintain Dhall and related packages.";
     shortName = "Dhall";

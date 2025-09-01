@@ -48,6 +48,8 @@ let
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
+  corePlugins = callPackage ./corePlugins.nix { };
+
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
   # * run ./update.py
@@ -66,6 +68,7 @@ lib.pipe initialPackages [
   (extends luaPackagePlugins)
   (extends nodePackagePlugins)
   (extends nonGeneratedPlugins)
+  (extends corePlugins)
   (extends overrides)
   (extends aliases)
   lib.makeExtensible

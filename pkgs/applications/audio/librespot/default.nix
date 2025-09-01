@@ -18,20 +18,21 @@
   withMDNS ? true,
   withDNS-SD ? false,
   avahi-compat,
+  tlsBackend ? "native-tls", # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "sha256-dGQDRb7fgIkXelZKa+PdodIs9DxbgEMlVGJjK/hU3Mo=";
+    hash = "sha256-IsHyYH4RDMRqXLNv6RZNzRTl3+zxan0TM/bjHoZC8YA=";
   };
 
-  cargoHash = "sha256-SqvJSHkyd1IicT6c4pE96dBJNNodULhpyG14HRGVWCk=";
+  cargoHash = "sha256-1Jc7gfnrsvk3Lcrvq0jV78IMKAnMDsW3nDr1W34PVmE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,14 +51,16 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optional withPulseAudio libpulseaudio;
 
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    lib.optional withRodio "rodio-backend"
-    ++ lib.optional withMDNS "with-libmdns"
-    ++ lib.optional withDNS-SD "with-dns-sd"
-    ++ lib.optional withALSA "alsa-backend"
-    ++ lib.optional withAvahi "with-avahi"
-    ++ lib.optional withPortAudio "portaudio-backend"
-    ++ lib.optional withPulseAudio "pulseaudio-backend";
+  buildFeatures = [
+    tlsBackend
+  ]
+  ++ lib.optional withRodio "rodio-backend"
+  ++ lib.optional withMDNS "with-libmdns"
+  ++ lib.optional withDNS-SD "with-dns-sd"
+  ++ lib.optional withALSA "alsa-backend"
+  ++ lib.optional withAvahi "with-avahi"
+  ++ lib.optional withPortAudio "portaudio-backend"
+  ++ lib.optional withPulseAudio "pulseaudio-backend";
 
   postFixup = lib.optionalString withALSA ''
     wrapProgram "$out/bin/librespot" \

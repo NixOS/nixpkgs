@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
         (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
         "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
@@ -385,15 +384,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ optional (!withBundledLLVM) llvmShared.lib
-  ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
-    llvmPackages.libunwind
-    # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-    (runCommandLocal "libunwind-libgcc" { } ''
-      mkdir -p $out/lib
-      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-      ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-    '')
-  ];
+  ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
 
   outputs = [
     "out"
@@ -435,7 +426,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
+    inherit (rustc) targetPlatforms targetPlatformsWithHostTools badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
     }
@@ -451,7 +442,7 @@ stdenv.mkDerivation (finalAttrs: {
       licenses.mit
       licenses.asl20
     ];
-    platforms = rustc.tier1TargetPlatforms;
+    platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;

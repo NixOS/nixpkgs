@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   buildGoModule,
   installShellFiles,
   versionCheckHook,
@@ -15,29 +14,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3ZopogeRqsgaM/HEKlS6B0ipaDG/5mKUyzGET3P1e0=";
+    hash = "sha256-VJCKZYBuw6fenTqRDxvLVNMXlPuDEq43WB7TI2RNWvc=";
   };
 
-  vendorHash = "sha256-D4uZmQKe4VuSpuW8JD5NOOq7Nvx8HRXzyvgzkBhsKLQ=";
+  vendorHash = "sha256-4SWpWGWoesUCgSpgOpblkxOpPbBC/grC2S1m7R9qasY=";
 
   proxyVendor = true;
-
-  patches = [
-    (fetchpatch2 {
-      # Temporarily revert upstream raising the min go version to 1.24.6
-      # until that go version lands from staging in master.
-      name = "revert-Bump-to-Go-1.24.6.patch";
-      url = "https://github.com/openbao/openbao/commit/85504045ecf2d343b74be2c1cda6c2c0b0d6acff.patch?full_index=1";
-      revert = true;
-      hash = "sha256-tXSnnqrNxgnJ2ya4HjLSh4e+6hdyPgKRsFsmkMNfNRU=";
-    })
-  ];
 
   subPackages = [ "." ];
 
@@ -89,6 +77,9 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/openbao/openbao/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "bao";
-    maintainers = with lib.maintainers; [ brianmay ];
+    maintainers = with lib.maintainers; [
+      brianmay
+      emilylange
+    ];
   };
 })

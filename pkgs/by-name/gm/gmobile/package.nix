@@ -35,16 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gobject-introspection
     udevCheckHook
+    vala
   ];
 
   buildInputs = [
     glib
     json-glib
     libuev
-    vala
   ];
 
   doInstallCheck = true;
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 

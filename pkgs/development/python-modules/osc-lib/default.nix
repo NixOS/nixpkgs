@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "3.2.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = version;
-    hash = "sha256-P1f0wwtOo0LKbc3ay0Vh8GGi/2nRXcTr9JOByc2nlZY=";
+    tag = version;
+    hash = "sha256-mFZLVlq2mFgx5yQLBPVVT/zDLbOJ/EodAwsm/QxvW0Q=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
