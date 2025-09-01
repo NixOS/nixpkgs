@@ -8,18 +8,17 @@
 
 buildPythonPackage rec {
   pname = "loro";
-  version = "1.5.4";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vC1SLkwCkiytZe9d9t1OH+Vd360657XxdU81bM9C9jk=";
+    hash = "sha256-9UO4XHf3Nm3yFi3hwA490sLHUXG36WcM/8C2rFYdcpM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-cjIHU2aMxkYMoulePmxFhuZrqMbnOkEL+Ar75+KCVFw=";
+    inherit pname version src;
+    hash = "sha256-sTJ2jA/TLoVp7UTC2YMKzuJi1SxldG8gj3YGPbVco5s=";
   };
 
   build-system = [
@@ -29,12 +28,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Upstream test has hardcoded version and is rarely updated.
-    # See https://github.com/loro-dev/loro-py/issues/19
-    "test_version"
   ];
 
   meta = {

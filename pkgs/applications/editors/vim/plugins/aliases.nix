@@ -125,6 +125,7 @@ mapAliases (
     surround = vim-surround;
     sleuth = vim-sleuth;
     solidity = vim-solidity;
+    ssr = ssr-nvim; # Added 2025-08-31
     stylish-haskell = vim-stylish-haskell;
     stylishHaskell = vim-stylish-haskell; # backwards compat, added 2014-10-18
     suda-vim = vim-suda; # backwards compat, added 2024-05-16
