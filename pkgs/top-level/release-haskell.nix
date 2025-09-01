@@ -70,7 +70,6 @@ let
     ghc963
     ghc967
     ghc984
-    ghc9101
     ghc9102
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
@@ -589,7 +588,6 @@ let
       funcmp = released;
       git-annex = [
         # for 9.10, test that using filepath (instead of filepath-bytestring) works.
-        compilerNames.ghc9101
         compilerNames.ghc9102
       ];
       haskell-language-server = lib.subtractLists [
@@ -603,7 +601,6 @@ let
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc902
-        compilerNames.ghc9101
         compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
@@ -639,7 +636,6 @@ let
         compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
-        compilerNames.ghc9101
         compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
