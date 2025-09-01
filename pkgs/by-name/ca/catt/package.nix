@@ -2,32 +2,34 @@
   lib,
   fetchPypi,
   fetchpatch,
-  python3,
+  python3Packages,
 }:
-
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
-        version = "13.1.0";
-
-        src = fetchPypi {
-          pname = "PyChromecast";
+  pythonPackages = python3Packages.overrideScope (
+    _: prev: {
+      pychromecast = prev.pychromecast.overridePythonAttrs (
+        let
+          version = "13.1.0";
+        in
+        {
           inherit version;
-          hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
-        };
 
-        postPatch = "";
-      });
-    };
-  };
+          src = fetchPypi {
+            pname = "PyChromecast";
+            inherit version;
+            hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
+          };
+
+          postPatch = "";
+        }
+      );
+    }
+  );
 in
-
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "catt";
   version = "0.12.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -42,17 +44,17 @@ python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
+  build-system = [
+    pythonPackages.poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    click
-    ifaddr
-    pychromecast
-    protobuf
-    requests
-    yt-dlp
+  dependencies = [
+    pythonPackages.click
+    pythonPackages.ifaddr
+    pythonPackages.pychromecast
+    pythonPackages.protobuf
+    pythonPackages.requests
+    pythonPackages.yt-dlp
   ];
 
   doCheck = false; # attempts to access various URLs
@@ -61,11 +63,11 @@ python.pkgs.buildPythonApplication rec {
     "catt"
   ];
 
-  meta = with lib; {
-    description = "Tool to send media from online sources to Chromecast devices";
+  meta = {
+    description = "Send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
-    license = licenses.bsd2;
-    maintainers = [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.RossSmyth ];
     mainProgram = "catt";
   };
 }
