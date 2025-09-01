@@ -114,11 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     ffmpeg
     mpi
+    python3Packages.pybind11
   ];
 
   propagatedBuildInputs = with python3Packages; [
     packaging
-    pybind11
     mpi4py
     numpy
   ];
