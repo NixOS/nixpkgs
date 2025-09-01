@@ -35,7 +35,7 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "unstable-2025-08-10";
+  version = "2.20.1-unstable-2025-08-10";
   src = fetchzip {
     url = "https://github.com/NixOS/cabal2nix/archive/31c6db234a905bbf4e8f34c5a986f294b231de0a.tar.gz";
     sha256 = "1ifbmcm5k8mxcpq4kscfc5ddcknawxz6a4ak30jmf0kk1lrfsikf";

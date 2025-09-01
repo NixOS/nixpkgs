@@ -191,6 +191,7 @@ with haskellLib;
 
   # cabal2nix depends on hpack which doesn't support Cabal >= 3.16
   cabal2nix-unstable = super.cabal2nix-unstable.override (
+    prev:
     # Manually override the relevant dependencies to reduce rebuild amount
     let
       cabalOverride = {
@@ -199,7 +200,7 @@ with haskellLib;
     in
     cabalOverride
     // lib.mapAttrs (_: drv: drv.override cabalOverride) {
-      inherit (self)
+      inherit (prev)
         distribution-nixpkgs
         hackage-db
         hpack
