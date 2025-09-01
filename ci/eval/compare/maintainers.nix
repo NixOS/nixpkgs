@@ -22,18 +22,27 @@ let
 
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  attrsWithMaintainers = builtins.map (
-    name:
-    let
-      package = lib.getAttrFromPath (lib.splitString "." name) pkgs;
-    in
-    {
-      inherit name package;
-      # TODO: Refactor this so we can ping entire teams instead of the individual members.
-      # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers = package.meta.maintainers or [ ];
-    }
-  ) (changedattrs ++ removedattrs);
+  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
+    (builtins.map (
+      name:
+      let
+        # Some packages might be reported as changed on a different platform, but
+        # not even have an attribute on the platform the maintainers are requested on.
+        # Fallback to `null` for these to filter them out below.
+        package = lib.attrByPath (lib.splitString "." name) null pkgs;
+      in
+      {
+        inherit name package;
+        # TODO: Refactor this so we can ping entire teams instead of the individual members.
+        # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+        maintainers = package.meta.maintainers or [ ];
+      }
+    ))
+    # No need to match up packages without maintainers with their files.
+    # This also filters out attributes where `packge = null`, which is the
+    # case for libintl, for example.
+    (builtins.filter (pkg: pkg.maintainers != [ ]))
+  ];
 
   relevantFilenames =
     drv:
