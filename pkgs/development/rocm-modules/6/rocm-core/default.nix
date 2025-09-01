@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Test that the CMake config file can be included and sets expected vars
     ''
       mkdir test_project
-      cd test_project
+      pushd test_project
 
       echo '
         cmake_minimum_required(VERSION 3.16)
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       ' > CMakeLists.txt
 
       CMAKE_PREFIX_PATH="$out" cmake .
-      cd ..
+      popd
 
       . $out/nix-support/setup-hook
       env | grep '^ROCM'
