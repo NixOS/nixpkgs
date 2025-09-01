@@ -263,34 +263,33 @@ in
           ExecStart = "${cfg.package}/bin/portunus-orchestrator";
           Restart = "on-failure";
         };
-        environment =
+        environment = {
+          PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
+          PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
+          PORTUNUS_SERVER_GROUP = cfg.group;
+          PORTUNUS_SERVER_USER = cfg.user;
+          PORTUNUS_SERVER_HTTP_LISTEN = "127.0.0.1:${toString cfg.port}";
+          PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
+          PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
+          PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
+          PORTUNUS_SLAPD_USER = cfg.ldap.user;
+          PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
+        }
+        // (lib.optionalAttrs (cfg.seedPath != null) ({
+          PORTUNUS_SEED_PATH = cfg.seedPath;
+        }))
+        // (lib.optionalAttrs cfg.ldap.tls (
+          let
+            acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
+          in
           {
-            PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
-            PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
-            PORTUNUS_SERVER_GROUP = cfg.group;
-            PORTUNUS_SERVER_USER = cfg.user;
-            PORTUNUS_SERVER_HTTP_LISTEN = "127.0.0.1:${toString cfg.port}";
-            PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
-            PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
-            PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
-            PORTUNUS_SLAPD_USER = cfg.ldap.user;
-            PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
+            PORTUNUS_SERVER_HTTP_SECURE = "true";
+            PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = config.security.pki.caBundle;
+            PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
+            PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;
+            PORTUNUS_SLAPD_TLS_PRIVATE_KEY = "${acmeDirectory}/key.pem";
           }
-          // (lib.optionalAttrs (cfg.seedPath != null) ({
-            PORTUNUS_SEED_PATH = cfg.seedPath;
-          }))
-          // (lib.optionalAttrs cfg.ldap.tls (
-            let
-              acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
-            in
-            {
-              PORTUNUS_SERVER_HTTP_SECURE = "true";
-              PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = config.security.pki.caBundle;
-              PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
-              PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;
-              PORTUNUS_SLAPD_TLS_PRIVATE_KEY = "${acmeDirectory}/key.pem";
-            }
-          ));
+        ));
       };
     };
 

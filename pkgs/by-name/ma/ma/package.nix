@@ -40,10 +40,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "minimalistic variant of the Acme editor";
+    description = "Minimalistic variant of the Acme editor";
     homepage = "http://call-with-current-continuation.org/ma/ma.html";
     mainProgram = "ma";
-    maintainers = with lib.maintainers; [ ehmry ];
     # Per the README:
     # > All of MA's source code is hereby placed in the public domain
     license = lib.licenses.publicDomain;

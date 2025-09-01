@@ -35,7 +35,6 @@ buildGoModule rec {
     mainProgram = "dovecot_exporter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      willibutz
       globin
     ];
   };

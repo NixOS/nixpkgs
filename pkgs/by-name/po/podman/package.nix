@@ -57,30 +57,29 @@ let
     name = "podman-helper-binary-wrapper";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths =
-      [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+    paths = [
+      gvproxy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      aardvark-dns
+      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+      netavark
+      passt
+      conmon
+      crun
+    ]
+    ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.5.1";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-/dGFDwjAAc1D88VslVDolf2YVPZ9cHUCQjdaEreQSE0=";
+    hash = "sha256-0w22mEbp1RRQlVqAKx0oHG0dVoC6m6Oo2l5RaL05t/A=";
   };
 
   patches = [
@@ -165,21 +164,20 @@ buildGoModule rec {
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
 
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = podman;
-        command = "HOME=$TMPDIR podman --version";
-      };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) podman;
-      # related modules
-      inherit (nixosTests)
-        podman-tls-ghostunnel
-        ;
-      oci-containers-podman = nixosTests.oci-containers.podman;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = podman;
+      command = "HOME=$TMPDIR podman --version";
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
+  };
 
   meta = {
     homepage = "https://podman.io/";

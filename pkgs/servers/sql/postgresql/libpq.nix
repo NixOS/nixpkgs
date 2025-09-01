@@ -53,16 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     disallowedReferences = [ "dev" ];
     disallowedRequisites = [
       stdenv.cc
-    ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+    ]
+    ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
   };
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals gssSupport [ libkrb5 ]
-    ++ lib.optionals nlsSupport [ gettext ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals gssSupport [ libkrb5 ]
+  ++ lib.optionals nlsSupport [ gettext ];
 
   nativeBuildInputs = [
     bison
@@ -100,18 +100,17 @@ stdenv.mkDerivation (finalAttrs: {
   # This doesn't apply to us with Nix.
   env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
 
-  configureFlags =
-    [
-      "--enable-debug"
-      "--sysconfdir=/etc"
-      "--with-openssl"
-      "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--without-icu"
-      "--without-perl"
-      "--without-readline"
-    ]
-    ++ lib.optionals gssSupport [ "--with-gssapi" ]
-    ++ lib.optionals nlsSupport [ "--enable-nls" ];
+  configureFlags = [
+    "--enable-debug"
+    "--sysconfdir=/etc"
+    "--with-openssl"
+    "--with-system-tzdata=${tzdata}/share/zoneinfo"
+    "--without-icu"
+    "--without-perl"
+    "--without-readline"
+  ]
+  ++ lib.optionals gssSupport [ "--with-gssapi" ]
+  ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./patches/socketdir-in-run-13+.patch

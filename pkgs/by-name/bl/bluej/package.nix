@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${openjdk}/bin/java $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
                    -cp $out/share/bluej/boot.jar bluej.Boot"
 
@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.gpl2ClasspathPlus;
+    license = with lib.licenses; [
+      gpl2Plus
+      classpathException20
+    ];
     mainProgram = "bluej";
     maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;

@@ -33,18 +33,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      dpdk
-      libbsd
-      libpcap
-      lua5_3
-      numactl
-      which
-    ]
-    ++ lib.optionals withGtk [
-      gtk2
-    ];
+  buildInputs = [
+    dpdk
+    libbsd
+    libpcap
+    lua5_3
+    numactl
+    which
+  ]
+  ++ lib.optionals withGtk [
+    gtk2
+  ];
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";

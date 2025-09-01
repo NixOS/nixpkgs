@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "postfix_exporter";
-  version = "0.10.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Hsn723";
     repo = "postfix_exporter";
     tag = "v${version}";
-    sha256 = "sha256-z+qQ/5g6RBSDqtDx8H7BZmg12g2TR0+B2WV6XZBGg0w=";
+    sha256 = "sha256-3Sj9qRAK7lDLYShE0G1UkZsDPAMlk4KZBucDeWcnS4I=";
   };
 
-  vendorHash = "sha256-eZAB6GlZkSrW/sU5pAUlY4MKm/16bv3cBj+z4ZN4Ugw=";
+  vendorHash = "sha256-HCKJA7T5kCQX9ZEClHWgZgjN71YG3BGF8gXc1aDKDJ8=";
 
   ldflags = [
     "-s"
@@ -43,7 +43,6 @@ buildGoModule rec {
     mainProgram = "postfix_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      willibutz
       globin
     ];
   };

@@ -30,11 +30,13 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  # Exclude tests which require network access
   disabledTests = [
+    # Exclude tests which require network access
     "testCanPostBinaryData"
     "test_content_type_override"
     "test_url_is_native_str"
+    # too narrow time comparison
+    "test_fetch_access_token"
   ];
 
   # Requires selenium and chrome

@@ -62,38 +62,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Remove this once a release is made with
   # https://github.com/NVlabs/tiny-cuda-nn/commit/78a14fe8c292a69f54e6d0d47a09f52b777127e1
-  postPatch = lib.optionals (cudaAtLeast "11.0") ''
+  postPatch = ''
     substituteInPlace bindings/torch/setup.py --replace-fail \
       "-std=c++14" "-std=c++17"
   '';
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    cuda-native-redist
+    ninja
+    which
+  ]
+  ++ lists.optionals pythonSupport (
+    with python3Packages;
     [
-      cmake
-      cuda-native-redist
-      ninja
-      which
+      pip
+      setuptools
+      wheel
     ]
-    ++ lists.optionals pythonSupport (
-      with python3Packages;
-      [
-        pip
-        setuptools
-        wheel
-      ]
-    );
+  );
 
-  buildInputs =
+  buildInputs = [
+    cuda-redist
+  ]
+  ++ lib.optionals pythonSupport (
+    with python3Packages;
     [
-      cuda-redist
+      pybind11
+      python
     ]
-    ++ lib.optionals pythonSupport (
-      with python3Packages;
-      [
-        pybind11
-        python
-      ]
-    );
+  );
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     with python3Packages;
@@ -142,30 +140,29 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p "$out/lib"
-    ''
-    # Installing the C++ library just requires copying the static library to the output directory
-    + strings.optionalString (!pythonSupport) ''
-      cp libtiny-cuda-nn.a "$out/lib/"
-    ''
-    # Installing the python bindings requires building the wheel and installing it
-    + strings.optionalString pythonSupport ''
-      python -m pip install \
-        --no-build-isolation \
-        --no-cache-dir \
-        --no-deps \
-        --no-index \
-        --no-warn-script-location \
-        --prefix="$out" \
-        --verbose \
-        ./*.whl
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$out/lib"
+  ''
+  # Installing the C++ library just requires copying the static library to the output directory
+  + strings.optionalString (!pythonSupport) ''
+    cp libtiny-cuda-nn.a "$out/lib/"
+  ''
+  # Installing the python bindings requires building the wheel and installing it
+  + strings.optionalString pythonSupport ''
+    python -m pip install \
+      --no-build-isolation \
+      --no-cache-dir \
+      --no-deps \
+      --no-index \
+      --no-warn-script-location \
+      --prefix="$out" \
+      --verbose \
+      ./*.whl
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru = {
     inherit cudaPackages;

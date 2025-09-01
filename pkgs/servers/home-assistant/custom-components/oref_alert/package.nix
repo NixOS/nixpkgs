@@ -4,6 +4,7 @@
   fetchFromGitHub,
   aiofiles,
   shapely,
+  paho-mqtt,
   pytestCheckHook,
   pytest-homeassistant-custom-component,
   pytest-freezer,
@@ -12,19 +13,22 @@
 buildHomeAssistantComponent rec {
   owner = "amitfin";
   domain = "oref_alert";
-  version = "2.21.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
     tag = "v${version}";
-    hash = "sha256-ov/smP7rflRfQMqYduTxDAYj5xQkpZJSzIQZrP0YADQ=";
+    hash = "sha256-DnxHF24YQOQoeAHNzWFd0omEStaJBeuy8Jpsqp2VkGY=";
   };
 
   dependencies = [
     aiofiles
     shapely
+    paho-mqtt
   ];
+
+  ignoreVersionRequirement = [ "shapely" ];
 
   nativeCheckInputs = [
     pytestCheckHook

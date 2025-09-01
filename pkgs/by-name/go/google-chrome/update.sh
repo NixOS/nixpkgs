@@ -41,7 +41,7 @@ update_linux() {
 
     local download_url="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${version}-1_amd64.deb"
     new_hash="$(nix-prefetch-url "$download_url" 2>/dev/null)"
-    new_sri_hash="$(nix hash to-sri --type sha256 "$new_hash")"
+    new_sri_hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$new_hash")"
 
     sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s/version = \".*\"/version = \"$version\"/" "$DEFAULT_NIX"
     sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s|hash = \".*\"|hash = \"$new_sri_hash\"|" "$DEFAULT_NIX"
@@ -87,8 +87,8 @@ update_darwin() {
     manifest_version="$(echo "$response" | xmllint --xpath "string(//manifest/@version)" -)"
 
     local download_url="$url$pkg"
-    new_hash="$(nix hash to-sri --type sha256 "$(nix-prefetch-url "$download_url" 2>/dev/null)")"
-    new_sri_hash="$(nix hash to-sri --type sha256 "$new_hash")"
+    new_hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(nix-prefetch-url "$download_url" 2>/dev/null)")"
+    new_sri_hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$new_hash")"
 
     sed -i "/^  darwin = stdenvNoCC.mkDerivation/,/^  });/s/version = \".*\"/version = \"$manifest_version\"/" "$DEFAULT_NIX"
     sed -i "/^  darwin = stdenvNoCC.mkDerivation/,/^  });/s|hash = \".*\"|hash = \"$new_sri_hash\"|" "$DEFAULT_NIX"

@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "svxlink";
-  version = "25.05";
+  version = "25.05.1";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
     repo = "svxlink";
     tag = version;
-    hash = "sha256-xFtfHkLnStG730o5tGATLLZvcqYYpR+7ATUdib7B2rw=";
+    hash = "sha256-OyAR/6heGX6J53p6x+ZPXY6nzSv22umMTg0ISlWcjp8=";
   };
 
   cmakeFlags = [

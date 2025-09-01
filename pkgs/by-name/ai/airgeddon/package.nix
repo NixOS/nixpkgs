@@ -58,70 +58,69 @@
   supportX11 ? false, # Allow using xterm instead of tmux, hard to test
 }:
 let
-  deps =
-    [
-      aircrack-ng
-      bash
-      coreutils-full
-      curl
-      gawk
-      glibc
-      gnugrep
-      gnused
-      iproute2
-      iw
-      networkmanager
-      ncurses
-      pciutils
-      procps
-      tmux
-      usbutils
-      wget
-      ethtool
-      util-linux
-      ccze
-      systemd
-    ]
-    ++ lib.optionals supportWpaWps [
-      bully
-      pixiewps
-      reaverwps-t6x
-    ]
-    ++ lib.optionals supportHashCracking [
-      asleap
-      crunch
-      hashcat
-      hcxdumptool
-      hcxtools
-      john
-      wireshark-cli
-    ]
-    ++ lib.optionals supportEvilTwin [
-      bettercap
-      dnsmasq
-      ettercap
-      hostapd
-      lighttpd
-      openssl
-      mdk4
-      nftables
-      apparmor-bin-utils
-    ]
-    ++ lib.optionals supportX11 [
-      xterm
-      xorg.xset
-      xorg.xdpyinfo
-    ];
+  deps = [
+    aircrack-ng
+    bash
+    coreutils-full
+    curl
+    gawk
+    glibc
+    gnugrep
+    gnused
+    iproute2
+    iw
+    networkmanager
+    ncurses
+    pciutils
+    procps
+    tmux
+    usbutils
+    wget
+    ethtool
+    util-linux
+    ccze
+    systemd
+  ]
+  ++ lib.optionals supportWpaWps [
+    bully
+    pixiewps
+    reaverwps-t6x
+  ]
+  ++ lib.optionals supportHashCracking [
+    asleap
+    crunch
+    hashcat
+    hcxdumptool
+    hcxtools
+    john
+    wireshark-cli
+  ]
+  ++ lib.optionals supportEvilTwin [
+    bettercap
+    dnsmasq
+    ettercap
+    hostapd
+    lighttpd
+    openssl
+    mdk4
+    nftables
+    apparmor-bin-utils
+  ]
+  ++ lib.optionals supportX11 [
+    xterm
+    xorg.xset
+    xorg.xdpyinfo
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";
-  version = "11.41";
+  version = "11.51";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
     tag = "v${version}";
-    hash = "sha256-+hJqaEjEy8woJKE+HKg3utNrZmGeAdd0YWi62HPLN/I=";
+    hash = "sha256-PkP8sPpX/z3yjvTpsRYJ9fKzUaMsnCp+p6AAoTlcAA0=";
   };
 
   strictDeps = true;

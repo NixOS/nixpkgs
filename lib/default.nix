@@ -207,6 +207,7 @@ let
         mapAttrsRecursive
         mapAttrsRecursiveCond
         genAttrs
+        genAttrs'
         isDerivation
         toDerivation
         optionalAttrs
@@ -287,6 +288,7 @@ let
         init
         crossLists
         unique
+        uniqueStrings
         allUnique
         intersectLists
         subtractLists

@@ -15,9 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/actions                        @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/nixpkgs-ci
+/ci                                     @NixOS/nixpkgs-ci
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
@@ -26,13 +26,19 @@
 
 # Libraries
 /lib                        @infinisil @hsjobeki
-/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
 /lib/generators.nix         @infinisil @hsjobeki @Profpatsch
 /lib/cli.nix                @infinisil @hsjobeki @Profpatsch
 /lib/debug.nix              @infinisil @hsjobeki @Profpatsch
 /lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
 /lib/path/*                 @infinisil @hsjobeki
 /lib/fileset                @infinisil @hsjobeki
+## Standard environment–related libraries
+/lib/customisation.nix      @alyssais @NixOS/stdenv
+/lib/derivations.nix        @alyssais @NixOS/stdenv
+/lib/fetchers.nix           @alyssais @NixOS/stdenv
+/lib/meta.nix               @alyssais @NixOS/stdenv
+/lib/source-types.nix       @alyssais @NixOS/stdenv
+/lib/systems                @alyssais @NixOS/stdenv
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth @hsjobeki
 /lib/types.nix              @infinisil @roberth @hsjobeki
@@ -56,6 +62,7 @@
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
+/pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
 
@@ -227,8 +234,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
+/pkgs/build-support/build-mozilla-mach @mweinelt
+/pkgs/applications/networking/browsers/firefox/update.nix
+/pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
+/pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
 /pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
-/pkgs/applications/networking/browsers/firefox @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
@@ -248,15 +258,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy
+/lib/licenses.nix @alyssais @emilazy @jopejoe1
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
 /pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
 
-# KDE / Plasma 5
-/pkgs/applications/kde @K900 @NickCao @SuperSandro2000 @ttuegel
-/pkgs/desktops/plasma-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+# KDE Frameworks 5
 /pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # KDE / Plasma 6
@@ -290,6 +298,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
+
+# Linux kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -356,13 +368,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
@@ -485,4 +496,4 @@ pkgs/by-name/oc/octodns/ @anthonyroussel
 pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
-pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @donteatoreo @johnrtitor
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor

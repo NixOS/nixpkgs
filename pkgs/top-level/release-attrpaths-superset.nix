@@ -24,37 +24,21 @@
 {
   lib ? import (path + "/lib"),
   trace ? false,
-  enableWarnings ? true,
   checkMeta ? true,
   path ? ./../..,
 }:
 let
 
-  # __attrsFailEvaluation is a temporary workaround to get top-level
-  # eval to succeed (under builtins.tryEval) for the entire
-  # packageset, without deep invasve changes into individual
-  # packages.
-  #
-  # Now that CI has been added, ensuring that top-level eval will
-  # not be broken by any new commits, you should not add any new
-  # occurrences of __attrsFailEvaluation, and should remove them
-  # wherever you are able to (doing so will likely require deep
-  # adjustments within packages).  Once all of the uses of
-  # __attrsFailEvaluation are removed, it will be deleted from the
-  # routine below.  In the meantime,
-  #
   # The intended semantics are that an attrpath rooted at pkgs is
-  # part of the (unfiltered) release jobset iff all of the following
+  # part of the (unfiltered) release jobset iff both of the following
   # are true:
   #
   # 1. The attrpath leads to a value for which lib.isDerivation is true
   #
-  # 2. No proper prefix of the attrpath has __attrsFailEvaluation=true
-  #
-  # 3. Any proper prefix of the attrpath at which lib.isDerivation
+  # 2. Any proper prefix of the attrpath at which lib.isDerivation
   #    is true also has __recurseIntoDerivationForReleaseJobs=true.
   #
-  # The last condition is unfortunately necessary because there are
+  # The second condition is unfortunately necessary because there are
   # Hydra release jobnames which have proper prefixes which are
   # attrnames of derivations (!).  We should probably restructure
   # the job tree so that this is not the case.
@@ -62,8 +46,10 @@ let
   justAttrNames =
     path: value:
     let
-      attempt =
-        if
+      result =
+        if path == [ "AAAAAASomeThingsFailToEvaluate" ] then
+          [ ]
+        else if
           lib.isDerivation value
           &&
             # in some places we have *derivations* with jobsets as subattributes, ugh
@@ -81,8 +67,6 @@ let
 
         else if !(lib.isAttrs value) then
           [ ]
-        else if (value.__attrsFailEvaluation or false) then
-          [ ]
         else
           lib.pipe value [
             (builtins.mapAttrs (
@@ -94,17 +78,6 @@ let
             builtins.attrValues
             builtins.concatLists
           ];
-
-      seq = builtins.deepSeq attempt attempt;
-      tried = builtins.tryEval seq;
-
-      result =
-        if tried.success then
-          tried.value
-        else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ] then
-          lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" [ ]
-        else
-          [ ];
     in
     if !trace then result else lib.trace "** ${lib.concatStringsSep "." path}" result;
 
@@ -130,7 +103,8 @@ let
       "pkgsMusl"
       "stdenv"
     ]
-  ] ++ justAttrNames [ ] releaseOutpaths;
+  ]
+  ++ justAttrNames [ ] releaseOutpaths;
 
   names = map (path: (lib.concatStringsSep "." path)) paths;
 

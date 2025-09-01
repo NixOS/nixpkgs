@@ -5,6 +5,9 @@
   fetchFromGitHub,
   cmake,
   asciidoc,
+  pkg-config,
+  db,
+  curl,
   jemalloc,
   boost186,
   fmt,
@@ -13,17 +16,19 @@
   yaml-cpp,
   isa-l,
   judy,
+  prometheus-cpp,
+  libz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.8.1";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CGnU32TuHkDZYbC3bbjfz4lFWjYe3yrhX08K+UIP51Q=";
+    hash = "sha256-ZQ0+jiVpHZhAOdYneKkPi3M45LU9xj2FBbqo6VcD0JY=";
   };
 
   patches = [
@@ -39,8 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     asciidoc
+    pkg-config
   ];
   buildInputs = [
+    db
+    curl
     fmt
     spdlog
     yaml-cpp
@@ -49,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     isa-l
     judy
+    prometheus-cpp
+    libz
   ];
 
   cmakeFlags = [

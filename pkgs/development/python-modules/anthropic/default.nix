@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   hatch-fancy-pypi-readme,
@@ -24,20 +25,21 @@
   dirty-equals,
   nest-asyncio,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   respx,
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.52.2";
+  version = "0.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-vCIS2NDsScKESfYFHDTSRLb9ZhUsrEPHyfuubrbc+44=";
+    hash = "sha256-EVLSC6ClHnmGqMoefMXj3M4dh812ZN5t9nF3gfCLyCo=";
   };
 
   postPatch = ''
@@ -69,6 +71,7 @@ buildPythonPackage rec {
     dirty-equals
     nest-asyncio
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     respx
   ];
@@ -78,6 +81,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs
+    # https://github.com/anthropics/anthropic-sdk-python/issues/1008
+    "test_get_platform"
   ];
 
   disabledTestPaths = [
@@ -86,9 +94,8 @@ buildPythonPackage rec {
     "tests/lib/test_bedrock.py"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

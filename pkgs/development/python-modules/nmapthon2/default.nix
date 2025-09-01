@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/scanner_tests.py" ];
+  enabledTestPaths = [ "tests/scanner_tests.py" ];
 
   pythonImportsCheck = [ "nmapthon2" ];
 

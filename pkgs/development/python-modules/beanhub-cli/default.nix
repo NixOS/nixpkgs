@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "2.1.1";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     tag = version;
-    hash = "sha256-mGLg6Kgur2LAcujFzO/rkSPAC2t3wR5CO2AeOO0+bFI=";
+    hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
   };
 
   pythonRelaxDeps = [
@@ -71,7 +71,8 @@ buildPythonPackage rec {
     rich
     starlette-wtf
     uvicorn
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = {
     login = [
@@ -97,7 +98,8 @@ buildPythonPackage rec {
     pytest-httpx
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "beanhub_cli" ];
 

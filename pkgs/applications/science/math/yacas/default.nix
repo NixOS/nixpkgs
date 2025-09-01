@@ -58,32 +58,30 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      # Perl is only for the documentation
-      perl
-    ]
-    ++ lib.optionals enableJava [
-      openjdk
-    ];
-  buildInputs =
-    [
-    ]
-    ++ lib.optionals enableGui [
-      qtbase
-      wrapQtAppsHook
-      qtwebengine
-    ]
-    ++ lib.optionals enableJupyter [
-      boost
-      jsoncpp
-      openssl
-      zmqpp
-    ];
+  nativeBuildInputs = [
+    cmake
+    # Perl is only for the documentation
+    perl
+  ]
+  ++ lib.optionals enableJava [
+    openjdk
+  ];
+  buildInputs = [
+  ]
+  ++ lib.optionals enableGui [
+    qtbase
+    wrapQtAppsHook
+    qtwebengine
+  ]
+  ++ lib.optionals enableJupyter [
+    boost
+    jsoncpp
+    openssl
+    zmqpp
+  ];
 
   meta = {
-    description = "Easy to use, general purpose Computer Algebra System${lib.optionalString enableGui ", built with GUI."}";
+    description = "Easy to use, general purpose Computer Algebra System, optionally with GUI";
     homepage = "http://www.yacas.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];

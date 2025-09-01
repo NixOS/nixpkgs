@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    description = "JackAss is a VST plugin that provides JACK-MIDI support for VST hosts";
+    description = "VST plugin that provides JACK-MIDI support for VST hosts";
     longDescription = ''
       Simply load the plugin in your favourite host to get a JACK-MIDI port.
       Optionally includes a special Wine build for running in Wine

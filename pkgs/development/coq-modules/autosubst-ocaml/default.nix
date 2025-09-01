@@ -43,7 +43,7 @@ mkCoqDerivation {
   '';
 
   meta = with lib; {
-    description = "An OCaml reimplementation of the Autosubst 2 code generator";
+    description = "OCaml reimplementation of the Autosubst 2 code generator";
     homepage = "https://github.com/uds-psl/autosubst-ocaml";
     mainProgram = "autosubst";
     maintainers = with maintainers; [ chen ];

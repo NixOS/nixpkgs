@@ -45,7 +45,6 @@
   mongoengine,
   mongomock,
   peewee,
-  pony,
   pytestCheckHook,
   requests,
   zxcvbn,
@@ -103,23 +102,21 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      authlib
-      flask-sqlalchemy-lite
-      freezegun
-      mongoengine
-      mongomock
-      peewee
-      pony
-      pytestCheckHook
-      requests
-      zxcvbn
-    ]
-    ++ optional-dependencies.babel
-    ++ optional-dependencies.common
-    ++ optional-dependencies.fsqla
-    ++ optional-dependencies.mfa;
+  nativeCheckInputs = [
+    authlib
+    flask-sqlalchemy-lite
+    freezegun
+    mongoengine
+    mongomock
+    peewee
+    pytestCheckHook
+    requests
+    zxcvbn
+  ]
+  ++ optional-dependencies.babel
+  ++ optional-dependencies.common
+  ++ optional-dependencies.fsqla
+  ++ optional-dependencies.mfa;
 
   preCheck = ''
     pybabel compile --domain flask_security -d flask_security/translations
@@ -132,11 +129,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_security" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pallets-eco/flask-security/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/pallets-eco/flask-security";
     description = "Quickly add security features to your Flask application";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

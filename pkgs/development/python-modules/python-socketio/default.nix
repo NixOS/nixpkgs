@@ -18,7 +18,7 @@
 
   # tests
   msgpack,
-  pytestCheckHook,
+  pytest7CheckHook,
   simple-websocket,
   uvicorn,
 
@@ -53,10 +53,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     msgpack
-    pytestCheckHook
+    pytest7CheckHook
     uvicorn
     simple-websocket
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "socketio" ];
 

@@ -15,14 +15,14 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2506";
+  version = "2508.1";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-wzUAyNCfMlABBd3yzFZkPUiy7spuHrekTqVoyUB9jxI=";
+    hash = "sha256-yWUZF/Chgi9bd5gF9qU1jiiIvHOHBUw7tLWxyNUZy9g=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -66,20 +66,18 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ nasm ];
 
-  buildInputs =
-    [
-      xxHash
-      fmt
-    ]
-    ++ (with qt5; [
-      qtbase
-      qtdeclarative
-      qtquickcontrols
-      qtquickcontrols2
-    ]);
+  buildInputs = [
+    xxHash
+    fmt
+  ]
+  ++ (with qt5; [
+    qtbase
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+  ]);
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "USE_LINKER" "lld")
     (lib.cmakeBool "ENABLE_LTO" true)
     (lib.cmakeBool "ENABLE_ASSERTIONS" false)

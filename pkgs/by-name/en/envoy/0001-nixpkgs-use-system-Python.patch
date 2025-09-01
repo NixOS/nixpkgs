@@ -45,12 +45,12 @@ index 9867dc3a46dbe780eb3c02bad8f6a22a2c7fd97e..ff8685e0e437aee447218e912f1cf3e4
          extra_pip_args = ["--require-hashes"],
      )
 diff --git a/bazel/repositories_extra.bzl b/bazel/repositories_extra.bzl
-index 7a9d3bbb53b567a8f398abaefe5ff044056d4d21..a5b75718de667883824e4320e2d563830b02f5d2 100644
+index 84e2a69c092fa4c824401a52b2c39a49f83d0837..e5afd5743613ad5fdbf7b28a99b6d1b5902566ac 100644
 --- a/bazel/repositories_extra.bzl
 +++ b/bazel/repositories_extra.bzl
-@@ -3,19 +3,11 @@ load("@bazel_features//:deps.bzl", "bazel_features_deps")
- load("@com_google_protobuf//bazel/private:proto_bazel_features.bzl", "proto_bazel_features")
+@@ -4,19 +4,11 @@ load("@com_google_protobuf//bazel/private:proto_bazel_features.bzl", "proto_baze
  load("@emsdk//:deps.bzl", emsdk_deps = "deps")
+ load("@envoy_examples//bazel:env.bzl", "envoy_examples_env")
  load("@proxy_wasm_cpp_host//bazel/cargo/wasmtime/remote:crates.bzl", "crate_repositories")
 -load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
 +load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -69,7 +69,7 @@ index 7a9d3bbb53b567a8f398abaefe5ff044056d4d21..a5b75718de667883824e4320e2d56383
          ignore_root_user_error = False):
      bazel_features_deps()
      emsdk_deps()
-@@ -23,13 +15,6 @@ def envoy_dependencies_extra(
+@@ -24,13 +16,6 @@ def envoy_dependencies_extra(
      crate_repositories()
      py_repositories()
  

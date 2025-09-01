@@ -42,28 +42,26 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "9.3.3";
+  version = "9.6.5";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
-    url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+yhHFt9SvYUl/tjfwZyR0OJK8+BDzieLS2AFY1VyNLE=";
+    url = "https://codeberg.org/Limine/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-d3teFW6eSKG+VIWbuOs5a9f0cxv2Fssepkcjfle7Ems=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs =
-    [
-      llvmPackages.clang-unwrapped
-      llvmPackages.libllvm
-      llvmPackages.lld
-    ]
-    ++ lib.optionals (enableAll || buildCDs) [
-      mtools
-    ]
-    ++ lib.optionals hasX86 [ nasm ];
+  nativeBuildInputs = [
+    llvmPackages.libllvm
+    llvmPackages.lld
+  ]
+  ++ lib.optionals (enableAll || buildCDs) [
+    mtools
+  ]
+  ++ lib.optionals hasX86 [ nasm ];
 
   outputs = [
     "out"
@@ -80,19 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
+    );
 
   passthru.tests = nixosTests.limine;
 
   meta = {
     homepage = "https://limine-bootloader.org/";
-    changelog = "https://raw.githubusercontent.com/limine-bootloader/limine/refs/tags/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://codeberg.org/Limine/Limine/raw/tag/v${finalAttrs.version}/ChangeLog";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
@@ -103,11 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       asl20 # cc-runtime
       bsd0 # freestanding-headers, freestanding-toolchain
-      bsd2 # limine, flanterm, libfdt, nyu-efi
-      bsd2Patent # nyu-efi
-      bsd3 # nyu-efi
-      bsdAxisNoDisclaimerUnmodified # nyu-efi
-      mit # nyu-efi, stb_image
+      bsd2 # limine, flanterm, libfdt, PicoEFI
+      bsd2Patent # PicoEFI
+      bsd3 # PicoEFI
+      bsdAxisNoDisclaimerUnmodified # PicoEFI
+      mit # PicoEFI, stb_image
       zlib # tinf
     ];
     maintainers = with lib.maintainers; [

@@ -24,17 +24,16 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs =
-    [
-      libev
-      libconfig
-      perl
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      tcp_wrappers
-    ];
+  buildInputs = [
+    libev
+    libconfig
+    perl
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    tcp_wrappers
+  ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "USELIBCAP=1"

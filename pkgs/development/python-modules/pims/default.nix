@@ -37,9 +37,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pims" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::Warning"
+  pytestFlags = [
+    "-Wignore::Warning"
   ];
 
   disabledTests = [

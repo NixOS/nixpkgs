@@ -52,15 +52,14 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall =
-    ''
-      installManPage doc/yay.8
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --name yay.bash --bash completions/bash
-      installShellCompletion --name yay.fish --fish completions/fish
-      installShellCompletion --name _yay --zsh completions/zsh
-    '';
+  postInstall = ''
+    installManPage doc/yay.8
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --name yay.bash --bash completions/bash
+    installShellCompletion --name yay.fish --fish completions/fish
+    installShellCompletion --name _yay --zsh completions/zsh
+  '';
 
   meta = {
     description = "AUR Helper written in Go";
@@ -68,6 +67,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "yay";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

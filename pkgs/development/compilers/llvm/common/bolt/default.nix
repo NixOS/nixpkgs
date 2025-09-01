@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-  ] ++ devExtraCmakeFlags;
+  ]
+  ++ devExtraCmakeFlags;
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..
@@ -92,6 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";
-    description = "LLVM post-link optimizer.";
+    description = "LLVM post-link optimizer";
   };
 })

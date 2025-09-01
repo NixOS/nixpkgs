@@ -41,14 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
   buildInputs = [
     boost
@@ -84,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "LenMus Phonascus is a program for learning music";
+    description = "Program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
       It allows you to focus on specific skills and exercises, on both theory and aural training.

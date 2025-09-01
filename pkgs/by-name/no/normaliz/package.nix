@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "normaliz";
-  version = "3.10.4";
+  version = "3.10.5";
 
   src = fetchFromGitHub {
     owner = "normaliz";
     repo = "normaliz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qmbLgjAkLrW8rqFthK3H4n63zLVJ33Pe82V7yU1StOo=";
+    hash = "sha256-Ku5OTtRxrs9qaSE0mle17eJSE2yKZUUsflEZk4k91jM=";
   };
 
   buildInputs = [

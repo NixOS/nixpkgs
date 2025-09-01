@@ -68,12 +68,13 @@
           ProtectControlGroups = true;
           LockPersonality = true;
           RestrictRealtime = true;
+          RuntimeDirectory = "clash-verge-rev";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
-          RestrictNamespaces = [ "~user cgroup ipc mnt uts" ];
+          RestrictNamespaces = [ "~user cgroup mnt uts" ];
           RestrictAddressFamilies = [
-            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_RAW"
+            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_UNIX"
           ];
           CapabilityBoundingSet = [
             "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "volk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
     fetchSubmodules = true;
   };
@@ -35,13 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags =
-    [ (lib.cmakeBool "ENABLE_MODTOOL" enableModTool) ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # offset 14335 in1: -1.03372 in2: -1.03371 tolerance was: 1e-05
-      # volk_32f_log2_32f: fail on arch neon
-      "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;qa_volk_32f_log2_32f"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_MODTOOL" enableModTool)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # offset 14335 in1: -1.03372 in2: -1.03371 tolerance was: 1e-05
+    # volk_32f_log2_32f: fail on arch neon
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;qa_volk_32f_log2_32f"
+  ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)

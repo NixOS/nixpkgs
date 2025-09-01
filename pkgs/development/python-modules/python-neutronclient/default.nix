@@ -24,7 +24,6 @@
   oslotest,
   osprofiler,
   python-openstackclient,
-  subunit,
   requests-mock,
   stestr,
   testtools,
@@ -34,12 +33,13 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.4.0";
+  version = "11.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h0Ehk2Lkv5wuQ/LmyuTUmR7Y+d+QY/Q0CKC2WLA9YuI=";
+    pname = "python_neutronclient";
+    inherit version;
+    hash = "sha256-PGlYCI0YyGdqEKv52UuNvxqYR0HLuYhVTyFogHl+By8=";
   };
 
   build-system = [
@@ -69,7 +69,6 @@ buildPythonPackage rec {
     oslotest
     osprofiler
     python-openstackclient
-    subunit
     requests-mock
     stestr
     testtools

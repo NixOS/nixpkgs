@@ -16,7 +16,7 @@ symlinkJoin rec {
   ];
 
   meta = {
-    description = "Fira font family including Fira Sans and Fira Mono";
+    description = "Font family including Fira Sans and Fira Mono";
     homepage = "https://bboxtype.com/fira/";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

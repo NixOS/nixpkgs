@@ -5,10 +5,13 @@
   gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "ablog";
+let
   version = "0.11.12";
-  format = "pyproject";
+in
+python3Packages.buildPythonApplication {
+  pname = "ablog";
+  inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
@@ -20,9 +23,8 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [
     setuptools
     setuptools-scm
+    wheel
   ];
-
-  nativeBuildInputs = with python3Packages; [ wheel ];
 
   dependencies = with python3Packages; [
     docutils
@@ -39,23 +41,23 @@ python3Packages.buildPythonApplication rec {
     defusedxml
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
-    "--rootdir"
-    "src/ablog"
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+  pytestFlags = [
+    "--rootdir=src/ablog"
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
-  # assert "post 1" not in html
-  # AssertionError
-  disabledTests = [ "test_not_safe_for_parallel_read" ];
+  disabledTests = [
+    # upstream investigation is still ongoing
+    # https://github.com/sunpy/ablog/issues/302
+    "test_not_safe_for_parallel_read"
+    # need sphinx old version
+    "test_feed"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    description = "ABlog for blogging with Sphinx";
+    description = "Sphinx extension that converts any documentation or personal website project into a full-fledged blog";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
     license = lib.licenses.mit;

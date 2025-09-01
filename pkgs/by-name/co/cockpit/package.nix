@@ -16,6 +16,7 @@
   glib-networking,
   gnused,
   gnutls,
+  hostname,
   iproute2,
   json-glib,
   krb5,
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "338";
+  version = "345";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-ZNvMLzkDh1SuyHuChWM0YykSYu152JHvjrKVm+u0Upw=";
+    hash = "sha256-dK2sMqPmxNKMKrlNkr7FoSaHY5Qn1dtNHX32d/IYu8U=";
     fetchSubmodules = true;
   };
 
@@ -183,8 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/share/cockpit/issue/update-issue \
       --prefix PATH : ${
         lib.makeBinPath [
-          iproute2
           gnused
+          hostname
+          iproute2
         ]
       }
 

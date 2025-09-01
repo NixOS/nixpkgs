@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "edusong";
   version = "4.0";
 
   src = fetchzip {
-    name = "${pname}-${version}";
+    name = "edusong-${finalAttrs.version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/eduSong_Unicode.zip";
     hash = "sha256-4NBnwMrYufeZbgSiD2fAhe4tuy0aAA5u9tWwjQQjEQk=";
   };
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.cc-by-nd-30;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

@@ -19,6 +19,6 @@ callPackage ../generic.nix rec {
   meta = {
     homepage = "https://github.com/TrashboxBobylev/Shorter-Pixel-Dungeon";
     downloadPage = "https://github.com/TrashboxBobylev/Shorter-Pixel-Dungeon/releases";
-    description = "A shorter fork of the Shattered Pixel Dungeon roguelike";
+    description = "Shorter fork of the Shattered Pixel Dungeon roguelike";
   };
 }

@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "3.3.3";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-ET0cygX/r/YXGWpPU01FnBoLRtjo1ddXEiVIva71aE8=";
+    hash = "sha256-84H6JOqKcFSApNnm/C4ftuxqkQrO064OORQSQXIiHps=";
   };
 
   sourceRoot = "${src.name}/source";
@@ -41,17 +41,16 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      # needed for gstreamer https
-      glib-networking
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    libadwaita
+    # needed for gstreamer https
+    glib-networking
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   pythonRelaxDeps = [ "mpris_server" ];
 

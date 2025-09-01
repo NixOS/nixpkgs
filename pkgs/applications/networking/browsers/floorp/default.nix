@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.27.0";
+    packageVersion = "11.30.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,14 +17,14 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.12.0";
+    version = "128.14.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-lQ84NNWlu4hVKK/CDIDS5JKGdD4i7TTjv4x/dQhDJwo=";
+      hash = "sha256-4IAN0S9JWjaGXtnRUJz3HqUm+ZWL7KmryLu8ojSXiqg=";
     };
 
     extraConfigureFlags = [
@@ -67,6 +67,8 @@
     webrtcSupport = true;
     enableOfficialBranding = false;
     geolocationSupport = true;
+    # https://github.com/NixOS/nixpkgs/issues/418473
+    ltoSupport = false;
   }
 ).overrideAttrs
   (prev: {

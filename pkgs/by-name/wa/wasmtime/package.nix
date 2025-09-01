@@ -9,20 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "32.0.0";
+  version = "33.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MGeLnxUmhhuW1FInBCc1xzppgvf3W8J0sy9v9QjgBIA=";
+    hash = "sha256-/i//5kPN1/zQnfDZWuJldKdFWk/DKAf5b5P4F58rgPI=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-m9TsTTx/ExqE9/W3xVkYxtgKh8AlGUJTlGPMIDK2xog=";
+
+  cargoHash = "sha256-4ziMGmBbQ4anXvF6wwK1ezYXHY7JBvMRmPDreNME0H8=";
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -59,14 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -r ''${!outputLib}/lib
 
       # copy the build.rs generated c-api headers
-      install -d -m0755 $dev/include/wasmtime
       # https://github.com/rust-lang/cargo/issues/9661
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/*.h \
-        $dev/include
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/wasmtime/*.h \
-        $dev/include/wasmtime
+      cp -r target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include $dev/include
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
@@ -87,7 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = lib.licenses.asl20;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.llvm-exception
+    ];
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre

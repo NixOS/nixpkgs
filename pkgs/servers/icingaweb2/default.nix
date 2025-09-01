@@ -9,20 +9,20 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.12.4";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    hash = "sha256-Ds1SxNQ3WAhY79SWl1ZIQUl2Pb8bZlHISRaSEe+Phos=";
+    hash = "sha256-g55TR7rgWnxNa1OQXOaLAPg3ijtx1u3mqxAxcMLhcB4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share
-    cp -ra application bin etc library modules public $out
+    cp -ra application bin etc library modules public schema $out
     cp -ra doc $out/share
 
     wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}"

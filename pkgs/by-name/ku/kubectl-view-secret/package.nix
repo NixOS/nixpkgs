@@ -20,12 +20,12 @@ buildGoModule rec {
   subPackages = [ "./cmd/" ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/kubectl-view-secret
+    mv $out/bin/cmd $out/bin/kubectl-view_secret
   '';
 
   meta = {
     description = "Kubernetes CLI plugin to decode Kubernetes secrets";
-    mainProgram = "kubectl-view-secret";
+    mainProgram = "kubectl-view_secret";
     homepage = "https://github.com/elsesiy/kubectl-view-secret";
     changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -1,35 +1,43 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
   autoconf,
   automake,
-  makeBinaryWrapper,
-  pkg-config,
-  pciutils,
-  libusb1,
+  bashNonInteractive,
+  coreutils,
+  fetchFromGitHub,
   fuse,
-  busybox,
+  gawk,
+  gnugrep,
+  gnused,
+  lib,
+  libusb1,
+  makeBinaryWrapper,
+  pciutils,
+  pkg-config,
+  procps,
   pv,
+  stdenv,
+  which,
+  util-linux,
   withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.2.4";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
     rev = "rshim-${version}";
-    hash = "sha256-z0Uk520vsBERbeVtxBqXPXSWhO0sLD5GCQy1dQsJdEg=";
+    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     pkg-config
-  ] ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
+  ]
+  ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
     pciutils
@@ -45,27 +53,34 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  installPhase =
-    ''
-      mkdir -p "$out"/bin
-      cp -a src/rshim "$out"/bin/
-    ''
-    + lib.optionalString withBfbInstall ''
-      cp -a scripts/bfb-install "$out"/bin/
-    '';
+  installPhase = ''
+    mkdir -p "$out"/bin
+    cp -a src/rshim "$out"/bin/
+  ''
+  + lib.optionalString withBfbInstall ''
+    cp -a scripts/bfb-install "$out"/bin/
+  '';
 
   postFixup = lib.optionalString withBfbInstall ''
     wrapProgram $out/bin/bfb-install \
       --set PATH ${
         lib.makeBinPath [
-          busybox
+          bashNonInteractive
+          coreutils
+          gawk
+          gnugrep
+          gnused
+          pciutils
+          procps
           pv
+          util-linux
+          which
         ]
       }
   '';
 
   meta = with lib; {
-    description = "user-space rshim driver for the BlueField SoC";
+    description = "User-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
       BlueField target from external host machine. The current version

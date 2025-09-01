@@ -12,6 +12,7 @@
   libpulseaudio,
   libva,
   libxkbcommon,
+  libxml2_13,
   makeShellWrapper,
   minizip,
   nss,
@@ -56,9 +57,11 @@ let
     buildInputs = [
       elfutils
       ffmpeg_6-headless
+      libedit
       libpulseaudio
       libva
       libxkbcommon
+      libxml2_13
       minizip
       nss
       stdenv.cc.cc
@@ -103,8 +106,6 @@ let
       rm $out/lib/libEGL.so*
       rm $out/lib/libdrm.so*
       rm $out/lib/libdrm*
-
-      ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
 
       # Keep dependencies where the version from nixpkgs is higher.
       cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2

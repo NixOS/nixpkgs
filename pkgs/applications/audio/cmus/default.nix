@@ -145,19 +145,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.flatten (lib.concatMap (a: a.deps) opts);
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.flatten (lib.concatMap (a: a.deps) opts);
 
   prefixKey = "prefix=";
 
   configureFlags = [
     "CONFIG_WAV=y"
     "HOSTCC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.concatMap (a: a.flags) opts;
+  ]
+  ++ lib.concatMap (a: a.flags) opts;
 
   makeFlags = [ "LD=$(CC)" ];
 

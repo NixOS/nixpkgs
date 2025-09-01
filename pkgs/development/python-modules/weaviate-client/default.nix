@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.12.0";
+  version = "4.16.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-7Mg6d7gbBQfbkxsZI6aGVpfdhBS6MwmK6cl/8koy46k=";
+    hash = "sha256-AjZZ9kmVxePlomX6bXUohZZXl2IXMbrjG00qNlGdjRc=";
   };
 
   pythonRelaxDeps = [
@@ -87,7 +87,7 @@ buildPythonPackage rec {
     "test_client_with_extra_options"
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
     "mock_tests"
   ];

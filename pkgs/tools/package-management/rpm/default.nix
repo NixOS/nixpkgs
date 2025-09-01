@@ -44,25 +44,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
   };
 
-  postPatch =
-    ''
-      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
-      sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
-    ''
-    # clang: error: unknown argument: '-fhardened'
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "-fhardened" ""
-    '';
+  postPatch = ''
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
+    sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
+  ''
+  # clang: error: unknown argument: '-fhardened'
+  + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-fhardened" ""
+  '';
 
-  outputs =
-    [
-      "out"
-      "man"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "dev"
-    ];
+  outputs = [
+    "out"
+    "man"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "dev"
+  ];
   separateDebugInfo = true;
 
   nativeBuildInputs = [
@@ -71,68 +69,68 @@ stdenv.mkDerivation rec {
     autoconf
     python3
     gettext
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
-  buildInputs =
-    [
-      bzip2
-      zlib
-      zstd
-      file
-      libarchive
-      xz
-      lua
-      sqlite
-      openssl
-      readline
-      rpm-sequoia
-      gnupg
-    ]
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      audit
-      systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_13
-      (darwinMinVersionHook "13.0")
-    ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
+  buildInputs = [
+    bzip2
+    zlib
+    zstd
+    file
+    libarchive
+    xz
+    lua
+    sqlite
+    openssl
+    readline
+    rpm-sequoia
+    gnupg
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    audit
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_13
+    (darwinMinVersionHook "13.0")
+  ];
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./sighandler_t-macos.patch
   ];
 
-  cmakeFlags =
-    [
-      "-DWITH_DBUS=OFF"
-      # libselinux is missing propagatedBuildInputs
-      "-DWITH_SELINUX=OFF"
+  cmakeFlags = [
+    "-DWITH_DBUS=OFF"
+    # libselinux is missing propagatedBuildInputs
+    "-DWITH_SELINUX=OFF"
 
-      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DMKTREE_BACKEND=rootfs"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      # Test suite rely on either podman or bubblewrap
-      "-DENABLE_TESTSUITE=OFF"
+    "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DMKTREE_BACKEND=rootfs"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    # Test suite rely on either podman or bubblewrap
+    "-DENABLE_TESTSUITE=OFF"
 
-      "-DWITH_CAP=OFF"
-      "-DWITH_AUDIT=OFF"
-      "-DWITH_ACL=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DWITH_LIBELF=OFF"
-      "-DWITH_LIBDW=OFF"
-    ]
-    ++ lib.optionals disableUnshare [
-      "-DHAVE_UNSHARE=OFF"
-    ];
+    "-DWITH_CAP=OFF"
+    "-DWITH_AUDIT=OFF"
+    "-DWITH_ACL=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DWITH_LIBELF=OFF"
+    "-DWITH_LIBDW=OFF"
+  ]
+  ++ lib.optionals disableUnshare [
+    "-DHAVE_UNSHARE=OFF"
+  ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [
     popt
-  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   enableParallelBuilding = true;
 
@@ -142,7 +140,7 @@ stdenv.mkDerivation rec {
       gpl2Plus
       lgpl21Plus
     ];
-    description = "RPM Package Manager";
+    description = "RPM package manager";
     maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };

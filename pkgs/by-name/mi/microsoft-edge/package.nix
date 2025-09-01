@@ -6,7 +6,6 @@
   patchelf,
   bintools,
   dpkg,
-
   # Linked dynamic libraries.
   alsa-lib,
   at-spi2-atk,
@@ -47,20 +46,15 @@
   pipewire,
   vulkan-loader,
   wayland, # ozone/wayland
-
   # Command line programs
   coreutils,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Will crash without.
   systemd,
-
   # Loaded at runtime.
   libexif,
   pciutils,
-
   # Additional dependencies according to other distros.
   ## Ubuntu
   curl,
@@ -79,111 +73,100 @@
   ## Gentoo
   bzip2,
   libcap,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
-
   adwaita-icon-theme,
   gsettings-desktop-schemas,
-
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
   libva,
   libvaSupport ? true,
-
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
-
   # For QT support
   qt6,
-
   # Edge AAD sync
   cacert,
   libsecret,
-
   # Edge Specific
   libuuid,
 }:
-
 let
-
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cacert
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-      libsecret
-      libuuid
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals libvaSupport [ libva ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cacert
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libxkbcommon
+    libXrandr
+    libXrender
+    libXScrnSaver
+    libxshmfence
+    libXtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+    libsecret
+    libuuid
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals libvaSupport [ libva ];
 in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "137.0.3296.68";
+  version = "139.0.3405.125";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-dgmQF6zpd8dAYKoTSiidk8VU6dZ/ZWEDlYD91IPaDEE=";
+    hash = "sha256-MqJPlFoPiTIReXRhLJGR+nbOVwWcpiHTMr5s+M6KXqE=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -292,6 +275,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
+      bricklou
+      jonhermansen
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

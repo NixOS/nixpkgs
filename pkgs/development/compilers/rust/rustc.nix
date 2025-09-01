@@ -24,7 +24,6 @@
   xz,
   zlib,
   bintools,
-  libiconv,
   which,
   libffi,
   withBundledLLVM ? false,
@@ -83,13 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  # The Rust pkg-config crate does not support prefixed pkg-config executables[1],
-  # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
-  # environment variables.
-  # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings [ "-" ] [ "_" ] stdenv.buildPlatform.rust.rustcTarget}" =
-    "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
-
   NIX_LDFLAGS = toString (
     # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
     # This doesn't apply to cross-building for FreeBSD because the host
@@ -102,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
         (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
         "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
@@ -119,9 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
       cxxPrefixForStdenv =
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
-      setBuild = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
-      setHost = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
-      setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTarget}\"";
+      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTarget}\"";
+      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTarget}\"";
       ccForBuild = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       cxxForBuild = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       ccForHost = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
@@ -153,11 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
       # std is built for all platforms in --target.
       "--target=${
         concatStringsSep "," (
-          [
-            stdenv.targetPlatform.rust.rustcTargetSpec
-          ]
           # Other targets that don't need any extra dependencies to build.
-          ++ optionals (!fastCross) [
+          optionals (!fastCross) [
             "wasm32-unknown-unknown"
             "wasm32v1-none"
             "bpfel-unknown-none"
@@ -175,6 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
           ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.hostPlatform.rust.rustcTargetSpec
           ]
+          ++ [
+            # `make install` only keeps the docs of the last target in the list.
+            # If the `targetPlatform` is not the last entry, we may end up without
+            # `alloc` or `std` docs (if the last target is `no_std`).
+            # More information: https://github.com/rust-lang/rust/issues/140922
+            stdenv.targetPlatform.rust.rustcTargetSpec
+          ]
         )
       }"
 
@@ -182,9 +177,38 @@ stdenv.mkDerivation (finalAttrs: {
       "${setHost}.cc=${ccForHost}"
       "${setTarget}.cc=${ccForTarget}"
 
+      # The Rust compiler build identifies platforms by Rust target
+      # name, and later arguments override previous arguments. This
+      # means that when platforms differ in configuration but overlap
+      # in Rust target name (for instance, `pkgsStatic`), only one
+      # setting will be applied for any given option.
+      #
+      # This is usually mostly harmless, especially as `fastCross`
+      # means that we usually only compile `std` in such cases.
+      # However, the build does still need to link helper tools for the
+      # build platform in that case. This was breaking the Darwin
+      # `pkgsStatic` build, as it was attempting to link build tools
+      # with the target platform’s static linker, and failing to locate
+      # an appropriate static library for `-liconv`.
+      #
+      # Since the static build does not link anything for the target
+      # platform anyway, we put the target linker first so that the
+      # build platform linker overrides it when the Rust target names
+      # overlap, allowing the helper tools to build successfully.
+      #
+      # Note that Rust does not remember these settings in the built
+      # compiler, so this does not compromise any functionality of the
+      # resulting compiler.
+      #
+      # The longer‐term fix would be to get Rust to use a more nuanced
+      # understanding of platforms, such as by explicitly constructing
+      # and passing Rust JSON target definitions that let us
+      # distinguish the platforms in cases like these. That would also
+      # let us supplant various hacks around the wrappers and hooks
+      # that we currently need.
+      "${setTarget}.linker=${ccForTarget}"
       "${setBuild}.linker=${ccForBuild}"
       "${setHost}.linker=${ccForHost}"
-      "${setTarget}.linker=${ccForTarget}"
 
       "${setBuild}.cxx=${cxxForBuild}"
       "${setHost}.cxx=${cxxForHost}"
@@ -228,6 +252,17 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/NixOS/nixpkgs/issues/311930
       "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
       "--enable-use-libcxx"
+    ]
+    ++ optionals (!stdenv.hostPlatform.isx86_32) [
+      # This enables frame pointers for the compiler itself.
+      #
+      # Note that when compiling std, frame pointers (or at least non-leaf
+      # frame pointers, depending on version) are unconditionally enabled and
+      # cannot be overridden, so we do not touch that. (Also note this only
+      # applies to functions that can be immediately compiled when building
+      # std. Generic functions that do codegen when called in user code obey
+      # -Cforce-frame-pointers specified then, if any)
+      "--set rust.frame-pointers"
     ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -258,6 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
         python ./x.py --keep-stage=0 --stage=1 install library/std
         mkdir -v $out/bin $doc $man
         ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+        ln -s ${rustc.unwrapped}/libexec $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
         ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
@@ -274,47 +310,46 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch =
-    ''
-      patchShebangs src/etc
+  postPatch = ''
+    patchShebangs src/etc
 
-      # rust-lld is the name rustup uses for its bundled lld, so that it
-      # doesn't conflict with any system lld.  This is not an
-      # appropriate default for Nixpkgs, where there is no rust-lld.
-      substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
-        --replace-quiet '"rust-lld"' '"lld"'
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
 
-      ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
+    ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
-      # Useful debugging parameter
-      # export VERBOSE=1
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
-      # Replace hardcoded path to strip with llvm-strip
-      # https://github.com/NixOS/nixpkgs/issues/299606
-      substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
-        --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # See https://github.com/jemalloc/jemalloc/issues/1997
-      # Using a value of 48 should work on both emulated and native x86_64-darwin.
-      export JEMALLOC_SYS_WITH_LG_VADDR=48
-    ''
-    + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
-      mkdir .cargo
-      cat > .cargo/config.toml <<\EOF
-      [source.crates-io]
-      replace-with = "vendored-sources"
-      [source.vendored-sources]
-      directory = "vendor"
-      EOF
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
-      # lzma-sys bundles an old version of xz that doesn't build
-      # on modern FreeBSD, use the system one instead
-      substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
-          --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
-    '';
+    # Useful debugging parameter
+    # export VERBOSE=1
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
+    # Replace hardcoded path to strip with llvm-strip
+    # https://github.com/NixOS/nixpkgs/issues/299606
+    substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
+      --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  ''
+  + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
+    mkdir .cargo
+    cat > .cargo/config.toml <<\EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "vendor"
+    EOF
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
+  '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
@@ -326,39 +361,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   depsBuildTarget = lib.optionals stdenv.targetPlatform.isMinGW [ bintools ];
 
-  nativeBuildInputs =
-    [
-      file
-      python3
-      rustc
-      cmake
-      which
-      libffi
-      removeReferencesTo
-      pkg-config
-      xz
-    ]
-    ++ optionals fastCross [
-      lndir
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    file
+    python3
+    rustc
+    cmake
+    which
+    libffi
+    removeReferencesTo
+    pkg-config
+    xz
+  ]
+  ++ optionals fastCross [
+    lndir
+    makeWrapper
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      zlib
-    ]
-    ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
-      llvmPackages.libunwind
-      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-      (runCommandLocal "libunwind-libgcc" { } ''
-        mkdir -p $out/lib
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-      '')
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ]
+  ++ optional (!withBundledLLVM) llvmShared.lib
+  ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
 
   outputs = [
     "out"
@@ -400,10 +426,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
+    inherit (rustc) targetPlatforms targetPlatformsWithHostTools badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
   meta = with lib; {
@@ -415,14 +442,9 @@ stdenv.mkDerivation (finalAttrs: {
       licenses.mit
       licenses.asl20
     ];
-    platforms = rustc.tier1TargetPlatforms;
+    platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
-    # Builds, but can't actually compile anything
-    # https://github.com/NixOS/nixpkgs/issues/311930
-    # https://github.com/rust-lang/rust/issues/55120
-    # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
   };
 })

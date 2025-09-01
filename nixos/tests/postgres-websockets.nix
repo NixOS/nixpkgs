@@ -58,7 +58,7 @@
       token = jwt.encode({ "mode": "rw" }, "reallyreallyreallyreallyverysafe")
 
       def test():
-          machine.wait_for_unit("postgresql.service")
+          machine.wait_for_unit("postgresql.target")
           machine.wait_for_unit("postgres-websockets.service")
 
           machine.succeed(f"echo 'hi there' | websocat --no-close 'ws://localhost:3000/test/{token}' > output &")

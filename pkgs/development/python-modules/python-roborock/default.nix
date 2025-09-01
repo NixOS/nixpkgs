@@ -20,11 +20,12 @@
   pytestCheckHook,
   pythonOlder,
   vacuum-map-parser-roborock,
+  pyshark,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.19.0";
+  version = "2.39.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-d0rjMo9/ZsqygxdNf78t3Ct2VJjvYQrCrYkIeG6Zkkc=";
+    hash = "sha256-V0zuUlJ0wPpxOKtY7ydbJ7mhWT5xGSLv19csmpWCO1Q=";
   };
 
   postPatch = ''
@@ -56,7 +57,9 @@ buildPythonPackage rec {
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
+    pyshark
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
     aioresponses

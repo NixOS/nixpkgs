@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.1.0";
-  sha256 = "c8171b2aeccb28c8c5347f273a25adae172fb2a65bc8c975bc22ec58949d0eaf";
+  version = "24.7.0";
+  sha256 = "cf74a77753b629ffebd2e38fb153a21001b2b7a3c365c0ec7332b120b98c7251";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -47,17 +47,18 @@ buildNodejs {
     ++ [
       ./configure-armv6-vfpv2.patch
       ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
 
-      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
+      # TODO: newer GYP versions have been patched to be more compatible with Nix sandbox. We need
+      # to adapt our patch to this newer version, see https://github.com/NixOS/nixpkgs/pull/434742.
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
-        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
+        url = "https://github.com/nodejs/node/commit/886e4b3b534a9f3ad2facbc99097419e06615900.patch?full_index=1";
+        hash = "sha256-HFTabl92NPkBwXD0mUGDN+Gzabyi+Ph0kL0FEHHknbk=";
         revert = true;
       })
+      ./bypass-darwin-xcrun-node16.patch
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts

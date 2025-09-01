@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
-  version = "5.23.1";
+  version = "6.1.1";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-GPOISOR3N8CTS7eNtDYQkzX1bjZYfOMz4zj//K32Dsw=";
+    hash = "sha256-jlxHJRJp8ZzTRn6P/GffBPWlgRsboTYLi9/Rh/XQZGU=";
   };
 
   buildInputs = [ nodejs-slim ];

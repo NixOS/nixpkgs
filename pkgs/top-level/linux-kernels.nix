@@ -12,7 +12,6 @@
   newScope,
   lib,
   fetchurl,
-  gcc10Stdenv,
 }:
 
 # When adding a kernel:
@@ -179,22 +178,6 @@ in
           ];
         };
 
-        linux_ham = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.13";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            {
-              name = "ax25-ham";
-              patch = null;
-              extraStructuredConfig = {
-                HAMRADIO = lib.kernel.yes;
-                AX25 = lib.kernel.module;
-              };
-            }
-          ];
-        };
-
         linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
           kernelPatches = [
             kernelPatches.bridge_stp_helper
@@ -227,24 +210,8 @@ in
           ];
         };
 
-        linux_6_13 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.13";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_6_14 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.14";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_6_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.15";
+        linux_6_16 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.16";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -319,35 +286,34 @@ in
 
         linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
 
-        linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
-
-        linux_5_4_hardened = markBroken (
-          hardenedKernelFor kernels.linux_5_4 {
-            stdenv = gcc10Stdenv;
-            buildPackages = buildPackages // {
-              stdenv = buildPackages.gcc10Stdenv;
-            };
-          }
-        );
-        linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
-        linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
-        linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
-        linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
-        linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
-        linux_6_14_hardened = hardenedKernelFor kernels.linux_6_14 { };
 
+        linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
       }
       // lib.optionalAttrs config.allowAliases {
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
+        linux_6_13 = throw "linux 6.13 was removed because it has reached its end of life upstream";
+        linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
+        linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
+
+        linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+        linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
 
         linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
+        linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
         linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
+        linux_6_13_hardened = throw "linux 6.13 was removed because it has reached its end of life upstream";
+        linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
+        linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
+
+        linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
       }
     )
   );
@@ -373,7 +339,12 @@ in
         inherit (kernel) stdenv; # in particular, use the same compiler by default
 
         # to help determine module compatibility
-        inherit (kernel) isZen isHardened isLibre;
+        inherit (kernel)
+          isLTS
+          isZen
+          isHardened
+          isLibre
+          ;
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -383,6 +354,8 @@ in
         inherit (pkgs) bcc bpftrace; # added 2021-12
         inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
         inherit (pkgs) dpdk; # added 2024-03
+
+        acer-wmi-battery = callPackage ../os-specific/linux/acer-wmi-battery { };
 
         acpi_call = callPackage ../os-specific/linux/acpi-call { };
 
@@ -413,8 +386,6 @@ in
 
         cpupower = callPackage ../os-specific/linux/cpupower { };
 
-        deepin-anything-module = callPackage ../os-specific/linux/deepin-anything-module { };
-
         ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
         dddvb = callPackage ../os-specific/linux/dddvb { };
@@ -424,6 +395,11 @@ in
         digimend = callPackage ../os-specific/linux/digimend { };
 
         dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+
+        ecapture = callPackage ../by-name/ec/ecapture/package.nix {
+          withNonBTF = true;
+          inherit kernel;
+        };
 
         exfat-nofuse =
           if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
@@ -610,17 +586,13 @@ in
 
         perf = callPackage ../os-specific/linux/kernel/perf { };
 
-        phc-intel =
-          if lib.versionAtLeast kernel.version "4.10" then
-            callPackage ../os-specific/linux/phc-intel { }
-          else
-            null;
-
         prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
         isgx = callPackage ../os-specific/linux/isgx { };
 
         rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
+
+        sheep-net = callPackage ../os-specific/linux/sheep-net { };
 
         shufflecake = callPackage ../os-specific/linux/shufflecake { };
 
@@ -637,6 +609,8 @@ in
         tmon = callPackage ../os-specific/linux/tmon { };
 
         tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+
+        tt-kmd = callPackage ../os-specific/linux/tt-kmd { };
 
         turbostat = callPackage ../os-specific/linux/turbostat { };
 
@@ -732,6 +706,7 @@ in
         zfs = throw "linuxPackages.zfs has been removed, use zfs_* instead, or linuxPackages.\${pkgs.zfs.kernelModuleAttribute}"; # added 2025-01-23
         zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
         ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+        deepin-anything-module = throw "the Deepin desktop environment and associated tools have been removed from nixpkgs due to lack of maintenance";
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
@@ -742,30 +717,31 @@ in
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
+        phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
       }
     );
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
-  vanillaPackages =
-    {
-      # recurse to build modules for the kernels
-      linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
-      linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-      linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-      linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
-      linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-      linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-      linux_6_13 = recurseIntoAttrs (packagesFor kernels.linux_6_13);
-      linux_6_14 = recurseIntoAttrs (packagesFor kernels.linux_6_14);
-      linux_6_15 = recurseIntoAttrs (packagesFor kernels.linux_6_15);
-    }
-    // lib.optionalAttrs config.allowAliases {
-      linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
-      linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
-      linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
-      linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
-    };
+  vanillaPackages = {
+    # recurse to build modules for the kernels
+    linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
+    linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
+    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
+    linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
+    linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
+    linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
+    linux_6_16 = recurseIntoAttrs (packagesFor kernels.linux_6_16);
+  }
+  // lib.optionalAttrs config.allowAliases {
+    linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
+    linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
+    linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
+    linux_6_13 = throw "linux 6.13 was removed because it reached its end of life upstream"; # Added 2025-06-22
+    linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
+    linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
+  };
 
   rtPackages = {
     # realtime kernel packages
@@ -794,14 +770,7 @@ in
 
       linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
-      linux_5_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_4_hardened);
-      linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
-      linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
-      linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
-      linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
-      linux_6_13_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_13_hardened);
-      linux_6_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_14_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -811,30 +780,38 @@ in
 
       linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
-      linux_ham = recurseIntoAttrs (packagesFor kernels.linux_ham);
-
       linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
       __recurseIntoDerivationForReleaseJobs = true;
     }
     // lib.optionalAttrs config.allowAliases {
+
+      linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+      linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+
       linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
+      linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
       linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
       linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
       linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
+      linux_6_13_hardened = throw "linux 6.13 was removed because it has reached its end of life upstream";
+      linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
+      linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
+      linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
     }
   );
 
-  packageAliases =
-    {
-      linux_default = packages.linux_6_12;
-      # Update this when adding the newest kernel major version!
-      linux_latest = packages.linux_6_15;
-      linux_rt_default = packages.linux_rt_5_15;
-      linux_rt_latest = packages.linux_rt_6_6;
-    }
-    // lib.optionalAttrs config.allowAliases {
-      linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
-    };
+  packageAliases = {
+    linux_default = packages.linux_6_12;
+    # Update this when adding the newest kernel major version!
+    linux_latest = packages.linux_6_16;
+    linux_rt_default = packages.linux_rt_5_15;
+    linux_rt_latest = packages.linux_rt_6_6;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
+  };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix { };
 
@@ -869,12 +846,13 @@ in
     }:
     stdenvNoCC.mkDerivation {
       inherit name src;
-      depsBuildBuild =
-        [ buildPackages.stdenv.cc ]
-        ++ lib.optionals (lib.versionAtLeast version "4.16") [
-          buildPackages.bison
-          buildPackages.flex
-        ];
+      depsBuildBuild = [
+        buildPackages.stdenv.cc
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "4.16") [
+        buildPackages.bison
+        buildPackages.flex
+      ];
       patches = map (p: p.patch) kernelPatches; # Patches may include new configs.
       postPatch = ''
         patchShebangs scripts/

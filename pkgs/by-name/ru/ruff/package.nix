@@ -16,19 +16,39 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.13";
+  version = "0.12.8";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-qa4TCvjk0zrXRdiTTqjJbUnCXQKpwiRwtA28y8ZuGpw=";
+    hash = "sha256-ypYtAUQBFSf+cgly9K5eRMegtWrRmLmqrgfRmCJvXEk=";
   };
+
+  # Patch out test that fails due to ANSI escape codes being written as-is,
+  # causing a snapshot test to fail. The output itself is correct.
+  #
+  # This is the relevant test's output as of 0.12.5
+  # >     0       │-/home/ferris/project/code.py:1:1: E902 Permission denied (os error 13)
+  # >     1       │-/home/ferris/project/notebook.ipynb:1:1: E902 Permission denied (os error 13)
+  # >     2       │-/home/ferris/project/pyproject.toml:1:1: E902 Permission denied (os error 13)
+  # >           0 │+␛[1m/home/ferris/project/code.py␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
+  # >           1 │+␛[1m/home/ferris/project/notebook.ipynb␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
+  # >           2 │+␛[1m/home/ferris/project/pyproject.toml␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
+  # > ────────────┴───────────────────────────────────────────────────────────────────
+  postPatch = ''
+    substituteInPlace crates/ruff/src/commands/check.rs --replace-fail '
+        #[test]
+        fn unreadable_files() -> Result<()> {' \
+    '
+        #[test]
+        #[ignore = "ANSI Escape Codes trigger snapshot diff"]
+        fn unreadable_files() -> Result<()> {'
+  '';
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JkhvTONWKd3/2jI/yQU2jRfEQ2eAp3drup9SsYWOXNA=";
+  cargoHash = "sha256-0iYwS8Ssi4JDxwr0Q2+iKvYHb179L6BiiuXa2D4qiOA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--exclude=ty_project"
     "--exclude=ty_python_semantic"
     "--exclude=ty_server"
+    "--exclude=ty_static"
     "--exclude=ty_test"
     "--exclude=ty_vendored"
     "--exclude=ty_wasm"
@@ -82,6 +103,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 

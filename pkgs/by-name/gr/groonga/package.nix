@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.0.4";
+  version = "15.1.4";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ESPUEBpV6hg8KQeSzjklPgf4R0DlYdpwxp9M6YdTV/Q=";
+    hash = "sha256-w5r7HiTQ1YZNdjTo3sDl0s++z0M3mAXtOjZWxrMhahk=";
   };
 
   patches = [
@@ -40,25 +40,24 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      rapidjson
-      xxHash
-      zstd
-      mecab
-      kytea
-      msgpack-c
-    ]
-    ++ lib.optionals lz4Support [
-      lz4
-    ]
-    ++ lib.optional zlibSupport [
-      zlib
-    ]
-    ++ lib.optionals suggestSupport [
-      zeromq
-      libevent
-    ];
+  buildInputs = [
+    rapidjson
+    xxHash
+    zstd
+    mecab
+    kytea
+    msgpack-c
+  ]
+  ++ lib.optionals lz4Support [
+    lz4
+  ]
+  ++ lib.optional zlibSupport [
+    zlib
+  ]
+  ++ lib.optionals suggestSupport [
+    zeromq
+    libevent
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 

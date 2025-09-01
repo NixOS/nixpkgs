@@ -11,7 +11,7 @@
   httpx,
   mock,
   parse,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-console-scripts,
   pytestCheckHook,
   pythonOlder,
@@ -51,11 +51,12 @@ buildPythonPackage rec {
     aiofiles
     mock
     parse
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   optional-dependencies = {
     all = [
@@ -82,9 +83,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--asyncio-mode=auto"
-    "-m 'not online'"
+  ];
+
+  disabledTestMarks = [
+    "online"
   ];
 
   disabledTests = [

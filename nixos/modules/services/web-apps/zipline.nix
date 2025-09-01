@@ -93,8 +93,8 @@ in
       wantedBy = [ "multi-user.target" ];
 
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
 
       environment = lib.mapAttrs (_: value: toString value) cfg.settings;
 
@@ -135,6 +135,7 @@ in
           "@system-service"
           "~@privileged"
           "~@resources"
+          "@chown"
         ];
         UMask = "0077";
       };

@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller-versionfile";
-  version = "2.1.1";
+  version = "3.0.1";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
     repo = "pyinstaller-versionfile";
-    rev = "v${version}";
-    hash = "sha256-lz1GuiXU+r8sMld5SsG3qS+FOsWfbvkQmO2bxAR3XcY=";
+    tag = "v${version}";
+    hash = "sha256-UNrXP5strO6LIkIM3etBo1+Vm+1lR5wF0VfKtZYRoYc=";
   };
 
   propagatedBuildInputs = [

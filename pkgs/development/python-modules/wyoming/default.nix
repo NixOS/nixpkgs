@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "1.6.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming";
     tag = version;
-    hash = "sha256-Q7e4YSvVHpjyJQwsXTfyzMA1DKi71xiVDKWGWTh1l6w=";
+    hash = "sha256-tLwMysBxNPk5ztkwuuOhChhGgY+uEE9uA4S5ZVlVtY0=";
   };
 
   build-system = [ setuptools ];

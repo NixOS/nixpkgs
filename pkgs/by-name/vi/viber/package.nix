@@ -38,7 +38,6 @@
   xorg,
   zlib,
   zstd,
-  ...
 }:
 
 stdenv.mkDerivation {
@@ -124,7 +123,7 @@ stdenv.mkDerivation {
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath $libPath:$out/opt/viber/lib $file || true
+      patchelf --set-rpath $libPath:$out/opt/viber/lib:$out/lib $file || true
     done
 
     # qt.conf is not working, so override everything using environment variables
@@ -143,6 +142,10 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/viber.desktop \
       --replace /opt/viber/Viber $out/opt/viber/Viber \
       --replace /usr/share/ $out/share/
+
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/opt/viber/lib/libxml2.so.2"
   '';
 
   dontStrip = true;

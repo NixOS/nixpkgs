@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
+  patches = [
+    # Fixes test-float-h failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ];
+
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     (lib.getBin xz)
@@ -43,6 +50,10 @@ stdenv.mkDerivation rec {
         sed -i -E 's:[[:space:]]test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
         sed -i -E 's:[[:space:]]test-sigsegv-catch-stackoverflow[12]\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
         sed -i -E 's:[[:space:]]test-sigaction\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
+      ''
+    else if stdenv.hostPlatform.isFreeBSD then
+      ''
+        sed -i -E 's:test-time::g' gnulib-tests/Makefile.in
       ''
     else
       null;

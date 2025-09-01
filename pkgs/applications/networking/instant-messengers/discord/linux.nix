@@ -54,7 +54,6 @@
   pipewire,
   python3,
   runCommand,
-  libunity,
   speechd-minimal,
   wayland,
   branch,
@@ -62,6 +61,8 @@
   openasar,
   withVencord ? false,
   vencord,
+  withEquicord ? false,
+  equicord,
   withMoonlight ? false,
   moonlight,
   withTTS ? true,
@@ -70,11 +71,17 @@
   # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
   # for example if a settings.json is linked declaratively (e.g., with home-manager).
   disableUpdates ? true,
+  commandLineArgs ? "",
 }:
-assert lib.assertMsg (
-  !(withMoonlight && withVencord)
-) "discord: Moonlight and Vencord can not be enabled at the same time";
+
 let
+  discordMods = [
+    withVencord
+    withEquicord
+    withMoonlight
+  ];
+  enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
+
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
       {
@@ -89,6 +96,9 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
+assert lib.assertMsg (
+  enabledDiscordModsCount <= 1
+) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
 stdenv.mkDerivation rec {
   inherit
     pname
@@ -142,7 +152,6 @@ stdenv.mkDerivation rec {
       libnotify
       libX11
       libXcomposite
-      libunity
       libuuid
       libXcursor
       libXdamage
@@ -184,7 +193,8 @@ stdenv.mkDerivation rec {
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
-        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"}
+        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
@@ -207,6 +217,12 @@ stdenv.mkDerivation rec {
       mkdir $out/opt/${binaryName}/resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
+    ''
+    + lib.strings.optionalString withEquicord ''
+      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+      mkdir $out/opt/${binaryName}/resources/app.asar
+      echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+      echo 'require("${equicord}/desktop/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
     ''
     + lib.strings.optionalString withMoonlight ''
       mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar

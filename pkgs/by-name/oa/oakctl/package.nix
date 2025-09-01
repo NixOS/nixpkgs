@@ -9,26 +9,26 @@
 }:
 
 let
-  version = "0.2.12";
+  version = "0.13.2";
 
   # Note: Extracted from install script
   # https://oakctl-releases.luxonis.com/oakctl-installer.sh
   sources = {
     x86_64-linux = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/linux_x86_64/oakctl";
-      hash = "sha256-HCnFD0LD6sQp9k3SP2g4svjA5/kLvfrnN+IwiuMWGCY=";
+      hash = "sha256-uS7CUnj9+/kBwGaaZA9P6R2//vhZ1cJW+lhkQePZ0is=";
     };
     aarch64-linux = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/linux_aarch64/oakctl";
-      hash = "sha256-1oJQs57/tW3rsMM+LAuKiBUf1aKOKFoPQAMcVUfXqlE=";
+      hash = "sha256-+WFSV3TALeJtdcxkcduaN8tWGLCrOxvs3UV6cOr1xAI=";
     };
     aarch64-darwin = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_arm64/oakctl";
-      hash = "sha256-arS2qfd/Z/ZCNWAKD9bc2PMwkhVtO5WViTibMST7zd8=";
+      hash = "sha256-OgVmfYcRNVcLGjEbxdVUtsV45vICj+jKPQJ578aRwZs=";
     };
     x86_64-darwin = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_x86_64/oakctl";
-      hash = "sha256-yyvDQbFEtlB8xmdbxquy22wAIUcCSVchP/AuSpi4TAU=";
+      hash = "sha256-KjJxwMRLs0XqiOTHjke+dSVKBftwBDYppjrqsbf0Qe8=";
     };
   };
 
@@ -51,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libgcc ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libgcc
+    stdenv.cc.cc.lib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -65,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: The command 'oakctl self-update' won't work as the binary is located in the nix/store
   meta = {
     description = "Tool to interact with Luxonis OAK4 cameras";
-    homepage = "https://rvc4.docs.luxonis.com/software/tools/oakctl";
+    homepage = "https://docs.luxonis.com/software-v3/oak-apps/oakctl/";
     license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"

@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     unbound
     libreswan
-  ] ++ pythonPath;
+  ]
+  ++ pythonPath;
 
   propagatedUserEnvPkgs = [
     unbound

@@ -9,25 +9,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.34.1";
+  version = "3.36.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "virtuslab";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-CllaviW7pqLD9XD4oSHyW2nG4lObkPWFseXZbtkNUQI=";
+    repo = "git-machete";
+    tag = "v${version}";
+    hash = "sha256-9xJCwu2TeWsxut6y4VJV6Qou4G81kXcGPHJPrOrsGuc=";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs =
-    [
-      git
-    ]
-    ++ (with python3.pkgs; [
-      pytest-mock
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    pytest-mock
+    pytestCheckHook
+  ]);
 
   disabledTests = [
     # Requires fully functioning shells including zsh modules and bash
@@ -52,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
-    changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
+    changelog = "https://github.com/VirtusLab/git-machete/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ blitz ];
     mainProgram = "git-machete";

@@ -34,7 +34,8 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     tensorflow
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [ "tf_keras" ];
 

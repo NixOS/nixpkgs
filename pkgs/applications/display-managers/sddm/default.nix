@@ -2,7 +2,7 @@
   lib,
   callPackage,
   runCommand,
-  layer-shell-qt,
+  layer-shell-qt ? null,
   qtwayland,
   wrapQtAppsHook,
   unwrapped ? callPackage ./unwrapped.nix { },
@@ -20,6 +20,8 @@ runCommand "sddm-wrapped"
       ++ lib.optional withWayland qtwayland
       ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
     nativeBuildInputs = [ wrapQtAppsHook ];
+
+    strictDeps = true;
 
     passthru = {
       inherit unwrapped;

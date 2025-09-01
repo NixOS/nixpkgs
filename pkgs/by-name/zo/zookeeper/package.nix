@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nathan-gs
-      pradeepchhetri
       ztzg
     ];
     platforms = lib.platforms.unix;

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.20";
+  version = "0.8.21";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "node-problem-detector";
     rev = "v${version}";
-    sha256 = "sha256-Aw6TDyWczqWgUOCV7f4JSAI4eVcjWgwe2V5qSrx4TBI=";
+    sha256 = "sha256-byxj6EXKAmesFOBtBt0URcT0h1pYdrW8ewtITuEPFcs=";
   };
 
   vendorHash = null;
@@ -27,7 +27,8 @@ buildGoModule rec {
   # https://github.com/kubernetes/node-problem-detector/blob/master/Makefile
   subPackages = [
     "cmd/nodeproblemdetector"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "cmd/logcounter" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "cmd/logcounter" ];
 
   preBuild = ''
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}

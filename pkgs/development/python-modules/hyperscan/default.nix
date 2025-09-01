@@ -23,14 +23,14 @@ let
 in
 buildPythonPackage rec {
   pname = "hyperscan";
-  version = "0.7.13";
+  version = "0.7.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
     tag = "v${version}";
-    hash = "sha256-l97UXuM37WK3XRSoIfQzobkM+3WYp6JUtemn/28mMNk=";
+    hash = "sha256-99PkxxGCwyGa5xhfHLa7+1JnTgcRfDEKcTRopGzqkh8=";
   };
 
   env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperscan" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -1,0 +1,12 @@
+diff --git a/makefile_build/Makefile b/makefile_build/Makefile
+index 335e74a..71492d0 100644
+--- a/makefile_build/Makefile
++++ b/makefile_build/Makefile
+@@ -40,7 +40,6 @@ LIBEDGETPU_LDFLAGS := \
+ 	-labsl_hashtablez_sampler \
+ 	-labsl_raw_hash_set \
+ 	-labsl_str_format_internal \
+-	-labsl_bad_optional_access \
+ 	-lusb-1.0
+ 
+ LIBEDGETPU_FLATC_SRCS := \

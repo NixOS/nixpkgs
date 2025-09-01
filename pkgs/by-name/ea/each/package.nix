@@ -15,11 +15,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-5Aa/uHWrU4bpWd28Uddnuhmi6guHy09W9AU8sAfea6I=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TfAT36/JeBjBxymnX1gIyCEPZcxTW4fPVIOhHF3z9wA=";
 
   meta = with lib; {
-    description = " A better way of working with structured data on the command line";
+    description = "Command-line tool for processing CSV, JSON and other structured data";
     mainProgram = "each";
     homepage = "https://github.com/arraypad/each";
     license = with licenses; [ mit ];

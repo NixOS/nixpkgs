@@ -88,7 +88,8 @@ stdenv.mkDerivation {
     "--with-readline"
     "--with-sodium"
     "--with-termcap"
-  ] ++ (if withFreeImage then [ "--with-freeimage" ] else [ "--without-freeimage" ]);
+  ]
+  ++ (if withFreeImage then [ "--with-freeimage" ] else [ "--without-freeimage" ]);
 
   # On darwin, some macros defined in AssertMacros.h (from apple-sdk) are conflicting.
   postConfigure = ''

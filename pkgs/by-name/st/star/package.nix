@@ -2,34 +2,46 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  xxd,
   zlib,
+  llvmPackages,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "star";
-  version = "2.7.10b";
+  version = "2.7.11b";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "sha256-58Y4lzqXwBhRlXcionUg2IhAg5znNUuyr/FsuNZd+5Q=";
+    sha256 = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
   };
 
   sourceRoot = "${src.name}/source";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "/bin/rm" "rm"
+    substituteInPlace Makefile --replace-fail "-std=c++11" "-std=c++14"
   '';
 
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [ xxd ];
+
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+
+  enableParallelBuilding = true;
+
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "CXXFLAGS_SIMD=" ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="$CXXFLAGS -DSHM_NORESERVE=0"
+  '';
 
   buildFlags = [
     "STAR"
     "STARlong"
   ];
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -37,11 +49,23 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/STAR";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Spliced Transcripts Alignment to a Reference";
+    longDescription = ''
+      STAR (Spliced Transcripts Alignment to a Reference) is a fast RNA-seq
+      read mapper, with support for splice-junction and fusion read detection.
+    '';
+    mainProgram = "STAR";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.arcadio ];
   };
 }

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   chex,
   jaxlib,
   numpy,
@@ -26,12 +26,27 @@ buildPythonPackage rec {
 
   patches = [
     # TODO: remove at the next release (already on master)
-    (fetchpatch {
+    (fetchpatch2 {
       name = "fix-jax-0.6.0-compat";
       url = "https://github.com/google-deepmind/distrax/commit/c02708ac46518fac00ab2945311e0f2ee32c672c.patch";
       hash = "sha256-hFNXKoA1b5I6dzhwTRXp/SnkHv89GI6tYwlnBBHwG78=";
     })
+    # https://github.com/google-deepmind/distrax/pull/289
+    (fetchpatch2 {
+      name = "fix-jax-0.7.0-compat";
+      url = "https://github.com/google-deepmind/distrax/commit/7fc5bd7efff4a7144d175199159f115c3e68a3cf.patch";
+      hash = "sha256-TiD72YIb6ajpaCO1yOGl/+JCuaikQ879Zcpaf2wzMq4=";
+    })
   ];
+
+  # TODO: remove at the next release (already on master)
+  # https://github.com/google-deepmind/distrax/pull/293
+  postPatch = ''
+    substituteInPlace distrax/_src/utils/transformations.py \
+      --replace-fail \
+        "jax.experimental.pjit.pjit_p" \
+        "jex.core.primitives.jit_p"
+  '';
 
   dependencies = [
     chex

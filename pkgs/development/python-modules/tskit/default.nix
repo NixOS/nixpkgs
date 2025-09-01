@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.6.3";
+  version = "0.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bbo89pMhTDEF2M3c1pauDjECNmk34CmmqmXNmOcbVfI=";
+    hash = "sha256-vawbt+OuPR9WLsGRtdhAFW4ILdKtxq98QbFwxPsb55I=";
   };
 
   postPatch = ''
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alxsimon ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

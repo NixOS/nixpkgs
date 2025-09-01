@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "pyogrio";
     tag = "v${version}";
-    hash = "sha256-3XrP3/sqGRtA+sfaoOV/ByGAtfpGZB5RYRr5lyYZUj0=";
+    hash = "sha256-F6XfkihN3k2xquYS8jJMlqtLXzaTORaduJ2Q9LhSQGM=";
   };
 
   postPatch = ''
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     setuptools
     versioneer
     wheel
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml;
 
   buildInputs = [ gdal ];
 
@@ -55,9 +56,9 @@ buildPythonPackage rec {
     python setup.py build_ext --inplace
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # disable tests which require network access
-    "-m 'not network'"
+    "network"
   ];
 
   pythonImportsCheck = [ "pyogrio" ];
@@ -65,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Vectorized spatial vector file format I/O using GDAL/OGR";
     homepage = "https://pyogrio.readthedocs.io/";
-    changelog = "https://github.com/geopandas/pyogrio/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/geopandas/pyogrio/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
   };

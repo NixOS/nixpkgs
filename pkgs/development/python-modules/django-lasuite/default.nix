@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-lasuite";
-  version = "0.0.9";
+  version = "0.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
-    hash = "sha256-vUtWBR9uRc99jTe0Gg7k4EZZAkqHct5+GCOHp1mTIkA=";
+    hash = "sha256-cSDNDc8AmiuviVUlV3RhsbhsLF1LbsIkSrw6suTu5zk=";
   };
 
   build-system = [ hatchling ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lasuite" ];
 
   meta = {
-    description = "The common library for La Suite Django projects and Proconnected Django projects";
+    description = "Common library for La Suite Django projects and Proconnected Django projects";
     homepage = "https://github.com/suitenumerique/django-lasuite";
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

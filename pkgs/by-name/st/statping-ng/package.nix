@@ -10,13 +10,13 @@
   yarnConfigHook,
 }:
 let
-  version = "0.92.0";
+  version = "0.93.0";
 
   src = fetchFromGitHub {
     owner = "statping-ng";
     repo = "statping-ng";
     tag = "v${version}";
-    hash = "sha256-E4sVIa8sKmjRcduATTHLklkr+LKX6KucDw42uVFhK4g=";
+    hash = "sha256-VVM3Jyahs0OQuHiF/r+U9vq9TBOFOtuTzBurAhR1Dhc=";
   };
 
   frontend = stdenv.mkDerivation {

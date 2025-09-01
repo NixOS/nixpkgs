@@ -6,27 +6,22 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nvrh";
-  version = "0.1.15";
+  version = "0.1.23";
 
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "nvrh";
-    tag = "v${version}";
-    hash = "sha256-FLlSS/ZgoGT4SyBG/sKdrN3eBSJdT0qFeGl01y4P/So=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9pWeoFah8bxbngqETgi8uGbvUqKUhdiRHmOuxpPmJNs=";
   };
 
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.23.1" "go 1.22.7"
-  '';
+  vendorHash = "sha256-DuGMlRdVUMKwghPQjVP3A+epnsA5a15jl84Y8LTPkTM=";
 
   preBuild = ''
     cp manifest.json src/
   '';
-
-  vendorHash = "sha256-DuGMlRdVUMKwghPQjVP3A+epnsA5a15jl84Y8LTPkTM=";
 
   ldflags = [
     "-s"
@@ -50,9 +45,9 @@ buildGoModule rec {
   meta = {
     description = "Aims to be similar to VSCode Remote, but for Neovim";
     homepage = "https://github.com/mikew/nvrh";
-    changelog = "https://github.com/mikew/nvrh/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mikew/nvrh/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "nvrh";
   };
-}
+})

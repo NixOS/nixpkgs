@@ -3,6 +3,7 @@
   fetchFromGitHub,
   git,
   gitUpdater,
+  fetchpatch,
   lib,
   nlohmann_json,
   pkg-config,
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "3.3.5";
+  version = "3.3.8";
 
   outputs = [
     "out"
@@ -25,26 +26,32 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-PcV31lLABv7SGzrD/+rR9j1Z9/uZrp1hFPdW0EZwOqc=";
+    hash = "sha256-s7gY3l5ML+7T7i6DsstC75XXgxQgTWyITfa+8OhHl+w=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace cmake/tools/version_files.py \
-        --replace-fail "args.git_version" '"${finalAttrs.version}"' \
-        --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
-        --replace-fail "args.git_date" '"1970-01-01"'
-      substituteInPlace cmake/templates/lcevc_dec.pc.in \
-        --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
+  patches = [
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/010-lcevcdec-fix-pkgconfig-libs.patch?h=lcevcdec&id=a3470fad7d64dfc9d5ebd7ed0c09cb1fb5e2488f";
+      hash = "sha256-z65W3k2OA/QDX0jJu4nmXtpi8kTcUFN7cK82PsI4jrQ=";
+    })
+  ];
 
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
-      substituteInPlace cmake/modules/Compiler/GNU.cmake \
-        --replace-fail "-mavx" ""
+  postPatch = ''
+    substituteInPlace cmake/tools/version_files.py \
+      --replace-fail "args.git_version" '"${finalAttrs.version}"' \
+      --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
+      --replace-fail "args.git_date" '"1970-01-01"'
+    substituteInPlace cmake/templates/lcevc_dec.pc.in \
+      --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
 
-       substituteInPlace src/core/decoder/src/common/simd.c \
-        --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
-    '';
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
+    substituteInPlace cmake/modules/Compiler/GNU.cmake \
+      --replace-fail "-mavx" ""
+
+     substituteInPlace src/core/decoder/src/common/simd.c \
+      --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
+  '';
 
   env = {
     includedir = "${placeholder "dev"}/include";

@@ -345,9 +345,8 @@ let
         nix-output-monitor
         nix-script
         nix-tree
-        nixfmt
         nixfmt-classic
-        nixfmt-rfc-style
+        nixfmt
         nota
         nvfetcher
         oama
@@ -385,7 +384,6 @@ let
         xmonadctl
         xmonad-with-packages
         yi
-        zsh-git-prompt
         ;
 
       # Members of the elmPackages set that are Haskell derivations
@@ -393,8 +391,6 @@ let
         inherit (pkgsPlatforms.elmPackages)
           elm
           elm-format
-          elm-instrument
-          elmi-to-json
           ;
       };
 
@@ -482,6 +478,26 @@ let
           };
 
       pkgsCross = {
+        aarch64-android-prebuilt.pkgsStatic =
+          removePlatforms
+            [
+              # Android NDK package doesn't support building on
+              "aarch64-darwin"
+              "aarch64-linux"
+
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit
+                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+            };
+
         ghcjs =
           removePlatforms
             [
@@ -523,6 +539,14 @@ let
                   ;
               };
             };
+
+        ucrt64.haskell.packages.ghc912 = {
+          inherit (packagePlatforms pkgs.pkgsCross.ucrt64.haskell.packages.ghc912)
+            ghc
+            # hello # executables don't build yet
+            microlens
+            ;
+        };
 
         riscv64 = {
           # Cross compilation of GHC
@@ -579,6 +603,11 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      git-annex = [
+        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
+        compilerNames.ghc9101
+        compilerNames.ghc9102
+      ];
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107

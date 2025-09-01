@@ -142,6 +142,8 @@ let
 
       hipfft = self.callPackage ./hipfft { };
 
+      hiprt = self.callPackage ./hiprt { };
+
       tensile = pyPackages.callPackage ./tensile {
         inherit (self)
           rocmUpdateScript
@@ -262,21 +264,6 @@ let
       );
       mpi = self.openmpi;
 
-      triton-llvm = triton-llvm.overrideAttrs {
-        src = fetchFromGitHub {
-          owner = "llvm";
-          repo = "llvm-project";
-          # make sure this matches triton llvm rel branch hash for now
-          # https://github.com/triton-lang/triton/blob/release/3.2.x/cmake/llvm-hash.txt
-          rev = "86b69c31642e98f8357df62c09d118ad1da4e16a";
-          hash = "sha256-W/mQwaLGx6/rIBjdzUTIbWrvGjdh7m4s15f70fQ1/hE=";
-        };
-        pname = "triton-llvm-rocm";
-        patches = [ ]; # FIXME: https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch doesn't apply, may need to rebase
-      };
-
-      triton = pyPackages.callPackage ./triton { rocmPackages = self; };
-
       ## Meta ##
       # Emulate common ROCm meta layout
       # These are mainly for users. I strongly suggest NOT using these in nixpkgs derivations
@@ -323,6 +310,7 @@ let
             rocprim
             rocalution
             hipfft
+            hiprt
             rocm-core
             hipcub
             hipblas
@@ -355,6 +343,7 @@ let
             hipblaslt
             rocfft
             hipfft
+            hiprt
             rccl
             rocsparse
             hipsparse
@@ -441,11 +430,19 @@ let
         };
       };
 
+      rocm-bandwidth-test = self.callPackage ./rocm-bandwidth-test {
+        rocmPackages = self;
+      };
+
       rocm-tests = self.callPackage ./rocm-tests {
         rocmPackages = self;
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      triton = throw ''
+        'rocmPackages.triton' has been removed. Please use python3Packages.triton
+      ''; # Added 2025-08-24
+
       rocm-thunk = throw ''
         'rocm-thunk' has been removed. It's now part of the ROCm runtime.
       ''; # Added 2025-3-16
@@ -500,5 +497,9 @@ outer
     "gfx1100"
     "gfx1101"
     "gfx1102"
+  ];
+  gfx12 = scopeForArches [
+    "gfx1200"
+    "gfx1201"
   ];
 }

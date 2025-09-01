@@ -9,22 +9,22 @@
   requests-mock,
   rich,
   setuptools,
-  tomli,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.4.0.1";
+  version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
     tag = "v${version}";
-    hash = "sha256-6K6wBLCJCIAHbJQuY7JPnkmuq8OwrxCaSAHWeFDwH10=";
+    hash = "sha256-c8uU5WZsZufi/QNJkXh2Z1bmoM/oOm6+rggm4J+pnIc=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     requests
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     progress_bar = [ rich ];
@@ -42,11 +42,8 @@ buildPythonPackage rec {
     fixtures
     pytestCheckHook
     requests-mock
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "podman" ];
 

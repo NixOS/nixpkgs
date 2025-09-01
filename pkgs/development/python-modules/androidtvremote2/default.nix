@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "androidtvremote2";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "androidtvremote2";
     tag = "v${version}";
-    hash = "sha256-KlOvtJ7TyX+SUuO5TF/2gkHh059dMKmPOzc6H+MDfbg=";
+    hash = "sha256-oNZE7Fo60u6c3Gmk4Gi1Ni3HGPDMx7Uh+uerZmxiMCM=";
   };
 
   build-system = [ setuptools ];

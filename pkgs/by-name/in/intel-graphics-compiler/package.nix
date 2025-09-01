@@ -22,8 +22,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.22.1";
-    hash = "sha256-dSK+kNEZoF4bBx24S0No9aZLZiHK0U9TR1jRyEBL+2U=";
+    rev = "v0.23.1";
+    hash = "sha256-7coQegLcgIKiqnonZmgrKlw6FCB3ltSh6oMMvdopeQc=";
   };
 
   inherit (llvmPackages_15) lld llvm;
@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.11.7";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     tag = "v${version}";
-    hash = "sha256-bGH+cgWI3bRgOhSBgQUrHPiCQ68EfAxG+iM6vs8VjhU=";
+    hash = "sha256-PBUKLvP9h7AhYbaxjAC749sQqYJLAjNpWfME8t84D0k=";
   };
 
   postPatch = ''

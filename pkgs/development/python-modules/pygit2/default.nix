@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.18.0";
+  version = "1.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+9AdBKTSziiaqgLPhYBDZ5vw3R+YVca4jtlTgsH1ARo=";
+    hash = "sha256-hOBvw3CLjTvu787GN/Ydh96zgnLnSH6hxSkXQYT/9sQ=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -37,7 +37,8 @@ buildPythonPackage rec {
   dependencies = [
     cached-property
     pycparser
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 

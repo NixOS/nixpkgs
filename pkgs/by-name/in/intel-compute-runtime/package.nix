@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "25.18.33578.6";
+  version = "25.31.34666.3";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     tag = version;
-    hash = "sha256-6HJUwoMzd8T9o0dohLiXz2xwtqnUmkFuftIUPqKpy5s=";
+    hash = "sha256-eijW4VYKUbiC7izaocadIxFvdZ3neaM3dewPnQDCLYc=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    # disable spectre mitigations (already mitigated in the kernel)
+    # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
+    (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
   ];
 
   outputs = [

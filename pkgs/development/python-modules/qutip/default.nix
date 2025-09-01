@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_0,
+  cython,
   oldest-supported-numpy,
   setuptools,
 
@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.1.1";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${version}";
-    hash = "sha256-5j47Wqt9i6vC3uwRzQ9+8pk+ENl5w6PvnP+830RLCls=";
+    hash = "sha256-iM+RptMvLFF51v7OJPESYFB4WaYF5HxnfpqjYWAjAKU=";
   };
 
   postPatch =
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     '';
 
   build-system = [
-    cython_0
+    cython
     oldest-supported-numpy
     setuptools
   ];
@@ -62,7 +62,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
     writableTmpDirAsHomeHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.

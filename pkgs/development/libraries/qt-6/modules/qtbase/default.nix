@@ -12,7 +12,6 @@
   which,
   cmake,
   ninja,
-  xmlstarlet,
   libproxy,
   xorg,
   zstd,
@@ -81,6 +80,7 @@
   libinput,
   # options
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -91,74 +91,73 @@ stdenv.mkDerivation rec {
 
   inherit src version;
 
-  propagatedBuildInputs =
-    [
-      libxml2
-      libxslt
-      openssl
-      sqlite
-      zlib
-      libGL
-      vulkan-headers
-      vulkan-loader
-      # Text rendering
-      harfbuzz
-      icu
-      # Image formats
-      libjpeg
-      libpng
-      pcre2
-      zstd
-      libb2
-      md4c
-      double-conversion
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      libproxy
-      dbus
-      glib
-      # unixODBC drivers
-      unixODBC
-      unixODBCDrivers.psql
-      unixODBCDrivers.sqlite
-      unixODBCDrivers.mariadb
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      util-linux
-      mtdev
-      lksctp-tools
-      libselinux
-      libsepol
-      lttng-ust
-      libthai
-      libdrm
-      libdatrie
-      udev
-      # Text rendering
-      fontconfig
-      freetype
-      # X11 libs
-      libX11
-      libXcomposite
-      libXext
-      libXi
-      libXrender
-      libxcb
-      libxkbcommon
-      xcbutil
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
-      xorg.libXdmcp
-      xorg.libXtst
-      xorg.xcbutilcursor
-      libepoxy
-    ]
-    ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
+  propagatedBuildInputs = [
+    libxml2
+    libxslt
+    openssl
+    sqlite
+    zlib
+    libGL
+    vulkan-headers
+    vulkan-loader
+    # Text rendering
+    harfbuzz
+    icu
+    # Image formats
+    libjpeg
+    libpng
+    pcre2
+    zstd
+    libb2
+    md4c
+    double-conversion
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    libproxy
+    dbus
+    glib
+    # unixODBC drivers
+    unixODBC
+    unixODBCDrivers.psql
+    unixODBCDrivers.sqlite
+    unixODBCDrivers.mariadb
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    util-linux
+    mtdev
+    lksctp-tools
+    libselinux
+    libsepol
+    lttng-ust
+    libthai
+    libdrm
+    libdatrie
+    udev
+    # Text rendering
+    fontconfig
+    freetype
+    # X11 libs
+    libX11
+    libXcomposite
+    libXext
+    libXi
+    libXrender
+    libxcb
+    libxkbcommon
+    xcbutil
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilrenderutil
+    xcbutilwm
+    xorg.libXdmcp
+    xorg.libXtst
+    xorg.xcbutilcursor
+    libepoxy
+  ]
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
@@ -179,15 +178,16 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
-    xmlstarlet
     ninja
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  propagatedNativeBuildInputs =
-    [ lndir ]
-    # I’m not sure if this is necessary, but the macOS mkspecs stuff
-    # tries to call `xcrun xcodebuild`, so better safe than sorry.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  propagatedNativeBuildInputs = [
+    lndir
+  ]
+  # I’m not sure if this is necessary, but the macOS mkspecs stuff
+  # tries to call `xcrun xcodebuild`, so better safe than sorry.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   strictDeps = true;
 
@@ -218,6 +218,13 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # Backport patch recommended by KDE to fix HTTP2 stream corruption issues
+    # FIXME: remove in 6.9.2
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/904aec2f372e2981af19bf762583a0ef42ec6bb9.diff";
+      hash = "sha256-bSf4TgYUk7Ariu37NHGQKv6wFArVpQLlnHCTbCFzAfI=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -251,34 +258,37 @@ stdenv.mkDerivation rec {
   qtPluginPrefix = "lib/qt-6/plugins";
   qtQmlPrefix = "lib/qt-6/qml";
 
-  cmakeFlags =
-    [
-      "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
-      "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
-      "-DINSTALL_QMLDIR=${qtQmlPrefix}"
-      "-DQT_FEATURE_libproxy=ON"
-      "-DQT_FEATURE_system_sqlite=ON"
-      "-DQT_FEATURE_openssl_linked=ON"
-      "-DQT_FEATURE_vulkan=ON"
-      # don't leak OS version into the final output
-      # https://bugreports.qt.io/browse/QTBUG-136060
-      "-DCMAKE_SYSTEM_VERSION="
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DQT_FEATURE_sctp=ON"
-      "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DQT_FEATURE_rpath=OFF"
-      "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
-    ]
-    ++ lib.optionals isCrossBuild [
-      "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
-      "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
-    ]
-    ++ lib.optional (
-      qttranslations != null && !isCrossBuild
-    ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+  cmakeFlags = [
+    "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
+    "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
+    "-DINSTALL_QMLDIR=${qtQmlPrefix}"
+    "-DQT_FEATURE_libproxy=ON"
+    "-DQT_FEATURE_system_sqlite=ON"
+    "-DQT_FEATURE_openssl_linked=ON"
+    "-DQT_FEATURE_vulkan=ON"
+    # don't leak OS version into the final output
+    # https://bugreports.qt.io/browse/QTBUG-136060
+    "-DCMAKE_SYSTEM_VERSION="
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "-DQT_FEATURE_sctp=ON"
+    "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DQT_FEATURE_rpath=OFF"
+    "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
+    # This is only used for the min version check, which we disabled above.
+    # When this variable is not set, cmake tries to execute xcodebuild
+    # to query the version.
+    "-DQT_INTERNAL_XCODE_VERSION=0.1"
+  ]
+  ++ lib.optionals isCrossBuild [
+    "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
+    "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
+  ]
+  ++ lib.optional (
+    qttranslations != null && !isCrossBuild
+  ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
@@ -290,17 +300,16 @@ stdenv.mkDerivation rec {
 
   moveToDev = false;
 
-  postFixup =
-    ''
-      moveToOutput      "mkspecs/modules" "$dev"
-      fixQtModulePaths  "$dev/mkspecs/modules"
-      fixQtBuiltinPaths "$out" '*.pr?'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # FIXME: not sure why this isn't added automatically?
-      patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
-      patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/lib/libQt6Gui.so
-    '';
+  postFixup = ''
+    moveToOutput      "mkspecs/modules" "$dev"
+    fixQtModulePaths  "$dev/mkspecs/modules"
+    fixQtBuiltinPaths "$out" '*.pr?'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # FIXME: not sure why this isn't added automatically?
+    patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
+    patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/lib/libQt6Gui.so
+  '';
 
   dontWrapQtApps = true;
 

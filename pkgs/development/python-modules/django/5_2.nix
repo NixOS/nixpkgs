@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  pythonAtLeast,
   pythonOlder,
   replaceVars,
 
@@ -33,7 +33,6 @@
   pylibmc,
   pymemcache,
   python,
-  pywatchman,
   pyyaml,
   pytz,
   redis,
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.3";
+  version = "5.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,26 +52,30 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-P2WnWkQbzqHNzlIac8boe2VIe2IBdCIB5J6av6J0nvg=";
+    hash = "sha256-1Lw0L+mPynf9CmioiTQhePgqCLniUkv9E0ZIoHhhBTs=";
   };
 
-  patches =
-    [
-      (replaceVars ./django_5_set_zoneinfo_dir.patch {
-        zoneinfo = tzdata + "/share/zoneinfo";
-      })
-      # prevent tests from messing with our pythonpath
-      ./django_5_tests_pythonpath.patch
-      # disable test that expects timezone issues
-      ./django_5_disable_failing_tests.patch
-    ]
-    ++ lib.optionals withGdal [
-      (replaceVars ./django_5_set_geos_gdal_lib.patch {
-        geos = geos;
-        gdal = gdal;
-        extension = stdenv.hostPlatform.extensions.sharedLibrary;
-      })
-    ];
+  patches = [
+    (replaceVars ./django_5_set_zoneinfo_dir.patch {
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+    # prevent tests from messing with our pythonpath
+    ./django_5_tests_pythonpath.patch
+    # disable test that expects timezone issues
+    ./django_5_disable_failing_tests.patch
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://code.djangoproject.com/ticket/36499
+    # https://github.com/django/django/pull/19639
+    ./3.13.6-html-parser.patch
+  ]
+  ++ lib.optionals withGdal [
+    (replaceVars ./django_5_set_geos_gdal_lib.patch {
+      geos = geos;
+      gdal = gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
@@ -101,19 +104,14 @@ buildPythonPackage rec {
     pillow
     pylibmc
     pymemcache
-    pywatchman
     pyyaml
     pytz
     redis
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  doCheck =
-    !stdenv.hostPlatform.isDarwin
-    # pywatchman depends on folly which does not support 32bits
-    && !stdenv.hostPlatform.is32bit;
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -132,7 +130,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     pushd tests
-    ${python.interpreter} runtests.py --settings=test_sqlite
+    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
+    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
     popd
 
     runHook postCheck

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "waybackpy";
   version = "3.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

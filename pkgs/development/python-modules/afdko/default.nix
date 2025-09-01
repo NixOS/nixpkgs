@@ -80,23 +80,22 @@ buildPythonPackage rec {
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
 
-  dependencies =
-    [
-      booleanoperations
-      defcon
-      fontmath
-      fontpens
-      fonttools
-      mutatormath
-      tqdm
-      ufonormalizer
-      ufoprocessor
-    ]
-    ++ defcon.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.unicode
-    ++ fonttools.optional-dependencies.woff;
+  dependencies = [
+    booleanoperations
+    defcon
+    fontmath
+    fontpens
+    fonttools
+    mutatormath
+    tqdm
+    ufonormalizer
+    ufoprocessor
+  ]
+  ++ defcon.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.unicode
+  ++ fonttools.optional-dependencies.woff;
 
   # Use system libxml2
   FORCE_SYSTEM_LIBXML2 = true;
@@ -110,40 +109,39 @@ buildPythonPackage rec {
     rm -rf _skbuild
   '';
 
-  disabledTests =
-    [
-      # broke in the fontforge 4.51 -> 4.53 update
-      "test_glyphs_2_7"
-      "test_hinting_data"
-      "test_waterfallplot"
-      # broke at some point
-      "test_type1_supported_hint"
-    ]
-    ++ lib.optionals (stdenv.cc.isGNU) [
-      # broke in the gcc 13 -> 14 update
-      "test_dump"
-      "test_input_formats"
-      "test_other_input_formats"
-    ]
-    ++ lib.optionals (!runAllTests) [
-      # Disable slow tests, reduces test time ~25 %
-      "test_report"
-      "test_post_overflow"
-      "test_cjk"
-      "test_extrapolate"
-      "test_filename_without_dir"
-      "test_overwrite"
-      "test_options"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
-      # unknown reason so far
-      # https://github.com/adobe-type-tools/afdko/issues/1425
-      "test_spec"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isi686) [
-      "test_dump_option"
-      "test_type1mm_inputs"
-    ];
+  disabledTests = [
+    # broke in the fontforge 4.51 -> 4.53 update
+    "test_glyphs_2_7"
+    "test_hinting_data"
+    "test_waterfallplot"
+    # broke at some point
+    "test_type1_supported_hint"
+  ]
+  ++ lib.optionals (stdenv.cc.isGNU) [
+    # broke in the gcc 13 -> 14 update
+    "test_dump"
+    "test_input_formats"
+    "test_other_input_formats"
+  ]
+  ++ lib.optionals (!runAllTests) [
+    # Disable slow tests, reduces test time ~25 %
+    "test_report"
+    "test_post_overflow"
+    "test_cjk"
+    "test_extrapolate"
+    "test_filename_without_dir"
+    "test_overwrite"
+    "test_options"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
+    # unknown reason so far
+    # https://github.com/adobe-type-tools/afdko/issues/1425
+    "test_spec"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_dump_option"
+    "test_type1mm_inputs"
+  ];
 
   passthru.tests = {
     fullTestsuite = afdko.override { runAllTests = true; };

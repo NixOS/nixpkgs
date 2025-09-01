@@ -3,54 +3,64 @@
   stdenv,
   fetchFromGitHub,
   coreutils,
-  git,
+  fswatch,
+  gitMinimal,
   gnugrep,
   gnused,
-  makeWrapper,
+  makeBinaryWrapper,
   inotify-tools,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-sync";
-  version = "0-unstable-2024-11-30";
+  version = "0-unstable-2025-06-26";
 
   src = fetchFromGitHub {
     owner = "simonthum";
     repo = "git-sync";
-    rev = "7242291edf543ecc1bb9de8f47086bb69a5cb9f7";
-    hash = "sha256-t1NVgp+ELmTMK0N1fFFJCoKQd8mSYSMAIDG9+kNs3Ok=";
+    rev = "15af8a43cb4d8354f0b7e7c8d27e09587a9a3994";
+    hash = "sha256-7sCncPxVMiDGi1PSoFhA9emSY2Jit35/FaBbinCdS/A=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -a git-* $out/bin/
-    cp -a contrib/git-* $out/bin/
-  '';
+  installPhase =
+    let
+      wrapperPath = lib.makeBinPath (
+        [
+          coreutils
+          fswatch
+          gitMinimal
+          gnugrep
+          gnused
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+      );
 
-  wrapperPath = lib.makeBinPath (
-    [
-      coreutils
-      git
-      gnugrep
-      gnused
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-  );
+    in
+    ''
+      runHook preInstall
 
-  postFixup = ''
-    wrap_path="${wrapperPath}":$out/bin
+      for file in git-*; do
+        install -D -m 755 "$file" -t $out/bin
+      done
 
-    wrapProgram $out/bin/git-sync \
-      --prefix PATH : $wrap_path
+      for file in contrib/git-*; do
+        install -D -m 755 "$file" -t $out/bin
+      done
 
-    wrapProgram $out/bin/git-sync-on-inotify \
-      --prefix PATH : $wrap_path
-  '';
+      wrap_path="${wrapperPath}":$out/bin
+
+      for file in $out/bin/*; do
+        wrapProgram $file \
+          --prefix PATH : $wrap_path
+      done
+
+      runHook postInstall
+    '';
 
   passthru = {
     updateScript = nix-update-script { };

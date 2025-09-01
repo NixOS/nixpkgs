@@ -11,6 +11,7 @@ with lib;
 
 let
   inherit (utils) systemdUtils escapeSystemdPath;
+  inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
     generateUnits
     pathToUnit
@@ -21,6 +22,7 @@ let
     timerToUnit
     mountToUnit
     automountToUnit
+    attrsToSection
     ;
 
   cfg = config.boot.initrd.systemd;
@@ -78,7 +80,8 @@ let
     "timers.target"
     "umount.target"
     "systemd-bsod.service"
-  ] ++ cfg.additionalUpstreamUnits;
+  ]
+  ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
     "sysinit.target.wants"
@@ -99,14 +102,6 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
-    allowMissing = false;
-    inherit (config.boot.initrd) extraFirmwarePaths;
-  };
 
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
@@ -146,6 +141,12 @@ in
       It only saved ~1MiB of initramfs size, but caused a few issues
       like unloadable kernel modules.
     '')
+    (lib.mkRemovedOptionModule [
+      "boot"
+      "initrd"
+      "systemd"
+      "extraConfig"
+    ] "Use boot.initrd.systemd.settings.Manager instead.")
   ];
 
   options.boot.initrd.systemd = {
@@ -168,12 +169,24 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
+    settings.Manager = mkOption {
+      default = { };
+      defaultText = lib.literalExpression ''
+        {
+          DefaultEnvironment = "PATH=/bin:/sbin";
+        }
+      '';
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
+        Options for the global systemd service manager used in initrd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -189,6 +202,11 @@ in
           ])
         );
       default = { };
+      defaultText = ''
+        {
+          PATH = "/bin:/sbin";
+        }
+      '';
       example = {
         SYSTEMD_LOG_LEVEL = "debug";
       };
@@ -387,15 +405,15 @@ in
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
-    assertions =
-      [
-        {
-          assertion =
-            cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
-          message = "The ‘fileSystems’ option does not specify your root file system.";
-        }
-      ]
-      ++ map
+    assertions = [
+      {
+        assertion =
+          cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+        message = "The ‘fileSystems’ option does not specify your root file system.";
+      }
+    ]
+    ++
+      map
         (name: {
           assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
           message = ''
@@ -430,25 +448,25 @@ in
       # systemd needs this for some features
       "autofs"
       # systemd-cryptenroll
-    ] ++ lib.optional cfg.package.withEfi "efivarfs";
+    ]
+    ++ lib.optional cfg.package.withEfi "efivarfs";
 
-    boot.kernelParams =
-      [
-        "root=${config.boot.initrd.systemd.root}"
-      ]
-      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
-      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
-      # For NixOS activation to succeed, we need to have root writable in initrd.
-      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
+    boot.kernelParams = [
+      "root=${config.boot.initrd.systemd.root}"
+    ]
+    ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+    # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+    # For NixOS activation to succeed, we need to have root writable in initrd.
+    ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
       # bashInteractive is easier to use and also required by debug-shell.service
       initrdBin = [
         pkgs.bashInteractive
         pkgs.coreutils
-        cfg.package.kmod
         cfg.package
-      ];
+      ]
+      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod;
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -457,99 +475,97 @@ in
       };
 
       managerEnvironment.PATH = "/bin:/sbin";
+      settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
-      contents =
-        {
-          "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
-          "/init".source = "${cfg.package}/lib/systemd/systemd";
-          "/etc/systemd/system".source = stage1Units;
+      contents = {
+        "/init".source = "${cfg.package}/lib/systemd/systemd";
+        "/etc/systemd/system".source = stage1Units;
 
-          "/etc/systemd/system.conf".text = ''
-            [Manager]
-            DefaultEnvironment=PATH=/bin:/sbin
-            ${cfg.extraConfig}
-            ManagerEnvironment=${
-              lib.concatStringsSep " " (
-                lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-              )
-            }
-          '';
+        "/etc/systemd/system.conf".text = ''
+          [Manager]
+          ${attrsToSection cfg.settings.Manager}
+        '';
 
-          "/lib".source = "${modulesClosure}/lib";
+        # We can use either ! or * to lock the root account in the
+        # console, but some software like OpenSSH won't even allow you
+        # to log in with an SSH key if you use ! so we use * instead
+        "/etc/shadow".text =
+          let
+            ea = cfg.emergencyAccess;
+            access = ea != null && !(isBool ea && !ea);
+            passwd = if isString ea then ea else "";
+          in
+          "root:${if access then passwd else "*"}:::::::";
 
-          "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+        "/bin".source = "${initrdBinEnv}/bin";
+        "/sbin".source = "${initrdBinEnv}/sbin";
+        "/usr/bin".source = "${initrdBinEnv}/bin";
+        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
-          # We can use either ! or * to lock the root account in the
-          # console, but some software like OpenSSH won't even allow you
-          # to log in with an SSH key if you use ! so we use * instead
-          "/etc/shadow".text =
-            let
-              ea = cfg.emergencyAccess;
-              access = ea != null && !(isBool ea && !ea);
-              passwd = if isString ea then ea else "";
-            in
-            "root:${if access then passwd else "*"}:::::::";
+        "/etc/os-release".source = config.boot.initrd.osRelease;
+        "/etc/initrd-release".source = config.boot.initrd.osRelease;
 
-          "/bin".source = "${initrdBinEnv}/bin";
-          "/sbin".source = "${initrdBinEnv}/sbin";
+        # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
+        "/etc/hostname".text = config.networking.hostName;
 
-          "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
-          "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-          "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+      }
+      // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
+        "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
+      }
+      // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+        "/lib".source = "${config.system.build.modulesClosure}/lib";
 
-          "/etc/os-release".source = config.boot.initrd.osRelease;
-          "/etc/initrd-release".source = config.boot.initrd.osRelease;
+        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
-          # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
-          "/etc/hostname".text = config.networking.hostName;
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+      };
 
-        }
-        // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
-          "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
-        };
+      storePaths = [
+        # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-executor"
+        "${cfg.package}/lib/systemd/systemd-fsck"
+        "${cfg.package}/lib/systemd/systemd-hibernate-resume"
+        "${cfg.package}/lib/systemd/systemd-journald"
+        "${cfg.package}/lib/systemd/systemd-makefs"
+        "${cfg.package}/lib/systemd/systemd-modules-load"
+        "${cfg.package}/lib/systemd/systemd-remount-fs"
+        "${cfg.package}/lib/systemd/systemd-shutdown"
+        "${cfg.package}/lib/systemd/systemd-sulogin-shell"
+        "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-bsod"
+        "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
 
-      storePaths =
-        [
-          # systemd tooling
-          "${cfg.package}/lib/systemd/systemd-executor"
-          "${cfg.package}/lib/systemd/systemd-fsck"
-          "${cfg.package}/lib/systemd/systemd-hibernate-resume"
-          "${cfg.package}/lib/systemd/systemd-journald"
-          "${cfg.package}/lib/systemd/systemd-makefs"
-          "${cfg.package}/lib/systemd/systemd-modules-load"
-          "${cfg.package}/lib/systemd/systemd-remount-fs"
-          "${cfg.package}/lib/systemd/systemd-shutdown"
-          "${cfg.package}/lib/systemd/systemd-sulogin-shell"
-          "${cfg.package}/lib/systemd/systemd-sysctl"
-          "${cfg.package}/lib/systemd/systemd-bsod"
-          "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
+        # generators
+        "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-fstab-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
 
-          # generators
-          "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
-          "${cfg.package}/lib/systemd/system-generators/systemd-fstab-generator"
-          "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
-          "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
-          "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
+        # utilities needed by systemd
+        "${cfg.package.util-linux}/bin/mount"
+        "${cfg.package.util-linux}/bin/umount"
+        "${cfg.package.util-linux}/bin/sulogin"
 
-          # utilities needed by systemd
-          "${cfg.package.util-linux}/bin/mount"
-          "${cfg.package.util-linux}/bin/umount"
-          "${cfg.package.util-linux}/bin/sulogin"
+        # required for services generated with writeShellScript and friends
+        pkgs.runtimeShell
+        # some tools like xfs still want the sh symlink
+        "${pkgs.bashNonInteractive}/bin"
 
-          # required for services generated with writeShellScript and friends
-          pkgs.runtimeShell
-          # some tools like xfs still want the sh symlink
-          "${pkgs.bash}/bin"
+        # so NSS can look up usernames
+        "${pkgs.glibc}/lib/libnss_files.so.2"
 
-          # so NSS can look up usernames
-          "${pkgs.glibc}/lib/libnss_files.so.2"
-
-          # Resolving sysroot symlinks without code exec
-          "${pkgs.chroot-realpath}/bin/chroot-realpath"
-        ]
-        ++ jobScripts
-        ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+        # Resolving sysroot symlinks without code exec
+        "${pkgs.chroot-realpath}/bin/chroot-realpath"
+      ]
+      ++ jobScripts
+      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
 
       targets.initrd.aliases = [ "default.target" ];
       units =

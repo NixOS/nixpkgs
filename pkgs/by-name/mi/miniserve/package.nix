@@ -10,21 +10,29 @@
   curl,
   versionCheckHook,
   nix-update-script,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.29.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HHTNBqMYf7WrqJl5adPmH87xfrzV4TKJckpwTPiiw7w=";
+    hash = "sha256-sSCS5jHhu0PBF/R3YqbR9krZghNNa2cPkLkK8kvWWd4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Rjql9cyw7RS66HE50iUrjNvS5JRhR1HBaalOY9eDGH4=";
+  patches = [
+    (fetchpatch {
+      name = "upload.patch";
+      url = "https://github.com/svenstaro/miniserve/commit/d41ade0d79e2c175515701350f763dd461c55964.patch";
+      hash = "sha256-2xQPcJFjlvrCeobuDXm+eVZzDsKoQoZL7OXEJxncX5k=";
+    })
+  ];
+
+  cargoHash = "sha256-Gb1k4sd2/OV1GskFZBn7EapZTlhb9LK19lJHVP7uCK0=";
 
   nativeBuildInputs = [
     pkg-config

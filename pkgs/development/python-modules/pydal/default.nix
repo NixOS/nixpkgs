@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250526.4";
+  version = "20250629.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OprwHcF7vHpqdNUd9vAcHJAmiI8mTJgR6GRLwZvn928=";
+    hash = "sha256-P65iULncYasN7ahwD75czGlwum+N4D1Y0WCd6XpBXSk=";
   };
 
   build-system = [ setuptools ];
@@ -28,19 +28,22 @@ buildPythonPackage rec {
 
   checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/*.py"
+  ];
+
+  disabledTestPaths = [
     # these tests already seem to be broken on the upstream
-    "--deselect=tests/nosql.py::TestFields::testRun"
-    "--deselect=tests/nosql.py::TestSelect::testGroupByAndDistinct"
-    "--deselect=tests/nosql.py::TestExpressions::testOps"
-    "--deselect=tests/nosql.py::TestExpressions::testRun"
-    "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
-    "--deselect=tests/nosql.py::TestConnection::testRun"
-    "--deselect=tests/restapi.py::TestRestAPI::test_search"
-    "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
-    "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
-    "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
+    "tests/nosql.py::TestFields::testRun"
+    "tests/nosql.py::TestSelect::testGroupByAndDistinct"
+    "tests/nosql.py::TestExpressions::testOps"
+    "tests/nosql.py::TestExpressions::testRun"
+    "tests/nosql.py::TestImportExportUuidFields::testRun"
+    "tests/nosql.py::TestConnection::testRun"
+    "tests/restapi.py::TestRestAPI::test_search"
+    "tests/validation.py::TestValidateAndInsert::testRun"
+    "tests/validation.py::TestValidateUpdateInsert::testRun"
+    "tests/validators.py::TestValidators::test_IS_IN_DB"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

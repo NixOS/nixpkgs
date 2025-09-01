@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-DTPlPCumkVI2naYoNdO8T3pQNSawBA0FZ9LxVpqKqN0=";
 
   setupHook = replaceVars ./setup-hook.sh {

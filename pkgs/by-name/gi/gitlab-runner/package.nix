@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "17.11.0";
+  version = "18.3.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jppy8IG0Oq95RDDkvN1FpXjJuSc3DkfhGgnfpaUSKa4=";
+    hash = "sha256-D40ecrGAu76WoV8B49/2eDqigpcXcSCc+1nOW7KxHcA=";
   };
 
-  vendorHash = "sha256-wxFVDkqiqs7jaZEPGyawWfs6h6UgAhCWSckM90G44lA=";
+  vendorHash = "sha256-vP/htZiUp5qL4TMw6AgNW/TVcvx+pl6rxp41SK5g4XM=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -29,43 +29,42 @@ buildGoModule (finalAttrs: {
     ./remove-bash-test.patch
   ];
 
-  prePatch =
-    ''
-      # Remove some tests that can't work during a nix build
+  prePatch = ''
+    # Remove some tests that can't work during a nix build
 
-      # Needs the build directory to be a git repo
-      substituteInPlace commands/helpers/file_archiver_test.go \
-        --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
-        --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
-      rm shells/abstract_test.go
+    # Needs the build directory to be a git repo
+    substituteInPlace commands/helpers/file_archiver_test.go \
+      --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
+      --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
+    rm shells/abstract_test.go
 
-      # No writable developer environment
-      rm common/build_settings_test.go
-      rm common/build_test.go
-      rm executors/custom/custom_test.go
+    # No writable developer environment
+    rm common/build_settings_test.go
+    rm common/build_test.go
+    rm executors/custom/custom_test.go
 
-      # No Docker during build
-      rm executors/docker/docker_test.go
-      rm executors/docker/services_test.go
-      rm executors/docker/terminal_test.go
-      rm helpers/docker/auth/auth_test.go
+    # No Docker during build
+    rm executors/docker/docker_test.go
+    rm executors/docker/services_test.go
+    rm executors/docker/terminal_test.go
+    rm helpers/docker/auth/auth_test.go
 
-      # No Kubernetes during build
-      rm executors/kubernetes/feature_test.go
-      rm executors/kubernetes/kubernetes_test.go
-      rm executors/kubernetes/overwrites_test.go
-    ''
-    + lib.optionalString stdenv.buildPlatform.isDarwin ''
-      # Invalid bind arguments break Unix socket tests
-      substituteInPlace commands/wrapper_test.go \
-        --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
+    # No Kubernetes during build
+    rm executors/kubernetes/feature_test.go
+    rm executors/kubernetes/kubernetes_test.go
+    rm executors/kubernetes/overwrites_test.go
+  ''
+  + lib.optionalString stdenv.buildPlatform.isDarwin ''
+    # Invalid bind arguments break Unix socket tests
+    substituteInPlace commands/wrapper_test.go \
+      --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
 
-      # No keychain access during build breaks X.509 certificate tests
-      substituteInPlace helpers/certificate/x509_test.go \
-        --replace-fail "func TestCertificate" "func OFF_TestCertificate"
-      substituteInPlace network/client_test.go \
-        --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
-    '';
+    # No keychain access during build breaks X.509 certificate tests
+    substituteInPlace helpers/certificate/x509_test.go \
+      --replace-fail "func TestCertificate" "func OFF_TestCertificate"
+    substituteInPlace network/client_test.go \
+      --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
+  '';
 
   excludedPackages = [
     # Nested dependency Go module, used with go.mod replace directive

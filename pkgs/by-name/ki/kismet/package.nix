@@ -57,61 +57,58 @@ stdenv.mkDerivation (finalPackage: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      protobuf
-      protobufc
-    ]
-    ++ lib.optionals withPython [
-      (python3.withPackages (ps: [
-        ps.numpy
-        ps.protobuf
-        ps.pyserial
-        ps.setuptools
-        ps.websockets
-      ]))
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    protobuf
+    protobufc
+  ]
+  ++ lib.optionals withPython [
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.protobuf
+      ps.pyserial
+      ps.setuptools
+      ps.websockets
+    ]))
+  ];
 
-  buildInputs =
-    [
-      binutils
-      elfutils
-      libcap
-      libmicrohttpd
-      libnl
-      libpcap
-      openssl
-      libusb1
-      libwebsockets
-      pcre2
-      protobuf
-      protobufc
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals withNetworkManager [
-      networkmanager
-      glib
-    ]
-    ++ lib.optionals withSensors [
-      lm_sensors
-    ];
+  buildInputs = [
+    binutils
+    elfutils
+    libcap
+    libmicrohttpd
+    libnl
+    libpcap
+    openssl
+    libusb1
+    libwebsockets
+    pcre2
+    protobuf
+    protobufc
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals withNetworkManager [
+    networkmanager
+    glib
+  ]
+  ++ lib.optionals withSensors [
+    lm_sensors
+  ];
 
-  configureFlags =
-    [
-      "--disable-wifi-coconut" # Until https://github.com/kismetwireless/kismet/issues/478
-    ]
-    ++ lib.optionals (!withNetworkManager) [
-      "--disable-libnm"
-    ]
-    ++ lib.optionals (!withPython) [
-      "--disable-python-tools"
-    ]
-    ++ lib.optionals (!withSensors) [
-      "--disable-lmsensors"
-    ];
+  configureFlags = [
+    "--disable-wifi-coconut" # Until https://github.com/kismetwireless/kismet/issues/478
+  ]
+  ++ lib.optionals (!withNetworkManager) [
+    "--disable-libnm"
+  ]
+  ++ lib.optionals (!withPython) [
+    "--disable-python-tools"
+  ]
+  ++ lib.optionals (!withSensors) [
+    "--disable-lmsensors"
+  ];
 
   enableParallelBuilding = true;
 

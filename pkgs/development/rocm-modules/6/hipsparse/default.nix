@@ -22,16 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -47,32 +46,30 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    [
-      rocsparse
-      git
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildSamples) [
-      openmp
-    ];
+  buildInputs = [
+    rocsparse
+    git
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildSamples) [
+    openmp
+  ];
 
-  cmakeFlags =
-    [
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
-      (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
-      (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildSamples)
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ];
+  cmakeFlags = [
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+    (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+    (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildSamples)
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
 
   # We have to manually generate the matrices
   # CMAKE_MATRICES_DIR seems to be reset in clients/tests/CMakeLists.txt

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   esptool,
   git,
   inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -33,19 +34,26 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.5.2";
+  version = "2025.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-p4+OuBGS9OJxxiQ4xOO2WseUrw3yXWyCZn7jilnh06E=";
+    hash = "sha256-UcYzGUz+H5N/jql3KgSNa24mygasAL4sOXLt9PdLYT8=";
   };
 
-  build-systems = with python.pkgs; [
+  patches = [
+    # Use the esptool executable directly in the ESP32 post build script, that
+    # gets executed by platformio. This is required, because platformio uses its
+    # own python environment through `python -m esptool` and then fails to find
+    # the esptool library.
+    ./esp32-post-build-esptool-reference.patch
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -61,7 +69,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.4.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.46" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -82,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
+    jinja2
     kconfiglib
     packaging
     paho-mqtt
@@ -123,23 +133,25 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [ versionCheckHook ];
+
+  disabledTestPaths = [
+    # platformio builds; requires networking for dependency resolution
+    "tests/integration"
   ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-  ];
-
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
+  preCheck = ''
+    export PATH=$PATH:$out/bin
   '';
 
   postInstall =
@@ -152,6 +164,10 @@ python.pkgs.buildPythonApplication rec {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
 
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;

@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       system, excellent dev tools, and maintained releases, Pharo is an
       attractive platform to build and deploy mission critical applications.
     '';
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
   };

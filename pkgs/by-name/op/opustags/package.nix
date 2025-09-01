@@ -26,22 +26,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildInputs = [ libogg ];
 
   doCheck = true;
 
-  nativeCheckInputs =
-    [
-      ffmpeg
-      glibcLocales
-      perl
-    ]
-    ++ (with perlPackages; [
-      ListMoreUtils
-      TestDeep
-    ]);
+  nativeCheckInputs = [
+    ffmpeg
+    glibcLocales
+    perl
+  ]
+  ++ (with perlPackages; [
+    ListMoreUtils
+    TestDeep
+  ]);
 
   checkPhase = ''
     export LANG="en_US.UTF-8"

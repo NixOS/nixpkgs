@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
-  future,
   pyusb,
 }:
 
 buildPythonPackage rec {
   pname = "pygreat";
-  version = "2024.0.3";
+  version = "2024.0.5";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libgreat";
     tag = "v${version}";
-    hash = "sha256-dJqL85mx1zGYUpMxDa83hNRr7eUn5NNfWXullGFQK70=";
+    hash = "sha256-2PFeCG7m8qiK3eBX2838P6ZsLoQxcJBG+/TppUMT6dE=";
   };
 
   sourceRoot = "${src.name}/host";
@@ -29,31 +26,22 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  pythonRemoveDeps = [ "backports.functools_lru_cache" ];
 
-  pythonRemoveDeps = [
-    "backports.functools_lru_cache"
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    future
-    pyusb
-  ];
+  dependencies = [ pyusb ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pygreat"
-  ];
+  pythonImportsCheck = [ "pygreat" ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/v${version}";
     description = "Python library for talking with libGreat devices";
     homepage = "https://github.com/greatscottgadgets/libgreat/";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
   };
 }

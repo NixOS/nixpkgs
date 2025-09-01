@@ -1,16 +1,18 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   awesomeversion,
   buildPythonPackage,
   envoy-utils,
   fetchFromGitHub,
-  httpx,
   lxml,
   orjson,
   poetry-core,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.26.1";
+  version = "2.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +31,7 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     tag = "v${version}";
-    hash = "sha256-EKelQNHDaWSBrr19a8kYRI/wOYcRS9umJIo4oW9aU6k=";
+    hash = "sha256-Z6txaTkIkUTYWVWbsmvoI/huDTZKX5DxePqM5rsmIWY=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -37,9 +39,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    aiohttp
     awesomeversion
     envoy-utils
-    httpx
     lxml
     orjson
     pyjwt
@@ -47,8 +49,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
     respx
     syrupy

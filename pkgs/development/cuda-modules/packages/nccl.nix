@@ -18,18 +18,10 @@ let
     cuda_cudart
     cuda_nvcc
     cudaAtLeast
-    cudaOlder
-    cudatoolkit
     flags
     ;
-  # versions 2.26+ with CUDA 11.x error with
-  # fatal error: cuda/atomic: No such file or directory
-  version = if cudaAtLeast "12.0" then "2.26.2-1" else "2.25.1-1";
-  hash =
-    if cudaAtLeast "12.0" then
-      "sha256-iLEuru3gaNLcAdH4V8VIv3gjdTGjgb2/Mr5UKOh69N4="
-    else
-      "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
+  version = "2.27.6-1";
+  hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
@@ -50,55 +42,33 @@ backendStdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      which
-      autoAddDriverRunpath
-      python3
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    which
+    autoAddDriverRunpath
+    python3
+    cuda_nvcc
+  ];
 
-  buildInputs =
-    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      cuda_nvcc # crt/host_config.h
-      cuda_cudart
-    ]
-    # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
-    # against other version, like below, it's important that we use the same format. Otherwise,
-    # we'll get incorrect results.
-    # For example, lib.versionAtLeast "12.0" "12.0.0" == false.
-    ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+  buildInputs = [
+    cuda_nvcc # crt/host_config.h
+    cuda_cudart
+    cuda_cccl
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
-  postPatch =
-    ''
-      patchShebangs ./src/device/generate.py
-    ''
-    # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
-    # in order to work with new constexpr handling
-    + lib.optionalString (cudaAtLeast "12.8") ''
-      substituteInPlace ./makefiles/common.mk \
-        --replace-fail "-std=c++11" "-std=c++14"
-    '';
+  postPatch = ''
+    patchShebangs ./src/device/generate.py
+    patchShebangs ./src/device/symmetric/generate.py
+  '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "NVCC_GENCODE=${flags.gencodeString}"
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [
-      "CUDA_HOME=${cudatoolkit}"
-      "CUDA_LIB=${lib.getLib cudatoolkit}/lib"
-      "CUDA_INC=${lib.getDev cudatoolkit}/include"
-    ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      "CUDA_HOME=${cuda_nvcc}"
-      "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-      "CUDA_INC=${lib.getDev cuda_cudart}/include"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NVCC_GENCODE=${flags.gencodeString}"
+    "CUDA_HOME=${cuda_nvcc}"
+    "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
+    "CUDA_INC=${lib.getDev cuda_cudart}/include"
+  ];
 
   enableParallelBuilding = true;
 

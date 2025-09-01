@@ -4,31 +4,31 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "storj-uplink";
-  version = "1.130.6";
+  version = "1.135.3";
 
   src = fetchFromGitHub {
     owner = "storj";
     repo = "storj";
-    rev = "v${version}";
-    hash = "sha256-5IFMIiDP+HmR/yc7OQjs23lO5Cw12lZBsD8oIo2CaLE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9KcJ0Ol+oV2SWpTUOJxNcKnd+l80ysh8A02of0pccjs=";
   };
 
   subPackages = [ "cmd/uplink" ];
 
-  vendorHash = "sha256-PnRnnl3uFs889eYQbD+oNvDtJgNepNIJ90KTjnGthI8=";
+  vendorHash = "sha256-XOsOCBIC9krvEn7MxRhXpLA2UAjv4Sfdnim/wf3HBPU=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
-  meta = with lib; {
+  # Tests fail with 'listen tcp 127.0.0.1:0: bind: operation not permitted'.
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Command-line tool for Storj";
     homepage = "https://storj.io";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "uplink";
-    maintainers = with maintainers; [ felipeqq2 ];
+    maintainers = with lib.maintainers; [ felipeqq2 ];
   };
-}
+})

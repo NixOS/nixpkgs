@@ -74,7 +74,7 @@
 }:
 
 let
-  version = "1.3.20";
+  version = "1.4.19";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -112,18 +112,19 @@ let
       tracing-otlp
       tracing
       ;
-    triton =
-      [ tritonclient ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux (
-        tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
-      );
+    triton = [
+      tritonclient
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
+      tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
+    );
   };
 
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-zc/JvnEEoV21EbBHhLBWvilidXHx1pxYsBYISFg16Us=";
+    hash = "sha256-sRQfjB3K5F6lYeW92O7BV2slQ+DRCuMTVqRG8vT+9wc=";
   };
 in
 buildPythonPackage {
@@ -191,7 +192,8 @@ buildPythonPackage {
     uv
     uvicorn
     watchfiles
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   inherit optional-dependencies;
 
@@ -224,7 +226,8 @@ buildPythonPackage {
     pytest-xdist
     pytestCheckHook
     scikit-learn
-  ] ++ optional-dependencies.grpc;
+  ]
+  ++ optional-dependencies.grpc;
 
   meta = with lib; {
     description = "Build Production-Grade AI Applications";

@@ -37,15 +37,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.graphics =
-      {
-        enable = true;
-        extraPackages = [ cfg.package ];
-      }
-      // lib.optionalAttrs cfg.support32Bit.enable {
-        enable32Bit = true;
-        extraPackages32 = [ cfg.support32Bit.package ];
-      };
+    hardware.graphics = {
+      enable = true;
+      extraPackages = [ cfg.package ];
+    }
+    // lib.optionalAttrs cfg.support32Bit.enable {
+      enable32Bit = true;
+      extraPackages32 = [ cfg.support32Bit.package ];
+    };
 
     environment.sessionVariables = lib.mkIf cfg.supportExperimental.enable {
       AMDVLK_ENABLE_DEVELOPING_EXT = "all";

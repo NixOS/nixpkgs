@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.12.2";
+  version = "1.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     tag = version;
-    hash = "sha256-rgnfp12SHlL3LFFMSrHlTd0tWNnA4ekxZ9kKYRvZWlw=";
+    hash = "sha256-Q43IXlzmCO7m9y/tRlJJ2Dz4wNeK+kXtLLLrthO+n58=";
   };
 
   pythonRelaxDeps = [ "traits" ];
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "niworkflows" ];
+  enabledTestPaths = [ "niworkflows" ];
 
   disabledTests = [
     # try to download data:

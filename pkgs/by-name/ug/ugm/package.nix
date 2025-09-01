@@ -36,6 +36,6 @@ buildGoModule rec {
     license = licenses.mit;
     mainProgram = "ugm";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ oosquare ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -7,20 +7,19 @@
 let
   sanitizeUTF8Capitalization =
     lang: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] lang);
-  aggregatedLocales =
-    [
-      "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
-    ]
-    ++ lib.pipe config.i18n.extraLocaleSettings [
-      # See description of extraLocaleSettings for why is this ignored here.
-      (lib.filterAttrs (n: v: n != "LANGUAGE"))
-      (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
-      (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
-    ]
-    ++ (builtins.map sanitizeUTF8Capitalization (
-      lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
-    ))
-    ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
+  aggregatedLocales = [
+    "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
+  ]
+  ++ lib.pipe config.i18n.extraLocaleSettings [
+    # See description of extraLocaleSettings for why is this ignored here.
+    (lib.filterAttrs (n: v: n != "LANGUAGE"))
+    (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
+    (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
+  ]
+  ++ (builtins.map sanitizeUTF8Capitalization (
+    lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
+  ))
+  ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
 in
 {
   ###### interface
@@ -171,7 +170,8 @@ in
     environment.sessionVariables = {
       LANG = config.i18n.defaultLocale;
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-    } // config.i18n.extraLocaleSettings;
+    }
+    // config.i18n.extraLocaleSettings;
 
     systemd.globalEnvironment = lib.mkIf (config.i18n.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";

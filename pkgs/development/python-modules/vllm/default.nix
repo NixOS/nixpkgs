@@ -3,8 +3,8 @@
   stdenv,
   python,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch,
   symlinkJoin,
   autoAddDriverRunpath,
 
@@ -44,6 +44,8 @@
   lm-format-enforcer,
   prometheus-fastapi-instrumentator,
   cupy,
+  cbor2,
+  pybase64,
   gguf,
   einops,
   importlib-metadata,
@@ -67,6 +69,9 @@
   opentelemetry-exporter-otlp,
   bitsandbytes,
   flashinfer,
+  py-libnuma,
+  setproctitle,
+  openai-harmony,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -90,13 +95,13 @@ let
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
-  # see CMakeLists.txt, grepping for GIT_TAG near cutlass
+  # see CMakeLists.txt, grepping for CUTLASS_REVISION
   # https://github.com/vllm-project/vllm/blob/v${version}/CMakeLists.txt
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.2";
-    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
+    tag = "v4.0.0";
+    hash = "sha256-HJY+Go1viPkSVZPEs/NyMtYJzas4mMLiIZF3kNX+WgA=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -109,8 +114,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "575f7724b9762f265bbee5889df9c7d630801845";
-      hash = "sha256-8WrKMl0olr0nYV4FRJfwSaJ0F5gWQpssoFMjr9tbHBk=";
+      rev = "0e43e774597682284358ff2c54530757b654b8d1";
+      hash = "sha256-wxL/jtq/lsLg1o+4392KNgfw5TYlW6lqEVbmR3Jl4/Q=";
     };
 
     dontConfigure = true;
@@ -136,22 +141,21 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "8798f27777fb57f447070301bf33a9f9c607f491";
-      hash = "sha256-UTUvATGN1NU/Bc8qo078q6bEgILLmlrjL7Yk2iAJhg4=";
+      rev = "57b4e68b9f9d94750b46de8f8dbd2bfcc86edd4f";
+      hash = "sha256-c7L7WZVVEnXMOTPBoSp7jhkl9d4TA4sj11QvOSWTDIE=";
     };
 
     dontConfigure = true;
 
     # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass and composable_kernel
-    buildPhase =
-      ''
-        rm -rf csrc/cutlass
-        ln -sf ${cutlass} csrc/cutlass
-      ''
-      + lib.optionalString (rocmSupport) ''
-        rm -rf csrc/composable_kernel;
-        ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
-      '';
+    buildPhase = ''
+      rm -rf csrc/cutlass
+      ln -sf ${cutlass} csrc/cutlass
+    ''
+    + lib.optionalString (rocmSupport) ''
+      rm -rf csrc/composable_kernel;
+      ln -sf ${rocmPackages.composable_kernel} csrc/composable_kernel
+    '';
 
     installPhase = ''
       cp -rva . $out
@@ -160,7 +164,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
+  # https://github.com/pytorch/pytorch/blob/v2.7.1/torch/utils/cpp_extension.py#L2343-L2345
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -230,6 +234,7 @@ let
     libcusolver # cusolverDn.h
     cuda_nvtx
     cuda_nvrtc
+    # cusparselt # cusparseLt.h
     libcublas
   ];
 
@@ -246,8 +251,11 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.9.0.1";
+  version = "0.10.1.1";
   pyproject = true;
+
+  # https://github.com/vllm-project/vllm/issues/12083
+  disabled = pythonAtLeast "3.13";
 
   stdenv = torch.stdenv;
 
@@ -255,58 +263,46 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-gNe/kdsDQno8Fd6mo29feWmbyC0c2+kljlVxY4v7R9U=";
+    hash = "sha256-lLNjBv5baER0AArX3IV4HWjDZ2jTGXyGIvnHupR8MGM=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "remove-unused-opentelemetry-semantic-conventions-ai-dep.patch";
-      url = "https://github.com/vllm-project/vllm/commit/6a5d7e45f52c3a13de43b8b4fa9033e3b342ebd2.patch";
-      hash = "sha256-KYthqu+6XwsYYd80PtfrMMjuRV9+ionccr7EbjE4jJE=";
-    })
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
-    ./0004-drop-lsmod.patch
     ./0005-drop-intel-reqs.patch
   ];
 
-  postPatch =
-    ''
-      # pythonRelaxDeps does not cover build-system
-      substituteInPlace pyproject.toml \
-        --replace-fail "torch ==" "torch >="
+  postPatch = ''
+    # pythonRelaxDeps does not cover build-system
+    substituteInPlace pyproject.toml \
+      --replace-fail "torch ==" "torch >=" \
+      --replace-fail "setuptools>=77.0.3,<80.0.0" "setuptools"
 
-      # Ignore the python version check because it hard-codes minor versions and
-      # lags behind `ray`'s python interpreter support
-      substituteInPlace CMakeLists.txt \
-        --replace-fail \
-          'set(PYTHON_SUPPORTED_VERSIONS' \
-          'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    # Ignore the python version check because it hard-codes minor versions and
+    # lags behind `ray`'s python interpreter support
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'set(PYTHON_SUPPORTED_VERSIONS' \
+        'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
 
-      # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
-      substituteInPlace CMakeLists.txt \
-        --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
-    ''
-    + lib.optionalString (nccl == null) ''
-      # On platforms where NCCL is not supported (e.g. Jetson), substitute Gloo (provided by Torch)
-      substituteInPlace vllm/distributed/parallel_state.py \
-        --replace-fail '"nccl"' '"gloo"'
-    '';
+    # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
+  '';
 
-  nativeBuildInputs =
-    [
-      which
-    ]
-    ++ lib.optionals rocmSupport [
-      rocmPackages.hipcc
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ]
-    ++ lib.optionals isCudaJetson [
-      cudaPackages.autoAddCudaCompatRunpath
-    ];
+  nativeBuildInputs = [
+    which
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.hipcc
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ]
+  ++ lib.optionals isCudaJetson [
+    cudaPackages.autoAddCudaCompatRunpath
+  ];
 
   build-system = [
     cmake
@@ -347,81 +343,88 @@ buildPythonPackage rec {
       llvmPackages.openmp
     ];
 
-  dependencies =
-    [
-      aioprometheus
-      blake3
-      cachetools
-      depyf
-      fastapi
-      llguidance
-      lm-format-enforcer
-      numpy
-      openai
-      opencv-python-headless
-      outlines
-      pandas
-      prometheus-fastapi-instrumentator
-      psutil
-      py-cpuinfo
-      pyarrow
-      pydantic
-      python-json-logger
-      python-multipart
-      pyzmq
-      ray
-      sentencepiece
-      tiktoken
-      tokenizers
-      msgspec
-      gguf
-      einops
-      importlib-metadata
-      partial-json-parser
-      compressed-tensors
-      mistral-common
-      torch
-      torchaudio
-      torchvision
-      transformers
-      uvicorn
-      xformers
-      xgrammar
-      numba
-      opentelemetry-sdk
-      opentelemetry-api
-      opentelemetry-exporter-otlp
-      bitsandbytes
-    ]
-    ++ uvicorn.optional-dependencies.standard
-    ++ aioprometheus.optional-dependencies.starlette
-    ++ lib.optionals cudaSupport [
-      cupy
-      pynvml
-      flashinfer
-    ];
+  dependencies = [
+    aioprometheus
+    blake3
+    cachetools
+    cbor2
+    depyf
+    fastapi
+    llguidance
+    lm-format-enforcer
+    numpy
+    openai
+    opencv-python-headless
+    outlines
+    pandas
+    prometheus-fastapi-instrumentator
+    py-cpuinfo
+    pyarrow
+    pybase64
+    pydantic
+    python-json-logger
+    python-multipart
+    pyzmq
+    ray
+    sentencepiece
+    tiktoken
+    tokenizers
+    msgspec
+    gguf
+    einops
+    importlib-metadata
+    partial-json-parser
+    compressed-tensors
+    mistral-common
+    torch
+    torchaudio
+    torchvision
+    transformers
+    uvicorn
+    xformers
+    xgrammar
+    numba
+    opentelemetry-sdk
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    bitsandbytes
+    setproctitle
+    openai-harmony
+    # vLLM needs Torch's compiler to be present in order to use torch.compile
+    torch.stdenv.cc
+  ]
+  ++ uvicorn.optional-dependencies.standard
+  ++ aioprometheus.optional-dependencies.starlette
+  ++ lib.optionals stdenv.targetPlatform.isLinux [
+    py-libnuma
+    psutil
+  ]
+  ++ lib.optionals cudaSupport [
+    cupy
+    pynvml
+    flashinfer
+  ];
 
   dontUseCmakeConfigure = true;
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
-      (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
-      (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
-      (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
-      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
-        name = "cuda-merged-${cudaPackages.cudaMajorMinorVersion}";
-        paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
-      }}")
-      (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")
-      (lib.cmakeFeature "CAFFE2_USE_CUFILE" "ON")
-      (lib.cmakeFeature "CUTLASS_ENABLE_CUBLAS" "ON")
-    ]
-    ++ lib.optionals cpuSupport [
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
-    ];
+  cmakeFlags = [
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
+    (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
+    (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
+    (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
+    (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
+    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
+      name = "cuda-merged-${cudaPackages.cudaMajorMinorVersion}";
+      paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
+    }}")
+    (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")
+    (lib.cmakeFeature "CAFFE2_USE_CUFILE" "ON")
+    (lib.cmakeFeature "CUTLASS_ENABLE_CUBLAS" "ON")
+  ]
+  ++ lib.optionals cpuSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
+  ];
 
   env =
     lib.optionalAttrs cudaSupport {

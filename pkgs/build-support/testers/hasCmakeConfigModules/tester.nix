@@ -33,26 +33,26 @@ runCommandCC testName
     version = if versionCheck then version else null;
     nativeBuildInputs = [
       cmake
-    ] ++ nativeBuildInputs;
+    ]
+    ++ nativeBuildInputs;
     buildInputs = [ package ] ++ buildInputs;
-    meta =
-      {
-        description = "Test whether ${package.name} exposes cmake-config modules ${lib.concatStringsSep ", " moduleNames}";
-      }
-      # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
-      # as hydra can't check this meta info in dependencies.
-      # The test itself is just Nixpkgs, with MIT license.
-      // builtins.intersectAttrs {
-        available = throw "unused";
-        broken = throw "unused";
-        insecure = throw "unused";
-        license = throw "unused";
-        maintainers = throw "unused";
-        teams = throw "unused";
-        platforms = throw "unused";
-        unfree = throw "unused";
-        unsupported = throw "unused";
-      } package.meta;
+    meta = {
+      description = "Test whether ${package.name} exposes cmake-config modules ${lib.concatStringsSep ", " moduleNames}";
+    }
+    # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
+    # as hydra can't check this meta info in dependencies.
+    # The test itself is just Nixpkgs, with MIT license.
+    // builtins.intersectAttrs {
+      available = throw "unused";
+      broken = throw "unused";
+      insecure = throw "unused";
+      license = throw "unused";
+      maintainers = throw "unused";
+      teams = throw "unused";
+      platforms = throw "unused";
+      unfree = throw "unused";
+      unsupported = throw "unused";
+    } package.meta;
   }
   ''
     touch "$out"

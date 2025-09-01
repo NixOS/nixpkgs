@@ -10,15 +10,14 @@
   ncurses,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "12.4";
+  version = "12.8";
   pname = "textadept";
 
   src = fetchFromGitHub {
-    name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
     tag = "textadept_${finalAttrs.version}";
-    hash = "sha256-nPgpQeBq5Stv2o0Ke4W2Ltnx6qLe5TIC5a8HSYVkmfI=";
+    hash = "sha256-ba5YSZaWGGEFFAbHNNXv2/a4dWrG/o5mTySCmlPauWs=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ libsForQt5.wrapQtAppsHook ];
@@ -32,16 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
       "-DQT=OFF"
     ];
 
-  preConfigure =
-    ''
-      mkdir -p $PWD/build/_deps
+  preConfigure = ''
+    mkdir -p $PWD/build/_deps
 
-    ''
-    + lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
-      ) (import ./deps.nix)
-    );
+  ''
+  + lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
+    ) (import ./deps.nix)
+  );
 
   meta = {
     description = "Extensible text editor based on Scintilla with Lua scripting";

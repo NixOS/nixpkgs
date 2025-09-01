@@ -1,5 +1,6 @@
 {
   aacgain,
+  chromaprint,
   ffmpeg,
   flac,
   imagemagick,
@@ -55,6 +56,9 @@
   chroma = {
     propagatedBuildInputs = [ python3Packages.pyacoustid ];
     testPaths = [ ];
+    wrapperBins = [
+      chromaprint
+    ];
   };
   convert.wrapperBins = [ ffmpeg ];
   deezer = {

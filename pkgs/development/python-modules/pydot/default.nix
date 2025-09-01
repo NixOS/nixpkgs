@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "3.0.4";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-POiLJVjzgIsDdvIr+mwmOQnhw5geKntim2W0Ue7kol0=";
+    hash = "sha256-whSPaBxKM+CL8OJqnl+OQJmoLg4qBoCY8yzoZXc2StU=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pytestFlagsArray = [ "test/test_pydot.py" ];
+  enabledTestPaths = [ "test/test_pydot.py" ];
 
   pythonImportsCheck = [ "pydot" ];
 

@@ -2,24 +2,37 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs,
   nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
-  version = "0.16.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "eyaltoledano";
     repo = "claude-task-master";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-u9gLwYGRNwkyIOS8zf0nSJfrUDs7ib3Vbm0awtskpSg=";
+    tag = "task-master-ai@${finalAttrs.version}";
+    hash = "sha256-7Vs8k8/ym2K+FzX3fAke344S9gEhjPCnzz1z+OlounE=";
   };
 
-  npmDepsHash = "sha256-PjnyCqYKj1alnm1gOMSnIeGtg3pJcZ5A8ThxOQZMSF4=";
+  npmDepsHash = "sha256-6dPIZtbTmLVrJgaSAZE7pT1+xbKVkBS+UF8xfy/micc=";
 
   dontNpmBuild = true;
 
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
+
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    mkdir -p $out/lib/node_modules/task-master-ai/apps
+    cp -r apps/extension $out/lib/node_modules/task-master-ai/apps/extension
+    cp -r apps/docs $out/lib/node_modules/task-master-ai/apps/docs
+  '';
+
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = 1;
+  };
 
   meta = with lib; {
     description = "Node.js agentic AI workflow orchestrator";

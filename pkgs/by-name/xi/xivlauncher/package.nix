@@ -17,7 +17,7 @@
 }:
 
 let
-  rev = "1.1.2";
+  rev = "1.2.1";
 in
 buildDotnetModule rec {
   pname = "XIVLauncher";
@@ -27,7 +27,7 @@ buildDotnetModule rec {
     owner = "goatcorp";
     repo = "XIVLauncher.Core";
     inherit rev;
-    hash = "sha256-QkA18C3oWxcW0vK6sji7vbm4bY5LxwIWierAg5qf38Q=";
+    hash = "sha256-bGHUDPUrohcc/lLE647cicaEIYo9t1/anc2VeMJlsGc=";
     fetchSubmodules = true;
   };
 

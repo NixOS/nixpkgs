@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gettext,
   pkg-config,
   intltool,
   gtk3,
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
     intltool
     xfce4-dev-tools
@@ -35,6 +37,13 @@ stdenv.mkDerivation rec {
     libxfce4util
     xfce4-panel
     i3ipc-glib
+  ];
+
+  patches = [
+    # Fix build with gettext 0.25
+    # https://hydra.nixos.org/build/302762031/nixlog/2
+    # FIXME: remove when gettext is fixed
+    ./gettext-0.25.patch
   ];
 
   enableParallelBuilding = true;

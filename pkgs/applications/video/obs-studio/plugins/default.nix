@@ -14,6 +14,8 @@
 
   droidcam-obs = callPackage ./droidcam-obs { };
 
+  distroav = qt6Packages.callPackage ./distroav { };
+
   input-overlay = qt6Packages.callPackage ./input-overlay.nix { };
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
@@ -25,6 +27,8 @@
   obs-aitum-multistream = qt6Packages.callPackage ./obs-aitum-multistream.nix { };
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
+
+  obs-browser-transition = callPackage ./obs-browser-transition.nix { };
 
   obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
 
@@ -105,6 +109,8 @@
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
+
+  obs-vnc = callPackage ./obs-vnc.nix { };
 
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 

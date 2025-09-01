@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.25.5";
+  version = "1.25.8";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
     tag = version;
-    hash = "sha256-lKjYSKjZSJ9HtbmGWFR0bVv6hLnRzpklq2ueWirJ+Nw=";
+    hash = "sha256-FsaTXGlQ390XgFrV4InF+xFr+Y9JgZefsR/AyHOuSsA=";
   };
 
   nativeBuildInputs = [

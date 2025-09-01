@@ -113,124 +113,121 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      lua5
-      perl
-      pkg-config
-      removeReferencesTo
-      unzip
-      wrapGAppsHook3
-    ]
-    ++ optionals chromecastSupport [ protobuf ]
-    ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]
-    ++ optionals waylandSupport [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    lua5
+    perl
+    pkg-config
+    removeReferencesTo
+    unzip
+    wrapGAppsHook3
+  ]
+  ++ optionals chromecastSupport [ protobuf ]
+  ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]
+  ++ optionals waylandSupport [
+    wayland-scanner
+  ];
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
-  buildInputs =
+  buildInputs = [
+    a52dec
+    alsa-lib
+    avahi
+    cairo
+    dbus
+    faad2
+    ffmpeg_6
+    flac
+    fluidsynth
+    fontconfig
+    freetype
+    fribidi
+    gnutls
+    harfbuzz
+    libGL
+    libSM
+    libarchive
+    libass
+    libbluray
+    libcaca
+    libcddb
+    libdc1394
+    libdvbpsi
+    libdvdnav
+    libdvdnav.libdvdread
+    libebml
+    libgcrypt
+    libgpg-error
+    libjpeg
+    libkate
+    libmad
+    libmatroska
+    libmodplug
+    libmpeg2
+    libmtp
+    libogg
+    libopus
+    libplacebo_5
+    libpng
+    libpulseaudio
+    librsvg
+    libsamplerate
+    libspatialaudio
+    libssh2
+    libtheora
+    libtiger
+    libupnp
+    libv4l
+    libva
+    libvorbis
+    libxml2
+    lua5
+    ncurses
+    samba
+    schroedinger
+    speex
+    srt
+    systemdLibs
+    taglib_1
+    xcbutilkeysyms
+    zlib
+  ]
+  ++ optionals (!onlyLibVLC) [ live555 ]
+  ++ optionals jackSupport [ libjack2 ]
+  ++ optionals chromecastSupport [
+    libmicrodns
+    protobuf
+  ]
+  ++ optionals skins2Support [
+    libXext
+    libXinerama
+    libXpm
+  ]
+  ++ optionals waylandSupport [
+    wayland
+    wayland-protocols
+  ]
+  ++ optionals withQt5 (
+    with libsForQt5;
     [
-      a52dec
-      alsa-lib
-      avahi
-      cairo
-      dbus
-      faad2
-      ffmpeg_6
-      flac
-      fluidsynth
-      fontconfig
-      freetype
-      fribidi
-      gnutls
-      harfbuzz
-      libGL
-      libSM
-      libarchive
-      libass
-      libbluray
-      libcaca
-      libcddb
-      libdc1394
-      libdvbpsi
-      libdvdnav
-      libdvdnav.libdvdread
-      libebml
-      libgcrypt
-      libgpg-error
-      libjpeg
-      libkate
-      libmad
-      libmatroska
-      libmodplug
-      libmpeg2
-      libmtp
-      libogg
-      libopus
-      libplacebo_5
-      libpng
-      libpulseaudio
-      librsvg
-      libsamplerate
-      libspatialaudio
-      libssh2
-      libtheora
-      libtiger
-      libupnp
-      libv4l
-      libva
-      libvorbis
-      libxml2
-      lua5
-      ncurses
-      samba
-      schroedinger
-      speex
-      srt
-      systemdLibs
-      taglib_1
-      xcbutilkeysyms
-      zlib
+      qtbase
+      qtsvg
+      qtx11extras
     ]
-    ++ optionals (!onlyLibVLC) [ live555 ]
-    ++ optionals jackSupport [ libjack2 ]
-    ++ optionals chromecastSupport [
-      libmicrodns
-      protobuf
-    ]
-    ++ optionals skins2Support [
-      libXext
-      libXinerama
-      libXpm
-    ]
-    ++ optionals waylandSupport [
-      wayland
-      wayland-protocols
-    ]
-    ++ optionals withQt5 (
-      with libsForQt5;
-      [
-        qtbase
-        qtsvg
-        qtx11extras
-      ]
-    )
-    ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+  )
+  ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
   strictDeps = true;
 
-  env =
-    {
-      # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
-      BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
-      LIVE555_PREFIX = live555;
-    }
-    // lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-    };
+  env = {
+    # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
+    BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
+    LIVE555_PREFIX = live555;
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   patches = [
     # patch to build with recent live555
@@ -250,20 +247,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./deterministic-plugin-cache.diff
   ];
 
-  postPatch =
-    ''
-      substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
-        --replace \
-          /usr/share/fonts/truetype/freefont \
-          ${freefont_ttf}/share/fonts/truetype
-    ''
-    # Upstream luac can't cross compile, so we have to install the lua sources
-    # instead of bytecode, which was built for buildPlatform:
-    # https://www.lua.org/wshop13/Jericke.pdf#page=39
-    + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
-      substituteInPlace share/Makefile.am \
-        --replace $'.luac \\\n' $'.lua \\\n'
-    '';
+  postPatch = ''
+    substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
+      --replace \
+        /usr/share/fonts/truetype/freefont \
+        ${freefont_ttf}/share/fonts/truetype
+  ''
+  # Upstream luac can't cross compile, so we have to install the lua sources
+  # instead of bytecode, which was built for buildPlatform:
+  # https://www.lua.org/wshop13/Jericke.pdf#page=39
+  + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+    substituteInPlace share/Makefile.am \
+      --replace $'.luac \\\n' $'.lua \\\n'
+  '';
 
   enableParallelBuilding = true;
 
@@ -271,16 +267,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
-  configureFlags =
-    [ "--with-kde-solid=$out/share/apps/solid/actions" ]
-    ++ optionals onlyLibVLC [ "--disable-vlc" ]
-    ++ optionals skins2Support [ "--enable-skins2" ]
-    ++ optionals waylandSupport [ "--enable-wayland" ]
-    ++ optionals chromecastSupport [
-      "--enable-sout"
-      "--enable-chromecast"
-      "--enable-microdns"
-    ];
+  configureFlags = [
+    "--with-kde-solid=$out/share/apps/solid/actions"
+  ]
+  ++ optionals onlyLibVLC [ "--disable-vlc" ]
+  ++ optionals skins2Support [ "--enable-skins2" ]
+  ++ optionals waylandSupport [ "--enable-wayland" ]
+  ++ optionals chromecastSupport [
+    "--enable-sout"
+    "--enable-chromecast"
+    "--enable-microdns"
+  ];
 
   # Remove runtime dependencies on libraries
   postConfigure = ''
@@ -304,17 +301,16 @@ stdenv.mkDerivation (finalAttrs: {
   # pkgsBuildBuild is used here because buildPackages.libvlc somehow
   # depends on a qt5.qttranslations that doesn't build, even though it
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
-  postFixup =
-    ''
-      patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
-      find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
-      ${
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc
-      }/lib/vlc/vlc-cache-gen $out/vlc/plugins
-    ''
-    + optionalString withQt5 ''
-      remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
-    '';
+  postFixup = ''
+    patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
+    find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
+    ${
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc
+    }/lib/vlc/vlc-cache-gen $out/vlc/plugins
+  ''
+  + optionalString withQt5 ''
+    remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
+  '';
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "vlc-versionLister" ''

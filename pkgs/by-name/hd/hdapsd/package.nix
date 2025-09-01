@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ppgrfabd0ivx9hyny3c3rv4rphjyxcdsd5svx5pgfai49mxnl36";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   postInstall = builtins.readFile ./postInstall.sh;
 
   meta = with lib; {
@@ -21,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = "http://hdaps.sf.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ehmry ];
   };
 }

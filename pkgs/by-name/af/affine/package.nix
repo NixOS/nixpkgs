@@ -26,14 +26,8 @@
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
-  nodePlatform = hostPlatform.parsed.kernel.name; # nodejs's `process.platform`
-  nodeArch = # nodejs's `process.arch`
-    {
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${hostPlatform.parsed.cpu.name}
-      or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
+  nodePlatform = hostPlatform.node.platform;
+  nodeArch = hostPlatform.node.arch;
   electron = electron_35;
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
@@ -43,17 +37,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.21.6";
+  version = "0.24.1";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xiOfy3uskqYv5b0U2s1Zpc4/ydsRhhUd8M33IH0BJ10=";
+    hash = "sha256-Yq5TD5yInv+0d1S6M58I8CneCAGUwH0ThGrEJfLIrX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1BTSvHaSPE55v6awnvRry1Exms+zeGug3PNldZ2v2HY=";
+    hash = "sha256-tRDc7Rky59Rh08QTNiG3yopErHJzARxN8BZGrSUECLE=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -98,33 +92,32 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-XpVygLwK/vjQJ5cDckIRM3Uo5hcahTz/XV1WjBQmOac=";
+    outputHash = "sha256-U2FGvdtGiM97aXmbfNIfi87hvwDkd1dvlAABYiDgAGI=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
     apple-sdk_15
   ];
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry
-      cargo
-      rustc
-      findutils
-      zip
-      jq
-      rsync
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      copyDesktopItems
-      makeWrapper
-    ]
-    ++ lib.optionals hostPlatform.isDarwin [
-      # bindgenHook is needed to build `coreaudio-sys` on darwin
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    cargo
+    rustc
+    findutils
+    zip
+    jq
+    rsync
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    copyDesktopItems
+    makeWrapper
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # bindgenHook is needed to build `coreaudio-sys` on darwin
+    rustPlatform.bindgenHook
+  ];
 
   env = {
     # force yarn install run in CI mode

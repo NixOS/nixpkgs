@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonAtLeast,
   fetchPypi,
   rustPlatform,
 }:
@@ -13,7 +12,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "zxcvbn_rs_py";

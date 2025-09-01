@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   cyrus_sasl,
@@ -14,17 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bonsai";
-  version = "1.5.3";
-
-  disabled = pythonOlder "3.8";
-
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "bonsai";
-    rev = "v${version}";
-    hash = "sha256-SAP/YeWqow5dqXlXDzjnTWIfJhMwVeZSSUfWr1Mgmng=";
+    tag = "v${version}";
+    hash = "sha256-1AKdayvkRIY8F9UhuEvGg3uboYh7A/4BkmJ11RkYI9w=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bonsai" ];
 
   meta = {
-    changelog = "https://github.com/noirello/bonsai/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/noirello/bonsai/blob/${src.tag}/CHANGELOG.rst";
     description = "Python 3 module for accessing LDAP directory servers";
     homepage = "https://github.com/noirello/bonsai";
     license = lib.licenses.mit;

@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     libgpg-error
   ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = [
+    # Device permissions are set by udev/kernel, so don't restrict them unnecessarily
+    "--with-dont-check-for-root"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_file__dev_urandom=true"
     "ac_cv_file__dev_random=true"
   ];

@@ -32,6 +32,8 @@
   "el18"
   "pl18"
   "pl18ev"
+  "pl18u"
+  "st16"
   "x10"
   "x10express"
   "x12s"

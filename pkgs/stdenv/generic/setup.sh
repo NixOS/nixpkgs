@@ -519,7 +519,7 @@ isELF() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
@@ -530,7 +530,7 @@ isMachO() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
 
     # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
@@ -559,7 +559,7 @@ isScript() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 2 -u "$fd" magic
+    LANG=C read -r -n 2 -u "$fd" magic
     exec {fd}<&-
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
@@ -1174,20 +1174,23 @@ substituteAllInPlace() {
 # What follows is the generic builder.
 
 
-# This function is useful for debugging broken Nix builds.  It dumps
-# all environment variables to a file `env-vars' in the build
-# directory.  If the build fails and the `-K' option is used, you can
-# then go to the build directory and source in `env-vars' to reproduce
-# the environment used for building.
+# This function is useful for debugging broken Nix builds. It dumps all environment variables to a
+# file `env-vars' in the Nix build directory. If the build fails and the `-K' option is used,
+# you can then go to the build directory and source the `env-vars' file to reproduce the environment
+# used for building. Set `noDumpEnvVars` in the derivation to avoid this, and if for whatever reason
+# `$NIX_BUILD_TOP` is not a directory, this function also does nothing.
 dumpVars() {
-    if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        # On darwin, install(1) cannot be called with /dev/stdin or fd from process substitution
-        # so first we create the file and then write to it
-        # See https://github.com/NixOS/nixpkgs/issues/335016
-        {
-            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
-            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
-        } || true
+    if [[ "${noDumpEnvVars:-0}" != 1 && -d "$NIX_BUILD_TOP" ]]; then
+        # Set umask to create env-vars file with 0600 permissions (owner read/write only)
+        local old_umask
+        old_umask=$(umask)
+        umask 0077
+
+        # Dump all environment variables to the env-vars file
+        export 2>/dev/null > "$NIX_BUILD_TOP/env-vars"
+
+        # Restore original umask
+        umask "$old_umask"
     fi
 }
 
@@ -1260,7 +1263,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1381,6 +1384,9 @@ patchPhase() {
     local -a patchesArray
     concatTo patchesArray patches
 
+    local -a flagsArray
+    concatTo flagsArray patchFlags=-p1
+
     for i in "${patchesArray[@]}"; do
         echo "applying patch $i"
         local uncompress=cat
@@ -1399,8 +1405,6 @@ patchPhase() {
                 ;;
         esac
 
-        local -a flagsArray
-        concatTo flagsArray patchFlags=-p1
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"

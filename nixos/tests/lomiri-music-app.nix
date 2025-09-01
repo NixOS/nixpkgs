@@ -59,15 +59,13 @@ in
             (lib.meta.hiPrio (
               suru-icon-theme.overrideAttrs (oa: {
                 # Colour the background in special colours, which we can OCR for
-                postPatch =
-                  (oa.postPatch or "")
-                  + ''
-                    substituteInPlace suru/actions/scalable/media-playback-pause.svg \
-                      --replace-fail 'fill:none' 'fill:${ocrPauseColor}'
+                postPatch = (oa.postPatch or "") + ''
+                  substituteInPlace suru/actions/scalable/media-playback-pause.svg \
+                    --replace-fail 'fill:none' 'fill:${ocrPauseColor}'
 
-                    substituteInPlace suru/actions/scalable/media-playback-start.svg \
-                      --replace-fail 'fill:none' 'fill:${ocrStartColor}'
-                  '';
+                  substituteInPlace suru/actions/scalable/media-playback-start.svg \
+                    --replace-fail 'fill:none' 'fill:${ocrStartColor}'
+                '';
               })
             ))
           ]);

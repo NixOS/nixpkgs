@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     perl
     gnused
     coreutils
-  ] ++ lib.optionals withLatex [ texliveMedium ];
+  ]
+  ++ lib.optionals withLatex [ texliveMedium ];
 
   meta = with lib; {
     description = "Toolset for processing LinuxDoc DTD SGML files";

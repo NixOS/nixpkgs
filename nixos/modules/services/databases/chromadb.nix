@@ -17,7 +17,7 @@ let
 in
 {
 
-  meta.maintainers = with lib.maintainers; [ drupol ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   options = {
     services.chromadb = {

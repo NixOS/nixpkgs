@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -25,28 +26,27 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.6";
+  version = "2.19.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-JbsgzhUWobcweDGyY872hAQ7NyBxFGa9nUFk5f1XZVc=";
+    hash = "sha256-r/0zs40ytXz8LNba86r8s4QpcDnkxWABlqLumqAnt10=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
-    substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
-
     patchShebangs --build packaging/cli-doc/build.py
 
     SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
@@ -57,6 +57,9 @@ buildPythonPackage rec {
     else
       exit 2
     fi
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "wheel == 0.45.1" wheel
   '';
 
   nativeBuildInputs = [
@@ -87,7 +90,9 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
 
   pythonRelaxDeps = [ "resolvelib" ];
 
@@ -105,6 +110,9 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/9bcfe8ba/Feishu-linux_x64-7.36.11.deb";
-      sha256 = "sha256-iqEcwfF6z2jJ0TmFzDu2gf6eapHcJPaLSVESgtC9WUg=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/72e0cee3/Feishu-linux_x64-7.46.12.deb";
+      sha256 = "sha256-qdaWx4vQQWJtEX+3xo6oGp82sblsWb1jB96w8djc7wM=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/484fc204/Feishu-linux_arm64-7.36.11.deb";
-      sha256 = "sha256-XTa5GOMBsiXI5IDhDQktSxdUfuvG7c2VWHuS76cFsqE=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/ea20b00e/Feishu-linux_arm64-7.46.12.deb";
+      sha256 = "sha256-zh65+v9JWRv631hQDSnKwH1C8I35ddRpq8kcnhRe4wo=";
     };
   };
 
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.36.11";
+  version = "7.46.12";
   pname = "feishu";
 
   src =
@@ -217,7 +217,7 @@ stdenv.mkDerivation {
         update_link=$(echo $package_info | jq -r '.data.download_link' | sed 's/lf[0-9]*-ug-sign.feishucdn.com/sf3-cn.feishucdn.com\/obj/;s/?.*$//')
         new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
         sha256_hash=$(nix-prefetch-url $update_link)
-        sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
+        sri_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $sha256_hash)
         update-source-version feishu $new_version $sri_hash $update_link --system=$platform --ignore-same-version --source-key="sources.$platform"
       done
     '';

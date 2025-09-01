@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.18.2";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-1R8jMDPprTeLt98iALC5l1mdW1U2yKGVtncXGatM8Vg=";
+    hash = "sha256-xj+CZPHeMAisOMB8mYSIc2jAa5iQD5pM+Stccq4gnak=";
   };
 
   strictDeps = true;
@@ -72,19 +72,18 @@ stdenv.mkDerivation rec {
     "-DWITH_GBM=ON"
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd wl-mirror \
-        --bash ../scripts/completions/bash-completions/_wl-mirror \
-        --zsh ../scripts/completions/zsh-completions/_wl-mirror
+  postInstall = ''
+    installShellCompletion --cmd wl-mirror \
+      --bash ../scripts/completions/bash-completions/_wl-mirror \
+      --zsh ../scripts/completions/zsh-completions/_wl-mirror
 
-      installShellCompletion --cmd wl-present \
-        --bash ../scripts/completions/bash-completions/_wl-present \
-        --zsh ../scripts/completions/zsh-completions/_wl-present
-    ''
-    + lib.optionalString installExampleScripts ''
-      wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
-    '';
+    installShellCompletion --cmd wl-present \
+      --bash ../scripts/completions/bash-completions/_wl-present \
+      --zsh ../scripts/completions/zsh-completions/_wl-present
+  ''
+  + lib.optionalString installExampleScripts ''
+    wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";

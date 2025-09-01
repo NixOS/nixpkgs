@@ -86,12 +86,12 @@ let
           inherit (finalAttrs)
             pname
             src
+            vendorHash
             version
             ;
           inherit
             php
             composer
-            vendorHash
             composerLock
             composerNoDev
             composerNoPlugins

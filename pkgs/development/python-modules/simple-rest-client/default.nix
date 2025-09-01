@@ -4,6 +4,7 @@
   fetchFromGitHub,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
   python-slugify,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpserver
     pytestCheckHook
   ];
@@ -40,8 +42,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pytest-runner" ""
-    substituteInPlace pytest.ini \
-      --replace " --cov=simple_rest_client --cov-report=term-missing" ""
     substituteInPlace requirements-dev.txt \
       --replace "asyncmock" ""
   '';

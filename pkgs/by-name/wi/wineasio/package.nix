@@ -10,13 +10,13 @@
 
 multiStdenv.mkDerivation rec {
   pname = "wineasio";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "wineasio";
     repo = "wineasio";
-    rev = "v${version}";
-    hash = "sha256-d5BGJAkaM5XZXyqm6K/UzFE4sD6QVHHGnLi1bcHxiaM=";
+    tag = "v${version}";
+    hash = "sha256-Yw07XBzllbZ7l1XZcCvEaxZieaHLVxM5cmBM+HAjtQ4=";
     fetchSubmodules = true;
   };
 

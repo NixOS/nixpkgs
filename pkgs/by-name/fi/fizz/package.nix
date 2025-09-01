@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   openssl,
   glog,
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -100,18 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-  '';
 
   passthru.updateScript = nix-update-script { };
 

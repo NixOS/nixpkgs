@@ -2,85 +2,84 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   imagemagick,
   libicns,
-  libsForQt5,
+  kdePackages,
   grim,
   makeBinaryWrapper,
+  kdsingleapplication,
   nix-update-script,
-  enableWlrSupport ? false,
+  enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
   enableMonochromeIcon ? false,
 }:
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flameshot";
-  # wlr screenshotting is currently only available on unstable version (>12.1.0)
-  version = "12.1.0-unstable-2025-05-04";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "f4cde19c63473f8fadd448ad2056c22f0f847f34";
-    hash = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Wg0jc1AqgetaESmTyhzAHx3zal/5DMDum7fzhClqeck=";
   };
 
-  patches = [
-    # https://github.com/flameshot-org/flameshot/pull/3166
-    # fixes fractional scaling calculations on wayland
-    (fetchpatch {
-      name = "10-fix-wayland.patch";
-      url = "https://github.com/flameshot-org/flameshot/commit/5fea9144501f7024344d6f29c480b000b2dcd5a6.patch";
-      hash = "sha256-SnjVbFMDKD070vR4vGYrwLw6scZAFaQA4b+MbI+0W9E=";
-    })
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-I${kdsingleapplication}/include/kdsingleapplication-qt6"
+    (lib.cmakeBool "USE_BUNDLED_KDSINGLEAPPLICATION" false)
+    (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
+    (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "Qt6_DIR" "${kdePackages.qtbase}/lib/cmake/Qt6")
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
-      (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-      (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
-    ];
+  # 1. "load-missing-deps" prevents from build inputs being fetched via GitHub.
+  # 2. "macos-build" mainly patches out the use of codesigning + macdeployqt,
+  #    which incorrectly fetches Qt libraries.
+  # 2.1 Also fixes target link to "kdsingpleapplications-qt6" as in Nixpkgs.
+  patches = [
+    ./load-missing-deps.patch
+    ./macos-build.patch
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      libsForQt5.qttools
-      libsForQt5.qtsvg
-      libsForQt5.wrapQtAppsHook
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ];
+  nativeBuildInputs = [
+    cmake
+    kdePackages.qttools
+    kdePackages.wrapQtAppsHook
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.kguiaddons
+    kdsingleapplication
+    kdePackages.qt-color-widgets
+    kdePackages.qtbase
+    kdePackages.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    kdePackages.qtwayland # Included explicitly due to reported inconsistencies without it.
+    kdePackages.kguiaddons
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    kdePackages.qhotkey
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Fix icns generation running concurrently with png generation
-    sed -E -i '/"iconutil -o/i\
-        )\
-        execute_process(\
-    ' src/CMakeLists.txt
-
-    # Replace unavailable commands
-    sed -E -i \
-        -e 's/"sips -z ([0-9]+) ([0-9]+) +(.+) --out /"magick \3 -resize \1x\2\! /' \
-        -e 's/"iconutil -o (.+) -c icns (.+)"/"png2icns \1 \2\/*{16,32,128,256,512}.png"/' \
-        src/CMakeLists.txt
+    # Replace sips with imagemagick and iconutil with png2icns.
+    sed -i -E \
+      -e 's|sips -z ([0-9]+) ([0-9]+) +(.+) --out (.+)|magick \3 -resize \1x\2\\! \4|g' \
+      -e 's|iconutil -o \\?"([^"]+)" -c icns \\?"([^"]+)"|png2icns \1 \2/*\{16,32,128,256,512\}.png|' \
+      src/CMakeLists.txt
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -111,20 +110,19 @@ stdenv.mkDerivation {
         ''${qtWrapperArgs[@]}
     '';
 
-  passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
     changelog = "https://github.com/flameshot-org/flameshot/releases";
     mainProgram = "flameshot";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       scode
       oxalica
+      dmkhitaryan
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

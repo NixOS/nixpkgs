@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rosegarden";
-  version = "24.12.1";
+  version = "25.06";
 
   src = fetchurl {
     url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VmltXEu7Qn7lViT2ICn+6zJlzDSlFG6P69evRRX0iTI=";
+    sha256 = "sha256-df5SsAWJlHHMSw5JVL5dNe4c6PQWWauO9IomF4qlw20=";
   };
 
   postPhase = ''

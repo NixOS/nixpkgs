@@ -23,7 +23,8 @@ let
   rWithPackages = rWrapper.override {
     packages = [
       rPackages.rmarkdown
-    ] ++ extraRPackages;
+    ]
+    ++ extraRPackages;
   };
 
   pythonWithPackages = python3.withPackages (
@@ -38,11 +39,11 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.7.31";
+  version = "1.7.33";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-YRSe4MLcJCaqBDGwHiYxOxAGFcehZLIVCkXjTE0ezFc=";
+    hash = "sha256-ODO8pp940pZtP53HEM8R9JPfjAKxShVvyABjcHdrlew=";
   };
 
   patches = [
@@ -58,13 +59,15 @@ stdenv.mkDerivation (final: {
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --set QUARTO_DENO ${lib.getExe deno} \
-      --set QUARTO_PANDOC ${lib.getExe pandoc} \
-      --set QUARTO_ESBUILD ${lib.getExe esbuild} \
-      --set QUARTO_DART_SASS ${lib.getExe dart-sass} \
-      --set QUARTO_TYPST ${lib.getExe typst} \
-      ${lib.optionalString (rWrapper != null) "--set QUARTO_R ${rWithPackages}/bin/R"} \
-      ${lib.optionalString (python3 != null) "--set QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+      --set-default QUARTO_DENO ${lib.getExe deno} \
+      --set-default QUARTO_PANDOC ${lib.getExe pandoc} \
+      --set-default QUARTO_ESBUILD ${lib.getExe esbuild} \
+      --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
+      --set-default QUARTO_TYPST ${lib.getExe typst} \
+      ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
+      ${lib.optionalString (
+        python3 != null
+      ) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
   '';
 
   installPhase = ''

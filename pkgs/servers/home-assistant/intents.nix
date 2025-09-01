@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.5.7";
+  version = "2025.7.30";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     repo = "intents-package";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-803TTK8wT00uZjXl6EfNMNveRBeKPQIgRXIawg68tEU=";
+    hash = "sha256-eXEZNeEWeTFFwnMuDS9HqTGmqQ23NN5WTiklhcoOWbg=";
   };
 
   build-system = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "intents/tests"
   ];
 

@@ -181,7 +181,7 @@ in
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-        See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+        See <https://doc.powerdns.com/md/recursor/dnssec/> for a detailed explanation.
       '';
     };
 
@@ -251,6 +251,8 @@ in
   config = mkIf cfg.enable {
 
     environment.etc."/pdns-recursor/recursor.yml".source = configFile;
+
+    networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
     services.pdns-recursor.yaml-settings = {
       incoming = mkDefaultAttrs {

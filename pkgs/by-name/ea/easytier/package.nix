@@ -4,24 +4,31 @@
   fetchFromGitHub,
   rustPlatform,
   protobuf,
+  nixosTests,
   nix-update-script,
   withQuic ? false, # with QUIC protocol support
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.3.1";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-urcwzM5nup3+guvSngw+I2QBjmjSc/WV7BWFpISVDBg=";
+    hash = "sha256-0TuRNxf8xDhwUjBXJsv7dhgeYjr/voIt+/0tinImUhA=";
   };
 
-  useFetchCargoVendor = true;
+  # remove if rust 1.89 merged
+  postPatch = ''
+    substituteInPlace easytier/Cargo.toml \
+      --replace-fail 'rust-version = "1.89.0"' ""
+    substituteInPlace easytier-rpc-build/Cargo.toml \
+      --replace-fail 'rust-version = "1.89.0"' ""
+  '';
 
-  cargoHash = "sha256-rqL8tnLPeXK2BLvSFrzMRvtJAqHgOqNh4fE0w8c0ThU=";
+  cargoHash = "sha256-FQC3JD051fEZQO9UriNzJPrxE0QcSQ8p3VTk3tQGPBc=";
 
   nativeBuildInputs = [
     protobuf
@@ -33,7 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # tests failed due to heavy rely on network
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) easytier; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/EasyTier/EasyTier";

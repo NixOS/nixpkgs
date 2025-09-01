@@ -17,15 +17,6 @@
   libseccomp,
 }:
 
-let
-  # Fixes a bug with the meson build script where it specifies
-  # /bin/bash twice in the script
-  misbehaviorBash = writeShellScript "bash" ''
-    shift 1
-    exec ${lib.getExe bash} "$@"
-  '';
-
-in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
   inherit (scx-common) version src;
@@ -66,20 +57,20 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cp ${finalAttrs.fetchBpftool} meson-scripts/fetch_bpftool
     cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
     substituteInPlace meson.build \
-      --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
+      --replace-fail '[build_bpftool' "['${lib.getExe bash}', build_bpftool"
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      jq
-      pkg-config
-      zstd
-      protobuf
-    ]
-    ++ bpftools.buildInputs
-    ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs = [
+    meson
+    ninja
+    jq
+    pkg-config
+    zstd
+    protobuf
+    llvmPackages.libllvm
+  ]
+  ++ bpftools.buildInputs
+  ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils
@@ -94,7 +85,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       "systemd" = false;
       # not for nix
       "openrc" = false;
-      "libalpm" = false;
     })
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
@@ -111,22 +101,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "zerocallusedregs"
   ];
 
-  # We copy the compiled header files to the dev output
-  # These are needed for the rust schedulers
-  preInstall = ''
-    mkdir -p ${placeholder "dev"}/libbpf ${placeholder "dev"}/bpftool
-    cp -r libbpf/* ${placeholder "dev"}/libbpf/
-    cp -r bpftool/* ${placeholder "dev"}/bpftool/
-  '';
-
   outputs = [
     "bin"
-    "dev"
     "out"
   ];
 
-  # Enable this when default kernel in nixpkgs is 6.12+
-  doCheck = false;
+  doCheck = true;
 
   meta = scx-common.meta // {
     description = "Sched-ext C userspace schedulers";

@@ -1,25 +1,25 @@
 {
   lib,
-  fetchFromGitHub,
-  flutter329,
-  webkitgtk_4_1,
-  mpv,
-  rustPlatform,
   stdenv,
+  flutter332,
+  rustPlatform,
+  fetchFromGitHub,
   copyDesktopItems,
+  mpv-unwrapped,
+  webkitgtk_4_1,
   makeDesktopItem,
-  replaceVars,
+  writeText,
 }:
 
 let
   pname = "mangayomi";
-  version = "0.6.0";
+  version = "0.6.35";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-kvwssyVjce9VipANRED5k3a2pdJRAhio6GtM7+5nd38=";
+    hash = "sha256-XSXFo0+rLTUJ0p3F5+CvKD85OmrShb2xrpQK0F6fo2U=";
   };
 
   metaCommon = {
@@ -36,16 +36,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    useFetchCargoVendor = true;
-
-    cargoHash = "sha256-vGu5e5M6CFpaLodEpt8v8DGhu2S5h/E4vvqSNOKkWns=";
+    cargoHash = "sha256-DDHBLQWscORg4+0CX5c2wmrhm2t7wOpotZFB+85w+EA=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter329.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -53,38 +51,79 @@ flutter329.buildFlutterApplication {
   customSourceBuilders = {
     rust_lib_mangayomi =
       { version, src, ... }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation {
         pname = "rust_lib_mangayomi";
         inherit version src;
         inherit (src) passthru;
 
-        patches = [
-          (replaceVars ./cargokit.patch {
-            output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
-          })
-        ];
+        postPatch =
+          let
+            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+                set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
+              endfunction()
+            '';
+          in
+          ''
+            cp ${fakeCargokitCmake} rust_builder/cargokit/cmake/cargokit.cmake
+          '';
 
         installPhase = ''
           runHook preInstall
 
-          cp -r . $out
+          cp -r . "$out"
+
+          runHook postInstall
+        '';
+      };
+    flutter_discord_rpc_fork =
+      { version, src, ... }:
+      let
+        flutter_discord_rpc_fork-rs = rustPlatform.buildRustPackage {
+          pname = "flutter_discord_rpc_fork-rs";
+          inherit version src;
+
+          buildAndTestSubdir = "rust";
+
+          cargoHash = "sha256-vYVg5ZALQDrolDtbbXm/epE5MmSKpRJbSU15VDiKh4U=";
+
+          passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
+        };
+      in
+      stdenv.mkDerivation {
+        pname = "flutter_discord_rpc_fork";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch =
+          let
+            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+                set("''${target}_cargokit_lib" ${flutter_discord_rpc_fork-rs}/${flutter_discord_rpc_fork-rs.passthru.libraryPath} PARENT_SCOPE)
+              endfunction()
+            '';
+          in
+          ''
+            cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+          '';
+
+        installPhase = ''
+          runHook preInstall
+
+          cp -r . "$out"
 
           runHook postInstall
         '';
       };
   };
 
-  gitHashes = {
-    desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
-    flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
-    flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
+    mpv-unwrapped
     webkitgtk_4_1
-    mpv
   ];
 
   desktopItems = [

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
     tag = version;
-    hash = "sha256-ZvodSRJkKwPwpYHOLmxAYIIv7f9AlrjmZS9KLPjz5rM=";
+    hash = "sha256-olA3Yqf+upMJZiwpQp6HDSMxe9OssGLGMdHbZARg0+Y=";
   };
 
   postPatch = ''
@@ -66,12 +66,12 @@ buildPythonPackage rec {
   ];
 
   # do subset of tests which don't fetch resources
-  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+  enabledTestPaths = [ "nilearn/connectome/tests" ];
 
   meta = {
     description = "Module for statistical learning on neuroimaging data";
     homepage = "https://nilearn.github.io";
-    changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

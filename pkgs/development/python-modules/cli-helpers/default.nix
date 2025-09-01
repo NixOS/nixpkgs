@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.4.0";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,13 +20,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-VZA7cFohKkc3Mdsg+ib1hlXjVAeLmcsTyZ7AaUAoek0=";
+    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
   };
 
   propagatedBuildInputs = [
     configobj
     tabulate
-  ] ++ tabulate.optional-dependencies.widechars;
+  ]
+  ++ tabulate.optional-dependencies.widechars;
 
   optional-dependencies = {
     styles = [ pygments ];
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

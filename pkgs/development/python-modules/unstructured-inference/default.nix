@@ -33,20 +33,19 @@ buildPythonPackage rec {
     hash = "sha256-wRFTwSvkPdvvB08qGOvn8lrbUuoXF6yPqNSk9iiB1S8=";
   };
 
-  propagatedBuildInputs =
-    [
-      layoutparser
-      python-multipart
-      huggingface-hub
-      opencv-python
-      onnxruntime
-      transformers
-      # detectron2 # fails to build
-      # paddleocr # 3.12 not yet supported
-      # yolox
-    ]
-    ++ layoutparser.optional-dependencies.layoutmodels
-    ++ layoutparser.optional-dependencies.tesseract;
+  propagatedBuildInputs = [
+    layoutparser
+    python-multipart
+    huggingface-hub
+    opencv-python
+    onnxruntime
+    transformers
+    # detectron2 # fails to build
+    # paddleocr # 3.12 not yet supported
+    # yolox
+  ]
+  ++ layoutparser.optional-dependencies.layoutmodels
+  ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -88,7 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unstructured_inference" ];
 
   meta = with lib; {
-    description = "hosted model inference code for layout parsing models";
+    description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;

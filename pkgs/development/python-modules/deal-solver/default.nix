@@ -34,7 +34,8 @@ buildPythonPackage rec {
   dependencies = [
     z3-solver
     astroid
-  ] ++ z3-solver.requiredPythonModules;
+  ]
+  ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [
     hypothesis

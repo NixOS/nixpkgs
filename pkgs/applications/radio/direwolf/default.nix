@@ -13,6 +13,7 @@
   python3,
   espeak,
   udev,
+  udevCheckHook,
   extraScripts ? false,
 }:
 
@@ -27,7 +28,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    udevCheckHook
+  ];
 
   strictDeps = true;
 
@@ -49,27 +53,28 @@ stdenv.mkDerivation rec {
     echo "" > scripts/CMakeLists.txt
   '';
 
-  postPatch =
-    ''
-      substituteInPlace conf/CMakeLists.txt \
-        --replace /etc/udev/rules.d/ $out/lib/udev/rules.d/
-      substituteInPlace src/symbols.c \
-        --replace /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
-        --replace /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
-      substituteInPlace src/decode_aprs.c \
-        --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
-        --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
-      substituteInPlace cmake/cpack/direwolf.desktop.in \
-        --replace 'Terminal=false' 'Terminal=true' \
-        --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
-      substituteInPlace src/dwgpsd.c \
-        --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
-    ''
-    + lib.optionalString extraScripts ''
-      patchShebangs scripts/dwespeak.sh
-      substituteInPlace scripts/dwespeak.sh \
-        --replace espeak ${espeak}/bin/espeak
-    '';
+  postPatch = ''
+    substituteInPlace conf/CMakeLists.txt \
+      --replace /etc/udev/rules.d/ $out/lib/udev/rules.d/
+    substituteInPlace src/symbols.c \
+      --replace /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
+      --replace /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
+    substituteInPlace src/decode_aprs.c \
+      --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
+      --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
+    substituteInPlace cmake/cpack/direwolf.desktop.in \
+      --replace 'Terminal=false' 'Terminal=true' \
+      --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
+    substituteInPlace src/dwgpsd.c \
+      --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
+  ''
+  + lib.optionalString extraScripts ''
+    patchShebangs scripts/dwespeak.sh
+    substituteInPlace scripts/dwespeak.sh \
+      --replace espeak ${espeak}/bin/espeak
+  '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";

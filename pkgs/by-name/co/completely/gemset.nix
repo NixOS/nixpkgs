@@ -18,10 +18,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ci8iza647hvc4f1cmf9mpsm3i78ysf6g6213wkyrr5jk296hjjb";
+      sha256 = "0129alz54h2vy7vd19i5664sasdbvrl4zgj70hl5j4rpvckr5lf8";
       type = "gem";
     };
-    version = "0.6.3";
+    version = "0.7.1";
   };
   docopt_ng = {
     groups = [ "default" ];
@@ -42,9 +42,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0xx8cxvzcn47zsnshcllf477x4rbssrchvp76929qnsg5k9q7fas";
+      sha256 = "1zz3vpy6xrgzln2dpxgcnrq1bpzz0syl60whqc9zf8j29mayw1fy";
       type = "gem";
     };
-    version = "0.7.6";
+    version = "0.8.1";
   };
 }

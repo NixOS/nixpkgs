@@ -38,22 +38,25 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.1.1";
+  version = "12.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-RTHL5+lbR+AbkiE4+z4ZbxZSV2E4NGTmShbMIMRKJPA=";
+    hash = "sha256-XYZ14JlVYG/OLlEze+C1L/HP3HD5GEW+jG2YYSXW/8Y=";
   };
 
   pythonRelaxDeps = [
-    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
+    "cryptography"
+    "flask"
     "h2"
     "passlib"
-    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
+    "pyopenssl"
     "tornado"
+    "typing-extensions"
+    "urwid"
   ];
 
   build-system = [ setuptools ];

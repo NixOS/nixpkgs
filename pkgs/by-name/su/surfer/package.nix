@@ -48,7 +48,6 @@ rustPlatform.buildRustPackage rec {
     libXi
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-89pkHS0YQ77PmQfT8epdu2tPRNAenYGgtoiJVuuVYiI=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318

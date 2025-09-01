@@ -12,21 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = "hurl";
     tag = version;
-    hash = "sha256-NtvBw8Nb2eZN0rjVL/LPyIdY5hBJGnz/cDun6VvwYZE=";
+    hash = "sha256-dmPXI2RHEi/wcdVVwBRtBgNXyBXFnm44236pqYjxgBs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WyNActmsHpr5fgN1a3X9ApEACWFVJMVoi4fBvKhGgZ0=";
+  cargoHash = "sha256-1bZaSdMJe39cDEOoqW82zS5NvOlZDGe1ia56BjXddyc=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [

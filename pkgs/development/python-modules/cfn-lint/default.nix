@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.32.1";
+  version = "1.38.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-s0CYQ6r3rA1PEiZ9LLFL3RC2PdfCgZHTqQ9nZUi1m+Q=";
+    hash = "sha256-oHbTB4XOyYSazyhO6No2+Z9QRR8tnuB3E4kGzG1HwTk=";
   };
 
   build-system = [ setuptools ];
@@ -69,7 +69,8 @@ buildPythonPackage rec {
     defusedxml
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH=$out/bin:$PATH

@@ -22,6 +22,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gSpeech";
   version = "0.11.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mothsart";

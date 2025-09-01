@@ -62,41 +62,40 @@ fetchurl (
       ]
       ++ nativeBuildInputs;
 
-    postFetch =
-      ''
-        unpackDir="$TMPDIR/unpack"
-        mkdir "$unpackDir"
-        cd "$unpackDir"
+    postFetch = ''
+      unpackDir="$TMPDIR/unpack"
+      mkdir "$unpackDir"
+      cd "$unpackDir"
 
-        renamed="$TMPDIR/${tmpFilename}"
-        mv "$downloadedFile" "$renamed"
-        unpackFile "$renamed"
-        chmod -R +w "$unpackDir"
-      ''
-      + (
-        if stripRoot then
-          ''
-            if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
-              echo "error: zip file must contain a single file or directory."
-              echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
-              exit 1
-            fi
-            fn=$(cd "$unpackDir" && ls -A)
-            if [ -f "$unpackDir/$fn" ]; then
-              mkdir $out
-            fi
-            mv "$unpackDir/$fn" "$out"
-          ''
-        else
-          ''
-            mv "$unpackDir" "$out"
-          ''
-      )
-      + ''
-        ${postFetch}
-        ${extraPostFetch}
-        chmod 755 "$out"
-      '';
+      renamed="$TMPDIR/${tmpFilename}"
+      mv "$downloadedFile" "$renamed"
+      unpackFile "$renamed"
+      chmod -R +w "$unpackDir"
+    ''
+    + (
+      if stripRoot then
+        ''
+          if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
+            echo "error: zip file must contain a single file or directory."
+            echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
+            exit 1
+          fi
+          fn=$(cd "$unpackDir" && ls -A)
+          if [ -f "$unpackDir/$fn" ]; then
+            mkdir $out
+          fi
+          mv "$unpackDir/$fn" "$out"
+        ''
+      else
+        ''
+          mv "$unpackDir" "$out"
+        ''
+    )
+    + ''
+      ${postFetch}
+      ${extraPostFetch}
+      chmod 755 "$out"
+    '';
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
   }

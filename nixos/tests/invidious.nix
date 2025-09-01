@@ -144,7 +144,7 @@
       curl_assert_status_code("http://invidious.example.com/search", 200)
       machine.succeed("journalctl -eu invidious.service | grep -o \"SigHelper: Using helper at 'tcp://127.0.0.1:2999'\"")
 
-      postgres_tcp.wait_for_unit("postgresql.service")
+      postgres_tcp.wait_for_unit("postgresql.target")
       activate_specialisation("postgres-tcp")
       machine.wait_for_open_port(port)
       curl_assert_status_code(f"{url}/search", 200)

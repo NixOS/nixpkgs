@@ -2,9 +2,7 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchFromGitHub,
   fetchPypi,
-  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -28,24 +26,6 @@ let
         # checks are failing with django 5
         doCheck = false;
       };
-      symbolic = prev.symbolic.overridePythonAttrs rec {
-        version = "10.2.1";
-        src = fetchFromGitHub {
-          owner = "getsentry";
-          repo = "symbolic";
-          tag = version;
-          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-          # the `py` directory is not included in the tarball, so we fetch the source via git instead
-          forceFetchGit = true;
-        };
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          inherit src postPatch;
-          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
-        };
-        postPatch = ''
-          ln -s ${./symbolic_Cargo.lock} Cargo.lock
-        '';
-      };
     };
   };
 
@@ -58,6 +38,7 @@ let
       brotli
       celery
       celery-batches
+      cxxfilt
       django
       django-allauth
       django-anymail
@@ -87,6 +68,7 @@ let
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
+    ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ django-redis.optional-dependencies.hiredis
@@ -102,14 +84,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.4";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ihefyunZc191w9cn7iSqblNA4V4hELi9jwxfFrjPvu0=";
+    hash = "sha256-okX/bWZNe5ypkfUYm7usNXa7HpBgZoj2vLEq+oGHKiM=";
   };
 
   propagatedBuildInputs = pythonPackages;

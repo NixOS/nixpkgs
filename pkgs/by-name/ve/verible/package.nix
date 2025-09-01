@@ -3,7 +3,7 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   bison,
   flex,
@@ -41,7 +41,7 @@ buildBazelPackage rec {
     hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
     "--registry"
@@ -51,9 +51,9 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-ErhBpmXhtiZbBWy506rLp4TQh5oXJQ44lw25jlVkjUM=";
-        x86_64-linux = "sha256-d8CYiqpL7rM3VvEqHSBvtgF2WLyH23jSvK7w4ChTtgU=";
-        aarch64-darwin = "sha256-lHMbziDzQpmXvsW25SgjQUkPRIRYv6TJIPTAEvhSfuA=";
+        aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d16jB/kE2jYPg=";
+        x86_64-linux = "sha256-kiI/LX0l9ERxItsqiAyl+BP3QnLr0Ly2YVb988M4jVs=";
+        aarch64-darwin = "sha256-bkw4ErWYblzr3lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

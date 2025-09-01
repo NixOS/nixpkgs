@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.06.01.post1";
+  version = "2025.08.15.post2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-qwsUb9w/eeNO1mGYpnwkWgH5AfcUm7Y7DtkWep8SAcA=";
+    hash = "sha256-Ds3A3GN9f264e/gtVTZVHW+v25C7vt75QkWgdqA4aJw=";
   };
 
   postPatch = ''
@@ -42,8 +42,28 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
   versionCheckProgramArg = "--version";
+
+  env = {
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
+  };
+
+  disabledTests = [
+    "test_logger_can_be_cleaned_during_execution"
+    "test_presets_run"
+    "test_thumbnail"
+  ];
+
+  disabledTestPaths = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "tests/e2e"
+  ];
 
   passthru.updateScript = ./update.sh;
 

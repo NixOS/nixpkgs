@@ -25,9 +25,7 @@ typst.withPackages.override
     typstPackages = old.typstPackages.extend (
       _: previous: {
         polylux_0_4_0 = previous.polylux_0_4_0.overrideAttrs (oldPolylux: {
-          src = oldPolylux.src.overrideAttrs {
-            outputHash = YourUpToDatePolyluxHash;
-          };
+          src = oldPolylux.src.overrideAttrs { outputHash = YourUpToDatePolyluxHash; };
         });
       }
     );
@@ -47,10 +45,7 @@ typst.withPackages.override
 Here's how to define a custom Typst package:
 
 ```nix
-{
-  buildTypstPackage,
-  typstPackages,
-}:
+{ buildTypstPackage, typstPackages }:
 
 buildTypstPackage (finalAttrs: {
   pname = "my-typst-package";

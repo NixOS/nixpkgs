@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "captive-browser";
-  version = "unstable-2021-08-01";
+  version = "0-unstable-2021-08-01";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";

@@ -11,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "azure-monitor-ingestion";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JU11mTof5wfRmPAUrvWhT6pXDO5zabNbsDriqo+Zvnk=";
+    pname = "azure_monitor_ingestion";
+    inherit version;
+    hash = "sha256-l6/ueA2a4waRKM3ncCfUzGL6gk/mTVusiArEpksKDE4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-core
     isodate
     typing-extensions

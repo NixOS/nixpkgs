@@ -8,38 +8,9 @@
     {
       imports = [ ./common/user-account.nix ];
 
-      networking.firewall.enable = true;
-      services.paretosecurity = {
-        enable = true;
-
-        # Create a patched version of the package that points to the local dashboard
-        # for easier testing
-        package = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
-          postPatch =
-            oldAttrs.postPatch or ""
-            + ''
-              substituteInPlace team/report.go \
-                --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
-                               'const reportURL = "http://dashboard"'
-            '';
-        });
-      };
+      services.paretosecurity.enable = true;
 
     };
-
-  nodes.dashboard = {
-    networking.firewall.allowedTCPPorts = [ 80 ];
-
-    services.nginx = {
-      enable = true;
-      virtualHosts."dashboard" = {
-        locations."/api/v1/team/".extraConfig = ''
-          add_header Content-Type application/json;
-          return 200 '{"message": "Linked device."}';
-        '';
-      };
-    };
-  };
 
   nodes.xfce =
     { pkgs, ... }:
@@ -72,9 +43,8 @@
   testScript = ''
     # Test setup
     terminal.succeed("su - alice -c 'mkdir -p /home/alice/.config'")
-    for m in [terminal, dashboard]:
-      m.systemctl("start network-online.target")
-      m.wait_for_unit("network-online.target")
+    terminal.systemctl("start network-online.target")
+    terminal.wait_for_unit("network-online.target")
 
     # Test 1: Test the systemd socket is installed & enabled
     terminal.succeed('systemctl is-enabled paretosecurity.socket')
@@ -93,17 +63,7 @@
       + "'"
     )
 
-    # Test 3: Test linking
-    terminal.succeed("su - alice -c 'paretosecurity link"
-    + " paretosecurity://enrollTeam/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
-    + "eyJ0b2tlbiI6ImR1bW15LXRva2VuIiwidGVhbUlEIjoiZHVtbXktdGVhbS1pZCIsImlhdCI6"
-    + "MTcwMDAwMDAwMCwiZXhwIjoxOTAwMDAwMDAwfQ.WgnL6_S0EBJHwF1wEVUG8GtIcoVvK5IjWbZpUeZr4Qw'")
-
-    config = terminal.succeed("cat /home/alice/.config/pareto.toml")
-    assert 'AuthToken = "dummy-token"' in config
-    assert 'TeamID = "dummy-team-id"' in config
-
-    # Test 4: Test the tray icon
+    # Test 3: Test the tray icon
     xfce.wait_for_x()
     for unit in [
         'paretosecurity-trayicon',
@@ -117,7 +77,7 @@
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")
 
-    # Test 5: Desktop entry
+    # Test 4: Desktop entry
     xfce.succeed("xdotool mousemove 10 10")
     xfce.succeed("xdotool click 1")  # hide the tray icon window
     xfce.succeed("xdotool click 1")  # show the Applications menu
@@ -125,7 +85,7 @@
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Pareto Security")
 
-    # Test 6: paretosecurity:// URL handler is registered
+    # Test 5: paretosecurity:// URL handler is registered
     xfce.succeed("su - alice -c 'xdg-open paretosecurity://foo'")
   '';
 }

@@ -7,7 +7,7 @@
   yarn,
   nodejs,
   jq,
-  electron_36,
+  electron_37,
   element-web,
   sqlcipher,
   callPackage,
@@ -22,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_36;
+  electron = electron_37;
   keytar = callPackage ./keytar {
     inherit electron;
   };
@@ -57,7 +57,8 @@ stdenv.mkDerivation (
       jq
       yarn
       typescript
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
 
@@ -67,9 +68,18 @@ stdenv.mkDerivation (
     dontPatchShebangs = true;
 
     configurePhase = ''
+      runHook preConfigure
+
       mkdir -p node_modules/
       cp -r $offlineCache/node_modules/* node_modules/
       substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
+
+      runHook postConfigure
+    '';
+
+    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
+    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TMPDIR="$(mktemp -d)"
     '';
 
     buildPhase = ''

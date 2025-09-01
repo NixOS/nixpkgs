@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.11.4";
+  version = "3.11.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "gpodder";
     rev = version;
-    sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
+    hash = "sha256-Hhk9JeHMg+FrekiNXP6Q8loCtst+FHT4EJTnh64VOhc=";
   };
 
   patches = [
@@ -30,6 +30,13 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
+
+  build-system = with python3Packages; [
+    setuptools
+    build
+    installer
+    wheel
+  ];
 
   nativeBuildInputs = [
     intltool

@@ -2,10 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+  fetchPypi,
+
+  # build-system
   setuptools,
+
+  # tests
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-html,
@@ -15,17 +17,12 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.24.0";
+  version = "0.25.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchFromGitHub {
-    owner = "tree-sitter";
-    repo = "py-tree-sitter";
-    tag = "v${version}";
-    hash = "sha256-ZDt/8suteaAjGdk71l8eej7jDkkVpVDBIZS63SA8tsU=";
-    fetchSubmodules = true;
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-zXYa0OTR/IiksbgIO64G1PlzrPb18pu/E+qWCcHeycE=";
   };
 
   # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
@@ -36,7 +33,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     tree-sitter-python
     tree-sitter-rust
     tree-sitter-html
@@ -59,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

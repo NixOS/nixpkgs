@@ -1,80 +1,74 @@
 {
   lib,
   stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  nodejs_22, # Node ≥22 is required by codex-cli
-  pnpm_10,
-  makeBinaryWrapper,
   installShellFiles,
+  nix-update-script,
+  pkg-config,
+  openssl,
   versionCheckHook,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.1.2504301751"; # from codex-cli/package.json
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
-    rev = "463a230991393c7b39f2543a9766e6133ef65393";
-    hash = "sha256-CSd5e6BsGEigENjPu6R6s+QhZRLQ2CTmI5XBI9mPkmA=";
+    tag = "rust-v${finalAttrs.version}";
+    hash = "sha256-vsZmHkph2rrb0K+ZRymweRculh+SIASCJCRP3V09hKU=";
   };
 
-  pnpmWorkspaces = [ "@openai/codex" ];
+  sourceRoot = "${finalAttrs.src.name}/codex-rs";
+
+  cargoHash = "sha256-NK1TOY5Puo881bhgF3w470k2N4LoC6/qTI93uhg7Alw=";
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_10.configHook
-    makeBinaryWrapper
     installShellFiles
+    pkg-config
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      pnpmWorkspaces
-      ;
-    hash = "sha256-pPwHjtqqaG+Zqmq6x5o+WCT1H9XuXAqFNKMzevp7wTc=";
-  };
+  buildInputs = [ openssl ];
 
-  buildPhase = ''
-    runHook preBuild
-    pnpm --filter @openai/codex run build
-    runHook postBuild
-  '';
+  # NOTE: part of the test suite requires access to networking, local shells,
+  # apple system configuration, etc. since this is a very fast moving target
+  # (for now), with releases happening every other day, constantly figuring out
+  # which tests need to be skipped, or finding workarounds, was too burdensome,
+  # and in practice not adding any real value. this decision may be reversed in
+  # the future once this software stabilizes.
+  doCheck = false;
 
-  installPhase = ''
-    runHook preInstall
-
-    dest=$out/lib/node_modules/@openai/codex
-    mkdir -p "$dest"
-    cp -r codex-cli/dist codex-cli/bin codex-cli/package.json "$dest"
-    cp LICENSE README.md "$dest"
-
-    mkdir -p $out/bin
-    makeBinaryWrapper ${nodejs_22}/bin/node $out/bin/codex --add-flags "$dest/bin/codex.js"
-
-    # Install shell completions
-    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      $out/bin/codex completion bash > codex.bash
-      $out/bin/codex completion zsh > codex.zsh
-      $out/bin/codex completion fish > codex.fish
-      installShellCompletion codex.{bash,zsh,fish}
-    ''}
-
-    runHook postInstall
+  postInstall = lib.optionalString installShellCompletions ''
+    installShellCompletion --cmd codex \
+      --bash <($out/bin/codex completion bash) \
+      --fish <($out/bin/codex completion fish) \
+      --zsh <($out/bin/codex completion zsh)
   '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^rust-v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
     homepage = "https://github.com/openai/codex";
+    changelog = "https://raw.githubusercontent.com/openai/codex/refs/tags/rust-v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.malo ];
     mainProgram = "codex";
+    maintainers = with lib.maintainers; [
+      malo
+      delafthi
+    ];
+    platforms = lib.platforms.unix;
   };
 })

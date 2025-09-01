@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     freetype
     libglvnd
     libgbm
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   installPhase = ''
     runHook preInstall

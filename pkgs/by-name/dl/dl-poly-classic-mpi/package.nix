@@ -20,8 +20,12 @@ stdenv.mkDerivation {
   buildInputs = [ mpi ];
 
   configurePhase = ''
+    runHook preConfigure
+
     cd source
     cp -v ../build/MakePAR Makefile
+
+    runHook postConfigure
   '';
 
   # https://gitlab.com/DL_POLY_Classic/dl_poly/-/blob/master/README

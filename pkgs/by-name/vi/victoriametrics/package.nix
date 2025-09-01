@@ -9,18 +9,17 @@
   withVmAuth ? true, # HTTP proxy for authentication
   withBackupTools ? true, # vmbackup, vmrestore
   withVmctl ? true, # vmctl is used to migrate time series
-  withVictoriaLogs ? true, # logs server
 }:
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.119.0";
+  version = "1.124.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gc3B3JmTbINdPJ8PIhcuQhFD+FoxNOskoBEcDoMAUUk=";
+    hash = "sha256-f0Mf/4cFnJ/3I8z/4UhhNJnSCau9Q7mFfR32lP9/yi0=";
   };
 
   vendorHash = null;
@@ -43,12 +42,6 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withBackupTools [
       "app/vmbackup"
       "app/vmrestore"
-    ]
-    ++ lib.optionals withVictoriaLogs [
-      "app/victoria-logs"
-      "app/vlinsert"
-      "app/vlselect"
-      "app/vlstorage"
     ];
 
   postPatch = ''
@@ -57,6 +50,10 @@ buildGoModule (finalAttrs: {
     #
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
+
+    # Allow older go versions
+    substituteInPlace go.mod \
+      --replace-fail "go 1.24.6" "go ${finalAttrs.passthru.go.version}"
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
@@ -87,7 +84,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://victoriametrics.com/";
-    description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
+    description = "Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp

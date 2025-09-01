@@ -74,7 +74,8 @@ crystal.buildCrystalPackage {
   nativeBuildInputs = [
     wrapGAppsHook4
     gobject-introspection
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     webkitgtk_6_0

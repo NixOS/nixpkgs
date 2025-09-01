@@ -3,10 +3,8 @@
   stdenv,
   fetchurl,
   kernel,
-  kernelModuleMakeFlags,
   elfutils,
   python3,
-  perl,
   newt,
   slang,
   asciidoc,
@@ -39,6 +37,7 @@
   zstd,
   withLibcap ? true,
   libcap,
+  buildPackages,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -60,6 +59,10 @@ stdenv.mkDerivation {
   pname = "perf-linux";
   inherit (kernel) version src;
 
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   patches =
     lib.optionals (lib.versionAtLeast kernel.version "5.10" && lib.versionOlder kernel.version "6.13")
       [
@@ -67,44 +70,43 @@ stdenv.mkDerivation {
         ./fix-dmesg-path.diff
       ];
 
-  postPatch =
-    ''
-      # Linux scripts
-      patchShebangs scripts
-      patchShebangs tools/perf/check-headers.sh
-    ''
-    + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
-      # perf-specific scripts
-      patchShebangs tools/perf/pmu-events
-    ''
-    + ''
-      cd tools/perf
+  postPatch = ''
+    # Linux scripts
+    patchShebangs scripts
+    patchShebangs tools/perf/check-headers.sh
+  ''
+  + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
+    # perf-specific scripts
+    patchShebangs tools/perf/pmu-events
+  ''
+  + ''
+    cd tools/perf
 
-      for x in util/build-id.c util/dso.c; do
-        substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
-      done
+    for x in util/build-id.c util/dso.c; do
+      substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
+    done
 
-    ''
-    + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
-      substituteInPlace scripts/python/flamegraph.py \
-        --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
-        "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
+  ''
+  + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
+    substituteInPlace scripts/python/flamegraph.py \
+      --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
+      "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
 
-    ''
-    + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
-      patchShebangs pmu-events/jevents.py
-    '';
+  ''
+  + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
+    patchShebangs pmu-events/jevents.py
+  '';
 
-  makeFlags =
-    [
-      "prefix=$(out)"
-      "WERROR=0"
-      "ASCIIDOC8=1"
-    ]
-    ++ kernelModuleMakeFlags
-    ++ lib.optional (!withGtk) "NO_GTK2=1"
-    ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
-    ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
+  makeFlags = [
+    "prefix=$(out)"
+    "WERROR=0"
+    "ASCIIDOC8=1"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optional (!withGtk) "NO_GTK2=1"
+  ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
+  ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
 
   hardeningDisable = [ "format" ];
 
@@ -124,46 +126,44 @@ stdenv.mkDerivation {
     python3
   ];
 
-  buildInputs =
-    [
-      elfutils
-      newt
-      slang
-      libtraceevent
-      libunwind
-      zlib
-      openssl
-      numactl
-      python3
-      perl
-      babeltrace
-    ]
-    ++ (
-      if (lib.versionAtLeast kernel.version "5.19") then
-        [
-          libbfd
-          libopcodes
-        ]
-      else
-        [
-          libbfd_2_38
-          libopcodes_2_38
-        ]
-    )
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap) systemtap.stapBuild
-    ++ lib.optional withGtk gtk2
-    ++ lib.optional withZstd zstd
-    ++ lib.optional withLibcap libcap
-    ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
-    ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
-    # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
-    ++
-      lib.optional
-        (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12")
-        [
-          python3.pkgs.distutils
-          python3.pkgs.packaging
-        ];
+  buildInputs = [
+    elfutils
+    newt
+    slang
+    libtraceevent
+    libunwind
+    zlib
+    openssl
+    numactl
+    python3
+    babeltrace
+  ]
+  ++ (
+    if (lib.versionAtLeast kernel.version "5.19") then
+      [
+        libbfd
+        libopcodes
+      ]
+    else
+      [
+        libbfd_2_38
+        libopcodes_2_38
+      ]
+  )
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap) systemtap.stapBuild
+  ++ lib.optional withGtk gtk2
+  ++ lib.optional withZstd zstd
+  ++ lib.optional withLibcap libcap
+  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
+  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
+  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
+  ++
+    lib.optional
+      (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12")
+      [
+        python3.pkgs.distutils
+        python3.pkgs.packaging
+      ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -175,7 +175,7 @@ stdenv.mkDerivation {
   doCheck = false; # requires "sparse"
 
   installTargets = [
-    "install"
+    "install-tools" # don't install tests, as those depend on perl
     "install-man"
   ];
 

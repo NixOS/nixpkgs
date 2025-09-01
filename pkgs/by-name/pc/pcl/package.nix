@@ -15,6 +15,7 @@
   libpcap,
   libusb1,
   llvmPackages,
+  nanoflann,
 
   # nativeBuildInputs
   boost,
@@ -32,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     tag = "pcl-${finalAttrs.version}";
-    hash = "sha256-UCuQMWGwe+YxeGj0Y6m5IT58NW2lAWN5RqyZnvyFSr4=";
+    hash = "sha256-+KyaajJM0I5CAcr8AiOLC4TkGV3Gm73a0/X8LQWFZMI=";
   };
 
   strictDeps = true;
@@ -53,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libsForQt5.wrapQtAppsHook
     pkg-config
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
@@ -61,7 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsForQt5.qtbase
     libusb1
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+    nanoflann
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   propagatedBuildInputs = [
     boost

@@ -1,11 +1,11 @@
 {
-  "release": "10.0.0-preview.4",
+  "release": "10.0.0-preview.7",
   "channel": "10.0",
-  "tag": "v10.0.0-preview.4.25258.110",
-  "sdkVersion": "10.0.100-preview.4.25258.110",
-  "runtimeVersion": "10.0.0-preview.4.25258.110",
-  "aspNetCoreVersion": "10.0.0-preview.4.25258.110",
+  "tag": "v10.0.100-preview.7.25380.108",
+  "sdkVersion": "10.0.100-preview.7.25380.108",
+  "runtimeVersion": "10.0.0-preview.7.25380.108",
+  "aspNetCoreVersion": "10.0.0-preview.7.25380.108",
   "sourceRepository": "https://github.com/dotnet/dotnet",
-  "sourceVersion": "c22dcd0c7a78d095a94d20e59ec0271b9924c82c",
-  "officialBuildId": "20250508.10"
+  "sourceVersion": "30000d883e06c122311a66894579bc12329a09d4",
+  "officialBuildId": "20250730.8"
 }

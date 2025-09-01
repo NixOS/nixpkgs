@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "Command line Kiwix tools: kiwix-serve, kiwix-manage, ..";
+    description = "Command line Kiwix tools";
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/kiwix-tools/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Plus;

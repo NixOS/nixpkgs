@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "rowhammer-test";
-  version = "unstable-2015-08-11";
+  version = "0-unstable-2015-08-11";
 
   src = fetchFromGitHub {
     owner = "google";
