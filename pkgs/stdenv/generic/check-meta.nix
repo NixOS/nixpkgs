@@ -565,7 +565,12 @@ let
       validYes;
 
   # Helper functions and declarations to handle identifiers, extracted to reduce allocations
-  hasAllCPEParts = cpeParts: !any isNull (attrValues cpeParts);
+  hasAllCPEParts =
+    cpeParts:
+    let
+      values = attrValues cpeParts;
+    in
+    (length values == 11) && !any isNull values;
   makeCPE =
     cpeParts:
     "cpe:2.3:${cpeParts.part}:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}";
@@ -643,12 +648,14 @@ let
 
       identifiers =
         let
+          # nix-env writes a warning for each derivation that has null in its meta values, so
+          # fields without known values are removed from the result
           defaultCPEParts = {
             part = "a";
-            vendor = null;
-            product = attrs.pname or null;
-            version = null;
-            update = null;
+            #vendor = null;
+            ${if attrs ? pname then "product" else null} = attrs.pname;
+            #version = null;
+            #update = null;
             edition = "*";
             sw_edition = "*";
             target_sw = "*";
@@ -679,7 +686,10 @@ let
                   cpe = (makeCPE guessedParts);
                 }
               ) possibleCPEPartsFuns;
-          v1 = { inherit cpeParts cpe possibleCPEs; };
+          v1 = {
+            inherit cpeParts possibleCPEs;
+            ${if cpe != null then "cpe" else null} = cpe;
+          };
         in
         v1
         // {
