@@ -2,7 +2,7 @@
 #! nix-shell -i python3 -p python3
 
 from __future__ import annotations
-import sys, os, json, base64, re, subprocess, shutil, argparse, urllib.request, time
+import sys, os, json, base64, re, argparse, urllib.request, time
 from typing import Dict, Optional, Tuple
 from pathlib import Path
 
@@ -66,35 +66,11 @@ def build_entry(pkey: str, pentry: dict) -> dict:
 
     sri = hex_to_sri(hv)
     version = extract_ver_from_url(url)
-    return {"platform_key": pkey, "url": url, "hashValue": hv, "sri": sri, "version": version}
-
-def subst_version(file: str, new_version: str) -> str:
-    return re.sub(
-        r'(?m)^(?P<ind>\s*)version\s*=\s*(?P<q>["\'])(?P<v>[^"\']*)(?P=q)\s*;',
-        lambda m: f'{m.group("ind")}version = {m.group("q")}{new_version}{m.group("q")};',
-        file,
-        count=1
-    )
-
-def subst_src_url(file: str, new_url: str) -> str:
-    return re.sub(
-        r'(?m)^(?P<ind>\s*)url\s*=\s*(?P<q>["\'])(?P<v>[^"\']*)(?P=q)\s*;',
-        lambda m: f'{m.group("ind")}url = {m.group("q")}{new_url}{m.group("q")};',
-        file,
-        count=1
-    )
-
-def subst_src_hash(file: str, new_hash: str) -> str:
-    return re.sub(
-        r'(?m)^(?P<ind>\s*)hash\s*=\s*(?P<q>["\'])(?P<v>[^"\']*)(?P=q)\s*;',
-        lambda m: f'{m.group("ind")}hash = {m.group("q")}{new_hash}{m.group("q")};',
-        file,
-        count=1
-    )
+    return {"platform_key": pkey, "url": url, "sri": sri, "version": version}
 
 def main():
     WIDEVINE_DIR = Path(__file__).resolve().parent
-    DEFAULT_FILE = WIDEVINE_DIR / "x86_64-linux.nix"
+    DEFAULT_FILE = WIDEVINE_DIR / "x86_64-manifest.json"
 
     ap = argparse.ArgumentParser()
     ap.add_argument("file", type=Path, nargs="?", default=DEFAULT_FILE)
@@ -124,15 +100,7 @@ def main():
 
     linux_x64 = results["linux_x86_64"]
 
-    txt = args.file.read_text(encoding="utf-8")
-
-    txt = subst_version(txt, linux_x64["version"])
-
-    txt = subst_src_url(txt, linux_x64["url"])
-
-    txt = subst_src_hash(txt, linux_x64["sri"])
-
-    args.file.write_text(txt, encoding="utf-8")
+    args.file.write_text(json.dumps(linux_x64, indent=2) + "\n", encoding="utf-8")
     print("# updated", file=sys.stderr)
 
 if __name__ == "__main__":
