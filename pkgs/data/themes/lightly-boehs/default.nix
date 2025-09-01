@@ -38,7 +38,6 @@ mkDerivation {
     mainProgram = "lightly-settings5";
     homepage = "https://github.com/boehs/Lightly";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.hikari ];
     platforms = platforms.all;
   };
 }
