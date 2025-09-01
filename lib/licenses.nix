@@ -1170,9 +1170,9 @@ lib.mapAttrs mkLicense (
       fullName = "Q Public License 1.0";
     };
 
-    qwt = {
-      fullName = "Qwt License, Version 1.0";
-      url = "https://qwt.sourceforge.io/qwtlicense.html";
+    qwtException = {
+      spdxId = "Qwt-exception-1.0";
+      fullName = "Qwt exception 1.0";
     };
 
     ruby = {
