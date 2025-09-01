@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "firdrake-fiat";
+  pname = "firedrake-fiat";
   version = "2025.4.0";
   pyproject = true;
 
