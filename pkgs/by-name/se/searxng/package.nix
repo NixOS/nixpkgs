@@ -31,6 +31,7 @@ python.pkgs.toPythonModule (
       "flask-babel"
       "httpx-socks"
       "lxml"
+      "typer-slim"
     ];
 
     preBuild =
