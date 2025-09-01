@@ -6,6 +6,7 @@
   intel-compute-runtime,
   openvino,
   stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,8 +29,11 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
-  passthru.tests = {
-    inherit intel-compute-runtime openvino;
+  passthru = {
+    tests = {
+      inherit intel-compute-runtime openvino;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
