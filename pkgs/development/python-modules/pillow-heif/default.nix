@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.22.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     tag = "v${version}";
-    hash = "sha256-xof6lFb0DhmWVmYuBNslcGZs82NRkcgZgt+SX9gsrBY=";
+    hash = "sha256-CY//orCEKBfgHF7lTTSMenDsvf9NOQo8iiQS3p9NMH8=";
   };
 
   postPatch = ''
@@ -74,17 +74,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    # https://github.com/bigcat88/pillow_heif/issues/325
-    rm tests/images/heif_other/L_xmp_latin1.heic
-    rm tests/images/heif/L_xmp.heif
-  '';
-
   disabledTests = [
-    # Time based
+    # Time sensitive speed test, not reproducible
     "test_decode_threads"
-    # Missing EXIF info on WEBP-AVIF variant
-    "test_exif_from_pillow"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/bigcat88/pillow_heif/issues/89
