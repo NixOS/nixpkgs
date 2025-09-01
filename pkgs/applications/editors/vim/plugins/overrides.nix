@@ -7,9 +7,7 @@
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
-  neovimUtils,
   replaceVars,
-  symlinkJoin,
   # Language dependencies
   fetchYarnDeps,
   mkYarnModules,
@@ -35,10 +33,8 @@
   neovim-unwrapped,
   nim1,
   nodejs,
-  notmuch,
   openscad,
   openssh,
-  parinfer-rust,
   ranger,
   ripgrep,
   sqlite,
@@ -64,7 +60,6 @@
   codeium,
   # command-t dependencies
   getconf,
-  ruby,
   # cornelis dependencies
   cornelis,
   # cpsm dependencies
@@ -108,7 +103,6 @@
   # hurl dependencies
   hurl,
   # must be lua51Packages
-  luajitPackages,
   aider-chat,
   # typst-preview dependencies
   tinymist,
@@ -131,42 +125,22 @@ self: super:
 let
   luaPackages = neovim-unwrapped.lua.pkgs;
 
-  # Ensure the vim plugin builders are not used in this file.
-  # If they are used, these stubs will throw.
-  buildVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
-  buildNeoVimPlugin = throw "New plugin definitions should be done outside `overrides.nix`";
+  # Ensures new attributes are not added in this file.
+  assertNoAdditions =
+    overrides:
+    let
+      prevNames = lib.attrNames super;
+      definedNames = lib.attrNames overrides;
+      addedNames = lib.subtractLists prevNames definedNames;
+    in
+    lib.throwIfNot (addedNames == [ ])
+      "vimPlugins: the following attributes should not be defined in overrides.nix:${
+        lib.concatMapStrings (name: "\n- ${name}") addedNames
+      }"
+      overrides;
 in
-{
-  corePlugins = symlinkJoin {
-    name = "core-vim-plugins";
-    paths = with self; [
-      # plugin managers
-      lazy-nvim
-      mini-deps
-      packer-nvim
-      vim-plug
 
-      # core dependencies
-      plenary-nvim
-
-      # popular plugins
-      mini-nvim
-      nvim-cmp
-      nvim-lspconfig
-      nvim-treesitter
-      vim-airline
-      vim-fugitive
-      vim-surround
-    ];
-
-    meta = {
-      description = "Collection of popular vim plugins (for internal testing purposes)";
-    };
-  };
-
-  #######################
-  # Regular overrides
-
+assertNoAdditions {
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
       snacks-nvim
@@ -1306,8 +1280,7 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  fzf-lua = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.fzf-lua;
+  fzf-lua = super.fzf-lua.overrideAttrs {
     runtimeDeps = [ fzf ];
     nvimSkipModules = [
       "fzf-lua.shell_helper"
@@ -1433,10 +1406,9 @@ in
     dependencies = [ self.luasnip ];
   };
 
-  haskell-tools-nvim = neovimUtils.buildNeovimPlugin {
+  haskell-tools-nvim = super.haskell-tools-nvim.overrideAttrs {
     # Optional integrations
     checkInputs = [ self.telescope-nvim ];
-    luaAttr = luaPackages.haskell-tools-nvim;
   };
 
   helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
@@ -2339,8 +2311,6 @@ in
   NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
   };
 
-  notmuch-vim = notmuch.vim;
-
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
   };
@@ -2699,8 +2669,6 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
-  nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
-
   nvim-treesitter-pyfold = super.nvim-treesitter-pyfold.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
@@ -2905,8 +2873,6 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  inherit parinfer-rust;
-
   parpar-nvim = super.parpar-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-parinfer
@@ -3091,27 +3057,22 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  rocks-nvim =
-    (neovimUtils.buildNeovimPlugin {
-      luaAttr = luaPackages.rocks-nvim;
-    }).overrideAttrs
-      (oa: {
-        passthru = oa.passthru // {
-          initLua = ''
-            vim.g.rocks_nvim = {
-              luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
-              }
-          '';
-        };
+  rocks-nvim = super.rocks-nvim.overrideAttrs (oa: {
+    passthru = oa.passthru // {
+      initLua = ''
+        vim.g.rocks_nvim = {
+          luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
+          }
+      '';
+    };
 
-      });
+  });
 
-  rustaceanvim = neovimUtils.buildNeovimPlugin {
+  rustaceanvim = super.rustaceanvim.overrideAttrs {
     checkInputs = [
       # Optional integration
       self.neotest
     ];
-    luaAttr = luaPackages.rustaceanvim;
   };
 
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
@@ -3252,7 +3213,7 @@ in
     }
   );
 
-  ssr = super.ssr-nvim.overrideAttrs {
+  ssr-nvim = super.ssr-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
 

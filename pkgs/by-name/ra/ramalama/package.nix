@@ -4,6 +4,9 @@
   fetchFromGitHub,
   go-md2man,
 
+  # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
+  # https://github.com/NixOS/nixpkgs/pull/434130
+  llama-cpp,
   podman,
   withPodman ? true,
 
@@ -13,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ramalama";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
-    hash = "sha256-Hozyf0yfB0XhxWeA3SS24BPfDDXYa2AXY8/gLh8ZFcU=";
+    hash = "sha256-BFJoM9MEprCdCANQntb4IIuWhtUXvCnK/mE7vOdf2PM=";
   };
 
   build-system = with python3.pkgs; [
@@ -28,8 +31,9 @@ python3.pkgs.buildPythonApplication rec {
     wheel
   ];
 
-  dependencies = [
-    python3.pkgs.argcomplete
+  dependencies = with python3.pkgs; [
+    argcomplete
+    pyyaml
   ];
 
   nativeBuildInputs = [
@@ -42,7 +46,21 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = lib.optionalString withPodman ''
     wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${lib.makeBinPath [ podman ]}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            llama-cpp
+            podman
+          ]
+          ++ (
+            with python3.pkgs;
+            [
+              huggingface-hub
+            ]
+            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
+          )
+        )
+      }
   '';
 
   pythonImportsCheck = [

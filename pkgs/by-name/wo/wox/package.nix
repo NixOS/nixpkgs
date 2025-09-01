@@ -8,7 +8,7 @@
   pnpm_9,
   python3Packages,
   writableTmpDirAsHomeHook,
-  buildGoModule,
+  buildGo125Module,
   pkg-config,
   autoPatchelfHook,
   xorg,
@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.0.0-beta.3";
+  version = "2.0.0-beta.4";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-z/fVRs5mflBhkeTazK9zg5WTYqDpqiXWEcNepEHg2k8=";
+    hash = "sha256-KOndb8snDk1BwOontI5G9wnBBvO8KV85YF5zzp95t/M=";
   };
 
   metaCommon = {
@@ -74,8 +74,8 @@ let
         src
         sourceRoot
         ;
-      fetcherVersion = 1;
-      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
+      fetcherVersion = 2;
+      hash = "sha256-HhdMwVNt7178EQlZGpTiTySBp8GR9tBpUaikEWt1BGY=";
     };
 
     buildPhase = ''
@@ -137,7 +137,7 @@ let
     };
   };
 in
-buildGoModule {
+buildGo125Module {
   pname = "wox";
   inherit version src;
 
@@ -154,7 +154,7 @@ buildGoModule {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-PW8upRPhv4UDnXvI+0b61c4jKkTrxzFuobF7x+qxY74=";
+  vendorHash = "sha256-Ft4X2woSf0ib0Z8dAwf0VAFQv0ck9nVs7EnpWgGi2+0=";
 
   proxyVendor = true;
 
@@ -200,7 +200,7 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/pixmaps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
   '';
 
   meta = metaCommon // {
