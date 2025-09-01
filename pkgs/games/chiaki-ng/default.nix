@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
-  version = "1.9.8";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
-    rev = "v${version}";
-    hash = "sha256-HQmXbi2diewA/+AMjlkyffvD73TkX6D+lMh+FL2Rcz4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7pDQnlElnBkW+Nr6R+NaylZbsGH8dB31nd7jxYD66yQ=";
     fetchSubmodules = true;
   };
 
@@ -86,12 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     libdovi
     xxHash
   ];
-
-  # handle library name discrepancy when curl not built with cmake
-  postPatch = ''
-    substituteInPlace lib/CMakeLists.txt \
-      --replace-fail 'libcurl_shared' 'libcurl'
-  '';
 
   cmakeFlags = [
     "-Wno-dev"
