@@ -1172,6 +1172,25 @@ in
             Please enable it in your configuration.
           '';
         }
+        {
+          assertion =
+            let
+              vlans = cfg.vlans ++ (lib.mapAttrsToList (_: v: v.vlan) cfg.interfaces);
+              uniqueVlans = lib.unique vlans;
+            in
+            lib.length vlans == lib.length uniqueVlans;
+          message = ''
+            Multiple interfaces cannot have the same VLAN property on a single machine.
+            This would result in duplicate MAC addresses, causing network issues.
+
+            Current interface VLAN properties:
+            ${lib.concatStringsSep "\n" (
+              lib.mapAttrsToList (name: iface: "  ${name}.vlan = ${toString iface.vlan}") cfg.interfaces
+            )}
+
+            Please use unique VLAN values for each interface.
+          '';
+        }
       ];
 
     warnings = optional (cfg.directBoot.enable && cfg.useBootLoader) ''
