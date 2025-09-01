@@ -152,6 +152,11 @@ lib.mapAttrs mkLicense (
       fullName = "Artistic License 2.0";
     };
 
+    asl11 = {
+      spdxId = "Apache-1.1";
+      fullName = "Apache License 1.1";
+    };
+
     asl20 = {
       spdxId = "Apache-2.0";
       fullName = "Apache License 2.0";
@@ -272,11 +277,6 @@ lib.mapAttrs mkLicense (
       fullName = "Business Source License 1.1";
       free = false;
       redistributable = true;
-    };
-
-    caossl = {
-      fullName = "Computer Associates Open Source Licence Version 1.0";
-      url = "http://jxplorer.org/licence.html";
     };
 
     cal10 = {
