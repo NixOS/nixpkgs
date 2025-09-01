@@ -51,7 +51,7 @@ assert builtins.elem gpuBackend [
 ];
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "SIRIUS";
   version = "7.8.0-unstable-2025-07-23";
 

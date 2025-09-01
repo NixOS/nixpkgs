@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "proxmox-auto-install-assistant";
   version = "8.4.6";
 

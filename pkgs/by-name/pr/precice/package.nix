@@ -12,7 +12,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "precice";
   version = "3.2.0-unstable-2025-05-23";
 

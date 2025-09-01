@@ -10,7 +10,7 @@ let
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
 in
-pkgs.recurseIntoAttrs (rec {
+pkgs.recurseIntoAttrs ({
   vim_empty_config = vimUtils.vimrcFile {
     beforePlugins = "";
     customRC = "";
