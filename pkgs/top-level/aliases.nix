@@ -2238,6 +2238,7 @@ mapAliases {
   syncthing-cli = throw "'syncthing-cli' has been renamed to/replaced by 'syncthing'"; # Converted to throw 2024-10-17
   syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
   syncthing-tray = throw "syncthing-tray has been removed because it is broken and unmaintained";
+  syndicate_utils = throw "'syndicate_utils' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
 
   ### T ###
 
