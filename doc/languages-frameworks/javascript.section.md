@@ -542,7 +542,7 @@ set `prePnpmInstall` to the right commands to run. For example:
 ```nix
 {
   prePnpmInstall = ''
-    pnpm config set dedupe-peer-dependants false
+    pnpm config set dedupe-peer-dependents false
   '';
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) prePnpmInstall;
