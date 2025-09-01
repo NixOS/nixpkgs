@@ -2799,12 +2799,12 @@ self: super:
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "13.0.0";
+          version = "13.0.6";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-j+WlY7D3hkPHIjiyCFenC5trF31L05gEPptCwOVil6U=";
+            hash = "sha256-BM7fLW7LYrl+++NVztr407QyAhj2k5zO70iDqSe22dc=";
           };
         })
       ];
