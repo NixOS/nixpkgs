@@ -37,12 +37,12 @@
 let
   isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
 in
-stdenv.mkDerivation (finalPackage: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
   version = "2.41.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
     hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
   };
 
@@ -231,7 +231,7 @@ stdenv.mkDerivation (finalPackage: rec {
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "Set of system utilities for Linux";
-    changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
+    changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/v${finalAttrs.version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with lib.licenses; [
       gpl2Only
