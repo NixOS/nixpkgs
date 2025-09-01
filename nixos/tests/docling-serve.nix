@@ -4,7 +4,7 @@ let
 in
 {
   name = "docling-serve";
-  meta = with lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

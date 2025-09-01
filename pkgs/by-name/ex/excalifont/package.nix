@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://plus.excalidraw.com/excalifont";
     description = "Font based on the original handwritten Virgil font carefully curated to improve legibility while preserving its hand-drawn nature";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.ofl;
   };
 })

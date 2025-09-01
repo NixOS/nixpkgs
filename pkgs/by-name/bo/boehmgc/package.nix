@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.boehmGC;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -127,7 +127,7 @@ in
       description = "Soothing pastel theme for Tmux";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -1017,7 +1017,7 @@ in
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
-            with pkgs;
+
             lib.makeBinPath ([
               pkgs.fzf
               pkgs.zoxide

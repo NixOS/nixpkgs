@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/glehmann/earthlyls/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "earthlyls";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

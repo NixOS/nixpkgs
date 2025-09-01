@@ -44,7 +44,7 @@ in
       package = mkPackageOption pkgs "vmware-workstation" { };
       extraPackages = mkOption {
         type = with types; listOf package;
-        default = with pkgs; [ ];
+        default = [ ];
         description = "Extra packages to be used with VMware host.";
         example = "with pkgs; [ ntfs3g ]";
       };
