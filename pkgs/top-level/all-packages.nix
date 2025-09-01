@@ -9886,8 +9886,6 @@ with pkgs;
   # https://github.com/minio/minio/releases/tag/RELEASE.2022-10-29T06-21-33Z
   minio_legacy_fs = callPackage ../servers/minio/legacy_fs.nix { };
 
-  mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
-
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
