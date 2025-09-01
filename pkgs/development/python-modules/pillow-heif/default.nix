@@ -102,6 +102,9 @@ buildPythonPackage rec {
       bsd3
       lgpl3
     ];
-    maintainers = with lib.maintainers; [ dandellion ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      kuflierl
+    ];
   };
 }
