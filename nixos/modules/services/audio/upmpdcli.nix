@@ -35,7 +35,6 @@ let
     mpdport = 6600;
     ##mpdpassword =
     ##ownqueue = 1
-
   };
 
   configuration =
@@ -81,19 +80,9 @@ in
       description = "upmpdcli music player daemon";
       serviceConfig = {
         ExecStart = "${pkgs.upmpdcli}/bin/upmpdcli -c ${upmpdcliConf}";
+        DynamicUser = true;
       };
     };
-
-    users.users.upmpdcli = {
-      inherit uid;
-      group = "upmpdcli";
-      extraGroups = [ "audio" ];
-      description = "UpMpd daemon user";
-      home = configuration.pkgdatadir;
-    };
-
-    users.groups.upmpdcli.gid = gid;
-
   };
 
 }
