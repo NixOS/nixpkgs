@@ -23,14 +23,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2022-10-31";
+  version = "0.3.8.1-unstable-2025-06-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
-    hash = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+    rev = "6e583366ae23b56a33c1ad4ca164e04d64174538";
+    hash = "sha256-CtmOkQAqUNn7+59mWEfAsgtWmGcXD3eE9j2t3sLnXms=";
   };
 
   # Patch up the different paths to icons and stuff that are installed
