@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "ipv8-rust-tunnels";
-  version = "0.1.33";
+  version = "0.1.34";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ipv8_rust_tunnels";
-    hash = "sha256-LwQL/u+h6mwCo207OxSk9YKxuLuxXQhh07rSWrNFh7w=";
+    hash = "sha256-YXIfAXwcbWGq/CSMrTslpbkmj8AryzsinWK8kAWF90k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NwYLez9NFgS0GBXrcNrKJKV+s4HIHM8jHXfmkgya03M=";
+    hash = "sha256-C2LLiEpD0Gk39XSuwqQJ/l2olFL2HSktdZCJp5WG0pk=";
   };
 
   nativeBuildInputs = with rustPlatform; [
