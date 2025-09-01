@@ -841,6 +841,8 @@ mapAliases {
   ephemeral = throw "'ephemeral' has been archived upstream since 2022-04-02"; # added 2025-04-12
   epoxy = throw "'epoxy' has been renamed to/replaced by 'libepoxy'"; # Converted to throw 2024-10-17
 
+  eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+
   erlang_24 = throw "erlang_24 has been removed as it is unmaintained upstream";
   erlang_27-rc3 = throw "erlang_27-rc3 has been removed in favor of erlang_27"; # added 2024-05-20
   erlang_nox = throw "erlang_nox has been removed in favor of beam_minimal.packages.erlang or beamMinimalPackages.erlang"; # added 2025-04-01
