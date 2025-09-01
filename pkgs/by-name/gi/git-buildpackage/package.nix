@@ -40,6 +40,8 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     python-dateutil
+    pyyaml
+    rpm
   ];
 
   pythonImportsCheck = [
@@ -57,8 +59,6 @@ python3Packages.buildPythonApplication rec {
     coverage
     pytest-cov
     pytestCheckHook
-    pyyaml
-    rpm
   ]);
 
   disabledTests = [
