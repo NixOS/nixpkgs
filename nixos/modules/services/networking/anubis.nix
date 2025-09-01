@@ -12,26 +12,21 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
-  optionalUnixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
-  settingsToUnixSocketAddrs =
+  unixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  unixSocketAddrs =
     settings:
-    builtins.filter (x: x != "") [
-      (optionalUnixAddr settings.BIND_NETWORK settings.BIND)
-      (optionalUnixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    lib.filter (x: x != "") [
+      (unixAddr settings.BIND_NETWORK settings.BIND)
+      (unixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
     ];
 
-  runtimeDirectoryPrefix = "/run/anubis/";
-  unixSocketAddrToRuntimeDirectory =
-    unixSocketAddr: lib.removePrefix "/run/" (builtins.dirOf unixSocketAddr);
-
-  settingsToRuntimeDirectory =
-    settings: lib.unique (map unixSocketAddrToRuntimeDirectory (settingsToUnixSocketAddrs settings));
-
-  instanceConfigs = lib.mapAttrs (name: attrs: rec {
-    unixSocketAddrs = settingsToUnixSocketAddrs attrs.settings;
-    runtimeDirectory = settingsToRuntimeDirectory attrs.settings;
-  }) enabledInstances;
-  instanceConfigsList = (lib.mapAttrsToList (_: attrs: attrs) instanceConfigs);
+  dedicatedRuntimeDirectory = # Set when more than one instance uses unix sockets.
+    let
+      instanceUsesUnixSockets = instance: lib.length (unixSocketAddrs instance.settings) > 0;
+    in
+    lib.foldl' (acc: hasUnixSockets: if hasUnixSockets then acc + 1 else acc) 0 (
+      lib.map instanceUsesUnixSockets (lib.attrValues enabledInstances)
+    ) > 1;
 
   commonSubmodule =
     isDefault:
@@ -206,6 +201,7 @@ let
         default = "/run/anubis/${instanceName name}.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
+          Use the prefix /run/anubis/<instance name> when configured multiple instances.
 
           Defaults to Unix domain sockets. To use TCP sockets, set this to a TCP address and `BIND_NETWORK` to `"tcp"`.
         '';
@@ -217,6 +213,7 @@ let
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
+          Use the prefix /run/anubis/<instance name> when configuring multiple instances.
 
           The metrics server is enabled by default and may be disabled. However, due to implementation details, this is
           only possible by setting a command line flag. See {option}`services.anubis.defaultOptions.extraFlags` for an
@@ -266,18 +263,24 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
-    assertions = [
-      {
-        assertion = lib.all (
-          instance: lib.all (lib.hasPrefix runtimeDirectoryPrefix) instance.unixSocketAddrs
-        ) instanceConfigsList;
-        message = "BIND and METRICS_BIND set with unix sockets must be located in ${runtimeDirectoryPrefix}";
-      }
-      {
-        assertion = lib.all (instance: builtins.length instance.runtimeDirectory <= 1) instanceConfigsList;
-        message = "BIND and METRICS_BIND of each instance set with unix sockets must be located in the same runtime directory";
-      }
+    warnings = [
+      "RuntimeDirectory is going to be migrated from `anubis` to `anubis/anubis-<instance name>`, update BIND and METRICS_BIND to /run/anubis/anubis-<instance name>"
     ];
+
+    assertions =
+      let
+        validInstanceUnixSocketAddrs =
+          { name, value }:
+          lib.all (lib.hasPrefix "/run/anubis/${instanceName name}/") (unixSocketAddrs value.settings);
+      in
+      [
+        {
+          assertion =
+            !dedicatedRuntimeDirectory
+            || lib.all validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances);
+          message = lib.trace (builtins.toString (lib.map validInstanceUnixSocketAddrs (lib.attrsToList enabledInstances))) "use the prefix /run/anubis/anubis-<instance name> in BIND and METRICS_BIND when configuring multiple instances";
+        }
+      ];
 
     users.users = lib.mkIf (cfg.defaultOptions.user == "anubis") {
       anubis = {
@@ -310,7 +313,16 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
-          RuntimeDirectory = instanceConfigs."${name}".runtimeDirectory;
+          RuntimeDirectory =
+            if dedicatedRuntimeDirectory then
+              "anubis/${instanceName name}"
+            else
+              # `dedicatedRuntimeDirectory = false`: only one instance is configured with unix sockets, /run/anubis may still be used.
+              # `anubis` will be deprecated eventually.
+              [
+                "anubis/${instanceName name}"
+                "anubis"
+              ];
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;
