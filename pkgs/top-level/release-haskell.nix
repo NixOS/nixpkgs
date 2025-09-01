@@ -71,7 +71,6 @@ let
     ghc967
     ghc984
     ghc9102
-    # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
 
@@ -577,7 +576,6 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9121
         compilerNames.ghc9122
       ] released;
       Cabal_3_12_1_0 = released;
