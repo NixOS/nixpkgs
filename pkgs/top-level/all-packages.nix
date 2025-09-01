@@ -9825,17 +9825,16 @@ with pkgs;
 
   jetty = jetty_12;
 
-  kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix {
+  kanidm_1_5 = callPackage ../servers/kanidm/1_5.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
   };
-  kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix {
+  kanidm_1_6 = callPackage ../servers/kanidm/1_6.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
   };
-  kanidm_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix {
+  kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
   };
 
-  kanidmWithSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
