@@ -48,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/EbonJaeger/bluejay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

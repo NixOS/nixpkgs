@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ezibenroc/PyRoaringBitMap";
     changelog = "https://github.com/Ezibenroc/PyRoaringBitMap/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

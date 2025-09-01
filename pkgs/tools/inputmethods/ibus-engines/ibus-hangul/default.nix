@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     mainProgram = "ibus-setup-hangul";
     homepage = "https://github.com/libhangul/ibus-hangul";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

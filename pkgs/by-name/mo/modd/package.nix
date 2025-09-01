@@ -27,6 +27,6 @@ buildGoModule {
     mainProgram = "modd";
     homepage = "https://github.com/cortesi/modd";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

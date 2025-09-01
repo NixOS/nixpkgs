@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/neithere/argh";
     description = "Unobtrusive argparse wrapper with natural syntax";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

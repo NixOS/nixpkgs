@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "chsrc";
   };

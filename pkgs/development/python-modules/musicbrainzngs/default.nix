@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://python-musicbrainzngs.readthedocs.org/";
     description = "Python bindings for musicbrainz NGS webservice";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

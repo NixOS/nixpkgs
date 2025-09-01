@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.call-with-current-continuation.org/fleng/fleng.html";
     description = "Low level concurrent logic programming language descended from Prolog";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

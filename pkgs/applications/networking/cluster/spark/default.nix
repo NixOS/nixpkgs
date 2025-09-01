@@ -31,7 +31,7 @@ let
       inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
         url =
-          with finalAttrs;
+
           "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
         inherit (finalAttrs) hash;
       };

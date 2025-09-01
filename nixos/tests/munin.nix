@@ -4,7 +4,7 @@
 { pkgs, ... }:
 {
   name = "munin";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

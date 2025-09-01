@@ -54,7 +54,7 @@ in
     boot.blacklistedKernelModules = cfg.blacklistedKernelModules;
 
     systemd.user.services.opentabletdriver =
-      with pkgs;
+
       lib.mkIf cfg.daemon.enable {
         description = "Open source, cross-platform, user-mode tablet driver";
         wantedBy = [ "graphical-session.target" ];

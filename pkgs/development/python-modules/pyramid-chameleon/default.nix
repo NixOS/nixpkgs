@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
