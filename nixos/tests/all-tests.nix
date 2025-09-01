@@ -1037,7 +1037,10 @@ in
   nix-config = runTest ./nix-config.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
-  nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
+  nix-upgrade = handleTest ./nix/upgrade.nix {
+    inherit (pkgs) nixVersions;
+    inherit system;
+  };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
