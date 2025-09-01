@@ -516,7 +516,7 @@ stdenv.mkDerivation {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;

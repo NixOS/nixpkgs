@@ -9,7 +9,7 @@ let
     packageOverrides = self: super: {
 
       # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: {
         dependencies = [
           python3.pkgs.pydantic_1
           python3.pkgs.cryptography
