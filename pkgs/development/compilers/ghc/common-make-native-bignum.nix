@@ -317,6 +317,19 @@ stdenv.mkDerivation (
       )
     ]
 
+    ++ lib.optionals (lib.versionAtLeast version "8.10" && stdenv.hostPlatform.isBigEndian) [
+      # unboxed arrays are borked on big-endian, lead to internal compiler errors
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/16998
+      (fetchpatch {
+        name = "ghc-Disable-unboxed-arrays.patch";
+        # From https://gitlab.haskell.org/ghc/ghc/-/issues/15411#note_174828
+        url = "https://gitlab.haskell.org/-/project/1/uploads/5deb133cf910e9e0ca9ad9fe53f7383a/Disable-unboxed-arrays.patch";
+        stripLen = 2;
+        extraPrefix = "libraries/containers/";
+        hash = "sha256-pe+Mlz1zP4uHUZ5MZAFcwkJBkXr7hkErrS7DAO86hg0=";
+      })
+    ]
+
     # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
     # invoke the C compiler to generate assembly and later call the assembler on the result of
     # that operation. Unfortunately, that is brittle in a lot of cases, e.g. when using mismatched
