@@ -151,7 +151,9 @@ in
       ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
         bootPkgs =
           # the oldest ghc with aarch64-darwin support is 8.10.5
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian then
+            bb.packages.ghc865
+          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
             bb.packages.ghc865Binary
           else
