@@ -1449,6 +1449,8 @@ let
                     rec {
                       valueMeta = {
                         inherit headError;
+                        # Allow freeformType to suppress the warning below, because it has a more specific solution.
+                        _deprecatedFreeformTypeValueOverride = mergeOneOption loc defs;
                       };
                       headError = {
                         message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";

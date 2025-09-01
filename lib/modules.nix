@@ -276,13 +276,24 @@ let
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
-            let
-              defs = map (def: {
-                file = def.file;
-                value = setAttrByPath def.prefix def.value;
-              }) merged.unmatchedDefns;
-            in
-            if defs == [ ] then { } else declaredConfig._module.freeformType.merge prefix defs;
+            if merged.unmatchedDefns == [ ] then
+              { }
+            else
+              let
+                defs = map (def: {
+                  file = def.file;
+                  value = setAttrByPath def.prefix def.value;
+                }) merged.unmatchedDefns;
+                mergedFreeform = mergeDefinitions prefix declaredConfig._module.freeformType defs;
+              in
+              # TODO (after 25.11): make this throw or just use mergedFreeform.checkedAndMerged.value, which throws
+              warnIf (mergedFreeform.checkedAndMerged.headError != null)
+                "freeformType at `${showOption prefix}` does not pass type check. If you are the maintainer, please provide the correct type. It probably just needs to be wrapped in attrsOf."
+                (
+                  # Use valueMeta to silence a warning from `either`, which is a more general but worse duplicate
+                  mergedFreeform.checkedAndMerged.valueMeta._deprecatedFreeformTypeValueOverride
+                    or mergedFreeform.checkedAndMerged.value
+                );
 
         in
         if declaredConfig._module.freeformType == null then
