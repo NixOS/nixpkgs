@@ -25,6 +25,7 @@
   makeWrapper,
   replaceVars,
   nixosTests,
+  bintools,
 }:
 
 stdenv.mkDerivation {
@@ -86,7 +87,8 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
-      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art
+      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
+      --prefix PATH : ${lib.makeBinPath [ bintools ]}
   '';
 
   passthru.tests = {
