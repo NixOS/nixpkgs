@@ -4,7 +4,7 @@
   fetchurl,
   cabextract,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xow_dongle-firmware";
   version = "0-unstable-2025-04-22";
 

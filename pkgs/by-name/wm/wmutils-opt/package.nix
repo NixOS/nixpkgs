@@ -6,7 +6,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmutils-opt";
   version = "1.0-unstable-2024-09-09";
 

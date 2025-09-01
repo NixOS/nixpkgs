@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "countryguess";
   version = "0-unstable-2025-03-04";
   # upstream pyproject.toml is nonsense. Copied from another project

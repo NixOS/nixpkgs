@@ -14,7 +14,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bic";
   version = "1.0.0-unstable-2022-02-16";
 
