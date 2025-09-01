@@ -25,4 +25,5 @@ in
   platforms = platforms.unix;
   teams = [ teams.gcc ];
 
+  identifiers.cpeParts.vendor = "gnu";
 }
