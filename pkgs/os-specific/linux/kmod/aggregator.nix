@@ -9,7 +9,8 @@
 buildEnv {
   inherit name;
 
-  paths = modules;
+  # Automatically extract the "modules" output from derivations that have it
+  paths = map (m: m.modules or m) modules;
 
   postBuild = ''
     source ${stdenvNoCC}/setup
