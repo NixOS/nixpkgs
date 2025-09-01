@@ -77,7 +77,8 @@ in
   doCheck ? !isCross,
   doBenchmark ? false,
   doHoogle ? true,
-  doHaddockQuickjump ? doHoogle,
+  # unrecognized 'haddock' option `--quickjump'
+  doHaddockQuickjump ? doHoogle && lib.strings.versionAtLeast ghc.version "8.6.5",
   doInstallIntermediates ? false,
   editedCabalFile ? null,
   enableLibraryProfiling ? !outputsJS,
@@ -348,13 +349,23 @@ let
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
+  ]
+  # 8.0.1 doesn't understand this flag
+  ++ optionals (lib.versionAtLeast ghc.version "8.6.5") [
     (enableFeature enableStaticLibraries "static")
+  ]
+  ++ [
     (enableFeature enableSharedExecutables "executable-dynamic")
     (enableFeature doCheck "tests")
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla" # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
+  ]
+  # 8.0.1 doesn't understand this flag
+  ++ optionals (lib.versionAtLeast ghc.version "8.6.5") [
     (enableFeature enableDeadCodeElimination "split-sections")
+  ]
+  ++ [
     (enableFeature (!dontStrip) "library-stripping")
     (enableFeature (!dontStrip) "executable-stripping")
   ]
@@ -796,7 +807,7 @@ lib.fix (
         runHook preCheck
         checkFlagsArray+=(
           "--show-details=streaming"
-          "--test-wrapper=${testWrapperScript}"
+          ${lib.optionalString (lib.versionAtLeast ghc.version "8.10.7") "\"--test-wrapper=${testWrapperScript}\""}
           ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
         )
         export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
