@@ -1366,6 +1366,14 @@ with haskellLib;
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   }) super.hastache;
 
+  # 2025-09-01: Merged patch from upstream to fix bounds:
+  optics = appendPatch (fetchpatch {
+    name = "optics-fix-inspection-testing-bound";
+    url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
+    sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
+    relative = "optics";
+  }) super.optics;
+
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
 
