@@ -78,7 +78,7 @@ buildGoModule {
     inherit (nixosTests) mailpit;
     version = testers.testVersion {
       package = mailpit;
-      command = "mailpit version";
+      command = "mailpit version --no-release-check";
     };
   };
 
