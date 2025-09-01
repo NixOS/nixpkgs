@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (sevVariant || withGpu) pkg-config;
 
   buildInputs = [
-    (libkrunfw.override { inherit sevVariant; })
+    (libkrunfw.override { variant = if sevVariant then "sev" else null; })
     glibc
     glibc.static
   ]
