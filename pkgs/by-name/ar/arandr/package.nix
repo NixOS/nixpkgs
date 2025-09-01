@@ -15,14 +15,14 @@ let
 in
 buildPythonApplication rec {
   pname = "arandr";
-  version = "0.1.11";
+  version = "debian/0.1.11-1";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "arandr";
     repo = "arandr";
     tag = version;
-    hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
+    hash = "sha256-KAnTo3+0WTB1SzMCM8vDMPJhPw/fsT4msRETXwE21qA=";
   };
 
   # patch to set mtime=0 on setup.py
