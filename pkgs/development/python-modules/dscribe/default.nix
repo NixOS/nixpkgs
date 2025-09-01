@@ -79,6 +79,17 @@ buildPythonPackage rec {
     "test_examples"
   ];
 
+  # Broken due to use of missing _get_constraints attr in ase >= 3.26.0
+  # https://github.com/SINGROUP/dscribe/issues/160
+  disabledTestPaths = [
+    "tests/test_examples.py::test_examples"
+    "tests/test_general.py::test_atoms_to_system"
+    "tests/test_lmbtr.py"
+    "tests/test_mbtr.py"
+    "tests/test_sinematrix.py"
+    "tests/test_valle_oganov.py"
+  ];
+
   meta = {
     description = "Machine learning descriptors for atomistic systems";
     homepage = "https://github.com/SINGROUP/dscribe";

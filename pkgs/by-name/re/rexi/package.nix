@@ -16,6 +16,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-tag2/QTM6tDCU3qr4e1GqRYAZgpvEgtA+FtR4P7WdiU=";
   };
 
+  # AttributeError: 'Static' object has no attribute 'renderable'.
+  # In textual==0.6.0, the `renderable` property was renamed to `content`
+  # https://github.com/Textualize/textual/pull/6041
+  postPatch = ''
+    substituteInPlace tests/test_ui.py \
+      --replace-fail ".renderable" ".content"
+  '';
+
   build-system = with python3Packages; [
     poetry-core
   ];

@@ -20,6 +20,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-bShFMuDJlvBA3rQJRwXlsgRk4q+gdFQjOpDzOrp4/8k=";
   };
 
+  # AttributeError: 'Label' object has no attribute 'renderable'.
+  # In textual==0.6.0, the `renderable` property was renamed to `content`
+  # https://github.com/Textualize/textual/pull/6041
+  postPatch = ''
+    substituteInPlace tests/unit/test_tui_reporter.py \
+      --replace-fail ".renderable" ".content"
+  '';
+
   build-system = with python3Packages; [
     distutils
     setuptools
