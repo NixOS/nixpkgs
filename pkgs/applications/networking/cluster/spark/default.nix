@@ -101,7 +101,7 @@ in
     version = "3.5.5";
     hash = "sha256-vzcWgIfHPhN3nyrxdk3f0p4fW3MpQ+FuEPnWPw0xNPg=";
   };
-  spark_3_4 = spark rec {
+  spark_3_4 = spark {
     pname = "spark";
     version = "3.4.4";
     hash = "sha256-GItHmthLhG7y0XSF3QINCyE7wYFb0+lPZmYLUuMa4Ww=";

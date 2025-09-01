@@ -11,7 +11,7 @@ let
 
   self = {
 
-    octoprint = stdenv.mkDerivation rec {
+    octoprint = stdenv.mkDerivation {
       pname = "Cura-OctoPrintPlugin";
       version = "3.5.18";
 

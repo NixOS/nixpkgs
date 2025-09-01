@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-icdiff";
   version = "0.5-unstable-2024-09-04";
   pyproject = true;
