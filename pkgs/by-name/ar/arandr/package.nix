@@ -7,6 +7,7 @@
   gtk3,
   wrapGAppsHook3,
   xrandr,
+  nix-update-script,
 }:
 
 let
@@ -50,6 +51,12 @@ buildPythonApplication rec {
 
   # no tests
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(\\d.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
