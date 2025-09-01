@@ -20,7 +20,6 @@
   binutils-unwrapped,
   libiberty,
   audit,
-  libbfd,
   libopcodes,
   libpfm,
   libtraceevent,
@@ -120,7 +119,6 @@ stdenv.mkDerivation {
     numactl
     python3
     babeltrace
-    libbfd
     libopcodes
     libpfm
     python3.pkgs.setuptools
