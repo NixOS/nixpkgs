@@ -922,6 +922,11 @@ lib.mapAttrs mkLicense (
       fullName = "Lucent Public License v1.02";
     };
 
+    lsof = {
+      spdxId = "lsof";
+      fullName = "lsof License"; # also known as Purdue BSD-Style License
+    };
+
     miros = {
       spdxId = "MirOS";
       fullName = "MirOS License";
@@ -1147,11 +1152,6 @@ lib.mapAttrs mkLicense (
 
     publicDomain = {
       fullName = "Public Domain";
-    };
-
-    purdueBsd = {
-      fullName = "Purdue BSD-Style License"; # also known as lsof license
-      url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
     };
 
     prosperity30 = {

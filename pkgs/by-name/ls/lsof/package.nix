@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = lib.licenses.purdueBsd;
+    license = lib.licenses.lsof;
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = lib.platforms.unix;
   };
