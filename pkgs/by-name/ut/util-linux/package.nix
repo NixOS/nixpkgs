@@ -21,6 +21,7 @@
   pam,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  systemdLibs,
   sqlite,
   nlsSupport ? true,
   translateManpages ? true,
@@ -164,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals pamSupport [ pam ]
   ++ lib.optionals capabilitiesSupport [ libcap_ng ]
   ++ lib.optionals ncursesSupport [ ncurses ]
-  ++ lib.optionals systemdSupport [ systemd ];
+  ++ lib.optionals systemdSupport [ systemdLibs ];
 
   enableParallelBuilding = true;
 
