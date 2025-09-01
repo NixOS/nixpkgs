@@ -52,9 +52,6 @@ buildPythonPackage rec {
     pbr
   ];
 
-  # tests hang for unknown reason and time the build out
-  doCheck = false;
-
   nativeCheckInputs = [
     eventlet
     fixtures
@@ -70,6 +67,8 @@ buildPythonPackage rec {
     stestr run -e <(echo "
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n
+    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn
+    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n
     ")
   '';
 
