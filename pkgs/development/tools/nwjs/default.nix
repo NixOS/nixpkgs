@@ -16,6 +16,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
+  hashes,
   lib,
   libcap,
   libdrm,
@@ -34,6 +35,7 @@
   stdenv,
   systemd,
   udev,
+  version,
   xorg,
 }:
 
@@ -90,8 +92,6 @@ let
       "out"
     ];
   };
-
-  version = "0.100.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -103,14 +103,7 @@ stdenv.mkDerivation {
     in
     fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      hash =
-        {
-          "sdk-ia32" = "sha256-8T3lyQi5tvXhThapng/l+wEbmXdUQBqPT7HHDBpEk5Y=";
-          "sdk-x64" = "sha256-nD1MYEm+4sq4MHkiOI46IgM6oDWpcyVWl3Yis0beEIg=";
-          "ia32" = "sha256-TfAw7+z/I3eYRn20DN0sR9moqD23UG7nvQbeXQDNDcg=";
-          "x64" = "sha256-EqLESL4zVdBzFvhPgXfcIwSVNNBVIMy1SdCu6eNU96Q=";
-        }
-        ."${flavor + bits}";
+      hash = hashes."${flavor + bits}";
     };
 
   nativeBuildInputs = [

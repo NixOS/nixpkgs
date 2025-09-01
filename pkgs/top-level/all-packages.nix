@@ -7053,10 +7053,35 @@ with pkgs;
     _7zz = _7zz-rar;
   };
 
-  nwjs = callPackage ../development/tools/nwjs { };
+  nwjs = callPackage ../development/tools/nwjs {
+    version = "0.100.1";
+    hashes = {
+      "sdk-ia32" = "sha256-8T3lyQi5tvXhThapng/l+wEbmXdUQBqPT7HHDBpEk5Y=";
+      "sdk-x64" = "sha256-nD1MYEm+4sq4MHkiOI46IgM6oDWpcyVWl3Yis0beEIg=";
+      "ia32" = "sha256-TfAw7+z/I3eYRn20DN0sR9moqD23UG7nvQbeXQDNDcg=";
+      "x64" = "sha256-EqLESL4zVdBzFvhPgXfcIwSVNNBVIMy1SdCu6eNU96Q=";
+    };
+  };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
     sdk = true;
+    version = "0.100.1";
+    hashes = {
+      "sdk-ia32" = "sha256-8T3lyQi5tvXhThapng/l+wEbmXdUQBqPT7HHDBpEk5Y=";
+      "sdk-x64" = "sha256-nD1MYEm+4sq4MHkiOI46IgM6oDWpcyVWl3Yis0beEIg=";
+      "ia32" = "sha256-TfAw7+z/I3eYRn20DN0sR9moqD23UG7nvQbeXQDNDcg=";
+      "x64" = "sha256-EqLESL4zVdBzFvhPgXfcIwSVNNBVIMy1SdCu6eNU96Q=";
+    };
+  };
+
+  nwjs084 = callPackage ../development/tools/nwjs {
+    version = "0.84.0";
+    hashes = {
+      "sdk-ia32" = "sha256-uy6WZuA5b79yACSe3wiKiEeMb6K/z84cSeQDrKFUUdE=";
+      "sdk-x64" = "sha256-xI/YMHg5RWYh9XCLskSkuDwemH77U43Fzb8C9+fS9wE=";
+      "ia32" = "sha256-Sc9geGuwl9TIdLrKr97Wz2h4S+AEgP3DAd12Toyk7b8=";
+      "x64" = "sha256-VIygMzCPTKzLr47bG1DYy/zj0OxsjGcms0G1BkI/TEI=";
+    };
   };
 
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
