@@ -24,7 +24,7 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  targetPkgs = pkgs: ([
+  targetPkgs = pkgs: [
     dbus
     fontconfig
     freetype
@@ -39,7 +39,7 @@ buildFHSEnv {
     xorg.libXrender
     xorg.libxcb
     zlib
-  ]);
+  ];
 
   extraInstallCommands = ''
     install -Dvm644 ${src}/Driver/99-Kingst.rules \

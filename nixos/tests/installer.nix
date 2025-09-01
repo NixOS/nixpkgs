@@ -669,7 +669,7 @@ let
             virtualisation.diskImage = "./target.qcow2";
 
             # and the same TPM options
-            virtualisation.qemu.options = mkIf (clevisTest) [
+            virtualisation.qemu.options = mkIf clevisTest [
               "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
               "-tpmdev emulator,id=tpm0,chardev=chrtpm"
               "-device tpm-tis,tpmdev=tpm0"
@@ -1056,7 +1056,7 @@ let
           "echo -n password | zfs create"
           + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
         ''
-        + optionalString (parentDataset) ''
+        + optionalString parentDataset ''
           "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
         ''
@@ -1071,7 +1071,7 @@ let
           optionalString (!parentDataset) ''
             boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
-          + optionalString (parentDataset) ''
+          + optionalString parentDataset ''
             boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
           + ''

@@ -35,7 +35,7 @@ let
     allHashAndPlatform."${stdenv.system}"."${cpuOrGpu}"."${pyShortVersion}"
       or (throw "${pname} has no binary-hashes.nix entry for '${stdenv.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
   platform = allHashAndPlatform."${stdenv.system}".platform;
-  src = fetchPypi ({
+  src = fetchPypi {
     inherit
       version
       format
@@ -46,7 +46,7 @@ let
     dist = pyShortVersion;
     python = pyShortVersion;
     abi = pyShortVersion;
-  });
+  };
 in
 buildPythonPackage {
   inherit

@@ -7,7 +7,7 @@
 }:
 
 let
-  fetched = coqPackages.metaFetch ({
+  fetched = coqPackages.metaFetch {
     release."20231231".sha256 = "sha256-veB0ORHp6jdRwCyDDAfc7a7ov8sOeHUmiELdOFf/QYk=";
     release."20240715".sha256 = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI=";
     releaseRev = v: "${v}";
@@ -16,7 +16,7 @@ let
       owner = "fpottier";
       repo = "menhir";
     };
-  }) version;
+  } version;
 in
 buildDunePackage {
   pname = "menhirLib";

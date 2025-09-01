@@ -115,7 +115,7 @@ in
         # We want to place the tmpdirs for the wrappers to the parent dir.
         wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
         chmod a+rx "$wrapperDir"
-        ${lib.concatStringsSep "\n" (vmwareWrappers)}
+        ${lib.concatStringsSep "\n" vmwareWrappers}
         if [ -L ${wrapperDir} ]; then
           # Atomically replace the symlink
           # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/

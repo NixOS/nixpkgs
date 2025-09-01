@@ -66,7 +66,7 @@ in
 ++ optional (!atLeast12) ./fix-bug-80431.patch
 # Pass the path to a C++ compiler directly in the Makefile.in
 ++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
-++ optionals (noSysDirs) (
+++ optionals noSysDirs (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
     (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)
@@ -308,7 +308,7 @@ in
 ## gcc 11.0 and older ##############################################################################
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
-++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
+++ optionals is11 [ ./11/gcc-issue-103910.patch ]
 
 ## gcc 10.0 and older ##############################################################################
 

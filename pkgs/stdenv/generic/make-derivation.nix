@@ -555,14 +555,14 @@ let
 
             inherit outputs;
           }
-          // optionalAttrs (__contentAddressed) {
+          // optionalAttrs __contentAddressed {
             inherit __contentAddressed;
             # Provide default values for outputHashMode and outputHashAlgo because
             # most people won't care about these anyways
             outputHashAlgo = attrs.outputHashAlgo or "sha256";
             outputHashMode = attrs.outputHashMode or "recursive";
           }
-          // optionalAttrs (enableParallelBuilding) {
+          // optionalAttrs enableParallelBuilding {
             inherit enableParallelBuilding;
             enableParallelChecking = attrs.enableParallelChecking or true;
             enableParallelInstalling = attrs.enableParallelInstalling or true;

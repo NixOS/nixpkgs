@@ -231,9 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./1-otb-swig-include-itk.diff
   ];
 
-  postPatch = (
-    "substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt --replace-fail '''$''{ITK_INCLUDE_DIRS}' ${otb-itk}/include/ITK-${itkMajorMinorVersion}"
-  );
+  postPatch = "substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt --replace-fail '''$''{ITK_INCLUDE_DIRS}' ${otb-itk}/include/ITK-${itkMajorMinorVersion}";
 
   nativeBuildInputs = [
     cmake

@@ -97,7 +97,7 @@ let
         };
       });
 
-      av = super.av.overridePythonAttrs (rec {
+      av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -105,9 +105,9 @@ let
           tag = "v${version}";
           hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
-      });
+      };
 
-      brother = super.brother.overridePythonAttrs (rec {
+      brother = super.brother.overridePythonAttrs rec {
         version = "4.3.1";
         src = fetchFromGitHub {
           owner = "bieniu";
@@ -115,7 +115,7 @@ let
           tag = version;
           hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
         };
-      });
+      };
 
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
@@ -337,7 +337,7 @@ let
         };
       });
 
-      wolf-comm = super.wolf-comm.overridePythonAttrs (rec {
+      wolf-comm = super.wolf-comm.overridePythonAttrs rec {
         version = "0.0.23";
         src = fetchFromGitHub {
           owner = "janrothkegel";
@@ -345,7 +345,7 @@ let
           tag = version;
           hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
         };
-      });
+      };
 
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };

@@ -1296,8 +1296,8 @@ let
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
         # Enable AMD's ROCm GPU compute stack
-        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit (yes);
-        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (yes);
+        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
+        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit yes;
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
