@@ -116,11 +116,11 @@ index 5f008a55b1c0..c6ae2a9023de 100644
      createSwDoc("tdf166152.fodt");
  
      auto* pWrtShell = getSwDocShell()->GetWrtShell();
-diff --git a/sw/qa/extras/odfexport/odfexport2.cxx b/sw/qa/extras/odfexport/odfexport2.cxx
-index 2f732b3863be..d06f19954da1 100644
---- a/sw/qa/extras/odfexport/odfexport2.cxx
-+++ b/sw/qa/extras/odfexport/odfexport2.cxx
-@@ -1719,6 +1719,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
+diff --git i/sw/qa/extras/odfexport/odfexport4.cxx w/sw/qa/extras/odfexport/odfexport4.cxx
+index 91d51ef40d48..f4447b5f7f35 100644
+--- i/sw/qa/extras/odfexport/odfexport4.cxx
++++ w/sw/qa/extras/odfexport/odfexport4.cxx
+@@ -1196,6 +1196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
      // - Error: "2001-01-01" does not satisfy the "dateTime" type
      // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
      loadAndReload("midnight_redline.fodt");

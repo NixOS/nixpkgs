@@ -35,7 +35,6 @@
   cairo,
   which,
   icu,
-  boost,
   jdk21,
   ant,
   cups,
@@ -71,7 +70,6 @@
   libcdr,
   lcms2,
   unixODBC,
-  mdds,
   sane-backends,
   mythes,
   libexttextcat,
@@ -99,7 +97,6 @@
   abseil-cpp,
   libepubgen,
   libetonyek,
-  liborcus,
   libpng,
   libxcrypt,
   langs ? [
@@ -343,8 +340,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
 
+  ]
+  ++ lib.optionals (lib.versionOlder version "25.8") [
     # Backport patch to fix build with Poppler 25.05
-    # FIXME: conditionalize/remove as upstream updates
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
       includes = [ "sdext/*" ];
@@ -416,7 +414,6 @@ stdenv.mkDerivation (finalAttrs: {
       coinmp
       abseil-cpp
       bluez5
-      boost
       box2d_2
       cairo
       clucene_core_2
@@ -466,7 +463,6 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      liborcus
       xorg.libpthreadstubs
       librdf_redland
       librevenge
@@ -483,7 +479,6 @@ stdenv.mkDerivation (finalAttrs: {
       libzmf
       libwebp
       lp_solve
-      mdds
       mythes
       ncurses
       neon
@@ -549,8 +544,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-buildconfig-recorded"
 
     (lib.withFeature withHelp "help")
-    "--with-boost=${getDev boost}"
-    "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--disable-report-builder"
@@ -590,7 +583,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-libs"
     "--with-system-libwps"
     "--with-system-lpsolve"
-    "--with-system-mdds"
     "--with-system-openldap"
     "--with-system-openssl"
     "--with-system-orcus"
@@ -600,6 +592,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
     "--without-system-frozen"
+    "--without-system-libeot"
     "--without-system-libfreehand"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
@@ -609,6 +602,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-dragonbox"
     "--without-system-libfixmath"
 
+    # TODO: bump this to 0.20
+    "--without-system-orcus"
+
+    # TODO: bump this to 3.0 (#382851)
+    "--without-system-mdds"
+
     # requires an oddly specific, old version
     "--without-system-hsqldb"
 
@@ -617,6 +616,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # is packaged but headers can't be found because there is no pkg-config file
     "--without-system-zxcvbn"
+
+    # cannot find headers, no idea why
+    "--without-system-boost"
   ]
   ++ optionals kdeIntegration [
     "--enable-kf${qtMajor}"
