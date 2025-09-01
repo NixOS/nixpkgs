@@ -1,13 +1,14 @@
 {
   "url": "https://github.com/vrischmann/tree-sitter-templ",
-  "rev": "de35706f89beed5087670a9c4421b7794ef02411",
-  "date": "2025-06-01T21:02:54+02:00",
-  "path": "/nix/store/9m1jydr3j1m876dmazg9kzvs7878a7ly-tree-sitter-templ",
-  "sha256": "0vbhks5879b7bpygxr9zba142zsb760j4im1gzbgcl6yj6q59j30",
-  "hash": "sha256-YMhUsJHeUPbWf6FGIoE5S39Bglo/5f78XWelg4qecG0=",
+  "rev": "47594c5cbef941e6a3ccf4ddb934a68cf4c68075",
+  "date": "2025-07-27T18:47:47+02:00",
+  "path": "/nix/store/5bq9j9ih5jwbbl3j6yf709aqaqm90s9b-tree-sitter-templ",
+  "sha256": "1msbnjx6a7gh0xjhlpirqxprka2kq093mn44f7qb4ln039gzlbqg",
+  "hash": "sha256-Dy/6XxrAUrLwcYTYOhLAU6iZb8c5XgplB/AdZbq0S9c=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "fetchTags": false,
-  "leaveDotGit": false
+  "leaveDotGit": false,
+  "rootDir": ""
 }
