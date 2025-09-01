@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    # meson: use pkg-config from art-standalone instead of manual library search
+    # See: https://gitlab.com/android_translation_layer/android_translation_layer/-/merge_requests/164
     (replaceVars ./configure-art-path.patch {
       artStandalonePackageDir = "${art-standalone}";
     })
