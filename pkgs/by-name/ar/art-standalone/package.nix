@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Do not hardocde addr2line binary path
     ./no-hardcode-path-addr2line.patch
+
+    # Add support for pkg-config
+    # See: https://gitlab.com/android_translation_layer/art_standalone/-/merge_requests/37
+    ./pkg-config-support.patch
   ];
 
   postPatch = ''
