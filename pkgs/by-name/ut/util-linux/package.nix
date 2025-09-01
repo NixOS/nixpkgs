@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "scanf_cv_type_modifier=ms"
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "scanf_cv_type_modifier=ms" ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # These features are all disabled in the freebsd-ports distribution
     "--disable-nls"
@@ -166,50 +166,44 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals systemdSupport [ systemd ];
 
-  doCheck = false; # "For development purpose only. Don't execute on production system!"
-
   enableParallelBuilding = true;
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      moveToOutput bin/mount "$mount"
-      moveToOutput bin/umount "$mount"
-      ln -svf "$mount/bin/"* $bin/bin/
-    ''
-    + ''
+  postInstall = ''
+    moveToOutput sbin/nologin "$login"
+    moveToOutput sbin/sulogin "$login"
+    prefix=$login _moveSbin
+    ln -svf "$login/bin/"* $bin/bin/
 
-      moveToOutput sbin/nologin "$login"
-      moveToOutput sbin/sulogin "$login"
-      prefix=$login _moveSbin
-      ln -svf "$login/bin/"* $bin/bin/
-    ''
-    + lib.optionalString withLastlog ''
-      # moveToOutput "lib/liblastlog2*" "$lastlog"
-      ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
-      moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
-      moveToOutput "bin/lastlog2" "$lastlog"
-      ln -svf "$lastlog/bin/"* $bin/bin/
-    ''
-    + lib.optionalString (withLastlog && systemdSupport) ''
-      moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
-      substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
-        --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    installShellCompletion --bash bash-completion/*
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    moveToOutput bin/mount "$mount"
+    moveToOutput bin/umount "$mount"
+    ln -svf "$mount/bin/"* $bin/bin/
 
-      moveToOutput sbin/swapon "$swap"
-      moveToOutput sbin/swapoff "$swap"
-      prefix=$swap _moveSbin
-      ln -svf "$swap/bin/"* $bin/bin/
-    ''
-    + ''
+    moveToOutput sbin/swapon "$swap"
+    moveToOutput sbin/swapoff "$swap"
+    prefix=$swap _moveSbin
+    ln -svf "$swap/bin/"* $bin/bin/
+  ''
+  # moveToOutput "lib/liblastlog2*" "$lastlog"
+  + lib.optionalString withLastlog ''
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
+    moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
 
-      ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
-      ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
+    moveToOutput "bin/lastlog2" "$lastlog"
+    ln -svf "$lastlog/bin/"* $bin/bin/
+  ''
+  + lib.optionalString (withLastlog && systemdSupport) ''
+    moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
+    substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
+      --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
+  '';
 
-      installShellCompletion --bash bash-completion/*
-    '';
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   passthru = {
     updateScript = gitUpdater {
