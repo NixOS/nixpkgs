@@ -5,6 +5,7 @@
   nodejs,
   python3,
   libtool,
+  cctools,
   npmHooks,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -28,6 +29,8 @@ let
     hash = source.hash;
   };
 
+  libtool' = if stdenv.hostPlatform.isDarwin then cctools else libtool;
+
   # Separate derivation, because if we mix this in buildGoModule, the separate
   # go-modules build inherits specific attributes and fails. Getting that to
   # work is hackier than just splitting the build.
@@ -43,7 +46,7 @@ let
     nativeBuildInputs = [
       nodejs
       python3
-      libtool
+      libtool'
       npmHooks.npmConfigHook
     ];
 
