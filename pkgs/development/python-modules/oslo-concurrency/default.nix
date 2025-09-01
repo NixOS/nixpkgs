@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   bash,
   coreutils,
   debtcollector,
@@ -24,23 +24,22 @@ buildPythonPackage rec {
   version = "7.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_concurrency";
-    inherit version;
-    hash = "sha256-Fg6BTIVJ9qRk53oEJl7ZltWBvdP9O9Tr8xHTRGu34ao=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.concurrency";
+    tag = version;
+    hash = "sha256-72KatSWTCx4hyUel2Fu5yiqrdYveRGruvJDWWo1hkIk=";
   };
 
   postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
       --replace-fail "/bin/bash" "${bash}/bin/bash" \
       --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
+
+  env.PBR_VERSION = version;
 
   build-system = [ setuptools ];
 
