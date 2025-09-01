@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.10";
+  version = "3.13.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MnFH77ryrLyu//IH6FYb3ZVFlsdkimJKzKGbDH1sgmw=";
+    hash = "sha256-kdG2Md90YknRA265u+JjHuiKw/6h1NcdwYOLXy8UF1o=";
   };
 
   build-system = [ hatchling ];
