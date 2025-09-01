@@ -8,7 +8,7 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "11.0.12";
+  version = "13.0.9-server";
   pyproject = false;
 
   src = fetchFromGitHub {
