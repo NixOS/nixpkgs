@@ -7,7 +7,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uudeview";
   version = "0.5.20-unstable-2025-03-20";
 

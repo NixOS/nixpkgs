@@ -20,7 +20,7 @@ let
         };
       });
       # pdm requires ...... -> jbig2dec which is AGPL only
-      moto = super.moto.overridePythonAttrs (old: rec {
+      moto = super.moto.overridePythonAttrs (old: {
         doCheck = false;
       });
     };

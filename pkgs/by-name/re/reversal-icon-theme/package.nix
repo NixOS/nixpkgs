@@ -31,7 +31,7 @@ lib.checkListOfEnum "${pname}: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
     version = "0-unstable-2023-05-13";
 

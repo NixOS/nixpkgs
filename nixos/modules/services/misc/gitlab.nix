@@ -1699,7 +1699,7 @@ in
         filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
         isSecret = v: isAttrs v && v ? _secret && isString v._secret;
         mkPagesKeyValue = lib.generators.toKeyValue {
-          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
             mkValueString =
               v:
               if isInt v then

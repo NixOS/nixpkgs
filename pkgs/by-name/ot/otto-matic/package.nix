@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OttoMatic";
   version = "4.0.1-unstable-2025-04-27";
 

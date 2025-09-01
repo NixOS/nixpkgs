@@ -49,7 +49,7 @@ lib.checkListOfEnum "${pname}: theme variants"
   tweaks
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
     version = "0-unstable-2025-04-02";
 

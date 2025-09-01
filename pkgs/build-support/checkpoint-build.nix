@@ -44,7 +44,7 @@ let
     });
 in
 
-rec {
+{
   inherit mkCheckpointBuild;
   /*
     Prepare a derivation for local builds.

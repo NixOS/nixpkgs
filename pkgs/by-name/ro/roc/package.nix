@@ -20,7 +20,7 @@ let
   rocVersion = "alpha4";
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "roc";
   version = "0-${rocVersion}";
 
