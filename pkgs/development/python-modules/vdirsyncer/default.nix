@@ -32,19 +32,17 @@ buildPythonPackage rec {
   version = "0.20.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/rGlM1AKlcFP0VVzOhBW/jWRklU9gsB8a6BPy/xAsS0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     click
     click-log
@@ -64,7 +62,6 @@ buildPythonPackage rec {
     pytest-asyncio
     trustme
     aioresponses
-    wheel
   ];
 
   preCheck = ''
