@@ -1,0 +1,44 @@
+From 75b01fc3c1986b38ab9ea6c97017e0d36f81064b Mon Sep 17 00:00:00 2001
+From: Matthew Pickering <matthewtpickering@gmail.com>
+Date: Tue, 3 Jan 2023 15:56:37 +0000
+Subject: [PATCH] sphinx: Use modern syntax for extlinks
+
+This fixes the following build error:
+
+```
+  Command line: /opt/homebrew/opt/sphinx-doc/bin/sphinx-build -b man -d /private/tmp/extra-dir-55768274273/.doctrees-man -n -w /private/tmp/extra-dir-55768274273/.log docs/users_guide /private/tmp/extra-dir-55768274273
+  ===> Command failed with error code: 2
+
+  Exception occurred:
+    File "/opt/homebrew/Cellar/sphinx-doc/6.0.0/libexec/lib/python3.11/site-packages/sphinx/ext/extlinks.py", line 101, in role
+      title = caption % part
+              ~~~~~~~~^~~~~~
+  TypeError: not all arguments converted during string formatting
+```
+
+I tested on Sphinx-5.1.1 and Sphinx-6.0.0
+
+Thanks for sterni for providing instructions about how to test using
+sphinx-6.0.0.
+
+Fixes #22690
+---
+ docs/users_guide/ghc_config.py.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/docs/users_guide/ghc_config.py.in b/docs/users_guide/ghc_config.py.in
+index 4ff77adc9d..aa9177b363 100644
+--- a/docs/users_guide/ghc_config.py.in
++++ b/docs/users_guide/ghc_config.py.in
+@@ -1,6 +1,6 @@
+ extlinks = {
+-    'ghc-ticket': ('https://ghc.haskell.org/trac/ghc/ticket/%s', 'Trac #'),
+-    'ghc-wiki': ('https://ghc.haskell.org/trac/ghc/wiki/%s', 'Trac #'),
++    'ghc-ticket': ('https://ghc.haskell.org/trac/ghc/ticket/%s', 'Trac %s'),
++    'ghc-wiki': ('https://ghc.haskell.org/trac/ghc/wiki/%s', 'Trac #%s'),
+ }
+ 
+ libs_base_uri = '../libraries'
+-- 
+2.50.1
+

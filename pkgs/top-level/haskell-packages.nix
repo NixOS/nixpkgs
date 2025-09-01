@@ -12,6 +12,8 @@ let
   integerSimpleIncludes = [
     "ghc82"
     "ghc822"
+    "ghc86"
+    "ghc865"
     "ghc88"
     "ghc884"
     "ghc810"
@@ -130,6 +132,22 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
       ghc82 = compiler.ghc822;
+      ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
+        bootPkgs =
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian then
+            bb.packages.ghc822
+          else
+            bb.packages.ghc865Binary;
+        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+        python3 = buildPackages.python311; # so that we don't have two of them
+        # Need to use apple's patched xattr until
+        # https://github.com/xattr/xattr/issues/44 and
+        # https://github.com/xattr/xattr/issues/55 are solved.
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+      ghc86 = compiler.ghc865;
       ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
         bootPkgs =
           # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -578,6 +596,12 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       };
       ghc82 = packages.ghc822;
+      ghc865 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc865;
+        ghc = bh.compiler.ghc865;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      };
+      ghc86 = packages.ghc865;
       ghc8107 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc8107;
         ghc = bh.compiler.ghc8107;
