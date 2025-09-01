@@ -20,9 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iodhF/puv9L/4bNoKpqYyALA9HGJ9X09tLmXdCBoMuE=";
   };
 
-  postPatch = ''
-    echo "${finalAttrs.version}" > VERSION
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      echo "${finalAttrs.version}" > VERSION
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      echo '#define VERSION "${finalAttrs.version}"' > version
+    '';
 
   postAutoreconf = ''
     substituteInPlace configure --replace-fail "macx-g++" "macx-clang"
@@ -41,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableGUI [ libsForQt5.qt5.qtbase ];
 
-  configureFlags = [ ''--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}'' ];
+  configureFlags = [
+    ''--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}''
+  ]
+  ++ lib.optionals (!enableGUI) [ "--without-doc" ];
 
   enableParallelBuilding = true;
 
