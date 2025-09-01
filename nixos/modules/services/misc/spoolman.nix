@@ -16,8 +16,17 @@ in
     environment = lib.mkOption {
       type = lib.types.attrs;
       default = { };
+      example = {
+        SPOOLMAN_DB_TYPE = "sqlite";
+        SPOOLMAN_LOGGING_LEVEL = "DEBUG";
+        SPOOLMAN_AUTOMATIC_BACKUP = "TRUE";
+        SPOOLMAN_BASE_PATH = "/spoolman";
+        SPOOLMAN_METRICS_ENABLED = "TRUE";
+        SPOOLMAN_CORS_ORIGIN = "source1.domain.com:p1, source2.domain.com:p2";
+      };
       description = ''
         Environment variables to be passed to the spoolman service.
+        Refer to https://github.com/Donkie/Spoolman/blob/master/.env.example for details on supported variables.
       '';
     };
 
