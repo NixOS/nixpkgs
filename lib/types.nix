@@ -1453,7 +1453,14 @@ let
                       headError = {
                         message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
                       };
-                      value = abort "(t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that consumes a module system type.";
+                      value =
+                        # TODO (after 25.11): Make this an error
+                        lib.warn
+                          "while accessing option ${showOption loc}: (t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that use the module system type interface incorrectly. This will be an error after Nixpkgs 25.11."
+                          mergeOneOption
+                          loc
+                          defs;
+                      #
                     };
               in
               checkedAndMerged;
