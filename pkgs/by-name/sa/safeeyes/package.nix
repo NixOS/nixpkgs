@@ -81,7 +81,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://slgobinath.github.io/SafeEyes";
     description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srghma ];
     platforms = platforms.linux;
     mainProgram = "safeeyes";
   };
