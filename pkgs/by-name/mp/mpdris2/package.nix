@@ -56,12 +56,12 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [ ./fix-gettext-0.25.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "mpDris2";
   };
 }
