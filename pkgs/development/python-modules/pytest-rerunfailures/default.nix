@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";
     homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
+    changelog = "https://github.com/pytest-dev/pytest-rerunfailures/blob/${src.tag}/CHANGES.rst";
     license = licenses.mpl20;
     maintainers = with maintainers; [ das-g ];
   };
