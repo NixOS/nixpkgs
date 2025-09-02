@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "1h99sm2ddaq483hhk2s3z4bjbgn0d2h7qna7l7qq98wvhqix8iyz";
   };
 
+  # https://github.com/kometbomb/klystrack/commit/6dac9eb5e75801ce4dec1d8b339f78e3df2f54bc fixes build but doesn't apply as-is, just patch in the flag
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '-DUSESDL_IMAGE' '-DUSESDL_IMAGE -DUSESDL_RWOPS'
+  '';
+
   buildInputs = [
     SDL2
     SDL2_image
