@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.25.0";
+  version = "1.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = version;
-    hash = "sha256-VkpwTHPpM1cS5HT5zE3gB25zWOTIVaZdPKNgQFJHO/Q=";
+    hash = "sha256-k9JaWQdTOsrIv1LG/aNVzJtbq4kXhAVUK3MKyVlWeKM=";
   };
 
   postPatch = ''
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # faraday itself is currently not available
     "tests/test_report_collection.py"
+    "tests/test_cli.py"
   ];
 
   disabledTests = [
