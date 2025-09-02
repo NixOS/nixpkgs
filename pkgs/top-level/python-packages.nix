@@ -17774,6 +17774,8 @@ self: super: with self; {
 
   supafunc = callPackage ../development/python-modules/supafunc { };
 
+  super-collections = callPackage ../development/python-modules/super-collections { };
+
   superqt = callPackage ../development/python-modules/superqt { };
 
   supervise-api = callPackage ../development/python-modules/supervise-api { };
