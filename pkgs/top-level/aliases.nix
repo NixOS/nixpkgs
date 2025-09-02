@@ -876,6 +876,7 @@ mapAliases {
   faustStk = faustPhysicalModeling; # Added 2023-05-16
   fastnlo = throw "'fastnlo' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2024-10-17
   fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
+  fbjni = throw "fbjni has been removed, as it was broken"; # Added 2025-08-25
   fcitx5-catppuccin = catppuccin-fcitx5; # Added 2024-06-19
   fdr = throw "fdr has been removed, as it cannot be built from source and depends on Python 2.x"; # Added 2025-03-19
   inherit (luaPackages) fennel; # Added 2022-09-24
