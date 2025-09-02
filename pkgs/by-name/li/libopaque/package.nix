@@ -28,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     liboprf
   ];
 
+  # expand_message_xmd has been renamed to oprf_expand_message_xmd in liboprf
+  # TODO: remove in the next release
+  postPatch = ''
+    substituteInPlace opaque.c \
+      --replace-fail 'expand_message_xmd' 'oprf_expand_message_xmd'
+  '';
+
   postInstall = ''
     mkdir -p ${placeholder "out"}/lib/pkgconfig
     cp ../libopaque.pc ${placeholder "out"}/lib/pkgconfig/
