@@ -47,6 +47,13 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  # Python builder already uses makeWrapper, so we disable the hook
+  # and add its args to the existing ones for Python:
+  # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
   patches = [ ./fix-gettext-0.25.patch ];
 
   meta = with lib; {
