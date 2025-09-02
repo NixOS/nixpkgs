@@ -91,7 +91,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 1 as the PR's base branch.
-   Go through the [pull request template](#pull-request-template).
+   Go through the [pull request template][pr-template].
 
 7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
    Always keep it in a mergeable state.
@@ -526,8 +526,23 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-Pull requests should not be squash-merged, as this discards information including detail from commit messages, GPG signatures, and authorship.
-Many pull requests don't make sense as a single commit anyway.
+## Review and Merge conventions
+
+Comments on Pull Requests are considered non-blocking by default.
+Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
+A reviewer who submits a blocking review should be available for discussion and re-review.
+An abandoned review may be dismissed after reasonable time was given at the discretion of the merger.
+
+All suggestions for change, blocking or not, should be acknowledged before merge.
+This can happen implicitly by applying the suggestion, or explicitly by rejecting it.
+
+To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [checkout the PR](https://cli.github.com/manual/gh_pr_checkout) and push directly to the contributor's branch before merging.
+Committers will carefully weigh the cost of another review cycle against the feelings of the contributor when pushing to their branch.
+They should also transparently communicate which changes they made.
+If a contributor does not want committers to push to their branch, they must uncheck the "Allow edits and access to secrets by maintainers" box explicitly.
+
+> [!WARNING]
+> Committers: Branches created via `gh pr checkout` can't be pushed with `--force-with-lease`, so do a sanity check before pushing.
 
 ## Code conventions
 [code-conventions]: #code-conventions
