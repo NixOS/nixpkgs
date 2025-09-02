@@ -24,7 +24,7 @@ buildDunePackage {
   ];
 
   meta = {
-    description = "A Why3 Package Manager";
+    description = "Why3 Package Manager";
     homepage = "https://git.frama-c.com/pub/why3find";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
