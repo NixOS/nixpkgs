@@ -33,7 +33,7 @@ jobs:
           sparse-checkout: ci
 
       - name: Install Nix
-        uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31
+        uses: cachix/install-nix-action@56a7bb7b56d9a92d4fd1bc05758de7eea4a370a8 # v31
 
       - name: Build the requestReviews derivation
         run: nix-build trusted/ci -A requestReviews
