@@ -1,35 +1,35 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchurl,
   cmake,
   extra-cmake-modules,
+  pkg-config,
   qtwebengine,
-  qtscript,
+  qt5compat,
   grantlee,
-  qtxmlpatterns,
+  wrapQtAppsHook,
   kxmlgui,
   kwallet,
   kparts,
   kdoctools,
   kjobwidgets,
-  kdesignerplugin,
   kiconthemes,
   knewstuff,
   sqlcipher,
-  qca-qt5,
-  kactivities,
+  qca,
+  plasma-activities,
   karchive,
   kguiaddons,
   knotifyconfig,
   krunner,
+  ktexttemplate,
   kwindowsystem,
   libofx,
   shared-mime-info,
-  qtquickcontrols2,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "skrooge";
   version = "25.4.0";
 
@@ -41,32 +41,32 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    pkg-config
     kdoctools
     shared-mime-info
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qtwebengine
-    qtscript
+    qt5compat
     grantlee
     kxmlgui
     kwallet
     kparts
-    qtxmlpatterns
     kjobwidgets
-    kdesignerplugin
     kiconthemes
     knewstuff
     sqlcipher
-    qca-qt5
-    kactivities
+    qca
+    plasma-activities
     karchive
     kguiaddons
     knotifyconfig
     krunner
+    ktexttemplate
     kwindowsystem
     libofx
-    qtquickcontrols2
   ];
 
   # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
@@ -76,6 +76,7 @@ mkDerivation rec {
     "-DSKG_DESIGNER=OFF"
     "-DSKG_WEBENGINE=ON"
     "-DSKG_WEBKIT=OFF"
+    "-DBUILD_WITH_QT6=ON"
     "-DBUILD_TESTS=ON"
   ];
 
