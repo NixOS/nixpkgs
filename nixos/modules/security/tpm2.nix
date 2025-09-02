@@ -356,6 +356,10 @@ in
 
       {
         environment.etc."tpm2-tss/fapi-config.json".source = fapiConfig;
+        systemd.tmpfiles.rules = [
+          "d ${cfg.fapi.logDir} 2750 tss ${cfg.tssGroup} -"
+          "d ${cfg.fapi.systemDir} 2750 root ${cfg.tssGroup} -"
+        ];
       }
     ]
   );
