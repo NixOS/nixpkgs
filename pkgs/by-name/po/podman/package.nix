@@ -16,7 +16,6 @@
   nixosTests,
   python3,
   makeWrapper,
-  runtimeShell,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -34,8 +33,7 @@
   netavark,
   passt,
   vfkit,
-  testers,
-  podman,
+  versionCheckHook,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -124,7 +122,6 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -164,13 +161,11 @@ buildGoModule rec {
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = podman;
-      command = "HOME=$TMPDIR podman --version";
-    };
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)
