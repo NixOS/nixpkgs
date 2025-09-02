@@ -16,13 +16,18 @@ let
       concatTextFile,
       makeSetupHook,
       nix-update-script,
+
+      # This is the "current" version of gradle in nixpkgs.
+      # Used to define the update script.
+      gradle-unwrapped,
+
       runCommand,
     }:
-    gradle-unwrapped: updateAttrPath:
+    this-gradle-unwrapped:
     lib.makeOverridable (
       args:
       let
-        gradle = gradle-unwrapped.override args;
+        gradle = this-gradle-unwrapped.override args;
       in
       symlinkJoin {
         pname = "gradle";
@@ -80,9 +85,8 @@ let
           }
           // gradle.tests;
         }
-        // lib.optionalAttrs (updateAttrPath != null) {
+        // lib.optionalAttrs (this-gradle-unwrapped == gradle-unwrapped) {
           updateScript = nix-update-script {
-            attrPath = updateAttrPath;
             extraArgs = [
               "--url=https://github.com/gradle/gradle"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
@@ -283,7 +287,7 @@ let
       };
       passthru.jdk = defaultJava;
       passthru.unwrapped = gen' genArgs;
-      passthru.wrap = callPackage wrapGradle { } finalAttrs.finalPackage.unwrapped;
+      passthru.wrapped = callPackage wrapGradle { } finalAttrs.finalPackage.unwrapped;
 
       meta =
         with lib;
@@ -320,7 +324,7 @@ let
   # Calls the generated Gradle package with default arguments.
   gen' = args: callPackage (gen args) { };
 in
-{
+rec {
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
@@ -335,10 +339,12 @@ in
     hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
     defaultJava = jdk21;
   };
-
   gradle_7 = gen' {
     version = "7.6.6";
     hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
     defaultJava = jdk17;
   };
+
+  # Default version of Gradle in nixpkgs.
+  gradle = gradle_8;
 }
