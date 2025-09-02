@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R po_/* po/
     touch po/Makefile.in.in
     touch m4/Makefile.am
+    substituteInPlace include/tpm_pkcs11.h \
+      --replace-fail "libopencryptoki.so" "${opencryptoki}/lib/opencryptoki/libopencryptoki.so"
   '';
 
   nativeBuildInputs = [
