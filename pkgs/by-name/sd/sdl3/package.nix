@@ -100,23 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
-    finalAttrs.dlopenBuildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
-    ++ lib.optionals ibusSupport [
-      # sdl3 only uses some constants of the ibus headers
-      # it never actually loads the library
-      # thus, it also does not have to care about gtk integration,
-      # so using ibusMinimal avoids an unnecessarily large closure here.
-      ibusMinimal
-    ]
-    ++ lib.optional waylandSupport zenity;
-
-  dlopenBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       libusb1
     ]
@@ -154,7 +137,21 @@ stdenv.mkDerivation (finalAttrs: {
       vulkan-loader
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    ++ lib.optional x11Support xorg.libX11;
+    ++ lib.optional x11Support xorg.libX11
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
+      (darwinMinVersionHook "11.0")
+
+      apple-sdk_11
+    ]
+    ++ lib.optionals ibusSupport [
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
+    ]
+    ++ lib.optional waylandSupport zenity;
 
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
@@ -175,20 +172,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
+    (lib.cmakeBool "SDL_DEPS_SHARED" false)
   ];
 
   doCheck = true;
-
-  # See comment below. We actually *do* need these RPATH entries
-  dontPatchELF = true;
-
-  env = {
-    # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
-    # helps them be found
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
-    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
-  };
 
   postInstall = ''
     moveToOutput "share/installed-tests" "$installedTests"
