@@ -21,10 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Traditional (K&R-style) C macro preprocessor";
     mainProgram = "tradcpp";
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 })
