@@ -22,6 +22,12 @@ in
 
     services.xserver.desktopManager.lxqt.enable = mkEnableOption "the LXQt desktop manager";
 
+    services.xserver.desktopManager.lxqt.iconThemePackage =
+      lib.mkPackageOption pkgs [ "kdePackages" "breeze-icons" ] { }
+      // {
+        description = "The package that provides a default icon theme.";
+      };
+
     environment.lxqt.excludePackages = mkOption {
       type = with lib.types; listOf package;
       default = [ ];
@@ -57,6 +63,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages
       ++ pkgs.lxqt.corePackages
+      ++ [ cfg.iconThemePackage ]
       ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages);
 
     # Link some extra directories in /run/current-system/software/share
