@@ -181,13 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
     "--with-fc=${lib.getDev mpi}/bin/mpif90"
   ]
-  ++ lib.optionals (!debug) [
-    "--with-debugging=0"
-    "COPTFLAGS=-O3"
-    "FOPTFLAGS=-O3"
-    "CXXOPTFLAGS=-O3"
-    "CXXFLAGS=-O3"
-  ]
+  ++ lib.optional (!debug) "--with-debugging=0"
   ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
   ++ lib.optional pythonSupport "--with-petsc4py=1"
   ++ lib.optional withMetis "--with-metis=1"
