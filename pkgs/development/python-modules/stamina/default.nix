@@ -11,6 +11,7 @@
   typing-extensions,
 
   anyio,
+  dirty-equals,
   pytestCheckHook,
 }:
 
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     anyio
+    dirty-equals
   ];
 
   meta = with lib; {
