@@ -54,7 +54,7 @@
   openvdb,
   c-blosc,
   unixODBC,
-  postgresql,
+  libpq,
   libmysqlclient,
   ffmpeg,
   libjpeg,
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     imath
     c-blosc
     unixODBC
-    postgresql
+    libpq
     libmysqlclient
     ffmpeg
     opencascade-occt
