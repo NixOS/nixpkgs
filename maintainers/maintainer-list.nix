@@ -15287,7 +15287,7 @@
     github = "M0NsTeRRR";
     githubId = 37785089;
   };
-  m0ustache3 = {
+  m0ustach3 = {
     name = "M0ustach3";
     github = "M0ustach3";
     githubId = 37956764;
