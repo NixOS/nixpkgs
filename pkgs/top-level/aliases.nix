@@ -1105,6 +1105,7 @@ mapAliases {
   gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
 
   gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead";
+  gr-framework = throw "gr-framework has been removed, as it was broken"; # Added 2025-08-25
   graalvmCEPackages = graalvmPackages; # Added 2024-08-10
   graalvm-ce = graalvmPackages.graalvm-ce; # Added 2024-08-10
   graalvm-oracle = graalvmPackages.graalvm-oracle; # Added 2024-12-17
