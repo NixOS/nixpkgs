@@ -3,7 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   buildNpmPackage,
-  rocksdb_8_11,
+  rocksdb_9_10,
   pkg-config,
   perl,
   postgresql,
@@ -13,12 +13,12 @@
 }:
 
 let
-  version = "0.27.3";
+  version = "0.28.0";
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${version}";
-    hash = "sha256-gQ0lc86casYMftHIGHf8rEw9CI//pJHCYqb1dud46F8=";
+    hash = "sha256-vrkU5yTXx8GC1HLNhxsk1VTTiWY8Aqn5MjyUspNOmq0=";
   };
 
   frontend = buildNpmPackage {
@@ -32,7 +32,7 @@ let
       ./0001-build-svelte-files-inside-the-current-directory.patch
     ];
 
-    npmDepsHash = "sha256-bExsHVpLd1dKU5GJ3Kt56vTwF3tn4+2AJtETqRX3g+o=";
+    npmDepsHash = "sha256-62v6xGnwKeafDz7VS4DtR1703nXLvEeY/hk5NvJ2cBM=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -44,12 +44,12 @@ rustPlatform.buildRustPackage {
     ./0002-enable-vendored-feature-for-utoipa-swagger-ui.patch
   ];
 
-  cargoHash = "sha256-m9O626rXzHRX2Py7pHgmiQlDntduVCDM82h8j1HmXbE=";
+  cargoHash = "sha256-BUtycGKWV0KOxUjeDO+yl+OvIdIDiObsLWZ0rsS1Pg4=";
 
-  prePatch = ''
-    cp -r ${frontend}/lib/node_modules/frontend/dist/templates/html/ templates/html
-    cp -r ${frontend}/lib/node_modules/frontend/dist/static/ static
-  '';
+  #prePatch = ''
+  #  cp -r ${frontend}/lib/node_modules/frontend/dist/templates/html/ templates/html
+  #  cp -r ${frontend}/lib/node_modules/frontend/dist/static/ static
+  #'';
 
   # TODO: next version has comitted sqlx data, we can drop postgres then
   # Force sqlx to use the prepared queries
@@ -68,8 +68,8 @@ rustPlatform.buildRustPackage {
     cargo sqlx prepare --workspace
   '';
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb_8_11}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb_8_11}/lib";
+  ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb_9_10}/lib";
 
   nativeBuildInputs = [
     pkg-config
