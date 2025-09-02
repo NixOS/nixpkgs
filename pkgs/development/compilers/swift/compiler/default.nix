@@ -467,7 +467,11 @@ stdenv.mkDerivation {
   '';
 
   # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
-  hardeningDisable = lib.optional stdenv.hostPlatform.isAarch64 "zerocallusedregs";
+  # > clang-15-unwrapped: error: argument unused during compilation: '-fstack-clash-protection' [-Werror,-Wunused-command-line-argument]
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "zerocallusedregs"
+    "stackclashprotection"
+  ];
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
