@@ -25814,6 +25814,12 @@
     githubId = 26417242;
     name = "Mikolaj Galkowski";
   };
+  tesuji = {
+    email = "taolzu@gmail.com";
+    github = "tesuji";
+    githubId = 15225902;
+    name = "Lzu Tao";
+  };
   TethysSvensson = {
     email = "freaken@freaken.dk";
     github = "TethysSvensson";
