@@ -52,6 +52,11 @@ stdenv.mkDerivation {
     # unreachable path was not annotated as such - this patch adds the annotation to ensure
     # that the test suite passes in the nix build process.
     ./test_unreachable_call.patch
+    # By default, the base dir for placing generated config and certs is in /usr/local
+    # which can cause some issues if the permissions are set incorrectly - which appears
+    # to be the case when Multipass creates the dir. The Nix module already uses /var/lib/multipass
+    # so this patch switches the base dir there, where permissions should already be set
+    ./base_dir_linux.patch
   ];
 
   postPatch = ''

@@ -1,0 +1,13 @@
+diff --git i/src/platform/platform_linux.cpp w/src/platform/platform_linux.cpp
+index 987eaeffd..226623f29 100644
+--- i/src/platform/platform_linux.cpp
++++ w/src/platform/platform_linux.cpp
+@@ -468,7 +468,7 @@ std::filesystem::path mp::platform::Platform::get_root_cert_dir() const
+     using Path = std::filesystem::path;
+     const auto base_dir = utils::in_multipass_snap()
+                               ? Path{utils::snap_common_dir().toStdString()} / "data"
+-                              : Path{"/usr/local/etc"};
++                              : Path{"/var/lib/multipass/config"};
+ 
+     return base_dir / daemon_name;
+ }
