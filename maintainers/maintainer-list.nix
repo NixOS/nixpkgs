@@ -16425,6 +16425,12 @@
     github = "merrkry";
     githubId = 124278440;
   };
+  metalmatze = {
+    email = "matthias.loibl@polarsignals.com";
+    name = "Matthias Loibl";
+    github = "metalmatze";
+    githubId = 872251;
+  };
   mevatron = {
     email = "mevatron@gmail.com";
     name = "mevatron";
