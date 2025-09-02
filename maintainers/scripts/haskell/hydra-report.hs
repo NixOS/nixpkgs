@@ -1,4 +1,5 @@
 #! /usr/bin/env nix-shell
+#! nix-shell -I nixpkgs=.
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
 #! nix-shell -p nix-eval-jobs
 #! nix-shell -i runhaskell
@@ -42,7 +43,7 @@ import Data.Aeson (
    encodeFile,
  )
 import Data.Aeson.Decoding (eitherDecodeStrictText)
-import Data.Foldable (Foldable (toList), foldl')
+import Data.Foldable (Foldable (toList))
 import Data.Either (rights)
 import Data.Functor ((<&>))
 import Data.List.NonEmpty (NonEmpty, nonEmpty)
@@ -230,9 +231,9 @@ nixEvalJobsParams =
     -- options necessary to make nix-eval-jobs behave like hydra-eval-jobs used to
     -- https://github.com/NixOS/hydra/commit/d84ff32ce600204c6473889a3ff16cd6053533c9
     "--meta",
-    "--constituents",
     "--force-recurse",
-    "--max-jobs", "1",
+    "--no-instantiate",
+    "--workers", "3",
 
     "-I", ".",
    "pkgs/top-level/release-haskell.nix"
