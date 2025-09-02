@@ -45,6 +45,5 @@ buildGoModule {
     homepage = "${git-repo}/";
     changelog = "${git-repo}/+log?s=${commit}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ gm6k ];
   };
 }
