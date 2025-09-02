@@ -2,12 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  buildNpmPackage,
   rocksdb_9_10,
   pkg-config,
   perl,
-  postgresql,
-  sqlx-cli,
   openssl,
   nix-update-script,
 }:
@@ -19,20 +16,6 @@ let
     repo = "rauthy";
     tag = "v${version}";
     hash = "sha256-vrkU5yTXx8GC1HLNhxsk1VTTiWY8Aqn5MjyUspNOmq0=";
-  };
-
-  frontend = buildNpmPackage {
-    pname = "rauthy-frontend";
-    inherit version src;
-
-    sourceRoot = "${src.name}/frontend";
-
-    patches = [
-      # otherwise permission denied error for trying to write outside of the build directory
-      ./0001-build-svelte-files-inside-the-current-directory.patch
-    ];
-
-    npmDepsHash = "sha256-62v6xGnwKeafDz7VS4DtR1703nXLvEeY/hk5NvJ2cBM=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -46,28 +29,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-BUtycGKWV0KOxUjeDO+yl+OvIdIDiObsLWZ0rsS1Pg4=";
 
-  #prePatch = ''
-  #  cp -r ${frontend}/lib/node_modules/frontend/dist/templates/html/ templates/html
-  #  cp -r ${frontend}/lib/node_modules/frontend/dist/static/ static
-  #'';
-
-  # TODO: next version has comitted sqlx data, we can drop postgres then
-  # Force sqlx to use the prepared queries
-  SQLX_OFFLINE = true;
-  preBuild = ''
-    # start up a postgres server
-    export PGDATA="$PWD/postgres-work"
-    export DATABASE_URL="postgresql:///rauthy?host=$PGDATA"
-    initdb -D postgres-work
-    pg_ctl start -D postgres-work -o "-k $PGDATA -h \"\""
-    createuser -h $PGDATA rauthy -R -S
-    createdb -h $PGDATA --owner=rauthy rauthy
-
-    # populate postgres database that will be access when building
-    cargo sqlx database setup --source migrations/postgres
-    cargo sqlx prepare --workspace
-  '';
-
   ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
   ROCKSDB_LIB_DIR = "${rocksdb_9_10}/lib";
 
@@ -75,8 +36,6 @@ rustPlatform.buildRustPackage {
     pkg-config
     perl
     rustPlatform.bindgenHook
-    postgresql
-    sqlx-cli
   ];
 
   buildInputs = [
