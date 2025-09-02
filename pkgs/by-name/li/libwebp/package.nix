@@ -29,6 +29,8 @@
   opencv,
   python3,
   vips,
+  testers,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
       ;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
+    pkg-config = testers.hasPkgConfigModules { package = libwebp; };
   };
 
   meta = with lib; {
@@ -87,5 +90,15 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ajs124 ];
+    pkgConfigModules = [
+      # configure_pkg_config() calls for these are unconditional
+      "libwebp"
+      "libwebpdecoder"
+      "libwebpdemux"
+      "libsharpyuv"
+    ]
+    ++ lib.optionals libwebpmuxSupport [
+      "libwebpmux"
+    ];
   };
 }

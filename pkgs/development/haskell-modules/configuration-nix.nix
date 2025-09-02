@@ -507,24 +507,21 @@ builtins.intersectAttrs super {
   # LLVM input that llvm-ffi declares.
   llvm-ffi =
     let
-      chosenLlvmVersion = 20;
-      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
-      shouldUpgrade =
-        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
+      currentDefaultVersion = lib.versions.major pkgs.llvmPackages.llvm.version;
+      latestSupportedVersion = lib.versions.major super.llvm-ffi.version;
     in
-    lib.warnIf shouldUpgrade
-      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
-      lib.pipe
-      super.llvm-ffi
+    lib.pipe super.llvm-ffi (
       [
-        # ATTN: There is no matching flag for the latest supported LLVM version,
-        # so you may need to remove this when updating chosenLlvmVersion
-        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
         (addBuildDepends [
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
+          pkgs.llvmPackages.llvm.lib
+          pkgs.llvmPackages.llvm.dev
         ])
-      ];
+      ]
+      # There is no matching flag for the latest supported LLVM version.
+      ++ lib.optional (currentDefaultVersion != latestSupportedVersion) (
+        enableCabalFlag "LLVM${currentDefaultVersion}00"
+      )
+    );
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
