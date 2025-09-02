@@ -7,11 +7,11 @@
   gobject-introspection,
   intltool,
   libnotify,
-  python3,
+  python3Packages,
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mpDris2";
   version = "0.9.1";
   format = "other";
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     dbus-python
     mpd2
     mutagen
