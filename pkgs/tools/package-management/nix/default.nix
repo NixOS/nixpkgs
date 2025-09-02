@@ -131,8 +131,8 @@ lib.makeExtensible (
   (
     {
       nix_2_28 = commonMeson {
-        version = "2.28.4";
-        hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
+        version = "2.28.5";
+        hash = "sha256-oIfAHxO+BCtHXJXLHBnsKkGl1Pw+Uuq1PwNxl+lZ+Oc=";
         self_attribute_name = "nix_2_28";
       };
 
