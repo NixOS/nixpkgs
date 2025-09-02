@@ -889,7 +889,7 @@ in
 
         services.mail.sendmailSetuidWrapper = lib.mkIf config.services.postfix.setSendmail {
           program = "sendmail";
-          source = "${cfg.package}/bin/sendmail";
+          source = lib.getExe' cfg.package "sendmail";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -898,7 +898,7 @@ in
 
         security.wrappers.mailq = {
           program = "mailq";
-          source = "${cfg.package}/bin/mailq";
+          source = lib.getExe' cfg.package "mailq";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -907,7 +907,7 @@ in
 
         security.wrappers.postqueue = {
           program = "postqueue";
-          source = "${cfg.package}/bin/postqueue";
+          source = lib.getExe' cfg.package "postqueue";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -916,7 +916,7 @@ in
 
         security.wrappers.postdrop = {
           program = "postdrop";
-          source = "${cfg.package}/bin/postdrop";
+          source = lib.getExe' cfg.package "postdrop";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -965,13 +965,13 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${cfg.package}/bin/postalias -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postalias"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.aliasFiles
             )}
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${cfg.package}/bin/postmap -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postmap"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -981,7 +981,7 @@ in
             ln -sf /var/spool/mail /var/
 
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
-            ${cfg.package}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
+            ${lib.getExe' cfg.package "postfix"} set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
 
@@ -1001,9 +1001,9 @@ in
             Type = "forking";
             Restart = "always";
             PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${cfg.package}/bin/postfix start";
-            ExecStop = "${cfg.package}/bin/postfix stop";
-            ExecReload = "${cfg.package}/bin/postfix reload";
+            ExecStart = "${lib.getExe' cfg.package "postfix"} start";
+            ExecStop = "${lib.getExe' cfg.package "postfix"} stop";
+            ExecReload = "${lib.getExe' cfg.package "postfix"} reload";
 
             # Hardening
             PrivateTmp = true;
@@ -1039,10 +1039,10 @@ in
             meta_directory = "${cfg.package}/etc/postfix";
             command_directory = "${cfg.package}/bin";
             sample_directory = "/etc/postfix";
-            newaliases_path = "${cfg.package}/bin/newaliases";
-            mailq_path = "${cfg.package}/bin/mailq";
+            newaliases_path = lib.getExe' cfg.package "newaliases";
+            mailq_path = lib.getExe' cfg.package "mailq";
             readme_directory = false;
-            sendmail_path = "${cfg.package}/bin/sendmail";
+            sendmail_path = lib.getExe' cfg.package "sendmail";
             daemon_directory = "${cfg.package}/libexec/postfix";
             manpage_directory = "${cfg.package}/share/man";
             html_directory = "${cfg.package}/share/postfix/doc/html";
