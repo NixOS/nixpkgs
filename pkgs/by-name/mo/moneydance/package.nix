@@ -4,6 +4,7 @@
   buildPackages,
   fetchzip,
   makeWrapper,
+  glib,
   openjdk23,
   clientJdk ? openjdk23.override { enableJavaFX = true; },
   wrapGAppsHook3,
@@ -68,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       # This is in postFixup because gappsWrapperArgs is generated in preFixup
       makeWrapper ${clientJdk}/bin/java $out/bin/moneydance \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)} \
+        --suffix PATH : ${lib.makeBinPath [ glib ]}
     '';
 
   passthru = {
