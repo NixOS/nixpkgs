@@ -9412,6 +9412,10 @@ self: super: with self; {
 
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
+  mkdocs-table-reader-plugin =
+    callPackage ../development/python-modules/mkdocs-table-reader-plugin
+      { };
+
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
   mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
