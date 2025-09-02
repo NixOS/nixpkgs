@@ -6,20 +6,18 @@
   hatchling,
   pytest-asyncio,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.18.0";
+  version = "3.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rbyI6ruZ0v7IycGyKbFx8Yr6ZVQAFz3cZT1dAVAfufI=";
+    hash = "sha256-Zu2hiIsBccmYs1vivMD211w4inziDD8/N6qOlsLd31g=";
   };
 
   build-system = [
@@ -30,6 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-timeout
     pytestCheckHook
   ];
 
