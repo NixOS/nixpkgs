@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "fopnu";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

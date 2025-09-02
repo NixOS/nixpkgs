@@ -18957,12 +18957,6 @@
     name = "Michael Bergmeister";
     githubId = 53442728;
   };
-  paveloom = {
-    email = "contact@paveloom.dev";
-    github = "paveloom";
-    githubId = 49961859;
-    name = "Pavel Sobolev";
-  };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";
     github = "pawelchcki";
