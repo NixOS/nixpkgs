@@ -29,6 +29,7 @@
   installShellFiles,
   writeSupport ? stdenv.hostPlatform.isLinux,
   shadowSupport ? stdenv.hostPlatform.isLinux,
+  coreutils,
   # Doesn't build on Darwin, only makes sense on systems which have pam
   withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
   gitUpdater,
@@ -190,17 +191,18 @@ stdenv.mkDerivation (finalAttrs: {
     prefix=$swap _moveSbin
     ln -svf "$swap/bin/"* $bin/bin/
   ''
-  # moveToOutput "lib/liblastlog2*" "$lastlog"
   + lib.optionalString withLastlog ''
     ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''moveToOutput "lib/security" "$lastlog"''}
     moveToOutput "lib/tmpfiles.d/lastlog2-tmpfiles.conf" "$lastlog"
 
     moveToOutput "bin/lastlog2" "$lastlog"
     ln -svf "$lastlog/bin/"* $bin/bin/
+
   ''
   + lib.optionalString (withLastlog && systemdSupport) ''
     moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
     substituteInPlace $lastlog/lib/systemd/system/lastlog2-import.service \
+      --replace-fail "/usr/bin/mv" "${lib.getExe' coreutils "mv"}" \
       --replace-fail "$bin/bin/lastlog2" "$lastlog/bin/lastlog2"
   '';
 
