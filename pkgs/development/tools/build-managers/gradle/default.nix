@@ -286,8 +286,7 @@ let
         };
       };
       passthru.jdk = defaultJava;
-      passthru.unwrapped = gen' genArgs;
-      passthru.wrapped = callPackage wrapGradle { } finalAttrs.finalPackage.unwrapped;
+      passthru.wrapped = callPackage wrapGradle { } (gen' genArgs);
 
       meta =
         with lib;
