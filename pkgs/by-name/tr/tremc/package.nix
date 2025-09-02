@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   xclip ? null,
@@ -10,35 +9,19 @@
   useGeoIP ? false, # Require /var/lib/geoip-databases/GeoIP.dat
 }:
 let
-  wrapperPath = lib.makeBinPath (
-    lib.optional x11Support xclip ++ lib.optional stdenv.hostPlatform.isDarwin pbcopy
-  );
+  version = "0.9.4";
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "tremc";
-  version = "0.9.3";
-  format = "other";
+  inherit version;
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tremc";
     repo = "tremc";
-    rev = version;
-    hash = "sha256-219rntmetmj1JFG+4NyYMFTWmrHKJL7fnLoMIvnTP4Y=";
+    tag = version;
+    hash = "sha256-vVqFADu1arAe29NYYhxSUqEIxup1nNVmWrpz1wuSDPE=";
   };
-
-  patches = [
-    # Remove when tremc > 0.9.3 is released
-    (fetchpatch {
-      url = "https://github.com/tremc/tremc/commit/a8aaf9a6728a9ef3d8f13b3603456b0086122891.patch";
-      hash = "sha256-+HYdWTbcpvZqjshdHLZ+Svmr6U/aKFc3sy0aka6rn/A=";
-      name = "support-transmission-4.patch";
-    })
-  ];
-
-  buildInputs = with python3Packages; [
-    python
-    wrapPython
-  ];
 
   pythonPath =
     with python3Packages;
@@ -51,12 +34,13 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.escapeShellArg wrapperPath}" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  installPhase = ''
-    make DESTDIR=$out install
-    wrapPythonPrograms
-  '';
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath (lib.optional x11Support xclip ++ lib.optional stdenv.hostPlatform.isDarwin pbcopy)
+    }"
+  ];
 
   meta = with lib; {
     description = "Curses interface for transmission";
