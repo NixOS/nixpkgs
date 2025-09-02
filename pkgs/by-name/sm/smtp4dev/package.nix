@@ -47,6 +47,15 @@ buildDotnetModule (finalAttrs: {
     mv $out/bin/Rnwood.Smtp4dev $out/bin/smtp4dev
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/smtp4dev --help | head -1 | grep -F "smtp4dev version ${finalAttrs.version}"
+
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
