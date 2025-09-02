@@ -9,12 +9,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpm-tools";
   version = "1.3.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trousers/tpm-tools/${version}/tpm-tools-${version}.tar.gz";
+    url = "mirror://sourceforge/trousers/tpm-tools/${finalAttrs.version}/tpm-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-ivg3lJouwwsZU4msiisxvEn+MVBQdRt9TQ1DK/eBKpc=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ak ];
     platforms = platforms.unix;
   };
-}
+})
