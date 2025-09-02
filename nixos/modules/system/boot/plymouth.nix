@@ -190,8 +190,8 @@ in
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
-    systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
-    systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
+    systemd.services.systemd-ask-password-plymouth.wantedBy = [ "sysinit.target" ];
+    systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "sysinit.target" ];
 
     # Prevent Plymouth taking over the screen during system updates.
     systemd.services.plymouth-start.restartIfChanged = false;
