@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     dbus-python
     mpd2
     mutagen
