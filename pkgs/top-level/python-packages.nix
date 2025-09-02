@@ -15555,6 +15555,8 @@ self: super: with self; {
 
   rapidocr = callPackage ../development/python-modules/rapidocr { };
 
+  rapidocr-onnxruntime = callPackage ../development/python-modules/rapidocr-onnxruntime { };
+
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
