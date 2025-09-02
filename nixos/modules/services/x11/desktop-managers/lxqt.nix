@@ -28,6 +28,14 @@ in
         description = "The package that provides a default icon theme.";
       };
 
+    services.xserver.desktopManager.lxqt.extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [ ];
+      defaultText = lib.literalExpression "[ ]";
+      example = lib.literalExpression "with pkgs; [ xscreensaver ]";
+      description = "Extra packages to be installed system wide.";
+    };
+
     environment.lxqt.excludePackages = mkOption {
       type = with lib.types; listOf package;
       default = [ ];
@@ -64,7 +72,8 @@ in
       pkgs.lxqt.preRequisitePackages
       ++ pkgs.lxqt.corePackages
       ++ [ cfg.iconThemePackage ]
-      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages);
+      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages)
+      ++ cfg.extraPackages;
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
