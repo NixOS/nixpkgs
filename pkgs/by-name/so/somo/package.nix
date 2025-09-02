@@ -4,22 +4,28 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  iana-etc,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "somo";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "theopfr";
     repo = "somo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HUTaBSy3FemAQH1aKZYTJnUWiq0bU/H6c5Gz3yamPiA=";
+    hash = "sha256-QTW+hsoj8Wrv3BbFCB2aibR27Wu1MA/1gWzAXtPKWsM=";
   };
 
-  cargoHash = "sha256-e3NrEfbWz6h9q4TJnn8jnRmMJbeaEc4Yo3hFlaRLzzQ=";
+  cargoHash = "sha256-xlAdEo11UV1Y49D1LjxH5Oykf/RUoe1w6ZcQpGhfqkk=";
+
+  postPatch = ''
+    substituteInPlace src/services.rs \
+      --replace-fail '"/etc/services"' '"${iana-etc}/etc/services"'
+  '';
 
   nativeBuildInputs = [
     installShellFiles
