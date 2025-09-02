@@ -7,23 +7,18 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_bigm";
-  version = "1.2-20240606";
+  version = "1.2-20250903";
 
   src = fetchFromGitHub {
     owner = "pgbigm";
     repo = "pg_bigm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Uy1DmGZR4WdtRUvNdZ5b9zBHJUb9idcEzW20rkreBs=";
+    hash = "sha256-8V+sGebagYxXW1o2k2cNlGG4cFOObdRAvqCXKyR95hI=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
 
   meta = {
-    # PostgreSQL 18 support issue upstream: https://github.com/pgbigm/pg_bigm/issues/28
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "1.2-20240606"
-    ) "Is postgresql18Packages.pg_bigm still broken?" (lib.versionAtLeast postgresql.version "18");
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
     maintainers = [ ];
