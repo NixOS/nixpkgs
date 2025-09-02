@@ -4876,6 +4876,8 @@ self: super: with self; {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  exscript = callPackage ../development/python-modules/exscript { };
+
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   extract-msg = callPackage ../development/python-modules/extract-msg { };
