@@ -5555,10 +5555,10 @@ with pkgs;
 
   # Haskell and GHC
 
-  haskell = callPackage ./haskell-packages.nix { };
+  haskell = recurseIntoAttrs (callPackage ./haskell-packages.nix { });
 
   haskellPackages =
-    dontRecurseIntoAttrs
+    recurseIntoAttrs
       # Prefer native-bignum to avoid linking issues with gmp
       # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
       # until 9.8 is ready
