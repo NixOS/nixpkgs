@@ -46,6 +46,5 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = licenses.mit;
     mainProgram = "pricehist";
-    maintainers = with maintainers; [ chrpinedo ];
   };
 }
