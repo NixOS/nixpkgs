@@ -10,7 +10,6 @@
   bison,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  python3,
   python3Packages,
 
   # Build options
@@ -78,7 +77,6 @@ let
   petscPackages = lib.makeScope newScope (self: {
     inherit
       mpi
-      python3
       python3Packages
       # global override options
       mpiSupport
@@ -121,10 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    python3
     gfortran
     pkg-config
     bison
+    python3Packages.python
   ]
   ++ lib.optional mpiSupport mpi
   ++ lib.optionals pythonSupport [
@@ -154,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3.sitePackages;
+      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
     })
   ];
 

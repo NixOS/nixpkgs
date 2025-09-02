@@ -11561,7 +11561,6 @@ self: super: with self; {
 
   petsc4py = toPythonModule (
     pkgs.petsc.override {
-      python3 = python;
       python3Packages = self;
       pythonSupport = true;
     }
@@ -16798,7 +16797,6 @@ self: super: with self; {
   slepc4py = toPythonModule (
     pkgs.slepc.override {
       pythonSupport = true;
-      python3 = self.python;
       python3Packages = self;
       petsc = petsc4py;
     }
