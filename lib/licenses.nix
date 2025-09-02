@@ -77,6 +77,7 @@ lib.mapAttrs mkLicense (
     afl3 = {
       spdxId = "AFL-3.0";
       fullName = "Academic Free License v3.0";
+      url = "https://rosenlaw.com/OSL3.0-explained.htm";
     };
 
     agpl3Only = {
@@ -130,11 +131,13 @@ lib.mapAttrs mkLicense (
     apple-psl20 = {
       spdxId = "APSL-2.0";
       fullName = "Apple Public Source License 2.0";
+      url = "https://opensource.apple.com/apsl/";
     };
 
     arphicpl = {
       spdxId = "Arphic-1999";
       fullName = "Arphic Public License";
+      url = "https://ftp.gnu.org/gnu/non-gnu/chinese-fonts-truetype/LICENSE";
     };
 
     artistic1 = {
@@ -150,11 +153,13 @@ lib.mapAttrs mkLicense (
     artistic2 = {
       spdxId = "Artistic-2.0";
       fullName = "Artistic License 2.0";
+      url = "https://www.perlfoundation.org/artistic-license-20.html";
     };
 
     asl20 = {
       spdxId = "Apache-2.0";
       fullName = "Apache License 2.0";
+      url = "https://www.apache.org/licenses/LICENSE-2.0";
     };
 
     bitstreamVera = {
@@ -180,6 +185,7 @@ lib.mapAttrs mkLicense (
     boost = {
       spdxId = "BSL-1.0";
       fullName = "Boost Software License 1.0";
+      url = "https://www.boost.org/LICENSE_1_0.txt";
     };
 
     beerware = {
@@ -190,6 +196,7 @@ lib.mapAttrs mkLicense (
     blueOak100 = {
       spdxId = "BlueOak-1.0.0";
       fullName = "Blue Oak Model License 1.0.0";
+      url = "https://blueoakcouncil.org/license/1.0.0";
     };
 
     bsd0 = {
@@ -1143,6 +1150,7 @@ lib.mapAttrs mkLicense (
     parity70 = {
       spdxId = "Parity-7.0.0";
       fullName = "Parity Public License 7.0.0";
+      url = "https://paritylicense.com/versions/7.0.0";
     };
 
     php301 = {
