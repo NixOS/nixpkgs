@@ -24,7 +24,7 @@
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
-  util-linux,
+  util-linuxMinimal,
   iptables,
   iproute2,
   catatonit,
@@ -41,7 +41,7 @@ let
   binPath = lib.makeBinPath (
     lib.optionals stdenv.hostPlatform.isLinux [
       fuse-overlayfs
-      util-linux
+      util-linuxMinimal
       iptables
       iproute2
     ]
