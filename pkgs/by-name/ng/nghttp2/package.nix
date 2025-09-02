@@ -46,11 +46,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.66.0";
+  version = "1.67.0";
 
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    hash = "sha256-HUhK03NU35/KuXCBTpOl3KkaUyVug/T1jdcxGcYyEBc=";
+    hash = "sha256-E3YtpNYMVSPSbMuKSyb0neeVwkHzarm1BnbvUrl1p7c=";
   };
 
   outputs = [
