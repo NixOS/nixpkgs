@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tradcpp";
   version = "0.5.3";
 
   src = fetchurl {
-    url = "https://ftp.netbsd.org/pub/NetBSD/misc/dholland/tradcpp-${version}.tar.gz";
+    url = "https://ftp.netbsd.org/pub/NetBSD/misc/dholland/tradcpp-${finalAttrs.version}.tar.gz";
     hash = "sha256-4XufQs90s2DVaRvFn7U/N+QVgcRbdfzWS7ll5eL+TF4=";
   };
 
@@ -27,5 +27,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.bsd2;
   };
-
-}
+})
