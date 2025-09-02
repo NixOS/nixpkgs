@@ -5,14 +5,15 @@
   fetchzip,
   makeWrapper,
   openjdk23,
+  clientJdk ? openjdk23.override { enableJavaFX = true; },
   wrapGAppsHook3,
+  baseJvmFlags ? [
+    "-client"
+    "--add-modules"
+    "javafx.swing,javafx.controls,javafx.graphics"
+  ],
   jvmFlags ? [ ],
 }:
-let
-  jdk = openjdk23.override {
-    enableJavaFX = true;
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moneydance";
   version = "2024.4_5253";
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
-  buildInputs = [ jdk ];
+  buildInputs = [ clientJdk ];
   dontWrapGApps = true;
 
   installPhase = ''
@@ -54,25 +55,24 @@ stdenv.mkDerivation (finalAttrs: {
   # 2. https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
   postFixup =
     let
-      finalJvmFlags = [
-        "-client"
-        "--add-modules"
-        "javafx.swing,javafx.controls,javafx.graphics"
-        "-classpath"
-        "${placeholder "out"}/libexec/*"
-      ]
-      ++ jvmFlags
-      ++ [ "Moneydance" ];
+      finalJvmFlags =
+        baseJvmFlags
+        ++ [
+          "-classpath"
+          "${placeholder "out"}/libexec/*"
+        ]
+        ++ jvmFlags
+        ++ [ "Moneydance" ];
     in
     ''
       # This is in postFixup because gappsWrapperArgs is generated in preFixup
-      makeWrapper ${jdk}/bin/java $out/bin/moneydance \
+      makeWrapper ${clientJdk}/bin/java $out/bin/moneydance \
         "''${gappsWrapperArgs[@]}" \
         --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
     '';
 
   passthru = {
-    inherit jdk;
+    jdk = clientJdk;
   };
 
   meta = {
