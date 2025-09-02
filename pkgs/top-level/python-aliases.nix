@@ -743,6 +743,7 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   scikit-optimize = throw "scikit-optimize has been removed because it is abandoned"; # added 2024-09-30
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
+  seaserv = throw "seaserv has been removed as it is unmaintained"; # Added 2025-08-21
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   sentry-sdk_2 = sentry-sdk; # added 2025-04-20
