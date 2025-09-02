@@ -2104,6 +2104,7 @@ mapAliases {
   scry = throw "'scry' has been removed as it was archived upstream. Use 'crystalline' instead"; # Added 2025-02-12
   scudcloud = throw "'scudcloud' has been removed as it was archived by upstream"; # Added 2025-07-24
   seafile-server = throw "'seafile-server' has been removed as it is unmaintained"; # Added 2025-08-21
+  seahub = throw "'seahub' has been removed as it is unmaintained"; # Added 2025-08-21
   semeru-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   semeru-jre-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   sensu = throw "sensu has been removed as the upstream project is deprecated. Consider using `sensu-go`"; # Added 2024-10-28
