@@ -30,6 +30,7 @@ in
     machine.wait_for_unit("sockets.target")
     machine.wait_for_unit("multipass.service")
     machine.wait_for_file("/var/lib/multipass/data/multipassd/network/multipass_subnet")
+    machine.wait_for_file("/var/lib/multipass/config/multipassd/multipass_root_cert.pem")
 
     # Wait for Multipass to settle
     machine.sleep(1)
