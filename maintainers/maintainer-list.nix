@@ -1,5 +1,5 @@
 /*
-  List of NixOS maintainers.
+  List of active NixOS maintainers.
    ```nix
    handle = {
      # Required
@@ -9452,10 +9452,6 @@
     githubId = 47015416;
     name = "globule655";
   };
-  gm6k = {
-    email = "nix@quidecco.pl";
-    name = "Isidor Zeuner";
-  };
   gmacon = {
     name = "George Macon";
     matrix = "@gmacon:matrix.org";
@@ -12472,6 +12468,12 @@
     github = "jolheiser";
     githubId = 42128690;
     name = "John Olheiser";
+  };
+  JollyDevelopment = {
+    name = "Alan Roberts";
+    email = "jolly.development@gmail.com";
+    github = "JollyDevelopment";
+    githubId = 6932224;
   };
   jonaenz = {
     name = "Jona Enzinger";
@@ -26078,6 +26080,8 @@
   };
   tomkoid = {
     email = "tomaszierl@outlook.com";
+    github = "tomkoid";
+    githubId = 67477750;
     name = "Tomkoid";
   };
   Tommimon = {

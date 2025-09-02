@@ -2085,10 +2085,8 @@ rec {
   dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
 
   /**
-    `unionOfDisjoint x y` is equal to `x // y // z` where the
-    attrnames in `z` are the intersection of the attrnames in `x` and
-    `y`, and all values `assert` with an error message.  This
-     operator is commutative, unlike (//).
+    `unionOfDisjoint x y` is equal to `x // y`, but accessing attributes present
+    in both `x` and `y` will throw an error.  This operator is commutative, unlike `//`.
 
     # Inputs
 
