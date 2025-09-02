@@ -2,7 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
+  fetchpatch2,
   python3Packages,
+  importNpmLock,
+  npmHooks,
   libsForQt5,
   installShellFiles,
   sox,
@@ -21,7 +25,7 @@
   enableYtdl ? true,
   enableSonos ? true,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "mkchromecast-unstable";
   version = "0.3.8.1-unstable-2025-06-01";
   pyproject = true;
@@ -36,6 +40,9 @@ python3Packages.buildPythonApplication {
   # Patch up the different paths to icons and stuff that are installed
   # with the derivation.
   postPatch = ''
+    cp -f ${./package-lock.json} nodejs/
+    cp -f ${./package.json} nodejs/
+
     substituteInPlace mkchromecast.desktop \
       --replace-fail "/usr/bin/mkchromecast" "$out/bin/mkchromecast" \
       --replace-fail "/usr/share/pixmaps/mkchromecast.xpm" "$out/share/pixmaps/mkchromecast.xpm"
@@ -44,14 +51,32 @@ python3Packages.buildPythonApplication {
       --replace-fail "./bin/audiodevice" "$out/bin/audiodevice"
 
     substituteInPlace mkchromecast/video.py \
-      --replace-fail "/usr/share/mkchromecast/nodejs/" "$out/share/mkchromecast/nodejs/"
+      --replace-fail "/usr/share/mkchromecast/nodejs/" "$out/share/mkchromecast/nodejs/" \
+      --replace-fail '"./nodejs/"' "$out/share/mkchromecast/nodejs"
 
     substituteInPlace mkchromecast/systray.py \
       --replace-fail '"images' "\"$out/share/mkchromecast/images"
 
     substituteInPlace mkchromecast/node.py \
-      --replace-fail '"images' "\"$out/share/mkchromecast/images"
+      --replace-fail '"images' "\"$out/share/mkchromecast/images" \
+      --replace-fail "/usr/local/bin/node" "${lib.getExe nodejs}" \
+      --replace-fail "./nodejs/node_modules/" "$out/lib/node_modules/mkchromecast/node_modules"
+
   '';
+
+  npmRoot = "nodejs";
+  npmDeps = importNpmLock {
+    package = lib.importJSON ./package.json;
+    packageLock = lib.importJSON ./package-lock.json;
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+    libsForQt5.wrapQtAppsHook
+    nodejs
+    importNpmLock.npmConfigHook
+    npmHooks.npmInstallHook
+  ];
 
   build-system = [ python3Packages.setuptools ];
 
@@ -67,11 +92,6 @@ python3Packages.buildPythonApplication {
   ]
   ++ lib.optionals enablePyqt [ python3Packages.pyqt5 ]
   ++ lib.optionals enableSonos [ python3Packages.soco ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    libsForQt5.wrapQtAppsHook
-  ];
 
   # Relies on an old version (0.7.7) of PyChromecast unavailable in Nixpkgs.
   # Is also I/O bound and impure, testing an actual device, so we disable.
@@ -94,6 +114,7 @@ python3Packages.buildPythonApplication {
     in
     [
       "--prefix PATH : ${lib.makeBinPath path}"
+      "--prefix NODE_PATH : ${placeholder "out"}/lib/node_modules/mkchromecast/node_modules"
     ];
 
   postInstall = ''
@@ -102,6 +123,8 @@ python3Packages.buildPythonApplication {
     install -Dm644 mkchromecast.desktop -t "$out/share/applications/"
     install -Dm644 "images/mkchromecast.xpm" -t "$out/share/pixmaps/"
 
+    mkdir -p "$out/lib/node_modules/mkchromecast"
+    cp -r nodejs/node_modules "$out/lib/node_modules/mkchromecast"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm 755 -t "$out/bin" "bin/audiodevice"
