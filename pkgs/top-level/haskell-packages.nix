@@ -78,7 +78,7 @@ in
   # `name: pkgs: pkgs.haskell.packages.${name}.ghc == pkgs.buildPackages.haskell.compiler.${name}.ghc`.
   # This isn't problematic since pkgsBuildBuild.buildPackages is also build->build,
   # just something to keep in mind.
-  compiler =
+  compiler = pkgs.lib.recurseIntoAttrs (
     let
       bb = pkgsBuildBuild.haskell;
     in
@@ -492,7 +492,8 @@ in
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
-    };
+    }
+  );
 
   # Default overrides that are applied to all package sets.
   packageOverrides = self: super: { };

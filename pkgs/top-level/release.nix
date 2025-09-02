@@ -371,29 +371,27 @@ let
         if attrNamesOnly then id else release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
-        haskell.compiler = packagePlatforms pkgs.haskell.compiler;
-        haskellPackages = packagePlatforms pkgs.haskellPackages;
         # Build selected packages (HLS) for multiple Haskell compilers to rebuild
         # the cache after a staging merge
-        haskell.packages =
-          genAttrs
-            [
-              # TODO: share this list between release.nix and release-haskell.nix
-              "ghc90"
-              "ghc92"
-              "ghc94"
-              "ghc96"
-              "ghc98"
-              "ghc910"
-              "ghc912"
-            ]
-            (compilerName: {
-              inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
-                haskell-language-server
-                ;
-            });
-        idrisPackages = packagePlatforms pkgs.idrisPackages;
-        agdaPackages = packagePlatforms pkgs.agdaPackages;
+        haskell = packagePlatforms pkgs.haskell // {
+          packages =
+            genAttrs
+              [
+                # TODO: share this list between release.nix and release-haskell.nix
+                "ghc90"
+                "ghc92"
+                "ghc94"
+                "ghc96"
+                "ghc98"
+                "ghc910"
+                "ghc912"
+              ]
+              (compilerName: {
+                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+                  haskell-language-server
+                  ;
+              });
+        };
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"
@@ -416,18 +414,8 @@ let
           "aarch64-linux"
         ];
 
-        tests = packagePlatforms pkgs.tests;
-
-        # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
-
-        #emacsPackages = packagePlatforms pkgs.emacsPackages;
-        #rPackages = packagePlatforms pkgs.rPackages;
+        # Fails CI in its current state
         ocamlPackages = { };
-        perlPackages = { };
-
-        darwin = packagePlatforms pkgs.darwin // {
-          xcode = { };
-        };
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in
