@@ -103,6 +103,8 @@ stdenv.mkDerivation {
     in
     fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
+      # TODO: Write an update script to update all 4 hashes.
+      # nixpkgs-update: no auto update
       hash =
         {
           "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
