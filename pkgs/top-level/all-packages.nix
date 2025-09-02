@@ -12171,9 +12171,6 @@ with pkgs;
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
-  alkimia = kdePackages.callPackage ../development/libraries/alkimia { };
-  kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
-
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };

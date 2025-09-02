@@ -3,16 +3,10 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
   doxygen,
   graphviz,
-  qtbase,
-  qtwebengine,
   mpir,
-  libplasma,
-  knewstuff,
-  kpackage,
-  wrapQtAppsHook,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "invent.kde.org";
     owner = "office";
     repo = "alkimia";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v5DfnnzOMsoCXr074ydXxBIrSsnbex6G/OqF6psTvPs=";
   };
 
@@ -33,16 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     doxygen
     graphviz
+  ]
+  ++ (with kdePackages; [
+    extra-cmake-modules
     wrapQtAppsHook
-  ];
+  ]);
 
   # qtwebengine is not a mandatory dependency, but it adds some features
   # we might need for alkimia's dependents. See:
   # https://github.com/KDE/alkimia/blob/v8.1.2/CMakeLists.txt#L124
-  buildInputs = [
+  buildInputs = with kdePackages; [
     qtbase
     qtwebengine
     libplasma
@@ -63,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       application boundaries.
     '';
     license = lib.licenses.lgpl21Plus;
-    platforms = qtbase.meta.platforms;
+    platforms = kdePackages.qtbase.meta.platforms;
   };
 })
