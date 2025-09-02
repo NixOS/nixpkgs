@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   };
 
   # https://github.com/kometbomb/klystrack/commit/6dac9eb5e75801ce4dec1d8b339f78e3df2f54bc fixes build but doesn't apply as-is, just patch in the flag
+  # Make embedded date reproducible
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '-DUSESDL_IMAGE' '-DUSESDL_IMAGE -DUSESDL_RWOPS'
+
+    substituteInPlace Makefile klystron/Makefile \
+      --replace-fail 'date' 'date --date @$(SOURCE_DATE_EPOCH)'
   '';
 
   buildInputs = [
