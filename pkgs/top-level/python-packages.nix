@@ -9416,6 +9416,8 @@ self: super: with self; {
     callPackage ../development/python-modules/mkdocs-table-reader-plugin
       { };
 
+  mkdocs-test = callPackage ../development/python-modules/mkdocs-test { };
+
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
   mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
