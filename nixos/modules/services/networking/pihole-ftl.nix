@@ -53,7 +53,7 @@ in
         query logging.
       '';
       default = 0;
-      example = "3";
+      example = 3;
     };
 
     openFirewallDNS = mkOption {
@@ -240,7 +240,7 @@ in
       (mkDefaults {
         misc.readOnly = true; # Prevent config changes via API or CLI by default
         webserver.port = ""; # Disable the webserver by default
-        misc.privacyLevel = cfg.privacyLevel;
+        misc.privacylevel = cfg.privacyLevel;
       })
 
       # Move state files to cfg.stateDirectory
