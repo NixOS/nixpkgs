@@ -1351,6 +1351,7 @@ in
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
+  slurm-pam = runTest ./slurm-pam.nix;
   snmpd = runTest ./snmpd.nix;
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
