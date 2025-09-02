@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "9menu";
-  version = "unstable-2021-02-24";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "arnoldrobbins";
     repo = "9menu";
-    rev = "00cbf99c48dc580ca28f81ed66c89a98b7a182c8";
-    sha256 = "arca8Gbr4ytiCk43cifmNj7SUrDgn1XB26zAhZrVDs0=";
+    tag = "9menu-release-${finalAttrs.version}";
+    hash = "sha256-J0vHArLH8WDCOvbbF4TYd9b75+5UkhnVdhbbeiUJ4SM=";
   };
 
   nativeBuildInputs = [
