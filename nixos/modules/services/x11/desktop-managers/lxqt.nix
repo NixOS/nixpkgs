@@ -9,8 +9,7 @@
 with lib;
 
 let
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.lxqt;
+  cfg = config.services.xserver.desktopManager.lxqt;
 
 in
 
@@ -21,16 +20,13 @@ in
 
   options = {
 
-    services.xserver.desktopManager.lxqt.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the LXQt desktop manager";
-    };
+    services.xserver.desktopManager.lxqt.enable = mkEnableOption "the LXQt desktop manager";
 
     environment.lxqt.excludePackages = mkOption {
+      type = with lib.types; listOf package;
       default = [ ];
-      example = literalExpression "[ pkgs.lxqt.qterminal ]";
-      type = types.listOf types.package;
+      defaultText = lib.literalExpression "[ ]";
+      example = lib.literalExpression "with pkgs; [ lxqt.qterminal ]";
       description = "Which LXQt packages to exclude from the default environment";
     };
 
@@ -69,7 +65,7 @@ in
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
-    services.gvfs.enable = true;
+    services.gvfs.enable = mkDefault true;
 
     services.upower.enable = config.powerManagement.enable;
 
