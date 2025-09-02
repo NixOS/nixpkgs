@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
   cmakeFlags = [
     "-DUSE_RAPIDJSON=ON"
+    # Enable exception handling for release builds.
+    (lib.cmakeBool "BUILD_RELEASE_DISABLE_EXCEPTIONS" false)
   ]
   ++ lib.optionals withVtk [
     (lib.cmakeBool "USE_VTK" true)
