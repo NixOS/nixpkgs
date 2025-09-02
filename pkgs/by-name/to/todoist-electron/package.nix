@@ -6,7 +6,7 @@
 }:
 let
   pname = "todoist-electron";
-  version = "9.8.0";
+  version = "9.19.0";
 
   src = fetchurl {
     url = "https://electron-dl.todoist.com/linux/Todoist-linux-${version}-x86_64-latest.AppImage";
