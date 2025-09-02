@@ -13,18 +13,10 @@
       inherit (super)
         fusePackages
         gns3Packages
-        haskellPackages
         platformioPackages
         rPackages
         sourceHanPackages
         ;
-
-      # Make sure haskell.compiler is included, so alternative GHC versions show up,
-      # but don't add haskell.packages.* since they contain the same packages (at
-      # least by name) as haskellPackages.
-      haskell = super.haskell // {
-        compiler = recurseIntoAttrs super.haskell.compiler;
-      };
 
       # emacsPackages is an alias for emacs.pkgs
       # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
