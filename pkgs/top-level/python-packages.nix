@@ -1528,6 +1528,10 @@ self: super: with self; {
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
 
+  azure-mgmt-resource-deployments =
+    callPackage ../development/python-modules/azure-mgmt-resource-deployments
+      { };
+
   azure-mgmt-scheduler = callPackage ../development/python-modules/azure-mgmt-scheduler { };
 
   azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
