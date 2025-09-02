@@ -39,7 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/iawia002/lux";
     changelog = "https://github.com/iawia002/lux/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ galaxy ];
     mainProgram = "lux";
   };
 }
