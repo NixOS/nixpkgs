@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
-  version = "2023.12.0";
+  version = "2025.08.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aiopurpleair";
     tag = version;
-    hash = "sha256-2Ngo2pvzwcgQvpyW5Q97VQN/tGSVhVJwRj0DMaPn+O4=";
+    hash = "sha256-VmKIIgfZFk9z8WORDHA4ibL4FZchiRrT6L0rCkxosoc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
