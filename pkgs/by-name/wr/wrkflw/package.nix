@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       awwpotato
       FKouhai
+      tebriel
     ];
     mainProgram = "wrkflw";
   };
