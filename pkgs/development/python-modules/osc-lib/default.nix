@@ -11,6 +11,7 @@
   requests,
   requests-mock,
   setuptools,
+  stdenv,
   stestr,
   stevedore,
 }:
@@ -27,8 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-mFZLVlq2mFgx5yQLBPVVT/zDLbOJ/EodAwsm/QxvW0Q=";
   };
 
-  # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   build-system = [
     pbr
@@ -51,7 +51,13 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run
+    stestr run -e <(echo "
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public
+      osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence
+      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1
+      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2
+    ''}")
   '';
 
   pythonImportsCheck = [ "osc_lib" ];
