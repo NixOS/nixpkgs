@@ -777,6 +777,15 @@ builtins.intersectAttrs super {
   colour = dontCheck super.colour;
   spatial-rotations = dontCheck super.spatial-rotations;
 
+  # This package is marked broken, but it causes some evail failures for nixpkgs-review.
+  # cabal2nix still adds opencv3, which has been removed. It makes no sense to add opencv4,
+  # because the haskell package is only targeting opencv 3.x specifically.
+  # TODO: Remove this package entirely from hackage-packages.nix. It's broken and has been last
+  # updated in 2018.
+  opencv = overrideCabal (drv: {
+    libraryPkgconfigDepends = [ ];
+  }) super.opencv;
+
   LDAP = dontCheck (
     overrideCabal (drv: {
       librarySystemDepends = drv.librarySystemDepends or [ ] ++ [ pkgs.cyrus_sasl.dev ];
