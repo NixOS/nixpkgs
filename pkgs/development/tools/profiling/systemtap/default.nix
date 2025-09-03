@@ -6,6 +6,7 @@
   runCommand,
   makeWrapper,
   cpio,
+  boost,
   elfutils,
   kernel,
   gnumake,
@@ -18,8 +19,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
-  version = "5.2";
+  hash = "sha256-W9iJ+hyowqgeq1hGcNQbvPfHpqY0Yt2W/Ng/4p6asxc=";
+  version = "5.3";
 
   inherit (kernel) stdenv;
 
@@ -35,6 +36,7 @@ let
       python3.pkgs.setuptools
     ];
     buildInputs = [
+      boost
       elfutils
       gettext
       python3
