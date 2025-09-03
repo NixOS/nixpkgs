@@ -4,7 +4,6 @@
 
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
 
   copyDesktopItems,
   fixup-yarn-lock,
@@ -60,17 +59,6 @@ let
   ];
 
   electron = electron_37;
-
-  electronHeaders = fetchurl {
-    url = "https://www.electronjs.org/headers/v${electron.version}/node-v${electron.version}-headers.tar.gz";
-    hash = "sha256-IIyMidJoUgPr6D6sYwKIT7OGBOv/soz4b8SEXoJNbPY=";
-  };
-
-  electronHeadersSHA = fetchurl {
-    url = "https://www.electronjs.org/headers/v${electron.version}/SHASUMS256.txt";
-    hash = "sha256-M8BsUCxgvzZLirxz0VfhfBWx0zWE9kG2XdTKB3eeLw4=";
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-terminal";
@@ -150,8 +138,13 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preBuild
 
       mkdir -p http-cache/v${electron.version}
-      cp ${electronHeaders} http-cache/v${electron.version}/node-v${electron.version}-headers.tar.gz
-      cp ${electronHeadersSHA} http-cache/v${electron.version}/SHASUMS256.txt
+      pushd http-cache/v${electron.version}
+        tar \
+          --transform 's|^\./|node_headers/|' \
+          -czvf node-v${electron.version}-headers.tar.gz \
+          -C ${electron.headers} .
+        sha256sum node-v${electron.version}-headers.tar.gz > SHASUMS256.txt
+      popd
       http-server http-cache &
     ''
     # Rebuild all the needed packages using electron-rebuild
