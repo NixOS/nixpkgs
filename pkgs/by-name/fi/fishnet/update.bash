@@ -1,9 +1,9 @@
 new_version="$(
-    curl --fail --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest" |
+    curl --fail --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/lichess-org/fishnet/releases/latest" |
         jq '.tag_name | ltrimstr("v")' --raw-output
 )"
 stockfish_revision="$(
-    curl --fail --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/Stockfish?ref=v$new_version" |
+    curl --fail --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/lichess-org/fishnet/contents/Stockfish?ref=v$new_version" |
         jq .sha --raw-output
 )"
 stockfish_header="$(
@@ -37,7 +37,7 @@ pkg_body="${pkg_body//"$NNUE_SMALL_HASH"/"$new_nnue_small_hash"}"
 echo "$pkg_body" >"$PKG_FILE"
 
 # Update version, src
-update-source-version "$PNAME" "$new_version" --ignore-same-version --print-changes
+update-source-version "fishnet" "$new_version" --ignore-same-version --print-changes
 
 # Update cargoHash
-nix-update --version=skip "$PNAME"
+nix-update --version=skip "fishnet"
