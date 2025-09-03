@@ -1114,9 +1114,9 @@
   },
   "vme": {
     "pname": "vme",
-    "version": "1.0.0b4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/vme-1.0.0b4-py3-none-any.whl",
-    "hash": "sha256-TMOUIL/cntB9DcQubv7B1OMs+nSwv2RRcFD6KCRwFrk=",
+    "version": "1.0.0b5",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/vme-1.0.0b5-py3-none-any.whl",
+    "hash": "sha256-DVb8jVymvcXEEmPsz+qGh3Q3iTFVTI904VD3Kq5d3fc=",
     "description": "Microsoft Azure Command-Line Tools Vme Extension"
   },
   "vmware": {
