@@ -1107,6 +1107,7 @@ mapAliases {
   gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
 
   gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead";
+  gr-framework = throw "gr-framework has been removed, as it was broken"; # Added 2025-08-25
   graalvmCEPackages = graalvmPackages; # Added 2024-08-10
   graalvm-ce = graalvmPackages.graalvm-ce; # Added 2024-08-10
   graalvm-oracle = graalvmPackages.graalvm-oracle; # Added 2024-12-17
@@ -2501,6 +2502,7 @@ mapAliases {
   xarchive = throw "'xarchive' has been removed due to lack of maintenance upstream. Consider using 'file-roller' instead"; # Added 2024-10-19
   xbmc-retroarch-advanced-launchers = throw "'xbmc-retroarch-advanced-launchers' has been renamed to/replaced by 'kodi-retroarch-advanced-launchers'"; # Converted to throw 2024-10-17
   xboxdrv = throw "'xboxdrv' has been dropped as it has been superseded by an in-tree kernel driver"; # Added 2024-12-25
+  xbrightness = throw "'xbrightness' has been removed as it is unmaintained"; # Added 2025-08-28
   xbursttools = throw "'xbursttools' has been removed as it is broken and unmaintained upstream."; # Added 2025-06-12
   xdg_utils = throw "'xdg_utils' has been renamed to/replaced by 'xdg-utils'"; # Converted to throw 2024-10-17
   xdragon = dragon-drop; # Added 2025-03-22

@@ -448,7 +448,7 @@ in
         script = ''
           cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
           chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe pkgs.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
         '';
       };
 

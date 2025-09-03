@@ -41,6 +41,8 @@ buildPythonPackage {
     setuptools-scm
   ];
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.0.0";
+
   dependencies = [
     fonttools
     ufomerge

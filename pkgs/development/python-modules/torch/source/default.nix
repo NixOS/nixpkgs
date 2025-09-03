@@ -306,6 +306,11 @@ buildPythonPackage rec {
       url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
       hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
     })
+
+    # Fixes GCC-14 compatibility on ARM
+    # Adapted from https://github.com/pytorch/pytorch/pull/157867
+    # TODO: remove at the next release
+    ./gcc-14-arm-compat.path
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
