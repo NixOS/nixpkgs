@@ -2472,6 +2472,13 @@ with haskellLib;
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
+  # 2025-09-03: allow QuickCheck 2.15
+  # https://github.com/haskell-works/hw-prim/issues/150
+  hw-prim = lib.pipe super.hw-prim [
+    (warnAfterVersion "0.6.3.2")
+    doJailbreak
+  ];
+
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
