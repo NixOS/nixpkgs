@@ -1,25 +1,32 @@
-{ fetchFromGitHub, buildNpmPackage, yq-go, lib, nodejs }:
+{
+  fetchFromGitHub,
+  buildNpmPackage,
+  yq-go,
+  lib,
+  nodejs,
+}:
 let
-  version = "2.16.2";
-in buildNpmPackage {
+  version = "3.0.1";
+in
+buildNpmPackage {
   pname = "appium-unwrapped";
   inherit version;
 
   patches = [
     # appium checks for a writable directory, this fails because the nix store is read-only
     ./Disable-writable.patch
-    # Lockfile fix backport, remove when upstream has a working lockfile
   ];
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "appium";
     rev = "appium@${version}";
-    hash = "sha256-nwn3zmMISPdsmlxyisf+6LO9pMIB8y3r2iupKScP3K4=";
+    hash = "sha256-TPzH6HtIqYjM9sltn5tXHHAoNs0xIZEZQ7oflue/x/M=";
   };
 
-  npmDepsHash = "sha256-Uym6xG2eHztsy4bRrsNUTujVskMoJ888f+q0MAQRFI4=";
+  npmDepsHash = "sha256-gORsfJZ78epTnVzZj4Ju2xTMaISR/0NHGXRSmWFjPG8=";
 
+  # Lockfile fix backport, remove when upstream has a working lockfile
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
