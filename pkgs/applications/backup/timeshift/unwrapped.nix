@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-X3TwUkOeGzcgFM/4Fyfs8eQuGK2wHe3t13WSpIizX8s=";
   };
 
