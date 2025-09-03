@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   glibc,
 }:
 
@@ -9,13 +10,19 @@ stdenv.mkDerivation rec {
   pname = "libax25";
   version = "0.0.12-rc5";
 
-  buildInputs = [ glibc ] ++ lib.optionals stdenv.hostPlatform.isStatic [ glibc.static ];
+  nativeBuildInputs = [
+    autoreconfHook
+    glibc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ glibc.static ];
 
-  # Due to recent unsolvable administrative domain problems with linux-ax25.org,
-  # the new domain is linux-ax25.in-berlin.de
-  src = fetchurl {
-    url = "https://linux-ax25.in-berlin.de/pub/ax25-lib/libax25-${version}.tar.gz";
-    hash = "sha256-vxV5GVDOHr38N/512ArZpnZ+a7FTbXBNpoSJkc9DI98=";
+  # src from linux-ax25.in-berlin.de remote has been
+  # unreliable, pointing to github mirror from the radiocatalog
+  src = fetchFromGitHub {
+    owner = "radiocatalog";
+    repo = "libax25";
+    tag = "libax25-${finalAttrs.version}";
+    hash = "sha256-MQDrroRZhtWJiu3N7FQVp5/sqe1MDjdwKu4ufnfHTUM=";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
