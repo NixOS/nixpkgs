@@ -7,6 +7,7 @@
   hatch-vcs,
   hatchling,
 
+  dirty-equals,
   tenacity,
   typing-extensions,
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stamina" ];
 
   nativeCheckInputs = [
+    dirty-equals
     pytestCheckHook
     anyio
   ];
