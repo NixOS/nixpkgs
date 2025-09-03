@@ -778,9 +778,9 @@
   },
   "new-relic": {
     "pname": "new-relic",
-    "version": "1.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/new_relic-1.0.1-py3-none-any.whl",
-    "hash": "sha256-VKbfg2sflMylsHcjvJ1QUhbVW3fOG+JViuCSIt4mJ2A=",
+    "version": "1.0.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/new_relic-1.0.2-py3-none-any.whl",
+    "hash": "sha256-/h2TeDcQyRFvcZBwNzxcPrlf638sjfZxYZ97pm7AxB4=",
     "description": "Microsoft Azure Command-Line Tools NewRelic Extension"
   },
   "next": {
