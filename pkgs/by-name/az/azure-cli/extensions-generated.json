@@ -78,9 +78,9 @@
   },
   "amg": {
     "pname": "amg",
-    "version": "2.6.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/amg-2.6.1-py3-none-any.whl",
-    "hash": "sha256-ERGri8mXJtLy/acz8R2UqdmILr7JT4bTQaU6GtxhKjs=",
+    "version": "2.8.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/amg-2.8.0-py3-none-any.whl",
+    "hash": "sha256-E4Id15eoKStqeQynaHisZLcZsiApMf6uV/J8xWz/s5w=",
     "description": "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension"
   },
   "amlfs": {
