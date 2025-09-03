@@ -3,19 +3,19 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  http-sfv,
   pytestCheckHook,
   pythonOlder,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyauth";
@@ -24,11 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-vPZeAS3hR7Bmj2FtME+V9WU3TViBndrBb9GLkdMVh2Q=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     cryptography
-    http-sfv
   ];
 
   nativeCheckInputs = [
