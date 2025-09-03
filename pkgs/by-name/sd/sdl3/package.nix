@@ -150,8 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       # thus, it also does not have to care about gtk integration,
       # so using ibusMinimal avoids an unnecessarily large closure here.
       ibusMinimal
-    ]
-    ++ lib.optional waylandSupport zenity;
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
