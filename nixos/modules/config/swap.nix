@@ -307,6 +307,7 @@ in
                     chattr +C "$DEVICE" 2>/dev/null || true
 
                     echo "Creating swap file using dd and mkswap."
+                    mkdir -p $(dirname $DEVICE)
                     dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
                     ${lib.optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
