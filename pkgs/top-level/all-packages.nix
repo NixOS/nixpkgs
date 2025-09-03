@@ -5239,7 +5239,6 @@ with pkgs;
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );
 
-  spicedb = callPackage ../servers/spicedb { };
   spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover = (
