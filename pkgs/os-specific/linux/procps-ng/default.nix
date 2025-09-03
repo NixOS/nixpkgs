@@ -21,13 +21,13 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "procps";
   version = "4.0.4";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
-    url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
+    url = "mirror://sourceforge/procps-ng/procps-ng-${finalAttrs.version}.tar.xz";
     hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
   };
 
@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     execer cannot bin/{ps,top,free}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/procps-ng/procps";
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
