@@ -160,13 +160,14 @@ let
             libtool
             installShellFiles
           ];
+
           buildInputs = [
             sqlite
           ]
-          ++ lib.optional withLvm lvm2
-          ++ lib.optional withBtrfs btrfs-progs
-          ++ lib.optional withSystemd systemd
-          ++ lib.optional withSeccomp libseccomp;
+          ++ lib.optionals withLvm [ lvm2 ]
+          ++ lib.optionals withBtrfs [ btrfs-progs ]
+          ++ lib.optionals withSystemd [ systemd ]
+          ++ lib.optionals withSeccomp [ libseccomp ];
 
           extraPath = lib.optionals stdenv.hostPlatform.isLinux (
             lib.makeBinPath [
@@ -234,10 +235,10 @@ let
           '';
 
           DOCKER_BUILDTAGS =
-            lib.optional withSystemd "journald"
-            ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
-            ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
-            ++ lib.optional withSeccomp "seccomp";
+            lib.optionals withSystemd [ "journald" ]
+            ++ lib.optionals (!withBtrfs) [ "exclude_graphdriver_btrfs" ]
+            ++ lib.optionals (!withLvm) [ "exclude_graphdriver_devicemapper" ]
+            ++ lib.optionals withSeccomp [ "seccomp" ];
 
           meta = docker-meta // {
             homepage = "https://mobyproject.org/";
@@ -247,10 +248,11 @@ let
       );
 
       plugins =
-        lib.optional buildxSupport docker-buildx
-        ++ lib.optional composeSupport docker-compose
-        ++ lib.optional sbomSupport docker-sbom
-        ++ lib.optional initSupport docker-init;
+        lib.optionals buildxSupport [ docker-buildx ]
+        ++ lib.optionals composeSupport [ docker-compose ]
+        ++ lib.optionals sbomSupport [ docker-sbom ]
+        ++ lib.optionals initSupport [ docker-init ];
+
       pluginsRef = symlinkJoin {
         name = "docker-plugins";
         paths = plugins;
