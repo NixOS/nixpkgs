@@ -28,6 +28,33 @@
   speechPlayerSupport ? true,
 }:
 
+let
+  version = "1.52.0";
+
+  src = fetchFromGitHub {
+    owner = "espeak-ng";
+    repo = "espeak-ng";
+    tag = version;
+    hash = "sha256-mmh5QPSVD5YQ0j16R+bEL5vcyWLtTNOJ/irBNzWY3ro=";
+  };
+
+  ucd-tools = stdenv.mkDerivation {
+    pname = "ucd-tools";
+    inherit version src;
+
+    sourceRoot = "${src.name}/src/ucd-tools";
+
+    nativeBuildInputs = [ cmake ];
+
+    installPhase = ''
+      runHook preInstall
+      mkdir $out
+      cp -v libucd.a $out/
+      runHook postInstall
+    '';
+  };
+in
+
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
   version = "1.52.0";
@@ -49,6 +76,10 @@ stdenv.mkDerivation rec {
       inherit mbrola;
     })
   ];
+
+  postPatch = ''
+    ln -s ${ucd-tools}/libucd.a src/ucd-tools/libucd.a
+  '';
 
   nativeBuildInputs = [
     autoconf
@@ -82,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit mbrolaSupport;
+    inherit mbrolaSupport ucd-tools;
   };
 
   meta = {
