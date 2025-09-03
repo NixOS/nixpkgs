@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
   testers,
   twitch-cli,
@@ -31,6 +32,18 @@ buildGoModule rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    $out/bin/twitch-cli completion bash > twitch-cli.bash
+    $out/bin/twitch-cli completion fish > twitch-cli.fish
+    $out/bin/twitch-cli completion zsh > _twitch-cli
+    installShellCompletion --cmd twitch-cli \
+      --bash twitch-cli.bash \
+      --fish twitch-cli.fish \
+      --zsh _twitch-cli
   '';
 
   __darwinAllowLocalNetworking = true;
