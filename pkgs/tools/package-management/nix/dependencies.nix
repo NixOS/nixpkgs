@@ -19,7 +19,7 @@ regular@{
           # small, run Nix with GC_PRINT_STATS=1 and look for messages
           # such as `Mark stack overflow`, `No room to copy back mark
           # stack`, and `Grew mark stack to ... frames`.
-          NIX_CFLAGS_COMPILE = "-DINITIAL_MARK_STACK_SIZE=1048576";
+          env.NIX_CFLAGS_COMPILE = "-DINITIAL_MARK_STACK_SIZE=1048576";
         });
 
     aws-sdk-cpp =
