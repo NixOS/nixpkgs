@@ -907,6 +907,12 @@ self: super: with self; {
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
 
+  arro3-compute = (callPackage ../development/python-modules/arro3 { }).arro3-compute;
+
+  arro3-core = (callPackage ../development/python-modules/arro3 { }).arro3-core;
+
+  arro3-io = (callPackage ../development/python-modules/arro3 { }).arro3-io;
+
   arrow = callPackage ../development/python-modules/arrow { };
 
   arsenic = callPackage ../development/python-modules/arsenic { };
@@ -1527,6 +1533,22 @@ self: super: with self; {
   azure-mgmt-reservations = callPackage ../development/python-modules/azure-mgmt-reservations { };
 
   azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
+
+  azure-mgmt-resource-deployments =
+    callPackage ../development/python-modules/azure-mgmt-resource-deployments
+      { };
+
+  azure-mgmt-resource-deploymentscripts =
+    callPackage ../development/python-modules/azure-mgmt-resource-deploymentscripts
+      { };
+
+  azure-mgmt-resource-deploymentstacks =
+    callPackage ../development/python-modules/azure-mgmt-resource-deploymentstacks
+      { };
+
+  azure-mgmt-resource-templatespecs =
+    callPackage ../development/python-modules/azure-mgmt-resource-templatespecs
+      { };
 
   azure-mgmt-scheduler = callPackage ../development/python-modules/azure-mgmt-scheduler { };
 
