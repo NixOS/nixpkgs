@@ -440,7 +440,6 @@ let
           extraBuildCommands = mkExtraBuildCommands0 cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
           nixSupport.cc-cflags = lib.optional (
             lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
           ) "-fno-exceptions";
