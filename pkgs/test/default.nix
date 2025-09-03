@@ -154,9 +154,7 @@ with pkgs;
 
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // {
-    __recurseIntoDerivationForReleaseJobs = true;
-  };
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });

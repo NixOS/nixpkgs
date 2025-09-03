@@ -21325,6 +21325,13 @@
     githubId = 23345803;
     name = "Szymon Scholz";
   };
+  ratakor = {
+    name = "Ratakor";
+    github = "ratakor";
+    githubId = 45130910;
+    email = "ratakor@disroot.org";
+    keys = [ { fingerprint = "B60F 8F80 D6CD C5D2 58CF  14C3 241B 1CBE 567B 287E"; } ];
+  };
   ratcornu = {
     email = "ratcornu+programmation@skaven.org";
     github = "RatCornu";
