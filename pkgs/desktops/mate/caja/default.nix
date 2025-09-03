@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   gtk-layer-shell,
@@ -25,6 +26,15 @@ stdenv.mkDerivation rec {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "HjAUzhRVgX7C73TQnv37aDXYo3LtmhbvtZGe97ghlXo=";
   };
+
+  patches = [
+    # wayland: ensure windows can be moved if compositor is using CSD
+    # https://github.com/mate-desktop/caja/pull/1787
+    (fetchpatch {
+      url = "https://github.com/mate-desktop/caja/commit/b0fb727c62ef9f45865d5d7974df7b79bcf0d133.patch";
+      hash = "sha256-2QAXveJnrPPyFSBST6wQcXz9PRsJVdt4iSYy0gubDAs=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
