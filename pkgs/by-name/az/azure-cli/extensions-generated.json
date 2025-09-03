@@ -111,6 +111,13 @@
     "hash": "sha256-Mw/R8ZdL7OFtySTjU3MbHw9EA6WONuM0dwXwHb2/A9E=",
     "description": "Microsoft Azure Command-Line Tools Arcgateway Extension"
   },
+  "arize-ai": {
+    "pname": "arize-ai",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/arize_ai-1.0.0-py3-none-any.whl",
+    "hash": "sha256-re+iMmNO+fYl5j5oTGy4vm6OHATHytv5TIaYl2k6fVg=",
+    "description": "Microsoft Azure Command-Line Tools ArizeAi Extension"
+  },
   "astronomer": {
     "pname": "astronomer",
     "version": "1.0.1",
