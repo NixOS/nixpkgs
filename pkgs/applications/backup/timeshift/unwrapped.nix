@@ -11,7 +11,7 @@
   gtk3,
   json-glib,
   libgee,
-  util-linux,
+  util-linuxMinimal,
   vte,
   xapp,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for FILE in src/Core/Main.vala src/Utility/Device.vala; do
       substituteInPlace "$FILE" \
-        --replace-fail "/sbin/blkid" "${lib.getExe' util-linux "blkid"}"
+        --replace-fail "/sbin/blkid" "${lib.getExe' util-linuxMinimal "blkid"}"
     done
 
     substituteInPlace ./src/Utility/IconManager.vala \
