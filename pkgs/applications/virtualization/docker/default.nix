@@ -232,11 +232,12 @@ let
             runHook postInstall
           '';
 
-          DOCKER_BUILDTAGS =
+          env.DOCKER_BUILDTAGS = toString (
             lib.optionals withSystemd [ "journald" ]
             ++ lib.optionals (!withBtrfs) [ "exclude_graphdriver_btrfs" ]
             ++ lib.optionals (!withLvm) [ "exclude_graphdriver_devicemapper" ]
-            ++ lib.optionals withSeccomp [ "seccomp" ];
+            ++ lib.optionals withSeccomp [ "seccomp" ]
+          );
 
           meta = docker-meta // {
             homepage = "https://mobyproject.org/";
