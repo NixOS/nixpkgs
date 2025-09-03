@@ -55,10 +55,7 @@ in
       [ "services" "aria2" "rpcListenPort" ]
       [ "services" "aria2" "settings" "rpc-listen-port" ]
     )
-    (lib.mkRenamedOptionModule
-      [ "programs" "aria2" "openPorts" ]
-      [ "services" "aria2" "openPorts" ]
-    )
+    (lib.mkRenamedOptionModule [ "programs" "aria2" "openPorts" ] [ "services" "aria2" "openPorts" ])
   ];
 
   options = {
@@ -186,7 +183,9 @@ in
       # to allow bittorrent to work with ad-hoc invocations of aria2c.
       networking.firewall = lib.mkIf cfg.openPorts {
         allowedUDPPortRanges = config.services.aria2.settings.listen-port;
-        allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [ config.services.aria2.settings.rpc-listen-port ];
+        allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [
+          config.services.aria2.settings.rpc-listen-port
+        ];
       };
     })
     (lib.mkIf cfg.enable {
@@ -200,7 +199,7 @@ in
           message = "Set the RPC secret through services.aria2.rpcSecretFile so it will not end up in the world-readable nix store.";
         }
       ];
-  
+
       users.users.aria2 = {
         group = "aria2";
         uid = config.ids.uids.aria2;
@@ -208,14 +207,14 @@ in
         home = homeDir;
         createHome = false;
       };
-  
+
       users.groups.aria2.gid = config.ids.gids.aria2;
-  
+
       systemd.tmpfiles.rules = [
         "d '${homeDir}' 0770 aria2 aria2 - -"
         "d '${config.services.aria2.settings.dir}' ${config.services.aria2.downloadDirPermission} aria2 aria2 - -"
       ];
-  
+
       systemd.services.aria2 = {
         description = "aria2 Service";
         after = [ "network.target" ];
@@ -229,7 +228,7 @@ in
           chmod +w "${cfg.settings.conf-path}"
           echo "rpc-secret=$(cat "$CREDENTIALS_DIRECTORY/rpcSecretFile")" >> "${cfg.settings.conf-path}"
         '';
-  
+
         serviceConfig = {
           Restart = "on-abort";
           ExecStart = "${pkgs.aria2}/bin/aria2c --conf-path=${cfg.settings.conf-path}";
