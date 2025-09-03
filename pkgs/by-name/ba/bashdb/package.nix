@@ -44,10 +44,14 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Bash script debugger";
-    mainProgram = "bashdb";
     homepage = "https://bashdb.sourceforge.net/";
+    description = "A gdb-like debugger for bash";
+    longDescription = ''
+      The Bash Debugger Project is a source-code debugger for bash that follows
+      the gdb command syntax.
+    '';
     license = lib.licenses.gpl2Plus;
+    mainProgram = "bashdb";
     platforms = lib.platforms.linux;
   };
 }
