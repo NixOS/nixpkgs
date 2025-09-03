@@ -176,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           # Make sure libGL libvulkan can be found by dlopen()
           libGL
+          libdrm
           vulkan-loader
         ]
       }"
