@@ -18,7 +18,7 @@ let
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-5TO68+h49l0KCT99rZ+iXzgZiT7H0H0XeRWjSbrc9yM=";
+    hash = "sha256-LhPtoMD7IjxbTFTSzP+vtflDUixUoN9eqE1AQyWhJzg=";
   };
 in
 flutter335.buildFlutterApplication {
