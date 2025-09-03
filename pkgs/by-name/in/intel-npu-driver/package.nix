@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-npu-driver";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-Lc+FsW0bM2cIqEXpCd9+nvFh70xCbY6aMSHZIjESxhs=";
   };
