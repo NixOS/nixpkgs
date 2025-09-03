@@ -91,7 +91,7 @@ class Repo:
                 },
                 **{
                 f"checkout_{arch}": True
-                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc"]
+                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
                 },
             },
             "",
