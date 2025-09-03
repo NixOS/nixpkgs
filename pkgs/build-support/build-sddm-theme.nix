@@ -2,6 +2,7 @@
   lib,
   formats,
   stdenvNoCC,
+  buildSddmThemePackage,
   # testGreeter dependencies
   writeShellScriptBin,
   kdePackages,
@@ -29,7 +30,7 @@
   # `qt6` or `qt5`
   qtVersion ? "qt6",
   meta ? { },
-}:
+}@input:
 let
   themeOutPath = "/share/sddm/themes/${pname}";
 
@@ -76,6 +77,15 @@ let
     passthru = rec {
       sddmThemeName = themeName;
       sddmThemeDir = "${outputDerivation}/${themeOutPath}";
+
+      withConfig =
+        config:
+        buildSddmThemePackage (
+          input
+          // {
+            configOverrides = config;
+          }
+        );
 
       # The sddm package needed to run this theme
       sddmPackage =
