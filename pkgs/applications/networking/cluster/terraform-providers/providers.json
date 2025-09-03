@@ -153,11 +153,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-gwodjIFYg6BTIz3ORzWD6tUn2QXwXMN1KC5mMvxyjdE=",
+    "hash": "sha256-rCWT9QmQnobfyqHtb1r/2XIgZEd4eA71eg6ffFQQZOU=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.40.0",
+    "rev": "v4.42.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -270,13 +270,13 @@
     "vendorHash": "sha256-shRiTPn4A1rmwBnoSlRDfdYuHqSFvL4o6o8vAJutu3Q="
   },
   "cloudflare": {
-    "hash": "sha256-Bv3M7GjroItGgnzqUQC4QMxJZ8I0WW+ukmXtQZstRoo=",
+    "hash": "sha256-EsbktS0pP+tJtIPHckMmgdeIBLyL9T+lVyoDzJAzi98=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.8.4",
+    "rev": "v5.9.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-SM5bbYwuLTCRo7vu9SPRNpYO3m5yN8rzedgAqg/BbKw="
+    "vendorHash": "sha256-aMEcmK2lhKg0OH0jsQXDE09eHbImieyNgT4xH+pBEEk="
   },
   "cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -940,11 +940,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-LoaFc5Ro7l2DOzWIUtcx+ycKwoRORkbBJtF8fu6kMBA=",
+    "hash": "sha256-MbyUz+sMOoWnBKu9t0QWyZKnhoJyelsaZteqxtUKwDE=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.14.0",
+    "rev": "v7.16.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1021,11 +1021,11 @@
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-Z9V+66Ycaa/XWs37ATAbQiwbMooBaHJYaEeduUXghV0=",
+    "hash": "sha256-qMKjJP7iuW5qE+H/uP2TDl1zxowobutf9TrtJqQKzws=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v2.6.0",
+    "rev": "v2.7.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

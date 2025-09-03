@@ -638,6 +638,9 @@ assertNoAdditions {
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "codecompanion.providers.actions.fzf_lua"
       # Test
       "minimal"
     ];
@@ -2907,14 +2910,6 @@ assertNoAdditions {
         deno = lib.getExe deno;
       })
     ];
-  });
-
-  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
-    dependencies = [ gperf ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ fredeb ];
-    };
   });
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {

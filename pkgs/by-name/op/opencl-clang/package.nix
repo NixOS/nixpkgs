@@ -56,13 +56,13 @@ let
     };
   };
 
-  version = "15.0.1";
+  version = "15.0.3";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "intel";
       repo = "opencl-clang";
       tag = "v${version}";
-      hash = "sha256-mUqxe3lZQdhz/CRE1+NU2q5g2Taxlh7nzPwUHOB6I0c=";
+      hash = "sha256-JkYFmnDh7Ot3Br/818aLN33COEG7+xyOf8OhdoJX9Cw=";
     };
 
     patches = [

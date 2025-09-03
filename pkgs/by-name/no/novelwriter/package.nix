@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication {
   dependencies = with python3.pkgs; [
     pyqt6
     pyenchant
+    qt6.qtsvg
   ];
 
   # See setup/debian/install

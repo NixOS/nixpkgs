@@ -3,6 +3,7 @@
   adlfs,
   appdirs,
   buildPythonPackage,
+  databackend,
   fastparquet,
   fetchFromGitHub,
   fsspec,
@@ -21,8 +22,9 @@
   pyyaml,
   requests,
   s3fs,
-  setuptools,
   setuptools-scm,
+  setuptools,
+  typing-extensions,
   xxhash,
 }:
 
@@ -31,7 +33,7 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rstudio";
@@ -47,6 +49,7 @@ buildPythonPackage rec {
 
   dependencies = [
     appdirs
+    databackend
     fsspec
     humanize
     importlib-metadata
@@ -56,6 +59,7 @@ buildPythonPackage rec {
     pandas
     pyyaml
     requests
+    typing-extensions
     xxhash
   ];
 

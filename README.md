@@ -40,7 +40,7 @@ Here are some of the main ones:
 * [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
 * [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
 * [hydra](https://github.com/NixOS/hydra) - our continuous integration system
-* [NixOS Artwork](https://github.com/NixOS/nixos-artwork) - NixOS artwork
+* [NixOS Branding](https://github.com/NixOS/branding) - NixOS branding
 
 # Continuous Integration and Distribution
 

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "krelay";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "knight42";
     repo = "krelay";
     rev = "v${version}";
-    hash = "sha256-TonkGh4j+xLGgSpspCedg6c2NpIZIzp5pv8VtWFssPk=";
+    hash = "sha256-v7yX5wDf3d07TiWe+9iTkGhc8LqfU1hUkxuf5ZBVcYE=";
   };
 
-  vendorHash = "sha256-Qz3q/503A5QmsgEaDqChxS2tcUEJGmeT6YE6R3LBbcY=";
+  vendorHash = "sha256-9bOU9Zqqb4tdQCIB3UkTdAcD4cn6+7C35gOCywv1/Os=";
 
   subPackages = [ "cmd/client" ];
 

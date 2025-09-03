@@ -8,7 +8,6 @@
   hacking,
   keystoneauth1,
   makePythonPath,
-  openstackclient,
   openstackdocstheme,
   installer,
   osc-lib,
@@ -18,6 +17,7 @@
   pbr,
   pygments,
   python-neutronclient,
+  python-openstackclient,
   requests,
   requests-mock,
   setuptools,
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     cliff
     keystoneauth1
     python-neutronclient
-    openstackclient
+    python-openstackclient
     osc-lib
     oslo-serialization
     oslo-utils

@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.124.0";
+  version = "1.125.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f0Mf/4cFnJ/3I8z/4UhhNJnSCau9Q7mFfR32lP9/yi0=";
+    hash = "sha256-Xhurksf2BMw+v+4PsKm9o+XO2KfYX9wZTlq/kLLxVYc=";
   };
 
   vendorHash = null;
@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
 
     # Allow older go versions
     substituteInPlace go.mod \
-      --replace-fail "go 1.24.6" "go ${finalAttrs.passthru.go.version}"
+      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \

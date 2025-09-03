@@ -527,24 +527,21 @@ builtins.intersectAttrs super {
   # LLVM input that llvm-ffi declares.
   llvm-ffi =
     let
-      chosenLlvmVersion = 20;
-      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
-      shouldUpgrade =
-        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
+      currentDefaultVersion = lib.versions.major pkgs.llvmPackages.llvm.version;
+      latestSupportedVersion = lib.versions.major super.llvm-ffi.version;
     in
-    lib.warnIf shouldUpgrade
-      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
-      lib.pipe
-      super.llvm-ffi
+    lib.pipe super.llvm-ffi (
       [
-        # ATTN: There is no matching flag for the latest supported LLVM version,
-        # so you may need to remove this when updating chosenLlvmVersion
-        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
         (addBuildDepends [
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
-          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
+          pkgs.llvmPackages.llvm.lib
+          pkgs.llvmPackages.llvm.dev
         ])
-      ];
+      ]
+      # There is no matching flag for the latest supported LLVM version.
+      ++ lib.optional (currentDefaultVersion != latestSupportedVersion) (
+        enableCabalFlag "LLVM${currentDefaultVersion}00"
+      )
+    );
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
@@ -827,6 +824,15 @@ builtins.intersectAttrs super {
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
   spatial-rotations = dontCheck super.spatial-rotations;
+
+  # This package is marked broken, but it causes some evail failures for nixpkgs-review.
+  # cabal2nix still adds opencv3, which has been removed. It makes no sense to add opencv4,
+  # because the haskell package is only targeting opencv 3.x specifically.
+  # TODO: Remove this package entirely from hackage-packages.nix. It's broken and has been last
+  # updated in 2018.
+  opencv = overrideCabal (drv: {
+    libraryPkgconfigDepends = [ ];
+  }) super.opencv;
 
   LDAP = dontCheck (
     overrideCabal (drv: {
@@ -1910,4 +1916,6 @@ builtins.intersectAttrs super {
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
+
+  botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 }

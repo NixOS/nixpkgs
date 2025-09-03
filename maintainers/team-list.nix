@@ -799,7 +799,6 @@ with lib.maintainers;
     members = [
       aanderse
       adamcstephens
-      jnsgruk
       megheaiulian
       mkg20001
     ];
