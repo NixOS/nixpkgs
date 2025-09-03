@@ -26,8 +26,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Alternative regular expression module, to replace re";
-    homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
-    license = licenses.psfl;
+    homepage = "https://github.com/mrabarnett/mrab-regex";
+    license = [
+      licenses.asl20
+      licenses.cnri-python
+    ];
     maintainers = [ ];
   };
 }
