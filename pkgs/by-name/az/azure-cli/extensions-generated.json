@@ -258,13 +258,6 @@
     "hash": "sha256-bl4FPQW61q1jBb0CT1HjVeYP3ou2oDNQ39gcJUN9LkU=",
     "description": "Microsoft Azure Command-Line Tools CostManagementClient Extension"
   },
-  "csvmware": {
-    "pname": "csvmware",
-    "version": "0.3.0",
-    "url": "https://github.com/Azure/az-csvmware-cli/releases/download/0.3.0/csvmware-0.3.0-py2.py3-none-any.whl",
-    "hash": "sha256-37l2fwWsE8di6p3EMnFp5jpcEYeRI1RLIA7bmiyaikI=",
-    "description": "Manage Azure VMware Solution by CloudSimple"
-  },
   "custom-providers": {
     "pname": "custom-providers",
     "version": "0.2.1",
