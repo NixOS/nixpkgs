@@ -18,14 +18,19 @@
 let
   pname = "libc";
 
-  src' = runCommand "${pname}-src-${version}" { } (''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/runtimes "$out"
-    cp -r ${monorepoSrc}/llvm "$out"
-    cp -r ${monorepoSrc}/compiler-rt "$out"
-    cp -r ${monorepoSrc}/${pname} "$out"
-  '');
+  src' = runCommand "${pname}-src-${version}" { } (
+    ''
+      mkdir -p "$out"
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/runtimes "$out"
+      cp -r ${monorepoSrc}/llvm "$out"
+      cp -r ${monorepoSrc}/compiler-rt "$out"
+      cp -r ${monorepoSrc}/${pname} "$out"
+    ''
+    + lib.optionalString (lib.versionAtLeast release_version "21") ''
+      cp -r ${monorepoSrc}/third-party "$out"
+    ''
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version patches;
