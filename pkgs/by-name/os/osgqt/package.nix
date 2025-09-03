@@ -42,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Qt bindings for OpenSceneGraph";
     homepage = "https://github.com/openscenegraph/osgQt";
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException3
+    ];
     maintainers = [ lib.maintainers.nim65s ];
     platforms = lib.platforms.unix;
   };
