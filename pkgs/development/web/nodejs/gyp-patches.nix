@@ -47,3 +47,7 @@ lib.optionals patch_tools_catch_oserror ([
     extraPrefix = "deps/npm/node_modules/node-gyp/gyp/";
   })
 ])
+# TODO: remove the Darwin conditionals from this file
+++ lib.optionals stdenv.buildPlatform.isDarwin ([
+  ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+])
