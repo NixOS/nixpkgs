@@ -127,8 +127,14 @@ let
   ];
 
   # bundled into the k3s binary
-  traefikChart = fetchurl chartVersions.traefik;
-  traefik-crdChart = fetchurl chartVersions.traefik-crd;
+  traefik = {
+    chart = fetchurl chartVersions.traefik;
+    name = builtins.baseNameOf chartVersions.traefik.url;
+  };
+  traefik-crd = {
+    chart = fetchurl chartVersions.traefik-crd;
+    name = builtins.baseNameOf chartVersions.traefik-crd.url;
+  };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
   # aarch64 (arm64) and x86_64 (amd64), throws on other architectures.
@@ -267,6 +273,18 @@ let
         "linux"
       ];
 
+      # Set flags for sqlite dbstat
+      CGO_CFLAGS = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
+
+      # Copy manifests and static charts pre build so they get embedded during build
+      preBuild = ''
+        cp -av manifests/* ./pkg/deploy/embed/
+
+        mkdir -p ./pkg/static/embed/charts/
+        cp -v ${traefik.chart} ./pkg/static/embed/charts/${traefik.name}
+        cp -v ${traefik-crd.chart} ./pkg/static/embed/charts/${traefik-crd.name}
+      '';
+
       # create the multicall symlinks for k3s
       postInstall = ''
         mv $out/bin/server $out/bin/k3s
@@ -402,10 +420,6 @@ buildGoModule rec {
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
     ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
-    mkdir -p ./build/static/charts
-
-    cp ${traefikChart} ./build/static/charts
-    cp ${traefik-crdChart} ./build/static/charts
 
     export ARCH=$GOARCH
     export DRONE_TAG="v${k3sVersion}"
