@@ -23,21 +23,10 @@
   pam,
   bashInteractive,
   rust-jemalloc-sys,
-  kanidmWithSecretProvisioning,
-  # If this is enabled, kanidm will be built with two patches allowing both
-  # oauth2 basic secrets and admin credentials to be provisioned.
-  # This is NOT officially supported (and will likely never be),
-  # see https://github.com/kanidm/kanidm/issues/1747.
-  # Please report any provisioning-related errors to
-  # https://github.com/oddlama/kanidm-provision/issues/ instead.
-  enableSecretProvisioning ? false,
 }:
 
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
-
-  versionUnderscored =
-    finalAttrs: lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor finalAttrs.version);
 
   upgradeNote = ''
     Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the
@@ -47,8 +36,8 @@ let
   '';
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
-  inherit version cargoHash;
+  pname = "kanidm";
+  inherit version cargoHash patches;
 
   cargoDepsName = "kanidm";
 
@@ -60,13 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
-
-  patches =
-    patches
-    ++ lib.optionals enableSecretProvisioning [
-      (./. + "/provision-patches/${versionUnderscored finalAttrs}/oauth2-basic-secret-modify.patch")
-      (./. + "/provision-patches/${versionUnderscored finalAttrs}/recover-account.patch")
-    ];
 
   postPatch =
     let
@@ -135,28 +117,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
+    finalPackage = finalAttrs.finalPackage;
+
     tests = {
       kanidm = nixosTests.kanidm.extend {
         modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage; } ];
       };
-      kanidm-provisioning = nixosTests.kanidm-provisioning.extend {
-        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage.withSecretProvisioning; } ];
-      };
     };
 
-    updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {
+    updateScript = nix-update-script {
       extraArgs = [
         "-vr"
         "v(${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\.[0-9]*)"
         "--override-filename"
-        "pkgs/by-name/ka/kanidm/${versionUnderscored finalAttrs}.nix"
+        "pkgs/by-name/ka/kanidm/${
+          lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor finalAttrs.version)
+        }.nix"
       ];
-    });
-
-    inherit enableSecretProvisioning;
-    # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
-    # so we have to resort to this.
-    withSecretProvisioning = kanidmWithSecretProvisioning;
+    };
 
     eolMessage = lib.optionalString (eolDate != null) ''
       kanidm ${lib.versions.majorMinor finalAttrs.version} is deprecated and will reach end-of-life on ${eolDate}
