@@ -1016,9 +1016,9 @@
   },
   "storage-blob-preview": {
     "pname": "storage-blob-preview",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_blob_preview-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-H/5FHkFlfI8ooiq+44c3HRHO3YDS5Sz8vtCtrAqRe0E=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_blob_preview-1.0.0b3-py2.py3-none-any.whl",
+    "hash": "sha256-88MkEV7z+bGUJXxv16lu14Xj8uRh2wWTji1O3nswYq8=",
     "description": "Microsoft Azure Command-Line Tools Storage-blob-preview Extension"
   },
   "storage-discovery": {
