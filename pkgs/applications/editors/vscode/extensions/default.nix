@@ -2091,6 +2091,8 @@ let
         };
       };
 
+      google.geminicodeassist = callPackage ./google.geminicodeassist { };
+
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gc-excelviewer";
