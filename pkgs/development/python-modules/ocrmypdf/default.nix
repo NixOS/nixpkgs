@@ -83,6 +83,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ocrmypdf" ];
 
+  # Dynamically limit parallel test execution to max 256 cores
+  # Override the default "-n auto" from pyproject.toml which uses all CPU cores.
+  # This because the ocrmypdf cli limits 256 jobs internally and will break otherwise
+  preCheck = ''
+    # Use NIX_BUILD_CORES, capped at 256
+    cores=$(( NIX_BUILD_CORES > 256 ? 256 : NIX_BUILD_CORES ))
+    # Override the "-n auto" from pyproject.toml with our calculated value
+    pytestFlagsArray+=("-n" "$cores")
+  '';
+
   disabledTests = [
     # Broken by Python 3.13.4 change
     # https://github.com/python/cpython/commit/8e923f36596370aedfdfb12251447bface41317a
