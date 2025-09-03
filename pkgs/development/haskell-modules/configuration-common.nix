@@ -756,6 +756,13 @@ with haskellLib;
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
+  # 2025-09-03: jailbreak for base 4.20 and hashable 1.5
+  # https://github.com/typeclasses/ascii-case/pulls/1
+  ascii-case = lib.pipe super.ascii-case [
+    (warnAfterVersion "1.0.1.4")
+    doJailbreak
+  ];
+
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
 
