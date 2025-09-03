@@ -194,15 +194,21 @@ rec {
           '';
 
           buildPhase = ''
+            runHook preBuild
+
             export GOCACHE="$TMPDIR/go-cache"
             # build engine
             export AUTO_GOPATH=1
             export DOCKER_GITCOMMIT="${cliRev}"
             export VERSION="${version}"
             ./hack/make.sh dynbinary
+
+            runHook postBuild
           '';
 
           installPhase = ''
+            runHook preInstall
+
             install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
             install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
@@ -223,6 +229,8 @@ rec {
             install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
             makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
               --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
+
+            runHook postInstall
           '';
 
           DOCKER_BUILDTAGS =
@@ -301,6 +309,8 @@ rec {
 
         # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
         buildPhase = ''
+          runHook preBuild
+
           export GOCACHE="$TMPDIR/go-cache"
 
           # Mimic AUTO_GOPATH
@@ -312,6 +322,7 @@ rec {
           export BUILDTIME="1970-01-01T00:00:00Z"
           make dynbinary
 
+          runHook postBuild
         '';
 
         outputs = [ "out" ];
