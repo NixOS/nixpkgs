@@ -288,9 +288,9 @@
   },
   "data-transfer": {
     "pname": "data-transfer",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/data_transfer-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-dnF7ZpUcGP7d3uywoXZdMmr/INH5y46glKuJwrlenfU=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/data_transfer-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-PqiantcGNb58p+pQm0kQEPcVkY2dg64IfE9VZhOwz2U=",
     "description": "Microsoft Azure Command-Line Tools DataTransfer Extension"
   },
   "databox": {
