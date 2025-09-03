@@ -644,12 +644,12 @@ in
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2022-05-01";
+    version = "unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "ca6468e2deef11efadfe3a62832ae67742505432";
-      hash = "sha256-wl9/5XvFq+AjV8CwYgIZjPOE0/kIuEYBNQqNDidjNFo=";
+      rev = "cff343cf9e81983d3da0c8562b01616f12e8d548";
+      hash = "sha256-2ZM23RQps2XO2OYX9NTZj5yIUZEv4ggYzjrJ9RxxLLg=";
       fetchSubmodules = true;
     };
     meta = {
@@ -675,7 +675,10 @@ in
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ ronanmacf ];
+      maintainers = with lib.maintainers; [
+        ronanmacf
+        DieracDelta
+      ];
     };
   };
 
