@@ -188,7 +188,7 @@ in
         allowedUDPPortRanges = config.services.aria2.settings.listen-port;
         allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [ config.services.aria2.settings.rpc-listen-port ];
     }
-    lib.mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.settings.enable-rpc;
@@ -239,8 +239,7 @@ in
         UMask = cfg.serviceUMask;
       };
     };
-  }
-  ];
+  })];
 
   meta.maintainers = [ lib.maintainers.timhae ];
 }
