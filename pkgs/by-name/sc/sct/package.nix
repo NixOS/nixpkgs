@@ -7,7 +7,7 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sct";
   version = "0.5";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       raskin
       somasis
     ];
-    license = licenses.publicDomain;
+    license = licenses.isc;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

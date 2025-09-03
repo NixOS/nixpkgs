@@ -73,7 +73,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/hugolabe/Wike";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ samalws ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ samalws ];
+    teams = [ teams.gnome-circle ];
     mainProgram = "wike";
   };
 }

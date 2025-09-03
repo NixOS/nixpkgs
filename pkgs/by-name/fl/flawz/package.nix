@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7p/BUXrElJutUcRMu+LxdsMxA6lCDnaci0fDaKGsawI=";
   };
 
-  cargoHash = "sha256-jVAMnU2NnL/2Hri6NxSUkIfQ/bJ5wMZ+oFOTMPrFE0M=";
+  cargoHash = "sha256-X2RyavcPOQzuAt347KxfmNtO4YsFdncwUcBWtMfxaRU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -74,6 +74,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flawz";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.hostPlatform.isDarwin; # needing some apple_sdk packages
   };
 }

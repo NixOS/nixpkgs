@@ -1,20 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter327,
   autoPatchelfHook,
   buildGoModule,
   libayatana-appindicator,
 }:
 
 let
-  version = "1.6.8";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-Z6t652m420FcCK4V9sG9I+Dzc2OTyXwWunBhVSreyac=";
+    hash = "sha256-lfTZN3csxMQGMxf0kfl1hkC47T5XT0sSKIwIMwmS9CQ=";
   };
 
   metaCommon = {
@@ -34,8 +34,9 @@ let
     buildPhase = ''
       runHook preBuild
 
-      mkdir -p $out/lib
+      mkdir -p $out/lib $out/bin
       go build -tags nosqlite -ldflags="-w -s -X github.com/GopeedLab/gopeed/pkg/base.Version=v${version}" -buildmode=c-shared -o $out/lib/libgopeed.so github.com/GopeedLab/gopeed/bind/desktop
+      go build -ldflags="-w -s" -o $out/bin/host github.com/GopeedLab/gopeed/cmd/host
 
       runHook postBuild
     '';
@@ -43,15 +44,18 @@ let
     meta = metaCommon;
   };
 in
-flutter324.buildFlutterApplication {
-  inherit version src libgopeed;
+flutter327.buildFlutterApplication {
+  inherit version src;
   pname = "gopeed";
 
   sourceRoot = "${src.name}/ui/flutter";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes.permission_handler_windows = "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA=";
+  gitHashes = {
+    install_plugin = "sha256-3FM08D2pbtWmitf8R4pAylVqum7IfbWh6pOIEhJdySk=";
+    permission_handler_windows = "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA=";
+  };
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -60,6 +64,7 @@ flutter324.buildFlutterApplication {
   preBuild = ''
     mkdir -p linux/bundle/lib
     cp ${libgopeed}/lib/libgopeed.so linux/bundle/lib/libgopeed.so
+    cp ${libgopeed}/bin/host assets/exec/host
   '';
 
   postInstall = ''
@@ -68,7 +73,15 @@ flutter324.buildFlutterApplication {
     install -Dm644 assets/icon/icon_1024.png $out/share/icons/hicolor/1024x1024/apps/com.gopeed.Gopeed.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  preFixup = ''
+    patchelf --add-needed libgopeed.so \
+      --add-rpath $out/app/gopeed/lib $out/app/gopeed/gopeed
+  '';
+
+  passthru = {
+    inherit libgopeed;
+    updateScript = ./update.sh;
+  };
 
   meta = metaCommon // {
     mainProgram = "gopeed";

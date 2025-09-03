@@ -1,27 +1,34 @@
-{ stdenv
-, lib
-, python3
-, fetchPypi
-, git
+{
+  stdenv,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  git,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.13.1";
-  format = "setuptools";
+  version = "1.15.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hYIuSLK2HeeXPL28qKvkKwPVpOwObNGrVWbDq6B0/IA=";
+  src = fetchFromGitHub {
+    owner = "gigalixir";
+    repo = "gigalixir-cli";
+    tag = "v${version}";
+    hash = "sha256-OCPxOVWHUvH3Tj9bR+aj2VUNNuY5GWhnDaSKRDqLSvI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "cryptography==" "cryptography>="
+      --replace-fail "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    importlib-metadata
     click
     pygments
     pyopenssl
@@ -31,17 +38,19 @@ python3.pkgs.buildPythonApplication rec {
     stripe
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     git
-  ] ++ (with python3.pkgs; [
+
     httpretty
     pytestCheckHook
     sure
-  ]);
+  ];
 
   disabledTests = [
     # Test requires network access
     "test_rollback_without_version"
+    "test_rollback"
+    "test_create_user"
     # These following test's are now depraced and removed, check out these commits:
     # https://github.com/gigalixir/gigalixir-cli/commit/00b758ed462ad8eff6ff0b16cd37fa71f75b2d7d
     # https://github.com/gigalixir/gigalixir-cli/commit/76fa25f96e71fd75cc22e5439b4a8f9e9ec4e3e5
@@ -54,11 +63,10 @@ python3.pkgs.buildPythonApplication rec {
     "gigalixir"
   ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gigalixir";
   };

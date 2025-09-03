@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -41,6 +42,7 @@
   # tests
   azure-core,
   azure-storage-blob,
+  datafusion,
   fastavro,
   moto,
   pyspark,
@@ -49,19 +51,19 @@
   pytest-mock,
   pytest-timeout,
   requests-mock,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "iceberg-python";
-  version = "0.8.1";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${version}";
-    hash = "sha256-L3YlOtzJv9R4TLeJGzfMQ+0nYtQEsqmgNZpW9B6vVAI=";
+    hash = "sha256-OUj8z/UOIcK0S4tf6Id52YHweNDfYnX6P4nChXrOxqY=";
   };
 
   patches = [
@@ -80,6 +82,11 @@ buildPythonPackage rec {
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
+
+  pythonRelaxDeps = [
+    "cachetools"
+    "rich"
+  ];
 
   dependencies = [
     cachetools
@@ -161,6 +168,7 @@ buildPythonPackage rec {
     azure-core
     azure-storage-blob
     boto3
+    datafusion
     fastavro
     moto
     mypy-boto3-glue
@@ -175,7 +183,13 @@ buildPythonPackage rec {
     s3fs
     sqlalchemy
     thrift
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ moto.optional-dependencies.server;
+
+  pytestFlags = [
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+  ];
 
   disabledTestPaths = [
     # Several errors:
@@ -186,6 +200,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # ModuleNotFoundError: No module named 'puresasl'
+    "test_create_hive_client_with_kerberos"
+    "test_create_hive_client_with_kerberos_using_context_manager"
+
+    # Require unpackaged pyiceberg_core
+    "test_bucket_pyarrow_transforms"
+    "test_transform_consistency_with_pyarrow_transform"
+    "test_truncate_pyarrow_transforms"
+
     # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
     "test_checking_if_a_file_exists"
     "test_closing_a_file"
@@ -208,38 +231,30 @@ buildPythonPackage rec {
     "test_fsspec_new_abfss_output_file_adls"
     "test_fsspec_new_input_file_adls"
     "test_fsspec_pickle_round_trip_aldfs"
-
-    # TypeError: pyarrow.lib.large_list() takes no keyword argument
-    # From tests/io/test_pyarrow_stats.py:
-    "test_bounds"
-    "test_column_metrics_mode"
-    "test_column_sizes"
-    "test_metrics_mode_counts"
-    "test_metrics_mode_full"
-    "test_metrics_mode_non_default_trunc"
-    "test_metrics_mode_none"
-    "test_null_and_nan_counts"
-    "test_offsets"
-    "test_read_missing_statistics"
-    "test_record_count"
-    "test_value_counts"
-    "test_write_and_read_stats_schema"
-    # From tests/io/test_pyarrow.py:
-    "test_list_type_to_pyarrow"
-    "test_projection_add_column"
-    "test_projection_list_of_structs"
-    "test_read_list"
-    "test_schema_compatible_missing_nullable_field_nested"
-    "test_schema_compatible_nested"
-    "test_schema_mismatch_missing_required_field_nested"
-    "test_schema_to_pyarrow_schema_exclude_field_ids"
-    "test_schema_to_pyarrow_schema_include_field_ids"
-    # From tests/io/test_pyarrow_visitor.py
-    "test_round_schema_conversion_nested"
+    "test_partitioned_write"
+    "test_token_200_w_oauth2_server_uri"
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+    "test_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_new_input_file_gcs"
+    "test_new_output_file_gc"
+
+    # PermissionError: [Errno 13] Failed to open local file
+    # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
+    "test_identity_transform_column_projection"
+    "test_identity_transform_columns_projection"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError:
+    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
+    "test_read_not_struct_type"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";

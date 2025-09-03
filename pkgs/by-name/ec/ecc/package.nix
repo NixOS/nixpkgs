@@ -12,7 +12,7 @@ let
   inherit (rustPackages) rustPlatform;
   bpftool = llvmPackages.stdenv.mkDerivation {
     pname = "bpftool";
-    version = "unstable-2023-03-11";
+    version = "0-unstable-2023-03-11";
 
     # this fork specialized for some functions
     # and has eventually been embedded into the ecc binary
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-t8sPwAha90SMC/SJqZngXD9hpoaWh9e91X/kuHN4G7o=";
+  cargoHash = "sha256-iYceYwRqnYA6KxCQxOieR8JZ6TQlIL+OSzAjyr4Cu/g=";
 
   nativeBuildInputs = [
     pkg-config

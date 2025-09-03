@@ -6,12 +6,11 @@
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
+  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
   pkg-config,
-  sharutils,
   xz,
   zlib,
   zstd,
@@ -33,29 +32,27 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.7.7";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-maV2+Whi4aDG1VLAYpOTxluO9I0zNiZ8fA3w7epGlDg=";
+    hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
   };
 
   patches = [
-    # The `.pc` file lists `iconv` in `Requires.private` when `-liconv`
-    # is required, even though common platforms in that situation like
-    # Darwin don’t ship a `.pc` file for their `libiconv`. This isn’t
-    # upstreamed as there are a handful of closed or regressed PRs
-    # trying to fix it already and it seems upstream added this to deal
-    # with some non‐portable MSYS2 thing or something.
-    #
-    # See:
-    #
-    # * <https://github.com/libarchive/libarchive/issues/1766>
-    # * <https://github.com/libarchive/libarchive/issues/1819>
-    # * <https://github.com/Homebrew/homebrew-core/blob/f8e9e8d4f30979dc99146b5877fce76be6d35124/Formula/lib/libarchive.rb#L48-L52>
-    ./fix-pkg-config-iconv.patch
+    # https://github.com/libarchive/libarchive/pull/2689
+    # Remove after next release.
+    (fetchpatch {
+      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
+      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
+    })
+    # Fix the tests on Darwin when `$TMPDIR` does not end with a slash
+    # and its parent directory is not writable by the build user, as on
+    # Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
+    # <https://github.com/libarchive/libarchive/pull/2708>
+    ./fix-darwin-tmpdir-handling.patch
   ];
 
   outputs = [
@@ -66,23 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      skipTestPaths =
-        [
-          # test won't work in nix sandbox
-          "libarchive/test/test_write_disk_perms.c"
-          # the filesystem does not necessarily have sparse capabilities
-          "libarchive/test/test_sparse_basic.c"
-          # the filesystem does not necessarily have hardlink capabilities
-          "libarchive/test/test_write_disk_hardlink.c"
-          # access-time-related tests flakey on some systems
-          "cpio/test/test_option_a.c"
-          "cpio/test/test_option_t.c"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-          # only on some aarch64-linux systems?
-          "cpio/test/test_basic.c"
-          "cpio/test/test_format_newc.c"
-        ];
+      skipTestPaths = [
+        # test won't work in nix sandbox
+        "libarchive/test/test_write_disk_perms.c"
+        # the filesystem does not necessarily have sparse capabilities
+        "libarchive/test/test_sparse_basic.c"
+        # the filesystem does not necessarily have hardlink capabilities
+        "libarchive/test/test_write_disk_hardlink.c"
+        # access-time-related tests flakey on some systems
+        "libarchive/test/test_read_disk_directory_traversals.c"
+        "cpio/test/test_option_a.c"
+        "cpio/test/test_option_t.c"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+        # only on some aarch64-linux systems?
+        "cpio/test/test_basic.c"
+        "cpio/test/test_format_newc.c"
+      ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
         rm "${testPath}"
@@ -100,28 +97,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      lzo
-      openssl
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optional stdenv.hostPlatform.isUnix sharutils
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      e2fsprogs
-    ]
-    ++ lib.optional xarSupport libxml2;
+  buildInputs = [
+    bzip2
+    lzo
+    openssl
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+  ]
+  ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     attr
     acl
   ];
+
+  hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 

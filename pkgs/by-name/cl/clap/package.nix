@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clap";
-  version = "1.2.2";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
     rev = finalAttrs.version;
-    hash = "sha256-W3cvAtBrd+zyGj7xNSuFFChUUVjRadH6aCv5Zcvq/qs=";
+    hash = "sha256-QyIuuiwFg5DP2Ao/LOKYiBXxKHQ0FbFhssIIUnEQz+c=";
   };
 
   postPatch = ''

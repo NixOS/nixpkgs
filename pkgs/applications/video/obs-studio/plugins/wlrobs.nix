@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation {
   pname = "wlrobs";
-  version = "unstable-2023-08-23";
+  version = "unstable-2024-12-24";
 
   src = fetchFromSourcehut {
     vc = "hg";
     owner = "~scoopta";
     repo = "wlrobs";
-    rev = "f72d5cb3cbbd3983ae6cfd86cb1940be7372681c";
-    hash = "sha256-hiM0d38SSUqbyisP3fAtKRLBDjVKZdU2U1xyXci7yNk=";
+    rev = "b8668b4d6d6d33e3de86ce3fa4331249bc0abc8b";
+    hash = "sha256-gqGnDrfID5hTcpX3EkSGg4yDwa/ZKCQCqJ3feq44I1I=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
     maintainers = with maintainers; [ grahamc ];
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

@@ -21,7 +21,7 @@ let
     pname = "sg-nvim-rust";
     inherit version src;
 
-    cargoHash = "sha256-4GaBrIMPuPOPeMVlDlb9XBe2txeM4196sdZ1r8bu7Kk=";
+    cargoHash = "sha256-yY/5w2ztmTKJAYDxBJND8itCOwRNi1negiFq3PyFaSM=";
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -55,7 +55,7 @@ vimUtils.buildVimPlugin {
     ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Dependent on active fuzzy search state
     "sg.cody.fuzzy"
   ];

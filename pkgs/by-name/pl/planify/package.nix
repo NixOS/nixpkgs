@@ -22,20 +22,19 @@
   libportal-gtk4,
   libsecret,
   libsoup_3,
-  pantheon,
   sqlite,
   webkitgtk_6_0,
 }:
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.11.6";
+  version = "4.13.4";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-tHn3677bfJgAZnOfDjBJ87DUzr+e9I2lnCke/cN4olE=";
+    hash = "sha256-lHjMOpCr6ya0k5NMaiZW7jz0EGVUEADA7od87W8DcT8=";
   };
 
   nativeBuildInputs = [
@@ -64,20 +63,15 @@ stdenv.mkDerivation rec {
     libportal-gtk4
     libsecret
     libsoup_3
-    pantheon.granite7
     sqlite
     webkitgtk_6_0
-  ];
-
-  mesonFlags = [
-    "-Dprofile=default"
   ];
 
   meta = with lib; {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };

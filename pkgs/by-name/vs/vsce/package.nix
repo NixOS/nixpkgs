@@ -6,25 +6,24 @@
   libsecret,
   python3,
   testers,
-  vsce,
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.2.2";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
-    rev = "v${version}";
-    hash = "sha256-zWs3DVb9BThCdjqQLfK4Z6wvph3oibVBdj+h3n33Lns=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Tt7IewbCLHG8DVoD8PV6VmrNu3MCUHITgYFq9smvOo=";
   };
 
-  npmDepsHash = "sha256-9tD2an6878XEXWbO5Jsplibd6lbzNBufdHJJ89mjMig=";
+  npmDepsHash = "sha256-pZUDui2mhGe+My9QL+pqeBU16AyJ+/udULbo2EQjZd0=";
 
   postPatch = ''
-    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ buildNpmPackage rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = vsce;
+      package = finalAttrs.finalPackage;
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -56,4 +55,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "vsce";
   };
-}
+})

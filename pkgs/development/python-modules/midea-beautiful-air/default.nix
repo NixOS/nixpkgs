@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nbogojevic";
-    repo = pname;
+    repo = "midea-beautiful-air";
     tag = "v${version}";
     hash = "sha256-786Q085bv8Zsm0c55I4XalRhEfwElRTJds5qnb0cWhk=";
   };

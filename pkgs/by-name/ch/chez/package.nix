@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  llvmPackages_17,
   fetchurl,
   coreutils,
   cctools,
@@ -13,22 +12,13 @@
   testers,
 }@args:
 
-let
-  # x64 darwin fails with invalid memory reference with clang-18 & 19.
-  # https://github.com/cisco/ChezScheme/issues/896
-  stdenv =
-    if args.stdenv.hostPlatform.isDarwin && args.stdenv.hostPlatform.isx86_64 then
-      llvmPackages_17.stdenv
-    else
-      args.stdenv;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "10.1.0";
+  version = "10.2.0";
 
   src = fetchurl {
     url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
-    hash = "sha256-kYGmyMSrXl0y2Hn/FZ0zWlDU+LOIYRriKiY+kyw1OYs=";
+    hash = "sha256-t5WRbUz+1ZJAxfRLG1B6hlfv0o5i5y4TTQNIbp8+N0o=";
   };
 
   nativeBuildInputs =

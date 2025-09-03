@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "obs-cmd";
-  version = "0.18.2";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "grigio";
     repo = "obs-cmd";
-    rev = "v${version}";
-    hash = "sha256-plNLVBSTen11q945qtDBJaNTWKGICbuWokyvRzhu0Wg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a7GUv14iJLrgXu6y5uJalD1cx723aIlPLDPOOoemtIY=";
   };
 
-  cargoHash = "sha256-xBzOMH6r8SkDsD8+3ZsrUK2sD3pHFt71fGK09kVeRc0=";
+  cargoHash = "sha256-ZWVNLI900SZhXLMV2/v3WT2eqv+4XofpIgm/f/0eE+U=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal CLI to control OBS Studio via obs-websocket";
     homepage = "https://github.com/grigio/obs-cmd";
-    changelog = "https://github.com/grigio/obs-cmd/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/grigio/obs-cmd/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "obs-cmd";
   };
-}
+})

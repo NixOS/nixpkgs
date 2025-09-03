@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kube-router }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  kube-router,
+}:
 
 buildGoModule rec {
   pname = "kube-router";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
-    repo = pname;
+    repo = "kube-router";
     rev = "v${version}";
-    hash = "sha256-N1AC4r5NLW7hxBHGFRKcDZ1sLLKlcqqNmXeh8Zt3l1g=";
+    hash = "sha256-bt7BnMIq/tkRL8d1pf/gG5qBq/1yiMqXDpBrIICo780=";
   };
 
-  vendorHash = "sha256-Yai6nszdaw2TwOi9N3BkY/4zz2aJGdCqWskHmnBKTDk=";
+  vendorHash = "sha256-BH0yLr7oVtpMPfljDIjzpQiABtwRKOPXNvejh8l8lE8=";
 
   env.CGO_ENABLED = 0;
 

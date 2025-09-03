@@ -5,7 +5,7 @@
   async,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "angstrom-async";
 
   inherit (angstrom) version src;

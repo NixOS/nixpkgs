@@ -1,47 +1,36 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
 }:
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "railway";
-  version = "3.20.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-AFcgONdWHHIK4/3zON6PRJaTXEXiE/0/Ha2rZpABiyw=";
+    hash = "sha256-rCgl0s05AecF6reyYySVH+oxtWPDCLxZEm3L1WmxA1k=";
   };
 
-  cargoHash = "sha256-kyjEACPrHWeAbpzi/7Lq+8Fvw/ClBGN6Jn2hebert/g=";
+  cargoHash = "sha256-sOr/vafZLt25yO0chwbtHxPucevLvny/33Gf/J4Bt6Q=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "railway";
     description = "Railway.app CLI";
     homepage = "https://github.com/railwayapp/cli";
     changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Crafter
       techknowlogick
     ];

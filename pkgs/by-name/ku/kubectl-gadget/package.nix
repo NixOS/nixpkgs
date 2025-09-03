@@ -1,22 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, kubectl-gadget, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.34.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
     rev = "v${version}";
-    hash = "sha256-qOenoC1NycRVFMXETJ1WpAhjeUAnminhkhJ39skvt4k=";
+    hash = "sha256-h3J6RQG9CI+2U+iWINUs3JX4uEfbl0VeOXsaWuZx2dg=";
   };
 
-  vendorHash = "sha256-V2bgMFJGo1t1MiJyACdB9mjM2xtHwgH6bNEbEeZC2XM=";
+  vendorHash = "sha256-MSi8nTd9ZAdHq1xONww9qKkgKbXHe7H6oms8/WANuOg=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${version}"
     "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
     "-extldflags=-static"
@@ -28,17 +33,14 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-gadget" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = kubectl-gadget;
-    command = "kubectl-gadget version || true"; # mask non-zero return code if no kubeconfig present
-    version = "v${version}";
-  };
-
   meta = with lib; {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 devusb ];
+    maintainers = with maintainers; [
+      kranurag7
+      devusb
+    ];
   };
 }

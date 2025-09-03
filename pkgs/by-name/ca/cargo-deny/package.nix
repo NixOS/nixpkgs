@@ -4,35 +4,28 @@
   fetchFromGitHub,
   pkg-config,
   zstd,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
-  version = "0.16.4";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-deny";
     rev = version;
-    hash = "sha256-DykyIZBlIS4vUrD491boYcUvwcxllnV1PUT+58eOljI=";
+    hash = "sha256-5aa13eFfGEJZBRB4/PAKKLwxw2wt8sBI7ZVOpgnO+t8=";
   };
 
-  cargoHash = "sha256-ITtlBKBYXilaZtl4WJLSPoss77wezvNjwgj5FN8ll1w=";
+  cargoHash = "sha256-RW+drxVouQbiZsjEL+XZBE2VMzEiCkLTOC9jMxI76T8=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -41,16 +34,16 @@ rustPlatform.buildRustPackage rec {
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
-    description = "Cargo plugin to generate list of all licenses for a crate";
+  meta = {
+    description = "Cargo plugin for linting your dependencies";
     mainProgram = "cargo-deny";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
     changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
       jk

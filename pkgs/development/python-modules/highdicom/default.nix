@@ -6,24 +6,17 @@
   pytestCheckHook,
   numpy,
   pillow,
-  pillow-jpls,
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
   setuptools,
+  typing-extensions,
 }:
 
-let
-  test_data = fetchFromGitHub {
-    owner = "pydicom";
-    repo = "pydicom-data";
-    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
-    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
-  };
-in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.23.1";
+  version = "0.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,7 +25,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-LrsG85/bpqIEP++LgvyaVyw4tMsuUTtHNwWl7apuToM=";
+    hash = "sha256-zaa0daGMQHktYkG56JA2a7s5UZSv8AbinO5roe9rWQc=";
   };
 
   build-system = [
@@ -42,15 +35,15 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     pillow
-    pillow-jpls
     pydicom
+    typing-extensions
   ];
 
   optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # broken on aarch64-linux
+      pylibjpeg-openjpeg
     ];
   };
 
@@ -62,11 +55,12 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
-    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+    ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
 
   disabledTests = [
     # require pyjpegls
+    "test_construction_10"
     "test_jpegls_monochrome"
     "test_jpegls_rgb"
     "test_jpeglsnearlossless_monochrome"
@@ -77,6 +71,7 @@ buildPythonPackage rec {
     "test_rgb_jpegls"
     "test_construction_autotile"
     "test_pixel_types_fractional"
+    "test_pixel_types_labelmap"
   ];
 
   pythonImportsCheck = [
@@ -91,11 +86,11 @@ buildPythonPackage rec {
     "highdicom.sc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level DICOM abstractions for Python";
     homepage = "https://highdicom.readthedocs.io";
     changelog = "https://github.com/ImagingDataCommons/highdicom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

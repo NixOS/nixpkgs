@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "6.1";
+  version = "6.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qhfm5ISXONCAcG6+bHnsjbD0qyyHl1+bNCSer3qWWGc=";
+    hash = "sha256-LTIbYOsH75APhals8HH/jDua7m5nm+zEjEbzRX6NnS8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
+      --replace-fail "setuptools < 74" "setuptools"
   '';
 
   build-system = [ setuptools ];
@@ -36,7 +36,8 @@ buildPythonPackage rec {
   dependencies = [
     zope-interface
     zope-deferredimport
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   pythonImportsCheck = [ "persistent" ];
 

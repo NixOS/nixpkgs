@@ -17,43 +17,41 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coal";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "coal-library";
     repo = "coal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7LfeBQX9k0HY/muIl3FNq3xQv66KnwV9BChi0LxFcAQ=";
+    hash = "sha256-2X1chL4tYQXo50W/C5z+IVA1DGPcPdA378lh+7Bs2OE=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  propagatedBuildInputs =
-    [
-      assimp
-      jrl-cmakemodules
-      octomap
-      qhull
-      zlib
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.boost
-      python3Packages.eigenpy
-    ];
+  propagatedBuildInputs = [
+    assimp
+    jrl-cmakemodules
+    octomap
+    qhull
+    zlib
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    boost
+    eigen
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.boost
+    python3Packages.eigenpy
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
@@ -75,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   postFixup = ''
     moveToOutput share/ament_index "$dev"
-    moveToOutput share/${finalAttrs.pname} "$dev"
+    moveToOutput share/coal "$dev"
   '';
 
   meta = {

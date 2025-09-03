@@ -34,14 +34,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful macOS menu bar customization tool";
     homepage = "https://swiftbar.app";
     changelog = "https://github.com/swiftbar/SwiftBar/releases/tag/v${version}";
     mainProgram = "SwiftBar";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ matteopacini ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ matteopacini ];
   };
 }

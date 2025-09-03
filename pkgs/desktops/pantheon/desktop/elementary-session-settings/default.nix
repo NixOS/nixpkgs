@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, gettext
-, pkg-config
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, systemd
-, writeText
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  gettext,
+  pkg-config,
+  gnome-keyring,
+  gnome-session,
+  wingpanel,
+  orca,
+  onboard,
+  elementary-default-settings,
+  gnome-settings-daemon,
+  runtimeShell,
+  systemd,
+  writeText,
+  meson,
+  ninja,
 }:
-
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "8.0.1";
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
   };
+
+  /*
+    This allows `elementary-session-settings` to not use gnome-keyring's ssh capabilities anymore, as they have been
+    moved to gcr upstream, in an effort to modularize gnome-keyring.
+
+    More info can be found here: https://gitlab.gnome.org/GNOME/gnome-keyring/-/merge_requests/60
+  */
+  patches = [ ./no-gnome-keyring-ssh-autostart.patch ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -80,6 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/session-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

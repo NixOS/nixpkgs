@@ -20,7 +20,8 @@ let
         crateName = "nixtestcrate";
         version = "0.1.0";
         authors = [ "Test <test@example.com>" ];
-      } // args;
+      }
+      // args;
     in
     buildRustCrate p;
   mkHostCrate = mkCrate buildRustCrate;
@@ -589,7 +590,7 @@ rec {
             expectedTestOutputs = [ "test build_foo_check ... ok" ];
           };
         # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
-        # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
+        # Whenevever a build.rs file is generating files those should not be overlaid onto the actual source dir
         buildRsOutDirOverlay = {
           src = symlinkJoin {
             name = "buildrs-out-dir-overlay";
@@ -680,7 +681,7 @@ rec {
           # By default ".", meaning the top level directory is assumed.
           # Using null will trigger a search.
           workspace_member = null;
-          src = symlinkJoin rec {
+          src = symlinkJoin {
             name = "find-cargo-toml";
             paths = [
               (mkCargoToml { name = "ignoreMe"; })
@@ -736,7 +737,7 @@ rec {
       ) cases;
     in
     tests
-    // rec {
+    // {
 
       crateBinWithPathOutputs = assertOutputs {
         name = "crateBinWithPath";
@@ -766,15 +767,14 @@ rec {
           ];
           src = mkBin "src/foobar.rs";
         };
-        expectedFiles =
-          [
-            "./bin/test_binary1"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            # On Darwin, the debug symbols are in a separate directory.
-            "./bin/test_binary1.dSYM/Contents/Info.plist"
-            "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
-          ];
+        expectedFiles = [
+          "./bin/test_binary1"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # On Darwin, the debug symbols are in a separate directory.
+          "./bin/test_binary1.dSYM/Contents/Info.plist"
+          "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+        ];
       };
 
       crateBinNoPath1Outputs = assertOutputs {

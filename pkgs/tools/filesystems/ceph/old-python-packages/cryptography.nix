@@ -41,11 +41,14 @@ buildPythonPackage rec {
     hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-pZHu3Oo9DWRAtldU0UvrH1FIg0bEvyfizPUhj9IBL58=";
   };
 
   # Since Cryptography v40 is quite outdated, we need to backport
@@ -77,15 +80,16 @@ buildPythonPackage rec {
     cargo
     rustc
     pkg-config
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      libiconv
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
@@ -100,21 +104,20 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
-  disabledTestPaths =
-    [
-      # save compute time by not running benchmarks
-      "tests/bench"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # aarch64-darwin forbids W+X memory, but this tests depends on it:
-      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-      "tests/hazmat/backends/test_openssl_memleak.py"
-    ];
+  disabledTestPaths = [
+    # save compute time by not running benchmarks
+    "tests/bench"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # aarch64-darwin forbids W+X memory, but this tests depends on it:
+    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "tests/hazmat/backends/test_openssl_memleak.py"
+  ];
 
   meta = with lib; {
-    description = "A package which provides cryptographic recipes and primitives";
+    description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message

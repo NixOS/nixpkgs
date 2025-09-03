@@ -11,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "pass-git-helper";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "pass-git-helper";
     tag = "v${version}";
-    sha256 = "sha256-HcafOaunDsyUm5KPcDNo/hENFMZseWSD8GYilKYOPco=";
+    sha256 = "sha256-SAMndgcxBa7wymXbOwRGcoogFfzpFFIZ0tF4NSCXpjw=";
   };
 
   build-system = [ setuptools ];

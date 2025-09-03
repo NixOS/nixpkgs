@@ -1,35 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   cliff,
+  fetchFromGitHub,
+  keystoneauth1,
+  openstacksdk,
   oslo-i18n,
   oslo-utils,
-  openstacksdk,
   pbr,
-  pythonOlder,
+  requests,
   requests-mock,
   setuptools,
-  requests,
+  stdenv,
   stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = version;
-    hash = "sha256-DDjWM4hjHPXYDeAJ6FDZZPzi65DG1rJ3efs8MouX1WY=";
+    tag = version;
+    hash = "sha256-mFZLVlq2mFgx5yQLBPVVT/zDLbOJ/EodAwsm/QxvW0Q=";
   };
 
-  # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   build-system = [
     pbr
@@ -38,10 +37,12 @@ buildPythonPackage rec {
 
   dependencies = [
     cliff
+    keystoneauth1
     openstacksdk
     oslo-i18n
     oslo-utils
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [
@@ -50,13 +51,13 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # tests parse cli output which slightly changed
     stestr run -e <(echo "
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_filtering_option_to_parser
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_create
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_set
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_unset
-    ")
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public
+      osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence
+      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1
+      osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2
+    ''}")
   '';
 
   pythonImportsCheck = [ "osc_lib" ];
@@ -65,6 +66,6 @@ buildPythonPackage rec {
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

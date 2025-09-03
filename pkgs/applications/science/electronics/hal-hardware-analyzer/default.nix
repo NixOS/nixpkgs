@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-bjbW4pr04pP0TCuSdzPcV8h6LbLWMvdGSf61RL9Ju6E=";
     })
     ./4.4.1-newer-spdlog-fmt-compat.patch
+    ./resynthesis-fix-narrowing-conversion.patch
   ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise
@@ -65,25 +66,24 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      boost
-      rapidjson
-      igraph
-      nlohmann_json
-      spdlog
-      graphviz
-      verilator
-      z3
-      quazip
-    ]
-    ++ (with python3Packages; [
-      python
-      pybind11
-    ])
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs = [
+    qtbase
+    qtsvg
+    boost
+    rapidjson
+    igraph
+    nlohmann_json
+    spdlog
+    graphviz
+    verilator
+    z3
+    quazip
+  ]
+  ++ (with python3Packages; [
+    python
+    pybind11
+  ])
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"

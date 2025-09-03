@@ -2,14 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.18.6";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,20 +17,8 @@ buildPythonPackage rec {
     owner = "jcrist";
     repo = "msgspec";
     tag = version;
-    hash = "sha256-xqtV60saQNINPMpOnZRSDnicedPSPBUQwPSE5zJGrTo=";
+    hash = "sha256-g2yhw9fMucBHlGx9kAMQL87znXlQT9KbxQ/QcmUetqI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/jcrist/msgspec/commit/7ade46952adea22f3b2bb9c2b8b3139e4f2831b7.patch";
-      includes = [
-        "msgspec/_core.c"
-        "msgspec/_utils.py"
-      ];
-      hash = "sha256-yYotfJXUOaFiqvy0u+LqAx2YYnibNDXA24cE1ibPSOc=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

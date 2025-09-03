@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "alertmanager-irc-relay";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Rl7o2QPa/IU1snlx/LiJxQok9pnkw9XANnJsu41vNlY=";
   };
 

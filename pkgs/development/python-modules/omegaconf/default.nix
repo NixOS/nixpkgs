@@ -9,10 +9,11 @@
   jre_minimal,
   pydevd,
   pytest-mock,
-  pytestCheckHook,
+  pytest7CheckHook,
+  pythonAtLeast,
   pythonOlder,
   pyyaml,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -30,8 +31,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./antlr4.patch;
+    (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
 
@@ -60,17 +60,26 @@ buildPythonPackage rec {
     attrs
     pydevd
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "omegaconf" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::UserWarning"
   ];
 
-  disabledTests = [ "test_eq" ];
+  disabledTests = [
+    # assert (1560791320562868035 == 1560791320562868035) == False
+    "test_eq"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # pathlib._local.Path != pathlib.Path type check mismatch
+    "test_errors"
+    "test_to_yaml"
+    "test_type_str"
+  ];
 
   meta = with lib; {
     description = "Framework for configuring complex applications";

@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.4.0p6";
+  version = "4.4.1";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    rev = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-QxMMMnXaWe+0ogA6+3eOtdROb0RolSveya6DIx97/YY=";
+    tag = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    hash = "sha256-vrRIirWQLbbe1l07AqqHK/StWo0egKuivdKT5R8Rx58=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -49,31 +49,38 @@ stdenv.mkDerivation rec {
     forceFetchGit = true;
   };
 
-  patches = [
-    (fetchpatch {
-      # removes dead code with invalid member reference in gfanlib
-      name = "clang-19.patch";
-      url = "https://github.com/Singular/Singular/commit/d3f73432d73ac0dd041af83cb35301498e9b57d9.patch";
-      hash = "sha256-1KOk+yrTvHWY4aSK9QcByHIwKwe71QIYTMx8zo7XNos=";
-    })
+  configureFlags = [
+    "--enable-gfanlib"
+    "--with-ntl=${ntl}"
+    "--with-flint=${flint3}"
+  ]
+  ++ lib.optionals enableDocs [
+    "--enable-doc-build"
   ];
-
-  configureFlags =
-    [
-      "--enable-gfanlib"
-      "--with-ntl=${ntl}"
-      "--with-flint=${flint3}"
-    ]
-    ++ lib.optionals enableDocs [
-      "--enable-doc-build"
-    ];
 
   prePatch = ''
     # don't let the tests depend on `hostname`
-    substituteInPlace Tst/regress.cmd --replace 'mysystem_catch("hostname")' 'nix_test_runner'
+    substituteInPlace Tst/regress.cmd \
+      --replace-fail 'mysystem_catch("hostname")' 'nix_test_runner'
+
+    # ld: file not found: @rpath/libquadmath.0.dylib
+    substituteInPlace m4/p-procs.m4 \
+      --replace-fail "-flat_namespace" ""
 
     patchShebangs .
   '';
+
+  # Use fq_nmod_mat_entry instead of row pointer (removed in flint 3.3.0)
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Singular/Singular/commit/05f5116e13c8a4f5f820c78c35944dd6d197d442.patch";
+      hash = "sha256-4l7JaCCFzE+xINU+E92eBN5CJKIdtQHly4Ed3ZwbKTA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/Singular/Singular/commit/595d7167e6e019d45d9a4f1e18ae741df1f3c41d.patch";
+      hash = "sha256-hpTZy/eAiHAaleasWPAenxM35aqeNAZ//o6OqqdGOJ4=";
+    })
+  ];
 
   # For reference (last checked on commit 75f460d):
   # https://github.com/Singular/Singular/blob/spielwiese/doc/Building-Singular-from-source.md
@@ -93,22 +100,21 @@ stdenv.mkDerivation rec {
     cddlib
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      perl
-      pkg-config
-      autoreconfHook
-      sharutils # needed for regress.cmd install checks
-    ]
-    ++ lib.optionals enableDocs [
-      doxygen
-      graphviz
-      latex2html
-      texinfo
-      texliveSmall
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
+  nativeBuildInputs = [
+    bison
+    perl
+    pkg-config
+    autoreconfHook
+    sharutils # needed for regress.cmd install checks
+  ]
+  ++ lib.optionals enableDocs [
+    doxygen
+    graphviz
+    latex2html
+    texinfo
+    texliveSmall
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''
@@ -123,21 +129,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # very basic checks, does not test any libraries
 
-  installPhase =
-    ''
-      # clean up any artefacts a previous non-sandboxed docbuild may have left behind
-      rm /tmp/conic.log /tmp/conic.tex /tmp/tropicalcurve*.tex || true
-      make install
-    ''
-    + lib.optionalString enableDocs ''
-      # Sage uses singular.info, which is not installed by default
-      mkdir -p $out/share/info
-      cp doc/singular.info $out/share/info
-    ''
-    + ''
-      # Make sure patchelf picks up the right libraries
-      rm -rf libpolys factory resources omalloc Singular
-    '';
+  installPhase = ''
+    # clean up any artefacts a previous non-sandboxed docbuild may have left behind
+    rm /tmp/conic.log /tmp/conic.tex /tmp/tropicalcurve*.tex || true
+    make install
+  ''
+  + lib.optionalString enableDocs ''
+    # Sage uses singular.info, which is not installed by default
+    mkdir -p $out/share/info
+    cp doc/singular.info $out/share/info
+  ''
+  + ''
+    # Make sure patchelf picks up the right libraries
+    rm -rf libpolys factory resources omalloc Singular
+  '';
 
   # singular tests are a bit complicated, see
   # https://github.com/Singular/Singular/tree/spielwiese/Tst
@@ -187,7 +192,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CAS for polynomial computations";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
     # https://www.singular.uni-kl.de:8002/trac/ticket/837
     platforms = subtractLists platforms.i686 platforms.unix;

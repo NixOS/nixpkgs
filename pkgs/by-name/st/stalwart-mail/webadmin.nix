@@ -1,9 +1,10 @@
 {
   lib,
   rustPlatform,
+  stalwart-mail,
   fetchFromGitHub,
   trunk,
-  tailwindcss,
+  tailwindcss_3,
   fetchNpmDeps,
   nix-update-script,
   nodejs,
@@ -14,25 +15,23 @@
   zip,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "webadmin";
-  version = "0.1.20";
+  version = "0.1.32";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
-    tag = "v${version}";
-    hash = "sha256-0/XiYFQDqcpRS9DXPyKQwoifnEd2YxFiyDbV12zd2RU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HmQBMU7o0A20SY4tBw4SPVfHFfw8e0JsNQDNdZcex24=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-npm-deps";
+    name = "${finalAttrs.pname}-npm-deps";
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-rXpyPLe28YgUkDJNBEA0HGSpmcHOik9em1uwLuYAU8I=";
+  cargoHash = "sha256-a2+3uNNSLfb81QXjZfftbwpgjORPRSgC056U3FINP4o=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.bintools-unwrapped
     nodejs
     npmHooks.npmConfigHook
-    tailwindcss
+    tailwindcss_3
     trunk
     # needs to match with wasm-bindgen version in upstreams Cargo.lock
     wasm-bindgen-cli_0_2_93
@@ -71,8 +70,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
     homepage = "https://github.com/stalwartlabs/webadmin";
-    changelog = "https://github.com/stalwartlabs/webadmin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
+    inherit (stalwart-mail.meta) maintainers;
   };
-}
+})

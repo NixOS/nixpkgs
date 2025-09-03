@@ -1,4 +1,5 @@
 {
+  cmake,
   fetchFromGitHub,
   glib,
   gtk3,
@@ -7,22 +8,26 @@
   networkmanager,
   pkg-config,
   rustPlatform,
+  versionCheckHook,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  xdotool,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "imgurbot12";
     repo = "rmenu";
-    hash = "sha256-khauloUGVuekR+Lran1DLnsxwY8sIf5PsEKY7sNy1K4=";
+    hash = "sha256-cmuB7JfHQuDFo8YaenTDwpe+TxKFaoJM5YwrT7eAfPM=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    cmake
     wrapGAppsHook3
   ];
 
@@ -32,24 +37,18 @@ rustPlatform.buildRustPackage rec {
     libsoup_3
     networkmanager
     webkitgtk_4_1
+    xdotool
   ];
 
   strictDeps = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "gio-0.19.0" = "sha256-+PAQNJ9sTk8aKAhA/PLQWDCKDT/cQ+ukdbem7g1J+pU=";
-      "nm-0.4.0" = "sha256-53ipJU10ZhIKIF7PCw5Eo/e/reUK0qpyTyE7uIrCD88=";
-    };
-  };
+  cargoHash = "sha256-FIlFy3/Hih40My5fTykYjvaQEmnB3ZC5vX3lfKdW9Gk=";
 
   postInstall = ''
     # copy themes and plugins
-    mkdir $out/themes
-    mkdir $out/plugins
-    cp -vfr $src/themes/* $out/themes/.
-    cp -vfr $src/other-plugins/* $out/plugins/.
+    mkdir -p $out/themes $out/plugins/css
+    cp -vfr $src/themes/* $out/themes
+    cp -vfr $src/plugins/misc/* $out/plugins
     mv $out/bin/* $out/plugins # everything is a plugin by default
 
     # rmenu and rmenu-build are actual binaries
@@ -57,16 +56,16 @@ rustPlatform.buildRustPackage rec {
     mv $out/plugins/rmenu-build $out/bin/rmenu-build
 
     # fix plugin names
-    # desktop  network  pactl-audio.sh  powermenu.sh  run  window
-    mv $out/plugins/run $out/plugins/rmenu-run
-    mv $out/plugins/desktop $out/plugins/rmenu-desktop
-    mv $out/plugins/network $out/plugins/rmenu-network
-    mv $out/plugins/window $out/plugins/rmenu-window
+    # desktop  network  pactl-audio.sh  powermenu.sh  run  window  emoji  search
+    for plugin in desktop emoji files network run search window ; do
+      mv $out/plugins/$plugin $out/plugins/rmenu-$plugin
+    done
 
     # fix config and theme
     mkdir -p $out/share/rmenu
     cp -vf $src/rmenu/public/config.yaml $out/share/rmenu/config.yaml
-    substituteInPlace $out/share/rmenu/config.yaml --replace "~/.config/rmenu" "$out"
+    cp -vf $src/plugins/emoji/css/* $out/plugins/css
+    substituteInPlace $out/share/rmenu/config.yaml --replace-fail "~/.config/rmenu" "$out"
     ln -sf  $out/themes/dark.css $out/share/rmenu/style.css
   '';
 
@@ -79,6 +78,11 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : "$out/bin"
     )
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/imgurbot12/rmenu/releases/tag/v${version}";

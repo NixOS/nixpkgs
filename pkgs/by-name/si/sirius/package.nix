@@ -6,6 +6,7 @@
   pkg-config,
   mpi,
   mpiCheckPhaseHook,
+  ctestCheckHook,
   gfortran,
   blas,
   lapack,
@@ -21,6 +22,12 @@
   boost,
   eigen,
   libvdwxc,
+  dftd4,
+  simple-dftd3,
+  mctc-lib,
+  jonquil,
+  toml-f,
+  multicharge,
   enablePython ? false,
   pythonPackages ? null,
   llvmPackages,
@@ -46,13 +53,13 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "SIRIUS";
-  version = "7.6.1";
+  version = "7.8.0-unstable-2025-07-23";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JvI75AbthNThXep2jcriLTPC8GGiPgrg5nYCCbCi+EI=";
+    repo = "SIRIUS";
+    rev = "258c8c6543af0350ac002a52fbe18221ea275590";
+    hash = "sha256-HHt3iw3muIGz86NmI9p6yuv7jrXoiz/83qTTueU7Lpk=";
   };
 
   outputs = [
@@ -64,104 +71,108 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     pkg-config
-  ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ]
+  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
-  buildInputs =
+  buildInputs = [
+    blas
+    lapack
+    gsl
+    libxc
+    hdf5
+    umpire
+    mpi
+    spglib
+    spfft
+    spla
+    costa
+    scalapack
+    boost
+    eigen
+    libvdwxc
+    jonquil
+    simple-dftd3
+    dftd4
+    mctc-lib
+    toml-f
+    multicharge
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_profiler_api
+    cudaPackages.cudatoolkit
+    cudaPackages.libcublas
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocblas
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals enablePython (
+    with pythonPackages;
     [
-      blas
-      lapack
-      gsl
-      libxc
-      hdf5
-      umpire
-      mpi
-      spglib
-      spfft
-      spla
-      costa
-      scalapack
-      boost
-      eigen
-      libvdwxc
+      python
+      pybind11
     ]
-    ++ lib.optionals (gpuBackend == "cuda") [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_profiler_api
-      cudaPackages.cudatoolkit
-      cudaPackages.libcublas
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      rocmPackages.clr
-      rocmPackages.rocblas
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals enablePython (
-      with pythonPackages;
-      [
-        python
-        pybind11
-      ]
-    );
+  );
 
-  propagatedBuildInputs =
+  propagatedBuildInputs = [
+    (lib.getBin mpi)
+  ]
+  ++ lib.optionals enablePython (
+    with pythonPackages;
     [
-      (lib.getBin mpi)
+      mpi4py
+      voluptuous
+      numpy
+      h5py
+      scipy
+      pyyaml
     ]
-    ++ lib.optionals enablePython (
-      with pythonPackages;
-      [
-        mpi4py
-        voluptuous
-        numpy
-        h5py
-        scipy
-        pyyaml
-      ]
-    );
+  );
 
   CXXFLAGS = [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];
 
-  cmakeFlags =
-    [
-      "-DSIRIUS_USE_SCALAPACK=ON"
-      "-DSIRIUS_USE_VDWXC=ON"
-      "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
-      "-DSIRIUS_USE_OPENMP=ON"
-      "-DBUILD_TESTING=ON"
-    ]
-    ++ lib.optionals (gpuBackend == "cuda") [
-      "-DSIRIUS_USE_CUDA=ON"
-      "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      "-DSIRIUS_USE_ROCM=ON"
-      "-DHIP_ROOT_DIR=${rocmPackages.clr}"
-    ]
-    ++ lib.optionals enablePython [
-      "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
-    ];
+  cmakeFlags = [
+    "-DSIRIUS_USE_SCALAPACK=ON"
+    "-DSIRIUS_USE_VDWXC=ON"
+    "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
+    "-DSIRIUS_USE_OPENMP=ON"
+    "-DSIRIUS_USE_DFTD3=ON"
+    "-DSIRIUS_USE_DFTD4=ON"
+    "-DBUILD_TESTING=ON"
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [
+    "-DSIRIUS_USE_CUDA=ON"
+    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    "-DSIRIUS_USE_ROCM=ON"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
+  ]
+  ++ lib.optionals enablePython [
+    "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
+  ];
 
   doCheck = true;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
   # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox
   # and run into the same problem as MPI tests
-  checkPhase = ''
-    runHook preCheck
-
-    ctest --output-on-failure --label-exclude integration_test
-
-    runHook postCheck
-  '';
+  checkFlags = [
+    "--label-exclude"
+    "integration_test"
+  ];
 
   nativeCheckInputs = [
     mpiCheckPhaseHook
+    ctestCheckHook
   ];
 
   meta = with lib; {

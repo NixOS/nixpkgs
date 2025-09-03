@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.12.0";
+  version = "1.13.2";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "spicy";
-    rev = "v${version}";
-    hash = "sha256-MLwBklSNLqx3LgNSFvo5p/MPyt/IlYGwvTbN1PJlims=";
+    tag = "v${version}";
+    hash = "sha256-+F7P8D70vN85pYyTOSMXgf1yWgPJHPpvP38rOyKTJ/A=";
     fetchSubmodules = true;
   };
 

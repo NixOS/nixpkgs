@@ -6,7 +6,7 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "frozen";
   # pin to a newer release if frozen releases again, see cesanta/frozen#72
   version = "unstable-2021-02-23";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # Since it has only two source files, the best course of action to support
   # cross compilation is to create a small meson.build file.
   # Relevant upstream issue: https://github.com/cesanta/frozen/pull/71
-  # We also remove the GN BUILD file to prevent conflicts on case-insesitive
+  # We also remove the GN BUILD file to prevent conflicts on case-insensitive
   # file systems.
   preConfigure = ''
     rm BUILD

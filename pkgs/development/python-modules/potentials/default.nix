@@ -1,20 +1,24 @@
 {
   lib,
-  bibtexparser,
   buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  bibtexparser,
   cdcs,
   datamodeldict,
-  fetchPypi,
   habanero,
   ipywidgets,
   lxml,
   matplotlib,
   numpy,
   pandas,
-  pythonOlder,
   requests,
   scipy,
-  setuptools,
   unidecode,
   xmltodict,
   yabadaba,
@@ -22,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "potentials";
-  version = "0.3.8";
+  version = "0.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZXsqsqsgWntZUOuW1/2KAhsbnienHu6VFctxYkw+GCU=";
+  src = fetchFromGitHub {
+    owner = "usnistgov";
+    repo = "potentials";
+    tag = "v${version}";
+    hash = "sha256-R6LGRmi6xeNp81qylXBAVdL62/SN87TvuyRqueQD6DA=";
   };
 
   build-system = [ setuptools ];
@@ -56,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "potentials" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API database tools for accessing the NIST Interatomic Potentials Repository";
     homepage = "https://github.com/usnistgov/potentials";
     changelog = "https://github.com/usnistgov/potentials/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

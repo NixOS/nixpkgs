@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mscerts";
-  version = "2024.5.29";
+  version = "2025.8.29";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ralphje";
     repo = "mscerts";
     tag = version;
-    hash = "sha256-1k0k5BSEyiJ1Brx7P+sgUQI63k1eT59edghnPVuCuZE=";
+    hash = "sha256-K7U4dbhH3yWElSKRhU9mHU4W+Hdc6Vb9kf/TE4EJs8c=";
   };
 
   build-system = [ setuptools ];

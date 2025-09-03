@@ -30,6 +30,7 @@
   unshareUts ? false,
   unshareCgroup ? false,
   privateTmp ? false,
+  chdirToPwd ? true,
   dieWithParent ? true,
   ...
 }@args:
@@ -38,7 +39,7 @@
 # `pname` and `version` will throw if they were not provided.
 # Use `name` instead of directly evaluating `pname` or `version`.
 #
-# If you need `pname` or `version` sepcifically, use `args` instead:
+# If you need `pname` or `version` specifically, use `args` instead:
 # e.g. `args.pname or ...`.
 
 let
@@ -93,7 +94,7 @@ let
       files = [
         # NixOS Compatibility
         "static"
-        "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+        "nix" # mainly for nixVersions.git users, but also for access to nix/netrc
         # Shells
         "shells"
         "bashrc"
@@ -279,7 +280,7 @@ let
         ${bubblewrap}/bin/bwrap
         --dev-bind /dev /dev
         --proc /proc
-        --chdir "$(pwd)"
+        ${optionalString chdirToPwd ''--chdir "$(pwd)"''}
         ${optionalString unshareUser "--unshare-user"}
         ${optionalString unshareIpc "--unshare-ipc"}
         ${optionalString unsharePid "--unshare-pid"}
@@ -349,7 +350,8 @@ runCommandLocal name
 
       meta = {
         mainProgram = executableName;
-      } // meta;
+      }
+      // meta;
     }
   )
   ''

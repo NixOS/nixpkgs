@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tkarabela";
-    repo = pname;
+    repo = "pysubs2";
     rev = version;
     hash = "sha256-fKSb7MfBHGft8Tp6excjfkVXKnHRER11X0QxbR1zD4I=";
   };

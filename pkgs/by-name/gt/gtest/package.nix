@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.15.2";
+  version = "1.17.0";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "googletest";
     rev = "v${version}";
-    hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
+    hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
   patches = [
@@ -49,13 +49,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals (cxx_standard != null) [
-      "-DCMAKE_CXX_STANDARD=${cxx_standard}"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals (cxx_standard != null) [
+    "-DCMAKE_CXX_STANDARD=${cxx_standard}"
+  ];
 
   meta = with lib; {
     description = "Google's framework for writing C++ tests";

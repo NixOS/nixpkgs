@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     physfs
     openal
     gamenetworkingsockets
+    xorg.libX11
   ];
   # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
   runtimeDependencies = [ xorg.libX11 ];
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Opensoldat is a unique 2D (side-view) multiplayer action game";
+    description = "Unique 2D (side-view) multiplayer action game";
     license = [
       licenses.mit
       base.meta.license

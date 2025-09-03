@@ -1,20 +1,20 @@
 {
-  lib,
   fetchFromGitHub,
-  postgresql,
-  buildPostgresqlExtension,
-  postgresqlTestExtension,
+  lib,
   perl,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
 }:
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgddl";
-  version = "0.29";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "lacanoid";
     repo = "pgddl";
     tag = finalAttrs.version;
-    hash = "sha256-W3G6TGtkj+zXXdGZZR0bmZhsLuFJvuGTlDoo8kL8sf0=";
+    hash = "sha256-w08IgnobIhlwRGrz+feEnZbI1KrWrMRI4BvNVUZFSSg=";
   };
 
   nativeBuildInputs = [

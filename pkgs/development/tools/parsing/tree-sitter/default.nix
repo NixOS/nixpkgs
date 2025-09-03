@@ -8,6 +8,8 @@
   which,
   rustPlatform,
   emscripten,
+  openssl,
+  pkg-config,
   callPackage,
   linkFarm,
   substitute,
@@ -28,8 +30,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.24.6";
-  hash = "sha256-L7F2/S22knqEdB2hxfqLe5Tcgk0WQqBdFQ7BvHFl4EI=";
+  version = "0.25.6";
+  hash = "sha256-2/DF2xyiKi5HAqqeGt1TIMvAWFfZgcfVccK4zrTqq88=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -41,7 +43,7 @@ let
 
   update-all-grammars = callPackage ./update.nix { };
 
-  fetchGrammar = (
+  fetchGrammar =
     v:
     fetchgit {
       inherit (v)
@@ -50,8 +52,7 @@ let
         sha256
         fetchSubmodules
         ;
-    }
-  );
+    };
 
   grammars = runCommand "grammars" { } (
     ''
@@ -59,7 +60,7 @@ let
     ''
     + (lib.concatStrings (
       lib.mapAttrsToList (
-        name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"
+        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
       ) (import ./grammars { inherit lib; })
     ))
   );
@@ -132,7 +133,7 @@ let
           };
         };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -170,10 +171,21 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
+  cargoHash = "sha256-sGh16M7cbT5ct1sT2FcUUoIQFcoOftTuQ0aSCjtkTEs=";
 
-  buildInputs = [ installShellFiles ];
-  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals webUISupport [
+    openssl
+  ];
+  nativeBuildInputs = [
+    which
+  ]
+  ++ lib.optionals webUISupport [
+    emscripten
+    pkg-config
+  ];
 
   patches = lib.optionals (!webUISupport) [
     (substitute {
@@ -192,27 +204,26 @@ rustPlatform.buildRustPackage {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
-    bash ./script/build-wasm --debug
+    cargo run --package xtask -- build-wasm --debug
   '';
 
-  postInstall =
-    ''
-      PREFIX=$out make install
-      ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
-      ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd tree-sitter \
-        --bash <("$out/bin/tree-sitter" complete --shell bash) \
-        --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
-        --fish <("$out/bin/tree-sitter" complete --shell fish)
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd tree-sitter \
-        --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
-        --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
-        --fish "${buildPackages.tree-sitter}"/share/fish/*/*
-    '';
+  postInstall = ''
+    PREFIX=$out make install
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tree-sitter \
+      --bash <("$out/bin/tree-sitter" complete --shell bash) \
+      --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
+      --fish <("$out/bin/tree-sitter" complete --shell fish)
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tree-sitter \
+      --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
+      --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
+      --fish "${buildPackages.tree-sitter}"/share/fish/*/*
+  '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
@@ -243,7 +254,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

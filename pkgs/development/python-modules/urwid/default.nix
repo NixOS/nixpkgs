@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.16";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     tag = version;
-    hash = "sha256-D5NHtU7XQRh8OqkwrN5r8U/VGF87LGwdnaqGhdjN8AE=";
+    hash = "sha256-pMGNybuJZeCzZRZr0/+N87/z+ZtLmSaWW47MWDirTjQ=";
   };
 
   postPatch = ''
@@ -62,11 +62,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   env.LC_ALL = "en_US.UTF8";
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Flaky tests
@@ -82,7 +83,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Full-featured console (xterm et al.) user interface library";
-    changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
+    changelog = "https://github.com/urwid/urwid/releases/tag/${src.tag}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;

@@ -4,22 +4,14 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "geist-font";
-  version = "1.1.0";
+  version = "1.5.0";
 
   srcs = [
     (fetchzip {
-      name = "geist-mono";
-      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.Mono.zip";
-      stripRoot = false;
-      hash = "sha256-8I4O2+bJAlUiDIhbyXzAcwXP5qpmHoh4IfrFio7IZN8=";
-    })
-    (fetchzip {
-      name = "geist-sans";
-      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.zip";
-      stripRoot = false;
-      hash = "sha256-nSN+Ql5hTd230w/u6VZyAZaPtFSaHGmMc6T1fgGTCME=";
+      url = "https://github.com/vercel/geist-font/releases/download/${finalAttrs.version}/geist-font-${finalAttrs.version}.zip";
+      hash = "sha256-p3nFuaQPvw4PLcb5AOhu9jiNCTzZD7st1MuJKTAzwKE=";
     })
   ];
 
@@ -28,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 geist-{mono,sans}/*/*.otf -t $out/share/fonts/opentype
+    install -D source/fonts/{Geist,GeistMono}/otf/*.otf -t $out/share/fonts/opentype
 
     runHook postInstall
   '';
@@ -41,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

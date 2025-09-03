@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "marwaita-orange";
     rev = version;
     hash = "sha256-/F/nboht7YG9pXVv7/ZvZ4QkxfB+h201G1KZLRohM80=";
   };

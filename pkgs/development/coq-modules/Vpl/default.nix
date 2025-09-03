@@ -14,7 +14,7 @@ mkCoqDerivation {
 
   release."0.5".sha256 = "sha256-mSD/xSweeK9WMxWDdX/vzN96iXo74RkufjuNvtzsP9o=";
 
-  sourceRoot = "source/coq";
+  setSourceRoot = "sourceRoot=$(echo */coq)";
 
   meta = {
     description = "Coq interface to VPL abstract domain of convex polyhedra";

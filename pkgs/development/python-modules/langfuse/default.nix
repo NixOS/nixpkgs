@@ -9,22 +9,26 @@
   langchain,
   llama-index,
   openai,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
   packaging,
   poetry-core,
   pydantic,
+  requests,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.53.3";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     tag = "v${version}";
-    hash = "sha256-uhbCLDjOU13KAJcCXz03IPNICG5ZI16KIShY2sXPkp4=";
+    hash = "sha256-O2mu152aQnYZkPgJTf9TGrC4Ohcp89qQxxrup63yxu8=";
   };
 
   build-system = [ poetry-core ];
@@ -36,8 +40,12 @@ buildPythonPackage rec {
     backoff
     httpx
     idna
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-exporter-otlp
     packaging
     pydantic
+    requests
     wrapt
   ];
 
@@ -55,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/v${version}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

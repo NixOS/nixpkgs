@@ -13,7 +13,7 @@
   ninja,
   pkg-config,
   python3,
-  substituteAll,
+  replaceVars,
   systemdMinimal,
   usbutils,
   vala,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.19.0";
+  version = "0.19.2";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MF7J+i1s4yVugWHx7rwsF4ahNTbWfzHnYODgpNoNQlQ=";
+    hash = "sha256-b92mdUTzZslfFVbeDR+C2xPyMbwDYsffA8w0uiaykmg=";
   };
 
   patches = [
@@ -44,25 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace references to udevadm with an absolute paths, so programs using
     # umockdev will just work without having to provide it in their test environment
     # $PATH.
-    (substituteAll {
-      src = ./substitute-udevadm.patch;
+    (replaceVars ./substitute-udevadm.patch {
       udevadm = "${systemdMinimal}/bin/udevadm";
     })
   ];
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib

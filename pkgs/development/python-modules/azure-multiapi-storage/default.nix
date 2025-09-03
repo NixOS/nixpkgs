@@ -14,14 +14,15 @@
 
 buildPythonPackage rec {
   pname = "azure-multiapi-storage";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tlKogIs39tIoMVl3p/YConfPdPrpX9oc9WqQ+FuhgQk=";
+    pname = "azure_multiapi_storage";
+    inherit version;
+    hash = "sha256-g/5BOsU3OzvpxMnySPVNoaXLrmwjb8aq3hetC/jsEWY=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +43,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "azure.multiapi.storage"
+    "azure.multiapi.storagev2"
   ];
 
   meta = {

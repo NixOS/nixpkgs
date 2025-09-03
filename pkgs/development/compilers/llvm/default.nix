@@ -5,7 +5,6 @@
   buildPackages,
   targetPackages,
   stdenv,
-  gcc12Stdenv,
   pkgs,
   recurseIntoAttrs,
   # This is the default binutils, but with *this* version of LLD rather
@@ -14,6 +13,7 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
+  patchesFn ? lib.id,
   # Allows passthrough to packages via newScope in ./common/default.nix.
   # This makes it possible to do
   # `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
@@ -29,13 +29,16 @@ let
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.6".officialRelease.sha256 = "sha256-LD4nIjZTSZJtbgW6tZopbTF5Mq0Tenj2gbuPXhtOeUI=";
-    "20.0.0-git".gitRelease = {
-      rev = "6383a12e3b4339fa4743bb97da4d51dea6d2e2ea";
-      rev-version = "20.0.0-unstable-2025-01-25";
-      sha256 = "sha256-LMew+lFm+HrR5iwFDnoXA6B2LiU/pVqsy1YrP9xr5GU=";
+    "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
+    "20.1.8".officialRelease.sha256 = "sha256-ysyB/EYxi2qE9fD5x/F2zI4vjn8UDoo1Z9ukiIrjFGw=";
+    "21.1.0".officialRelease.sha256 = "sha256-4DLEZuhREHMl2t0f1iqvXSRSE5VBMVxd94Tj4m8Yf9s=";
+    "22.0.0-git".gitRelease = {
+      rev = "0b42e117c829c6e127ef4b1bd82807ba01853128";
+      rev-version = "22.0.0-unstable-2025-08-31";
+      sha256 = "sha256-rClCPbTYqw0ZO9dJqJn3bqtuu9yxwcEfJs3vAW2xjAc=";
     };
-  } // llvmVersions;
+  }
+  // llvmVersions;
 
   mkPackage =
     {
@@ -73,20 +76,14 @@ let
               gitRelease
               monorepoSrc
               version
+              patchesFn
               ;
           }
           // packageSetArgs # Allow overrides.
-          // {
-            stdenv =
-              if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
-                gcc12Stdenv
-              else
-                stdenv; # does not build with gcc13
-          }
         )
       )
     );
 
   llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
 in
-llvmPackages // { inherit mkPackage; }
+llvmPackages // { inherit mkPackage versions; }

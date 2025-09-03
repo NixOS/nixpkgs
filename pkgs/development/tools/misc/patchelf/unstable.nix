@@ -1,14 +1,20 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "patchelf";
-  version = "0.18.0-unstable-2025-01-07";
+  version = "0.18.0-unstable-2025-08-13";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "43b75fbc9ffbc1190fee7c8693ad74cb8286cfd4";
-    sha256 = "sha256-rqFH9xUu36Hky763cQ9D1V7iuWteItAFDM2jIQGP5Us=";
+    rev = "b49de1b3384e7928bf0df9a889fe5a4e7b3fbddf";
+    sha256 = "sha256-0AGK+ZPZDc7zTVAmG6jAAynQhh4nP8skVwOEV5hZKh0=";
   };
 
   # Drop test that fails on musl (?)

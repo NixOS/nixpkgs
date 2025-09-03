@@ -13,6 +13,9 @@
   gnused,
   gnugrep,
   bash,
+  gawk,
+  gnutar,
+  gzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +42,9 @@ stdenv.mkDerivation rec {
     gnused
     gnugrep
     bash
+    gawk
+    gnutar
+    gzip
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -9,19 +9,18 @@
   m17n_lib,
   m17n_db,
   gettext,
-  fmt,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
-  version = "5.1.2";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-LBFPkkBaKcVtTLKswLlr1EdCoY63nToa8I7ea1/MZeg=";
+    hash = "sha256-TJMJGjO9V6EOzxt6Z7rwOfIQWK38XolDhUKbjbNUGhA=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     fcitx5
     m17n_db
     m17n_lib
-    fmt
   ];
 
   passthru.tests = {

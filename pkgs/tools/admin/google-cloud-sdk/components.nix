@@ -10,7 +10,7 @@
 }:
 
 let
-  # Mapping from GCS component architecture names to Nix archictecture names
+  # Mapping from GCS component architecture names to Nix architecture names
   arches = {
     x86 = "i686";
     x86_64 = "x86_64";
@@ -169,14 +169,13 @@ let
         # Write the snapshot file to the `.install` folder
         cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
-      nativeBuildInputs =
-        [
-          python3
-          stdenv.cc.cc
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          autoPatchelfHook
-        ];
+      nativeBuildInputs = [
+        python3
+        stdenv.cc.cc
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        autoPatchelfHook
+      ];
       buildInputs = [
         libxcrypt-legacy
       ];

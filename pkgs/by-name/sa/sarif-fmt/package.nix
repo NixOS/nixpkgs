@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-uQQ/UbmyPJbilxP2R+6KyBkf2dzGohN22xCCtU31y0s=";
+    hash = "sha256-Xc9uc//5wTBWJ89mcaC/4c8/xtTvnu8g2Aa1viUhluo=";
   };
 
-  cargoHash = "sha256-F2zHGlIaSGWcw67AIOa3N0AbKMVGQukUECZxCte7qlE=";
+  cargoHash = "sha256-h4g4+2yiqr3CTkSgv8fTHEVQwSunFfYFhIczSGA+M5U=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to pretty print SARIF diagnostics";
+    description = "CLI tool to pretty print SARIF diagnostics";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

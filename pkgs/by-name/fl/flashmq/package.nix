@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashmq";
-  version = "1.19.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "halfgaar";
     repo = "FlashMQ";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sMpXDriH/uko0zvrliK+knAcw2unBbDHQfYHG7brhTk=";
+    hash = "sha256-JIEJwtS9rtjX+8uqvjnhdAKwp8vk2rptpPYnEX385nk=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast light-weight MQTT broker/server";
     mainProgram = "flashmq";
     homepage = "https://www.flashmq.org/";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.osl3;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
   };

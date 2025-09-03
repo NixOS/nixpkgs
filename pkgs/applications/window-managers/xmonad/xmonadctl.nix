@@ -12,7 +12,7 @@ let
     self.X11
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmonadctl";
 
   inherit (haskellPackages.xmonad-contrib) src version;

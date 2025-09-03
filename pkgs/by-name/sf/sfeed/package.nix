@@ -7,23 +7,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfeed";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     tag = finalAttrs.version;
-    hash = "sha256-KVZsVCTkwyOVr37vIXbiPjQLnb9lbuIlNxpZNvHxbEo=";
+    hash = "sha256-ULCYZYRTdrsUaL0XJd5Dxa9Cd0Hc6PVNMnnLTGs4pIo=";
   };
 
   buildInputs = [ ncurses ];
 
-  makeFlags =
-    [
-      "RANLIB:=$(RANLIB)"
-      "SFEED_CURSES_LDFLAGS:=-lncurses"
-    ]
-    # use macOS's strlcat() and strlcpy() instead of vendored ones
-    ++ lib.optional stdenv.hostPlatform.isDarwin "COMPATOBJ:=";
+  makeFlags = [
+    "RANLIB:=$(RANLIB)"
+    "SFEED_CURSES_LDFLAGS:=-lncurses"
+  ]
+  # use macOS's strlcat() and strlcpy() instead of vendored ones
+  ++ lib.optional stdenv.hostPlatform.isDarwin "COMPATOBJ:=";
 
   installFlags = [ "PREFIX=$(out)" ];
 

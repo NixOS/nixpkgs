@@ -9,10 +9,9 @@
   fftwSinglePrec,
   libsamplerate,
   qtbase,
-  darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liblastfm-unstable";
   version = "2019-08-23";
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
     libsamplerate
     qtbase
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"

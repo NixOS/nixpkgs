@@ -7,9 +7,9 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "compressed-rtf";
-  version = "1.0.6-unstable-2023-10-15";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "compressed_rtf" ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Compressed Rich Text Format (RTF) compression and decompression";

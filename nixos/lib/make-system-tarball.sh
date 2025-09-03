@@ -1,10 +1,3 @@
-sources_=($sources)
-targets_=($targets)
-
-objects=($objects)
-symlinks=($symlinks)
-
-
 # Remove the initial slash from a path, since genisofs likes it that way.
 stripSlash() {
     res="$1"
@@ -12,10 +5,10 @@ stripSlash() {
 }
 
 # Add the individual files.
-for ((i = 0; i < ${#targets_[@]}; i++)); do
-    stripSlash "${targets_[$i]}"
+for ((i = 0; i < ${#targets[@]}; i++)); do
+    stripSlash "${targets[$i]}"
     mkdir -p "$(dirname "$res")"
-    cp -a "${sources_[$i]}" "$res"
+    cp -a "${sources[$i]}" "$res"
 done
 
 

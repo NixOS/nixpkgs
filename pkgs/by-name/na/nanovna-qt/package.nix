@@ -12,6 +12,8 @@
 stdenv.mkDerivation rec {
   pname = "nanovna-qt";
   # 20200507 dropped support for NanoVNA V2.2
+  # We could add later versions as separate packages if someone needs, but not updating it
+  # nixpkgs-update: no auto update
   version = "20200403";
 
   src = fetchFromGitHub {

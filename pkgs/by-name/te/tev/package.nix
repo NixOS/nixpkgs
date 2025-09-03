@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Tom94";
-    repo = pname;
-    rev = "v${version}";
+    repo = "tev";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-ke1T5nOrDoJilpfshAIAFWw/640Gm5OaxZ+ZakCevTs=";
   };
@@ -28,21 +28,20 @@ stdenv.mkDerivation rec {
     cmake
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      libX11
-      libzip
-      glfw
-      libpng
-    ]
-    ++ (with xorg; [
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXxf86vm
-      libXext
-    ]);
+  buildInputs = [
+    libX11
+    libzip
+    glfw
+    libpng
+  ]
+  ++ (with xorg; [
+    libXrandr
+    libXinerama
+    libXcursor
+    libXi
+    libXxf86vm
+    libXext
+  ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
 
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
 
   env.CXXFLAGS = "-include cstdint";
 
-  meta = with lib; {
+  meta = {
     description = "High dynamic range (HDR) image comparison tool";
     mainProgram = "tev";
     longDescription = ''
@@ -74,9 +73,9 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -16,7 +16,7 @@
   # native dependencies
   eigen,
   boost,
-  cgal,
+  cgal_5,
   gmp,
   hdf5,
   icu,
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     # ifcopenshell needs stdc++
     (lib.getLib stdenv.cc.cc)
     boost
-    cgal
+    cgal_5
     eigen
     gmp
     hdf5
@@ -183,8 +183,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  pytestFlagsArray = [
-    "-p no:pytest-blender"
+  pytestFlags = [
+    "-pno:pytest-blender"
   ];
 
   disabledTestPaths = [

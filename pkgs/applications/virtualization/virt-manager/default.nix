@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "virt-manager";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KtB2VspkA/vFu7I8y6M8WfAoZglxmCeb4Z3OzdsGuvk=";
+    hash = "sha256-nMWLDo2pfWcqsVuEk0JbzLZ1a0lViTohsZ8gEXGhBuI=";
   };
 
   strictDeps = true;
@@ -56,25 +56,35 @@ stdenv.mkDerivation rec {
     docutils
     wrapGAppsHook4
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      python3
-      libvirt-glib
-      vte
-      dconf
-      gtk-vnc
-      adwaita-icon-theme
-      gsettings-desktop-schemas
-      libosinfo
-      gtksourceview4
-    ]
-    ++ lib.optionals spiceSupport [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      spice-gtk
-    ];
+  buildInputs = [
+    python3
+    libvirt-glib
+    vte
+    dconf
+    gtk-vnc
+    adwaita-icon-theme
+    gsettings-desktop-schemas
+    libosinfo
+    gtksourceview4
+  ]
+  ++ lib.optionals spiceSupport [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    spice-gtk
+  ];
+
+  postInstall = ''
+    if ! grep -q StartupWMClass= "$out/share/applications/virt-manager.desktop"; then
+        echo "StartupWMClass=.virt-manager-wrapped" >> "$out/share/applications/virt-manager.desktop"
+    else
+        echo "error: upstream desktop file already contains StartupWMClass=, please update Nix expr" >&2
+        exit 1
+    fi
+  '';
+
   preFixup = ''
     glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 

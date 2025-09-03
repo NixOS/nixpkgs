@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-desktop";
     rev = version;
     hash = "sha256-YKGVuT28MLcLO9T8ZJqbHqMN0SAn1P1l8JTDBo4n838=";
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x install-scripts/meson_install_schemas.py # patchShebangs requires executable file
     patchShebangs install-scripts/meson_install_schemas.py
-    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon-common/share/cinnamon
+    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
   meta = with lib; {
@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
       licenses.lgpl2
     ];
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

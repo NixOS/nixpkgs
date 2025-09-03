@@ -4,7 +4,6 @@
   fetchFromGitHub,
   appstream,
   cmake,
-  fetchpatch,
   gettext,
   git,
   makeWrapper,
@@ -21,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "money-manager-ex";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-TOT5dFDCF3F1L8P2u+9Ve3/N9mtBD2/KirzF0pyfdIA=";
+    hash = "sha256-gpDwfRKXgp6hEpitflVIAIOU/k3Fx6hKKhyzQvLlog8=";
   };
 
   postPatch = ''
@@ -36,20 +35,19 @@ stdenv.mkDerivation rec {
       --replace-fail "sqlite3mc_amalgamation.h" "sqlite3.h"
   '';
 
-  nativeBuildInputs =
-    [
-      appstream # for appstreamcli
-      cmake
-      gettext
-      git
-      makeWrapper
-      pkg-config
-      wrapGAppsHook3
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ];
+  nativeBuildInputs = [
+    appstream # for appstreamcli
+    cmake
+    gettext
+    git
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ];
 
   buildInputs = [
     curl

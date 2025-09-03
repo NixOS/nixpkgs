@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "25.1.1";
+  version = "25.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "gvm-tools";
     tag = "v${version}";
-    hash = "sha256-2IE2Nxz0EBWlbL09XgA/AtfFi9gOE/VSMZmb5Op+clY=";
+    hash = "sha256-C0LWO9oQ5TgTgSFcxzm5YNhis24uxpenBalwqns2VL0=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -34,14 +34,15 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't test sending
     "SendTargetTestCase"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
 
   pythonImportsCheck = [ "gvmtools" ];
 
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/gvm-tools";
-    changelog = "https://github.com/greenbone/gvm-tools/releases/tag/v${version}";
+    changelog = "https://github.com/greenbone/gvm-tools/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

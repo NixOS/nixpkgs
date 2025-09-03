@@ -1,0 +1,178 @@
+diff --git a/src/include/bootstrap.h b/src/include/bootstrap.h
+index 8c5f081..9922b79 100644
+--- a/src/include/bootstrap.h
++++ b/src/include/bootstrap.h
+@@ -10,11 +10,13 @@
+ #include "nccl.h"
+ #include "comm.h"
+ 
++// this is accessed through unaligned ptrs because ncclUniqueId is a typedef of char[128]
+ struct ncclBootstrapHandle {
+   uint64_t magic;
+   union ncclSocketAddress addr;
+ };
+ static_assert(sizeof(struct ncclBootstrapHandle) <= sizeof(ncclUniqueId), "Bootstrap handle is too large to fit inside NCCL unique ID");
++static_assert(alignof(struct ncclBootstrapHandle) == alignof(ncclUniqueId), "Bootstrap handle must have same alignment as NCCL unique ID to avoid UB");
+ 
+ ncclResult_t bootstrapNetInit();
+ ncclResult_t bootstrapCreateRoot(struct ncclBootstrapHandle* handle, bool idFromEnv);
+diff --git a/src/misc/rocmwrap.cc b/src/misc/rocmwrap.cc
+index b3063d5..464b80d 100644
+--- a/src/misc/rocmwrap.cc
++++ b/src/misc/rocmwrap.cc
+@@ -131,9 +131,12 @@ static void initOnceFunc() {
+       //format and store the kernel conf file location
+       snprintf(kernel_conf_file, sizeof(kernel_conf_file), "/boot/config-%s", utsname.release);
+       fp = fopen(kernel_conf_file, "r");
+-      if (fp == NULL) INFO(NCCL_INIT,"Could not open kernel conf file");
++      if (fp == NULL) {
++        INFO(NCCL_INIT,"Could not open kernel conf file, will assume CONFIG_DMABUF_MOVE_NOTIFY and CONFIG_PCI_P2PDMA are enabled");
++      }
+       //look for kernel_opt1 and kernel_opt2 in the conf file and check
+-      while (fgets(buf, sizeof(buf), fp) != NULL) {
++      // FIXME: This check is broken, CONFIG_DMABUF_MOVE_NOTIFY could be across a buf boundary.
++      while (fp && fgets(buf, sizeof(buf), fp) != NULL) {
+         if (strstr(buf, kernel_opt1) != NULL) {
+           found_opt1 = 1;
+           INFO(NCCL_INIT,"CONFIG_DMABUF_MOVE_NOTIFY=y in /boot/config-%s", utsname.release);
+@@ -143,11 +146,12 @@ static void initOnceFunc() {
+           INFO(NCCL_INIT,"CONFIG_PCI_P2PDMA=y in /boot/config-%s", utsname.release);
+         }
+       }
+-      if (!found_opt1 || !found_opt2) {
++      if (fp && (!found_opt1 || !found_opt2)) {
+         dmaBufSupport = 0;
+         INFO(NCCL_INIT, "CONFIG_DMABUF_MOVE_NOTIFY and CONFIG_PCI_P2PDMA should be set for DMA_BUF in /boot/config-%s", utsname.release);
+         INFO(NCCL_INIT, "DMA_BUF_SUPPORT Failed due to OS kernel support");
+       }
++      if (fp) fclose(fp);
+ 
+       if(dmaBufSupport) INFO(NCCL_INIT, "DMA_BUF Support Enabled");
+       else goto error;
+diff --git a/src/nccl.h.in b/src/nccl.h.in
+index 1d127b0..6296073 100644
+--- a/src/nccl.h.in
++++ b/src/nccl.h.in
+@@ -39,7 +39,7 @@ typedef struct ncclComm* ncclComm_t;
+ #define NCCL_UNIQUE_ID_BYTES 128
+ /*! @brief      Opaque unique id used to initialize communicators
+     @details    The ncclUniqueId must be passed to all participating ranks */
+-typedef struct { char internal[NCCL_UNIQUE_ID_BYTES]; /*!< Opaque array>*/} ncclUniqueId;
++typedef struct alignas(int64_t) { char internal[NCCL_UNIQUE_ID_BYTES]; /*!< Opaque array>*/} ncclUniqueId;
+ 
+ /*! @defgroup   rccl_result_code Result Codes
+     @details    The various result codes that RCCL API calls may return
+diff --git a/src/proxy.cc b/src/proxy.cc
+index 50e5437..51bb401 100644
+--- a/src/proxy.cc
++++ b/src/proxy.cc
+@@ -965,7 +965,11 @@ struct ncclProxyConnectionPool {
+ 
+ static ncclResult_t ncclProxyNewConnection(struct ncclProxyConnectionPool* pool, int* id) {
+   if (pool->offset == NCCL_PROXY_CONN_POOL_SIZE) {
+-    NCCLCHECK(ncclRealloc(&pool->pools, pool->banks, pool->banks+1));
++    if (pool->pools) {
++      NCCLCHECK(ncclRealloc(&pool->pools, pool->banks, pool->banks+1));
++    } else {
++      NCCLCHECK(ncclCalloc(&pool->pools, pool->banks+1));
++    }
+     NCCLCHECK(ncclCalloc(pool->pools+pool->banks, NCCL_PROXY_CONN_POOL_SIZE));
+     pool->banks++;
+     pool->offset = 0;
+diff --git a/src/transport/net_ib.cc b/src/transport/net_ib.cc
+index 6d77784..49762d3 100644
+--- a/src/transport/net_ib.cc
++++ b/src/transport/net_ib.cc
+@@ -573,7 +573,7 @@ ncclResult_t ncclIbGdrSupport() {
+     // Requires support from NIC driver modules
+     // Use ONLY for debugging!
+     moduleLoaded = 1;
+-    INFO(NCCL_INIT, "RCCL_FORCE_ENABLE_GDRDMA = 1, so explicitly setting moduleLoaded = 1");
++    INFO(NCCL_INIT, "ncclIbGdrSupport: RCCL_FORCE_ENABLE_GDRDMA = 1, so explicitly setting moduleLoaded = 1");
+   }
+ 
+   if (moduleLoaded == -1) {
+@@ -586,13 +586,14 @@ ncclResult_t ncclIbGdrSupport() {
+     // or created under a different path like `/sys/kernel/` or `/sys/` (depending on your ib_peer_mem module)
+     const char* memory_peers_paths[] = {"/sys/kernel/mm/memory_peers/amdkfd/version",
+                                   "/sys/kernel/memory_peers/amdkfd/version",
+-                                  "/sys/memory_peers/amdkfd/version"};
++                                  "/sys/memory_peers/amdkfd/version",
++                                  NULL};
+     int i = 0;
+ 
+     while (memory_peers_paths[i]) {
+       if (access(memory_peers_paths[i], F_OK) == 0) {
+         moduleLoaded = 1;
+-        INFO(NCCL_INIT,"Found %s", memory_peers_paths[i]);
++        INFO(NCCL_INIT,"ncclIbGdrSupport: Found %s", memory_peers_paths[i]);
+         break;
+       } else {
+         moduleLoaded = 0;
+@@ -612,22 +613,23 @@ ncclResult_t ncclIbGdrSupport() {
+     if (moduleLoaded == 0) {
+       // Check for `ib_register_peer_memory_client` symbol in `/proc/kallsyms`
+       // if your system uses native OS ib_peer module
+-      char buf[256];
+-      FILE *fp = NULL;
+-      fp = fopen("/proc/kallsyms", "r");
++      FILE *fp = fopen("/proc/kallsyms", "r");
++      char *line = NULL;
++      size_t len = 0;
+ 
+       if (fp == NULL) {
+-        INFO(NCCL_INIT,"Could not open /proc/kallsyms");
++        INFO(NCCL_INIT,"ncclIbGdrSupport: Could not open /proc/kallsyms to check for ib_register_peer_memory_client");
+       } else {
+-        while (fgets(buf, sizeof(buf), fp) != NULL) {
+-          if (strstr(buf, "t ib_register_peer_memory_client") != NULL ||
+-              strstr(buf, "T ib_register_peer_memory_client") != NULL) {
++        while (getline(&line, &len, fp) > 0) {
++          if (line && strstr(line, "ib_register_peer_memory_client") != NULL) {
+             moduleLoaded = 1;
+-            INFO(NCCL_INIT,"Found ib_register_peer_memory_client in /proc/kallsyms");
++            INFO(NCCL_INIT,"ncclIbGdrSupport: Found ib_register_peer_memory_client in /proc/kallsyms");
+             break;
+           }
+         }
+       }
++      if (line) free(line);
++      if (fp) fclose(fp);
+     }
+ #else
+     // Check for the nv_peer_mem module being loaded
+@@ -637,7 +639,7 @@ ncclResult_t ncclIbGdrSupport() {
+ #endif
+   }
+   if (moduleLoaded == 0) {
+-    INFO(NCCL_INIT,"GDRDMA not enabled. Could not find memory_peers directory or peer_memory symbol");
++    INFO(NCCL_INIT,"ncclIbGdrSupport: GDRDMA not enabled. Could not find memory_peers directory or peer_memory symbol");
+     return ncclSystemError;
+   }
+   return ncclSuccess;
+diff --git a/tools/ib-test/include/nccl.h b/tools/ib-test/include/nccl.h
+index 2c86c33..5801c61 100755
+--- a/tools/ib-test/include/nccl.h
++++ b/tools/ib-test/include/nccl.h
+@@ -31,7 +31,7 @@ extern "C" {
+ typedef struct ncclComm* ncclComm_t;
+ 
+ #define NCCL_UNIQUE_ID_BYTES 128
+-typedef struct { char internal[NCCL_UNIQUE_ID_BYTES]; } ncclUniqueId;
++typedef struct alignas(int64_t) { char internal[NCCL_UNIQUE_ID_BYTES]; } ncclUniqueId;
+ 
+ /* Error type */
+ typedef enum { ncclSuccess                 =  0,
+diff --git a/tools/topo_expl/include/nccl.h b/tools/topo_expl/include/nccl.h
+index 729561b..4e4bdd9 100644
+--- a/tools/topo_expl/include/nccl.h
++++ b/tools/topo_expl/include/nccl.h
+@@ -35,7 +35,7 @@ typedef struct ncclComm* ncclComm_t;
+ #define NCCL_COMM_NULL NULL
+ 
+ #define NCCL_UNIQUE_ID_BYTES 128
+-typedef struct { char internal[NCCL_UNIQUE_ID_BYTES]; } ncclUniqueId;
++typedef struct alignas(int64_t) { char internal[NCCL_UNIQUE_ID_BYTES]; } ncclUniqueId;
+ 
+ /*! @brief Error type */
+ typedef enum { ncclSuccess                 =  0,

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.7.2";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-EBjWWoNRuIZFWQkrjf9IyZZ648rP5d7MZkjeIYifgGk=";
+    tag = version;
+    hash = "sha256-XnLCejK6m8p/OC5gKCoP1UXVblISChu3lKF8BnrnRbk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -58,11 +58,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_machine_learning" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
+  ];
+  disabledTestPaths = [
+    "test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s

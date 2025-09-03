@@ -1,339 +1,361 @@
 name: Eval
 
 on:
-  pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened]
-  push:
-    # Keep this synced with ci/request-reviews/dev-branches.txt
-    branches:
-      - master
-      - staging
-      - release-*
-      - staging-*
-      - haskell-updates
-      - python-updates
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        type: string
+      systems:
+        required: true
+        type: string
+      testVersions:
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  get-merge-commit:
-    uses: ./.github/workflows/get-merge-commit.yml
-
-  attrs:
-    name: Attributes
-    runs-on: ubuntu-24.04
-    needs: get-merge-commit
-    if: needs.get-merge-commit.outputs.mergedSha
+  versions:
+    if: inputs.testVersions
+    runs-on: ubuntu-24.04-arm
     outputs:
-      targetSha: ${{ steps.targetSha.outputs.targetSha }}
-      systems: ${{ steps.systems.outputs.systems }}
+      versions: ${{ steps.versions.outputs.versions }}
     steps:
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          fetch-depth: 2
-          path: nixpkgs
+          path: trusted
+          sparse-checkout: |
+            ci/supportedVersions.nix
 
-      - name: Determine target commit
-        if: github.event_name == 'pull_request_target'
-        id: targetSha
-        run: |
-          targetSha=$(git -C nixpkgs rev-parse HEAD^1)
-          echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ inputs.mergedSha }}
+          path: untrusted
+          sparse-checkout: |
+            ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: sandbox = true
+        uses: cachix/install-nix-action@56a7bb7b56d9a92d4fd1bc05758de7eea4a370a8 # v31
 
-      - name: Evaluate the list of all attributes and get the systems matrix
-        id: systems
+      - name: Load supported versions
+        id: versions
         run: |
-          nix-build nixpkgs/ci -A eval.attrpathsSuperset
-          echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
+          echo "versions=$(trusted/ci/supportedVersions.nix --arg pinnedJson untrusted/ci/pinned.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Upload the list of all attributes
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: paths
-          path: result/*
-
-  eval-aliases:
-    name: Eval nixpkgs with aliases enabled
-    runs-on: ubuntu-24.04
-    needs: [ get-merge-commit ]
-    steps:
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          path: nixpkgs
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: sandbox = true
-
-      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
-        run: |
-          time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
-
-  outpaths:
-    name: Outpaths
-    runs-on: ubuntu-24.04
-    needs: [ attrs, get-merge-commit ]
+  eval:
+    runs-on: ubuntu-24.04-arm
+    needs: versions
+    if: ${{ !cancelled() && !failure() }}
     strategy:
       fail-fast: false
       matrix:
-        system: ${{ fromJSON(needs.attrs.outputs.systems) }}
+        system: ${{ fromJSON(inputs.systems) }}
+        version:
+          - "" # Default Eval triggering rebuild labels and such.
+          - ${{ fromJSON(needs.versions.outputs.versions || '[]') }} # Only for ci/pinned.json updates.
+    # Failures for versioned Evals will be collected in a separate job below
+    # to not interrupt main Eval's compare step.
+    continue-on-error: ${{ matrix.version != '' }}
+    name: ${{ matrix.system }}${{ matrix.version && format(' @ {0}', matrix.version) || '' }}
+    timeout-minutes: 15
     steps:
+      # This is not supposed to be used and just acts as a fallback.
+      # Without swap, when Eval runs OOM, it will fail badly with a
+      # job that is sometimes not interruptible anymore.
+      # If Eval starts swapping, decrease chunkSize to keep it fast.
       - name: Enable swap
         run: |
-          sudo fallocate -l 10G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+          sudo fallocate -l 10G /swap
+          sudo chmod 600 /swap
+          sudo mkswap /swap
+          sudo swapon /swap
 
-      - name: Download the list of all attributes
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          name: paths
-          path: paths
-
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+          sparse-checkout: .github/actions
+      - name: Check out the PR at merged and target commits
+        uses: ./.github/actions/checkout
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          path: nixpkgs
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: sandbox = true
+        uses: cachix/install-nix-action@56a7bb7b56d9a92d4fd1bc05758de7eea4a370a8 # v31
 
-      - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: '(-source|-single-chunk)$'
+
+      - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+          MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
+        run: |
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned  -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg chunkSize 8000 \
+            --argstr nixPath "$MATRIX_VERSION" \
+            --out-link merged
+          # If it uses too much memory, slightly decrease chunkSize.
+          # Note: Keep the same further down in sync!
+
+      # Running the attrpath generation step separately from the outpath step afterwards.
+      # The idea is that, *if* Eval on the target branch has not finished, yet, we will
+      # generate the attrpaths in the meantime - and the separate command command afterwards
+      # will check cachix again for whether Eval has finished. If no Eval result from the
+      # target branch can be found the second time, we proceed to run it in here. Attrpaths
+      # generation takes roughly 30 seconds, so for every normal use-case this should be more
+      # than enough of a head start for Eval on the target branch to finish.
+      # This edge-case, that Eval on the target branch is delayed is unlikely to happen anyway:
+      # For a commit to become the target commit of a PR, it must *already* be on the branch.
+      # Normally, CI should always start running on that push event *before* it starts running
+      # on the PR.
+      - name: Evaluate the ${{ matrix.system }} attribute paths at the target commit
+        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build nixpkgs/ci -A eval.singleSystem \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.attrpathsSuperset \
             --argstr evalSystem "$MATRIX_SYSTEM" \
-            --arg attrpathFile ./paths/paths.json \
-            --arg chunkSize 10000
-          # If it uses too much memory, slightly decrease chunkSize
+            --argstr nixPath "nixVersions.latest"
 
-      - name: Upload the output paths and eval stats
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+      - name: Evaluate the ${{ matrix.system }} output paths at the target commit
+        if: inputs.targetSha
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        # This should be very quick, because it pulls the eval results from Cachix.
+        run: |
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg chunkSize 8000 \
+            --argstr nixPath "nixVersions.latest" \
+            --out-link target
+
+      - name: Compare outpaths against the target branch
+        if: inputs.targetSha
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.diff \
+            --arg beforeDir "$(readlink ./target)" \
+            --arg afterDir "$(readlink ./merged)" \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --out-link diff
+
+      - name: Upload outpaths diff and stats
+        if: inputs.targetSha
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: intermediate-${{ matrix.system }}
-          path: result/*
+          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
+          path: diff/*
 
-  process:
-    name: Process
-    runs-on: ubuntu-24.04
-    needs: [ outpaths, attrs, get-merge-commit ]
-    outputs:
-      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
+  compare:
+    runs-on: ubuntu-24.04-arm
+    needs: [eval]
+    if: inputs.targetSha && !cancelled() && !failure()
+    permissions:
+      statuses: write
+    timeout-minutes: 5
     steps:
-      - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          pattern: intermediate-*
-          path: intermediate
+          sparse-checkout: .github/actions
+      - name: Check out the PR at the target commit
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Download output paths and eval stats for all systems
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          fetch-depth: 2
-          path: nixpkgs
+          pattern: diff-*
+          path: diff
+          merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: sandbox = true
+        uses: cachix/install-nix-action@56a7bb7b56d9a92d4fd1bc05758de7eea4a370a8 # v31
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build nixpkgs/ci -A eval.combine \
-            --arg resultsDir ./intermediate \
-            -o prResult
-
-      - name: Upload the combined results
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: result
-          path: prResult/*
-
-      - name: Get target run id
-        if: needs.attrs.outputs.targetSha
-        id: targetRunId
-        run: |
-          # Get the latest eval.yml workflow run for the PR's target commit
-          if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$BASE_SHA" -f event=push \
-            --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
-            || [[ -z "$run" ]]; then
-            echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
-            exit 0
-          fi
-          echo "Comparing against $(jq .html_url <<< "$run")"
-          runId=$(jq .id <<< "$run")
-          conclusion=$(jq -r .conclusion <<< "$run")
-
-          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
-            echo "Workflow not done, waiting 10 seconds before checking again"
-            sleep 10
-            conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
-          done
-
-          if [[ "$conclusion" != "success" ]]; then
-            echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
-            exit 0
-          fi
-
-          echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
-        env:
-          REPOSITORY: ${{ github.repository }}
-          BASE_SHA: ${{ needs.attrs.outputs.targetSha }}
-          GH_TOKEN: ${{ github.token }}
-
-      - uses: actions/download-artifact@v4
-        if: steps.targetRunId.outputs.targetRunId
-        with:
-          name: result
-          path: targetResult
-          github-token: ${{ github.token }}
-          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.combine \
+            --arg diffDir ./diff \
+            --out-link combined
 
       - name: Compare against the target branch
-        if: steps.targetRunId.outputs.targetRunId
+        env:
+          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C nixpkgs worktree add ../target ${{ needs.attrs.outputs.targetSha }}
-          git -C nixpkgs diff --name-only ${{ needs.attrs.outputs.targetSha }} \
+          git -C nixpkgs/trusted diff --name-only ${{ inputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build target/ci -A eval.compare \
-            --arg beforeResultDir ./targetResult \
-            --arg afterResultDir ./prResult \
+          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
+            --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
-            -o comparison
+            --argstr githubAuthorId "$AUTHOR_ID" \
+            --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload the combined results
-        if: steps.targetRunId.outputs.targetRunId
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+      - name: Upload the comparison results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: comparison
           path: comparison/*
 
-  # Separate job to have a very tightly scoped PR write token
-  tag:
-    name: Tag
-    runs-on: ubuntu-24.04
-    needs: [ attrs, process ]
-    if: needs.process.outputs.targetRunId
-    permissions:
-      pull-requests: write
-      statuses: write
-    steps:
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
-        id: app-token
-        with:
-          app-id: ${{ vars.OWNER_APP_ID }}
-          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-
-      - name: Download process result
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        with:
-          name: comparison
-          path: comparison
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-
-      # Important: This workflow job runs with extra permissions,
-      # so we need to make sure to not run untrusted code from PRs
-      - name: Check out Nixpkgs at the base commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ needs.attrs.outputs.targetSha }}
-          path: base
-          sparse-checkout: ci
-
-      - name: Build the requestReviews derivation
-        run: nix-build base/ci -A requestReviews
-
-      - name: Labelling pull request
-        run: |
-          # Get all currently set rebuild labels
-          gh api \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            --jq '.[].name | select(startswith("10.rebuild"))' \
-            | sort > before
-
-          # And the labels that should be there
-          jq -r '.labels[]' comparison/changed-paths.json \
-            | sort > after
-
-          # Remove the ones not needed anymore
-          while read -r toRemove; do
-            echo "Removing label $toRemove"
-            gh api \
-              --method DELETE \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
-          done < <(comm -23 before after)
-
-          # And add the ones that aren't set already
-          while read -r toAdd; do
-            echo "Adding label $toAdd"
-            gh api \
-              --method POST \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-              -f "labels[]=$toAdd"
-          done < <(comm -13 before after)
-
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        run: |
-          description=$(jq -r '
-          "Package: added " + (.attrdiff.added | length | tostring) +
-          ", removed " + (.attrdiff.removed | length | tostring) +
-          ", changed " + (.attrdiff.changed | length | tostring) +
-          ", Rebuild: linux " + (.rebuildCountByKernel.linux | tostring) +
-          ", darwin " + (.rebuildCountByKernel.darwin | tostring)
-          ' <comparison/changed-paths.json)
-          target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID?pr=$NUMBER"
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
-            -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          NUMBER: ${{ github.event.number }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
+            const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const description =
+              'Package: ' + [
+                `added ${changed.attrdiff.added.length}`,
+                `removed ${changed.attrdiff.removed.length}`,
+                `changed ${changed.attrdiff.changed.length}`
+              ].join(', ') +
+              ' — Rebuild: ' + [
+                `linux ${changed.rebuildCountByKernel.linux}`,
+                `darwin ${changed.rebuildCountByKernel.darwin}`
+              ].join(', ')
 
-      - name: Requesting maintainer reviews
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
 
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.pull_request.head.sha,
+              context: 'Eval Summary',
+              state: 'success',
+              description,
+              target_url
+            })
+
+  # Creates a matrix of Eval performance for various versions and systems.
+  report:
+    runs-on: ubuntu-24.04-arm
+    needs: [versions, eval]
+    steps:
+      - name: Download output paths and eval stats for all versions
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          pattern: "*-diff-*"
+          path: versions
+
+      - name: Add version comparison table to job summary
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          AUTHOR: ${{ github.event.pull_request.user.login }}
-          # Don't request reviewers on draft PRs
-          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+          SYSTEMS: ${{ inputs.systems }}
+          VERSIONS: ${{ needs.versions.outputs.versions }}
+        with:
+          script: |
+            const { readFileSync } = require('node:fs')
+            const path = require('node:path')
+
+            const systems = JSON.parse(process.env.SYSTEMS)
+            const versions = JSON.parse(process.env.VERSIONS)
+
+            core.summary.addHeading('Lix/Nix version comparison')
+            core.summary.addTable(
+              [].concat(
+                [
+                  [{ data: 'Version', header: true }].concat(
+                    systems.map((system) => ({ data: system, header: true })),
+                  ),
+                ],
+                versions.map((version) =>
+                  [{ data: version }].concat(
+                    systems.map((system) => {
+                      try {
+                        const artifact = path.join('versions', `${version}-diff-${system}`)
+                        const time = Math.round(
+                          parseFloat(
+                            readFileSync(
+                              path.join(artifact, 'after', system, 'total-time'),
+                              'utf-8',
+                            ),
+                          ),
+                        )
+                        const diff = JSON.parse(
+                          readFileSync(path.join(artifact, system, 'diff.json'), 'utf-8'),
+                        )
+                        const attrs = [].concat(
+                          diff.added,
+                          diff.removed,
+                          diff.changed,
+                          diff.rebuilds
+                        ).filter(attr =>
+                          // Exceptions related to dev shells, which changed at some time between 2.18 and 2.24.
+                          !attr.startsWith('tests.devShellTools.nixos.') &&
+                          !attr.startsWith('tests.devShellTools.unstructuredDerivationInputEnv.')
+                        )
+                        if (attrs.length > 0) {
+                          core.setFailed(
+                            `${version} on ${system} has changed outpaths!\nNote: Please make sure to update ci/pinned.json separately from changes to other packages.`,
+                          )
+                          return { data: ':x:' }
+                        }
+                        return { data: time }
+                      } catch {
+                        core.warning(`${version} on ${system} did not produce artifact.`)
+                        return { data: ':warning:' }
+                      }
+                    }),
+                  ),
+                ),
+              ),
+            )
+            core.summary.addRaw(
+              '\n*Evaluation time in seconds without downloading dependencies.*',
+              true,
+            )
+            core.summary.addRaw('\n*:warning: Job did not report a result.*', true)
+            core.summary.addRaw(
+              '\n*:x: Job produced different outpaths than the target branch.*',
+              true,
+            )
+            core.summary.write()
+
+  misc:
+    if: ${{ github.event_name != 'push' }}
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: .github/actions
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@56a7bb7b56d9a92d4fd1bc05758de7eea4a370a8 # v31
+
+      - name: Run misc eval tasks in parallel
+        run: |
+          # Ensure flake outputs on all systems still evaluate
+          nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1' &
+          # Query nixpkgs with aliases enabled to check for basic syntax errors
+          nix-env -I ./nixpkgs/untrusted -f ./nixpkgs/untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null &
+          wait

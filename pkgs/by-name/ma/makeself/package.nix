@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
-    rev = "release-${version}";
+    tag = "release-${version}";
     fetchSubmodules = true;
     hash = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
   };

@@ -5,16 +5,16 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-aoc";
   version = "0.3.8";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5CjY91515GeLzmLJiGjfbBfIMPr32EA65X/rriKPWRY=";
   };
 
-  cargoHash = "sha256-LhPsiO0Fnx9Tf+itaaVaO1XgqM00m+UQMlUJYY8isXY=";
+  cargoHash = "sha256-q0kpo6DNR+8129+vJSLoOC/bUYjlfaB77YTht6+kT00=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "cargo-aoc";
   };
-}
+})

@@ -1,12 +1,19 @@
+{
+  lib,
+}:
 # Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
-{ changedattrs, changedpathsjson }:
+{
+  changedattrs,
+  changedpathsjson,
+  removedattrs,
+  byName ? false,
+}:
 let
   pkgs = import ../../.. {
     system = "x86_64-linux";
     config = { };
     overlays = [ ];
   };
-  inherit (pkgs) lib;
 
   changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
 
@@ -15,38 +22,35 @@ let
 
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (name: {
-    path = lib.splitString "." name;
-    name = name;
-  }) changedattrs;
-
-  validPackageAttributes = builtins.filter (
-    pkg:
-    if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
-      (
-        if (builtins.tryEval (lib.attrsets.attrByPath pkg.path null pkgs)).success then
-          true
-        else
-          builtins.trace "Failed to access ${pkg.name} even though it exists" false
-      )
-    else
-      builtins.trace "Failed to locate ${pkg.name}." false
-  ) enrichedAttrs;
-
-  attrsWithPackages = builtins.map (
-    pkg: pkg // { package = lib.attrsets.attrByPath pkg.path null pkgs; }
-  ) validPackageAttributes;
-
-  attrsWithMaintainers = builtins.map (
-    pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
-  ) attrsWithPackages;
+  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
+    (builtins.map (
+      name:
+      let
+        # Some packages might be reported as changed on a different platform, but
+        # not even have an attribute on the platform the maintainers are requested on.
+        # Fallback to `null` for these to filter them out below.
+        package = lib.attrByPath (lib.splitString "." name) null pkgs;
+      in
+      {
+        inherit name package;
+        # TODO: Refactor this so we can ping entire teams instead of the individual members.
+        # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+        maintainers = package.meta.maintainers or [ ];
+      }
+    ))
+    # No need to match up packages without maintainers with their files.
+    # This also filters out attributes where `packge = null`, which is the
+    # case for libintl, for example.
+    (builtins.filter (pkg: pkg.maintainers != [ ]))
+  ];
 
   relevantFilenames =
     drv:
     (lib.lists.unique (
       builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
-          (builtins.unsafeGetAttrPos "maintainers" (drv.meta or { }))
+          ((drv.meta or { }).maintainersPosition or null)
+          ((drv.meta or { }).teamsPosition or null)
           (builtins.unsafeGetAttrPos "src" drv)
           # broken because name is always set by stdenv:
           #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
@@ -80,12 +84,13 @@ let
     pkg:
     builtins.map (maintainer: {
       id = maintainer.githubId;
+      inherit (maintainer) github;
       packageName = pkg.name;
       dueToFiles = pkg.filenames;
     }) pkg.maintainers
   ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
+  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages

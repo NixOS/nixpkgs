@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchzip,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
+  bluez,
   curl,
   ffmpeg,
   freeimage,
@@ -17,15 +17,16 @@
   poppler,
   pugixml,
   SDL2,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchzip {
     url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-pQHT/BEtIWc8tQXPjU5KFt8jED+4IqcZR+VMmAFc940=";
+    hash = "sha256-tW8+7ImcJ3mBhoIHVE8h4cba+4SQLP55kiFYE7N8jyI=";
   };
 
   patches = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    bluez
     curl
     ffmpeg
     freeimage
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
     pugixml
     SDL2
+    libGL
   ];
 
   cmakeFlags = [ (lib.cmakeBool "APPLICATION_UPDATER" false) ];

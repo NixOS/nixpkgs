@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs_20,
   jre_headless,
-  protobuf,
+  protobuf_30,
   cyclonedx-cli,
   makeWrapper,
   maven,
@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.12.2";
+  version = "4.13.4";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,10 +25,15 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-M7UtyhIuEi6ebkjO8OM0VVi8LQ+VqeVIzBgQwIzSAzg=";
+      hash = "sha256-CBO69GSUDENBRGDGn7nbxxh9++SAqcFgRBg/SYPze5U=";
     };
 
-    npmDepsHash = "sha256-ZU5D3ZXLaZ1m2YP6uZmpzahP2JQPL9tdOHOyN9fp/XA=";
+    installPhase = ''
+      mkdir $out
+      cp -R ./dist $out/
+    '';
+
+    npmDepsHash = "sha256-W3EkDJ0raRNXXZO9ajob+cVN6vcdoUrZYYmkiruSHCE=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -45,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-wn4HnOFhV02oq66LwBIOVzU+ehXemCuzOWcDASG/47c=";
+    hash = "sha256-bEODby53pVg/3KVUbLJvDAqfpyc0G+iIUxpLKy7LwJc=";
   };
 
   patches = [
@@ -56,11 +61,11 @@ maven.buildMavenPackage rec {
   postPatch = ''
     substituteInPlace pom.xml \
       --replace-fail '<protocArtifact>''${tool.protoc.version}</protocArtifact>' \
-      "<protocCommand>${protobuf}/bin/protoc</protocCommand>"
+      "<protocCommand>${protobuf_30}/bin/protoc</protocCommand>"
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-x1/b8LoXyGxCQiu7QB60XSpiufTk/y4492mOraFnRKY=";
+  mvnHash = "sha256-zM4iPFwQV/sAX666SdfArcjJNVaWXAUeQoiNsYbv2GA=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -74,16 +79,10 @@ maven.buildMavenPackage rec {
     "-Dmaven.test.skip=true"
     "-P enhance"
     "-P embedded-jetty"
-    "-P bundle-ui"
     "-Dservices.bom.merge.skip=false"
     "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
     "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
   ];
-
-  preBuild = ''
-    mkdir -p frontend
-    cp -r ${frontend}/lib/node_modules/@dependencytrack/frontend/dist frontend/
-  '';
 
   afterDepsSetup = ''
     mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
@@ -105,19 +104,23 @@ maven.buildMavenPackage rec {
   '';
 
   passthru = {
-    # passthru for nix-update
-    inherit (frontend) npmDeps;
+    inherit frontend;
     tests = {
       inherit (nixosTests) dependency-track;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.cyberus.members;
+    teams = [ lib.teams.cyberus ];
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

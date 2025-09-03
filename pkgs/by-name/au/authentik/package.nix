@@ -4,9 +4,9 @@
   callPackages,
   cacert,
   fetchFromGitHub,
-  buildNpmPackage,
   buildGoModule,
   runCommand,
+  bash,
   chromedriver,
   openapi-generator-cli,
   nodejs,
@@ -15,22 +15,25 @@
 }:
 
 let
-  version = "2024.12.2";
+  version = "2025.6.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-Z3rFFrXrOKaF9NpY/fInsEbzdOWnWqLfEYl7YX9hFEU=";
+    hash = "sha256-bs/ThY3YixwBObahcS7BrOWj0gsaUXI664ldUQlJul8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    maintainers = with lib.maintainers; [
       jvanbruegge
       risson
     ];
@@ -41,9 +44,15 @@ let
     pname = "authentik-website-deps";
     inherit src version meta;
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
-    outputHash = "sha256-SONw9v67uuVk8meRIuS1KaBGbej6Gbz6nZxPDnHfCwQ=";
+    outputHash =
+      {
+        "aarch64-linux" = "sha256-+UObt/FhHkEzZUR24ND6phSDqvuzaOuUiyoW0dolsiY=";
+        "x86_64-linux" = "sha256-1qlJf4mVYM5znF3Ifi7CpGMfinUsb/YoXGeM6QLYMis=";
+      }
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported hust platform");
+
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -53,7 +62,8 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache
+
+      rm -r ./cache node_modules/.package-lock.json
     '';
 
     installPhase = ''
@@ -71,20 +81,24 @@ let
 
     postPatch = ''
       substituteInPlace package.json --replace-fail 'cross-env ' ""
+      substituteInPlace ../packages/docusaurus-config/lib/common.js \
+        --replace-fail 'title: "authentik",' 'title: "authentik", future: { experimental_faster : { rspackBundler: false }},'
     '';
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     buildPhase = ''
       runHook preBuild
 
       cp -r ${website-deps} node_modules
       chmod -R +w node_modules
+
       pushd node_modules/.bin
       patchShebangs $(readlink docusaurus)
       popd
-      cat node_modules/.bin/docusaurus
-      npm run build-bundled
+      npm run build:schema
+      npm run build:api
+      npm run build:docusaurus
 
       runHook postBuild
     '';
@@ -118,21 +132,89 @@ let
     '';
   };
 
-  webui = buildNpmPackage {
+  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
+  webui-deps = stdenvNoCC.mkDerivation {
+    pname = "authentik-webui-deps";
+    inherit src version meta;
+
+    sourceRoot = "${src.name}/web";
+
+    outputHash =
+      {
+        "aarch64-linux" = "sha256-e4v7f3+/e++CI9xa9G2/47y8Dga+vluyUtBXGyaWFcI=";
+        "x86_64-linux" = "sha256-m0vYUevOz6pof8XqiZHXzgPhkQLUUFOdblmfOjHJUJc=";
+      }
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported hust platform");
+    outputHashMode = "recursive";
+
+    nativeBuildInputs = [
+      nodejs
+      cacert
+    ];
+
+    postPatch = ''
+      substituteInPlace packages/core/version/node.js \
+        --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
+        --replace-fail '(PackageJSON.version);' '"${version}";'
+    '';
+
+    buildPhase = ''
+      npm ci --cache ./cache
+
+      rm -r node_modules/chromedriver node_modules/.bin/chromedriver
+
+      rm -r ./cache node_modules/.package-lock.json
+      rm node_modules/@goauthentik/{core,web-sfe,esbuild-plugin-live-reload}
+      cp -r packages/core node_modules/@goauthentik/
+      cp -r packages/sfe node_modules/@goauthentik/web-sfe
+    '';
+
+    installPhase = ''
+      mv node_modules $out
+    '';
+
+    dontPatchShebangs = true;
+  };
+
+  webui = stdenvNoCC.mkDerivation {
     pname = "authentik-webui";
     inherit version meta;
 
     src = runCommand "authentik-webui-source" { } ''
-      mkdir -p $out/web/node_modules/@goauthentik/
+      mkdir $out
       cp -r ${src}/web $out/
       ln -s ${src}/package.json $out/
-      ln -s ${src}/website $out/
+      chmod -R +w $out/web
+      ln -s ${src}/website $out/web/
+      cp -r ${webui-deps} $out/web/node_modules
+      chmod -R +w $out/web/node_modules
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-aRfpJWTp2WQB3E9aqzJn3BiPLwpCkdvMoyHexaKvz0U=";
+
+    nativeBuildInputs = [
+      nodejs
+    ];
 
     postPatch = ''
       cd web
+
+      substituteInPlace packages/core/version/node.js \
+        --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
+        --replace-fail '(PackageJSON.version);' '"${version}";'
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd node_modules/.bin
+      patchShebangs $(readlink rollup)
+      patchShebangs $(readlink wireit)
+      patchShebangs $(readlink lit-localize)
+      popd
+
+      npm run build
+
+      runHook postBuild
     '';
 
     CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
@@ -157,28 +239,22 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django-tenants = prev.django-tenants.overrideAttrs {
-        version = "3.6.1-unstable-2024-01-11";
-        src = fetchFromGitHub {
-          owner = "rissson";
-          repo = "django-tenants";
-          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
-          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
-        };
-      };
-      # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
-      # Otherwise applying blueprints/default/default-brand.yaml fails with:
-      #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
-      djangorestframework = prev.buildPythonPackage rec {
+      # https://github.com/goauthentik/authentik/pull/14709
+      django = final.django_5_1;
+
+      # Running authentik currently requires a custom version.
+      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
+      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
+      djangorestframework = prev.buildPythonPackage {
         pname = "djangorestframework";
-        version = "3.14.0";
+        version = "3.16.0";
         format = "setuptools";
 
         src = fetchFromGitHub {
-          owner = "encode";
+          owner = "authentik-community";
           repo = "django-rest-framework";
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+          rev = "896722bab969fabc74a08b827da59409cf9f1a4e";
+          hash = "sha256-YrEDEU3qtw/iyQM3CoB8wYx57zuPNXiJx6ZjrIwnCNU=";
         };
 
         propagatedBuildInputs = with final; [
@@ -193,12 +269,32 @@ let
           # optional tests
           coreapi
           django-guardian
+          inflection
           pyyaml
           uritemplate
         ];
 
+        disabledTests = [
+          "test_ignore_validation_for_unchanged_fields"
+          "test_invalid_inputs"
+          "test_shell_code_example_rendering"
+          "test_unique_together_condition"
+          "test_unique_together_with_source"
+        ];
+
         pythonImportsCheck = [ "rest_framework" ];
       };
+
+      tenant-schemas-celery = prev.tenant-schemas-celery.overrideAttrs (_: rec {
+        version = "3.0.0";
+
+        src = fetchFromGitHub {
+          owner = "maciej-gol";
+          repo = "tenant-schemas-celery";
+          tag = version;
+          hash = "sha256-rGLrP8rE9SACMDVpNeBU85U/Sb2lNhsgEgHJhAsdKNM=";
+        };
+      });
 
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
@@ -212,16 +308,18 @@ let
           substituteInPlace authentik/lib/default.yml \
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
-          substituteInPlace pyproject.toml \
-            --replace-fail 'dumb-init = "*"' "" \
-            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
 
         nativeBuildInputs = [
-          prev.poetry-core
+          prev.hatchling
+          prev.pythonRelaxDepsHook
         ];
+
+        pythonRemoveDeps = [ "dumb-init" ];
+
+        pythonRelaxDeps = true;
 
         propagatedBuildInputs =
           with final;
@@ -246,7 +344,7 @@ let
             django-storages
             django-tenants
             djangorestframework
-            djangorestframework-guardian2
+            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular
@@ -254,6 +352,7 @@ let
             fido2
             flower
             geoip2
+            geopy
             google-api-python-client
             gunicorn
             gssapi
@@ -283,6 +382,7 @@ let
             tenant-schemas-celery
             twilio
             ua-parser
+            unidecode
             urllib3
             uvicorn
             watchdog
@@ -294,6 +394,7 @@ let
           ++ django-storages.optional-dependencies.s3
           ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
+          ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
@@ -326,7 +427,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-FyRTPs2xfostV2x03IjrxEYBSrsZwnuPn+oHyQq1Kq0=";
+    vendorHash = "sha256-7oX7e7Ni5I6zblEQIeXjYOt4+QNSjH4Rpn7B5Cr5LMc=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -339,6 +440,8 @@ in
 stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile
@@ -368,7 +471,12 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.outposts = callPackages ./outposts.nix { };
+  passthru = {
+    inherit proxy;
+    outposts = callPackages ./outposts.nix {
+      inherit (proxy) vendorHash;
+    };
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 

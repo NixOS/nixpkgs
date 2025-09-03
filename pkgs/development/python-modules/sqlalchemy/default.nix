@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -15,6 +16,7 @@
 
   # optionals
   aiomysql,
+  # TODO: aioodbc
   aiosqlite,
   asyncmy,
   asyncpg,
@@ -28,10 +30,11 @@
   psycopg,
   psycopg2,
   psycopg2cffi,
-  # TODO: pymssql
+  pymssql,
   pymysql,
   pyodbc,
-  # TODO: sqlcipher3
+  sqlcipher3,
+  types-greenlet,
 
   # tests
   mock,
@@ -41,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.36";
+  version = "2.0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,27 +53,28 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-i1yyAVBXz0efAdpFvUPvdzS+4IRU94akmePoprb8Is0=";
+    hash = "sha256-e/DkS9CioMLG/qMOf0//DxMFDTep4xEtCVTp/Hn0Wiw=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
+  build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     greenlet
     typing-extensions
   ];
 
   optional-dependencies = lib.fix (self: {
     asyncio = [ greenlet ];
-    mypy = [ mypy ];
-    mssql = [ pyodbc ];
-    mssql_pymysql = [
-      # TODO: pymssql
+    mypy = [
+      mypy
+      types-greenlet
     ];
+    mssql = [ pyodbc ];
+    mssql_pymysql = [ pymssql ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
     mysql_connector = [ mysql-connector ];
@@ -86,14 +90,10 @@ buildPythonPackage rec {
     postgresql_psycopgbinary = [ psycopg ];
     pymysql = [ pymysql ];
     aiomysql = [ aiomysql ] ++ self.asyncio;
+    # TODO: aioodbc
     asyncmy = [ asyncmy ] ++ self.asyncio;
-    aiosqlite = [
-      aiosqlite
-      typing-extensions
-    ] ++ self.asyncio;
-    sqlcipher = [
-      # TODO: sqlcipher3
-    ];
+    aiosqlite = [ aiosqlite ] ++ self.asyncio;
+    sqlcipher = [ sqlcipher3 ];
   });
 
   nativeCheckInputs = [
@@ -109,6 +109,13 @@ buildPythonPackage rec {
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
+  };
 
   meta = with lib; {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${

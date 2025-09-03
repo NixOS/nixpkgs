@@ -13,9 +13,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "orage";
-  version = "4.20.0";
+  version = "4.20.2";
 
-  sha256 = "sha256-VaabhMRgH/q9HiFXBPQ90HbMLW21BXTvZtxd8bhYYnw=";
+  sha256 = "sha256-iV4eVYmOXfEpq5cnHeCXRvx0Ms0Dis3EIwbcSakGLXs=";
 
   buildInputs = [
     glib
@@ -34,6 +34,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Simple calendar application for Xfce";
     mainProgram = "orage";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

@@ -6,9 +6,9 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rofi-menugen";
-  version = "unstable-2015-12-28";
+  version = "0-unstable-2015-12-28";
 
   src = fetchFromGitHub {
     owner = "octotep";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   meson,
   ninja,
@@ -48,16 +48,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "47.4";
+  version = "48.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-coHFS5t0jWai55LrjgMxyJec44+vrfct482ZnYDpe08=";
+    hash = "sha256-nNEwvGLNCLY6Ii6yZmG8xxfnXVjuGzwYgMTRt2zNJjs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit isocodes;
     })
   ];
@@ -102,12 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [ fwupd ];
+  ]
+  ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
+  ]
+  ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
@@ -118,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

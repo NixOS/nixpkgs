@@ -1,100 +1,173 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  mono,
-  libmediainfo,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
   sqlite,
-  curl,
-  makeWrapper,
-  icu,
-  dotnet-runtime,
-  openssl,
+  fetchYarnDeps,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
   nixosTests,
-  zlib,
+  # update script
+  writers,
+  python3Packages,
+  nix,
+  prefetch-yarn-deps,
+  fetchpatch,
+  applyPatches,
 }:
 let
-  pname = "prowlarr";
-
-  unsupported = throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}";
-
-  os =
-    if stdenv.hostPlatform.isDarwin then
-      "osx"
-    else if stdenv.hostPlatform.isLinux then
-      "linux"
-    else
-      unsupported;
-
-  arch =
-    {
-      aarch64-darwin = "arm64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      x86_64-linux = "x64";
-    }
-    .${stdenv.hostPlatform.system} or unsupported;
-
-  hash =
-    {
-      aarch64-darwin = "sha256-F6q0JFiwESTenh9xAjqoqqQh911d8DMEWYm3CrYHoxI=";
-      aarch64-linux = "sha256-izh5er3uLUKFMjUCiZYBqtS9sosicSCo+qvavcnX/6s=";
-      x86_64-darwin = "sha256-BLklmXj8UbN8jjEXnHe1xsr2fF5H1enwztbKDU3IpPU=";
-      x86_64-linux = "sha256-aiH4bv47cnBzUtFwfJfmrY+2LaqgZkRXT2Jx8FkSX7M=";
-    }
-    .${stdenv.hostPlatform.system} or unsupported;
+  version = "2.0.5.5160";
+  # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
+  # the already patched lockfile to `fetchYarnDeps`.
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "Prowlarr";
+      repo = "Prowlarr";
+      tag = "v${version}";
+      hash = "sha256-xSAEDcBaItA+retaSKtEI6wlwj5Knfi4RwUN6GGYms0=";
+    };
+    postPatch = ''
+      mv src/NuGet.config NuGet.Config
+    '';
+  };
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
-stdenv.mkDerivation rec {
-  inherit pname;
-  version = "1.30.2.4939";
+buildDotnetModule {
+  pname = "prowlarr";
+  inherit version src;
 
-  src = fetchurl {
-    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";
-    inherit hash;
+  strictDeps = true;
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    prefetch-yarn-deps
+    fixup-yarn-lock
+  ];
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-QVyjo/Zshy+61qocGKa3tZS8gnHvvVqenf79FkiXDBM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
-
-    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Prowlarr \
-      --add-flags "$out/share/${pname}-${version}/Prowlarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          curl
-          sqlite
-          libmediainfo
-          mono
-          openssl
-          icu
-          zlib
-        ]
-      }
-
-    runHook postInstall
+  postConfigure = ''
+    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs --build node_modules
+  '';
+  postBuild = ''
+    yarn --offline run build --env production
+  '';
+  postInstall = ''
+    cp -a -- _output/UI "$out/lib/prowlarr/UI"
   '';
 
+  nugetDeps = ./deps.json;
+
+  runtimeDeps = [ sqlite ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+
+  doCheck = true;
+
+  __darwinAllowLocalNetworking = true; # for tests
+
+  __structuredAttrs = true; # for Copyright property that contains spaces
+
+  executables = [ "Prowlarr" ];
+
+  projectFile = [
+    "src/NzbDrone.Console/Prowlarr.Console.csproj"
+    "src/NzbDrone.Mono/Prowlarr.Mono.csproj"
+  ];
+
+  testProjectFile = [
+    "src/Prowlarr.Api.V1.Test/Prowlarr.Api.V1.Test.csproj"
+    "src/NzbDrone.Common.Test/Prowlarr.Common.Test.csproj"
+    "src/NzbDrone.Core.Test/Prowlarr.Core.Test.csproj"
+    "src/NzbDrone.Host.Test/Prowlarr.Host.Test.csproj"
+    "src/NzbDrone.Libraries.Test/Prowlarr.Libraries.Test.csproj"
+    "src/NzbDrone.Mono.Test/Prowlarr.Mono.Test.csproj"
+    "src/NzbDrone.Test.Common/Prowlarr.Test.Common.csproj"
+  ];
+
+  dotnetFlags = [
+    "--property:TargetFramework=net8.0"
+    "--property:EnableAnalyzers=false"
+    "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
+    # Override defaults in src/Directory.Build.props that use current time.
+    "--property:Copyright=Copyright 2014-2025 prowlarr.com (GNU General Public v3)"
+    "--property:AssemblyVersion=${version}"
+    "--property:AssemblyConfiguration=master"
+    "--property:RuntimeIdentifier=${rid}"
+  ];
+
+  # Skip manual, integration, automation and platform-dependent tests.
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
+
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
+
+  disabledTests = [
+    # setgid tests
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+
+    # we do not set application data directory during tests (i.e. XDG data directory)
+    "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+    "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
+
+    # attempts to read /etc/*release and fails since it does not exist
+    "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+
+    # fails to start test dummy because it cannot locate .NET runtime for some reason
+    "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+  ];
+
   passthru = {
-    updateScript = ./update.sh;
-    tests.smoke-test = nixosTests.prowlarr;
+    tests = {
+      inherit (nixosTests) prowlarr;
+    };
+
+    updateScript = writers.writePython3 "prowlarr-updater" {
+      libraries = with python3Packages; [ requests ];
+      flakeIgnore = [ "E501" ];
+      makeWrapperArgs = [
+        "--prefix"
+        "PATH"
+        ":"
+        (lib.makeBinPath [
+          nix
+          prefetch-yarn-deps
+        ])
+      ];
+    } ./update.py;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Indexer manager/proxy built on the popular arr .net/reactjs base stack";
-    homepage = "https://wiki.servarr.com/prowlarr";
+    homepage = "https://prowlarr.com/";
     changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pizzapim ];
-    mainProgram = "Prowlarr";
-    platforms = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "x86_64-linux"
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      pizzapim
+      nyanloutre
     ];
+    mainProgram = "Prowlarr";
+    # platforms inherited from dotnet-sdk.
   };
 }

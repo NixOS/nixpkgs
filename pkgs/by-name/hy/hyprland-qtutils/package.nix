@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -12,15 +12,15 @@
 let
   inherit (lib.strings) makeBinPath;
 in
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9m/Ha7hrxtbBl4UylZTYzTT/8a6Sy5DvTmBJrcQ6FwQ=";
+    hash = "sha256-2dModE32doiyQMmd6EDAQeZnz+5LOs6KXyE0qX76WIg=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     platforms = lib.platforms.linux;
   };
 })

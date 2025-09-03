@@ -16,6 +16,7 @@
   keep-going ? null,
   commit ? null,
   skip-prompt ? null,
+  order ? null,
 }:
 
 let
@@ -217,6 +218,18 @@ let
     to skip prompt:
 
         --argstr skip-prompt true
+
+    By default, the updater will update the packages in arbitrary order. Alternately, you can force a specific order based on the packages’ dependency relations:
+
+        - Reverse topological order (e.g. {"gnome-text-editor", "gimp"}, {"gtk3", "gtk4"}, {"glib"}) is useful when you want checkout each commit one by one to build each package individually but some of the packages to be updated would cause a mass rebuild for the others. Of course, this requires that none of the updated dependents require a new version of the dependency.
+
+            --argstr order reverse-topological
+
+        - Topological order (e.g. {"glib"}, {"gtk3", "gtk4"}, {"gnome-text-editor", "gimp"}) is useful when the updated dependents require a new version of updated dependency.
+
+            --argstr order topological
+
+    Note that sorting requires instantiating each package and then querying Nix store for requisites so it will be pretty slow with large number of packages.
   '';
 
   # Transform a matched package into an object for update.py.
@@ -241,7 +254,8 @@ let
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
     ++ lib.optional (keep-going == "true") "--keep-going"
     ++ lib.optional (commit == "true") "--commit"
-    ++ lib.optional (skip-prompt == "true") "--skip-prompt";
+    ++ lib.optional (skip-prompt == "true") "--skip-prompt"
+    ++ lib.optional (order != null) "--order=${order}";
 
   args = [ packagesJson ] ++ optionalArgs;
 

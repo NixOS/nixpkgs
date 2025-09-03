@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "amd-blis";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
     rev = version;
-    hash = "sha256-E6JmV4W0plFJfOAPK1Vn7qkmFalwl6OjqSpxYnhAPmw=";
+    hash = "sha256-hqb/Q1CBqtC4AXqHNd7voewGUD675hJ9IwvP3Mn9b+M=";
   };
 
   inherit blas64;
@@ -47,13 +47,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--enable-cblas"
-      "--blas-int-size=${blasIntSize}"
-    ]
-    ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
-    ++ [ withArchitecture ];
+  configureFlags = [
+    "--enable-cblas"
+    "--blas-int-size=${blasIntSize}"
+  ]
+  ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  ++ [ withArchitecture ];
 
   postPatch = ''
     patchShebangs configure build/flatten-headers.py

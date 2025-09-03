@@ -38,6 +38,12 @@ let
           rev = "932366c9d4d8e487162b5c1b2a2d9693e24e0483";
           hash = "sha256-zOekPmP1zR/S+zxq/7OrEz24k8SInlsB+wJ8kPlmqe4=";
         };
+        patches = [ ];
+        preCheck = ''
+          rm -rf src/coincurve
+          # don't run benchmark tests
+          rm tests/test_bench.py
+        '';
       });
   bindir = linkFarm "bindir" (
     lib.mapAttrs (_: p: "${lib.getBin p}/bin") {
@@ -52,14 +58,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "basicswap";
-  version = "0.14.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${version}";
-    hash = "sha256-Ay7MQJdbPDjbtfaIWsegu01KIjlKQqdqH3MomYW7KGc=";
+    hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
   };
 
   postPatch = ''

@@ -4,45 +4,31 @@
   fetchurl,
   autoreconfHook,
   cups,
-  rpm,
-  cpio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.26";
+  version = "1.2.35";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
-    # and retreive the download link for source package for x86 CPU
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/65/06/8fdecc271f6473178d08ffd6b6f6ca2abc92e32f/epson-inkjet-printer-escpr2-1.2.26-1.src.rpm";
-    sha256 = "sha256-Js2iZCS9ZzJVRF8PbDA/U1muOne+upq4sA0u+NVIk/0=";
+    # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/17/28/09/4e8dc40219d4b52e414b608de92552af4fd46eca/epson-inkjet-printer-escpr2-1.2.35-1.tar.gz";
+    hash = "sha256-aYEuEION/C32/SnngreX/nqK/6Yzkuxf0k0HpferTYM=";
   };
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    rpm2cpio $src | cpio -idmv
-    tar xvf ${pname}-${version}-1.tar.gz
-    cd ${pname}-${version}
-
-    runHook postUnpack
-  '';
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoreconfHook
-    rpm
-    cpio
   ];
 
   patches = [
     # Fixes "implicit declaration of function" errors
     # source of patch: https://aur.archlinux.org/packages/epson-inkjet-printer-escpr2
     (fetchurl {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=575d1b959063044f233cca099caceec8e6d5c02f";
-      sha256 = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=8fbca325d6d39fa3ffe001f90a432380bdeacc2f";
+      sha256 = "sha256-V8ejK33qyHPX4x8EOgR+XWW44KR8DQwHx2w+O71gQwo=";
     })
   ];
 
@@ -51,7 +37,7 @@ stdenv.mkDerivation rec {
     "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''
@@ -60,12 +46,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma9e
       ma27
       shawn8901
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

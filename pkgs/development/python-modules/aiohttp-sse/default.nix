@@ -4,7 +4,7 @@
   fetchFromGitHub,
   lib,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiohttp_sse" ];
 
   nativeCheckInputs = [
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-asyncio_0
     pytest-cov-stub
     pytestCheckHook
   ];

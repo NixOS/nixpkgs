@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "workshop-runner";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "rust-workshop-runner";
     rev = "v${version}";
-    hash = "sha256-8Qq3kXFR4z9k7I6b9hN1JKOGNkzydo/wA99/X17iSkk=";
+    hash = "sha256-PfQPRbOPK1Y/j8Xtg78oDzBFUx8eiM3ZwRul/ao0SgI=";
   };
 
-  cargoHash = "sha256-pvcIN2nxLTt4nDEviJBdlX69xPtLZMyH2nVveOpD1R0=";
+  cargoHash = "sha256-opV2IrqMIwdgrXY6V0jxFtrdP8NVmdlUdsLdfFNimt0=";
 
   meta = {
     description = "CLI tool to drive test-driven Rust workshops";

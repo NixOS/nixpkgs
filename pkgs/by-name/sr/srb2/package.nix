@@ -5,10 +5,9 @@
   fetchFromGitHub,
   cmake,
   curl,
-  nasm,
   libopenmpt,
+  miniupnpc,
   game-music-emu,
-  libGLU,
   libpng,
   SDL2,
   SDL2_mixer,
@@ -20,18 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srb2";
-  version = "2.2.13";
+  version = "2.2.15";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "SRB2";
     rev = "SRB2_release_${finalAttrs.version}";
-    hash = "sha256-OSkkjCz7ZW5+0vh6l7+TpnHLzXmd/5QvTidRQSHJYX8=";
+    hash = "sha256-eJ0GYe3Rw6qQXj+jtyt8MkP87DaCiO9ffChg+SpQqaI=";
   };
 
   nativeBuildInputs = [
     cmake
-    nasm
     makeWrapper
     copyDesktopItems
   ];
@@ -41,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     game-music-emu
     libpng
     libopenmpt
+    miniupnpc
     SDL2
     SDL2_mixer
     zlib
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     src = fetchgit {
       url = "https://git.do.srb2.org/STJr/srb2assets-public";
       rev = "SRB2_release_${finalAttrs.version}";
-      hash = "sha256-OXvO5ZlujIYmYevc62Dtx192dxoujQMNFUCrH5quBBg=";
+      hash = "sha256-1kwhWHzL2TbSx1rhFExbMhXqn0HMBRhR6LZiuoRx+iI=";
       fetchLFS = true;
     };
 
@@ -72,26 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
-    "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2.dev}/include/SDL2"
+    "-DSDL2_INCLUDE_DIR=${lib.getInclude SDL2}/include/SDL2"
   ];
 
   patches = [
-    # Make the build work without internet connectivity
-    # See: https://build.opensuse.org/request/show/1109889
     ./cmake.patch
-    ./thirdparty.patch
   ];
-
-  postPatch = ''
-    substituteInPlace ./src/sdl/ogl_sdl.c \
-      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
-  '';
 
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2";
+      icon = "srb2";
       comment = finalAttrs.meta.description;
       desktopName = name;
       genericName = name;

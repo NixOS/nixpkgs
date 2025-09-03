@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     "--with-milter=${libmilter}"
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-unbound=${unbound}";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-unbound=${unbound}";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
     openssl
     libmilter
     perl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin unbound;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin unbound;
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
     homepage = "http://www.opendkim.org/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

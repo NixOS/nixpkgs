@@ -58,13 +58,11 @@
 
 let
   # We use `--replace-fail` instead of `--subst-var-by` so that if the thing isn't there, we fail.
-  subst-var-by =
-    name: value:
-    lib.optionals (value != null) [
-      "--replace-fail"
-      (lib.escapeShellArg "@${name}@")
-      (lib.escapeShellArg value)
-    ];
+  subst-var-by = name: value: [
+    "--replace-fail"
+    (lib.escapeShellArg "@${name}@")
+    (lib.escapeShellArg (lib.defaultTo "@${name}@" value))
+  ];
 
   substitutions = lib.concatLists (lib.mapAttrsToList subst-var-by replacements);
 

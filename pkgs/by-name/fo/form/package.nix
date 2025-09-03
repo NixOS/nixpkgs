@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "FORM project for symbolic manipulation of very big expressions";
+    description = "Symbolic manipulation of very big expressions";
     homepage = "https://www.nikhef.nl/~form/";
     license = licenses.gpl3;
     maintainers = [ maintainers.veprbl ];

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "shazamio";
-  version = "0.6.0";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dotX12";
     repo = "ShazamIO";
     tag = version;
-    hash = "sha256-PYA7HUm++4r4kwezyPi3mWRRGF47qHjz2nHUZmVYk/I=";
+    hash = "sha256-beEEr9Y8w0XlC/0+mNL/oWscmnfwt9KChlZ7Ullyk3E=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
-    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${version}";
+    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     # https://github.com/shazamio/ShazamIO/issues/80

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qt5,
@@ -27,6 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b2RqSw0Ksn9OLxQV9+3reBiqrty+Kx9OwV93jlvuPnY=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "include-algorithm-header.patch";
+      url = "https://github.com/AppImageCommunity/AppImageUpdate/commit/5e91de84aba775ba8d3a4771e4f7f06056f9b764.patch";
+      hash = "sha256-RX2HFAlGsEjXona7cL3WdwwiiA0u9CnfvHMC6S0DeLY=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'VERSION 1-alpha' 'VERSION ${finalAttrs.version}' \
@@ -35,28 +44,26 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '<local dev build>' '<nixpkgs build>'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      zsync2
-      libcpr
-      libgcrypt
-      libappimage
-      argagg
-      nlohmann_json
-      gpgme
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.qtbase
-    ];
+  buildInputs = [
+    zsync2
+    libcpr
+    libgcrypt
+    libappimage
+    argagg
+    nlohmann_json
+    gpgme
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ZSYNC2" true)

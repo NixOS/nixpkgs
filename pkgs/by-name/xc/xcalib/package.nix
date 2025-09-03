@@ -1,42 +1,45 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
+  cmake,
+  ninja,
   libX11,
   libXxf86vm,
-  libXext,
   libXrandr,
+  samurai,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcalib";
-  version = "0.10";
+  version = "0.11";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "OpenICC";
     repo = "xcalib";
-    rev = version;
-    sha256 = "05fzdjmhiafgi2jf0k41i3nm0837a78sb6yv59cwc23nla8g0bhr";
+    tag = finalAttrs.version;
+    hash = "sha256-o0pizV4Qrb9wfVKVNH2Ifb9tr7N7iveVHQB39WVCl8w=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs = [
     libX11
     libXxf86vm
-    libXext
     libXrandr
+    samurai
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp xcalib $out/bin/
-  '';
-
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Tiny monitor calibration loader for X and MS-Windows";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xcalib";
   };
-}
+})

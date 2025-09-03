@@ -31,22 +31,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.11";
+  version = "0.1.12";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocumentation [
-      "doc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
+  ];
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
     tag = finalAttrs.version;
-    hash = "sha256-5/8RCtDvCBtxyb65WhT63jL4TryMvJfHTSieb/vTs9I=";
+    hash = "sha256-vlSlQJysKmoGNmRtJ34FCI3p5bL7GDc8TjOljnKSiAE=";
   };
 
   patches = [
@@ -67,20 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
-      gobject-introspection
-      lttng-ust
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      python3Packages.breathe
-      sphinx
-    ];
+  nativeBuildInputs = [
+    cmake
+    dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
+    gobject-introspection
+    lttng-ust
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    python3Packages.breathe
+    sphinx
+  ];
 
   buildInputs = [
     cmake-extras
@@ -149,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-app-launch-0"

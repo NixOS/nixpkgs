@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_33,
+  electron_35,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_33;
+  electron = electron_35;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.10.2";
+  version = "5.12.1";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-LHjVmrsOdk8vfsqvNEWkzpusm6jbz3SOb3bEaIb7rb4=";
+    hash = "sha256-Sn6gKkeN+wRgTnFtQ9ewAFvRsRdXVo11ibaxFvSG7dg=";
   };
 
-  npmDepsHash = "sha256-LAbqsMdMmmHGgvg2ilz6neQxMOK3jtCKt8K0M8BWifs=";
+  npmDepsHash = "sha256-U6pmvSfps1VzKFnzJ0yij2r0uLrtnujZv+LVediX1Bo=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -59,7 +59,7 @@ buildNpmPackage rec {
       $out/share/applications \
       $out/share/icons/hicolor/512x512/apps
 
-    readonly dist=release/linux-unpacked
+    readonly dist=release/*-unpacked
 
     cp -a $dist/resources $out/share/${pname}
 
@@ -86,7 +86,9 @@ buildNpmPackage rec {
       # Invoking with `--version` insists on being able to write to a log file.
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+    };
   };
 
   meta = {

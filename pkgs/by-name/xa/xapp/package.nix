@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.8.8";
+  version = "2.8.12";
 
   outputs = [
     "out"
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "xapp";
     rev = version;
-    hash = "sha256-vd3uAihOF4dgZ49VVhRjG+Cx7sjMvHI/0oRLvIs2ZaM=";
+    hash = "sha256-LGONOsllf9POLLcRG2JN6VNvvMZorcG+aXVNLUz31Tc=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "Cross-desktop libraries and common resources";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

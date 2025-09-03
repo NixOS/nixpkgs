@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rpm-sequoia";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "rpm-sequoia";
-    rev = "v${version}";
-    hash = "sha256-AZCsboUv4muKOw5El2Hw5O1cvAgD3JhBppacrQCJT2k=";
+    tag = "v${version}";
+    hash = "sha256-KYoxQwQTcc75VEwWXEhHd+GNowzC7JlcIf6r7WM4Els=";
   };
 
-  cargoHash = "sha256-0yO1+OAkXje/ir8i8URVhIcW8gwXleYx+XL1U4bjtXk=";
+  cargoHash = "sha256-oKk768pgMYMJ3NTSlzqV1Y61fyu2DxY62JOpLKfUUY4=";
 
   patches = [
     ./objdump.patch
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An OpenPGP backend for rpm using Sequoia PGP";
+    description = "OpenPGP backend for rpm using Sequoia PGP";
     homepage = "https://sequoia-pgp.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ baloo ];

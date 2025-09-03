@@ -9,19 +9,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.6";
+        version = "1.4.2";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-ZdSo9bKZ7Q1xwMe4SR840U3+fVpKwtiZQA5KDM5qF9M=";
+          hash = "sha256-xa35HhziEUzuNIKT1h/nOXjV5/UYkbFlJcZMApaIGfQ=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-W853++SSvkAYYUczbl8vnoBQZnimUdsAEXp4MCkLPBU=";
+        vendorHash = "sha256-HP5XJ74ELaZT/bZgAPqe7vBPvJhHwyZVSNrUa+KToIE=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";
@@ -46,25 +46,25 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.2.2";
+        version = "4.3.3";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
-          hash = "sha256-BW+oUZh82m2QDf0tUKRLcPk3mUpkukZkVzSIfXtQwio=";
+          hash = "sha256-gQuakfQgB5gLVYLmmThy06CyGBhlBOCJI9jaEm7ucf0=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-ed779LFPL38i/+pGlGIty9I/SvOtjF4/dOAx8zY7Y5E=";
+        vendorHash = "sha256-z8bLbudm1b5xFCAUpL/m90vxwLJlBqpQCjAEjSYOQH8=";
 
-        # Do not build conmon and squashfuse from the Git submodule sources,
-        # Use Nixpkgs provided version
         extraConfigureFlags = [
-          "--without-conmon"
+          # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version
           "--without-squashfuse"
+          # Disable subid as it requires (unavailable?) libsubid headers:
+          "--without-libsubid"
         ];
 
         extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";

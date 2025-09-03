@@ -1,6 +1,6 @@
 {
   lib,
-  bazel_6,
+  bazel_7,
   bazel-gazelle,
   buildBazelPackage,
   fetchFromGitHub,
@@ -16,7 +16,7 @@
   jdk,
   ninja,
   patchelf,
-  python3,
+  python312,
   linuxHeaders,
   nixosTests,
   runCommandLocal,
@@ -34,24 +34,26 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.33.0";
-    rev = "b0f43d67aa25c1b03c97186a200cc187f4c22db3";
-    hash = "sha256-zqekRpOlaA2IrwwFUEwASa1uokET98h5sr7EwzWgcbU=";
+    version = "1.35.1";
+    rev = "6e9539d0366baf85baf9acb3e618cb3384765f13";
+    hash = "sha256-c1c8j/BCRrvAEqjt4EQ/d7zsM1zUe4Qr5EHzpuGblIk=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-4CQkHlXbDpRiqzeyserVf9PpLx3ME7TtZ2H88ggog6U=";
-      aarch64-linux = "sha256-FxkfBWiG0NIInl28w+l4YvaV2VFuCtjn5VBAKvJoxM8=";
+      x86_64-linux = "sha256-E6yUSd00ngmjaMds+9UVZLtcYhzeS8F9eSIkC1mZSps=";
+      aarch64-linux = "sha256-ivboOrV/uORKVHRL3685aopcElGvzsxgVcUmYsBwzXY=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
+  python3 = python312;
 
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -59,6 +61,8 @@ buildBazelPackage rec {
       repo = "envoy";
       inherit (srcVer) hash rev;
     };
+    # By convention, these patches are generated like:
+    # git format-patch --zero-commit --signoff --no-numbered --minimal --full-index --no-signature
     patches = [
       # use system Python, not bazel-fetched binary Python
       ./0001-nixpkgs-use-system-Python.patch
@@ -68,6 +72,9 @@ buildBazelPackage rec {
 
       # use system C/C++ tools
       ./0003-nixpkgs-use-system-C-C-toolchains.patch
+
+      # bump rules_rust to support newer Rust
+      ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -91,6 +98,12 @@ buildBazelPackage rec {
     substituteInPlace bazel/dependency_imports.bzl \
       --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
       --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
+
+    # patch rules_rust for envoy specifics
+    cp ${./rules_rust.patch} bazel/rules_rust.patch
+    substituteInPlace bazel/repositories.bzl \
+      --replace-fail ', "@envoy//bazel:rules_rust_ppc64le.patch"' "" \
+      --replace-fail '"@envoy//bazel:emsdk.patch"' ""
 
     substitute ${./rules_rust_extra.patch} bazel/nix/rules_rust_extra.patch \
       --subst-var-by bash "$(type -p bash)"
@@ -119,11 +132,23 @@ buildBazelPackage rec {
     postPatch = ''
       ${postPatch}
 
+      echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
+
       substituteInPlace bazel/dependency_imports.bzl \
         --replace-fail 'crate_universe_dependencies(' 'crate_universe_dependencies(bootstrap=True, ' \
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      mkdir $NIX_BUILD_TOP/empty
+      pushd $NIX_BUILD_TOP/empty
+      touch MODULE.bazel
+      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
+      # This really bloats the size of the FOD.
+      # TODO: lukegb - figure out how to make this suck less.
+      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
+      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      popd
+
       # Strip out the path to the build location (by deleting the comment line).
       find $bazelOut/external -name requirements.bzl | while read requirements; do
         sed -i '/# Generated from /d' "$requirements"
@@ -133,13 +158,13 @@ buildBazelPackage rec {
       sed -i \
         -e 's,${python3},__NIXPYTHON__,' \
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
+        -e 's,${builtins.storeDir}/[^/]\+/bin/bash,__NIXBASH__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
         $bazelOut/external/*_pip3/BUILD.bazel \
         $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
         $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
-      rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
@@ -163,7 +188,11 @@ buildBazelPackage rec {
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
+    bazel = null;
     preConfigure = ''
+      echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
+      echo "common --repository_disable_download" >> .bazelrc
+
       # Make executables work, for the most part.
       find $bazelOut/external -type f -executable | while read execbin; do
         file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
@@ -180,9 +209,12 @@ buildBazelPackage rec {
       sed -i \
         -e 's,__NIXPYTHON__,${python3},' \
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
+        -e 's,__NIXBASH__,${stdenv.shell},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/*_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel \
+        $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
+        $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
       # Install repinned rules_rust lockfile
       cp $bazelOut/external/Cargo.Bazel.lock source/extensions/dynamic_modules/sdk/rust/Cargo.Bazel.lock
@@ -196,40 +228,42 @@ buildBazelPackage rec {
   removeLocalConfigCc = true;
   removeLocal = false;
   bazelTargets = [ "//source/exe:envoy-static" ];
-  bazelBuildFlags =
-    [
-      "-c opt"
-      "--spawn_strategy=standalone"
-      "--noexperimental_strict_action_env"
-      "--cxxopt=-Wno-error"
-      "--linkopt=-Wl,-z,noexecstack"
-      "--config=gcc"
-      "--verbose_failures"
+  bazelFlags = [
+    "--repo_env=BAZEL_HTTP_RULES_URLS_AS_DEFAULT_CANONICAL_ID=0"
+  ];
+  bazelBuildFlags = [
+    "-c opt"
+    "--spawn_strategy=standalone"
+    "--noexperimental_strict_action_env"
+    "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
+    "--config=gcc"
+    "--verbose_failures"
 
-      # Force use of system Java.
-      "--extra_toolchains=@local_jdk//:all"
-      "--java_runtime_version=local_jdk"
-      "--tool_java_runtime_version=local_jdk"
+    # Force use of system Java.
+    "--extra_toolchains=@local_jdk//:all"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
 
-      # Force use of system Rust.
-      "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
+    # Force use of system Rust.
+    "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
-      # undefined reference to 'grpc_core::*Metadata*::*Memento*
-      #
-      # During linking of the final binary, we see undefined references to grpc_core related symbols.
-      # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
-      # "ParseMemento" and "MementoToValue" are only implemented for some types
-      # and appear unused and unimplemented for the undefined cases reported by the linker.
-      "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
-      "--define=wasm=${wasmRuntime}"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
-      # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
-      #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
-      #       |         ^
-      "--define=tcmalloc=disabled"
-    ]);
+    "--define=wasm=${wasmRuntime}"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
+    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+    #       |         ^
+    "--define=tcmalloc=disabled"
+  ]);
 
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
@@ -282,13 +316,13 @@ buildBazelPackage rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://envoyproxy.io";
     changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     mainProgram = "envoy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

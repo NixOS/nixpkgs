@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
-  version = "1.21.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
-    hash = "sha256-9LWoacjisyaiR0spF5/k5SneIo09UaCHBE1mrewftd8=";
+    hash = "sha256-aqNJGor6gH/7XjwuT2uD7L89wn1kzsFKBMlitSVjUCM=";
   };
 
   setOutputFlags = false;
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 

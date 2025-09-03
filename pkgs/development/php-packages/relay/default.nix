@@ -15,36 +15,36 @@
 }:
 
 let
-  version = "0.10.0";
+  version = "0.11.1";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-aEuYKo31dKV7TSOeKt4BSShstNxfS4EdibJ2279XTbg=";
-        "8.2" = "sha256-tjE+bAiVWYh6od8rW7flZ6ajMGxMJszw7H055VtDJsc=";
-        "8.3" = "1czi5sfic13068hj8x1fgzkwsykbrr1g5ifc53zxds5vqywa74d7";
-        "8.4" = "sha256-QUryARS5omADR3kEykCnoK4IFau1RpTQKDcCJ+lN/SY=";
-        "8.5" = "0k33qfrlxb9v0d15mdzzqsgdcik8z65nv1q9spn7ibdxg6clzykj";
+        "8.1" = "sha256-m7WWbrOwKH/IV4mCtmxzkNaBeKwUe89QlSMNxUAbq5A=";
+        "8.2" = "sha256-ytYYtxo43H8GTDOiLpBPtJmvoi4Q9rpJ2uY0AQWm2Dg=";
+        "8.3" = "12UvfJhJn3B70Q3xxfKfAzOH/fyC/ZftC4RMWGsEO88=";
+        "8.4" = "sha256-TszXByZtkJZ0uf1BFX2RJXQqfJFPzW1CokxRFnLBZpI=";
+        "8.5" = "WYJKnDuqsprgtev5g/LGcFbZTphEcCZb6/zanur4g8U=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-Aq4jZyo5JzVtJM96HzzsnSnx8jOCAmHB6f3eo1922gs=";
-        "8.2" = "sha256-Yd1bWEsRXuG30aDE9lCgLa/qlnXyeMehR3ROF0uAVTY=";
-        "8.3" = "sha256-j6qhr04zQDi+mQh968nVxlTGEnhQobI7kG8DK35sCiM=";
-        "8.4" = "0av8g5n4h3g2r4jbv3v1bwyx256z58wyygnd5jk4jzpx0ik2c1vv";
-        "8.5" = "1aav4lh29d507av5ydxjvgm20fljl5lwdljdyq3038g3gi06yjaj";
+        "8.1" = "sha256-e8eeQhzMLoXo1UaqFkSYMOwnkiNo7Fp8mKjVJY3SJIY=";
+        "8.2" = "sha256-dYkX4zV3lOwveMrZHLs2a7P+T3AGMv3dZNVUujpzJ9Q=";
+        "8.3" = "sha256-hU9jgz6gCWDSeoqWMznmNipfcMk7Ju7leRdSYFTl+Go=";
+        "8.4" = "gsSNY8cxWHPCm3UZNyhk9qs+9BgnnFLjeFIiksOG2A4=";
+        "8.5" = "M0SRivsTn1wQVuOt4v8F+OynZBpUkUJLR/E59veyH+Y=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-306YMQr/UCJ+LOgEdzmqAPVBvbq2TDXnvSxdh4u6Nbc=";
-        "8.2" = "sha256-tapNth0vqNlCh1c3HryIYOs+V9jadTV1rMvoz+tVbeI=";
-        "8.3" = "sha256-f0eKpHcdiOHM55VuPYq+AJnbIwnBDLaECv+hYMBh0dw=";
-        "8.4" = "05h2ikl0ymd2xmqifvv700xazhllsm234s41ipdgfwdj7zyxv58s";
-        "8.5" = "0frnd7y3zvj8vq10r4479lx04lj606xzd3hjg61lg5mq65i6xih0";
+        "8.1" = "sha256-poEjqvCVvdWmO2pw7jon+nzK52itsBfRkxcIjpHEa0M=";
+        "8.2" = "sha256-0xKV0Ro5VDaLU45BFiVhwT/a7Y7jeL7DerTmVLB0glo=";
+        "8.3" = "sha256-LggNCDl9vYXNPhIZpgeZ4h3nzddBg7FgzzJmcD+1nIA=";
+        "8.4" = "FGgHJWqlLIPXs1UBXEfgTyL6EHuP5P4fnMjop8QVmzo=";
+        "8.5" = "C5YrgTyag2ug+8sQIt7KolhXv1y63D6aSABrwU1HlWs=";
       };
     };
   };
@@ -81,47 +81,46 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
   internalDeps = [ php.extensions.session ];
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 relay.so -t $out/lib/php/extensions
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        let
-          args =
-            lib.strings.concatMapStrings
-              (
-                v:
-                " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
-              )
-              (
-                with lib.attrsets;
-                [
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                  (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-                ]
-              );
-        in
-        # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
-        ''
-          install_name_tool${args} $out/lib/php/extensions/relay.so
-        ''
-      else
-        ""
-    )
-    + ''
-      # Random UUID that's required by the extension. Can be anything, but must be different from default.
-      sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
-      chmod -w $out/lib/php/extensions/relay.so
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 relay.so -t $out/lib/php/extensions
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      let
+        args =
+          lib.strings.concatMapStrings
+            (
+              v:
+              " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
+            )
+            (
+              with lib.attrsets;
+              [
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
+                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
+              ]
+            );
+      in
+      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+      ''
+        install_name_tool${args} $out/lib/php/extensions/relay.so
+      ''
+    else
+      ""
+  )
+  + ''
+    # Random UUID that's required by the extension. Can be anything, but must be different from default.
+    sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
+    chmod -w $out/lib/php/extensions/relay.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''

@@ -1,18 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ config, ... }:
 
 let
+  pkgs = config.node.pkgs;
+
   template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
     name = "bootstrap3";
-    version = "2022-07-27";
+    version = "2024-02-06";
     src = pkgs.fetchFromGitHub {
       owner = "giterlizzi";
       repo = "dokuwiki-template-bootstrap3";
       rev = "v${version}";
-      hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
+      hash = "sha256-PSA/rHMkM/kMvOV7CP1byL8Ym4Qu7a4Rz+/aPX31x9k=";
     };
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
-
 
   plugin-icalevents = pkgs.stdenv.mkDerivation rec {
     name = "icalevents";
@@ -35,60 +36,71 @@ let
     '';
   });
 
-  mkNode = webserver: { ... }: {
-    services.dokuwiki = {
-      inherit webserver;
+  mkNode =
+    webserver:
+    { ... }:
+    {
+      services.dokuwiki = {
+        inherit webserver;
 
-      sites = {
-        "site1.local" = {
-          templates = [ template-bootstrap3 ];
-          settings = {
-            useacl = false;
-            userewrite = true;
-            template = "bootstrap3";
+        sites = {
+          "site1.local" = {
+            templates = [ template-bootstrap3 ];
+            settings = {
+              useacl = false;
+              userewrite = true;
+              template = "bootstrap3";
+            };
           };
-        };
-        "site2.local" = {
-          package = dwWithAcronyms;
-          usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-          plugins = [ plugin-icalevents ];
-          settings = {
-            useacl = true;
-            superuser = "admin";
-            title._file = titleFile;
-            plugin.dummy.empty = "This is just for testing purposes";
-          };
-          acl = [
-            { page = "*";
-              actor = "@ALL";
-              level = "read"; }
-            { page = "acl-test";
-              actor = "@ALL";
-              level = "none"; }
-          ];
-          pluginsConfig = {
-            authad = false;
-            authldap = false;
-            authmysql = false;
-            authpgsql = false;
-            tag = false;
-            icalevents = true;
+          "site2.local" = {
+            package = dwWithAcronyms;
+            usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
+            plugins = [ plugin-icalevents ];
+            settings = {
+              useacl = true;
+              superuser = "admin";
+              title._file = titleFile;
+              plugin.dummy.empty = "This is just for testing purposes";
+            };
+            acl = [
+              {
+                page = "*";
+                actor = "@ALL";
+                level = "read";
+              }
+              {
+                page = "acl-test";
+                actor = "@ALL";
+                level = "none";
+              }
+            ];
+            pluginsConfig = {
+              authad = false;
+              authldap = false;
+              authmysql = false;
+              authpgsql = false;
+              tag = false;
+              icalevents = true;
+            };
           };
         };
       };
-    };
 
-    services.caddy.virtualHosts = {
-      "site1.local".hostName = "http://site1.local";
-      "site2.local".hostName = "http://site2.local";
-    };
+      services.caddy.virtualHosts = {
+        "site1.local".hostName = "http://site1.local";
+        "site2.local".hostName = "http://site2.local";
+      };
 
-    networking.firewall.allowedTCPPorts = [ 80 ];
-    networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
-  };
+      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.hosts."127.0.0.1" = [
+        "site1.local"
+        "site2.local"
+      ];
+    };
 
   titleFile = pkgs.writeText "dokuwiki-title" "DokuWiki on site2";
-in {
+in
+{
   name = "dokuwiki";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [
@@ -163,4 +175,4 @@ in {
             "curl -sSfL http://site1.local/rewrite-test | grep 'Hello, NixOS!'",
           )
   '';
-})
+}

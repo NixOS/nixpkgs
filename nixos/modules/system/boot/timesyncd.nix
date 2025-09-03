@@ -53,8 +53,7 @@ in
         '';
         description = ''
           Extra config options for systemd-timesyncd. See
-          [
-          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
+          {manpage}`timesyncd.conf(5)` for available options.
         '';
       };
     };
@@ -100,17 +99,16 @@ in
       );
     };
 
-    environment.etc."systemd/timesyncd.conf".text =
-      ''
-        [Time]
-      ''
-      + optionalString (cfg.servers != null) ''
-        NTP=${concatStringsSep " " cfg.servers}
-      ''
-      + optionalString (cfg.fallbackServers != null) ''
-        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-      ''
-      + cfg.extraConfig;
+    environment.etc."systemd/timesyncd.conf".text = ''
+      [Time]
+    ''
+    + optionalString (cfg.servers != null) ''
+      NTP=${concatStringsSep " " cfg.servers}
+    ''
+    + optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+    ''
+    + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

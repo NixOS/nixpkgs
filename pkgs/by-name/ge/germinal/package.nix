@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Keruspe/Germinal";
     license = lib.licenses.gpl3Plus;
     mainProgram = "germinal";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

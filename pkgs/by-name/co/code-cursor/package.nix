@@ -1,100 +1,80 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
+  callPackage,
+  vscode-generic,
   fetchurl,
   appimageTools,
-  makeWrapper,
-  writeScript,
+  undmg,
+  commandLineArgs ? "",
+  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
+
 let
-  pname = "cursor";
-  version = "0.44.11";
+  inherit (stdenv) hostPlatform;
+  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-x86_64.AppImage";
-      hash = "sha256-eOZuofnpED9F6wic0S9m933Tb7Gq7cb/v0kRDltvFVg=";
+      url = "https://downloads.cursor.com/production/823f58d4f60b795a6aefb9955933f3a2f0331d7b/linux/x64/Cursor-1.5.5-x86_64.AppImage";
+      hash = "sha256-eq/AQcAONs6HBpRdx2yf4MFTQ1cm/rOeaZZTq8YUF8s=";
     };
     aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-arm64.AppImage";
-      hash = "sha256-mxq7tQJfDccE0QsZDZbaFUKO0Xc141N00ntX3oEYRcc=";
+      url = "https://downloads.cursor.com/production/823f58d4f60b795a6aefb9955933f3a2f0331d7b/linux/arm64/Cursor-1.5.5-aarch64.AppImage";
+      hash = "sha256-709MYaAnoYI+k1CPkfVzL0PvrJ4zw4wSHZvbuqLlXMQ=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://downloads.cursor.com/production/823f58d4f60b795a6aefb9955933f3a2f0331d7b/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-A13mVAw8mgjGlGegAzkeUi536keZwcJZkbO4ZzfMmXs=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://downloads.cursor.com/production/823f58d4f60b795a6aefb9955933f3a2f0331d7b/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-Pc1pG1Vj9bf8H6Gt2bR8JANo/6oZza+L3Zlrihpg1dk=";
     };
   };
 
-  supportedPlatforms = [
-    "x86_64-linux"
-    "aarch64-linux"
-  ];
-
-  src = sources.${stdenvNoCC.hostPlatform.system};
-
-  appimageContents = appimageTools.extractType2 {
-    inherit version pname src;
-  };
-
-  wrappedAppImage = appimageTools.wrapType2 { inherit version pname src; };
-
-  appimageInstall = ''
-    runHook preInstall
-
-    mkdir -p $out/
-    cp -r bin $out/bin
-
-    mkdir -p $out/share/cursor
-    cp -a ${appimageContents}/locales $out/share/cursor
-    cp -a ${appimageContents}/resources $out/share/cursor
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-    install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
-
-    substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
-
-    wrapProgram $out/bin/cursor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
-
-    runHook postInstall
-  '';
-
+  source = sources.${hostPlatform.system};
 in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+(callPackage vscode-generic rec {
+  inherit useVSCodeRipgrep;
+  commandLineArgs = finalCommandLineArgs;
 
-  src = wrappedAppImage;
+  version = "1.5.5";
+  pname = "cursor";
 
-  nativeBuildInputs = [ makeWrapper ];
+  # You can find the current VSCode version in the About dialog:
+  # workbench.action.showAboutDialog (Help: About)
+  vscodeVersion = "1.99.3";
 
-  installPhase = appimageInstall;
+  executableName = "cursor";
+  longName = "Cursor";
+  shortName = "cursor";
+  libraryName = "cursor";
+  iconName = "cursor";
 
-  passthru = {
-    inherit sources;
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl yq coreutils gnused common-updater-scripts
-      set -eu -o pipefail
-      baseUrl="https://download.todesktop.com/230313mzl4w4u92"
-      latestLinux="$(curl -s $baseUrl/latest-linux.yml)"
-      version="$(echo "$latestLinux" | yq -r .version)"
-      filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-      linuxStem="$(echo "$filename" | sed -E s/^\(cursor-.+-build-.*\)-.+$/\\1/)"
+  src =
+    if hostPlatform.isLinux then
+      appimageTools.extract {
+        inherit pname version;
+        src = source;
+      }
+    else
+      source;
 
-      currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
+  sourceRoot =
+    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
-      if [[ "$version" != "$currentVersion" ]]; then
-        for platform in ${lib.escapeShellArgs supportedPlatforms}; do
-          if [ $platform = "x86_64-linux" ]; then
-            url="$baseUrl/$linuxStem-x86_64.AppImage"
-          elif [ $platform = "aarch64-linux" ]; then
-            url="$baseUrl/$linuxStem-arm64.AppImage"
-          else
-            echo "Unsupported platform: $platform"
-            exit 1
-          fi
+  tests = { };
 
-          hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
-          update-source-version code-cursor $version $hash $url --system=$platform --ignore-same-version --source-key="sources.$platform"
-        done
-      fi
-    '';
-  };
+  updateScript = ./update.sh;
+
+  # Editing the `cursor` binary within the app bundle causes the bundle's signature
+  # to be invalidated, which prevents launching starting with macOS Ventura, because Cursor is notarized.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
+  # Cursor has no wrapper script.
+  patchVSCodePath = false;
 
   meta = {
     description = "AI-powered code editor built on vscode";
@@ -102,8 +82,23 @@ stdenvNoCC.mkDerivation {
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ sarahec ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      aspauldingcode
+      prince213
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    nativeBuildInputs =
+      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+    passthru = (oldAttrs.passthru or { }) // {
+      inherit sources;
+    };
+  })

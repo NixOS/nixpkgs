@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "tl-eggdeps";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

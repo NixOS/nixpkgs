@@ -23,13 +23,13 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.63.33";
+  version = "2.82.9";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ivbjnYKuZW3xvyPxOF3Ov/0obI71lri/itsVFJ4Cb4k=";
+    hash = "sha256-2eexWmrVNjfOnK+upPJfUMxE+Xuo5dOyJrEFNGuCapc=";
   };
 
   postPatch = ''
@@ -50,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  makeFlags =
-    [ "GIT_VERSION=\"v${finalAttrs.version}\"" ]
-    ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
-    ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
-    ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
-    ++ lib.optionals enableThreads [ "THREADS=1" ];
+  makeFlags = [
+    "GIT_VERSION=\"v${finalAttrs.version}\""
+  ]
+  ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
+  ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
+  ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
+  ++ lib.optionals enableThreads [ "THREADS=1" ];
 
   enableParallelBuilding = true;
 
@@ -96,10 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       siraben
-      AndersonTorres
     ];
     mainProgram = "tpl";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

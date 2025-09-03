@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/udp2raw" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wangyu-/udp2raw";
     description = "Tunnel which turns UDP traffic into encrypted UDP/FakeTCP/ICMP traffic by using a raw socket";
     mainProgram = "udp2raw";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/wangyu-/udp2raw/releases/tag/${version}";
-    maintainers = with maintainers; [ chvp ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = lib.platforms.linux;
   };
 }

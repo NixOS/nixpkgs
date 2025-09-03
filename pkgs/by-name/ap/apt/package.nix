@@ -34,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "2.9.25";
+  version = "3.1.4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-YVMqqWF4heSF11b0uKD/EUUBPPzkTtGP3QxnLVY6/l8=";
+    hash = "sha256-l0ZrtYUSX5CmzmtL+qXxvjGNNXG04RUuK9mu1/NJnq8=";
   };
 
   # cycle detection; lib can't be split
@@ -52,46 +52,44 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      dpkg # dpkg-architecture
-      gettext # msgfmt
-      gtest
-      (lib.getBin libxslt)
-      pkg-config
-      triehash
-      perlPackages.perl
-    ]
-    ++ lib.optionals withDocs [
-      docbook_xml_dtd_45
-      doxygen
-      perlPackages.Po4a
-      w3m
-    ];
+  nativeBuildInputs = [
+    cmake
+    dpkg # dpkg-architecture
+    gettext # msgfmt
+    gtest
+    (lib.getBin libxslt)
+    pkg-config
+    triehash
+    perlPackages.perl
+  ]
+  ++ lib.optionals withDocs [
+    docbook_xml_dtd_45
+    doxygen
+    perlPackages.Po4a
+    w3m
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      curl
-      db
-      dpkg
-      gnutls
-      gtest
-      libgcrypt
-      libgpg-error
-      libseccomp
-      libtasn1
-      lz4
-      p11-kit
-      udev
-      xxHash
-      xz
-      zstd
-    ]
-    ++ lib.optionals withNLS [
-      gettext
-    ];
+  buildInputs = [
+    bzip2
+    curl
+    db
+    dpkg
+    gnutls
+    gtest
+    libgcrypt
+    libgpg-error
+    libseccomp
+    libtasn1
+    lz4
+    p11-kit
+    udev
+    xxHash
+    xz
+    zstd
+  ]
+  ++ lib.optionals withNLS [
+    gettext
+  ];
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")

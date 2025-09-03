@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioairzone-cloud";
-  version = "0.6.10";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "aioairzone-cloud";
     tag = version;
-    hash = "sha256-H78vlCGJhIE1/utX4Dh1vssOwYnQxCytsEs+hpOPVtM=";
+    hash = "sha256-fWd5feCWE2o0HqvzGhGngWsIkXtS+VdZJ0d6B10Jq1E=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control Airzone via Cloud API";
     homepage = "https://github.com/Noltari/aioairzone-cloud";
-    changelog = "https://github.com/Noltari/aioairzone-cloud/releases/tag/${version}";
+    changelog = "https://github.com/Noltari/aioairzone-cloud/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

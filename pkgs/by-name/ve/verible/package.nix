@@ -3,11 +3,12 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   bison,
   flex,
   python3,
+  cctools,
 }:
 
 let
@@ -15,8 +16,8 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "6ca6e91cb9fa2d224f61b8a4a2a7fd6b1211e388";
-    hash = "sha256-LRD8sGbISp2LXjpg4cpbUHG2a1JbKLA7z3vSvqqXMGo=";
+    rev = "bac7a5dc8b5535d7b36d0405f76badfba77c84c2";
+    hash = "sha256-TXooqzqfvf1twldfrs0m8QR3AJkUCIyBS36TFTwN4Eg=";
   };
 in
 buildBazelPackage rec {
@@ -25,8 +26,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2025-01-02";
-  GIT_VERSION = "v0.0-3894-g0a842c85";
+  GIT_DATE = "2025-03-30";
+  GIT_VERSION = "v0.0-3956-ge12a194d";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -37,10 +38,10 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    hash = "sha256-FWeEIWvrjE8ESGFUWDPtd9gLkhMDtgkw6WbXViDxQQA=";
+    hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
     "--registry"
@@ -50,8 +51,9 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
-        x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
+        aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d16jB/kE2jYPg=";
+        x86_64-linux = "sha256-kiI/LX0l9ERxItsqiAyl+BP3QnLr0Ly2YVb988M4jVs=";
+        aarch64-darwin = "sha256-bkw4ErWYblzr3lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -62,6 +64,7 @@ buildBazelPackage rec {
     flex # .. to compile with newer glibc
     python3
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs \
@@ -99,7 +102,5 @@ buildBazelPackage rec {
       hzeller
       newam
     ];
-    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
-    platforms = platforms.linux;
   };
 }

@@ -1,35 +1,48 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
 }:
 
 buildGoModule rec {
   pname = "terramate";
-  version = "0.11.8";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
     rev = "v${version}";
-    hash = "sha256-VRoYjn0iZD0fbctpJPgvvRQIAV7ZoOoFeqlDSCDc3ME=";
+    hash = "sha256-36AZBi4QYmYc+0e6LsWkGmanf13hyCJZU7kusP/zwlQ=";
   };
 
-  vendorHash = "sha256-rvUsYBrz85TWtnivX3QmIXdIDVbDbQRmXcYjcP2S3kg=";
+  vendorHash = "sha256-u9eXi7FjMsXm0H0y7Gs/Wu2I8tp4rRLxtjUxrrHJkEU=";
 
   # required for version info
   nativeBuildInputs = [ git ];
 
-  ldflags = [ "-extldflags" "-static" ];
+  ldflags = [
+    "-extldflags"
+    "-static"
+  ];
+
+  # Needed for the tests to pass on macOS
+  __darwinAllowLocalNetworking = true;
 
   # Disable failing E2E tests preventing the package from building
-  excludedPackages = [ "./e2etests/cloud" "./e2etests/core" ];
+  excludedPackages = [
+    "./e2etests/cloud"
+    "./e2etests/core"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds code generation, stacks, orchestration, change detection, data sharing and more to Terraform";
     homepage = "https://github.com/terramate-io/terramate";
     changelog = "https://github.com/terramate-io/terramate/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dit7ya asininemonkey ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      dit7ya
+      asininemonkey
+    ];
   };
 }

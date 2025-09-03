@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "payload_dumper";
-  version = "unstable-2022-04-11";
+  version = "0-unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "vm03";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    sitePackages=$out/${python3.sitePackages}/${finalAttrs.pname}
+    sitePackages=$out/${python3.sitePackages}/payload_dumper
 
     install -D ./payload_dumper.py $out/bin/payload_dumper
     install -D ./update_metadata_pb2.py $sitePackages/update_metadata_pb2.py

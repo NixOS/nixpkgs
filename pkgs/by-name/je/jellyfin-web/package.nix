@@ -13,7 +13,7 @@
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.10.5";
+  version = "10.10.7";
 
   src =
     assert version == jellyfin.version;
@@ -21,7 +21,7 @@ buildNpmPackage rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-bmLEFnP5HalQ7w42pTJt4iV7uISLnMrOsrXKjPAezog";
+      hash = "sha256-jX9Qut8YsJRyKI2L7Aww4+6G8z741WzN37CUx3KWQfY=";
     };
 
   nodejs = nodejs_20; # does not build with 22
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-MoXE7hzavOS86UjLzpJtSQxded98YjL4h7L1IC5KLas";
+  npmDepsHash = "sha256-nfvqVByD3Kweq+nFJQY4R2uRX3mx/qJvGFiKiOyMUdw=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -42,11 +42,12 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs =
-    [ pango ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-    ];
+  buildInputs = [
+    pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    giflib
+  ];
 
   installPhase = ''
     runHook preInstall

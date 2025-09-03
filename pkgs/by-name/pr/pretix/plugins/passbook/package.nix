@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
 
   # build-system
   pretix-plugin-build,
@@ -18,19 +18,18 @@
 
 buildPythonPackage rec {
   pname = "pretix-passbook";
-  version = "1.13.2";
+  version = "1.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-passbook";
     rev = "v${version}";
-    hash = "sha256-rdX93AFoLLsA44a9sSgcQrCJiOlhe3j5WTBO+MHZ/X8=";
+    hash = "sha256-xN37nM2AQVxFg+TOZ3cEvEV4F115U9m6YVX12al4SIw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./openssl.patch;
+    (replaceVars ./openssl.patch {
       openssl = lib.getExe openssl;
     })
   ];

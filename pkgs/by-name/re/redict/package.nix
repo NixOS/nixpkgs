@@ -6,7 +6,6 @@
   lua,
   jemalloc,
   pkg-config,
-  nixosTests,
   tcl,
   which,
   ps,
@@ -45,25 +44,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
-    ++ lib.optionals tlsSupport [ openssl ];
+  buildInputs = [
+    lua
+  ]
+  ++ lib.optional useSystemJemalloc jemalloc
+  ++ lib.optional withSystemd systemd
+  ++ lib.optionals tlsSupport [ openssl ];
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile --replace-fail "-flto" ""
   '';
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -78,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
 
   checkPhase = ''
     runHook preCheck
@@ -103,8 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
-
-  passthru.tests.redict = nixosTests.redict;
 
   meta = {
     homepage = "https://redict.io";

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
 }:
 
 let
@@ -10,6 +11,18 @@ let
     {
       poetry = self.callPackage ./unwrapped.nix { };
 
+      # Poetry 2.1.4 officially requires virtualenv >=20.26.6, <20.33.0
+      # otherwise will be incompatible with python312
+      # see: https://github.com/python-poetry/poetry/issues/10490
+      virtualenv = super.virtualenv.overridePythonAttrs (old: rec {
+        version = "20.30.0";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-gAhjFivKpUUKbk1yEElzDn8trgdyDgkCsOQEC9b5rag=";
+        };
+      });
+
       # The versions of Poetry and poetry-core need to match exactly,
       # and poetry-core in nixpkgs requires a staging cycle to be updated,
       # so apply an override here.
@@ -17,27 +30,23 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "2.0.0";
+        version = "2.1.3";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           tag = version;
-          hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
+          hash = "sha256-CgaWlqjvBTN7GuerzmO5IiEdXxYH6pmTDj9IsNJlCBE=";
         };
-        patches = [ ];
-        nativeCheckInputs =
-          old.nativeCheckInputs
-          ++ (with self; [
-            trove-classifiers
-          ]);
-        disabledTests = old.disabledTests ++ [
-          # relies on git
-          "test_package_with_include"
-          # Nix changes timestamp
-          "test_dist_info_date_time_default_value"
-          "test_sdist_members_mtime_default"
-          "test_sdist_mtime_zero"
-        ];
+      });
+
+      findpython = super.findpython.overridePythonAttrs (old: rec {
+        version = "0.6.3";
+
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-WGPqVVVtiq3Gk0gaFKxPNiSVJxnvwcVZGrsLSp6WXJQ=";
+        };
       });
     }
     // (plugins self);

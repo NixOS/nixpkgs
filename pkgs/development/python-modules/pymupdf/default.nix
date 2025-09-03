@@ -5,6 +5,7 @@
   pythonOlder,
   fetchFromGitHub,
   python,
+  toPythonModule,
 
   # build-system
   libclang,
@@ -36,25 +37,27 @@ let
     enableOcr = true;
     enableCxx = true;
     enablePython = true;
+    enableBarcode = true;
     python3 = python;
   };
+  mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
+  mupdf-cxx-dev = lib.getDev mupdf-cxx;
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.25.1";
+  version = "1.26.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-kdu8CuQJ5+h8+PS66acWEfcttgALiD+JBoWWyGtjBzs=";
+    hash = "sha256-djTbALLvdX2jOTGgoyUIBhiqJ6KzM+Dkb4M7d2eVoPM=";
   };
 
   # swig is not wrapped as Python package
-  # libclang calls itself just clang in wheel metadata
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "ret.append( 'swig')" "pass" \
@@ -76,7 +79,7 @@ buildPythonPackage rec {
     gumbo
   ];
 
-  propagatedBuildInputs = [ mupdf-cxx ];
+  propagatedBuildInputs = [ mupdf-cxx-lib ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
@@ -84,14 +87,14 @@ buildPythonPackage rec {
     # Setup the name of the package away from the default 'libclang'
     PYMUPDF_SETUP_LIBCLANG = "clang";
     # provide MuPDF paths
-    PYMUPDF_MUPDF_LIB = "${lib.getLib mupdf-cxx}/lib";
-    PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
+    PYMUPDF_MUPDF_LIB = "${mupdf-cxx-lib}/lib";
+    PYMUPDF_MUPDF_INCLUDE = "${mupdf-cxx-dev}/include";
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
-      install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
+      install_name_tool -add_rpath ${mupdf-cxx-lib}/lib "$lib"
     done
   '';
 
@@ -114,6 +117,18 @@ buildPythonPackage rec {
     "test_color_count"
     "test_3050"
     "test_textbox3"
+    "test_3493"
+    "test_4180"
+    # Requires downloads
+    "test_4457"
+    "test_4445"
+    # Not a git repository, so git ls-files fails
+    "test_open2"
+  ];
+
+  disabledTestPaths = [
+    # mad about markdown table formatting
+    "tests/test_tables.py::test_markdown"
   ];
 
   pythonImportsCheck = [
@@ -133,9 +148,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ teto ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

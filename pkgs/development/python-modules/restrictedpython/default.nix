@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "7.4";
+  version = "8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gbYpJHE9vSgJF/zq7K8hD+96Sd3fGgjIwhSjYT++tCU=";
+    hash = "sha256-OvIxK8Z+X87Yh/uFsAbImGHackiBKLFVvuqB62oKmyQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" setuptools
+      --replace-fail "setuptools <= 75.6.0" setuptools
   '';
 
   build-system = [ setuptools ];

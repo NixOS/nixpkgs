@@ -8,7 +8,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "myhdl";
   # The stable version is from 2019 and it doesn't pass tests
   version = "unstable-2022-04-26";

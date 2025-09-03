@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    hash = "sha256-2gK+CUpml6AaHcwNoq0tHLr2NwqtMPx+jP80/LLFFr4=";
+    hash = "sha256-blhSdtNXwe4wKPVKlopsE0omgikMdl12JjwqASwJM2w=";
   };
 
   nativeBuildInputs = [
@@ -23,17 +23,16 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  cmakeFlags =
-    [
-      "-DCATCH_DEVELOPMENT_BUILD=ON"
-      "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
-      "-DCATCH_ENABLE_WERROR=OFF"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && doCheck) [
-      # test has a faulty path normalization technique that won't work in
-      # our darwin build environment https://github.com/catchorg/Catch2/issues/1691
-      "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
-    ];
+  cmakeFlags = [
+    "-DCATCH_DEVELOPMENT_BUILD=ON"
+    "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+    "-DCATCH_ENABLE_WERROR=OFF"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && doCheck) [
+    # test has a faulty path normalization technique that won't work in
+    # our darwin build environment https://github.com/catchorg/Catch2/issues/1691
+    "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
+  ];
 
   env =
     lib.optionalAttrs stdenv.hostPlatform.isx86_32 {

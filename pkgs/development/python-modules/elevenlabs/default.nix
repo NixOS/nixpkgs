@@ -4,6 +4,7 @@
   httpx,
   lib,
   poetry-core,
+  pyaudio,
   pydantic,
   pydantic-core,
   requests,
@@ -12,8 +13,8 @@
 }:
 
 let
-  version = "1.50.6";
-  tag = version;
+  version = "2.12.1";
+  tag = "v${version}";
 in
 buildPythonPackage {
   pname = "elevenlabs";
@@ -24,7 +25,7 @@ buildPythonPackage {
     owner = "elevenlabs";
     repo = "elevenlabs-python";
     inherit tag;
-    hash = "sha256-o+J9UnYWE0/3SXQJtv2sm6xibXUPG1V1T7d+SXyBW50=";
+    hash = "sha256-61MxA0xnXhfzvIpLtL0SA0aXdwF3tzIy+/TsJRaS2mM=";
   };
 
   build-system = [ poetry-core ];
@@ -37,6 +38,10 @@ buildPythonPackage {
     typing-extensions
     websockets
   ];
+
+  optional-dependencies = {
+    pyaudio = [ pyaudio ];
+  };
 
   pythonImportsCheck = [ "elevenlabs" ];
 

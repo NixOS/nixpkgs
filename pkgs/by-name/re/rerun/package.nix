@@ -6,6 +6,7 @@
   # nativeBuildInputs
   binaryen,
   lld,
+  llvmPackages,
   pkg-config,
   protobuf,
   rustfmt,
@@ -28,20 +29,18 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
-    "grpc"
     "map_view"
   ],
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.21.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
-    tag = version;
-    hash = "sha256-U+Q8u1XKBD9c49eXAgc5vASKytgyAEYyYv8XNfftlZU=";
+    tag = finalAttrs.version;
+    hash = "sha256-unPgvQcYhshdx5NGCl/pLh8UdJ9T6B8Fd0s8G1NSBmE=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-d68dNAAGY+a0DpL82S/qntu2XOsoVqHpfU2L9NcoJQc=";
+  cargoHash = "sha256-zdq8djnmH8srSd9sml7t6wsbxpTaT3x5/7hkDRgelbg=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -100,6 +99,25 @@ rustPlatform.buildRustPackage rec {
     nasm
   ];
 
+  # NOTE: Without setting these environment variables the web-viewer
+  # preBuild step uses the nix wrapped CC which doesn't support
+  # multiple targets including wasm32-unknown-unknown. These are taken
+  # from the following issue discussion in the rust ring crate:
+  # https://github.com/briansmith/ring/discussions/2581#discussioncomment-14096969
+  env =
+    let
+      inherit (llvmPackages) clang-unwrapped;
+      majorVersion = lib.versions.major clang-unwrapped.version;
+
+      # resource dir + builtins from the unwrapped clang
+      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${majorVersion}";
+      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${majorVersion}/include";
+    in
+    {
+      CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
+      CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
+    };
+
   buildInputs = [
     freetype
     glib
@@ -107,7 +125,8 @@ rustPlatform.buildRustPackage rec {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -139,7 +158,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -152,7 +171,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
     homepage = "https://github.com/rerun-io/rerun";
-    changelog = "https://github.com/rerun-io/rerun/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rerun-io/rerun/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -163,4 +182,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "rerun";
   };
-}
+})

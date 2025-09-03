@@ -6,24 +6,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "lhvy";
-    repo = pname;
+    repo = "pipes-rs";
     rev = "v${version}";
-    sha256 = "sha256-NrBmkA7sV1RhfG9KEqQNMR5s0l2u66b7KK0toDjQIps=";
+    sha256 = "sha256-7FdC/VY1ZO4E/qDdeKzsIai8h5ZgMrSr1C+Ny4fYh38=";
   };
 
-  cargoHash = "sha256-cOLPkmUwNdaexgauULraBVVx6mznI9GXhHV3mSEhL0g=";
+  cargoHash = "sha256-TIVWl/9xSFsSXD9XzOHBvc/1HvI/radas00p4fZ/AzM=";
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}" --version)" == "${pname} ${version}" ]]; then
-      echo '${pname} smoke check passed'
+    if [[ "$("$out/bin/pipes-rs" --version)" == "pipes-rs ${version}" ]]; then
+      echo 'pipes-rs smoke check passed'
     else
-      echo '${pname} smoke check failed'
+      echo 'pipes-rs smoke check failed'
       return 1
     fi
   '';

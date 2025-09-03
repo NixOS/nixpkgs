@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   ollama,
-  poetry-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.5.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-88DaBPhUB5Az7jwbER4JdFYAW5o4Z+1LtJuNKOSg8zY=";
+    hash = "sha256-GJtl6iXAPGYMEFuA27UQnE/qjaaPHpBZKuv9/d5wiSg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

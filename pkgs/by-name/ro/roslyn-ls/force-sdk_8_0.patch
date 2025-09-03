@@ -1,5 +1,5 @@
 diff --git a/eng/targets/TargetFrameworks.props b/eng/targets/TargetFrameworks.props
-index 2dddaff1560..bc8fd1938d5 100644
+index 58f90114f4d..8eb23c25067 100644
 --- a/eng/targets/TargetFrameworks.props
 +++ b/eng/targets/TargetFrameworks.props
 @@ -17,7 +17,7 @@
@@ -11,10 +11,10 @@ index 2dddaff1560..bc8fd1938d5 100644
      <NetRoslynNext>net9.0</NetRoslynNext>
    </PropertyGroup>
  
-diff --git a/src/Workspaces/Core/MSBuild.BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj b/src/Workspaces/Core/MSBuild.BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
+diff --git a/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj b/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
 index 8101f56b8be..1733955dc3d 100644
---- a/src/Workspaces/Core/MSBuild.BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
-+++ b/src/Workspaces/Core/MSBuild.BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
+--- a/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
++++ b/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
 @@ -28,6 +28,12 @@
      -->
      <_MsbuildVersion>17.3.4</_MsbuildVersion>
@@ -43,3 +43,4 @@ index 8101f56b8be..1733955dc3d 100644
    </ItemGroup>
    <ItemGroup>
      <PackageReference Include="Microsoft.Build.Locator" PrivateAssets="All" />
+

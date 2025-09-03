@@ -4,19 +4,23 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tag-expressions";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/6Ym72jlgVdpel4V2W2aCKNtISDT9y5qz7+gTllUuPg=";
+    pname = "tag_expressions";
+    inherit version;
+    hash = "sha256-EbSwfAH+sL3JGW+COfDA2f7cLGyKmQMsbyyDGy13Lkg=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

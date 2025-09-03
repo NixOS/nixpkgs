@@ -19,7 +19,10 @@ let
       sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
     };
 
-    cargoHash = "sha256-uNoqWT3gVslGEPcyrfFeOquvSlLzZbPO4yM1YJeD8N4=";
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit pname version src;
+      hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
+    };
 
     checkFlags = [
       # requires wasm32-unknown-unknown target

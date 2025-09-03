@@ -16,7 +16,6 @@
   libXcursor,
   libXfixes,
   libXmu,
-  libIDL,
   SDL2,
   libcap,
   libGL,
@@ -36,7 +35,7 @@
   alsa-lib,
   curl,
   libvpx,
-  nettools,
+  net-tools,
   dbus,
   replaceVars,
   gsoap,
@@ -50,7 +49,6 @@
   open-watcom-bin,
   makeself,
   perl,
-  vulkan-loader,
   javaBindings ? true,
   jdk, # Almost doesn't affect closure size
   pythonBindings ? false,
@@ -74,12 +72,12 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.6";
-  virtualboxSubVersion = "a";
-  virtualboxSha256 = "5a7b13066ec71990af0cc00a5eea9c7ec3c71ca5ed99bb549c85494ce2ea395d";
+  virtualboxVersion = "7.1.12";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
 
-  kvmPatchVersion = "20241220";
-  kvmPatchHash = "sha256-SYyD79iN6Sp/Mxat+ml3fee9X1vFUFyrwHPnQNboc1c=";
+  kvmPatchVersion = "20250207";
+  kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -133,55 +131,54 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     yasm
     glslang
-  ] ++ optional (!headless) wrapQtAppsHook;
+  ]
+  ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
-  buildInputs =
-    [
-      acpica-tools
-      dev86
-      libxslt
-      libxml2
-      xorgproto
-      libX11
-      libXext
-      libXcursor
-      libIDL
-      libcap
-      glib
-      lvm2
-      alsa-lib
-      curl
-      libvpx
-      pam
-      makeself
-      perl
-      libXmu
-      libXrandr
-      libpng
-      libopus
-      libtpms
-      python3
-      xz
-    ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libGL ]
-    ++ optionals (!headless) [
-      qtbase
-      qttools
-      qtscxml
-      libXinerama
-      SDL2
-      libGLU
-    ]
-    ++ optionals enableWebService [
-      gsoap
-      zlib
-    ];
+  buildInputs = [
+    acpica-tools
+    dev86
+    libxslt
+    libxml2
+    xorgproto
+    libX11
+    libXext
+    libXcursor
+    libcap
+    glib
+    lvm2
+    alsa-lib
+    curl
+    libvpx
+    pam
+    makeself
+    perl
+    libXmu
+    libXrandr
+    libpng
+    libopus
+    libtpms
+    python3
+    xz
+    libGL
+  ]
+  ++ optional javaBindings jdk
+  ++ optional pythonBindings python3 # Python is needed even when not building bindings
+  ++ optional pulseSupport libpulseaudio
+  ++ optionals (!headless) [
+    qtbase
+    qttools
+    qtscxml
+    libXinerama
+    SDL2
+    libGLU
+  ]
+  ++ optionals enableWebService [
+    gsoap
+    zlib
+  ];
 
   hardeningDisable = [
     "format"
@@ -214,6 +211,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
+
+    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
+      --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
+
+    # this works in conjunction with fix-graphics-driver-loading.patch
+    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
+      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
 
     export USER=nix
     set +x
@@ -249,8 +253,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableKvm (
       let
         patchVboxVersion =
-          # There is no updated patch for 7.0.22 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
+          # There is no updated patch for 7.1.12 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.1.12" then "7.1.6" else finalAttrs.virtualboxVersion;
       in
       fetchpatch {
         name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
@@ -262,10 +266,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      ./fix-graphics-driver-loading.patch
     ];
 
   postPatch = ''
-    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+    sed -i -e 's|/sbin/ifconfig|${net-tools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 
@@ -320,7 +325,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
-    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
+    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
@@ -396,8 +401,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
     # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
-      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
-         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
 
   passthru = {
@@ -418,7 +422,7 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryNativeCode
     ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       sander

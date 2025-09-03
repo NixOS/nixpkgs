@@ -19,7 +19,7 @@ This function will place them into [`outputBin`](#outputbin).
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the file has an undersirable name. It should be renamed before
+  # Sometimes the file has an undesirable name. It should be renamed before
   # being installed via installBin
   postInstall = ''
     mv a.out delmar
@@ -42,7 +42,7 @@ The manpages must have a section suffix, and may optionally be compressed (with
 {
   nativeBuildInputs = [ installShellFiles ];
 
-  # Sometimes the manpage file has an undersirable name; e.g. it conflicts with
+  # Sometimes the manpage file has an undesirable name; e.g., it conflicts with
   # another software with an equal name. It should be renamed before being
   # installed via installManPage
   postInstall = ''
@@ -84,7 +84,7 @@ zsh).
 }
 ```
 
-The path may also be a fifo or named fd (such as produced by `<(cmd)`), in which
+The path may also be the result of process substitution (e.g. `<(cmd)`), in which
 case the shell and name must be provided (see below).
 
 If the destination shell completion file is not actually present or consists of
@@ -100,7 +100,7 @@ failure. To prevent this, guard the completion generation commands.
 {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # using named fd
+    # using process substitution
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
       --fish <($out/bin/foobar --fish-completion) \

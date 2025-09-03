@@ -1,39 +1,40 @@
-{ alsa-lib
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, buildEnv
-, buildPackages
-, cairo
-, cups
-, dbus
-, expat
-, fetchurl
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, lib
-, libcap
-, libdrm
-, libGL
-, libnotify
-, libuuid
-, libxcb
-, libxkbcommon
-, makeWrapper
-, libgbm
-, nspr
-, nss
-, pango
-, sdk ? false
-, sqlite
-, stdenv
-, systemd
-, udev
-, xorg
+{
+  alsa-lib,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  buildEnv,
+  buildPackages,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fetchurl,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libcap,
+  libdrm,
+  libGL,
+  libnotify,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  makeWrapper,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  sdk ? false,
+  sqlite,
+  stdenv,
+  systemd,
+  udev,
+  xorg,
 }:
 
 let
@@ -84,25 +85,34 @@ let
       udev
     ];
 
-    extraOutputsToInstall = [ "lib" "out" ];
+    extraOutputsToInstall = [
+      "lib"
+      "out"
+    ];
   };
 
-  version = "0.90.0";
+  version = "0.102.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
   inherit version;
 
   src =
-    let flavor = if sdk then "sdk-" else "";
-    in fetchurl {
+    let
+      flavor = if sdk then "sdk-" else "";
+    in
+    fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      hash = {
-        "sdk-ia32" = "sha256-dETXtOdJ9/1wZ47l/j/K5moN4m+KNc7vu7wVGql8NXQ=";
-        "sdk-x64" = "sha256-mRIKIrFIdXQ+tLled3ygJvMCBDKP08bl3IlqTbQmYq0=";
-        "ia32" = "sha256-+nGIQuWdPfctPNzDu7mkEUOmLx1cwcJoVCAk6ImNBxQ=";
-        "x64" = "sha256-uEb0GTONaR58nhjGAan1HCOqQKtQ2JDrTaSL+SfRY6E=";
-      }."${flavor + bits}";
+      # TODO: Write an update script to update all 4 hashes.
+      # nixpkgs-update: no auto update
+      hash =
+        {
+          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
+          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
+          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
+          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
+        }
+        ."${flavor + bits}";
     };
 
   nativeBuildInputs = [
@@ -113,7 +123,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ nwEnv ];
-  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ];
+  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
+    nwEnv
+    stdenv.cc.libc
+    stdenv.cc.cc
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -122,27 +136,30 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/share/nwjs
-      cp -R * $out/share/nwjs
-      find $out/share/nwjs
+    mkdir -p $out/share/nwjs
+    cp -R * $out/share/nwjs
+    find $out/share/nwjs
 
-      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
-      mkdir -p $out/bin
-      ln -s $out/share/nwjs/nw $out/bin
+    mkdir -p $out/bin
+    ln -s $out/share/nwjs/nw $out/bin
 
-      mkdir $out/lib
-      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+    mkdir $out/lib
+    ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = [ lib.maintainers.mikaelfangel ];
     mainProgram = "nw";

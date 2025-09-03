@@ -8,7 +8,6 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   pytz,
   setuptools,
@@ -26,6 +25,12 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-rpfH1RIT9LcLapWCklMCiQkN46fhWEHhCPvhRPBp0xM=";
   };
+
+  postPatch = ''
+    # https://github.com/PyFilesystem/pyfilesystem2/pull/591
+    substituteInPlace tests/test_ftpfs.py \
+      --replace ThreadedTestFTPd FtpdThreadWrapper
+  '';
 
   build-system = [ setuptools ];
 
@@ -56,18 +61,17 @@ buildPythonPackage rec {
     "tests/test_copy.py"
   ];
 
-  disabledTests =
-    [
-      "user_data_repr"
-      # https://github.com/PyFilesystem/pyfilesystem2/issues/568
-      "test_remove"
-      # Tests require network access
-      "TestFTPFS"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
-      "test_ftpfs"
-    ];
+  disabledTests = [
+    "user_data_repr"
+    # https://github.com/PyFilesystem/pyfilesystem2/issues/568
+    "test_remove"
+    # Tests require network access
+    "TestFTPFS"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
+    "test_ftpfs"
+  ];
 
   pythonImportsCheck = [ "fs" ];
 

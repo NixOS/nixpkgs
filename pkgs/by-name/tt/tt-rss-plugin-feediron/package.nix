@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-feediron";
-  version = "1.32";
+  version = "1.33";
 
   src = fetchFromGitHub {
     owner = "feediron";
     repo = "ttrss_plugin-feediron";
     rev = "v${version}";
-    sha256 = "0a4nq0k0zmgmx7dzz70smhp0yxp7jynk9djz0nnbaa138h8888pr";
+    sha256 = "sha256-KU4XQJNK7Ua7rZaXA32lv16RlloCysAb54E5kEY847A=";
   };
 
   installPhase = ''

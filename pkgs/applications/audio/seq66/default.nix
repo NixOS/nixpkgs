@@ -1,21 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, qttools, which
-, alsa-lib, libjack2, liblo, qtbase, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  qttools,
+  which,
+  alsa-lib,
+  libjack2,
+  liblo,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "seq66";
-  version = "0.99.17";
+  version = "0.99.21";
 
   src = fetchFromGitHub {
     owner = "ahlstromcj";
     repo = "seq66";
     rev = version;
-    hash = "sha256-xGJL6fAk4wTOPI7k3mA0DbVh51dru4gxaJlad00hBiM=";
+    hash = "sha256-0joa69nSX3lcpoRq9YToNA75Sg9dlYMGRZEfcJm9Vjg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config qttools which wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    qttools
+    which
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ alsa-lib libjack2 liblo qtbase ];
+  buildInputs = [
+    alsa-lib
+    libjack2
+    liblo
+    qtbase
+  ];
 
   postPatch = ''
     for d in libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/src; do

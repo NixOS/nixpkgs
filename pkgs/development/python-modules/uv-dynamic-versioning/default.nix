@@ -8,9 +8,7 @@
 
   # dependencies
   dunamai,
-  eval-type-backport,
-  pydantic,
-  returns,
+  jinja2,
   tomlkit,
 
   # tests
@@ -21,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "uv-dynamic-versioning";
-  version = "0.4.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -30,7 +28,7 @@ buildPythonPackage rec {
     tag = "v${version}";
     # Tests perform mock operations on the local repo
     leaveDotGit = true;
-    hash = "sha256-5pc05yazeHyQvmNk0uy6XkLrmX4ZQF6Lj7fDDtVcpu4=";
+    hash = "sha256-AH0ZGZYmsVub/1Vqmedgop6QRNSNOnMh5ALkBqwepUw=";
   };
 
   build-system = [
@@ -39,10 +37,8 @@ buildPythonPackage rec {
 
   dependencies = [
     dunamai
-    eval-type-backport
     hatchling
-    pydantic
-    returns
+    jinja2
     tomlkit
   ];
 
@@ -60,6 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "Dynamic versioning based on VCS tags for uv/hatch project";

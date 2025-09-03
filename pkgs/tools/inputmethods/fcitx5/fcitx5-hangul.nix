@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-hangul";
-  version = "5.1.5";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-+IXsMT87Dc+Ad4r6/U+NLYo+04j+I58Cqz99v4Yr0uc=";
+    hash = "sha256-66VW/hzKMVwXd7ktPQHrVbsWazKedS+/giTLIh5fkwo=";
   };
 
   nativeBuildInputs = [

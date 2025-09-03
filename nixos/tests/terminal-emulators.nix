@@ -36,8 +36,6 @@ let
 
     darktile.pkg = p: p.darktile;
 
-    deepin-terminal.pkg = p: p.deepin.deepin-terminal;
-
     eterm.pkg = p: p.eterm;
     eterm.executable = "Eterm";
     eterm.pinkValue = "#D40055";
@@ -63,12 +61,7 @@ let
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";
 
-    konsole.pkg = p: p.plasma5Packages.konsole;
-
-    lomiri-terminal-app.pkg = p: p.lomiri.lomiri-terminal-app;
-    # after recent Mesa change, borked software rendering config under x86_64 icewm?
-    # BGR colour display on x86_64, RGB on aarch64
-    lomiri-terminal-app.colourTest = false;
+    konsole.pkg = p: p.kdePackages.konsole;
 
     lxterminal.pkg = p: p.lxterminal;
 

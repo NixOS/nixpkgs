@@ -71,14 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  dontWrapQtApps = true;
-
   buildPhase = ''
-    runHook preInstall
+    runHook preBuild
 
     sh build.sh
 
-    runHook postInstall
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -89,9 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 ./simple64-gui/icons/simple64.svg -t $out/share/icons/hicolor/scalable/apps/
 
-    makeWrapper $out/share/simple64/simple64-gui $out/bin/simple64-gui \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
-        "''${qtWrapperArgs[@]}"
+    patchelf $out/share/simple64/simple64-gui \
+      --add-needed libvulkan.so.1 --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
+
+    ln -s $out/share/simple64/simple64-gui $out/bin/simple64-gui
 
     runHook postInstall
   '';

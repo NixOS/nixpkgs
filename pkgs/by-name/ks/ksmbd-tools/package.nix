@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
-    repo = pname;
+    repo = "ksmbd-tools";
     rev = version;
     sha256 = "sha256-f2B+24AboAWLIrtuHWn8YMEPzWahIafc3kfx0zKyz8g=";
   };
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libnl
-  ] ++ lib.optional withKerberos libkrb5;
+  ]
+  ++ lib.optional withKerberos libkrb5;
 
   nativeBuildInputs = [
     meson

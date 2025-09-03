@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libbsd,
   libgcrypt,
+  xxHash,
   pkg-config,
   glib,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
@@ -14,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.14.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-iMv80UKktYOhNfVA3mW6kKv8TwLZaP6MQt24t3Rchk4=";
+    hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
   postPatch = ''
@@ -30,11 +32,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libbsd
     libgcrypt
     glib
     linuxHeaders
     sqlite
     util-linux
+    xxHash
   ];
 
   makeFlags = [
@@ -53,7 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/markfasheh/duperemove";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      bluescreen303
       thoughtpolice
     ];
     platforms = platforms.linux;

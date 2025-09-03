@@ -115,15 +115,15 @@ convertIconTheme() {
     }
 
     # macOS does not correctly display 16x and 32x png icons on app bundles
-    # they need to be converted to rgb+mask (argb is supported only from macOS 11)
+    # they need to be converted to argb
     function convertIfUnsupportedIcon() {
         local -r in=$1
         local -r iconSize=$2
         local -r scale=$3
-        local -r out=${in%.png}.rgb
+        local -r out=${in%.png}.argb
 
         if [[ ($scale -eq 1) && ($iconSize -eq 32 || $iconSize -eq 16) ]]; then
-            echo "desktopToDarwinBundle: converting ${iconSize}x icon to rgb" >&2
+            echo "desktopToDarwinBundle: converting ${iconSize}x icon to argb" >&2
             icnsutil convert "$out" "$in"
             rm "$in"
         fi

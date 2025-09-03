@@ -12,23 +12,24 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.12.2";
+  version = "4.12.6";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-/OdSV/wTrs6roiPiSQCqCLrlWtkB11gm3DM7r7B4HUU=";
+    hash = "sha256-iV8qpUsUnL1n6hKADegNTmrW/AUWNiiNLxrTU4WPR30=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      imagemagick # for icon resizing
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    imagemagick # for icon resizing
+    copyDesktopItems
+  ];
 
-  npmDepsHash = "sha256-ZM3hFMHuKl5BW1+10czESDknc9jIZ024mUSUdNHF3EM=";
+  npmDepsHash = "sha256-ZLFmcK91SrUM+ouBENzc+MdNvQCRDh0ej4tf2TneUtQ=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -66,7 +67,7 @@ buildNpmPackage rec {
 
       for size in 16 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
+        magick icon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
       done
 
       makeWrapper ${lib.getExe electron} $out/bin/blockbench \

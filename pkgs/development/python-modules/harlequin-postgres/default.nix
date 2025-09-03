@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "harlequin-postgres";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "harlequin_postgres";
     inherit version;
-    hash = "sha256-1/tALkY5wz9lOWc2QsZkEa/qx0DxjKIiVfXTfOu4wQE=";
+    hash = "sha256-9US0aaXP2F+UVM9pY43KpnB05KC0/uDxrpZAYOJ+RR0=";
   };
 
   build-system = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Harlequin adapter for Postgres";
+    description = "Harlequin adapter for Postgres";
     homepage = "https://pypi.org/project/harlequin-postgres/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];

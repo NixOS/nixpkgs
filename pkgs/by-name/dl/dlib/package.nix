@@ -20,65 +20,65 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.6";
+  version = "20.0";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
+    sha256 = "sha256-VTX7s0p2AzlvPUsSMXwZiij+UY9g2y+a1YIge9bi0sw=";
   };
 
   postPatch = ''
     rm -rf dlib/external
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
-      (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
-      (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
-      (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
-        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)
-      ))
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
+    (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+    (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
+      builtins.concatStringsSep "," (with cudaPackages.flags; map dropDots cudaCapabilities)
+    ))
+  ];
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      cmake
-      pkg-config
+      cuda_nvcc
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_nvcc
-      ]
-    );
+  );
 
-  buildInputs =
+  buildInputs = [
+    libpng
+    libjpeg
+    libwebp
+    blas
+    lapack
+  ]
+  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      libpng
-      libjpeg
-      libwebp
-      blas
-      lapack
+      cuda_cudart
+      cuda_nvcc
+      libcublas
+      libcurand
+      libcusolver
+      cudnn
+      cuda_cccl
     ]
-    ++ lib.optionals guiSupport [ libX11 ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart
-        cuda_nvcc
-        libcublas
-        libcurand
-        libcusolver
-        cudnn
-        cuda_cccl
-      ]
-    );
+  );
 
   passthru = {
     inherit

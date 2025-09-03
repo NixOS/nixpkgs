@@ -22,7 +22,7 @@ let
   ];
   version = "2.0.1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apple_cursor";
   inherit version;
   inherit srcs;

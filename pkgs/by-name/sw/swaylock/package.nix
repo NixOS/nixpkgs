@@ -14,18 +14,18 @@
   gdk-pixbuf,
   pam,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaylock";
-  version = "1.8.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
     tag = "v${version}";
-    hash = "sha256-1+AXxw1gH0SKAxUa0JIhSzMbSmsfmBPCBY5IKaYtldg=";
+    hash = "sha256-5JAA8mCY3vOsauvRK2zquBrzA2ROakEfahzp4a6j/Ac=";
   };
 
   strictDeps = true;
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "swaylock";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ rewine ];
   };
 }

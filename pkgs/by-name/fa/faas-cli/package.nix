@@ -1,30 +1,36 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, installShellFiles
-, testers
-, faas-cli
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  installShellFiles,
+  testers,
+  faas-cli,
 }:
 let
-  faasPlatform = platform:
-    let cpuName = platform.parsed.cpu.name; in {
+  faasPlatform =
+    platform:
+    let
+      cpuName = platform.parsed.cpu.name;
+    in
+    {
       "aarch64" = "arm64";
       "armv7l" = "armhf";
       "armv6l" = "armhf";
-    }.${cpuName} or cpuName;
+    }
+    .${cpuName} or cpuName;
 in
 buildGoModule rec {
   pname = "faas-cli";
-  version = "0.17.1";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-pCzYfsL4ZQOyxEpg//Edh+dengXkx6G+OWMNPfIPM+o=";
+    sha256 = "sha256-gyd9uX5i5nl7x476SGfBwWUL1hTLsPCCdsmwo783x5Q=";
   };
 
   vendorHash = null;
@@ -34,13 +40,17 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/faas-cli" \
@@ -61,6 +71,9 @@ buildGoModule rec {
     mainProgram = "faas-cli";
     homepage = "https://github.com/openfaas/faas-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki techknowlogick ];
+    maintainers = with maintainers; [
+      welteki
+      techknowlogick
+    ];
   };
 }

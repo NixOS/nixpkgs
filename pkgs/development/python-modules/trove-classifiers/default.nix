@@ -11,7 +11,7 @@
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2024.9.12";
+    version = "2025.5.9.12";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ let
     src = fetchPypi {
       pname = "trove_classifiers";
       inherit version;
-      hash = "sha256-S0az4TSk0BmZrFvG5SivzBDMSPD3JPGF8mfidgBXaPQ=";
+      hash = "sha256-fKfIp6duLNMURoxnfGnRLMI1dxH8q0pg+HmUwVieXLU=";
     };
 
     build-system = [

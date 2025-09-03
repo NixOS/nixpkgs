@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "civo";
-  version = "1.1.95";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "civo";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-/byI9QFxkCiyVvxF0K1RjK5xW4EE8l/+LqqKy9GW1Pw=";
+    hash = "sha256-0F8RF2vbuuLv39yIYQk7TdBw8CImcnMFQ9r+GSHGGiY=";
   };
 
-  vendorHash = "sha256-ZylfnOeS6tXYaBbXg5znus6CKE+IZXmPSOc9UwYtscc=";
+  vendorHash = "sha256-TsaGXDUTvTsfDIBhM9+JwL2swEw/qSivn3NTA0tWkZw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

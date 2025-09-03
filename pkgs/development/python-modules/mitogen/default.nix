@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mitogen";
-  version = "0.3.21";
+  version = "0.3.27";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mitogen-hq";
     repo = "mitogen";
     tag = "v${version}";
-    hash = "sha256-F8W15JHOuQ+MhQtQZz+zssgeZqFC+agqINnFaKP0lto=";
+    hash = "sha256-vW3OgVFu9xw45g9Idurb2feguH8AhY7qcWbF9nXjLLw=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Library for writing distributed self-replicating programs";
     homepage = "https://github.com/mitogen-hq/mitogen";
-    changelog = "https://github.com/mitogen-hq/mitogen/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/mitogen-hq/mitogen/blob/${src.tag}/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

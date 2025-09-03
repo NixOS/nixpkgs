@@ -1,23 +1,8 @@
 [
   {
     "pname": "Avalonia",
-    "version": "11.0.0",
-    "hash": "sha256-7QE0MtD1QDiG3gRx5xW33E33BXyEtASQSw+Wi3Lmy3E="
-  },
-  {
-    "pname": "Avalonia",
-    "version": "11.0.10",
-    "hash": "sha256-FuGl5admJ9AeRNrg/faGfqx8pwxGxdkmbnth9Jxhelc="
-  },
-  {
-    "pname": "Avalonia",
     "version": "11.0.13",
     "hash": "sha256-D0KHUUC3FxhOxeVowzVHRtRYfoV1G8Xk55LMF4Rw8w4="
-  },
-  {
-    "pname": "Avalonia",
-    "version": "11.0.4",
-    "hash": "sha256-YEqAwBRAhvhN5eT8GqOA8XsSwEF4ccwTMBWxBlIHLUo="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -43,11 +28,6 @@
     "pname": "Avalonia.Controls.DataGrid",
     "version": "11.0.13",
     "hash": "sha256-Mi6Z55KbQuU7RSiWkMjFzktZxuyuQyXnDw5B1ZS0bHc="
-  },
-  {
-    "pname": "Avalonia.Controls.DataGrid",
-    "version": "11.0.4",
-    "hash": "sha256-wlig5frBAO1DPH9GX0h8MZQq3U4F4K16EliC6N0NbII="
   },
   {
     "pname": "Avalonia.Controls.ItemsRepeater",
@@ -171,8 +151,8 @@
   },
   {
     "pname": "Gommon",
-    "version": "2.7.0.2",
-    "hash": "sha256-gFDtIC6VJ8aaxolppXPG8pBTe9ApBCDy2DFm8Qrxa5w="
+    "version": "2.7.1.1",
+    "hash": "sha256-2AnVtyEbg5A+K/LDjgOpKw/CNRDkAhjVa38L5LYYyrw="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -468,11 +448,6 @@
     "pname": "JetBrains.Annotations",
     "version": "2023.2.0",
     "hash": "sha256-Um10fSmO+21I7f+lbzzVq5e8GBijJ9amTvOlt362p1s="
-  },
-  {
-    "pname": "LibHac",
-    "version": "0.19.0",
-    "hash": "sha256-FDEmeGHbX/aCFjFbFk8QwO2rTfFizt9UKb+KFDt23hk="
   },
   {
     "pname": "MicroCom.CodeGenerator.MSBuild",
@@ -815,14 +790,19 @@
     "hash": "sha256-NHGzMcYduuYJjduIlf8M8zSQQuJcXAEaMNmKIqAgs3w="
   },
   {
-    "pname": "Ryujinx.Graphics.Nvdec.Dependencies",
-    "version": "5.0.3-build14",
-    "hash": "sha256-+ff+tlWggY+qZTBJroOOphRpOjBDg5cQgwGtVOTiqRQ="
+    "pname": "Ryujinx.Graphics.Nvdec.Dependencies.AllArch",
+    "version": "6.1.2-build3",
+    "hash": "sha256-Glhvv00ZbrbB+Z4PMSTsmiP14HZDonp611s1gXGuyqI="
   },
   {
     "pname": "Ryujinx.Graphics.Vulkan.Dependencies.MoltenVK",
     "version": "1.2.0",
     "hash": "sha256-vdDw6YGoyQzv6ustyXP6v7YWUIKEXaZOyUKAaVbRauI="
+  },
+  {
+    "pname": "Ryujinx.LibHac",
+    "version": "0.20.0",
+    "hash": "sha256-msrn9BElOOGtQAz6oK3HbMeyLOQ10Xt8wT0Qyr8NwYU="
   },
   {
     "pname": "Ryujinx.SDL2-CS",
@@ -848,11 +828,6 @@
     "pname": "shaderc.net",
     "version": "0.1.0",
     "hash": "sha256-+K7ObC9ucilwWY+Tlf9KcrAVoTFS65V6Di7JDWDSZTg="
-  },
-  {
-    "pname": "SharpMetal",
-    "version": "1.0.0-preview21",
-    "hash": "sha256-ixS88SuK94KfBONdTgXSPSI4tftqekjQ3aJ502rG3Vo="
   },
   {
     "pname": "SharpZipLib",
@@ -971,8 +946,8 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "9.0.0",
-    "hash": "sha256-578lcBgswW0eM16r0EnJzfGodPx86RxxFoZHc2PSzsw="
+    "version": "9.0.2",
+    "hash": "sha256-hNhCSyuD9/teTgFuX4zrBn/LWlijczwrMqv+r3/yfHI="
   },
   {
     "pname": "System.Collections",
@@ -1016,8 +991,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "9.0.0",
-    "hash": "sha256-k6Pdndm5fTD6CB1QsQfP7G+2h4B30CWIsuvjHuBg3fc="
+    "version": "9.0.2",
+    "hash": "sha256-CI1z3rCDA2XnYE7hA1Hh6+rPkdIRAcswCXu/Pbaavck="
   },
   {
     "pname": "System.IO.Pipelines",
@@ -1036,8 +1011,8 @@
   },
   {
     "pname": "System.Management",
-    "version": "9.0.0",
-    "hash": "sha256-UyLO5dgNVC7rBT1S6o/Ix6EQGlVTSWUQtVC+/cyTkfQ="
+    "version": "9.0.2",
+    "hash": "sha256-7FhGnAYgoJnPcHy+HbVdK/fD8ICSLAttLtueTLBoWZc="
   },
   {
     "pname": "System.Memory",

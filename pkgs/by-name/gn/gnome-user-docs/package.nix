@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-docs";
-  version = "47.2";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2b8IuabChNHgT2/pI3pt7trRYeDlungQv/7PKF4rzd8=";
+    hash = "sha256-Z4Kfdkumctf5n/cu9lE7QMyTH7QBv3vX21+AXnv6Pbk=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "User and system administration help for the GNOME desktop";
     homepage = "https://help.gnome.org/users/gnome-help/";
     license = licenses.cc-by-30;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.all;
   };
 }

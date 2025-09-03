@@ -31,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-reentrant"
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # concerning. upstream defines XOPEN_SOURCE=700 which makes FreeBSD very insistent on
+    # not showing us gethostbyname()
+    NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
+  };
+
   hardeningDisable = [ "format" ];
 
   # Shared-only build
@@ -58,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       xbreak
       hjones2199
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 })

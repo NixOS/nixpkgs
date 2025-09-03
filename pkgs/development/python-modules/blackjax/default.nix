@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = version;
-    hash = "sha256-qaQBbRAKExRHr4Uhm5/Q1Ydon6ePsjG2PWbwSdR9QZM=";
+    hash = "sha256-2GTjKjLIWFaluTjdWdUF9Iim973y81xv715xspghRZI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,6 +49,11 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: JAXopt is no longer maintained
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     "tests/test_benchmarks.py"
 
@@ -56,27 +61,28 @@ buildPythonPackage rec {
     "tests/mcmc/test_integrators.py"
   ];
 
-  disabledTests =
-    [
-      # too slow
-      "test_adaptive_tempered_smc"
+  disabledTests = [
+    # too slow
+    "test_adaptive_tempered_smc"
 
-      # AssertionError on numerical values
-      "test_barker"
-      "test_mclmc"
-      "test_mcse4"
-      "test_normal_univariate"
-      "test_nuts__with_device"
-      "test_nuts__with_jit"
-      "test_nuts__without_device"
-      "test_nuts__without_jit"
-      "test_smc_waste_free__with_jit"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Numerical test (AssertionError)
-      # https://github.com/blackjax-devs/blackjax/issues/668
-      "test_chees_adaptation"
-    ];
+    # AssertionError on numerical values
+    "test_barker"
+    "test_mclmc"
+    "test_mcse4"
+    "test_normal_univariate"
+    "test_nuts__with_device"
+    "test_nuts__with_jit"
+    "test_nuts__without_device"
+    "test_nuts__without_jit"
+    "test_smc_waste_free__with_jit"
+
+    # Numerical test (AssertionError)
+    # First report, when the failure was only happening on aarch64-linux:
+    # https://github.com/blackjax-devs/blackjax/issues/668
+    # Second report, when the test started happening on x86_64-linux too after Jax was updated to 0.7.0
+    # https://github.com/blackjax-devs/blackjax/issues/795
+    "test_chees_adaptation"
+  ];
 
   pythonImportsCheck = [ "blackjax" ];
 

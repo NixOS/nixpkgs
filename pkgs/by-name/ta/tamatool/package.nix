@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jcrona";
     repo = "tamatool";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VDmpIBuMWg3TwfCf9J6/bi/DaWip6ESAQWvGh2SH+A8=";
     fetchSubmodules = true;
   };
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "-Clinux"
     "VERSION=${finalAttrs.version}"
-    "CFLAGS+=-I${SDL2.dev}/include/SDL2"
+    "CFLAGS+=-I${lib.getInclude SDL2}/include/SDL2"
     "CFLAGS+=-I${SDL2_image}/include/SDL2"
     "DIST_PATH=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"

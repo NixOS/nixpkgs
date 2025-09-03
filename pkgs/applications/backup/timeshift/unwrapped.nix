@@ -18,26 +18,27 @@
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "24.06.6";
+  version = "25.07.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    hash = "sha256-umMekxP9bvV01KzfIh2Zxa9Xb+tR5x+tG9dOnBIOkjY=";
+    hash = "sha256-M3r5CUSMF2Es1EDolmZAwqj2uX76wARk5oefqdf2eYk=";
   };
 
-  patches = [
-    ./timeshift-launcher.patch
-  ];
-
   postPatch = ''
-    while IFS="" read -r -d $'\0' FILE; do
+    for FILE in src/Core/Main.vala src/Utility/Device.vala; do
       substituteInPlace "$FILE" \
-        --replace "/sbin/blkid" "${util-linux}/bin/blkid"
-    done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
+        --replace-fail "/sbin/blkid" "${lib.getExe' util-linux "blkid"}"
+    done
+
     substituteInPlace ./src/Utility/IconManager.vala \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
+
+    # Substitute app_command to look for the `timeshift-gtk` in $out.
+    substituteInPlace ./src/timeshift-launcher \
+      --replace-fail "app_command='timeshift-gtk'" "app_command=$out/bin/timeshift-gtk"
   '';
 
   nativeBuildInputs = [

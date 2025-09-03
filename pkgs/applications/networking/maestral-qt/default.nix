@@ -52,6 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
+  postInstall = ''
+    install -Dm444 -t $out/share/icons/hicolor/512x512/apps src/maestral_qt/resources/maestral.png
+  '';
+
   # no tests
   doCheck = false;
 
@@ -59,16 +63,16 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       sfrijters
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "maestral_qt";
   };
 }

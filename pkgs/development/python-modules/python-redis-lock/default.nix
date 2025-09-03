@@ -54,8 +54,9 @@ buildPythonPackage rec {
     gevent
     pytestCheckHook
     process-tests
-    pkgs.redis
-  ] ++ optional-dependencies.django;
+    pkgs.valkey
+  ]
+  ++ optional-dependencies.django;
 
   # For Django tests
   preCheck = "export DJANGO_SETTINGS_MODULE=test_project.settings";

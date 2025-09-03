@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mud";
-  version = "1.0.11";
+  version = "1.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasursadikov";
     repo = "mud";
     tag = "v${version}";
-    hash = "sha256-HnYBHfburJuA/yRV4Nb8HApi7kfkONh5N9t221GOxMw=";
+    hash = "sha256-nYmMz91ElYZDelyHGAF6FlEhXqORODRgdLbxha4sUb8=";
   };
 
   build-system = with python3Packages; [
@@ -32,10 +32,10 @@ python3Packages.buildPythonApplication rec {
   # Mud can only be initialized in a directory containing git repos.
 
   meta = {
-    description = "multi-directory git runner which allows you to run git commands in a multiple repositories";
+    description = "Multi-directory git runner which allows you to run git commands in a multiple repositories";
     homepage = "https://github.com/jasursadikov/mud";
     license = lib.licenses.mit;
-    changelog = "https://github.com/jasursadikov/mud/releases/tag/v${version}";
+    changelog = "https://github.com/jasursadikov/mud/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "mud";
   };

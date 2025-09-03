@@ -2,24 +2,24 @@
   lib,
   stdenv,
   fetchurl,
-  SDL,
-  SDL_image,
-  SDL_mixer,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vectoroids";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchurl {
-    url = "ftp://ftp.tuxpaint.org/unix/x/vectoroids/src/vectoroids-${version}.tar.gz";
-    sha256 = "0bkvd4a1v496w0vlvqyi1a6p25ssgpkchxxxi8899sb72wlds54d";
+    url = "https://tuxpaint.org/ftp/unix/x/vectoroids/src/vectoroids-${finalAttrs.version}.tar.gz";
+    hash = "sha256-aLV4rrNuLKODYGD+0UBAQeQKKCNlFOX2g5CcjjkCWyQ=";
   };
 
   buildInputs = [
-    SDL
-    SDL_image
-    SDL_mixer
+    SDL2
+    SDL2_image
+    SDL2_mixer
   ];
 
   preConfigure = ''
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Clone of the classic arcade game Asteroids by Atari";
     mainProgram = "vectoroids";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    inherit (SDL2.meta) platforms;
   };
-}
+})

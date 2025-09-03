@@ -15,12 +15,14 @@ let
     ui_config = {
       enabled = cfg.webUi;
     };
-  } // cfg.extraConfig;
+  }
+  // cfg.extraConfig;
 
   configFiles = [
     "/etc/consul.json"
     "/etc/consul-addrs.json"
-  ] ++ cfg.extraConfigFiles;
+  ]
+  ++ cfg.extraConfigFiles;
 
   devices = lib.attrValues (lib.filterAttrs (_: i: i != null) cfg.interface);
   systemdDevices = lib.forEach devices (
@@ -193,26 +195,26 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ] ++ systemdDevices;
           bindsTo = systemdDevices;
-          restartTriggers =
-            [ config.environment.etc."consul.json".source ]
-            ++ lib.mapAttrsToList (_: d: d.source) (
-              lib.filterAttrs (n: _: lib.hasPrefix "consul.d/" n) config.environment.etc
-            );
+          restartTriggers = [
+            config.environment.etc."consul.json".source
+          ]
+          ++ lib.mapAttrsToList (_: d: d.source) (
+            lib.filterAttrs (n: _: lib.hasPrefix "consul.d/" n) config.environment.etc
+          );
 
-          serviceConfig =
-            {
-              ExecStart =
-                "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
-                + lib.concatMapStrings (n: " -config-file ${n}") configFiles;
-              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-              PermissionsStartOnly = true;
-              User = if cfg.dropPrivileges then "consul" else null;
-              Restart = "on-failure";
-              TimeoutStartSec = "infinity";
-            }
-            // (lib.optionalAttrs (cfg.leaveOnStop) {
-              ExecStop = "${lib.getExe cfg.package} leave";
-            });
+          serviceConfig = {
+            ExecStart =
+              "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
+              + lib.concatMapStrings (n: " -config-file ${n}") configFiles;
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            PermissionsStartOnly = true;
+            User = if cfg.dropPrivileges then "consul" else null;
+            Restart = "on-failure";
+            TimeoutStartSec = "infinity";
+          }
+          // (lib.optionalAttrs (cfg.leaveOnStop) {
+            ExecStop = "${lib.getExe cfg.package} leave";
+          });
 
           path = with pkgs; [
             iproute2

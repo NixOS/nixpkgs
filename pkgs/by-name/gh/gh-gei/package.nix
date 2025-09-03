@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
   pname = "gh-gei";
-  version = "1.12.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "github";
-    repo = pname;
+    repo = "gh-gei";
     rev = "v${version}";
-    hash = "sha256-orDjHgyqwBo/LOuujCp/6p4G0SWDA/ZDWvtTfH1ofrU=";
+    hash = "sha256-AMmeuobgJ+DSRG4zS7RP5l3/BraqQxXB+ygLDc3XnOs=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx;

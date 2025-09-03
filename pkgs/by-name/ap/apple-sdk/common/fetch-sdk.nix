@@ -6,14 +6,14 @@
 }:
 
 {
-  url,
+  urls,
   version,
   hash,
 }:
 
 fetchurl {
   pname = "macOS-SDK";
-  inherit version url hash;
+  inherit version urls hash;
 
   recursiveHash = true;
 

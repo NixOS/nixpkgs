@@ -14,15 +14,15 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpscorrelate";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
     repo = "gpscorrelate";
-    rev = version;
-    hash = "sha256-H1kqOzL79/Y1kHVEQ5y9JRWTDCBMbtEPo75drm8+7Qo=";
+    tag = finalAttrs.version;
+    hash = "sha256-7uNYwnMkW9jlt3kBrNqkhJsDoVkUFbCmqt0lQv8bRE0=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2
@@ -55,14 +56,14 @@ stdenv.mkDerivation rec {
     "install-desktop-file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GPS photo correlation tool, to add EXIF geotags";
 
     longDescription = ''
-      Digital cameras are cool.  So is GPS.  And, EXIF tags are really
+      Digital cameras are cool. So is GPS. And, EXIF tags are really
       cool too.
 
-      What happens when you merge the three?  You end up with a set of
+      What happens when you merge the three? You end up with a set of
       photos taken with a digital camera that are "stamped" with the
       location at which they were taken.
 
@@ -70,14 +71,15 @@ stdenv.mkDerivation rec {
 
       A variety of programs exist around the place to match GPS data
       with digital camera photos, but most of them are Windows or
-      MacOS only.  Which doesn't really suit me that much. Also, each
+      MacOS only. Which doesn't really suit me that much. Also, each
       one takes the GPS data in a different format.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://dfandrich.github.io/gpscorrelate/";
-    changelog = "https://github.com/dfandrich/gpscorrelate/releases/tag/${src.rev}";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/dfandrich/gpscorrelate/releases/tag/${finalAttrs.version}";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
+    mainProgram = "gpscorrelate";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   poetry-core,
   colorlog,
@@ -15,34 +16,29 @@
   python-dateutil,
   scipy,
   toml,
-  nltk-data,
-  symlinkJoin,
 }:
 let
-  testNltkData = symlinkJoin {
-    name = "nltk-test-data";
-    paths = [
-      nltk-data.punkt
-      nltk-data.punkt_tab
-      nltk-data.stopwords
-    ];
-  };
+  testNltkData = nltk.dataDir (d: [
+    d.punkt
+    d.punkt-tab
+    d.stopwords
+  ]);
 
-  version = "0.0.20";
+  version = "0.0.23";
   tag = "v${version}";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "type-infer";
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-2Y+NPwUnQMj0oXoCMfUOG40lqduy9GTcqxfyuFDOkHc=";
+    hash = "sha256-tqT/MTcSHcKGoPUUzjPLFpOTchannFsCd2VMC+8kVZ8=";
   };
 
   pythonRelaxDeps = [

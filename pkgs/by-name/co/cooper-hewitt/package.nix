@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "cooper-hewitt";
   version = "unstable-2014-06-09";
 

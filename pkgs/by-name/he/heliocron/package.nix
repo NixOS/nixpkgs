@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "heliocron";
-  version = "0.8.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "mfreeborn";
     repo = "heliocron";
     rev = "v${version}";
-    hash = "sha256-5rzFz29Bpy2GR6bEt2DdCq9RtpdcY3SK/KnZrBrHUvk=";
+    hash = "sha256-tqwVYIU8RXb1hiKnP7AlkxHsMhbAlwSmPGyFFMHIbAo=";
   };
 
-  cargoHash = "sha256-RjYE2TBvHnBgiwJi/Ys+wAmJoMHJuimcD07FOqwkcis=";
+  cargoHash = "sha256-rQriNb/njEUBUmCUy5NKEfOYkOLy9i7ClU0vR72udOo=";
 
   meta = {
     description = "Execute tasks relative to sunset, sunrise and other solar events";

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
-    repo = pname;
+    repo = "SpFFT";
     rev = "v${version}";
     hash = "sha256-Qc/omdRv7dW9NJUOczMZJKhc+Z/sXeIxv3SbpegAGdU=";
   };
@@ -40,39 +40,38 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gfortran
-  ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ]
+  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
-  buildInputs =
-    [
-      fftw
-      mpi
-    ]
-    ++ lib.optionals (gpuBackend == "cuda") [
-      cudaPackages.libcufft
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals (gpuBackend == "rocm") [
-      rocmPackages.clr
-      rocmPackages.rocfft
-      rocmPackages.hipfft
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs = [
+    fftw
+    mpi
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.libcufft
+    cudaPackages.cuda_cudart
+  ]
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocfft
+    rocmPackages.hipfft
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  cmakeFlags =
-    [
-      "-DSPFFT_OMP=ON"
-      "-DSPFFT_MPI=ON"
-      "-DSPFFT_SINGLE_PRECISION=OFF"
-      "-DSPFFT_FORTRAN=ON"
-      # Required due to broken CMake files
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optional (gpuBackend == "cuda") "-DSPFFT_GPU_BACKEND=CUDA"
-    ++ lib.optionals (gpuBackend == "rocm") [
-      "-DSPFFT_GPU_BACKEND=ROCM"
-      "-DHIP_ROOT_DIR=${rocmPackages.clr}"
-    ];
+  cmakeFlags = [
+    "-DSPFFT_OMP=ON"
+    "-DSPFFT_MPI=ON"
+    "-DSPFFT_SINGLE_PRECISION=OFF"
+    "-DSPFFT_FORTRAN=ON"
+    # Required due to broken CMake files
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optional (gpuBackend == "cuda") "-DSPFFT_GPU_BACKEND=CUDA"
+  ++ lib.optionals (gpuBackend == "rocm") [
+    "-DSPFFT_GPU_BACKEND=ROCM"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
+  ];
 
   meta = with lib; {
     description = "Sparse 3D FFT library with MPI, OpenMP, CUDA and ROCm support";

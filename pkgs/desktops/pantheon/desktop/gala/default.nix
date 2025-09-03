@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   desktop-file-utils,
   gettext,
   libxml2,
@@ -29,19 +30,26 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "8.1.0";
+  version = "8.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-C0Vct2xuGHd/G5x0Faif0DfpyNyCLJDxki+O9697c2s=";
+    hash = "sha256-uupFeQ73hr6ziLEtzgVJWASUxhspXJX54/U+3PLSCFY=";
   };
 
   patches = [
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
+
+    # Fix gtk3 daemon menu location with x2 scaling
+    # https://github.com/elementary/gala/pull/2493
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/33bc3ebe7f175c61845feaf2d06083f1e3b64ddc.patch";
+      hash = "sha256-hjjiKcO5o/OABKD8vUsVyqtNKN4ffEOGZntLceLr2+k=";
+    })
   ];
 
   depsBuildBuild = [ pkg-config ];
@@ -83,7 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "gala";
   };
 }

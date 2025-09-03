@@ -3,25 +3,24 @@
   rustPlatform,
   fetchFromGitHub,
   autoPatchelfHook,
-  stdenv,
   openssl,
   dbus,
   pkg-config,
   libgcc,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fum";
-  version = "0.6.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "qxb3";
     repo = "fum";
     tag = "v${version}";
-    hash = "sha256-vBn76s2ewLVVYhyXviQUmq+AzH6FSVdJaTEJQ2EPlM0=";
+    hash = "sha256-qZGbJGotxJCxlMIRPS/hw/cfz/k8PFdVKoJtqWKXD6s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7h/KIAIxldXPXUo0lzuBqs6Uf5S5p39yV+kTfLe/LBo=";
+  cargoHash = "sha256-g6Nn3teRHMdlKReX3j0jkhfJEHOigDF4ghSfSYU33o8=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -36,11 +35,14 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fully ricable tui-based music client";
     homepage = "https://github.com/qxb3/fum";
+    changelog = "https://github.com/qxb3/fum/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ linuxmobile ];
+    maintainers = with lib.maintainers; [ FKouhai ];
     platforms = lib.platforms.linux;
     mainProgram = "fum";
   };

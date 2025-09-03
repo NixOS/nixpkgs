@@ -40,41 +40,41 @@ let
   inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
-  version = "1.34.1";
+  version = "1.34.2";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
-    repo = pname;
+    repo = "unit";
     rev = version;
-    sha256 = "sha256-p3n0j/sZr+aLwfZuXTbb5+J4T48FWdsZBbSH3Yiex9g=";
+    sha256 = "sha256-tu1JqGWtfTznTDmZqEEVF3FmiDEXvaAdgQPsvLHCWy8=";
   };
 
   nativeBuildInputs = [ which ];
 
-  buildInputs =
-    [ pcre2.dev ]
-    ++ optionals withPython3 [
-      python3
-      ncurses
-    ]
-    ++ optional withPHP81 php81-unit
-    ++ optional withPHP82 php82-unit
-    ++ optional withPerl perl
-    ++ optional withRuby_3_1 ruby_3_1
-    ++ optional withRuby_3_2 ruby_3_2
-    ++ optional withSSL openssl;
+  buildInputs = [
+    pcre2.dev
+  ]
+  ++ optionals withPython3 [
+    python3
+    ncurses
+  ]
+  ++ optional withPHP81 php81-unit
+  ++ optional withPHP82 php82-unit
+  ++ optional withPerl perl
+  ++ optional withRuby_3_1 ruby_3_1
+  ++ optional withRuby_3_2 ruby_3_2
+  ++ optional withSSL openssl;
 
-  configureFlags =
-    [
-      "--control=unix:/run/unit/control.unit.sock"
-      "--pid=/run/unit/unit.pid"
-      "--user=unit"
-      "--group=unit"
-    ]
-    ++ optional withSSL "--openssl"
-    ++ optional (!withIPv6) "--no-ipv6"
-    ++ optional withDebug "--debug";
+  configureFlags = [
+    "--control=unix:/run/unit/control.unit.sock"
+    "--pid=/run/unit/unit.pid"
+    "--user=unit"
+    "--group=unit"
+  ]
+  ++ optional withSSL "--openssl"
+  ++ optional (!withIPv6) "--no-ipv6"
+  ++ optional withDebug "--debug";
 
   # Optionally add the PHP derivations used so they can be addressed in the configs
   usedPhp81 = optionals withPHP81 php81-unit;

@@ -6,28 +6,33 @@
   rustPlatform,
   testers,
   cachix,
-  sqlx-cli,
   nixVersions,
   openssl,
+  dbus,
   pkg-config,
   glibcLocalesUtf8,
   devenv, # required to run version test
 }:
 
 let
-  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
-    version = "2.24-devenv";
-    src = fetchFromGitHub {
-      owner = "domenkozar";
-      repo = "nix";
-      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
-      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
-    };
-    doCheck = false;
-    doInstallCheck = false;
-  });
+  version = "1.8.2";
+  devenvNixVersion = "2.30.4";
 
-  version = "1.3.1";
+  devenv_nix =
+    (nixVersions.git.overrideSource (fetchFromGitHub {
+      owner = "cachix";
+      repo = "nix";
+      rev = "devenv-${devenvNixVersion}";
+      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+    })).overrideAttrs
+      (old: {
+        pname = "devenv-nix";
+        version = devenvNixVersion;
+        doCheck = false;
+        doInstallCheck = false;
+        # do override src, but the Nix way so the warning is unaware of it
+        __intentionallyOverridingVersion = true;
+      });
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -36,32 +41,24 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    rev = "v${version}";
-    hash = "sha256-FhlknassIb3rKEucqnfFAzgny1ANmenJcTyRaXYwbA0=";
+    tag = "v${version}";
+    hash = "sha256-j1IujIUZFdKKv33ldsptrcbe0avAX725SYhGtNrGJcI=";
   };
 
-  cargoHash = "sha256-dJ8A2kVXkpJcRvMLE/IawFUZNJqok/IRixTRGtLsE3w=";
+  cargoHash = "sha256-NNfqmdnDIKmp1upkBwJMp+VirSYsUXJNgGbAzcHs8LY=";
 
   buildAndTestSubdir = "devenv";
-
-  # Force sqlx to use the prepared queries
-  SQLX_OFFLINE = true;
-  # A local database to use for preparing queries
-  DATABASE_URL = "sqlite:nix-eval-cache.db";
-
-  preBuild = ''
-    cargo sqlx database setup --source devenv-eval-cache/migrations
-    cargo sqlx prepare --workspace
-  '';
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
-    sqlx-cli
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    dbus
+  ];
 
   postInstall =
     let

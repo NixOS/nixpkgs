@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pallets";
-    repo = pname;
+    repo = "cachelib";
     tag = version;
     hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pallets/cachelib";
     description = "Collection of cache libraries in the same API interface";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

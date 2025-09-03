@@ -74,6 +74,44 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
+  awesome-wm-widgets = callPackage (
+    {
+      stdenv,
+      fetchFromGitHub,
+      lua,
+      lib,
+    }:
+
+    stdenv.mkDerivation {
+      pname = "awesome-wm-widgets";
+      version = "0-unstable-2024-02-15";
+
+      src = fetchFromGitHub {
+        owner = "streetturtle";
+        repo = "awesome-wm-widgets";
+        rev = "2a27e625056c50b40b1519eed623da253d36cc27";
+        hash = "sha256-qz/kUIpuhWwTLbwbaES32wGKe4D2hfz90dnq+mrHrj0=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        target=$out/lib/lua/${lua.luaversion}/awesome-wm-widgets
+        mkdir -p $target
+        cp -r $src/* $target
+
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "Widgets for Awesome window manager";
+        homepage = "https://github.com/streetturtle/awesome-wm-widgets";
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ averdow ];
+      };
+    }
+  ) { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -83,8 +121,6 @@ rec {
     buildLuaPackage rec {
       pname = "lua-pam";
       version = "unstable-2015-07-03";
-      # Needed for `disabled`, overridden in buildLuaPackage
-      name = "${pname}-${version}";
 
       src = fetchFromGitHub {
         owner = "devurandom";
@@ -109,10 +145,9 @@ rec {
         runHook postInstall
       '';
 
-      # The package does not build with lua 5.4 or luaJIT
-      disabled = luaAtLeast "5.4" || isLuaJIT;
-
       meta = with lib; {
+        # The package does not build with lua 5.4 or luaJIT
+        broken = luaAtLeast "5.4" || isLuaJIT;
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
         license = licenses.mit;
@@ -167,6 +202,9 @@ rec {
     }
   ) { };
 
+  luv = callPackage ../development/lua-modules/luv { };
+  libluv = callPackage ../development/lua-modules/luv/lib.nix { };
+
   luxio = callPackage (
     {
       fetchurl,
@@ -213,7 +251,6 @@ rec {
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
-    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
   vicious = callPackage (

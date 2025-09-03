@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "networking-ts-cxx";
   version = "2019-02-27";
 

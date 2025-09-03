@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "5.4.0";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
-    repo = pname;
+    repo = "kafkactl";
     tag = "v${version}";
-    hash = "sha256-ByvyRVyYXGvMFF9F/DU7lSka5PQJULyzo3nvqYAlQzI=";
+    hash = "sha256-wNqoGb3tVzoj+cUNNxqJvnq2Qr8BF0BC0FM01QAnu2o=";
   };
 
-  vendorHash = "sha256-95iiNoeWkECwIWumb03buCc9s616cO1v5BBGcjfnRNo=";
+  vendorHash = "sha256-sVvEHMXpjas+l93IZfAChDX5eDm0lkUNCr5r1JaVQ9I=";
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/deviceinsight/kafkactl";
     changelog = "https://github.com/deviceinsight/kafkactl/blob/v${version}/CHANGELOG.md";
     description = "Command Line Tool for managing Apache Kafka";
@@ -32,7 +32,7 @@ buildGoModule rec {
       - Configuration of different contexts
       - directly access kafka clusters inside your kubernetes cluster
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ grburst ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ grburst ];
   };
 }

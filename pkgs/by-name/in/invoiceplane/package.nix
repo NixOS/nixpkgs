@@ -3,41 +3,47 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  nodejs,
+  applyPatches,
   php,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
   nodePackages,
-  python3,
-  pkg-config,
-  libsass,
-  stdenv,
   fetchzip,
 }:
 let
-  version = "1.6.2";
+  version = "1.6.3";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
+    hash = "sha256-MuqxbkayW3GeiaorxfZSJtlwCWvnIF2ED/UUqahyoIQ=";
   };
 in
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "InvoicePlane";
-    repo = "InvoicePlane";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "InvoicePlane";
+      repo = "InvoicePlane";
+      tag = "v${version}";
+      hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
+    };
+    patches = [
+      # Fix composer.json validation
+      # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
+      ./fix_composer_validation.patch
+    ];
   };
 
-  vendorHash = "sha256-k7YBs6x/ABNTHPx9/EZXa4W9kcLQqpruV7YFGAADZq0=";
+  patches = [
+    # yarn.lock missing some resolved attributes and fails
+    ./fix-yarn-lock.patch
+  ];
 
-  buildInputs = [ libsass ];
+  vendorHash = "sha256-UCYAnECuIbIYg1T4I8I9maXVKXJc1zkyauBuIy5frTY=";
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -45,36 +51,20 @@ php.buildComposerProject (finalAttrs: {
     yarnInstallHook
     # Needed for executing package.json scripts
     nodePackages.grunt-cli
-    pkg-config
-    (python3.withPackages (ps: with ps; [ distutils ]))
-    stdenv.cc
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-0fPdxOIeQBTulPUxHtaQylm4jevQTONSN1bChqbGbGs=";
   };
 
-  # Upstream composer.json file is missing the name, description and license fields
-  composerStrictValidation = false;
-
   postBuild = ''
-    # Building node-sass dependency
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    pushd node_modules/node-sass
-    LIBSASS_EXT=auto yarn run build --offline
-    popd
-
-    # Running package.json scripts
     grunt build
   '';
 
   # Cleanup and language files
   postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
     rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}

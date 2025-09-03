@@ -1,0 +1,206 @@
+diff --git a/libxslt/functions.c b/libxslt/functions.c
+index 72a58dc4d6592..309af458c22f7 100644
+--- a/libxslt/functions.c
++++ b/libxslt/functions.c
+@@ -760,7 +760,7 @@ xsltGenerateIdFunction(xmlXPathParserContextPtr ctxt, int nargs){
+     }
+ 
+     if (xsltGetSourceNodeFlags(cur) & XSLT_SOURCE_NODE_HAS_ID) {
+-        id = (unsigned long) (size_t) *psviPtr;
++        id = (unsigned long) xsltGetSourceNodeValue(cur);
+     } else {
+         if (cur->type == XML_TEXT_NODE && cur->line == USHRT_MAX) {
+             /* Text nodes store big line numbers in psvi. */
+@@ -772,7 +772,7 @@ xsltGenerateIdFunction(xmlXPathParserContextPtr ctxt, int nargs){
+             goto out;
+         }
+ 
+-        if (tctxt->currentId == ULONG_MAX) {
++        if (tctxt->currentId == XSLT_SOURCE_NODE_VALUE_MAX) {
+             xsltTransformError(tctxt, NULL, NULL,
+                     "generate-id(): id overflow\n");
+             ctxt->error = XPATH_MEMORY_ERROR;
+@@ -780,7 +780,7 @@ xsltGenerateIdFunction(xmlXPathParserContextPtr ctxt, int nargs){
+         }
+ 
+         id = ++tctxt->currentId;
+-        *psviPtr = (void *) (size_t) id;
++        xsltSetSourceNodeValue(cur, id);
+         xsltSetSourceNodeFlags(tctxt, cur, XSLT_SOURCE_NODE_HAS_ID);
+     }
+ 
+diff --git a/libxslt/transform.c b/libxslt/transform.c
+index 54ef821b5016f..1ac2471d6441b 100644
+--- a/libxslt/transform.c
++++ b/libxslt/transform.c
+@@ -5772,7 +5772,8 @@ xsltCleanupSourceDoc(xmlDocPtr doc) {
+             xmlAttrPtr prop = cur->properties;
+ 
+             while (prop) {
+-                prop->atype &= ~(XSLT_SOURCE_NODE_MASK << 27);
++                prop->extra &=
++                    ~(XSLT_SOURCE_NODE_MASK << XSLT_SOURCE_NODE_SHIFT_32);
+                 prop->psvi = NULL;
+                 prop = prop->next;
+             }
+diff --git a/libxslt/xsltutils.c b/libxslt/xsltutils.c
+index a20da96182289..b431fafbbb441 100644
+--- a/libxslt/xsltutils.c
++++ b/libxslt/xsltutils.c
+@@ -1920,26 +1920,26 @@ xsltSaveResultToString(xmlChar **doc_txt_ptr, int * doc_txt_len,
+ int
+ xsltGetSourceNodeFlags(xmlNodePtr node) {
+     /*
+-     * Squeeze the bit flags into the upper bits of
++     * Squeeze the bit flags into the upper 4 bits of
+      *
+-     * - 'int properties' member in struct _xmlDoc
+-     * - 'xmlAttributeType atype' member in struct _xmlAttr
++     * - 'unsigned int extra' member in struct _xmlDoc
++     * - 'unsigned int extra' member in struct _xmlAttr
+      * - 'unsigned short extra' member in struct _xmlNode
+      */
+     switch (node->type) {
+         case XML_DOCUMENT_NODE:
+         case XML_HTML_DOCUMENT_NODE:
+-            return ((xmlDocPtr) node)->properties >> 27;
++            return ((xmlDocPtr) node)->extra >> XSLT_SOURCE_NODE_SHIFT_32;
+ 
+         case XML_ATTRIBUTE_NODE:
+-            return ((xmlAttrPtr) node)->atype >> 27;
++            return ((xmlAttrPtr) node)->extra >> XSLT_SOURCE_NODE_SHIFT_32;
+ 
+         case XML_ELEMENT_NODE:
+         case XML_TEXT_NODE:
+         case XML_CDATA_SECTION_NODE:
+         case XML_PI_NODE:
+         case XML_COMMENT_NODE:
+-            return node->extra >> 12;
++            return node->extra >> XSLT_SOURCE_NODE_SHIFT_32;
+ 
+         default:
+             return 0;
+@@ -1964,11 +1964,13 @@ xsltSetSourceNodeFlags(xsltTransformContextPtr ctxt, xmlNodePtr node,
+     switch (node->type) {
+         case XML_DOCUMENT_NODE:
+         case XML_HTML_DOCUMENT_NODE:
+-            ((xmlDocPtr) node)->properties |= flags << 27;
++            ((xmlDocPtr) node)->extra |=
++                ((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_32);
+             return 0;
+ 
+         case XML_ATTRIBUTE_NODE:
+-            ((xmlAttrPtr) node)->atype |= flags << 27;
++            ((xmlAttrPtr) node)->extra |=
++                ((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_32);
+             return 0;
+ 
+         case XML_ELEMENT_NODE:
+@@ -1976,7 +1978,7 @@ xsltSetSourceNodeFlags(xsltTransformContextPtr ctxt, xmlNodePtr node,
+         case XML_CDATA_SECTION_NODE:
+         case XML_PI_NODE:
+         case XML_COMMENT_NODE:
+-            node->extra |= flags << 12;
++            node->extra |= ((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_16);
+             return 0;
+ 
+         default:
+@@ -1998,11 +2000,13 @@ xsltClearSourceNodeFlags(xmlNodePtr node, int flags) {
+     switch (node->type) {
+         case XML_DOCUMENT_NODE:
+         case XML_HTML_DOCUMENT_NODE:
+-            ((xmlDocPtr) node)->properties &= ~(flags << 27);
++            ((xmlDocPtr) node)->extra &=
++                ~((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_32);
+             return 0;
+ 
+         case XML_ATTRIBUTE_NODE:
+-            ((xmlAttrPtr) node)->atype &= ~(flags << 27);
++            ((xmlAttrPtr) node)->extra &=
++                ~((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_32);
+             return 0;
+ 
+         case XML_ELEMENT_NODE:
+@@ -2010,7 +2014,55 @@ xsltClearSourceNodeFlags(xmlNodePtr node, int flags) {
+         case XML_CDATA_SECTION_NODE:
+         case XML_PI_NODE:
+         case XML_COMMENT_NODE:
+-            node->extra &= ~(flags << 12);
++            node->extra &= ~((unsigned) flags << XSLT_SOURCE_NODE_SHIFT_16);
++            return 0;
++
++        default:
++            return -1;
++    }
++}
++
++/**
++ * xsltGetSourceNodeValue:
++ * @node:  Node from source document
++ *
++ * Returns the associated 28 bit unsigned value for a source node,
++ * or 0 if node does not have an associated value.
++ */
++int
++xsltGetSourceNodeValue(xmlNodePtr node) {
++    switch (node->type) {
++        case XML_DOCUMENT_NODE:
++        case XML_HTML_DOCUMENT_NODE:
++            return (((xmlDocPtr) node)->extra & XSLT_SOURCE_NODE_VALUE_MASK);
++
++        case XML_ATTRIBUTE_NODE:
++            return (((xmlAttrPtr) node)->extra & XSLT_SOURCE_NODE_VALUE_MASK);
++
++        default:
++            return 0;
++    }
++}
++
++/**
++ * xsltSetSourceNodeValue:
++ * @node:  Node from source document
++ * @value:  28 bit unsigned value to associate with the node.
++ *
++ * Returns 0 on success, -1 on error.
++ */
++int
++xsltSetSourceNodeValue(xmlNodePtr node, int value) {
++    switch (node->type) {
++        case XML_DOCUMENT_NODE:
++        case XML_HTML_DOCUMENT_NODE:
++            ((xmlDocPtr) node)->extra &= ~XSLT_SOURCE_NODE_VALUE_MASK;
++            ((xmlDocPtr) node)->extra |= (value & XSLT_SOURCE_NODE_VALUE_MASK);
++            return 0;
++
++        case XML_ATTRIBUTE_NODE:
++            ((xmlAttrPtr) node)->extra &= ~XSLT_SOURCE_NODE_VALUE_MASK;
++            ((xmlAttrPtr) node)->extra |= (value & XSLT_SOURCE_NODE_VALUE_MASK);
+             return 0;
+ 
+         default:
+diff --git a/libxslt/xsltutils.h b/libxslt/xsltutils.h
+index 2514774b3f11a..1e753eebadd98 100644
+--- a/libxslt/xsltutils.h
++++ b/libxslt/xsltutils.h
+@@ -261,6 +261,10 @@ XSLTPUBFUN xmlXPathCompExprPtr XSLTCALL
+ #define XSLT_SOURCE_NODE_MASK       15u
+ #define XSLT_SOURCE_NODE_HAS_KEY    1u
+ #define XSLT_SOURCE_NODE_HAS_ID     2u
++#define XSLT_SOURCE_NODE_SHIFT_16   12u
++#define XSLT_SOURCE_NODE_SHIFT_32   28u
++#define XSLT_SOURCE_NODE_VALUE_MASK ((1 << XSLT_SOURCE_NODE_SHIFT_32) - 1)
++#define XSLT_SOURCE_NODE_VALUE_MAX  XSLT_SOURCE_NODE_VALUE_MASK
+ int
+ xsltGetSourceNodeFlags(xmlNodePtr node);
+ int
+@@ -268,6 +272,10 @@ xsltSetSourceNodeFlags(xsltTransformContextPtr ctxt, xmlNodePtr node,
+                        int flags);
+ int
+ xsltClearSourceNodeFlags(xmlNodePtr node, int flags);
++int
++xsltSetSourceNodeValue(xmlNodePtr node, int value);
++int
++xsltGetSourceNodeValue(xmlNodePtr node);
+ void **
+ xsltGetPSVIPtr(xmlNodePtr cur);
+ /** DOC_ENABLE */

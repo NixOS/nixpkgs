@@ -1,14 +1,22 @@
+# Evaluates all the accessible paths in nixpkgs.
+# *This only builds on Linux* since it requires the Linux sandbox isolation to
+# be able to write in various places while evaluating inside the sandbox.
+#
+# This file is used by nixpkgs CI (see .github/workflows/eval.yml) as well as
+# being used directly as an entry point in Lix's CI (in `flake.nix` in the Lix
+# repo).
+#
+# If you know you are doing a breaking API change, please ping the nixpkgs CI
+# maintainers and the Lix maintainers (`nix eval -f . lib.teams.lix`).
 {
+  callPackage,
   lib,
   runCommand,
   writeShellScript,
-  writeText,
-  linkFarm,
-  time,
-  procps,
-  nixVersions,
+  symlinkJoin,
+  busybox,
   jq,
-  sta,
+  nix,
 }:
 
 let
@@ -22,28 +30,29 @@ let
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
           ".version"
-          "ci/supportedSystems.nix"
+          "ci/supportedSystems.json"
         ]
       );
     };
 
-  nix = nixVersions.nix_2_24;
-
-  supportedSystems = import ../supportedSystems.nix;
+  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
+    {
+      evalSystem,
+    }:
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           nix
-          time
         ];
-        env.supportedSystems = builtins.toJSON supportedSystems;
-        passAsFile = [ "supportedSystems" ];
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -56,8 +65,7 @@ let
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --arg enableWarnings false > $out/paths.json
-        mv "$supportedSystemsPath" $out/systems.json
+            --option eval-system "${evalSystem}" > $out/paths.json
       '';
 
   singleSystem =
@@ -65,13 +73,15 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem,
+      evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile,
+      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       checkMeta ? true,
-      includeBroken ? true,
+
+      # Don't try to eval packages marked as broken.
+      includeBroken ? false,
       # Whether to just evaluate a single chunk for quick testing
       quickTest ? false,
     }:
@@ -87,12 +97,14 @@ let
         export NIX_SHOW_STATS_PATH="$outputDir/stats/$myChunk"
         echo "Chunk $myChunk on $system start"
         set +e
-        command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+        command time -o "$outputDir/timestats/$myChunk" \
+          -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
+          nix-env -f "${nixpkgs}/pkgs/top-level/release-outpaths-parallel.nix" \
+          --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
-          --no-name --attr-path --out-path \
+          --out-path --json \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -102,27 +114,35 @@ let
           --arg includeBroken ${lib.boolToString includeBroken} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
-          > "$outputDir/result/$myChunk"
+          > "$outputDir/result/$myChunk" \
+          2> "$outputDir/stderr/$myChunk"
         exitCode=$?
         set -e
+        cat "$outputDir/stderr/$myChunk"
+        cat "$outputDir/timestats/$myChunk"
         if (( exitCode != 0 )); then
           echo "Evaluation failed with exit code $exitCode"
           # This immediately halts all xargs processes
+          kill $PPID
+        elif [[ -s "$outputDir/stderr/$myChunk" ]]; then
+          echo "Nixpkgs on $system evaluated with warnings, aborting"
           kill $PPID
         fi
       '';
     in
     runCommand "nixpkgs-eval-${evalSystem}"
       {
-        nativeBuildInputs = [
-          nix
-          time
-          procps
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           jq
+          nix
         ];
         env = {
           inherit evalSystem chunkSize;
         };
+        __structuredAttrs = true;
+        unsafeDiscardReferences.out = true;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -138,20 +158,20 @@ let
         chunkCount=$(( (attrCount - 1) / chunkSize + 1 ))
         echo "Chunk count: $chunkCount"
 
-        mkdir $out
+        mkdir -p $out/${evalSystem}
 
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
-            echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
+            availMemory=$(free -m | grep Mem | awk '{print $7}')
+            freeSwap=$(free -m | grep Swap | awk '{print $4}')
+            echo "Available memory: $(( availMemory )) MiB, free swap: $(( freeSwap )) MiB"
 
-            if [[ ! -f "$out/min-avail-memory" ]] || (( availMemory < $(<$out/min-avail-memory) )); then
-              echo "$availMemory" > $out/min-avail-memory
+            if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
+              echo "$availMemory" > $out/${evalSystem}/min-avail-memory
             fi
-            if [[ ! -f $out/min-free-swap ]] || (( availMemory < $(<$out/min-free-swap) )); then
-              echo "$freeSwap" > $out/min-free-swap
+            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( freeSwap < $(<$out/${evalSystem}/min-free-swap) )); then
+              echo "$freeSwap" > $out/${evalSystem}/min-free-swap
             fi
             sleep 4
           done
@@ -164,120 +184,106 @@ let
         ''}
 
         chunkOutputDir=$(mktemp -d)
-        mkdir "$chunkOutputDir"/{result,stats}
+        mkdir "$chunkOutputDir"/{result,stats,timestats,stderr}
 
         seq -w 0 "$seq_end" |
-          command time -f "%e" -o "$out/total-time" \
+          command time -f "%e" -o "$out/${evalSystem}/total-time" \
           xargs -I{} -P"$cores" \
           ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir"
+
+        cp -r "$chunkOutputDir"/stats $out/${evalSystem}/stats-by-chunk
 
         if (( chunkSize * chunkCount != attrCount )); then
           # A final incomplete chunk would mess up the stats, don't include it
           rm "$chunkOutputDir"/stats/"$seq_end"
         fi
 
-        # Make sure the glob doesn't break when there's no files
-        shopt -s nullglob
-        cat "$chunkOutputDir"/result/* > $out/paths
-        cat "$chunkOutputDir"/stats/* > $out/stats.jsonstream
+        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
       '';
+
+  diff = callPackage ./diff.nix { };
 
   combine =
     {
-      resultsDir,
+      diffDir,
     }:
-    runCommand "combined-result"
+    runCommand "combined-eval"
       {
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
           jq
-          sta
         ];
       }
       ''
         mkdir -p $out
 
-        # Transform output paths to JSON
-        cat ${resultsDir}/*/paths |
-          jq --sort-keys --raw-input --slurp '
-            split("\n") |
-            map(select(. != "") | split(" ") | map(select(. != ""))) |
-            map(
-              {
-                key: .[0],
-                value: .[1] | split(";") | map(split("=") |
-                  if length == 1 then
-                    { key: "out", value: .[0] }
-                  else
-                    { key: .[0], value: .[1] }
-                  end) | from_entries}
-            ) | from_entries
-          ' > $out/outpaths.json
+        # Combine output paths from all systems
+        cat ${diffDir}/*/diff.json | jq -s '
+          reduce .[] as $item ({}; {
+            added: (.added + $item.added),
+            changed: (.changed + $item.changed),
+            removed: (.removed + $item.removed),
+            rebuilds: (.rebuilds + $item.rebuilds)
+          })
+        ' > $out/combined-diff.json
 
-        # Computes min, mean, error, etc. for a list of values and outputs a JSON from that
-        statistics() {
-          local stat=$1
-          sta --transpose |
-            jq --raw-input --argjson stat "$stat" -n '
-              [
-                inputs |
-                  split("\t") |
-                  { key: .[0], value: (.[1] | fromjson) }
-              ] |
-                from_entries |
-                {
-                  key: ($stat | join(".")),
-                  value: .
-                }'
-        }
+        mkdir -p $out/before/stats
+        for d in ${diffDir}/before/*; do
+          cp -r "$d"/stats-by-chunk $out/before/stats/$(basename "$d")
+        done
 
-        # Gets all available number stats (without .sizes because those are constant and not interesting)
-        readarray -t stats < <(jq -cs '.[0] | del(.sizes) | paths(type == "number")' ${resultsDir}/*/stats.jsonstream)
-
-        # Combines the statistics from all evaluations
-        {
-          echo "{ \"key\": \"minAvailMemory\", \"value\": $(cat ${resultsDir}/*/min-avail-memory | sta --brief --min) }"
-          echo "{ \"key\": \"minFreeSwap\", \"value\": $(cat ${resultsDir}/*/min-free-swap | sta --brief --min) }"
-          cat ${resultsDir}/*/total-time | statistics '["totalTime"]'
-          for stat in "''${stats[@]}"; do
-            cat ${resultsDir}/*/stats.jsonstream |
-              jq --argjson stat "$stat" 'getpath($stat)' |
-              statistics "$stat"
-          done
-        } |
-          jq -s from_entries > $out/stats.json
+        mkdir -p $out/after/stats
+        for d in ${diffDir}/after/*; do
+          cp -r "$d"/stats-by-chunk $out/after/stats/$(basename "$d")
+        done
       '';
 
-  compare = import ./compare {
-    inherit
-      lib
-      jq
-      runCommand
-      writeText
-      supportedSystems
-      ;
-  };
+  compare = callPackage ./compare { };
+
+  baseline =
+    {
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
+      # The number of attributes per chunk, see ./README.md for more info.
+      chunkSize ? 5000,
+      quickTest ? false,
+    }:
+    symlinkJoin {
+      name = "nixpkgs-eval-baseline";
+      paths = map (
+        evalSystem:
+        singleSystem {
+          inherit quickTest evalSystem chunkSize;
+        }
+      ) evalSystems;
+    };
 
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
+      chunkSize ? 5000,
       quickTest ? false,
+      baseline,
     }:
     let
-      results = linkFarm "results" (
-        map (evalSystem: {
-          name = evalSystem;
-          path = singleSystem {
-            inherit quickTest evalSystem chunkSize;
-            attrpathFile = attrpathsSuperset + "/paths.json";
-          };
-        }) evalSystems
-      );
+      diffs = symlinkJoin {
+        name = "nixpkgs-eval-diffs";
+        paths = map (
+          evalSystem:
+          diff {
+            inherit evalSystem;
+            beforeDir = baseline;
+            afterDir = singleSystem {
+              inherit quickTest evalSystem chunkSize;
+            };
+          }
+        ) evalSystems;
+      };
     in
     combine {
-      resultsDir = results;
+      diffDir = diffs;
     };
 
 in
@@ -285,10 +291,12 @@ in
   inherit
     attrpathsSuperset
     singleSystem
+    diff
     combine
     compare
     # The above three are used by separate VMs in a GitHub workflow,
-    # while the below is intended for testing on a single local machine
+    # while the below are intended for testing on a single local machine
+    baseline
     full
     ;
 }

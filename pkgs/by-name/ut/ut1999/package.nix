@@ -6,6 +6,7 @@
   undmg,
   fetchurl,
   makeDesktopItem,
+  makeWrapper,
   copyDesktopItems,
   libarchive,
   imagemagick,
@@ -20,23 +21,23 @@
 }:
 
 let
-  version = "469d";
+  version = "469e-rc9";
   srcs = rec {
     x86_64-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
-      hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-amd64.tar.bz2";
+      hash = "sha256-1hEWiUjgzb1mKTs/2p2/Whj8FdpqpvfaDtXf63S/W44=";
     };
     aarch64-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-arm64.tar.bz2";
-      hash = "sha256-2e9lHB12jLTR8UYofLWL7gg0qb2IqFk6eND3T5VqAx0=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-arm64.tar.bz2";
+      hash = "sha256-ZYbwwefn5ifzz9rkx9X8PSVy1c8t2Z24VXt6dignUtg=";
     };
     i686-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-x86.tar.bz2";
-      hash = "sha256-1JsFKuAAj/LtYvOUPFu0Hn+zvY3riW0YlJbLd4UnaKU=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-x86.tar.bz2";
+      hash = "sha256-afpDtlU01tEpGnfgichWqsUj80Lk2K//s/6iyqS/Vq8=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
-      hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
+      hash = "sha256-rFbgSQNeYwgd3Dzs/F+ljUFaGRwHCddLEuJBCehKktQ=";
     };
     # fat binary
     aarch64-darwin = x86_64-darwin;
@@ -67,7 +68,7 @@ let
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "ut1999";
   inherit version;
   sourceRoot = ".";
@@ -91,23 +92,32 @@ stdenv.mkDerivation {
       autoPatchelfHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
       undmg
     ];
 
   installPhase =
     let
       outPrefix =
-        if stdenv.hostPlatform.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/UnrealTournament.app/Contents/MacOS"
+        else
+          "$out";
     in
     ''
       runHook preInstall
-      mkdir -p $out
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/bin
     ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -r ./* $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      mkdir -p $out/Applications/
+      cp -r "UnrealTournament.app" $out/Applications/
+      makeWrapper $out/Applications/UnrealTournament.app/Contents/MacOS/UnrealTournament \
+        $out/bin/${finalAttrs.meta.mainProgram}
+    ''
     + ''
-      cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
       chmod -R 755 $out
       cd ${outPrefix}
       # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
@@ -156,6 +166,17 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+  # This can be removed with version 469e as that contains this file already
+  # Workaround for bug https://github.com/OldUnreal/UnrealTournamentPatches/issues/1578
+  # that prevented starting or joining a multi player game
+  missing-file = fetchurl {
+    url = "https://gist.github.com/dwt/733d620fbbfd5c49da88683aef60d889/raw/73b271ef019412cf1be5ce1966842ef63a18ba39/de.u";
+    hash = "sha256-M14imMl35KUT0tG8dgB+DBoXve/1saVL7hPNgUFo1hY=";
+  };
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    cp ${finalAttrs.missing-file} $out/Applications/UnrealTournament.app/Contents/MacOS/System/de.u
+  '';
+
   # Bring in game's .so files into lookup. Otherwise game fails to start
   # as: `Object not found: Class Render.Render`
   appendRunpaths = [
@@ -181,4 +202,4 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };
-}
+})

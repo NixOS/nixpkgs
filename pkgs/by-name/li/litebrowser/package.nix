@@ -7,13 +7,12 @@
   gtk3,
   gtkmm3,
   curl,
-  poco,
   gumbo, # litehtml dependency
 }:
 
 stdenv.mkDerivation {
   pname = "litebrowser";
-  version = "unstable-2024-02-25";
+  version = "0-unstable-2024-02-25";
 
   src = fetchFromGitHub {
     owner = "litehtml";
@@ -32,7 +31,6 @@ stdenv.mkDerivation {
     gtk3
     gtkmm3
     curl
-    poco
     gumbo
   ];
 

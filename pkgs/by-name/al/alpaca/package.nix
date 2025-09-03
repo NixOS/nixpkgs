@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "3.5.0";
+  version = "6.1.7";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-YheyeT9KiH9LphFfExie7RU7q/qVni5pFdpz32rM8RQ=";
+    hash = "sha256-9UXaJpkz9F2D490bMKU/xv+rgfrxstm1DuDwpMmydI0=";
   };
 
   nativeBuildInputs = [
@@ -51,14 +51,19 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     requests
     pillow
-    pypdf
     html2text
     youtube-transcript-api
     pydbus
     odfpy
     pyicu
     matplotlib
+    openai
+    markitdown
   ];
+
+  optional-dependencies = {
+    speech-to-text = [ python3Packages.openai-whisper ];
+  };
 
   dontWrapGApps = true;
 
@@ -95,6 +100,6 @@ python3Packages.buildPythonApplication rec {
       aleksana
       Gliczy
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

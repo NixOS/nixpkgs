@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.26.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${version}";
-    hash = "sha256-cVRa5idgAi6UoQkEFvhFd27Mp9AVkfzEuGnWrThm9+Q=";
+    hash = "sha256-/gP9abygktYSzg/054o1PEcQywiPFTtKNdUdI3hCYyc=";
   };
 
-  cargoHash = "sha256-Z2oDuSqUpGM3iw3za77+W8mMb79GutM4s6LFeAgRgPA=";
+  cargoHash = "sha256-txHl0+HDCVdmbZppGsFqPjsEbPBCJVEB3XZWZJBBoOk=";
 
   buildAndTestSubdir = pname;
 
@@ -61,15 +61,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=util::cargo::test::workspace_root"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       xgroleau
       newam
     ];

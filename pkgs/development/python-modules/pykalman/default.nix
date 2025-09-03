@@ -4,27 +4,29 @@
   fetchFromGitHub,
   numpy,
   scipy,
+  scikit-base,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.9.7";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pykalman";
     repo = "pykalman";
-    rev = "aaf8c8574b0474b6f41b7b135a9a7f2dfbd0e86c"; # no tags
-    hash = "sha256-++YqxGMsFGv5OxicDFO9Xz89e62NG8X+6oR6M9ePUcg=";
+    tag = "v${version}";
+    hash = "sha256-SMK0b2twlHk4sbNfwWafqDYXlhrZhgpaC1nhv2XQaqo=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
+    scikit-base
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

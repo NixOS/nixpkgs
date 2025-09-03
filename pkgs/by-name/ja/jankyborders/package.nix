@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "JankyBorders is a lightweight tool designed to add colored borders to user windows on macOS 14.0+";
+    description = "Lightweight tool designed to add colored borders to user windows on macOS 14.0+";
     longDescription = "It enhances the user experience by visually highlighting the currently focused window without relying on the accessibility API, thereby being faster than comparable tools.";
     homepage = "https://github.com/FelixKratz/JankyBorders";
     license = lib.licenses.gpl3;

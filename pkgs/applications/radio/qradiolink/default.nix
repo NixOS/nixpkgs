@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libconfig
-# Needs a gnuradio built with qt gui support
-, gnuradio
-, log4cpp
-, thrift
-# Not gnuradioPackages'
-, codec2
-, gmp
-, gsm
-, libopus
-, libjpeg
-, libsndfile
-, libftdi
-, limesuite
-, soapysdr-with-plugins
-, protobuf
-, speex
-, speexdsp
-, cppzmq
-, uhd
+{
+  lib,
+  fetchFromGitHub,
+  libpulseaudio,
+  libconfig,
+  # Needs a gnuradio built with qt gui support
+  gnuradio,
+  log4cpp,
+  thrift,
+  # Not gnuradioPackages'
+  codec2,
+  gmp,
+  gsm,
+  libopus,
+  libjpeg,
+  libsndfile,
+  libftdi,
+  limesuite,
+  soapysdr-with-plugins,
+  protobuf,
+  speex,
+  speexdsp,
+  cppzmq,
+  uhd,
 }:
 
-gnuradio.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation {
   pname = "qradiolink";
   # https://github.com/qradiolink/qradiolink/tree/gr_3.10
   version = "0.9.0-1-unstable-2024-08-29";
@@ -76,7 +77,8 @@ gnuradio.pkgs.mkDerivation rec {
     cppzmq
     gnuradio.qwt
     uhd
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
     gnuradio.unwrapped.python.pkgs.thrift
   ];

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "leeping";
     repo = "geomeTRIC";
     tag = version;
-    hash = "sha256-8kM6zaQPxtFiJGT8ZW0ivg7bJc/8sdfoTv7NGW2wwR8=";
+    hash = "sha256-hxNzyuupktUWDzZXXJNsVoC6m/kyE1fbfY5K6LiO+x0=";
   };
 
   propagatedBuildInputs = [

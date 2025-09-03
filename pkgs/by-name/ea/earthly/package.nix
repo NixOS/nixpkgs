@@ -1,18 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, testers, earthly }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  testers,
+  earthly,
+}:
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.8.15";
+  version = "0.8.16";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    hash = "sha256-7yw2SmwWsPBCH0LOaZSruYeZ5qL+njGuExy8+11Ni78=";
+    hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
   };
 
-  vendorHash = "sha256-bwNuQPGjAQ9Afa2GuPWrW8ytfIvhsOYFKPt0zyfdZhU=";
-  subPackages = [ "cmd/earthly" "cmd/debugger" ];
+  vendorHash = "sha256-kEgg7zrT69X4yrsGtLyvnrGQ7+sXaEzdqd4Fz7rpFyg=";
+  subPackages = [
+    "cmd/earthly"
+    "cmd/debugger"
+  ];
 
   env.CGO_ENABLED = 0;
 
@@ -23,7 +33,8 @@ buildGoModule rec {
     "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
     "-X main.GitSha=v${version}"
     "-X main.DefaultInstallationName=earthly"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
   ];
 
@@ -46,11 +57,14 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ zoedsoupe konradmalik ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      zoedsoupe
+      konradmalik
+    ];
   };
 }

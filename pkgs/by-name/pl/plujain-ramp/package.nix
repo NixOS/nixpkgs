@@ -5,7 +5,7 @@
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.1.3";
   pname = "plujain-ramp";
 

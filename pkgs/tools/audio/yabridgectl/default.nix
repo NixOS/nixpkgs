@@ -12,12 +12,8 @@ rustPlatform.buildRustPackage {
 
   src = yabridge.src;
   sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "reflink-0.1.3" = "sha256-1o5d/mepjbDLuoZ2/49Bi6sFgVX4WdCuhGJkk8ulhcI=";
-    };
-  };
+
+  cargoHash = "sha256-VcBQxKjjs9ESJrE4F1kxEp4ah3j9jiNPq/Kdz/qPvro=";
 
   patches = [
     # Patch yabridgectl to search for the chainloader through NIX_PROFILES

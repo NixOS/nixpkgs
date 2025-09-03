@@ -1,13 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
   gettext,
   itstool,
-  python3,
   wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
@@ -21,17 +20,20 @@
   libxml2,
   sane-backends,
   vala,
-  gnome,
+  gitUpdater,
   gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "46.0";
+  version = "48.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "simple-scan";
+    tag = version;
+    hash = "sha256-Y+uVAW0jpXJgadP6CjG8zeLgikFY2Pm0z4TZoyYK4+g=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +42,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    python3
     wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
@@ -60,19 +61,16 @@ stdenv.mkDerivation rec {
     sane-backends
   ];
 
-  postPatch = ''
-    patchShebangs data/meson_compile_gschema.py
-  '';
-
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "simple-scan";
+    updateScript = gitUpdater {
+      # Ignore tags like 48.1-2, which actually does not introduce any changes.
+      ignoredVersions = "-";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple scanning utility";
     mainProgram = "simple-scan";
     longDescription = ''
@@ -85,8 +83,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
     changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

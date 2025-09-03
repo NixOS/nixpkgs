@@ -12,13 +12,13 @@
   xorg,
 }:
 let
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
     rev = "v${version}";
-    hash = "sha256-bQ2546q+oachvuNKMJHjQzF6uv06LG+f7eFQPoAn6mw=";
+    hash = "sha256-qYwBSye6RYClSlWmHwuy/rxq9w5932tR33Z+o2S1l8k=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -37,12 +37,7 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mpeg_encoder-0.2.1" = "sha256-+BNZZ1FIr1374n8Zs1mww2w3eWHOH6ENOTYXz9RT2Ck=";
-    };
-  };
+  cargoHash = "sha256-mXeNAVYqPsBWiUZFV/atx/xjLgFNarm2HwI7k/NaAbc=";
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"
@@ -60,8 +55,10 @@ rustPlatform.buildRustPackage {
         xorg.libXrender
       ]
     }"
+
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.desktop $out/share/applications/com.github.polymeilex.neothesia.desktop
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.png $out/share/icons/hicolor/256x256/apps/com.github.polymeilex.neothesia.png
+    install -Dm 644 default.sf2 $out/share/neothesia/default.sf2
   '';
 
   meta = {

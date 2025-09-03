@@ -6,19 +6,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.12.14";
+  version = "0.13.17";
 
   src = fetchFromGitHub {
-    owner = "Enter-tainer";
+    owner = "typstyle-rs";
     repo = "typstyle";
-    tag = "v${version}";
-    hash = "sha256-TOu/1NiIofY87ttdBPDM2tVRg57FL8v8FCwkf0NFdBQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JsRMs6ARiXs/S/ybkzNo4giR3BvGbOm8X/UH08kvznU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2BX1Ol7eCWs7b5cIwQWWBwFksQ4HO7NmnoP9D384TUQ=";
+  cargoHash = "sha256-G7X5FoWHEWFoLqfHmbuSylG7/xp4aXrSugnGc20oZcE=";
 
   # Disabling tests requiring network access
   checkFlags = [
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -36,11 +35,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Enter-tainer/typstyle/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/typstyle-rs/typstyle/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Format your typst source code";
-    homepage = "https://github.com/Enter-tainer/typstyle";
+    homepage = "https://github.com/typstyle-rs/typstyle";
     license = lib.licenses.asl20;
     mainProgram = "typstyle";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      prince213
+    ];
   };
-}
+})

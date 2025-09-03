@@ -4,64 +4,35 @@
   fetchFromGitHub,
   setuptools-scm,
   bottle,
-  importlib-resources,
   proxy-tools,
-  pygobject3,
-  pyqtwebengine,
-  pytest,
-  pythonOlder,
-  qt5,
+  pyside6,
   qtpy,
   six,
-  xvfb-run,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "5.3.2";
+  version = "6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     tag = version;
-    hash = "sha256-/jKauq+G3Nz91n/keTZGNDTaW5EhdyCx4c2Nylxqc+0=";
+    hash = "sha256-EuDm3Ixw1z5xwpl4U15Xwg5mE3dXslTvv0N0XyjxrAg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    qt5.wrapQtAppsHook
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bottle
-    pyqtwebengine
+    pyside6
     proxy-tools
-    six
-  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
-
-  nativeCheckInputs = [
-    pygobject3
-    pytest
     qtpy
-    xvfb-run
+    six
+    typing-extensions
   ];
-
-  checkPhase = ''
-    # a Qt wrapper is required to run the Qt backend
-    # since the upstream script does not have a way to disable tests individually pytest is used directly instead
-    makeQtWrapper "$(command -v pytest)" tests/run.sh \
-      --set PYWEBVIEW_LOG debug \
-      --add-flags "--deselect tests/test_js_api.py::test_concurrent"
-
-    # HOME and XDG directories are required for the tests
-    env \
-      HOME=$TMPDIR \
-      XDG_RUNTIME_DIR=$TMPDIR/xdg-runtime-dir \
-      xvfb-run -s '-screen 0 800x600x24' tests/run.sh
-  '';
 
   pythonImportsCheck = [ "webview" ];
 

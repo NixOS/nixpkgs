@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
-  version = "4.5.1";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GFfBiGMOyBwMKjpD1kj3vRpvjR0ydji3QNDyoOQoQsw=";
+    hash = "sha256-wmvjex68Mh7qehA33WNBYHhV9Q/XWLixokuGWnqJ3n0=";
   };
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.59.tar.xz";
-    hash = "sha256-I2FoCNjAjxKBX/iY9O20wROXorKEPQKe5iRS0hgzp20=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.20.tar.xz";
+    hash = "sha256-Iw6JsHsKuC508H7MG+4xBdyoHQ70qX+QCSnEBySbasc=";
   };
 
   postPatch = ''
@@ -48,13 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
   ];
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-    ]
-    ++ lib.optionals sevVariant [
-      "SEV=1"
-    ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals sevVariant [
+    "SEV=1"
+  ];
 
   # Fixes https://github.com/containers/libkrunfw/issues/55
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
@@ -71,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       nickcao
       RossComputerGuy
+      nrabulinski
     ];
     platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
   };

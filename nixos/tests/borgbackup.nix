@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   passphrase = "supersecret";
@@ -38,121 +38,130 @@ let
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFpxm7PUQsZB2Ejs8Xp0YVp8IOW+HylIRzhweORbRCMv root@client
   '';
 
-in {
+in
+{
   name = "borgbackup";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
   nodes = {
-    client = { ... }: {
-      virtualisation.fileSystems.${localRepoMount} = {
-        device = "tmpfs";
-        fsType = "tmpfs";
-        options = [ "noauto" ];
-      };
+    client =
+      { ... }:
+      {
+        virtualisation.fileSystems.${localRepoMount} = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+          options = [ "noauto" ];
+        };
 
-      services.borgbackup.jobs = {
+        services.borgbackup.jobs = {
 
-        local = {
-          paths = dataDir;
-          repo = localRepo;
-          preHook = ''
-            # Don't append a timestamp
-            archiveName="${archiveName}"
-          '';
-          encryption = {
-            mode = "repokey";
-            inherit passphrase;
+          local = {
+            paths = dataDir;
+            repo = localRepo;
+            preHook = ''
+              # Don't append a timestamp
+              archiveName="${archiveName}"
+            '';
+            encryption = {
+              mode = "repokey";
+              inherit passphrase;
+            };
+            compression = "auto,zlib,9";
+            prune.keep = {
+              within = "1y";
+              yearly = 5;
+            };
+            exclude = [ "*/${excludeFile}" ];
+            extraCreateArgs = [
+              "--exclude-caches"
+              "--exclude-if-present"
+              ".dont backup"
+            ];
+            postHook = "echo post";
+            startAt = [ ]; # Do not run automatically
           };
-          compression = "auto,zlib,9";
-          prune.keep = {
-            within = "1y";
-            yearly = 5;
+
+          localMount = {
+            paths = dataDir;
+            repo = localRepoMount;
+            encryption.mode = "none";
+            startAt = [ ];
           };
-          exclude = [ "*/${excludeFile}" ];
-          extraCreateArgs = [ "--exclude-caches" "--exclude-if-present" ".dont backup" ];
-          postHook = "echo post";
-          startAt = [ ]; # Do not run automatically
-        };
 
-        localMount = {
-          paths = dataDir;
-          repo = localRepoMount;
-          encryption.mode = "none";
-          startAt = [ ];
-        };
+          remote = {
+            paths = dataDir;
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        remote = {
-          paths = dataDir;
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          remoteAppendOnly = {
+            paths = dataDir;
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
+          };
 
-        remoteAppendOnly = {
-          paths = dataDir;
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
-        };
+          commandSuccess = {
+            dumpCommand = pkgs.writeScript "commandSuccess" ''
+              echo -n test
+            '';
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        commandSuccess = {
-          dumpCommand = pkgs.writeScript "commandSuccess" ''
-            echo -n test
-          '';
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          commandFail = {
+            dumpCommand = "${pkgs.coreutils}/bin/false";
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        commandFail = {
-          dumpCommand = "${pkgs.coreutils}/bin/false";
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          sleepInhibited = {
+            inhibitsSleep = true;
+            # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
+            dumpCommand = pkgs.writeScript "sleepInhibited" ''
+              cat /dev/zero
+            '';
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        sleepInhibited = {
-          inhibitsSleep = true;
-          # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
-          dumpCommand = pkgs.writeScript "sleepInhibited" ''
-            cat /dev/zero
-          '';
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
-
-      };
-    };
-
-    server = { ... }: {
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
         };
       };
 
-      services.borgbackup.repos.repo1 = {
-        authorizedKeys = [ publicKey ];
-        path = "/data/borgbackup";
-      };
+    server =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
+          settings = {
+            PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
+          };
+        };
 
-      # Second repo to make sure the authorizedKeys options are merged correctly
-      services.borgbackup.repos.repo2 = {
-        authorizedKeysAppendOnly = [ publicKeyAppendOnly ];
-        path = "/data/borgbackup";
-        quota = ".5G";
+        services.borgbackup.repos.repo1 = {
+          authorizedKeys = [ publicKey ];
+          path = "/data/borgbackup";
+        };
+
+        # Second repo to make sure the authorizedKeys options are merged correctly
+        services.borgbackup.repos.repo2 = {
+          authorizedKeysAppendOnly = [ publicKeyAppendOnly ];
+          path = "/data/borgbackup";
+          quota = ".5G";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -262,4 +271,4 @@ in {
         client.wait_until_succeeds("systemd-inhibit --list | grep -q borgbackup")
         client.systemctl("stop borgbackup-job-sleepInhibited")
   '';
-})
+}

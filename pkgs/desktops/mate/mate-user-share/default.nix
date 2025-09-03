@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

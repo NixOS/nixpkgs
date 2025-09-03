@@ -25,7 +25,10 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace nixops/args.py --replace "@version@" "${version}-pre-${
+    substituteInPlace pyproject.toml --replace-fail \
+      'include = ["nix/*.nix", "nixops/py.typed" ]' \
+      'include = [ { path = "nix/*.nix", format = "wheel" }, { path = "nixops/py.typed", format = "wheel" } ]'
+    substituteInPlace nixops/args.py --replace-fail "@version@" "${version}-pre-${
       lib.substring 0 7 src.rev or "dirty"
     }"
   '';

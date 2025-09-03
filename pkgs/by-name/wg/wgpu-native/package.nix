@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-native";
-  version = "22.1.0.5";
+  version = "25.0.2.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
     tag = "v${version}";
-    hash = "sha256-lEUHRU7+sFWtEYTOB2F+SmMNG8nrjro3IL7BgYuIGgM=";
+    hash = "sha256-ihA1pfTW6EHpihL4IUv7YTsU1SLkxEM6wUDr7NiHmLc=";
     fetchSubmodules = true;
   };
 
@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     "dev"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-frlGlUqyKa3PTRbpLhcnUvu+SX64V/CnZGa6+ADxKCo=";
+  cargoHash = "sha256-8Axm9gIX6yW0ScV5SjB6AWlmlIeGuQYonWsGwcIH2os=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     vulkan-loader

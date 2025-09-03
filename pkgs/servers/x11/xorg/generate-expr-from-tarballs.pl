@@ -36,11 +36,37 @@ $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
+$pcMap{"fontutil"} = "fontutil";
+$pcMap{"pciaccess"} = "libpciaccess";
+$pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"x11"} = "libX11";
+$pcMap{"x11-xcb"} = "libX11";
+$pcMap{"xau"} = "libXau";
+$pcMap{"xbitmaps"} = "xbitmaps";
+$pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xdmcp"} = "libXdmcp";
+$pcMap{"xext"} = "libXext";
+$pcMap{"xtrans"} = "xtrans";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
 $pcMap{"\${XKBMODULE}"} = "libxkbfile";
+foreach my $mod ("xcb", "xcb-composite", "xcb-damage", "xcb-dpms", "xcb-dri2", "xcb-dri3",
+    "xcb-glx", "xcb-present", "xcb-randr", "xcb-record", "xcb-render", "xcb-res", "xcb-screensaver",
+    "xcb-shape", "xcb-shm", "xcb-sync", "xcb-xf86dri", "xcb-xfixes", "xcb-xinerama", "xcb-xinput",
+    "xcb-xkb", "xcb-xtest", "xcb-xv", "xcb-xvmc") {
+    $pcMap{$mod} = "libxcb";
+}
+foreach my $mod ("applewmproto", "bigreqsproto", "compositeproto", "damageproto", "dmxproto",
+    "dpmsproto", "dri2proto", "dri3proto", "evieproto", "fixesproto", "fontcacheproto",
+    "fontsproto", "glproto", "inputproto", "kbproto", "lg3dproto", "presentproto",
+    "printproto", "randrproto", "recordproto", "renderproto", "resourceproto", "scrnsaverproto",
+    "trapproto", "videoproto", "windowswmproto", "xcalibrateproto", "xcmiscproto", "xextproto",
+    "xf86bigfontproto", "xf86dgaproto", "xf86driproto", "xf86miscproto", "xf86rushproto",
+    "xf86vidmodeproto", "xineramaproto", "xproto", "xproxymngproto", "xwaylandproto") {
+    $pcMap{$mod} = "xorgproto";
+}
 
 
 my $downloadCache = "./download-cache";
@@ -260,14 +286,66 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  pixman,
+  bdftopcf,
+  font-alias,
+  font-util,
+  gccmakedep,
+  imake,
+  libpciaccess,
+  libpthread-stubs,
+  libx11,
+  libxau,
+  libxcb,
+  libxcvt,
+  libxdmcp,
+  libxext,
+  lndir,
   luit,
+  makedepend,
+  pixman,
+  sessreg,
+  util-macros,
+  xbitmaps,
+  xcb-proto,
+  xkeyboard-config,
+  xorg-cf-files,
+  xorg-docs,
+  xorgproto,
+  xorg-sgml-doctools,
+  xtrans,
 }:
 
 self: with self; {
 
-  inherit pixman;
-  inherit luit;
+  inherit
+    bdftopcf
+    gccmakedep
+    imake
+    libpciaccess
+    libxcb
+    libxcvt
+    lndir
+    luit
+    makedepend
+    pixman
+    sessreg
+    xbitmaps
+    xorgproto
+    xtrans
+    ;
+  fontalias = font-alias;
+  fontutil = font-util;
+  libpthreadstubs = libpthread-stubs;
+  libX11 = libx11;
+  libXau = libxau;
+  libXdmcp = libxdmcp;
+  libXext = libxext;
+  utilmacros = util-macros;
+  xcbproto = xcb-proto;
+  xkeyboardconfig = xkeyboard-config;
+  xorgcffiles = xorg-cf-files;
+  xorgdocs = xorg-docs;
+  xorgsgmldoctools = xorg-sgml-doctools;
 
 EOF
 

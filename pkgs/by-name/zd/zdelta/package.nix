@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zdelta";
   version = "2.1";
 

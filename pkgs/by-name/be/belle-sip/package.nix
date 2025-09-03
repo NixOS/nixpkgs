@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "belle-sip";
     rev = version;
     hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
   };

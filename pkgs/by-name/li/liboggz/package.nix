@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liboggz";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/liboggz/${pname}-${version}.tar.gz";
-    sha256 = "0nj17lhnsw4qbbk8jy4j6a78w6v2llhqdwq46g44mbm9w2qsvbvb";
+    sha256 = "sha256-JGbQO2fvC8ug4Q+zUtGp/9n5aRFlerzjy7a6Qpxlbi8=";
   };
 
   propagatedBuildInputs = [ libogg ];

@@ -8,6 +8,7 @@
   libmpg123,
   libopus,
   libvorbis,
+  libX11,
   makeWrapper,
   meson,
   moltenvk,
@@ -22,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.31.3";
+  version = "1.32.3.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    sha256 = "sha256-VqTfcwt6/VTotD2Y7x7WiVwISRGOLfmMWh6EO5DSMX4=";
+    hash = "sha256-Hsj6LgxlEICI3MMDMCE1KvslYrsYfQPhShpP5kzLCTI=";
   };
 
   nativeBuildInputs = [
@@ -40,23 +41,23 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      SDL2
-      flac
-      gzip
-      libmpg123
-      libopus
-      libvorbis
-      opusfile
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-      vulkan-headers
-    ];
+  buildInputs = [
+    SDL2
+    flac
+    gzip
+    libmpg123
+    libopus
+    libvorbis
+    libX11
+    opusfile
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+    vulkan-headers
+  ];
 
-  buildFlags = [ "DO_USERDIRS=1" ];
+  mesonFlags = [ "-Ddo_userdirs=enabled" ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
@@ -111,5 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       ylh
     ];
     mainProgram = "vkquake";
+    license = lib.licenses.gpl2Plus;
   };
 })

@@ -61,14 +61,14 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.2.1";
+  version = "32.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o+c2aB9oAI5xyHj2xtQowSP4Wjq6RAAmasXjrzXR5ko=";
+    hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
   };
 
   dontConfigure = true;
@@ -127,7 +127,8 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ] ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -11,6 +11,7 @@
   qtserialport,
   qtsvg,
   wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -18,37 +19,43 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.34";
+  version = "13.46";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
-    rev = finalAttrs.version;
-    hash = "sha256-adZTcZGRE0PkG9rntvD3vLIqXOsVxP28LCZrfyVqy9M=";
+    tag = finalAttrs.version;
+    hash = "sha256-SkAEnKviUHQrej1fhpLs1bh/nAOgmRzzBzTFe4fURVc=";
   };
 
-  buildInputs =
-    [
-      qtserialport
-    ]
-    ++ (
-      if isQt6 then
-        [
-          qtbase
-          qtpositioning
-          qtsvg
-        ]
-      else
-        [
-          qtlocation
-        ]
-    );
+  buildInputs = [
+    qtserialport
+  ]
+  ++ (
+    if isQt6 then
+      [
+        qtbase
+        qtpositioning
+        qtsvg
+      ]
+    else
+      [
+        qtlocation
+      ]
+  );
 
   nativeBuildInputs = [
     qmake
     qttools
     wrapQtAppsHook
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=(''${gappsWrapperArgs[@]})
+  '';
 
   preConfigure = ''
     lrelease gpxsee.pro
@@ -66,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = isQt6 && stdenv.hostPlatform.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
     mainProgram = "gpxsee";

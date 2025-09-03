@@ -34,12 +34,12 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d); ${pname} version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qovery Command Line Interface";
     homepage = "https://github.com/Qovery/qovery-cli";
     changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "qovery-cli";
   };
 }

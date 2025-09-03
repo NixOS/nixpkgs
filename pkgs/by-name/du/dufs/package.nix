@@ -4,31 +4,25 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.43.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
     rev = "v${version}";
-    hash = "sha256-KkuP9UE9VT9aJ50QH1Y/2f+t0tLOMyNovxCaLq0Jz0s=";
+    hash = "sha256-krrph0tyz7d1cSmScKSAVSYoKp9RbsZvVdOLIvbJ3dc=";
   };
 
-  cargoHash = "sha256-KyFE8TpbkSZQE3CL7jbvSE3JDWjnyqhiWXO7LZ4ZpgI=";
+  cargoHash = "sha256-cklssERy3sDYWCyzgQd7tsRd+kuBmSTZBio8svMQP2Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  # FIXME: checkPhase on darwin will leave some zombie spawn processes
-  # see https://github.com/NixOS/nixpkgs/issues/205620
-  doCheck = !stdenv.hostPlatform.isDarwin;
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"

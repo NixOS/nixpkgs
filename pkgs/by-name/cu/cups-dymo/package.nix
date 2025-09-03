@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   cups,
-  ...
 }:
 
 stdenv.mkDerivation rec {

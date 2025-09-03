@@ -3,7 +3,7 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   elfutils,
   libcap,
@@ -18,7 +18,7 @@ let
     hash = "sha256-PhacBegQDwWZqZeoZjoLR4akhVV3QrSPr1KflCuied0=";
   };
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "perf_data_converter";
   version = "0-unstable-2024-10-14";
 
@@ -29,7 +29,7 @@ buildBazelPackage rec {
     hash = "sha256-AScXL74K0Eiajdib56+7ay3K/MMWbmeUWkRWMaEJRC8=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--registry"
     "file://${registry}"
@@ -38,8 +38,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-Ksae4VC2FbkW79N5EGn/rTdj+GFKQsZCdi4LPfnzV7Y=";
-        x86_64-linux = "sha256-TYeS1bax7sA0hJLXqtE8Q5FLnIylcWPZynVE2LhvZKc=";
+        aarch64-linux = "sha256-GvuOEQfzPF5J75TRlEc4oDiXXUN4G3fMfRhMDmg3FL0=";
+        x86_64-linux = "sha256-A47JJg+GUIhR7FhufxEsfsIuSg6dd7sPNzSWiQZXIEE=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

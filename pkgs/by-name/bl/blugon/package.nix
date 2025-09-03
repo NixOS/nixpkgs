@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jumper149";
-    repo = pname;
+    repo = "blugon";
     rev = version;
     sha256 = "1i67v8jxvavgax3dwvns200iwwdcvgki04liq0x64q52lg0vrh7m";
   };

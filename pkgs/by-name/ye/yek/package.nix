@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 let
-  version = "0.16.0";
+  version = "0.21.0";
 in
 rustPlatform.buildRustPackage {
   pname = "yek";
@@ -18,9 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "bodo-run";
     repo = "yek";
     tag = "v${version}";
-    hash = "sha256-dboKZuY6mlFZu/xCoLXFJ4ARXyYs5/yOYeGkAnUKRX4=";
+    hash = "sha256-GAG5SCcxWL0JbngE2oOadVhOt2ppep6rIbYjIF2y3jI=";
   };
-  cargoHash = "sha256-3+jTzYwu9eHji8o4abLiiJGXtZYPfXtXeiZEZajxrVo=";
+
+  cargoHash = "sha256-uShKrH4fdLDJX4ZX0TWXCyFctEH0C98B/STY9j6aH8A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -41,6 +42,11 @@ rustPlatform.buildRustPackage {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   meta = {
     description = "Serialize text files for LLM consumption";

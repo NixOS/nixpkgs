@@ -5,7 +5,7 @@
   libxml2,
   libxslt,
   openssl,
-  postgresql,
+  libpq,
   sqlite,
 }:
 
@@ -17,23 +17,20 @@ buildNimSbom (finalAttrs: {
     owner = "ehmry";
     repo = "syndicate_utils";
     rev = finalAttrs.version;
-    hash = "sha256-X8sb/2mkhVp0jJpTk9uYSDhAVui4jHl355amRCnkNhA=";
+    hash = "sha256-zHVL2A5mAZX73Xk6Pcs02wHCAVfsOYxDO8/yKX0FvBs=";
   };
 
   buildInputs = [
-    postgresql
+    libpq
     sqlite
     libxml2
     libxslt
     openssl
   ];
 
-  nimFlags = [ "--define:nimPreviewHashRef" ];
-
   meta = finalAttrs.src.meta // {
     description = "Utilities for the Syndicated Actor Model";
     homepage = "https://git.syndicate-lang.org/ehmry/syndicate_utils";
-    maintainers = [ lib.maintainers.ehmry ];
     license = lib.licenses.unlicense;
   };
 }) ./sbom.json

@@ -6,13 +6,11 @@ For local development, it's recommended to use nix-shell to create a dotnet envi
 
 ```nix
 # shell.nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 mkShell {
   name = "dotnet-env";
-  packages = [
-    dotnet-sdk
-  ];
+  packages = [ dotnet-sdk ];
 }
 ```
 
@@ -21,20 +19,23 @@ mkShell {
 It's very likely that more than one sdk will be needed on a given project. Dotnet provides several different frameworks (E.g dotnetcore, aspnetcore, etc.) as well as many versions for a given framework. Normally, dotnet is able to fetch a framework and install it relative to the executable. However, this would mean writing to the nix store in nixpkgs, which is read-only. To support the many-sdk use case, one can compose an environment using `dotnetCorePackages.combinePackages`:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 mkShell {
   name = "dotnet-env";
   packages = [
-    (with dotnetCorePackages; combinePackages [
-      sdk_8_0
-      sdk_9_0
-    ])
+    (
+      with dotnetCorePackages;
+      combinePackages [
+        sdk_8_0
+        sdk_9_0
+      ]
+    )
   ];
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 8.0 9.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 8.0 9.0 sdk. The first sdk listed will have its cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
@@ -120,7 +121,7 @@ For more detail about managing the `deps.json` file, see [Generating and updatin
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
 * `selfContainedBuild` allows to enable the [self-contained](https://docs.microsoft.com/en-us/dotnet/core/deploying/#publish-self-contained) build flag. By default, it is set to false and generated applications have a dependency on the selected dotnet runtime. If enabled, the dotnet runtime is bundled into the executable and the built app has no dependency on .NET.
 * `useAppHost` will enable creation of a binary executable that runs the .NET application using the specified root. More info in [Microsoft docs](https://learn.microsoft.com/en-us/dotnet/core/deploying/#publish-framework-dependent). Enabled by default.
-* `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the users' .NET runtime.
+* `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the user's .NET runtime.
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this. Note that if set, only tests from this project are executed.
@@ -137,11 +138,19 @@ When packaging a new application, you need to fetch its dependencies. Create an 
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
-{ lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  ffmpeg,
+}:
 
 let
-  referencedProject = import ../../bar { /* ... */ };
-in buildDotnetModule rec {
+  referencedProject = import ../../bar {
+    # ...
+  };
+in
+buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
 
@@ -150,13 +159,15 @@ in buildDotnetModule rec {
   projectFile = "src/project.sln";
   nugetDeps = ./deps.json; # see "Generating and updating NuGet dependencies" section for details
 
-  buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
+  buildInputs = [
+    referencedProject
+  ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
-  executables = []; # Don't install any executables.
+  executables = [ ]; # Don't install any executables.
 
   packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
 
@@ -239,13 +250,13 @@ $ dotnet restore --packages out
   Restored /home/ggg/git-credential-manager/src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj (in 1.21 sec).
 ```
 
-Next, use `nuget-to-json` tool provided in nixpkgs to generate a lockfile to `deps.json` from
+Next, use the `nuget-to-json` tool provided in Nixpkgs to generate a lockfile to `deps.json` from
 the packages inside the `out` directory.
 
 ```bash
 $ nuget-to-json out > deps.json
 ```
-Which `nuget-to-json` will generate an output similar to below
+The `nuget-to-json` tool will generate an output similar to the one below
 ```json
 [
   {

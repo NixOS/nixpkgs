@@ -1,12 +1,12 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vendor-reset";
   version = "unstable-2024-04-16-${kernel.version}";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

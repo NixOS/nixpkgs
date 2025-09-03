@@ -245,6 +245,16 @@
     "hash": "sha256-0AqQ2gMS8iNlYkrD+BxtIg7cXMnr9xZHtKAuN4bjfaQ="
   },
   {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
+    "version": "1.0.3",
+    "hash": "sha256-FBoJP5DHZF0QHM0xLm9yd4HJZVQOuSpSKA+VQRpphEE="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net452",
+    "version": "1.0.3",
+    "hash": "sha256-RTPuFG8D7gnwINEoEtAqmVm4oTW8K4Z87v1o4DDeLMI="
+  },
+  {
     "pname": "Microsoft.TestPlatform.Extensions.TrxLogger",
     "version": "17.9.0",
     "hash": "sha256-6edCHExW+iO5Y/2HamyB4daM746ME6p/4fKRmORGw3I="
@@ -293,6 +303,11 @@
     "pname": "Nerdbank.Streams",
     "version": "2.6.81",
     "hash": "sha256-0Zshmi1IMWj9/MKUieffpgJxKhJyVgBXPKMg9RSDkRs="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -530,6 +545,11 @@
     "hash": "sha256-XqZWb4Kd04960h4U9seivjKseGA/YEIpdplfHYHQ9jk="
   },
   {
+    "pname": "System.Buffers",
+    "version": "4.4.0",
+    "hash": "sha256-KTxAhYawFG2V5VX1jw3pzx3IrQXRgn1TsvgjPgxAbqA="
+  },
+  {
     "pname": "System.Collections",
     "version": "4.3.0",
     "hash": "sha256-afY7VUtD6w/5mYqrce8kQrvDIfS2GXDINDh73IjxJKc="
@@ -625,9 +645,19 @@
     "hash": "sha256-7zqB+FXgkvhtlBzpcZyd81xczWP0D3uWssyAGw3t7b4="
   },
   {
+    "pname": "System.Memory",
+    "version": "4.5.3",
+    "hash": "sha256-Cvl7RbRbRu9qKzeRBWjavUkseT2jhZBUWV1SPipUWFk="
+  },
+  {
     "pname": "System.Net.WebSockets",
     "version": "4.3.0",
     "hash": "sha256-l3h3cF1cCC9zMhWLKSDnZBZvFADUd0Afe2+iAwBA0r0="
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.4.0",
+    "hash": "sha256-auXQK2flL/JpnB/rEcAcUm4vYMCYMEMiWOCAlIaqu2U="
   },
   {
     "pname": "System.ObjectModel",
@@ -723,6 +753,11 @@
     "pname": "System.Runtime.CompilerServices.Unsafe",
     "version": "4.4.0",
     "hash": "sha256-SeTI4+yVRO2SmAKgOrMni4070OD+Oo8L1YiEVeKDyig="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.2",
+    "hash": "sha256-8eUXXGWO2LL7uATMZye2iCpQOETn2jCcjUhG6coR5O8="
   },
   {
     "pname": "System.Runtime.CompilerServices.Unsafe",
@@ -841,7 +876,7 @@
   },
   {
     "pname": "Tomlyn",
-    "version": "0.16.2",
-    "hash": "sha256-ULW4n8s2lvTMG3I18rpsVfXtKXN7C8nPrMXQowxGIsU="
+    "version": "0.17.0",
+    "hash": "sha256-pJHF7w8RJhV23wiI3qzm5el4qPlPlgYTmTKA8yGhzXY="
   }
 ]

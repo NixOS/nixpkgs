@@ -33,30 +33,27 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-f0TWiRX203/gNsa9UEr/1Bv+kUxLAK/Zlw+S693xZlE=";
 
   # autoPatchelfHook required on linux for crusader-gui
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      fontconfig
-      libgcc
-      libxkbcommon
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-    ];
+  buildInputs = [
+    fontconfig
+    libgcc
+    libxkbcommon
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+  ];
 
   # required for crusader-gui
   runtimeDependencies = [
@@ -73,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

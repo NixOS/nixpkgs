@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src =
     let
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-Wp1gPFQkOv+ZCEy0D2Tw9l6aCZekdpkXYcTZNheJHEg=";
-        aarch64-linux = "sha256-jBYu4m3L+j/coJ4D9cPA8mSBYiLiUyVKp98x6mdrrrk=";
-        x86_64-darwin = "sha256-OuiF1pgutt69ghlkLkEwkWMIFjvAsY7YUZERHNiToMs=";
-        aarch64-darwin = "sha256-sYKA02euri/K8FM8GoY7Y/WWLE2nBSoiNoxSdUPunWA=";
+        x86_64-linux = "sha256-tqgY0308n3F/ZYGhn3bAsHa4cBdFz0oGgSHI6y6J1LY=";
+        aarch64-linux = "sha256-vvc8rOpyOd91crZTQQofj3RixUuWHe7SbMM0BZDkdRw=";
+        x86_64-darwin = "sha256-wsI8hqULVN+W6zwQsXcWQHbxmocrijsl5eUJgUxLxf8=";
+        aarch64-darwin = "sha256-S0QXBBiO2qgSazjtwd1bWgL/6gJUimKYPv369L419UU=";
       };
     in
     fetchzip {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://boundaryproject.io/";
     changelog = "https://github.com/hashicorp/boundary/blob/v${version}/CHANGELOG.md";
     description = "Enables identity-based access management for dynamic infrastructure";
@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       jk
       techknowlogick
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "boundary";
   };
 }

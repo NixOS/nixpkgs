@@ -12,6 +12,7 @@
   gopls,
   tempel,
   unstableGitUpdater,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -31,13 +32,13 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2025-01-22";
+  version = "0-unstable-2025-06-28";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "c87e6ac6d452b3bd94583a5c5edb16f37edadb94";
-    hash = "sha256-+6qU8KGdti/pji1d+024bnT7+oFP5Ve3jToURautKzE=";
+    rev = "3b37a04bd1b6bbcdc2b0ad7a5c388ad027eb7a25";
+    hash = "sha256-0pjRihJapljd/9nR7G+FC+gCqD82YGITPK2mcJcI7ZI=";
   };
 
   patches = [
@@ -56,13 +57,16 @@ melpaBuild {
   checkInputs = [
     # Emacs packages
     tempel
+  ];
 
+  nativeCheckInputs = [
     # Executables
     basedpyright
     git
     go
     gopls
     python
+    writableTmpDirAsHomeHook
   ];
 
   files = ''
@@ -80,7 +84,7 @@ melpaBuild {
 
     mkfifo test.log
     cat < test.log &
-    HOME=$(mktemp -d) python -m test.test
+    python -m test.test
 
     runHook postCheck
   '';

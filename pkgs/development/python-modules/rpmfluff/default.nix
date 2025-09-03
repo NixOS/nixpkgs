@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ glibcLocales ];
 
   meta = with lib; {
-    description = "lightweight way of building RPMs, and sabotaging them";
+    description = "Lightweight way of building RPMs, and sabotaging them";
     homepage = "https://pagure.io/rpmfluff";
     license = licenses.gpl2;
     maintainers = with maintainers; [ disassembler ];

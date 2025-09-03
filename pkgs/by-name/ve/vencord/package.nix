@@ -1,55 +1,41 @@
 {
   curl,
-  esbuild,
   fetchFromGitHub,
   git,
   jq,
   lib,
   nix-update,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.3";
+  version = "1.12.13";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hx8YXkkpZoNq1aDsgdU5+Usmcp/mrlTo9sV2X4vqRuY=";
+    hash = "sha256-mJPUt7+SjszRmscKr0HlW3X2yDwc9cCcJLz8rlg+gNA=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-
-    hash = "sha256-ZUwtNtOmxjhOBpYB7vuytunGBRSuVxdlQsceRmeyhhI=";
+    fetcherVersion = 2;
+    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.overrideAttrs (
-        final: _: {
-          version = "0.15.18";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${final.version}";
-            hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      )
-    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     VENCORD_HASH = "${finalAttrs.version}";
   };
@@ -67,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cp -r dist/${lib.optionalString buildWebExtension "chromium-unpacked/"} $out
+    cp package.json $out # Presence is checked by Vesktop.
 
     runHook postInstall
   '';
@@ -89,15 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$latestTag" "$@"
   '';
 
-  meta = with lib; {
-    description = "Vencord web extension";
+  meta = {
+    description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      FlameFlag
       FlafyDev
+      Gliczy
       NotAShelf
       Scrumplex
-      donteatoreo
     ];
   };
 })

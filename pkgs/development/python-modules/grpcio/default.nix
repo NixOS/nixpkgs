@@ -18,14 +18,14 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.68.1";
+  version = "1.74.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RKhQLdXeZTrmpz4t5QpAHYQYTwMx0Kw9rrBE5m1cUFQ=";
+    hash = "sha256-gNH0+7NbB0LT49O7ZUtzgc1fAV+ElyeaHpwhumI+AbE=";
   };
 
   outputs = [
@@ -48,16 +48,15 @@ buildPythonPackage rec {
 
   dependencies = [ protobuf ];
 
-  preBuild =
-    ''
-      export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
-      if [ -z "$enableParallelBuilding" ]; then
-        GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
-      fi
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      unset AR
-    '';
+  preBuild = ''
+    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+    if [ -z "$enableParallelBuilding" ]; then
+      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    unset AR
+  '';
 
   GRPC_BUILD_WITH_BORING_SSL_ASM = "";
   GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;

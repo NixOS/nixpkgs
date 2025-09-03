@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -19,7 +20,6 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             extensions = ps: [ ps.anonymizer ];
             settings.shared_preload_libraries = [ "anon" ];
           };
@@ -28,7 +28,7 @@ let
       testScript = ''
         start_all()
         machine.wait_for_unit("multi-user.target")
-        machine.wait_for_unit("postgresql.service")
+        machine.wait_for_unit("postgresql.target")
 
         with subtest("Setup"):
             machine.succeed("sudo -u postgres psql --command 'create database demo'")
@@ -107,11 +107,7 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.anonymizer.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.anonymizer.meta.broken;
+}

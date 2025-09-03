@@ -14,13 +14,13 @@ rustPlatform.buildRustPackage rec {
   version = "0.5.8";
 
   src = fetchFromGitHub {
-    owner = "nerdypepper";
-    repo = pname;
+    owner = "oppiliappan";
+    repo = "statix";
     rev = "v${version}";
     sha256 = "sha256-bMs3XMiGP6sXCqdjna4xoV6CANOIWuISSzCaL5LYY4c=";
   };
 
-  cargoHash = "sha256-QF7P0CWlKfBzVQC//eKhf/u1qV9AfLIJDxWDDWzMG8g=";
+  cargoHash = "sha256-Pi1q2qNLjQYr3Wla7rqrktNm0StszB2klcfzwAnF3tE=";
 
   buildFeatures = lib.optional withJson "json";
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Lints and suggestions for the nix programming language";
-    homepage = "https://github.com/nerdypepper/statix";
+    homepage = "https://github.com/oppiliappan/statix";
     license = licenses.mit;
     mainProgram = "statix";
     maintainers = with maintainers; [

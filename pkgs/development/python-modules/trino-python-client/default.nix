@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "trino-python-client";
-  version = "0.322.0";
+  version = "0.334.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "trino-python-client";
     owner = "trinodb";
     tag = version;
-    hash = "sha256-Hl88Keavyp1QBw67AFbevy/btzNs7UlsKQ93K02YgLM=";
+    hash = "sha256-cSwMmzIUFYX8VgSwobth8EsARUff3hhfBf+IrhuFSYM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 
@@ -58,13 +59,16 @@ buildPythonPackage rec {
     "tests/integration/test_sqlalchemy_integration.py"
   ];
 
-  pytestFlagsArray = [ "-k 'not auth'" ];
+  disabledTestMarks = [ "auth" ];
 
   meta = with lib; {
-    changelog = "https://github.com/trinodb/trino-python-client/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/trinodb/trino-python-client/blob/${src.tag}/CHANGES.md";
     description = "Client for the Trino distributed SQL Engine";
     homepage = "https://github.com/trinodb/trino-python-client";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      flokli
+    ];
   };
 }

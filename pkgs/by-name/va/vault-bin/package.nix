@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.18.4";
+  version = "1.20.3";
 
   src =
     let
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-rQXtyxaM1OOF54kIeIWHEwaXYbJyHhuruH+kOSZ/6zc=";
-        aarch64-linux = "sha256-Bqg3UE8CXplJiYK9YKwAy88unZWmWus5IgQS4Bh0ODA=";
-        i686-linux = "sha256-qVEueQ00gqAEbOI4ThcU7vZu8TL4oeBDarOtOkSaGvY=";
-        x86_64-darwin = "sha256-tCTnOHmLaa2uTOr9ju0QHN/LexAoBlCUMrEXPLc2LJ4=";
-        aarch64-darwin = "sha256-sbwVOxMNCq1wcAT4PcDlu9HEsrPphLE2L87zZqfAg8M=";
+        x86_64-linux = "sha256-3IE0WJ3JmzeUwC6OcorebHOD858SKiBR2Rv6KhKewXU=";
+        aarch64-linux = "sha256-DsqOf3yeOz3SI+CCvS2KcCJ6k18o4H+LI1Z39i9ezb0=";
+        i686-linux = "sha256-ONrB+Gwm0dMAK8lvCg5ljC2KApkugA8zX9HcmV0QzFM=";
+        x86_64-darwin = "sha256-cbxdyuLhc8+Ux2ZOX1zncsP2KGqWruuno/Yzct/cyII=";
+        aarch64-darwin = "sha256-zWuI+KFNyqoxnEKI25N4igXnXjoz+AXMU1WgGDKyfog=";
       };
     in
     fetchzip {
@@ -61,15 +61,13 @@ stdenv.mkDerivation rec {
     homepage = "https://www.vaultproject.io";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
-    maintainers =
-      with maintainers;
-      teams.serokell.members
-      ++ [
-        offline
-        psyanticy
-        Chili-Man
-        techknowlogick
-      ];
+    maintainers = with maintainers; [
+      offline
+      psyanticy
+      Chili-Man
+      techknowlogick
+    ];
+    teams = [ teams.serokell ];
     mainProgram = "vault";
     platforms = [
       "x86_64-linux"

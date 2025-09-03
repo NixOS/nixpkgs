@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-asn-lite";
-  version = "2025-01";
+  version = "2025-09";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-asn-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-cRlhlP5ml+swBZGiLpVH5s7nvPiHUi7qxM2GajoeK+Y=";
+    hash = "sha256-QQO2dIKBphkOYoFlYUBqgk9FKSkUF2PTlgwFgFqGCCI=";
   };
 
   dontUnpack = true;

@@ -35,10 +35,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-7zWK0wkh53ojnoznv4T/X//JeyKJVKOrfYF0IkvciIY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-AaRmTOgFmBi0s1zdIVHc6bLjrUopy9YuB3GJOCnbjU4=";
+    hash = "sha256-731aD+yJkyrNMmYtgKYzXIAyLegDBzTT2XqZs5usXiI=";
   };
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "cargo_output = 'src' / rust_target / meson.project_name()" \
+      "cargo_output = 'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
 
   nativeBuildInputs = [
     appstream-glib
@@ -70,6 +76,9 @@ stdenv.mkDerivation rec {
 
   # https://github.com/xou816/spot/issues/313
   mesonBuildType = "release";
+
+  # For https://github.com/xou816/spot/blob/21ee601f655caa4ca9cae1033a27459fe6289318/src/meson.build#L122
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = nix-update-script { };

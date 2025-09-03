@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   budgie-desktop,
@@ -75,19 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
       gcm = gnome-color-manager;
       inherit
         cups
-        glibc
         libgnomekbd
         shadow
         ;
@@ -200,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
   };

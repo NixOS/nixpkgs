@@ -1,29 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nixosTests
-, directoryListingUpdater
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wrapGAppsHook4
-, desktop-file-utils
-, feedbackd
-, gtk4
-, libadwaita
-, lm_sensors
-, phoc
-, phosh
-, wayland-protocols
-, json-glib
-, gsound
-, gmobile
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nixosTests,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  feedbackd,
+  gtk4,
+  libadwaita,
+  lm_sensors,
+  phoc,
+  phosh,
+  wayland-protocols,
+  json-glib,
+  gsound,
+  gmobile,
+  gnome-desktop,
+  libpulseaudio,
+  libportal,
+  libportal-gtk4,
+  glib,
 }:
 
+let
+  # Derived from subprojects/gvc.wrap
+  gvc = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libgnome-volume-control";
+    rev = "5f9768a2eac29c1ed56f1fbb449a77a3523683b6";
+    hash = "sha256-gdgTnxzH8BeYQAsvv++Yq/8wHi7ISk2LTBfU8hk12NM=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.41.0";
+  version = "0.48.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -31,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = "phosh-mobile-settings";
     rev = "v${version}";
-    hash = "sha256-t5qngjQcjPltUGbcZ+CF5FbZtZkV/cD3xUhuApQbKHo=";
+    hash = "sha256-XnXwTjZnPlGNUmqizcIQdJ6SmrQ0dq9jNEhNsmDPzyM=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +57,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland-scanner
     wrapGAppsHook4
+    glib.dev
   ];
 
   buildInputs = [
@@ -54,31 +71,37 @@ stdenv.mkDerivation rec {
     json-glib
     gsound
     gmobile
+    gnome-desktop
+    libpulseaudio
+    libportal
+    libportal-gtk4
   ];
 
   postPatch = ''
-    # There are no schemas to compile.
-    substituteInPlace meson.build \
-      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
+    ln -s ${gvc} subprojects/gvc
   '';
 
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    updateScript = directoryListingUpdater { };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rvl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      rvl
+      armelclo
+    ];
+    platforms = lib.platforms.linux;
   };
 }

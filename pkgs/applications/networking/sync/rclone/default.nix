@@ -17,7 +17,7 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.69.0";
+  version = "1.71.0";
 
   outputs = [
     "out"
@@ -28,10 +28,10 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     tag = "v${version}";
-    hash = "sha256-cJNlRubL6RFaYIr0WrDONqgmz75vNIIDHMqBpf5So5Q=";
+    hash = "sha256-qTxmcTBZzbQe0TC/MRn9KTKWb/mSWne7L1cQ79AE9bA=";
   };
 
-  vendorHash = "sha256-+tugs0vNuIVUQPU3a3mF3e+zfi1IQuqjDm52D85o8NE=";
+  vendorHash = "sha256-Hapwa+WYz6a22HauRjRUl7q0ZlwR/j/zwex0VebgC+g=";
 
   subPackages = [ "." ];
 
@@ -90,7 +90,7 @@ buildGoModule rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   passthru = {
     tests = {
@@ -99,15 +99,14 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "rclone";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       SuperSandro2000
-      tomfitzhenry
     ];
   };
 }

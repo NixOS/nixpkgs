@@ -164,10 +164,10 @@ let
 
   version = "3";
   canonicalExtension =
-    if stdenv.hostPlatform.isLinux then
+    if stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic then
       "${stdenv.hostPlatform.extensions.sharedLibrary}.${version}"
     else
-      stdenv.hostPlatform.extensions.sharedLibrary;
+      stdenv.hostPlatform.extensions.sharedLibrary or ".a";
 
   blasImplementation = lib.getName blasProvider;
   blasProvider' =
@@ -212,18 +212,20 @@ stdenv.mkDerivation {
         echo "$libblas does not exist, ${blasProvider'.name} does not provide libblas."
         exit 1
       fi
-
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
       $NM -an "$libblas" | cut -f3 -d' ' > symbols
       for symbol in ${toString blasFortranSymbols}; do
         grep -q "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
       done
-
+    ''
+    + ''
       cp -L "$libblas" $out/lib/libblas${canonicalExtension}
       chmod +w $out/lib/libblas${canonicalExtension}
 
     ''
     + (
-      if stdenv.hostPlatform.isElf then
+      if (stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic) then
         ''
           patchelf --set-soname libblas${canonicalExtension} $out/lib/libblas${canonicalExtension}
           patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libblas${canonicalExtension}
@@ -238,8 +240,12 @@ stdenv.mkDerivation {
     )
     + ''
 
-        if [ "$out/lib/libblas${canonicalExtension}" != "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
-          ln -s $out/lib/libblas${canonicalExtension} "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+        if [ "$out/lib/libblas${canonicalExtension}" != "$out/lib/libblas${
+          stdenv.hostPlatform.extensions.sharedLibrary or ".a"
+        }" ]; then
+          ln -s $out/lib/libblas${canonicalExtension} "$out/lib/libblas${
+            stdenv.hostPlatform.extensions.sharedLibrary or ".a"
+          }"
         fi
 
         cat <<EOF > $dev/lib/pkgconfig/blas.pc
@@ -262,7 +268,7 @@ stdenv.mkDerivation {
 
     ''
     + (
-      if stdenv.hostPlatform.isElf then
+      if (stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic) then
         ''
           patchelf --set-soname libcblas${canonicalExtension} $out/lib/libcblas${canonicalExtension}
           patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libcblas${canonicalExtension}
@@ -276,8 +282,12 @@ stdenv.mkDerivation {
         ''
     )
     + ''
-        if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
-          ln -s $out/lib/libcblas${canonicalExtension} "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+        if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${
+          stdenv.hostPlatform.extensions.sharedLibrary or ".a"
+        }" ]; then
+          ln -s $out/lib/libcblas${canonicalExtension} "$out/lib/libcblas${
+            stdenv.hostPlatform.extensions.sharedLibrary or ".a"
+          }"
         fi
 
         cp ${lib.getDev lapack-reference}/include/cblas{,_mangling}.h $dev/include
@@ -293,7 +303,9 @@ stdenv.mkDerivation {
     + lib.optionalString (blasImplementation == "mkl") ''
       mkdir -p $out/nix-support
       echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
-      ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
+      ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${
+        stdenv.hostPlatform.extensions.sharedLibrary or ".a"
+      }
       ln -sf ${blasProvider'}/include/* $dev/include
     ''
   );

@@ -78,20 +78,19 @@ in
 stdenv.mkDerivation {
   name = bootGhcjs.name;
   src = passthru.configuredSrc;
-  nativeBuildInputs =
-    [
-      bootGhcjs
-      passthru.bootPkgs.ghc
-      cabal-install
-      nodejs
-      makeWrapper
-      xorg.lndir
-      gmp
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gcc # https://github.com/ghcjs/ghcjs/issues/663
-    ];
+  nativeBuildInputs = [
+    bootGhcjs
+    passthru.bootPkgs.ghc
+    cabal-install
+    nodejs
+    makeWrapper
+    xorg.lndir
+    gmp
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gcc # https://github.com/ghcjs/ghcjs/issues/663
+  ];
   dontConfigure = true;
   dontInstall = true;
 
@@ -104,6 +103,9 @@ stdenv.mkDerivation {
     mkdir $HOME/.cabal
     touch $HOME/.cabal/config
     cd lib/boot
+
+    export EM_CACHE="$HOME/.emscriptencache"
+    mkdir -p "$EM_CACHE"
 
     mkdir -p $out/bin
     mkdir -p $out/lib/${bootGhcjs.name}

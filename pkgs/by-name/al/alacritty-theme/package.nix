@@ -3,18 +3,17 @@
   fetchFromGitHub,
   unstableGitUpdater,
   stdenvNoCC,
-  ...
 }:
 
 stdenvNoCC.mkDerivation (self: {
   pname = "alacritty-theme";
-  version = "0-unstable-2025-01-21";
+  version = "0-unstable-2025-08-04";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "69d07c3bc280add63906a1cebf6be326687bc9eb";
-    hash = "sha256-G8sUu8GD44uqUyQ7sZrgrGxC4IOfhSn++WIc+U67zL0=";
+    rev = "a2f966e33fbb26d8d34b9c78d49c95158720d2e4";
+    hash = "sha256-KG3guGyEY4AgO/tcRgq6De2kv+/JmFI8/RfzRG+QAXs=";
     sparseCheckout = [ "themes" ];
   };
 
@@ -25,7 +24,7 @@ stdenvNoCC.mkDerivation (self: {
   sourceRoot = "${self.src.name}/themes";
   installPhase = ''
     runHook preInstall
-    install -Dt $out *.toml
+    install -Dt $out/share/alacritty-theme *.toml
     runHook postInstall
   '';
 

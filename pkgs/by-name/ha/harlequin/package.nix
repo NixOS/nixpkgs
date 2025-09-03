@@ -6,25 +6,28 @@
   nix-update-script,
   glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
-    hash = "sha256-IUzN+rWL69TUUS9npcmfSAPqy/8SYNusNAN/muCMqNI=";
+    hash = "sha256-uHzhAI8ppp6aoveMPcLCQX2slhbor5Qy+IoTui+RP7M=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "pyarrow"
     "textual"
+    "tree-sitter"
+    "tree-sitter-sql"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
@@ -40,6 +43,7 @@ python3Packages.buildPythonApplication rec {
       numpy
       packaging
       platformdirs
+      pyarrow
       questionary
       rich-click
       sqlfmt
@@ -47,6 +51,7 @@ python3Packages.buildPythonApplication rec {
       textual-fastdatatable
       textual-textarea
       tomlkit
+      tree-sitter-sql
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
@@ -62,26 +67,22 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_connect_extensions"
-      "test_connect_prql"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      # Test incorrectly tries to load a dylib compiled for x86_64
-      "test_load_extension"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
 
   disabledTestPaths = [
     # Tests requires more setup
@@ -89,7 +90,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "The SQL IDE for Your Terminal";
+    description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
     changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
     license = lib.licenses.mit;

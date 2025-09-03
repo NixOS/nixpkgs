@@ -13,17 +13,18 @@
   systemd,
   runtimeShell,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
-  version = "2.1.10";
+  version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
-    hash = "sha256-5bT9MaJ2OHFU9R9X01UOOztRqtR6rWv4RS5d1MGWf6M=";
+    hash = "sha256-Xs2EiNSkRtAQPoagCAKl07VndYKDspGLchxMvsfvTi0=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ninja
     perl
+    udevCheckHook
   ];
   buildInputs = [
     kmod
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     "-Dsystemddir=${placeholder "out"}/lib/systemd"
     "-Ddbroot=/etc/iscsi"
   ];
+
+  doInstallCheck = true;
 
   passthru.tests = { inherit (nixosTests) iscsi-root; };
 

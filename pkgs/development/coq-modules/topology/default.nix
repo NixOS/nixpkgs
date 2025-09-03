@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "topology";
 
   releaseRev = v: "v${v}";

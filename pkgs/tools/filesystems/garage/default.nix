@@ -7,7 +7,6 @@
   pkg-config,
   protobuf,
   cacert,
-  garage,
   nixosTests,
 }:
 let
@@ -38,7 +37,6 @@ let
         rm .cargo/config.toml || true
       '';
 
-      useFetchCargoVendor = true;
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
@@ -58,42 +56,42 @@ let
 
       # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
       # on version changes for checking if changes are required here
-      buildFeatures =
-        [
-          "kubernetes-discovery"
-          "bundled-libs"
-        ]
-        ++ lib.optional (lib.versionOlder version "1.0") "sled"
-        ++ [
-          "metrics"
-          "k2v"
-          "telemetry-otlp"
-          "lmdb"
-          "sqlite"
-          "consul-discovery"
-        ];
+      buildFeatures = [
+        "kubernetes-discovery"
+        "bundled-libs"
+      ]
+      ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ [
+        "metrics"
+        "k2v"
+        "telemetry-otlp"
+        "lmdb"
+        "sqlite"
+        "consul-discovery"
+      ];
 
       # To make integration tests pass, we include the optional k2v feature here,
       # but in buildFeatures only for version 0.8+, where it's enabled by default.
       # See: https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
-      checkFeatures =
-        [
-          "k2v"
-          "kubernetes-discovery"
-          "bundled-libs"
-        ]
-        ++ lib.optional (lib.versionOlder version "1.0") "sled"
-        ++ [
-          "lmdb"
-          "sqlite"
-        ];
+      checkFeatures = [
+        "k2v"
+        "kubernetes-discovery"
+        "bundled-libs"
+      ]
+      ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ [
+        "lmdb"
+        "sqlite"
+      ];
 
       disabledTests = [
         # Upstream told us this test is flakey.
         "k2v::poll::test_poll_item"
       ];
 
-      passthru.tests = nixosTests.garage;
+      passthru.tests =
+        lib.optionalAttrs (lib.versionAtLeast version "1")
+          nixosTests."garage_${lib.versions.major version}";
 
       meta = {
         description = "S3-compatible object store for small self-hosted geo-distributed deployments";
@@ -101,6 +99,7 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
+          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
@@ -112,39 +111,31 @@ let
     };
 in
 rec {
-  # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
-  # we have to keep all the numbers in the version to handle major/minor/patch level.
-  # for <1.0.
-  # Please add new versions to nixos/tests/garage/default.nix as well.
-
-  garage_0_8_7 = generic {
-    version = "0.8.7";
-    hash = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoHash = "sha256-NmeAkm35Su4o5JEn75pZmxhVHh+VMwKwULKY0eCVlYo=";
-    cargoPatches = [ ./update-time-0.8.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
-  };
-
   garage_0_9_4 = generic {
     version = "0.9.4";
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
     cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
+    eol = true;
   };
 
-  garage_1_0_1 = generic {
-    version = "1.0.1";
-    hash = "sha256-f6N2asycN04I6U5XQ5LEAqYu/v5jYZiFCxZ8YQ32XyM=";
-    cargoHash = "sha256-DX20Uv4g8JO3PlRsTbvr8nF4g9aw1/hW0bfQm6zGBd4=";
-    broken = stdenv.hostPlatform.isDarwin;
+  garage_1_2_0 = generic {
+    version = "1.2.0";
+    hash = "sha256-JoOwCbChSL7mjegnLHOH2Abfmsnw9BwNsjFj7nqBN6o=";
+    cargoHash = "sha256-vcvD0Fn/etnAuXrM3+rj16cqpEmW2nzRmrjXsftKTFE=";
   };
 
-  garage_0_8 = garage_0_8_7;
+  garage_2_0_0 = generic {
+    version = "2.0.0";
+    hash = "sha256-dn7FoouF+5qmW6fcC20bKQSc6D2G9yrWdBK3uN3bF58=";
+    cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
+  };
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_0_1;
+  garage_1 = garage_1_2_0;
 
-  garage = garage_1_x;
+  garage_2 = garage_2_0_0;
+
+  garage = garage_1;
 }

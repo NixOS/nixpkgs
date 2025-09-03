@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   buildDotnetModule,
   dotnetCorePackages,
   xz,
@@ -91,7 +90,8 @@ buildDotnetModule rec {
     libgdiplus
     glib
     libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning
   # and add it later
@@ -132,7 +132,7 @@ buildDotnetModule rec {
     '';
 
   meta = with lib; {
-    description = "A open-source, cross-platform, stand-alone, Network Renderer for Blender";
+    description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
     homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ gador ];

@@ -8,14 +8,12 @@
   ipaddr,
   logs,
   lwt,
-  mirage-clock,
-  mirage-time,
   rresult,
   tls,
   uri,
   bigstringaf,
   domain-name,
-  httpaf,
+  h1,
   mirage-flow,
   tls-mirage,
 }:
@@ -24,6 +22,11 @@ buildDunePackage {
   pname = "git-paf";
 
   inherit (git) version src;
+
+  postPatch = ''
+    substituteInPlace src/git-paf/dune --replace-fail bigstringaf 'bigstringaf bstr'
+    substituteInPlace src/git-paf/git_paf.ml --replace-fail Bigstringaf.t Bstr.t
+  '';
 
   minimalOCamlVersion = "4.08";
 
@@ -37,13 +40,11 @@ buildDunePackage {
     rresult
     ipaddr
     logs
-    mirage-clock
-    mirage-time
     tls
     uri
     bigstringaf
     domain-name
-    httpaf
+    h1
     mirage-flow
     tls-mirage
   ];

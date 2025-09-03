@@ -1,29 +1,73 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
   pythonOlder,
   numpy,
   lxml,
+  trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
+  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.1";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/uoiGFhKZnEzinDryUMwpoxZwSggV0ZPd9kqgB1vQPI=";
+  src = fetchFromGitHub {
+    owner = "mikedh";
+    repo = "trimesh";
+    tag = version;
+    hash = "sha256-nU79v0n6Dx5YV4nWBtLYXU1oickdcS43Me5fd5QNb88=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
+
+  optional-dependencies = {
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+    ]
+    ++ lib.optionals embreex.meta.available [
+      embreex
+    ];
+  };
 
   nativeCheckInputs = [
     lxml
@@ -35,18 +79,29 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
-  pythonImportsCheck = [ "trimesh" ];
+  pythonImportsCheck = [
+    "trimesh"
+    "trimesh.ray"
+    "trimesh.path"
+    "trimesh.path.exchange"
+    "trimesh.scene"
+    "trimesh.voxel"
+    "trimesh.visual"
+    "trimesh.viewer"
+    "trimesh.exchange"
+    "trimesh.resources"
+    "trimesh.interfaces"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimesh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     mainProgram = "trimesh";
-    maintainers = with maintainers; [
-      gebner
+    maintainers = with lib.maintainers; [
       pbsds
     ];
   };

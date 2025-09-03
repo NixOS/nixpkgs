@@ -9,7 +9,7 @@
   requests,
   tlv8,
   pyserial,
-  protobuf5,
+  protobuf,
   semver,
   crcmod,
   hidapi,
@@ -17,15 +17,17 @@
 
 buildPythonPackage rec {
   pname = "nitrokey";
-  version = "0.2.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XDlcOfOTGgYsg5DLsy1wJd3AzuvWSvqyFSEYrDOp0Ic=";
+    hash = "sha256-uZ3KF+8PUwVjwf73buFpq/6Fu+fqkfIecP3A33FmtKk=";
   };
 
   disabled = pythonOlder "3.9";
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   build-system = [ poetry-core ];
 
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     crcmod
     cryptography
     hidapi
-    protobuf5
+    protobuf
     pyserial
   ];
 

@@ -2,20 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "yggstack";
-  version = "1.0.1";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggstack";
     rev = "${version}";
-    hash = "sha256-RQ7AvVv+VLfgzlb7orZbSB7TNz/hj2fo832ed4WUN80=";
+    hash = "sha256-S3yk2v2RPGFeGDJ8Lmjr7VM2kIswIREfPpDLXM/P1YU=";
   };
 
-  vendorHash = "sha256-Hjb3KSh+2qYYKdgv4+dsSp0kAbzz8gu9qnQdA7wB5fA=";
+  vendorHash = "sha256-7EIUsMhAJ+uPD5LG7Yucpo82aJYYRt9vrmAbsQzNmEw=";
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
@@ -26,12 +27,13 @@ buildGoModule rec {
 
   doCheck = false;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Yggdrasil as SOCKS proxy / port forwarder";
     homepage = "https://yggdrasil-network.github.io/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [
-      ehmry
       peigongdsd
     ];
   };

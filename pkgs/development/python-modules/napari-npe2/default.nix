@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "napari-npe2";
-  version = "0.7.7";
+  version = "0.7.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = "npe2";
     tag = "v${version}";
-    hash = "sha256-HjMf5J1n5NKqtunRQ7cqZiTZMTNmcq5j++O03Sxwvqw=";
+    hash = "sha256-q+vgzUuSSHFR64OajT/j/tLsNgSm3azQPCvDlrIvceM=";
   };
 
   build-system = [

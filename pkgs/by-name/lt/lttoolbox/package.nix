@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
   autoconf,
   automake,
   pkg-config,
@@ -15,25 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "lttoolbox";
-  version = "3.7.1";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
     tag = "v${version}";
-    hash = "sha256-3lHXKtwQSrMGQEGOGr27e3kB2qKkTFZcEzeAnIm89Rg=";
+    hash = "sha256-T92TEhrWwPYW8e49rc0jfM0C3dmNYtuexhO/l5s+tQ0=";
   };
 
-  patches = [
-    # can be removed once the version goes past this commit
-    # https://github.com/apertium/lttoolbox/commit/e682fe18a96d5a865cfbd3e5661dbc7b3ace1821
-    (fetchpatch {
-      url = "https://github.com/apertium/lttoolbox/commit/e682fe18a96d5a865cfbd3e5661dbc7b3ace1821.patch";
-      hash = "sha256-VeP8Mv2KYxX+eVjIRw/jHbURaWN665+fiFaoT3VxAno=";
-    })
-  ];
-
   nativeBuildInputs = [
+    autoreconfHook
     autoconf
     automake
     pkg-config
@@ -47,20 +40,19 @@ stdenv.mkDerivation rec {
   buildFlags = [
     "CPPFLAGS=-I${utf8cpp}/include/utf8cpp"
   ];
-  configurePhase = ''
-    ./autogen.sh --prefix $out
-  '';
+
+  nativeCheckInputs = [ python3 ];
   doCheck = true;
   checkPhase = ''
-    ${python3}/bin/python3 tests/run_tests.py
+    python3 tests/run_tests.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Finite state compiler, processor and helper tools used by apertium";
     homepage = "https://github.com/apertium/lttoolbox";
-    maintainers = with maintainers; [ onthestairs ];
+    maintainers = with lib.maintainers; [ onthestairs ];
     changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${version}";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

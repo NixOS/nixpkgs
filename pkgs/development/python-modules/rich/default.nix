@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -10,7 +9,6 @@
   # dependencies
   markdown-it-py,
   pygments,
-  typing-extensions,
 
   # optional-dependencies
   ipywidgets,
@@ -29,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.9.4";
+  version = "14.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
     tag = "v${version}";
-    hash = "sha256-Zaop9zR+Sz9lMQjQP1ddJSid5jEmf0tQYuTeLuWNGA8=";
+    hash = "sha256-44L3eVf/gI0FlOlxzJ7/+A1jN6ILkeVEelaru1Io20U=";
   };
 
   build-system = [ poetry-core ];
@@ -46,7 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies = {
     jupyter = [ ipywidgets ];

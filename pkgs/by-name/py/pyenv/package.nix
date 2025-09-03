@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pyenv";
-  version = "2.5.1";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "pyenv";
     repo = "pyenv";
     tag = "v${version}";
-    hash = "sha256-i4CQTaz4VDYxUOGcmyIQN+n9yd1ptQ+rqiES/JR189A=";
+    hash = "sha256-Rm4czJoUu36frPvBPvjWo0x0NKEkAHCL07iffsC741o=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
 
   configureScript = "src/configure";
 
-  makeFlags = ["-C" "src"];
+  makeFlags = [
+    "-C"
+    "src"
+  ];
 
   installPhase = ''
     runHook preInstall

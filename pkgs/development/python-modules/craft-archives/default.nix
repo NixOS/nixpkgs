@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "2.0.2";
+  version = "2.2.0";
 
   pyproject = true;
 
@@ -26,16 +26,17 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     tag = version;
-    hash = "sha256-1HEz4d1WLQDDHga7X+V/37n8E7JK/k0z+UDeNEiLOHs=";
+    hash = "sha256-NXMBaY4sZT47Qi3XS5yuiXJEMKENghiXkLXnXHHYpRI=";
   };
 
   postPatch = ''
     substituteInPlace craft_archives/__init__.py \
       --replace-fail "dev" "${version}"
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
   '';
+
+  pythonRelaxDeps = [
+    "python-debian"
+  ];
 
   build-system = [ setuptools-scm ];
 
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 

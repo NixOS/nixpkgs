@@ -10,13 +10,14 @@
 }:
 buildNpmPackage rec {
   pname = "factoriolab";
-  version = "3.10.0";
+  version = "3.16.6";
 
   src = fetchFromGitHub {
     owner = "factoriolab";
     repo = "factoriolab";
     tag = "v${version}";
-    hash = "sha256-MSiwtFd9u8IFrHDy++jO//P7Yn4Arip1DwBufR8KIRU=";
+    hash = "sha256-feKva+TuqRZ66VCoHlUK695FMvsjgX5sJOwTBne8qX4=";
+    fetchLFS = true;
   };
   buildInputs = [ vips ];
   nativeBuildInputs = [

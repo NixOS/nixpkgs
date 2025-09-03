@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "1.1.1";
+  version = "2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U6SJ3JRJY25ICnhDWa4qqzGRdIySBklVHI43hiLw7KQ=";
+    hash = "sha256-XD2GCB++vQTdXeA2JqBge4CamPtsy6V3C2JGb+lA/yA=";
   };
 
   nativeBuildInputs = [

@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, fetchurl
-, testers
+{
+  lib,
+  stdenv,
+  callPackage,
+  ctestCheckHook,
+  fetchFromGitHub,
+  testers,
 
-, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
+  enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format,
 
-, cmake
-, curl
-, gdal
-, hdf5-cpp
-, laszip
-, libe57format
-, libgeotiff
-, libtiff
-, libxml2
-, openscenegraph
-, pkg-config
-, postgresql
-, proj
-, sqlite
-, tiledb
-, xercesc
-, zlib
-, zstd
+  cmake,
+  curl,
+  gdal,
+  hdf5-cpp,
+  laszip,
+  libe57format,
+  libgeotiff,
+  libtiff,
+  libxml2,
+  openscenegraph,
+  pkg-config,
+  libpq,
+  proj,
+  sqlite,
+  tiledb,
+  xercesc,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    hash = "sha256-i4Kk9T9MwMGshyGtHrSDhnzqeeThRCKXsjpW3rIDVVc=";
+    hash = "sha256-52v7oDmvq820mJ91XAZI1rQEwssWcHagcd2QNVV6zPA=";
   };
 
   nativeBuildInputs = [
@@ -52,16 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     openscenegraph
-    postgresql
+    libpq
     proj
     sqlite
     tiledb
     xercesc
     zlib
     zstd
-  ] ++ lib.optionals enableE57 [
+  ]
+  ++ lib.optionals enableE57 [
     libe57format
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_PLUGIN_E57=${if enableE57 then "ON" else "OFF"}"
@@ -88,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # tests are flaky and they seem to fail less often when they don't run in
+  # parallel
+  enableParallelChecking = false;
 
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
@@ -108,14 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Failure
     "pdal_app_plugin_test"
+
+    # Removed in GDAL 3.11
+    "pdal_io_gdal_writer_test"
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    # tests are flaky and they seem to fail less often when they don't run in
-    # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
-    runHook postCheck
+  nativeCheckInputs = [
+    gdal # gdalinfo
+    ctestCheckHook
+  ];
+
+  postInstall = ''
+    patchShebangs --update --build $out/bin/pdal-config
   '';
 
   passthru.tests = {
@@ -131,10 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
+    description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     platforms = platforms.all;
     pkgConfigModules = [ "pdal" ];
   };

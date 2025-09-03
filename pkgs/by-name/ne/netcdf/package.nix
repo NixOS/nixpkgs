@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.2";
+  version = "4.9.3";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
-    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
+    hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
   };
 
   postPatch = ''
@@ -50,11 +50,12 @@ stdenv.mkDerivation rec {
     curl
     hdf5
     libxml2
-    mpi
     bzip2
     libzip
     zstd
-  ] ++ lib.optional szipSupport szip;
+  ]
+  ++ lib.optional szipSupport szip
+  ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
 
@@ -67,18 +68,17 @@ stdenv.mkDerivation rec {
     # tracked upstream here: https://github.com/Unidata/netcdf-c/issues/2715
     lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
-  configureFlags =
-    [
-      "--enable-netcdf-4"
-      "--enable-dap"
-      "--enable-shared"
-      "--disable-dap-remote-tests"
-      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
-    ]
-    ++ (lib.optionals mpiSupport [
-      "--enable-parallel-tests"
-      "CC=${lib.getDev mpi}/bin/mpicc"
-    ]);
+  configureFlags = [
+    "--enable-netcdf-4"
+    "--enable-dap"
+    "--enable-shared"
+    "--disable-dap-remote-tests"
+    "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
+  ]
+  ++ (lib.optionals mpiSupport [
+    "--enable-parallel-tests"
+    "CC=${lib.getDev mpi}/bin/mpicc"
+  ]);
 
   enableParallelBuilding = true;
 

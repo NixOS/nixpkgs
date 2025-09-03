@@ -5,7 +5,7 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cyclone";
   version = "unstable-2023-09-12";
 
@@ -23,19 +23,21 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postInstall = ''
     mv "$out/lib/pd-externals/cyclone" "$out/"
     rm -rf $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments";
     homepage = "http://puredata.info/downloads/cyclone";
-    license = licenses.tcltk;
-    maintainers = with maintainers; [
+    license = lib.licenses.tcltk;
+    maintainers = with lib.maintainers; [
       magnetophon
       carlthome
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -32,9 +32,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-version" ];
+  versionCheckProgramArg = "-version";
 
-  meta = with lib; {
+  meta = {
     description = "Fast and multi-purpose DNS toolkit";
     longDescription = ''
       dnsx is a fast and multi-purpose DNS toolkit allow to run multiple
@@ -44,8 +44,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/dnsx";
     changelog = "https://github.com/projectdiscovery/dnsx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnsx";
   };
 }

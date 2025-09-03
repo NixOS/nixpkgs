@@ -34,18 +34,18 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
-  buildInputs =
-    [
-      gnuplot
-      perl
-    ]
-    ++ (with perlPackages; [
-      ListMoreUtils
-      IPCRun
-      StringShellQuote
-    ]);
+  buildInputs = [
+    gnuplot
+    perl
+  ]
+  ++ (with perlPackages; [
+    ListMoreUtils
+    IPCRun
+    StringShellQuote
+  ]);
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = fontsConf;

@@ -45,7 +45,7 @@ let
     '';
   };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.

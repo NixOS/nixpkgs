@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, cairo
-, expat
-, flex
-, fontconfig
-, gd
-, gts
-, libjpeg
-, libpng
-, libtool
-, pango
-, bash
-, bison
-, xorg
-, ApplicationServices
-, Foundation
-, python3
-, withXorg ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  cairo,
+  expat,
+  flex,
+  fontconfig,
+  gd,
+  gts,
+  libjpeg,
+  libpng,
+  libtool,
+  makeWrapper,
+  pango,
+  bash,
+  bison,
+  xorg,
+  python3,
+  withXorg ? true,
 
-# for passthru.tests
-, exiv2
-, fltk
-, graphicsmagick
+  # for passthru.tests
+  exiv2,
+  fltk,
+  graphicsmagick,
 }:
 
 let
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
     pkg-config
     python3
     bison
@@ -58,20 +59,20 @@ stdenv.mkDerivation rec {
     gts
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
+  ]
+  ++ optionals withXorg (with xorg; [ libXrender ]);
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ optional (xorg == null) "--without-x";
+  ]
+  ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin)
-    "-I${cairo.dev}/include/cairo";
+  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin) "-I${cairo.dev}/include/cairo";
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
@@ -81,9 +82,11 @@ stdenv.mkDerivation rec {
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
-      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
-      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
-      --replace /usr/bin/vimdot $out/bin/vimdot \
+      --replace-warn '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace-warn '"/usr/bin/vim"' '"$(command -v vim)"' \
+      --replace-warn /usr/bin/vimdot $out/bin/vimdot
+
+    wrapProgram $out/bin/vimdot --prefix PATH : "$out/bin"
   '';
 
   passthru.tests = {
@@ -92,12 +95,12 @@ stdenv.mkDerivation rec {
       pydot
       pygraphviz
       xdot
-    ;
+      ;
     inherit
       exiv2
       fltk
       graphicsmagick
-    ;
+      ;
   };
 
   meta = with lib; {
@@ -105,6 +108,9 @@ stdenv.mkDerivation rec {
     description = "Graph visualization tools";
     license = licenses.epl10;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor raskin ];
+    maintainers = with maintainers; [
+      bjornfor
+      raskin
+    ];
   };
 }

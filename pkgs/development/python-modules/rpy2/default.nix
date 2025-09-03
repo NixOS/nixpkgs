@@ -12,6 +12,7 @@
   xz,
   bzip2,
   zlib,
+  zstd,
   icu,
   ipython,
   jinja2,
@@ -26,14 +27,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.5.17";
+  version = "3.6.2";
   format = "setuptools";
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-2/8Iww89eRYZImI4WKWztoo/uo7hdH1q9BvEumjz1YI=";
+    hash = "sha256-F06ld2qR0Ds13VYRiJlg4PVFHp0KvqSr/IwL5qhTd9A=";
   };
 
   patches = [
@@ -47,30 +48,30 @@ buildPythonPackage rec {
     substituteInPlace 'requirements.txt' --replace 'pytest' ""
   '';
 
-  buildInputs =
-    [
-      pcre
-      xz
-      bzip2
-      zlib
-      icu
-      libdeflate
-    ]
-    ++ (with rPackages; [
-      # packages expected by the test framework
-      ggplot2
-      dplyr
-      RSQLite
-      broom
-      DBI
-      dbplyr
-      hexbin
-      lazyeval
-      lme4
-      tidyr
-    ])
-    ++ extraRPackages
-    ++ rWrapper.recommendedPackages;
+  buildInputs = [
+    pcre
+    xz
+    bzip2
+    zlib
+    zstd
+    icu
+    libdeflate
+  ]
+  ++ (with rPackages; [
+    # packages expected by the test framework
+    ggplot2
+    dplyr
+    RSQLite
+    broom
+    DBI
+    dbplyr
+    hexbin
+    lazyeval
+    lme4
+    tidyr
+  ])
+  ++ extraRPackages
+  ++ rWrapper.recommendedPackages;
 
   nativeBuildInputs = [
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
@@ -86,8 +87,6 @@ buildPythonPackage rec {
     tzlocal
     simplegeneric
   ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # https://github.com/rpy2/rpy2/issues/1111
   disabledTests = [

@@ -8,14 +8,15 @@
   ninja,
   qt5,
   shiboken2,
+  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.16";
+  version = "5.15.17";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    hash = "sha256-bT7W/RcnXqdIKatW35wudkG/ymtbIBzyRJmPqBzwc2A=";
+    hash = "sha256-hKSzKPamAjW4cXrVIriKe2AAWSYMV6IYntAFEJ8kxSc=";
   };
 
   patches = [
@@ -67,13 +68,15 @@ stdenv.mkDerivation rec {
       qtlocation
       qtscript
       qtwebsockets
-      qtwebengine
       qtwebchannel
       qtcharts
       qtsensors
       qtsvg
       qt3d
     ])
+    ++ lib.optionals withWebengine [
+      qt5.qtwebengine
+    ]
     ++ (with python.pkgs; [ setuptools ])
     ++ (lib.optionals (python.pythonOlder "3.9") [
       # see similar issue: 202262
@@ -95,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

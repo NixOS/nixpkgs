@@ -27,6 +27,7 @@
   docbook_xsl_ns,
   docbook_xml_dtd_42,
   docbook_xml_dtd_45,
+  udevCheckHook,
 
   # Defaulting to false because usually the rationale for using elogind is to
   # use it in situation where a systemd dependency does not work (especially
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elogind";
-    repo = pname;
+    repo = "elogind";
     rev = "v${version}";
     hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
   };
@@ -63,6 +64,10 @@ stdenv.mkDerivation rec {
 
     python3Packages.python
     python3Packages.jinja2
+  ]
+  ++ lib.optionals enableSystemd [
+    # udevCheckHook introduces a dependency on systemdMinimal
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -73,7 +78,8 @@ stdenv.mkDerivation rec {
     libselinux
     pam
     util-linux
-  ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
+  ]
+  ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
@@ -148,7 +154,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/elogind/elogind";
-    description = ''The systemd project's "logind", extracted to a standalone package'';
+    description = "systemd project's 'logind', extracted to a standalone package";
     platforms = platforms.linux; # probably more
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ nh2 ];

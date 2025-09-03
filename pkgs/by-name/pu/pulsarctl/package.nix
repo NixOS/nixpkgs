@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "pulsarctl";
-  version = "4.0.1.2";
+  version = "4.0.4.3";
 
   src = fetchFromGitHub {
     owner = "streamnative";
     repo = "pulsarctl";
     rev = "v${version}";
-    hash = "sha256-3VONhrKViblh0LXy/hMVgzCN54JkDYw3v/YrqXuk6l8=";
+    hash = "sha256-acNd3nF1nHkYlw7tPoD01IjEc97dLvyAZ7yC1UDWN7s=";
   };
 
-  vendorHash = "sha256-wNUTJn7Ar+GlePEhdr6xeolAiltJdAoIs5o5uDo8Ibs=";
+  vendorHash = "sha256-AruXsUIKeUMcojf0XF1ZEaZ2LlXDwCp2n82RN5e0Rj8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,7 +67,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = " a CLI for Apache Pulsar written in Go";
+    description = "CLI for Apache Pulsar written in Go";
     homepage = "https://github.com/streamnative/pulsarctl";
     license = with licenses; [ asl20 ];
     platforms = platforms.unix;

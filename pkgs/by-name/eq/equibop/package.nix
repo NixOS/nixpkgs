@@ -12,39 +12,37 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_9,
+  pnpm_10,
   nodejs,
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
-  # Enables the use of Equicord from nixpkgs instead of
-  # letting Equibop manage it's own version
-  withSystemEquicord ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.1";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LGgmWaC7iYj0Mx5wPKmLkYV2ozyhkiwrE4v4uFB0erg=";
+    hash = "sha256-0OtCxz7g1xMmnkDke34deaS3dx5b8bGOC0Vbq6BIObg=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    hash = "sha256-dIz/HyhzFU86QqQEQ9qWSthKB9HfoRJbmpc3raWNbcA=";
+    fetcherVersion = 1;
+    hash = "sha256-MDqAncWdU2rIQAGF/wx2gWxDf74P3fp3w4nA8b6AITw=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     # XXX: Equibop *does not* ship venmic as a prebuilt node module. The package
     # seems to build with or without this hook, but I (NotAShelf) don't have the
     # time to test the consequences of removing this hook. Please open a pull
@@ -62,13 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches =
-    [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (
-      replaceVars ./use_system_equicord.patch {
-        inherit equicord;
-      }
-    );
+  patches = [
+    ./disable_update_checking.patch
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

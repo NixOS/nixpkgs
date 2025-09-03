@@ -2,27 +2,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  nclib,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nhc";
-  version = "0.3.4";
+  version = "0.4.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vandeurenglenn";
     repo = "nhc";
-    tag = "v${version}";
-    hash = "sha256-TSfOcSeedr0cSDHo1bqftUOZ3AeCW3Zgb80IBv3eerM=";
+    tag = version;
+    hash = "sha256-g9uSAk1YTBDnGRfQQkEu1XMMN3MYYDWJoOJ+Ga7jXRw=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [
-    nclib
-  ];
 
   pythonImportsCheck = [ "nhc" ];
 
@@ -30,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/vandeurenglenn/nhc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/VandeurenGlenn/nhc/blob/${src.tag}/CHANGELOG.md";
     description = "SDK for Niko Home Control";
     homepage = "https://github.com/vandeurenglenn/nhc";
     license = lib.licenses.mit;

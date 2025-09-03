@@ -6,7 +6,9 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yams";
+  # nixpkgs-update: no auto update
   version = "0.7.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Berulacks";
@@ -15,7 +17,9 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1zkhcys9i0s6jkaz24an690rvnkv1r84jxpaa84sf46abi59ijh8";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pyyaml
     psutil
     mpd2
@@ -23,6 +27,8 @@ python3Packages.buildPythonPackage rec {
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "yams.scrobble" ];
 
   meta = with lib; {
     homepage = "https://github.com/Berulacks/yams";

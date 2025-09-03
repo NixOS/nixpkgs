@@ -392,7 +392,7 @@ mountFS() {
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
     # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
-    local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
+    local optionsPrefixed="$( echo "${optionsFiltered%,}" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
     echo "$device /mnt-root$mountPoint $fsType $optionsPrefixed" >> /etc/fstab
 
@@ -423,8 +423,16 @@ mountFS() {
 
     # For bind mounts, busybox has a tendency to ignore options, which can be a
     # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
-    # issue.
-    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+    # issue. This should only be done for bind and rbind mountpoints because other
+    # filesystems may have limitations or may not support remount.
+    local IFS=,
+    for opt in $options; do
+        if [[ "$opt" = bind || "$opt" = rbind ]]; then
+            mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+            break
+        fi
+    done
+    unset IFS
 
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&

@@ -35,12 +35,6 @@ let
     ) args);
   kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
-      linux_5_4_hardened
-      linux_5_10_hardened
-      linux_5_15_hardened
-      linux_6_1_hardened
-      linux_6_6_hardened
-      linux_6_11_hardened
       linux_6_12_hardened
       linux_rt_5_4
       linux_rt_5_10

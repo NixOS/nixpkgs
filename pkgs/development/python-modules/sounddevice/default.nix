@@ -8,18 +8,18 @@
   cffi,
   numpy,
   portaudio,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CcqZHa7ajOS+mskeFamoHI+B76a2laNIyRceoMFssEE=";
+    hash = "sha256-xjTVG9TpItbw+l4al1zIl8lH9h0x2p95un6jTf9Ei0k=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sounddevice" ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-portaudio-library-path.patch;
+    (replaceVars ./fix-portaudio-library-path.patch {
       portaudio = "${portaudio}/lib/libportaudio${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

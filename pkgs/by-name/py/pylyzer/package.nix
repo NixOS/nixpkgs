@@ -14,24 +14,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.78";
+  version = "0.0.82";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     tag = "v${version}";
-    hash = "sha256-g8/zhl0dCQOq4aTlivAh3ufgfEMzeMvTtJQxFuHHWB0=";
+    hash = "sha256-cSMHd3j3xslSR/v4KZ5LUwxPPR/b+okwrT54gUyLXXw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mi4pCYA0dQnv3MIpZxVVY0qLdIts/qvxS4og0Tyxk3w=";
+  cargoHash = "sha256-JrDj88JjQon2rtywa/PqnS1pTxTLigPHNnqQS/tO9RA=";
 
   nativeBuildInputs = [
     gitMinimal
     python3
     makeWrapper
     writableTmpDirAsHomeHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

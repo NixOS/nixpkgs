@@ -43,7 +43,7 @@ buildGoModule rec {
     command = "datree version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
     mainProgram = "datree";
     longDescription = ''
@@ -54,8 +54,8 @@ buildGoModule rec {
     '';
     homepage = "https://datree.io/";
     changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       azahi
       jceb
     ];

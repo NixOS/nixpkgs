@@ -24,10 +24,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [ msgpack ]
-    ++ lib.optionals (!isPyPy) [ greenlet ]
-    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
+  dependencies = [
+    msgpack
+  ]
+  ++ lib.optionals (!isPyPy) [ greenlet ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   # Tests require pkgs.neovim which we cannot add because of circular dependency
   doCheck = false;

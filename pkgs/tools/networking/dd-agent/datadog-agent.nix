@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, cmake
-, buildGo122Module
-, makeWrapper
-, fetchFromGitHub
-, pythonPackages
-, pkg-config
-, systemd
-, hostname
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, withDocker ? true
-, extraTags ? [ ]
-, testers
-, datadog-agent
+{
+  lib,
+  stdenv,
+  cmake,
+  buildGoModule,
+  makeWrapper,
+  fetchFromGitHub,
+  pythonPackages,
+  pkg-config,
+  systemd,
+  hostname,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withDocker ? true,
+  extraTags ? [ ],
+  testers,
+  datadog-agent,
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "5.0.124";
   python = pythonPackages.python;
-  owner   = "DataDog";
-  repo    = "datadog-agent";
+  owner = "DataDog";
+  repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
   version = "7.56.2";
 
@@ -35,18 +36,24 @@ let
     inherit version;
     nativeBuildInputs = [ cmake ];
     buildInputs = [ python ];
-    cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
+    cmakeFlags = [
+      "-DBUILD_DEMO=OFF"
+      "-DDISABLE_PYTHON2=ON"
+    ];
   };
 
-in buildGo122Module rec {
+in
+buildGoModule rec {
   pname = "datadog-agent";
   inherit src version;
 
   doCheck = false;
 
-  vendorHash = if stdenv.isDarwin
-               then "sha256-3Piq5DPMTZUEjqNkw5HZY25An2kATX6Jac9unQfZnZc="
-               else "sha256-FR0Et3DvjJhbYUPy9mpN0QCJ7QDU4VRZFUTL0J1FSXw=";
+  vendorHash =
+    if stdenv.hostPlatform.isDarwin then
+      "sha256-3Piq5DPMTZUEjqNkw5HZY25An2kATX6Jac9unQfZnZc="
+    else
+      "sha256-FR0Et3DvjJhbYUPy9mpN0QCJ7QDU4VRZFUTL0J1FSXw=";
 
   subPackages = [
     "cmd/agent"
@@ -55,9 +62,11 @@ in buildGo122Module rec {
     "cmd/trace-agent"
   ];
 
-
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [rtloader] ++ lib.optionals withSystemd [ systemd ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
   tags = [
@@ -103,7 +112,12 @@ in buildGo122Module rec {
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}"''
-      + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ (lib.getLib systemd) rtloader ]}";
+  + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
+     lib.makeLibraryPath [
+       (lib.getLib systemd)
+       rtloader
+     ]
+   }";
 
   passthru.tests.version = testers.testVersion {
     package = datadog-agent;
@@ -115,8 +129,10 @@ in buildGo122Module rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar ];
+    homepage = "https://www.datadoghq.com";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      thoughtpolice
+    ];
   };
 }

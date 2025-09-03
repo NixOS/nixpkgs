@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.5.1";
+  version = "1.5.4";
 in
 buildPecl {
   inherit version;
@@ -20,7 +20,7 @@ buildPecl {
     repo = "php-gnupg";
     rev = "gnupg-${version}";
     fetchSubmodules = true;
-    hash = "sha256-kEc0883sYgmAf1mkH0zRjHzUASnZgQvdYE6VzT5X2RI=";
+    hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
   };
 
   buildInputs = [ gpgme ];
@@ -28,20 +28,25 @@ buildPecl {
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace '/usr/bin/file' '${file}/bin/file' \
-      --replace 'SEARCH_PATH="/usr/local /usr /opt"' 'SEARCH_PATH="${gpgme.dev}"'
+      --replace-fail '/usr/bin/file' '${file}/bin/file' \
+      --replace-fail 'SEARCH_PATH="/usr/local /usr /opt /opt/homebrew"' 'SEARCH_PATH="${gpgme.dev}"'
   '';
 
   postConfigure = ''
     substituteInPlace Makefile \
-      --replace 'run-tests.php' 'run-tests.php -q --offline'
+      --replace-fail 'run-tests.php' 'run-tests.php -q --offline'
     substituteInPlace tests/gnupg_res_init_file_name.phpt \
-      --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
     substituteInPlace tests/gnupg_oo_init_file_name.phpt \
-      --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
   '';
+
+  patches = [
+    # https://github.com/php-gnupg/php-gnupg/issues/62
+    ./missing-new-line-test.patch
+  ];
 
   doCheck = true;
 
@@ -51,6 +56,7 @@ buildPecl {
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = lib.licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";
-    maintainers = with lib.maintainers; [ taikx4 ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ taikx4 ];
+    teams = [ lib.teams.php ];
   };
 }

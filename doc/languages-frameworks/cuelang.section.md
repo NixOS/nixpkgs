@@ -27,13 +27,11 @@ Nixpkgs provides a `pkgs.writeCueValidator` helper, which will write a validatio
 
 Here is an example:
 ```nix
-pkgs.writeCueValidator
-  (pkgs.writeText "schema.cue" ''
-    #Def1: {
-      field1: string
-    }
-  '')
-  { document = "#Def1"; }
+pkgs.writeCueValidator (pkgs.writeText "schema.cue" ''
+  #Def1: {
+    field1: string
+  }
+'') { document = "#Def1"; }
 ```
 
 - The first parameter is the Cue schema file.
@@ -43,19 +41,19 @@ pkgs.writeCueValidator
 
 Another example, given the following `validator.nix` :
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 let
-  genericValidator = version:
-  pkgs.writeCueValidator
-    (pkgs.writeText "schema.cue" ''
+  genericValidator =
+    version:
+    pkgs.writeCueValidator (pkgs.writeText "schema.cue" ''
       #Version1: {
         field1: string
       }
       #Version2: #Version1 & {
         field1: "unused"
-      }''
-    )
-    { document = "#Version${toString version}"; };
+      }'') { document = "#Version${toString version}"; };
 in
 {
   validateV1 = genericValidator 1;

@@ -32,7 +32,8 @@ let
 
   knownHostsFiles = [
     "/etc/ssh/ssh_known_hosts"
-  ] ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
+  ]
+  ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
 
 in
 {
@@ -47,6 +48,15 @@ in
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
         description = "Whether to configure SSH_ASKPASS in the environment.";
+      };
+
+      systemd-ssh-proxy.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable systemd's ssh proxy plugin.
+          See {manpage}`systemd-ssh-proxy(1)`.
+        '';
       };
 
       askPassword = lib.mkOption {
@@ -310,21 +320,22 @@ in
       || config.services.openssh.settings.X11Forwarding
     );
 
-    assertions =
-      [
-        {
-          assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ]
-      ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
-        name: data: {
-          assertion =
-            (data.publicKey == null && data.publicKeyFile != null)
-            || (data.publicKey != null && data.publicKeyFile == null);
-          message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-        }
-      );
+    assertions = [
+      {
+        assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }
+    ]
+    ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
+      name: data: {
+        assertion =
+          (data.publicKey == null && data.publicKeyFile != null)
+          || (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      }
+    );
+
+    environment.corePackages = [ cfg.package ];
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
@@ -334,6 +345,11 @@ in
 
       # Generated options from other settings
       Host *
+      ${lib.optionalString cfg.systemd-ssh-proxy.enable ''
+        # See systemd-ssh-proxy(1)
+        Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
+      ''}
+
       GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
       ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}

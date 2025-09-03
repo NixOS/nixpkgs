@@ -10,12 +10,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "hkmatsumoto";
-    repo = pname;
+    repo = "roogle";
     rev = version;
     sha256 = "sha256-oeQwRcDn4X/CL+O4APmGv9T19c9oD5tCBRz4K41K1Zg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lmRo6Q67hJ3hv0jQt6epiNOckRv0rA0a0DNEKIdDoUE=";
 
   meta = with lib; {

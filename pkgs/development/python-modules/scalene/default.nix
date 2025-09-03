@@ -38,7 +38,7 @@ in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.51";
+  version = "1.5.52";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${version}";
-    hash = "sha256-507auU1uy3StmDWruwd/sgJDpV1WhbneSj/bTxUuAN0=";
+    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
   };
 
   patches = [
@@ -75,11 +75,13 @@ buildPythonPackage rec {
     psutil
     pydantic
     rich
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
   pythonRemoveDeps = [
     "nvidia-ml-py3"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "flatter";
-  version = "0-unstable-2024-03-04";
+  version = "0-unstable-2025-08-12";
 
   src = fetchFromGitHub {
     owner = "keeganryan";
     repo = "flatter";
-    rev = "c2ed0ee94b6d281df7bcbce31ca275197ef9a562";
-    hash = "sha256-1Pjn0lANXaMOqlwwdOx6X/7jtAvfa2ZWa0nDfS3T5XU=";
+    rev = "7757f6c1166ce5feda1cb829736976b8d20741fc";
+    hash = "sha256-n/JtSdX8kZIEXcxj344APRo7fuRIR8+ZeUnk7QX8f3Q=";
   };
 
   strictDeps = true;
@@ -29,22 +29,21 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      blas
-      gmp
-      mpfr
-      fplll
-      eigen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    blas
+    gmp
+    mpfr
+    fplll
+    eigen
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "(F)ast (lat)tice (r)eduction of integer lattice bases";
+    description = "Fast lattice reduction of integer lattice bases";
     homepage = "https://github.com/keeganryan/flatter";
     license = licenses.lgpl3Only;
     mainProgram = "flatter";

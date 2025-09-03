@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   guile,
   pkg-config,
   texinfo,
@@ -32,6 +33,11 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac \
       --replace 'SITEDIR="$datadir/guile-lib"' 'SITEDIR=$datadir/guile/site/$GUILE_EFFECTIVE_VERSION' \
       --replace 'SITECCACHEDIR="$libdir/guile-lib/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"' 'SITECCACHEDIR="$libdir/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"'
+  '';
+
+  # error: possibly undefined macro: AC_LIB_LINKFLAGS_FROM_LIBS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/lib-{ld,link,prefix}.m4 m4
   '';
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];

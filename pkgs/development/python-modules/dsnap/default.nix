@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dsnap";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "RhinoSecurityLabs";
     repo = "dsnap";
     tag = "v${version}";
-    hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
+    hash = "sha256-h5zeyfkBoHnvjqHYahDXEEbGdmMti2Y56R/8OKyxOOM=";
   };
 
   postPatch = ''
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     moto
     mypy-boto3-ebs
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # https://github.com/RhinoSecurityLabs/dsnap/issues/26
   # ImportError: cannot import name 'mock_iam' from 'moto'

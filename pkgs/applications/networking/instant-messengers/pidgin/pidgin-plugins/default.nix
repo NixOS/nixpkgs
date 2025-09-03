@@ -18,12 +18,7 @@ lib.makeScope newScope (
       plugins = [ ];
     };
 
-    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
-    pidginPackages = self // {
-      pidginPackages = self.pidginPackages // {
-        __attrsFailEvaluation = true;
-      };
-    };
+    pidginPackages = self;
 
     pidgin-indicator = callPackage ./pidgin-indicator { };
 
@@ -62,8 +57,6 @@ lib.makeScope newScope (
     purple-mm-sms = callPackage ./purple-mm-sms { };
 
     purple-plugin-pack = callPackage ./purple-plugin-pack { };
-
-    purple-signald = callPackage ./purple-signald { };
 
     purple-slack = callPackage ./purple-slack { };
 

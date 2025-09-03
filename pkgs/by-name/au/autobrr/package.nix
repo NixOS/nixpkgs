@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   stdenvNoCC,
@@ -12,12 +13,12 @@
 
 let
   pname = "autobrr";
-  version = "1.57.0";
+  version = "1.65.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-RVkeSrL3ZfEz+oCICi8JFJ6AaOBBumi5mnnQYE5Gjt8=";
+    hash = "sha256-i6F0CMMT/Qn+IUjvJdTkNl+pjqdLwGp+LPbQkYpehuY=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -39,7 +40,8 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-mABHRuZfjq9qNanfGGv+xDhs3bSufaWRecJypic8SWo=";
+      fetcherVersion = 1;
+      hash = "sha256-HH2+FHlDhxNKhYoO/m2nXV87fUqnoC/6L2s6hvkqnyM=";
     };
 
     postBuild = ''
@@ -59,7 +61,7 @@ buildGoModule rec {
     src
     ;
 
-  vendorHash = "sha256-rCtUE2/IwR6AnXQNgeH0TQ0BL7g6vi9L128xP0PwOXc=";
+  vendorHash = "sha256-dgBE80kZOvZdFJ4XP+E+d6IygtI6c1tL//IwhiBPmfY=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist
@@ -70,7 +72,10 @@ buildGoModule rec {
     "-X main.commit=${src.tag}"
   ];
 
-  doInstallCheck = true;
+  # In darwin, tests try to access /etc/protocols, which is not permitted.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

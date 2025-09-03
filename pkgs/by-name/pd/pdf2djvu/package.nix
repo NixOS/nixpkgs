@@ -56,9 +56,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Required by Poppler on darwin
-  # https://github.com/jwilk/pdf2djvu/commit/373e065faf2f0d868a3700788d20a96e9528bb12
-  CXXFLAGS = "-std=c++17";
+  # Required by Poppler
+  CXXFLAGS = "-std=c++20";
 
   meta = with lib; {
     description = "Creates djvu files from PDF files";

@@ -4,7 +4,6 @@
   buildPackages,
 }:
 
-
 /**
   A utility builder to create a desktop entry file at a predetermined location (by default, $out/share/applications).
 
@@ -157,7 +156,8 @@ lib.makeOverridable (
       "URL" = url;
       "PrefersNonDefaultGPU" = boolOrNullToString prefersNonDefaultGPU;
       # "SingleMainWindow" = boolOrNullToString singleMainWindow;
-    } // extraConfig;
+    }
+    // extraConfig;
 
     # Render a single attribute pair to a Key=Value line.
     # FIXME: this isn't entirely correct for arbitrary strings, as some characters

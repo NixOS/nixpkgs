@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m8c";
-  version = "1.7.8";
+  version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "laamaa";
     repo = "m8c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kUXNtAO8yUBeBg1NEwk+3jB7lL8ITm5hmXiemTUWbGc=";
+    hash = "sha256-8QkvvTtFxQmDIqpyhZi/ORcB7YwENu+YafYtCZw0faE=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

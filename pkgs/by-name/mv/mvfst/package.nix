@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   folly,
   gflags,
@@ -21,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.01.06.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "bin"
@@ -33,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgqVksPcm9CStAK32oNz7DT0CVzFb8ANohNxtyP0iT0=";
+    hash = "sha256-/84smnZ2L1zDmkO1w9VQzVhXKt/S5azQr7Xpr8/dOA4=";
   };
 
   patches = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -60,21 +58,27 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  hardeningDisable = [
+    # causes test failures on aarch64
+    "pacret"
+    # causes empty cmake files to be generated
+    "trivialautovarinit"
+  ];
 
-      (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
 
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Homebrew sets this, and the shared library build fails without
-      # it. I don‘t know, either. It scares me.
-      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
-    ];
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Homebrew sets this, and the shared library build fails without
+    # it. I don‘t know, either. It scares me.
+    (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -114,21 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-
-    # TODO: Do this in `gtest` rather than downstream.
-    remove-references-to -t ${gtest.dev} $out/lib/*
   '';
 
   passthru.updateScript = nix-update-script { };

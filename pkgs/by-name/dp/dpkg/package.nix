@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchgit
-, perl
-, gnutar
-, zlib
-, bzip2
-, xz
-, zstd
-, libmd
-, makeWrapper
-, coreutils
-, autoreconfHook
-, pkg-config
-, diffutils
-, glibc ? !stdenv.hostPlatform.isDarwin
-, darwin
+{
+  lib,
+  stdenv,
+  fetchgit,
+  perl,
+  gnutar,
+  zlib,
+  bzip2,
+  xz,
+  zstd,
+  libmd,
+  makeWrapper,
+  coreutils,
+  autoreconfHook,
+  pkg-config,
+  diffutils,
+  glibc ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.11";
+  version = "1.22.21";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-mKyS0lPTG3ROcw8AhB4IdjNjvZK2YTGV9pbpjz/OLAc=";
+    hash = "sha256-UiXZfwvgsgyXR6olNzKelt/3Fgtp7KU8UbTRRkDl8wY=";
   };
 
   configureFlags = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -71,27 +72,38 @@ stdenv.mkDerivation rec {
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
        --replace '"diff"' \"${diffutils}/bin/diff\"
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace src/main/help.c \
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd libmd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
-  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
+  buildInputs = [
+    perl
+    zlib
+    bzip2
+    xz
+    zstd
+    libmd
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    autoreconfHook
+    pkg-config
+  ];
 
-  postInstall =
-    ''
-      for i in $out/bin/*; do
-        if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
-        fi
-      done
+  postInstall = ''
+    for i in $out/bin/*; do
+      if head -n 1 $i | grep -q perl; then
+        substituteInPlace $i --replace \
+          "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      fi
+    done
 
-      mkdir -p $out/etc/dpkg
-      cp -r scripts/t/origins $out/etc/dpkg
-    '';
+    mkdir -p $out/etc/dpkg
+    cp -r scripts/t/origins $out/etc/dpkg
+  '';
 
   setupHook = ./setup-hook.sh;
 
@@ -100,6 +112,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ siriobalmelli ];
   };
 }

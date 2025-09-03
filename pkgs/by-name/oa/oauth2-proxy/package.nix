@@ -2,29 +2,34 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "oauth2-proxy";
-  version = "7.8.1";
+  version = "7.11.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "oauth2-proxy";
     owner = "oauth2-proxy";
-    sha256 = "sha256-NU9/BLyTEWGqt9SJNbvF4kSG/op8TEpYV2A24/V29PM=";
+    sha256 = "sha256-rZoD1H4YeVs9q8406gpYnWOyOEi2me/KkvSenzL/rA8=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-t/SJjh9bcsIevr3S0ysDlvtaIGzkks+qvfXF5/SEidE=";
+  vendorHash = "sha256-6Asydomg4Xz0JciRnODJSqVBtFAmpfMjDnr1JKr222o=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
-  ldflags = [ "-X main.VERSION=${version}" ];
+  ldflags = [ "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${version}" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Reverse proxy that provides authentication with Google, Github, or other providers";
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = licenses.mit;
-    maintainers = teams.serokell.members;
+    teams = [ teams.serokell ];
     mainProgram = "oauth2-proxy";
   };
 }

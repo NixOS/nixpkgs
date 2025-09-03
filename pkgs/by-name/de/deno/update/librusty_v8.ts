@@ -25,16 +25,12 @@ const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(
     async (arch: Architecture): Promise<PrefetchResult> => {
       log("Fetching:", arch.nix);
-      const sha256 = await run("nix-prefetch", [
-        `
-{ fetchurl }:
-fetchurl {
-  url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch.rust}.a.gz";
-}
-`,
+      const sha256 = await run("nix-prefetch-url", [
+        `https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch.rust}.a.gz`
       ]);
+      const sha256_sri = await run("nix-hash", ["--type", "sha256", "--to-sri", sha256]);
       log("Done:    ", arch.nix);
-      return { arch, sha256 };
+      return { arch, sha256: sha256_sri };
     },
   );
 
@@ -45,10 +41,6 @@ const templateDeps = (version: string, deps: PrefetchResult[]) =>
 fetchLibrustyV8 {
   version = "${version}";
   shas = {
-    x86_64-linux = "sha256-jLYl/CJp2Z+Ut6qZlh6u+CtR8KN+ToNTB+72QnVbIKM=";
-    aarch64-linux = "sha256-uAkBMg6JXA+aILd8TzDtuaEdM3Axiw43Ad5tZzxNt5w=";
-    x86_64-darwin = "sha256-60aR0YvQT8KyacY8J3fWKZcf9vny51VUB19NVpurS/A=";
-    aarch64-darwin = "sha256-pd/I6Mclj2/r/uJTIywnolPKYzeLu1c28d/6D56vkzQ=";
 ${deps.map(({ arch, sha256 }) => `    ${arch.nix} = "${sha256}";`).join("\n")}
   };
 }

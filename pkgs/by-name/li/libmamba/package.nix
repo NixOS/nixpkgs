@@ -3,7 +3,7 @@
   lib,
   stdenv,
   cmake,
-  fmt,
+  fmt_11,
   spdlog,
   tl-expected,
   nlohmann_json,
@@ -16,27 +16,27 @@
   zstd,
   nix-update-script,
   bzip2,
-  python3Packages,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.0.5";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "libmamba-${finalAttrs.version}";
-    hash = "sha256-o5shAmsplJS2WZ4HhAt1U27KqUheVxZTkjlyxR7EYxI=";
+    tag = finalAttrs.version;
+    hash = "sha256-EwG5pR3nOYffQdK3xIKJztkKLqMi6Hj9fmkihn9pZHE=";
   };
 
   nativeBuildInputs = [
     cmake
-    python3Packages.python
+    python3
   ];
 
   buildInputs = [
-    fmt
+    fmt_11
     spdlog
     tl-expected
     nlohmann_json

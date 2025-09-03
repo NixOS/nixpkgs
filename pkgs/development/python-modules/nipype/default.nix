@@ -9,8 +9,6 @@
   python-dateutil,
   etelemetry,
   filelock,
-  funcsigs,
-  future,
   looseversion,
   mock,
   networkx,
@@ -19,6 +17,7 @@
   packaging,
   prov,
   psutil,
+  puremagic,
   pybids,
   pydot,
   pytest,
@@ -41,29 +40,26 @@
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.8.6";
-  disabled = pythonOlder "3.7";
+  version = "1.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l3sTFej3D5QWPsB+MeVXG+g/Kt1gIxQcWgascAEm+NE=";
+    hash = "sha256-GeXWzvpwmXGY94vGZe9NPTy1MyW1uYpy5Rrvra9rPg4=";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
   pythonRelaxDeps = [ "traits" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     python-dateutil
     etelemetry
     filelock
-    funcsigs
-    future
     looseversion
     networkx
     nibabel
@@ -71,6 +67,7 @@ buildPythonPackage rec {
     packaging
     prov
     psutil
+    puremagic
     pydot
     rdflib
     scipy
@@ -93,15 +90,16 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'
+    pytest nipype/tests -k 'not display and not test_no_et_multiproc'
   '';
   pythonImportsCheck = [ "nipype" ];
 
-  meta = with lib; {
-    homepage = "https://nipy.org/nipype/";
+  meta = {
+    homepage = "https://nipy.org/nipype";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
+    changelog = "https://github.com/nipy/nipype/releases/tag/${version}";
     mainProgram = "nipypecli";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

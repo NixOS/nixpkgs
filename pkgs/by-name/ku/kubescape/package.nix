@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.24";
+  version = "3.0.39";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${version}";
-    hash = "sha256-gzwdDUYOHZnd9mMHmuW9q1xhxWjpk5u/yoxdJkSNrVA=";
+    hash = "sha256-yKbOzwvg8VtSVLZTJC7AUzUVRDbj7c+sjCt+C3x8VSI=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GL5V3f2hiTzNDhBKyvyT8BlbRCaPSJXLy/+xiYjhsvw=";
+  vendorHash = "sha256-oFY31Cd0fXkmDpRwF8NI2VZVmWRDZ53uwsT2aUfGyjM=";
 
   subPackages = [ "." ];
 
@@ -66,9 +66,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
     changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
@@ -83,8 +83,8 @@ buildGoModule rec {
       time. Kubescape integrates natively with other DevOps tools, including
       Jenkins, CircleCI and Github workflows.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];

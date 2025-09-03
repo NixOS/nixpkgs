@@ -27,15 +27,15 @@
 }:
 
 let
-  version = "1.36.2";
-  patterns_version = "1.36.2";
+  version = "1.37.4";
+  patterns_version = "1.37.4";
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
-    rev = "ImHex-v${patterns_version}";
-    hash = "sha256-MKw9BsOhbaojmQGdl+Wkit/ot5Xsym+AvCTHY2vZHmY=";
+    tag = "ImHex-v${patterns_version}";
+    hash = "sha256-2NgMYaG6+XKp0fIHAn3vAcoXXa3EF4HV01nI+t1IL1U=";
   };
 
 in
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WerWolv";
     repo = "ImHex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e7ppx2MdtTPki/Q+1kWswHkFLNRcO0Y8+q9VzpgUoVE=";
+    hash = "sha256-uenwAaIjtBzrtiLdy6fh5TxtbWtUJbtybNOLP3+8blA=";
   };
 
   strictDeps = true;
@@ -62,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rsync
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     capstone
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kashw2
       cafkafk
+      govanify
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };

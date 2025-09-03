@@ -82,8 +82,6 @@ stdenv.mkDerivation {
     openssl
     curl
     jq
-    gcc
-    elfutils
     tbb
     re2
     protobuf
@@ -93,10 +91,15 @@ stdenv.mkDerivation {
     nlohmann_json
     zstd
     uthash
-    clang
-    libbpf
+  ]
+  ++ lib.optionals stdenv.isLinux [
     bpftools
-  ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
+    elfutils
+    libbpf
+    clang
+    gcc
+  ]
+  ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [
     "pic"
@@ -138,27 +141,27 @@ stdenv.mkDerivation {
     "-DCREATE_TEST_TARGETS=OFF"
     "-DVALIJSON_INCLUDE=${valijson}/include"
     "-DUTHASH_INCLUDE=${uthash}/include"
-  ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
+  ]
+  ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   env.NIX_CFLAGS_COMPILE =
     # fix compiler warnings been treated as errors
     "-Wno-error";
 
-  preConfigure =
-    ''
-      if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
-        echo "falcosecurity-libs checksum needs to be updated!"
-        exit 1
-      fi
-      cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -lzstd -labsl_synchronization")
-    ''
-    + lib.optionalString (kernel != null) ''
-      export INSTALL_MOD_PATH="$out"
-      export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    '';
+  preConfigure = ''
+    if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
+      echo "falcosecurity-libs checksum needs to be updated!"
+      exit 1
+    fi
+    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -lzstd -labsl_synchronization")
+  ''
+  + lib.optionalString (kernel != null) ''
+    export INSTALL_MOD_PATH="$out"
+    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  '';
 
   postInstall =
-    ''
+    lib.optionalString stdenv.isLinux ''
       # Fix the bash completion location
       installShellCompletion --bash $out/etc/bash_completion.d/sysdig
       rm $out/etc/bash_completion.d/sysdig
@@ -184,7 +187,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
+    description = "Tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = with lib.licenses; [
       asl20
       gpl2Only

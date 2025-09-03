@@ -20,15 +20,13 @@
   python-xmp-toolkit,
   qpdf,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.4.2";
+  version = "9.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -40,12 +38,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-J/ipkKqZifkWtgv7z/MJPwRK+yB7MP/19PDdjV1NMpY=";
+    hash = "sha256-gFaGHml1F5i+w68xapmPHYUK760rT4GJzTWTkDsIwC8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
       mutool = lib.getExe' mupdf-headless "mutool";
     })
@@ -88,6 +85,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
   };
 }

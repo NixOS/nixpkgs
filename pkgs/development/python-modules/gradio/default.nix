@@ -2,14 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   writeShellScriptBin,
   gradio,
 
-  # pyproject
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
@@ -19,14 +16,16 @@
   nodejs,
   pnpm_9,
 
-  # runtime
+  # dependencies
   setuptools,
   aiofiles,
   anyio,
+  brotli,
   diffusers,
   fastapi,
   ffmpy,
   gradio-client,
+  groovy,
   httpx,
   huggingface-hub,
   importlib-resources,
@@ -38,6 +37,7 @@
   packaging,
   pandas,
   pillow,
+  polars,
   pydantic,
   python-multipart,
   pydub,
@@ -53,14 +53,16 @@
   authlib,
   itsdangerous,
 
-  # check
+  # tests
   pytestCheckHook,
   hypothesis,
   altair,
   boto3,
+  docker,
   gradio-pdf,
   ffmpeg,
   ipython,
+  mcp,
   pytest-asyncio,
   respx,
   scikit-image,
@@ -68,42 +70,33 @@
   tqdm,
   transformers,
   vega-datasets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.11.0";
+  version = "5.38.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  # unfortunately no fetchPypi due to https://github.com/gradio-app/gradio/pull/9778
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-HW0J7oSkCo4DIHpU4LUoBZ2jmmrv5Xd64floA4uyo5A=";
+    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-9fAkP2zV3OfyROdtvmS94ujpkGmlB0wGOaWS13LgJTM=";
-   };
-
-  # fix packaging.ParserSyntaxError, which can't handle comments
-  postPatch = ''
-    sed -i -e "s/ #.*$//g" requirements*.txt
-  '';
+    fetcherVersion = 1;
+    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
+  };
 
   pythonRelaxDeps = [
-    "tomlkit"
     "aiofiles"
     "markupsafe"
-    "pillow"
   ];
 
   pythonRemoveDeps = [
-    # our package is presented as a binary, not a python lib - and
     # this isn't a real runtime dependency
     "ruff"
   ];
@@ -124,10 +117,12 @@ buildPythonPackage rec {
     setuptools # needed for 'pkg_resources'
     aiofiles
     anyio
+    brotli
     diffusers
     fastapi
     ffmpy
     gradio-client
+    groovy
     httpx
     huggingface-hub
     importlib-resources
@@ -139,6 +134,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pillow
+    polars
     pydantic
     python-multipart
     pydub
@@ -157,17 +153,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
     altair
     boto3
-    gradio-pdf
+    brotli
+    docker
     ffmpeg
+    gradio-pdf
+    hypothesis
     ipython
+    mcp
     pytest-asyncio
+    pytestCheckHook
     respx
-    scikit-image
     # shap is needed as well, but breaks too often
+    scikit-image
     torch
     tqdm
     transformers
@@ -175,7 +174,10 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.oauth
+  ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
     pnpm build
@@ -189,116 +191,128 @@ buildPythonPackage rec {
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
-  preCheck =
-    ''
-      export HOME=$TMPDIR
-      cat ${./conftest-skip-network-errors.py} >> test/conftest.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # OSError: [Errno 24] Too many open files
-      ulimit -n 4096
-    '';
+  preCheck = ''
+    cat ${./conftest-skip-network-errors.py} >> test/conftest.py
+  ''
+  # OSError: [Errno 24] Too many open files
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ulimit -n 4096
+  '';
 
-  disabledTests =
-    [
-      # Actually broken
-      "test_mount_gradio_app"
-      "test_processing_utils_backwards_compatibility" # type error
+  disabledTests = [
+    # Actually broken
+    "test_mount_gradio_app"
+    "test_processing_utils_backwards_compatibility" # type error
 
-      # requires network, it caught our xfail exception
-      "test_error_analytics_successful"
+    # requires network, it caught our xfail exception
+    "test_error_analytics_successful"
 
-      # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
-      # These error only affect downstream use of the check dependencies.
-      "test_no_color"
-      "test_in_interface_as_output"
-      "test_should_warn_url_not_having_version"
+    # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
+    # These error only affect downstream use of the check dependencies.
+    "test_no_color"
+    "test_in_interface_as_output"
+    "test_should_warn_url_not_having_version"
 
-      # Flaky, unknown reason
-      "test_in_interface"
+    # Flaky, unknown reason
+    "test_in_interface"
 
-      # shap is too often broken in nixpkgs
-      "test_shapley_text"
+    # shap is too often broken in nixpkgs
+    "test_shapley_text"
 
-      # fails without network
-      "test_download_if_url_correct_parse"
-      "test_encode_url_to_base64_doesnt_encode_errors"
+    # fails without network
+    "test_download_if_url_correct_parse"
+    "test_encode_url_to_base64_doesnt_encode_errors"
 
-      # flaky: OSError: Cannot find empty port in range: 7860-7959
-      "test_docs_url"
-      "test_orjson_serialization"
-      "test_dataset_is_updated"
-      "test_multimodal_api"
-      "test_examples_keep_all_suffixes"
-      "test_progress_bar"
-      "test_progress_bar_track_tqdm"
-      "test_info_and_warning_alerts"
-      "test_info_isolation[True]"
-      "test_info_isolation[False]"
-      "test_examples_no_cache_optional_inputs"
-      "test_start_server[127.0.0.1]"
-      "test_start_server[[::1]]"
-      "test_single_request"
-      "test_all_status_messages"
-      "test_default_concurrency_limits[not_set-statuses0]"
-      "test_default_concurrency_limits[None-statuses1]"
-      "test_default_concurrency_limits[1-statuses2]"
-      "test_default_concurrency_limits[2-statuses3]"
-      "test_concurrency_limits"
+    # flaky: OSError: Cannot find empty port in range: 7860-7959
+    "test_docs_url"
+    "test_orjson_serialization"
+    "test_dataset_is_updated"
+    "test_multimodal_api"
+    "test_examples_keep_all_suffixes"
+    "test_progress_bar"
+    "test_progress_bar_track_tqdm"
+    "test_info_and_warning_alerts"
+    "test_info_isolation[True]"
+    "test_info_isolation[False]"
+    "test_examples_no_cache_optional_inputs"
+    "test_start_server[127.0.0.1]"
+    "test_start_server[[::1]]"
+    "test_single_request"
+    "test_all_status_messages"
+    "test_default_concurrency_limits[not_set-statuses0]"
+    "test_default_concurrency_limits[None-statuses1]"
+    "test_default_concurrency_limits[1-statuses2]"
+    "test_default_concurrency_limits[2-statuses3]"
+    "test_concurrency_limits"
 
-      # tests if pip and other tools are installed
-      "test_get_executable_path"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # flaky on darwin (depend on port availability)
-      "test_all_status_messages"
-      "test_async_generators"
-      "test_async_generators_interface"
-      "test_async_iterator_update_with_new_component"
-      "test_concurrency_limits"
-      "test_default_concurrency_limits"
-      "test_default_flagging_callback"
-      "test_end_to_end"
-      "test_end_to_end_cache_examples"
-      "test_event_data"
-      "test_every_does_not_block_queue"
-      "test_example_caching_relaunch"
-      "test_example_caching_relaunch"
-      "test_exit_called_at_launch"
-      "test_file_component_uploads"
-      "test_files_saved_as_file_paths"
-      "test_flagging_does_not_create_unnecessary_directories"
-      "test_flagging_no_permission_error_with_flagging_disabled"
-      "test_info_and_warning_alerts"
-      "test_info_isolation"
-      "test_launch_analytics_does_not_error_with_invalid_blocks"
-      "test_no_empty_audio_files"
-      "test_no_empty_image_files"
-      "test_no_empty_video_files"
-      "test_non_streaming_api"
-      "test_non_streaming_api_async"
-      "test_pil_images_hashed"
-      "test_progress_bar"
-      "test_progress_bar_track_tqdm"
-      "test_queue_when_using_auth"
-      "test_restart_after_close"
-      "test_set_share_in_colab"
-      "test_show_error"
-      "test_simple_csv_flagging_callback"
-      "test_single_request"
-      "test_socket_reuse"
-      "test_start_server"
-      "test_state_holder_is_used_in_postprocess"
-      "test_state_stored_up_to_capacity"
-      "test_static_files_single_app"
-      "test_streaming_api"
-      "test_streaming_api_async"
-      "test_streaming_api_with_additional_inputs"
-      "test_sync_generators"
-      "test_time_to_live_and_delete_callback_for_state"
-      "test_updates_stored_up_to_capacity"
-      "test_varying_output_forms_with_generators"
-    ];
+    # tests if pip and other tools are installed
+    "test_get_executable_path"
+
+    # Flaky test (AssertionError when comparing to a fixed array)
+    # https://github.com/gradio-app/gradio/issues/11620
+    "test_auto_datatype"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+    "test_component_example_values"
+    "test_component_functions"
+    "test_public_request_pass"
+
+    # Failed: DID NOT RAISE <class 'ValueError'>
+    # test.conftest.NixNetworkAccessDeniedError
+    "test_private_request_fail"
+    "test_theme_builder_launches"
+
+    # flaky on darwin (depend on port availability)
+    "test_all_status_messages"
+    "test_async_generators"
+    "test_async_generators_interface"
+    "test_async_iterator_update_with_new_component"
+    "test_concurrency_limits"
+    "test_default_concurrency_limits"
+    "test_default_flagging_callback"
+    "test_end_to_end"
+    "test_end_to_end_cache_examples"
+    "test_event_data"
+    "test_every_does_not_block_queue"
+    "test_example_caching_relaunch"
+    "test_example_caching_relaunch"
+    "test_exit_called_at_launch"
+    "test_file_component_uploads"
+    "test_files_saved_as_file_paths"
+    "test_flagging_does_not_create_unnecessary_directories"
+    "test_flagging_no_permission_error_with_flagging_disabled"
+    "test_info_and_warning_alerts"
+    "test_info_isolation"
+    "test_launch_analytics_does_not_error_with_invalid_blocks"
+    "test_no_empty_audio_files"
+    "test_no_empty_image_files"
+    "test_no_empty_video_files"
+    "test_non_streaming_api"
+    "test_non_streaming_api_async"
+    "test_pil_images_hashed"
+    "test_progress_bar"
+    "test_progress_bar_track_tqdm"
+    "test_queue_when_using_auth"
+    "test_restart_after_close"
+    "test_set_share_in_colab"
+    "test_show_error"
+    "test_simple_csv_flagging_callback"
+    "test_single_request"
+    "test_socket_reuse"
+    "test_start_server"
+    "test_state_holder_is_used_in_postprocess"
+    "test_state_stored_up_to_capacity"
+    "test_static_files_single_app"
+    "test_streaming_api"
+    "test_streaming_api_async"
+    "test_streaming_api_with_additional_inputs"
+    "test_sync_generators"
+    "test_time_to_live_and_delete_callback_for_state"
+    "test_updates_stored_up_to_capacity"
+    "test_varying_output_forms_with_generators"
+  ];
+
   disabledTestPaths = [
     # 100% touches network
     "test/test_networking.py"
@@ -308,16 +322,24 @@ buildPythonPackage rec {
 
     # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
+
+    # No module named build.__main__; 'build' is a package and cannot be directly executed
+    "test/test_docker/test_reverse_proxy/test_reverse_proxy.py"
+    "test/test_docker/test_reverse_proxy_fastapi_mount/test_reverse_proxy_fastapi_mount.py"
+    "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
-  pytestFlagsArray = [
+
+  disabledTestMarks = [
+    "flaky"
+  ];
+
+  pytestFlags = [
     "-x" # abort on first failure
-    "-m 'not flaky'"
-    #"-W" "ignore" # uncomment for debugging help
+    #"-Wignore" # uncomment for debugging help
   ];
 
   # check the binary works outside the build env
-  doInstallCheck = true;
-  postInstallCheck = ''
+  postCheck = ''
     env --ignore-environment $out/bin/gradio environment >/dev/null
   '';
 

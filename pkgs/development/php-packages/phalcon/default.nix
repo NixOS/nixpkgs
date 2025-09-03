@@ -9,13 +9,13 @@
 
 buildPecl rec {
   pname = "phalcon";
-  version = "5.8.0";
+  version = "5.9.3";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
     rev = "v${version}";
-    hash = "sha256-Jgl/sBWgP4N4rYloaGn78T6XWF/yTYYCsSC9Q6gD6Wg=";
+    hash = "sha256-1+8+kIaKvgQCE+qvZOkYOW/RdDv4ln0njC5VzL9jvnQ=";
   };
 
   internalDeps = [
@@ -36,7 +36,7 @@ buildPecl rec {
     description = "Phalcon is a full stack PHP framework offering low resource consumption and high performance";
     license = licenses.bsd3;
     homepage = "https://phalcon.io";
-    maintainers = teams.php.members ++ [ maintainers.krzaczek ];
-    broken = lib.versionAtLeast php.version "8.4";
+    maintainers = [ maintainers.krzaczek ];
+    teams = [ teams.php ];
   };
 }
