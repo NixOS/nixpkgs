@@ -1612,6 +1612,8 @@ let
         };
       };
 
+      elijah-potter.harper = callPackage ./elijah-potter.harper { };
+
       elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
