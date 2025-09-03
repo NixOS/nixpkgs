@@ -198,7 +198,7 @@ stdenv.mkDerivation (
             }
           )
       ++
-        lib.optional (lib.versionAtLeast release_version "12" && lib.versionOlder release_version "19")
+        lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
           #   https://github.com/llvm/llvm-project/pull/101761
           (
