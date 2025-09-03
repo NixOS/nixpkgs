@@ -853,7 +853,7 @@ let
           else
             null;
 
-        janeStreet =
+        janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
             import ../development/ocaml-modules/janestreet/0.17.nix {
               inherit self;
@@ -910,7 +910,8 @@ let
             }
           else
             import ../development/ocaml-modules/janestreet {
-            };
+            }
+        );
 
         janeStreet_0_15 =
           (lib.makeScope self.newScope (
