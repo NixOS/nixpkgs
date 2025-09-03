@@ -757,9 +757,9 @@
   },
   "neon": {
     "pname": "neon",
-    "version": "1.0.0b4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/neon-1.0.0b4-py3-none-any.whl",
-    "hash": "sha256-iak+Dt5UD+YpVO1mQzatzIYybEyVIZaRabL0Jbgr17M=",
+    "version": "1.0.0b6",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/neon-1.0.0b6-py3-none-any.whl",
+    "hash": "sha256-qCyfYQIDoZo8l1bPYDJsLTFfBQJEi7/FyNL6jmS1tTc=",
     "description": "Microsoft Azure Command-Line Tools Neon Extension"
   },
   "network-analytics": {
