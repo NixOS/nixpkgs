@@ -12,14 +12,14 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V+JYWoZclA4agfqXl3oUhxdTlJXeuO3JQIPfqu2idy0=";
   };
 
   vendorHash = "sha256-hr+xIfPjlrH9igRsYeqNOPgx/jWhDfu73gA+/NoWWxI=";
 
   ldflags = [
-    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
+    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.tag}'"
   ];
 
   subPackages = [ "cmd/spicedb" ];
@@ -34,6 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/authzed/spicedb/releases/tag/${src.tag}";
     description = "Open source permission database";
     longDescription = ''
       SpiceDB is an open-source permissions database inspired by
