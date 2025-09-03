@@ -62,6 +62,7 @@ rec {
       withSeccomp ? stdenv.hostPlatform.isLinux,
       libseccomp,
       knownVulnerabilities ? [ ],
+      versionCheckHook,
     }:
     let
       docker-meta = {
@@ -342,6 +343,10 @@ rec {
         + ''
           runHook postInstall
         '';
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [ versionCheckHook ];
+        versionCheckProgramArg = "--version";
 
         passthru = {
           # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
