@@ -1,34 +1,33 @@
 {
   stdenv,
   lib,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
   fio,
   cmake,
-  polkit-qt-1,
   extra-cmake-modules,
+  kdePackages,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kdiskmark";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-b42PNUrG10RyGct6dPtdT89oO222tEovkSPoRcROfaQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ (with kdePackages; [
     extra-cmake-modules
     wrapQtAppsHook
-  ];
+  ]);
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
     qtbase
     qttools
     polkit-qt-1
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     (lib.makeBinPath [ fio ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HDD and SSD benchmark tool with a friendly graphical user interface";
     longDescription = ''
       If kdiskmark is not run as root it can rely on polkit to get the necessary
@@ -54,9 +53,9 @@ stdenv.mkDerivation rec {
       on NixOS, nix-env will not work.
     '';
     homepage = "https://github.com/JonMagon/KDiskMark";
-    maintainers = [ maintainers.symphorien ];
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ symphorien ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     mainProgram = "kdiskmark";
   };
-}
+})

@@ -3306,8 +3306,6 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  kdiskmark = kdePackages.callPackage ../tools/filesystems/kdiskmark { };
-
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
   keybase = callPackage ../tools/security/keybase { };
@@ -3463,8 +3461,6 @@ with pkgs;
   nodePackages = recurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
-
-  ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
 
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
@@ -11024,10 +11020,6 @@ with pkgs;
   */
   inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
 
-  kde-rounded-corners =
-    kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
-      { };
-
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
     inherit (plasma5Packages) breeze-icons;
     inherit (pantheon) elementary-icon-theme;
@@ -11157,8 +11149,6 @@ with pkgs;
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
-
-  whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
   xkeyboard_config = xkeyboard-config;
 
@@ -13110,10 +13100,6 @@ with pkgs;
     syncthing-relay
     ;
 
-  syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
-    # renamed in KF5 -> KF6
-    plasma-framework = kdePackages.libplasma;
-  };
   syncthingtray-minimal = syncthingtray.override {
     webviewSupport = false;
     jsSupport = false;
@@ -13860,8 +13846,6 @@ with pkgs;
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
-
-  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
