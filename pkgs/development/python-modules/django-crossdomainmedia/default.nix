@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "django-crossdomainmedia";
-  version = "0.0.4";
+  version = "0.0.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
