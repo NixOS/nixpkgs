@@ -145,11 +145,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    install -Dm755 opencode $out/bin/opencode
+        install -Dm755 opencode $out/bin/.opencode-unwrapped
 
-    runHook postInstall
+        # Create wrapper script that adds -- when no arguments provided
+        cat > $out/bin/opencode << EOF
+    #!/bin/bash
+    if [ \$# -eq 0 ]; then
+        exec "$out/bin/.opencode-unwrapped" --
+    else
+        exec "$out/bin/.opencode-unwrapped" "\$@"
+    fi
+    EOF
+        chmod +x $out/bin/opencode
+
+        runHook postInstall
   '';
 
   # Execution of commands using bash-tool fail on linux with
