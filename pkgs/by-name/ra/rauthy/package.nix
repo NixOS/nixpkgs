@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
 
   cargoPatches = [
     # otherwise it tries to download swagger-ui at build time
-    ./0002-enable-vendored-feature-for-utoipa-swagger-ui.patch
+    ./0001-enable-vendored-feature-for-utoipa-swagger-ui.patch
   ];
 
   cargoHash = "sha256-fp/6rT0ulqy0D/QHHEq+on8P6ImDhZx61ukuGCogzys=";

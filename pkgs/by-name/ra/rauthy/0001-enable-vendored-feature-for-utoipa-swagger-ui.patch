@@ -1,7 +1,7 @@
-From f8ad40d368a0732732948b965d3ea9b57b0bfd5f Mon Sep 17 00:00:00 2001
+From c0297740c3112878c28cceb2dd7d3924dff1079c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
-Date: Mon, 1 Sep 2025 23:39:25 +0200
-Subject: [PATCH 2/2] enable vendored feature for utoipa-swagger-ui
+Date: Wed, 3 Sep 2025 22:40:59 +0200
+Subject: [PATCH] enable vendored feature for utoipa-swagger-ui
 
 ---
  Cargo.lock | 7 +++++++
@@ -9,10 +9,10 @@ Subject: [PATCH 2/2] enable vendored feature for utoipa-swagger-ui
  2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/Cargo.lock b/Cargo.lock
-index c9d6fa9a..dcdcf124 100644
+index 08c5aa5c..db45b6cd 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -6340,9 +6340,16 @@ dependencies = [
+@@ -5972,9 +5972,16 @@ dependencies = [
   "serde_json",
   "url",
   "utoipa",
@@ -28,14 +28,14 @@ index c9d6fa9a..dcdcf124 100644
 +
  [[package]]
  name = "uuid"
- version = "1.15.1"
+ version = "1.16.0"
 diff --git a/Cargo.toml b/Cargo.toml
-index d5844524..05892391 100644
+index f1ef5502..3d52117f 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -110,7 +110,7 @@ tracing = { version = "0.1", features = ["attributes"] }
- tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "tracing"] }
- tokio = { version = "1", features = ["full"] }
+@@ -115,7 +115,7 @@ tokio = { version = "1", features = ["full"] }
+ tokio-postgres = { version = "0.7.10", features = ["with-chrono-0_4"] }
+ tokio-postgres-rustls = { version = "0.13", features = [] }
  utoipa = { version = "5", features = ["actix_extras", "chrono", "openapi_extensions"] }
 -utoipa-swagger-ui = { version = "9.0.0", features = ["actix-web"] }
 +utoipa-swagger-ui = { version = "9.0.0", features = ["actix-web", "vendored"] }
