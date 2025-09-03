@@ -163,17 +163,23 @@ let
             --wait \
             --collect \
             --service-type=exec \
+            --setenv OC_PASS \
+            --setenv NC_PASS \
             --quiet \
             ${command}
         elif [[ "$USER" != nextcloud ]]; then
           if [[ -x /run/wrappers/bin/sudo ]]; then
             exec /run/wrappers/bin/sudo \
               --preserve-env=CREDENTIALS_DIRECTORY \
+              --preserve-env=OC_PASS \
+              --preserve-env=NC_PASS \
               --user=nextcloud \
               ${command}
           else
             exec ${lib.getExe' pkgs.util-linux "runuser"} \
               --whitelist-environment=CREDENTIALS_DIRECTORY \
+              --whitelist-environment=OC_PASS \
+              --whitelist-environment=NC_PASS \
               --user=nextcloud \
               ${command}
           fi
