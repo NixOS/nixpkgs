@@ -65,21 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-      (lib.cmakeBool "WITH_BENCHMARK" false)
-      (lib.cmakeBool "WITH_OTLP_HTTP" enableHttp)
-      (lib.cmakeBool "WITH_OTLP_GRPC" enableGrpc)
-      (lib.cmakeBool "WITH_PROMETHEUS" enablePrometheus)
-      (lib.cmakeBool "WITH_ELASTICSEARCH" enableElasticSearch)
-      (lib.cmakeBool "WITH_ZIPKIN" enableZipkin)
-      (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
-    ]
-    ++ lib.optionals (cxxStandard != null) [
-      (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-      (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "WITH_BENCHMARK" false)
+    (lib.cmakeBool "WITH_OTLP_HTTP" enableHttp)
+    (lib.cmakeBool "WITH_OTLP_GRPC" enableGrpc)
+    (lib.cmakeBool "WITH_PROMETHEUS" enablePrometheus)
+    (lib.cmakeBool "WITH_ELASTICSEARCH" enableElasticSearch)
+    (lib.cmakeBool "WITH_ZIPKIN" enableZipkin)
+    (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
+  ]
+  ++ lib.optionals (cxxStandard != null) [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
+    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+  ];
 
   outputs = [
     "out"
