@@ -231,7 +231,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
-    license = "nethack";
+    license = lib.licenses.ngpl;
     platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = [ ];
     mainProgram = "nethack";
