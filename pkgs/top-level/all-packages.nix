@@ -10981,7 +10981,8 @@ with pkgs;
   font-awesome_4 = (callPackage ../data/fonts/font-awesome { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome { }).v5;
   font-awesome_6 = (callPackage ../data/fonts/font-awesome { }).v6;
-  font-awesome = font-awesome_6;
+  font-awesome_7 = (callPackage ../data/fonts/font-awesome { }).v7;
+  font-awesome = font-awesome_7;
 
   palenight-theme = callPackage ../data/themes/gtk-theme-framework { theme = "palenight"; };
 
