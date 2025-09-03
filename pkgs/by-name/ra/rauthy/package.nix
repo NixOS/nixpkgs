@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "0.30.0";
+  version = "0.29.4";
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${version}";
-    hash = "sha256-zmzo1GMy+5lUr53PhVqAdYQHMEPqBAp6M2SPocIMER0=";
+    hash = "sha256-+k5t4CTVFFmWKoCdkN2t4jK/uDI+HcM6LuButdUzBa4=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     ./0001-enable-vendored-feature-for-utoipa-swagger-ui.patch
   ];
 
-  cargoHash = "sha256-hOBmyo4Jwmnbv1Eywepn6lJbUfonUSvDzxKOGY1yTM0=";
+  cargoHash = "sha256-l/rByM1QxBY4mTXKtR9bKaL+xrHmLluxKOUuyR1moek=";
 
   ROCKSDB_INCLUDE_DIR = "${rocksdb_9_10}/include";
   ROCKSDB_LIB_DIR = "${rocksdb_9_10}/lib";
