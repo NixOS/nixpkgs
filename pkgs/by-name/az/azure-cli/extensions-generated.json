@@ -874,6 +874,13 @@
     "hash": "sha256-mqrXcCKvAEqWOzQZrBDSM4IO81Jduen2+fx5fhqFmtY=",
     "description": "Microsoft Azure Command-Line Tools ProviderHub Extension"
   },
+  "pscloud": {
+    "pname": "pscloud",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/pscloud-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-aIobuwrf1z72gUzYZLLIzk1mRrsbIfWlxgpfJ+1n20U=",
+    "description": "Microsoft Azure Command-Line Tools Pscloud Extension"
+  },
   "purview": {
     "pname": "purview",
     "version": "0.1.0",
