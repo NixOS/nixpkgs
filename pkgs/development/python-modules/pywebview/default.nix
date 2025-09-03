@@ -9,6 +9,12 @@
   qtpy,
   six,
   typing-extensions,
+  stdenv,
+  pyobjc-core,
+  pyobjc-framework-Cocoa,
+  pyobjc-framework-Quartz,
+  pyobjc-framework-Security,
+  pyobjc-framework-WebKit,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +38,13 @@ buildPythonPackage rec {
     qtpy
     six
     typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+    pyobjc-framework-Quartz
+    pyobjc-framework-Security
+    pyobjc-framework-WebKit
   ];
 
   pythonImportsCheck = [ "webview" ];
