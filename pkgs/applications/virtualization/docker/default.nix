@@ -43,7 +43,7 @@ rec {
       iptables,
       e2fsprogs,
       xz,
-      util-linux,
+      util-linuxMinimal,
       xfsprogs,
       gitMinimal,
       procps,
@@ -175,7 +175,7 @@ rec {
               xz
               xfsprogs
               procps
-              util-linux
+              util-linuxMinimal
               gitMinimal
             ]
           );
