@@ -3100,6 +3100,12 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
 
+  # 2025-09-03: allow QuickCheck 2.15, containers 0.7, filepath 1.5, witch 1.3
+  hevm = lib.pipe super.hevm [
+    (warnAfterVersion "0.55.1")
+    doJailbreak
+  ];
+
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
