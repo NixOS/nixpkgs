@@ -683,7 +683,7 @@ stdenvNoCC.mkDerivation {
     #
     # Unfortunately, setting -B appears to override the default search
     # path. Thus, the gcc-specific "../includes-fixed" directory is
-    # now longer searched and glibc's <limits.h> header fails to
+    # no longer searched and glibc's <limits.h> header fails to
     # compile, because it uses "#include_next <limits.h>" to find the
     # limits.h file in ../includes-fixed. To remedy the problem,
     # another -idirafter is necessary to add that directory again.
