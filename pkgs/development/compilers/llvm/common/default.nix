@@ -456,6 +456,7 @@ let
           extraPackages = [ ];
           extraBuildCommands = mkExtraBuildCommands0 cc;
         }
+        # FIXME: This should be inside the `wrapCCWith` call.
         // lib.optionalAttrs (
           lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
         ) { nixSupport.cc-cflags = [ "-fno-exceptions" ]; };
