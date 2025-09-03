@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional withSystemd systemd;
+  buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemd ];
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-modern-top"
     "--enable-watch8bit"
   ]
-  ++ lib.optional withSystemd "--with-systemd"
-  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-w"
+  ++ lib.optionals withSystemd [ "--with-systemd" ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ "--disable-w" ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
