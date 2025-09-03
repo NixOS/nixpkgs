@@ -5849,6 +5849,12 @@
     github = "DavHau";
     githubId = 42246742;
   };
+  daviaaze = {
+    email = "daviaaze@gmail.com";
+    github = "daviaaze";
+    githubId = 22331100;
+    name = "Davi Azevedo";
+  };
   david-hamelin = {
     email = "david.hamelin@outlook.fr";
     github = "HamelinDavid";
