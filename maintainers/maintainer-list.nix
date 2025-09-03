@@ -9138,10 +9138,6 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
-  gm6k = {
-    email = "nix@quidecco.pl";
-    name = "Isidor Zeuner";
-  };
   gmacon = {
     name = "George Macon";
     matrix = "@gmacon:matrix.org";
@@ -18961,12 +18957,6 @@
     name = "Michael Bergmeister";
     githubId = 53442728;
   };
-  paveloom = {
-    email = "contact@paveloom.dev";
-    github = "paveloom";
-    githubId = 49961859;
-    name = "Pavel Sobolev";
-  };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";
     github = "pawelchcki";
@@ -25104,6 +25094,8 @@
   };
   tomkoid = {
     email = "tomaszierl@outlook.com";
+    github = "tomkoid";
+    githubId = 67477750;
     name = "Tomkoid";
   };
   Tommimon = {

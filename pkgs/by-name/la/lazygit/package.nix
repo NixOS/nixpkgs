@@ -45,7 +45,6 @@ buildGoModule rec {
       Br1ght0ne
       equirosa
       khaneliman
-      paveloom
       starsep
       sigmasquadron
     ];

@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { lib, ... }:
   {
     name = "flaresolverr";
-    meta.maintainers = with lib.maintainers; [ paveloom ];
+    meta.maintainers = with lib.maintainers; [ ];
 
     nodes.machine =
       { pkgs, ... }:
