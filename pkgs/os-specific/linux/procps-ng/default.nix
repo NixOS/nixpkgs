@@ -54,8 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = lib.optionalString watchOnly ''
+    runHooks preInstall
+
     install -m 0755 -D src/watch $out/bin/watch
     install -m 0644 -D man/watch.1 $out/share/man/man1/watch.1
+
+    runHooks postInstall
   '';
 
   # no obvious exec in documented arguments; haven't trawled source
