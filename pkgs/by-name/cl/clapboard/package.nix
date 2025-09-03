@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "clapboard";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "clapboard";
     rev = "v${version}";
-    hash = "sha256-TM07BcluIh+MEcVg1ApZu85rj36ZBUfn125A0eALNMo=";
+    hash = "sha256-1y2tG4ajnsstNkPTE3eBr8QJJF6Qq/HCQzJoj1ETuUY=";
   };
 
-  cargoHash = "sha256-uPMaw36y9773LTu02muLot8I42VM2GE/MJSAHClLNgs=";
+  cargoHash = "sha256-DEwipAG/zPPftYwYahRJfpXgHPXerGdn10PkS8DHWCM=";
 
   meta = with lib; {
     description = "Wayland clipboard manager that will make you clap";
