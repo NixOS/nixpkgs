@@ -5239,8 +5239,6 @@ with pkgs;
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );
 
-  spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
-
   tamarin-prover = (
     callPackage ../applications/science/logic/tamarin-prover {
       # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
