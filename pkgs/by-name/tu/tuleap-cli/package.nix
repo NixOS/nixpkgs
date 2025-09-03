@@ -3,20 +3,21 @@
   buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
   pname = "tuleap-cli";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "csgroup-oss";
     repo = "tuleap-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hL0mGWXzvHYFc8u4RXCDys3Fe/cgsGljfhSkPAjzt4o=";
+    tag = version;
+    hash = "sha256-qiQnu167BIF+LzwahheBE0KwxFmRcahdU7quTpPtEEk=";
   };
 
-  vendorHash = "sha256-N9Hmxw/70Cgc790AVRn7lmuhMtDhI94CTUlqHU4VbaY=";
+  vendorHash = "sha256-cO7+wG4uAd9e6n/KWQPYepixNmXBbuBxagT82hcbcIo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tuleap-cli \
       --bash <($out/bin/tuleap-cli -s tuleap.example.com completion bash) \
       --fish <($out/bin/tuleap-cli -s tuleap.example.com completion fish) \

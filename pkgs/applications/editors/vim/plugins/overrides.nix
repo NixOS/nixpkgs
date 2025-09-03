@@ -2912,14 +2912,6 @@ assertNoAdditions {
     ];
   });
 
-  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
-    dependencies = [ gperf ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ fredeb ];
-    };
-  });
-
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)

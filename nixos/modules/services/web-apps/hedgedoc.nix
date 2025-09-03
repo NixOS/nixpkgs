@@ -262,7 +262,7 @@ in
         viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
       };
 
-      nginx = lib.mkIf cfg.configureNginx.enable {
+      nginx = lib.mkIf cfg.configureNginx {
         enable = true;
         upstreams.hedgedoc.servers."unix:${config.services.hedgedoc.settings.path}" = { };
         virtualHosts."${cfg.settings.domain}" = {

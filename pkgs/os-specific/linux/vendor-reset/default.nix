@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   lib,
 }:
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

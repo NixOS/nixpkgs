@@ -514,7 +514,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
+          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libfontmanager}.so
           rm $out/lib/openjdk/jre/bin/policytool
           rm $out/lib/openjdk/bin/{policytool,appletviewer}
         ''
