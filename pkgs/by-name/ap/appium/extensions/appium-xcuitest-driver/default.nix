@@ -1,20 +1,23 @@
-{ buildNpmPackage, fetchFromGitHub, jq }:
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  jq,
+}:
 
 buildNpmPackage rec {
   pname = "appium-xcuitest-driver";
   packageName = pname;
-  version = "8.4.3";
+  version = "10.0.5";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-w2Uk4SjikU+kkEZfRA5pE49shOImTQWMktcUQwC/Ym8=";
+    hash = "sha256-uYicjH+UyKfBvq7iYmwIcaB25Xof17COylquLssEoa8=";
   };
-  npmDepsHash = "sha256-bxM/HtKCJgmXA6dBhkiGT7r3TMfmVgO6JiqzMwH/ngs=";
+  npmDepsHash = "sha256-z5V1jbvPI0mQ4UeGUpheoJraP5+EKr0rrWJXIrNS118=";
 
   postPatch = ''
-    # export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
     cp ${./package-lock.json} package-lock.json
     ${jq}/bin/jq 'del(.bin)' < package.json > package.json.patched && mv package.json.patched package.json
   '';
