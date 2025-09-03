@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Need to explicitly link to brotlicommon
-  patches = lib.optional static ./brotli-static.patch;
+  patches = lib.optional static ./brotli-static.patch ++ [ ./gcc15.patch ];
 
   nativeBuildInputs = [
     cmake
