@@ -51,10 +51,10 @@ stdenv.mkDerivation {
       $out/bin/nvidia-persistenced
   '';
 
-  meta = with lib; {
-    homepage = "https://www.nvidia.com/object/unix.html";
-    description = "Settings application for NVIDIA graphics cards";
-    license = licenses.unfreeRedistributable;
+  meta = {
+    homepage = "https://github.com/NVIDIA/nvidia-persistenced";
+    description = "NVIDIA driver persistence daemon";
+    license = lib.licenses.mit;
     platforms = nvidia_x11.meta.platforms;
     maintainers = [ ];
     mainProgram = "nvidia-persistenced";
