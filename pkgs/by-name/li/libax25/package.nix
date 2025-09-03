@@ -6,7 +6,7 @@
   glibc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libax25";
   version = "0.0.12-rc5";
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sarcasticadmin ];
     platforms = platforms.linux;
   };
-}
+})
