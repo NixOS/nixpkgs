@@ -1,56 +1,65 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  gradle,
   jre,
   makeWrapper,
   jdk,
-  git,
   makeDesktopItem,
   copyDesktopItems,
+  fetchzip,
+  fetchurl,
 }:
+let
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/hrehfeld/QuakeInjector/b741bae9904acbf2e18cdb1ca8e71a12e7d416cf/src/main/resources/Inject2_256.png";
+    hash = "sha256-769YoSJ52+BTk7s+wh4oOyHwPPrR7AeOxCS58CdQ93s=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "quake-injector";
-  version = "06";
+  version = "07";
 
-  src = fetchFromGitHub {
-    owner = "hrehfeld";
-    repo = "QuakeInjector";
-    tag = "alpha${finalAttrs.version}";
-    hash = "sha256-bbvLp5/Grg+mXBuV5aJCMOSjFp1+ukZS+AivcbhBxHU=";
+  src = fetchzip {
+    url = "https://github.com/hrehfeld/QuakeInjector/releases/download/alpha${finalAttrs.version}/QuakeInjector-alpha${finalAttrs.version}.zip";
+    hash = "sha256-Lixac9K3+9j7QvprZGzhnYuvlJV9V+ja4EipygELkWA=";
   };
 
   nativeBuildInputs = [
-    gradle
     makeWrapper
-    git
     copyDesktopItems
   ];
 
-  mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
-    data = ./deps.json;
-  };
+  installPhase =
+    let
+      # Explicit needed JAR filenames
+      filenames = [
+        "QuakeInjector-alpha${finalAttrs.version}.jar"
+        "BrowserLauncher2-1.3.jar"
+        "jackson-annotations-2.13.3.jar"
+        "jackson-core-2.13.3.jar"
+        "jackson-databind-2.13.3.jar"
+      ];
 
-  __darwinAllowLocalNetworking = true;
+      mkClasspath = prefix: lib.concatMapStringsSep ":" (filename: "${prefix}/${filename}") filenames;
+      classpath = mkClasspath "$out/share/quake-injector";
+    in
+    ''
+      runHook preInstall
 
-  doCheck = true;
+      mkdir -p $out/{bin,share/quake-injector}
+      cp lib/*.jar $out/share/quake-injector
 
-  installPhase = ''
-    runHook preInstall
+      mkdir -p $out/share/icons/hicolor/256x256/apps
+      cp ${icon} $out/share/icons/hicolor/256x256/apps/quake-injector.png
 
-    mkdir -p $out/{bin,share/quake-injector}
-    cp build/libs/QuakeInjector.jar $out/share/quake-injector
+      makeWrapper ${jre}/bin/java $out/bin/quake-injector \
+        --add-flags "-classpath ${classpath} de.haukerehfeld.quakeinjector.QuakeInjector"
 
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-    cp src/main/resources/Inject2_256.png $out/share/icons/hicolor/256x256/apps/quake-injector.png
+      runHook postInstall
+    '';
 
-    makeWrapper ${jre}/bin/java $out/bin/quake-injector \
-      --add-flags "-jar $out/share/quake-injector/QuakeInjector.jar"
-
-    runHook postInstall
-  '';
+  # There are no tests.
+  doCheck = false;
 
   desktopItems = [
     (makeDesktopItem {
@@ -71,9 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "quake-injector";
     platforms = jdk.meta.platforms;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryBytecode # mitm cache
-    ];
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 })

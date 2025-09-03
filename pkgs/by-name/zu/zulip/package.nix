@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "zulip";
-  version = "5.12.1";
+  version = "5.12.2";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${version}";
-    hash = "sha256-YuiPf/ciSm0nBlF8U55EkPSTz+RI148QKOFv6FmYRD0=";
+    hash = "sha256-+OS3Fw4Z1ZOzXou1sK39AUFLI78nUl4UBVYA3SNH7I0=";
   };
 
-  npmDepsHash = "sha256-RNXhDV0b1FZglIS5UsTn6YboJ4Au1/CZVtRz1BvcP2E=";
+  npmDepsHash = "sha256-5qjBZfl9kse97y5Mru4RF4RLTbojoXeUp84I/bOHEcw=";
   makeCacheWritable = true;
 
   env = {

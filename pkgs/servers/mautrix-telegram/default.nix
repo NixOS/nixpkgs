@@ -17,6 +17,7 @@ let
           inherit pname version;
           hash = "sha256-ewqc6s5xXquZJTZVBsFmHeamBLDw6PnTSNcmTNKD0sk=";
         };
+        patches = [ ];
         doCheck = false;
       });
     };

@@ -10441,7 +10441,8 @@ with pkgs;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
-  libkrun-sev = libkrun.override { sevVariant = true; };
+  libkrun-sev = libkrun.override { variant = "sev"; };
+  libkrun-tdx = libkrun.override { variant = "tdx"; };
 
   linthesia = callPackage ../games/linthesia/default.nix { };
 
