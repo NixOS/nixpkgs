@@ -23,7 +23,7 @@ rec {
       fetchFromGitHub,
       fetchpatch,
       buildGoModule,
-      makeWrapper,
+      makeBinaryWrapper,
       installShellFiles,
       pkg-config,
       glibc,
@@ -153,7 +153,7 @@ rec {
           vendorHash = null;
 
           nativeBuildInputs = [
-            makeWrapper
+            makeBinaryWrapper
             pkg-config
             go-md2man
             go
@@ -273,7 +273,7 @@ rec {
         vendorHash = null;
 
         nativeBuildInputs = [
-          makeWrapper
+          makeBinaryWrapper
           pkg-config
           go-md2man
           go
