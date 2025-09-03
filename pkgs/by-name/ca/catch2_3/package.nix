@@ -8,14 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.8.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
-    rev = "v${version}";
-    hash = "sha256-blhSdtNXwe4wKPVKlopsE0omgikMdl12JjwqASwJM2w=";
+    tag = "v${version}";
+    hash = "sha256-mkNdjbnSf8bprZ9QMYTlfMM4KBPH0v7njWzqUF/jk84=";
   };
+
+  postPatch = ''
+    substituteInPlace CMake/*.pc.in \
+      --replace-fail "\''${prefix}/" ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
     homepage = "https://github.com/catchorg/Catch2";
-    changelog = "https://github.com/catchorg/Catch2/blob/${src.rev}/docs/release-notes.md";
+    changelog = "https://github.com/catchorg/Catch2/blob/${src.tag}/docs/release-notes.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; unix ++ windows;
