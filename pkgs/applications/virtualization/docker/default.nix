@@ -82,7 +82,7 @@ rec {
         src = fetchFromGitHub {
           owner = "opencontainers";
           repo = "runc";
-          rev = runcRev;
+          tag = runcRev;
           hash = runcHash;
         };
 
@@ -104,7 +104,7 @@ rec {
         src = fetchFromGitHub {
           owner = "containerd";
           repo = "containerd";
-          rev = containerdRev;
+          tag = containerdRev;
           hash = containerdHash;
         };
 
@@ -121,7 +121,7 @@ rec {
         src = fetchFromGitHub {
           owner = "krallin";
           repo = "tini";
-          rev = tiniRev;
+          tag = tiniRev;
           hash = tiniHash;
         };
 
@@ -139,7 +139,7 @@ rec {
       moby-src = fetchFromGitHub {
         owner = "moby";
         repo = "moby";
-        rev = mobyRev;
+        tag = mobyRev;
         hash = mobyHash;
       };
 
@@ -266,6 +266,8 @@ rec {
         src = fetchFromGitHub {
           owner = "docker";
           repo = "cli";
+          # Cannot use `tag` since upstream forgot to tag release, see
+          # https://github.com/docker/cli/issues/5789
           rev = cliRev;
           hash = cliHash;
         };
