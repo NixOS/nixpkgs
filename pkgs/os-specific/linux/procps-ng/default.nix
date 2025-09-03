@@ -8,8 +8,8 @@
 
   # `ps` with systemd support is able to properly report different
   # attributes like unit name, so we want to have it on linux.
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 
   # procps is mostly Linux-only. Most commands require a running Linux
   # system (or very similar like that found in Cygwin). The one
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemd ];
+  buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
