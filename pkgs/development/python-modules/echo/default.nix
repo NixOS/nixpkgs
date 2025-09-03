@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -10,6 +11,7 @@
   qt6,
   qtpy,
   pyqt6,
+  mesa,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -48,11 +50,14 @@ buildPythonPackage rec {
     qtpy
   ];
 
-  # collecting ... qt.qpa.xcb: could not connect to display
-  # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
-  doCheck = false;
+  doCheck = lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook;
+
+  preCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+  '';
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook
     pytestCheckHook
     pytest-cov-stub
   ];
