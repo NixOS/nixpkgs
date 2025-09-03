@@ -24,7 +24,7 @@ def ensure_version_valid(version):
   Ensure a version string is a valid Julia-parsable version.
   It doesn't really matter what it looks like as it's just used for overrides.
   """
-  return re.sub('[^0-9\.]','', version)
+  return re.sub('[^0-9.]','', version)
 
 with open(out_path, "w") as f:
   f.write("{fetchgit}:\n")
@@ -41,6 +41,9 @@ with open(out_path, "w") as f:
     treehash = "{treehash}";
   }};\n""")
     elif uuid in registry["packages"]:
+      # The treehash is missing for stdlib packages. Don't bother downloading these.
+      if (not ("tree_hash" in pkg)) or pkg["tree_hash"] == "nothing": continue
+
       registry_info = registry["packages"][uuid]
       path = registry_info["path"]
       packageToml = toml.load(registry_path / path / "Package.toml")
@@ -65,7 +68,8 @@ with open(out_path, "w") as f:
     treehash = "{version_to_use["git-tree-sha1"]}";
   }};\n""")
     else:
-      # print("Warning: couldn't figure out what to do with pkg in sources_nix.py", pkg)
+      # This is probably a stdlib
+      # print("WARNING: couldn't figure out what to do with pkg in sources_nix.py", pkg)
       pass
 
   f.write("}")
