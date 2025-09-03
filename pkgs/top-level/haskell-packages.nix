@@ -74,17 +74,11 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
 
-      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
-      };
+      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix { };
 
-      ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
-        llvmPackages = pkgs.llvmPackages_15;
-      };
+      ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix { };
 
-      ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix {
-        llvmPackages = pkgs.llvmPackages_15;
-      };
+      ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix { };
 
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
