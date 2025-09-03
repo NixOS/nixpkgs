@@ -75,12 +75,12 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool which facilitates building OCI images";
     mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
   };
 })
