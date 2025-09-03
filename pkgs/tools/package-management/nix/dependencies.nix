@@ -20,18 +20,19 @@ regular@{
       initialMarkStackSize = 1048576;
     };
 
-    aws-sdk-cpp =
-      (regular.aws-sdk-cpp.override {
-        apis = [
-          "identity-management"
-          "s3"
-          "transfer"
-        ];
-        customMemoryManagement = false;
-      }).overrideAttrs
-        {
-          # only a stripped down version is build which takes a lot less resources to build
-          requiredSystemFeatures = [ ];
-        };
+    aws-sdk-cpp = regular.aws-sdk-cpp.override {
+      # Nix only needs these AWS APIs.
+      apis = [
+        "identity-management"
+        "s3"
+        "transfer"
+      ];
+
+      # Don't use AWS' custom memory management.
+      customMemoryManagement = false;
+
+      # only a stripped down version is built which takes a lot less resources to build
+      requiredSystemFeatures = [ ];
+    };
   };
 }
