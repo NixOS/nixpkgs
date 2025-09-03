@@ -386,7 +386,9 @@ stdenv.mkDerivation (
       # elimination on aarch64-darwin. (see
       # https://github.com/NixOS/nixpkgs/issues/140774 for details).
       ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-    ];
+    ]
+
+    ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     postPatch = "patchShebangs .";
 
@@ -671,8 +673,6 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
 
   }

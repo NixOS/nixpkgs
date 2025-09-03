@@ -269,7 +269,9 @@
       # Missing ELF symbols
       ++ lib.optionals stdenv.targetPlatform.isAndroid [
         ./ghc-define-undefined-elf-st-visibility.patch
-      ];
+      ]
+
+      ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
   },
@@ -859,8 +861,6 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;
