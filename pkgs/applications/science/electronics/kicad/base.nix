@@ -28,7 +28,7 @@
   ninja,
   writableTmpDirAsHomeHook,
 
-  util-linux,
+  util-linuxMinimal,
   libselinux,
   libsepol,
   libthai,
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
   ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linux
+    util-linuxMinimal
     libselinux
     libsepol
     libthai
