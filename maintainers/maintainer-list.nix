@@ -3707,6 +3707,12 @@
     githubId = 86652;
     name = "Bram Duvigneau";
   };
+  brancz = {
+    email = "frederic.branczyk@polarsignals.com";
+    name = "Frederic Branczyk";
+    github = "brancz";
+    githubId = 4546722;
+  };
   braydenjw = {
     email = "nixpkgs@willenborg.ca";
     github = "braydenjw";
@@ -16430,6 +16436,12 @@
     name = "merrkry";
     github = "merrkry";
     githubId = 124278440;
+  };
+  metalmatze = {
+    email = "matthias.loibl@polarsignals.com";
+    name = "Matthias Loibl";
+    github = "metalmatze";
+    githubId = 872251;
   };
   mevatron = {
     email = "mevatron@gmail.com";
