@@ -732,6 +732,8 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      # To be fixed for GHC 9.4.8 soon.
+      broken = useLLVM;
     };
 
   }

@@ -57,6 +57,9 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_20;
+  llvmPackages = pkgs.llvmPackages_20;
+
 in
 {
   lib = haskellLibUncomposable;
@@ -85,7 +88,7 @@ in
       };
 
       ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-        llvmPackages = pkgs.llvmPackages_12;
+        llvmPackages = null;
       };
 
       # Required to bootstrap 9.4.8.
@@ -113,8 +116,8 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc810 = compiler.ghc8107;
       ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
@@ -127,8 +130,8 @@ in
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc90 = compiler.ghc902;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
@@ -147,8 +150,8 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        buildTargetLlvmPackages = null;
+        llvmPackages = null;
       };
       ghc92 = compiler.ghc928;
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
@@ -166,9 +169,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 10 && < 14
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc94 = compiler.ghc948;
       ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
@@ -185,9 +186,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs =
@@ -203,9 +202,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
@@ -224,9 +221,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
@@ -250,9 +245,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
@@ -275,9 +268,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc910 = compiler.ghc9102;
       ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
@@ -289,9 +280,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2024-12-21: Support range >= 13 && < 20
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
-        llvmPackages = pkgs.llvmPackages_19;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9122 = callPackage ../development/compilers/ghc/9.12.2.nix {
         bootPkgs =
@@ -302,9 +291,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2024-12-21: Support range >= 13 && < 20
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
-        llvmPackages = pkgs.llvmPackages_19;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
@@ -321,9 +308,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
-        llvmPackages = pkgs.llvmPackages_18;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
 
       # The integer-simple attribute set contains all the GHC compilers
