@@ -1,7 +1,7 @@
 {
   buildah-unwrapped,
   runCommand,
-  makeWrapper,
+  makeBinaryWrapper,
   symlinkJoin,
   lib,
   stdenv,
@@ -63,14 +63,14 @@ runCommand buildah-unwrapped.name
     ];
 
     nativeBuildInputs = [
-      makeWrapper
+      makeBinaryWrapper
     ];
 
   }
   ''
     ln -s ${buildah-unwrapped.man} $man
 
-    mkdir -p $out/bin
+    mkdir -p $out
     ln -s ${buildah-unwrapped}/share $out/share
     makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
       --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
