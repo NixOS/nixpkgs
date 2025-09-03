@@ -8,6 +8,7 @@
   hatchling,
 
   tenacity,
+  dirty-equals,
   typing-extensions,
 
   anyio,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     anyio
+    dirty-equals
   ];
 
   meta = with lib; {
