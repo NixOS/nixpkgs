@@ -2751,6 +2751,13 @@ with haskellLib;
   tailwind = doJailbreak super.tailwind; # base <=4.17.0.0
   commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
 
+  # 2025-09-03: Disable tests until this is solved:
+  # https://github.com/clash-lang/ghc-typelits-extra/issues/60
+  ghc-typelits-extra = lib.pipe super.ghc-typelits-extra [
+    (warnAfterVersion "0.4.8")
+    dontCheck
+  ];
+
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
